@@ -198,11 +198,10 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
 
     /** Whether the packet carries no data and only serves to elicit an ACK. */
     private boolean isAckOnly(int size) {
-        boolean ackOnly = size <= 0 && // no data
+        return size <= 0 && // no data
                           _connection.getLastSendId() >= 0 && // not a SYN
                           (!_connection.getOutputStream().getClosed() || // not a CLOSE
                            _connection.getCloseSentOn() > 0); // or it is a dup CLOSE
-        return ackOnly;
     }
 
     /**

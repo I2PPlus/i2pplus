@@ -39,7 +39,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Rtt deviation. */
     private int _rttDeviation;
     /** Retransmit timeout. */
-    private int _retransmitTimeout = _defaultInitialRTO;
+    private int _retransmitTimeout = defaultInitialRTO;
     /** Retransmit delay. */
     private int _retransmitDelay;
     /** Ack delay. */
@@ -134,59 +134,59 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * this adaptively based on network conditions.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _defaultInitialRTO = 5000;
+    private static volatile int defaultInitialRTO = 5000;
 
     /** Initial rto. */
-    static int getInitialRTO() { return _defaultInitialRTO; }
+    static int getInitialRTO() { return defaultInitialRTO; }
     /** Initial rto. */
-    static void setInitialRTO(int val) { _defaultInitialRTO = Math.max(500, Math.min(30000, val)); }
+    static void setInitialRTO(int val) { defaultInitialRTO = Math.max(500, Math.min(30000, val)); }
 
     /**
      * Default 30000 accommodates RTT up to ~15s with standard TCP deviation.
      * Tuner may raise this for very high-latency networks.
      */
-    private static volatile int _maxRTO = 30000;
+    private static volatile int maxRTO = 30000;
 
     /** @since 0.9.70+ */
-    public static int getMaxRTOStatic() { return _maxRTO; }
+    public static int getMaxRTOStatic() { return maxRTO; }
     /** @since 0.9.70+ */
-    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxRTO(int val) { maxRTO = Math.max(1000, Math.min(60000, val)); }
 
     /** RTO multiplier as percentage (e.g. 150 = 1.5x), clamped to [100, 500] */
     static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _rtoMultiplier = 150;
+    private static volatile int rtoMultiplier = 150;
 
     /** @since 0.9.70+ */
-    static int getRTOMultiplier() { return _rtoMultiplier; }
+    static int getRTOMultiplier() { return rtoMultiplier; }
     /** @since 0.9.70+ */
-    static void setRTOMultiplier(int val) { _rtoMultiplier = Math.max(100, Math.min(500, val)); }
+    static void setRTOMultiplier(int val) { rtoMultiplier = Math.max(100, Math.min(500, val)); }
 
     /** Min resend delay. */
-    private static volatile int _minResendDelay = 300;
+    private static volatile int minResendDelay = 300;
 
     /** @since 0.9.70+ */
-    public static int getMinResendDelayStatic() { return _minResendDelay; }
+    public static int getMinResendDelayStatic() { return minResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMinResendDelay(int val) { _minResendDelay = Math.max(300, Math.min(5000, val)); }
+    public static void setMinResendDelay(int val) { minResendDelay = Math.max(300, Math.min(5000, val)); }
 
     /**
      * Max resend delay. Raised to 30000 to accommodate high-RTT paths without premature retransmit.
      */
-    private static volatile int _maxResendDelay = 30000;
+    private static volatile int maxResendDelay = 30000;
 
     /** @since 0.9.70+ */
-    public static int getMaxResendDelayStatic() { return _maxResendDelay; }
+    public static int getMaxResendDelayStatic() { return maxResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxResendDelay(int val) { maxResendDelay = Math.max(1000, Math.min(60000, val)); }
 
     /** Max rto. */
-    private int getMaxRTO() { return _maxRTO; }
+    private int getMaxRTO() { return maxRTO; }
     /** Min resend delay. */
-    private int getMinResendDelay() { return _minResendDelay; }
+    private int getMinResendDelay() { return minResendDelay; }
     /** Max resend delay. */
-    private int getMaxResendDelay() { return _maxResendDelay; }
+    private int getMaxResendDelay() { return maxResendDelay; }
 
     /** Delay before starting connection setup, in ms */
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
@@ -258,15 +258,15 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * RFC 6928 recommends 10; increased to 16 for I2P's high-latency environment.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    static volatile int _initialWindowSize = 64;
+    static volatile int initialWindowSize = 64;
 
     /** Default maximum number of times a single message will be retransmitted */
     static final int DEFAULT_MAX_SENDS = 30;
 
     /** Initial window size. */
-    static int getInitialWindowSize() { return _initialWindowSize; }
+    static int getInitialWindowSize() { return initialWindowSize; }
     /** Initial window size. */
-    static void setInitialWindowSize(int val) { _initialWindowSize = Math.max(4, Math.min(256, val)); }
+    static void setInitialWindowSize(int val) { initialWindowSize = Math.max(4, Math.min(256, val)); }
 
     /**
      * Initial RTT estimate before first measurement.
@@ -275,19 +275,19 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final int DEFAULT_INITIAL_RTT = 2*1000;
 
     /** Max RTT to prevent pathological RTO cases. Tunable via i2p.streaming.maxRtt (default 10000). */
-    private static volatile int _maxRTT = 10*1000;
+    private static volatile int maxRTT = 10*1000;
 
     /** Max rtt. */
-    private int getMaxRtt() { return _maxRTT; }
+    private int getMaxRtt() { return maxRTT; }
     /**
      * Max RTT, clamped to [1000, 60000] ms.
      */
-    public static void setMaxRtt(int val) { _maxRTT = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxRtt(int val) { maxRTT = Math.max(1000, Math.min(60000, val)); }
     /**
      * Max RTT.
      * @return the max rtt static
      */
-    public static int getMaxRttStatic() { return _maxRTT; }
+    public static int getMaxRttStatic() { return maxRTT; }
 
     /**
      * 500ms provides a reasonable delayed-ACK window for I2P's high-latency,
@@ -295,27 +295,27 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _defaultInitialAckDelay = 500;
+    private static volatile int defaultInitialAckDelay = 500;
 
     /**
      * Default initial ACK delay.
      * @return the default initial ack delay
      */
-    public static int getDefaultInitialAckDelay() { return _defaultInitialAckDelay; }
+    public static int getDefaultInitialAckDelay() { return defaultInitialAckDelay; }
     /**
      * Default initial ACK delay, clamped to [10, 500] ms.
      */
-    public static void setDefaultInitialAckDelay(int val) { _defaultInitialAckDelay = Math.max(10, Math.min(500, val)); }
+    public static void setDefaultInitialAckDelay(int val) { defaultInitialAckDelay = Math.max(10, Math.min(500, val)); }
 
     /**
      * Default inactivity timeout.
      * @return the default inactivity timeout
      */
-    public static int getDefaultInactivityTimeout() { return _defaultInactivityTimeout; }
+    public static int getDefaultInactivityTimeout() { return defaultInactivityTimeout; }
     /**
      * Default inactivity timeout, clamped to [60000, 600000] ms.
      */
-    public static void setDefaultInactivityTimeout(int val) { _defaultInactivityTimeout = Math.max(60000, Math.min(600000, val)); }
+    public static void setDefaultInactivityTimeout(int val) { defaultInactivityTimeout = Math.max(60000, Math.min(600000, val)); }
 
     /** Minimum congestion window size (one message in flight) */
     static final int MIN_WINDOW_SIZE = 1;
@@ -323,87 +323,87 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final boolean DEFAULT_ANSWER_PINGS = true;
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    static volatile int _defaultInactivityTimeout = 300000;
+    static volatile int defaultInactivityTimeout = 300000;
 
     /** Default inactivity action. */
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    static volatile int _maxSlowStartWindow = SystemVersion.isSlow() ? 32 : 256;
+    static volatile int maxSlowStartWindow = SystemVersion.isSlow() ? 32 : 256;
 
     /** Max slow start window static. */
-    static int getMaxSlowStartWindowStatic() { return _maxSlowStartWindow; }
+    static int getMaxSlowStartWindowStatic() { return maxSlowStartWindow; }
     /** Max slow start window. */
-    static void setMaxSlowStartWindow(int val) { _maxSlowStartWindow = Math.max(8, Math.min(Connection.ABSOLUTE_MAX_WINDOW, val)); }
+    static void setMaxSlowStartWindow(int val) { maxSlowStartWindow = Math.max(8, Math.min(Connection.ABSOLUTE_MAX_WINDOW, val)); }
 
     /** Immediate ack delay. */
-    private static volatile int _immediateAckDelay = SystemVersion.isSlow() ? 100 : 80;
+    private static volatile int immediateAckDelay = SystemVersion.isSlow() ? 100 : 80;
 
     /** Immediate ack delay static. */
-    static int getImmediateAckDelayStatic() { return _immediateAckDelay; }
+    static int getImmediateAckDelayStatic() { return immediateAckDelay; }
     /** Immediate ack delay. */
-    static void setImmediateAckDelay(int val) { _immediateAckDelay = Math.max(1, Math.min(1000, val)); }
+    static void setImmediateAckDelay(int val) { immediateAckDelay = Math.max(1, Math.min(1000, val)); }
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _defaultRetransmitDelay = 1000;
+    private static volatile int defaultRetransmitDelay = 1000;
 
     /**
      * Default resend delay.
      * @return the default resend delay static
      */
-    public static int getDefaultResendDelayStatic() { return _defaultRetransmitDelay; }
+    public static int getDefaultResendDelayStatic() { return defaultRetransmitDelay; }
     /**
      * Default resend delay, clamped to [100, 3000] ms.
      */
-    public static void setDefaultResendDelay(int val) { _defaultRetransmitDelay = Math.max(100, Math.min(3000, val)); }
+    public static void setDefaultResendDelay(int val) { defaultRetransmitDelay = Math.max(100, Math.min(3000, val)); }
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _defaultCongestionAvoidanceGrowthRateFactor = 1;
+    private static volatile int defaultCongestionAvoidanceGrowthRateFactor = 1;
 
     /**
      * Default congestion avoidance growth rate factor.
      * @return the default congestion avoidance growth rate factor static
      */
-    public static int getDefaultCongestionAvoidanceGrowthRateFactorStatic() { return _defaultCongestionAvoidanceGrowthRateFactor; }
+    public static int getDefaultCongestionAvoidanceGrowthRateFactorStatic() { return defaultCongestionAvoidanceGrowthRateFactor; }
     /**
      * Default congestion avoidance growth rate factor, clamped to [1, 4].
      */
-    public static void setDefaultCongestionAvoidanceGrowthRateFactor(int val) { _defaultCongestionAvoidanceGrowthRateFactor = Math.max(1, Math.min(4, val)); }
+    public static void setDefaultCongestionAvoidanceGrowthRateFactor(int val) { defaultCongestionAvoidanceGrowthRateFactor = Math.max(1, Math.min(4, val)); }
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _defaultSlowStartGrowthRateFactor = 2;
+    private static volatile int defaultSlowStartGrowthRateFactor = 2;
 
     /**
      * Default slow start growth rate factor.
      * @return the default slow start growth rate factor static
      */
-    public static int getDefaultSlowStartGrowthRateFactorStatic() { return _defaultSlowStartGrowthRateFactor; }
+    public static int getDefaultSlowStartGrowthRateFactorStatic() { return defaultSlowStartGrowthRateFactor; }
     /**
      * Default slow start growth rate factor, clamped to [1, 4].
      */
-    public static void setDefaultSlowStartGrowthRateFactor(int val) { _defaultSlowStartGrowthRateFactor = Math.max(1, Math.min(4, val)); }
+    public static void setDefaultSlowStartGrowthRateFactor(int val) { defaultSlowStartGrowthRateFactor = Math.max(1, Math.min(4, val)); }
 
     /**
      * Minimum pacing rate. Below this, pacing is disabled to avoid excessive delays.
      * Default 16 KB/s, tunable via Tuner.
      */
-    private static volatile long _minPacingRate = 16 * 1024;
+    private static volatile long minPacingRate = 16 * 1024;
 
     /**
      * Min pacing rate.
      * @return the min pacing rate
      */
-    public static long getMinPacingRate() { return _minPacingRate; }
+    public static long getMinPacingRate() { return minPacingRate; }
     /**
      * Min pacing rate, clamped to [1024, 256 KB/s].
      */
-    public static void setMinPacingRate(long val) { _minPacingRate = Math.max(1024, Math.min(256 * 1024, val)); }
+    public static void setMinPacingRate(long val) { minPacingRate = Math.max(1024, Math.min(256 * 1024, val)); }
 
     /** @since 0.9.70+ */
-    public static int getMinPacingRateKBps() { return (int) (_minPacingRate / 1024); }
+    public static int getMinPacingRateKBps() { return (int) (minPacingRate / 1024); }
 
     /** KB/s wrapper for Tuner int reflection */
-    public static void setMinPacingRateKBps(int val) { _minPacingRate = Math.max(1024, Math.min(256 * 1024, (long) val * 1024)); }
+    public static void setMinPacingRateKBps(int val) { minPacingRate = Math.max(1024, Math.min(256 * 1024, (long) val * 1024)); }
 
     /** @since 0.9.34 */
     private static final String DEFAULT_LIMIT_ACTION = "reset";
@@ -580,20 +580,20 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_CONNECT_DELAY, -1, onlyIfSet, this::setConnectDelay);
         applyInt(opts, PROP_PROFILE, PROFILE_BULK, onlyIfSet, this::setProfile);
         applyInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE, onlyIfSet, this::setMaxMessageSize);
-        applyInt(opts, PROP_INITIAL_RESEND_DELAY, _defaultRetransmitDelay, onlyIfSet, this::setResendDelay);
-        applyInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay, onlyIfSet, this::setSendAckDelay);
-        applyInt(opts, PROP_INITIAL_WINDOW_SIZE, _initialWindowSize, onlyIfSet, this::setWindowSize);
+        applyInt(opts, PROP_INITIAL_RESEND_DELAY, defaultRetransmitDelay, onlyIfSet, this::setResendDelay);
+        applyInt(opts, PROP_INITIAL_ACK_DELAY, defaultInitialAckDelay, onlyIfSet, this::setSendAckDelay);
+        applyInt(opts, PROP_INITIAL_WINDOW_SIZE, initialWindowSize, onlyIfSet, this::setWindowSize);
         applyInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS, onlyIfSet, this::setMaxResends);
-        applyInt(opts, PROP_INACTIVITY_TIMEOUT, _defaultInactivityTimeout, onlyIfSet, this::setInactivityTimeout);
+        applyInt(opts, PROP_INACTIVITY_TIMEOUT, defaultInactivityTimeout, onlyIfSet, this::setInactivityTimeout);
         applyInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION, onlyIfSet, this::setInactivityAction);
 
         initializeInboundBufferSize();
 
         applyInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
-                 _defaultCongestionAvoidanceGrowthRateFactor, onlyIfSet,
+                 defaultCongestionAvoidanceGrowthRateFactor, onlyIfSet,
                  this::setCongestionAvoidanceGrowthRateFactor);
         applyInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
-                 _defaultSlowStartGrowthRateFactor, onlyIfSet,
+                 defaultSlowStartGrowthRateFactor, onlyIfSet,
                  this::setSlowStartGrowthRateFactor);
         applyInt(opts, PROP_PASSIVE_FLUSH_DELAY, 0, onlyIfSet, this::setPassiveFlushDelay);
 
@@ -619,7 +619,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD, onlyIfSet, v -> _tagThreshold = v);
 
         synchronized(this) {
-            _retransmitTimeout = getInt(opts, PROP_INITIAL_RTO, _defaultInitialRTO);
+            _retransmitTimeout = getInt(opts, PROP_INITIAL_RTO, defaultInitialRTO);
         }
     }
 
@@ -799,7 +799,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             return _retransmitTimeout;
         }
         _lastRtoDoubleTime = now;
-        _retransmitTimeout = _retransmitTimeout * _rtoMultiplier / 100;
+        _retransmitTimeout = _retransmitTimeout * rtoMultiplier / 100;
         int mrto = getMaxRTO();
         if (_retransmitTimeout > mrto) {_retransmitTimeout = mrto;}
         return _retransmitTimeout;
@@ -1127,17 +1127,17 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Default 8MB accommodates high-BDP paths without excess memory use.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _maxInboundBuffer = 8 * 1024 * 1024;
+    private static volatile int maxInboundBuffer = 8 * 1024 * 1024;
 
     /** @since 0.9.70+ */
-    public static int getMaxInboundBufferStatic() { return _maxInboundBuffer; }
+    public static int getMaxInboundBufferStatic() { return maxInboundBuffer; }
     /** @since 0.9.70+ */
-    public static void setMaxInboundBufferStatic(int val) { _maxInboundBuffer = Math.max(512 * 1024, Math.min(64 * 1024 * 1024, val)); }
+    public static void setMaxInboundBufferStatic(int val) { maxInboundBuffer = Math.max(512 * 1024, Math.min(64 * 1024 * 1024, val)); }
 
     /** Initialize inbound buffer size and packet count cap. */
     private void initializeInboundBufferSize() {
         int minRequiredBufferSize = getMaxMessageSize() * ((6 * getMaxWindowSize()) / 2 + 2);
-        setInboundBufferSize(Math.min(minRequiredBufferSize, _maxInboundBuffer));
+        setInboundBufferSize(Math.min(minRequiredBufferSize, maxInboundBuffer));
         _maxPacketCount = Math.max(_maxPacketCount, _inboundBufferSize / getMaxMessageSize() + 32);
     }
 

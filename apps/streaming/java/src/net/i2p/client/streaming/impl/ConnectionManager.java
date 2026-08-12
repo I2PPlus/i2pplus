@@ -125,7 +125,7 @@ class ConnectionManager {
      private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /** Cache of the property to detect changes. */
-    private static volatile String _currentBlacklist = "";
+    private static volatile String currentBlacklist = "";
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
     /**
@@ -588,7 +588,7 @@ class ConnectionManager {
         int randomDelay = _context.random().nextInt(pongDelay);
         boolean enableDelay = _context.getProperty(PROP_ENABLE_PONG_DELAY, DEFAULT_ENABLE_PONG_DELAY);
         if (enableDelay) {
-            try { Thread.sleep(randomDelay); } catch (InterruptedException ie) { /* ignored */ }
+            try { Thread.sleep(randomDelay); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             if (_log.shouldInfo())
                 _log.info("Sending pong to: " + dest.toBase32() + " with random delay of " + randomDelay + "ms");
         } else {
@@ -922,7 +922,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         // if the sig is absent or bad it will be caught later (in CPH)
         String hashes = _context.getProperty(PROP_BLACKLIST, "");
-        if (!_currentBlacklist.equals(hashes)) {
+        if (!currentBlacklist.equals(hashes)) {
             // rebuild _globalBlacklist when property changes
             synchronized(_globalBlacklist) {
                 if (!hashes.isEmpty()) {
@@ -938,10 +938,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                     }
                     _globalBlacklist.addAll(newSet);
                     _globalBlacklist.retainAll(newSet);
-                    _currentBlacklist = hashes;
+                    currentBlacklist = hashes;
                 } else {
                     _globalBlacklist.clear();
-                    _currentBlacklist = "";
+                    currentBlacklist = "";
                 }
             }
         }
@@ -1365,7 +1365,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         if (blocking) {
             synchronized (req) {
                 if (!req.pongReceived())
-                    try { req.wait(timeoutMs); } catch (InterruptedException ie) { /* ignored */ }
+                    try { req.wait(timeoutMs); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             }
             _pendingPings.remove(id);
         } else {
@@ -1373,8 +1373,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             pf.schedule(timeoutMs);
         }
 
-        boolean ok = req.pongReceived();
-        return ok;
+        return req.pongReceived();
     }
 
     /**
@@ -1415,7 +1414,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         synchronized (req) {
             if (!req.pongReceived())
-                try { req.wait(timeoutMs); } catch (InterruptedException ie) { /* ignored */ }
+                try { req.wait(timeoutMs); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
         }
         _pendingPings.remove(id);
 

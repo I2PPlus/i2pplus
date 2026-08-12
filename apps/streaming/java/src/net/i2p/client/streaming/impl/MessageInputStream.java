@@ -551,6 +551,7 @@ class MessageInputStream extends InputStream {
                         return 0; // non-blocking
                     }
                 } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
                     throw new InterruptedIOException("Interrupted during read");
                 }
             }

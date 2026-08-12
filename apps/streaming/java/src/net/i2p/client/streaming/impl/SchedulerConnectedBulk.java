@@ -49,12 +49,11 @@ class SchedulerConnectedBulk extends SchedulerImpl {
      */
     @Override
     public boolean accept(Connection con) {
-        boolean ok = (con != null) &&
+        return (con != null) &&
                      (con.getHighestAckedThrough() >= 0) &&
                      (con.getOptions().getProfile() == ConnectionOptions.PROFILE_BULK) &&
                      (!con.getResetReceived()) &&
                      ( (con.getCloseSentOn() <= 0) || (con.getCloseReceivedOn() <= 0) );
-        return ok;
     }
 
     /**

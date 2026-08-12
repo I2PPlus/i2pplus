@@ -38,7 +38,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     // As in kernel tcp_westwood.c
     // Should probably match ConnectionOptions.TCP_ALPHA
     private static final int DEFAULT_DECAY_FACTOR = 8;
-    private static volatile int _decayFactor = DEFAULT_DECAY_FACTOR;
+    private static volatile int decayFactor = DEFAULT_DECAY_FACTOR;
     private static final int WESTWOOD_RTT_MIN = 500;
 
     // Snapshot of the global decay factor taken at construction, so runtime
@@ -52,7 +52,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      * @return the current decay factor
      * @since 0.9.70+
      */
-    public static int getDecayFactor() { return _decayFactor; }
+    public static int getDecayFactor() { return decayFactor; }
 
     /**
      * EWMA decay factor for new estimators.
@@ -63,7 +63,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      */
     public static void setDecayFactor(int factor) {
         if (factor >= 2 && factor <= 16)
-            _decayFactor = factor;
+            decayFactor = factor;
     }
 
     /** New estimator bound to the given options. */
@@ -71,7 +71,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         _log = ctx.logManager().getLog(SimpleBandwidthEstimator.class);
         _context = ctx;
         _opts = opts;
-        _localDecayFactor = _decayFactor;
+        _localDecayFactor = decayFactor;
         // assume we're about to send something
         _tAck = ctx.clock().now();
         _acked = -1;

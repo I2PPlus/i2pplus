@@ -45,11 +45,10 @@ class SchedulerConnecting extends SchedulerImpl {
      */
     public boolean accept(Connection con) {
         if (con == null) return false;
-        boolean notYetConnected = (con.getIsConnected()) &&
+        return (con.getIsConnected()) &&
                                   (con.getLastSendId() >= 0) &&
                                   (con.getHighestAckedThrough() < 0) &&
                                   (!con.getResetReceived());
-        return notYetConnected;
     }
 
     /**

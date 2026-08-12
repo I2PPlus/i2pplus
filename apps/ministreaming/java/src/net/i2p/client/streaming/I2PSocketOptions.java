@@ -14,17 +14,18 @@ public interface I2PSocketOptions {
     /** How long to block on write/flush */
     public static final String PROP_WRITE_TIMEOUT = "i2p.streaming.writeTimeout";
     /**
-     * Description.
+     *  If set, the profile used to prioritize packets on the network.
+     *  One of the PROFILE_ constants below.
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final String PROP_PROFILE = "i2p.streaming.profile";
     /**
-     * Description.
+     *  Profile for bulk transfers (normal downloads/uploads).
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_BULK = 1;
     /**
-     * Description.
+     *  Profile for interactive traffic (latency-sensitive, e.g. SSH).
      *  @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_INTERACTIVE = 2;

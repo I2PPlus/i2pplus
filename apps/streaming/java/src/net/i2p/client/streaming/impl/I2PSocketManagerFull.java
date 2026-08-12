@@ -153,7 +153,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /** Cached property value to detect changes. */
-    private static volatile String _userDsaList = "";
+    private static volatile String userDsaList = "";
     private static final Set<Hash> _userDsaOnly = new ConcurrentHashSet<>(4);
     private static final String PROP_DSALIST = "i2p.streaming.dsalist";
 
@@ -640,7 +640,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     private void updateUserDsaList() {
         String hashes = _context.getProperty(PROP_DSALIST, "");
-        if (!_userDsaList.equals(hashes)) {
+        if (!userDsaList.equals(hashes)) {
             // rebuild _userDsaOnly when property changes
             synchronized(_userDsaOnly) {
                 if (!hashes.isEmpty()) {
@@ -656,10 +656,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                     }
                     _userDsaOnly.addAll(newSet);
                     _userDsaOnly.retainAll(newSet);
-                    _userDsaList = hashes;
+                    userDsaList = hashes;
                 } else {
                     _userDsaOnly.clear();
-                    _userDsaList = "";
+                    userDsaList = "";
                 }
             }
         }
@@ -813,7 +813,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     private static final Object _pcapInitLock = new Object();
-    private static boolean _pcapInitialized;
+    private static boolean pcapInitialized;
     /** The PCAP writer */
     static PcapWriter pcapWriter;
     /** The PCAP property */
@@ -828,13 +828,13 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         if (!ctx.getBooleanProperty(PROP_PCAP))
             return;
         synchronized(_pcapInitLock) {
-            if (!_pcapInitialized) {
+            if (!pcapInitialized) {
                 try {
                     pcapWriter = new PcapWriter(ctx, PCAP_FILE);
                 } catch (IOException ioe) {
                      System.err.println("pcap init ioe: " + ioe);
                 }
-                 _pcapInitialized = true;
+                 pcapInitialized = true;
             }
         }
     }

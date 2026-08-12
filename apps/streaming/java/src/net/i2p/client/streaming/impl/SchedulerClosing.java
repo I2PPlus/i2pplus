@@ -49,12 +49,11 @@ class SchedulerClosing extends SchedulerImpl {
         if (con == null)
             return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
-        boolean ok = (!con.getResetSent()) &&
+        return (!con.getResetSent()) &&
                      (!con.getResetReceived()) &&
                      ( (con.getCloseSentOn() > 0) || (con.getCloseReceivedOn() > 0) ) &&
                       (timeSinceClose < Connection.getDisconnectTimeout()) &&
                      ( (con.getUnackedPacketsReceived() > 0) || (con.getUnackedPacketsSent() > 0) );
-        return ok;
     }
 
     /**

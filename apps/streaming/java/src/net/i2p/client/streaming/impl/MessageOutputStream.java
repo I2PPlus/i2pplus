@@ -90,13 +90,13 @@ class MessageOutputStream extends OutputStream {
      * @return whether slow
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;
+    private static volatile int defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;
 
     /** @since 0.9.70+ */
-    public static int getDefaultPassiveFlushDelay() { return _defaultPassiveFlushDelay; }
+    public static int getDefaultPassiveFlushDelay() { return defaultPassiveFlushDelay; }
 
     /** @since 0.9.70+ */
-    public static void setDefaultPassiveFlushDelay(int val) { _defaultPassiveFlushDelay = Math.max(10, Math.min(500, val)); }
+    public static void setDefaultPassiveFlushDelay(int val) { defaultPassiveFlushDelay = Math.max(10, Math.min(500, val)); }
 
     /**
      * Stream with default passive flush delay.
@@ -109,7 +109,7 @@ class MessageOutputStream extends OutputStream {
      */
     public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
                                DataReceiver receiver, int bufSize, int initBufSize) {
-        this(ctx, timer, receiver, bufSize, initBufSize, _defaultPassiveFlushDelay);
+        this(ctx, timer, receiver, bufSize, initBufSize, defaultPassiveFlushDelay);
     }
 
     /**
@@ -280,6 +280,7 @@ class MessageOutputStream extends OutputStream {
                 try {
                     ws.waitForAccept(_writeTimeout);
                 } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
                     InterruptedIOException iioe = new InterruptedIOException("Interrupted write");
                     iioe.initCause(ie);
                     throw iioe;
@@ -411,6 +412,7 @@ class MessageOutputStream extends OutputStream {
                 ws.waitForCompletion(_writeTimeout);
             }
         } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             InterruptedIOException iioe = new InterruptedIOException("Interrupted flush");
             iioe.initCause(ie);
             throw iioe;
@@ -573,6 +575,7 @@ class MessageOutputStream extends OutputStream {
             try {
                 ws.waitForAccept(_writeTimeout);
             } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
                 InterruptedIOException iioe = new InterruptedIOException("Interrupted flush");
                 iioe.initCause(ie);
                 throw iioe;

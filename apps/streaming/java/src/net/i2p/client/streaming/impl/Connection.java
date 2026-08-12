@@ -199,16 +199,16 @@ class Connection {
      * fast and slow networks get enough time. Applied in waitForConnect().
      * @since 0.9.70+
      */
-    private static volatile int _connectTimeoutMultiplier = 100;
+    private static volatile int connectTimeoutMultiplier = 100;
 
     /** @since 0.9.70+ */
     static void setConnectTimeoutMultiplier(int pct) {
-        _connectTimeoutMultiplier = Math.max(30, Math.min(200, pct));
+        connectTimeoutMultiplier = Math.max(30, Math.min(200, pct));
     }
 
     /** @since 0.9.70+ */
     static int getConnectTimeoutMultiplier() {
-        return _connectTimeoutMultiplier;
+        return connectTimeoutMultiplier;
     }
 
     /**
@@ -226,12 +226,12 @@ class Connection {
     public static final int ABSOLUTE_MAX_WINDOW = 4096;
 
     /** @since 0.9.70+ mutable for adaptive tuning via Tuner */
-    private static volatile int _maxWindowSize = MAX_WINDOW_SIZE_DEFAULT;
+    private static volatile int maxWindowSize = MAX_WINDOW_SIZE_DEFAULT;
     /** @since 0.9.70+ */
-    public static int getGlobalMaxWindowSize() { return _maxWindowSize; }
+    public static int getGlobalMaxWindowSize() { return maxWindowSize; }
     /** @since 0.9.70+ */
     public static void setGlobalMaxWindowSize(int val) {
-        _maxWindowSize = Math.max(128, Math.min(ABSOLUTE_MAX_WINDOW, val));
+        maxWindowSize = Math.max(128, Math.min(ABSOLUTE_MAX_WINDOW, val));
     }
 
     /** Number of remaining unchoke assertions to send. */
@@ -250,7 +250,7 @@ class Connection {
      *  maxSynResends of 12, the budget is 60s — matching the connect timeout.
      *  @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _maxSynResends = 12;
+    private static volatile int maxSynResends = 12;
 
     /**
      * Maximum number of packets to retransmit when the timer hits.
@@ -258,15 +258,15 @@ class Connection {
      * backlog clears in 4 rounds instead of 8).
      * @since 0.9.70+
      */
-    private static volatile int _maxRetransmissions = 32;
+    private static volatile int maxRetransmissions = 32;
     /** @since 0.9.70+ */
-    public static int getMaxRetransmissionsStatic() { return _maxRetransmissions; }
+    public static int getMaxRetransmissionsStatic() { return maxRetransmissions; }
     /** @since 0.9.70+ */
-    public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(128, val)); }
+    public static void setMaxRetransmissions(int val) { maxRetransmissions = Math.max(8, Math.min(128, val)); }
     /** @since 0.9.70+ */
-    public static int getMaxSynResendsStatic() { return _maxSynResends; }
+    public static int getMaxSynResendsStatic() { return maxSynResends; }
     /** @since 0.9.70+ */
-    public static void setMaxSynResends(int val) { _maxSynResends = Math.max(3, Math.min(16, val)); }
+    public static void setMaxSynResends(int val) { maxSynResends = Math.max(3, Math.min(16, val)); }
 
     /**
      * Maximum number of packets to retransmit in a single timer fire.
@@ -276,7 +276,7 @@ class Connection {
      * @return the max rtx
      */
     private int getMaxRtx() {
-        return _maxRetransmissions;
+        return maxRetransmissions;
     }
 
     /**
@@ -2128,7 +2128,7 @@ class Connection {
                         return;
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
-                           packet.getNumSends() >= _maxSynResends) {
+                           packet.getNumSends() >= maxSynResends) {
                     // If the SYN handshake is never ACKed the connect() caller has
                     // already given up (default 60s timeout), so stop resending
                     // instead of running to maxResends (~12 min). SYN retransmits
