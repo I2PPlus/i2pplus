@@ -25,6 +25,7 @@ override.properties
 
 # Build artifacts
 *.mo
+*.mo.*
 config/
 apps/i2psnark/java/i2psnark/
 
@@ -76,6 +77,9 @@ findbugs.html
 .classpath
 .project
 .settings/
+.externalToolBuilders/
+# NetBeans
+nbproject/
 # IDEA
 *.iml
 .idea
@@ -234,6 +238,11 @@ router/java/logs/
 # Logger config
 logger.config
 core/java/logger.config
+core/logger.config
+
+# Dev-run router state (manual `ant` router starts in the workspace)
+router/router.config
+router/wrapper.log*
 
 # JSDoc template dependencies
 tools/jsdoc/docdash-template/node_modules/
