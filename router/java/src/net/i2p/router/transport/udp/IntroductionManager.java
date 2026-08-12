@@ -280,22 +280,21 @@ class IntroductionManager {
             // and reuse if still recent enough, so deepEquals() won't fail in UDPT.rEA
             if (current != null) {
                 for (int j = 0; j < UDPTransport.PUBLIC_RELAY_COUNT; j++) {
-                    String oexp = null;
                     if (in.shash.equals(current.getOption(UDPAddress.PROP_INTRO_HASH_PREFIX + j)) &&
                         in.stag.equals(current.getOption(UDPAddress.PROP_INTRO_TAG_PREFIX + j))) {
                         // found old one
-                        oexp = current.getOption(UDPAddress.PROP_INTRO_EXP_PREFIX + j);
+                        String oexp = current.getOption(UDPAddress.PROP_INTRO_EXP_PREFIX + j);
+                        if (oexp != null) {
+                            try {
+                                long oex = Long.parseLong(oexp) * 1000;
+                                if (oex > now + UDPTransport.INTRODUCER_EXPIRATION_MARGIN) {
+                                    // still good, use old expiration time
+                                    sexp = oexp;
+                                }
+                            } catch (NumberFormatException nfe) { /* ignored */ }
+                        }
+                        break;
                     }
-                    if (oexp != null) {
-                        try {
-                            long oex = Long.parseLong(oexp) * 1000;
-                            if (oex > now + UDPTransport.INTRODUCER_EXPIRATION_MARGIN) {
-                                // still good, use old expiration time
-                                sexp = oexp;
-                            }
-                        } catch (NumberFormatException nfe) { /* ignored */ }
-                    }
-                    break;
                 }
             }
             ssuOptions.setProperty(UDPAddress.PROP_INTRO_EXP_PREFIX + i, sexp);
