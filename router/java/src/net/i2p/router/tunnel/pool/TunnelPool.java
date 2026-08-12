@@ -2378,6 +2378,7 @@ public class TunnelPool {
      *  @return true if a fallback tunnel is built, false otherwise
      */
     boolean buildFallback() {
+        if (!_alive) {return false;}
         int usable = getValidTunnelCount();
         if (usable > 0) {return false;}
 

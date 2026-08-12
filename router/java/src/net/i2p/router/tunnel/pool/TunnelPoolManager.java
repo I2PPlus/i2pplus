@@ -3,7 +3,6 @@ package net.i2p.router.tunnel.pool;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,7 +22,6 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.peermanager.PeerTestJob;
 import net.i2p.router.peermanager.PeerManagerFacadeImpl;
 import net.i2p.router.TunnelPoolSettings;
-import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
@@ -80,6 +78,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final Map<Hash, DelayedPoolCleanup> _pendingCleanups;
 
     /**
+     * Pending delayed outbound pool startups, keyed by destination hash.
+     * Cancelled when the pool is actually removed.
+     * @since 0.9.70+
+     */
+    private final Map<Hash, ConditionalOutboundStartup> _pendingOutboundStartups;
+
+    /**
+     * Pending bootstrap jobs for newly created client pools, keyed by destination hash.
+     * Cancelled when the pool is actually removed.
+     * @since 0.9.70+
+     */
+    private final Map<Hash, BootstrapClientPool> _pendingBootstrapJobs;
+
+    /**
      * Manage tunnel pools for the given router context.
      *
      * @param ctx the router context
@@ -90,6 +102,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _clientInboundPools = new ConcurrentHashMap<>(32);
         _clientOutboundPools = new ConcurrentHashMap<>(32);
         _pendingCleanups = new ConcurrentHashMap<>(32);
+        _pendingOutboundStartups = new ConcurrentHashMap<>(32);
+        _pendingBootstrapJobs = new ConcurrentHashMap<>(32);
         _clientPeerSelector = new ClientPeerSelector(ctx);
         _ghostPeerManager = new GhostPeerManager(ctx);
         ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
@@ -198,10 +212,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public TunnelInfo selectAnyOutboundTunnel() {
         List<TunnelPool> pools = new ArrayList<>(_clientOutboundPools.values());
-        Collections.shuffle(pools);
-        for (TunnelPool pool : pools) {
-            TunnelInfo info = pool.selectTunnel();
-            if (info != null) return info;
+        int size = pools.size();
+        if (size > 0) {
+            int start = _context.random().nextInt(size);
+            for (int i = 0; i < size; i++) {
+                TunnelInfo info = pools.get((start + i) % size).selectTunnel();
+                if (info != null) return info;
+            }
         }
         return selectOutboundTunnel();
     }
@@ -215,10 +232,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public TunnelInfo selectAnyInboundTunnel() {
         List<TunnelPool> pools = new ArrayList<>(_clientInboundPools.values());
-        Collections.shuffle(pools);
-        for (TunnelPool pool : pools) {
-            TunnelInfo info = pool.selectTunnel();
-            if (info != null) return info;
+        int size = pools.size();
+        if (size > 0) {
+            int start = _context.random().nextInt(size);
+            for (int i = 0; i < size; i++) {
+                TunnelInfo info = pools.get((start + i) % size).selectTunnel();
+                if (info != null) return info;
+            }
         }
         return selectInboundTunnel();
     }
@@ -547,12 +567,17 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         inbound.startup();
         // Don't delay the outbound if it already exists, as this opens up a large
         // race window with removeTunnels() below
-        if (delayOutbound) {_context.simpleTimer2().addEvent(new ConditionalOutboundStartup(outbound, inbound, _context), 2000);}
-        else {outbound.startup();}
+        if (delayOutbound) {
+            ConditionalOutboundStartup startEvt = new ConditionalOutboundStartup(outbound, inbound, this, _context, dest);
+            _pendingOutboundStartups.put(dest, startEvt);
+            _context.simpleTimer2().addEvent(startEvt, 2000);
+        } else {outbound.startup();}
 
         // Bootstrap newly created client pools to ensure they get initial tunnels
         if (isClientBootstrapping) {
-            _context.jobQueue().addJob(new BootstrapClientPool(_context, inbound, outbound));
+            BootstrapClientPool boot = new BootstrapClientPool(_context, this, dest, inbound, outbound);
+            _pendingBootstrapJobs.put(dest, boot);
+            _context.jobQueue().addJob(boot);
         }
     }
 
@@ -649,29 +674,51 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static class ConditionalOutboundStartup extends SimpleTimer2.TimedEvent {
         private final TunnelPool outbound;
         private final TunnelPool inbound;
+        private final TunnelPoolManager _mgr;
+        private final Hash _dest;
         private final RouterContext ctx;
         private final int maxAttempts;
+        private volatile boolean _cancelled;
         private int attempts;
 
         /**
          * ConditionalOutboundStartup.
          */
-        public ConditionalOutboundStartup(TunnelPool out, TunnelPool in, RouterContext context) {
+        public ConditionalOutboundStartup(TunnelPool out, TunnelPool in, TunnelPoolManager mgr,
+                                          RouterContext context, Hash dest) {
             super(context.simpleTimer2());
             this.outbound = out;
             this.inbound = in;
+            this._mgr = mgr;
+            this._dest = dest;
             this.ctx = context;
             this.maxAttempts = context.getProperty(PROP_OUTBOUND_STARTUP_RETRIES, DEFAULT_OUTBOUND_STARTUP_RETRIES);
+        }
+
+        /**
+         * Cancel this pending startup, if it hasn't fired yet.
+         */
+        public void cancelStartup() {
+            _cancelled = true;
+            cancel();
         }
 
         /**
          * Start the outbound pool when inbound has tunnels or attempts are exhausted.
          */
         public void timeReached() {
-            if (inbound.getTunnelCount() > 0 || ++attempts >= maxAttempts) {
-                outbound.startup();
-            } else {
-                schedule(2000);
+            if (_cancelled) {return;}
+            // Synchronize with doRemoveTunnels()/shutdown() so a pool being removed
+            // can't be started in the same window it is shut down
+            synchronized (_mgr) {
+                // The pool may have been removed (and possibly recreated) since this was scheduled
+                if (_mgr._clientOutboundPools.get(_dest) != outbound) {return;}
+                if (inbound.getTunnelCount() > 0 || ++attempts >= maxAttempts) {
+                    _mgr._pendingOutboundStartups.remove(_dest, this);
+                    outbound.startup();
+                } else {
+                    schedule(2000);
+                }
             }
         }
     }
@@ -751,6 +798,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (_log.shouldDebug()) {
             _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
         }
+        cancelPendingOutboundStartup(destination);
+        cancelPendingBootstrapJob(destination);
         TunnelPool inbound = _clientInboundPools.remove(destination);
         TunnelPool outbound = _clientOutboundPools.remove(destination);
         if (inbound != null) {
@@ -791,15 +840,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         public void timeReached() {
             if (_cancelled) return;
             _pendingCleanups.remove(_destination);
-            // Check if client re-registered during delay
-            if (_context.clientManager().isLocal(_destination)) {
-                if (_log.shouldInfo()) {
-                    _log.info("Cancelling delayed pool removal - client re-registered: " +
-                              _destination.toBase32().substring(0,8));
+            // Synchronize with buildTunnels()/removeTunnels() so a client that
+            // re-registered during the delay isn't left without pools
+            synchronized (TunnelPoolManager.this) {
+                // Check if client re-registered during delay
+                if (_context.clientManager().isLocal(_destination)) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Cancelling delayed pool removal - client re-registered: " +
+                                  _destination.toBase32().substring(0,8));
+                    }
+                    return;
                 }
-                return;
+                doRemoveTunnels(_destination);
             }
-            doRemoveTunnels(_destination);
         }
     }
 
@@ -867,7 +920,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Tuned by Tuner — min 1, max 8
+     *  Tuned by Tuner — min 2, max 8
      *  @return number of build handler threads
      */
     public static int getBuildHandlerThreads() { return _numHandlerThreads; }
@@ -886,7 +939,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return current build handler thread count
      *  @since 0.9.70+
      */
-    public int getBuildHandlerThreadCount() { return _handlerThreads != null ? _handlerThreads.size() : 0; }
+    public int getBuildHandlerThreadCount() { return _handlerThreads.size(); }
 
     /**
      *  Dynamically adjust BuildHandler thread count to match target.
@@ -910,6 +963,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 hThread.interrupt();
             }
         }
+        // Keep the tunable in sync with the actual thread count
+        _numHandlerThreads = _handlerThreads.size();
     }
 
     private static class BootstrapPool extends JobImpl {
@@ -934,26 +989,45 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     private static class BootstrapClientPool extends JobImpl {
+        private final TunnelPoolManager _mgr;
+        private final Hash _dest;
         private final TunnelPool _inbound;
         private final TunnelPool _outbound;
+        private volatile boolean _cancelled;
+
         /**
          * Build the fallback tunnels for both pools after the startup delay.
          */
-        public BootstrapClientPool(RouterContext ctx, TunnelPool inbound, TunnelPool outbound) {
+        public BootstrapClientPool(RouterContext ctx, TunnelPoolManager mgr, Hash dest,
+                                   TunnelPool inbound, TunnelPool outbound) {
             super(ctx);
+            _mgr = mgr;
+            _dest = dest;
             _inbound = inbound;
             _outbound = outbound;
             getTiming().setStartAfter(ctx.clock().now() + 2*1000);
         }
+
+        /**
+         * Cancel this job, if it hasn't fired yet.
+         */
+        public void cancelJob() {_cancelled = true;}
+
         /**
          * The name of this job.
          * @return the name
          */
         public String getName() { return "Bootstrap Client Tunnel Pool"; }
+
         /**
          * Build fallback tunnels for both pools.
          */
         public void runJob() {
+            if (_cancelled) {return;}
+            // Pools may have been removed (and possibly recreated) since this was scheduled
+            if (_mgr._clientInboundPools.get(_dest) != _inbound ||
+                _mgr._clientOutboundPools.get(_dest) != _outbound) {return;}
+            _mgr._pendingBootstrapJobs.remove(_dest, this);
             _inbound.buildFallback();
             _outbound.buildFallback();
         }
@@ -1031,27 +1105,32 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
             // Diagnostic logging
             int runNum = _runCount.incrementAndGet();
-            _mgr._log.info("RemoveSlowTunnelsJob run #" + runNum + " completed in " + duration + "ms");
+            if (_mgr._log.shouldInfo())
+                _mgr._log.info("RemoveSlowTunnelsJob run #" + runNum + " completed in " + duration + "ms");
 
-            // Use configurable interval (default 30s), increase if queue is overloaded
+            // Use configurable interval (default 15s), increase if queue is overloaded
             long interval = _mgr._context.getProperty(PROP_SLOW_TUNNEL_INTERVAL, DEFAULT_RUN_INTERVAL_MS);
             int maxWaiting = _mgr._context.getProperty("router.maxWaitingJobs", 750);
             int readyCount = _mgr._context.jobQueue().getReadyCount();
             long maxLag = _mgr._context.jobQueue().getMaxLag();
             long avgLag = _mgr._context.jobQueue().getAvgLag();
-            // If queue overloaded, increase interval to reduce load (check both max and avg lag)
-            if (readyCount > maxWaiting || maxLag >= 10 || avgLag >= 10) {
+            // If queue overloaded, increase interval to reduce load.
+            // getMaxLag()/getAvgLag() are in milliseconds (see JobQueue),
+            // so use a >= 500ms threshold like the rest of the router
+            if (readyCount > maxWaiting || maxLag >= 500 || avgLag >= 500) {
                 interval = 2 * 60 * 1000L; // 2m
                 if (_mgr._log.shouldWarn()) {
                     _mgr._log.warn("Job queue overloaded (Ready jobs: " + readyCount + ", Max lag: " + maxLag +
-                                   "ms, Avg lag: " + avgLag + "ms) -> Increasing interval to 90s...");
+                                   "ms, Avg lag: " + avgLag + "ms) -> Increasing interval to 2m...");
                 }
             }
-            _mgr._log.info("Remove Slow Tunnels Job: Requeueing in " + (interval / 1000) + "s...");
+            if (_mgr._log.shouldInfo())
+                _mgr._log.info("Remove Slow Tunnels Job: Requeueing in " + (interval / 1000) + "s...");
             long start = _mgr._context.clock().now();
             requeue(interval);
             long after = _mgr._context.clock().now();
-            _mgr._log.info("RemoveSlowTunnelsJob requeue took " + (after - start) + "ms, next run at " + (after + interval));
+            if (_mgr._log.shouldInfo())
+                _mgr._log.info("RemoveSlowTunnelsJob requeue took " + (after - start) + "ms, next run at " + (after + interval));
         }
     }
 
@@ -1107,7 +1186,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Does not blame peers for the removal.
      * Removes all such tunnels per pool if pool has more tunnels than configured quantity,
      * but won't go below the configured quantity.
-     * Threshold is either the configured property (in ms), or Math.max(minLatency, 1000ms), whichever is larger.
+     * Threshold is either the configured property (in ms), or Math.max(avg latency,
+     * DEFAULT_MIN_SLOW_THRESHOLD), whichever is larger.
      * @return true if any tunnels were removed
      * @since 0.9.69+
      */
@@ -1166,7 +1246,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (configuredThreshold > 0) {
             threshold = configuredThreshold;
         } else {
-            // Use avg latency as threshold, but minimum DEFAULT_MIN_SLOW_THRESHOLD (2000ms)
+            // Use avg latency as threshold, but minimum DEFAULT_MIN_SLOW_THRESHOLD (10s)
             threshold = Math.max(avg, DEFAULT_MIN_SLOW_THRESHOLD);
         }
         if (_log.shouldDebug()) {
@@ -1280,14 +1360,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     try {
                         pool.removeTunnel(info);
                     } catch (Exception e) {
-                        _log.warn("Exception removing slow tunnel " + info, e);
+                        if (_log.shouldWarn())
+                            _log.warn("Exception removing slow tunnel " + info, e);
                     }
                 }
             }
 
             if (!toRemove.isEmpty()) {
                 didRemove = true;
-                _log.warn("Scheduled early expiry for " + toRemove.size() + " slow tunnels from " + pool);
+                if (_log.shouldWarn())
+                    _log.warn("Scheduled early expiry for " + toRemove.size() + " slow tunnels from " + pool);
             }
         }
         return didRemove;
@@ -1367,9 +1449,31 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
+    /**
+     * Cancel any pending outbound startup event for the destination.
+     * Called when the pool is actually removed.
+     * @param destination the destination hash
+     * @since 0.9.70+
+     */
+    private void cancelPendingOutboundStartup(Hash destination) {
+        ConditionalOutboundStartup evt = _pendingOutboundStartups.remove(destination);
+        if (evt != null) {evt.cancelStartup();}
+    }
+
+    /**
+     * Cancel any pending bootstrap job for the destination.
+     * Called when the pool is actually removed.
+     * @param destination the destination hash
+     * @since 0.9.70+
+     */
+    private void cancelPendingBootstrapJob(Hash destination) {
+        BootstrapClientPool job = _pendingBootstrapJobs.remove(destination);
+        if (job != null) {job.cancelJob();}
+    }
+
     private void shutdownExploratory() {
-            _inboundExploratory.shutdown();
-            _outboundExploratory.shutdown();
+        _inboundExploratory.shutdown();
+        _outboundExploratory.shutdown();
     }
 
     /** List of TunnelPool instances currently in play. */
@@ -1394,15 +1498,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /** Remove a tunnel from the expiration queue to prevent memory leak */
     void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
         ExpireJob.removeFromExpiration(cfg);
-    }
-
-    /**
-     * Remove a participating tunnel from the expiration queue.
-     * Called when IdleTunnelMonitor drops idle tunnels.
-     * @param cfg the hop config to remove
-     */
-    public void removeFromExpirationHop(HopConfig cfg) {
-        // HopConfig-based removal is a no-op for now; only PooledTunnelCreatorConfig tracked
     }
 
     /**
@@ -1447,13 +1542,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             pools.addAll(_clientOutboundPools.values());
         }
         int tunnelCount = 0;
+        Hash routerHash = _context.routerHash();
         for (TunnelPool tp : pools) {
             for (TunnelInfo info : tp.listTunnels()) {
                 if (info.getLength() > 1) {
                     tunnelCount++;
                     for (int j = 0; j < info.getLength(); j++) {
                         Hash peer = info.getPeer(j);
-                        if (!_context.routerHash().equals(peer)) {
+                        if (!routerHash.equals(peer)) {
                             lc.increment(peer);
                         }
                     }
@@ -1517,12 +1613,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return true if the router is firewalled
      */
     public boolean isFirewalled() {
-        return _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+        net.i2p.router.CommSystemFacade.Status status = _context.commSystem().getStatus();
+        return status == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
     }
 
     /** For TunnelRenderer in router console. */
@@ -1575,6 +1672,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @since 0.9.69+
      */
     public int checkAndRecoverPools() {
+        if (_isShutdown) {return 0;}
         int recovered = 0;
         Set<Destination> clients = _context.clientManager().listClients();
         for (Destination dest : clients) {
@@ -1600,6 +1698,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 }
 
                 try {
+                    // Prior settings were lost with the removed pool; rebuild with defaults
                     ClientTunnelSettings settings = new ClientTunnelSettings(h);
                     buildTunnels(dest, settings);
                     recovered++;
@@ -1643,10 +1742,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         int pendingCleanups = _pendingCleanups.size();
 
         if (inboundPools != registeredClients || outboundPools != registeredClients) {
-            _log.warn("Pool mismatch detected: " + registeredClients + " clients, " +
-                      inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
-                      pendingCleanups + " pending cleanups");
-        } else {
+            if (_log.shouldWarn())
+                _log.warn("Pool mismatch detected: " + registeredClients + " clients, " +
+                          inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
+                          pendingCleanups + " pending cleanups");
+        } else if (_log.shouldInfo()) {
             _log.info("Pool health: " + registeredClients + " clients, " +
                       inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
                       pendingCleanups + " pending cleanups");
