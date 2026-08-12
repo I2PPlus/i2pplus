@@ -21,7 +21,9 @@ jobs:
 
     steps:
       - name: PackageInstall
-        run: sudo apt install -y gettext ant-contrib parallel uglifyjs
+        run: |
+          sudo apt install -y gettext ant-contrib parallel uglifyjs
+          sudo npm install -g minify
 
       - uses: actions/checkout@v7
 
@@ -61,6 +63,11 @@ jobs:
         continue-on-error: true
         run: ant jsdoc-zip
 
+      - name: Build dev docs
+        run: |
+          pip install --quiet --break-system-packages markdown-it-py
+          ant devdocs-zip
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -72,6 +79,7 @@ jobs:
             dist/i2psnark-standalone.zip
             dist/javadoc.zip
             dist/jsdoc.zip
+            dist/devdocs.zip
             dist/i2p-src-*.zip
             dist/*.deb
           retention-days: 7
@@ -87,6 +95,7 @@ jobs:
             dist/i2psnark-standalone.zip
             dist/javadoc.zip
             dist/jsdoc.zip
+            dist/devdocs.zip
             dist/i2p-src-*.zip
             dist/*.deb
           generate_release_notes: true
