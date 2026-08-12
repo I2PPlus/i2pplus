@@ -1,3 +1,14 @@
+2026-08-12 dr|z3d
+  * Build:
+    - Fixed the ant i18n generation skipping its locale bundles whenever
+      another build system's output (e.g. the gradle build) sat under the
+      shared build root: the up-to-date check in bundle-messages.sh now
+      only looks at the module's own generated classes, so the router jar
+      again carries all 96 translated message bundles
+    - Excluded the phantom legacy package-info.class files (major 49,
+      annotation-free, unique to the ant javac path) from the router jar so
+      the ant and gradle router jars now carry the identical 1205 classes
+
 2026-08-11 dr|z3d
   * Docs:
     - Corrected the Java requirement in the build docs (1.8 minimum; 17 will

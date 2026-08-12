@@ -78,7 +78,8 @@
   <target name="jar" depends="compile, bundleTranslations, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="${build.dir}/router.jar" basedir="${build.dir}/obj" includes="**/*.class">
+    <jar destfile="${build.dir}/router.jar" basedir="${build.dir}/obj"
+      includes="**/*.class" excludes="**/package-info.class">
       <manifest>
         <!-- so people with very old wrapper.config files will still work with Jetty 6 -->
         <attribute name="${manifest.classpath.name}" value="i2p.jar addressbook.jar jetty-i2p.jar jetty-rewrite-handler.jar jetty-start.jar jetty-util.jar"/>

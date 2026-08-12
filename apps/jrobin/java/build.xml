@@ -69,7 +69,7 @@
   <target name="jar" depends="compile, jarUpToDate, listChangedFiles" unless="jar.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="${build.dir}/jrobin.jar" basedir="${build.dir}/obj" includes="**/*.class">
+    <jar destfile="${build.dir}/jrobin.jar" basedir="${build.dir}/obj" includes="**/*.class" excludes="**/package-info.class">
       <manifest>
         <attribute name="Implementation-Version" value="3.8"/>
         <attribute name="Built-By" value="${build.built-by}"/>

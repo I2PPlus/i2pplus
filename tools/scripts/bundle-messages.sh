@@ -125,12 +125,11 @@ if [ "$TYPE" = "java" ]; then
         LG=$(basename "$i" .po)
         LG="${LG#messages_}"
         [ "$LG" = "en" ] && continue
-        # Search for the class file under the build tree.
-        # Modules output to various subdirs: $BD/obj, $BD/classes, $BD,
-        # or to a sibling under the build root (e.g. i2ptunnel/jsp).
-        MATCH=$(find "$BD" "$BD/.." "$BD/../.." "$BD/../../.." \
-          -path "*/$PACKAGE_PATH/messages_$LG.class" 2>/dev/null | head -1)
-        if [ -z "$MATCH" ] || [ "$i" -nt "$MATCH" ]; then
+        # Only this module's own generated classes count as up to date;
+        # scanning the build root can mistake another module's (or the
+        # gradle build's) output for ours and skip regeneration.
+        CLASSFILE="$CLASS_OUTPUT_DIR/$PACKAGE_PATH/messages_$LG.class"
+        if [ ! -s "$CLASSFILE" ] || [ "$i" -nt "$CLASSFILE" ]; then
             ALL_UPTODATE=0; break
         fi
     done
