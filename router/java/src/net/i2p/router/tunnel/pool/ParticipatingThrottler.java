@@ -76,6 +76,10 @@ public class ParticipatingThrottler {
      */
     public static volatile int _loadWeight = 100;
 
+    /** Cached RateStat handle for the shared load-score computation; refreshed when the context changes. */
+    private static volatile RouterContext _scoreCtx;
+    private static volatile RateStat _bwQueueRateStat;
+
     /**
      * The participating minimum limit.
      * @return min limit
@@ -444,7 +448,7 @@ public class ParticipatingThrottler {
             return Result.ACCEPT;
 
         float ratio = (float) count / limit;
-        float load = calculateLoadScore();
+        float load = calculateLoadScore(context);
         float threshold = _rejectThreshold / 100.0f;
         float steepness = _rejectSteepness / 100.0f;
 
@@ -479,9 +483,10 @@ public class ParticipatingThrottler {
     /**
      * Computes a 0.0–1.0 load score from job queue lag, CPU load, system load,
      * and bandwidth queue pressure. Used to shift the rejection probability curve
-     * left when the router is under load.
+     * left when the router is under load. Shared by ParticipatingThrottler and
+     * RequestThrottler; the RateStat handle is cached per context.
      */
-    private float calculateLoadScore() {
+    static float calculateLoadScore(RouterContext context) {
         float score = 0.0f;
         // Job lag: 0ms → 0, 1000ms+ → 1.0 (40% weight)
         long lag = context.jobQueue().getMaxLag();
@@ -494,7 +499,7 @@ public class ParticipatingThrottler {
         int sysLoad = SystemVersion.getSystemLoad();
         score += Math.min(1.0f, sysLoad / 100.0f) * 0.2f;
         // Bandwidth queue: 0 → 0, 100KB+ → 1.0 (15% weight)
-        RateStat bwRs = context.statManager().getRate("bwLimiter.participatingBandwidthQueue");
+        RateStat bwRs = getBwQueueRateStat(context);
         if (bwRs != null) {
             net.i2p.stat.Rate rate = bwRs.getRate(60000);
             if (rate != null && rate.getLastEventCount() > 0) {
@@ -502,6 +507,18 @@ public class ParticipatingThrottler {
             }
         }
         return Math.min(1.0f, score);
+    }
+
+    private static RateStat getBwQueueRateStat(RouterContext context) {
+        if (_scoreCtx != context) {
+            RateStat rs = context.statManager().getRate("bwLimiter.participatingBandwidthQueue");
+            if (rs != null) {
+                _bwQueueRateStat = rs;
+                _scoreCtx = context;
+            }
+            return rs;
+        }
+        return _bwQueueRateStat;
     }
 
     /**

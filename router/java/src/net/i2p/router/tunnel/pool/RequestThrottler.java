@@ -41,6 +41,7 @@ public class RequestThrottler {
     private volatile Boolean cachedShouldThrottle;
     private volatile Boolean cachedShouldDisconnect;
     private volatile Boolean cachedShouldBlockOldRouters;
+    private volatile boolean cachedShouldBanExcessive = true;
     private static final long PROPERTY_CHECK_INTERVAL = 30*1000L; // Check every 30 seconds
 
     /** Minimum request limit per peer. @since 0.9.70+ */
@@ -294,6 +295,8 @@ public class RequestThrottler {
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
+    private static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = true;
+    private static final String PROP_BAN_EXCESSIVE_REQUESTS = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     /**
      * Creates a new RequestThrottler bound to the given router context.
@@ -454,7 +457,7 @@ public class RequestThrottler {
         }
 
         // Probabilistic rejection: effective ratio = per-peer ratio inflated by load score
-        float load = calculateLoadScore();
+        float load = ParticipatingThrottler.calculateLoadScore(context);
         float threshold2 = _reqRejectThreshold / 100.0f;
         float steepness2 = _reqRejectSteepness / 100.0f;
         float ratio = limit > 0 ? (float) count / limit : 0;
@@ -501,7 +504,7 @@ public class RequestThrottler {
 
         // Graduated response for rejected requests
         if (shouldReject) {
-            boolean banEnabled = "true".equals(context.getProperty("router.banlist.enableExcessiveTunnelRequestsBan", "true"));
+            boolean banEnabled = cachedShouldBanExcessive;
             if (ratio >= 3.0f) {
                 if (banEnabled) {
                     String ipPort = TransportImpl.getRouterIPPort(ri);
@@ -536,29 +539,6 @@ public class RequestThrottler {
 
         if (shouldReject) {context.statManager().addRateData("tunnel.throttleRequestReject", 1);}
         return shouldReject;
-    }
-
-    /**
-     * Computes a 0.0–1.0 load score from job queue lag, CPU load, system load,
-     * and bandwidth queue pressure. Shared curve shape with ParticipatingThrottler.
-     */
-    private float calculateLoadScore() {
-        float score = 0.0f;
-        long lag = context.jobQueue().getMaxLag();
-        score += Math.min(1.0f, lag / 1000.0f) * 0.4f;
-        int cpuLoad = SystemVersion.getCPULoadAvg();
-        if (cpuLoad > 0)
-            score += Math.min(1.0f, cpuLoad / 100.0f) * 0.25f;
-        int sysLoad = SystemVersion.getSystemLoad();
-        score += Math.min(1.0f, sysLoad / 100.0f) * 0.2f;
-        net.i2p.stat.RateStat bwRs = context.statManager().getRate("bwLimiter.participatingBandwidthQueue");
-        if (bwRs != null) {
-            net.i2p.stat.Rate rate = bwRs.getRate(60000);
-            if (rate != null && rate.getLastEventCount() > 0) {
-                score += Math.min(1.0f, (float)(rate.getAverageValue() / 100000.0)) * 0.15f;
-            }
-        }
-        return Math.min(1.0f, score);
     }
 
     /**
@@ -634,6 +614,7 @@ public class RequestThrottler {
             cachedShouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
             cachedShouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
             cachedShouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
+            cachedShouldBanExcessive = context.getProperty(PROP_BAN_EXCESSIVE_REQUESTS, DEFAULT_BAN_EXCESSIVE_REQUESTS);
             lastPropertyCheckTime = now;
         }
     }
