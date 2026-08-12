@@ -2590,14 +2590,9 @@
     <copy quiet="true" verbose="false" file="apps/susidns/src/lib/standard.jar" todir="${pkg.temp.dir}/lib/"/>
   </target>
 
-  <!-- does NOT include launch4j licenses for Windows builds -->
-  <target name="preplicenses" depends="preplicenses-unlesspkg">
-    <copy quiet="true" verbose="false" file="docs/LICENSES.md" tofile="${pkg.temp.dir}/docs/LICENSES.md"/>
-    <copy quiet="true" verbose="false" file="docs/LICENSES.md" tofile="${pkg.temp.dir}/licenses/LICENSE.md"/>
-  </target>
-
-  <target name="preplicenses-unlesspkg" depends="settomcatprop" unless="${with-libtomcat-java}">
-    <copy quiet="true" verbose="false" file="apps/jetty/apache-tomcat-${tomcat.ver}/NOTICE" tofile="${pkg.temp.dir}/licenses/NOTICE-Tomcat.txt"/>
+  <!-- The single license file shipped in update payloads -->
+  <target name="preplicenses">
+    <copy quiet="true" verbose="false" file="docs/LICENSES.md" tofile="${pkg.temp.dir}/docs/LICENSE.md"/>
   </target>
 
 <!-- DOES include launch4j licenses for Windows builds -->

@@ -27,6 +27,8 @@ task i2psnarkJar(type: Jar) {
     from sourceSets.main.output
     exclude 'org/klomp/snark/standalone/**'
     exclude 'org/klomp/snark/web/**'
+    // Locale classes ship in the war, not the jar (ant i2psnark.jar)
+    exclude '**/messages_*.class'
     manifest {
         attributes 'Main-Class': 'org.klomp.snark.Snark'
         attributes 'Class-Path': 'i2p.jar mstreaming.jar streaming.jar'
@@ -35,18 +37,21 @@ task i2psnarkJar(type: Jar) {
 
 // TODO: standalone jar.  This is rather involved!
 
+// i2psnarkJar above is the shipping jar; the default jar would overwrite it
+jar.enabled = false
+
 assemble.dependsOn i2psnarkJar, war
 
-// Create the java files from the po files. The jar task will compile them.
+// Create the java files from the po files. The war task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+// bundle-messages.sh exits fast when all locale classes are current
 def buildDirPath = buildDir
-task bundle {
-    doLast {
-        if (!(new File("${buildDirPath}/classes/java/main/org/klomp/snark/web/messages_de.class")).exists())
-            println "tools/scripts/bundle-messages.sh --dir apps/i2psnark/java --build-dir ${buildDirPath}".execute().text
-    }
+task bundle(type: Exec) {
+    workingDir rootDir
+    commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/i2psnark/java', '--build-dir', buildDirPath.absolutePath
 }
+compileJava.dependsOn bundle
 war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'
 
 war {

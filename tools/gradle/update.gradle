@@ -1,9 +1,15 @@
 def pkgTmpDir = pkgTempDir
+def distAbsDir = distDir.absolutePath
 def localeBuildDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/locale-build"
+
+// Release number from CoreVersion.VERSION, parsed like ant's getReleaseNumber;
+// computed at configuration time so the doLast closures stay config-cache safe
+def releaseNum = (file('core/java/src/net/i2p/CoreVersion.java').getText() =~ /public static final String VERSION\s*=\s*"([^"]+)"/)[0][1]
 
 task prepUpdateRouter(type: Copy) {
     group = 'package'
     description = 'Assemble the router-only update payload (mirrors ant prepupdate-router).'
+    includeEmptyDirs = false
     dependsOn ':core:jar', ':router:jar'
     // Fresh staging dir; the zip task zips everything found, so stale
     // leftovers from earlier runs (renamed jars, deleted dirs) must not persist
@@ -21,20 +27,27 @@ task prepUpdateRouter(type: Copy) {
 task prepUpdateSmall(type: Copy) {
     group = 'package'
     description = 'Assemble the base update payload: core, router, streaming, console jars and wars (mirrors ant prepupdateSmall).'
+    includeEmptyDirs = false
     dependsOn prepUpdateRouter
     dependsOn ':apps:ministreaming:jar', ':apps:streaming:jar'
     dependsOn ':apps:routerconsole:jar', ':apps:i2ptunnel:i2ptunnelJar'
     dependsOn ':apps:routerconsole:war', ':apps:i2ptunnel:war'
-    dependsOn ':apps:addressbook:jar'
+    dependsOn ':apps:jetty:jar'
+    dependsOn ':apps:addressbook:jar', ':apps:addressbook:war'
+    dependsOn ':apps:pack200:jar'
     // Base dir
     into pkgTempDir
     into('lib') {
         from {[
             project(':apps:ministreaming').jar.archiveFile,
             project(':apps:streaming').jar.archiveFile,
-            project(':apps:routerconsole').jar.archiveFile,
+            project(':apps:routerconsole').consoleJar.archiveFile,
             project(':apps:i2ptunnel').i2ptunnelJar.archiveFile,
             project(':apps:jrobin').jar.archiveFile,
+            // Jetty fix jar rides in the compact updater (ant prepjupdatefixes)
+            project(':apps:jetty').jar.archiveFile,
+            // Pack200 needs no Pack200 API and ships in the compact updater (ant prepupdateSmall)
+            project(':apps:pack200').jar.archiveFile,
             // Address book must ship in the payload (ant preppkg-base copies it)
             project(':apps:addressbook').jar.archiveFile,
         ]}
@@ -43,7 +56,18 @@ task prepUpdateSmall(type: Copy) {
         from {[
             project(':apps:routerconsole').war.archiveFile,
             project(':apps:i2ptunnel').war.archiveFile,
+            // Intentionally empty war (ant addressbook emptyWar)
+            project(':apps:addressbook').war.archiveFile,
         ]}
+    }
+    into('geoip') {
+        from 'installer/resources/geoip/countries.txt'
+        from 'installer/resources/geoip/continents.txt'
+    }
+    into('docs/themes') {
+        from('installer/resources/console/themes') {
+            exclude '**/*.*~'
+        }
     }
 }
 
@@ -58,11 +82,11 @@ task compileLocale(type: Exec) {
 task prepUpdate(type: Copy) {
     group = 'package'
     description = 'Assemble the full update payload into pkg-temp: all jars, wars, locale, certificates, docs (mirrors ant prepupdate).'
+    includeEmptyDirs = false
     dependsOn prepUpdateSmall
     dependsOn ':apps:sam:jar'
-    dependsOn ':apps:i2psnark:i2psnarkJar', ':apps:i2psnark:jar'
+    dependsOn ':apps:i2psnark:i2psnarkJar'
     dependsOn ':apps:systray:jar'
-    dependsOn ':apps:jetty:jar'
     dependsOn ':apps:desktopgui:jar'
     dependsOn ':apps:susidns:war', ':apps:susimail:war'
     dependsOn ':apps:i2psnark:war'
@@ -81,7 +105,6 @@ task prepUpdate(type: Copy) {
             project(':apps:i2psnark').i2psnarkJar.archiveFile,
             project(':apps:systray').jar.archiveFile,
             project(':apps:desktopgui').jar.archiveFile,
-            project(':apps:jetty').jar.archiveFile,
         ]}
         // as of 0.7.12; someday, we can remove these from the updater
         from 'apps/susidns/src/WEB-INF/lib/jstl.jar'
@@ -96,60 +119,92 @@ task prepUpdate(type: Copy) {
             project(':apps:imagegen').war.archiveFile,
         ]}
     }
-    from('history.txt') {
+    from 'installer/resources/deletelist.txt'
+    from 'installer/resources/blocklist/blocklist.txt'
+    from 'installer/resources/blocklist/blocklist_tor.txt'
+    from 'installer/resources/platform-specific/unix/eepget'
+    from 'installer/resources/platform-specific/unix/eephead'
+    from 'installer/resources/platform-specific/unix/graceful_update'
+    from 'installer/resources/platform-specific/unix/hostping'
+    from 'installer/resources/platform-specific/unix/i2ping'
+    into('scripts') {
+        from 'installer/resources/platform-specific/windows/fixperms2.bat'
+    }
+    into('docs/readme') {
+        from('installer/resources/console/readme') {
+            include 'readme*.html'
+        }
+    }
+    into('docs/proxy') {
+        from('installer/resources/console/proxy') {
+            include '*.ht'
+        }
+    }
+    into('docs') {
+        from 'docs/LICENSES.md'
+        rename 'LICENSES.md', 'LICENSE.md'
+    }
+    from('docs/history.txt') {
         filter(org.apache.tools.ant.filters.HeadFilter, lines:1500)
     }
     doLast {
         String more = '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
         ant.concat(more, append: 'true', destfile: pkgTmpDir + '/history.txt')
     }
-    from 'docs/LICENSE.md'
-    into('docs') { from 'docs/LICENSE.md' }
-    from 'installer/resources/blocklist.txt'
-    from 'installer/resources/deletelist.txt'
     into('certificates') { from 'installer/resources/certificates' }
     into('locale') { from "$localeBuildDir/mo" }
-    into('man') { from 'installer/resources/platform-specific/unix/man' }
 }
 
-task updaterRouter(type: Zip) {
+// The ant ZipTask is used here (not Gradle's) because it is the only way to
+// match ant's zipit output exactly: deflate level 9 and the zip comment
+task updaterRouter {
     group = 'package'
     description = 'Build the router-only update zip dist/i2pupdate.zip (mirrors ant updater-router).'
     dependsOn prepUpdateRouter
-    // https://stackoverflow.com/questions/54501697/gradle-war-plugin-how-to-change-name-of-an-archive
-    // https://discuss.gradle.org/t/destinationdir-is-deprecated-archivename-is-deprecated/31586
-    archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(distDir)
-    from pkgTempDir
+    doLast {
+        File out = new File(distAbsDir, 'i2pupdate.zip')
+        File tmp = new File(out.absolutePath + '.tmp')
+        ant.delete(file: tmp.absolutePath)
+        ant.zip(destfile: tmp.absolutePath, level: '9', basedir: pkgTmpDir, excludes: 'README.md', comment: releaseNum, whenempty: 'fail')
+        // Replace atomically so a failed zip never leaves a half-written dist zip
+        ant.move(file: tmp.absolutePath, tofile: out.absolutePath, overwrite: 'true')
+    }
 }
 
-task updaterSmall(type: Zip) {
+task updaterSmall {
     group = 'package'
     description = 'Build the compact update zip dist/i2pupdate.zip to verify all module compiles (mirrors ant updaterSmall).'
     dependsOn prepUpdateSmall
-    archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(distDir)
-    from pkgTempDir
+    doLast {
+        File out = new File(distAbsDir, 'i2pupdate.zip')
+        File tmp = new File(out.absolutePath + '.tmp')
+        ant.delete(file: tmp.absolutePath)
+        ant.zip(destfile: tmp.absolutePath, level: '9', basedir: pkgTmpDir, excludes: 'README.md', comment: releaseNum, whenempty: 'fail')
+        // Replace atomically so a failed zip never leaves a half-written dist zip
+        ant.move(file: tmp.absolutePath, tofile: out.absolutePath, overwrite: 'true')
+    }
 }
 
 def rootDirAbs = rootDir.absolutePath
 
-task updater(type: Zip) {
+task updater {
     group = 'package'
     description = 'Build the full update zip dist/i2pupdate.zip for existing installs (mirrors ant updater).'
     dependsOn prepUpdate, prepUpdateSmall, prepUpdateRouter
-    archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(distDir)
-    from pkgTempDir
     doLast {
+        File out = new File(distAbsDir, 'i2pupdate.zip')
+        File tmp = new File(out.absolutePath + '.tmp')
+        ant.delete(file: tmp.absolutePath)
+        ant.zip(destfile: tmp.absolutePath, level: '9', basedir: pkgTmpDir, excludes: 'README.md', comment: releaseNum, whenempty: 'fail')
+        // Replace atomically so a failed zip never leaves a half-written dist zip
+        ant.move(file: tmp.absolutePath, tofile: out.absolutePath, overwrite: 'true')
         ant.exec(executable: 'git', outputproperty: 'git.revision', dir: rootDirAbs) {
             arg(value: 'rev-parse')
             arg(value: '--short')
             arg(value: 'HEAD')
         }
         def rev = ant.project.properties['git.revision'] ?: 'unknown'
-        logger.lifecycle("Created I2P+ update (rev. ${rev}): ${archiveFile.get().asFile.absolutePath}")
+        logger.lifecycle("Created I2P+ update (rev. ${rev}): ${distAbsDir}/i2pupdate.zip")
     }
 }
-
 

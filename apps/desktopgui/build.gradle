@@ -21,11 +21,11 @@ dependencies {
 // Create the java files from the po files. The jar task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+// bundle-messages.sh exits fast when all locale classes are current
 def buildDirPath = buildDir
-task bundle {
-    doLast {
-        if (!(new File("${buildDirPath}/net/i2p/desktopgui/messages_de.class")).exists())
-            println "tools/scripts/bundle-messages.sh --dir apps/desktopgui --build-dir ${buildDirPath}".execute().text
-    }
+task bundle(type: Exec) {
+    workingDir rootDir
+    commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/desktopgui', '--build-dir', buildDirPath.absolutePath
 }
+compileJava.dependsOn bundle
 jar.dependsOn bundle

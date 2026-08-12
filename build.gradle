@@ -80,6 +80,13 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'jacoco'
 
+    // Match the ant build (javac.version=1.8, javac.release=8) so both
+    // produce Java 8 bytecode and identical synthetic classes
+    tasks.withType(JavaCompile).configureEach {
+        options.release = 8
+        options.encoding = 'UTF-8'
+    }
+
     repositories {
         mavenCentral()
     }

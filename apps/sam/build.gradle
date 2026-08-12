@@ -8,7 +8,12 @@ sourceSets {
             srcDir 'java/src'
         }
     }
-    test {
+// The SAM client API is not part of the update payload (ant sam.jar)
+tasks.named('jar') {
+    exclude 'net/i2p/sam/client/**'
+}
+
+test {
         java {
             srcDir 'java/test'
         }

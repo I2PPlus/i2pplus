@@ -1,0 +1,22 @@
+// Port of the ant apps/pack200/java component: standalone pack200 munger, no external deps.
+// The jar is what ant ships as lib/pack200.jar in the update payload.
+sourceSets {
+    main {
+        java {
+            srcDir 'java/src'
+        }
+    }
+}
+
+jar {
+    from('java/src') {
+        include 'io/pack200/intrinsic.properties'
+    }
+    manifest {
+        attributes 'Implementation-Title': 'Pack200',
+                'Implementation-Version': '14',
+                'Implementation-Vendor': 'Oracle Inc.',
+                'X-Compile-Source-JDK': '1.8',
+                'X-Compile-Target-JDK': '1.8'
+    }
+}

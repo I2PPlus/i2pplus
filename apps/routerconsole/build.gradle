@@ -65,25 +65,31 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
 // Create the java files from the po files. The jar task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+// bundle-messages.sh exits fast when all locale classes are current
 def buildDirPath = buildDir
+task bundleCountries(type: Exec) {
+    workingDir rootDir
+    commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/routerconsole/java', '--cfg', 'bundle-messages-countries.cfg', '--build-dir', buildDirPath.absolutePath
+}
+task bundleNews(type: Exec) {
+    workingDir rootDir
+    commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/routerconsole/java', '--cfg', 'bundle-messages-news.cfg', '--build-dir', buildDirPath.absolutePath
+}
 task bundleJar {
-    doLast {
-        if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/countries/messages_de.class")).exists())
-            println "tools/scripts/bundle-messages.sh --dir apps/routerconsole/java --cfg bundle-messages-countries.cfg --build-dir ${buildDirPath}".execute().text
-        if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/news/messages_de.class")).exists())
-            println "tools/scripts/bundle-messages.sh --dir apps/routerconsole/java --cfg bundle-messages-news.cfg --build-dir ${buildDirPath}".execute().text
-    }
+    dependsOn bundleCountries, bundleNews
 }
-task bundle {
-    doLast {
-        if (!(new File("${buildDirPath}/classes/java/main/net/i2p/router/web/messages_de.class")).exists())
-            println "tools/scripts/bundle-messages.sh --dir apps/routerconsole/java --build-dir ${buildDirPath}".execute().text
-    }
+task bundle(type: Exec) {
+    workingDir rootDir
+    commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/routerconsole/java', '--build-dir', buildDirPath.absolutePath
 }
+compileJava.dependsOn bundle, bundleJar
 
 task consoleJar(type: Jar) {
     from sourceSets.main.output
+    // These stay out of the jar; the war carries them (ant routerconsole.jar)
     exclude 'net/i2p/router/web/helpers/**'
+    exclude 'net/i2p/router/web/servlets/**'
+    exclude 'net/i2p/router/web/resources/**'
     manifest {
         // Top level installer will rename to jrobin.jar
         // DTG added in 0.8.4, not in the classpath for very old installs,
@@ -104,7 +110,6 @@ task helpersJar(type: Jar) {
     archiveBaseName = 'consoleHelpers'
 }
 
-
 task copyJsps(type: Copy) {
     doFirst {
         def f = new File("${buildDirPath}/jsp_copy")
@@ -124,8 +129,10 @@ task copyJsps(type: Copy) {
 }
 
 task precompileJsp(type: JavaExec) {
-    dependsOn copyJsps, ':apps:i2ptunnel:i2ptunnelJar'
-    classpath = java.sourceSets.main.runtimeClasspath
+    dependsOn copyJsps, ':apps:i2ptunnel:i2ptunnelJar', ':apps:jetty:jspcJar'
+    // Resolved at execution, after :apps:jetty is configured (config cache)
+    def jspcJarFile = project.provider { project(':apps:jetty').jspcJar.archiveFile.get().asFile }
+    classpath = java.sourceSets.main.runtimeClasspath + files(jspcJarFile)
     def classpathStr = java.sourceSets.main.runtimeClasspath.asPath
     def sourceCompat = java.sourceCompatibility
     def targetCompat = java.targetCompatibility
@@ -189,7 +196,6 @@ task precompileJsp(type: JavaExec) {
 consoleJar.dependsOn bundleJar
 war.dependsOn(bundle,precompileJsp)
 
-
 war {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     rootSpec.exclude('**/*.jar')
@@ -212,6 +218,9 @@ war {
         into "WEB-INF/classes/net/i2p/router/web/resources"
     })
 }
+
+// consoleJar above is the shipping jar; the default jar would overwrite it
+jar.enabled = false
 
 assemble.dependsOn war, consoleJar
 

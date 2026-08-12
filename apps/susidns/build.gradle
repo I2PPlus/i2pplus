@@ -23,16 +23,16 @@ dependencies {
     implementation fileTree("../jetty/jetty-distribution-${jettyVersion}")
 }
 
-// Create the java files from the po files. The jar task will compile them.
+// Create the java files from the po files. The war task will compile them.
 // This requires gettext 0.19 or higher.
 // We don't support the "slow way"
+// bundle-messages.sh exits fast when all locale classes are current
 def buildDirPath = buildDir
-task bundle {
-    doLast {
-        if (!(new File("${buildDirPath}/classes/java/main/i2p/susi/dns/messages_de.class")).exists())
-            println "tools/scripts/bundle-messages.sh --dir apps/susidns/src --build-dir ${buildDirPath}".execute().text
-    }
+task bundle(type: Exec) {
+    workingDir rootDir
+    commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/susidns/src', '--build-dir', buildDirPath.absolutePath
 }
+compileJava.dependsOn bundle
 
 task copyJsps(type: Copy) {
     doFirst {
@@ -52,18 +52,19 @@ task copyJsps(type: Copy) {
     }
 }
 
-
 task precompileJsp(type: JavaExec) {
     doFirst {
         new File("${buildDirPath}/tmp_jsp").mkdirs()
     }
 
     dependsOn copyJsps, ':apps:i2ptunnel:i2ptunnelJar',
-              ':apps:jetty:jar', ':apps:ministreaming:jar',
+              ':apps:jetty:jar', ':apps:jetty:jspcJar', ':apps:ministreaming:jar',
               ':core:jar', ':router:jar', ':apps:addressbook:jar'
 
-    classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib")
-    def jspClasspathStr = (java.sourceSets.main.runtimeClasspath + fileTree("src/lib")).asPath
+    // Resolved at execution, after :apps:jetty is configured (config cache)
+    def jspcJarFile = project.provider { project(':apps:jetty').jspcJar.archiveFile.get().asFile }
+    classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib") + files(jspcJarFile)
+    def jspClasspathStr = (java.sourceSets.main.runtimeClasspath + fileTree("src/lib") + files(jspcJarFile)).asPath
     def sourceCompat = java.sourceCompatibility
     def targetCompat = java.targetCompatibility
     def projectDirPath = projectDir
@@ -127,7 +128,6 @@ task precompileJsp(type: JavaExec) {
         }
 
         new File("${buildDirPath}/web.xml").text = webXML
-
 
     }
 }

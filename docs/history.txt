@@ -8,6 +8,14 @@
     - Excluded the phantom legacy package-info.class files (major 49,
       annotation-free, unique to the ant javac path) from the router jar so
       the ant and gradle router jars now carry the identical 1205 classes
+    - Extended that package-info exclusion to the jrobin and pack200 jars,
+      making every ant and gradle module jar class-identical
+    - Aligned the gradle packaging with ant: the gradle updater zip is now
+      entry-identical to the ant one (841 files). Module jars and webapps
+      wars carry the same classes, the ant jar layouts are mirrored (web,
+      ui, standalone and SAM client classes live only in the wars; the JspC
+      wrapper stays out of jetty-i2p.jar; no vendored jetty/tomcat jars in
+      the updater payload), and the payload docs and locale bundles match
 
 2026-08-11 dr|z3d
   * Docs:

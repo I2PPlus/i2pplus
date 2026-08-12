@@ -15,6 +15,8 @@ def jettyClassesDir = layout.buildDirectory.dir('classes/java/main').get().asFil
 
 tasks.named('jar') {
     outputs.cacheIf { false }
+    // JspC is a build-time JSP compiler wrapper, never shipped (ant jspc.jar)
+    exclude 'net/i2p/servlet/util/JspC.class'
     doFirst {
         if (!jettyClassesDir.isDirectory() || jettyClassesDir.listFiles().length == 0) {
             throw new GradleException('Refusing to build an empty jetty-i2p.jar: no compiled classes')
@@ -22,10 +24,22 @@ tasks.named('jar') {
     }
 }
 
+// Build-time only: the JspC wrapper used by the jsp precompilers, as in ant
+task jspcJar(type: Jar) {
+    outputs.cacheIf { false }
+    from sourceSets.main.output
+    include 'net/i2p/servlet/util/JspC.class'
+    archiveFileName = 'jspc.jar'
+    dependsOn compileJava
+}
+
 sourceSets {
     main {
         java {
             srcDir 'java/src'
+        }
+        resources {
+            srcDir 'resources'
         }
     }
 }
