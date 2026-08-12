@@ -80,7 +80,7 @@
       {
         passive: {
           get: function () {
-            passiveSupported = true
+            return (passiveSupported = true)
           }
         }
       }
@@ -1150,7 +1150,11 @@
   // If this script is async-loaded, then tell parent page to retry init.
   function chkLateLoaded() {
     if ('loading' !== document.readyState) {
-      window.parent.postMessage('[iFrameResizerChild]Ready', '*')
+      var parentOrigin = '*'
+      try {
+        parentOrigin = window.parent.location.origin
+      } catch (e) {}
+      window.parent.postMessage('[iFrameResizerChild]Ready', parentOrigin)
     }
   }
 

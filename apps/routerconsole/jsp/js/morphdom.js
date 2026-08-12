@@ -456,68 +456,70 @@ function morphdomFactory(morphAttrs) {
           continue outer;
         }
 
-        while (!skipFrom && curFromNodeChild) {
-          var fromNextSibling = curFromNodeChild.nextSibling;
-          var curFromNodeKey = getNodeKey(curFromNodeChild);
-          var curFromNodeType = curFromNodeChild.nodeType;
+        if (!skipFrom) {
+          while (curFromNodeChild) {
+            var fromNextSibling = curFromNodeChild.nextSibling;
+            var curFromNodeKey = getNodeKey(curFromNodeChild);
+            var curFromNodeType = curFromNodeChild.nodeType;
 
-          // Skip table sections in the source — they're matched by tag name
-          // above and must not be removed as "incompatible" children.
-          if (fromEl.nodeName === "TABLE" && isTableSection(curFromNodeChild)) {
-            curFromNodeChild = fromNextSibling;
-            continue;
-          }
+            // Skip table sections in the source — they're matched by tag name
+            // above and must not be removed as "incompatible" children.
+            if (fromEl.nodeName === "TABLE" && isTableSection(curFromNodeChild)) {
+              curFromNodeChild = fromNextSibling;
+              continue;
+            }
 
-          var isCompatible = undefined;
+            var isCompatible = undefined;
 
-          if (curFromNodeType === curToNodeChild.nodeType) {
-            if (curFromNodeType === ELEMENT_NODE) {
-              if (curToNodeKey) {
-                if (curToNodeKey !== curFromNodeKey) {
-                  var matchingFromEl = fromNodesLookup[curToNodeKey];
-                  if (matchingFromEl && compareNodeNames(curFromNodeChild, matchingFromEl)) {
-                    fromEl.insertBefore(matchingFromEl, curFromNodeChild);
-                    if (curFromNodeKey) {
-                      addKeyedRemoval(curFromNodeKey);
+            if (curFromNodeType === curToNodeChild.nodeType) {
+              if (curFromNodeType === ELEMENT_NODE) {
+                if (curToNodeKey) {
+                  if (curToNodeKey !== curFromNodeKey) {
+                    var matchingFromEl = fromNodesLookup[curToNodeKey];
+                    if (matchingFromEl && compareNodeNames(curFromNodeChild, matchingFromEl)) {
+                      fromEl.insertBefore(matchingFromEl, curFromNodeChild);
+                      if (curFromNodeKey) {
+                        addKeyedRemoval(curFromNodeKey);
+                      } else {
+                        removeNode(curFromNodeChild, fromEl, true);
+                      }
+                      curFromNodeChild = matchingFromEl;
+                      curFromNodeKey = getNodeKey(curFromNodeChild);
                     } else {
-                      removeNode(curFromNodeChild, fromEl, true);
+                      isCompatible = false;
                     }
-                    curFromNodeChild = matchingFromEl;
-                    curFromNodeKey = getNodeKey(curFromNodeChild);
-                  } else {
-                    isCompatible = false;
                   }
+                } else if (curFromNodeKey) {
+                  isCompatible = false;
                 }
-              } else if (curFromNodeKey) {
-                isCompatible = false;
-              }
 
-              isCompatible = isCompatible !== false && compareNodeNames(curFromNodeChild, curToNodeChild);
-              if (isCompatible) {
-                morphEl(curFromNodeChild, curToNodeChild);
-              }
-            } else if (curFromNodeType === TEXT_NODE || curFromNodeType === COMMENT_NODE) {
-              if (curFromNodeChild.nodeValue !== curToNodeChild.nodeValue &&
-                  !(curFromNodeType === TEXT_NODE && !inPreContext(fromEl) &&
-                    isWsOnlyText(curFromNodeChild.nodeValue) && isWsOnlyText(curToNodeChild.nodeValue))) {
-                curFromNodeChild.nodeValue = curToNodeChild.nodeValue;
+                isCompatible = isCompatible !== false && compareNodeNames(curFromNodeChild, curToNodeChild);
+                if (isCompatible) {
+                  morphEl(curFromNodeChild, curToNodeChild);
+                }
+              } else if (curFromNodeType === TEXT_NODE || curFromNodeType === COMMENT_NODE) {
+                if (curFromNodeChild.nodeValue !== curToNodeChild.nodeValue &&
+                    !(curFromNodeType === TEXT_NODE && !inPreContext(fromEl) &&
+                      isWsOnlyText(curFromNodeChild.nodeValue) && isWsOnlyText(curToNodeChild.nodeValue))) {
+                  curFromNodeChild.nodeValue = curToNodeChild.nodeValue;
+                }
               }
             }
-          }
 
-          if (isCompatible) {
-            curToNodeChild = toNextSibling;
+            if (isCompatible) {
+              curToNodeChild = toNextSibling;
+              curFromNodeChild = fromNextSibling;
+              continue outer;
+            }
+
+            if (curFromNodeKey) {
+              addKeyedRemoval(curFromNodeKey);
+            } else if (!(curFromNodeChild.nodeType === TEXT_NODE && !inPreContext(fromEl) && isWsOnlyText(curFromNodeChild.nodeValue))) {
+              removeNode(curFromNodeChild, fromEl, true);
+            }
+
             curFromNodeChild = fromNextSibling;
-            continue outer;
           }
-
-          if (curFromNodeKey) {
-            addKeyedRemoval(curFromNodeKey);
-          } else if (!(curFromNodeChild.nodeType === TEXT_NODE && !inPreContext(fromEl) && isWsOnlyText(curFromNodeChild.nodeValue))) {
-            removeNode(curFromNodeChild, fromEl, true);
-          }
-
-          curFromNodeChild = fromNextSibling;
         }
 
         if (curToNodeKey && fromNodesLookup[curToNodeKey] && compareNodeNames(fromNodesLookup[curToNodeKey], curToNodeChild)) {
