@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
  */
 public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
-    private static volatile X25519KeyFactory _lastInstance;
+    private static volatile X25519KeyFactory lastInstance;
     private final I2PAppContext _context;
     private final Log _log;
     private volatile int _minSize;
@@ -76,7 +76,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         }
         _keys = new LinkedBlockingQueue<>(HARD_MAX);
         if (!SystemVersion.isWindows()) {setPriority(Thread.NORM_PRIORITY - 1);}
-        _lastInstance = this;
+        lastInstance = this;
     }
 
     /**
@@ -212,7 +212,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      * @return the instance
      * @since 0.9.70+
      */
-    public static X25519KeyFactory getInstance() { return _lastInstance; }
+    public static X25519KeyFactory getInstance() { return lastInstance; }
 
     /**
      * Returns the current minimum precalc queue size.

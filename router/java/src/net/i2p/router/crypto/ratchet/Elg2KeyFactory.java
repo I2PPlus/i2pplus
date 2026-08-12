@@ -21,7 +21,7 @@ import net.i2p.util.SystemVersion;
  */
 public class Elg2KeyFactory extends I2PThread implements KeyFactory {
 
-    private static volatile Elg2KeyFactory _lastInstance;
+    private static volatile Elg2KeyFactory lastInstance;
     private final RouterContext _context;
     private final Log _log;
     private final Elligator2 _elg2;
@@ -74,7 +74,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         }
         _keys = new LinkedBlockingQueue<>(HARD_MAX);
         if (!SystemVersion.isWindows()) {setPriority(Thread.NORM_PRIORITY - 1);}
-        _lastInstance = this;
+        lastInstance = this;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
      * @return the instance
      * @since 0.9.70+
      */
-    public static Elg2KeyFactory getInstance() { return _lastInstance; }
+    public static Elg2KeyFactory getInstance() { return lastInstance; }
 
     /**
      * Current minimum precalc queue size.

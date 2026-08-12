@@ -32,12 +32,12 @@ class ArrayUtils {
      * Return a new typed array of the specified minimum length.
      *
      * @param <T> the component type
-     * @param _clazz the class of the component type
+     * @param clazz the class of the component type
      * @param minLen the minimum length
      * @return the new array
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[] newUnpaddedArray(Class<T> _clazz, int minLen) {
-        return (T[]) java.lang.reflect.Array.newInstance(_clazz, minLen);
+    public static <T> T[] newUnpaddedArray(Class<T> clazz, int minLen) {
+        return (T[]) java.lang.reflect.Array.newInstance(clazz, minLen);
     }
 }

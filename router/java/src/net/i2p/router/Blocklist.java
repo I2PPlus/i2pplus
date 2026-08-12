@@ -922,14 +922,12 @@ public class Blocklist {
             if (rv) {_context.commSystem().removeExemption(Addresses.toCanonicalString(ip));}
         } else {return;}
 
-        if (rv) {
+        if (rv && _log.shouldInfo()) {
             // lower log level at startup when initializing from blocklist files
-            if (_log.shouldInfo()) {
-                if (source == null) {
-                    _log.info("Banning " + Addresses.toString(ip) + " for duration of session -> Blocklist entry");
-                } else {
-                    _log.info("Banning " + Addresses.toString(ip) + " for duration of session -> " + source);
-                }
+            if (source == null) {
+                _log.info("Banning " + Addresses.toString(ip) + " for duration of session -> Blocklist entry");
+            } else {
+                _log.info("Banning " + Addresses.toString(ip) + " for duration of session -> " + source);
             }
         }
     }
@@ -1381,7 +1379,7 @@ public class Blocklist {
         }
     }
 
-    private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long _duration) {
+    private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long duration) {
         // This only checks one file for now, pick the best one
         File blFile = null; // user specified
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);

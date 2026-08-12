@@ -196,11 +196,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /** Perform recurring maintenance */
         public void timeReached() {
             if (!_alive) {return;}
-            long beforeExpire = _context.clock().now();
-            int expired = aggressiveExpire();
+            aggressiveExpire();
             int overage = _inboundTagSets.size() - MAX_INBOUND_SESSION_TAGS;
             if (overage > 0) {clearExcess(overage);}
-            long expireTime = _context.clock().now() - beforeExpire;
             schedule(60L*1000);
         }
     }
@@ -698,7 +696,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         }
                     }
                 }
-                remaining = _inboundTagSets.size();
             }
         }
         if (removed > 0 && _log.shouldInfo())

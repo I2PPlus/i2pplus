@@ -262,30 +262,30 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /** I2CP internal queue size — static so ClientManager can read it without circular dep */
-    private static volatile int _internalQueueSize = SystemVersion.isSlow() ? 256 : 512;
+    private static volatile int internalQueueSize = SystemVersion.isSlow() ? 256 : 512;
 
     /** Max time (ms) a message may sit in the outbound dispatch queue before being dropped */
-    private static volatile int _maxDispatchAgeMs = 3000;
+    private static volatile int maxDispatchAgeMs = 3000;
 
     /** Priority for I/O handler threads — boosted under load, reduced when idle */
-    private static volatile int _handlerThreadPriority = Thread.NORM_PRIORITY;
+    private static volatile int handlerThreadPriority = Thread.NORM_PRIORITY;
 
     /** Per-pool test budget for client tunnels — high enough to never throttle.
      *  Global caps (maxQueuedTests, hardLimit) protect the job queue instead. */
-    private static volatile int _testClientBudget = 256;
+    private static volatile int testClientBudget = 256;
 
     /**
      * Retest delay backoff multiplier (percent, 100 = 1x).
      * Increases under job queue pressure to free test capacity for UNTESTED tunnels.
      * Range 100 (no backoff) to 800 (8x).
      */
-    private static volatile int _testRetestBackoff = 100;
+    private static volatile int testRetestBackoff = 100;
 
     /**
      * Extra tunnels to build beyond target per pool when build failure rate is high.
      * Computed from build success rate. Range 0-10.
      */
-    private static volatile int _buildFailureBuffer = 0;
+    private static volatile int buildFailureBuffer = 0;
 
     /**
      * Minimum INITIAL_RTO target (ms) in the Tuner's computeTarget().
@@ -295,14 +295,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * premature retransmit; the Tuner raises from there for higher-latency paths.
      * @since 0.9.70+
      */
-    private static volatile int INITIAL_RTO_FLOOR = 3000;
+    private static volatile int initialRtoFloor = 3000;
 
     /**
      * The handler thread priority.
      * @return the target priority for I/O handler threads
      * @since 0.9.70+
      */
-    public static int getHandlerThreadPriority() { return _handlerThreadPriority; }
+    public static int getHandlerThreadPriority() { return handlerThreadPriority; }
 
     /**
      * Adjust the current thread's priority to the target handler priority.
@@ -312,7 +312,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.70+
      */
     public static void adjustHandlerPriority() {
-        int target = _handlerThreadPriority;
+        int target = handlerThreadPriority;
         Thread t = Thread.currentThread();
         if (t.getPriority() != target) {
             try { t.setPriority(target); }
@@ -325,30 +325,30 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @return the max dispatch age in ms
      * @since 0.9.70+
      */
-    public static int getMaxDispatchAgeMs() { return _maxDispatchAgeMs; }
+    public static int getMaxDispatchAgeMs() { return maxDispatchAgeMs; }
 
     /**
      * The I2CP internal queue size.
      * @return the current I2CP internal queue size
      * @since 0.9.70+
      */
-    public static int getInternalQueueSize() { return _internalQueueSize; }
+    public static int getInternalQueueSize() { return internalQueueSize; }
 
     /**
      * The test client budget.
      * @return the test client budget
      */
-    public static int getTestClientBudget() { return _testClientBudget; }
+    public static int getTestClientBudget() { return testClientBudget; }
     /**
      * The test retest backoff.
      * @return the test retest backoff
      */
-    public static int getTestRetestBackoff() { return _testRetestBackoff; }
+    public static int getTestRetestBackoff() { return testRetestBackoff; }
     /**
      * The build failure buffer.
      * @return the build failure buffer
      */
-    public static int getBuildFailureBuffer() { return _buildFailureBuffer; }
+    public static int getBuildFailureBuffer() { return buildFailureBuffer; }
 
     /**
      * The I2CP internal queue size, clamped to a sane range (called by Tuner).
@@ -358,7 +358,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     public static void setInternalQueueSize(int size) {
         int def = SystemVersion.isSlow() ? 256 : 512;
-        _internalQueueSize = Math.max(def / 2, Math.min(def * 4, size));
+        internalQueueSize = Math.max(def / 2, Math.min(def * 4, size));
     }
 
     /** Subsystem labels for grouping in the UI */
@@ -547,9 +547,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _context = ctx;
         _log = ctx.logManager().getLog(Tuner.class);
         _autotune = new AutotuneConfig(ctx);
-        BaseParam._sharedAutotune = _autotune;
-        _maxDispatchAgeMs = ctx.getProperty("i2p.router.maxDispatchAge", 3000);
-        _handlerThreadPriority = ctx.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY);
+        BaseParam.sharedAutotune = _autotune;
+        // Apply the configured values at startup, clamped to the tunable ranges
+        // enforced by MaxDispatchAgeParam / HandlerThreadPriorityParam. These
+        // fields feed adjustHandlerPriority() and GetBidsJob before the tunable
+        // machinery takes over; an out-of-range priority would make setPriority()
+        // throw in every handler loop, and a negative dispatch age is nonsense.
+        maxDispatchAgeMs = Math.max(2000, Math.min(30000,
+                ctx.getProperty("i2p.router.maxDispatchAge", 3000)));
+        handlerThreadPriority = Math.max(Thread.MIN_PRIORITY + 2,
+                Math.min(Thread.MAX_PRIORITY - 1,
+                ctx.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY)));
         _params = new ArrayList<TunableParam>(72);
 
         // Transport — NTCP/UDP/SSU
@@ -841,13 +849,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // Uses hourly build success rate to avoid over-reacting to transient dips.
         double successRate = getBuildSuccessRate();
         if (Double.isNaN(successRate) || successRate >= 0.80) {
-            _buildFailureBuffer = 0;
+            buildFailureBuffer = 0;
         } else if (successRate >= 0.60) {
-            _buildFailureBuffer = 1;
+            buildFailureBuffer = 1;
         } else if (successRate >= 0.40) {
-            _buildFailureBuffer = 2;
+            buildFailureBuffer = 2;
         } else {
-            _buildFailureBuffer = 3;
+            buildFailureBuffer = 3;
         }
 
         // Test retest backoff: multiplier (percent) on retest delay for reliable
@@ -855,9 +863,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // GOOD tunnels to free test capacity for UNTESTED ones — no per-pool
         // budgets ever deny a test outright.
         double pressure = getJobQueuePressure();
-        _testRetestBackoff = 100 + (int)(pressure * 700); // 0.0→100(1x), 1.0→800(8x)
+        testRetestBackoff = 100 + (int)(pressure * 700); // 0.0→100(1x), 1.0→800(8x)
 
-        // _testClientBudget stays at 256 — we never throttle testing at the pool level.
+        // testClientBudget stays at 256 — we never throttle testing at the pool level.
         // Global caps (maxQueuedTests, hardLimit) protect the job queue instead.
     }
 
@@ -1271,7 +1279,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     abstract static class BaseParam implements TunableParam {
         /** Shared instance — set once in Tuner constructor, used by all BaseParams */
-        static volatile AutotuneConfig _sharedAutotune;
+        static volatile AutotuneConfig sharedAutotune;
         /** Internal config property key (e.g. "i2p.tunnel.socketConnectTimeout"). */
         protected final String _name;
         /** Human-readable label for display in the Tuner UI. */
@@ -1364,7 +1372,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _step = defaultStep;
             _log = ctx.logManager().getLog(Tuner.class);
             _ctx = ctx;
-            _autotune = (autotune != null) ? autotune : _sharedAutotune;
+            _autotune = (autotune != null) ? autotune : sharedAutotune;
             // Capture factory default on first run, persist to autotune.config
             int runtimeDefault = getRuntimeValue();
             _factoryDefault = runtimeDefault;
@@ -2128,19 +2136,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private static class StreamingReflector {
         private static final String FULL_CLASS = "net.i2p.client.streaming.impl.I2PSocketManagerFull";
-        private static volatile Class<?> _cls;
-        private static volatile boolean _resolved;
+        private static volatile Class<?> cls;
+        private static volatile boolean resolved;
 
         private static Class<?> getCLS() {
-            if (!_resolved) {
+            if (!resolved) {
                 try {
-                    _cls = Class.forName(FULL_CLASS);
-                    _resolved = true;
+                    cls = Class.forName(FULL_CLASS);
+                    resolved = true;
                 } catch (ClassNotFoundException e) {
                     // streaming not loaded — retry next cycle
                 }
             }
-            return _cls;
+            return cls;
         }
 
         /** Call a static int getter via reflection. */
@@ -2177,29 +2185,29 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.70+
      */
     private static class StreamingConnectionReflector {
-        private static volatile Class<?> _connectionOptionsCls;
-        private static volatile Class<?> _connectionCls;
-        private static volatile boolean _resolved;
+        private static volatile Class<?> connectionOptionsCls;
+        private static volatile Class<?> connectionCls;
+        private static volatile boolean resolved;
 
         private static void resolve() {
-            if (!_resolved) {
+            if (!resolved) {
                 try {
-                    _connectionOptionsCls = Class.forName("net.i2p.client.streaming.impl.ConnectionOptions");
-                    _connectionCls = Class.forName("net.i2p.client.streaming.impl.Connection");
+                    connectionOptionsCls = Class.forName("net.i2p.client.streaming.impl.ConnectionOptions");
+                    connectionCls = Class.forName("net.i2p.client.streaming.impl.Connection");
                 } catch (ClassNotFoundException e) {
                     // streaming not loaded yet — don't cache, retry next cycle
                     return;
                 }
-                _resolved = true;
+                resolved = true;
             }
         }
 
         /** Method name for reflection-based config invocation. */
         static int invokeConnectionOptionsInt(String methodName) {
             resolve();
-            if (_connectionOptionsCls == null) return -1;
+            if (connectionOptionsCls == null) return -1;
             try {
-                return (Integer) _connectionOptionsCls.getMethod(methodName).invoke(null);
+                return (Integer) connectionOptionsCls.getMethod(methodName).invoke(null);
             } catch (Exception e) {
                 return -1;
             }
@@ -2208,9 +2216,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Call a setter on ConnectionOptions via reflection. */
         static void invokeConnectionOptionsSet(String methodName, int value) {
             resolve();
-            if (_connectionOptionsCls == null) return;
+            if (connectionOptionsCls == null) return;
             try {
-                _connectionOptionsCls.getMethod(methodName, int.class).invoke(null, value);
+                connectionOptionsCls.getMethod(methodName, int.class).invoke(null, value);
             } catch (Exception e) {
                 // ignore
             }
@@ -2219,9 +2227,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Call a getter on Connection via reflection. */
         static int invokeConnectionInt(String methodName) {
             resolve();
-            if (_connectionCls == null) return -1;
+            if (connectionCls == null) return -1;
             try {
-                return (Integer) _connectionCls.getMethod(methodName).invoke(null);
+                return (Integer) connectionCls.getMethod(methodName).invoke(null);
             } catch (Exception e) {
                 return -1;
             }
@@ -2230,9 +2238,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Call a setter on Connection via reflection. */
         static void invokeConnectionSet(String methodName, int value) {
             resolve();
-            if (_connectionCls == null) return;
+            if (connectionCls == null) return;
             try {
-                _connectionCls.getMethod(methodName, int.class).invoke(null, value);
+                connectionCls.getMethod(methodName, int.class).invoke(null, value);
             } catch (Exception e) {
                 // ignore
             }
@@ -2247,19 +2255,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private static class I2PTunnelReflector {
         private static final String TCG = "net.i2p.i2ptunnel.TunnelControllerGroup";
-        private static volatile Class<?> _cls;
-        private static volatile boolean _resolved;
+        private static volatile Class<?> cls;
+        private static volatile boolean resolved;
 
         private static Class<?> getCLS() {
-            if (!_resolved) {
+            if (!resolved) {
                 try {
-                    _cls = Class.forName(TCG);
-                    _resolved = true;
+                    cls = Class.forName(TCG);
+                    resolved = true;
                 } catch (ClassNotFoundException e) {
                     // i2ptunnel not loaded — retry next cycle
                 }
             }
-            return _cls;
+            return cls;
         }
 
         /** Call a static int getter via reflection. */
@@ -2398,7 +2406,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             leaseSetFailed/Found (NetDB lookup time)
             double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double initialRTT = getAdditionalStat(_context, "stream.con.initialRTT.out");
             double leaseFailedTime = getAdditionalStat(_context, "client.leaseSetFailedRemoteTime");
@@ -2740,7 +2747,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _maxDispatchAgeMs = value;
+            maxDispatchAgeMs = value;
             _context.router().saveConfig("i2p.router.maxDispatchAge", Integer.toString(value));
         }
 
@@ -2753,7 +2760,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * The runtime value for this parameter.
          */
         protected void setRuntimeValue(int value) {
-            _maxDispatchAgeMs = value;
+            maxDispatchAgeMs = value;
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -2785,8 +2792,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean lotsOfBidFails = !Double.isNaN(bidFails) && bidFails > 10;
             boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
             boolean cpuFree = Double.isNaN(jobLag) || jobLag < 20;
-            boolean peersFalling = !Double.isNaN(peerCount) && peerCount < 1000;
-            boolean drainActive = !Double.isNaN(expiredCount) && expiredCount > 50;
             boolean atFloor = current <= _min;
             double totalCompleted = !Double.isNaN(delivered) && !Double.isNaN(expiredQ) ? delivered + expiredQ : Double.NaN;
             double deliveryRatio = !Double.isNaN(totalCompleted) && totalCompleted > 0 ? delivered / totalCompleted : Double.NaN;
@@ -2851,7 +2856,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _handlerThreadPriority = value;
+            handlerThreadPriority = value;
             _context.router().saveConfig("i2p.router.handlerThreadPriority", Integer.toString(value));
         }
 
@@ -3679,7 +3684,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Target: 2x RTT as baseline (standard TCP-like behavior)
             // Floor of 3000ms prevents premature SYN retransmit on higher-latency links
             // (too-low RTO causes spurious retransmits and wasted bandwidth).
-            int rtoFloor = INITIAL_RTO_FLOOR;
+            int rtoFloor = initialRtoFloor;
             int target;
             if (Double.isNaN(observed)) {
                 target = current;
@@ -3709,11 +3714,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Congested or network unhealthy = don't lower RTO
             // ...unless RTO far exceeds the RTT-based target, meaning the high RTO
             // itself is causing the failures (connections time out before completing).
-            if ((congested || !networkHealthy) && target < current) {
-                if (current <= target * 2)
-                    return current;
-                // else RTO >> target — fall through to decrease toward RTT target
-            }
+            if ((congested || !networkHealthy) && target < current && current <= target * 2)
+                return current;
+            // else RTO >> target — fall through to decrease toward RTT target
 
             // Dead zone: if current is within 50% of target and no drops, hold
             if (current >= target * 0.5 && current <= target * 1.5 && !spuriousRetransmits)
@@ -4245,7 +4248,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: codel.UDP-Sender.drop.<priority> (drop events), jobLag (CPU)
             // Note: CoDel drop stats are per-priority; sum all priorities.
             double drops = getCoDelDropEventCount(_context, "codel.UDP-Sender.drop.");
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
 
@@ -4319,7 +4321,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: codel.UDP-Sender.drop.<priority> (drop events), jobLag (CPU)
             // Note: CoDel drop stats are per-priority; sum all priorities.
             double drops = getCoDelDropEventCount(_context, "codel.UDP-Sender.drop.");
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
 
@@ -5002,7 +5003,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean sustainedHeavyTransit = !Double.isNaN(hourlyBps) && hourlyBps > getSustainedHeavyTransitThreshold(_context);
             boolean downstreamBackedUp = !Double.isNaN(msgRxQueue) && msgRxQueue > 50;
             boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
 
@@ -5630,7 +5630,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (configured > 0) return configured;
             // Default: min(maxTunnels, 100) — the old hardcoded value
             int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
-                                                  RouterThrottleImpl._defaultMaxTunnels);
+                                                  RouterThrottleImpl.defaultMaxTunnels);
             return Math.min(maxTunnels, 100);
         }
 
@@ -5647,8 +5647,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int numTunnels = _context.tunnelManager().getParticipatingCount();
-            int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
-                                                  RouterThrottleImpl._defaultMaxTunnels);
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
             if (maxBps <= 0) return current;
             double usagePct = observed / maxBps;
@@ -6455,7 +6453,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
-            double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congWindowSize = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
@@ -8218,7 +8215,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double lookupTime = getAdditionalStat(_context, "tunnel.nextHopLookupSuccessTime");
             boolean lookupsSlow = !Double.isNaN(lookupTime) && lookupTime > 10000;
             double tunnelBacklog = getAdditionalStat(_context, "router.tunnelBacklog");
-            boolean backlogHigh = !Double.isNaN(tunnelBacklog) && tunnelBacklog > 100;
             double banHits = getAdditionalEventCount(_context, "tunnel.buildBanHit");
             double testFails = getAdditionalStat(_context, "tunnel.testFailedTime");
             double buildRejects = getAdditionalEventCount(_context, "tunnel.buildClientReject");
@@ -11523,9 +11519,8 @@ protected int computeTarget(double observed) {
         }
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
             // Hold steady — CPU threshold is system-dependent, not load-reactive
-            return current;
+            return getRuntimeValue();
         }
     }
 
@@ -11588,8 +11583,7 @@ protected int computeTarget(double observed) {
         }
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            return current;
+            return getRuntimeValue();
         }
     }
 
@@ -11658,7 +11652,6 @@ protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             int sysLoad = SystemVersion.getSystemLoad();
-            boolean moderateLoad = !Double.isNaN(jobLag) && jobLag > 200 && sysLoad > 50;
             // Moderate window should be ~2x the high window
             int highWindow = (int) RequestThrottler.getSustainedHighLoadMs();
             int target = Math.max(_min, Math.min(_max, highWindow * 2));

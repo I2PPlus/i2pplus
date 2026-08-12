@@ -186,12 +186,12 @@ public class Router implements RouterClock.ClockShiftListener {
         if (System.getProperty("I2P_DISABLE_DNS_CACHE_OVERRIDE") == null) {
             // grumble about sun's java caching DNS entries *forever* by default
             // so let's just keep 'em for a short time
-            String DNS_CACHE_TIME = Integer.toString(15*60*1000);
-            String DNS_NEG_CACHE_TIME = Integer.toString(5*60*1000);
-            System.setProperty("sun.net.inetaddr.ttl", DNS_CACHE_TIME);
-            System.setProperty("sun.net.inetaddr.negative.ttl", DNS_NEG_CACHE_TIME);
-            System.setProperty("networkaddress.cache.ttl", DNS_CACHE_TIME);
-            System.setProperty("networkaddress.cache.negative.ttl", DNS_NEG_CACHE_TIME);
+            String dnsCacheTime = Integer.toString(15*60*1000);
+            String dnsNegCacheTime = Integer.toString(5*60*1000);
+            System.setProperty("sun.net.inetaddr.ttl", dnsCacheTime);
+            System.setProperty("sun.net.inetaddr.negative.ttl", dnsNegCacheTime);
+            System.setProperty("networkaddress.cache.ttl", dnsCacheTime);
+            System.setProperty("networkaddress.cache.negative.ttl", dnsNegCacheTime);
         }
 
         if (System.getProperty("I2P_DISABLE_HTTP_KEEPALIVE_OVERRIDE") == null) {
@@ -1239,7 +1239,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
 
         char cong = 0;
-        int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl._defaultMaxTunnels);
+        int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.defaultMaxTunnels);
         boolean disableCongestionCaps = isAdvanced() && _context.getBooleanProperty(PROP_RELAX_CONGESTION_CAP);
         boolean capsEnabled = false;
         if (forceG || maxTunnels <= 0) {cong = CAPABILITY_NO_TUNNELS;}

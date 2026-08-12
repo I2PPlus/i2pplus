@@ -32,8 +32,8 @@ public class JobStats {
     ));
     private static final long RECENT_WINDOW_MS = 10 * 1000L;
 
-    private static volatile boolean _recentTrackingEnabled;
-    private static volatile long _lastTrackingEnableTime;
+    private static volatile boolean recentTrackingEnabled;
+    private static volatile long lastTrackingEnableTime;
     private static final long TRACKING_TIMEOUT_MS = 60 * 1000L;  // Keep tracking for 60s after last view
 
     private final int _maxRecentEntries;
@@ -59,8 +59,8 @@ public class JobStats {
      * Tracking will remain enabled for 60 seconds after last enable.
      */
     public static void enableRecentTracking() {
-        _recentTrackingEnabled = true;
-        _lastTrackingEnableTime = System.currentTimeMillis();
+        recentTrackingEnabled = true;
+        lastTrackingEnableTime = System.currentTimeMillis();
     }
 
     /**
@@ -69,10 +69,10 @@ public class JobStats {
      * @return whether recent tracking enabled
      */
     public static boolean isRecentTrackingEnabled() {
-        if (!_recentTrackingEnabled) return false;
+        if (!recentTrackingEnabled) return false;
         // Auto-disable after timeout
-        if (System.currentTimeMillis() - _lastTrackingEnableTime > TRACKING_TIMEOUT_MS) {
-            _recentTrackingEnabled = false;
+        if (System.currentTimeMillis() - lastTrackingEnableTime > TRACKING_TIMEOUT_MS) {
+            recentTrackingEnabled = false;
             return false;
         }
         return true;
@@ -82,7 +82,7 @@ public class JobStats {
      * Force disable recent tracking immediately.
      */
     public static void disableRecentTracking() {
-        _recentTrackingEnabled = false;
+        recentTrackingEnabled = false;
     }
 
     /**

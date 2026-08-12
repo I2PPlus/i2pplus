@@ -53,7 +53,7 @@ public class BanLogger {
     private AtomicInteger _banCount;
     private long _startTime;
     private final Object _writeLock = new Object();
-    private static BanLogger _self;
+    private static BanLogger self;
 
     private static final String LOG_DIR = "sessionbans";
     private static final String LOG_FILENAME = "sessionbans.txt";
@@ -61,10 +61,10 @@ public class BanLogger {
     private static final String PROP_MAX_ARCHIVES = "router.banlogger.maxArchives";
     private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
     private static final int DEFAULT_MAX_ARCHIVES = 10;
-    private static volatile PrintWriter _writer;
-    private static volatile boolean _initialized = false;
-    private static volatile boolean _globalArchiveDone = false;
-    private static volatile boolean _headerWritten = false;
+    private static volatile PrintWriter writer;
+    private static volatile boolean initialized = false;
+    private static volatile boolean globalArchiveDone = false;
+    private static volatile boolean headerWritten = false;
 
     /** No-arg constructor for deferred initialization. */
     public BanLogger() {
@@ -88,9 +88,9 @@ public class BanLogger {
      */
     public void initialize(RouterContext context) {
         if (context == null) {return;}
-        if (_initialized) {return;}
+        if (initialized) {return;}
         synchronized (_writeLock) {
-            if (_initialized) {return;}
+            if (initialized) {return;}
             _context = context;
             _log = context.logManager().getLog(BanLogger.class);
             File dataDir = context.getRouterDir();
@@ -102,17 +102,17 @@ public class BanLogger {
             }
             _logFile = new File(logDir, LOG_FILENAME);
             _startTime = System.currentTimeMillis();
-            if (!_globalArchiveDone) {
+            if (!globalArchiveDone) {
                 archiveExisting();
-                _globalArchiveDone = true;
+                globalArchiveDone = true;
             }
             openWriter();
-            if (!_headerWritten) {
+            if (!headerWritten) {
                 logStartTime();
-                _headerWritten = true;
+                headerWritten = true;
             }
-            _initialized = true;
-            _self = this;
+            initialized = true;
+            self = this;
         }
     }
 
@@ -155,7 +155,7 @@ public class BanLogger {
      * @return true if initialized
      */
     public static boolean isInitialized() {
-        return _initialized;
+        return initialized;
     }
 
     /**
@@ -165,7 +165,7 @@ public class BanLogger {
      * @return the singleton instance, or null if not initialized
      */
     public static BanLogger getInstance() {
-        return _initialized ? _self : null;
+        return initialized ? self : null;
     }
 
     /**
@@ -256,24 +256,24 @@ public class BanLogger {
      * Log the router start time.
      */
     private void logStartTime() {
-        if (_writer == null) {return;}
-        _writer.println();
-        _writer.println("############################################################");
-        _writer.println("# Router started: " + _dateFormat.get().format(new Date(_startTime)));
-        _writer.println("############################################################");
-        _writer.println();
-        _writer.println("# Ban event log");
-        _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION | CAPS | VERSION | COUNTRY | HOST");
-        _writer.println("# TIMESTAMP: ISO 8601 UTC");
-        _writer.println("# HASH: Router hash (base64) or UNKNOWN");
-        _writer.println("# IP:PORT: IP address and port or UNKNOWN");
-        _writer.println("# REASON: Reason for ban");
-        _writer.println("# DURATION: Duration (e.g., 8h, 24h, FOREVER)");
-        _writer.println("# CAPS: Router capabilities (optional, may be empty)");
-        _writer.println("# VERSION: Router version string (optional, may be empty)");
-        _writer.println("# COUNTRY: GeoIP country code (optional, may be empty)");
-        _writer.println("# HOST: Hostname or ASN org name (optional, may be empty)");
-        _writer.println();
+        if (writer == null) {return;}
+        writer.println();
+        writer.println("############################################################");
+        writer.println("# Router started: " + _dateFormat.get().format(new Date(_startTime)));
+        writer.println("############################################################");
+        writer.println();
+        writer.println("# Ban event log");
+        writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION | CAPS | VERSION | COUNTRY | HOST");
+        writer.println("# TIMESTAMP: ISO 8601 UTC");
+        writer.println("# HASH: Router hash (base64) or UNKNOWN");
+        writer.println("# IP:PORT: IP address and port or UNKNOWN");
+        writer.println("# REASON: Reason for ban");
+        writer.println("# DURATION: Duration (e.g., 8h, 24h, FOREVER)");
+        writer.println("# CAPS: Router capabilities (optional, may be empty)");
+        writer.println("# VERSION: Router version string (optional, may be empty)");
+        writer.println("# COUNTRY: GeoIP country code (optional, may be empty)");
+        writer.println("# HOST: Hostname or ASN org name (optional, may be empty)");
+        writer.println();
     }
 
     /**
@@ -282,7 +282,7 @@ public class BanLogger {
     private void openWriter() {
         synchronized (_writeLock) {
             try {
-                _writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(_logFile, true), StandardCharsets.UTF_8), true);
+                writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(_logFile, true), StandardCharsets.UTF_8), true);
             } catch (IOException e) {
                 if (_log != null && _log.shouldLog(Log.WARN))
                     _log.warn("Failed to open ban log file: " + _logFile, e);
@@ -304,10 +304,9 @@ public class BanLogger {
         String caps = hash != null ? getCaps(hash) : "";
         String version = hash != null ? getVersion(hash) : "";
         writeLog(hashStr, ip, reason, durationStr, caps, version, getCountry(ip), getHost(ip));
-        if (hash != null && (caps.isEmpty() || version.isEmpty() || "UNKNOWN".equals(ip))) {
-            if (_context != null && !_context.banlist().isBanlisted(hash)) {
-                fetchRouterInfo(hash, reason, durationMs);
-            }
+        if (hash != null && (caps.isEmpty() || version.isEmpty() || "UNKNOWN".equals(ip)) &&
+            _context != null && !_context.banlist().isBanlisted(hash)) {
+            fetchRouterInfo(hash, reason, durationMs);
         }
     }
 
@@ -376,10 +375,9 @@ public class BanLogger {
         String caps = hash != null ? getCaps(hash) : "";
         String version = hash != null ? getVersion(hash) : "";
         writeLog(hashStr, ip, reason, "FOREVER", caps, version, getCountry(ip), getHost(ip));
-        if (hash != null && (caps.isEmpty() || version.isEmpty() || "UNKNOWN".equals(ip))) {
-            if (_context != null && !_context.banlist().isBanlisted(hash)) {
-                fetchRouterInfo(hash, reason, 0L);
-            }
+        if (hash != null && (caps.isEmpty() || version.isEmpty() || "UNKNOWN".equals(ip)) &&
+            _context != null && !_context.banlist().isBanlisted(hash)) {
+            fetchRouterInfo(hash, reason, 0L);
         }
     }
 
@@ -585,9 +583,9 @@ public class BanLogger {
                             ts, hash.toBase64(), ip, reason, dur,
                             caps, ver, getCountry(ip), getHost(ip));
                         synchronized (_writeLock) {
-                            if (_writer != null) {
-                                _writer.println(entry);
-                                _writer.flush();
+                            if (writer != null) {
+                                writer.println(entry);
+                                writer.flush();
                                 _banCount.incrementAndGet();
                             }
                         }
@@ -678,9 +676,9 @@ public class BanLogger {
                                      capsStr, verStr, countryStr, hostStr);
 
         synchronized (_writeLock) {
-            if (_writer != null) {
-                _writer.println(entry);
-                _writer.flush();
+            if (writer != null) {
+                writer.println(entry);
+                writer.flush();
                 _banCount.incrementAndGet();
             }
         }
@@ -753,18 +751,18 @@ public class BanLogger {
      * @since 0.9.70+
      */
     public static void shutdown() {
-        if (_writer == null && !_initialized)
+        if (writer == null && !initialized)
             return;
-        PrintWriter writer;
-        synchronized (_self != null ? _self._writeLock : new Object()) {
-            writer = _writer;
-            _writer = null;
+        PrintWriter writerToClose;
+        synchronized (self != null ? self._writeLock : new Object()) {
+            writerToClose = writer;
+            writer = null;
         }
-        if (writer != null) {
-            writer.close();
+        if (writerToClose != null) {
+            writerToClose.close();
         }
-        _initialized = false;
-        _self = null;
+        initialized = false;
+        self = null;
     }
 
     /**
@@ -772,8 +770,8 @@ public class BanLogger {
      */
     public void flush() {
         synchronized (_writeLock) {
-            if (_writer != null) {
-                _writer.flush();
+            if (writer != null) {
+                writer.flush();
             }
         }
     }
@@ -783,9 +781,9 @@ public class BanLogger {
      */
     public void close() {
         synchronized (_writeLock) {
-            if (_writer != null) {
-                _writer.close();
-                _writer = null;
+            if (writer != null) {
+                writer.close();
+                writer = null;
             }
         }
         archiveIfNeeded();

@@ -1100,7 +1100,7 @@ public class TunnelDispatcher implements Service {
             int divisor = _context.getProperty("router.tunnel.perTunnelBweDivisor", 0);
             if (divisor <= 0) {
                 int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
-                                                      RouterThrottleImpl._defaultMaxTunnels);
+                                                      RouterThrottleImpl.defaultMaxTunnels);
                 divisor = Math.min(maxTunnels, 100);
             }
             divisor = Math.max(1, divisor);

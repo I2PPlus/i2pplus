@@ -109,23 +109,17 @@ public class StatisticsManager {
             String sig = null;
             String key = null;
             RouterInfo oldRI = _context.router().getRouterInfo();
-            if (oldRI != null) {
+            if (oldRI != null && family.equals(oldRI.getOption(FamilyKeyCrypto.OPT_NAME))) {
                 // don't do it if family changed
-                if (family.equals(oldRI.getOption(FamilyKeyCrypto.OPT_NAME))) {
-                    // copy over the pubkey and signature
-                    key = oldRI.getOption(FamilyKeyCrypto.OPT_KEY);
-                    if (key != null) {
-                        if (key.contains(";")) {
-                            // we changed the separator from ';' to ':'
-                            key = null;
-                        } else {
-                            sig = oldRI.getOption(FamilyKeyCrypto.OPT_SIG);
-                            if (sig != null) {
-                                stats.setProperty(FamilyKeyCrypto.OPT_NAME, family);
-                                stats.setProperty(FamilyKeyCrypto.OPT_KEY, key);
-                                stats.setProperty(FamilyKeyCrypto.OPT_SIG, sig);
-                            }
-                        }
+                // copy over the pubkey and signature
+                key = oldRI.getOption(FamilyKeyCrypto.OPT_KEY);
+                if (key != null && !key.contains(";")) {
+                    // old separator was ';', changed to ':'; old-format keys are unusable
+                    sig = oldRI.getOption(FamilyKeyCrypto.OPT_SIG);
+                    if (sig != null) {
+                        stats.setProperty(FamilyKeyCrypto.OPT_NAME, family);
+                        stats.setProperty(FamilyKeyCrypto.OPT_KEY, key);
+                        stats.setProperty(FamilyKeyCrypto.OPT_SIG, sig);
                     }
                 }
             }

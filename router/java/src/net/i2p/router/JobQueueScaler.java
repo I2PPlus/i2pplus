@@ -190,7 +190,7 @@ class JobQueueScaler implements Runnable {
         _msgDelayHistoryCount = 0;
 
         // Calculate max runners
-        _configuredMaxRunners = context.getProperty(JobQueue.PROP_MAX_RUNNERS, JobQueue.RUNNERS);
+        _configuredMaxRunners = context.getProperty(JobQueue.PROP_MAX_RUNNERS, JobQueue.runners);
         _currentMaxRunners = calculateMaxRunnersBasedOnRAM(_configuredMaxRunners);
 
         // Register rate stats

@@ -27,13 +27,13 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
     /** Default maximum tunnels, adjusted by system speed and memory. */
-    public static volatile int _defaultMaxTunnels = SystemVersion.isSlow() ? 3*1000 :
+    public static volatile int defaultMaxTunnels = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
                                                   SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
     /** @since 0.9.70+ */
-    public static int getDefaultMaxTunnels() { return _defaultMaxTunnels; }
+    public static int getDefaultMaxTunnels() { return defaultMaxTunnels; }
     /** @since 0.9.70+ */
-    public static void setDefaultMaxTunnels(int val) { _defaultMaxTunnels = Math.max(500, Math.min(20000, val)); }
+    public static void setDefaultMaxTunnels(int val) { defaultMaxTunnels = Math.max(500, Math.min(20000, val)); }
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000L;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000L;
@@ -209,7 +209,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         double tgf = getTunnelGrowthFactor();
         if (highload) {
             setTunnelStatus("[rejecting/overload]" + _x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
-        } else if (numTunnels > minToThrottle && _defaultMaxTunnels >= maxTunnels) {
+        } else if (numTunnels > minToThrottle && defaultMaxTunnels >= maxTunnels) {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(RateConstants.TEN_MINUTES);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
@@ -271,7 +271,6 @@ public class RouterThrottleImpl implements RouterThrottle {
 
         // ok, we're not hosed, but can we handle the bandwidth requirements of another tunnel?
         rs = _context.statManager().getRate("tunnel.participatingMessageCountAvgPerTunnel");
-        r = null;
         double messagesPerTunnel = 0;
         if (rs != null) {
             r = rs.getRate(RateConstants.ONE_MINUTE);
@@ -453,7 +452,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private String _cachedTestTimeGrowthFactorProp;
     private double _cachedTestTimeGrowthFactor = DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR;
     private String _cachedMaxTunnelsProp;
-    private int _cachedMaxTunnels = _defaultMaxTunnels;
+    private int _cachedMaxTunnels = defaultMaxTunnels;
     private String _cachedMaxProcessingTimeProp;
     private int _cachedMaxProcessingTime = DEFAULT_MAX_PROCESSINGTIME;
     private String _cachedMinThrottleTunnelsProp;
@@ -466,12 +465,12 @@ public class RouterThrottleImpl implements RouterThrottle {
         }
         _cachedMaxTunnelsProp = p;
         if (p == null) {
-            _cachedMaxTunnels = _defaultMaxTunnels;
+            _cachedMaxTunnels = defaultMaxTunnels;
         } else {
             try {
                 _cachedMaxTunnels = Integer.parseInt(p);
             } catch (NumberFormatException nfe) {
-                _cachedMaxTunnels = _defaultMaxTunnels;
+                _cachedMaxTunnels = defaultMaxTunnels;
             }
         }
         return _cachedMaxTunnels;
@@ -577,11 +576,11 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      * Whether the router is shutting down.
      *
-     * @param _context the router context
+     * @param context the router context
      * @return whether shutting down
      */
-    public static boolean isShuttingDown(RouterContext _context) {
-        int code = _context.router().scheduledGracefulExitCode();
+    public static boolean isShuttingDown(RouterContext context) {
+        int code = context.router().scheduledGracefulExitCode();
         return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code;
     }
 

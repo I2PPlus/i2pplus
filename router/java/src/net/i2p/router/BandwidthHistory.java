@@ -43,7 +43,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
     private static final String FILE_NAME = "i2p-bandwidth.dat";
 
-    private static BandwidthHistory _instance;
+    private static BandwidthHistory instance;
 
     private final RouterContext _ctx;
     private final long[] _timestamps;
@@ -72,7 +72,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
         _file = new File(dir, FILE_NAME);
         load();
         _nextFlush = ctx != null ? ctx.clock().now() + FLUSH_INTERVAL : System.currentTimeMillis() + FLUSH_INTERVAL;
-        _instance = this;
+        instance = this;
     }
 
     /**
@@ -80,7 +80,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
      *  @return the singleton, or null if not yet created
      */
     public static BandwidthHistory getInstance() {
-        return _instance;
+        return instance;
     }
 
     /**

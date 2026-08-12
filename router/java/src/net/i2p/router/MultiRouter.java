@@ -51,8 +51,8 @@ public class MultiRouter {
 
     private static int nbrRouters;
 
-    private static PrintStream _out;
-    private static ArrayList<Router> _routers = new ArrayList<>(8);
+    private static PrintStream out;
+    private static ArrayList<Router> routers = new ArrayList<>(8);
     private static I2PAppContext _defaultContext; // NOSONAR S1450: used on lines 78-79
 
     /** Boot the requested number of routers from the given arguments. */
@@ -73,19 +73,19 @@ public class MultiRouter {
             }
         }
 
-        _out = System.out;
+        out = System.out;
 
         buildClientProps(0);
         _defaultContext = new I2PAppContext(buildRouterProps(0));
         _defaultContext.clock().setOffset(0);
 
-        _out.println("RouterConsole for Router 0 is listening on: 127.0.0.1:" + (BASE_PORT-1));
+        out.println("RouterConsole for Router 0 is listening on: 127.0.0.1:" + (BASE_PORT-1));
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                _out.println("Shutting down in a few moments..");
-                for(Router r : _routers) {
+                out.println("Shutting down in a few moments..");
+                for(Router r : routers) {
                     r.shutdown(0);
                 }
                 try { Thread.sleep(1500); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
@@ -96,13 +96,13 @@ public class MultiRouter {
         for (int i = 0; i < nbrRouters; i++) {
             Router router = new Router(buildRouterProps(i));
             router.setKillVMOnEnd(false);
-            _routers.add(router);
-            _out.println("Router " + i + " was created");
+            routers.add(router);
+            out.println("Router " + i + " was created");
             try { Thread.sleep(100); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         }
 
         for (int i = 0; i < nbrRouters; i++) {
-            final Router r = _routers.get(i);
+            final Router r = routers.get(i);
             long offset = r.getContext().random().nextLong(Router.CLOCK_FUDGE_FACTOR/2);
             if (r.getContext().random().nextBoolean())
                 offset = 0 - offset;
@@ -117,14 +117,14 @@ public class MultiRouter {
             }).start();
             try { Thread.sleep(100); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 
-            _out.println("Router " + i + " was started with time offset " + offset);
+            out.println("Router " + i + " was started with time offset " + offset);
         }
-        _out.println("All routers have been started");
+        out.println("All routers have been started");
 
         /* Wait for routers to start services and generate keys
          * before doing the internal reseed. */
         int waitForRouters = (nbrRouters/10)*1000;
-        _out.println("Waiting " + waitForRouters/1000 +  " seconds for routers to start" +
+        out.println("Waiting " + waitForRouters/1000 +  " seconds for routers to start" +
                      "before doing the internal reseed");
         try { Thread.sleep(waitForRouters); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         internalReseed();
@@ -135,15 +135,15 @@ public class MultiRouter {
     private static void internalReseed() {
 
         HashSet<RouterInfo> riSet = new HashSet<>();
-        for(Router r : _routers) {
+        for(Router r : routers) {
     		riSet.addAll(r.getContext().netDb().getRouters());
         }
-        for(Router r : _routers) {
+        for(Router r : routers) {
             for(RouterInfo ri : riSet){
     			r.getContext().netDb().publish(ri);
             }
         }
-        _out.println(riSet.size() + " RouterInfos were reseeded");
+        out.println(riSet.size() + " RouterInfos were reseeded");
     }
 
     private static Properties buildRouterProps(int id) {
@@ -234,10 +234,10 @@ public class MultiRouter {
     private static void waitForCompletion() {
         while (true) {
             int alive = 0;
-            for (int i = 0; i < _routers.size(); i++) {
-                Router r = _routers.get(i);
+            for (int i = 0; i < routers.size(); i++) {
+                Router r = routers.get(i);
                 if (!r.isAlive()) {
-                    _out.println("Router " + i + " is dead");
+                    out.println("Router " + i + " is dead");
                 } else {
                     alive++;
                 }
@@ -248,7 +248,7 @@ public class MultiRouter {
                 break;
             }
         }
-        _out.println("All routers shut down");
+        out.println("All routers shut down");
     }
 
     private static void usage() {

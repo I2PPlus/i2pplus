@@ -139,17 +139,17 @@ class Elligator2 {
             alternative = false;
         }
 
-        // negative_plus_x_A = -(x + A) (mod p)
-        BigInteger negative_plus_x_A = x.add(A).negate();
+        // negativePlusXA = -(x + A) (mod p)
+        BigInteger negativePlusXA = x.add(A).negate();
 
-        // negative_multiply3_u_x_plus_x_A = -ux(x + A) (mod p)
-        BigInteger negative_multiply3_u_x_plus_x_A = u.multiply(x);
-        negative_multiply3_u_x_plus_x_A = negative_multiply3_u_x_plus_x_A.mod(p);
-        negative_multiply3_u_x_plus_x_A = negative_multiply3_u_x_plus_x_A.multiply(negative_plus_x_A);
-        negative_multiply3_u_x_plus_x_A = negative_multiply3_u_x_plus_x_A.mod(p);
+        // negativeMultiply3UXPlusXA = -ux(x + A) (mod p)
+        BigInteger negativeMultiply3UXPlusXA = u.multiply(x);
+        negativeMultiply3UXPlusXA = negativeMultiply3UXPlusXA.mod(p);
+        negativeMultiply3UXPlusXA = negativeMultiply3UXPlusXA.multiply(negativePlusXA);
+        negativeMultiply3UXPlusXA = negativeMultiply3UXPlusXA.mod(p);
 
         // If -ux(x + A) is not a square modulo p
-        if (legendre(negative_multiply3_u_x_plus_x_A) == -1) {
+        if (legendre(negativeMultiply3UXPlusXA) == -1) {
             return null;
         }
 
@@ -157,10 +157,10 @@ class Elligator2 {
         if (alternative) {
             // r := -(x + A) / x (mod p)
             r = x.modInverse(p);
-            r = r.multiply(negative_plus_x_A);
+            r = r.multiply(negativePlusXA);
         } else {
             // r := -x / (x + A) (mod p)
-            r = negative_plus_x_A.modInverse(p);
+            r = negativePlusXA.modInverse(p);
             r = r.multiply(x);
         }
         r = r.mod(p);
@@ -230,13 +230,13 @@ class Elligator2 {
         v = v.multiply(negative_A);
         v = v.mod(p);
 
-        // plus_v_A = v + A (mod p)
-        BigInteger plus_v_A = v.add(A);
+        // plusVA = v + A (mod p)
+        BigInteger plusVA = v.add(A);
 
         // t = x ^ 3 + Ax ^ 2 + Bx (mod p)
         BigInteger t = v.multiply(v);
         t = t.mod(p);
-        t = t.multiply(plus_v_A);
+        t = t.multiply(plusVA);
         t = t.add(v);
         t = t.mod(p);
 

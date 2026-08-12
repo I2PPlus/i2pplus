@@ -18,20 +18,20 @@ import net.i2p.I2PAppContext;
  */
 public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     /**
-     * Description.
+     *  The encrypted records, one per hop, or null until readMessage().
      */
     protected EncryptedBuildRecord[] _records;
     /**
-     * RECORD_COUNT.
+     *  Number of records in _records, zero if not yet set.
      */
     protected int RECORD_COUNT;
     /**
-     * MAX_RECORD_COUNT.
+     *  Maximum number of records in any tunnel build message (8 hops).
      */
     public static final int MAX_RECORD_COUNT = 8;
 
     /**
-     * TunnelBuildMessageBase.
+     *  Create with the default number of records.
      */
     public TunnelBuildMessageBase(I2PAppContext context) {this(context, MAX_RECORD_COUNT);}
 
@@ -42,9 +42,6 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
             RECORD_COUNT = records;
             _records = new EncryptedBuildRecord[records];
         }
-        /**
-         * Description.
-         */
         // else will be initialized by readMessage()
     }
 
@@ -66,7 +63,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     public int getRecordCount() {return RECORD_COUNT;}
 
     /**
-     * Description.
+     *  Size in bytes of one encrypted record: 16 byte IV + 512 byte payload.
      */
     public static final int RECORD_SIZE = 512+16;
 

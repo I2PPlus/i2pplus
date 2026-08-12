@@ -1020,7 +1020,7 @@ public class Banlist {
      *  @param realUnbanlist if true, update message history
      *  @param transport the transport
      */
-    private void unbanlistRouter(Hash peer, boolean _realUnbanlist, String transport) {
+    private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
         if (_log.shouldInfo())
             _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"

@@ -66,12 +66,12 @@ public class JobQueue {
     private volatile long _nextPumperRun;
 
     /** How many when we go parallel */
-    static int RUNNERS;
+    static int runners;
     static {
         int cores = SystemVersion.getCores();
         int maxRunners = 32;
-        RUNNERS = SystemVersion.isSlow() ? 8 : Math.max(cores * 2, 12);
-        if (RUNNERS > maxRunners) {RUNNERS = maxRunners;}
+        runners = SystemVersion.isSlow() ? 8 : Math.max(cores * 2, 12);
+        if (runners > maxRunners) {runners = maxRunners;}
     }
 
     /** Router.config parameter to override the max runners */
@@ -139,7 +139,7 @@ public class JobQueue {
         _timedJobsReady = new LinkedBlockingQueue<>();
         _jobsInFlight = Collections.synchronizedSet(new HashSet<>());
         _jobLock = new Object();
-        _queueRunners = new ConcurrentHashMap<>(RUNNERS);
+        _queueRunners = new ConcurrentHashMap<>(runners);
         _jobStats = new ConcurrentHashMap<>();
         _pumper = new QueuePumper();
         _scaler = new JobQueueScaler(context, this);
@@ -244,10 +244,8 @@ public class JobQueue {
         synchronized (_jobLock) {
             // Promote any scheduled copy so the job runs once (now) instead of
             // twice (now, plus again when the timed copy matures).
-            if (_timedJobs.remove(job)) {
-                if (_log.shouldWarn()) {
-                    _log.warn(job + " removed from queue and promoted to top -> Duplicate instance");
-                }
+            if (_timedJobs.remove(job) && _log.shouldWarn()) {
+                _log.warn(job + " removed from queue and promoted to top -> Duplicate instance");
             }
             _timedJobsReady.remove(job);
             _readyJobs.remove(job);
@@ -467,7 +465,7 @@ public class JobQueue {
      */
     public void allowParallelOperation() {
         _allowParallelOperation = true;
-        int requested = _context.getProperty(PROP_MAX_RUNNERS, RUNNERS);
+        int requested = _context.getProperty(PROP_MAX_RUNNERS, runners);
         // Cap to 2× cores to prevent context-switching death spirals
         int capped = Math.min(requested, Math.max(SystemVersion.getCores() * 2, 16));
         if (requested > capped && _log.shouldWarn()) {
@@ -653,7 +651,7 @@ public class JobQueue {
      * @since 0.9.68+
      */
     public int getMaxRunnerCount() {
-        int configured = _context.getProperty(PROP_MAX_RUNNERS, RUNNERS);
+        int configured = _context.getProperty(PROP_MAX_RUNNERS, runners);
         int hardLimit = configured * 2;
         // Cap to 2× cores
         int cpuCap = Math.max(SystemVersion.getCores() * 2, 16);
@@ -871,7 +869,7 @@ public class JobQueue {
     }
 
     /** Update stats */
-    void updateStats(Job job, long doStart, long _origStartAfter, long duration) {
+    void updateStats(Job job, long doStart, long origStartAfter, long duration) {
         // Remove from in-flight tracking when job completes
         _jobsInFlight.remove(job);
         if (_context.router() == null) return;
@@ -909,10 +907,8 @@ public class JobQueue {
             return;
         }
 
-        if ((uptime > _warmupTime) && (duration > _runFatal)) {
-            if (_log.shouldWarn()) {
-                _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
-            }
+        if ((uptime > _warmupTime) && (duration > _runFatal) && _log.shouldWarn()) {
+            _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
         }
     }
 
