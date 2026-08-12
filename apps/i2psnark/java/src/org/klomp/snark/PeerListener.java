@@ -9,6 +9,7 @@ package org.klomp.snark;
 import java.util.List;
 import java.util.Set;
 import net.i2p.data.ByteArray;
+import net.i2p.data.Hash;
 import org.klomp.snark.comments.Comment;
 
 /** Listener for Peer events. */
@@ -194,4 +195,21 @@ interface PeerListener {
      * @since 0.9.31
      */
     public void gotComments(Peer peer, List<Comment> comments);
+
+    /**
+     * Is the given hash banned?
+     *
+     * @param h the hash
+     * @return true if banned
+     * @since 0.9.71
+     */
+    public boolean isBanned(Hash h);
+
+    /**
+     * Ban the given hash.
+     *
+     * @param h the hash
+     * @since 0.9.71
+     */
+    public void ban(Hash h);
 }

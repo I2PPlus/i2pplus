@@ -619,6 +619,27 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
+     * Is the given hash banned?
+     *
+     * @param h the hash
+     * @return true if banned
+     * @since 0.9.71
+     */
+    public boolean isBanned(Hash h) {
+        return _badCounter.count(h) >= MAX_BAD;
+    }
+
+    /**
+     * Ban the given hash.
+     *
+     * @param h the hash
+     * @since 0.9.71
+     */
+    public void ban(Hash h) {
+        _badCounter.increment(h);
+    }
+
+    /**
      * @since 0.9.1
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {

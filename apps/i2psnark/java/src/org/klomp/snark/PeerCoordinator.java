@@ -27,6 +27,7 @@ import net.i2p.data.Base32;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -2462,5 +2463,26 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             _webPeerBans.remove(host);
         }
         return rv;
+    }
+
+    /**
+     * Is the given hash banned?
+     *
+     * @param h the hash
+     * @return true if banned
+     * @since 0.9.71
+     */
+    public boolean isBanned(Hash h) {
+        return listener.isBanned(h);
+    }
+
+    /**
+     * Ban the given hash.
+     *
+     * @param h the hash
+     * @since 0.9.71
+     */
+    public void ban(Hash h) {
+        listener.ban(h);
     }
 }

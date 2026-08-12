@@ -20,6 +20,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
@@ -283,10 +284,17 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
         if (_log.shouldDebug())
             _log.debug("Running connection to " + peerID.toString(), new Exception("connecting"));
+        Hash h = null;
         try {
             // Do we need to handshake?
             if (din == null) {
                 // Outgoing connection
+                Destination d = peerID.getAddress();
+                if (d == null)
+                    throw new IOException("No destination for " + peerID);
+                h = d.calculateHash();
+                if (listener.isBanned(h))
+                    throw new IOException("IsBanned: " + peerID);
                 sock = util.connect(peerID, infohash);
                 if (_log.shouldDebug()) _log.debug("Connected to " + peerID + ": " + sock);
                 if ((sock == null) || (sock.isClosed())) {
@@ -359,6 +367,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             out.startup();
             Thread.currentThread().setName("SnarkReader." + peerID);
             s.in.run();
+        } catch (PeerAcceptor.ProtocolException pe) {
+            if (_log.shouldWarn())
+                _log.warn(this.toString(), pe);
+            if (h != null)
+                listener.ban(h);
+            try { sock.reset(); } catch (IOException ioe) { /* ignored */ }
         } catch (IOException eofe) {
             // Ignore, probably just the other side closing the connection.
             // Or refusing the connection, timing out, etc.
@@ -405,14 +419,14 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             din = new DataInputStream(in);
             byte b = din.readByte();
             if (b != HANDSHAKE.length) {
-                throw new IOException(
+                throw new PeerAcceptor.ProtocolException(
                         "Handshake failure, expected 19, got " + (b & 0xff) + " on " + sock);
             }
 
             bs = new byte[HANDSHAKE.length];
             din.readFully(bs);
             if (!Arrays.equals(HANDSHAKE, bs)) {
-                throw new IOException("Handshake failure, expected " + "'BitTorrent protocol'");
+                throw new PeerAcceptor.ProtocolException("Handshake failure, expected " + "'BitTorrent protocol'");
             }
 
             // Handshake read - options

@@ -7,6 +7,8 @@
 
 package org.klomp.snark;
 
+import net.i2p.data.Hash;
+
 /**
  * Callback interface for monitoring PeerCoordinator state changes.
  *
@@ -52,4 +54,21 @@ interface CoordinatorListener {
      * @param message the message
      */
     public void addMessage(String message);
+
+    /**
+     * Is the given hash banned?
+     *
+     * @param h the hash
+     * @return true if banned
+     * @since 0.9.71
+     */
+    public boolean isBanned(Hash h);
+
+    /**
+     * Ban the given hash.
+     *
+     * @param h the hash
+     * @since 0.9.71
+     */
+    public void ban(Hash h);
 }

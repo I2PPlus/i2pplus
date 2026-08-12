@@ -17,6 +17,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.data.Base64;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SimpleTimer2;
@@ -1560,5 +1561,27 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public void setNotificationSent(boolean sent) {
         this.notificationSent = sent;
+    }
+
+    /**
+     * Is the given hash banned?
+     *
+     * @param h the hash
+     * @return true if banned
+     * @since 0.9.71
+     */
+    public boolean isBanned(Hash h) {
+        return acceptor != null && acceptor.isBanned(h);
+    }
+
+    /**
+     * Ban the given hash.
+     *
+     * @param h the hash
+     * @since 0.9.71
+     */
+    public void ban(Hash h) {
+        if (acceptor != null)
+            acceptor.ban(h);
     }
 }
