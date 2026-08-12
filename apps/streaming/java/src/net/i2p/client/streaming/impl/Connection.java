@@ -236,6 +236,10 @@ class Connection {
 
     /** Number of remaining unchoke assertions to send. */
     private static final int UNCHOKES_TO_SEND = 8;
+    /** Multiplier for the Westwood BDP estimate used to calculate the new slow start threshold */
+    private static final int SSTHR_BW_FACTOR = 2;
+    /** Minimum slow start threshold after fast retransmit */
+    private static final int MIN_SSTHR_FAST_RETX = 16;
 
     /**
      *  Give up resending an unacked SYN after this many sends.
@@ -2396,36 +2400,39 @@ class Connection {
             if (_packet.getReceiveStreamId() <= 0) {_packet.setReceiveStreamId(_receiveStreamId.get());}
             if (_packet.getSendStreamId() <= 0) {_packet.setSendStreamId(_sendStreamId.get());}
 
-            int newWindowSize = _options.getWindowSize();
-            if (_isChoked) {
-                congestionOccurred();
-                _options.setWindowSize(1);
-            } else if (_ackSinceCongestion.get() && _packet.getSequenceNum() > _lastCongestionHighestUnacked) {
-                // only shrink the window once per window
-                congestionOccurred();
-                _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
-                /*
-                 * RTO doubling enabled - TCP-style backoff for better congestion control.
-                 * Tunnel failover still provides redundancy, but we now also use RTO
-                 * backoff for more aggressive retransmit timing.
-                 * Window size shrinks for congestion control.
-                 */
-                _options.doubleRTO();
+            synchronized(_outboundPackets) {
+                int newWindowSize = _options.getWindowSize();
+                if (_isChoked) {
+                    congestionOccurred();
+                    _options.setWindowSize(1);
+                } else if (_ackSinceCongestion.get() && _packet.getSequenceNum() > _lastCongestionHighestUnacked) {
+                    // only shrink the window once per window
+                    congestionOccurred();
+                    _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
+                    /*
+                     * RTO doubling enabled - TCP-style backoff for better congestion control.
+                     * Tunnel failover still provides redundancy, but we now also use RTO
+                     * backoff for more aggressive retransmit timing.
+                     * Window size shrinks for congestion control.
+                     */
+                    _options.doubleRTO();
 
-                if (_packet.getNumSends() == 1) {
-                    _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
-                    _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
-                    int wsize = _options.getWindowSize();
-                    _options.setWindowSize(Math.min(_ssthresh, wsize));
-                    updatePacingRate(); // Update pacing when window changes
-                }
+                    if (_packet.getNumSends() == 1) {
+                        _ssthresh = Math.max(Math.round(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT() * SSTHR_BW_FACTOR),
+                                             MIN_SSTHR_FAST_RETX);
+                        _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
+                        int wsize = _options.getWindowSize();
+                        _options.setWindowSize(Math.min(_ssthresh, wsize));
+                        updatePacingRate(); // Update pacing when window changes
+                    }
 
-                if (_log.shouldInfo()) {
-                    _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
-                                  + "\n* New Window Size: " + newWindowSize + "/" + _options.getWindowSize()
-                                  + " for " + Connection.this.toString());
+                    if (_log.shouldInfo()) {
+                        _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
+                                      + "\n* New Window Size: " + newWindowSize + "/" + _options.getWindowSize()
+                                      + " for " + Connection.this.toString());
+                    }
+                    windowAdjusted();
                 }
-                windowAdjusted();
             }
 
             int numSends = _packet.getNumSends() + 1;
@@ -2469,7 +2476,7 @@ class Connection {
                                   "\n* Next resend in " + (timeout / 1000) + "s" +
                                   "\n* Active resends: " + _activeResends +
                                   "; Window Size: "
-                                  + newWindowSize + "; Lifetime: "
+                                  + _options.getWindowSize() + "; Lifetime: "
                                   + (_context.clock().now() - _packet.getCreatedOn()) + "ms");
                     }
                     _unackedPacketsReceived.set(0);
