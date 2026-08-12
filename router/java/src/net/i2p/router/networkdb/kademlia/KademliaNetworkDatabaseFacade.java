@@ -224,6 +224,29 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000L;
     /** RouterInfo expiration time in ms for floodfill peers. */
     private static final long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000L;
+
+    private static volatile RouterContext _cfgCtx;
+    private static volatile long _cfgRefreshed;
+    private static volatile long _cachedProactiveRepublishThreshold;
+    private static volatile boolean _cachedBlockMyCountry;
+    private static volatile String _cachedMyCountry;
+    private static final long CONFIG_REFRESH_MS = 30 * 1000L;
+
+    /**
+     *  Refresh the cached configuration from properties at most once per
+     *  CONFIG_REFRESH_MS, or immediately when the context changes.
+     *  Benign race: duplicate refreshes are idempotent writes.
+     */
+    private static void refreshConfig(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (_cfgCtx == ctx && now - _cfgRefreshed < CONFIG_REFRESH_MS)
+            return;
+        _cachedProactiveRepublishThreshold = ctx.getProperty("i2p.netdb.proactiveRepublishThreshold", 3*60*1000);
+        _cachedBlockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+        _cachedMyCountry = ctx.getProperty(PROP_IP_COUNTRY);
+        _cfgCtx = ctx;
+        _cfgRefreshed = now;
+    }
     /** RouterInfo expiration time in ms for introduced peers. */
     private static final long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000L;
     /** Property: adjusted RouterInfo expiration time in ms. */
@@ -431,8 +454,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.statManager().addRateData("netDb.exploreKeySet", _exploreKeys.size());
     }
 
-    @Override
     /** Shut down the NetDB and all its jobs. */
+    @Override
     public synchronized void shutdown() {
         _initialized = false;
         if (!_context.commSystem().isDummy() && !isClientDb() &&
@@ -961,8 +984,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return whether banlist based on country
      */
     private boolean shouldBanlistBasedOnCountry(RouterInfo _ri, Hash key) {
+        refreshConfig(_context);
         boolean isStrict = _context.commSystem().isInStrictCountry(key);
-        return isStrict || _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+        return isStrict || _cachedBlockMyCountry;
     }
 
     /**
@@ -1234,7 +1258,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return the proactive republish threshold
      */
     private long getProactiveRepublishThreshold() {
-        return _context.getProperty("i2p.netdb.proactiveRepublishThreshold", 3*60*1000);
+        refreshConfig(_context);
+        return _cachedProactiveRepublishThreshold;
     }
 
     /**
@@ -2047,14 +2072,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private boolean checkCountryBlocking(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (!_context.banlist().isCountryBanEnabled()) return false;
+        refreshConfig(_context);
         String country = _context.commSystem().getCountry(h);
         if (country == null) country = "unknown";
         boolean isFF = caps.contains("f");
         boolean isStrict = _context.commSystem().isInStrictCountry();
         boolean isHidden = _context.router().isHidden();
-        boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+        boolean blockMyCountry = _cachedBlockMyCountry;
         Set<String> blockedCountries = getBlockedCountries();
-        String myCountry = _context.getProperty(PROP_IP_COUNTRY);
+        String myCountry = _cachedMyCountry;
         boolean isBanned = _context.banlist().isBanlisted(h);
 
         if ((isStrict || isHidden || blockMyCountry) && myCountry != null && myCountry.equals(country) && !isBanned) {

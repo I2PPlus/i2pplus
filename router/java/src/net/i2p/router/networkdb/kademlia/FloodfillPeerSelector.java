@@ -43,6 +43,45 @@ class FloodfillPeerSelector extends PeerSelector {
 
     private BanLogger _banLogger;
 
+    private static volatile RouterContext _cfgCtx;
+    private static volatile long _cfgRefreshed;
+    private static volatile boolean _cachedEnableUnresponsiveFloodfillBan;
+    private static final long CONFIG_REFRESH_MS = 30 * 1000L;
+    private final RateStat[] _failedLookupRateStatSlot = new RateStat[1];
+    private final RateStat[] _testSuccessTimeStatSlot = new RateStat[1];
+
+    /**
+     *  Refresh the cached configuration from properties at most once per
+     *  CONFIG_REFRESH_MS, or immediately when the context changes.
+     *  Benign race: duplicate refreshes are idempotent writes.
+     */
+    private static void refreshConfig(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (_cfgCtx == ctx && now - _cfgRefreshed < CONFIG_REFRESH_MS)
+            return;
+        _cachedEnableUnresponsiveFloodfillBan = ctx.getProperty("router.banlist.enableUnresponsiveFloodfillBan", true);
+        _cfgCtx = ctx;
+        _cfgRefreshed = now;
+    }
+
+    private static boolean getEnableUnresponsiveFloodfillBan(RouterContext ctx) {
+        refreshConfig(ctx);
+        return _cachedEnableUnresponsiveFloodfillBan;
+    }
+
+    /**
+     *  Get the RateStat handle, caching it in the slot for subsequent calls.
+     *  Null is not cached, the stat may register later.
+     */
+    private RateStat getRateStat(RateStat[] slot, String name) {
+        RateStat rs = slot[0];
+        if (rs == null) {
+            rs = _context.statManager().getRate(name);
+            if (rs != null) slot[0] = rs;
+        }
+        return rs;
+    }
+
     /**
      * FloodfillPeerSelector.
      */
@@ -306,7 +345,7 @@ class FloodfillPeerSelector extends PeerSelector {
     private double computeMaxFailRate(long uptime) {
         double maxFailRate = 0.95;
         if (uptime > 2*60*60*1000L) {
-            RateStat rs = _context.statManager().getRate("peer.failedLookupRate");
+            RateStat rs = getRateStat(_failedLookupRateStatSlot, "peer.failedLookupRate");
             if (rs != null) {
                 Rate r = rs.getRate(RateConstants.ONE_HOUR);
                 if (r != null) {
@@ -372,7 +411,7 @@ class FloodfillPeerSelector extends PeerSelector {
         }
         PeerProfile prof = _context.profileOrganizer().getOrCreateProfileNonblocking(entry);
         double maxGoodRespTime = MAX_GOOD_RESP_TIME;
-        RateStat ttst = _context.statManager().getRate("tunnel.testSuccessTime");
+        RateStat ttst = getRateStat(_testSuccessTimeStatSlot, "tunnel.testSuccessTime");
         if (ttst != null) {
             Rate tunnelTestTime = ttst.getRate(RateConstants.TEN_MINUTES);
             if (tunnelTestTime != null && tunnelTestTime.getAverageValue() > 500)
@@ -416,7 +455,7 @@ class FloodfillPeerSelector extends PeerSelector {
             failRate.getAverageValue() > 0.95d &&
             now - Math.max(prof.getDBHistory().getLastLookupSuccessful(), prof.getDBHistory().getLastStoreSuccessful()) > 15*60*1000L &&
             Math.max(prof.getDBHistory().getLastLookupFailed(), prof.getDBHistory().getLastStoreFailed()) > now - 15*60*1000L) {
-            if ("true".equals(_context.getProperty("router.banlist.enableUnresponsiveFloodfillBan", "true"))) {
+            if (getEnableUnresponsiveFloodfillBan(_context)) {
                 String ipPort = getIPFromRouterInfo(info);
                 String verCaps = "(" + info.getVersion() + " / " + caps + ")";
                 _context.banlist().banlistRouter(entry, "Unresponsive Floodfill", null, null, now + 60*60*1000L);

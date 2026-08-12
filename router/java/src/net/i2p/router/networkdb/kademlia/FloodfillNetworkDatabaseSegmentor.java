@@ -60,11 +60,6 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
         _mainDbid = new FloodfillNetworkDatabaseFacade(_context, MAIN_DBID);
     }
 
-    /* Commented out prior to 2.4.0 release, might be worth resurrecting at some point
-    public boolean useSubDbs() {
-        return _context.getProperty(PROP_NETDB_ISOLATION, true);
-    }*/
-
     /**
      * Retrieves the FloodfillNetworkDatabaseFacade object for the specified ID.
      * If the ID is null, the main database is returned.
