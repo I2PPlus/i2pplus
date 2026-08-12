@@ -5,6 +5,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
@@ -125,7 +126,14 @@ public class AliasedTunnelPool extends TunnelPool {
     @Override
     protected LeaseSet locked_buildNewLeaseSet() {
         Hash primary = _aliasOf.getSettings().getDestination();
-        FloodfillNetworkDatabaseFacade db =  (FloodfillNetworkDatabaseFacade) _context.clientNetDb(primary);
+        NetworkDatabaseFacade ndb = _context.clientNetDb(primary);
+        if (!(ndb instanceof FloodfillNetworkDatabaseFacade)) {
+            if (_log.shouldWarn())
+                _log.warn("No FloodfillNetworkDatabaseFacade " + ndb + " for " + primary +
+                          " to copy LeaseSet from");
+            return null;
+        }
+        FloodfillNetworkDatabaseFacade db = (FloodfillNetworkDatabaseFacade) ndb;
         LeaseSet ls =  db.lookupLeaseSetLocally(primary);
         if (ls == null) {
             if (_log.shouldWarn())
@@ -159,6 +167,17 @@ public class AliasedTunnelPool extends TunnelPool {
     @Override
     PooledTunnelCreatorConfig configureNewTunnel() {
         return null;
+    }
+
+    /**
+     *  Aliased pools have no tunnels of their own; the primary pool builds and
+     *  maintains tunnels for all aliases.  Running the full build-decision logic
+     *  on the empty local pool would log false "EMERGENCY: Zero usable tunnels"
+     *  warnings and waste cycles on every maintenance pass.
+     */
+    @Override
+    void ensureSufficientTunnels() {
+        // No-op - the primary pool handles build/maintenance for all aliases
     }
 
     @Override

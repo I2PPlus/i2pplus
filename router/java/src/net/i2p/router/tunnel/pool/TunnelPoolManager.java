@@ -676,7 +676,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         private final TunnelPool inbound;
         private final TunnelPoolManager _mgr;
         private final Hash _dest;
-        private final RouterContext ctx;
         private final int maxAttempts;
         private volatile boolean _cancelled;
         private int attempts;
@@ -691,7 +690,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             this.inbound = in;
             this._mgr = mgr;
             this._dest = dest;
-            this.ctx = context;
             this.maxAttempts = context.getProperty(PROP_OUTBOUND_STARTUP_RETRIES, DEFAULT_OUTBOUND_STARTUP_RETRIES);
         }
 

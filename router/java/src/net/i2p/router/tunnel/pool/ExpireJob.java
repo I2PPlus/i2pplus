@@ -48,6 +48,10 @@ class ExpireJob extends JobImpl {
      * Schedule a tunnel for batched expiration.
      * Applies randomized early expiration to reduce the chance of
      * LeaseSet/tunnel mismatch during the transition period.
+     * If the tunnel is already scheduled with a later expiration (e.g. by
+     * BuildExecutor at build completion), an earlier expiration set by the
+     * caller on the config is merged in so early-expiry paths (slow-tunnel
+     * removal, budget pruning) actually take effect.
      * @param ctx the router context
      * @param cfg the tunnel config to expire
      */
@@ -56,7 +60,16 @@ class ExpireJob extends JobImpl {
         if (key == null) {
             return;
         }
-        if (_expirations.get(key) != null) {
+        TunnelExpiration existing = _expirations.get(key);
+        if (existing != null) {
+            // Callers (TunnelPoolManager.replaceSlowTunnels(), TunnelPool.pruneExcessTunnels())
+            // set an explicit earlier expiration on the config before re-scheduling.
+            // Honor the earliest, but never disturb a tunnel already in its phase 2
+            // grace period (dropTime is final and phase 1 must not re-fire).
+            long cfgExpire = cfg.getExpiration();
+            if (cfgExpire > 0 && !existing.phase1Complete && cfgExpire < existing.expirationTime) {
+                existing.expirationTime = cfgExpire;
+            }
             return;
         }
         long expire = cfg.getExpiration();
@@ -257,9 +270,11 @@ class ExpireJob extends JobImpl {
                     && te.untestedExtensions < MAX_UNTESTED_EXTENSIONS) {
                 te.untestedExtensions++;
                 te.expirationTime = now + UNTESTED_EXTENSION_MS;
-                log.info("Extending UNTESTED tunnel " + te.tunnelKey +
-                    " (+" + UNTESTED_EXTENSION_MS + "ms, extension " +
-                    te.untestedExtensions + "/" + MAX_UNTESTED_EXTENSIONS + ")");
+                if (log.shouldInfo()) {
+                    log.info("Extending UNTESTED tunnel " + te.tunnelKey +
+                        " (+" + UNTESTED_EXTENSION_MS + "ms, extension " +
+                        te.untestedExtensions + "/" + MAX_UNTESTED_EXTENSIONS + ")");
+                }
                 extendedCount++;
                 continue;
             }
@@ -281,7 +296,7 @@ class ExpireJob extends JobImpl {
             // even if the job runs late, to give clients with cached LeaseSets
             // time to transition to the new tunnels
         }
-        if (extendedCount > 0) {
+        if (extendedCount > 0 && log.shouldInfo()) {
             log.info("Extended " + extendedCount + " UNTESTED tunnels to allow testing");
         }
 

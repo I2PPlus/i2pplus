@@ -1,5 +1,6 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -57,6 +58,7 @@ public class GhostPeerManager {
      */
     public void recordTimeout(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
+        pruneToLimit();
 
         AtomicInteger count = _timeoutCounts.putIfAbsent(peer, new AtomicInteger(1));
         if (count != null) {
@@ -73,6 +75,38 @@ public class GhostPeerManager {
                           getCooldownMs(_context)/1000 + "s -> " +
                            newCount + " consecutive tunnel build timeouts" +
                            (underAttack ? " (network under stress, shortened threshold " + getThreshold() + ")" : ""));
+            }
+        }
+    }
+
+    /**
+     *  Enforce {@link #MAX_TRACKED_PEERS} when the tracked set is full:
+     *  evict peers that never reached the ghost threshold (their stale counts
+     *  would otherwise live forever) and ghosts whose cooldown has already
+     *  elapsed.  Active ghosts and counts at/above the threshold are kept.
+     *  Best-effort under concurrency; size can transiently exceed the limit.
+     */
+    private void pruneToLimit() {
+        if (_timeoutCounts.size() < MAX_TRACKED_PEERS) {
+            return;
+        }
+        int threshold = getThreshold();
+        long cooldown = getCooldownMs(_context);
+        long now = _context.clock().now();
+        for (Map.Entry<Hash, AtomicInteger> e : _timeoutCounts.entrySet()) {
+            Hash peer = e.getKey();
+            AtomicInteger count = e.getValue();
+            Long since = _ghostSince.get(peer);
+            // Evict stale ghosts (cooldown elapsed without an isGhost() cleanup)
+            // and sub-threshold counts (would otherwise live forever).
+            boolean evict = since != null ? (now - since >= cooldown)
+                                          : count.get() < threshold;
+            if (evict) {
+                _ghostSince.remove(peer);
+                _timeoutCounts.remove(peer, count);
+            }
+            if (_timeoutCounts.size() < MAX_TRACKED_PEERS) {
+                return;
             }
         }
     }
