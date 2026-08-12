@@ -22,4 +22,4 @@ JSP pages in the console use a "Helper" or "Renderer" class to generate HTML. Co
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`routerconsole/README.md`](../../../README.md) — console module overview
+- [`routerconsole/README.md`](../../../../../../../README.md) — console module overview

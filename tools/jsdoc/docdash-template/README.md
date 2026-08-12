@@ -41,7 +41,7 @@ In your `jsdoc.json` file, add a template option.
 ```
 
 ## Sample `jsdoc.json`
-See the config file for the [fixtures](fixtures/fixtures.conf.json) or the sample below.
+See the config file for the fixtures, or the sample below.
 
 ```json
 {

@@ -8,7 +8,7 @@ This document covers open-source tools and techniques for debugging the I2P+ rou
 
 - [JDWP (Remote Debugging)](#jdwp-remote-debugging)
 - [VisualVM](#visualvm)
-- [jhat / OQL](#jhat--oql)
+- [jhat / OQL](#jhat--oql-analysis)
 - [jconsole](#jconsole)
 - [jmap / jstack / jinfo](#jmap--jstack--jinfo)
 - [jcmd](#jcmd)

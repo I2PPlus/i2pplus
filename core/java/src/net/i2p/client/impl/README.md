@@ -22,5 +22,5 @@ Internal implementation of the I2P client SDK: the client side of the I2CP proto
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`core/java/src/net/i2p/README.md`](../README.md) — core source map
+- [`core/java/src/net/i2p/README.md`](../../../README.md) — core source map
 - Public API: `net.i2p.client` in `core/java/src/net/i2p/client`

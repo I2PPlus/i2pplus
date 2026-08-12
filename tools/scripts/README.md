@@ -74,7 +74,7 @@ Utility scripts for I2P+ development and administration.
 ## Administration
 
 - **`i2p-sessionban-nftables.py`** — Sync I2P+ session bans to nftables sets. Uses nftables named sets with `interval` flag for O(log n) lookups. Persists bans across reboots by saving the ruleset and adding an `include` to `/etc/nftables.conf`. Requires `nft`.
-  [Documentation](../docs/i2p-sessionban-nftables.md)
+  [Documentation](../../docs/i2p-sessionban-nftables.md)
 
   ```
   i2p-sessionban-nftables.py [--list] [--list-summary] [--clean] [--reset]

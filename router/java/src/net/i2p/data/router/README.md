@@ -20,4 +20,4 @@ A router's public face is its `RouterInfo`: identity, transport addresses (NTCP/
 ## Docs
 
 - [package.html](package.html) — canonical package description
-- [`router/java/src/net/i2p/README.md`](../README.md) — router source map
+- [`router/java/src/net/i2p/README.md`](../../../README.md) — router source map

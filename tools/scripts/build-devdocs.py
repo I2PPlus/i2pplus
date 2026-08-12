@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """build-devdocs.py — Consolidate all markdown (README.md, docs/*.md) and
 package.html files into a self-contained, javadoc-style HTML documentation
-site. English only; translated README-*.md copies are skipped.
+site. Translated README-*.md copies under docs/ are included; their links
+are resolved root-relative, since they translate the root README.
 
 The output tree mirrors the source tree:
     *.md           -> *.html   (markdown rendered, heading anchors added)
@@ -45,7 +46,7 @@ except ImportError:
     sys.stderr.write("ERROR: 'markdown-it-py' is required: pip install markdown-it-py\n")
     sys.exit(1)
 
-EXCLUDED_PREFIXES = ("tools/codeql/", "tools/gradle/", "installer/lib/",
+EXCLUDED_PREFIXES = ("tools/codeql/", "tools/gradle/",
                      "dist/", "build/", ".github/", ".opencode/", ".recon/",
                      "tools/sonarqube/sonar-scanner-")
 EXCLUDED_SEGMENTS = ("node_modules", ".git", "wip", "dist")
@@ -58,9 +59,10 @@ DEFAULT_OUT = "dist/devdocs"
 
 
 def slugify(text):
-    """Approximate GitHub heading slug (lowercase, punctuation removed)."""
-    s = re.sub(r"[^a-z0-9\- ]", "", text.lower())
-    return re.sub(r" +", "-", s.strip())
+    """Approximate GitHub heading slug: lowercase, punctuation removed,
+    underscores kept, every space becomes a hyphen (no collapsing)."""
+    s = re.sub(r"[^a-z0-9\-_ ]", "", text.lower())
+    return s.strip().replace(" ", "-")
 
 
 def add_heading_ids(html):
@@ -121,6 +123,16 @@ def load_favicon(root):
     return '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%s">' % quote(data)
 
 
+def load_brand(root):
+    """URL-escaped data URI of the I2P+ wordmark (tools/template/cannon.svg)
+    for the --ident CSS variable; '' when the asset is missing."""
+    try:
+        data = (root / "tools/template/cannon.svg").read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    return quote(data)
+
+
 def clean_title(title, rel):
     """Display label for a page: strip markdown backticks, and drop a
     trailing parenthetical like (`pack200/`) when it names the page's own
@@ -155,10 +167,21 @@ def strip_badge_rows(html):
     return "".join(out)
 
 
+_LANGS = {
+    "ar": "Arabic", "bn": "Bengali", "bo": "Tibetan", "cs": "Czech",
+    "de": "German", "el": "Greek", "es": "Spanish", "fa": "Persian",
+    "fr": "French", "he": "Hebrew", "hi": "Hindi", "hu": "Hungarian",
+    "id": "Indonesian", "it": "Italian", "ja": "Japanese", "ko": "Korean",
+    "nl": "Dutch", "pl": "Polish", "pt": "Portuguese", "ro": "Romanian",
+    "ru": "Russian", "th": "Thai", "tr": "Turkish", "uk": "Ukrainian",
+    "ur": "Urdu", "vi": "Vietnamese", "zh": "Chinese",
+}
+
+
 def collect_pages(root):
     """All .md / package.html pages as dicts (rel, outrel, kind, title,
-    third_party, body). Translated README-*.md and agent/config files are
-    skipped; docs are English-only."""
+    third_party, body). Agent/config files are skipped; translated
+    README-*.md pages under docs/ are kept."""
     pages = []
     for path in sorted(root.rglob("*.md")) + sorted(root.rglob("package.html")):
         rel = posixpath.join(*[str(x) for x in path.relative_to(root).parts])
@@ -172,44 +195,74 @@ def collect_pages(root):
                           "title": title, "label": clean_title(title, rel),
                           "third_party": is_third_party(rel), "body": body})
             continue
-        if path.name in EXCLUDED_NAMES or path.name.startswith("README-"):
-            continue  # agent config, translated copies of docs
+        if path.name in EXCLUDED_NAMES:
+            continue  # agent config files
+        if path.name.startswith("README-") and not rel.startswith("docs/"):
+            continue  # translations outside docs/ are out of scope
         title = detect_title(path)
-        pages.append({"rel": rel, "outrel": rel[:-3] + ".html", "kind": "md",
-                      "title": title, "label": clean_title(title, rel),
-                      "third_party": False, "body": None})
+        page = {"rel": rel, "outrel": rel[:-3] + ".html", "kind": "md",
+                "title": title, "label": clean_title(title, rel),
+                "third_party": False, "body": None}
+        if path.name.startswith("README-"):
+            m = re.match(r"README-(.+)\.md$", path.name)
+            lang = _LANGS.get(m.group(1), m.group(1))
+            page["label"] += " (%s)" % lang
+            page["root_rel"] = True  # links written root-relative
+        pages.append(page)
     return pages
 
 
-def resolve_target(val, page, pages_by_out, root, assets):
-    """Output-tree target for a local href/src, relative to the page directory;
-    None means leave it alone."""
+def resolve_target(val, base, pages_by_out, root, assets, strip=False):
+    """Output-tree target for a local href/src, relative to the page directory
+    ('' for pages whose links are written root-relative, tried again relative
+    to docs/ for the translated readmes, which mix both conventions). Returns
+    the rewritten href, None to leave the reference alone, or False to drop
+    the attribute. Directory references map to the directory's README.html /
+    package.html / index.html landing page when one exists; local references
+    that resolve to no built page and no asset (excluded subtrees, class
+    pages the site doesn't host, dead paths) render as plain text."""
     if not val or val.startswith(("#", "http:", "https:", "mailto:", "data:", "javascript:", "//")):
         return None
-    target = posixpath.normpath(posixpath.join(posixpath.dirname(page["outrel"]), val))
-    if target == "." or target.startswith("../"):
-        return None
-    target = target.lstrip("/")
-    if target.endswith(".md"):
-        target = target[:-3] + ".html"
-    if target.endswith("package-summary.html"):
-        target = target[:-len("package-summary.html")] + "package.html"
-    rel = posixpath.relpath(target, posixpath.dirname(page["outrel"]))
-    if target in pages_by_out:
-        return rel
-    src = root / target
-    if src.is_file() and target.endswith(ASSET_EXTS) and src.stat().st_size <= ASSET_MAX:
-        assets.add(target)
-        return rel
-    return None
+    bases = [base, "docs"] if base == "" else [base]
+    for b in bases:
+        target = posixpath.normpath(posixpath.join(b, val))
+        if target == "." or target.startswith("../"):
+            continue
+        target = target.lstrip("/")
+        if target.endswith(".md"):
+            target = target[:-3] + ".html"
+        if target.endswith("package-summary.html"):
+            target = target[:-len("package-summary.html")] + "package.html"
+        if target in pages_by_out:
+            return target
+        src = root / target
+        if src.is_file() and target.endswith(ASSET_EXTS) and src.stat().st_size <= ASSET_MAX:
+            assets.add(target)
+            return target
+        if not target.endswith(ASSET_EXTS):
+            for candidate in (target + "/README.html", target + "/package.html",
+                              target + "/index.html"):
+                if candidate in pages_by_out:
+                    return candidate
+    return False if strip else None
 
 
 def fix_links(text, page, pages_by_out, root, assets):
-    """Rewrite href=/src= attributes; record local assets referenced."""
+    """Rewrite href=/src= attributes; record local assets referenced.
+    Unresolvable local hrefs are stripped (dead links render as plain text);
+    src= attributes are never touched."""
+    base = "" if page.get("root_rel") else posixpath.dirname(page["outrel"])
+
     def sub(m):
         pre, name, q, val = m.group(1), m.group(2), m.group(3), m.group(4)
-        new = resolve_target(val, page, pages_by_out, root, assets)
-        return "%s %s=%s%s%s" % (pre, name, q, new, q) if new is not None else m.group(0)
+        new = resolve_target(val, base, pages_by_out, root, assets,
+                             strip=name == "href")
+        if new is None:
+            return m.group(0)
+        if new is False:
+            return ""
+        return "%s %s=%s%s%s" % (pre, name, q,
+                                 posixpath.relpath(new, posixpath.dirname(page["outrel"])), q)
 
     return re.sub(r'(\s)(href|src)=("|\')([^"\'>]+)\3', sub, text)
 
@@ -308,7 +361,7 @@ def related_html(p, pages, up=""):
 
 
 CSS = """<style>
-:root{--bg:#1f2630;--fg:#d5dbe4;--navbg:#171c24;--navfg:#c8cfd9;--link:#6cb4e8;--hl:#343d4a;--code:#262f3b;--third:#e0b341}
+:root{--bg:#1f2630;--fg:#d5dbe4;--navbg:#171c24;--navfg:#c8cfd9;--link:#6cb4e8;--hl:#343d4a;--code:#262f3b;--third:#e0b341;--ident:url("data:image/svg+xml,__IDENT_SVG__")}
 *{box-sizing:border-box}
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -317,6 +370,7 @@ body{margin:0;font:15px/1.6 Open Sans,-apple-system,'Segoe UI',Roboto,'Helvetica
 code{background:var(--code);border:1px solid #343d4a;border-radius:3px;padding:1px 4px;font-size:13px}
 color:var(--fg);background:var(--bg)}
 footer{margin-top:18px;font-size:12px;color:#7a8490}
+html{scrollbar-color:#6cb4e8 #0000}
 h1{font-size:26px;margin:0 0 12px}
 h2,.section{border-bottom:1px solid var(--hl);padding-bottom:4px;margin-top:1.6em}
 img{max-width:100%}
@@ -334,8 +388,8 @@ th{background:#2a3340}
 .related h3{margin:0 0 6px;font-size:14px}
 .related ul{margin:0;padding-left:18px}
 .related{background:#232c38;border:1px solid var(--hl);border-radius:6px;padding:10px 16px;margin-top:24px;font-size:14px}
-.sidebar .brand:hover{color:#7cc0ff;text-decoration:none}
-.sidebar .brand{color:#fff;font-weight:700;font-size:16px;padding:0 6px 10px;display:block}
+.sidebar .ident:hover{color:#7cc0ff;text-decoration:none}
+.sidebar .ident{color:#fff;font-weight:700;font-size:16px;padding:2px 6px 10px 34px;display:block;background-image:var(--ident);background-repeat:no-repeat;background-size:auto 18px;background-position:4px 3px}
 .sidebar a{color:var(--navfg);display:block;line-height:1.35;margin:1px 0}
 .sidebar details{margin-left:2px}
 .sidebar form{padding:0 0 8px}
@@ -349,7 +403,9 @@ th{background:#2a3340}
 .sidebar ul{list-style:none;margin:2px 0 4px;padding-left:10px}
 .sidebar ul a{font-size:90%}
 .sidebar{width:320px;min-width:320px;background:var(--navbg);color:var(--navfg);padding:14px 10px;overflow-y:auto;max-height:100vh;position:sticky;top:0;font-size:14px}
-.wrap{display:flex;min-height:100vh}
+.sub li a{margin-bottom:3px;padding-bottom:3px;border-bottom:1px solid #fff1}
+.wrap{display:flex;min-height:100vh;position:relative;contain:paint}
+.wrap::after{width:500px;height:500px;display:inline-block;position:absolute;right:0;bottom:0;background:var(--ident) no-repeat right 10px bottom/500px;content:'';pointer-events:none}
 #list .pth,#list-tp .pth{color:#7a8490;font-size:12px}
 #list li,#list-tp li{padding:2px 0}
 #list,#list-tp{list-style:none;padding:0}
@@ -359,7 +415,7 @@ th{background:#2a3340}
 </style>"""
 
 
-def output_page(p, pages, tree, favicon):
+def output_page(p, pages, tree, favicon, ident):
     title = htmlmod.escape(p["label"])
     up = "../" * p["outrel"].count("/")
     index = up + "index.html"
@@ -376,8 +432,9 @@ def output_page(p, pages, tree, favicon):
         heading = "<h1>" + title + badge + "</h1>\n"
     return ("<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"utf-8\">\n"
             "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n"
-            "<title>" + title + "</title>\n" + favicon + "\n" + CSS + "</head>\n<body><div class=\"wrap\">\n"
-            "<aside class=\"sidebar\">\n<a class=\"brand\" href=\"" + index + "\">I2P+ Docs</a>\n"
+            "<title>" + title + "</title>\n" + favicon + "\n"
+            + CSS.replace("__IDENT_SVG__", ident) + "</head>\n<body><div class=\"wrap\">\n"
+            "<aside class=\"sidebar\">\n<a class=\"ident\" href=\"" + index + "\">I2P+ Docs</a>\n"
             "<form action=\"" + index + "\" method=\"get\">"
             "<input type=\"search\" name=\"q\" placeholder=\"Search...\"></form>\n"
             + render_tree(tree, p["outrel"], up) +
@@ -389,7 +446,7 @@ def output_page(p, pages, tree, favicon):
             "</main>\n</div>\n</body>\n</html>\n")
 
 
-def write_index(out_dir, pages, tree, favicon):
+def write_index(out_dir, pages, tree, favicon, ident):
     first = [p for p in pages if not p["third_party"]]
     third = [p for p in pages if p["third_party"]]
     mods = OrderedDict()
@@ -416,13 +473,14 @@ def write_index(out_dir, pages, tree, favicon):
     parts = [
         "<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"utf-8\">\n",
         "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n",
-        "<title>I2P+ Developer Documentation</title>\n", favicon, "\n", CSS,
+        "<title>I2P+ Developer Documentation</title>\n", favicon, "\n",
+        CSS.replace("__IDENT_SVG__", ident),
         "<style>.mods{display:flex;flex-wrap:wrap;gap:12px}\n",
         ".mod{border:1px solid var(--hl);border-radius:6px;padding:10px 14px;",
         "background:var(--code);flex:1 1 300px}\n",
         ".mod p{margin:6px 0 0;line-height:1.9}</style>\n</head>\n",
         "<body><div class=\"wrap\">\n<aside class=\"sidebar\">\n",
-        "<div class=\"brand\">I2P+ Docs</div>\n",
+        "<div class=\"ident\">I2P+ Docs</div>\n",
         render_tree(tree, ""),
         "</aside>\n<main class=\"content\">\n<h1>Documentation</h1>\n",
         "<input id=\"q\" type=\"search\" placeholder=\"Filter documents...\">\n",
@@ -482,12 +540,12 @@ def write_index(out_dir, pages, tree, favicon):
     (out_dir / "index.html").write_text("".join(parts), encoding="utf-8")
 
 
-def write_site(dirpath, pages, tree, root, assets, favicon):
+def write_site(dirpath, pages, tree, root, assets, favicon, ident):
     dirpath.mkdir(parents=True, exist_ok=True)
     for p in pages:
         dst = dirpath / p["outrel"]
         dst.parent.mkdir(parents=True, exist_ok=True)
-        dst.write_text(output_page(p, pages, tree, favicon), encoding="utf-8")
+        dst.write_text(output_page(p, pages, tree, favicon, ident), encoding="utf-8")
     for target in sorted(assets):
         src = root / target
         if not src.is_file():
@@ -496,7 +554,7 @@ def write_site(dirpath, pages, tree, root, assets, favicon):
         dst.parent.mkdir(parents=True, exist_ok=True)
         if not dst.exists():
             shutil.copyfile(src, dst)
-    write_index(dirpath, pages, tree, favicon)
+    write_index(dirpath, pages, tree, favicon, ident)
 
 
 _A_TAG = re.compile(r"<a\s+[^>]*?>")
@@ -552,7 +610,7 @@ def _package_page(ref, index, page):
     for n in range(len(parts), 0, -1):
         entry = index.get(".".join(parts[:n]))
         if entry:
-            return entry.get(top) or sorted(entry)[0]
+            return entry.get(top) or sorted(entry.items())[0][1]
     return None
 
 
@@ -645,7 +703,8 @@ def main():
     out = Path(args.out)
     if stage.exists():
         shutil.rmtree(stage)
-    write_site(stage, pages, tree, root, assets, load_favicon(root))
+    write_site(stage, pages, tree, root, assets, load_favicon(root),
+               load_brand(root))
 
     if not args.stage_only:
         if out.exists():
