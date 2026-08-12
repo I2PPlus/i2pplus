@@ -3947,68 +3947,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (routerOK) {
                         autostart = shouldAutoStart();
                         if (autostart && !oldOK && !doMagnets && !_snarks.isEmpty()) {
-                            // Start previously added torrents
-                            int started = 0;
-                            Set<Integer> seenPools = new HashSet<>(0);
+                            // Start previously added torrents; all of them are
+                            // known here, so pool-mates can be started together
+                            List<Snark> batch = new ArrayList<>(0);
                             for (Snark snark : _snarks.values()) {
                                 Properties config = getConfig(snark);
                                 String prop = config.getProperty(PROP_META_RUNNING);
                                 if (prop == null || Boolean.parseBoolean(prop)) {
-                                    int pool = _util.getPoolIndex(snark.getInfoHash());
-                                    boolean newPool = (pool < 0) || seenPools.add(pool);
-                                    if (started++ > 0 && newPool) {
-                                        multiDestStartDelay();
-                                    }
-                                    if (!_util.connected()) {
-                                        String msg = _t("Connecting to I2P") + "...";
-                                        addMessage(msg);
-                                        if (!_context.isRouterContext()) {
-                                            System.out.println(i2cpConnectMsg);
-                                        }
-                                        // getBWLimit() was successful so this should work
-                                        boolean ok = _util.connect();
-                                        if (!ok) {
-                                            if (_context.isRouterContext()) {
-                                                addMessage(_t("Unable to connect to I2P"));
-                                            } else {
-                                                msg =
-                                                        _t(
-                                                                        "Error connecting to I2P -"
-                                                                            + " check your I2CP"
-                                                                            + " settings!")
-                                                                + ' '
-                                                                + _util.getI2CPHost()
-                                                                + ':'
-                                                                + _util.getI2CPPort();
-                                                addMessage(msg);
-                                                System.out.println(" • " + msg);
-                                            }
-                                            routerOK = false;
-                                            autostart = false;
-                                            break;
-                                        } else {
-                                            if (!_context.isRouterContext()) {
-                                                msg =
-                                                        _t("Connected to I2P at")
-                                                                + ' '
-                                                                + _util.getI2CPHost()
-                                                                + ':'
-                                                                + _util.getI2CPPort();
-                                                System.out.println(" • " + msg);
-                                            }
-                                        }
-                                    }
-                                    addMessageNoEscape(
-                                            _t("Starting up torrent {0}", linkify(snark)));
-                                    try {
-                                        snark.startTorrent();
-                                    } catch (Snark.RouterException re) {
-                                        break;
-                                    } // Snark.fatal() will log and call fatal() here for user
-                                      // message before throwing
-                                    catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user
-                                      // message before throwing
+                                    batch.add(snark);
                                 }
+                            }
+                            if (!startBatch(batch)) {
+                                routerOK = false;
+                                autostart = false;
                             }
                         }
                     } else {
@@ -4314,8 +4265,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void addMagnets(boolean autostart) {
         boolean changed = false;
-        int started = 0;
-        Set<Integer> seenPools = new HashSet<>(0);
+        List<String> keys = new ArrayList<>(0);
         for (Iterator<?> iter = _config.keySet().iterator(); iter.hasNext(); ) {
             String k = (String) iter.next();
             if (k.startsWith(PROP_META_MAGNET_PREFIX)) {
@@ -4324,27 +4274,62 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 byte[] ih = Base64.decode(b64);
                 // ignore value - TODO put tracker URL in value
                 if (ih != null && ih.length == 20) {
-                    Properties config = getConfig(ih);
-                    String name = config.getProperty(PROP_META_MAGNET_DN);
-                    if (name == null) {
-                        name = _t("Magnet") + ' ' + I2PSnarkUtil.toHex(ih);
-                    }
-                    String tracker = config.getProperty(PROP_META_MAGNET_TR);
-                    String dir = config.getProperty(PROP_META_MAGNET_DIR);
-                    File dirf = (dir != null) ? (new File(dir)) : null;
-                    if (autostart) {
-                        int pool = _util.getPoolIndex(ih);
-                        boolean newPool = (pool < 0) || seenPools.add(pool);
-                        if (started++ > 0 && newPool) {
-                            multiDestStartDelay();
-                        }
-                    }
-                    addMagnet(name, ih, tracker, false, autostart, dirf, this);
+                    keys.add(k);
                 } else {
                     iter.remove();
                     changed = true;
                 }
             }
+        }
+        // Collect all the entries first, so none starts until the whole batch
+        // is known; then randomize the pool start order so pool-mates start
+        // together. In single-dest mode everything is in one pool, so this
+        // randomizes the whole batch's start order
+        List<String> ordered = keys;
+        if (autostart) {
+            Map<Integer, List<String>> byPool = new HashMap<>(keys.size() / 2);
+            for (String k : keys) {
+                String b64 = k.substring(PROP_META_MAGNET_PREFIX.length());
+                b64 = b64.replace('$', '=');
+                byte[] ih = Base64.decode(b64);
+                int pool = _util.getPoolIndex(ih);
+                List<String> members = byPool.get(pool);
+                if (members == null) {
+                    members = new ArrayList<>(0);
+                    byPool.put(pool, members);
+                }
+                members.add(k);
+            }
+            List<List<String>> pools = new ArrayList<>(byPool.values());
+            Collections.shuffle(pools, _context.random());
+            ordered = new ArrayList<>(keys.size());
+            for (List<String> members : pools) {
+                Collections.shuffle(members, _context.random());
+                ordered.addAll(members);
+            }
+        }
+        int started = 0;
+        Set<Integer> seenPools = new HashSet<>(0);
+        for (String k : ordered) {
+            String b64 = k.substring(PROP_META_MAGNET_PREFIX.length());
+            b64 = b64.replace('$', '=');
+            byte[] ih = Base64.decode(b64);
+            Properties config = getConfig(ih);
+            String name = config.getProperty(PROP_META_MAGNET_DN);
+            if (name == null) {
+                name = _t("Magnet") + ' ' + I2PSnarkUtil.toHex(ih);
+            }
+            String tracker = config.getProperty(PROP_META_MAGNET_TR);
+            String dir = config.getProperty(PROP_META_MAGNET_DIR);
+            File dirf = (dir != null) ? (new File(dir)) : null;
+            if (autostart) {
+                int pool = _util.getPoolIndex(ih);
+                boolean newPool = (pool < 0) || seenPools.add(pool);
+                if (started++ > 0 && newPool) {
+                    multiDestStartDelay();
+                }
+            }
+            addMagnet(name, ih, tracker, false, autostart, dirf, this);
         }
         if (changed) {
             saveConfig();
@@ -4371,26 +4356,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             // sort so the initial startup goes in natural order, more or less
             Collections.sort(foundNames, Collator.getInstance());
-            // Randomize the start order of an autostart batch: in multi-dest mode this
-            // keeps one destination's tunnel pool from grabbing all the early torrents,
-            // and everywhere it avoids repeated lockstep trackers announces on restarts
-            if (shouldStart) {
-                Collections.shuffle(foundNames, _context.random());
-            }
         }
 
         Set<String> existingNames = listTorrentFiles();
         // let's find new ones first...
+        // Add every new torrent without starting it: nothing may start until
+        // the whole batch is known, so pool-mates can be started together
+        List<Snark> added = new ArrayList<>(0);
         int count = 0;
-        int started = 0;
-        Set<Integer> seenPools = new HashSet<>(0);
         for (String name : foundNames) {
             if (existingNames.contains(name)) { /* ignored */ } // already known. noop
             else {
                 boolean ok = false;
                 try {
                     // don't let one bad torrent kill the whole loop
-                    ok = addTorrent(name, null, !shouldStart);
+                    ok = addTorrent(name, null, true);
                     if (!ok) {
                         addMessage(_t("Error: Could not add torrent: {0}", name));
                         _log.error("Unable to add torrent: " + name);
@@ -4409,24 +4389,24 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     disableTorrentFile(name);
                     rv = false;
                 }
-                if (shouldStart) {
-                    // Stagger only when a new pool starts; a shared destination's
-                    // tunnels are built by its first torrent only, so pool-mates
-                    // need no spacing
-                    Snark added = ok ? getTorrent(name) : null;
-                    int pool = (added != null) ? _util.getPoolIndex(added.getInfoHash()) : -1;
-                    boolean newPool = (pool < 0) || seenPools.add(pool);
-                    if (started++ > 0 && newPool) {
-                        multiDestStartDelay();
+                if (ok) {
+                    Snark snark = getTorrent(name);
+                    if (snark != null) {
+                        added.add(snark);
                     }
                 }
-                if (shouldStart && (count++ & 0x0f) == 15) {
+                if ((count++ & 0x0f) == 15) {
                     // try to prevent OOMs at startup
                     try {
                         Thread.sleep(250);
                     } catch (InterruptedException ie) { /* ignored */ }
                 }
             }
+        }
+        if (shouldStart) {
+            // Start the whole batch now that all stored torrents are known,
+            // keeping pool-mates together with a delay between pools
+            startBatch(added);
         }
         // Don't remove magnet torrents that don't have a torrent file yet
         existingNames.removeAll(_magnets);
@@ -4876,8 +4856,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         int count = 0;
+        int started = 0;
         Set<Integer> seenPools = new HashSet<>(0);
         for (Snark snark : stopped) {
+            if (_util.getMultiDest() && _randomizeStartupDelay) {
+                // Stagger per-pool torrents: only a pool's first torrent builds its
+                // tunnels, so wait before the first torrent of each new pool, and
+                // start pool-mates together
+                int pool = _util.getPoolIndex(snark.getInfoHash());
+                if (started++ > 0 && (pool < 0 || seenPools.add(pool))) {
+                    try {
+                        Thread.sleep(MULTI_DEST_STAGGER_MS);
+                    } catch (InterruptedException ie) { /* ignored */ }
+                }
+            }
             try {
                 snark.startTorrent();
             } catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user message before throwing
@@ -4887,19 +4879,111 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 } // try to prevent OOMs
                 catch (InterruptedException ie) { /* ignored */ }
             }
-            if (_util.getMultiDest() && _randomizeStartupDelay) {
-                // Stagger per-pool torrents: only a pool's first torrent builds its
-                // tunnels, so start the next pool's only after this pool's tunnels
-                // have had time to build, keeping the router from being swamped by
-                // tunnel build requests from every pool at once
-                int pool = _util.getPoolIndex(snark.getInfoHash());
-                if (pool < 0 || seenPools.add(pool)) {
+        }
+    }
+
+    /**
+     * Start a batch of torrents, keeping pool-mates together. All torrents in
+     * the batch are already known when this is called, so the destinations can
+     * be computed up front: pool-mates are started back-to-back, and only the
+     * first torrent of each subsequent pool waits, letting that destination's
+     * tunnels build before the next pool's torrents start. The pool start order
+     * is randomized so one destination doesn't grab all the early torrents; in
+     * single-dest mode the batch order is randomized with no delay between
+     * torrents.
+     *
+     * @param batch the torrents to start
+     * @return false if the I2CP connection could not be established, so the
+     *     caller knows the batch was left for a later pass
+     * @since 0.9.71+
+     */
+    private boolean startBatch(List<Snark> batch) {
+        if (batch.isEmpty()) {
+            return true;
+        }
+        // Group by pool; in single-dest mode this is one group of all torrents
+        Map<Integer, List<Snark>> byPool = new HashMap<>(batch.size() / 2);
+        for (Snark snark : batch) {
+            int pool = _util.getPoolIndex(snark.getInfoHash());
+            List<Snark> members = byPool.get(pool);
+            if (members == null) {
+                members = new ArrayList<>(0);
+                byPool.put(pool, members);
+            }
+            members.add(snark);
+        }
+        // Randomize the pool start order, and the order within each pool
+        List<List<Snark>> pools = new ArrayList<>(byPool.values());
+        Collections.shuffle(pools, _context.random());
+        for (List<Snark> members : pools) {
+            Collections.shuffle(members, _context.random());
+        }
+        int count = 0;
+        int started = 0;
+        for (List<Snark> members : pools) {
+            if (started++ > 0) {
+                // No-op in single-dest mode or when randomize startup delay is off
+                multiDestStartDelay();
+            }
+            for (Snark snark : members) {
+                if (!_util.connected()) {
+                    String msg = _t("Connecting to I2P") + "...";
+                    addMessage(msg);
+                    if (!_context.isRouterContext()) {
+                        System.out.println(
+                                " • "
+                                        + _t(
+                                                "Connecting to I2CP port on I2P instance at {0}",
+                                                _util.getI2CPHost()
+                                                        + ':'
+                                                        + _util.getI2CPPort()
+                                                        + "..."));
+                    }
+                    // getBWLimit() was successful so this should work
+                    boolean ok = _util.connect();
+                    if (!ok) {
+                        if (_context.isRouterContext()) {
+                            addMessage(_t("Unable to connect to I2P"));
+                        } else {
+                            msg =
+                                    _t("Error connecting to I2P - check your I2CP settings!")
+                                            + ' '
+                                            + _util.getI2CPHost()
+                                            + ':'
+                                            + _util.getI2CPPort();
+                            addMessage(msg);
+                            System.out.println(" • " + msg);
+                        }
+                        // Leave the rest of the batch for a later pass
+                        return false;
+                    } else if (!_context.isRouterContext()) {
+                        msg =
+                                _t("Connected to I2P at")
+                                        + ' '
+                                        + _util.getI2CPHost()
+                                        + ':'
+                                        + _util.getI2CPPort();
+                        System.out.println(" • " + msg);
+                    }
+                }
+                addMessageNoEscape(_t("Starting up torrent {0}", linkify(snark)));
+                try {
+                    snark.startTorrent();
+                } catch (Snark.RouterException re) {
+                    return true;
+                } // Snark.fatal() will log and call fatal() here for user
+                  // message before throwing
+                catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user
+                  // message before throwing
+                if ((count++ & 0x0f) == 15) {
+                    // try to prevent OOMs at startup
                     try {
-                        Thread.sleep(MULTI_DEST_STAGGER_MS);
+                        Thread.sleep(250);
                     } catch (InterruptedException ie) { /* ignored */ }
                 }
             }
         }
+        return true;
     }
 
     /**
