@@ -419,7 +419,6 @@ class SAMv3Handler extends SAMv1Handler
             allProps.putAll(i2cpProps);
             allProps.putAll(props);
             if (style.equals("MASTER") || style.equals("PRIMARY")) {
-                allProps.setProperty("i2p.streaming.enforceProtocol", "true");
                 allProps.setProperty("i2cp.dontPublishLeaseSet", "false");
             }
 

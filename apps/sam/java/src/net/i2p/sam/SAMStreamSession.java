@@ -182,10 +182,7 @@ class SAMStreamSession implements SAMMessageSess {
 
         forceFlush = Boolean.parseBoolean(allprops.getProperty(PROP_FORCE_FLUSH, DEFAULT_FORCE_FLUSH));
 
-        if (Boolean.parseBoolean(props.getProperty("i2p.streaming.enforceProtocol")))
-            listenProtocol = I2PSession.PROTO_STREAMING;
-        else
-            listenProtocol = I2PSession.PROTO_ANY;
+        listenProtocol = I2PSession.PROTO_STREAMING;
         listenPort = I2PSession.PORT_ANY;
 
 

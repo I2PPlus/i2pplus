@@ -673,9 +673,6 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null) {
             opts.setProperty("i2p.streaming.maxConnsPerHour", "384");
         } // per peer max incoming connections
-        if (opts.getProperty("i2p.streaming.enforceProtocol") == null) {
-            opts.setProperty("i2p.streaming.enforceProtocol", "true");
-        }
         if (opts.getProperty("i2p.streaming.disableRejectLogging") == null) {
             opts.setProperty("i2p.streaming.disableRejectLogging", "false");
         }
