@@ -562,8 +562,7 @@ public final class CertUtil {
         }
         CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(crls);
         try {
-            CertStore store = CertStore.getInstance("Collection", ccsp);
-            return store;
+            return CertStore.getInstance("Collection", ccsp);
         } catch (GeneralSecurityException gse) {
             error("CertStore", gse); // shouldn't happen
             throw new UnsupportedOperationException(gse);

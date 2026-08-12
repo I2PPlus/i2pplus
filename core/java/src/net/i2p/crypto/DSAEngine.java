@@ -373,9 +373,9 @@ public final class DSAEngine {
         BigInteger r = CryptoConstants.dsag.modPowCT(k, CryptoConstants.dsap).mod(CryptoConstants.dsaq);
         BigInteger kinv = k.modInverse(CryptoConstants.dsaq);
 
-        BigInteger M = new NativeBigInteger(1, hash.getData());
+        BigInteger m = new NativeBigInteger(1, hash.getData());
         BigInteger x = new NativeBigInteger(1, signingKey.getData());
-        BigInteger s = kinv.multiply(M.add(x.multiply(r))).mod(CryptoConstants.dsaq);
+        BigInteger s = kinv.multiply(m.add(x.multiply(r))).mod(CryptoConstants.dsaq);
 
         byte[] rbytes = r.toByteArray();
         byte[] sbytes = s.toByteArray();
@@ -551,8 +551,7 @@ public final class DSAEngine {
         PublicKey pubKey = SigUtil.toJavaDSAKey(verifyingKey);
         jsig.initVerify(pubKey);
         jsig.update(data, offset, len);
-        boolean rv = jsig.verify(SigUtil.toJavaSig(signature));
-        return rv;
+        return jsig.verify(SigUtil.toJavaSig(signature));
     }
 
     /**

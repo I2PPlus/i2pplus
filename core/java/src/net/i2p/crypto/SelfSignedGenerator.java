@@ -690,7 +690,7 @@ public final class SelfSignedGenerator {
         byte[] oid9 = getEncodedOID(OID_QT_CPSURI);
         byte[] oid10 = getEncodedOID(OID_EKU);
         byte[] oid11 = getEncodedOID(OID_ID_KP_SERVERAUTH);
-        byte[] TRUE = new byte[] {1, 1, (byte) 0xff};
+        byte[] trueBytes = new byte[] {1, 1, (byte) 0xff};
 
         // extXlen does NOT include the 0x30 and length
 
@@ -698,10 +698,10 @@ public final class SelfSignedGenerator {
         int ext1len = oid1.length + spaceFor(wrap1len);
 
         int wrap2len = 4;
-        int ext2len = oid2.length + TRUE.length + spaceFor(wrap2len);
+        int ext2len = oid2.length + trueBytes.length + spaceFor(wrap2len);
 
-        int wrap3len = spaceFor(TRUE.length + 3); // + path length constraint INTEGER
-        int ext3len = oid3.length + TRUE.length + spaceFor(wrap3len);
+        int wrap3len = spaceFor(trueBytes.length + 3); // + path length constraint INTEGER
+        int ext3len = oid3.length + trueBytes.length + spaceFor(wrap3len);
 
         int wrap41len = 0;
         // SEQUENCE doesn't have to be sorted, but let's do it for consistency,
@@ -797,15 +797,15 @@ public final class SelfSignedGenerator {
             idx = intToASN1(rv, idx, ext3len);
             System.arraycopy(oid3, 0, rv, idx, oid3.length);
             idx += oid3.length;
-            System.arraycopy(TRUE, 0, rv, idx, TRUE.length);
-            idx += TRUE.length;
+            System.arraycopy(trueBytes, 0, rv, idx, trueBytes.length);
+            idx += trueBytes.length;
             // octet string wraps an sequence containing TRUE and path length constraint INTEGER
             rv[idx++] = (byte) 0x04;
             idx = intToASN1(rv, idx, wrap3len);
             rv[idx++] = (byte) 0x30;
-            idx = intToASN1(rv, idx, TRUE.length + 3);
-            System.arraycopy(TRUE, 0, rv, idx, TRUE.length);
-            idx += TRUE.length;
+            idx = intToASN1(rv, idx, trueBytes.length + 3);
+            System.arraycopy(trueBytes, 0, rv, idx, trueBytes.length);
+            idx += trueBytes.length;
             // INTEGER path length = 0
             rv[idx++] = 0x02;
             rv[idx++] = 1;
@@ -817,8 +817,8 @@ public final class SelfSignedGenerator {
         idx = intToASN1(rv, idx, ext2len);
         System.arraycopy(oid2, 0, rv, idx, oid2.length);
         idx += oid2.length;
-        System.arraycopy(TRUE, 0, rv, idx, TRUE.length);
-        idx += TRUE.length;
+        System.arraycopy(trueBytes, 0, rv, idx, trueBytes.length);
+        idx += trueBytes.length;
         // octet string wraps a bit string
         rv[idx++] = (byte) 0x04;
         idx = intToASN1(rv, idx, wrap2len);

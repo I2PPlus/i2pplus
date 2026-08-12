@@ -800,46 +800,45 @@ public class EepGet {
             }
             for (int i = 0; i < currentWrite; i++) {
                 _written++;
-                if ((_markSize > 0) && (_written % _markSize == 0)) {
-                    if ((_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0L)) {
-                        long now = _context.clock().now();
-                        long timeToSend = now - _lastComplete;
-                        double timeInSeconds = timeToSend / 1000.0d;
-                        if (timeToSend > 0) {
-                            StringBuilder buf = new StringBuilder(50);
-                            Formatter fmt = new Formatter(buf);
-                            float received = (float) _written / 1024;
-                            if (received > 1024) {
-                                received = received / 1024;
-                                fmt.format("%3.2f", received);
-                                buf.append("M  ");
-                            } else {
-                                fmt.format("%3.0f", received);
-                                buf.append("K  ");
-                            }
-                            double lineKBytes = ((double)_markSize * (double)_lineSize) / 1024.0d;
-                            double kbps = timeInSeconds > 0 ? lineKBytes / timeInSeconds : 0;
-                            String formattedRate = formatSmoothedValue(kbps, true);
-
-                            // Append the formatted rate (e.g., "4.3KB/s" or "12KB/s")
-                            buf.append(formattedRate);
-                            buf.append("KB/s");
-
-                            if (bytesRemaining > 0) {
-                                double pct = 100 * ((double)_written + _previousWritten) /
-                                             ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
-                                buf.append("  [");
-                                fmt.format("%4.1f", Double.valueOf(pct));
-                                buf.append("%]");
-                            }
-                            if (SystemVersion.isWindows())
-                                System.out.println(" ◼ " + buf.toString());
-                            else
-                                System.out.println("\033[1A\033[K\r ◼ " + buf.toString());
-                            fmt.close();
+                if ((_markSize > 0) && (_written % _markSize == 0) &&
+                    (_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0L)) {
+                    long now = _context.clock().now();
+                    long timeToSend = now - _lastComplete;
+                    double timeInSeconds = timeToSend / 1000.0d;
+                    if (timeToSend > 0) {
+                        StringBuilder buf = new StringBuilder(50);
+                        Formatter fmt = new Formatter(buf);
+                        float received = (float) _written / 1024;
+                        if (received > 1024) {
+                            received = received / 1024;
+                            fmt.format("%3.2f", received);
+                            buf.append("M  ");
+                        } else {
+                            fmt.format("%3.0f", received);
+                            buf.append("K  ");
                         }
-                        _lastComplete = now;
+                        double lineKBytes = ((double)_markSize * (double)_lineSize) / 1024.0d;
+                        double kbps = timeInSeconds > 0 ? lineKBytes / timeInSeconds : 0;
+                        String formattedRate = formatSmoothedValue(kbps, true);
+
+                        // Append the formatted rate (e.g., "4.3KB/s" or "12KB/s")
+                        buf.append(formattedRate);
+                        buf.append("KB/s");
+
+                        if (bytesRemaining > 0) {
+                            double pct = 100 * ((double)_written + _previousWritten) /
+                                         ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
+                            buf.append("  [");
+                            fmt.format("%4.1f", Double.valueOf(pct));
+                            buf.append("%]");
+                        }
+                        if (SystemVersion.isWindows())
+                            System.out.println(" ◼ " + buf.toString());
+                        else
+                            System.out.println("\033[1A\033[K\r ◼ " + buf.toString());
+                        fmt.close();
                     }
+                    _lastComplete = now;
                 }
             }
         }
@@ -1101,7 +1100,7 @@ public class EepGet {
             try {
                 long delay = _context.random().nextInt(60*1000);
                 Thread.sleep(5*1000+delay);
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
         }
 
         for (int i = 0; i < _listeners.size(); i++)
@@ -1402,8 +1401,7 @@ public class EepGet {
         if (_isGzippedResponse) {
             try {
                 pusher.join();
-            } catch (InterruptedException ie) { /* ignored */ }
-            pusher = null;
+            } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             if (_decompressException != null) {
                 // we can't resume from here
                 _keepFetching = false;
@@ -1717,8 +1715,7 @@ public class EepGet {
 
         String len = buf.toString().trim();
         try {
-            long bytes = Long.parseLong(len, 16);
-            return bytes;
+            return Long.parseLong(len, 16);
         } catch (NumberFormatException nfe) {
             throw new IOException("Invalid chunk length [" + len + "]");
         }

@@ -24,8 +24,7 @@ public final class CryptixAESKeyCache {
      * @return a new key cache entry
      */
     public static final KeyCacheEntry createNew() {
-        KeyCacheEntry e = new KeyCacheEntry();
-        return e;
+        return new KeyCacheEntry();
     }
 
     /**

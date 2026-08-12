@@ -289,7 +289,7 @@ public class FileUtil {
         return false;
     }
 
-    private static boolean _failedOracle;
+    private static boolean failedOracle;
 
     // private static boolean _failedApache;
 
@@ -309,7 +309,7 @@ public class FileUtil {
     private static void unpack(InputStream in, JarOutputStream out) throws Exception {
         // For Sun, OpenJDK, IcedTea, etc, use this
         // Pack200.newUnpacker().unpack(in, out);
-        if (!_failedOracle) {
+        if (!failedOracle) {
             try {
                 Class<?> p200;
                 try {
@@ -326,10 +326,10 @@ public class FileUtil {
                 unpack.invoke(unpacker, new Object[] {in, out});
                 return;
             } catch (ClassNotFoundException e) {
-                _failedOracle = true;
+                failedOracle = true;
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
-                _failedOracle = true;
+                failedOracle = true;
                 e.printStackTrace();
             }
         }

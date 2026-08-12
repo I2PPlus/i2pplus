@@ -808,7 +808,6 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 len = d[off++] & 0xff;
                 if (len > 0) {
                     path = new String(d, off, len, StandardCharsets.ISO_8859_1);
-                    off += len;
                 }
             }
             String url = (type == 2 && !host.isEmpty()) ? "https://" + host + path : null;

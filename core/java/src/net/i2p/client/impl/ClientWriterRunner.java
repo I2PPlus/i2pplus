@@ -59,6 +59,7 @@ class ClientWriterRunner implements Runnable {
                 throw new I2PSessionException("Timed out waiting while write queue was full");
             }
         } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             throw new I2PSessionException("Interrupted while write queue was full", ie);
         }
     }
@@ -71,7 +72,7 @@ class ClientWriterRunner implements Runnable {
         _messagesToWrite.clear();
         try {
             _messagesToWrite.put(new PoisonI2CPMessage());
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
     }
 
     @Override

@@ -216,21 +216,21 @@ public class EdDSAEngine extends Signature {
         r = sc.reduce(r);
 
         // R = rB
-        GroupElement R = key.getParams().getB().scalarMultiply(r);
-        byte[] Rbyte = R.toByteArray();
+        GroupElement rPoint = key.getParams().getB().scalarMultiply(r);
+        byte[] rByte = rPoint.toByteArray();
 
         // S = (r + H(Rbar,Abar,M)*a) mod l
-        digest.update(Rbyte);
+        digest.update(rByte);
         digest.update(((EdDSAPrivateKey) key).getAbyte());
         digest.update(message, offset, length);
         byte[] h = digest.digest();
         h = sc.reduce(h);
-        byte[] S = sc.multiplyAndAdd(h, a, r);
+        byte[] s = sc.multiplyAndAdd(h, a, r);
 
         // R+S
         int b = curve.getField().getb();
         ByteBuffer out = ByteBuffer.allocate(b / 4);
-        out.put(Rbyte).put(S);
+        out.put(rByte).put(s);
         return out.array();
     }
 
@@ -272,19 +272,19 @@ public class EdDSAEngine extends Signature {
         // h mod l
         h = key.getParams().getScalarOps().reduce(h);
 
-        byte[] Sbyte = Arrays.copyOfRange(sigBytes, b / 8, b / 4);
+        byte[] sByte = Arrays.copyOfRange(sigBytes, b / 8, b / 4);
         // RFC 8032
-        BigInteger Sbigint = _ble.toBigInteger(Sbyte);
-        if (Sbigint.compareTo(EdDSABlinding.ORDER) >= 0) return false;
+        BigInteger sBigInt = _ble.toBigInteger(sByte);
+        if (sBigInt.compareTo(EdDSABlinding.ORDER) >= 0) return false;
 
         // R = SB - H(Rbar,Abar,M)A
-        GroupElement R = key.getParams().getB().doubleScalarMultiplyVariableTime(((EdDSAPublicKey) key).getNegativeA(), h, Sbyte);
+        GroupElement rPoint = key.getParams().getB().doubleScalarMultiplyVariableTime(((EdDSAPublicKey) key).getNegativeA(), h, sByte);
 
         // Variable time. This should be okay, because there are no secret
         // values used anywhere in verification.
-        byte[] Rcalc = R.toByteArray();
-        for (int i = 0; i < Rcalc.length; i++) {
-            if (Rcalc[i] != sigBytes[i]) return false;
+        byte[] rCalc = rPoint.toByteArray();
+        for (int i = 0; i < rCalc.length; i++) {
+            if (rCalc[i] != sigBytes[i]) return false;
         }
         return true;
     }

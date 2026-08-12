@@ -66,8 +66,7 @@ final class ECUtil {
         BigInteger xOut = (slope.modPow(TWO, prime).subtract(r.getAffineX())).subtract(s.getAffineX()).mod(prime);
         BigInteger yOut = s.getAffineY().negate().mod(prime);
         yOut = yOut.add(slope.multiply(s.getAffineX().subtract(xOut))).mod(prime);
-        ECPoint out = new ECPoint(xOut, yOut);
-        return out;
+        return new ECPoint(xOut, yOut);
     }
 
     private static ECPoint doublePoint(ECPoint r, EllipticCurve curve) {
@@ -80,8 +79,7 @@ final class ECUtil {
         slope = slope.multiply(tmp.modInverse(prime));
         BigInteger xOut = slope.pow(2).subtract(r.getAffineX().multiply(TWO)).mod(prime);
         BigInteger yOut = (r.getAffineY().negate()).add(slope.multiply(r.getAffineX().subtract(xOut))).mod(prime);
-        ECPoint out = new ECPoint(xOut, yOut);
-        return out;
+        return new ECPoint(xOut, yOut);
     }
 
     /**

@@ -21,13 +21,9 @@ import java.io.OutputStreamWriter;
  */
 public class FixWinPaths{
     /**
-     * Description.
-     */
-    /**
-     * Description.
-     */
-    /**
-     * Description.
+     *  Rewrite the wrapper.conf paths for Windows: convert forward slashes
+     *  and relative paths to backslash absolute paths.
+     *  @param args the wrapper config file, or nothing for the default
      */
     public static void main(String[] args) {
         if (args.length != 1) {

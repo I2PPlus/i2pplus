@@ -238,6 +238,7 @@ public class I2CPMessageReader {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
                         // we should break away here.
                         _log.warn("Breaking away stream \n* Interrupted Exception: " + ie.getMessage());
                         _listener.disconnected(I2CPMessageReader.this);

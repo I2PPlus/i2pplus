@@ -233,8 +233,8 @@ public class DataHelper {
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
     private static final DateFormat TIME_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
-    private static boolean _date_tz_set;
-    private static boolean _time_tz_set;
+    private static boolean dateTzSet;
+    private static boolean timeTzSet;
 
     /** Read a mapping from the stream, as defined by the I2P data structure spec,
      * and store it into a Properties object.
@@ -1271,8 +1271,7 @@ public class DataHelper {
      */
     public static final boolean eq(Object lhs, Object rhs) {
         try {
-            boolean eq = (((lhs == null) && (rhs == null)) || ((lhs != null) && (lhs.equals(rhs))));
-            return eq;
+            return (((lhs == null) && (rhs == null)) || ((lhs != null) && (lhs.equals(rhs))));
         } catch (ClassCastException cce) {
             return false;
         }
@@ -2063,11 +2062,11 @@ public class DataHelper {
      */
     public static String formatDate(long now) {
         synchronized (DATE_FORMAT) {
-            if (!_date_tz_set) {
+            if (!dateTzSet) {
                 // delayed set, too early if done in static block
                 TimeZone tz = SystemVersion.getSystemTimeZone();
                 DATE_FORMAT.setTimeZone(tz);
-                _date_tz_set = true;
+                dateTzSet = true;
             }
             return DATE_FORMAT.format(Date.from(Instant.ofEpochMilli(now)));
         }
@@ -2086,11 +2085,11 @@ public class DataHelper {
      */
     public static String formatTime(long now) {
         synchronized (TIME_FORMAT) {
-            if (!_time_tz_set) {
+            if (!timeTzSet) {
                 // delayed set, too early if done in static block
                 TimeZone tz = SystemVersion.getSystemTimeZone();
                 TIME_FORMAT.setTimeZone(tz);
-                _time_tz_set = true;
+                timeTzSet = true;
             }
             return TIME_FORMAT.format(Date.from(Instant.ofEpochMilli(now)));
         }
@@ -2528,7 +2527,7 @@ public class DataHelper {
         } catch (IllegalArgumentException iae1) {
             try {
                 Thread.sleep(5);
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             try {
                 Collections.sort(list, c);
             } catch (IllegalArgumentException iae2) { /* ignored */ }
@@ -2553,7 +2552,7 @@ public class DataHelper {
         } catch (IllegalArgumentException iae1) {
             try {
                 Thread.sleep(5);
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             try {
                 Arrays.sort(a, c);
             } catch (IllegalArgumentException iae2) { /* ignored */ }

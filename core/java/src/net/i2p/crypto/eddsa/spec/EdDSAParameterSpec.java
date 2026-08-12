@@ -33,10 +33,10 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
      * @param curve the curve
      * @param hashAlgo the JCA string for the hash algorithm
      * @param sc the parameter L represented as ScalarOps
-     * @param B the parameter B
+     * @param b the parameter B
      * @throws IllegalArgumentException if hash algorithm is unsupported or length is wrong
      */
-    public EdDSAParameterSpec(Curve curve, String hashAlgo, ScalarOps sc, GroupElement B) {
+    public EdDSAParameterSpec(Curve curve, String hashAlgo, ScalarOps sc, GroupElement b) {
         try {
             MessageDigest hash = MessageDigest.getInstance(hashAlgo);
             // EdDSA hash function must produce 2b-bit output
@@ -48,7 +48,7 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
         this.curve = curve;
         this.hashAlgo = hashAlgo;
         this.sc = sc;
-        this.B = B;
+        this.B = b;
     }
 
     /**

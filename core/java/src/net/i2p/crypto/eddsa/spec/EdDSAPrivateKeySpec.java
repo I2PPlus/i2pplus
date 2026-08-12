@@ -84,12 +84,12 @@ public class EdDSAPrivateKeySpec implements KeySpec {
      *  getSeed() and getH() will return null if this constructor is used.
      *
      *  @param a must be "clamped" (for Ed) or reduced mod l (for Red)
-     *  @param A if null, will be derived from a.
+     *  @param aPoint if null, will be derived from a.
      *  @throws IllegalArgumentException if a not clamped or reduced
      *  @since 0.9.39
      */
-    public EdDSAPrivateKeySpec(byte[] a, GroupElement A, EdDSAParameterSpec spec) {
-        this(null, null, a, A, spec);
+    public EdDSAPrivateKeySpec(byte[] a, GroupElement aPoint, EdDSAParameterSpec spec) {
+        this(null, null, a, aPoint, spec);
     }
 
     /**
@@ -98,14 +98,14 @@ public class EdDSAPrivateKeySpec implements KeySpec {
      *  @param seed may be null
      *  @param h may be null
      *  @param a must be "clamped" (for Ed) or reduced mod l (for Red)
-     *  @param A if null, will be derived from a.
+     *  @param aPoint if null, will be derived from a.
      *  @throws IllegalArgumentException if a not clamped or reduced
      */
-    public EdDSAPrivateKeySpec(byte[] seed, byte[] h, byte[] a, GroupElement A, EdDSAParameterSpec spec) {
+    public EdDSAPrivateKeySpec(byte[] seed, byte[] h, byte[] a, GroupElement aPoint, EdDSAParameterSpec spec) {
         this.seed = seed;
         this.h = h;
         this.a = a;
-        this.A = (A != null) ? A : spec.getB().scalarMultiply(a);
+        this.A = (aPoint != null) ? aPoint : spec.getB().scalarMultiply(a);
         this.spec = spec;
     }
 

@@ -69,8 +69,7 @@ public abstract class HMACGenerator {
      * @return 32-byte tmp array
      */
     protected byte[] acquireTmp() {
-        byte[] rv = SimpleByteCache.acquire(Hash.HASH_LENGTH);
-        return rv;
+        return SimpleByteCache.acquire(Hash.HASH_LENGTH);
     }
 
     /**

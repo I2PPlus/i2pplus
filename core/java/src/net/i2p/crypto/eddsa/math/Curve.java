@@ -33,13 +33,13 @@ public class Curve implements Serializable {
      *
      * @param f the finite field
      * @param d the curve parameter d
-     * @param I the square root of -1
+     * @param i the square root of -1
      */
-    public Curve(Field f, byte[] d, FieldElement I) {
+    public Curve(Field f, byte[] d, FieldElement i) {
         this.f = f;
         this.d = f.fromByteArray(d);
         this.d2 = this.d.add(this.d);
-        this.I = I;
+        this.I = i;
 
         FieldElement zero = f.ZERO;
         FieldElement one = f.ONE;
@@ -104,12 +104,12 @@ public class Curve implements Serializable {
     /**
      * Create a point from an encoded representation.
      *
-     * @param P the encoded point
+     * @param p the encoded point
      * @param precompute whether to precompute
      * @return the group element
      */
-    public GroupElement createPoint(byte[] P, boolean precompute) {
-        GroupElement ge = new GroupElement(this, P, precompute);
+    public GroupElement createPoint(byte[] p, boolean precompute) {
+        GroupElement ge = new GroupElement(this, p, precompute);
         return ge;
     }
 

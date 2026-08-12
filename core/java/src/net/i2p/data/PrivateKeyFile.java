@@ -996,8 +996,7 @@ public class PrivateKeyFile {
         InputStream in = null;
         try {
             in = new BufferedInputStream(new FileInputStream(this.file));
-            I2PSession s = this.client.createSession(in, opts);
-            return s;
+            return this.client.createSession(in, opts);
         } finally {
             if (in != null) {
                 try {

@@ -10,7 +10,6 @@ package net.i2p.client.impl;
  */
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -167,10 +166,8 @@ class I2CPMessageProducer {
         SessionConfig cfg = new SessionConfig(session.getMyDestination());
         Properties p = getRouterOptions(session);
         boolean isOffline = session.isOffline();
-        if (isOffline) {
-            if (!p.containsKey(RequestLeaseSetMessageHandler.PROP_LS_TYPE))
-                p.setProperty(RequestLeaseSetMessageHandler.PROP_LS_TYPE, "3");
-        }
+        if (isOffline && !p.containsKey(RequestLeaseSetMessageHandler.PROP_LS_TYPE))
+            p.setProperty(RequestLeaseSetMessageHandler.PROP_LS_TYPE, "3");
         cfg.setOptions(p);
         if (isOffline) {
             long exp = session.getOfflineExpiration();

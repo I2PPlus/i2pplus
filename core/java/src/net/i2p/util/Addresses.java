@@ -57,7 +57,7 @@ public abstract class Addresses {
     private static final int FLAG_PERMANENT = 0x80;
     private static final int FLAG_DEPRECATED = 0x20;
     private static final int FLAG_TEMPORARY = 0x01;
-    private static long _ifCacheTime;
+    private static long ifCacheTime;
     private static final Map<Inet6Address, Inet6Addr> _ifCache = INET6_CACHE_ENABLED ? new HashMap<>(8) : null;
     /** 12 char hex lower case */
     private static final Set<String> _macCache = new HashSet<>();
@@ -252,14 +252,10 @@ public abstract class Addresses {
                             haveIPv4 = true;
                         else
                             haveIPv6 = true;
-                        if (omitDeprecated && !isv4) {
-                            if (isDeprecated((Inet6Address) addr))
-                                continue;
-                        }
-                        if (!includeIPv6Temporary && !isv4) {
-                            if (isTemporary((Inet6Address) addr))
-                                continue;
-                        }
+                        if (omitDeprecated && !isv4 && isDeprecated((Inet6Address) addr))
+                            continue;
+                        if (!includeIPv6Temporary && !isv4 && isTemporary((Inet6Address) addr))
+                            continue;
                         if (shouldInclude(addr, includeSiteLocal,
                                           includeLoopbackAndWildcard, includeIPv6)) {
                             rv.add(stripScope(addr.getHostAddress()));
@@ -365,15 +361,13 @@ public abstract class Addresses {
     private static boolean shouldInclude(InetAddress ia, boolean includeSiteLocal,
                                          boolean includeLoopbackAndWildcard, boolean includeIPv6) {
         byte[] ip = ia.getAddress();
-        if (TEST_IPV6_ONLY) {
-            if (ip.length == 4) {
-                int i = ip[0] & 0xff;
-                if (i != 127 &&
-                    i != 192 &&
-                    i != 10 &&
-                    i != 0)
-                    return false;
-            }
+        if (TEST_IPV6_ONLY && ip.length == 4) {
+            int i = ip[0] & 0xff;
+            if (i != 127 &&
+                i != 192 &&
+                i != 10 &&
+                i != 0)
+                return false;
         }
 
         return
@@ -626,22 +620,20 @@ public abstract class Addresses {
         synchronized (_IPAddress) {
             rv = _IPAddress.get(host);
         }
-        if (rv == null) {
-            if (isIPAddress(host)) {
-                if (host.indexOf('.') > 0) {
-                    rv = getIPv4(host);
-                    if (rv == null)
-                        return null;
-                } else if (host.indexOf(':') >= 0 && !host.contains("::")) {
-                    rv = getIPv6(host);
-                    if (rv == null)
-                        return null;
-                } else {
+        if (rv == null && isIPAddress(host)) {
+            if (host.indexOf('.') > 0) {
+                rv = getIPv4(host);
+                if (rv == null)
                     return null;
-                }
-                synchronized (_IPAddress) {
-                    _IPAddress.put(host, rv);
-                }
+            } else if (host.indexOf(':') >= 0 && !host.contains("::")) {
+                rv = getIPv6(host);
+                if (rv == null)
+                    return null;
+            } else {
+                return null;
+            }
+            synchronized (_IPAddress) {
+                _IPAddress.put(host, rv);
             }
         }
         return rv;
@@ -898,7 +890,7 @@ public abstract class Addresses {
         return rv;
     }
 
-    //////// IPv6 Cache Utils ///////
+    /* ////// IPv6 Cache Utils /////// */
 
     /**
      *  @since 0.9.28
@@ -930,7 +922,7 @@ public abstract class Addresses {
      */
     private static void refreshCache() {
         long now = System.currentTimeMillis();
-        if (now - _ifCacheTime < INET6_CACHE_EXPIRE)
+        if (now - ifCacheTime < INET6_CACHE_EXPIRE)
             return;
         _ifCache.clear();
         BufferedReader in = null;
@@ -972,7 +964,7 @@ public abstract class Addresses {
         } catch (IOException ioe) { /* ignored */ } finally {
             if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
         }
-        _ifCacheTime = now;
+        ifCacheTime = now;
     }
 
 /**
@@ -1060,7 +1052,7 @@ public abstract class Addresses {
         return a.isTemporary();
     }
 
-    //////// End IPv6 Cache Utils ///////
+    /* ////// End IPv6 Cache Utils /////// */
 
     /**
      * Clears all internal caches.
@@ -1077,7 +1069,7 @@ public abstract class Addresses {
         if (_ifCache != null) {
             synchronized (_ifCache) {
                 _ifCache.clear();
-                _ifCacheTime = 0;
+                ifCacheTime = 0;
             }
         }
         synchronized (_macCache) {

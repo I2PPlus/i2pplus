@@ -40,77 +40,77 @@ public class GroupElement implements Serializable {
      * Creates a new group element in P2 representation.
      *
      * @param curve The curve
-     * @param X The X coordinate
-     * @param Y The Y coordinate
-     * @param Z The Z coordinate
+     * @param x The X coordinate
+     * @param y The Y coordinate
+     * @param z The Z coordinate
      * @return The group element in P2 representation
      */
     public static GroupElement p2(
             final Curve curve,
-            final FieldElement X,
-            final FieldElement Y,
-            final FieldElement Z) {
-        return new GroupElement(curve, Representation.P2, X, Y, Z, null);
+            final FieldElement x,
+            final FieldElement y,
+            final FieldElement z) {
+        return new GroupElement(curve, Representation.P2, x, y, z, null);
     }
 
     /**
      * Creates a new group element in P3 representation, without pre-computation.
      *
      * @param curve The curve.
-     * @param X The $X$ coordinate.
-     * @param Y The $Y$ coordinate.
-     * @param Z The $Z$ coordinate.
-     * @param T The $T$ coordinate.
+     * @param x The $X$ coordinate.
+     * @param y The $Y$ coordinate.
+     * @param z The $Z$ coordinate.
+     * @param t The $T$ coordinate.
      * @return The group element in P3 representation.
      */
     public static GroupElement p3(
             final Curve curve,
-            final FieldElement X,
-            final FieldElement Y,
-            final FieldElement Z,
-            final FieldElement T) {
-        return p3(curve, X, Y, Z, T, false);
+            final FieldElement x,
+            final FieldElement y,
+            final FieldElement z,
+            final FieldElement t) {
+        return p3(curve, x, y, z, t, false);
     }
 
     /**
      * Creates a new group element in P3 representation, potentially with pre-computation.
      *
      * @param curve The curve.
-     * @param X The $X$ coordinate.
-     * @param Y The $Y$ coordinate.
-     * @param Z The $Z$ coordinate.
-     * @param T The $T$ coordinate.
+     * @param x The $X$ coordinate.
+     * @param y The $Y$ coordinate.
+     * @param z The $Z$ coordinate.
+     * @param t The $T$ coordinate.
      * @param precomputeDoubleOnly If true, populate dblPrecmp, else set to null.
      * @return The group element in P3 representation.
      * @since 0.9.36
      */
     public static GroupElement p3(
             final Curve curve,
-            final FieldElement X,
-            final FieldElement Y,
-            final FieldElement Z,
-            final FieldElement T,
+            final FieldElement x,
+            final FieldElement y,
+            final FieldElement z,
+            final FieldElement t,
             final boolean precomputeDoubleOnly) {
-        return new GroupElement(curve, Representation.P3, X, Y, Z, T, precomputeDoubleOnly);
+        return new GroupElement(curve, Representation.P3, x, y, z, t, precomputeDoubleOnly);
     }
 
     /**
      * Creates a new group element in P1P1 representation.
      *
      * @param curve The curve.
-     * @param X The $X$ coordinate.
-     * @param Y The $Y$ coordinate.
-     * @param Z The $Z$ coordinate.
-     * @param T The $T$ coordinate.
+     * @param x The $X$ coordinate.
+     * @param y The $Y$ coordinate.
+     * @param z The $Z$ coordinate.
+     * @param t The $T$ coordinate.
      * @return The group element in P1P1 representation.
      */
     public static GroupElement p1p1(
             final Curve curve,
-            final FieldElement X,
-            final FieldElement Y,
-            final FieldElement Z,
-            final FieldElement T) {
-        return new GroupElement(curve, Representation.P1P1, X, Y, Z, T);
+            final FieldElement x,
+            final FieldElement y,
+            final FieldElement z,
+            final FieldElement t) {
+        return new GroupElement(curve, Representation.P1P1, x, y, z, t);
     }
 
     /**
@@ -134,19 +134,19 @@ public class GroupElement implements Serializable {
      * Creates a new group element in CACHED representation.
      *
      * @param curve The curve.
-     * @param YpX The $Y + X$ value.
-     * @param YmX The $Y - X$ value.
-     * @param Z The $Z$ coordinate.
-     * @param T2d The $2 * d * T$ value.
+     * @param ypX The $Y + X$ value.
+     * @param ymX The $Y - X$ value.
+     * @param z The $Z$ coordinate.
+     * @param t2d The $2 * d * T$ value.
      * @return The group element in CACHED representation.
      */
     public static GroupElement cached(
             final Curve curve,
-            final FieldElement YpX,
-            final FieldElement YmX,
-            final FieldElement Z,
-            final FieldElement T2d) {
-        return new GroupElement(curve, Representation.CACHED, YpX, YmX, Z, T2d);
+            final FieldElement ypX,
+            final FieldElement ymX,
+            final FieldElement z,
+            final FieldElement t2d) {
+        return new GroupElement(curve, Representation.CACHED, ypX, ymX, z, t2d);
     }
 
     /**
@@ -200,19 +200,19 @@ public class GroupElement implements Serializable {
      *
      * @param curve The curve.
      * @param repr The representation used to represent the group element.
-     * @param X The $X$ coordinate.
-     * @param Y The $Y$ coordinate.
-     * @param Z The $Z$ coordinate.
-     * @param T The $T$ coordinate.
+     * @param x The $X$ coordinate.
+     * @param y The $Y$ coordinate.
+     * @param z The $Z$ coordinate.
+     * @param t The $T$ coordinate.
      */
     public GroupElement(
             final Curve curve,
             final Representation repr,
-            final FieldElement X,
-            final FieldElement Y,
-            final FieldElement Z,
-            final FieldElement T) {
-        this(curve, repr, X, Y, Z, T, false);
+            final FieldElement x,
+            final FieldElement y,
+            final FieldElement z,
+            final FieldElement t) {
+        this(curve, repr, x, y, z, t, false);
     }
 
     /**
@@ -220,27 +220,27 @@ public class GroupElement implements Serializable {
      *
      * @param curve The curve.
      * @param repr The representation used to represent the group element.
-     * @param X The $X$ coordinate.
-     * @param Y The $Y$ coordinate.
-     * @param Z The $Z$ coordinate.
-     * @param T The $T$ coordinate.
+     * @param x The $X$ coordinate.
+     * @param y The $Y$ coordinate.
+     * @param z The $Z$ coordinate.
+     * @param t The $T$ coordinate.
      * @param precomputeDouble If true, populate dblPrecmp, else set to null.
      * @since 0.9.36
      */
     public GroupElement(
             final Curve curve,
             final Representation repr,
-            final FieldElement X,
-            final FieldElement Y,
-            final FieldElement Z,
-            final FieldElement T,
+            final FieldElement x,
+            final FieldElement y,
+            final FieldElement z,
+            final FieldElement t,
             final boolean precomputeDouble) {
         this.curve = curve;
         this.repr = repr;
-        this.X = X;
-        this.Y = Y;
-        this.Z = Z;
-        this.T = T;
+        this.X = x;
+        this.Y = y;
+        this.Z = z;
+        this.T = t;
         this.precmp = null;
         this.dblPrecmp = precomputeDouble ? precomputeDouble() : null;
     }
@@ -519,19 +519,19 @@ public class GroupElement implements Serializable {
         // Precomputation for single scalar multiplication.
         GroupElement[][] precmp = new GroupElement[32][8];
         // TODO-CR BR: check that this == base point when the method is called.
-        GroupElement Bi = this;
+        GroupElement bi = this;
         for (int i = 0; i < 32; i++) {
-            GroupElement Bij = Bi;
+            GroupElement bij = bi;
             for (int j = 0; j < 8; j++) {
-                final FieldElement recip = Bij.Z.invert();
-                final FieldElement x = Bij.X.multiply(recip);
-                final FieldElement y = Bij.Y.multiply(recip);
+                final FieldElement recip = bij.Z.invert();
+                final FieldElement x = bij.X.multiply(recip);
+                final FieldElement y = bij.Y.multiply(recip);
                 precmp[i][j] = precomp(this.curve, y.add(x), y.subtract(x), x.multiply(y).multiply(this.curve.get2D()));
-                Bij = Bij.add(Bi.toCached()).toP3();
+                bij = bij.add(bi.toCached()).toP3();
             }
             // Only every second summand is precomputed (16^2 = 256)
             for (int k = 0; k < 8; k++) {
-                Bi = Bi.add(Bi.toCached()).toP3();
+                bi = bi.add(bi.toCached()).toP3();
             }
         }
         return precmp;
@@ -546,14 +546,14 @@ public class GroupElement implements Serializable {
         // Precomputation for double scalar multiplication.
         // P,3P,5P,7P,9P,11P,13P,15P
         GroupElement[] dblPrecmp = new GroupElement[8];
-        GroupElement Bi = this;
+        GroupElement bi = this;
         for (int i = 0; i < 8; i++) {
-            final FieldElement recip = Bi.Z.invert();
-            final FieldElement x = Bi.X.multiply(recip);
-            final FieldElement y = Bi.Y.multiply(recip);
+            final FieldElement recip = bi.Z.invert();
+            final FieldElement x = bi.X.multiply(recip);
+            final FieldElement y = bi.Y.multiply(recip);
             dblPrecmp[i] = precomp(this.curve, y.add(x), y.subtract(x), x.multiply(y).multiply(this.curve.get2D()));
-            // Bi = edwards(B,edwards(B,Bi))
-            Bi = this.add(this.add(Bi.toCached()).toP3().toCached()).toP3();
+            // Bi = edwards(B,edwards(B,bi))
+            bi = this.add(this.add(bi.toCached()).toP3().toCached()).toP3();
         }
         return dblPrecmp;
     }
@@ -595,21 +595,21 @@ public class GroupElement implements Serializable {
         switch (this.repr) {
             case P2:
             case P3: // Ignore T for P3 representation
-                FieldElement XX;
-                FieldElement YY;
-                FieldElement B;
-                FieldElement A;
-                FieldElement AA;
-                FieldElement Yn;
-                FieldElement Zn;
-                XX = this.X.square();
-                YY = this.Y.square();
-                B = this.Z.squareAndDouble();
-                A = this.X.add(this.Y);
-                AA = A.square();
-                Yn = YY.add(XX);
-                Zn = YY.subtract(XX);
-                return p1p1(this.curve, AA.subtract(Yn), Yn, Zn, B.subtract(Zn));
+                FieldElement xx;
+                FieldElement yy;
+                FieldElement b;
+                FieldElement a;
+                FieldElement aa;
+                FieldElement yn;
+                FieldElement zn;
+                xx = this.X.square();
+                yy = this.Y.square();
+                b = this.Z.squareAndDouble();
+                a = this.X.add(this.Y);
+                aa = a.square();
+                yn = yy.add(xx);
+                zn = yy.subtract(xx);
+                return p1p1(this.curve, aa.subtract(yn), yn, zn, b.subtract(zn));
             default:
                 throw new UnsupportedOperationException();
         }
@@ -666,19 +666,19 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.PRECOMP)
             throw new IllegalArgumentException();
 
-        FieldElement YpX;
-        FieldElement YmX;
-        FieldElement A;
-        FieldElement B;
-        FieldElement C;
-        FieldElement D;
-        YpX = this.Y.add(this.X);
-        YmX = this.Y.subtract(this.X);
-        A = YpX.multiply(q.X); // q->y+x
-        B = YmX.multiply(q.Y); // q->y-x
-        C = q.Z.multiply(this.T); // q->2dxy
-        D = this.Z.add(this.Z);
-        return p1p1(this.curve, A.subtract(B), A.add(B), D.add(C), D.subtract(C));
+        FieldElement ypX;
+        FieldElement ymX;
+        FieldElement a;
+        FieldElement b;
+        FieldElement c;
+        FieldElement d;
+        ypX = this.Y.add(this.X);
+        ymX = this.Y.subtract(this.X);
+        a = ypX.multiply(q.X); // q->y+x
+        b = ymX.multiply(q.Y); // q->y-x
+        c = q.Z.multiply(this.T); // q->2dxy
+        d = this.Z.add(this.Z);
+        return p1p1(this.curve, a.subtract(b), a.add(b), d.add(c), d.subtract(c));
     }
 
     /**
@@ -700,19 +700,19 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.PRECOMP)
             throw new IllegalArgumentException();
 
-        FieldElement YpX;
-        FieldElement YmX;
-        FieldElement A;
-        FieldElement B;
-        FieldElement C;
-        FieldElement D;
-        YpX = this.Y.add(this.X);
-        YmX = this.Y.subtract(this.X);
-        A = YpX.multiply(q.Y); // q->y-x
-        B = YmX.multiply(q.X); // q->y+x
-        C = q.Z.multiply(this.T); // q->2dxy
-        D = this.Z.add(this.Z);
-        return p1p1(this.curve, A.subtract(B), A.add(B), D.subtract(C), D.add(C));
+        FieldElement ypX;
+        FieldElement ymX;
+        FieldElement a;
+        FieldElement b;
+        FieldElement c;
+        FieldElement d;
+        ypX = this.Y.add(this.X);
+        ymX = this.Y.subtract(this.X);
+        a = ypX.multiply(q.Y); // q->y-x
+        b = ymX.multiply(q.X); // q->y+x
+        c = q.Z.multiply(this.T); // q->2dxy
+        d = this.Z.add(this.Z);
+        return p1p1(this.curve, a.subtract(b), a.add(b), d.subtract(c), d.add(c));
     }
 
     /**
@@ -747,21 +747,21 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.CACHED)
             throw new IllegalArgumentException();
 
-        FieldElement YpX;
-        FieldElement YmX;
-        FieldElement A;
-        FieldElement B;
-        FieldElement C;
-        FieldElement ZZ;
-        FieldElement D;
-        YpX = this.Y.add(this.X);
-        YmX = this.Y.subtract(this.X);
-        A = YpX.multiply(q.X); // q->Y+X
-        B = YmX.multiply(q.Y); // q->Y-X
-        C = q.T.multiply(this.T); // q->2dT
-        ZZ = this.Z.multiply(q.Z);
-        D = ZZ.add(ZZ);
-        return p1p1(this.curve, A.subtract(B), A.add(B), D.add(C), D.subtract(C));
+        FieldElement ypX;
+        FieldElement ymX;
+        FieldElement a;
+        FieldElement b;
+        FieldElement c;
+        FieldElement zz;
+        FieldElement d;
+        ypX = this.Y.add(this.X);
+        ymX = this.Y.subtract(this.X);
+        a = ypX.multiply(q.X); // q->Y+X
+        b = ymX.multiply(q.Y); // q->Y-X
+        c = q.T.multiply(this.T); // q->2dT
+        zz = this.Z.multiply(q.Z);
+        d = zz.add(zz);
+        return p1p1(this.curve, a.subtract(b), a.add(b), d.add(c), d.subtract(c));
     }
 
     /**
@@ -782,21 +782,21 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.CACHED)
             throw new IllegalArgumentException();
 
-        FieldElement YpX;
-        FieldElement YmX;
-        FieldElement A;
-        FieldElement B;
-        FieldElement C;
-        FieldElement ZZ;
-        FieldElement D;
-        YpX = Y.add(X);
-        YmX = Y.subtract(X);
-        A = YpX.multiply(q.Y); // q->Y-X
-        B = YmX.multiply(q.X); // q->Y+X
-        C = q.T.multiply(T); // q->2dT
-        ZZ = Z.multiply(q.Z);
-        D = ZZ.add(ZZ);
-        return p1p1(curve, A.subtract(B), A.add(B), D.subtract(C), D.add(C));
+        FieldElement ypX;
+        FieldElement ymX;
+        FieldElement a;
+        FieldElement b;
+        FieldElement c;
+        FieldElement zz;
+        FieldElement d;
+        ypX = Y.add(X);
+        ymX = Y.subtract(X);
+        a = ypX.multiply(q.Y); // q->Y-X
+        b = ymX.multiply(q.X); // q->Y+X
+        c = q.T.multiply(T); // q->2dT
+        zz = Z.multiply(q.Z);
+        d = zz.add(zz);
+        return p1p1(curve, a.subtract(b), a.add(b), d.subtract(c), d.add(c));
     }
 
     /**
@@ -1035,12 +1035,12 @@ public class GroupElement implements Serializable {
      * <p>
      * $A$ must have been previously precomputed.
      *
-     * @param A in P3 representation.
+     * @param aPoint in P3 representation.
      * @param a $= a[0]+256*a[1]+\dots+256^{31} a[31]$
      * @param b $= b[0]+256*b[1]+\dots+256^{31} b[31]$
      * @return the GroupElement
      */
-    public GroupElement doubleScalarMultiplyVariableTime(final GroupElement A, final byte[] a, final byte[] b) {
+    public GroupElement doubleScalarMultiplyVariableTime(final GroupElement aPoint, final byte[] a, final byte[] b) {
         // TODO-CR BR: A check that this is the base point is needed.
         final byte[] aslide = slide(a);
         final byte[] bslide = slide(b);
@@ -1056,9 +1056,9 @@ public class GroupElement implements Serializable {
             GroupElement t = r.dbl();
 
             if (aslide[i] > 0) {
-                t = t.toP3().madd(A.dblPrecmp[aslide[i]/2]);
+                t = t.toP3().madd(aPoint.dblPrecmp[aslide[i]/2]);
             } else if (aslide[i] < 0) {
-                t = t.toP3().msub(A.dblPrecmp[(-aslide[i])/2]);
+                t = t.toP3().msub(aPoint.dblPrecmp[(-aslide[i])/2]);
             }
 
             if (bslide[i] > 0) {

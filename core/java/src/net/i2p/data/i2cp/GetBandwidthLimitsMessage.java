@@ -39,8 +39,7 @@ public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
-        byte[] rv = new byte[0];
-        return rv;
+        return new byte[0];
     }
 
     /**

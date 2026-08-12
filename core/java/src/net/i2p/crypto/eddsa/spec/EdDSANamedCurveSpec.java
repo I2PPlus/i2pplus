@@ -20,10 +20,10 @@ public class EdDSANamedCurveSpec extends EdDSAParameterSpec {
      * @param curve the curve parameters
      * @param hashAlgo the hash algorithm
      * @param sc the scalar ops
-     * @param B the base point
+     * @param b the base point
      */
-    public EdDSANamedCurveSpec(String name, Curve curve, String hashAlgo, ScalarOps sc, GroupElement B) {
-        super(curve, hashAlgo, sc, B);
+    public EdDSANamedCurveSpec(String name, Curve curve, String hashAlgo, ScalarOps sc, GroupElement b) {
+        super(curve, hashAlgo, sc, b);
         this.name = name;
     }
 
