@@ -17,3 +17,10 @@ include 'apps:imagegen'
 include 'core'
 include 'installer'
 include 'router'
+
+// Keep all Gradle build output out of the workspace, mirroring the Ant
+// build's ${java.io.tmpdir}/build-i2p convention (${build.root}).
+gradle.beforeProject { p ->
+    String pn = p.path == ':' ? 'root' : p.path.replaceFirst('^:', '').replace(':', '_')
+    p.buildDir = file("${System.getProperty('java.io.tmpdir')}/build-i2p/gradle/${pn}")
+}

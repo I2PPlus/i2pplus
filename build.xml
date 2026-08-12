@@ -1987,11 +1987,12 @@
       <!-- Runtime/test artifacts that must never live in the source tree -->
       <delete includeEmptyDirs="true" quiet="true">
         <fileset dir=".">
-          <include name="sessionbans/"/>
-          <include name="peerProfiles/"/>
-          <include name="autotune.config"/>
+          <include name="**/sessionbans/"/>
+          <include name="**/peerProfiles/"/>
+          <include name="**/autotune.config"/>
           <include name="logger.config"/>
-          <include name="messages.mo"/>
+          <include name="**/messages.mo"/>
+          <include name="**/messages.mo.*"/>
           <include name="build/"/>
           <include name="]*"/>
         </fileset>
@@ -2001,6 +2002,28 @@
       <delete dir="installer/java/build" quiet="true"/>
       <delete dir="installer/build" quiet="true"/>
       <delete dir="reproducible/build" quiet="true"/>
+      <!-- Module-level ant jar output (standalone module builds) -->
+      <delete dir="apps/addressbook/dist" quiet="true"/>
+      <!-- Literal unexpanded-property dir from an old pre-redirect jetty build -->
+      <delete dir="apps/jetty/$${build.root}build" quiet="true"/>
+      <!-- IzPack 5 langpack staging (rewritten by installer5 tasks) -->
+      <delete file="installer/lib/izpack/patches.jar" quiet="true" failonerror="false"/>
+      <!-- Dev-run runtime artifacts from manual router start in the workspace -->
+      <delete dir="apps/i2psnark/java/logs" quiet="true"/>
+      <delete dir="router/java/peerProfiles" quiet="true"/>
+      <delete file="core/java/logger.config" quiet="true" failonerror="false"/>
+      <delete file="core/logger.config" quiet="true" failonerror="false"/>
+      <delete file="router/router.config" quiet="true" failonerror="false"/>
+      <delete quiet="true">
+        <fileset dir="router">
+          <include name="wrapper.log*"/>
+        </fileset>
+      </delete>
+      <delete quiet="true">
+        <fileset dir="distro/debian">
+          <include name="*.debhelper.log"/>
+        </fileset>
+      </delete>
       <delete quiet="true">
         <fileset dir="installer/lib/wrapper/win64">
           <include name="*.o"/>
@@ -2014,7 +2037,7 @@
       <delete dir=".gradle" quiet="true"/>
       <delete dir="tools/gradle/wrapper/.gradle" quiet="true"/>
       <delete includeEmptyDirs="true" quiet="true">
-        <fileset dir="." includes="**/build"/>
+        <fileset dir="." includes="**/build" excludes="tools/build,tools/build/**,**/node_modules/**"/>
         <fileset dir="apps" includes="**/build"/>
         <fileset dir="core" includes="**/build"/>
         <fileset dir="router" includes="**/build"/>
