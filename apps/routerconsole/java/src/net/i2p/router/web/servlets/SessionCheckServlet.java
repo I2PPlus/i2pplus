@@ -19,7 +19,6 @@ import javax.servlet.http.Cookie;
  * Returns 200 if no password is configured (no auth required).
  */
 public class SessionCheckServlet extends HttpServlet {
-    private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SessionCheckServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

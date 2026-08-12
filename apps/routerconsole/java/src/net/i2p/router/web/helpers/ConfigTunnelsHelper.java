@@ -25,10 +25,6 @@ public class ConfigTunnelsHelper extends HelperBase {
     public ConfigTunnelsHelper() { super(); }
     private static final String HOP = "hop";
     private static final String TUNNEL = "tunnel";
-    /** dummies for translation */
-    private static final String HOPS = ngettext("{0} hop", "{0} hops");
-    private static final String TUNNELS = ngettext("{0} tunnel", "{0} tunnels");
-
     /**
      *  Render the tunnel configuration form.
      *
@@ -141,7 +137,6 @@ public class ConfigTunnelsHelper extends HelperBase {
     private static final int WARN_QUANTITY = 5;
     private static final int MAX_QUANTITY = 6;
     private static final int MAX_ADVANCED_QUANTITY = 16;
-    private static final int MAX_BACKUP_QUANTITY = 3;
     private static final int MAX_ADVANCED_BACKUP_QUANTITY = 16;
     private static final int MAX_VARIANCE = 3;
     private static final int MIN_NEG_VARIANCE = -2;

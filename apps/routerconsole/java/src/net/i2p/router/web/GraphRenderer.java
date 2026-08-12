@@ -46,15 +46,11 @@ class GraphRenderer {
     private final I2PAppContext _context;
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String DEFAULT_THEME = "dark";
-    private static final Color WHITE = new Color(255, 255, 255);
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
-    private static final Color CANVAS_COLOR_DARK = new Color(0, 0, 0);
     private static final Color BACK_COLOR = new Color(255, 255, 255);
     private static final Color BACK_COLOR_DARK = new Color(0, 0, 0, 192);
     private static final Color SHADEA_COLOR = new Color(255, 255, 255);
-    private static final Color SHADEA_COLOR_DARK = new Color(0, 0, 0);
     private static final Color SHADEB_COLOR = new Color(255, 255, 255);
-    private static final Color SHADEB_COLOR_DARK = new Color(0, 0, 0);
     private static final Color GRID_COLOR = new Color(80, 80, 80, 50);
     private static final Color GRID_COLOR_DARK = new Color(244, 244, 190, 50);
     private static final Color GRID_COLOR_DARK2 = new Color(244, 244, 190, 30);
@@ -82,16 +78,12 @@ class GraphRenderer {
     private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
 
     private static final boolean IS_WIN = SystemVersion.isWindows();
-    private static final String DEFAULT_FONT_NAME = IS_WIN ? "Lucida Console" : "Monospaced";
-    private static final String DEFAULT_TITLE_FONT_NAME = "Dialog";
-    private static final String DEFAULT_LEGEND_FONT_NAME = "Dialog";
     private static final String PROP_FONT_MONO = "routerconsole.graphFont.unit";
     private static final String PROP_FONT_LEGEND = "routerconsole.graphFont.legend";
     private static final String PROP_FONT_TITLE = "routerconsole.graphFont.title";
     private static final int SIZE_MONO = 10;
     private static final int SIZE_LEGEND = 11;
     private static final int SIZE_TITLE = 12;
-    private static final long[] RATES = RateConstants.BASIC_RATES;
     private static final Stroke GRID_STROKE =
             new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
     private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("(?<=[a-z])([A-Z])");

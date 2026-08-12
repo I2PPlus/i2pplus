@@ -102,16 +102,6 @@ public class ConfigUpdateHandler extends FormHandler {
     public static final String PROP_DEV_SU3_URL = "router.updateDevSU3URL";
 
     /**
-     *  Changed as of release 0.8 to support both .sud and .su2
-     *  Some JVMs (IcedTea) don't have pack200
-     *  Update hosts must maintain both
-     *
-     *  These versions have not been released since 0.9.22, 2015.
-     */
-    private static final String PACK200_URLS = "";
-    private static final String NO_PACK200_URLS = "";
-
-    /**
      *  These are only for .sud and .su2.
      *  Do NOT use this for .su3
      */

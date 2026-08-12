@@ -277,9 +277,7 @@ public class ConfigUIHelper extends HelperBase {
             buf.append("value=\"").append(lang).append("\" id=\"").append(lang).append("\">")
                .append("<span class=langflag><img width=48 height=36 alt=\"\" src=\"/flags.jsp?c=")
                .append(langs[i][1]).append("\"></span>")
-               .append("<div class=ui_lang>");
-            int under = lang.indexOf('_');
-            String slang = (under > 0) ? lang.substring(0, under) : lang;
+                .append("<div class=ui_lang>");
             buf.append(langs[i][2]);
             String name = langs[i][3];
             if (name != null) {

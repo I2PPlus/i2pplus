@@ -31,6 +31,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     private static final String PROP_PBKDF2 = ".pbkdf2";
     private static final int PBKDF2_ITERATIONS = 1000000;
     private static final Pattern COLON_SPLIT = Pattern.compile(":");
+    private static final SecureRandom _random = new SecureRandom();
 
     /**
      * Description.
@@ -261,8 +262,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             pfx += '.' + user;
         try {
             byte[] salt = new byte[16];
-            SecureRandom sr = new SecureRandom();
-            sr.nextBytes(salt);
+            _random.nextBytes(salt);
             PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt, PBKDF2_ITERATIONS, 256);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             byte[] hash = skf.generateSecret(spec).getEncoded();

@@ -26,14 +26,6 @@ import net.i2p.util.EepGet;
  */
 public class NewsHandler extends UpdateHandler implements Checker {
 
-    /**
-     *  NOTE: If you change, also change in Android:
-     *  app/src/main/java/net/i2p/android/apps/NewsFetcher.java
-     *
-     *  @since 0.7.14, configurable since 0.9.51
-     */
-    // idk
-    private static final String BACKUP_NEWS_URL = "http://dn3tvalnjz432qkqsvpfdqrwpqkw3ye4n4i2uyfr4jexvo3sp5ka.b32.i2p/news/news.atom.xml";
     private static final String DEFAULT_BACKUP_NEWS_URL_SU3 = "http://dn3tvalnjz432qkqsvpfdqrwpqkw3ye4n4i2uyfr4jexvo3sp5ka.b32.i2p/news/news.su3";
     private static final String PROP_BACKUP_NEWS_URL_SU3 = "router.backupNewsURL";
 

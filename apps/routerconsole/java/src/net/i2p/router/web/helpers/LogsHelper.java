@@ -32,7 +32,6 @@ import net.i2p.util.UIMessages;
 public class LogsHelper extends HelperBase {
 
     private static final Pattern LOG_LEVEL_PATTERN = Pattern.compile("\\|\\s*(DEBUG|INFO|WARN|ERROR|CRIT)\\s");
-    private static final Pattern AMP_DARR_PATTERN = Pattern.compile("&amp;(darr|uarr|#10140|hellip;)");
     private static final Pattern BRACKET_CLEANUP_PATTERN = Pattern.compile("\\[\\[(&#10004;|&#10008;)\\]\\]");
     private static final Pattern NEWLINE_STAR_PATTERN = Pattern.compile("\n(\\t)?\\* ");
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\n");
@@ -44,15 +43,6 @@ public class LogsHelper extends HelperBase {
     private static final Pattern LOG_READ = Pattern.compile("\\|.*\\[.*Read.*\\].*?:");
     private static final Pattern LOG_DIRMON = Pattern.compile("\\|.*\\[.*DirMon.*\\].*?:");
     private static final Pattern LOG_QUEUE = Pattern.compile("\\|.*\\[.*Queue.*\\].*?:");
-    private static final Pattern[] FILTER_PATTERNS = {
-        Pattern.compile("\\|.*\\[.*hutd.*\\].*?:"),
-        Pattern.compile("\\|.*\\[.*date.*\\].*?:"),
-        Pattern.compile("\\|.*\\[.*-Connection].*?:"),
-        Pattern.compile("\\|.*\\[.*Restart].*?:"),
-        Pattern.compile("\\|.*\\[.*Read.*\\].*?:"),
-        Pattern.compile("\\|.*\\[.*DirMon.*\\].*?:"),
-        Pattern.compile("\\|.*\\[.*Queue.*\\].*?:")
-    };
 
     /**
      * setContext.

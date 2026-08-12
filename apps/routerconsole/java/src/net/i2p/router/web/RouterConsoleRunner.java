@@ -1100,12 +1100,10 @@ public class RouterConsoleRunner implements RouterApp {
      * @since 0.9.28
      */
     private static class CustomHashLoginService extends HashLoginService {
-        private final String _webapp;
         private final Log _log;
 
         public CustomHashLoginService(String realm, String webapp, Log log) {
             super(realm);
-            _webapp = webapp;
             _log = log;
         }
 

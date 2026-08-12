@@ -988,7 +988,6 @@ public class SidebarHelper extends HelperBase {
      *  Inner class, can't be Serializable
      */
     private class AlphaComparator implements Comparator<Destination> {
-        private final String xsc = _t("Shared Clients");
         private final String snark = _t("I2PSnark");
 
         /**

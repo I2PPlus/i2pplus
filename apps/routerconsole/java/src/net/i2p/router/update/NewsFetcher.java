@@ -247,11 +247,7 @@ class NewsFetcher extends UpdateRunner {
     // you have to be at least this version to update to the new version
     private static final String MIN_VERSION_KEY = "minversion";
     private static final String MIN_JAVA_VERSION_KEY = "minjavaversion";
-    private static final String SUD_KEY = "sudtorrent";
-    private static final String SU2_KEY = "su2torrent";
     private static final String SU3_KEY = "su3torrent";
-    private static final String CLEARNET_SUD_KEY = "sudclearnet";
-    private static final String CLEARNET_SU2_KEY = "su2clearnet";
     private static final String CLEARNET_HTTP_SU3_KEY = "su3clearnet";
     private static final String CLEARNET_HTTPS_SU3_KEY = "su3ssl";
 

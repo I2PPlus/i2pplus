@@ -38,7 +38,6 @@ import net.i2p.router.web.Messages;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
-import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.ObjectCounterUnsafe;
 
@@ -48,7 +47,6 @@ import net.i2p.util.ObjectCounterUnsafe;
 class TunnelRenderer {
     private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
     private final RouterContext _context;
-    private final Log _log;
 
     /**
      *  A bounded LRU cache extending LinkedHashMap with computeIfAbsent support.
@@ -125,7 +123,6 @@ class TunnelRenderer {
      */
     public TunnelRenderer(RouterContext ctx) {
         _context = ctx;
-        _log = _context.logManager().getLog(TunnelRenderer.class);
     }
 
     private final BoundedCache<Hash, RouterInfo> routerInfoCache = new BoundedCache<>(5000);
@@ -753,7 +750,7 @@ class TunnelRenderer {
             chunkSb.append("<td class=tcount colspan=2 data-sort-column-key=transitCount data-sort=0></td>");
         }
         chunkSb.append("<td><a class=configpeer href=\"/configpeer?peer=")
-               .append(info.getHash())
+               .append(info != null ? info.getHash() : h)
                .append("\" title=\"").append(configurePeerTip).append("\">")
                .append(editLabel)
                .append("</a></td></tr>\n");
@@ -1322,7 +1319,7 @@ class TunnelRenderer {
             int count = info.getProcessedMessagesCount() * 1024;
             if (info.isInbound()) {lifetimeIn += count;}
             else {lifetimeOut += count;}
-            String nickname = getTunnelName(in);
+            String nickname = in != null ? getTunnelName(in) : null;
             String tunnelName = nickname != null ? nickname : _t("Unknown");
             buf.append("<tr><td>").append(tunnelName).append("</td><td>")
                .append(DataHelper.formatSize2(lifetimeIn, true)).append("</td><td>")

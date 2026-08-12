@@ -64,7 +64,6 @@ public class NetDbHelper extends FormHandler {
     private EncType _etype;
     private boolean _postOK;
     private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 100 : 200;
-    private static final int DEFAULT_PAGE = 0;
     /**
      * Whether the router is a floodfill router.
      * @return whether floodfill
