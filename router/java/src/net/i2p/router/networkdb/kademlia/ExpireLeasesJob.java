@@ -44,7 +44,6 @@ class ExpireLeasesJob extends JobImpl {
     /** Refresh leasesets with less than this much time remaining before expiry */
     private static final long REFRESH_THRESHOLD_MS = 2 * 60 * 1000L;
     /** Aggressive purge interval for client databases (ms) */
-    private static final long AGGRESSIVE_PURGE_INTERVAL_MS = 10 * 1000L;
     /** After this long past expiry, a leaseset is considered stale and purged immediately */
     private static final long STALE_EXPIRED_MS = 5 * 60 * 1000L;
 

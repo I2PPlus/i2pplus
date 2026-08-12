@@ -1833,8 +1833,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return a.getEarliestLeaseDate() > b.getEarliestLeaseDate();
     }
 
-    /** Minimum routers needed before starting netdb operations. */
-    private static final int MIN_ROUTERS = 2000;
 
     /**
      * Determine whether this routerInfo will be accepted as valid and current given what we know now.

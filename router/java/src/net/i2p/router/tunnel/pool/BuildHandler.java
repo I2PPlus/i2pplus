@@ -72,23 +72,16 @@ public class BuildHandler implements Runnable {
     private final Object _startupLock = new Object();
     private ExplState _explState = ExplState.NONE; // NOSONAR S1170
     private final String MIN_VERSION_HONOR_CAPS = "0.9.58";
-    private static final boolean DEFAULT_SHOULD_THROTTLE = true;
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private enum ExplState {NONE, IB, OB, BOTH}
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     /** TODO these may be too high, review and adjust */
-    private static final int MIN_QUEUE = IS_SLOW ? 16 : 32;
     private static volatile int _maxQueue = IS_SLOW ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 3*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
-    private static final int MIN_LOOKUP_LIMIT = IS_SLOW ? 4 : 10; // limits on concurrent next-hop RI lookup
     private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores(), 32);
-    private static final int PERCENT_LOOKUP_LIMIT = IS_SLOW ? 15 : 40; // limit lookups to this % of current participating tunnels
     private static final int MAX_PENDING_LOOKUPS = 64;
-    private static final long MAX_REQUEST_FUTURE = 5*60*1000L;
-    private static final long MAX_REQUEST_AGE = 65*60*1000L; /** Must be > 1 hour due to rounding down. */
-    private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000L;
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -168,13 +161,6 @@ public class BuildHandler implements Runnable {
         return _cachedMaxParticipatingTunnels;
     }
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
-    /**
-     * This is baseline minimum for estimating tunnel bandwidth, if accepted.
-     * We use an estimate of 200 messages (1 KB each) in 10 minutes.
-     *
-     * 200 KB in 10 minutes equals 340 Bps - optimized for high bandwidth contexts.
-     */
-    private static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 4096 / (10*60);
 
     private static String formatBandwidth(int bps) {
         if (bps >= 1000000000) {

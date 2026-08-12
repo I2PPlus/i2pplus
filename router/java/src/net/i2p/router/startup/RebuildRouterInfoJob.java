@@ -39,7 +39,6 @@ import net.i2p.util.SecureFileOutputStream;
 class RebuildRouterInfoJob extends JobImpl {
     private final Log _log;
 
-    private static final long REBUILD_DELAY = 45*1000L; // every 45 seconds
 
     /**
      * RebuildRouterInfoJob.

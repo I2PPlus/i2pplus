@@ -92,10 +92,6 @@ public class PersistentDataStore extends TransientDataStore {
     /** Config property to enable reverse address lookups. */
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-    /** Default value for immediate disconnect on IP spoof. */
-    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
-    /** Config property to enable immediate disconnect on IP spoof. */
-    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /** Stat rate periods for NetDb write metrics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;

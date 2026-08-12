@@ -2215,11 +2215,4 @@ public class Router implements RouterClock.ClockShiftListener {
         return recv;
     }
 
-    /**
-     *  Translate with console bundle
-     *
-     *  @since 0.9.53
-     */
-    private final String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
-
 }

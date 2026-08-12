@@ -976,22 +976,6 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     * Paired pool (opposite direction) for IB/OB balance comparison.
-     * Handles both client pools (by destination) and exploratory pools (by pool reference).
-     * @return the paired pool
-     */
-    private static TunnelPool getPairedPool(TunnelPool pool) {
-        if (pool == null) return null;
-        Hash dest = pool.getSettings().getDestination();
-        if (dest != null) {
-            TunnelPoolManager mgr = pool.getTunnelPoolManager();
-            return pool.getSettings().isInbound() ? mgr.getOutboundPool(dest) : mgr.getInboundPool(dest);
-        }
-        // Null destination → exploratory pool, use the paired field directly
-        return pool.getPairedPool();
-    }
-
-    /**
      * Build a tunnel with the given configuration.
      * Multi-hop builds are paced to at most {@link #MAX_BUILDS_PER_SECOND}
      * per second; when paced out, the build is skipped entirely.

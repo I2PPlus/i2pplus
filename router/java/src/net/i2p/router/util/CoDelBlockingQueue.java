@@ -61,7 +61,6 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /** Instance ID. */
     private final long _id;
 
-    private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
 
     /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
     private static final CopyOnWriteArrayList<WeakReference<CoDelBlockingQueue>> INSTANCES = new CopyOnWriteArrayList<>();

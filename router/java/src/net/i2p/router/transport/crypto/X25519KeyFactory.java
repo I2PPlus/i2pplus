@@ -42,11 +42,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     private final AtomicInteger _emptyCount = new AtomicInteger();
     /** Key consumption count since last refresh — drives fill ceiling */
     private final AtomicInteger _usedCount = new AtomicInteger();
-    private static final String PROP_DH_PRECALC_MIN = "crypto.xdh.precalc.min";
-    private static final String PROP_DH_PRECALC_MAX = "crypto.xdh.precalc.max";
     private static final String PROP_DH_PRECALC_DELAY = "crypto.xdh.precalc.delay";
-    private static final int DEFAULT_DH_PRECALC_MIN = 512;
-    private static final int DEFAULT_DH_PRECALC_MAX = 4096;
     private static final int DEFAULT_DH_PRECALC_DELAY = 25;
     /** Absolute floor — never go below this even under memory pressure */
     private static final int HARD_MIN = 128;
