@@ -22,7 +22,7 @@
 %>
 <!DOCTYPE HTML>
 <html lang=<%=lang%>>
-<head><meta charset=utf-8></head>
+<head><meta charset=utf-8><title><%=intl._t("Router Console")%></title></head>
 <body id=sb>
 <%@include file="xhr1.jsi"%>
 </body>

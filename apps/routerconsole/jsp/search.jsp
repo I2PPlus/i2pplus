@@ -15,6 +15,7 @@
 <html lang=<%=lang%>>
 <head>
 <meta charset=UTF-8>
+<title>Search - I2P+</title>
 <%  String url = searchhelper.getURL();
     if (url != null) {
 %>

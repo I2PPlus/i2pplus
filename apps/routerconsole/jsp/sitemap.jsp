@@ -52,7 +52,7 @@
 %>
 <a href="<%=sitemapLink.href%>" <%=(sitemapLink.extLink ? "target=_blank rel=noreferrer" : "")%>>
 <span class="sitemapLink <%=(sitemapLink.extLink ? "extlink" : "")%>" title="<%=intl._t(sitemapLink.titleKey)%>">
-<img src="<%=sitemapLink.imgSrc%>">
+<img src="<%=sitemapLink.imgSrc%>" alt="">
 <span class="sitemapLabel"><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>
@@ -87,7 +87,7 @@
 %>
 <a href="<%=sitemapLink.href%>">
 <span class="sitemapLink" title="<%=intl._t(sitemapLink.titleKey)%>">
-<img src="<%=sitemapLink.imgSrc%>">
+<img src="<%=sitemapLink.imgSrc%>" alt="">
 <span class="sitemapLabel"><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>
@@ -121,7 +121,7 @@
 %>
 <a href="<%=sitemapLink.href%>">
 <span class=sitemapLink title="<%=intl._t(sitemapLink.titleKey)%>">
-<img src="<%=sitemapLink.imgSrc%>">
+<img src="<%=sitemapLink.imgSrc%>" alt="">
 <span class=sitemapLabel><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>
@@ -146,7 +146,7 @@
 %>
 <a href="<%=sitemapLink.href%>">
 <span class=sitemapLink title="<%=intl._t(sitemapLink.titleKey)%>">
-<img src="<%=sitemapLink.imgSrc%>">
+<img src="<%=sitemapLink.imgSrc%>" alt="">
 <span class=sitemapLabel><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>

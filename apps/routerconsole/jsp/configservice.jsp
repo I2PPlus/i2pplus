@@ -48,7 +48,7 @@
 <div class=service_container>
 <h3 class=ptitle id=browseronstart><%=intl._t("Launch console at startup")%>&nbsp;<span class=h3navlinks>
 <a href="/help/faq#alternative_browser" title="<%=intl._t("Help with configuring I2P to use a non-system default browser")%>">
-<img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/help.png"></a></span></h3>
+<img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/help.png" alt=""></a></span></h3>
 <p class=infohelp>
 <%=intl._t("Launch I2P Router Console in web browser when I2P starts.").replace("I2P", "I2P+")%>
 </p>

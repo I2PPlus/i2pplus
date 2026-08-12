@@ -35,7 +35,7 @@
 <%      net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
         if (pm.isRegistered("imagegen")) {
 %>
-    <img class=identicon src="/imagegen/id?s=41&amp;c=<%=net.i2p.data.DataHelper.escapeHTML(peerB64)%>" style=float:right>
+    <img class=identicon alt="" src="/imagegen/id?s=41&amp;c=<%=net.i2p.data.DataHelper.escapeHTML(peerB64)%>" style=float:right>
 <%      } %>
 </h3>
 <table id=viewprofile hidden>

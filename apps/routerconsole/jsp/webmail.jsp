@@ -26,7 +26,7 @@
 <h1 class=mail><%=intl._t("Webmail")%> <a href="/susimail/" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>../images/newtab.svg" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=webmail>
 <noscript><p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/susimail/" target=_blank rel=noreferrer>the webmail client</a> in embedded mode.</p></noscript>
-<iframe id=susimailframe class=embed src="/susimail/" title="I2P+ <%=intl._t("webmail")%>" width=100% frameborder=0 border=0 scrolling=no name="susimailframe" allowtransparency=true style=display:none;pointer-events:none>
+<iframe id=susimailframe class=embed src="/susimail/" title="I2P+ <%=intl._t("webmail")%>" width=100% border=0 name="susimailframe" style=display:none;pointer-events:none>
 <%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
