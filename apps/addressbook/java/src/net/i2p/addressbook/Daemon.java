@@ -30,7 +30,7 @@ public class Daemon {
     /** Version string. */
     public static final String VERSION = "2.0.4";
     private volatile boolean _running;
-    private static HostChecker _hostChecker;
+    private static HostChecker hostChecker;
     private final Log _log = new Log(new File(I2PAppContext.getGlobalContext().getLogDir(), "addressbook.log"));
     // If you change this, change in SusiDNS SubscriptionBean also
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
@@ -657,8 +657,8 @@ public class Daemon {
      */
     public static void update(Map<String, String> settings, String home) {
         File published = null;
-        boolean should_publish = Boolean.parseBoolean(settings.get("should_publish"));
-        if (should_publish)
+        boolean shouldPublish = Boolean.parseBoolean(settings.get("should_publish"));
+        if (shouldPublish)
             published = new File(home, settings.get("published_addressbook"));
         File subscriptionFile = new File(home, settings.get("subscriptions"));
         File logFile = new File(home, settings.get("log"));
@@ -693,7 +693,7 @@ public class Daemon {
             // Direct hosts.txt access
             File routerFile = new File(home, settings.get("router_addressbook"));
             AddressBook master;
-            if (should_publish) {
+            if (shouldPublish) {
                 File masterFile = new File(home, settings.get("master_addressbook"));
                 master = new AddressBook(masterFile);
             } else {
@@ -756,8 +756,8 @@ public class Daemon {
      */
     public static void test() {
         Properties ctxProps = new Properties();
-        String PROP_FORCE = "i2p.naming.blockfile.writeInAppContext";
-        ctxProps.setProperty(PROP_FORCE, "true");
+        String propForce = "i2p.naming.blockfile.writeInAppContext";
+        ctxProps.setProperty(propForce, "true");
         I2PAppContext ctx = new I2PAppContext(ctxProps);
         NamingService ns = getNamingService("hosts.txt");
         File published = new File("test-published.txt");
@@ -810,14 +810,14 @@ public class Daemon {
         // Initialize HostChecker for address book monitoring
         try {
             _log.append("Initializing HostChecker for address book monitoring...");
-            _hostChecker = new HostChecker();
-            _log.append("HostChecker created: " + (_hostChecker != null ? "success" : "null"));
+            hostChecker = new HostChecker();
+            _log.append("HostChecker created: " + (hostChecker != null ? "success" : "null"));
 
             // Set the instance in HostCheckerBridge to avoid duplicate instances
-            HostCheckerBridge.setInstance(_hostChecker);
+            HostCheckerBridge.setInstance(hostChecker);
             _log.append("HostChecker instance set in bridge");
 
-            _hostChecker.start();
+            hostChecker.start();
             _log.append("HostChecker started successfully");
         } catch (Exception e) {
             _log.append("Failed to initialize HostChecker: " + e.getMessage());
@@ -863,10 +863,10 @@ public class Daemon {
             _running = false;
             notifyAll();
         }
-        if (_hostChecker != null) {
+        if (hostChecker != null) {
             try {
                 _log.append("Stopping HostChecker");
-                _hostChecker.stop();
+                hostChecker.stop();
             } catch (Exception e) {
                 _log.append("Error stopping HostChecker: " + e.getMessage());
             }
@@ -878,7 +878,7 @@ public class Daemon {
      * @return HostChecker instance or null if not initialized
      */
     public static HostChecker getHostChecker() {
-        return _hostChecker;
+        return hostChecker;
     }
 
 }

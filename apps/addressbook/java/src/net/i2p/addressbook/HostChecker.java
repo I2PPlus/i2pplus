@@ -485,6 +485,7 @@ public class HostChecker {
                     _log.warn("Categories failed to download from notbob.i2p (timeout) -> Starting ping cycle...");
                     _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     if (_log.shouldWarn()) {
                         _log.warn("Category download waiter interrupted");
                     }
@@ -931,10 +932,8 @@ public class HostChecker {
 
             if (reachable) {
                 PingResult result = createPingResult(true, startTime, pingTime, hostname, leaseSetTypes);
-                if (saveResult) {
-                    if (_log.shouldInfo()) {
-                        _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
-                    }
+                if (saveResult && _log.shouldInfo()) {
+                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
                 }
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
@@ -2017,6 +2016,7 @@ public class HostChecker {
                     _log.info("Starting HostChecker cycle for address book with " + addressBookSize + " entries...");
                 }
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 if (_log.shouldWarn()) {
                     _log.warn("HostChecker startup delay interrupted", e);
                 }

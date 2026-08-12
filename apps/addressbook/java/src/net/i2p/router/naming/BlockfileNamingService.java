@@ -498,8 +498,7 @@ public class BlockfileNamingService extends DummyNamingService {
             SkipList<String, DestEntry> sl = _bf.getIndex(listname, _stringSerializer, _destSerializer);
             if (sl == null)
                 return null;
-            DestEntry rv = sl.get(key);
-            return rv;
+            return sl.get(key);
         } catch (IOException ioe) {
             _log.error("DB Lookup error", ioe);
             // delete index??
