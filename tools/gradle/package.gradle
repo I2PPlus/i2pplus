@@ -199,14 +199,23 @@ task bumpMajorVersion {
 }
 
 // ---------------------------------------------------------------------------
-// QA tooling (mirrors ant sonarqube-report / po-status)
+// QA tooling (mirrors ant sonarqube-report-full / -zip, po-status)
 // ---------------------------------------------------------------------------
 
-task sonarqubeReport(type: Exec) {
+task "sonarqube-report-full"(type: Exec) {
     group = 'verification'
-    description = 'Run the SonarQube analysis (mirrors ant sonarqube-report).'
+    description = 'Run the SonarQube analysis with local rule docs (mirrors ant sonarqube-report-full).'
     dependsOn subprojects.findAll { it.plugins.hasPlugin('java') }.collect { it.tasks.named('classes') }
-    commandLine 'bash', 'tools/sonarqube/run-sonar.sh'
+    commandLine 'bash', 'tools/sonarqube/run-sonar.sh', '--local-rules'
+}
+
+task "sonarqube-report-zip"(type: Zip) {
+    group = 'verification'
+    description = 'Package the SonarQube report and rule docs into dist/sonarqube-report.zip (mirrors ant sonarqube-report-zip).'
+    dependsOn tasks.named('sonarqube-report-full')
+    from 'dist/sonarqube'
+    archiveFileName = 'sonarqube-report.zip'
+    destinationDirectory = file('dist')
 }
 
 task poStatus(type: Exec) {

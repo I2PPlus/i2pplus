@@ -1,0 +1,59 @@
+// ---------------------------------------------------------------------------
+// Self-test: verify the documented task inventory, then run the safe subset
+// ---------------------------------------------------------------------------
+
+// Public tasks documented in tools/gradle/README.md (plus kebab aliases).
+// The name check catches inventory drift before any compile or test work.
+// SonarQube report targets (sonarqube-report, -full, -zip) are omitted for
+// now: they download a server on first run, so they are exercised manually.
+def documentedTasks = [
+    'updater', 'updaterSmall', 'updaterRouter', 'updaterCompact',
+    'prepUpdate', 'prepUpdateSmall', 'prepUpdateRouter',
+    'installer', 'installerexe', 'installer-nowindows', 'installer-linux',
+    'installer-freebsd', 'installer-osx', 'installer-windows', 'installer2app',
+    'installer-all',
+    'installer5', 'installer5exe', 'installer5-freebsd', 'installer5-linux',
+    'installer5-nowindows', 'installer5-osx', 'installer5-windows',
+    'installer5WExe', 'installer5WJar', 'installerW4Exe', 'installerW4Jar',
+    'pkg', 'tarball', 'distclean',
+    'jbigi', 'jbigi-linux', 'jbigi-osx', 'jbigi-windows', 'jbigi-freebsd',
+    'jbigi-nowindows',
+    'buildexe', 'buildDeb', 'poStatus',
+    'testCore', 'testRouter', 'testApps',
+    'preppkg', 'preppkg-nowindows', 'preppkg-linux-only',
+    'preppkg-freebsd-only', 'preppkg-osx-only', 'preppkg-windows-only',
+]
+
+// Tasks actually executed here: updaterCompact compiles and packages every
+// module (it taxes all sub-components), so the per-module test suites are
+// not run here; report tasks (poStatus, SonarQube), the heavy packagers
+// (updater*, installer*, pkg) and the tool/network-dependent targets
+// (buildDeb, jbigi) are checked by name only.
+def selftestReal = ['updaterCompact']
+
+// Resolved at configuration time (config-cache-safe); the check itself is
+// gated to the selftest tasks, so a drifted inventory fails only selftest
+def missingTasks = documentedTasks.findAll { tasks.findByName(it) == null }
+
+task selftestNames {
+    group = 'verification'
+    description = 'Verify every documented task name still resolves.'
+    doLast {
+        if (missingTasks) {
+            throw new GradleException("selftest: documented tasks no longer resolve: ${missingTasks.join(', ')}")
+        }
+        println "selftest: all ${documentedTasks.size()} documented tasks resolve"
+    }
+}
+
+// Run the inventory check before any real task; its failure aborts the build
+selftestReal.each { taskName ->
+    tasks.named(taskName).get().mustRunAfter(selftestNames)
+}
+
+task selftest {
+    group = 'verification'
+    description = "Run the documented-task inventory check, then ${selftestReal.join(', ')}."
+    dependsOn selftestNames
+    dependsOn selftestReal
+}
