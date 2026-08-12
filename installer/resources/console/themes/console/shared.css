@@ -2,6 +2,7 @@
 /* Author: dr|z3d */
 
 :root{--graphbar:#292}
+iframe{border:0}
 .leaseset .ekey,.leaseset .stype{margin-left:2px!important;float:right}
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
