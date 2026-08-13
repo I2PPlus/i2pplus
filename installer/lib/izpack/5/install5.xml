@@ -130,6 +130,13 @@
       <value>64</value>
     </condition>
   </conditions>
+  <!--
+    Explicit error dialog on 32-bit Windows; only 64-bit is supported.
+    NOTE: element placement/syntax must be re-verified when building with izpack5.
+  -->
+  <installerrequirements>
+    <installerrequirement condition="is64bit|!izpack.windowsinstall" message="I2P+ requires 64-bit Windows and a 64-bit Java runtime. This computer is running a 32-bit configuration, which is no longer supported. Installation will now exit."/>
+  </installerrequirements>
   <!-- XInfoConsolePanel -->
   <jar src="installer/lib/izpack5/patches/java/build/izpack-i2p.jar"/>
   <panels>
@@ -216,44 +223,18 @@
       <parsable targetfile="$INSTALL_PATH/DisableI2P+Service.bat" type="shell">
         <os family="windows"/>
       </parsable>
-      <!-- postinstall stuff for windows -->
-      <!-- Wrapper for 32bit Windows JVM -->
+      <!-- postinstall stuff for windows (64-bit only) -->
+      <!--
+        Copy the wrapper to the install root. I2Psvc.exe is our
+        cross-compiled 64-bit wrapper (see
+        installer/lib/wrapper/build-wrapper-win64.sh).
+      -->
       <executable targetfile="$INSTALL_PATH/utility.jar"
         type="jar"
         class="net.i2p.installer.Main"
         stage="postinstall"
         keep="true"
-        failure="warn"
-        condition="!is64bit">
-        <os family="windows"/>
-        <args>
-          <arg value="copy"/>
-          <arg value="$INSTALL_PATH\lib\wrapper\win32\I2Psvc.exe"/>
-          <arg value="$INSTALL_PATH"/>
-        </args>
-      </executable>
-      <executable targetfile="$INSTALL_PATH/utility.jar"
-        type="jar"
-        class="net.i2p.installer.Main"
-        stage="postinstall"
-        keep="true"
-        failure="warn"
-        condition="!is64bit">
-        <os family="windows"/>
-        <args>
-          <arg value="copy"/>
-          <arg value="$INSTALL_PATH\lib\wrapper\win32\wrapper.dll"/>
-          <arg value="$INSTALL_PATH\lib"/>
-        </args>
-      </executable>
-      <!-- wrapper for 64bit Windows JVM -->
-      <executable targetfile="$INSTALL_PATH/utility.jar"
-        type="jar"
-        class="net.i2p.installer.Main"
-        stage="postinstall"
-        keep="true"
-        failure="warn"
-        condition="is64bit">
+        failure="warn">
         <os family="windows"/>
         <args>
           <arg value="copy"/>
@@ -261,36 +242,22 @@
           <arg value="$INSTALL_PATH"/>
         </args>
       </executable>
-      <executable targetfile="$INSTALL_PATH/utility.jar"
-        type="jar"
-        class="net.i2p.installer.Main"
-        stage="postinstall"
-        keep="true"
-        failure="warn"
-        condition="is64bit">
-        <os family="windows"/>
-        <args>
-          <arg value="copy"/>
-          <arg value="$INSTALL_PATH\lib\wrapper\win64\wrapper.dll"/>
-          <arg value="$INSTALL_PATH\lib"/>
-        </args>
-      </executable>
       <!--
-         We still copy the 32 bit version of wrapper.dll (even with a 64bit jvm) so that if a
-         32 bit jvm is installed in the future, nothing breaks.
+        Copy the JNI wrapper library next to the exe. WrapperManager (used
+        by the router console service page and i2pcontrol) loads it via
+        java.library.path, which wrapper.config points at $INSTALL_PATH\lib.
       -->
       <executable targetfile="$INSTALL_PATH/utility.jar"
         type="jar"
         class="net.i2p.installer.Main"
         stage="postinstall"
         keep="true"
-        failure="warn"
-        condition="is64bit">
+        failure="warn">
         <os family="windows"/>
         <args>
           <arg value="copy"/>
-          <arg value="$INSTALL_PATH\lib\wrapper\win32\wrapper.dll"/>
-          <arg value="$INSTALL_PATH\lib\wrapper-windows-x86-32.dll"/>
+          <arg value="$INSTALL_PATH\lib\wrapper\win64\wrapper.dll"/>
+          <arg value="$INSTALL_PATH\lib"/>
         </args>
       </executable>
       <!-- workaround for bad default path for wrapper.log in Windows. -->
@@ -331,22 +298,10 @@
       </executable>
 
       <!-- change owner to %username% so updates will work -->
-      <executable targetfile="$INSTALL_PATH/fixperms.bat" type="bin" stage="postinstall" keep="true" failure="warn"
-        condition="!izpack.windowsinstall.xp+!izpack.windowsinstall.2003">
+      <executable targetfile="$INSTALL_PATH/fixperms.bat" type="bin" stage="postinstall" keep="true" failure="warn">
         <os family="windows"/>
         <args>
           <arg value="$INSTALL_PATH"/>
-        </args>
-      </executable>
-      <!-- else delete it -->
-      <executable targetfile="$INSTALL_PATH/utility.jar"
-        type="jar"
-        class="net.i2p.installer.Main"
-        stage="postinstall" keep="true" failure="warn" condition="izpack.windowsinstall.xp|izpack.windowsinstall.2003">
-        <os family="windows"/>
-        <args>
-          <arg value="delete"/>
-          <arg value="$INSTALL_PATH\fixperms.bat"/>
         </args>
       </executable>
 
@@ -375,7 +330,7 @@
          Removal of the I2P service in Windows should be done in the base pack so that even if a user installed
          the service manually it will still be removed when uninstalling.
       -->
-      <executable targetfile="$INSTALL_PATH/uninstall_i2p_service_winnt.bat" stage="uninstall">
+      <executable targetfile="$INSTALL_PATH/uninstall_i2p_service_winnt.bat" stage="uninstall" failure="warn">
         <os family="windows"/>
       </executable>
     </pack>
@@ -383,7 +338,6 @@
     <pack name="Windows Service" required="yes" preselected="yes">
       <description>Install I2P+ as a service and run automatically at startup</description>
       <os family="windows"/>
-      <executable targetfile="$INSTALL_PATH/set_config_dir_for_nt_service.bat" stage="postinstall" failure="warn" keep="true"/>
       <executable targetfile="$INSTALL_PATH/install_i2p_service_winnt.bat" stage="postinstall" failure="warn" keep="true"/>
       <executable targetfile="$INSTALL_PATH/StartI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
       <executable targetfile="$INSTALL_PATH/StopI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
