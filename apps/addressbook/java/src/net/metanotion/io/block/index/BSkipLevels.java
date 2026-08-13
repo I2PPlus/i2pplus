@@ -415,6 +415,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
                 if (higher != null && higher.key().compareTo(key()) < 0) {
                     bf.log.warn("                Higher level has lower key " + higher.key());
                 }
+                higher = levels[i];
             } else {
                 bf.log.info("                level " + i + " empty");
                 if (higher != null)
