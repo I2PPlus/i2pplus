@@ -1179,38 +1179,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Send an error response. Currently unused.
-     *
-     * @param nInfo who to send it to
-     * @param msgID the message ID to respond to
-     * @param map the bencoded error message
-     * @return success
-     */
-    private boolean sendError(NodeInfo nInfo, MsgID msgID, Map<String, Object> map) {
-        if (nInfo.equals(_myNodeInfo)) {
-            throw new IllegalArgumentException("Don't send to ourselves");
-        }
-        if (_log.shouldInfo()) {
-            _log.info("Sending error to " + nInfo);
-        }
-        if (nInfo.getDestination() == null) {
-            NodeInfo newInfo = _knownNodes.get(nInfo.getNID());
-            if (newInfo != null && newInfo.getDestination() != null) {
-                nInfo = newInfo;
-            } else { // TODO: lookup b32?
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping sendError, no destination for " + nInfo);
-                }
-                return false;
-            }
-        }
-        map.put("y", "e");
-        map.put("t", msgID.getData());
-        return sendMessage(nInfo.getDestination(), nInfo.getPort() + 1, map, false);
-    }
-
-    /**
      * The dest for a NodeInfo lacking it, stored there. Blocking.
+
      *
      * @param nInfo the node to look up
      * @return success

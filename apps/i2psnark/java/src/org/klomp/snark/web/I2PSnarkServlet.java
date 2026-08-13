@@ -122,10 +122,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private long _lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
 
-    /** Session-bound nonce for CSRF protection @since 0.9.69 */
-    private static final String SESSION_NONCE_OUTER = "__i2psnark.nonce.outer__";
-    private static final String SESSION_NONCE_INNER = "__i2psnark.nonce.inner__";
-    private static final int SESSION_NONCE_QUEUE_SIZE = 10;
     private static final Pattern INFOHASH_PAREN = Pattern.compile(" \\(");
     /** Cumulative stats array indices: [downloaded, uploaded, download rate, upload rate, peers, total size] */
     private static final int STAT_DOWNLOADED = 0;
@@ -226,94 +222,6 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @return a new nonce for each call
      *  @since 0.9.69
      */
-    @SuppressWarnings("unchecked")
-    private String getNonce(HttpSession session, boolean xhr) {
-        if (session == null) {
-            return null;
-        }
-        // add a prefix to distinguish from other nonces for debugging
-        String rv = "SN" + (xhr ? 'B' : 'A') + _context.random().nextLong();
-        synchronized(session) {
-            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_OUTER);
-            if (nonces == null) {
-                nonces = new LinkedList<>();
-                session.setAttribute(SESSION_NONCE_OUTER, nonces);
-            }
-            nonces.offer(rv);
-            if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
-                nonces.poll();
-        }
-        return rv;
-    }
-
-    @SuppressWarnings("unchecked")
-    private String getInnerNonce(HttpSession session) {
-        if (session == null) {
-            return null;
-        }
-        // add a prefix to distinguish from other nonces for debugging
-        String rv = "SI" + _context.random().nextLong();
-        synchronized(session) {
-            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_INNER);
-            if (nonces == null) {
-                nonces = new LinkedList<>();
-                session.setAttribute(SESSION_NONCE_INNER, nonces);
-            }
-            nonces.offer(rv);
-            if (nonces.size() > SESSION_NONCE_QUEUE_SIZE)
-                nonces.poll();
-        }
-        return rv;
-    }
-
-    /**
-     *  Validate session-bound nonce (outer)
-     *  @param nonce the nonce to validate
-     *  @param session session containing nonce queue
-     *  @return true if valid
-     *  @since 0.9.69
-     */
-    @SuppressWarnings("unchecked")
-    private static boolean isValidNonce(String nonce, HttpSession session) {
-        if (nonce == null || session == null) {
-            return false;
-        }
-        boolean rv;
-        synchronized(session) {
-            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_OUTER);
-            if (nonces != null) {
-                rv = nonces.removeLastOccurrence(nonce);
-            } else {
-                rv = false;
-            }
-        }
-        return rv;
-    }
-
-    /**
-     *  Validate session-bound nonce (inner/XHR)
-     *  @param nonce the nonce to validate
-     *  @param session session containing nonce queue
-     *  @return true if valid
-     *  @since 0.9.69
-     */
-    @SuppressWarnings("unchecked")
-    private static boolean isValidInnerNonce(String nonce, HttpSession session) {
-        if (nonce == null || session == null) {
-            return false;
-        }
-        boolean rv;
-        synchronized(session) {
-            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_NONCE_INNER);
-            if (nonces != null) {
-                rv = nonces.removeLastOccurrence(nonce);
-            } else {
-                rv = false;
-            }
-        }
-        return rv;
-    }
-
     /**
      *  Validate Origin header for POST requests.
      *  Allows requests with matching Origin (same-origin), or no Origin header.
@@ -983,17 +891,6 @@ public class I2PSnarkServlet extends BasicServlet {
         try { maxAge = Math.min(Integer.parseInt(refresh), 60); } catch (NumberFormatException nfe) {}
         resp.setHeader("Cache-Control", "private, no-cache, max-age=" + maxAge);
         resp.setHeader("Content-Security-Policy", "default-src 'none'; child-src 'self'");
-    }
-
-    private transient UIMessages.Message lastMessage;
-
-    private synchronized String getLastMessage() {
-        List<UIMessages.Message> msgs = _manager.getMessages();
-        if (lastMessage == null || (msgs.size() > 0 && msgs.get(msgs.size() - 1) != lastMessage)) {
-            if (!msgs.isEmpty()) {lastMessage = msgs.get(msgs.size() - 1);}
-            else {lastMessage = null;}
-        }
-        return lastMessage != null ? lastMessage.message : null;
     }
 
     /**

@@ -2338,17 +2338,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Others should use the version in I2PSnarkUtil
-     *
-     * @return non-null, empty if disabled
-     * @since 0.9.1
-     */
-    private List<String> getOpenTrackers() {
-        if (!_util.shouldUseOpenTrackers()) return Collections.emptyList();
-        return getListConfig(PROP_OPENTRACKERS, DEFAULT_OPENTRACKERS);
-    }
-
-    /**
      * The configured private tracker list.
      *
      * @return non-null, fixed size, may be empty or unmodifiable
