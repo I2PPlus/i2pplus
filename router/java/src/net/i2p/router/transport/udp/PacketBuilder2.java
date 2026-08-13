@@ -23,6 +23,9 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
 import net.i2p.router.transport.udp.SSU2Payload.Block;
+import net.i2p.router.transport.udp.SSU2Payload.FirstFragBlock;
+import net.i2p.router.transport.udp.SSU2Payload.FollowFragBlock;
+import net.i2p.router.transport.udp.SSU2Payload.I2NPBlock;
 import net.i2p.util.Log;
 
 /**
@@ -37,6 +40,64 @@ class PacketBuilder2 {
     private final RouterContext _context;
     private final Log _log;
     private final UDPTransport _transport;
+
+    /**
+     *  Per-thread pool of payload block objects and the reusable block list.
+     *  Blocks are used only within buildPacket() for serialization and are never
+     *  retained after the packet is built, so each thread can clear and refill
+     *  its own pool across calls without synchronization.
+     *  @since 2.13.1
+     */
+    private static final class BlockPool {
+        /** The list passed to writePayload(); cleared and refilled per call */
+        final List<Block> blocks = new ArrayList<>(8);
+        final List<I2NPBlock> i2npBlocks = new ArrayList<>(4);
+        final List<FirstFragBlock> firstFragBlocks = new ArrayList<>(4);
+        final List<FollowFragBlock> followFragBlocks = new ArrayList<>(4);
+
+        I2NPBlock acquireI2NP(OutboundMessageState state) {
+            if (i2npBlocks.isEmpty())
+                return new I2NPBlock(state);
+            I2NPBlock b = i2npBlocks.remove(i2npBlocks.size() - 1);
+            b.setMessage(state);
+            return b;
+        }
+
+        FirstFragBlock acquireFirstFrag(OutboundMessageState state) {
+            if (firstFragBlocks.isEmpty())
+                return new FirstFragBlock(state);
+            FirstFragBlock b = firstFragBlocks.remove(firstFragBlocks.size() - 1);
+            b.setMessage(state);
+            return b;
+        }
+
+        FollowFragBlock acquireFollowFrag(OutboundMessageState state, int fragment) {
+            if (followFragBlocks.isEmpty())
+                return new FollowFragBlock(state, fragment);
+            FollowFragBlock b = followFragBlocks.remove(followFragBlocks.size() - 1);
+            b.setMessage(state, fragment);
+            return b;
+        }
+
+        /** Return all blocks to their type pools for reuse. */
+        void release(List<Block> used) {
+            for (Block b : used) {
+                if (b instanceof I2NPBlock)
+                    i2npBlocks.add((I2NPBlock) b);
+                else if (b instanceof FirstFragBlock)
+                    firstFragBlocks.add((FirstFragBlock) b);
+                else if (b instanceof FollowFragBlock)
+                    followFragBlocks.add((FollowFragBlock) b);
+            }
+        }
+    }
+
+    private static final ThreadLocal<BlockPool> _blockPool = new ThreadLocal<BlockPool>() {
+        @Override
+        protected BlockPool initialValue() {
+            return new BlockPool();
+        }
+    };
 
     /**
      *  For debugging and stats only - does not go out on the wire.
@@ -207,7 +268,9 @@ class PacketBuilder2 {
         int off = SHORT_HEADER_SIZE;
 
         // ok, now for the body...
-        List<Block> blocks = new ArrayList<>(8);
+        BlockPool pool = _blockPool.get();
+        List<Block> blocks = pool.blocks;
+        blocks.clear();
         // payload only
         int sizeWritten = 0;
 
@@ -236,11 +299,11 @@ class PacketBuilder2 {
             Block block;
             if (fragment == 0) {
                 if (count == 1)
-                    block = new SSU2Payload.I2NPBlock(state);
+                    block = pool.acquireI2NP(state);
                 else
-                    block = new SSU2Payload.FirstFragBlock(state);
+                    block = pool.acquireFirstFrag(state);
             } else {
-                block = new SSU2Payload.FollowFragBlock(state, fragment);
+                block = pool.acquireFollowFrag(state, fragment);
             }
             blocks.add(block);
             int sz = block.getTotalLength();
@@ -326,6 +389,7 @@ class PacketBuilder2 {
                 fragments = new ArrayList<>(fragments);
             peer.fragmentsSent(pktNum, length, fragments);
         }
+        pool.release(blocks);
         return packet;
     }
 

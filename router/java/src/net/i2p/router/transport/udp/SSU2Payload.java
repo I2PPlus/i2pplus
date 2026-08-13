@@ -650,7 +650,7 @@ class SSU2Payload {
      * Used to transport I2NP messages over SSU2.
      */
     public static class I2NPBlock extends Block {
-        private final OutboundMessageState m;
+        private OutboundMessageState m;
 
         /**
          * Create an I2NP message block.
@@ -658,6 +658,15 @@ class SSU2Payload {
          */
         public I2NPBlock(OutboundMessageState msg) {
             super(BLOCK_I2NP);
+            m = msg;
+        }
+
+        /**
+         * Repurpose this block for a new message. Only for pooling.
+         * @param msg the outbound message state
+         * @since 2.13.1
+         */
+        void setMessage(OutboundMessageState msg) {
             m = msg;
         }
 
@@ -685,7 +694,7 @@ class SSU2Payload {
      *  Same format as I2NPBlock
      */
     public static class FirstFragBlock extends Block {
-        private final OutboundMessageState m;
+        private OutboundMessageState m;
 
         /**
          * Create a first fragment block.
@@ -693,6 +702,15 @@ class SSU2Payload {
          */
         public FirstFragBlock(OutboundMessageState msg) {
             super(BLOCK_FIRSTFRAG);
+            m = msg;
+        }
+
+        /**
+         * Repurpose this block for a new message. Only for pooling.
+         * @param msg the outbound message state
+         * @since 2.13.1
+         */
+        void setMessage(OutboundMessageState msg) {
             m = msg;
         }
 
@@ -720,8 +738,8 @@ class SSU2Payload {
      *  Follow-on fragment block for SSU2 payload.
      */
     public static class FollowFragBlock extends Block {
-        private final OutboundMessageState m;
-        private final int f;
+        private OutboundMessageState m;
+        private int f;
 
         /**
          * Create a follow-on fragment block.
@@ -730,6 +748,19 @@ class SSU2Payload {
          */
         public FollowFragBlock(OutboundMessageState msg, int frag) {
             super(BLOCK_FOLLOWONFRAG);
+            if (frag <= 0)
+                throw new IllegalArgumentException();
+            m = msg;
+            f = frag;
+        }
+
+        /**
+         * Repurpose this block for a new fragment. Only for pooling.
+         * @param msg the outbound message state
+         * @param frag the fragment number (must be &gt; 0)
+         * @since 2.13.1
+         */
+        void setMessage(OutboundMessageState msg, int frag) {
             if (frag <= 0)
                 throw new IllegalArgumentException();
             m = msg;
