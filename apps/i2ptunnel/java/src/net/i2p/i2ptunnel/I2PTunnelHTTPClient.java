@@ -681,6 +681,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         // Host lookup failed - resolvable only with addresshelper
                                         // Store in local HashMap unless there is conflict
                                         String old = addressHelpers.putIfAbsent(destination.toLowerCase(Locale.US), ahelperKey);
+                                        // Opportunistic trim: the map only caches lookup hints,
+                                        // safe to drop; prevents unbounded growth from unique hosts (IT-M1)
+                                        if (old == null && addressHelpers.size() > 1024) {
+                                            addressHelpers.clear();
+                                        }
                                         ahelperNew = old == null;
                                         // inr address helper links without trailing '=', so omit from comparison
                                         if ((!ahelperNew) && !old.replace("=", "").equals(ahelperKey.replace("=", ""))) {
