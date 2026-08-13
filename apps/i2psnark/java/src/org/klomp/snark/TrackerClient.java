@@ -83,6 +83,10 @@ public class TrackerClient implements Runnable {
     private static final int LONG_SLEEP = 10 * 60 * 1000; // sleep a while after lots of fails
     private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * (long) 60 * 1000;
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
+    /** Periodic scrape interval: refresh the swarm size (seeds + leeches) between
+     *  announces (BEP 15/48). The announce loop wakes every 5m, so this fires on
+     *  every other wake per active torrent. */
+    private static final long SCRAPE_INTERVAL = 10 * (long) 60 * 1000;
 
     /** No guidance in BEP 5; standard practice is K (=8) */
     private static final int DHT_ANNOUNCE_PEERS = 8;
@@ -658,6 +662,7 @@ public class TrackerClient implements Runnable {
                                                 + ioe.getMessage());
                             }
                         }
+                        tr.lastScrapeTime = System.currentTimeMillis();
                     }
                     // auto stop
                     // These are very high thresholds for now, not configurable, just for update
@@ -744,6 +749,29 @@ public class TrackerClient implements Runnable {
                                     + " (interval: "
                                     + DataHelper.formatDuration(tr.interval)
                                     + ")");
+                }
+                // Refresh swarm composition periodically even between announces (BEP 15/48)
+                long now = System.currentTimeMillis();
+                if ((!tr.stop) && now > tr.lastScrapeTime + SCRAPE_INTERVAL) {
+                    try {
+                        TrackerInfo scrape = doScrape(tr);
+                        if (scrape != null
+                                && scrape.getSeedCount() + scrape.getLeechCount() > 0) {
+                            snark.updateScrape(
+                                    scrape.getSeedCount(),
+                                    scrape.getLeechCount(),
+                                    scrape.getPartialSeedCount());
+                        }
+                    } catch (IOException ioe) {
+                        if (_log.shouldDebug()) {
+                            _log.debug(
+                                    "Periodic scrape failed for "
+                                            + tr.host
+                                            + ": "
+                                            + ioe.getMessage());
+                        }
+                    }
+                    tr.lastScrapeTime = now;
                 }
             }
             if ((!tr.stop) && maxSeenPeers < tr.seenPeers) {
@@ -1561,6 +1589,7 @@ public class TrackerClient implements Runnable {
         final int port;
         long interval;
         long lastRequestTime;
+        long lastScrapeTime;
         String trackerProblems;
         boolean stop;
         boolean started;
@@ -1600,6 +1629,7 @@ public class TrackerClient implements Runnable {
          */
         public void reset() {
             lastRequestTime = 0;
+            lastScrapeTime = 0;
             trackerProblems = null;
             stop = false;
             started = false;
