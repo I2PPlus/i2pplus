@@ -93,6 +93,7 @@
     <echo message="  installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;.jar"/>
     <echo message="  installer-osx                                Build OS X GUI installer &#10140; ./dist/i2pinstall&#8230;osx.tar.bz2"/>
     <echo message="  installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;windows.exe"/>
+    <echo message="  jpackage-win                                 Build native Windows64 installer bundle via jpackage (JDK 14+) &#10140; ./dist/i2pinstaller&#8230;.exe"/>
     <echo message="  7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
     <echo message="  7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
     <echo message="  7zip-macos                                   Installation 7zip for macOS without installer &#10140; ./dist/i2p-macos.7z"/>
@@ -212,7 +213,7 @@
     <echo message="  bench                                        Build benchmarks"/>
     <echo message="  test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via tools/scripts/run-tests.sh"/>
     <echo message="  testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
-    <echo message="  testSAM                                     Run SAM bridge smoke test against running instance (needs SAM on 127.0.0.1:7656)"/>
+    <echo message="  testSAM                                      Run SAM bridge smoke test against running instance (needs SAM on 127.0.0.1:7656)"/>
     <echo message="  testscripts                                  Run various scripts to check certificate validity, file integrity etc"/>
     <echo message=""/>
     <!-- <echo message=" translationReport                            Generate in-console translation status report"/> -->
@@ -3521,6 +3522,80 @@
 
   <!-- this is broken as installer-xxx targets may delete (or not delete) things in pkg-temp -->
   <target name="installer-all" depends="installer-freebsd, installer-linux, installer-osx, installer-windows, installer-nowindows, installer"></target>
+
+  <!-- jpackage (JDK 14+) native bundles; separate from the IzPack targets above.
+       I2P+ compiles with Java 8, but jpackage requires a newer JDK, so it runs from
+       its own JDK 17/21. Set jpackage.home=/PATH/TO/JDK in override.properties if
+       your JDK 21 is elsewhere (default below is this machine's LTS 21 install).
+       Artifact mirrors the IzPack installer targets: a self-contained Windows exe
+       installer with bundled runtime.
+       NOTE: jpackage cannot cross-compile; this target must run on Windows.
+  -->
+  <target name="check-jpackage">
+    <property name="jpackage.home" value="/usr/lib/jvm/java-21-openjdk-amd64"/>
+    <condition property="jpackage.available">
+      <available file="${jpackage.home}/bin/jpackage" type="file"/>
+    </condition>
+    <fail message="Error - jpackage requires JDK 14+ (LTS 17/21 recommended); set jpackage.home=/PATH/TO/JDK21 in override.properties">
+      <condition>
+        <not>
+          <isset property="jpackage.available"/>
+        </not>
+      </condition>
+    </fail>
+    <property name="jpackage.exe" value="${jpackage.home}/bin/jpackage"/>
+    <!-- jpackage's app-version flag wants a pure x.y.z number, no build-number suffix -->
+    <propertyregex property="jp.version" input="${full.version}" regexp="^[0-9]+(\.[0-9]+)+" select="\0" defaultValue="${full.version}"/>
+  </target>
+
+  <!-- jpackage has no class-path option; the main jar's manifest Class-Path
+       (relative to the jar, so working-directory independent) is used instead.
+       Mirror runplain.sh: put every lib/*.jar on the classpath. -->
+  <target name="jpackage-launcher">
+    <path id="jp.lib.path">
+      <fileset dir="${pkg.temp.dir}/lib" includes="*.jar"/>
+    </path>
+    <pathconvert property="jp.classpath" refid="jp.lib.path" pathsep=" ">
+      <map from="${pkg.temp.dir}/" to=""/>
+    </pathconvert>
+    <mkdir dir="${build.root}/jpackage"/>
+    <manifest file="${build.root}/jpackage/launcher.mf">
+      <attribute name="Main-Class" value="net.i2p.router.RouterLaunch"/>
+      <attribute name="Class-Path" value="${jp.classpath}"/>
+    </manifest>
+    <jar destfile="${pkg.temp.dir}/jpackage-launcher.jar" manifest="${build.root}/jpackage/launcher.mf"/>
+  </target>
+
+  <!-- jpackage cannot cross-compile; this guard fails fast (before the long clean/preppkg
+       dependency) when the target is run on the wrong OS -->
+  <target name="jpackage-check-win">
+    <condition property="jpackage.on.windows"><os family="windows"/></condition>
+    <fail message="Error - jpackage cannot cross-compile: the jpackage-win target must run on Windows (run this target on a Windows build host with JDK 21)"><condition><not><isset property="jpackage.on.windows"/></not></condition></fail>
+  </target>
+
+  <target name="jpackage-win" depends="jpackage-check-win, clean, preppkg-windows-only, check-jpackage, jpackage-launcher">
+    <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
+    <exec executable="${jpackage.exe}" failonerror="true">
+      <arg value="--type"/><arg value="exe"/>
+      <arg value="--input"/><arg value="${pkg.temp.dir}"/>
+      <arg value="--main-jar"/><arg value="jpackage-launcher.jar"/>
+      <arg value="--main-class"/><arg value="net.i2p.router.RouterLaunch"/>
+      <arg value="--name"/><arg value="I2P+"/>
+      <arg value="--app-version"/><arg value="${jp.version}"/>
+      <arg value="--vendor"/><arg value="I2P+"/>
+      <arg value="--description"/><arg value="I2P+ anonymizing router"/>
+      <arg value="--icon"/><arg value="installer/resources/platform-specific/windows/console.ico"/>
+      <arg value="--java-options"/><arg value="-Di2p.dir=$APPDIR"/>
+      <arg value="--win-dir-chooser"/>
+      <arg value="--win-shortcut"/>
+      <arg value="--win-menu"/>
+      <arg value="--dest"/><arg value="${basedir}/dist"/>
+    </exec>
+    <move file="${basedir}/dist/I2P+.exe" tofile="${basedir}/dist/i2pinstaller-${full.version}.exe"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstaller-${full.version}.exe"/>
+    </antcall>
+  </target>
   <!-- end custom installers -->
 
   <!-- unit tests -->
