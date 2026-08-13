@@ -2544,7 +2544,8 @@ public class I2PSnarkServlet extends BasicServlet {
         String upBW = req.getParameter("upBW");
         String downBW = req.getParameter("downBW");
         String refreshDel = req.getParameter("refreshDelay");
-        String startupDel = req.getParameter("startupDelay");
+        String startupDelMin = req.getParameter("startupDelayMin");
+        String startupDelMax = req.getParameter("startupDelayMax");
         String pageSize = req.getParameter("pageSize");
         String theme = req.getParameter("theme");
         String lang = req.getParameter("lang");
@@ -2552,7 +2553,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String apiTarget = req.getParameter("apiTarget");
         String apiKey = req.getParameter("apiKey");
 
-        _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
+        _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDelMin, startupDelMax, pageSize, seedPct, eepHost, eepPort,
                               i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
                               ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
                               enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, randomizeStartup, apiTarget, apiKey);
@@ -4171,11 +4172,18 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (_context.isRouterContext()) {
             buf.append("<br>\n<span class=configOption><label><b>")
-               .append(_t("Startup delay"))
-               .append("</b> <input type=text name=startupDelay size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
+               .append(_t("Min startup delay"))
+               .append("</b> <input type=text name=startupDelayMin size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
                .append(" title=\"")
-               .append(_t("How long before auto-started torrents are loaded when I2PSnark starts"))
-               .append("\" value=\"").append(_manager.util().getStartupDelay()).append("\"> ")
+               .append(_t("How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"))
+               .append("\" value=\"").append(_manager.util().getStartupDelayMin()).append("\"> ")
+               .append(_t("minutes"))
+               .append("</label></span><br>\n<span class=configOption><label><b>")
+               .append(_t("Max startup delay"))
+               .append("</b> <input type=text name=startupDelayMax size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
+               .append(" title=\"")
+               .append(_t("How long before auto-started torrents are loaded when I2PSnark starts, at the latest"))
+               .append("\" value=\"").append(_manager.util().getStartupDelayMax()).append("\"> ")
                .append(_t("minutes"))
                .append("</label></span>");
         }
@@ -4275,7 +4283,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" class=numeric size=5 maxlength=4 pattern=\"[0-9]{1,4}\" spellcheck=false>")
            .append("</label></span><br>\n")
            .append("<span class=configOption id=randomizeStartup><b>")
-           .append(_t("Randomize startup delay"))
+           .append(_t("Random startup delay"))
            .append("</b> \n")
            .append("<label title=\"")
            .append(_t("Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."))

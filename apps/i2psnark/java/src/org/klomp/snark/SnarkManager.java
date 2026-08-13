@@ -202,7 +202,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_AUTO_START =
             "i2psnark.autoStart"; // convert in migration to new config file
     private final boolean DEFAULT_AUTO_START;
+    /** @deprecated since 2.13.0 replaced by PROP_STARTUP_DELAY_MIN/MAX, kept for migration */
     public static final String PROP_STARTUP_DELAY = "i2psnark.startupDelay";
+    public static final String PROP_STARTUP_DELAY_MIN = "i2psnark.startupDelayMin";
+    public static final String PROP_STARTUP_DELAY_MAX = "i2psnark.startupDelayMax";
     public static final String PROP_REFRESH_DELAY = "i2psnark.refreshSeconds";
     public static final String PROP_PAGE_SIZE = "i2psnark.pageSize";
     public static final String RC_PROP_THEME = "routerconsole.theme";
@@ -312,7 +315,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
     public static final int DEFAULT_MAX_UP_BW = 1024;
     private static final int DEFAULT_MAX_DOWN_BW = 1024;
-    public static final int DEFAULT_STARTUP_DELAY = 3;
+    public static final int DEFAULT_STARTUP_DELAY_MIN = 3;
+    public static final int DEFAULT_STARTUP_DELAY_MAX = 10;
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
@@ -962,15 +966,24 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /**
+     * A random startup delay in minutes, uniformly between the configured
+     * minimum and maximum, to avoid correlating auto-starts across routers.
+     *
+     * @return delay in minutes, 0 when not running inside the router
+     */
     private int getStartupDelayMinutes() {
         if (!_context.isRouterContext()) {
             return 0;
         }
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_STARTUP_DELAY));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_STARTUP_DELAY;
+        int min = getInt(PROP_STARTUP_DELAY_MIN, DEFAULT_STARTUP_DELAY_MIN);
+        int max = getInt(PROP_STARTUP_DELAY_MAX, DEFAULT_STARTUP_DELAY_MAX);
+        if (max < min) {
+            int tmp = max;
+            max = min;
+            min = tmp;
         }
+        return min + _context.random().nextInt(max - min + 1);
     }
 
     /**
@@ -1330,8 +1343,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_config.containsKey(PROP_REFRESH_DELAY)) {
             _config.setProperty(PROP_REFRESH_DELAY, Integer.toString(DEFAULT_REFRESH_DELAY_SECS));
         }
-        if (!_config.containsKey(PROP_STARTUP_DELAY)) {
-            _config.setProperty(PROP_STARTUP_DELAY, Integer.toString(DEFAULT_STARTUP_DELAY));
+        if (!_config.containsKey(PROP_STARTUP_DELAY_MIN)) {
+            if (_config.containsKey(PROP_STARTUP_DELAY)) {
+                try {
+                    // migrate the old single value to a fixed range
+                    int old = Integer.parseInt(_config.getProperty(PROP_STARTUP_DELAY));
+                    _config.setProperty(PROP_STARTUP_DELAY_MIN, Integer.toString(old));
+                    _config.setProperty(PROP_STARTUP_DELAY_MAX, Integer.toString(old));
+                    _config.remove(PROP_STARTUP_DELAY);
+                } catch (NumberFormatException nfe) { /* fall through to defaults */ }
+            }
+            if (!_config.containsKey(PROP_STARTUP_DELAY_MIN)) {
+                _config.setProperty(PROP_STARTUP_DELAY_MIN, Integer.toString(DEFAULT_STARTUP_DELAY_MIN));
+            }
+            if (!_config.containsKey(PROP_STARTUP_DELAY_MAX)) {
+                _config.setProperty(PROP_STARTUP_DELAY_MAX, Integer.toString(DEFAULT_STARTUP_DELAY_MAX));
+            }
         }
         if (!_config.containsKey(PROP_PAGE_SIZE)) {
             _config.setProperty(PROP_PAGE_SIZE, Integer.toString(DEFAULT_PAGE_SIZE));
@@ -1506,7 +1533,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
         _util.setMaxFilesPerTorrent(
                 getInt(PROP_MAX_FILES_PER_TORRENT, DEFAULT_MAX_FILES_PER_TORRENT));
-        _util.setStartupDelay(getInt(PROP_STARTUP_DELAY, DEFAULT_STARTUP_DELAY));
+        int startDelayMin = getInt(PROP_STARTUP_DELAY_MIN, DEFAULT_STARTUP_DELAY_MIN);
+        int startDelayMax = getInt(PROP_STARTUP_DELAY_MAX, DEFAULT_STARTUP_DELAY_MAX);
+        if (startDelayMax < startDelayMin) {
+            int tmp = startDelayMax;
+            startDelayMax = startDelayMin;
+            startDelayMin = tmp;
+        }
+        _util.setStartupDelayMin(startDelayMin);
+        _util.setStartupDelayMax(startDelayMax);
         _util.setFilesPublic(areFilesPublic());
         _util.setOpenTrackers(getListConfig(PROP_OPENTRACKERS, DEFAULT_OPENTRACKERS));
         String useOT = _config.getProperty(PROP_USE_OPENTRACKERS);
@@ -1623,7 +1658,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean filesPublic,
             boolean autoStart,
             String refreshDelay,
-            String startDelay,
+            String startDelayMin,
+            String startDelayMax,
             String pageSize,
             String seedPct,
             String eepHost,
@@ -1658,7 +1694,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     filesPublic,
                     autoStart,
                     refreshDelay,
-                    startDelay,
+                    startDelayMin,
+                    startDelayMax,
                     pageSize,
                     seedPct,
                     eepHost,
@@ -1695,7 +1732,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean filesPublic,
             boolean autoStart,
             String refreshDelay,
-            String startDelay,
+            String startDelayMin,
+            String startDelayMax,
             String pageSize,
             String seedPct,
             String eepHost,
@@ -1867,23 +1905,35 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             changed = true;
         }
 
-        if (startDelay != null && _context.isRouterContext()) {
-            int minutes = _util.getStartupDelay();
+        if (startDelayMin != null && _context.isRouterContext()) {
+            int min = _util.getStartupDelayMin();
             try {
-                minutes = Integer.parseInt(startDelay.trim());
+                min = Integer.parseInt(startDelayMin.trim());
             } catch (NumberFormatException nfe) { /* ignored */ }
-            if (minutes != _util.getStartupDelay()) {
-                _util.setStartupDelay(minutes);
+            int max = _util.getStartupDelayMax();
+            if (startDelayMax != null) {
+                try {
+                    max = Integer.parseInt(startDelayMax.trim());
+                } catch (NumberFormatException nfe) { /* ignored */ }
+            }
+            if (max < min) {
+                int tmp = max;
+                max = min;
+                min = tmp;
+            }
+            if (min != _util.getStartupDelayMin() || max != _util.getStartupDelayMax()) {
+                _util.setStartupDelayMin(min);
+                _util.setStartupDelayMax(max);
                 changed = true;
-                _config.setProperty(PROP_STARTUP_DELAY, Integer.toString(minutes));
+                _config.setProperty(PROP_STARTUP_DELAY_MIN, Integer.toString(min));
+                _config.setProperty(PROP_STARTUP_DELAY_MAX, Integer.toString(max));
+                _config.remove(PROP_STARTUP_DELAY);
                 String msg =
                         _t(
-                                "Startup delay changed to {0}",
-                                DataHelper.formatDuration2(minutes * (60L * 1000)));
+                                "Startup delay range changed to {0} - {1}",
+                                DataHelper.formatDuration2(min * (60L * 1000)),
+                                DataHelper.formatDuration2(max * (60L * 1000)));
                 addMessageNoEscape(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
             }
         }
 

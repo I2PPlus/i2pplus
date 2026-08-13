@@ -100,7 +100,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     /** Discard-ratio auto-ban toggle, set by SnarkManager from config */
     private volatile boolean _banDiscardRatio;
     private final File _tmpDir;
-    private int _startupDelay;
+    private int _startupDelayMin;
+    private int _startupDelayMax;
     private boolean _collapsePanels;
     private boolean _showStatusFilter;
     private boolean _enableLightbox;
@@ -133,7 +134,6 @@ public class I2PSnarkUtil implements DisconnectListener {
     private String _apiKey;
     private static final int EEPGET_CONNECT_TIMEOUT = 75 * 1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 30 * 1000;
-    public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
     public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;
@@ -184,7 +184,8 @@ public class I2PSnarkUtil implements DisconnectListener {
         _maxUploaders = Snark.MAX_TOTAL_UPLOADERS;
         _maxUpBW = SnarkManager.DEFAULT_MAX_UP_BW;
         _maxConnections = MAX_CONNECTIONS;
-        _startupDelay = DEFAULT_STARTUP_DELAY;
+        _startupDelayMin = SnarkManager.DEFAULT_STARTUP_DELAY_MIN;
+        _startupDelayMax = SnarkManager.DEFAULT_STARTUP_DELAY_MAX;
         _shouldUseOT = DEFAULT_USE_OPENTRACKERS;
         _openTrackers = Collections.emptyList();
         _shouldUseDHT = DEFAULT_USE_DHT;
@@ -304,10 +305,17 @@ public class I2PSnarkUtil implements DisconnectListener {
         _banDiscardRatio = ban;
     }
 
-    public void setStartupDelay(int minutes) {
-        _startupDelay = minutes;
+    public void setStartupDelayMin(int minutes) {
+        _startupDelayMin = minutes;
     /**
-     * The value.
+     * The minimum startup delay in minutes before auto-starting torrents.
+     */
+    }
+
+    public void setStartupDelayMax(int minutes) {
+        _startupDelayMax = minutes;
+    /**
+     * The maximum startup delay in minutes before auto-starting torrents.
      */
     }
 
@@ -395,12 +403,23 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * The startup delay in minutes.
+     * The minimum startup delay in minutes.
      *
-     * @return the startup delay
+     * @return the minimum startup delay
+     * @since 0.9.71+
      */
-    public int getStartupDelay() {
-        return _startupDelay;
+    public int getStartupDelayMin() {
+        return _startupDelayMin;
+    }
+
+    /**
+     * The maximum startup delay in minutes.
+     *
+     * @return the maximum startup delay
+     * @since 0.9.71+
+     */
+    public int getStartupDelayMax() {
+        return _startupDelayMax;
     }
 
     /**
