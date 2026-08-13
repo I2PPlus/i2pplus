@@ -164,6 +164,11 @@ public class TunnelPool {
      * the new LeaseSet while the gateway still routes instead of racing
      * tunnel death. */
     private static final long LEASE_SAFETY_MARGIN = 60L * 1000;
+    /** Tunnels must have at least this much remaining life to be published:
+     * the lease ends {@link #LEASE_SAFETY_MARGIN} before the tunnel expires
+     * and the lease end is floored 60s out, so a tunnel closer to death than
+     * this would produce a lease ending after the gateway stops routing. */
+    private static final long LEASE_MIN_REMAINING_MS = 2L * 60 * 1000;
 
     /**
      * Early expiry time for pruned tunnels.

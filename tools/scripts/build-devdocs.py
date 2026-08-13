@@ -373,6 +373,7 @@ footer{margin-top:18px;font-size:12px;color:#7a8490}
 html{scrollbar-color:#6cb4e8 #0000}
 h1{font-size:26px;margin:0 0 12px}
 h2,.section{border-bottom:1px solid var(--hl);padding-bottom:4px;margin-top:1.6em}
+hr{margin:30px 0 20px;border:0;border-bottom:1px solid #343d4a}
 img{max-width:100%}
 mark{background:#e4c981;color:#161b22;border-radius:2px;padding:0 2px}
 pre code{background:none;border:none;padding:0}
