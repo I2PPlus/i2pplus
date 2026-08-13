@@ -110,14 +110,6 @@ class TunnelRenderer {
     static {ZERO_DECIMALS.setRoundingMode(RoundingMode.HALF_UP);}
     private static String fmt0(double val) { synchronized (ZERO_DECIMALS) { return ZERO_DECIMALS.format(val); } }
 
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    /**
-     * enableReverseLookups.
-     */
-    public boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
-    }
-
     /**
      * TunnelRenderer.
      */

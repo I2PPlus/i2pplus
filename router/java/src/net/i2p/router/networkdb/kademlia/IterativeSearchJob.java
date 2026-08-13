@@ -322,7 +322,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(_key);
         RouterInfo isUs = getContext().netDb().lookupRouterInfoLocally(getContext().routerHash());
         long uptime = getContext().router().getUptime();
-        boolean enableReverseLookups = getContext().getBooleanProperty("routerconsole.enableReverseLookups");
+        boolean enableReverseLookups = getContext().commSystem().enableReverseLookups();
 
         if (ri != null && ri != isUs) {
             String v = ri.getVersion();

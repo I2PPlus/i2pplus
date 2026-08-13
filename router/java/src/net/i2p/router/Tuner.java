@@ -2669,7 +2669,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes rDNS executor core pool size based on queue depth.
-     * Only active when {@code routerconsole.enableReverseLookups} is true.
+     * Only active when {@link net.i2p.router.CommSystemFacade#enableReverseLookups()} is true.
      * Primary signal: {@code rdns.executor.queueSize}.
      *
      * @since 0.9.70+
@@ -2694,7 +2694,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
-            if (!_context.getBooleanProperty("routerconsole.enableReverseLookups"))
+            if (!_context.commSystem().enableReverseLookups())
                 return Double.NaN;
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null)
@@ -2709,7 +2709,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // Skip tuning when rDNS is disabled
-            if (!_context.getBooleanProperty("routerconsole.enableReverseLookups"))
+            if (!_context.commSystem().enableReverseLookups())
                 return current;
             double queueSize = observed;
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");

@@ -62,10 +62,6 @@ class ProfileOrganizerRenderer {
         _fragmentKeys = fragmentKeys;
     }
 
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    /** @since 0.9.70+ */
-    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-
     /**
      *  Render the peer profile status table.
      *

@@ -327,6 +327,16 @@ public abstract class CommSystemFacade implements Service {
     }
 
     /**
+     *  Whether reverse DNS lookups of router IPs are enabled.
+     *  Single source of truth for the routerconsole.enableReverseLookups setting;
+     *  used by the comm system, netDb, and the console UI.
+     *
+     *  @return true if reverse lookups are enabled
+     *  @since 0.9.71+
+     */
+    public abstract boolean enableReverseLookups();
+
+    /**
      *  Registered transports by style name.
      *
      *  @return SortedMap of style to Transport (a copy)

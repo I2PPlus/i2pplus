@@ -883,7 +883,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     /**
      * Whether reverse lookups are enabled.
+     * @since 0.9.71+
      */
+    @Override
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
 

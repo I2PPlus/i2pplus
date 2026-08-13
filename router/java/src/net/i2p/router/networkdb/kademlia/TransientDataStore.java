@@ -73,11 +73,6 @@ class TransientDataStore implements DataStore {
      */
     @Override
     public boolean isInitialized() {return true;}
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    /**
-     * Whether reverse lookups are enabled.
-     */
-    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     /**
      * Clear the in-memory store.
      */
@@ -240,7 +235,7 @@ class TransientDataStore implements DataStore {
                               "\n* Published: " + new Date(ri.getPublished()));
                 rv = true;
                 long uptime = _context.router().getUptime();
-                if (enableReverseLookups() && uptime > 30*1000) {
+                if (_context.commSystem().enableReverseLookups() && uptime > 30*1000) {
                     String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
                     if (ip != null) {_context.commSystem().getCanonicalHostName(ip);}
                 }

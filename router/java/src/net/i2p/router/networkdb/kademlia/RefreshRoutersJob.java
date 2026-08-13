@@ -294,7 +294,7 @@ class RefreshRoutersJob extends JobImpl {
         RouterContext ctx = getContext();
         long uptime = ctx.router().getUptime();
         String refreshTimeoutProp = ctx.getProperty("router.refreshTimeout");
-        boolean enableReverseLookups = ctx.getBooleanProperty("routerconsole.enableReverseLookups");
+        boolean enableReverseLookups = ctx.commSystem().enableReverseLookups();
         int refreshTimeoutSeconds;
 
         if (refreshTimeoutProp != null) {

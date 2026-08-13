@@ -234,7 +234,7 @@ public class InfoHelper extends HelperBase {
         String appDir = _context.getProperty("i2p.dir.base") + slash;
         String configDir = _context.getProperty("i2p.dir.config") + slash;
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
-        boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
+        boolean rdnsEnabled = _context.commSystem().enableReverseLookups();
         String congestionCap = ri.getCongestionCap();
 
         // basic router information

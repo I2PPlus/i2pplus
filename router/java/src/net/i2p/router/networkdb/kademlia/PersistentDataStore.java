@@ -89,10 +89,6 @@ public class PersistentDataStore extends TransientDataStore {
     /** Minimum router version to persist to disk. */
     private static final String MIN_VERSION = "0.9.64";
 
-    /** Config property to enable reverse address lookups. */
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-
     /** Stat rate periods for NetDb write metrics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
