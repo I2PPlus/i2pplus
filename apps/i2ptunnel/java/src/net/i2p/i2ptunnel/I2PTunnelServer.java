@@ -106,7 +106,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
     /** @since 0.9.30 */
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
-    private static final String PROP_SOCKET_CONNECT_TIMEOUT = "i2p.tunnel.socketConnectTimeout";
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
     private static final long RECONNECT_DELAY_10S = 10 * 1000L;
     protected volatile ThreadPoolExecutor _clientExecutor;

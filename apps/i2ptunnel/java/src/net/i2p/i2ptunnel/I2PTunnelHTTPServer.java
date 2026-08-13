@@ -474,50 +474,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Check if the Allow response header should be added.
-     *
-     *  @return true if the option is enabled
-     *  @since 0.9.61+
-     */
-    private boolean shouldAddResponseHeaderAllow() {
-        Properties opts = getTunnel().getClientOptions();
-        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
-    }
-
-    /**
-     *  Check if the Cache-Control response header should be added.
-     *
-     *  @return true if the option is enabled
-     *  @since 0.9.61+
-     */
-    private boolean shouldAddResponseHeaderCacheControl() {
-        Properties opts = getTunnel().getClientOptions();
-        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
-    }
-
-    /**
-     *  Check if the Referrer-Policy response header should be added.
-     *
-     *  @return true if the option is enabled
-     *  @since 0.9.61+
-     */
-    private boolean shouldAddResponseHeaderReferrerPolicy() {
-        Properties opts = getTunnel().getClientOptions();
-        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
-    }
-
-    /**
-     *  Check if the X-Content-Type-Options: nosniff response header should be added.
-     *
-     *  @return true if the option is enabled
-     *  @since 0.9.61+
-     */
-    private boolean shouldAddResponseHeaderNoSniff() {
-        Properties opts = getTunnel().getClientOptions();
-        return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
-    }
-
-    /**
      *  Close the tunnel and stop the POST throttler.
      *
      *  @param forced true to force close

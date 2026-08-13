@@ -29,11 +29,6 @@ public class BlacklistBean {
 
     private static final Log _log = new Log(BlacklistBean.class);
     private String content;
-    private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(
-        "^[a-zA-Z0-9.-]+\\.i2p$|" +                    // hostname.i2p
-        "^[a-zA-Z2-7]{52,53}\\.b32\\.i2p$|" +          // b32 addresses (52-53 chars)
-        "^[a-zA-Z0-9+/]{387}={0,2}\\.b64\\.i2p$"       // b64 addresses (387+ chars)
-    );
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\\n");
 
     /**
@@ -92,19 +87,6 @@ public class BlacklistBean {
                     _log.warn("Cannot create blacklist file: " + file.getAbsolutePath(), e);
             }
         }
-    }
-
-    /**
-     * Check if an address is a valid I2P address format.
-     *
-     * @param address the address
-     * @return true if the address matches a known I2P address pattern
-     */
-    private boolean isValidI2PAddress(String address) {
-        if (address == null || address.trim().isEmpty()) {
-            return false;
-        }
-        return I2P_ADDRESS_PATTERN.matcher(address.trim()).matches();
     }
 
     /**
