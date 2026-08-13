@@ -271,13 +271,21 @@ class NTCP2Payload {
      * Block containing I2NP message.
      */
     public static class I2NPBlock extends Block {
-        private final I2NPMessage m;
+        private I2NPMessage m;
 
         /**
          * I2NPBlock.
          */
         public I2NPBlock(I2NPMessage msg) {
             super(BLOCK_I2NP);
+            m = msg;
+        }
+
+        /**
+         * Set the message, for reuse of a pooled block.
+         * @since 2.13.1
+         */
+        void setMessage(I2NPMessage msg) {
             m = msg;
         }
 
@@ -301,7 +309,7 @@ class NTCP2Payload {
      * Block containing padding data.
      */
     public static class PaddingBlock extends Block {
-        private final int sz;
+        private int sz;
         private final I2PAppContext ctx;
 
         /** With zero-filled data. */
@@ -314,6 +322,14 @@ class NTCP2Payload {
             super(BLOCK_PADDING);
             sz = size;
             ctx = context;
+        }
+
+        /**
+         * Set the size, for reuse of a pooled block.
+         * @since 2.13.1
+         */
+        void setSize(int size) {
+            sz = size;
         }
 
         /**

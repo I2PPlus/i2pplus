@@ -888,6 +888,56 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
+     *  Reusable NTCP2 payload block list and blocks, per writer thread.
+     *  The list and the pooled blocks are only used within the
+     *  prepareNextWriteNTCP2(), sendRouterInfo(), and sendTermination()
+     *  call stacks, so no other thread can observe or modify them mid-write.
+     *  Package-private for testing.
+     *  @since 2.13.1
+     */
+    static class BlockPool {
+        /** per-frame block list */
+        final List<Block> blocks = new ArrayList<>(4);
+        private final List<NTCP2Payload.I2NPBlock> i2npBlocks = new ArrayList<>(4);
+        private final List<NTCP2Payload.PaddingBlock> paddingBlocks = new ArrayList<>(4);
+
+        /** Get an I2NP block, reusing a pooled one if available. */
+        NTCP2Payload.I2NPBlock acquireI2NP(I2NPMessage m) {
+            if (i2npBlocks.isEmpty())
+                return new NTCP2Payload.I2NPBlock(m);
+            NTCP2Payload.I2NPBlock b = i2npBlocks.remove(i2npBlocks.size() - 1);
+            b.setMessage(m);
+            return b;
+        }
+
+        /** Get a padding block, reusing a pooled one if available. */
+        NTCP2Payload.PaddingBlock acquirePadding(int size) {
+            if (paddingBlocks.isEmpty())
+                return new NTCP2Payload.PaddingBlock(size);
+            NTCP2Payload.PaddingBlock b = paddingBlocks.remove(paddingBlocks.size() - 1);
+            b.setSize(size);
+            return b;
+        }
+
+        /** Return the pooled block types to the pool; other types are dropped. */
+        void release(List<Block> blocks) {
+            for (Block b : blocks) {
+                if (b instanceof NTCP2Payload.I2NPBlock)
+                    i2npBlocks.add((NTCP2Payload.I2NPBlock) b);
+                else if (b instanceof NTCP2Payload.PaddingBlock)
+                    paddingBlocks.add((NTCP2Payload.PaddingBlock) b);
+            }
+        }
+    }
+
+    private static final ThreadLocal<BlockPool> _blockPool = new ThreadLocal<BlockPool>() {
+        @Override
+        protected BlockPool initialValue() {
+            return new BlockPool();
+        }
+    };
+
+    /**
      * Prepare the next I2NP message for transmission.  This should be run from
      * the Writer thread pool.
      *
@@ -898,7 +948,9 @@ public class NTCPConnection implements Closeable {
      */
     private void prepareNextWriteNTCP2(PrepBuffer buf) {
         int size = OutboundNTCP2State.MAC_SIZE;
-        List<Block> blocks = new ArrayList<>(4);
+        BlockPool pool = _blockPool.get();
+        List<Block> blocks = pool.blocks;
+        blocks.clear();
         long now = _context.clock().now();
         assert Thread.holdsLock(_writeLock);
         if (!_currentOutbound.isEmpty()) {
@@ -920,7 +972,7 @@ public class NTCPConnection implements Closeable {
         }
         _currentOutbound.add(msg);
         I2NPMessage m = msg.getMessage();
-        Block block = new NTCP2Payload.I2NPBlock(m);
+        Block block = pool.acquireI2NP(m);
         blocks.add(block);
         size += block.getTotalLength();
         // now add more (maybe)
@@ -944,7 +996,7 @@ public class NTCPConnection implements Closeable {
                 }
                 if (msg.getExpiration() >= now) {
                     _currentOutbound.add(msg);
-                    block = new NTCP2Payload.I2NPBlock(m);
+                    block = pool.acquireI2NP(m);
                     blocks.add(block);
                     size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
                 } else {
@@ -980,12 +1032,13 @@ public class NTCPConnection implements Closeable {
             int padlen = getPaddingSize(size, availForPad);
             // all zeros is fine here
             //block = new NTCP2Payload.PaddingBlock(_context, padlen);
-            block = new NTCP2Payload.PaddingBlock(padlen);
+            block = pool.acquirePadding(padlen);
             blocks.add(block);
             size += block.getTotalLength();
         }
         byte[] tmp = size <= BUFFER_SIZE ? buf.unencrypted : new byte[size];
         sendNTCP2(tmp, blocks);
+        pool.release(blocks);
     }
 
     /**
@@ -1056,7 +1109,9 @@ public class NTCPConnection implements Closeable {
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldDebug())
             _log.debug("Sending router info for: " + ri.getHash() + " flood? " + shouldFlood);
-        List<Block> blocks = new ArrayList<>(2);
+        BlockPool pool = _blockPool.get();
+        List<Block> blocks = pool.blocks;
+        blocks.clear();
         Block block = new NTCP2Payload.RIBlock(ri, shouldFlood);
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
@@ -1070,13 +1125,14 @@ public class NTCPConnection implements Closeable {
         if (availForPad > 0) {
             int padlen = getPaddingSize(size, availForPad);
             // all zeros is fine here
-            block = new NTCP2Payload.PaddingBlock(padlen);
+            block = pool.acquirePadding(padlen);
             blocks.add(block);
         }
         // use a "read buf" for the temp array
         ByteArray dataBuf = acquireReadBuf();
         sendNTCP2(dataBuf.getData(), blocks);
         releaseReadBuf(dataBuf);
+        pool.release(blocks);
     }
 
     /**
@@ -1110,14 +1166,16 @@ public class NTCPConnection implements Closeable {
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldInfo())
             _log.info("Sending termination, reason: " + reason + "; Valid frames received: " + validFramesRcvd + " on " + this);
-        List<Block> blocks = new ArrayList<>(2);
+        BlockPool pool = _blockPool.get();
+        List<Block> blocks = pool.blocks;
+        blocks.clear();
         Block block = new NTCP2Payload.TerminationBlock(reason, validFramesRcvd);
         int plen = block.getTotalLength();
         blocks.add(block);
         int padlen = getPaddingSize(plen, PADDING_MAX);
         if (padlen > 0) {
             // all zeros is fine here
-            block = new NTCP2Payload.PaddingBlock(padlen);
+            block = pool.acquirePadding(padlen);
             blocks.add(block);
         }
         // use a "read buf" for the temp array
@@ -1136,6 +1194,7 @@ public class NTCPConnection implements Closeable {
             }
         }
         releaseReadBuf(dataBuf);
+        pool.release(blocks);
     }
 
     /**
