@@ -122,14 +122,6 @@ public final class ECIESAEADEngine {
         _hkdf = new HKDF(ctx);
         _edhThread = new Elg2KeyFactory(ctx);
 
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptNewSession", "How often we encrypt to new ECIES/AEAD+SessionTag session",
-                                                   "Encryption", RATES);
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptExistingSession", "How often we encrypt to existing ECIES/AEAD+SessionTag session",
-                                                   "Encryption", RATES);
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptNewSession", "How often we decrypt with new ECIES/AEAD+SessionTag session",
-                                                   "Encryption", RATES);
-        _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptExistingSession", "How often we decrypt with existing ECIES/AEAD+SessionTag session",
-                                                   "Encryption", RATES);
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptFailed", "How often we fail to decrypt with ECIES/AEAD+SessionTag",
                                                    "Encryption", RATES);
     }
@@ -319,9 +311,7 @@ public final class ECIESAEADEngine {
                               data.length + " bytes) for NewSessionReply (minimum " + (KEYLEN + KEYLEN + MACLEN + MACLEN) + " bytes)");
                 }
             }
-            if (decrypted != null) {
-                _context.statManager().updateFrequency("crypto.eciesAEAD.decryptExistingSession");
-            } else {
+            if (decrypted == null) {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 if (_log.shouldWarn()) {
                     _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key +
@@ -367,9 +357,7 @@ public final class ECIESAEADEngine {
         if (data.length >= minns || (isRouter && data.length >= MIN_NS_N_SIZE)) {
             if (isRouter) {decrypted = decryptNewSession_N(data, targetPrivateKey, keyManager);}
             else {decrypted = decryptNewSession(data, targetPrivateKey, keyManager);}
-            if (decrypted != null) {
-                _context.statManager().updateFrequency("crypto.eciesAEAD.decryptNewSession");
-            } else {
+            if (decrypted == null) {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 // we'll get this a lot on muxed SKM
                 if (_log.shouldInfo()) {

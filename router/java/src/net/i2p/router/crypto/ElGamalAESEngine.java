@@ -50,18 +50,6 @@ public final class ElGamalAESEngine {
         _context = ctx;
         _log = _context.logManager().getLog(ElGamalAESEngine.class);
 
-        _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptNewSession",
-                                                   "How often we encrypt to a new ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptExistingSession",
-                                                   "How often we encrypt to an existing ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptNewSession",
-                                                   "How often we decrypt with a new ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptExistingSession",
-                                                   "How often we decrypt with an existing ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptFailed",
                                                    "How often we fail to decrypt with ElGamal/AES+SessionTag",
                                                    "Encryption", new long[] { RateConstants.ONE_MINUTE });
@@ -120,7 +108,6 @@ public final class ElGamalAESEngine {
 
             decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
             if (decrypted != null) {
-                _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
                 StringBuilder buf = new StringBuilder();
                 if (!foundTags.isEmpty()) {
                     for (SessionTag t : foundTags) {
@@ -139,7 +126,6 @@ public final class ElGamalAESEngine {
         } else if (data.length >= ELG_ENCRYPTED_LENGTH) {
             decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
             if (decrypted != null) {
-                _context.statManager().updateFrequency("crypto.elGamalAES.decryptNewSession");
                 if (!foundTags.isEmpty()) {
                     StringBuilder buf = new StringBuilder();
                     for (SessionTag t : foundTags) {
@@ -207,7 +193,6 @@ public final class ElGamalAESEngine {
             _log.debug("Decrypting existing session \n* Tag: " + st.toString() + "\n* Key: " + key.toBase64() + " (" + data.length + " bytes)");
         byte[] decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
         if (decrypted != null) {
-            _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
             if (!foundTags.isEmpty() && shouldDebug)
                 _log.debug("ElG/AES decrypt success with " + st + ": " + foundTags.size() + " found tags: " + foundTags);
             if (!foundTags.isEmpty()) {
@@ -247,9 +232,7 @@ public final class ElGamalAESEngine {
         Set<SessionTag> foundTags = new HashSet<>();
         byte[] decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
         final boolean shouldDebug = _log.shouldDebug();
-        if (decrypted != null) {
-            _context.statManager().updateFrequency("crypto.elGamalAES.decryptNewSession");
-        } else {
+        if (decrypted == null) {
             _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
             if (_log.shouldWarn())
                 _log.warn("ElG decrypt failure as new session");
@@ -493,11 +476,9 @@ public final class ElGamalAESEngine {
         if (currentTag == null) {
             if (_log.shouldDebug())
                 _log.debug("Current tag is null - encrypting as new session");
-            _context.statManager().updateFrequency("crypto.elGamalAES.encryptNewSession");
             return encryptNewSession(data, target, key, tagsForDelivery, newKey, paddedSize);
         }
         // target unused, using key and tag only
-        _context.statManager().updateFrequency("crypto.elGamalAES.encryptExistingSession");
         byte[] rv = encryptExistingSession(data, key, tagsForDelivery, currentTag, newKey, paddedSize);
         if (_log.shouldDebug())
             _log.debug("Encrypting existing session " + "(" + rv.length + " bytes)" +
