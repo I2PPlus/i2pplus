@@ -199,6 +199,7 @@ public class Datagram2 {
                 spk = transientSigningPublicKey;
             }
             int siglen = type.getSigLen();
+            in.skip(in.available() - siglen);
             // end of signed data
             Signature sig = new Signature(type);
             sig.readBytes(in);
