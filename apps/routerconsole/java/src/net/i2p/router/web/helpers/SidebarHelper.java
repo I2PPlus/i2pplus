@@ -1342,14 +1342,6 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Signed release update version, HTML-escaped.
-     * @return the signed release update version, HTML-escaped
-     */
-    private static String getUpdateVersion() {
-        return DataHelper.escapeHTML(NewsHelper.updateVersion());
-    }
-
-    /**
      * Unsigned update version string.
      * @return the unsigned update version string
      */

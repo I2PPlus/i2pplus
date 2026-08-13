@@ -1404,12 +1404,6 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         return copied;
     }
 
-    /**
-     *  Success.
-     *  @return success
-     */
-    private boolean handlePluginFile(URI uri, String actualVersion, File sudFile) {return false;} //handled elsewhere?
-
     private void restart() {
         if (_context.hasWrapper()) {
             ConfigServiceHandler.registerWrapperNotifier(_context, Router.EXIT_GRACEFUL_RESTART, false);

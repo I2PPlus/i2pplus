@@ -1,8 +1,5 @@
 package net.i2p.router.web.helpers;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import javax.servlet.http.HttpSession;
 
 import net.i2p.app.ClientApp;
@@ -143,42 +140,6 @@ public class ConfigRestartBean {
             else {buttons(ctx, buf, urlBase, nextNonce, SET4);}
         }
         return buf.toString();
-    }
-
-    /**
-     * Check if any i2ptunnel servers have shutdown delays configured.
-     * @param ctx the router context
-     * @return true if any server tunnel has shutdownDelayMin < shutdownDelayMax
-     * @since 0.9.68+
-     */
-    private static boolean hasServerTunnelDelays(RouterContext ctx) {
-        ClientAppManager mgr = ctx.clientAppManager();
-        if (mgr == null) {
-            return false;
-        }
-        ClientApp i2pt = mgr.getRegisteredApp("i2ptunnel");
-        if (i2pt == null) {
-            return false;
-        }
-        try {
-            Field f = i2pt.getClass().getDeclaredField("instance");
-            if (f != null && f.getType() == Field.class) {
-                f.setAccessible(true);
-                Object instance = f.get(null);
-                if (instance != null && instance.getClass().getName().equals("net.i2p.i2ptunnel.TunnelControllerGroup")) {
-                    Method m = instance.getClass().getMethod("hasServerTunnelDelays");
-                    if (m != null) {
-                        Object result = m.invoke(instance);
-                        if (result instanceof Boolean) {
-                            return (Boolean) result;
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return false;
     }
 
     /**

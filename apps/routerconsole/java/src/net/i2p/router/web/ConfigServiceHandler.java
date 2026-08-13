@@ -329,15 +329,6 @@ public class ConfigServiceHandler extends FormHandler {
         return f;
     }
 
-    private void installService() {
-        try {
-            Runtime.getRuntime().exec("install_i2p_service_winnt.bat");
-            addFormNotice(_t("Installed I2P+ system service"));
-        } catch (IOException ioe) {
-            addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
-        }
-    }
-
     private void enableService() {
         try {
             Runtime.getRuntime().exec("EnableI2P+Service.bat");

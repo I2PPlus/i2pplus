@@ -44,7 +44,6 @@ import net.i2p.util.Log;
  */
 class BanlistRenderer {
     private final RouterContext _context;
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     private static final Pattern IP_HOSTNAME_NORMALIZE = Pattern.compile("[.:]");
     private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
     private static final Pattern VERSION_LU_SUFFIX = Pattern.compile("\\s*\\(0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*/\\s*LU\\)\\s*$");
@@ -68,10 +67,6 @@ class BanlistRenderer {
      */
     public BanlistRenderer(RouterContext context) {
         _context = context;
-    }
-
-    private boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
 
     private String reverseLookup(String ip) {

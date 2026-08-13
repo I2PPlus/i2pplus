@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -428,40 +427,6 @@ class NetDbRenderer {
                 }
                 buf.append("</span></div>\n");
             }
-        }
-    }
-
-    /**
-     *  Filters routers by exact IP match.
-     *  @since 0.9.64
-     */
-    private static void filterIP(Set<RouterInfo> routers, String ip) {
-        outer:
-        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
-            RouterInfo ri = iter.next();
-            for (RouterAddress ra : ri.getAddresses()) {
-                if (ip.equals(ra.getHost())) {continue outer;}
-            }
-            iter.remove();
-        }
-    }
-
-    /**
-     *  Filters routers by IP prefix match (supports IPv4 ranges and IPv6 prefixes).
-     *  @param altip alternative IPv6 representation, may be null
-     *  @since 0.9.64
-     */
-    private static void filterIP(Set<RouterInfo> routers, String ip, String altip) {
-        outer:
-        for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
-            RouterInfo ri = iter.next();
-            for (RouterAddress ra : ri.getAddresses()) {
-                String host = ra.getHost();
-                if (host != null && (host.startsWith(ip) || (altip != null && host.startsWith(altip)))) {
-                    continue outer;
-                }
-            }
-            iter.remove();
         }
     }
 
@@ -1903,21 +1868,6 @@ class NetDbRenderer {
         else if (rv == 7) {rv = 6;}
         else if (rv == 8) {rv = 0;}
         return rv;
-    }
-
-    /**
-     *  Converts IPv6 between compressed and expanded forms.
-     *
-     *  @param ip IPv6 address not ending with "::"
-     *  @return alternative representation or null
-     *  @since 0.9.57
-     */
-    private static String getAltIPv6(String ip) {
-        if (ip.contains("::")) {
-            byte[] bip = Addresses.getIPOnly(ip);
-            if (bip != null) {return Addresses.toString(bip);}
-        } else if (ip.contains(":0:")) {return Addresses.toCanonicalString(ip);}
-        return null;
     }
 
     /**

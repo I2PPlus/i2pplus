@@ -604,13 +604,6 @@ public class HealthHelper extends HelperBase {
         return new int[]{inCount, outCount};
     }
 
-    /** Append unit only when value is present (not em-dash) */
-    private static String withUnit(String val, String unit) {
-        if ("\u2014".equals(val))
-            return val;
-        return val + unit;
-    }
-
     /** Build a details array from a base description plus an optional anomaly detail line */
     private static String[] withDetail(String desc, String anomalyDetail) {
         if (anomalyDetail != null)

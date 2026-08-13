@@ -311,7 +311,4 @@ public class ConfigTunnelsHelper extends HelperBase {
     }
 
     /** dummy for tagging */
-    private static String ngettext(String s, String p) {
-        return null;
-    }
 }
