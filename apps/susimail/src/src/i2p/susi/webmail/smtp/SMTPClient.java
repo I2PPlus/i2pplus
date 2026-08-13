@@ -80,9 +80,20 @@ public class SMTPClient {
      *  @since 0.9.13
      */
     private int sendCmd(String cmd, boolean shouldWait) {
+        return sendCmd(cmd, shouldWait, false);
+    }
+
+    /**
+     *  @param cmd may be null
+     *  @param shouldWait if false, don't wait for response, and return 100
+     *  @param mask true to mask the command in debug logs (credentials)
+     *  @return result code or 0 for failure
+     *  @since 0.9.13
+     */
+    private int sendCmd(String cmd, boolean shouldWait, boolean mask) {
         if (socket == null) {return 0;}
         try {
-            if (cmd != null) {sendCmdNoWait(cmd);}
+            if (cmd != null) {sendCmdNoWait(cmd, mask);}
             if (!shouldWait) {return 100;}
             socket.getOutputStream().flush();
             return getResult();
@@ -99,8 +110,19 @@ public class SMTPClient {
      *  @since 0.9.13
      */
     private void sendCmdNoWait(String cmd) throws IOException {
+        sendCmdNoWait(cmd, false);
+    }
+
+    /**
+     *  Does not flush, wait, or read
+     *
+     *  @param cmd non-null
+     *  @param mask true to mask the command in debug logs (credentials)
+     *  @since 0.9.13
+     */
+    private void sendCmdNoWait(String cmd, boolean mask) throws IOException {
         if (_log.shouldDebug()) {
-            String logCmd = cmd.startsWith("PASS ") ? "PASS ****" : cmd;
+            String logCmd = mask || cmd.startsWith("PASS ") ? "****" : cmd;
             _log.debug("SMTP sendCmd(" + logCmd + ")");
         }
         if (socket == null) {throw new IOException("No socket");}
@@ -121,7 +143,7 @@ public class SMTPClient {
         if (supportsPipelining) {
             if (_log.shouldDebug()) {_log.debug("SMTP pipelining " + cmds.size() + " commands");}
             try {
-                for (SendExpect cmd : cmds) {sendCmdNoWait(cmd.send);}
+                for (SendExpect cmd : cmds) {sendCmdNoWait(cmd.send, cmd.sensitive);}
                 socket.getOutputStream().flush();
             } catch (IOException ioe) {
                 error += ioe + "\n";
@@ -135,7 +157,7 @@ public class SMTPClient {
             }
         } else {
             for (SendExpect cmd : cmds) {
-                int r = sendCmd(cmd.send);
+                int r = sendCmd(cmd.send, true, cmd.sensitive);
                 // stop at first error
                 if (r != cmd.expect) {break;}
                 rv++;
@@ -264,8 +286,8 @@ public class SMTPClient {
                 // that includes the user/pass on following lines
                 List<SendExpect> cmds = new ArrayList<>();
                 cmds.add(new SendExpect("AUTH LOGIN", 334));
-                cmds.add(new SendExpect(base64.encode(user), 334));
-                cmds.add(new SendExpect(base64.encode(pass), 235));
+                cmds.add(new SendExpect(base64.encode(user), 334, true));
+                cmds.add(new SendExpect(base64.encode(pass), 235, true));
                 if (sendCmds(cmds) != 3) {
                     error += _t("Login failed") + '\n';
                     ok = false;
@@ -375,13 +397,26 @@ public class SMTPClient {
          * expect.
          */
         public final int expect;
+        /**
+         * sensitive, masked in debug logs.
+         */
+        public final boolean sensitive;
 
         /**
          * SendExpect.
          */
         public SendExpect(String s, int e) {
+            this(s, e, false);
+        }
+
+        /**
+         * SendExpect.
+         *  @param sen true if the command contains credentials to mask in debug logs
+         */
+        public SendExpect(String s, int e, boolean sen) {
             send = s;
             expect = e;
+            sensitive = sen;
         }
     }
 
