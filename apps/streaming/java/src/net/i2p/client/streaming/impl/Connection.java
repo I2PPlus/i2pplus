@@ -444,6 +444,12 @@ class Connection {
         int persistBackoff = 0;
         while (true) {
             long timeLeft = writeExpire - now;
+            // Sample the bandwidth estimator outside the lock; it has its own
+            // lock, and the timer/estimator thread takes _outboundPackets in
+            // the opposite order (see ackPackets / RetransmitEvent comments).
+            int inFlightCap = getBDPBasedInFlightCap();
+            boolean send = false;
+            int chokeSize = 0;
             synchronized (_outboundPackets) {
                 if (!started) {_context.statManager().addRateData("stream.chokeSizeBegin", _outboundPackets.size());}
                 if (start + 5*60*1000 < now) {return false;}
@@ -453,7 +459,7 @@ class Connection {
 
                 int unacked = _outboundPackets.size();
                 int wsz = _options.getWindowSize();
-                if (shouldWait(unacked, wsz)) {
+                if (shouldWait(unacked, wsz, inFlightCap)) {
                     if (_isChoked) {
                         long persistDelay = Math.max(_options.getRTO(), 2000L);
                         if (persistBackoff > 0) {
@@ -484,9 +490,13 @@ class Connection {
                     }
                     now = _context.clock().now();
                 } else {
-                    _context.statManager().addRateData("stream.chokeSizeEnd", _outboundPackets.size());
-                    return true;
+                    chokeSize = _outboundPackets.size();
+                    send = true;
                 }
+            }
+            if (send) {
+                _context.statManager().addRateData("stream.chokeSizeEnd", chokeSize);
+                return true;
             }
         }
     }
@@ -533,11 +543,14 @@ class Connection {
 
     /**
      *  Whether the sender should block.
+     *  @param unacked number of unacked packets
+     *  @param wsz the current window size
+     *  @param inFlightCap BDP-based in-flight cap, sampled outside the lock
      *  @return true if the sender should block (window full or choked)
      */
-    private boolean shouldWait(int unacked, int wsz) {
+    private boolean shouldWait(int unacked, int wsz, int inFlightCap) {
         return _isChoked || unacked >= wsz ||
-               _lastSendId.get() - _highestAckedThrough.get() >= getBDPBasedInFlightCap();
+               _lastSendId.get() - _highestAckedThrough.get() >= inFlightCap;
     }
 
     /**
@@ -746,6 +759,7 @@ class Connection {
         boolean anyLeft = false;
         boolean doPushBack = false;
         boolean doCancel = false;
+        boolean doCancelTLP = false;
         int pushBackRTO = 0;
         synchronized (_outboundPackets) {
             if (!_outboundPackets.isEmpty()) {  // short circuit iterator
@@ -790,7 +804,7 @@ class Connection {
                         // value can't spuriously match and trigger fast retransmit on
                         // the first (rather than the third) duplicate ACK.
                         _lastDupAck = -1;
-                        _tlpEvent.cancel();
+                        doCancelTLP = true;
                     } else {
                         if (ackThrough == _lastDupAck) {
                             _dupAckCount++;
@@ -822,6 +836,7 @@ class Connection {
                         }
                     }
                 }
+                _ackSinceCongestion.set(true);
             }
             if ((_outboundPackets.isEmpty()) && (_activeResends.get() != 0)) {
                 if (_log.shouldInfo()) {
@@ -834,8 +849,6 @@ class Connection {
             _outboundPackets.notifyAll();
 
             if (!_ackedList.isEmpty()) {
-                _ackSinceCongestion.set(true);
-                _bwEstimator.addSample(_ackedList.size());
                 if (anyLeft) {
                     // RFC 6298 section 5.3
                     pushBackRTO = _options.getRTO();
@@ -845,6 +858,15 @@ class Connection {
                     doCancel = true;
                 }
             }
+        }
+        // Outside the lock: the bandwidth estimator (which has its own lock)
+        // and the TLP timer. The timer thread takes _outboundPackets in the
+        // opposite order, so these must not run inside the critical section.
+        if (!_ackedList.isEmpty()) {
+            _bwEstimator.addSample(_ackedList.size());
+        }
+        if (doCancelTLP) {
+            _tlpEvent.cancel();
         }
         // Call RetransmitEvent outside _outboundPackets lock
         // to prevent deadlock with RetransmitEvent.timeReached()
