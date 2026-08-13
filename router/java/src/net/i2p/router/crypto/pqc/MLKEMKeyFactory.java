@@ -48,7 +48,6 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private static final int DEFAULT_MLKEM_PRECALC_MAX = 256;
     private static final int DEFAULT_MLKEM_PRECALC_DELAY = 25;
     private static final int HARD_MAX = 32768;
-    private static final int HARD_MIN = 4;
 
     /**
      *  Alice side only

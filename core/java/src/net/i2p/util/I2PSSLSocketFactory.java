@@ -99,7 +99,6 @@ public class I2PSSLSocketFactory {
     private static final String PROP_DISABLE = "i2p.disableSSLHostnameVerification";
     private static final String PROP_GEOIP_DIR = "geoip.dir";
     private static final String GEOIP_DIR_DEFAULT = "geoip";
-    private static final String GEOIP_FILE_DEFAULT = "geoip.txt";
     private static final String COUNTRY_FILE_DEFAULT = "countries.txt";
     private static final String PUBLIC_SUFFIX_LIST = "public-suffix-list.txt";
     private static volatile PublicSuffixMatcher DEFAULT_MATCHER;

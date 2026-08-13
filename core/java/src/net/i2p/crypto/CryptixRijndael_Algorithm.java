@@ -45,9 +45,6 @@ public final class CryptixRijndael_Algorithm {
                                                              { { 0, 0}, { 1, 5}, { 2, 4}, { 3, 3}},
                                                              { { 0, 0}, { 1, 7}, { 3, 5}, { 4, 4}}};
 
-    private static final char[] _HEX_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
-                                                'E', 'F'};
-
     // Static code - to intialise S-boxes and T-boxes
     //...........................................................................
 
@@ -586,61 +583,5 @@ public final class CryptixRijndael_Algorithm {
             // 32 bytes = 256 bits
                 return 14;
         }
-    }
-
-    /**
-     * Returns a string of 8 hexadecimal digits (most significant
-     * digit first) corresponding to the integer <i>n</i>, which is
-     * treated as unsigned.
-     *
-     * @return the hex string
-     */
-    private static final String intToString(int n) {
-        char[] buf = new char[8];
-        for (int i = 7; i >= 0; i--) {
-            buf[i] = _HEX_DIGITS[n & 0x0F];
-            n >>>= 4;
-        }
-        return new String(buf);
-    }
-
-    /**
-     * Returns a string of hexadecimal digits from a byte array. Each
-     * byte is converted to 2 hex symbols.
-     *
-     * @return the hex string
-     */
-    private static final String toString(byte[] ba) {
-        int length = ba.length;
-        char[] buf = new char[length * 2];
-        for (int i = 0, j = 0, k; i < length;) {
-            k = ba[i++];
-            buf[j++] = _HEX_DIGITS[(k >>> 4) & 0x0F];
-            buf[j++] = _HEX_DIGITS[k & 0x0F];
-        }
-        return new String(buf);
-    }
-
-    /**
-     * Returns a string of hexadecimal digits from an integer array. Each
-     * int is converted to 4 hex symbols.
-     *
-     * @return the hex string
-     */
-    private static final String toString(int[] ia) {
-        int length = ia.length;
-        char[] buf = new char[length * 8];
-        for (int i = 0, j = 0, k; i < length; i++) {
-            k = ia[i];
-            buf[j++] = _HEX_DIGITS[(k >>> 28) & 0x0F];
-            buf[j++] = _HEX_DIGITS[(k >>> 24) & 0x0F];
-            buf[j++] = _HEX_DIGITS[(k >>> 20) & 0x0F];
-            buf[j++] = _HEX_DIGITS[(k >>> 16) & 0x0F];
-            buf[j++] = _HEX_DIGITS[(k >>> 12) & 0x0F];
-            buf[j++] = _HEX_DIGITS[(k >>> 8) & 0x0F];
-            buf[j++] = _HEX_DIGITS[(k >>> 4) & 0x0F];
-            buf[j++] = _HEX_DIGITS[k & 0x0F];
-        }
-        return new String(buf);
     }
 }

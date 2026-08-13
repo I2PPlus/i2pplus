@@ -41,7 +41,6 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     private static final int DEFAULT_DH_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
     private static final int DEFAULT_DH_PRECALC_DELAY = 25;
     private static final int HARD_MAX = 65536;
-    private static final int HARD_MIN = 4;
     private final boolean RETURN_UNUSED_TO_XDH;
     /** Creates factory and starts background key precomputation thread. */
 
