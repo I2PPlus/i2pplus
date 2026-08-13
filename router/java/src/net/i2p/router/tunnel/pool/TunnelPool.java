@@ -3137,41 +3137,52 @@ public class TunnelPool {
                 // Ignore variance for now.
                 // Skip tunnels whose peers are on cooldown to ensure diversity.
                 len++; // us
-                _tunnelsLock.lock();
-                try {
-                    long cooldownCutoff = now - TunnelPeerSelector.PEER_SELECTION_COOLDOWN_MS;
-                    for (TunnelInfo ti : _tunnels) {
-                        if (ti.getLength() >= len && ti.getExpiration() < now + 3L * 60 * 1000 && !ti.wasReused()) {
-                            ti.setReused();
-                            len = ti.getLength();
-                            peers = new ArrayList<>(len);
-                            // Peers list is ordered endpoint first, but cfg.getPeer() is ordered gateway first
-                            for (int i = len - 1; i >= 0; i--) {peers.add(ti.getPeer(i));}
-                            // Skip reuse if any non-self peer is on cooldown
-                            boolean anyInCooldown = false;
-                            for (Hash p : peers) {
-                                if (p.equals(_context.routerHash())) continue;
-                                Long lastSel = TunnelPeerSelector._peerCooldowns.get(p);
-                                if (lastSel != null && lastSel > cooldownCutoff) {
-                                    anyInCooldown = true;
-                                    break;
-                                }
+                long cooldownCutoff = now - TunnelPeerSelector.PEER_SELECTION_COOLDOWN_MS;
+                int idx = 0;
+                // Hold _tunnelsLock only for the scan itself; the cooldown
+                // checks touch the concurrent _peerCooldowns map and don't
+                // need the pool lock.
+                while (peers == null) {
+                    _tunnelsLock.lock();
+                    try {
+                        for (; idx < _tunnels.size(); idx++) {
+                            TunnelInfo ti = _tunnels.get(idx);
+                            if (ti.getLength() >= len && ti.getExpiration() < now + 3L * 60 * 1000 && !ti.wasReused()) {
+                                ti.setReused();
+                                len = ti.getLength();
+                                peers = new ArrayList<>(len);
+                                // Peers list is ordered endpoint first, but cfg.getPeer() is ordered gateway first
+                                for (int i = len - 1; i >= 0; i--) {peers.add(ti.getPeer(i));}
+                                break;
                             }
-                            if (anyInCooldown) {
-                                peers = null;
-                                continue;
-                            }
-                            // Record cooldown for reused peers so selectPeers respects them
-                            for (Hash p : peers) {
-                                if (!p.equals(_context.routerHash()) &&
-                                    !TunnelPeerSelector.hasRecoveredFromFailure(_context, p)) {
-                                    TunnelPeerSelector._peerCooldowns.put(p, now);
-                                }
-                            }
+                        }
+                    } finally {_tunnelsLock.unlock();}
+                    if (peers == null) {
+                        // no candidate found; fall through to normal selection
+                        break;
+                    }
+                    // Skip reuse if any non-self peer is on cooldown
+                    boolean anyInCooldown = false;
+                    for (Hash p : peers) {
+                        if (p.equals(_context.routerHash())) continue;
+                        Long lastSel = TunnelPeerSelector._peerCooldowns.get(p);
+                        if (lastSel != null && lastSel > cooldownCutoff) {
+                            anyInCooldown = true;
                             break;
                         }
                     }
-                } finally {_tunnelsLock.unlock();}
+                    if (anyInCooldown) {
+                        peers = null;
+                        continue; // try the next tunnel
+                    }
+                    // Record cooldown for reused peers so selectPeers respects them
+                    for (Hash p : peers) {
+                        if (!p.equals(_context.routerHash()) &&
+                            !TunnelPeerSelector.hasRecoveredFromFailure(_context, p)) {
+                            TunnelPeerSelector._peerCooldowns.put(p, now);
+                        }
+                    }
+                }
             }
             if (peers == null) {
                 setLengthOverride();
