@@ -1766,24 +1766,6 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  States for all peers at the given remote host, ignoring port.
-     *  Used for a last-chance search for a peer that changed port, by PacketHandler.
-     *  Always returns empty list for IPv6 hostInfo.
-     *  @since 0.9.3
-     */
-    List<PeerState> getPeerStatesByIP(RemoteHostId hostInfo) {
-        List<PeerState> rv = new ArrayList<>(4);
-        byte[] ip = hostInfo.getIP();
-        if (ip != null && ip.length == 4) {
-            for (PeerState ps : _peersByIdent.values()) {
-                if (DataHelper.eq(ip, ps.getRemoteIP()))
-                    rv.add(ps);
-            }
-        }
-        return rv;
-    }
-
-    /**
      * The peer state for the peer with the given ident, or null
      * if no state exists.
      */
