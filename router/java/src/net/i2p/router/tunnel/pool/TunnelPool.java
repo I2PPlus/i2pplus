@@ -1102,7 +1102,7 @@ public class TunnelPool {
                         // expire together, all OB pools lose their paired IB
                         // tunnels simultaneously, and 5+ EMERGENCY triggers
                         // fire at once.  Let IB tunnels expire naturally
-                        // (10 min) to stagger the removal.
+                        // (11 min) to stagger the removal.
                         if (_log.shouldDebug()) {
                             _log.debug(toString() + " -> Skipping cleanup - paired OB pool below target (" + oppositeUsable + "/" + oppositeMin + ")");
                         }
@@ -1173,7 +1173,7 @@ public class TunnelPool {
                     // breaks client connections.  FAILING tunnels were recently GOOD
                     // and the old LeaseSet (propagated to peers) still references
                     // them — pruning during the propagation window causes unreachable
-                    // destinations.  Let them expire naturally (10 min).
+                    // destinations.  Let them expire naturally (11 min).
                     if (isServerPool && (info.getTestStatus() == TunnelTestStatus.GOOD ||
                                          info.getTestStatus() == TunnelTestStatus.FAILING)) {continue;}
                     // For non-server pools: keep at least goodTarget GOOD tunnels
@@ -1293,14 +1293,16 @@ public class TunnelPool {
 
     /**
      *  Track recently-added tunnel IDs to prevent duplicates.
-     *  Uses a simple sliding window based on expiration time.
-     *  Window set to 10 minutes to handle slow tunnel builds.
+     *  Uses a simple sliding window based on add time.
+     *  Window is 60 seconds — long enough to catch duplicate
+     *  addTunnel() calls for the same tunnel.
      */
     private static final long RECENTLY_ADDED_WINDOW = 60L * 1000;
     /**
      * Throttle refresh — publish at most once per throttle window.
-     * 5 min minimum prevents storms; with occasional emergency publishes
-     * the actual interval averages ~10 min.
+     * 2 min minimum (refresh throttle default) prevents storms;
+     * with occasional emergency publishes the actual interval
+     * averages ~10 min, driven by the lease duration cap.
      * Initialize to allow first request immediately.
      */
     private long _lastRefreshTime;
@@ -2340,7 +2342,7 @@ public class TunnelPool {
         long now = _context.clock().now();
 
         // Rate-limit: return cached LeaseSet if within minimum interval.
-        // Tunnels have a 10-minute lifetime; a cached LS within 5 min is
+        // Tunnels have an 11-minute lifetime; a cached LS within 5 min is
         // still valid and prevents unnecessary churn in published leases.
         // Emergency callers (removeTunnelSynchronous) use buildNewLeaseSetFromTunnels
         // and bypass this cache entirely.
@@ -2424,7 +2426,7 @@ public class TunnelPool {
                 // breaks client connections.  FAILING tunnels were recently GOOD
                 // and the old LeaseSet (propagated to peers) still references
                 // them — pruning during the propagation window causes unreachable
-                // destinations.  Let them expire naturally (10 min).
+                // destinations.  Let them expire naturally (11 min).
                 if (isServerPool && (t.getTestStatus() == TunnelTestStatus.GOOD ||
                                      t.getTestStatus() == TunnelTestStatus.FAILING)) {
                     goodCount++;
@@ -2849,7 +2851,7 @@ public class TunnelPool {
         // cascades where all tunnels expire at once, leaving the pool empty
         // while new builds queue (inProgress blocks EMERGENCY).
         // Without this, every boot-time tunnel batch expires together at
-        // ~10 min intervals, and pending-but-timing-out builds (20s each)
+        // ~11 min intervals, and pending-but-timing-out builds (20s each)
         // keep the inProgress counter above zero, starving the pool.
         int inProgress = getInProgressCount();
 

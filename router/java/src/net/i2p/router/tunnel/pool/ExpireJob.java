@@ -32,9 +32,9 @@ class ExpireJob extends JobImpl {
     /** Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
      *  with cached (stale) LeaseSets can still connect using old tunnel IDs. */
     private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000L;
-    // Must be greater than tunnel lifetime (10 min) + LEASESET_GRACE_PERIOD (10 min)
+    // Must be greater than tunnel lifetime (11 min) + LEASESET_GRACE_PERIOD (10 min)
     // to allow Phase 2 (dispatcher removal) to fire.  With early expiration,
-    // entries live up to ~19 min total; 25 min provides safety margin for
+    // entries live up to ~21 min total; 25 min provides safety margin for
     // clock skew and slow job execution.
     private static final long MAX_ENTRY_LIFETIME = 25 * 60 * 1000L;
     private static final int MAX_ITERATE_PER_RUN = 2000;

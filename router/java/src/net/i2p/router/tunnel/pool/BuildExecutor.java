@@ -34,7 +34,7 @@ import net.i2p.util.SystemVersion;
  * it waits for a short period before looping again (or until it is told that something
  * changed, such as a tunnel failed, new client started up, or tunnel creation was aborted).
  *
- * Note that 10 minute tunnel expiration is hardcoded in here.
+ * Note that the default 11 minute tunnel expiration is assumed in here.
  *
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
@@ -1426,7 +1426,7 @@ public class BuildExecutor implements Runnable {
                 }
                 /* Sufficient count — proactively replace GOOD tunnels approaching expiry.
                  * Start at 330s (5.5 min) so replacements have time to build before originals
-                 * expire at 600s (10 min). FAILING tunnels are NOT proactively replaced —
+                 * expire at 660s (11 min). FAILING tunnels are NOT proactively replaced —
                  * they stay until near-expiry (handled by ensureSufficientTunnels) or
                  * natural expiry. This prevents build-spam when all tunnels are FAILING.
                  * BUT: if there aren't enough GOOD tunnels to meet the target, build replacements
