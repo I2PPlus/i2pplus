@@ -96,8 +96,6 @@ public class TunnelPool {
     private final RateStat[] _successStatSlot = new RateStat[1];
     private final RateStat[] _buildSuccessRateStatSlot = new RateStat[1];
     private final RateStat[] _avgBWStatSlot = new RateStat[1];
-    private final RateStat[] _buildRatioStatSlot = new RateStat[1];
-    private long _lastTimeoutWarningTime;
     private long _lastNoTunnelsWarningTime;
     private long _lastLastResortLogTime;
     /**
@@ -2736,14 +2734,6 @@ public class TunnelPool {
     public long getLifetimeProcessed() {return _lifetimeProcessed;}
 
     /**
-     * Keep a separate stat for each type, direction, and length of tunnel.
-     */
-    private final String buildRateName() {
-        if (_settings.isExploratory()) {return "tunnel.buildRatio.exploratory." + (_settings.isInbound() ? " In" : " Out");}
-        else {return "tunnel.buildRatio.l" + _settings.getLength() + "v" + _settings.getLengthVariance() + (_settings.isInbound() ? ".in" : ".out");}
-    }
-
-    /**
      *  This only sets the peers and creation/expiration times in the configuration.
      *  For the crypto, see BuildRequestor and BuildMessageGenerator.
      *
@@ -3479,57 +3469,6 @@ public class TunnelPool {
 
         _lastNoTunnelsWarningTime = now;
         return true;
-    }
-
-    /**
-     * Check if this pool has had recent successful tunnel builds
-     * Enhanced to be more sensitive and detect working tunnels better
-     * @return true if there were successful builds in the last 10 minutes OR any usable tunnels exist
-     */
-    private boolean hasRecentSuccessfulBuilds() {
-        // First check if we have any usable tunnels right now - this is the most reliable indicator
-        int usableTunnels = countUsableTunnels(this);
-        if (usableTunnels > 0) {
-            return true; // We have working tunnels now
-        }
-
-        // Check rate stats as secondary indicator
-        String rateName = buildRateName();
-        RateStat rs = getRateStat(_buildRatioStatSlot, rateName);
-        if (rs == null) {
-            return false;
-        }
-
-        // Check longer time window (10 minutes) to be more forgiving
-        Rate r = rs.getRate(RateConstants.TEN_MINUTES); // Last 10 minutes
-        if (r == null) {
-            return false;
-        }
-
-        // Check if we have any successful builds (average > 0 indicates activity)
-        // Also check total events to catch any successful builds
-        return r.getAverageValue() > 0 || r.getLastEventCount() > 0;
-    }
-
-    /**
-     * Count usable tunnels in a pool (non-zero-hop unless pool allows zero-hop)
-     */
-    private int countUsableTunnels(TunnelPool pool) {
-        if (pool == null) return 0;
-
-        long now = _context.clock().now();
-        boolean allowZeroHop = pool.getSettings().getAllowZeroHop();
-        int usable = 0;
-
-        List<TunnelInfo> tunnels = pool.listTunnels();
-        for (TunnelInfo info : tunnels) {
-            if (info.getExpiration() > now) {
-                if (allowZeroHop || info.getLength() > 1) {
-                    usable++;
-                }
-            }
-        }
-        return usable;
     }
 
     /**
