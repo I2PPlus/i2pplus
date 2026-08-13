@@ -249,15 +249,21 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected static void prunePeerMaps(RouterContext ctx) {
         long now = ctx.clock().now();
-        if (_peerCooldowns.size() > 128) {
+        // Eviction thresholds are deliberately generous: routers hosting many
+        // destinations legitimately cooldown thousands of peers (hundreds of
+        // pools x up to 8 hops each).  Each entry is a Hash + timestamp,
+        // roughly 100-150 bytes, so even 4096 entries cost under 1MB.  The
+        // time-based removeIf below is the leak handling — the maps self-limit
+        // to peers touched within their cooldown window regardless of size.
+        if (_peerCooldowns.size() > 4096) {
             long cutoff = now - PEER_SELECTION_COOLDOWN_MS;
             _peerCooldowns.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
-        if (_lastKeepAlive.size() > 256) {
+        if (_lastKeepAlive.size() > 4096) {
             long cutoff = now - KEEPALIVE_INTERVAL_MS * 4;
             _lastKeepAlive.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
-        if (_firstHopFails.size() > 128) {
+        if (_firstHopFails.size() > 4096) {
             long cutoff = now - FIRST_HOP_FAIL_COOLDOWN_MS;
             _firstHopFails.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
@@ -299,7 +305,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
         // Periodically prune all static peer maps
-        if (_peerCooldowns.size() > 128 || _lastKeepAlive.size() > 256) {
+        if (_peerCooldowns.size() > 4096 || _lastKeepAlive.size() > 4096) {
             prunePeerMaps(ctx);
         }
     }

@@ -113,6 +113,14 @@ public class TunnelPool {
      */
     private static final int STRUGGLE_RESERVE = 2;
     /**
+     *  A tunnel counts as in use when it has carried verified traffic within
+     *  this window.  Generous on purpose: streaming retransmit chains can
+     *  stall for tens of seconds (observed RTOs of 12-15s and one ACK after
+     *  151s), and tearing down the tunnel under a live stream is what turns
+     *  a slow network into a dead download.
+     */
+    private static final long IN_USE_TRAFFIC_MS = 5 * 60 * 1000L;
+    /**
      *  Minimum interval between pre-build triggers per pool.
      *  pruneExcessTunnels() fires this on every ~15s cycle for every IB pool
      *  whose OB pair is depleted.  Without throttling, this generates ~32
@@ -2806,6 +2814,27 @@ public class TunnelPool {
                     // deadlocking the pool at zero usable tunnels with no
                     // LeaseSet until the tunnel expires naturally.
                     if (t.getExpiration() < preBuildThreshold) {
+                        // In-use protection: never tear down a tunnel that has
+                        // recently carried verified traffic — the data proves it
+                        // works (inbound: data reached us; outbound: our messages
+                        // left through it).  Mark inbound tunnels GOOD outright
+                        // (clearTestFailures() is this fork's own "data proves it"
+                        // path); outbound tunnels stay UNTESTED but are spared the
+                        // prune while traffic is recent so live streams are not
+                        // killed.  Only truly idle UNTESTED tunnels are pruned.
+                        if (t instanceof PooledTunnelCreatorConfig) {
+                            PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) t;
+                            if (cfg.getVerifiedBytesTransferred() > 0 &&
+                                System.currentTimeMillis() - cfg.getLastTransferred() < IN_USE_TRAFFIC_MS) {
+                                if (_settings.isInbound()) {
+                                    cfg.clearTestFailures();
+                                    nearExpiry++;
+                                } else {
+                                    untestedCount++;
+                                }
+                                continue;
+                            }
+                        }
                         it.remove();
                         if (t instanceof PooledTunnelCreatorConfig) {
                             ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) t);
@@ -3286,8 +3315,15 @@ public class TunnelPool {
 
         synchronized (_inProgress) {_inProgress.remove(cfg);}
 
-        // Record peer cooldown on build failure so bad OBEPs/IBGWs aren't retried
-        if (result != BuildExecutor.Result.SUCCESS && cfg.getLength() > 1) {
+        // Record peer cooldown on build failure so bad OBEPs/IBGWs aren't retried.
+        // Only REJECT/BAD_RESPONSE prove the far end was at fault — it answered
+        // and refused or broke the build.  TIMEOUT and DUP_ID are ambiguous:
+        // no peer can be blamed.  Cooldowning on them punishes healthy peers
+        // for network-wide problems and lets a mild timeout rate saturate the
+        // cooldown maps, starving peer selection (observed 247/247 client hops
+        // in cooldown on a single-destination router).
+        if ((result == BuildExecutor.Result.REJECT || result == BuildExecutor.Result.BAD_RESPONSE) &&
+            cfg.getLength() > 1) {
             Hash farEnd = cfg.getFarEnd();
             if (farEnd != null && !farEnd.equals(_context.routerHash()) &&
                 !TunnelPeerSelector.hasRecoveredFromFailure(_context, farEnd)) {
