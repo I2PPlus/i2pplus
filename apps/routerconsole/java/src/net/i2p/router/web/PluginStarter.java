@@ -351,6 +351,18 @@ public class PluginStarter implements Runnable {
      *  @throws Exception just about anything, caller would be wise to catch Throwable
      */
     @SuppressWarnings("deprecation")
+    /**
+     *  Reject a plugin with incompatible requirements: log, disable, and throw.
+     *  @since 0.9.71+
+     */
+    private static void pluginIncompatible(Log log, RouterContext ctx, String appName,
+                                           String detail, String userMessage) throws Exception {
+        String foo = "Plugin " + appName + ' ' + detail;
+        log.error(foo);
+        disablePlugin(appName);
+        throw new Exception(userMessage);
+    }
+
     public static boolean startPlugin(RouterContext ctx, String appName) throws Exception {
         Log log = ctx.logManager().getLog(PluginStarter.class);
         File pluginDir = new File(ctx.getConfigDir(), PLUGIN_DIR + '/' + appName);
@@ -387,64 +399,46 @@ public class PluginStarter implements Runnable {
         String minVersion = stripHTML(props, "min-i2p-version");
         if (minVersion != null &&
             VersionComparator.comp(CoreVersion.VERSION, minVersion) < 0) {
-            String foo = "Plugin " + appName + " requires I2P version " + minVersion + " or higher";
-            log.error(foo);
-            disablePlugin(appName);
-            foo = gettext("This plugin requires I2P version {0} or higher", minVersion, ctx);
-            throw new Exception(foo);
+            pluginIncompatible(log, ctx, appName, "requires I2P version " + minVersion + " or higher",
+                               gettext("This plugin requires I2P version {0} or higher", minVersion, ctx));
         }
 
         minVersion = stripHTML(props, "min-java-version");
         if (minVersion != null && !SystemVersion.isJava(minVersion)) {
-            String foo = "Plugin " + appName + " requires Java version " + minVersion + " or higher";
-            log.error(foo);
-            disablePlugin(appName);
-            foo = gettext("This plugin requires Java version {0} or higher", minVersion, ctx);
-            throw new Exception(foo);
+            pluginIncompatible(log, ctx, appName, "requires Java version " + minVersion + " or higher",
+                               gettext("This plugin requires Java version {0} or higher", minVersion, ctx));
         }
 
         String jVersion = RouterConsoleRunner.jettyVersion();
         minVersion = stripHTML(props, "min-jetty-version");
         if (minVersion != null &&
             VersionComparator.comp(minVersion, jVersion) > 0) {
-            String foo = "Plugin " + appName + " requires Jetty version " + minVersion + " or higher";
-            log.error(foo);
-            disablePlugin(appName);
-            foo = gettext("Plugin requires Jetty version {0} or higher", minVersion, ctx);
-            throw new Exception(foo);
+            pluginIncompatible(log, ctx, appName, "requires Jetty version " + minVersion + " or higher",
+                               gettext("Plugin requires Jetty version {0} or higher", minVersion, ctx));
         }
 
         String blacklistVersion = jetty9Blacklist.get(appName);
         String curVersion = stripHTML(props, "version");
         if (blacklistVersion != null &&
             VersionComparator.comp(curVersion, blacklistVersion) <= 0) {
-            String foo = "Plugin " + appName + " requires Jetty version 8.9999 or lower";
-            log.error(foo);
-            disablePlugin(appName);
-            foo = gettext("Plugin requires Jetty version {0} or lower", "8.9999", ctx);
-            throw new Exception(foo);
+            pluginIncompatible(log, ctx, appName, "requires Jetty version 8.9999 or lower",
+                               gettext("Plugin requires Jetty version {0} or lower", "8.9999", ctx));
         }
 
         if (SystemVersion.isJava9()) {
             blacklistVersion = java9Blacklist.get(appName);
             if (blacklistVersion != null &&
                 VersionComparator.comp(curVersion, blacklistVersion) <= 0) {
-                String foo = "Plugin " + appName + " requires Jetty version 8.9999 or lower";
-                log.error(foo);
-                disablePlugin(appName);
-                foo = gettext("Plugin requires Java version {0} or lower", "8.9999", ctx);
-                throw new Exception(foo);
+                pluginIncompatible(log, ctx, appName, "requires Java version 8.9999 or lower",
+                                   gettext("Plugin requires Java version {0} or lower", "8.9999", ctx));
             }
         }
 
         String maxVersion = stripHTML(props, "max-jetty-version");
         if (maxVersion != null &&
             VersionComparator.comp(maxVersion, jVersion) < 0) {
-            String foo = "Plugin " + appName + " requires Jetty version " + maxVersion + " or lower";
-            log.error(foo);
-            disablePlugin(appName);
-            foo = gettext("Plugin requires Jetty version {0} or lower", maxVersion, ctx);
-            throw new Exception(foo);
+            pluginIncompatible(log, ctx, appName, "requires Jetty version " + maxVersion + " or lower",
+                               gettext("Plugin requires Jetty version {0} or lower", maxVersion, ctx));
         }
 
         if (log.shouldInfo())
