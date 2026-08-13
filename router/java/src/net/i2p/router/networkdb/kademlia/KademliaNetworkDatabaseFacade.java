@@ -56,7 +56,6 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.FamilyKeyCrypto;
-import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.CommSystemFacadeImpl;
@@ -2935,16 +2934,11 @@ return false;
         long now = _context.clock().now();
         long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 150s
 
-        // Refresh even with 0 active tunnels — tunnel bind reader may not yet
-        // have built one, and stale LeaseSets freeze the pool out (no LS → no
-        // build → no LS, circular).  A failed remote lookup costs nothing.
-        TunnelPool clientPool = _context.tunnelManager().getOutboundPool(_dbid);
-        if (clientPool == null) {
-            if (_log.shouldDebug()) {
-                _log.debug("Skipping LeaseSet refresh - no client pool");
-            }
-            return;
-        }
+        // No pool gate: refresh even with 0 active tunnels — the tunnel bind
+        // reader may not have built one yet, and stale LeaseSets freeze the
+        // pool out (no LS → no build → no LS, circular).  getOutboundPool()
+        // is keyed by local client hash, so it is null for many client
+        // facades, and a failed remote lookup costs nothing anyway.
 
         // Limit size to prevent unbounded growth
         final int MAX_ENTRIES = 1024;
