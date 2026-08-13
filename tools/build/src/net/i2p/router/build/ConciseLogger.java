@@ -209,16 +209,13 @@ public class ConciseLogger extends DefaultLogger {
     @Override
     public void buildFinished(BuildEvent event) {
         if (event.getException() != null) {
-            String msg = event.getMessage();
-            if (msg != null) {
-                printMessage(c(RED, "\n" + msg), err, Project.MSG_ERR);
-                Throwable ex = event.getException();
-                while (ex != null) {
-                    String m = ex.getMessage();
-                    if (m != null)
-                        printMessage(c(RED, m), err, Project.MSG_ERR);
-                    ex = ex.getCause();
-                }
+            printMessage(c(RED, "\nBUILD FAILED"), err, Project.MSG_ERR);
+            Throwable ex = event.getException();
+            while (ex != null) {
+                String m = ex.getMessage();
+                if (m != null)
+                    printMessage(c(RED, m), err, Project.MSG_ERR);
+                ex = ex.getCause();
             }
             return;
         }
