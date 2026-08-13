@@ -68,6 +68,14 @@ jobs:
           pip install --quiet --break-system-packages markdown-it-py
           ant devdocs-zip
 
+      - name: Run test suites
+        continue-on-error: true
+        run: ant test
+
+      - name: Check test report exists
+        if: always()
+        run: ls dist/test-report.html 2>/dev/null || echo "no test report generated"
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -81,6 +89,7 @@ jobs:
             dist/jsdoc.zip
             dist/devdocs.zip
             dist/i2p-src-*.zip
+            dist/test-report.html
             dist/*.deb
           retention-days: 7
 
@@ -97,6 +106,7 @@ jobs:
             dist/jsdoc.zip
             dist/devdocs.zip
             dist/i2p-src-*.zip
+            dist/test-report.html
             dist/*.deb
           generate_release_notes: true
 
