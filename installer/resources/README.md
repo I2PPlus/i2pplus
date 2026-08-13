@@ -16,7 +16,6 @@ Files that get bundled into the installed I2P package. These are the scripts, co
 | `initialNews/`         | First-run news content                                   |
 | `locale/`              | Compiled translation bundles                             |
 | `package-lists/`       | Jetty package configuration                              |
-| `portable/`            | Portable installation support                            |
 | `small/`               | Minimal installation variant                             |
 
 ## Platform-Specific Resources

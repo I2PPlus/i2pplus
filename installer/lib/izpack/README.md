@@ -18,7 +18,7 @@ Contains the IzPack installer compiler and all resources needed to build I2P+ in
 
 - `images/` - Installer banner images (`i2plogo.png`, `i2plogo2.png`, `console.png`)
 - `icons/` - Windows icons (`console.ico`, `start.ico`, `stop.ico`, `uninstall.ico`)
-- `shortcutSpec.xml` - Windows desktop/start menu shortcut definitions
+- `shortcutSpec.xml` - Shortcut definitions for the IzPack 5 ShortcutPanel only (IzPack 4 creates shortcuts via `create_shortcuts.ps1`)
 - `CustomLangPack.xml_eng` - English custom language pack
 - `welcome.html` - IzPack 5 welcome panel content
 - `start-i2p.txt` - Post-install info panel text

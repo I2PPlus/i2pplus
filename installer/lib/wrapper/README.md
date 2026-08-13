@@ -1,7 +1,7 @@
 # Tanuki Java Service Wrapper
 
 This directory contains the Tanuki Java Service Wrapper binaries for all supported platforms.
-The wrapper version is managed via `version.txt` (currently **3.6.5**).
+The wrapper version is managed via `version.txt` (currently **3.7.0**).
 
 ## Automated Updates
 
@@ -59,8 +59,11 @@ sudo apt install mingw-w64
 | Linux ARM v7      | linux-armv7/     | libwrapper.so                          |
 | macOS Universal   | macosx/          | libwrapper-macosx-universal-64.jnilib  |
 | macOS ARM64       | macosx-arm64/    | libwrapper-macosx-arm-64.dylib         |
-| Windows x86       | win32/           | wrapper.dll                            |
 | Windows x86-64    | win64/           | wrapper.dll                            |
+
+> Tanuki ships no 64-bit Windows binaries; win64/I2Psvc.exe and win64/wrapper.dll
+> are cross-compiled from source by `build-wrapper-win64.sh`. The JNI wrapper.dll
+> is required by WrapperManager (service integration) and must match the exe version.
 
 ### Executables
 
@@ -75,8 +78,7 @@ sudo apt install mingw-w64
 | Linux ARM v5      | linux-armv5/     | i2psvc                                 |
 | Linux ARM v7      | linux-armv7/     | i2psvc                                 |
 | macOS Universal   | macosx/          | i2psvc-macosx-universal-64             |
-| Windows x86       | win32/           | I2Psvc.exe                             |
-| Windows x86-64    | win64/           | I2Psvc.exe, wrapper.exe                |
+| Windows x86-64    | win64/           | I2Psvc.exe                             |
 
 ## Building Other Platforms from Source
 

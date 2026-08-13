@@ -43,7 +43,7 @@ SRC_DIR="${WORK_DIR}/wrapper_${VERSION}_src"
 
 echo "Checking wrapper ${VERSION} win64..."
 
-if [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win-all/wrapper.jar" ]; then
+if [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win64/wrapper.dll" ] && [ -f "${WRAPPER_DIR}/win-all/wrapper.jar" ]; then
     jar_ver=$(unzip -p "${WRAPPER_DIR}/win-all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
     if [ "${jar_ver}" = "${VERSION}" ]; then
         echo "Nothing to do, all win64 wrapper files are up to date."
@@ -110,7 +110,15 @@ sed -i 's/"Winternl\.h"/"winternl.h"/g' wrapper.c
 sed -i '48i// Workaround for missing InterlockedOrAcquire in mingw-w64\n#if !defined(InterlockedOrAcquire)\n#define InterlockedOrAcquire InterlockedOr\n#endif\n' wrapper_win.c
 sed -i 's/ChainPara.dwUrlRetrievalTimeout = timeout;/\/\/ ChainPara.dwUrlRetrievalTimeout = timeout;/' wrapper_win.c
 sed -i 's/ChainPara.RequestedIssuancePolicy = CertUsage;/\/\/ ChainPara.RequestedIssuancePolicy = CertUsage;/' wrapper_win.c
+# Upstream quirk: wrapperjni.h declares JNU_SetByteArrayRegion extern, the
+# .c defines it static; gcc rejects the mismatch (MSVC tolerates it)
+sed -i 's/^static void JNU_SetByteArrayRegion(/void JNU_SetByteArrayRegion(/' wrapperjni_exception.c
 [ ! -f wrapperinfo.c ] && [ -f wrapperinfo.c.in ] && cp wrapperinfo.c.in wrapperinfo.c
+# Substitute the version tokens Tanuki's Ant build would normally fill in
+# (without this, wrapperinfo reports literal "@version@" strings)
+VERSION_BASE=$(echo "${VERSION}" | cut -d. -f1)
+VERSION_ROOT=$(echo "${VERSION}" | cut -d. -f2)
+sed -i "s/@version.base@/${VERSION_BASE}/g; s/@version.root@/${VERSION_ROOT}/g; s/@version@/${VERSION}/g; s/@bits@/64/g; s/@dist.arch@/x86_64/g; s/@dist.os@/win32/g; s/@build.date@/$(date +%Y%m%d)/g; s/@build.time@/$(date +%H%M)/g; s/@javac.target.version@/1.8/g" wrapperinfo.c
 
 python3 - << 'PYEND'
 import re
@@ -205,6 +213,57 @@ fi
 mkdir -p "${INSTALL_DIR}/${WIN_DIR}"
 cp "${SRC_DIR}/src/bin/wrapper.exe" "${INSTALL_DIR}/${WIN_DIR}/I2Psvc.exe"
 ${HOST}-strip -s "${INSTALL_DIR}/${WIN_DIR}/I2Psvc.exe"
+
+echo "=== Building Wrapper ${VERSION} JNI DLL for Windows x64 ==="
+# The JNI DLL (wrapper.dll) is loaded by the JVM via WrapperManager
+# (System.loadLibrary("wrapper")) for service integration (router console
+# service page, i2pcontrol). Tanuki ships no 64-bit Windows binaries, so
+# this is cross-compiled from the same source as the exe above.
+# jni.h is platform-independent; the Linux jni_md.h is ABI-equivalent on
+# x86-64 (JNICALL is empty and symbols are exported), so a local JDK works.
+JNI_INC=""
+if [ -n "${JAVA_HOME}" ] && [ -f "${JAVA_HOME}/include/jni.h" ]; then
+    JNI_INC="${JAVA_HOME}/include"
+elif command -v java >/dev/null 2>&1; then
+    JAVA_REAL="$(readlink -f "$(command -v java)")"
+    JNI_INC="$(dirname "$(dirname "${JAVA_REAL}")")/include"
+fi
+if [ -z "${JNI_INC}" ] || [ ! -f "${JNI_INC}/jni.h" ]; then
+    echo "Need JDK headers (jni.h) to build wrapper.dll; set JAVA_HOME"
+    exit 1
+fi
+
+# Object list mirrors Makefile-windows-x86-32.nmake (DLL_OBJS) from the 3.7.0 source
+cat > Makefile-windows-x64-dll.mingw << 'MAKEFILE'
+CC = x86_64-w64-mingw32-gcc
+DLL_FLAGS = -O2 -DWIN32 -D_UNICODE -DUNICODE -D_WINDOWS -D_USRDLL -DDECODERJNI_VC8_EXPORTS -D_WINDLL
+DLL_LIBS = -lws2_32 -lwsock32 -lshlwapi -ladvapi32 -luser32 -lshell32 -liphlpapi -lcrypt32 -lwintrust -lpsapi -lole32 -loleaut32 -lmpr -lnetapi32 -lbcrypt -lntdll -ldbghelp
+
+OBJS = wrapper_i18n.o wrapperjni_win.o wrapperjni_debug.o wrapperjni_exception.o \
+       wrapperjni_utils.o wrapperinfo.o wrapperjni.o loggerjni.o wrapper_backend_base.o
+
+.PHONY: all clean
+
+all: wrapper.dll
+
+wrapper.dll: $(OBJS)
+	$(CC) -shared -o $@ $(OBJS) $(DLL_FLAGS) -I"$(JNI_INC)" -I"$(JNI_INC)/linux" $(DLL_LIBS)
+
+%.o: %.c
+	$(CC) -c $< -o $@ $(DLL_FLAGS) -I"$(JNI_INC)" -I"$(JNI_INC)/linux"
+
+clean:
+	rm -f $(OBJS) wrapper.dll
+MAKEFILE
+
+make -f Makefile-windows-x64-dll.mingw JNI_INC="${JNI_INC}"
+
+if [ ! -f wrapper.dll ]; then
+    echo "DLL build failed"
+    exit 1
+fi
+cp wrapper.dll "${INSTALL_DIR}/${WIN_DIR}/wrapper.dll"
+${HOST}-strip -s "${INSTALL_DIR}/${WIN_DIR}/wrapper.dll"
 
 echo "Syncing wrapper.jar to win-all..."
 if [ -f "${INSTALL_DIR}/all/wrapper.jar" ]; then

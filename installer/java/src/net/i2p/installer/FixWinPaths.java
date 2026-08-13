@@ -27,7 +27,7 @@ public class FixWinPaths{
      */
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.err.println("Usage: FixWinPaths [wrapper.conf]\r\n");
+            System.err.println("Usage: FixWinPaths [wrapper.config]\r\n");
             System.exit(1);
         }
 
@@ -37,7 +37,7 @@ public class FixWinPaths{
 
     }
     private static void replace(String file) {
-        if (!file.contains("wrapper.conf")) {return;} //  Shouldn't be true
+        if (!file.contains("wrapper.config")) {return;} //  Shouldn't be true
         String wConf = file;
         String wConfTemp = wConf + ".tmp";
 

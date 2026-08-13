@@ -171,7 +171,6 @@
     <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message="  debianhowto                                  Instructions on building Debian packages"/>
     <echo message="  git-tag                                      Create annotated Git tag for release (e.g. v2.12.0-16+)"/>
-    <echo message="  pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
     <echo message="  pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
     <echo message="  slackpkg                                     Build Slackware package in ./distro/Slackware/i2p"/>
     <echo message="  tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
@@ -2230,17 +2229,17 @@
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/eephead.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/i2prouter.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/fixperms.bat" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/create_shortcuts.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/install_i2p_service_winnt.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/set_config_dir_for_nt_service.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/uninstall_i2p_service_winnt.bat" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/install_service.ps1" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/uninstall_service.ps1" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/create_shortcuts.ps1" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/StartI2P+Service.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/StopI2P+Service.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/EnableI2P+Service.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/DisableI2P+Service.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="${build.root}build/utility.jar" todir="${pkg.temp.dir}"/>
-      <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/win32/">
-        <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt README.md"/>
-      </copy>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/win64/">
         <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md"/>
       </copy>
@@ -5465,96 +5464,6 @@
 
   <target name="debianrepo" depends="debian">
     <exec dir="debian" executable="./makerepo.sh" failonerror="true"/>
-  </target>
-
-  <target name="pkg-portable-clean" depends="distclean"/>
-
-  <!-- build a portable archive -->
-
-  <!--
-        *0* Since we simply pack all files in folder "build/" into our archive,
-         we need to make sure its small, with NO redundent jars or wars.
-         thus cleaning is required before each build
-    -->
-  <target name="buildSmallOnly" depends="pkg-portable-clean,buildSmall"/>
-
-  <!-- *1* preparing the jars by OS dependent de-bloating -->
-  <target name="preppkg-portable-win32-jbigi" depends="buildSmallOnly, jbigi-windows-only"/>
-
-  <target name="preppkg-portable-linux-jbigi" depends="buildSmallOnly, jbigi-linux-only"/>
-
-  <!-- *2* os independent procedure  -->
-  <target name="preppkg-portable-basic">
-    <mkdir dir="${pkg.temp.dir}"/>
-    <!-- non OS dependent configurations only, don't add *nux/win stuff here -->
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}">
-      <fileset dir="installer/resources/portable/configs/"/>
-    </copy>
-    <copy quiet="true" verbose="false" file="installer/resources/blocklist/blocklist.txt" todir="${pkg.temp.dir}/"/>
-    <copy quiet="true" verbose="false" file="installer/resources/blocklist/blocklist_tor.txt" todir="${pkg.temp.dir}/"/>
-    <copy quiet="true" verbose="false" file="installer/resources/hosts.txt" todir="${pkg.temp.dir}/"/>
-    <copy quiet="true" verbose="false" file="installer/resources/portable/README.md" tofile="${pkg.temp.dir}/LICENSE.md"/>
-    <!--<mkdir dir="${pkg.temp.dir}/addressbook"/>-->
-    <!--<copy quiet="true" verbose="false" file="apps/addressbook/subscriptions.txt" todir="${pkg.temp.dir}/addressbook/"/>-->
-    <!--<copy quiet="true" verbose="false" file="apps/addressbook/myhosts.txt"  todir="${pkg.temp.dir}/addressbook/"/>-->
-    <!-- config.txt is in installer/resources/portable -->
-    <mkdir dir="${pkg.temp.dir}/docs"/>
-    <copy quiet="true" verbose="false" file="installer/resources/initialNews/initialNews.xml" tofile="${pkg.temp.dir}/docs/news.xml" overwrite="true"/>
-    <copy quiet="true" verbose="false" file="installer/resources/console/readme/readme.html" tofile="${pkg.temp.dir}/docs/readme/readme.html"/>
-    <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/startconsole.html" todir="${pkg.temp.dir}/docs/"/>
-    <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/start.ico" todir="${pkg.temp.dir}/docs/"/>
-    <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/stop.ico" todir="${pkg.temp.dir}/docs/"/>
-    <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/console.ico" todir="${pkg.temp.dir}/docs/"/>
-    <!-- HTTP Header files, english only, if you need a different lang do it in a seperate target -->
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/docs/proxy/">
-      <fileset dir="installer/resources/console/proxy/" includes="**-header.ht"/>
-    </copy>
-    <!-- Theme light only -->
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/docs/themes/console/light/" overwrite="true">
-      <fileset dir="installer/resources/console/themes/light/" includes="**.css"/>
-    </copy>
-    <copy quiet="true" verbose="false" file="installer/resources/console/themes/light/console_big.css" todir="portable/docs/themes/console/light/"/>
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/docs/themes/console/images/">
-      <fileset dir="installer/resources/console/themes/console/images/"/>
-    </copy>
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/docs/themes/login/">
-      <fileset dir="installer/resources/console/themes/login/"/>
-    </copy>
-    <mkdir dir="${pkg.temp.dir}/webapps"/>
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/webapps/">
-      <fileset dir="${build.root}build/" includes="**.war"/>
-    </copy>
-    <mkdir dir="${pkg.temp.dir}/lib"/>
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/">
-      <fileset dir="${build.root}build/" includes="**.jar"/>
-    </copy>
-    <!-- 3rd party jars from apps/  -->
-    <!-- jrobin - without jobin , you lose graphs and get a lot of error entries in logs -->
-    <copy quiet="true" verbose="false" file="${build.root}build/jrobin.jar" tofile="${pkg.temp.dir}/lib/jrobin.jar"/>
-  </target>
-
-  <!-- *3* os dependent procedure/commands -->
-  <target name="preppkg-portable-win32" depends="preppkg-portable-win32-jbigi,preppkg-portable-basic">
-    <!--wrapper - Don't even think about it! I2P consumes apparently more mem without it on win32-->
-    <copy quiet="true" verbose="false" file="installer/lib/wrapper/win32/wrapper.dll" todir="${pkg.temp.dir}/lib"/>
-    <copy quiet="true" verbose="false" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
-    <copy quiet="true" verbose="false" file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="${pkg.temp.dir}/i2psvc.ex_"/>
-    <!--  copy the unpack/start batchfiles -->
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/portable">
-      <fileset dir="installer/resources/portable/win32/"/>
-    </copy>
-  </target>
-
-  <!-- *4* command for windows package -->
-  <target name="pkg-portable-win32" depends="preppkg-portable-win32, pack200">
-    <!-- i need the portable\ folder in .zip so basedir is set to . -->
-    <move file="${pkg.temp.dir}/portable" tofile="dist/"/>
-    <zip destfile="dist/portable-win32.zip" basedir="." level="9" includes="portable\**"/>
-    <checksum file="dist/portable-win32.zip" forceOverwrite="yes"/>
-    <move todir="dist/portable-win32">
-      <fileset dir="./dist" includes="**/*" excludes="README.md"/>
-    </move>
-    <echo message="Note: This target is untested, references an obsolete Java6 in the batch file, and may not work as intended."/>
   </target>
 
   <target name="removeComments">
