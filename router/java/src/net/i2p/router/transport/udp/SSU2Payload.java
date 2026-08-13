@@ -664,7 +664,7 @@ class SSU2Payload {
         /**
          * Repurpose this block for a new message. Only for pooling.
          * @param msg the outbound message state
-         * @since 2.13.1
+         * @since 0.9.71+
          */
         void setMessage(OutboundMessageState msg) {
             m = msg;
@@ -708,7 +708,7 @@ class SSU2Payload {
         /**
          * Repurpose this block for a new message. Only for pooling.
          * @param msg the outbound message state
-         * @since 2.13.1
+         * @since 0.9.71+
          */
         void setMessage(OutboundMessageState msg) {
             m = msg;
@@ -758,7 +758,7 @@ class SSU2Payload {
          * Repurpose this block for a new fragment. Only for pooling.
          * @param msg the outbound message state
          * @param frag the fragment number (must be &gt; 0)
-         * @since 2.13.1
+         * @since 0.9.71+
          */
         void setMessage(OutboundMessageState msg, int frag) {
             if (frag <= 0)

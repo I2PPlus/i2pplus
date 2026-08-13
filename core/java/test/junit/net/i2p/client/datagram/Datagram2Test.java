@@ -26,7 +26,7 @@ import org.junit.Test;
  * public key and the main signature must use the transient sig type, not the
  * destination sig type.
  *
- * @since 2.13.1
+ * @since 0.9.71+
  */
 public class Datagram2Test {
     private static final SigType DEST_TYPE = SigType.EdDSA_SHA512_Ed25519;

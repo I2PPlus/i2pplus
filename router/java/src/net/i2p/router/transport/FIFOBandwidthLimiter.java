@@ -295,7 +295,7 @@ public class FIFOBandwidthLimiter {
      * @param bytesIn the number of bytes requested
      * @param purpose the purpose of the request, for logging
      * @return the request to use; never null
-     * @since 2.13.1
+     * @since 0.9.71+
      */
     public Request requestInbound(Request candidate, int bytesIn, String purpose) {
         if (candidate != null) {
@@ -359,7 +359,7 @@ public class FIFOBandwidthLimiter {
      * @param priority 0 for now
      * @param purpose the purpose of the request, for logging
      * @return the request to use; never null
-     * @since 2.13.1
+     * @since 0.9.71+
      */
     public Request requestOutbound(Request candidate, int bytesOut, int priority, String purpose) {
         if (candidate != null) {
@@ -896,7 +896,7 @@ public class FIFOBandwidthLimiter {
          *
          *  @param bytes the byte count
          *  @param priority 0 for now
-         *  @since 2.13.1
+         *  @since 0.9.71+
          */
         public void reset(int bytes, int priority) {
             _total = bytes;

@@ -283,7 +283,7 @@ class NTCP2Payload {
 
         /**
          * Set the message, for reuse of a pooled block.
-         * @since 2.13.1
+         * @since 0.9.71+
          */
         void setMessage(I2NPMessage msg) {
             m = msg;
@@ -326,7 +326,7 @@ class NTCP2Payload {
 
         /**
          * Set the size, for reuse of a pooled block.
-         * @since 2.13.1
+         * @since 0.9.71+
          */
         void setSize(int size) {
             sz = size;

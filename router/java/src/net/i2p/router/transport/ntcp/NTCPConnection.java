@@ -893,7 +893,7 @@ public class NTCPConnection implements Closeable {
      *  prepareNextWriteNTCP2(), sendRouterInfo(), and sendTermination()
      *  call stacks, so no other thread can observe or modify them mid-write.
      *  Package-private for testing.
-     *  @since 2.13.1
+     *  @since 0.9.71+
      */
     static class BlockPool {
         /** per-frame block list */

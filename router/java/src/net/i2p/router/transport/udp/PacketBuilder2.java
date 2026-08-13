@@ -46,7 +46,7 @@ class PacketBuilder2 {
      *  Blocks are used only within buildPacket() for serialization and are never
      *  retained after the packet is built, so each thread can clear and refill
      *  its own pool across calls without synchronization.
-     *  @since 2.13.1
+     *  @since 0.9.71+
      */
     private static final class BlockPool {
         /** The list passed to writePayload(); cleared and refilled per call */
