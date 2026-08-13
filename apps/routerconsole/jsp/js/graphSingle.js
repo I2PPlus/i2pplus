@@ -161,7 +161,6 @@ function initButtons() {
  * @returns {void}
  */
 function initCss() {
-  if (window._graphCssTimer) {clearInterval(window._graphCssTimer);}
   if (!graphImage) {return;}
   injectCss();
 }
