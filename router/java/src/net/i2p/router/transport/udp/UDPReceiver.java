@@ -28,6 +28,8 @@ class UDPReceiver {
     private final UDPTransport _transport;
     private final PacketHandler _handler;
     private final SocketListener _endpoint;
+    /** Reused inbound bandwidth request, only touched on the runner thread */
+    private FIFOBandwidthLimiter.Request _bandwidthRequest;
 
     private static final boolean IS_ANDROID = SystemVersion.isAndroid();
     /** How long to sleep between throttle checks while inbound is throttled */
@@ -145,12 +147,16 @@ class UDPReceiver {
                     }
                     if (_context.commSystem().isDummy()) {packet.release();} // testing
                     else if (size >= SSU2Util.MIN_DATA_LEN) {
-                        FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(size, "UDP receiver");
+                        FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(_bandwidthRequest, size, "UDP receiver");
+                        _bandwidthRequest = req;
                         int waitCount = 0; // failsafe, don't wait forever
                         while (req.getPendingRequested() > 0 && waitCount++ < 5) {req.waitForNextAllocation();}
                         if (waitCount >= 5) {
                             // tell FBL we didn't receive it, but accept it anyway
                             req.abort();
+                            // aborted requests stay queued in the limiter until swept;
+                            // drop it so the next cycle allocates a fresh one
+                            _bandwidthRequest = null;
                             _context.statManager().addRateData("udp.receiveFailsafe", 1);
                         }
                         receive(packet);

@@ -282,6 +282,40 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
+     * Request some bytes, reusing the given request if possible.
+     * Does not block.
+     *
+     * If the candidate is a SimpleRequest that is complete (fully
+     * allocated and not aborted), it is reset and re-queued, avoiding a new
+     * allocation. If the candidate is the shared no-op request and the
+     * shortcut still applies, it is returned as-is.
+     *
+     * @param candidate the request from a previous allocation for this
+     *        consumer, or null for a new request
+     * @param bytesIn the number of bytes requested
+     * @param purpose the purpose of the request, for logging
+     * @return the request to use; never null
+     * @since 2.13.1
+     */
+    public Request requestInbound(Request candidate, int bytesIn, String purpose) {
+        if (candidate != null) {
+            if (candidate instanceof SimpleRequest) {
+                SimpleRequest sr = (SimpleRequest) candidate;
+                synchronized (sr) {
+                    if (!sr._aborted && sr.getPendingRequested() == 0) {
+                        sr.reset(bytesIn, 0);
+                        requestInbound(sr, bytesIn, purpose);
+                        return sr;
+                    }
+                }
+            } else if (candidate == _noop && shortcutSatisfyInboundRequest(bytesIn)) {
+                return _noop;
+            }
+        }
+        return requestInbound(bytesIn, purpose);
+    }
+
+    /**
      * The transports don't use this any more, so make it private
      * and a SimpleRequest instead of a Request
      * So there's no more casting
@@ -308,6 +342,41 @@ public class FIFOBandwidthLimiter {
         SimpleRequest req = new SimpleRequest(bytesOut, priority);
         requestOutbound(req, bytesOut, purpose);
         return req;
+    }
+
+    /**
+     * Request some bytes, reusing the given request if possible.
+     * Does not block.
+     *
+     * If the candidate is a SimpleRequest that is complete (fully
+     * allocated and not aborted), it is reset and re-queued, avoiding a new
+     * allocation. If the candidate is the shared no-op request and the
+     * shortcut still applies, it is returned as-is.
+     *
+     * @param candidate the request from a previous allocation for this
+     *        consumer, or null for a new request
+     * @param bytesOut the number of bytes requested
+     * @param priority 0 for now
+     * @param purpose the purpose of the request, for logging
+     * @return the request to use; never null
+     * @since 2.13.1
+     */
+    public Request requestOutbound(Request candidate, int bytesOut, int priority, String purpose) {
+        if (candidate != null) {
+            if (candidate instanceof SimpleRequest) {
+                SimpleRequest sr = (SimpleRequest) candidate;
+                synchronized (sr) {
+                    if (!sr._aborted && sr.getPendingRequested() == 0) {
+                        sr.reset(bytesOut, priority);
+                        requestOutbound(sr, bytesOut, purpose);
+                        return sr;
+                    }
+                }
+            } else if (candidate == _noop && shortcutSatisfyOutboundRequest(bytesOut)) {
+                return _noop;
+            }
+        }
+        return requestOutbound(bytesOut, priority, purpose);
     }
 
     private void requestOutbound(SimpleRequest req, int bytesOut, String purpose) {
@@ -799,16 +868,16 @@ public class FIFOBandwidthLimiter {
 
     private static class SimpleRequest implements Request {
         private int _allocated;
-        private final int _total;
-        private final long _requestId;
-        private final long _requestTime;
+        private int _total;
+        private long _requestId;
+        private long _requestTime;
         private int _allocationsSinceWait;
         private volatile boolean _aborted;
         private boolean _waited;
         final List<Request> satisfiedBuffer;
         private CompleteListener _lsnr;
         private Object _attachment;
-        private final int _priority;
+        private int _priority;
 
         /**
          *  Allocation request for the given byte count.
@@ -817,11 +886,30 @@ public class FIFOBandwidthLimiter {
          */
         public SimpleRequest(int bytes, int priority) {
             satisfiedBuffer = new ArrayList<>(1);
+            reset(bytes, priority);
+        }
+
+        /**
+         *  Reinitialize this request for a new allocation by the same consumer.
+         *  Only called when the request is complete (fully allocated) and no
+         *  longer in the pending queue; aborted requests are never reset.
+         *
+         *  @param bytes the byte count
+         *  @param priority 0 for now
+         *  @since 2.13.1
+         */
+        public void reset(int bytes, int priority) {
             _total = bytes;
             _priority = priority;
             // following two are temp until switch to PBQ
             _requestTime = System.currentTimeMillis();
             _requestId = __requestId.incrementAndGet();
+            _allocated = 0;
+            _allocationsSinceWait = 0;
+            _aborted = false;
+            _waited = false;
+            _lsnr = null;
+            _attachment = null;
         }
 
         /** Uses System clock, not context clock. */

@@ -283,7 +283,8 @@ class UDPPacket implements CDPQEntry {
     /** Request outbound bandwidth. */
     public void requestOutboundBandwidth() {
         verifyNotReleased();
-        FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestOutbound(_packet.getLength(), 0, "UDP sender");
+        FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestOutbound(_bandwidthRequest.get(),
+                                                                                        _packet.getLength(), 0, "UDP sender");
         _bandwidthRequest.set(req);
     }
 
@@ -299,12 +300,16 @@ class UDPPacket implements CDPQEntry {
             if (_released) return;
             _released = true;
         }
-        FIFOBandwidthLimiter.Request br = _bandwidthRequest.getAndSet(null);
+        FIFOBandwidthLimiter.Request br = _bandwidthRequest.get();
         if (br != null) {
             /** Bandwidth request lock. */
             synchronized (br) {
-                if (br.getPendingRequested() > 0)
+                if (br.getPendingRequested() > 0) {
                     br.abort();
+                    // aborted requests stay queued in the limiter until swept;
+                    // drop it so the next cycle allocates a fresh one
+                    _bandwidthRequest.set(null);
+                }
             }
         }
         if (CACHE)
