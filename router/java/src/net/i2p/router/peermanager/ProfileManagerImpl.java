@@ -42,6 +42,20 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
+     * Record the packet-loss (retransmit) ratio measured by the transport for a peer.
+     * Non-blocking. Will not update the profile if we can't get the lock.
+     *
+     * @param peer the peer
+     * @param ratio retransmitted / transmitted packets, 0.0 = healthy
+     * @since 0.9.71+
+     */
+    public void peerLossEvent(Hash peer, float ratio) {
+        PeerProfile data = getProfileNonblocking(peer);
+        if (data == null) return;
+        data.setLossRatio(ratio, _context.clock().now());
+    }
+
+    /**
      * Note that the router failed to send a message to the peer over the transport specified.
      * Non-blocking. Will not update the profile if we can't get the lock.
      */

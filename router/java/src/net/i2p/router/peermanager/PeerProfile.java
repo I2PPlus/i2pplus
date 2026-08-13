@@ -86,6 +86,10 @@ public class PeerProfile {
     /** Low latency flag, set when peer responds quickly to tunnel builds, persisted. */
     private volatile boolean _lowLatency;
     private final int _distance;
+    /** Packet-loss (retransmit) ratio reported by the transport, 0.0 = unknown/healthy. Not persisted. */
+    private transient volatile float _lossRatio;
+    /** When _lossRatio was last reported by the transport. */
+    private transient volatile long _lossRatioLastUpdate;
 
     /** Keep track of the fastest 8 throughputs unless slow, then 4. */
     private static final int THROUGHPUT_COUNT = SystemVersion.isSlow() ? 4 : 8;
@@ -194,6 +198,34 @@ public class PeerProfile {
      * @param low true for low latency
      */
     public void setLowLatency(boolean low) {_lowLatency = low;}
+
+    /**
+     * Packet-loss (retransmit) ratio reported by the transport, 0.0 = unknown/healthy.
+     *
+     * @return ratio of retransmitted packets to transmitted packets
+     * @since 0.9.71+
+     */
+    public float getLossRatio() {return _lossRatio;}
+
+    /**
+     * When the loss ratio was last reported by the transport.
+     *
+     * @return time in ms
+     * @since 0.9.71+
+     */
+    public long getLossRatioLastUpdate() {return _lossRatioLastUpdate;}
+
+    /**
+     * Record the packet-loss ratio reported by the transport.
+     *
+     * @param ratio retransmitted / transmitted packets, 0.0 = healthy
+     * @param now time in ms
+     * @since 0.9.71+
+     */
+    public void setLossRatio(float ratio, long now) {
+        _lossRatio = ratio;
+        _lossRatioLastUpdate = now;
+    }
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last

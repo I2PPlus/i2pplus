@@ -24,6 +24,15 @@ public interface ProfileManager {
     void messageSent(Hash peer, String transport, long msToSend, long bytesSent);
 
     /**
+     * Record the packet-loss (retransmit) ratio measured by the transport for a peer.
+     *
+     * @param peer the peer
+     * @param ratio retransmitted / transmitted packets, 0.0 = healthy
+     * @since 0.9.71+
+     */
+    void peerLossEvent(Hash peer, float ratio);
+
+    /**
      * Note that the router failed to send a message to the peer over the transport specified
      *
      */

@@ -132,6 +132,8 @@ public class PeerState {
     private int _packetsTransmitted;
     /** How many packets were retransmitted within the last RETRANSMISSION_PERIOD_WIDTH packets. */
     private int _packetsRetransmitted;
+    /** Last 5% loss-ratio bucket reported to the profile, -1 = nothing reported yet. Lock: _outboundLock. */
+    private int _lastReportedLossBucket = -1;
     private long _nextSequenceNumber;
     private final AtomicBoolean _fastRetransmit = new AtomicBoolean();
 
@@ -1508,6 +1510,7 @@ public class PeerState {
             _packetsRetransmitted += packets;
             congestionOccurred();
             adjustMTU(maxPktSz, false);
+            reportLossRatio();
         }
     }
 
@@ -1515,6 +1518,27 @@ public class PeerState {
     void packetsTransmitted(int packets) {
         synchronized(_outboundLock) {
             _packetsTransmitted += packets;
+            reportLossRatio();
+        }
+    }
+
+    /**
+     * Report the current retransmit ratio to the profile when it crosses a 5% bucket
+     * boundary since the last report. Bucketing keeps profile writes to at most one
+     * per bucket change per connection.
+     *
+     * Caller must hold _outboundLock.
+     *
+     * @since 0.9.71+
+     */
+    private void reportLossRatio() {
+        if (_packetsTransmitted <= 0)
+            return;
+        int bucket = (int) ((_packetsRetransmitted * 20L) / _packetsTransmitted);
+        if (bucket != _lastReportedLossBucket) {
+            _lastReportedLossBucket = bucket;
+            _context.profileManager().peerLossEvent(_remotePeer,
+                                                    (float) _packetsRetransmitted / (float) _packetsTransmitted);
         }
     }
 

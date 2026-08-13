@@ -175,6 +175,15 @@ public class ProfileOrganizer {
      */
     private static final int MIN_FAST_TIGHT_COUNT = 200;
 
+    /** Config property for the loss ratio above which a peer is demoted from fast/high-cap tiers. */
+    public static final String PROP_LOSSY_THRESHOLD = "profileOrganizer.lossyThreshold";
+    /** Default loss ratio threshold (20% of packets retransmitted). */
+    private static final float DEFAULT_LOSSY_THRESHOLD = 0.20f;
+    /** Config property for how long a reported loss ratio stays fresh. */
+    public static final String PROP_LOSSY_WINDOW = "profileOrganizer.lossyWindow";
+    /** Default freshness window in ms (10 minutes). */
+    private static final long DEFAULT_LOSSY_WINDOW = 10 * 60 * 1000L;
+
     /** Config property for the maximum number of peer profiles. */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
     /** Runtime-adjustable default max profile count. */
@@ -1137,7 +1146,8 @@ public class ProfileOrganizer {
                     if (_fastPeers.size() >= target) break;
                     PeerProfile profile = candidates.get(i);
                     if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
-                        !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile)) {
+                        !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile) &&
+                        !hasHighLoss(profile, now)) {
                         _fastPeers.put(profile.getPeer(), profile);
                         added++;
                     }
@@ -1152,7 +1162,7 @@ public class ProfileOrganizer {
                         PeerProfile profile = candidates.get(i);
                         if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
                             isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile) &&
-                            !hasRecentTunnelFailures(profile)) {
+                            !hasRecentTunnelFailures(profile) && !hasHighLoss(profile, now)) {
                             _fastPeers.put(profile.getPeer(), profile);
                             added++;
                         }
@@ -1173,6 +1183,7 @@ public class ProfileOrganizer {
                         if (!isSelectable(profile.getPeer())) continue;
                         if (isLowTunnelAcceptance(profile)) continue;
                         if (hasRecentTunnelFailures(profile)) continue;
+                        if (hasHighLoss(profile, now)) continue;
                         // Require recent activity — don't fill fast tier with stale peers
                         if (profile.getLastHeardFrom() < activeCutoff &&
                             profile.getLastSendSuccessful() < activeCutoff) continue;
@@ -1195,6 +1206,7 @@ public class ProfileOrganizer {
                     if (!isSelectable(profile.getPeer())) continue;
                     if (isLowTunnelAcceptance(profile)) continue;
                     if (hasRecentTunnelFailures(profile)) continue;
+                    if (hasHighLoss(profile, now)) continue;
                     // Require recent activity — don't fill high-cap tier with stale peers
                     if (profile.getLastHeardFrom() < activeCutoff &&
                         profile.getLastSendSuccessful() < activeCutoff) continue;
@@ -1210,7 +1222,7 @@ public class ProfileOrganizer {
                 Iterator<Map.Entry<Hash, PeerProfile>> fastIt = _fastPeers.entrySet().iterator();
                 while (fastIt.hasNext()) {
                     PeerProfile profile = fastIt.next().getValue();
-                    if (hasRecentTunnelFailures(profile)) {
+                    if (hasRecentTunnelFailures(profile) || hasHighLoss(profile, now)) {
                         if (_log.shouldDebug()) {
                             _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
                                        "] from fast tier: recent tunnel failures");
@@ -1223,7 +1235,7 @@ public class ProfileOrganizer {
                 Iterator<Map.Entry<Hash, PeerProfile>> hcIt = _highCapacityPeers.entrySet().iterator();
                 while (hcIt.hasNext()) {
                     PeerProfile profile = hcIt.next().getValue();
-                    if (hasRecentTunnelFailures(profile)) {
+                    if (hasRecentTunnelFailures(profile) || hasHighLoss(profile, now)) {
                         if (_log.shouldDebug()) {
                             _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
                                        "] from high-cap tier: recent tunnel failures");
@@ -1246,6 +1258,7 @@ public class ProfileOrganizer {
                     if (!isSelectable(peer)) continue;
                     PeerProfile profile = entry.getValue();
                     if (hasRecentTunnelFailures(profile)) continue;
+                    if (hasHighLoss(profile, now)) continue;
                     if (isLowTunnelAcceptance(profile)) continue;
                     _fastPeers.put(peer, profile);
                     restored++;
@@ -1265,6 +1278,7 @@ public class ProfileOrganizer {
                     if (!isSelectable(peer)) continue;
                     PeerProfile profile = entry.getValue();
                     if (hasRecentTunnelFailures(profile)) continue;
+                    if (hasHighLoss(profile, now)) continue;
                     if (isLowTunnelAcceptance(profile)) continue;
                     _highCapacityPeers.put(peer, profile);
                     restored++;
@@ -1795,8 +1809,9 @@ public class ProfileOrganizer {
         boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
         boolean congested = isCongestedPeer(peer);
         boolean recentFailures = hasRecentTunnelFailures(profile);
+        boolean highLoss = hasHighLoss(profile, _context.clock().now());
 
-        if (!isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested) {
+        if (!isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss) {
             if (highLatency && _log.shouldDebug()) {
                 _log.debug("Skipping peer [" + peer.toBase32().substring(0, 6) +
                            "] from promotion: highLatency=true capBonus=" +
@@ -2197,6 +2212,24 @@ public class ProfileOrganizer {
         Rate failed = th.getFailedRate().getRate(RateConstants.ONE_HOUR);
         if (failed == null) return false;
         return failed.getCurrentEventCount() > 0;
+    }
+
+    /**
+     * True if the transport recently measured a packet-loss (retransmit) ratio at or above
+     * {@link #PROP_LOSSY_THRESHOLD} on this peer's connection. Lossy peers are demoted from
+     * the fast and high-capacity tiers so tunnel builds stop repeatedly selecting them.
+     * A peer with no loss data, or stale data, is not demoted.
+     *
+     * @param profile the profile
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    private boolean hasHighLoss(PeerProfile profile, long now) {
+        float ratio = profile.getLossRatio();
+        if (ratio <= 0.0f)
+            return false;
+        return ratio >= _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD) &&
+               now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW);
     }
 
     /**
