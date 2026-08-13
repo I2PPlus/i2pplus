@@ -183,4 +183,11 @@ public class VMCommSystem extends CommSystemFacade {
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         out.write("<p class=\"infohelp vmcomm\">Router is running without transports: <i>i2p.vmCommSystem=true</i></p>");
     }
+
+    /**
+     * No transports, so no IPs to reverse-resolve.
+     * @since 0.9.71+
+     */
+    @Override
+    public boolean enableReverseLookups() {return false;}
 }
