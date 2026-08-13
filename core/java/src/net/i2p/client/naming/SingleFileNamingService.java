@@ -57,6 +57,10 @@ public class SingleFileNamingService extends NamingService {
     /** Last write time */
     private long _lastWrite;
 
+    /** hostname -> base64 key cache, guarded by _fileLock; valid when _cacheStamp >= file mtime */
+    private final Map<String, String> _keyCache = new HashMap<>(64);
+    private volatile long _cacheStamp;
+
     private volatile boolean _isClosed;
 
     /**
@@ -150,26 +154,47 @@ public class SingleFileNamingService extends NamingService {
      */
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getKey(String host) throws IOException {
-        BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
-            String line = null;
-            String search = host + '=';
-            while ((line = in.readLine()) != null) {
-                if (!line.startsWith(search)) continue;
-                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
-                int split = line.indexOf('=');
-                return line.substring(split + 1); // .trim() ??????????????
+            if (_file.lastModified() > _cacheStamp) {
+                loadKeyCacheLocked();
             }
+            return _keyCache.get(host);
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    /**
+     *  Full-scan parse of the hosts file into _keyCache (hostname -> base64 key).
+     *  Caller must hold the read lock. Sets _cacheStamp on success.
+     *  @since 0.9.71+
+     */
+    private void loadKeyCacheLocked() throws IOException {
+        BufferedReader in = null;
+        try {
+            if (!_file.exists()) {
+                _keyCache.clear();
+                _cacheStamp = 0;
+                return;
+            }
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+            _keyCache.clear();
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                if (line.startsWith("#")) continue;
+                String clean = line.indexOf('#') > 0 ? line.substring(0, line.indexOf('#')).trim() : line.trim();
+                int split = clean.indexOf('=');
+                if (split <= 0) continue;
+                _keyCache.put(clean.substring(0, split), clean.substring(split + 1));
+            }
+            _cacheStamp = _file.lastModified();
         } finally {
             if (in != null)
                 try {
                     in.close();
                 } catch (IOException ioe) { /* ignored */ }
-            releaseReadLock();
         }
-        return null;
     }
 
     /**
@@ -211,6 +236,7 @@ public class SingleFileNamingService extends NamingService {
             out.close();
             boolean success = FileUtil.rename(tmp, _file);
             if (success) {
+                _cacheStamp = 0;
                 for (NamingServiceListener nsl : _listeners) {
                     nsl.entryChanged(this, hostname, d, options);
                 }
@@ -266,6 +292,7 @@ public class SingleFileNamingService extends NamingService {
             for (NamingServiceListener nsl : _listeners) {
                 nsl.entryAdded(this, hostname, d, options);
             }
+            _cacheStamp = 0;
             return true;
         } catch (IOException ioe) {
             _log.error("Error adding " + hostname, ioe);
@@ -344,6 +371,7 @@ public class SingleFileNamingService extends NamingService {
             }
             success = FileUtil.rename(tmp, _file);
             if (success) {
+                _cacheStamp = 0;
                 for (NamingServiceListener nsl : _listeners) {
                     nsl.entryRemoved(this, hostname);
                 }
