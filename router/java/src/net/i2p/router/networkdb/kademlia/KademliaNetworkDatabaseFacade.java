@@ -819,6 +819,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (ds == null || !ds.isLeaseSet()) {return null;}
         LeaseSet ls = (LeaseSet) ds;
         if (ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+            // Track every LeaseSet we actually use so refreshClientLeaseSets()
+            // keeps it current - mainline behavior. Skip our own published
+            // LeaseSets; the refresh loop drops those anyway.
+            if (isClientDb() && !_context.clientManager().isLocal(key)) {
+                _clientLeaseSetAccessTime.put(key, _context.clock().now());
+            }
             return ls;
         }
         key = blindCache().getHash(key);
@@ -830,22 +836,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Record access to a LeaseSet for refresh tracking.
      * Call this when actively using a LeaseSet (tunnel build, outbound message).
-     * Only tracks if we have tunnels built AND there's a hostname.
+     * Tracks all remote destinations, hostname or not, tunnel pool or not -
+     * b32/hash-only services (SAM, BOB, anonymous browsing) need refreshing too,
+     * and getOutboundPool() is keyed by local client hash, so it can never be
+     * used to gate remote destinations.
      * Do NOT call for HostChecker lookups.
      */
     @Override
     public void accessLeaseSet(Hash key) {
         if (!isClientDb() || key == null) return;
-        // Track even with 0 valid tunnels — without tracking the LeaseSet
-        // never gets refreshed, creating a circular dependency when tunnel
-        // building is already struggling (no LS → no build → no LS).
-        TunnelPool pool = _context.tunnelManager().getOutboundPool(key);
-        if (pool == null) return;
-        // Only track if there's a hostname (excludes HostChecker lookups)
-        NamingService ns = _context.namingService();
-        if (ns == null) return;
-        String hostname = ns.reverseLookup(key);
-        if (hostname == null) return;
+        // Never track our own published LeaseSets or tunnel participants
+        if (_context.clientManager().isLocal(key)) return;
         long now = _context.clock().now();
         // Use compute for atomic check-and-update
         _clientLeaseSetAccessTime.compute(key, (k, lastUpdate) -> {
@@ -2963,8 +2964,7 @@ return false;
             }
         }
 
-        NamingService ns = _context.namingService();
-        if (ns == null) return;
+        NamingService ns = _context.namingService(); // log names only - never gates refresh
 
         Iterator<Map.Entry<Hash, Long>> iter = _clientLeaseSetAccessTime.entrySet().iterator();
         int processed = 0;
@@ -2979,34 +2979,13 @@ return false;
                 continue;
             }
 
-            // Refresh even with 0 valid tunnels — stale LeaseSet causes
-            // circular dependency: no LS → no tunnel build → no LS refresh.
-            // Failed remote lookups are harmless.
-            TunnelPool pool = _context.tunnelManager().getOutboundPool(key);
-            if (pool == null) {
-                iter.remove();
-                removed++;
-                if (_log.shouldDebug()) {
-                    _log.debug("Removing client LeaseSet - no pool: " +
-                              (ns != null ? ns.reverseLookup(key) : key.toBase32().substring(0, 6)));
-                }
-                continue;
-            }
-
-            String hostname = ns.reverseLookup(key);
-            if (hostname == null) {
-                iter.remove();
-                removed++;
-                continue;
-            }
-
             // Skip LeaseSets we publish (our own local destinations or floodfill)
             // We shouldn't refresh our own LeaseSets - that would be redundant
             if (_context.clientManager().isLocal(key)) {
                 iter.remove();
                 removed++;
                 if (_log.shouldDebug()) {
-                    _log.debug("Skipping refresh - we publish this LeaseSet: " + hostname);
+                    _log.debug("Skipping refresh - we publish this LeaseSet: " + logName(ns, key));
                 }
                 continue;
             }
@@ -3022,7 +3001,7 @@ return false;
                         _clientLeaseSetAccessTime.put(key, now);
                         lookupLeaseSetRemotely(key, _dbid);
                         if (_log.shouldInfo()) {
-                            _log.info("Proactive refresh for " + hostname + " (expires in " + (timeToExpiry/1000) + "s)");
+                            _log.info("Proactive refresh for " + logName(ns, key) + " (expires in " + (timeToExpiry/1000) + "s)");
                         }
                         processed++;
                         continue;
@@ -3033,16 +3012,18 @@ return false;
                 iter.remove();
                 removed++;
                 if (_log.shouldInfo()) {
-                    _log.info("Removing stale client LeaseSet: " + hostname);
+                    _log.info("Removing stale client LeaseSet: " + logName(ns, key));
                 }
             } else {
                 // Refresh every cycle while tracked — the server may have
                 // published new tunnel endpoints.  Do not gate on access
-                // recency; stale LS data causes connection failures.
-                _clientLeaseSetAccessTime.put(key, now);
+                // recency; stale LS data causes connection failures.  Do NOT
+                // re-arm the access time here — only real access keeps an
+                // entry alive, so one-shot destinations drop out after the
+                // inactive window instead of being refreshed forever.
                 lookupLeaseSetRemotely(key, _dbid);
                 if (_log.shouldInfo()) {
-                    _log.info("Refreshing client LeaseSet: " + hostname);
+                    _log.info("Refreshing client LeaseSet: " + logName(ns, key));
                 }
                 processed++;
             }
@@ -3051,6 +3032,21 @@ return false;
             _log.info("Client LeaseSet refresh: processed " + processed + ", removed " + removed +
                       ", remaining " + _clientLeaseSetAccessTime.size());
         }
+    }
+
+    /**
+     *  Best-effort display name for a tracked LeaseSet in logs: the registered
+     *  hostname when available, otherwise a truncated b32. Never gates refresh.
+     *
+     *  @param ns may be null
+     *  @since 0.9.71+
+     */
+    private static String logName(NamingService ns, Hash key) {
+        if (ns != null) {
+            String hostname = ns.reverseLookup(key);
+            if (hostname != null) {return hostname;}
+        }
+        return key.toBase32().substring(0, 6);
     }
 
     /** Job to refresh client LeaseSets periodically. Only for client NetDB - refreshes LeaseSets we're actively using. */
