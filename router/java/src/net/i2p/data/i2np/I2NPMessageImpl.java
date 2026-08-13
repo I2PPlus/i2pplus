@@ -11,6 +11,7 @@ package net.i2p.data.i2np;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -44,7 +45,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  Extending classes should take care when accessing this field;
      *  to ensure initialization, use getUniqueId() instead.
      */
-    private long _uniqueId = -1;
+    private final AtomicLong _uniqueId = new AtomicLong(-1);
 
     /**
      * DEFAULT_EXPIRATION_MS.
@@ -131,9 +132,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             type = data[cur] & 0xff;
             cur++;
         }
-        synchronized(this) {
-            _uniqueId = DataHelper.fromLong(data, cur, 4);
-        }
+        _uniqueId.set(DataHelper.fromLong(data, cur, 4));
         cur += 4;
         _expiration = DataHelper.fromLong(data, cur, DataHelper.DATE_LENGTH);
         cur += DataHelper.DATE_LENGTH;
@@ -163,10 +162,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
         //long start = _context.clock().now();
         if (_log.shouldDebug()) {
-            long uniqueId;
-            synchronized(this) {
-                uniqueId = _uniqueId;
-            }
+            long uniqueId = _uniqueId.get();
             _log.debug("Reading bytes: [Type " + type + "] [ID " + uniqueId + "]\n* Expires: " + new Date(_expiration));
         }
         try {
@@ -183,7 +179,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * Replay resistant message Id
      * @return the unique id
      */
-    public synchronized long getUniqueId(long msgIDBloomXor) {
+    public long getUniqueId(long msgIDBloomXor) {
         return getUniqueId() ^ msgIDBloomXor;
     }
 
@@ -191,18 +187,23 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  Unique id for this message, lazily initialized when negative.
      *  @return the unique id
      */
-    public synchronized long getUniqueId() {
+    public long getUniqueId() {
         // Lazy initialization of value
-        if (_uniqueId < 0) {
-            _uniqueId = _context.random().nextLong(MAX_ID_VALUE);
+        long id = _uniqueId.get();
+        if (id < 0) {
+            long newId = _context.random().nextLong(MAX_ID_VALUE);
+            if (_uniqueId.compareAndSet(-1, newId))
+                id = newId;
+            else
+                id = _uniqueId.get();
         }
-        return _uniqueId;
+        return id;
     }
 
     /**
      *  The ID is set to a random value when written but it can be overridden here.
      */
-    public synchronized void setUniqueId(long id) { _uniqueId = id; }
+    public void setUniqueId(long id) { _uniqueId.set(id); }
 
     /**
      * Date after which the message should be dropped (and the associated uniqueId forgotten)
@@ -218,6 +219,10 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
     /**
      *  Serialized message size, including the 16-byte header.
+     *  <p>
+     *  Kept synchronized: subclasses (DatabaseStoreMessage, TunnelGatewayMessage)
+     *  lazily cache mutable state in calculateWrittenLength() and rely on the
+     *  enclosing monitor for safe publication.
      *  @return the message size
      */
     public synchronized int getMessageSize() {
