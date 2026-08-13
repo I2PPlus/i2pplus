@@ -457,8 +457,8 @@ public class MetaInfo {
                         for (int j = 0; j < i; j++) {
                             mAttributes.add("");
                         }
-                        mAttributes.add(s);
                     }
+                    mAttributes.add(s);
                 } else {
                     if (mAttributes != null) {
                         mAttributes.add("");
@@ -591,7 +591,7 @@ public class MetaInfo {
      * @since 0.9.48
      */
     public boolean isPaddingFile(int filenum) {
-        if (attributes == null) {
+        if (attributes == null || filenum < 0 || filenum >= attributes.size()) {
             return false;
         }
         return attributes.get(filenum).indexOf('p') >= 0;
@@ -880,7 +880,7 @@ public class MetaInfo {
                 file.put("path", new BEValue(befiles));
                 file.put("length", new BEValue(lengths.get(i)));
                 String attr = null;
-                if (attributes != null) {
+                if (attributes != null && i < attributes.size()) {
                     attr = attributes.get(i);
                     if (!attr.isEmpty()) {
                         file.put("attr", new BEValue(DataHelper.getASCII(attr)));
