@@ -1038,19 +1038,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Send a peers response.
-     *
-     * @param nInfo who to send it to
-     * @param msgID the message ID to respond to
-     * @param token non-null token to include
-     * @param peers the list of peer hashes to send
-     * @return success
-     */
-    private boolean sendPeers(NodeInfo nInfo, MsgID msgID, Token token, List<byte[]> peers) {
-        return sendPeers(nInfo, msgID, token, peers, null, null);
-    }
-
-    /**
      * Send a peers response, optionally with BEP 33 scrape bloom filters.
      *
      * @param nInfo who to send it to

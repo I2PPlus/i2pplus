@@ -4650,9 +4650,6 @@ public class I2PSnarkServlet extends BasicServlet {
     /** Translate a pluralized string. @since 0.7.14 */
     private String ngettext(String s, String p, int n) {return _manager.util().getString(n, s, p);}
 
-    /** Dummy for tagging. */
-    private static String ngettext(String s, String p) {return null;}
-
     /** Format the file size. */
     private static String formatSize(long bytes) {return DataHelper.formatSize2(bytes) + 'B';}
 
