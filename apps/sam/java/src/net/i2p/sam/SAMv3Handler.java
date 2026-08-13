@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
+import java.util.List;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
@@ -331,20 +332,29 @@ class SAMv3Handler extends SAMv1Handler
             // Close the I2P session and its resources
             session.close();
 
-            // Interrupt and wait for thread group threads, with timeout
+            // Interrupt and wait for session threads, with timeout
             // to avoid blocking the selector thread indefinitely
-            rec.getThreadGroup().interrupt();
+            List<Thread> threads = rec.getThreads();
+            for (Thread t : threads)
+                t.interrupt();
             long deadline = System.currentTimeMillis() + 10000;
-            while (rec.getThreadGroup().activeCount() > 0 && System.currentTimeMillis() < deadline) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+            boolean alive = true;
+            while (alive && System.currentTimeMillis() < deadline) {
+                alive = false;
+                for (Thread t : threads) {
+                    if (t.isAlive()) {
+                        alive = true;
+                        break;
+                    }
+                }
+                if (alive) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
-            try {
-                rec.getThreadGroup().destroy();
-            } catch (IllegalThreadStateException e) { /* threads still running, ignore */ }
 
             session = null;
             streamSession = null;

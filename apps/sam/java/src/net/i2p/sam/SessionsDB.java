@@ -64,7 +64,6 @@ class SessionsDB {
 				throw new ExistingDestException();
 			}
 		}
-		session.createThreadGroup("SAM session "+nick);
 		map.put(nick, session);
 	}
 
@@ -83,7 +82,6 @@ class SessionsDB {
 		if (map.containsKey(nick)) {
 			throw new ExistingIdException();
 		}
-		session.createThreadGroup("SAM session "+nick);
 		map.put(nick, session);
 	}
 

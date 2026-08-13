@@ -8,6 +8,9 @@ package net.i2p.sam;
  *
  */
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -19,7 +22,7 @@ import java.util.Properties;
 class SessionRecord {
 	private final String m_dest;
 	private final Properties m_props;
-	private ThreadGroup m_threadgroup;
+	private final List<Thread> m_threads = new ArrayList<Thread>();
 	private final SAMv3Handler m_handler;
 	private volatile long _lastAccessed; // NOSONAR volatile is correct: assigned and read as a timestamp, not read-modify-written
 
@@ -63,7 +66,7 @@ class SessionRecord {
 	{
 		m_dest = in.getDest();
 		m_props = in.getProps();
-		m_threadgroup = in.getThreadGroup();
+		m_threads.addAll(in.getThreads());
 		m_handler = in.getHandler();
 		_lastAccessed = in._lastAccessed;
 	}
@@ -101,23 +104,28 @@ class SessionRecord {
 	}
 
 	/**
-	 * Get the thread group for this session.
+	 * Get a snapshot of the threads running for this session.
 	 *
-	 * @return the thread group, or null if not yet created
+	 * @return the session threads, as a copy
 	 */
-	synchronized public ThreadGroup getThreadGroup()
+	synchronized public List<Thread> getThreads()
 	{
-		return m_threadgroup;
+		return new ArrayList<Thread>(m_threads);
 	}
 
 	/**
-	 * Create a thread group for this session if one does not already exist.
+	 * Register a new session thread and start it.
 	 *
-	 * @param name the name of the thread group
+	 * @param thread the thread to register and start
 	 */
-	synchronized public void createThreadGroup(String name)
+	synchronized public void startThread(Thread thread)
 	{
-		if (m_threadgroup == null)
-			m_threadgroup = new ThreadGroup(name);
+		// drop finished threads so the list only tracks live ones
+		for (Iterator<Thread> it = m_threads.iterator(); it.hasNext();) {
+			if (!it.next().isAlive())
+				it.remove();
+		}
+		m_threads.add(thread);
+		thread.start();
 	}
 }
