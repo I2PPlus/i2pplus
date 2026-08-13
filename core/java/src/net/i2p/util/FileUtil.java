@@ -96,7 +96,6 @@ public class FileUtil {
      * @since 0.9.7
      */
     public static boolean extractZip(File zipfile, File targetDir, int logLevel) {
-        int files = 0; // NOSONAR S1481
         ZipFile zip = null;
         try {
             final byte[] buf = new byte[8192];
@@ -153,7 +152,6 @@ public class FileUtil {
                             }
                             if (logLevel == Log.DEBUG) System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         }
-                        files++;
                     } catch (IOException ioe) {
                         if (logLevel <= Log.ERROR) {
                             System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + ')');
@@ -196,7 +194,6 @@ public class FileUtil {
                     zip.close();
                 } catch (IOException ioe) { /* ignored */ }
             }
-            // if (files > 0 && logLevel <= Log.WARN)
         }
     }
 
