@@ -1651,9 +1651,10 @@ public class TunnelPool {
         long now = _context.clock().now();
         int wanted = Math.min(_settings.getQuantity(), LeaseSet.MAX_LEASES);
 
-        // Exclude tunnels expiring within 2 min — gives the LeaseSet time to
-        // propagate through the floodfill network before the lease expires.
-        long expireAfter = now + 2L * 60 * 1000;
+        // Exclude tunnels expiring within LEASE_MIN_REMAINING_MS — gives the
+        // LeaseSet time to propagate through the floodfill network before the
+        // lease expires.
+        long expireAfter = now + LEASE_MIN_REMAINING_MS;
 
         boolean hasGoodTunnel = false;
         for (TunnelInfo t : tunnels) {
@@ -2644,10 +2645,16 @@ public class TunnelPool {
     }
 
     /**
-     * Build a Lease from a single tunnel's gateway, using the HopConfig
-     * expiration (original full lifetime) rather than the possibly-shortened
-     * failure expiration.  The lease ends {@link #LEASE_SAFETY_MARGIN} before
-     * the tunnel expires so peers re-fetch while the gateway still routes.
+     * Build a Lease from a single tunnel's gateway.  The lease ends
+     * {@link #LEASE_SAFETY_MARGIN} before the tunnel expires so peers
+     * re-fetch while the gateway still routes.
+     * <p>
+     * The end date is bounded by the shorter of the tunnel's overall
+     * expiration (shortened when the tunnel is scheduled for early expiry,
+     * e.g. pruned excess) and the gateway hop's original full lifetime.  A
+     * tunnel scheduled for early expiry stops routing when the shortened
+     * expiration fires, so a lease outliving that would leave the destination
+     * unreachable until the LeaseSet is republished.
      */
     private Lease buildLeaseFromTunnel(TunnelInfo cfg) {
         TunnelId inId = cfg.getReceiveTunnelId(0);
@@ -2656,7 +2663,7 @@ public class TunnelPool {
         Lease lease = new Lease();
         long expiration = cfg.getExpiration();
         if (cfg instanceof TunnelCreatorConfig) {
-            expiration = ((TunnelCreatorConfig) cfg).getConfig(0).getExpiration();
+            expiration = Math.min(expiration, ((TunnelCreatorConfig) cfg).getConfig(0).getExpiration());
         }
         // End the lease before the tunnel dies: the gateway keeps routing for
         // the margin, giving peers time to fetch the successor LeaseSet.
@@ -2685,6 +2692,11 @@ public class TunnelPool {
      * kept to prevent pool collapse and must be available for LS fallback.
      * Zero-hop tunnels are never eligible unless the pool is expressly
      * configured for zero hops (length 0).
+     * <p>
+     * Only tunnels with at least {@link #LEASE_MIN_REMAINING_MS} remaining
+     * are eligible: the lease ends {@link #LEASE_SAFETY_MARGIN} before the
+     * tunnel expires and is floored 60s out, so a tunnel closer to death
+     * would produce a lease ending after the gateway stops routing.
      *
      * @param tunnels list to search; the caller must not modify it concurrently
      * @param isServerPool if true, don't skip getTunnelFailed() tunnels
@@ -2703,7 +2715,7 @@ public class TunnelPool {
             if (t.getReceiveTunnelId(0) == null || t.getPeer(0) == null) {
                 continue;
             }
-            if (t.getExpiration() <= now + 10L * 1000) {continue;}
+            if (t.getExpiration() <= now + LEASE_MIN_REMAINING_MS) {continue;}
             int failures = t.getConsecutiveFailures();
             if (best == null || failures < bestFailures ||
                 (failures == bestFailures && t.getExpiration() > best.getExpiration())) {
