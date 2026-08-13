@@ -1,47 +1,7 @@
-# Building and Installing I2P+ from Source
+# Installing I2P+
 
-## Prerequisites
-
-| Requirement      | Details                                                        |
-| ---------------- | -------------------------------------------------------------- |
-| **Java SDK**     | 1.8 or higher (OpenJDK, Oracle, or Microsoft JDK on Windows).  |
-| **Apache Ant**   | 1.9.8 or higher                                                |
-| **GNU gettext**  | `xgettext`, `msgfmt`, and `msgmerge` must be on your PATH      |
-| **Locale**       | Build environment must use a UTF-8 locale                      |
-
-Java 17 will become the minimum after the Jetty 12 migration.
-
-For JVM compatibility details, see https://i2pplus.github.io/i2pplus
-
-## Building the installer
-
-From the project root:
-
-```sh
-ant pkg
-```
-
-On non-x86 platforms, use one of the following instead:
-
-```sh
-ant installer-linux
-ant installer-freebsd
-ant installer-osx
-```
-
-This produces:
-
-| File               | Description                                           |
-| ------------------ | ----------------------------------------------------- |
-| `install.jar`      | GUI and console installer                             |
-| `i2pinstall.exe`   | Cross-platform wrapped installer (`ant pkg` only)     |
-| `i2pupdate.zip`    | Update package (`ant pkg` only)                       |
-
-### Building native crypto libraries (jbigi)
-
-JBIGI provides hardware-optimised modular exponentiation via GMP. Pre-built
-binaries for common architectures are included in the installer. To rebuild
-for your specific CPU, see [`core/c/jbigi/README.md`](../core/c/jbigi/README.md).
+This document covers installation, running, and system services for end users.
+Developers building I2P+ from source should see [BUILD.md](BUILD.md).
 
 ## Installing
 
