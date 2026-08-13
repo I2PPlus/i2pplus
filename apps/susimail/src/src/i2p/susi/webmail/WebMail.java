@@ -3635,11 +3635,12 @@ public class WebMail extends HttpServlet {
         } else {
             sb.append("<td class=\"mailListSender ").append(jslink).append(" title=\"")
               .append(mail.sender.replace("\"", "")).append("\">");
-            if (mail.shortSender.contains("(")) {
-                int index = mail.shortSender.indexOf("(");
-                mail.shortSender = escapeHtml(mail.shortSender.substring(0, index));
+            String shortSender = mail.shortSender;
+            if (shortSender.contains("(")) {
+                int index = shortSender.indexOf("(");
+                shortSender = escapeHtml(shortSender.substring(0, index));
             }
-            sb.append(link).append(mail.shortSender.replaceAll("@.*", "").replace("&lt;", "").replace("&gt;", ""))
+            sb.append(link).append(shortSender.replaceAll("@.*", "").replace("&lt;", "").replace("&gt;", ""))
               .append("</a></td>");
         }
 
@@ -3924,7 +3925,7 @@ public class WebMail extends HttpServlet {
         buf.append("</div>\n</div>\n").append("<div id=viewmail>");
         // can't move unless has body
         // can't move from drafts
-        if (mail.hasBody() && mc.getFolderName() != null && !mc.getFolderName().equals(DIR_DRAFTS)) {
+        if (mail != null && mail.hasBody() && mc.getFolderName() != null && !mc.getFolderName().equals(DIR_DRAFTS)) {
             buf.append("<div class=folders>")
                .append(button(MOVE_TO, _t("Move to Folder")))
                .append(showFolderSelect(mc.getFolderName(), true))
