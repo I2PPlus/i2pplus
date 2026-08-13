@@ -1003,8 +1003,8 @@ public class GeoIP {
         if (asTradingScore > bestScore) {best = asTradingResult; bestScore = asTradingScore;}
 
         // Fallback: if any pass detected reversed words, accept even without known-word matches
-        if (best == name && !wordResult.isEmpty()) {return wordResult;}
-        if (best == name && !allWordResult.isEmpty() && allWordScore > scoreCandidate(name)) {
+        if (best.equals(name) && !wordResult.isEmpty()) {return wordResult;}
+        if (best.equals(name) && !allWordResult.isEmpty() && allWordScore > scoreCandidate(name)) {
             return allWordResult;
         }
         return best;
