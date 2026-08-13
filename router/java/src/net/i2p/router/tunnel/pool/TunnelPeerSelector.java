@@ -543,6 +543,14 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory) {
         final long BANDWIDTH_REJECTION_CUTOFF_MS = 20_000L;
 
+        // A banlisted peer must never be pre-selected for tunnel builds.
+        // The banlist is enforced at ingress (BuildHandler, throttlers), but
+        // selection used to ignore it, so we could build through peers we had
+        // flagged as abusive.  First check, cheapest and most decisive.
+        if (ctx.banlist().isBanlisted(peerHash)) {
+            return "banned";
+        }
+
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peerHash);
         if (profile != null && wasRecentlyRejected(profile, BANDWIDTH_REJECTION_CUTOFF_MS)) {
             return "recently-rejected";
@@ -746,6 +754,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsOBEP(Hash h) {
+        // Never use a banlisted peer as an endpoint — it may refuse or drop our builds.
+        if (ctx.banlist().isBanlisted(h))
+            return false;
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
             return true;
@@ -765,6 +776,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsIBGW(Hash h) {
+        // Never use a banlisted peer as an endpoint — it may refuse or drop our builds.
+        if (ctx.banlist().isBanlisted(h))
+            return false;
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
             return true;

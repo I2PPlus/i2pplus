@@ -304,6 +304,26 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
         if (rv.size() > 1)
             orderPeers(rv, settings.getRandomKey());
+        // Ghost-peer filtering: peers with consistent tunnel build timeouts
+        // waste build attempts and test cycles.  Client pools already filter
+        // these (ClientPeerSelector.filterGhostPeers); apply the same here so
+        // exploratory builds do not keep hammering the same failing peers.
+        // Fall back to the original selection if every peer is a ghost, so we
+        // never fail the build entirely.
+        TunnelManagerFacade tmf = ctx.tunnelManager();
+        GhostPeerManager ghostManager = tmf.getGhostPeerManager();
+        if (ghostManager != null && rv.size() > 1) {
+            List<Hash> before = new ArrayList<>(rv);
+            rv.removeIf(peer -> ghostManager.isGhost(peer));
+            if (rv.isEmpty()) {
+                rv.addAll(before);
+                if (log.shouldWarn()) {
+                    log.warn("EPS all selected peers were ghosts -> keeping original selection");
+                }
+            } else if (rv.size() != before.size() && log.shouldDebug()) {
+                log.debug("EPS ghost-filtered " + (before.size() - rv.size()) + " peer(s)");
+            }
+        }
         if (isInbound)
             rv.add(0, ctx.routerHash());
         else
