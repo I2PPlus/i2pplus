@@ -335,7 +335,7 @@ class RatchetPayload {
      * Garlic clove block for embedding I2NP messages in ratchet payload.
      */
     public static class GarlicBlock extends Block {
-        private final GarlicClove c;
+        private GarlicClove c;
 
         /**
          *  The clove carried by this block.
@@ -344,6 +344,16 @@ class RatchetPayload {
          */
         public GarlicBlock(GarlicClove clove) {
             super(BLOCK_GARLIC);
+            c = clove;
+        }
+
+        /**
+         *  Set the clove carried by this block, for reuse.
+         *
+         *  @param clove the garlic clove
+         *  @since 0.9.71+
+         */
+        void setClove(GarlicClove clove) {
             c = clove;
         }
         /** Data length of the block. */
@@ -360,7 +370,7 @@ class RatchetPayload {
      * Padding block for ratchet payload size alignment and obfuscation.
      */
     public static class PaddingBlock extends Block {
-        private final int sz;
+        private int sz;
         private final I2PAppContext ctx;
 
         /**
@@ -384,6 +394,16 @@ class RatchetPayload {
             sz = size;
             ctx = context;
         }
+
+        /**
+         *  Set the padding size, for reuse.
+         *
+         *  @param size the new padding size
+         *  @since 0.9.71+
+         */
+        void setSize(int size) {
+            sz = size;
+        }
         /** Data length of the block. */
         public int getDataLength() {
             return sz;
@@ -402,7 +422,7 @@ class RatchetPayload {
      * Timestamp block for ratchet payload synchronization and timing.
      */
     public static class DateTimeBlock extends Block {
-        private final long now;
+        private long now;
 
         /**
          *  Timestamp carried by this block.
@@ -411,6 +431,16 @@ class RatchetPayload {
          */
         public DateTimeBlock(long time) {
             super(BLOCK_DATETIME);
+            now = time;
+        }
+
+        /**
+         *  Set the timestamp, for reuse.
+         *
+         *  @param time the timestamp
+         *  @since 0.9.71+
+         */
+        void setTime(long time) {
             now = time;
         }
         /** Data length of the block. */
@@ -454,7 +484,7 @@ class RatchetPayload {
      * Next session key block for ratchet key exchange operations.
      */
     public static class NextKeyBlock extends Block {
-        private final NextSessionKey next;
+        private NextSessionKey next;
 
         /**
          *  Next session key carried by this block.
@@ -463,6 +493,16 @@ class RatchetPayload {
          */
         public NextKeyBlock(NextSessionKey nextKey) {
             super(BLOCK_NEXTKEY);
+            next = nextKey;
+        }
+
+        /**
+         *  Set the next session key, for reuse.
+         *
+         *  @param nextKey the next session key
+         *  @since 0.9.71+
+         */
+        void setNext(NextSessionKey nextKey) {
             next = nextKey;
         }
         /** Data length of the block. */
@@ -492,7 +532,7 @@ class RatchetPayload {
      * @since 0.9.46
      */
     public static class AckBlock extends Block {
-        private final byte[] data;
+        private byte[] data;
         /** Builds an ACK block for a single key ID and count. */
         public AckBlock(int keyID, int n) {
             super(BLOCK_ACK);
@@ -509,6 +549,24 @@ class RatchetPayload {
         public AckBlock(List<Integer> acks) {
             super(BLOCK_ACK);
             data = new byte[4 * acks.size()];
+            int i = 0;
+            for (Integer a : acks) {
+                toInt4(data, i, a.intValue());
+                i += 4;
+            }
+        }
+
+        /**
+         *  Set the ACK data, for reuse.  Reallocates only if the size changes.
+         *
+         *  @param acks each is id &lt;&lt; 16 | n
+         *  @since 0.9.71+
+         */
+        void setAcks(List<Integer> acks) {
+            int len = 4 * acks.size();
+            if (data == null || data.length != len) {
+                data = new byte[len];
+            }
             int i = 0;
             for (Integer a : acks) {
                 toInt4(data, i, a.intValue());

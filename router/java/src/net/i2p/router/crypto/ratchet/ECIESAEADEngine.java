@@ -1617,48 +1617,38 @@ public final class ECIESAEADEngine {
                                  NextSessionKey nextKey2, List<Integer> acksToSend,
                                  int overhead) {
         int count = cloves.getCloveCount();
-        int numblocks = count + 1;
-        if (expiration > 0)
-            numblocks++;
-        if (ackreq)
-            numblocks++;
-        if (nextKey1 != null)
-            numblocks++;
-        if (nextKey2 != null)
-            numblocks++;
-        if (acksToSend != null)
-            numblocks++;
         int len = 0;
-        List<Block> blocks = new ArrayList<>(numblocks);
+        BlockPool pool = _blockPool.get();
+        List<Block> blocks = pool.getBlocks();
         if (expiration > 0) {
-            Block block = new DateTimeBlock(expiration);
+            Block block = pool.acquireDateTime(expiration);
             blocks.add(block);
             len += block.getTotalLength();
         }
         if (nextKey1 != null) {
-            Block block = new NextKeyBlock(nextKey1);
+            Block block = pool.acquireNextKey(nextKey1);
             blocks.add(block);
             len += block.getTotalLength();
         }
         if (nextKey2 != null) {
-            Block block = new NextKeyBlock(nextKey2);
+            Block block = pool.acquireNextKey(nextKey2);
             blocks.add(block);
             len += block.getTotalLength();
         }
         for (int i = 0; i < count; i++) {
             GarlicClove clove = cloves.getClove(i);
-            Block block = new GarlicBlock(clove);
+            Block block = pool.acquireClove(clove);
             blocks.add(block);
             len += block.getTotalLength();
         }
         if (ackreq) {
             // put after the cloves so recipient has any LS garlic
-            Block block = new AckRequestBlock();
+            Block block = pool.acquireAckReq();
             blocks.add(block);
             len += block.getTotalLength();
         }
         if (acksToSend != null) {
-            Block block = new AckBlock(acksToSend);
+            Block block = pool.acquireAck(acksToSend);
             blocks.add(block);
             len += block.getTotalLength();
         }
@@ -1711,7 +1701,7 @@ public final class ECIESAEADEngine {
                 }
             }
             // zeros
-            Block block = new PaddingBlock(padlen);
+            Block block = pool.acquirePadding(padlen);
             blocks.add(block);
             len += block.getTotalLength();
         }
@@ -1719,6 +1709,7 @@ public final class ECIESAEADEngine {
         int payloadlen = RatchetPayload.writePayload(payload, 0, blocks);
         if (payloadlen != len)
             throw new IllegalStateException("Payload size mismatch");
+        pool.release(blocks);
         return payload;
     }
 
@@ -1792,5 +1783,99 @@ public final class ECIESAEADEngine {
             setResponseTimerNS(from, cloveSet, skm);
         }
     }
+
+    /**
+     *  Per-thread pool of payload block objects and the block list,
+     *  to avoid allocation per outbound payload.
+     *
+     *  @since 0.9.71+
+     */
+    static class BlockPool {
+        private final List<Block> blocks = new ArrayList<>(8);
+        private final List<GarlicBlock> cloveBlocks = new ArrayList<>(4);
+        private final List<PaddingBlock> paddingBlocks = new ArrayList<>(2);
+        private final List<DateTimeBlock> datetimeBlocks = new ArrayList<>(1);
+        private final List<NextKeyBlock> nextKeyBlocks = new ArrayList<>(1);
+        private final List<AckBlock> ackBlocks = new ArrayList<>(1);
+        private final List<AckRequestBlock> ackReqBlocks = new ArrayList<>(1);
+
+        /** the reusable block list, already cleared */
+        List<Block> getBlocks() {
+            blocks.clear();
+            return blocks;
+        }
+
+        GarlicBlock acquireClove(GarlicClove clove) {
+            if (cloveBlocks.isEmpty())
+                return new GarlicBlock(clove);
+            GarlicBlock b = cloveBlocks.remove(cloveBlocks.size() - 1);
+            b.setClove(clove);
+            return b;
+        }
+
+        PaddingBlock acquirePadding(int size) {
+            if (paddingBlocks.isEmpty())
+                return new PaddingBlock(size);
+            PaddingBlock b = paddingBlocks.remove(paddingBlocks.size() - 1);
+            b.setSize(size);
+            return b;
+        }
+
+        DateTimeBlock acquireDateTime(long time) {
+            if (datetimeBlocks.isEmpty())
+                return new DateTimeBlock(time);
+            DateTimeBlock b = datetimeBlocks.remove(datetimeBlocks.size() - 1);
+            b.setTime(time);
+            return b;
+        }
+
+        NextKeyBlock acquireNextKey(NextSessionKey nextKey) {
+            if (nextKeyBlocks.isEmpty())
+                return new NextKeyBlock(nextKey);
+            NextKeyBlock b = nextKeyBlocks.remove(nextKeyBlocks.size() - 1);
+            b.setNext(nextKey);
+            return b;
+        }
+
+        AckBlock acquireAck(List<Integer> acks) {
+            if (ackBlocks.isEmpty())
+                return new AckBlock(acks);
+            AckBlock b = ackBlocks.remove(ackBlocks.size() - 1);
+            b.setAcks(acks);
+            return b;
+        }
+
+        AckRequestBlock acquireAckReq() {
+            if (ackReqBlocks.isEmpty())
+                return new AckRequestBlock();
+            return ackReqBlocks.remove(ackReqBlocks.size() - 1);
+        }
+
+        /** return all blocks to their pools, clears the list */
+        void release(List<Block> blocks) {
+            for (Block b : blocks) {
+                if (b instanceof GarlicBlock)
+                    cloveBlocks.add((GarlicBlock) b);
+                else if (b instanceof PaddingBlock)
+                    paddingBlocks.add((PaddingBlock) b);
+                else if (b instanceof DateTimeBlock)
+                    datetimeBlocks.add((DateTimeBlock) b);
+                else if (b instanceof NextKeyBlock)
+                    nextKeyBlocks.add((NextKeyBlock) b);
+                else if (b instanceof AckBlock)
+                    ackBlocks.add((AckBlock) b);
+                else if (b instanceof AckRequestBlock)
+                    ackReqBlocks.add((AckRequestBlock) b);
+            }
+            blocks.clear();
+        }
+    }
+
+    private static final ThreadLocal<BlockPool> _blockPool = new ThreadLocal<BlockPool>() {
+        @Override
+        protected BlockPool initialValue() {
+            return new BlockPool();
+        }
+    };
 
 }

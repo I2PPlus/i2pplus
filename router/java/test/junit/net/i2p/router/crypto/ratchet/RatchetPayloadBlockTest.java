@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
+import net.i2p.data.i2np.DataMessage;
+import net.i2p.data.i2np.DeliveryInstructions;
+import net.i2p.data.i2np.GarlicClove;
 
 import org.junit.Test;
 
@@ -193,6 +196,108 @@ public class RatchetPayloadBlockTest {
         buf[5] = 0;
         TestCallback cb = new TestCallback();
         RatchetPayload.processPayload(I2PAppContext.getGlobalContext(), cb, buf, 0, 6, false);
+    }
+
+    /**
+     *  Test that released blocks are reused by the pool, no new instances.
+     */
+    @Test
+    public void testBlockPoolReuse() throws Exception {
+        ECIESAEADEngine.BlockPool pool = new ECIESAEADEngine.BlockPool();
+
+        RatchetPayload.DateTimeBlock d1 = pool.acquireDateTime(1234L);
+        RatchetPayload.PaddingBlock p1 = pool.acquirePadding(10);
+        RatchetPayload.AckRequestBlock ar1 = pool.acquireAckReq();
+        List<Integer> acks = new ArrayList<Integer>();
+        acks.add(Integer.valueOf(0x0102));
+        acks.add(Integer.valueOf(0x0304));
+        RatchetPayload.AckBlock a1 = pool.acquireAck(acks);
+        RatchetPayload.NextKeyBlock n1 = pool.acquireNextKey(new NextSessionKey(42, false, true));
+        RatchetPayload.GarlicBlock g1 = pool.acquireClove(makeClove(100));
+
+        List<RatchetPayload.Block> blocks = new ArrayList<RatchetPayload.Block>();
+        blocks.add(d1);
+        blocks.add(p1);
+        blocks.add(ar1);
+        blocks.add(a1);
+        blocks.add(n1);
+        blocks.add(g1);
+        pool.release(blocks);
+        assertTrue(blocks.isEmpty());
+
+        // re-acquire the same block types, expect the same instances
+        assertSame(d1, pool.acquireDateTime(1234L + 60000));
+        assertSame(p1, pool.acquirePadding(20));
+        assertSame(ar1, pool.acquireAckReq());
+        List<Integer> acks2 = new ArrayList<Integer>();
+        acks2.add(Integer.valueOf(0x0a0b));
+        assertSame(a1, pool.acquireAck(acks2));
+        assertSame(n1, pool.acquireNextKey(new NextSessionKey(43, false, true)));
+        assertSame(g1, pool.acquireClove(makeClove(200)));
+    }
+
+    /**
+     *  Test that reused blocks carry the new state after the setters.
+     */
+    @Test
+    public void testBlockPoolStateReset() throws Exception {
+        ECIESAEADEngine.BlockPool pool = new ECIESAEADEngine.BlockPool();
+        List<RatchetPayload.Block> blocks = new ArrayList<RatchetPayload.Block>();
+
+        // DateTime: new time reflected in serialized output
+        RatchetPayload.DateTimeBlock d = pool.acquireDateTime(1234L);
+        blocks.add(d);
+        pool.release(blocks);
+        d = pool.acquireDateTime(5678L);
+        byte[] buf = new byte[d.getTotalLength()];
+        d.write(buf, 0);
+        TestCallback cb = new TestCallback();
+        RatchetPayload.processPayload(I2PAppContext.getGlobalContext(), cb, buf, 0, buf.length, false);
+        assertEquals(5678L / 1000, cb.dateTime / 1000);
+
+        // Padding: new size reflected
+        RatchetPayload.PaddingBlock p = pool.acquirePadding(10);
+        blocks.add(p);
+        pool.release(blocks);
+        p = pool.acquirePadding(20);
+        assertEquals(20, p.getDataLength());
+
+        // Ack: reallocates down and up with the ack count
+        List<Integer> acks = new ArrayList<Integer>();
+        acks.add(Integer.valueOf(0x0102));
+        acks.add(Integer.valueOf(0x0304));
+        RatchetPayload.AckBlock a = pool.acquireAck(acks);
+        blocks.add(a);
+        pool.release(blocks);
+        acks = new ArrayList<Integer>();
+        acks.add(Integer.valueOf(0x0a0b));
+        a = pool.acquireAck(acks);
+        assertEquals(4, a.getDataLength());
+        acks.add(Integer.valueOf(0x0c0d));
+        blocks.add(a);
+        pool.release(blocks);
+        a = pool.acquireAck(acks);
+        assertEquals(8, a.getDataLength());
+
+        // Garlic: new clove size reflected
+        RatchetPayload.GarlicBlock g = pool.acquireClove(makeClove(100));
+        blocks.add(g);
+        pool.release(blocks);
+        g = pool.acquireClove(makeClove(200));
+        assertEquals(makeClove(200).getSizeRatchet(), g.getDataLength());
+    }
+
+    /**
+     *  A clove with an instructions and data of the given payload size.
+     */
+    private static GarlicClove makeClove(int size) {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        GarlicClove clove = new GarlicClove(ctx);
+        clove.setInstructions(new DeliveryInstructions());
+        DataMessage dm = new DataMessage(ctx);
+        dm.setData(new byte[size]);
+        clove.setData(dm);
+        return clove;
     }
 
     /**
