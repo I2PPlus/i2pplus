@@ -521,7 +521,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 .snarkNewTorrent td:nth-child(2),.snarkNewTorrent td:nth-child(3){padding-right:5px;font-weight:700}
 .snarkNewTorrent td[rowspan="0"]{width:50%}
 .trackerannounce,.trackerhome{width:260px}
-#bwAllocation .numeric,.numeric[name="upLimit"],#multiDestMax{min-width:48px}
+#bwAllocation .numeric,.numeric[name="upLimit"],#multiDestMax,#startupDelay input{min-width:48px}
 #configs{user-select:none}
 #configs a{font-weight:700}
 #configs a[href^="/config"]{font-size:9pt}

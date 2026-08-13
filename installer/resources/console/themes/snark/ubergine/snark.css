@@ -728,7 +728,7 @@ input.trackername{width:100px}
 #torrentOrderControl b{background:linear-gradient(180deg,#303,#101)}
 #bwAllocation .numeric,.numeric[name="upLimit"],.numeric[name="startupDelay"],#multiDestMax{min-width:68px}
 .numeric[name="maxFiles"]{min-width:80px}
-#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
+#configs a[href^="/config"],#configs .numeric[name="upBW"],#configs #startupDelay label~label{margin-left:8px}
 
 /* tracker config + create file filter */
 .info_tracker{margin:2px;padding:1px 8px 1px 18px;display:inline-block;max-width:180px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 0 0 1px #101,inset 0 0 0 1px rgba(96,32,96,.2);border-radius:3px;background:var(--tracker) no-repeat left 3px center/14px,linear-gradient(180deg,rgba(24,0,24,.5) 50%,rgba(12,0,12,.5) 50%)}

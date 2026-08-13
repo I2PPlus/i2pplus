@@ -3926,6 +3926,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 delay = 30000;
             }
             if (delay > 30000 && autostart) {
+                // Build the shared session's tunnels during the startup delay,
+                // so the batch can start as soon as the delay elapses instead
+                // of waiting on the lease set afterwards
+                (new I2PAppThread(
+                                new Runnable() {
+                                    public void run() {
+                                        _util.connect();
+                                    }
+                                },
+                                "SnarkPreConnect",
+                                true))
+                        .start();
                 int id =
                         _messages.addMessageNoEscape(
                                 getTime()
@@ -4946,14 +4958,64 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (List<Snark> members : pools) {
             Collections.shuffle(members, _context.random());
         }
-        int count = 0;
+        if (!_context.isRouterContext() && !_util.connected()) {
+            // Standalone: connect to the external router inline so a failure is
+            // reported back and the DirMonitor keeps probing; in-router, the
+            // shared session was pre-connected during the startup delay
+            String msg = _t("Connecting to I2P") + "...";
+            addMessage(msg);
+            System.out.println(
+                    " • "
+                            + _t(
+                                    "Connecting to I2CP port on I2P instance at {0}",
+                                    _util.getI2CPHost() + ':' + _util.getI2CPPort() + "..."));
+            // getBWLimit() was successful so this should work
+            boolean ok = _util.connect();
+            if (!ok) {
+                msg =
+                        _t("Error connecting to I2P - check your I2CP settings!")
+                                + ' '
+                                + _util.getI2CPHost()
+                                + ':'
+                                + _util.getI2CPPort();
+                addMessage(msg);
+                System.out.println(" • " + msg);
+                // Leave the rest of the batch for a later pass
+                return false;
+            }
+            msg = _t("Connected to I2P at") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
+            System.out.println(" • " + msg);
+        }
         int started = 0;
         for (List<Snark> members : pools) {
             if (started++ > 0) {
                 // No-op in single-dest mode or when randomize startup delay is off
                 multiDestStartDelay();
             }
-            for (Snark snark : members) {
+            // Start each pool on its own thread: a pool's session creation
+            // blocks until its tunnels build, and one slow pool must not hold
+            // up the rest of the batch
+            (new I2PAppThread(new PoolStarter(members), "SnarkStartPool", true)).start();
+        }
+        return true;
+    }
+
+    /**
+     * Start the torrents of one pool on its own thread, so each pool's session
+     * and tunnel builds proceed in parallel with the other pools.
+     *
+     * @since 0.9.71+
+     */
+    private class PoolStarter implements Runnable {
+        private final List<Snark> _members;
+
+        public PoolStarter(List<Snark> members) {
+            _members = members;
+        }
+
+        public void run() {
+            int count = 0;
+            for (Snark snark : _members) {
                 if (!_util.connected()) {
                     String msg = _t("Connecting to I2P") + "...";
                     addMessage(msg);
@@ -4967,7 +5029,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                                         + _util.getI2CPPort()
                                                         + "..."));
                     }
-                    // getBWLimit() was successful so this should work
                     boolean ok = _util.connect();
                     if (!ok) {
                         if (_context.isRouterContext()) {
@@ -4982,8 +5043,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             addMessage(msg);
                             System.out.println(" • " + msg);
                         }
-                        // Leave the rest of the batch for a later pass
-                        return false;
+                        // Leave the rest of the pool for a later pass
+                        return;
                     } else if (!_context.isRouterContext()) {
                         msg =
                                 _t("Connected to I2P at")
@@ -4998,7 +5059,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 try {
                     snark.startTorrent();
                 } catch (Snark.RouterException re) {
-                    return true;
+                    return;
                 } // Snark.fatal() will log and call fatal() here for user
                   // message before throwing
                 catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user
@@ -5011,7 +5072,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         }
-        return true;
     }
 
     /**

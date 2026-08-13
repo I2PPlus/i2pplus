@@ -638,7 +638,7 @@ input[name="nofilter_commentsName"]{max-width:248px}
 td#bwHelp{padding-left:30px;width:90%;line-height:1;background:url(images/details.svg) no-repeat left 12px center/14px}
 td#bwHelp a{display:inline-block;white-space:nowrap;margin-left:4px}
 #torrentOrderControl{line-height:1}
-#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"],#configs #multiDestMax{min-width:48px}
+#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"],#configs #multiDestMax,#configs #startupDelay input{min-width:48px}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 #configs input[name="i2cpOpts"],#configs input[name="nofilter_dataDir"]{font-size:90%}
 

@@ -660,7 +660,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs td b::after{content:":"}
 #configs td label b:hover{color:#4d2200}
 #snarkLang{margin:0 5px;padding:2px 8px;display:inline-block;vertical-align:middle;line-height:1.6;font-weight:700;text-align:center;border-radius:2px;background:#fef6f0}
-#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"],#configs .numeric[name="startupDelay"],#configs .numeric[name="pageSize"],#multiDestMax{min-width:48px}
+#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"],#configs .numeric[name="startupDelay"],#configs .numeric[name="pageSize"],#configs #startupDelay .numeric,#multiDestMax{min-width:48px}
 #configs .numeric[name="maxFiles"]{min-width:68px;max-width:68px;text-align:center}
 #configs #bwAllocation{font-size:9pt}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}

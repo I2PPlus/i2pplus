@@ -4171,20 +4171,18 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\"></span>");
 
         if (_context.isRouterContext()) {
-            buf.append("<br>\n<span class=configOption><label><b>")
-               .append(_t("Min startup delay"))
+            buf.append("<br>\n<span class=configOption id=startupDelay><label><b>")
+               .append(_t("Startup delay")).append(" (").append(_t("minutes")).append(")")
                .append("</b> <input type=text name=startupDelayMin size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
                .append(" title=\"")
                .append(_t("How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"))
                .append("\" value=\"").append(_manager.util().getStartupDelayMin()).append("\"> ")
-               .append(_t("minutes"))
-               .append("</label></span><br>\n<span class=configOption><label><b>")
-               .append(_t("Max startup delay"))
-               .append("</b> <input type=text name=startupDelayMax size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
+               .append(_t("min"))
+               .append("</label> <label><input type=text name=startupDelayMax size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
                .append(" title=\"")
                .append(_t("How long before auto-started torrents are loaded when I2PSnark starts, at the latest"))
                .append("\" value=\"").append(_manager.util().getStartupDelayMax()).append("\"> ")
-               .append(_t("minutes"))
+               .append(_t("max"))
                .append("</label></span>");
         }
         buf.append("\n</div>\n</td></tr>\n");

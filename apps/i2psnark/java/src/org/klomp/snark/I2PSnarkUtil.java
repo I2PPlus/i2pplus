@@ -839,7 +839,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             if (td == null) {
                 // Cap at minimal tunnels; IdleChecker ramps them up with usage.
                 // buildOpts() mutates the shared context properties, so copy them for the
-                // session and wait up to an hour for the initial tunnel builds before
+                // session and wait up to 20 minutes for the initial tunnel builds before
                 // giving up; a per-torrent session failure is retried by Snark.
                 // Pools start out named after their first torrent; TorrentDest renames
                 // them to "I2PSnark - Pool <n>" when a second torrent joins.
@@ -847,7 +847,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 String nickname = getNickname(name);
                 Properties opts = new Properties();
                 opts.putAll(buildOpts(nickname, true));
-                opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
+                opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "20");
                 if (poolIndex >= 0 && name != null) {
                     // Prefixes are required: the router only stores session options
                     // under inbound./outbound. in the pool settings, which the console
