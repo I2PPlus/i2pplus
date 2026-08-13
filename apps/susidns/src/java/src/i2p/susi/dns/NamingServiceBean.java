@@ -52,6 +52,9 @@ public class NamingServiceBean extends AddressbookBean {
     private boolean fail = false;
     private int filteredCount;
     private AddressBean[] fullFilteredEntries;
+
+    /** True when the last load applied skip/limit server-side; total is then totalSize(). */
+    private boolean _serverPaginated;
     /** How long a cached addressbook load or book size is reused before the naming service is re-queried. */
     private static final long CACHE_TTL = 60*1000;
     /** Key of the currently cached load (filter, search, category, pagination, book). */
@@ -105,6 +108,7 @@ public class NamingServiceBean extends AddressbookBean {
      */
     protected int getTotalFilteredCount() {
         if (isDirect()) {return resultSize();}
+        if (_serverPaginated) {return totalSize();}
         if (fullFilteredEntries != null) {
             return fullFilteredEntries.length;
         }
@@ -238,6 +242,7 @@ public class NamingServiceBean extends AddressbookBean {
             _sizeKey = null;
             _sizeTime = 0;
             _cachedSize = -1;
+            _serverPaginated = false;
         }
     }
 
@@ -275,15 +280,15 @@ public class NamingServiceBean extends AddressbookBean {
                 String startsAt = filter.equals("0-9") ? "[0-9]" : filter;
                 searchProps.setProperty("startsWith", startsAt);
             }
-            // Don't apply skip/limit when filtering by category - we need all results to filter by category
-            // Don't apply skip/limit for no filter or status filters
-            // Only apply for search or letter filters to use server-side pagination
-            boolean isStatusFilter = filter != null && (filter.equals("alive") || filter.equals("dead") || filter.equals("latest"));
-            boolean isNoFilter = filter == null || filter.length() <= 0;
-            if (isPrefiltered() && category == null && !isNoFilter && !isStatusFilter) {
-                // Only limit if we have a search or letter filter
+            // Apply skip/limit server-side for the default book with no filter and no search.
+            // isPrefiltered() is true only in that case, where getEntries() honors skip/limit
+            // and the exact total comes from the cached totalSize(). Status and category filters
+            // need the full result set; search and letter filters keep client-side pagination so
+            // the filtered count stays exact.
+            boolean serverPaginated = isPrefiltered() && category == null;
+            if (serverPaginated) {
                 if (beginIndex > 0) {searchProps.setProperty("skip", Integer.toString(beginIndex));}
-                int limit =1 + endIndex - beginIndex;
+                int limit = 1 + endIndex - beginIndex;
                 if (limit > 0) {searchProps.setProperty("limit", Integer.toString(limit));}
             }
 
@@ -316,6 +321,15 @@ public class NamingServiceBean extends AddressbookBean {
             int blacklistedHosts = 0;
             // Reused for every host in the list; the bean caches the file content itself
             BlacklistBean blacklist = new BlacklistBean();
+            // Hoist the cached ping result map once; it doesn't change during the loop.
+            Map<String, HostChecker.PingResult> allPingResults = null;
+            if (filter != null && (filter.equals("alive") || filter.equals("dead"))) {
+                try {
+                    allPingResults = HostCheckerBridge.getAllPingResults();
+                } catch (Exception e) {
+                    // treated as no results, matching the per-entry behavior below
+                }
+            }
             for (Map.Entry<String, Destination> entry : results.entrySet()) {
                 String name = entry.getKey();
 
@@ -347,35 +361,24 @@ public class NamingServiceBean extends AddressbookBean {
                         // Check if host is alive using cached ping results from HostCheckerBridge
                         boolean isAlive = false;
                         boolean haveResult = false;
-                        try {
-                            Map<String, HostChecker.PingResult> allResults = HostCheckerBridge.getAllPingResults();
-                            if (allResults != null && !allResults.isEmpty()) {
-                                haveResult = true;
-                                HostChecker.PingResult pingResult = allResults.get(name);
-                                if (pingResult != null && pingResult.reachable) {
-                                    isAlive = true;
-                                }
+                        if (allPingResults != null && !allPingResults.isEmpty()) {
+                            haveResult = true;
+                            HostChecker.PingResult pingResult = allPingResults.get(name);
+                            if (pingResult != null && pingResult.reachable) {
+                                isAlive = true;
                             }
-                        } catch (Exception e) {
-                            continue;
                         }
                         if (haveResult && !isAlive) {continue;}
                     }
                     else if (filter.equals("dead")) {
                         boolean isDead = false;
                         boolean haveResult = false;
-                        try {
-                            Map<String, HostChecker.PingResult> allResults = HostCheckerBridge.getAllPingResults();
-                            if (allResults != null && !allResults.isEmpty()) {
-                                haveResult = true;
-                                HostChecker.PingResult pingResult = allResults.get(name);
-                                if (pingResult != null && !pingResult.reachable) {
-                                    isDead = true;
-                                }
+                        if (allPingResults != null && !allPingResults.isEmpty()) {
+                            haveResult = true;
+                            HostChecker.PingResult pingResult = allPingResults.get(name);
+                            if (pingResult != null && !pingResult.reachable) {
+                                isDead = true;
                             }
-                        } catch (Exception e) {
-                            // If we can't get status, skip this host for dead filter
-                            continue;
                         }
                         // Only show hosts that have been checked and are dead
                         // Hosts without any ping result are NOT dead (they're untested)
@@ -406,29 +409,34 @@ public class NamingServiceBean extends AddressbookBean {
             filteredCount = array.length;
             // Store the full filtered list BEFORE pagination for accurate count
             fullFilteredEntries = array;
-            // Apply pagination - only apply manual pagination when NOT filtering by category
-            int fromIndex;
-            int toIndex;
-            if (category == null) {
-                // Not filtering by category, use manual begin/end pagination
-                if (sortByDate) {
-                    Arrays.sort(array, new AddressByDateSorter());
-                } else if (!(results instanceof SortedMap)) {
-                    Arrays.sort(array, sorter);
-                }
-                if (beginIndex >= array.length) {
-                    fromIndex = Math.max(0, array.length - 1);
-                } else {
-                    fromIndex = beginIndex;
-                }
-                toIndex = Math.min(fromIndex + (endIndex - beginIndex), array.length - 1);
-                List<AddressBean> paginatedList = Arrays.asList(Arrays.copyOfRange(array, fromIndex, toIndex + 1));
-                entries = paginatedList.toArray(new AddressBean[paginatedList.size()]);
-            } else {
-                // When filtering by category, ensure alphabetical sorting by hostname
-                Arrays.sort(array, new AddressByNameSorter());
-                // Use category filter's own pagination, ignore begin/end from request
+            _serverPaginated = serverPaginated;
+            if (serverPaginated) {
+                // Entries already cover the requested page via server-side skip/limit;
+                // keep the same name ordering the manual path would have produced
+                Arrays.sort(array, sorter);
                 entries = array;
+            } else {
+                int fromIndex;
+                int toIndex;
+                if (category == null) {
+                    // Not filtering by category, use manual begin/end pagination
+                    if (sortByDate) {
+                        Arrays.sort(array, new AddressByDateSorter());
+                    } else if (!(results instanceof SortedMap)) {
+                        Arrays.sort(array, sorter);
+                    }
+                    fromIndex = Math.min(beginIndex, array.length);
+                    toIndex = Math.min(fromIndex + (endIndex - beginIndex), array.length - 1);
+                    List<AddressBean> paginatedList = Arrays.asList(Arrays.copyOfRange(array, fromIndex, toIndex + 1));
+                    entries = paginatedList.toArray(new AddressBean[paginatedList.size()]);
+                } else {
+                    // When filtering by category, ensure alphabetical sorting by hostname
+                    Arrays.sort(array, new AddressByNameSorter());
+                    fromIndex = Math.min(beginIndex, array.length);
+                    toIndex = Math.min(fromIndex + (endIndex - beginIndex), array.length - 1);
+                    List<AddressBean> paginatedList = Arrays.asList(Arrays.copyOfRange(array, fromIndex, toIndex + 1));
+                    entries = paginatedList.toArray(new AddressBean[paginatedList.size()]);
+                }
             }
             _log.debug("Final entries count after filtering: " + (entries != null ? entries.length : 0) +
                        " of " + filteredCount + " total" +
@@ -883,13 +891,20 @@ public class NamingServiceBean extends AddressbookBean {
         SingleFileNamingService sfns = null;
         try {
             // non-null but zero bytes if no file entered, don't know why
-            if (in == null || in.available() <= 0) {
+            // in.available() is not a reliable emptiness test for upload streams
+            if (in == null) {
+                fail = true;
+                return styleMessage(_t("You must enter a file"), fail);
+            }
+            int first = in.read();
+            if (first < 0) {
                 fail = true;
                 return styleMessage(_t("You must enter a file"), fail);
             }
             // copy to temp file
             tmp = new File(_context.getTempDir(), "susidns-import-" + _context.random().nextLong() + ".txt");
             out = new FileOutputStream(tmp);
+            out.write(first);
             DataHelper.copy(in, out);
             in.close();
             in = null;

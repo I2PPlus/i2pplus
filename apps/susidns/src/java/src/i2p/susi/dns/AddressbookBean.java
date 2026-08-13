@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -80,7 +81,8 @@ public class AddressbookBean extends BaseBean {
     protected int endIndex;
 
     private Properties addressbook;
-    private int trClass;
+    /** Parsed #! properties per hostname, built once per load. */
+    private Map<String, Properties> _propsByHost;
     /** List of entries marked for deletion */
     protected final LinkedList<String> deletionMarks;
     /** Comparator for sorting addresses */
@@ -122,23 +124,6 @@ public class AddressbookBean extends BaseBean {
      */
     public boolean isHasFilter() {
         return filter != null && !filter.isEmpty();
-    }
-
-    /**
-     * Sets the table row class.
-     * @param trClass table row class
-     */
-    public void setTrClass(int trClass) {
-        this.trClass = trClass;
-    }
-
-    /**
-     * Gets the table row class.
-     * @return the table row class
-     */
-    public int getTrClass() {
-        trClass = 1 - trClass;
-        return trClass;
     }
 
     /**
@@ -188,38 +173,53 @@ public class AddressbookBean extends BaseBean {
      * @param hostname the hostname
      */
     private void loadPropertiesFromFile(AddressBean bean, String hostname) {
+        if (_propsByHost == null) {
+            _propsByHost = parsePropertiesFromFile();
+        }
+        Properties p = _propsByHost.get(hostname);
+        if (p != null) {
+            bean.setProperties(p);
+        }
+    }
+
+    /**
+     * Parse the #! properties from the raw hosts.txt file in one pass.
+     * Called once per load and reused for every entry.
+     *
+     * @return the map of hostname to parsed properties, may be empty
+     */
+    private Map<String, Properties> parsePropertiesFromFile() {
+        Map<String, Properties> rv = new HashMap<>();
         try (BufferedReader reader =
                 new BufferedReader(new InputStreamReader(new FileInputStream(getFileName()), StandardCharsets.UTF_8))) {
             String line;
-            String search = hostname + '=';
-
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith(search)) {
-                    // Check if this line has properties
-                    int propsIndex = line.indexOf(net.i2p.client.naming.HostTxtEntry.PROPS_SEPARATOR);
-                    if (propsIndex > 0) {
-                        String propsStr = line.substring(propsIndex + 2); // Skip #!
-                        Properties props = new Properties();
-                        // Parse the properties in format key1=value1#key2=value2
-                        String[] propPairs = propsStr.split("#");
-                        for (String pair : propPairs) {
-                            int eqIndex = pair.indexOf('=');
-                            if (eqIndex > 0) {
-                                String key = pair.substring(0, eqIndex);
-                                String value = pair.substring(eqIndex + 1);
-                                props.setProperty(key, value);
-                            }
-                        }
-                        if (!props.isEmpty()) {
-                            bean.setProperties(props);
-                        }
+                // Check if this line has properties
+                int propsIndex = line.indexOf(net.i2p.client.naming.HostTxtEntry.PROPS_SEPARATOR);
+                if (propsIndex <= 0) continue;
+                int eq = line.indexOf('=');
+                if (eq <= 0) continue;
+                String hostname = line.substring(0, eq);
+                String propsStr = line.substring(propsIndex + 2); // Skip #!
+                Properties props = new Properties();
+                // Parse the properties in format key1=value1#key2=value2
+                String[] propPairs = propsStr.split("#");
+                for (String pair : propPairs) {
+                    int eqIndex = pair.indexOf('=');
+                    if (eqIndex > 0) {
+                        String key = pair.substring(0, eqIndex);
+                        String value = pair.substring(eqIndex + 1);
+                        props.setProperty(key, value);
                     }
-                    break;
+                }
+                if (!props.isEmpty()) {
+                    rv.put(hostname, props);
                 }
             }
         } catch (IOException e) {
             // Ignore errors, properties will remain empty
         }
+        return rv;
     }
 
     /**
@@ -387,8 +387,10 @@ public class AddressbookBean extends BaseBean {
             } else {
                 // When filtering by category, ensure alphabetical sorting by hostname
                 Arrays.sort(array, new AddressByNameSorter());
-                // Use category filter's own pagination, ignore begin/end from request
-                entries = array;
+                fromIndex = Math.min(beginIndex, array.length);
+                toIndex = Math.min(fromIndex + (endIndex - beginIndex), array.length - 1);
+                List<AddressBean> paginatedList = Arrays.asList(Arrays.copyOfRange(array, fromIndex, toIndex + 1));
+                entries = paginatedList.toArray(new AddressBean[paginatedList.size()]);
             }
 
             message = generateLoadMessage();
@@ -454,7 +456,7 @@ public class AddressbookBean extends BaseBean {
                 message = ngettext("Book contains 1 entry", "Book contains {0} entries", getTotalFilteredCount());
             }
         }
-        if (resultCount <= 0 || category != null) { /* ignored */ } // nothing to display or category filter
+        if (resultCount <= 0) { /* ignored */ } // nothing to display
         else if (getPageBegin() == 0 && getEndInt() >= getTotalFilteredCount() - 1) {
             message += "</span>";
         } else {

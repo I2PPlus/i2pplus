@@ -10,6 +10,8 @@ import net.i2p.data.Destination;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 
 public class SingleFileNamingServiceTest extends TestCase {
     private I2PAppContext _context;
@@ -70,5 +72,47 @@ public class SingleFileNamingServiceTest extends TestCase {
         // assertThat(ns.size(), is(equalTo(1)));
         assertThat(ns.getEntries(), is(equalTo(Collections.EMPTY_MAP)));
         assertThat(ns.size(), is(equalTo(0)));
+    }
+
+    public void testGetEntriesSkipLimit() throws Exception {
+        String testB64 = "-KR6qyfPWXoN~F3UzzYSMIsaRy4quickbrownfoxXSzUQXQdi2Af1TV2UMH3PpPuNu-GwrqihwmLSkPFg4fv4yQQY3E10VeQVuI67dn5vlan3NGMsjqxoXTSHHt7C3nX3szXK90JSoO~tRMDl1xyqtKm94-RpIyNcLXofd0H6b02683CQIjb-7JiCpDD0zharm6SU54rhdisIUVXpi1xYgg2pKVpssL~KCp7RAGzpt2rSgz~RHFsecqGBeFwJdiko-6CYW~tcBcigM8ea57LK7JjCFVhOoYTqgk95AG04-hfehnmBtuAFHWklFyFh88x6mS9sbVPvi-am4La0G0jvUJw9a3wQ67jMr6KWQ~w~bFe~FDqoZqVXl8t88qHPIvXelvWw2Y8EMSF5PJhWw~AZfoWOA5VQVYvcmGzZIEKtFGE7bgQf3rFtJ2FAtig9XXBsoLisHbJgeVb29Ew5E7bkwxvEe9NYkIqvrKvUAt1i55we0Nkt6xlEdhBqg6xXOyIAAAA";
+        Destination testDest = new Destination();
+        testDest.fromBase64(testB64);
+
+        SingleFileNamingService ns = new SingleFileNamingService(_context, "testhosts.txt");
+        for (int i = 0; i < 5; i++) {
+            ns.put("host" + i + ".i2p", testDest);
+        }
+        assertThat(ns.size(), is(equalTo(5)));
+
+        // limit returns only the first entries
+        Properties opts = new Properties();
+        opts.setProperty("limit", "2");
+        Map<String, Destination> limited = ns.getEntries(opts);
+        assertThat(limited.size(), is(equalTo(2)));
+        assertThat(limited.containsKey("host0.i2p"), is(equalTo(true)));
+        assertThat(limited.containsKey("host1.i2p"), is(equalTo(true)));
+        assertThat(limited.containsKey("host2.i2p"), is(equalTo(false)));
+
+        // skip skips matching entries, combined with limit pages
+        Properties opts2 = new Properties();
+        opts2.setProperty("skip", "2");
+        opts2.setProperty("limit", "2");
+        Map<String, Destination> paged = ns.getEntries(opts2);
+        assertThat(paged.size(), is(equalTo(2)));
+        assertThat(paged.containsKey("host2.i2p"), is(equalTo(true)));
+        assertThat(paged.containsKey("host3.i2p"), is(equalTo(true)));
+        assertThat(paged.containsKey("host0.i2p"), is(equalTo(false)));
+
+        // skip applies after startsWith filtering
+        Properties opts3 = new Properties();
+        opts3.setProperty("startsWith", "host");
+        opts3.setProperty("skip", "4");
+        Map<String, Destination> tail = ns.getEntries(opts3);
+        assertThat(tail.size(), is(equalTo(1)));
+        assertThat(tail.containsKey("host4.i2p"), is(equalTo(true)));
+
+        // whole book is still returned without skip/limit
+        assertThat(ns.getEntries().size(), is(equalTo(5)));
     }
 }

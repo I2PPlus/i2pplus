@@ -37,14 +37,18 @@ public class BlacklistBean extends BaseBean {
     private String content;
     private static String cachedContent = null;
     private static long lastModified = 0;
+
+    /** Trimmed lines of the current content, rebuilt when content changes. */
+    private List<String> _lines;
     private static final String BLACKLIST_FILE = "blacklist.txt";
     private static final Log _log = new Log(BlacklistBean.class);
 
     // Pattern to validate I2P addresses (hostnames, b32, b64)
+    // b64 destinations vary with key type: EdDSA ~128 chars, DSA 516 chars
     private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(
         "^[a-zA-Z0-9.-]+\\.i2p$|" +                    // hostname.i2p
         "^[a-zA-Z2-7]{52,53}\\.b32\\.i2p$|" +          // b32 addresses (52-53 chars)
-        "^[a-zA-Z0-9+/]{387}={0,2}\\.b64\\.i2p$"       // b64 addresses (387+ chars)
+        "^[a-zA-Z0-9+/]{100,}={0,2}\\.b64\\.i2p$"      // b64 addresses
     );
 
     /**
@@ -82,7 +86,10 @@ public class BlacklistBean extends BaseBean {
             long currentModified = file.lastModified();
             // Use cached content if file hasn't changed
             if (cachedContent != null && currentModified == lastModified) {
-                content = cachedContent;
+                if (content != cachedContent) {
+                    content = cachedContent;
+                    _lines = null;
+                }
                 return;
             }
 
@@ -98,6 +105,7 @@ public class BlacklistBean extends BaseBean {
                 content = buf.toString();
                 cachedContent = content;
                 lastModified = currentModified;
+                _lines = null;
 
                 // Count valid entries (non-empty, non-comment lines)
                 int validEntries = 0;
@@ -114,6 +122,7 @@ public class BlacklistBean extends BaseBean {
                 warn(e);
                 content = "";
                 cachedContent = content;
+                _lines = null;
             }
             finally {
                 if (br != null) {
@@ -124,6 +133,7 @@ public class BlacklistBean extends BaseBean {
         } else {
             content = "";
             cachedContent = content;
+            _lines = null;
             debug("Blacklist file does not exist: " + file.getAbsolutePath());
         }
     }
@@ -191,10 +201,16 @@ public class BlacklistBean extends BaseBean {
         if (content == null) {
             return false;
         }
+        if (_lines == null) {
+            _lines = new ArrayList<>();
+            String[] parts = content.split("\\n");
+            for (String part : parts) {
+                _lines.add(part.trim());
+            }
+        }
         address = address.trim().toLowerCase();
-        String[] lines = content.split("\\n");
-        for (String line : lines) {
-            if (line.trim().equalsIgnoreCase(address)) {
+        for (String line : _lines) {
+            if (line.equalsIgnoreCase(address)) {
                 return true;
             }
         }
@@ -301,7 +317,8 @@ public class BlacklistBean extends BaseBean {
         }
 
         // Try as b64
-        if (address.length() > 500) { // Rough b64 length check
+        // shortest real b64 destinations are ~128 chars (EdDSA), DSA is 516
+        if (address.length() >= 100) { // Rough b64 length check
             return isB64Blacklisted(address);
         }
 

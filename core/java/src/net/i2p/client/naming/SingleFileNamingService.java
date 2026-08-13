@@ -400,25 +400,42 @@ public class SingleFileNamingService extends NamingService {
      *                Key "search": return only those matching substring
      *                Key "startsWith": return only those starting with
      *                                  ("[0-9]" allowed)
+     *                Key "skip": number of matching entries to skip
+     *                Key "limit": maximum number of matching entries to return
      * @return the entries
+     * @since 0.9.71+
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
         if (!_file.exists()) return Collections.emptyMap();
         String searchOpt = null;
         String startsWith = null;
+        int skip = 0;
+        int limit = 0;
         if (options != null) {
             searchOpt = options.getProperty("search");
             startsWith = options.getProperty("startsWith");
+            String s = options.getProperty("skip");
+            if (s != null) {
+                try { skip = Integer.parseInt(s); } catch (NumberFormatException nfe) { /* ignored */ }
+            }
+            s = options.getProperty("limit");
+            if (s != null) {
+                try { limit = Integer.parseInt(s); } catch (NumberFormatException nfe) { /* ignored */ }
+            }
         }
+        if (skip < 0) skip = 0;
+        if (limit < 0) limit = 0;
         if (_log.shouldDebug())
-            _log.debug("Searching " + " starting with " + startsWith + " search string " + searchOpt);
+            _log.debug("Searching " + " starting with " + startsWith + " search string " + searchOpt
+                       + " skip " + skip + " limit " + limit);
         BufferedReader in = null;
         getReadLock();
         try {
             in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             Map<String, Destination> rv = new HashMap<>();
+            int skipped = 0;
             while ((line = in.readLine()) != null) {
                 if (line.length() <= 0) continue;
                 if (startsWith != null) {
@@ -434,13 +451,18 @@ public class SingleFileNamingService extends NamingService {
                 if (split <= 0) continue;
                 String key = line.substring(0, split);
                 if (searchOpt != null && key.indexOf(searchOpt) < 0) continue;
+                if (skipped < skip) {
+                    skipped++;
+                    continue;
+                }
+                if (limit > 0 && rv.size() >= limit) break;
                 String b64 = line.substring(split + 1); // .trim() ??????????????
                 try {
                     Destination dest = new Destination(b64);
                     rv.put(key, dest);
                 } catch (DataFormatException dfe) { /* ignored */ }
             }
-            if (searchOpt == null && startsWith == null) {
+            if (searchOpt == null && startsWith == null && skip == 0 && limit == 0) {
                 _lastWrite = _file.lastModified();
                 _size = rv.size();
             }
