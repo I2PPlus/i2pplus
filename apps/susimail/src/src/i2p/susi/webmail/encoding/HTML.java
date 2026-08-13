@@ -27,10 +27,22 @@ public class HTML extends Encoding {
 
   @Override
   public String encode(String str) throws EncodingException {
-    return  str.replace("&", "&amp;")  // must be first
-               .replace( "<", "&lt;" )
-               .replace( ">", "&gt;" )
-               .replace( "\r\n", "<br>\r\n" ).replace( "\n", "<br>\r\n" );
+    StringBuilder buf = new StringBuilder(str.length() + 16);
+    for (int i = 0; i < str.length(); i++) {
+      char c = str.charAt(i);
+      switch (c) {
+        case '&': buf.append("&amp;"); break;
+        case '<': buf.append("&lt;"); break;
+        case '>': buf.append("&gt;"); break;
+        case '\r':
+          if (i + 1 < str.length() && str.charAt(i + 1) == '\n') {i++;}
+          buf.append("<br>\r\n");
+          break;
+        case '\n': buf.append("<br>\r\n"); break;
+        default: buf.append(c);
+      }
+    }
+    return buf.toString();
   }
 
   /** Decode HTML entities from the stream */

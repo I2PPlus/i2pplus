@@ -194,14 +194,25 @@ class PersistentMailCache {
      * @return success
      */
     public boolean getMail(Mail mail, boolean headerOnly) {
-        synchronized(_lock) {return locked_getMail(mail);}
+        synchronized(_lock) {return locked_getMail(mail, headerOnly);}
     }
 
-    private boolean locked_getMail(Mail mail) {
-        boolean found = false;
+    private boolean locked_getMail(Mail mail, boolean headerOnly) {
+        if (headerOnly) {
+            File hf = getHeaderFile(mail.uidl);
+            if (hf.exists()) {
+                Buffer rb = read(hf);
+                if (rb != null) {
+                    mail.setHeader(rb);
+                    return true;
+                }
+                if (_log.shouldWarn()) {_log.warn("Unable to read file " + hf);}
+            }
+            if (_log.shouldWarn()) {_log.warn("Unable to find header file " + hf + " for mail " + Base64.encode(mail.uidl));}
+            return false;
+        }
         File f = getFullFile(mail.uidl);
         if (f.exists()) {
-            found = true;
             Buffer rb = read(f);
             if (rb != null) {
                 mail.setBody(rb);
@@ -212,7 +223,6 @@ class PersistentMailCache {
         }
         f = getHeaderFile(mail.uidl);
         if (f.exists()) {
-            found = true;
             Buffer rb = read(f);
             if (rb != null) {
                 mail.setHeader(rb);
@@ -221,7 +231,7 @@ class PersistentMailCache {
                 if (_log.shouldWarn()) {_log.warn("Unable to read file " + f);}
             }
         }
-        if (!found && _log.shouldWarn()) {_log.warn("Unable to find file " + f + " for mail " + Base64.encode(mail.uidl));}
+        if (_log.shouldWarn()) {_log.warn("Unable to find file " + f + " for mail " + Base64.encode(mail.uidl));}
         return false;
     }
 
@@ -339,6 +349,8 @@ class PersistentMailCache {
             GzipFileBuffer gb = new GzipFileBuffer(f);
             out = gb.getOutputStream();
             DataHelper.copy(in, out);
+            out.close();
+            out = null;
             rb.readComplete(true);
             return true;
         } catch (IOException ioe) {

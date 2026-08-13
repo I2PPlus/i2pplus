@@ -8,6 +8,7 @@ import i2p.susi.util.FileBuffer;
 import i2p.susi.util.MemoryBuffer;
 import i2p.susi.webmail.encoding.Encoding;
 import i2p.susi.webmail.encoding.EncodingFactory;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -163,10 +164,23 @@ class Mail {
     public synchronized Buffer getBody() {return body;}
 
     /**
+     * Delete the backing file of a body buffer if it is a susimail-new-* temp file.
+     * The disk cache files (GzipFileBuffer) are never deleted here.
+     * @since 0.9.71+
+     */
+    static void deleteTempBodyFile(Buffer rb) {
+        if (rb instanceof FileBuffer) {
+            File f = ((FileBuffer) rb).getFile();
+            if (f.getParentFile().equals(I2PAppContext.getGlobalContext().getTempDir())) {f.delete();}
+        }
+    }
+
+    /**
      * @param rb buffer containing body data
      */
     public synchronized void setBody(Buffer rb) {
         if (rb == null) {return;}
+        if (body != rb) {deleteTempBodyFile(body);}
         // In the common case where we have the body, we only parse the headers once.
         // we always re-set the header, even if it was non-null before, as we have to
         // parse them to find the start of the body

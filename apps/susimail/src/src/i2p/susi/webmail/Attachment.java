@@ -5,12 +5,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Represents an email attachment with metadata and file data.
  * @since public since 0.9.33, was package private
  */
 public class Attachment {
+    /**
+     * Unique per-process id, used as the attachment id in the compose UI.
+     * @since 0.9.71+
+     */
+    private static final AtomicInteger _nextId = new AtomicInteger(1);
+    /**
+     * The id of this attachment, unique per process.
+     * @since 0.9.71+
+     */
+    public final int id = _nextId.getAndIncrement();
     /**
      * The file name of the attachment.
      */

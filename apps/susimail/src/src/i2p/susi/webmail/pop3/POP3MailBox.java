@@ -529,7 +529,7 @@ public class POP3MailBox implements NewMailListener {
                 // we probably weren't really connected.
                 // Let's try again from the top.
                 result = blockingConnectToServer();
-                if (socket != null) {
+                if (socket != null && !connected) {
                     try {socket.close();}
                     catch (IOException e) { /* ignored */ }
                     socket = null;

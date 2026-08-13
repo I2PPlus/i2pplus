@@ -53,6 +53,10 @@ class MailCache {
     private final I2PAppContext _context;
     private final Folder<String> folder;
     private final String folderName;
+    /**
+     *  Serializes draft/sent full-mail writes. @since 0.9.71+
+     */
+    private final Object _writeLock = new Object();
     private NewMailListener _loadInProgress;
     private boolean _isLoaded;
     private final boolean _isDrafts;
@@ -121,6 +125,7 @@ class MailCache {
     /**
      * For writing a new full mail (NOT headers only)
      * Caller must close.
+     * Caller must hold the write lock (see getWriteLock()) for the whole write.
      * @return the full write buffer
      * @since 0.9.35
      */
@@ -128,6 +133,13 @@ class MailCache {
         // no locking this way
         return disk.getFullBuffer(uidl);
     }
+
+    /**
+     *  Lock held while writing a new full mail, serializing draft/sent
+     *  writes against each other.
+     *  @since 0.9.71+
+     */
+    public Object getWriteLock() {return _writeLock;}
 
     /**
      * For writing a new full mail
@@ -183,6 +195,7 @@ class MailCache {
                 return false;
             if (!FileUtil.rename(from, to))
                 return false;
+            Mail.deleteTempBodyFile(mail.getBody());
             mails.remove(uidl);
             folder.removeElement(uidl);
         }
@@ -456,9 +469,12 @@ class MailCache {
                 headerOnly = false;
             if( headerOnly ) {
                 if(!mail.hasHeader()) {
-                    if (disk.getMail(mail, true)) {
+                    // load the body too if we have it cached and want to free server space
+                    boolean loadFull = !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER)) &&
+                                       disk.getFullFile(uidl).exists();
+                    if (disk.getMail(mail, !loadFull)) {
                         if (_log.shouldDebug()) _log.debug("[SusiMail] Loaded header from disk cache: " + uidl);
-                        // note that disk loaded the full body if it had it
+                        // note that disk loaded the full body if we asked for it
                         if (mail.hasBody() &&
                             !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
                             // we already have it, send delete
@@ -479,8 +495,10 @@ class MailCache {
                 if(!mail.hasBody()) {
                     if (disk.getMail(mail, false)) {
                         if (_log.shouldDebug()) _log.debug("[SusiMail] Loaded body from disk cache: " + uidl);
-                        // note that disk loaded the full body if it had it
-                        if (!Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
+                        // disk may only have the header file; never delete the
+                        // server copy unless we actually have the body
+                        if (mail.hasBody() &&
+                            !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
                             // we already have it, send delete
                             mailbox.queueForDeletion(mail.uidl);
                         }

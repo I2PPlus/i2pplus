@@ -65,7 +65,11 @@ class IdleCloser {
         @Override
         public void timeReached() {
         if (isDead) {return;}
-            if (!mailbox.isConnected()) {return;} // unsynchronized here, sync in thread only
+            if (!mailbox.isConnected()) {
+                // mailbox may reconnect later, keep checking (SM-L3)
+                schedule(getMaxIdle() + 5*1000);
+                return;
+            } // unsynchronized here, sync in thread only
             if (!isClosing) {
                 long config = getMaxIdle();
                 long idle = System.currentTimeMillis() - mailbox.getLastActivity();

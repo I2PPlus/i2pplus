@@ -1094,7 +1094,7 @@ public class WebMail extends HttpServlet {
                 if (uidl == null) {uidl = I2PAppContext.getGlobalContext().random().nextLong() + "drft";}
                 StringBuilder draft = composeDraft(sessionObject, request);
                 boolean ok = saveDraft(sessionObject, uidl, draft);
-                if (ok) {sessionObject.clearAttachments();}
+                if (ok) {sessionObject.deleteAttachments();}
                 if (ok && buttonPressed(request, SAVE_AS_DRAFT)) {sessionObject.info += _t("Draft saved.") + '\n';}
                 else if (ok && buttonPressed(request, SEND)) {
                     MailCache toMC = sessionObject.caches.get(DIR_DRAFTS);
@@ -1480,7 +1480,7 @@ public class WebMail extends HttpServlet {
                     int n = Integer.parseInt(item);
                     for (int i = 0; i < sessionObject.attachments.size(); i++) {
                         Attachment attachment = sessionObject.attachments.get(i);
-                        if (attachment.hashCode() == n) {
+                        if (attachment.id == n) {
                             sessionObject.attachments.remove(i);
                             attachment.deleteData();
                             deleted = true;
@@ -1623,7 +1623,7 @@ public class WebMail extends HttpServlet {
                 if (sessionObject.attachments != null) {
                     int hc = Integer.parseInt(str);
                     for (Attachment att : sessionObject.attachments) {
-                        if (hc == att.hashCode()) {
+                        if (hc == att.id) {
                             String ct = att.getContentType();
                             if (ct != null) {response.setContentType(ct);}
                             response.setContentLength((int) att.getSize());
@@ -2860,12 +2860,25 @@ public class WebMail extends HttpServlet {
         Log log = sessionObject.log;
         if (log.shouldDebug()) log.debug("Save as draft: " + uidl);
         MailCache toMC = sessionObject.caches.get(DIR_DRAFTS);
+        if (toMC == null) {
+            sessionObject.error += _t("Unable to save mail.") + ' ' + _t("No Drafts folder?") + '\n';
+            return false;
+        }
+        // serialize draft/sent writes against each other (SM-L2)
+        synchronized(toMC.getWriteLock()) {
+            return saveDraftLocked(log, sessionObject, toMC, uidl, draft);
+        }
+    }
+
+    /**
+     *  Caller must hold the MailCache write lock.
+     */
+    private static boolean saveDraftLocked(Log log, SessionObject sessionObject, MailCache toMC,
+                                           String uidl, StringBuilder draft) {
         Writer wout = null;
         boolean ok = false;
         Buffer buffer = null;
         try {
-            if (toMC == null)
-                throw new IOException("No Drafts folder?");
             waitForLoad(sessionObject, toMC);
             if (draft == null)
                 throw new IOException("Draft compose error");  // composeDraft added error messages
@@ -3306,13 +3319,13 @@ public class WebMail extends HttpServlet {
                     wroteHeader = true;
                 } else {buf.append("<tr><td>&nbsp;</td>");}
                 buf.append("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check")
-                   .append(attachment.hashCode()).append("\" value=1>&nbsp;").append(quoteHTML(attachment.getFileName()));
+                   .append(attachment.id).append("\" value=1>&nbsp;").append(quoteHTML(attachment.getFileName()));
                 buf.append(" <span class=attachSize>(").append(attachSize).append(")</span></label>");
                 String type = attachment.getContentType();
                 String iconDir = "/themes/susimail/images/";
                 if (type != null) {
                     buf.append("<span class=thumbnail><img alt=\"\" src=\"");
-                    if (type.startsWith("image/")) {buf.append(myself).append('?').append(DRAFT_ATTACHMENT).append('=').append(attachment.hashCode());}
+                    if (type.startsWith("image/")) {buf.append(myself).append('?').append(DRAFT_ATTACHMENT).append('=').append(attachment.id);}
                     else if (type.startsWith("audio/")) {buf.append(iconDir).append("audio.svg");}
                     else if (type.startsWith("text/")) {buf.append(iconDir).append("text.svg");}
                     else if (type.startsWith("video/")) {buf.append(iconDir).append("video.svg");}
