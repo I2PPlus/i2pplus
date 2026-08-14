@@ -758,6 +758,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         long now = _context.clock().now();
         // Fast cycle (5s): transport worker thread pools react to CPU saturation
         // and idle-drain quickly. Everything else stays on the 15s cycle.
+        fastCycle(now);
+        slowCycle(now);
+    }
+
+    /** Fast 5s cycle: transport worker thread pools react to CPU saturation. */
+    private void fastCycle(long now) {
         if (now - _lastFastCycle >= 5000) {
             _lastFastCycle = now;
             sampleStageCpu();
@@ -774,6 +780,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 }
             }
         }
+    }
+
+    /** Slow 15s cycle: system health, param updates, crypto pools and derived values. */
+    private void slowCycle(long now) {
         if (now - _lastSlowCycle >= 15000) {
             _lastSlowCycle = now;
             // Compute system health once per cycle, shared by all params
@@ -781,51 +791,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _lastHealth = health;
             _lastHealthScore = health.getScore();
             _lastSubsystemScores = health.computeSubsystemScores();
-            for (TunableParam param : _params) {
-                try {
-                    if (_fastParams.contains(param))
-                        continue;
-                    if (param instanceof BaseParam) {
-                        BaseParam bp = (BaseParam) param;
-                        bp.refreshRanges(_context);
-                        bp.refreshDefault(_context);
-                        bp.setHealth(health);
-                    }
-                    param.update();
-                } catch (Exception e) {
-                    if (_log.shouldWarn())
-                        _log.warn("Tuner: error updating " + param.getName(), e);
-                }
-            }
-            // Refresh XDH pool sizes based on current system conditions
-            X25519KeyFactory xdh = X25519KeyFactory.getInstance();
-            if (xdh != null) {
-                try { xdh.refreshPoolSize(); }
-                catch (Exception e) {
-                    if (_log.shouldWarn())
-                        _log.warn("Tuner: error refreshing XDH pool", e);
-                }
-            }
-            // Refresh EDH pool sizes based on current system conditions
-            net.i2p.router.crypto.ratchet.Elg2KeyFactory edh =
-                net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
-            if (edh != null) {
-                try { edh.refreshPoolSize(); }
-                catch (Exception e) {
-                    if (_log.shouldWarn())
-                        _log.warn("Tuner: error refreshing EDH pool", e);
-                }
-            }
-            // Refresh MLKEM pool sizes based on current system conditions
-            net.i2p.router.crypto.pqc.MLKEMKeyFactory mlkem =
-                net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
-            if (mlkem != null) {
-                try { mlkem.refreshPoolSize(); }
-                catch (Exception e) {
-                    if (_log.shouldWarn())
-                        _log.warn("Tuner: error refreshing MLKEM pool", e);
-                }
-            }
+            updateSlowParams(health);
+            refreshCryptoPoolSizes();
             // Compute derived test/build tuning values from subsystem scores
             computeTuningValues();
             // Expunge stale queue weak references (queues from cycled tunnels)
@@ -834,6 +801,59 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             CoDelPriorityBlockingQueue.expungeStaleInstances();
             // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)
             _autotune.save();
+        }
+    }
+
+    /** Update all non-fast params on the 15s cycle. */
+    private void updateSlowParams(SystemHealth health) {
+        for (TunableParam param : _params) {
+            try {
+                if (_fastParams.contains(param))
+                    continue;
+                if (param instanceof BaseParam) {
+                    BaseParam bp = (BaseParam) param;
+                    bp.refreshRanges(_context);
+                    bp.refreshDefault(_context);
+                    bp.setHealth(health);
+                }
+                param.update();
+            } catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Tuner: error updating " + param.getName(), e);
+            }
+        }
+    }
+
+    /** Refresh XDH, EDH and MLKEM precomputation pool sizes. */
+    private void refreshCryptoPoolSizes() {
+        // Refresh XDH pool sizes based on current system conditions
+        X25519KeyFactory xdh = X25519KeyFactory.getInstance();
+        if (xdh != null) {
+            try { xdh.refreshPoolSize(); }
+            catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Tuner: error refreshing XDH pool", e);
+            }
+        }
+        // Refresh EDH pool sizes based on current system conditions
+        net.i2p.router.crypto.ratchet.Elg2KeyFactory edh =
+            net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
+        if (edh != null) {
+            try { edh.refreshPoolSize(); }
+            catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Tuner: error refreshing EDH pool", e);
+            }
+        }
+        // Refresh MLKEM pool sizes based on current system conditions
+        net.i2p.router.crypto.pqc.MLKEMKeyFactory mlkem =
+            net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
+        if (mlkem != null) {
+            try { mlkem.refreshPoolSize(); }
+            catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Tuner: error refreshing MLKEM pool", e);
+            }
         }
     }
 
@@ -2050,6 +2070,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (Double.isNaN(observed) && !_cpuDriven)
                 return;
             // Auto-revert to factory default when system is severely degraded
+            if (autoRevertToDefault())
+                return;
+            _reverted = false;
+            int target = computeTarget(observed);
+            // Health-based dampening: reduce step size when degraded
+            if (_health != null && _health.getScore() < 0.6)
+                target = dampenTarget(target);
+            target = clampTarget(target);
+            applyTarget(target);
+        }
+
+        /** Auto-revert to the factory default when system health is severely degraded. */
+        private boolean autoRevertToDefault() {
             if (_health != null && _health.getScore() < DEGRADED_THRESHOLD) {
                 int current = getRuntimeValue();
                 if (current != _defaultValue && !_reverted) {
@@ -2058,21 +2091,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     applyValue(_defaultValue);
                     _reverted = true;
                 }
-                return;
+                return true;
             }
-            _reverted = false;
-            int target = computeTarget(observed);
-            // Health-based dampening: reduce step size when degraded
-            if (_health != null && _health.getScore() < 0.6) {
-                int current = getRuntimeValue();
-                int rawDelta = target - current;
-                // scale delta by health: at health=0.3 → 0% of delta, at health=0.6 → 100%
-                int dampened = current + (int)(rawDelta * ((_health.getScore() - DEGRADED_THRESHOLD) / 0.3));
-                // clamp to at least 1 step toward target
-                if (dampened == current && target != current)
-                    dampened = current + (rawDelta > 0 ? Math.min(_step, rawDelta) : Math.max(-_step, rawDelta));
-                target = dampened;
-            }
+            return false;
+        }
+
+        /** Dampen the computed target: reduce step size when system is degraded. */
+        private int dampenTarget(int target) {
+            int current = getRuntimeValue();
+            int rawDelta = target - current;
+            // scale delta by health: at health=0.3 → 0% of delta, at health=0.6 → 100%
+            int dampened = current + (int)(rawDelta * ((_health.getScore() - DEGRADED_THRESHOLD) / 0.3));
+            // clamp to at least 1 step toward target
+            if (dampened == current && target != current)
+                dampened = current + (rawDelta > 0 ? Math.min(_step, rawDelta) : Math.max(-_step, rawDelta));
+            return dampened;
+        }
+
+        /** Hard clamp the target to [min, max] before comparison. */
+        private int clampTarget(int target) {
             // Hard clamp to [min, max] BEFORE comparison — prevents stale persisted values
             // from exceeding caps after code changes, even when computeTarget() returns
             // unclamped current or dampening pushes target outside range
@@ -2081,6 +2118,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (target != unclamped && _log.shouldWarn())
                 _log.warn(_name + " target " + unclamped + " clamped to " + target +
                           " (range " + _min + "-" + _max + ")");
+            return target;
+        }
+
+        /** Apply the target value, accelerating rollback when diverged from default. */
+        private void applyTarget(int target) {
             // Fast rollback: when current has diverged from _defaultValue and the stat
             // has moved against the divergence, snap back faster (2x step)
             int current = getRuntimeValue();
