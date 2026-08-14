@@ -1120,9 +1120,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
             }
         } catch (IOException ex) {
-            System.err.println("[RDNSCache] Error reading RDNS cache file. Creating new file..."); // NOSONAR S106 static utility
+            _slog.error("Error reading RDNS cache file. Creating new file...", ex);
             createRdnsCacheFile();
-            ex.printStackTrace();
         }
         // Cancel existing timer before creating new one to prevent memory leak
         if (_rdnsTimer != null) {
@@ -1196,8 +1195,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     fos.write(bytes);
                 }
             } catch (IOException ex) {
-                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage()); // NOSONAR S106 static utility
-                ex.printStackTrace();
+                _slog.error("Error updating reverse DNS cache file", ex);
             }
         }
     }

@@ -324,7 +324,6 @@ public class RouterTimestamper extends Timestamper {
             synchronized (this) { notifyAll(); }
             if (_log != null)
                 _log.log(Log.CRIT, "Timestamper died!", t);
-            t.printStackTrace();
         }
     }
 
