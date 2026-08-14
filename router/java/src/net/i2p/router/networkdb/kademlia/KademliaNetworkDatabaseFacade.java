@@ -1277,65 +1277,83 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         validateLeaseSetExpiry(localLeaseSet);
 
         Hash hash = localLeaseSet.getHash();
+        storeLocalLeaseSetCopy(localLeaseSet);
 
+        // Skip publishing if client manager advises against it
+        if (!_context.clientManager().shouldPublishLeaseSet(hash)) {
+            handleNonPublishedLeaseSet(hash);
+            return;
+        }
+
+        if (isGracefulExitShutdown()) {
+            return;
+        }
+
+        mirrorToMainFacade(localLeaseSet);
+
+        scheduleRepublish(hash);
+    }
+
+    /** Store the local copy, forcing overwrite; propagate IAE to the caller. */
+    private void storeLocalLeaseSetCopy(LeaseSet localLeaseSet) {
         try {
-            store(hash, localLeaseSet, true); // force overwrite
+            store(localLeaseSet.getHash(), localLeaseSet, true); // force overwrite
         } catch (IllegalArgumentException iae) {
             _log.error("Locally published LeaseSet is not valid", iae);
             throw iae;
         }
+    }
 
-        // Skip publishing if client manager advises against it
-        if (!_context.clientManager().shouldPublishLeaseSet(hash)) {
-            // A local client whose LS is not published to the network
-            // (i2cp.dontPublishLeaseSet, e.g. HTTP proxy) still needs the local
-            // copy re-minted while it is active.  Client leases last ~6 min but
-            // tunnels rotate on a ~10-min cycle, so without a republish schedule
-            // the local LeaseSet shows expired in the netdb for minutes at a time.
-            if (_context.clientManager().isLocal(hash) &&
-                !_context.router().gracefulShutdownInProgress()) {
-                scheduleRepublish(hash);
-            }
-            return;
+    /**
+     * A local client whose LS is not published to the network
+     * (i2cp.dontPublishLeaseSet, e.g. HTTP proxy) still needs the local
+     * copy re-minted while it is active.  Client leases last ~6 min but
+     * tunnels rotate on a ~10-min cycle, so without a republish schedule
+     * the local LeaseSet shows expired in the netdb for minutes at a time.
+     */
+    private void handleNonPublishedLeaseSet(Hash hash) {
+        if (_context.clientManager().isLocal(hash) &&
+            !_context.router().gracefulShutdownInProgress()) {
+            scheduleRepublish(hash);
         }
+    }
 
-        // If shutting down gracefully with defined exit codes, skip publishing
-        if (_context.router().gracefulShutdownInProgress()) {
-            int code = _context.router().scheduledGracefulExitCode();
-            if (code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD) {
-                return;
-            }
-        }
+    /** @return true if a graceful shutdown with defined exit codes is in progress */
+    private boolean isGracefulExitShutdown() {
+        if (!_context.router().gracefulShutdownInProgress()) {return false;}
+        int code = _context.router().scheduledGracefulExitCode();
+        return code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD;
+    }
 
-        // A locally-published LeaseSet legitimately occupies both the client
-        // facade (where the client pushed it) and the floodfill facade (where
-        // the router console and the network look it up).  Storing the copy
-        // into the floodfill facade here makes hosted services retrievable
-        // immediately, without waiting for the network to flood the LeaseSet
-        // back to us.  The NetDbRenderer dedups the two facades' entries on
-        // the netdb page.
-        if (isClientDb()) {
-            KademliaNetworkDatabaseFacade main = (KademliaNetworkDatabaseFacade) _context.netDb();
-            if (main != null && main != this) {
-                try {
-                    main.store(hash, localLeaseSet, true);
-                    if (localLeaseSet instanceof EncryptedLeaseSet) {
-                        // LS2s are keyed in the netDb by their hash; store the
-                        // decrypted copy under the destination hash too, so
-                        // lookups by destination resolve hosted services
-                        EncryptedLeaseSet encls = (EncryptedLeaseSet) localLeaseSet;
-                        Destination dest = encls.getDestination();
-                        if (dest != null) {
-                            main.store(dest.getHash(), encls.getDecryptedLeaseSet(), true);
-                        }
+    /**
+     * A locally-published LeaseSet legitimately occupies both the client
+     * facade (where the client pushed it) and the floodfill facade (where
+     * the router console and the network look it up).  Storing the copy
+     * into the floodfill facade here makes hosted services retrievable
+     * immediately, without waiting for the network to flood the LeaseSet
+     * back to us.  The NetDbRenderer dedups the two facades' entries on
+     * the netdb page.
+     */
+    private void mirrorToMainFacade(LeaseSet localLeaseSet) {
+        if (!isClientDb()) {return;}
+        KademliaNetworkDatabaseFacade main = (KademliaNetworkDatabaseFacade) _context.netDb();
+        if (main != null && main != this) {
+            try {
+                main.store(localLeaseSet.getHash(), localLeaseSet, true);
+                if (localLeaseSet instanceof EncryptedLeaseSet) {
+                    // LS2s are keyed in the netDb by their hash; store the
+                    // decrypted copy under the destination hash too, so
+                    // lookups by destination resolve hosted services
+                    EncryptedLeaseSet encls = (EncryptedLeaseSet) localLeaseSet;
+                    Destination dest = encls.getDestination();
+                    if (dest != null) {
+                        main.store(dest.getHash(), encls.getDecryptedLeaseSet(), true);
                     }
-                } catch (IllegalArgumentException iae) {
-                    _log.error("Error storing LeaseSet into floodfill facade", iae);
                 }
+            } catch (IllegalArgumentException iae) {
+                _log.error("Error storing LeaseSet into floodfill facade", iae);
             }
         }
-
-        scheduleRepublish(hash);
     }
 
     /**
@@ -2561,52 +2579,65 @@ return false;
         if (h != null && entry.getHash().equals(h)) {
             int etype = entry.getType();
             if (DatabaseEntry.isLeaseSet(etype)) {
-                LeaseSet ls = (LeaseSet) entry;
-                Destination d = ls.getDestination();
-                // will be null for encrypted LS
-                if (d != null) {
-                    Certificate c = d.getCertificate();
-                    if (c.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
-                        try {
-                            KeyCertificate kc = c.toKeyCertificate();
-                            SigType type = kc.getSigType();
-                            if (type == null || !type.isAvailable() || type.getBaseAlgorithm() == SigAlgo.RSA) {
-                                failPermanently(d);
-                                String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
-                                if (_log.shouldWarn()) {
-                                    _log.warn("Unsupported Signature type " + stype + " for destination " + h);
-                                }
-                                throw new UnsupportedCryptoException("Sig type " + stype);
-                            }
-                        } catch (DataFormatException dfe) { /* ignored */ }
-                    }
-                }
+                checkLeaseSetSigType(h, (LeaseSet) entry);
             } else if (etype == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
-                RouterInfo ri = (RouterInfo) entry;
-                RouterIdentity id = ri.getIdentity();
-                Certificate c = id.getCertificate();
-                if (c.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
-                    try {
-                        KeyCertificate kc = c.toKeyCertificate();
-                        SigType type = kc.getSigType();
-                        if (type == null || !type.isAvailable()) {
-                            String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
-                            String ipPort = TransportImpl.getRouterIPPort(ri);
-                            _banLogger.logBanForever(h, ipPort, "Unsupported Signature type " + stype, ri);
-                            _context.banlist().banlistRouterForever(h, "" + "Unsupported Signature type " + stype);
-                            if (_log.shouldWarn()) {
-                                _log.warn("Unsupported Signature type " + stype + " for [" +
-                                          h.toBase64().substring(0,6) + "] - banned until restart");
-                            }
-                            throw new UnsupportedCryptoException("Sig type " + stype);
-                        }
-                    } catch (DataFormatException dfe) { /* ignored */ }
-                }
+                checkRouterInfoSigType(h, (RouterInfo) entry);
             }
         }
         if (_log.shouldWarn()) {
             _log.warn("RouterInfo verification failure (Unknown cause)\n" + entry);
         }
+    }
+
+    /** Reject LeaseSets with unsupported signature types; negative-cache the destination permanently. */
+    private void checkLeaseSetSigType(Hash h, LeaseSet ls) throws UnsupportedCryptoException {
+        Destination d = ls.getDestination();
+        // will be null for encrypted LS
+        if (d != null) {
+            Certificate c = d.getCertificate();
+            if (c.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
+                try {
+                    KeyCertificate kc = c.toKeyCertificate();
+                    SigType type = kc.getSigType();
+                    if (type == null || !type.isAvailable() || type.getBaseAlgorithm() == SigAlgo.RSA) {
+                        failPermanently(d);
+                        String stype = sigTypeDescription(kc, type);
+                        if (_log.shouldWarn()) {
+                            _log.warn("Unsupported Signature type " + stype + " for destination " + h);
+                        }
+                        throw new UnsupportedCryptoException("Sig type " + stype);
+                    }
+                } catch (DataFormatException dfe) { /* ignored */ }
+            }
+        }
+    }
+
+    /** Reject RouterInfos with unsupported signature types; ban until restart. */
+    private void checkRouterInfoSigType(Hash h, RouterInfo ri) throws UnsupportedCryptoException {
+        RouterIdentity id = ri.getIdentity();
+        Certificate c = id.getCertificate();
+        if (c.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
+            try {
+                KeyCertificate kc = c.toKeyCertificate();
+                SigType type = kc.getSigType();
+                if (type == null || !type.isAvailable()) {
+                    String stype = sigTypeDescription(kc, type);
+                    String ipPort = TransportImpl.getRouterIPPort(ri);
+                    _banLogger.logBanForever(h, ipPort, "Unsupported Signature type " + stype, ri);
+                    _context.banlist().banlistRouterForever(h, "" + "Unsupported Signature type " + stype);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Unsupported Signature type " + stype + " for [" +
+                                  h.toBase64().substring(0,6) + "] - banned until restart");
+                    }
+                    throw new UnsupportedCryptoException("Sig type " + stype);
+                }
+            } catch (DataFormatException dfe) { /* ignored */ }
+        }
+    }
+
+    /** @return the sig type name, or the raw type code when unnamed */
+    private static String sigTypeDescription(KeyCertificate kc, SigType type) {
+        return (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
     }
 
     /** Final remove for a leaseset.  For a router info, will look up in the network before dropping. */
@@ -2988,23 +3019,7 @@ return false;
         // is keyed by local client hash, so it is null for many client
         // facades, and a failed remote lookup costs nothing anyway.
 
-        // Limit size to prevent unbounded growth
-        final int MAX_ENTRIES = 1024;
-        if (_clientLeaseSetAccessTime.size() > MAX_ENTRIES) {
-            int toRemove = MAX_ENTRIES / 4;
-            // O(N) eviction - reduce map size to prevent unbounded growth
-            Iterator<Map.Entry<Hash, Long>> evictIter = _clientLeaseSetAccessTime.entrySet().iterator();
-            int evicted = 0;
-            while (evictIter.hasNext() && evicted < toRemove) {
-                evictIter.next();
-                evictIter.remove();
-                evicted++;
-            }
-            if (_log.shouldWarn()) {
-                _log.warn("Pruned " + evicted + " stale entries from client LeaseSet tracking, " +
-                          "current size: " + _clientLeaseSetAccessTime.size());
-            }
-        }
+        pruneLeaseSetTracking();
 
         NamingService ns = _context.namingService(); // log names only - never gates refresh
 
@@ -3031,24 +3046,11 @@ return false;
                 }
                 continue;
             }
-                // Use raw lookup to get LeaseSet even if expired
-                DatabaseEntry ds = _ds.get(key);
-                if (ds != null && ds.isLeaseSet()) {
-                    LeaseSet ls = (LeaseSet) ds;
-                    long expires = ls.getLatestLeaseDate();
-                    long timeToExpiry = expires - now;
-                    if (timeToExpiry > 0 && timeToExpiry < PROACTIVE_REFRESH_THRESHOLD) {
-                        // Proactive refresh - LeaseSet expiring soon
-                        // Always use client tunnels for client subDb refresh
-                        _clientLeaseSetAccessTime.put(key, now);
-                        lookupLeaseSetRemotely(key, _dbid);
-                        if (_log.shouldInfo()) {
-                            _log.info("Proactive refresh for " + logName(ns, key) + " (expires in " + (timeToExpiry/1000) + "s)");
-                        }
-                        processed++;
-                        continue;
-                    }
-                }
+
+            if (proactivelyRefreshIfExpiring(key, now, ns)) {
+                processed++;
+                continue;
+            }
 
             if (lastAccess < inactiveThreshold) {
                 iter.remove();
@@ -3074,6 +3076,51 @@ return false;
             _log.info("Client LeaseSet refresh: processed " + processed + ", removed " + removed +
                       ", remaining " + _clientLeaseSetAccessTime.size());
         }
+    }
+
+    /** Evict oldest tracked entries to cap map size. */
+    private void pruneLeaseSetTracking() {
+        final int MAX_ENTRIES = 1024;
+        if (_clientLeaseSetAccessTime.size() > MAX_ENTRIES) {
+            int toRemove = MAX_ENTRIES / 4;
+            // O(N) eviction - reduce map size to prevent unbounded growth
+            Iterator<Map.Entry<Hash, Long>> evictIter = _clientLeaseSetAccessTime.entrySet().iterator();
+            int evicted = 0;
+            while (evictIter.hasNext() && evicted < toRemove) {
+                evictIter.next();
+                evictIter.remove();
+                evicted++;
+            }
+            if (_log.shouldWarn()) {
+                _log.warn("Pruned " + evicted + " stale entries from client LeaseSet tracking, " +
+                          "current size: " + _clientLeaseSetAccessTime.size());
+            }
+        }
+    }
+
+    /**
+     * Refresh a tracked LeaseSet early when it is about to expire.  Always
+     * uses client tunnels for client subDb refresh.
+     *
+     * @return true if the proactive refresh was triggered
+     */
+    private boolean proactivelyRefreshIfExpiring(Hash key, long now, NamingService ns) {
+        // Use raw lookup to get LeaseSet even if expired
+        DatabaseEntry ds = _ds.get(key);
+        if (ds != null && ds.isLeaseSet()) {
+            LeaseSet ls = (LeaseSet) ds;
+            long expires = ls.getLatestLeaseDate();
+            long timeToExpiry = expires - now;
+            if (timeToExpiry > 0 && timeToExpiry < PROACTIVE_REFRESH_THRESHOLD) {
+                _clientLeaseSetAccessTime.put(key, now);
+                lookupLeaseSetRemotely(key, _dbid);
+                if (_log.shouldInfo()) {
+                    _log.info("Proactive refresh for " + logName(ns, key) + " (expires in " + (timeToExpiry/1000) + "s)");
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
