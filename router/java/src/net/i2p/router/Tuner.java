@@ -7826,7 +7826,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
-            return ctx.profileOrganizer().getAverageLossRatio() * 100.0;
+            return _context.profileOrganizer().getAverageLossRatio() * 100.0;
         }
 
         /** Compute the target value based on observed stat and configured limits. */

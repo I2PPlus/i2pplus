@@ -158,6 +158,7 @@ public class TuningFormHandler extends FormHandler {
         t = new Tunable("profileOrganizer.maxProfiles", "maxProfiles", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
         t = new Tunable("profileOrganizer.minFastPeers", "minFastPeers", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        t = new Tunable("profileOrganizer.lossyThreshold", "lossyThreshold", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
         t = new Tunable("profileOrganizer.maxFastPeers", "maxFastPeers", HAS_RANGE | HAS_DEFAULT);
         TUNED.add(t);
