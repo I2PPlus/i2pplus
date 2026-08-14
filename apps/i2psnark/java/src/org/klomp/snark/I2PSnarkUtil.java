@@ -1349,6 +1349,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         int truncate = url.indexOf("&");
         String convertedurl = trackerB32ToHostname(url);
+        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
         if (get.fetch(timeout)) {
             if (_log.shouldDebug()) {
                 _log.debug("Request successful [" + convertedurl.substring(0, truncate) + "...] (Size: " +
@@ -1401,6 +1402,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         int truncate = url.indexOf("&");
         String convertedurl = trackerB32ToHostname(url);
+        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
         if (get.fetch(timeout)) {
             if (_log.shouldDebug())
                 _log.debug(
@@ -1462,6 +1464,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         int truncate = url.indexOf("&");
         String convertedurl = trackerB32ToHostname(url);
+        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
         if (get.fetch(timeout)) {
             if (_log.shouldDebug())
                 _log.debug(
