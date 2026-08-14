@@ -1827,38 +1827,75 @@ public class EstablishmentManager {
                                  data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE);
             int payloadLen = len - (LONG_HEADER_SIZE + MAC_LEN);
             SSU2Payload.processPayload(_context, cb, data, off + LONG_HEADER_SIZE, payloadLen, false, null);
-            if (cb._respCode != 0) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] BAD HolePunch response: " + cb._respCode);}
-                return;
-            }
-            long skew = cb._timeReceived - now;
-            if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] Too skewed (" + skew + "ms) in HolePunch from " + id);}
-                return;
-            }
+            if (!isValidHolePunchResponse(cb, rcvConnID, now, id)) {return;}
             nonce = DataHelper.fromLong(cb._respData, 0, 4);
-            if (nonce != (rcvConnID & 0xFFFFFFFFL) ||
-                nonce != ((rcvConnID >> 32) & 0xFFFFFFFFL)) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] BAD nonce in HolePunch from " + id);}
-                return;
-            }
-            long time = DataHelper.fromLong(cb._respData, 4, 4) * 1000;
-            skew = time - now;
-            if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] Too skewed (" + skew + "ms) in HolePunch from " + id);}
-                return;
-            }
-            int ver = cb._respData[8] & 0xff;
-            if (ver != 2) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] BAD HolePunch version (" + ver + ") from " + id);}
-                return;
-            }
             // check signature below
         } catch (Exception e) {
             if (_log.shouldWarn() && !shouldSuppressException(e)) {_log.warn("[SSU] BAD HolePunch packet:\n" + HexDump.dump(data, off, len), e);}
             return;
         } finally {chacha.destroy();}
 
+        OutboundEstablishState state = findHolePunchState(id, nonce);
+        if (state == null) {return;}
+        if (state.getVersion() < 2 || state.getVersion() > 4) {return;}
+        OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+        byte[] signedData = verifyIntroducerSignature(state, state2, cb);
+        if (signedData == null) {return;}
+        int port = validateHolePunchAddress(state, id, signedData);
+        if (port < 0) {return;}
+        long token = DataHelper.fromLong8(cb._respData, cb._respData.length - 8);
+        updateHolePunchState(state, state2, signedData, port, now, token);
+    }
+
+    /**
+     *  Validate the decrypted HolePunch payload: response code, clock skew,
+     *  the nonce echoing the receiving connection ID, the response time, and
+     *  the version.
+     *
+     *  @param cb payload callback results
+     *  @param rcvConnID connection ID this packet was sent to
+     *  @param now receive time
+     *  @param id sender
+     *  @return true if all checks pass
+     */
+    private boolean isValidHolePunchResponse(HPCallback cb, long rcvConnID, long now, RemoteHostId id) {
+        if (cb._respCode != 0) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] BAD HolePunch response: " + cb._respCode);}
+            return false;
+        }
+        long skew = cb._timeReceived - now;
+        if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] Too skewed (" + skew + "ms) in HolePunch from " + id);}
+            return false;
+        }
+        long nonce = DataHelper.fromLong(cb._respData, 0, 4);
+        if (nonce != (rcvConnID & 0xFFFFFFFFL) ||
+            nonce != ((rcvConnID >> 32) & 0xFFFFFFFFL)) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] BAD nonce in HolePunch from " + id);}
+            return false;
+        }
+        long time = DataHelper.fromLong(cb._respData, 4, 4) * 1000;
+        skew = time - now;
+        if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] Too skewed (" + skew + "ms) in HolePunch from " + id);}
+            return false;
+        }
+        int ver = cb._respData[8] & 0xff;
+        if (ver != 2) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] BAD HolePunch version (" + ver + ") from " + id);}
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *  Find the outbound establish state this HolePunch belongs to.
+     *
+     *  @param id sender
+     *  @param nonce the nonce from the validated response
+     *  @return the state, or null if unknown
+     */
+    private OutboundEstablishState findHolePunchState(RemoteHostId id, long nonce) {
         // TODO now we can look up by nonce first instead if we want
         OutboundEstablishState state = _outboundStates.get(id);
         if (state != null) {
@@ -1871,148 +1908,195 @@ public class EstablishmentManager {
                 if (_log.shouldInfo()) {_log.info("[SSU] HolePunch before RelayResponse from " + state);}
             } else {
                 if (_log.shouldLog(Log.INFO)) {_log.info("[SSU] No state found for SSU2 HolePunch from " + id);}
-                return;
+                return null;
             }
         }
-        if (state.getVersion() < 2 || state.getVersion() > 4) {return;}
-        OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+        return state;
+    }
+
+    /**
+     *  Validate the introducer signature on the HolePunch, by trying each
+     *  introducer in a state that may have signed it.
+     *
+     *  @param state outbound establish state
+     *  @param state2 SSU2-specific state, for intro bookkeeping
+     *  @param cb payload callback results
+     *  @return the signed portion of the response data (everything but the
+     *          trailing token), or null if Charlie's RouterInfo is unknown or
+     *          no introducer signature validated
+     */
+    private byte[] verifyIntroducerSignature(OutboundEstablishState state, OutboundEstablishState2 state2, HPCallback cb) {
         Hash charlieHash = state.getRemoteIdentity().getHash();
         RouterInfo charlieRI = _context.netDb().lookupRouterInfoLocally(charlieHash);
-        if (charlieRI != null) {
-            // validate signed data, but we don't necessarily know which Bob
-            SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
-            UDPAddress addr = state.getRemoteAddress();
-            int count = addr.getIntroducerCount();
-            data = Arrays.copyOfRange(cb._respData, 0, cb._respData.length - 8);
-            boolean ok = false;
-            loop:
-            for (int i = 0; i < count; i++) {
-                Hash h = addr.getIntroducerHash(i);
-                if (h != null) {
-                    OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                    switch (istate) {
-                        // probably not signed by this introducer
-                        case INTRO_STATE_INIT:
-                        case INTRO_STATE_EXPIRED:
-                        case INTRO_STATE_REJECTED:
-                        case INTRO_STATE_CONNECT_FAILED:
-                        case INTRO_STATE_BOB_REJECT:
-                        case INTRO_STATE_CHARLIE_REJECT:
-                        case INTRO_STATE_FAILED:
-                        case INTRO_STATE_INVALID:
-                        case INTRO_STATE_DISCONNECTED:
-                            continue;
-
-                        // maybe or definitely signed by this introducer
-                        case INTRO_STATE_LOOKUP_SENT:
-                        case INTRO_STATE_HAS_RI:
-                        case INTRO_STATE_CONNECTING:
-                        case INTRO_STATE_CONNECTED:
-                        case INTRO_STATE_RELAY_REQUEST_SENT:
-                        case INTRO_STATE_RELAY_CHARLIE_ACCEPTED:
-                        case INTRO_STATE_LOOKUP_FAILED:
-                        case INTRO_STATE_RELAY_RESPONSE_TIMEOUT:
-                        case INTRO_STATE_SUCCESS:
-                        default:
-                            if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
-                                                     h, null, data, spk)) {
-                                if (_log.shouldInfo()) {
-                                    _log.info("[SSU] GOOD signature with HolePunch, credit " + h.toBase64() + " on " + state);
-                                }
-                                state2.setIntroState(h, INTRO_STATE_SUCCESS);
-                                ok = true;
-                                break loop;
-                            }
-                            break;
-                    }
-                }
-            }
-            if (!ok) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] Signature failed HolePunch on " + state);}
-                return;
-            }
-
-            int iplen = data[9] & 0xff;
-            if (iplen != 6 && iplen != 18) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + state);}
-                _context.statManager().addRateData("udp.relayBadIP", 1);
-                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000L);
-                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
-                                                 "Bad Introduction data", null, null,
-                                                 _context.clock().now() + 4*60*60*1000L);
-                state.fail();
-                return;
-            }
-            int port = (int) DataHelper.fromLong(data, 10, 2);
-            byte[] ip = new byte[iplen - 2];
-            System.arraycopy(data, 12, ip, 0, iplen - 2);
-            // validate
-            if (!TransportUtil.isValidPort(port) || !_transport.isValid(ip) ||
-                _transport.isTooClose(ip) || !DataHelper.eq(ip, id.getIP()) /* IP mismatch */ ||
-                _context.blocklist().isBlocklisted(ip)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU] BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
-                }
-                _context.statManager().addRateData("udp.relayBadIP", 1);
-                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000L);
-                _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
-                                                 "Bad Introduction data", null, null,
-                                                 _context.clock().now() + 4*60*60*1000L);
-                state.fail();
-                return;
-            }
-            int fromPort = id.getPort();
-            if (port != fromPort) {
-                // if port mismatch only, use the source port as charlie doesn't know
-                // his port or is behind a symmetric NAT
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU] HolePunch source mismatch (wrong port) from " + id + " -> Published port: " + port);
-                }
-                if (!TransportUtil.isValidPort(fromPort)) {
-                    _context.statManager().addRateData("udp.relayBadIP", 1);
-                    _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 6*60*60*1000L);
-                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad Introduction data", null, null,
-                                                     _context.clock().now() + 6*60*60*1000L);
-                    state.fail();
-                    return;
-                }
-                port = fromPort;
-            } else {
-                if (_log.shouldDebug())
-                    _log.debug("[SSU] Received HolePunch from " + state + " - they are on " +
-                               Addresses.toString(ip, port));
-            }
-            synchronized (state) {
-                RemoteHostId oldId = state.getRemoteHostId();
-                if (oldId.getIP() == null) {
-                    // hole punch before relay response
-                    long token = DataHelper.fromLong8(cb._respData, cb._respData.length - 8);
-                    state2.introduced(ip, port, token);
-                    RemoteHostId newId = state.getRemoteHostId();
-                    addOutboundToken(newId, token, now + 10*1000);
-                    // Swap out the RemoteHostId the state is indexed under.
-                    // It was a Hash, change it to a IP/port.
-                    // Remove the entry in the byClaimedAddress map as it's now in main map.
-                    // Add an entry in the byHash map so additional OB pkts can find it.
-                    _outboundByHash.put(charlieHash, state);
-                    RemoteHostId claimed = state.getClaimedAddress();
-                    if (!oldId.equals(newId)) {
-                        _outboundStates.remove(oldId);
-                        _outboundStates.put(newId, state);
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info("[SSU] HolePunch replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
-                    }
-                    if (claimed != null)
-                        _outboundByClaimedAddress.remove(oldId, state);  // only if == state
-                } else { /* ignored */ } // TODO validate same IP/port as in response?
-            }
-            boolean sendNow = state.receiveHolePunch();
-            if (sendNow) {
-                if (_log.shouldInfo()) {_log.info("[SSU] Send Session Request after HolePunch from " + state);}
-                notifyActivity();
-            }
-        } else {
+        if (charlieRI == null) {
             if (_log.shouldWarn()) {_log.warn("[SSU] Charlie's RouterInfo not found " + state);}
+            return null;
+        }
+        // validate signed data, but we don't necessarily know which Bob
+        SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
+        UDPAddress addr = state.getRemoteAddress();
+        int count = addr.getIntroducerCount();
+        byte[] data = Arrays.copyOfRange(cb._respData, 0, cb._respData.length - 8);
+        boolean ok = false;
+        loop:
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            if (h != null) {
+                OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
+                switch (istate) {
+                    // probably not signed by this introducer
+                    case INTRO_STATE_INIT:
+                    case INTRO_STATE_EXPIRED:
+                    case INTRO_STATE_REJECTED:
+                    case INTRO_STATE_CONNECT_FAILED:
+                    case INTRO_STATE_BOB_REJECT:
+                    case INTRO_STATE_CHARLIE_REJECT:
+                    case INTRO_STATE_FAILED:
+                    case INTRO_STATE_INVALID:
+                    case INTRO_STATE_DISCONNECTED:
+                        continue;
+
+                    // maybe or definitely signed by this introducer
+                    case INTRO_STATE_LOOKUP_SENT:
+                    case INTRO_STATE_HAS_RI:
+                    case INTRO_STATE_CONNECTING:
+                    case INTRO_STATE_CONNECTED:
+                    case INTRO_STATE_RELAY_REQUEST_SENT:
+                    case INTRO_STATE_RELAY_CHARLIE_ACCEPTED:
+                    case INTRO_STATE_LOOKUP_FAILED:
+                    case INTRO_STATE_RELAY_RESPONSE_TIMEOUT:
+                    case INTRO_STATE_SUCCESS:
+                    default:
+                        if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
+                                                 h, null, data, spk)) {
+                            if (_log.shouldInfo()) {
+                                _log.info("[SSU] GOOD signature with HolePunch, credit " + h.toBase64() + " on " + state);
+                            }
+                            state2.setIntroState(h, INTRO_STATE_SUCCESS);
+                            ok = true;
+                            break loop;
+                        }
+                        break;
+                }
+            }
+        }
+        if (!ok) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] Signature failed HolePunch on " + state);}
+            return null;
+        }
+        return data;
+    }
+
+    /**
+     *  Ban the peer and fail the outbound establish state for bad
+     *  introduction data.
+     *
+     *  @param state the outbound establish state
+     *  @param reason ban reason
+     *  @param banDuration ban duration in ms
+     */
+    private void banAndFailState(OutboundEstablishState state, String reason, long banDuration) {
+        Hash h = state.getRemoteIdentity().getHash();
+        _context.statManager().addRateData("udp.relayBadIP", 1);
+        _banLogger.logBan(h, _context, reason, banDuration);
+        _context.banlist().banlistRouter(h, reason, null, null, _context.clock().now() + banDuration);
+        state.fail();
+    }
+
+    /**
+     *  Validate the IP and port Charlie claims in the signed data.
+     *  A port mismatch is tolerated (use the source port, Charlie may be
+     *  behind a symmetric NAT); an invalid source port is not.
+     *
+     *  @param state the outbound establish state
+     *  @param id the actual sender of the HolePunch
+     *  @param data the signed portion of the response
+     *  @return the validated port (possibly the sender's source port), or -1
+     *          if the data is invalid
+     */
+    private int validateHolePunchAddress(OutboundEstablishState state, RemoteHostId id, byte[] data) {
+        int iplen = data[9] & 0xff;
+        if (iplen != 6 && iplen != 18) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + state);}
+            banAndFailState(state, "Bad Introduction data", 4*60*60*1000L);
+            return -1;
+        }
+        int port = (int) DataHelper.fromLong(data, 10, 2);
+        byte[] ip = new byte[iplen - 2];
+        System.arraycopy(data, 12, ip, 0, iplen - 2);
+        // validate
+        if (!TransportUtil.isValidPort(port) || !_transport.isValid(ip) ||
+            _transport.isTooClose(ip) || !DataHelper.eq(ip, id.getIP()) /* IP mismatch */ ||
+            _context.blocklist().isBlocklisted(ip)) {
+            if (_log.shouldWarn()) {
+                _log.warn("[SSU] BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
+            }
+            banAndFailState(state, "Bad Introduction data", 4*60*60*1000L);
+            return -1;
+        }
+        int fromPort = id.getPort();
+        if (port != fromPort) {
+            // if port mismatch only, use the source port as charlie doesn't know
+            // his port or is behind a symmetric NAT
+            if (_log.shouldWarn()) {
+                _log.warn("[SSU] HolePunch source mismatch (wrong port) from " + id + " -> Published port: " + port);
+            }
+            if (!TransportUtil.isValidPort(fromPort)) {
+                banAndFailState(state, "Bad Introduction data", 6*60*60*1000L);
+                return -1;
+            }
+            port = fromPort;
+        } else {
+            if (_log.shouldDebug())
+                _log.debug("[SSU] Received HolePunch from " + state + " - they are on " +
+                           Addresses.toString(ip, port));
+        }
+        return port;
+    }
+
+    /**
+     *  Update the state with the validated Charlie address, and swap the
+     *  RemoteHostId the state is indexed under if this was a HolePunch
+     *  before the RelayResponse.
+     *
+     *  @param state the outbound establish state
+     *  @param state2 SSU2-specific state
+     *  @param data the signed portion of the response
+     *  @param port the validated port
+     *  @param now receive time
+     *  @param token the token from the end of the full response
+     */
+    private void updateHolePunchState(OutboundEstablishState state, OutboundEstablishState2 state2, byte[] data, int port, long now, long token) {
+        int iplen = data[9] & 0xff;
+        byte[] ip = new byte[iplen - 2];
+        System.arraycopy(data, 12, ip, 0, iplen - 2);
+        synchronized (state) {
+            RemoteHostId oldId = state.getRemoteHostId();
+            if (oldId.getIP() == null) {
+                // hole punch before relay response
+                state2.introduced(ip, port, token);
+                RemoteHostId newId = state.getRemoteHostId();
+                addOutboundToken(newId, token, now + 10*1000);
+                // Swap out the RemoteHostId the state is indexed under.
+                // It was a Hash, change it to a IP/port.
+                // Remove the entry in the byClaimedAddress map as it's now in main map.
+                // Add an entry in the byHash map so additional OB pkts can find it.
+                _outboundByHash.put(state.getRemoteIdentity().getHash(), state);
+                RemoteHostId claimed = state.getClaimedAddress();
+                if (!oldId.equals(newId)) {
+                    _outboundStates.remove(oldId);
+                    _outboundStates.put(newId, state);
+                    if (_log.shouldLog(Log.INFO))
+                        _log.info("[SSU] HolePunch replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
+                }
+                if (claimed != null)
+                    _outboundByClaimedAddress.remove(oldId, state);  // only if == state
+            } else { /* ignored */ } // TODO validate same IP/port as in response?
+        }
+        boolean sendNow = state.receiveHolePunch();
+        if (sendNow) {
+            if (_log.shouldInfo()) {_log.info("[SSU] Send Session Request after HolePunch from " + state);}
+            notifyActivity();
         }
     }
 
