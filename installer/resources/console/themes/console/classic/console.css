@@ -557,18 +557,20 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #floodfills th{font-size:90%}
 #floodfills td:not(.rif):not(.rih):not(.rbw):nth-child(2){white-space:nowrap}
 #floodfills td:not(.rif):not(.rih):not(.rbw):nth-child(3) span{min-width:20px;display:inline-block;text-align:right}
-#profiles .percentBarOuter,#profiles .percentBarOuter,#profiles .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;box-sizing:border-box;float:none}
 #floodfills td:not(.rih):nth-child(2){width:6%;min-width:64px}
-#profiles .percentBarOuter,#profiles .percentBarText{margin:0 2px;width:calc(100% - 8px)}
-#profiles .percentBarOuter,#tunnels .percentBarOuter{height:16px;overflow:hidden}
-#profiles .percentBarOuter{text-align:left;border:var(--border);box-shadow:var(--highlight);background:var(--bg2);opacity:.9}
-#profiles .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top}
-#profiles .percentBarInner{background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#900 25px,#a00 40px,#b00 50px)}
-#profiles .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#090,#0b0)}
-#profiles .percentBarText{color:var(--bg);text-shadow:0 1px 1px #000;display:none}
 #floodfills td:not(.rif):not(.rih):not(.rbw):empty{text-align:center}
 #floodfills td:not(.rif):not(.rih):not(.rbw):empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before{width:100%;display:inline-block;text-align:center;opacity:.8;content:"‒"}
 #floodfills td:not(.rif):not(.rih):not(.rbw):first-child,#profilelist td:first-child{width:1%;white-space:nowrap}
+#profiles .percentBarOuter,#profiles .percentBarOuter,#profiles .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;box-sizing:border-box;float:none}
+#profiles .percentBarOuter,#profiles .percentBarText{margin:0 2px;width:calc(100% - 8px)}
+#profiles .percentBarOuter,#tunnels .percentBarOuter{height:16px;overflow:hidden}
+#profiles .percentBarOuter{min-width:52px;text-align:left;border:var(--border);box-shadow:var(--highlight);background:var(--bg2);opacity:.9}
+#profiles .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top}
+#profiles .percentBarInner{background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#900 25px,#a00 40px,#b00 50px)}
+#profiles .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#090,#0b0)}
+#profiles .percentBarText{color:var(--bg);text-shadow:0 1px 1px #000;display:none;font-size:85%;}
+#profiles .percentBarOuter:hover{background:#55f}
+#profiles .percentBarOuter:hover .percentBarText{width:100%;display:inline-block;position:absolute;top:0;right:0;bottom:0;left:0;text-align:center}
 #profiles_overview{background-image:url(/themes/console/images/profile.svg)}
 #profiles .ok,#ntcpconnections td.queue:empty::before,#profiles .ok,#profiles .notOk,#profiles .mostPass{display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
 #profiles .unreachable{border:0;box-shadow:none}

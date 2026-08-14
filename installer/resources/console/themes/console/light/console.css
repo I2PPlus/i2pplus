@@ -1158,10 +1158,6 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 .peer_arrow{margin:2px 1px;width:22px;display:inline-block;text-align:center}
 .peersort{text-align:center;display:inline-block}
 .reachability{margin:4px 4px 0;float:right;font-size:70%;color:#4f4f5f}
-#profiles .percentBarOuter,#tunnels .percentBarOuter{margin:0;height:16px;position:relative;text-align:left;border:1px solid #ccccf0;box-shadow:var(--highlight),0 3px 2px rgba(0,0,0,.15) inset;background:repeating-linear-gradient(90deg,#e2e2f2,#e2e2f2 10%,#f8f8ff 10%,#f8f8ff 20%);opacity:.9}
-#profiles .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,#0000 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#b00 25px,#c20000 40px,#c00 50px)}
-#profiles .percentBarOuter,#profiles .percentBarOuter,#profiles .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;vertical-align:middle;box-sizing:border-box;float:none}
-#profiles .percentBarOuter.nofail .percentBarInner{width:100%!important;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,#0000 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#383,#494)}
 #peers p.infohelp{margin-top:14px}
 #peers .infohelp code{font-size:9pt}
 #peers .rbw{line-height:1.25}
@@ -1188,7 +1184,11 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
 #peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;line-height:1.6;border:1px solid #bbd;box-shadow:var(--highlight),inset 0 0 2px 1px #ddf,0 0 1px #ddf;background:rgba(248,248,255,.6);break-inside:avoid}
 #peerstats{border:var(--border_inner)}
-#leasesetdebug tr:hover td,tr:hover .cells,.cells tr:hover td{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
+#profiles .percentBarOuter,#tunnels .percentBarOuter{margin:0;height:16px;position:relative;text-align:left;border:1px solid #ccccf0;box-shadow:var(--highlight),0 3px 2px rgba(0,0,0,.15) inset;background:repeating-linear-gradient(90deg,#e2e2f2,#e2e2f2 10%,#f8f8ff 10%,#f8f8ff 20%);opacity:.9}
+#profiles .percentBarInner,#tunnels .percentBarInner{width:inherit;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,#0000 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#b00 25px,#c20000 40px,#c00 50px)}
+#profiles .percentBarOuter,#profiles .percentBarOuter,#profiles .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;vertical-align:middle;box-sizing:border-box;float:none}
+#profiles .percentBarOuter.nofail .percentBarInner{width:100%!important;display:inline-block;vertical-align:top;background:repeating-linear-gradient(90deg,#0000 2px,rgba(0,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.1)),linear-gradient(90deg,#383,#494)}
+#leasesetdebug tr:hover td{box-shadow:inset 0 0 0 1px #ffe;transition:ease all .05s}
 #transportSummary tr:hover{background:#ffd}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center/12px}
@@ -1386,18 +1386,25 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profiles_overview+.widescroll{margin-bottom:-5px}
 #profiles span[hidden]{display:none!important}
 #profiles td span{vertical-align:middle}
+#profiles .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#090,#0b0)}
+#profiles .percentBarOuter,#profiles .percentBarText{width:calc(100% - 8px)}
+#profiles .percentBarOuter{margin-top:-1px;position:relative;text-align:left}
+#profiles .percentBarText{font-size:85%;color:#fff;text-shadow:0 1px 1px #000;display:none}
+#profiles .percentBarOuter:hover{background:#55f}
+#profiles .percentBarOuter:hover .percentBarText{width:100%;display:inline-block;position:absolute;top:0;right:0;bottom:0;left:0;text-align:center}
+#profiles .separator hr{display:none}
 #profiles .tunnel_peer img{margin-left:-6px}
 #profiles .tunnel_peer{margin-left:-6px}
-#profiles .wideload{text-align:center}
-#profiles .separator hr{display:none}
-#profiles .version{margin:0 2px}
 #profiles .unreachable{border:0;box-shadow:none}
+#profiles .version{margin:0 2px}
+#profiles .wideload{text-align:center}
 #profiles th,#profiles td{text-align:center}
 #profiles th{font-size:90%}
 #profilelist td:nth-child(2) span,#profilelist td:nth-child(3) span,#floodfills .tier{margin:0 2px;padding:1px 4px;min-width:20px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center;border:1px solid #bbd;line-height:1.3}
 #profilelist td:nth-child(3) span:empty{display:none}
+#profilelist td:nth-child(9){padding:3px 2px}
 #floodfills td:empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before,#tunnels .cells:empty::before{width:100%;display:inline-block;text-align:center;opacity:.8;content:"‒"}
-#floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;text-align:right}
+#floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;text-align:right}
 #profilelist{margin:9px auto 15px}
 #profilelist th,#profilelist td,#floodfills th,#floodfills td{text-align:center}
 #profilelist tr:first-child td,#profile_defs tr:first-child td{border-top:var(--border_inner)}
@@ -1407,7 +1414,6 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profilelist th.groups,#profilelist td.groups{width:10%;min-width:56px;white-space:nowrap}
 #profilelist td:first-child:not(.rif):not(.rbw),#profilelist td:nth-child(2):not(.rih):not(.rbw),#profilelist td:nth-child(3){width:1%;white-space:nowrap}
 #profilelist td:nth-last-child(2) span:not(.peerFlag),#profilelist td:nth-last-child(3) span{min-width:28px;display:inline-block}
-#profilelist td:nth-child(6) span,#profilelist td:nth-child(9) span{min-width:48px;display:inline-block;text-align:right}
 #profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{min-width:40px}
 #profilelist td[colspan="10"],#profilelist td[colspan="10"]:hover{padding:0;background:#77f}
 #profilelist .nospeed{text-align:center}
@@ -1436,10 +1442,6 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #floodfills td:not(.rif):first-child{padding-left:3px;padding-right:3px;width:1%;white-space:nowrap}
 #floodfills td:not(.rih):nth-child(2){width:6%;min-width:64px}
 #floodfills th{border-right:var(--border_inner);box-shadow:var(--highlight),inset 0 0 1px 1px #ddf}
-#profiles .percentBarInner[style="width:0%"]{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.1) 50%,rgba(0,0,0,.1) 50%),linear-gradient(90deg,#090,#0b0)}
-#profiles .percentBarOuter,#profiles .percentBarText{width:calc(100% - 8px)}
-#profiles .percentBarOuter{margin-top:-1px}
-#profiles .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
 #floodfills .tier,#floodfills .ff,#floodfills .ssuintro,#floodfills .unreachable,#floodfills .reachable,#floodfills .hidden{margin:0 2px}
 #profile_defs b{text-transform:capitalize}
 #profile_defs td{text-align:left}

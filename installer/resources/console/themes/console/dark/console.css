@@ -958,7 +958,7 @@ td.ipv6{width:1%;max-width:24px}
 #profilelist .viewedit{padding:1px}
 #profilelist .nospeed{text-align:center}
 #floodfills td:empty::before,#ntcpconnections td:not(:last-child):empty::before,#udpconnections td:not(:last-child):empty::before,#profilelist td:empty::before,#tunnels .cells:empty::after{width:100%;display:inline-block;text-align:center;content:"\2013";opacity:.8}
-#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:center}
+#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:center}
 #profilelist td:nth-child(7){width:unset;min-width:unset;text-align:center}
 #profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;display:inline-block;text-align:center;color:#373}
 #profilelist .highlatency{color:#900}
@@ -989,6 +989,18 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #profile_defs td:last-child{white-space:normal;line-height:1.2}
 #profile_defs b{text-transform:capitalize}
 #profile_defs+hr{display:none}
+#profiles .percentBarOuter,#profiles .percentBarOuter,#profiles .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;box-sizing:border-box;float:none}
+#profiles .percentBarOuter,#tunnels .percentBarOuter{height:16px;overflow:hidden}
+#profiles .percentBarOuter,#profiles .percentBarText{margin:0;width:calc(100% - 9px);vertical-align:middle}
+#profiles .percentBarOuter{margin:-1px 0 1px;text-align:left;border:1px solid #700;box-shadow:0 0 0 1px #000,var(--highlight),inset 0 2px 2px rgba(0,0,0,.7);background:repeating-linear-gradient(90deg,#0000,#0000 5%,#200 5%,#200 10%) left center/100% 10%,linear-gradient(180deg,#000,#200);opacity:.9}
+#profiles tr:hover .percentBarOuter,#profiles tr:hover .percentBarInner{border-color:#900}
+#profiles tr:hover .percentBarOuter.nofail,#profiles tr:hover .nofail .percentBarInner{border-color:#252}
+#profiles .percentBarOuter:hover .percentBarText{width:calc(100% - 2px);display:inline-block;position:absolute;top:1px;right:1px;bottom:1px;left:1px;text-align:center;font-size:85%;opacity:1}
+#profiles .percentBarInner{width:inherit;display:inline-block;border-right-color:#700;background:repeating-linear-gradient(to right,#0001 2px,#0000 4px) repeat left center/2px 100%,linear-gradient(to right,rgba(16,0,0,.3),rgba(96,0,0,.3)72px),linear-gradient(180deg,#700 50%,#500)}
+#profiles .percentBarInner[style="width:0%"]{width:100%!important;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141)}
+#profiles .percentBarOuter.nofail{background:#000}
+#profiles .percentBarOuter.nofail{border:var(--border)}
+#profiles .percentBarText{color:#fff;text-shadow:var(--textshadow);display:none}
 #capabilities_key table{border:0}
 #capabilities_key table tr:first-child td{border-top:0}
 #capabilities_key table tr,#capabilities_key table td:first-child{border-left:0}
@@ -1022,17 +1034,6 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #floodfills td:not(.rid td):nth-child(2){padding:4px;width:7%;min-width:64px;max-width:128px}
 #floodfills td:not(:last-child){border-right:var(--border_softer)}
 #floodfills td:nth-child(n+2){text-align:center}
-#profiles .percentBarOuter,#profiles .percentBarOuter,#profiles .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;box-sizing:border-box;float:none}
-#profiles .percentBarOuter,#tunnels .percentBarOuter{height:16px;overflow:hidden}
-#profiles .percentBarOuter,#profiles .percentBarText{margin:0;width:calc(100% - 9px);vertical-align:middle}
-#profiles .percentBarOuter{margin:-1px 0 1px;text-align:left;border:1px solid #700;box-shadow:0 0 0 1px #000,var(--highlight),inset 0 2px 2px rgba(0,0,0,.7);background:repeating-linear-gradient(90deg,#0000,#0000 5%,#200 5%,#200 10%) left center/100% 10%,linear-gradient(180deg,#000,#200);opacity:.9}
-#floodfills tr:hover .percentBarOuter,#floodfills tr:hover .percentBarInner{border-color:#900}
-#floodfills tr:hover .percentBarOuter.nofail,#floodfills tr:hover .nofail .percentBarInner{border-color:#252}
-#profiles .percentBarInner{width:inherit;display:inline-block;border-right-color:#700;background:repeating-linear-gradient(to right,#0001 2px,#0000 4px) repeat left center/2px 100%,linear-gradient(to right,rgba(16,0,0,.3),rgba(96,0,0,.3)72px),linear-gradient(180deg,#700 50%,#500)}
-#profiles .percentBarInner[style="width:0%"]{width:100%!important;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141)}
-#profiles .percentBarOuter.nofail{background:#000}
-#profiles .percentBarOuter.nofail{border:var(--border)}
-#profiles .percentBarText{color:#fff;text-shadow:var(--textshadow);display:none}
 #floodfills+hr{display:none}
 #viewprofile{margin-top:-14px;margin-bottom:10px}
 #viewprofile td{padding:0}
