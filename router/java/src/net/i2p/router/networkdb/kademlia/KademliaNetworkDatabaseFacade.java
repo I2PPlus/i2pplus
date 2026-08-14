@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,13 +56,11 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
-import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
-import net.i2p.util.SimpleTimer2;
 
 /**
  * Kademlia based version of network database.
@@ -114,8 +110,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final Job _elj;
     /** Expire routers job */
     private final Job _erj;
-    /** LU routers job */
-    private final Job _lurj;
     /** Property: minimum router version for exploration. */
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
     /** Config property for blocking own-country peers. */
@@ -314,7 +308,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _peerSelector = createPeerSelector();
         }
 
-        _lurj = new CleanupLURoutersJob(_context, this);
         _elj = new ExpireLeasesJob(_context, this);
         _banLogger = new BanLogger();
         _banLogger.initialize(context);
@@ -1606,34 +1599,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return a descriptive reason why the LeaseSet is invalid or expired, or {@code null} if the LeaseSet is valid
      */
     public String validate(Hash key, LeaseSet leaseSet) throws UnsupportedCryptoException {
-        String keyBase32 = key.toBase32();
-        Hash leaseHash = leaseSet.getHash();
-        String leaseBase32 = leaseHash.toBase32();
+        String leaseBase32 = leaseSet.getHash().toBase32();
 
         // Check that the key matches the LeaseSet hash
-        if (!key.equals(leaseHash)) {
-            if (_log.shouldWarn()) {
-                _log.warn("Invalid NetDbStore attempt! Key does not match LeaseSet destination!" +
-                          "\n* Key: [" + keyBase32.substring(0, 8) + "]" +
-                          "\n* LeaseSet: [" + leaseBase32.substring(0, 8) + "]");
-            }
-            return "Key does not match LeaseSet destination - " + keyBase32;
-        }
+        String err = validateKeyMatch(key, leaseSet);
+        if (err != null) {return err;}
 
         // Verify the LeaseSet's cryptographic signature validity
-        if (!leaseSet.verifySignature()) {
-            processStoreFailure(key, leaseSet); // This may throw UnsupportedCryptoException if signature type is unsupported
-            if (_log.shouldWarn()) {
-                _log.warn("Invalid LeaseSet signature! [" + leaseBase32.substring(0, 8) + "]");
-            }
-            return "Invalid LeaseSet signature on " + key;
-        }
+        err = validateSignature(key, leaseSet, leaseBase32);
+        if (err != null) {return err;}
 
         // Determine LeaseSet date boundaries based on LeaseSet type
         long earliest;
         long latest;
         int type = leaseSet.getType();
-
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
             // For encrypted LeaseSet2, use published and expires times directly
             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
@@ -1651,11 +1630,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         long now = _context.clock().now();
-        final long TEN_MINUTES_MS = 10 * 60 * 1000L;  // 10 minutes in milliseconds
-
-        // Determine if LeaseSet timestamps are outdated (stale)
-        boolean isEarliestStale = earliest <= now - TEN_MINUTES_MS;
-        boolean isLatestStale = latest <= now - Router.CLOCK_FUDGE_FACTOR;
 
         // Retrieve destination ID string, fallback to LeaseSet hash base32 if null
         Destination dest = leaseSet.getDestination();
@@ -1663,43 +1637,113 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String idShort = id.substring(0, 6);  // Shortened ID for logs and messages
 
         // Reject old (expired) LeaseSets
-        if (isEarliestStale || isLatestStale) {
-            long age = now - earliest;
-            if (_log.shouldWarn()) {
-                _log.warn("Old LeaseSet [" + idShort + "] -> rejecting store..." +
-                          "\n* First expired: " + new Date(earliest) +
-                          "\n* Last expired: " + new Date(latest) +
-                          "\n* " + leaseSet);
-            }
-            // If there are no leases, aggressively mark lookups as failed to reduce retries
-            if (leaseSet.getLeaseCount() == 0) {
-                for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
-                    lookupFailed(key);
-                }
-            }
-            return "LeaseSet for [" + idShort + "] expired " + DataHelper.formatDuration(age) + " ago";
-        }
+        err = checkExpiredLeaseSet(key, leaseSet, earliest, latest, now, idShort);
+        if (err != null) {return err;}
 
+        // If LeaseSet expires too far into the future, reject it (to handle clock skew issues)
+        err = checkFutureExpiration(leaseSet, type, latest, now, idShort);
+        if (err != null) {return err;}
+
+        // Passed all validation checks - LeaseSet is valid and current
+        return null;
+    }
+
+    /**
+     *  Check that the key matches the LeaseSet hash.
+     *
+     *  @param key the expected key (destination hash) for this LeaseSet
+     *  @param leaseSet the LeaseSet instance to validate
+     *  @return a descriptive reason why the key does not match, or null
+     */
+    private String validateKeyMatch(Hash key, LeaseSet leaseSet) {
+        if (key.equals(leaseSet.getHash())) {return null;}
+        String keyBase32 = key.toBase32();
+        String leaseBase32 = leaseSet.getHash().toBase32();
+        if (_log.shouldWarn()) {
+            _log.warn("Invalid NetDbStore attempt! Key does not match LeaseSet destination!" +
+                      "\n* Key: [" + keyBase32.substring(0, 8) + "]" +
+                      "\n* LeaseSet: [" + leaseBase32.substring(0, 8) + "]");
+        }
+        return "Key does not match LeaseSet destination - " + keyBase32;
+    }
+
+    /**
+     *  Verify the LeaseSet's cryptographic signature validity.
+     *
+     *  @param key the expected key (destination hash) for this LeaseSet
+     *  @param leaseSet the LeaseSet instance to validate
+     *  @param leaseBase32 base32 of the LeaseSet hash, for logging
+     *  @return a descriptive reason why the signature is invalid, or null
+     *  @throws UnsupportedCryptoException if the signature type is unsupported
+     */
+    private String validateSignature(Hash key, LeaseSet leaseSet, String leaseBase32) throws UnsupportedCryptoException {
+        if (leaseSet.verifySignature()) {return null;}
+        processStoreFailure(key, leaseSet); // This may throw UnsupportedCryptoException if signature type is unsupported
+        if (_log.shouldWarn()) {
+            _log.warn("Invalid LeaseSet signature! [" + leaseBase32.substring(0, 8) + "]");
+        }
+        return "Invalid LeaseSet signature on " + key;
+    }
+
+    /**
+     *  Reject a LeaseSet whose timestamps are outdated (stale).
+     *
+     *  @param key the expected key (destination hash) for this LeaseSet
+     *  @param leaseSet the LeaseSet instance to validate
+     *  @param earliest earliest relevant date
+     *  @param latest latest relevant date
+     *  @param now current time
+     *  @param idShort shortened destination ID for logs and messages
+     *  @return a descriptive reason why the LeaseSet is expired, or null
+     */
+    private String checkExpiredLeaseSet(Hash key, LeaseSet leaseSet, long earliest, long latest, long now, String idShort) {
+        final long TEN_MINUTES_MS = 10 * 60 * 1000L;  // 10 minutes in milliseconds
+        // Determine if LeaseSet timestamps are outdated (stale)
+        boolean isEarliestStale = earliest <= now - TEN_MINUTES_MS;
+        boolean isLatestStale = latest <= now - Router.CLOCK_FUDGE_FACTOR;
+        if (!isEarliestStale && !isLatestStale) {return null;}
+        long age = now - earliest;
+        if (_log.shouldWarn()) {
+            _log.warn("Old LeaseSet [" + idShort + "] -> rejecting store..." +
+                      "\n* First expired: " + new Date(earliest) +
+                      "\n* Last expired: " + new Date(latest) +
+                      "\n* " + leaseSet);
+        }
+        // If there are no leases, aggressively mark lookups as failed to reduce retries
+        if (leaseSet.getLeaseCount() == 0) {
+            for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+                lookupFailed(key);
+            }
+        }
+        return "LeaseSet for [" + idShort + "] expired " + DataHelper.formatDuration(age) + " ago";
+    }
+
+    /**
+     *  Reject a LeaseSet that expires too far into the future, to handle
+     *  clock skew issues.
+     *
+     *  @param leaseSet the LeaseSet instance to validate
+     *  @param type the LeaseSet type
+     *  @param latest latest relevant date
+     *  @param now current time
+     *  @param idShort shortened destination ID for logs and messages
+     *  @return a descriptive reason why the LeaseSet is rejected, or null
+     */
+    private String checkFutureExpiration(LeaseSet leaseSet, int type, long latest, long now, String idShort) {
         // Determine limits for future expiration timestamps
         long futureLimit = Router.CLOCK_FUDGE_FACTOR + MAX_LEASE_FUTURE;
         long metaFutureLimit = Router.CLOCK_FUDGE_FACTOR + MAX_META_LEASE_FUTURE;
 
-        // If LeaseSet expires too far into the future, reject it (to handle clock skew issues)
         boolean isFutureTooFar =
             latest > now + futureLimit &&
             (type != DatabaseEntry.KEY_TYPE_META_LS2 || latest > now + metaFutureLimit);
-
-        if (isFutureTooFar) {
-            long age = latest - now;
-            if (_log.shouldWarn()) {
-                _log.warn("LeaseSet expires too far in the future: [" + idShort + "]" +
-                          "\n* Expires: " + DataHelper.formatDuration(age) + " from now");
-            }
-            return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
+        if (!isFutureTooFar) {return null;}
+        long age = latest - now;
+        if (_log.shouldWarn()) {
+            _log.warn("LeaseSet expires too far in the future: [" + idShort + "]" +
+                      "\n* Expires: " + DataHelper.formatDuration(age) + " from now");
         }
-
-        // Passed all validation checks - LeaseSet is valid and current
-        return null;
+        return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
     }
 
     @Override
@@ -2210,42 +2254,6 @@ return false;
         return false;
     }
 
-    /** Clean up existing LU routers loaded before the ban was added. Called at startup to remove LU routers from the netdb. */
-    public void cleanupLURouters() {
-        if (!_context.banlist().isLuBanEnabled()) return;
-        int removed = 0;
-        int total = 0;
-        for (DatabaseEntry entry : _ds.getEntries()) {
-            if (!entry.isRouterInfo()) continue;
-            total++;
-            RouterInfo ri = (RouterInfo) entry;
-            String caps = ri.getCapabilities();
-            boolean isLowTier = caps != null && (caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                                 caps.indexOf(Router.CAPABILITY_BW32) >= 0);
-            boolean isUnreachable = caps != null && (caps.indexOf('U') >= 0 || caps.indexOf('R') < 0);
-            if (isLowTier && isUnreachable) {
-                Hash h = ri.getIdentity().getHash();
-                if (_context.banlist().isBanlisted(h)) continue;
-                String routerId = h.toBase64().substring(0, 6);
-                String ipPort = TransportImpl.getRouterIPPort(ri);
-                String version = ri.getVersion();
-                String reason = version != null ? "LU Router (" + version + ")" : "LU Router";
-                if (_log.shouldWarn()) {
-                    _log.warn("Removing existing LU Router from netDb: " + routerId + " - " + reason);
-                }
-                _banLogger.logBan(h, ipPort, reason, 60*60*1000L, ri);
-                _context.banlist().banlistRouter(h, reason, null, null, _context.clock().now() + 60*60*1000);
-                _ds.remove(h);
-                _kb.remove(h);
-                removed++;
-            }
-        }
-
-        if (_log.shouldWarn()) {
-            _log.warn("LU Router cleanup: scanned " + total + " routers, removed " + removed + " LU routers");
-        }
-    }
-
      /**
      * Determines whether the given router qualifies as an XG router that should be blocked.
      *
@@ -2745,7 +2753,6 @@ return false;
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
-                Hash key = o.getHash();
                 boolean isLocal = !o.getReceivedAsPublished() && !o.getReceivedAsReply();
                 if (isLocal) {leases.add((LeaseSet)o);}
             }
@@ -2961,13 +2968,6 @@ return false;
         return 0;
     }
 
-    /**/
-    private class Disconnector extends SimpleTimer2.TimedEvent {
-        private final Hash h;
-        public Disconnector(Hash h) {super(_context.simpleTimer2()); this.h = h;}
-        public void timeReached() {_context.commSystem().forceDisconnect(h, "Corrupt RouterInfo");}
-    }
-
     /**
      * Refresh client LeaseSets we're actively using and remove stale ones.
      * Only applies to client NetDB (not main NetDB).
@@ -3095,13 +3095,10 @@ return false;
     private static class RefreshClientLeaseSetsJob extends JobImpl {
         /** Reference to the Kademlia facade. */
         private final KademliaNetworkDatabaseFacade _facade;
-        /** Class logger. */
-        private final Log _log;
 
         public RefreshClientLeaseSetsJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
             super(ctx);
             _facade = facade;
-            _log = ctx.logManager().getLog(RefreshClientLeaseSetsJob.class);
         }
 
         /**
