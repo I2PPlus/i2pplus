@@ -2263,7 +2263,13 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** Data size. */
+    /**
+     *  Bid on a message to the given router.
+     *
+     *  @param toAddress target router info
+     *  @param dataSize message size in bytes
+     *  @return the bid, or null if we can't (or shouldn't) send via UDP
+     */
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (dataSize > OutboundMessageState.MAX_MSG_SIZE) {
             // NTCP max is lower, so msg will get dropped
@@ -2300,23 +2306,8 @@ public class UDPTransport extends TransportImpl {
                 return null;
 
             // temp, let NTCP2 deal with him (prop. 165)
-            // Be less aggressive about rejecting floodfills when firewalled, as we need more peers
-            if (toAddress.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
-                PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(to);
-                if (prof != null) {
-                    int agreed = (int) prof.getTunnelHistory().getLifetimeAgreedTo();
-                    int rejected = (int) prof.getTunnelHistory().getLifetimeRejected();
-                    boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
-                    // Much more lenient rejection threshold when firewalled (5x instead of 2x)
-                    int threshold = weAreFirewalled ? 10 : 2; // 10/2 = 5x for firewalled
-                    if (prof.getLastHeardFrom() <= 0 || rejected > agreed*threshold) {return null;}
-                } else  {return null;}
-            }
+            if (rejectFloodfill(to, toAddress))
+                return null;
 
             // Validate his SSU address
             RouterAddress addr = getTargetAddress(toAddress);
@@ -2361,67 +2352,109 @@ public class UDPTransport extends TransportImpl {
             if (!allowConnection())
                 return _cachedBid[TRANSIENT_FAIL_BID];
 
-            boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+            return selectBid(addr, cost, isFirewalled());
+        }
+    }
 
-            /*
-             * Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
-             * we have a selection to run peer tests with.
-             *
-             * If we are firewalled, and we don't have enough peers that volunteered to also introduce us,
-             * also bid aggressively so we are preferred over NTCP - otherwise we only talk UDP to those that
-             * are firewalled, and we will never get any introducers
-             */
-            if (alwaysPreferUDP()) {
-                int capacityThreshold = weAreFirewalled ? 75 : 90;
-                if (haveCapacity(capacityThreshold))
-                    return _cachedBid[SLOW_PREFERRED_BID];
-                if (cost > DEFAULT_COST)
-                    return _cachedBid[NEAR_CAPACITY_COST_BID];
-                return _cachedBid[NEAR_CAPACITY_BID];
-            }
-            int count = _peersByIdent.size();
-            boolean ipv6 = TransportUtil.isIPv6(addr);
-            boolean needIntroducers = (introducersRequired(ipv6) &&
-                        addr.getOption(UDPAddress.PROP_CAPACITY) != null &&
-                        addr.getOption(UDPAddress.PROP_CAPACITY).indexOf(UDPAddress.CAPACITY_INTRODUCER) >= 0 &&
-                        _introManager.introducerCount(ipv6) < MIN_INTRODUCER_POOL);
-            if ((!ipv6 && count < _min_peers) ||
-                       (ipv6 && _haveIPv6Address && count < _min_v6_peers) ||
-                       needIntroducers) {
-                 /*
-                  * Even if we haven't hit our minimums, give NTCP a chance some of the time.
-                  * This may make things work a little faster at startup, especially when we
-                  * have an IPv6 address and the increased minimums, and if UDP is completely
-                  * blocked we'll still have some connectivity.
-                  *
-                  * TODO After some time, decide that UDP is blocked/broken and return TRANSIENT_FAIL_BID?
-                  * Even more if hidden.
-                  * We'll have very low connection counts, and we don't need peer testing
-                  */
-                int ratio;
-                if (needIntroducers) {
-                    // When we need introducers, prefer UDP but not too aggressively (75% chance)
-                    ratio = 4; // 1 in 4 = 25% chance of SLOWEST, 75% chance of SLOW_PREFERRED
-                } else if (_context.router().isHidden() || weAreFirewalled) {
-                    ratio = 2;
-                } else {
-                    ratio = 4;
-                }
-                if (_context.random().nextInt(ratio) == 0) {return _cachedBid[SLOWEST_BID];}
+    /**
+     *  Reject a floodfill router that we have no history with, or that has
+     *  rejected tunnel creation far more often than it has agreed.
+     *
+     *  Be less aggressive about rejecting floodfills when firewalled, as we need more peers.
+     *  Temporary - let NTCP2 deal with them (prop. 165).
+     *
+     *  @param to target identity hash
+     *  @param toAddress target router info
+     *  @return true to skip bidding on this router
+     */
+    private boolean rejectFloodfill(Hash to, RouterInfo toAddress) {
+        if (toAddress.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) < 0)
+            return false;
+        PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(to);
+        if (prof == null)
+            return true;
+        int agreed = (int) prof.getTunnelHistory().getLifetimeAgreedTo();
+        int rejected = (int) prof.getTunnelHistory().getLifetimeRejected();
+        // Much more lenient rejection threshold when firewalled (5x instead of 2x)
+        int threshold = isFirewalled() ? 10 : 2; // 10/2 = 5x for firewalled
+        return prof.getLastHeardFrom() <= 0 || rejected > agreed*threshold;
+    }
+
+    /**
+     *  Are we behind a firewall, with no way to accept incoming UDP?
+     *
+     *  @return true if any firewall state is active
+     */
+    private boolean isFirewalled() {
+        Status s = _context.commSystem().getStatus();
+        return s == Status.REJECT_UNSOLICITED ||
+               s == Status.IPV4_FIREWALLED_IPV6_OK ||
+               s == Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+               s == Status.IPV4_OK_IPV6_FIREWALLED ||
+               s == Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+               s == Status.IPV4_DISABLED_IPV6_FIREWALLED;
+    }
+
+    /**
+     *  Select the bid tier for a message to an unestablished peer.
+     *
+     *  Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
+     *  we have a selection to run peer tests with.  If we are firewalled, and we don't have
+     *  enough peers that volunteered to also introduce us, also bid aggressively so we are
+     *  preferred over NTCP - otherwise we only talk UDP to those that are firewalled, and we
+     *  will never get any introducers.
+     *
+     *  @param addr validated target SSU address
+     *  @param cost the target's address cost
+     *  @param weAreFirewalled status computed by {@link #isFirewalled()}
+     *  @return the bid
+     */
+    private TransportBid selectBid(RouterAddress addr, int cost, boolean weAreFirewalled) {
+        if (alwaysPreferUDP()) {
+            int capacityThreshold = weAreFirewalled ? 75 : 90;
+            if (haveCapacity(capacityThreshold))
                 return _cachedBid[SLOW_PREFERRED_BID];
-            } else if (preferUDP()) {return _cachedBid[SLOW_BID];}
-            else if (haveCapacity()) {
-                if (cost > DEFAULT_COST) {return _cachedBid[SLOWEST_COST_BID];}
-                return _cachedBid[SLOWEST_BID];
+            if (cost > DEFAULT_COST)
+                return _cachedBid[NEAR_CAPACITY_COST_BID];
+            return _cachedBid[NEAR_CAPACITY_BID];
+        }
+        int count = _peersByIdent.size();
+        boolean ipv6 = TransportUtil.isIPv6(addr);
+        boolean needIntroducers = (introducersRequired(ipv6) &&
+                    addr.getOption(UDPAddress.PROP_CAPACITY) != null &&
+                    addr.getOption(UDPAddress.PROP_CAPACITY).indexOf(UDPAddress.CAPACITY_INTRODUCER) >= 0 &&
+                    _introManager.introducerCount(ipv6) < MIN_INTRODUCER_POOL);
+        if ((!ipv6 && count < _min_peers) ||
+                   (ipv6 && _haveIPv6Address && count < _min_v6_peers) ||
+                   needIntroducers) {
+             /*
+              * Even if we haven't hit our minimums, give NTCP a chance some of the time.
+              * This may make things work a little faster at startup, especially when we
+              * have an IPv6 address and the increased minimums, and if UDP is completely
+              * blocked we'll still have some connectivity.
+              *
+              * TODO After some time, decide that UDP is blocked/broken and return TRANSIENT_FAIL_BID?
+              * Even more if hidden.
+              * We'll have very low connection counts, and we don't need peer testing
+              */
+            int ratio;
+            if (needIntroducers) {
+                // When we need introducers, prefer UDP but not too aggressively (75% chance)
+                ratio = 4; // 1 in 4 = 25% chance of SLOWEST, 75% chance of SLOW_PREFERRED
+            } else if (_context.router().isHidden() || weAreFirewalled) {
+                ratio = 2;
             } else {
-                if (cost > DEFAULT_COST) {return _cachedBid[NEAR_CAPACITY_COST_BID];}
-                return _cachedBid[NEAR_CAPACITY_BID];
+                ratio = 4;
             }
+            if (_context.random().nextInt(ratio) == 0) {return _cachedBid[SLOWEST_BID];}
+            return _cachedBid[SLOW_PREFERRED_BID];
+        } else if (preferUDP()) {return _cachedBid[SLOW_BID];}
+        else if (haveCapacity()) {
+            if (cost > DEFAULT_COST) {return _cachedBid[SLOWEST_COST_BID];}
+            return _cachedBid[SLOWEST_BID];
+        } else {
+            if (cost > DEFAULT_COST) {return _cachedBid[NEAR_CAPACITY_COST_BID];}
+            return _cachedBid[NEAR_CAPACITY_BID];
         }
     }
 
@@ -2815,199 +2848,256 @@ public class UDPTransport extends TransportImpl {
         boolean isIPv6 = host != null && host.contains(":");
         if (isIPv6 && host.equals(":"))
             host = null;
+        if (_context.router().isHidden())
+            return rebuildHiddenExternalAddress(host, port, allowRebuildRouterInfo, isIPv6);
         OrderedProperties options = new OrderedProperties();
-        if (_context.router().isHidden()) {
-            // save the external address, since we didn't publish it
-            if (port > 0 && host != null) {
-                RouterAddress old = getCurrentExternalAddress(isIPv6);
-                if (old == null || !host.equals(old.getHost()) || port != old.getPort()) {
-                    options.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
-                    options.setProperty(UDPAddress.PROP_HOST, host);
-                    RouterAddress local = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
-                    replaceCurrentExternalAddress(local, isIPv6);
-                    options = new OrderedProperties();
-                }
-            }
-            // As of 0.9.50, make an address with only 4/6 caps
-            String caps;
-            int mtu;
-            TransportUtil.IPv6Config config = getIPv6Config();
-            if (config == IPV6_ONLY) {
-                caps = CAP_IPV6;
-                mtu = getMTU(true);
-            } else if (config != IPV6_DISABLED && hasIPv6Address()) {
-                caps = CAP_IPV4_IPV6;
-                mtu = getMTU(true);
-            } else {
-                caps = CAP_IPV4;
-                mtu = getMTU(false);
-            }
-            options.setProperty(UDPAddress.PROP_CAPACITY, caps);
-            if (mtu != _defaultMTU && mtu > 0)
-                options.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
-            if (mtu >= PeerState2.MIN_MTU || mtu == 0)
-                addSSU2Options(options);
-            RouterAddress current = getCurrentAddress(false);
-            RouterAddress addr = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
-            if (!addr.deepEquals(current)) {
-                if (_log.shouldInfo())
-                    _log.info("Address rebuilt: " + addr, new Exception());
-                replaceAddress(addr);
-                if (allowRebuildRouterInfo)
-                    rebuildRouterInfo();
-            } else {
-                addr = null;
-            }
-            _needsRebuild = false;
-            return addr;
-        }
-
-        boolean directIncluded;
-        // DNS name assumed IPv4
         boolean introducersRequired = introducersRequired(isIPv6);
-        if (!introducersRequired && allowDirectUDP() && port > 0 && host != null) {
+        // DNS name assumed IPv4
+        boolean directIncluded = !introducersRequired && allowDirectUDP() && port > 0 && host != null;
+        if (directIncluded) {
             options.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
             options.setProperty(UDPAddress.PROP_HOST, host);
-            directIncluded = true;
-        } else {
-            directIncluded = false;
         }
-
-        boolean introducersIncluded = false;
-        if (introducersRequired) {
-            // intro manager now sorts introducers, so
-            // deepEquals() below will not fail even with same introducers.
-            // Was only a problem when we had very very few peers to pick from.
-            RouterAddress current = getCurrentAddress(isIPv6);
-            int found = _introManager.pickInbound(current, isIPv6, options, PUBLIC_RELAY_COUNT);
-            if (found > 0) {
-                if (_log.shouldInfo())
-                    _log.info("Selected " + (isIPv6 ? "IPv6 " : "") + "introducers: " + found);
-                long now = _context.clock().now();
-                if (isIPv6)
-                    _v6IntroducersSelectedOn = now;
-                else
-                    _v4IntroducersSelectedOn = now;
-                introducersIncluded = true;
-            } else {
-                // logged elsewhere
-            }
-        }
-
+        boolean introducersIncluded = introducersRequired && selectIntroducers(isIPv6, getCurrentAddress(isIPv6), options);
         // if we have explicit external addresses, they had better be reachable
-        String caps;
-        if (!canTestAsCharlie(isIPv6)) {
-            // we could still be a Bob, but we don't have separate caps for Bob and Charlie
-            caps = isIPv6 ? CAP_IPV6 : CAP_IPV4;
-        } else if (introducersRequired || !canIntroduce(isIPv6)) {
-            if (!directIncluded) {
-                if (isIPv6) {caps = CAP_TESTING_6;}
-                else {caps = CAP_TESTING_4;}
-            } else {caps = CAP_TESTING;}
-        } else {caps = CAP_TESTING_INTRO;}
-        options.setProperty(UDPAddress.PROP_CAPACITY, caps);
-
+        options.setProperty(UDPAddress.PROP_CAPACITY, selectCapacity(isIPv6, directIncluded, introducersRequired));
         // MTU since 0.9.2
         int mtu = getMTU(isIPv6);
         if (mtu != _defaultMTU && mtu > 0)
             options.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
+        if (directIncluded || introducersIncluded)
+            return rebuildPublishedAddress(host, port, allowRebuildRouterInfo, isIPv6, directIncluded, introducersIncluded, mtu, options);
+        return rebuildEmptyAddress(host, port, allowRebuildRouterInfo, isIPv6, introducersRequired, mtu);
+    }
 
-        if (directIncluded || introducersIncluded) {
-            // SSU seems to regulate at about 85%, so make it a little higher.
-            // If this is too low, both NTCP and SSU always have incremented cost and
-            // the whole mechanism is not helpful.
-            int cost = DEFAULT_COST;
-            if (ADJUST_COST && !haveCapacity(91))
-                cost += CONGESTION_COST_ADJUSTMENT;
-            if (introducersIncluded)
-                cost += 2;
-            if (isIPv6) {
-                TransportUtil.IPv6Config config = getIPv6Config();
-                if (config == IPV6_PREFERRED)
-                    cost--;
-                else if (config == IPV6_NOT_PREFERRED)
-                    cost++;
-            }
-            if (mtu >= PeerState2.MIN_MTU || mtu == 0)
-                addSSU2Options(options);
-            RouterAddress addr = new RouterAddress(getPublishStyle(), options, cost);
-
-            RouterAddress current = getCurrentAddress(isIPv6);
-            boolean wantsRebuild = !addr.deepEquals(current);
-
-            // save the external address, even if we didn't publish it
-            if (port > 0 && host != null) {
-                RouterAddress local;
-                if (directIncluded) {
-                    local = addr;
-                } else {
-                    OrderedProperties localOpts = new OrderedProperties();
-                    localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
-                    localOpts.setProperty(UDPAddress.PROP_HOST, host);
-                    local = new RouterAddress(getPublishStyle(), localOpts, cost);
-                }
+    /**
+     *  Rebuild the external address of a hidden router: nothing is published,
+     *  so only an address with 4/6 caps is made.
+     *
+     *  @param host new validated host or null
+     *  @param port new validated port or 0/-1
+     *  @param allowRebuildRouterInfo whether to tell the router
+     *  @param isIPv6 true for an IPv6 address
+     *  @return the new address if changed, else null
+     */
+    private RouterAddress rebuildHiddenExternalAddress(String host, int port, boolean allowRebuildRouterInfo, boolean isIPv6) {
+        OrderedProperties options = new OrderedProperties();
+        // save the external address, since we didn't publish it
+        if (port > 0 && host != null) {
+            RouterAddress old = getCurrentExternalAddress(isIPv6);
+            if (old == null || !host.equals(old.getHost()) || port != old.getPort()) {
+                options.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
+                options.setProperty(UDPAddress.PROP_HOST, host);
+                RouterAddress local = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
                 replaceCurrentExternalAddress(local, isIPv6);
+                options = new OrderedProperties();
             }
-
-            if (wantsRebuild) {
-                if (_log.shouldInfo())
-                    _log.info("Address rebuilt\n* " + addr);
-                replaceAddress(addr);
-                if (!isIPv6 &&
-                    getCurrentAddress(true) == null &&
-                    getIPv6Config() != IPV6_DISABLED &&
-                    hasIPv6Address()) {
-                    // Also make an empty "6" address
-                    OrderedProperties opts = new OrderedProperties();
-                    opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV6);
-                    mtu = getMTU(true);
-                    if (mtu != _defaultMTU && mtu > 0)
-                        opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
-                    addSSU2Options(opts);
-                    RouterAddress addr6 = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
-                    replaceAddress(addr6);
-                }
-                // warning, this calls back into us with allowRebuildRouterInfo = false,
-                // via CSFI.createAddresses->TM.getAddresses()->updateAddress()->REA
-                if (allowRebuildRouterInfo)
-                    rebuildRouterInfo();
-            } else {
-                addr = null;
-            }
-
-            _needsRebuild = false;
-            return addr;
+        }
+        // As of 0.9.50, make an address with only 4/6 caps
+        String caps;
+        int mtu;
+        TransportUtil.IPv6Config config = getIPv6Config();
+        if (config == IPV6_ONLY) {
+            caps = CAP_IPV6;
+            mtu = getMTU(true);
+        } else if (config != IPV6_DISABLED && hasIPv6Address()) {
+            caps = CAP_IPV4_IPV6;
+            mtu = getMTU(true);
         } else {
-            long uptime = _context.router().getUptime();
-            if (_log.shouldWarn() && uptime > 3*60*1000) {
-                _log.warn("Failed to rebuild our " + (isIPv6 ? "IPv6 " : "") + "SSU address" + (introducersRequired ? " -> Need introducers" : ""));
-            }
-            _needsRebuild = true;
-            // save the external address, even if we didn't publish it
-            if (port > 0 && host != null) {
-                OrderedProperties localOpts = new OrderedProperties();
-                localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
-                localOpts.setProperty(UDPAddress.PROP_HOST, host);
-                RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
-                replaceCurrentExternalAddress(local, isIPv6);
-            }
-            // Make an empty "4" or "6" address
-            OrderedProperties opts = new OrderedProperties();
-            opts.setProperty(UDPAddress.PROP_CAPACITY, isIPv6 ? CAP_IPV6 : CAP_IPV4);
-            if (mtu != _defaultMTU && mtu > 0)
-                opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
-            if (mtu >= PeerState2.MIN_MTU || mtu == 0)
-                addSSU2Options(opts);
-            RouterAddress addr = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
-            RouterAddress current = getCurrentAddress(isIPv6);
-            boolean wantsRebuild = !addr.deepEquals(current);
-            if (!wantsRebuild)
-                return null;
+            caps = CAP_IPV4;
+            mtu = getMTU(false);
+        }
+        options.setProperty(UDPAddress.PROP_CAPACITY, caps);
+        if (mtu != _defaultMTU && mtu > 0)
+            options.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
+        if (mtu >= PeerState2.MIN_MTU || mtu == 0)
+            addSSU2Options(options);
+        RouterAddress current = getCurrentAddress(false);
+        RouterAddress addr = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
+        if (!addr.deepEquals(current)) {
+            if (_log.shouldInfo())
+                _log.info("Address rebuilt: " + addr, new Exception());
             replaceAddress(addr);
             if (allowRebuildRouterInfo)
                 rebuildRouterInfo();
-            return addr;
+        } else {
+            addr = null;
         }
+        _needsRebuild = false;
+        return addr;
+    }
+
+    /**
+     *  Pick inbound introducers for the address options.
+     *  The intro manager now sorts introducers, so deepEquals() will not fail
+     *  even with the same introducers (was only a problem when we had very
+     *  very few peers to pick from).
+     *
+     *  @param isIPv6 true for an IPv6 address
+     *  @param current current address, used as the introducer pool source
+     *  @param options address options to fill in
+     *  @return true if introducers were selected
+     */
+    private boolean selectIntroducers(boolean isIPv6, RouterAddress current, OrderedProperties options) {
+        int found = _introManager.pickInbound(current, isIPv6, options, PUBLIC_RELAY_COUNT);
+        if (found > 0) {
+            if (_log.shouldInfo())
+                _log.info("Selected " + (isIPv6 ? "IPv6 " : "") + "introducers: " + found);
+            long now = _context.clock().now();
+            if (isIPv6)
+                _v6IntroducersSelectedOn = now;
+            else
+                _v4IntroducersSelectedOn = now;
+            return true;
+        }
+        // no introducers found; logged elsewhere
+        return false;
+    }
+
+    /**
+     *  Select the address capacity string for the given state.
+     *
+     *  @param isIPv6 true for an IPv6 address
+     *  @param directIncluded whether a direct address is in the options
+     *  @param introducersRequired whether this address must have introducers
+     *  @return the capacity string
+     */
+    private String selectCapacity(boolean isIPv6, boolean directIncluded, boolean introducersRequired) {
+        if (!canTestAsCharlie(isIPv6)) {
+            // we could still be a Bob, but we don't have separate caps for Bob and Charlie
+            return isIPv6 ? CAP_IPV6 : CAP_IPV4;
+        } else if (introducersRequired || !canIntroduce(isIPv6)) {
+            if (!directIncluded) {
+                if (isIPv6) {return CAP_TESTING_6;}
+                else {return CAP_TESTING_4;}
+            } else {return CAP_TESTING;}
+        } else {return CAP_TESTING_INTRO;}
+    }
+
+    /**
+     *  Publish the fully populated address (direct and/or introducers).
+     *
+     *  @param host new validated host or null
+     *  @param port new validated port or 0/-1
+     *  @param allowRebuildRouterInfo whether to tell the router
+     *  @param isIPv6 true for an IPv6 address
+     *  @param directIncluded whether a direct address is in the options
+     *  @param introducersIncluded whether introducers are in the options
+     *  @param mtu the MTU for this address
+     *  @param options address options (host, port, caps, mtu, introducers)
+     *  @return the new address if changed, else null
+     */
+    private RouterAddress rebuildPublishedAddress(String host, int port, boolean allowRebuildRouterInfo, boolean isIPv6,
+                                                  boolean directIncluded, boolean introducersIncluded, int mtu, OrderedProperties options) {
+        // SSU seems to regulate at about 85%, so make it a little higher.
+        // If this is too low, both NTCP and SSU always have incremented cost and
+        // the whole mechanism is not helpful.
+        int cost = DEFAULT_COST;
+        if (ADJUST_COST && !haveCapacity(91))
+            cost += CONGESTION_COST_ADJUSTMENT;
+        if (introducersIncluded)
+            cost += 2;
+        if (isIPv6) {
+            TransportUtil.IPv6Config config = getIPv6Config();
+            if (config == IPV6_PREFERRED)
+                cost--;
+            else if (config == IPV6_NOT_PREFERRED)
+                cost++;
+        }
+        if (mtu >= PeerState2.MIN_MTU || mtu == 0)
+            addSSU2Options(options);
+        RouterAddress addr = new RouterAddress(getPublishStyle(), options, cost);
+
+        RouterAddress current = getCurrentAddress(isIPv6);
+        boolean wantsRebuild = !addr.deepEquals(current);
+
+        // save the external address, even if we didn't publish it
+        if (port > 0 && host != null) {
+            RouterAddress local;
+            if (directIncluded) {
+                local = addr;
+            } else {
+                OrderedProperties localOpts = new OrderedProperties();
+                localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
+                localOpts.setProperty(UDPAddress.PROP_HOST, host);
+                local = new RouterAddress(getPublishStyle(), localOpts, cost);
+            }
+            replaceCurrentExternalAddress(local, isIPv6);
+        }
+
+        if (wantsRebuild) {
+            if (_log.shouldInfo())
+                _log.info("Address rebuilt\n* " + addr);
+            replaceAddress(addr);
+            if (!isIPv6 &&
+                getCurrentAddress(true) == null &&
+                getIPv6Config() != IPV6_DISABLED &&
+                hasIPv6Address()) {
+                // Also make an empty "6" address
+                OrderedProperties opts = new OrderedProperties();
+                opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV6);
+                mtu = getMTU(true);
+                if (mtu != _defaultMTU && mtu > 0)
+                    opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
+                addSSU2Options(opts);
+                RouterAddress addr6 = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
+                replaceAddress(addr6);
+            }
+            // warning, this calls back into us with allowRebuildRouterInfo = false,
+            // via CSFI.createAddresses->TM.getAddresses()->updateAddress()->REA
+            if (allowRebuildRouterInfo)
+                rebuildRouterInfo();
+        } else {
+            addr = null;
+        }
+
+        _needsRebuild = false;
+        return addr;
+    }
+
+    /**
+     *  No direct address and no introducers available; publish an empty
+     *  "4" or "6" address so peers know the address exists, and retry later.
+     *
+     *  @param host new validated host or null
+     *  @param port new validated port or 0/-1
+     *  @param allowRebuildRouterInfo whether to tell the router
+     *  @param isIPv6 true for an IPv6 address
+     *  @param introducersRequired whether this address must have introducers
+     *  @param mtu the MTU for this address
+     *  @return the new address if changed, else null
+     */
+    private RouterAddress rebuildEmptyAddress(String host, int port, boolean allowRebuildRouterInfo, boolean isIPv6,
+                                              boolean introducersRequired, int mtu) {
+        long uptime = _context.router().getUptime();
+        if (_log.shouldWarn() && uptime > 3*60*1000) {
+            _log.warn("Failed to rebuild our " + (isIPv6 ? "IPv6 " : "") + "SSU address" + (introducersRequired ? " -> Need introducers" : ""));
+        }
+        _needsRebuild = true;
+        // save the external address, even if we didn't publish it
+        if (port > 0 && host != null) {
+            OrderedProperties localOpts = new OrderedProperties();
+            localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(port));
+            localOpts.setProperty(UDPAddress.PROP_HOST, host);
+            RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
+            replaceCurrentExternalAddress(local, isIPv6);
+        }
+        // Make an empty "4" or "6" address
+        OrderedProperties opts = new OrderedProperties();
+        opts.setProperty(UDPAddress.PROP_CAPACITY, isIPv6 ? CAP_IPV6 : CAP_IPV4);
+        if (mtu != _defaultMTU && mtu > 0)
+            opts.setProperty(UDPAddress.PROP_MTU, Integer.toString(mtu));
+        if (mtu >= PeerState2.MIN_MTU || mtu == 0)
+            addSSU2Options(opts);
+        RouterAddress addr = new RouterAddress(getPublishStyle(), opts, SSU_OUTBOUND_COST);
+        RouterAddress current = getCurrentAddress(isIPv6);
+        boolean wantsRebuild = !addr.deepEquals(current);
+        if (!wantsRebuild)
+            return null;
+        replaceAddress(addr);
+        if (allowRebuildRouterInfo)
+            rebuildRouterInfo();
+        return addr;
     }
 
     /**
