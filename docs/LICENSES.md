@@ -194,3 +194,9 @@ The following custom JavaScript scripts were written by dr|z3d for I2P+. License
 ## CONSOLE / WEBAPPS THEMES & GRAPHICS
 
 Custom console and webapp themes and graphics authored by dr|z3d. Licensed under AGPL-3.0 or later unless specified otherwise.
+
+### FONTS
+
+- **FiraCode** — SIL Open Font License. https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+- **Sora** — SIL Open Font License. https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+- **Open Sans** — SIL Open Font License, Version 1.1. https://openfontlicense.org/open-font-license-official-text/
