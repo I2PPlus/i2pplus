@@ -840,8 +840,8 @@
   <!-- Preparation of code coverage tool of choice -->
   <target name="prepareClover" depends="compile" if="with.clover">
     <taskdef resource="clovertasks"/>
-    <mkdir dir="../../../reports/apps/routerconsole/clover"/>
-    <clover-setup initString="../../../reports/apps/routerconsole/clover/coverage.db"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/clover"/>
+    <clover-setup initString="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/clover/coverage.db"/>
   </target>
 
   <target name="prepareCobertura" depends="compile" if="with.cobertura">
@@ -859,9 +859,9 @@
   <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
   <!-- end preparation of code coverage tool -->
   <target name="scalatest.test" depends="clean, scalatest.compileTest, prepareTest">
-    <mkdir dir="../../../reports/apps/routerconsole/scalatest/"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest/"/>
     <delete>
-      <fileset dir="../../../reports/apps/routerconsole/scalatest">
+      <fileset dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -883,14 +883,14 @@
         SlowTests
       </tagsToExclude>
       <reporter type="stdout"/>
-      <reporter type="junitxml" directory="../../../reports/apps/routerconsole/scalatest/"/>
+      <reporter type="junitxml" directory="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest/"/>
     </scalatest>
     <!-- Fetch the real hostname of this machine -->
     <exec executable="hostname" outputproperty="host.name"/>
     <!-- Set if unset -->
     <property name="host.fakename" value="i2ptester"/>
     <!-- Replace hostname that junit inserts into reports with fake one -->
-    <replace dir="../../../reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
+    <replace dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
   </target>
 
   <target name="compileTest" depends="compile">
@@ -919,7 +919,7 @@
   </target>
 
   <target name="junit.test" depends="compileTest">
-    <property name="junit.reports.dir" value="../../reports"/>
+    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <mkdir dir="${junit.reports.dir}/routerconsole/junit"/>
@@ -944,27 +944,27 @@
 
   <!-- Test reports -->
   <target name="scalatest.report">
-    <junitreport todir="../../../reports/apps/routerconsole/scalatest">
-      <fileset dir="../../../reports/apps/routerconsole/scalatest">
+    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest">
+      <fileset dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="../../../reports/apps/routerconsole/html/scalatest"/>
+      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/scalatest"/>
     </junitreport>
   </target>
 
   <target name="clover.report" depends="test" if="with.clover">
     <clover-report>
-      <current outfile="../../../reports/apps/routerconsole/html/clover">
+      <current outfile="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/clover">
         <format type="html"/>
       </current>
     </clover-report>
   </target>
 
   <target name="cobertura.report" depends="test" if="with.cobertura">
-    <mkdir dir="../../../reports/apps/routerconsole/cobertura"/>
-    <cobertura-report format="xml" srcdir="./src" destdir="../../../reports/apps/routerconsole/cobertura"/>
-    <mkdir dir="../../../reports/apps/routerconsole/html/cobertura"/>
-    <cobertura-report format="html" srcdir="./src" destdir="../../../reports/apps/routerconsole/html/cobertura"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/cobertura"/>
+    <cobertura-report format="xml" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/cobertura"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/cobertura"/>
+    <cobertura-report format="html" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/cobertura"/>
     <delete file="./cobertura.ser"/>
   </target>
 

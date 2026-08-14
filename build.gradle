@@ -111,6 +111,7 @@ subprojects {
         def junitDir = file("${System.getProperty('java.io.tmpdir')}/test-i2p/${project.name}/junit")
         reports.junitXml.outputLocation.set(junitDir)
         doFirst { junitDir.deleteDir() }
+        outputs.dir junitDir
     }
 }
 

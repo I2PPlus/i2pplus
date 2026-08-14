@@ -97,8 +97,8 @@
   <!-- preparation of code coverage tool of choice -->
   <target name="prepareClover" depends="compile" if="with.clover">
     <taskdef resource="clovertasks"/>
-    <mkdir dir="../../../reports/streaming/clover"/>
-    <clover-setup initString="../../../reports/streaming/clover/coverage.db"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/streaming/clover"/>
+    <clover-setup initString="${java.io.tmpdir}/build-i2p/reports/streaming/clover/coverage.db"/>
   </target>
   <target name="prepareCobertura" depends="compile" if="with.cobertura">
     <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report"/>
@@ -125,7 +125,7 @@
   <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
 
   <target name="junit.test" depends="junit.compileTest, prepareTest">
-    <property name="junit.reports.dir" value="../../../reports"/>
+    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
     <mkdir dir="${junit.reports.dir}/streaming/junit/"/>
     <delete>
       <fileset dir="${junit.reports.dir}/streaming/junit">
@@ -179,25 +179,25 @@
   <target name="test" depends="junit.test"/>
   <!-- test reports -->
   <target name="junit.report">
-    <junitreport todir="../../../reports/streaming/junit">
-      <fileset dir="../../../reports/streaming/junit">
+    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/streaming/junit">
+      <fileset dir="${java.io.tmpdir}/build-i2p/reports/streaming/junit">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="../../../reports/streaming/html/junit"/>
+      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/streaming/html/junit"/>
     </junitreport>
   </target>
   <target name="clover.report" depends="test" if="with.clover">
     <clover-report>
-      <current outfile="../../../reports/streaming/html/clover">
+      <current outfile="${java.io.tmpdir}/build-i2p/reports/streaming/html/clover">
         <format type="html"/>
       </current>
     </clover-report>
   </target>
   <target name="cobertura.report" depends="test" if="with.cobertura">
-    <mkdir dir="../../../reports/streaming/cobertura"/>
-    <cobertura-report format="xml" srcdir="./src" destdir="../../../reports/streaming/cobertura"/>
-    <mkdir dir="../../../reports/streaming/html/cobertura"/>
-    <cobertura-report format="html" srcdir="./src" destdir="../../../reports/streaming/html/cobertura"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/streaming/cobertura"/>
+    <cobertura-report format="xml" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/streaming/cobertura"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/streaming/html/cobertura"/>
+    <cobertura-report format="html" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/streaming/html/cobertura"/>
     <delete file="./cobertura.ser"/>
   </target>
   <target name="test.report" depends="junit.report, clover.report, cobertura.report"/>

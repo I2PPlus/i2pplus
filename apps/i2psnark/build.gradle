@@ -10,6 +10,15 @@ sourceSets {
             srcDir "$buildDir/messages-src"
         }
     }
+    test {
+        java {
+            srcDir 'java/test/junit'
+        }
+    }
+}
+
+test {
+    dependsOn ':apps:i2ptunnel:i2ptunnelJar'
 }
 
 dependencies {

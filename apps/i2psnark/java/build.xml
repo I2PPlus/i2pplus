@@ -546,7 +546,7 @@
   </target>
 
   <target name="junit.test" depends="compileTest">
-    <property name="junit.reports.dir" value="../../reports"/>
+    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <mkdir dir="${junit.reports.dir}/i2psnark/junit"/>

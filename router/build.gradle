@@ -2,12 +2,6 @@ plugins {
     id 'java-library'
 }
 
-tasks.configureEach { task ->
-    if (task.name.contains('test') || task.name.contains('Test')) {
-        task.enabled = false
-    }
-}
-
 sourceSets {
     main {
         java {

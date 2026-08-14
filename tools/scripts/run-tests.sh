@@ -83,6 +83,15 @@ get_build_props() {
   echo "$props"
 }
 
+get_test_target() {
+  # i2ptunnel has no junit.test target; its `test` target is the junit suite
+  if [ "$1" = "apps/i2ptunnel/java" ]; then
+    echo "test"
+  else
+    echo "junit.test"
+  fi
+}
+
 run_build() {
   local dir="$1" target="${2:-jar}"
   local logfile=$(mktemp /tmp/i2p_build_XXXXX.log)
@@ -142,7 +151,7 @@ run_test_bg() {
       exit 0
     fi
 
-    cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") test -logfile "$logfile" > /dev/null 2>&1 || true
+    cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") $(get_test_target "$dir") -logfile "$logfile" > /dev/null 2>&1 || true
 
     local report_name
     report_name=$(get_report_name "$dir")
@@ -178,7 +187,7 @@ run_test() {
 
   local logfile=$(mktemp /tmp/i2p_test_XXXXX.log)
   echo -e "${BOLD}${label}${RESET}"
-  (cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") test -logfile "$logfile" > /dev/null 2>&1) || true
+  (cd "${REPO_ROOT}/${dir}" && ant $ANT_PROPS $(get_build_props "$dir") $(get_test_target "$dir") -logfile "$logfile" > /dev/null 2>&1) || true
   rm -f "$logfile"
 
   local report_name

@@ -64,6 +64,7 @@ installer/resources/macosx/target
 *.fba
 sloccount.sc
 /reports/
+/apps/reports/
 findbugs.html
 
 # Don't allow patches

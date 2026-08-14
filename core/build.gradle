@@ -4,11 +4,9 @@ plugins {
     id 'me.champeau.jmh' version '0.7.3'
 }
 
-tasks.configureEach { task ->
-    if (task.name.contains('test') || task.name.contains('Test')) {
-        task.enabled = false
-    }
-}
+// JUnit tests run under gradle test; the scalatest runner is not part of the
+// parity target with ant junit.test, so only scalaTest is disabled.
+tasks.matching { it.name == 'scalaTest' }.configureEach { enabled = false }
 
 base {
     archivesName = 'i2p'
