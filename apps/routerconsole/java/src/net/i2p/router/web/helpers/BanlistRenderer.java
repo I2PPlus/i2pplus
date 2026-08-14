@@ -585,7 +585,7 @@ class BanlistRenderer {
                .append("<td class=ip>")
                .append(ip != null ? ip : "")
                .append("</td><td class=port")
-               .append(port != null ? " data-sort=" port : "").append(">")
+               .append(port != null ? " data-sort=" + port : "").append(">")
                .append(port != null ? port : "")
                .append("</td>")
                .append("<td class=hostname>")
