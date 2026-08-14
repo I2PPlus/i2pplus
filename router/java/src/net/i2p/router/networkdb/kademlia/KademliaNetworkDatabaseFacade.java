@@ -1732,10 +1732,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _log.debug("Not storing LeaseSet [" + key.toBase32().substring(0,8) + "] -> Local copy is newer");
                 }
                 // Copy over relevant metadata flags without re-storing
-                Hash to = leaseSet.getReceivedBy();
-                if (to != null) {rv.setReceivedBy(to);}
-                else if (leaseSet.getReceivedAsReply()) {rv.setReceivedAsReply();}
-                if (leaseSet.getReceivedAsPublished()) {rv.setReceivedAsPublished();}
+                copyStoreMetadata(rv, leaseSet);
                 return rv;
             }
         } catch (ClassCastException cce) {
@@ -1744,13 +1741,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         // spoof / hash collision detection
         // todo allow non-exp to overwrite exp
-        if (rv != null && !force) {
-            Destination d1 = leaseSet.getDestination();
-            Destination d2 = rv.getDestination();
-            if (d1 != null && d2 != null && !d1.equals(d2)) {
-                throw new IllegalArgumentException("LeaseSet Hash collision");
-            }
-        }
+        checkForHashCollision(rv, leaseSet, force);
 
         EncryptedLeaseSet encls = null;
         int type = leaseSet.getType();
@@ -1758,25 +1749,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // set dest or key before validate() calls verifySignature() which
             // will do the decryption
             encls = (EncryptedLeaseSet) leaseSet;
-            BlindData bd = blindCache().getReverseData(leaseSet.getSigningKey());
-            if (bd != null) {
-                if (_log.shouldInfo()) {_log.info("Found blind data for encrypted LeaseSet: " + bd);}
-                // secret must be set before destination
-                String secret = bd.getSecret();
-                if (secret != null) {encls.setSecret(secret);}
-                Destination dest = bd.getDestination();
-                if (dest != null) {encls.setDestination(dest);}
-                else {encls.setSigningKey(bd.getUnblindedPubKey());}
-                // per-client auth
-                if (bd.getAuthType() != BlindData.AUTH_NONE) {
-                    encls.setClientPrivateKey(bd.getAuthPrivKey());
-                }
-            } else {
-                // if we created it, there's no blind data, but it's still decrypted
-                if (encls.getDecryptedLeaseSet() == null && _log.shouldInfo()) {
-                    _log.info("No blind data found for " + leaseSet);
-                }
-            }
+            resolveBlindData(encls, leaseSet);
         }
 
         String err = validate(key, leaseSet);
@@ -1789,6 +1762,82 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (rv == null) {knownLeaseSetsCount.incrementAndGet();}
 
+        handleBlindStore(encls, leaseSet);
+        return rv;
+    }
+
+    /**
+     *  Copy the received-by / received-as-reply / received-as-published
+     *  metadata flags from the incoming LeaseSet onto the stored copy,
+     *  without re-storing the entry.
+     *
+     *  @param rv the stored copy, non-null
+     *  @param leaseSet the incoming LeaseSet
+     */
+    private void copyStoreMetadata(LeaseSet rv, LeaseSet leaseSet) {
+        Hash to = leaseSet.getReceivedBy();
+        if (to != null) {rv.setReceivedBy(to);}
+        else if (leaseSet.getReceivedAsReply()) {rv.setReceivedAsReply();}
+        if (leaseSet.getReceivedAsPublished()) {rv.setReceivedAsPublished();}
+    }
+
+    /**
+     *  Reject a store whose LeaseSet hash collides with an existing
+     *  LeaseSet for a different destination.
+     *
+     *  @param rv the stored copy, or null
+     *  @param leaseSet the incoming LeaseSet
+     *  @param force if true, skip the collision check
+     *  @throws IllegalArgumentException on a hash collision
+     */
+    private void checkForHashCollision(LeaseSet rv, LeaseSet leaseSet, boolean force) {
+        if (rv != null && !force) {
+            Destination d1 = leaseSet.getDestination();
+            Destination d2 = rv.getDestination();
+            if (d1 != null && d2 != null && !d1.equals(d2)) {
+                throw new IllegalArgumentException("LeaseSet Hash collision");
+            }
+        }
+    }
+
+    /**
+     *  Resolve blind data for an encrypted LeaseSet so validate() can
+     *  verify the signature, setting the secret before the destination.
+     *
+     *  @param encls the encrypted LeaseSet
+     *  @param leaseSet the incoming LeaseSet, for the signing key
+     */
+    private void resolveBlindData(EncryptedLeaseSet encls, LeaseSet leaseSet) {
+        BlindData bd = blindCache().getReverseData(leaseSet.getSigningKey());
+        if (bd != null) {
+            if (_log.shouldInfo()) {_log.info("Found blind data for encrypted LeaseSet: " + bd);}
+            // secret must be set before destination
+            String secret = bd.getSecret();
+            if (secret != null) {encls.setSecret(secret);}
+            Destination dest = bd.getDestination();
+            if (dest != null) {encls.setDestination(dest);}
+            else {encls.setSigningKey(bd.getUnblindedPubKey());}
+            // per-client auth
+            if (bd.getAuthType() != BlindData.AUTH_NONE) {
+                encls.setClientPrivateKey(bd.getAuthPrivKey());
+            }
+        } else {
+            // if we created it, there's no blind data, but it's still decrypted
+            if (encls.getDecryptedLeaseSet() == null && _log.shouldInfo()) {
+                _log.info("No blind data found for " + leaseSet);
+            }
+        }
+    }
+
+    /**
+     *  After storing, handle the blind data bookkeeping: an encrypted
+     *  LeaseSet we have now decrypted is stored under its own key, and a
+     *  blinded-when-published LeaseSet marks its destination as blinded.
+     *
+     *  @param encls the encrypted LeaseSet, or null
+     *  @param leaseSet the stored LeaseSet
+     */
+    private void handleBlindStore(EncryptedLeaseSet encls, LeaseSet leaseSet) {
         if (encls != null) {
             // we now have decrypted it, store it as well
             LeaseSet decls = encls.getDecryptedLeaseSet();
@@ -1801,7 +1850,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 store(dest.getHash(), decls);
                 blindCache().setBlinded(dest);
             }
-        } else if (type == DatabaseEntry.KEY_TYPE_LS2 || type == DatabaseEntry.KEY_TYPE_META_LS2) {
+        } else if (leaseSet.getType() == DatabaseEntry.KEY_TYPE_LS2 || leaseSet.getType() == DatabaseEntry.KEY_TYPE_META_LS2) {
             // if it came in via garlic
             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
             if (ls2.isBlindedWhenPublished()) {
@@ -1809,7 +1858,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 if (dest != null) {blindCache().setBlinded(dest, null, null);}
             }
         }
-        return rv;
     }
 
     /**
