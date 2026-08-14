@@ -646,12 +646,8 @@ public class TrackerClient implements Runnable {
                     if (info.getSeedCount() <= 0 && info.getLeechCount() <= 0) {
                         try {
                             TrackerInfo scrape = doScrape(tr);
-                            if (scrape != null
-                                    && scrape.getSeedCount() + scrape.getLeechCount() > 0) {
-                                snark.updateScrape(
-                                        scrape.getSeedCount(),
-                                        scrape.getLeechCount(),
-                                        scrape.getPartialSeedCount());
+                            if (scrape != null) {
+                                processScrapeResponse(tr, scrape);
                             }
                         } catch (IOException ioe) {
                             if (_log.shouldDebug()) {
@@ -755,12 +751,8 @@ public class TrackerClient implements Runnable {
                 if ((!tr.stop) && now > tr.lastScrapeTime + SCRAPE_INTERVAL) {
                     try {
                         TrackerInfo scrape = doScrape(tr);
-                        if (scrape != null
-                                && scrape.getSeedCount() + scrape.getLeechCount() > 0) {
-                            snark.updateScrape(
-                                    scrape.getSeedCount(),
-                                    scrape.getLeechCount(),
-                                    scrape.getPartialSeedCount());
+                        if (scrape != null) {
+                            processScrapeResponse(tr, scrape);
                         }
                     } catch (IOException ioe) {
                         if (_log.shouldDebug()) {
@@ -806,6 +798,22 @@ public class TrackerClient implements Runnable {
             snark.setTrackerProblems(firstProblem);
         } else {
             snark.setTrackerProblems(null);
+        }
+    }
+
+    /**
+     *  Handle a successful scrape response: refresh the swarm composition and
+     *  clear the tracker's error indicator — the response proves the tracker
+     *  is reachable, so a "No response from..." announce failure no longer
+     *  applies.
+     */
+    private void processScrapeResponse(TCTracker tr, TrackerInfo scrape) {
+        tr.trackerProblems = null;
+        if (scrape.getSeedCount() + scrape.getLeechCount() > 0) {
+            snark.updateScrape(
+                    scrape.getSeedCount(),
+                    scrape.getLeechCount(),
+                    scrape.getPartialSeedCount());
         }
     }
 
