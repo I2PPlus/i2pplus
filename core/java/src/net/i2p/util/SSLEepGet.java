@@ -519,19 +519,22 @@ public class SSLEepGet extends EepGet {
 
         Thread pusher = null;
         _decompressException = null;
+        OutputStream pipeSink = null;
         if (_isGzippedResponse) {
             PipedInputStream pi = new PipedInputStream(64 * 1024);
             PipedOutputStream po = new PipedOutputStream(pi);
             pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGetDecompress");
             _out = po;
+            pipeSink = po;
             pusher.start();
         }
 
-        int remaining = (int) _bytesRemaining;
+        long remaining = _bytesRemaining;
         byte[] buf = new byte[16 * 1024];
+        try {
         while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
             int toRead = buf.length;
-            if (strictSize && toRead > remaining) toRead = remaining;
+            if (strictSize && toRead > remaining) toRead = (int) remaining;
             int read = _proxyIn.read(buf, 0, toRead);
             if (read == -1) break;
             if (timeout != null) timeout.resetTimer();
@@ -544,7 +547,7 @@ public class SSLEepGet extends EepGet {
                 if (char1 == '\r') {
                     int char2 = _proxyIn.read();
                     if (char2 == '\n') {
-                        remaining = (int) readChunkLength();
+                        remaining = readChunkLength();
                     } else {
                         _out.write(char1);
                         _out.write(char2);
@@ -578,6 +581,14 @@ public class SSLEepGet extends EepGet {
                 // Do this after calling the listeners to keep the total correct
                 _alreadyTransferred += read;
             }
+        }
+        } catch (RuntimeException | IOException e) {
+            if (pipeSink != null) {
+                try { pipeSink.close(); } catch (IOException ioe) {}
+                // let the decompressor drain and finish before a retry reopens the file
+                try { pusher.join(); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+            }
+            throw e;
         }
 
         if (_out != null) _out.close();

@@ -1333,13 +1333,13 @@ public class EepGet {
             pusher.start();
         }
 
-        int remaining = (int)_bytesRemaining;
+        long remaining = _bytesRemaining;
         byte[] buf = new byte[16*1024];
         try {
             while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
                 int toRead = buf.length;
                 if (strictSize && toRead > remaining)
-                    toRead = remaining;
+                    toRead = (int) remaining;
                 int read = _proxyIn.read(buf, 0, toRead);
                 if (read == -1)
                     break;
@@ -1355,7 +1355,7 @@ public class EepGet {
                     if (char1 == '\r') {
                         int char2 = _proxyIn.read();
                         if (char2 == '\n') {
-                            remaining = (int) readChunkLength();
+                            remaining = readChunkLength();
                         } else {
                             _out.write(char1);
                             _out.write(char2);
@@ -1388,6 +1388,14 @@ public class EepGet {
         } catch (RuntimeException | IOException e) {
             if (pipeSink != null) {
                 try { pipeSink.close(); } catch (IOException ioe) {}
+                // let the decompressor drain and finish before a retry reopens the file
+                if (pusher != null) {
+                    try { pusher.join(); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                }
+            }
+            // close the file we opened, but never a caller-supplied stream
+            if (_outputStream == null && _out != null) {
+                try { _out.close(); } catch (IOException ioe) {}
             }
             _out = null;
             throw e;
@@ -1979,7 +1987,10 @@ public class EepGet {
         if (port >= 0)
             buf.append(':').append(port);
         buf.append("\r\n");
-        if (_alreadyTransferred > 0) {
+        // Don't resume after a transparently-gunzipped response: the stored bytes are
+        // decompressed, so appending at a compressed byte offset would corrupt the file.
+        // (A .gz/.tgz download is stored raw, so resume stays valid there.)
+        if (_alreadyTransferred > 0 && !_isGzippedResponse) {
             buf.append("Range: bytes=");
             buf.append(_alreadyTransferred);
             buf.append("-\r\n");
