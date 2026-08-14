@@ -158,13 +158,14 @@ public class TuningFormHandler extends FormHandler {
         t = new Tunable("profileOrganizer.maxProfiles", "maxProfiles", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
         t = new Tunable("profileOrganizer.minFastPeers", "minFastPeers", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
         t = new Tunable("profileOrganizer.lossyThreshold", "lossyThreshold", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
-        t = new Tunable("profileOrganizer.maxFastPeers", "maxFastPeers", HAS_RANGE | HAS_DEFAULT);
+        t = new Tunable("profileOrganizer.maxFastPeers", "maxFastPeers", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
-        t = new Tunable("profileOrganizer.minHighCapacityPeers", "minHighCapPeers", HAS_RANGE | HAS_DEFAULT);
+        t = new Tunable("profileOrganizer.minHighCapacityPeers", "minHighCapPeers", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
-        t = new Tunable("profileOrganizer.maxHighCapacityPeers", "maxHighCapPeers", HAS_RANGE | HAS_DEFAULT);
+        t = new Tunable("profileOrganizer.maxHighCapacityPeers", "maxHighCapPeers", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
         // Build timeouts
         t = new Tunable("i2p.tunnel.build.requestTimeout", "buildRequestTimeout", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
