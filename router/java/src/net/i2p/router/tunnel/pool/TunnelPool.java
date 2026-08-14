@@ -481,128 +481,161 @@ public class TunnelPool {
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
         boolean shouldWarn = false;
-        TunnelInfo lastResortTunnel = null;
         _tunnelsLock.lock();
         try {
             if (_tunnels.isEmpty()) {
                shouldWarn = _log.shouldWarn() && uptime > getStartupTime(_context) && shouldLogNoTunnelsWarning();
             } else {
-                TunnelInfo backloggedTunnel = null;
                 // Random start index for statistical load balancing
-                int startIdx = !_tunnels.isEmpty() ? _context.random().nextInt(_tunnels.size()) : 0;
+                int startIdx = _context.random().nextInt(_tunnels.size());
+                TunnelInfo lastResortTunnel = null;
+                TunnelInfo backloggedTunnel = null;
+                // Skip last resort tunnels on first pass - only use if no other option
                 if (avoidZeroHop) {
-                    for (int i = 0; i < _tunnels.size(); i++) {
-                        int idx = (startIdx + i) % _tunnels.size();
-                        TunnelInfo info = _tunnels.get(idx);
-                        // Skip last resort tunnels on first pass - only use if no other option
-                        if (info instanceof PooledTunnelCreatorConfig &&
-                            ((PooledTunnelCreatorConfig)info).isLastResort()) {
-                            lastResortTunnel = info;
-                            continue;
-                        }
-                        // Skip tunnels that have failed completely
-                        if (info.getTunnelFailed()) {continue;}
-                        // Only skip tunnels that have exceeded max allowed failures.
-                        // Test failures are often reply-path problems, not tunnel
-                        // quality issues.  Let data prove the tunnel works.
-                        if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {continue;}
-                        if (info.getLength() > 1 && info.getExpiration() > now) {
-                            if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
-                                resetConsecutiveTimeoutsOnSuccess();
-                                if (info instanceof PooledTunnelCreatorConfig) {
-                                    ((PooledTunnelCreatorConfig) info).recordActivity();
-                                }
-                                return info;
-                            } else {backloggedTunnel = info;}
-                        }
-                    }
-                    if (backloggedTunnel != null) {
+                    ScanResult pass1 = scanPoolForTunnel(startIdx, now, true, null);
+                    if (pass1.chosen != null) {return pass1.chosen;}
+                    if (pass1.backlogged != null) {
                         if (_log.shouldWarn()) {_log.warn(toString() + " -> All tunnels are backlogged");}
-                        if (backloggedTunnel instanceof PooledTunnelCreatorConfig) {
-                            ((PooledTunnelCreatorConfig) backloggedTunnel).recordActivity();
-                        }
-                        return backloggedTunnel;
+                        recordPooledActivity(pass1.backlogged);
+                        return pass1.backlogged;
                     }
+                    lastResortTunnel = pass1.lastResort;
                 }
-                for (int i = 0; i < _tunnels.size(); i++) {
-                    int idx = (startIdx + i) % _tunnels.size();
-                    TunnelInfo info = _tunnels.get(idx);
-                    // Skip last resort tunnels on first pass
-                    if (info instanceof PooledTunnelCreatorConfig &&
-                        ((PooledTunnelCreatorConfig)info).isLastResort()) {
-                        if (lastResortTunnel == null) lastResortTunnel = info;
-                        continue;
-                    }
-                    // Skip completely failed tunnels
-                    if (info.getTunnelFailed()) {continue;}
-                    // Skip only after max failures exceeded
-                    if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {continue;}
-                    if (info.getExpiration() > now) {
-                        if (_settings.isInbound() || info.getLength() <= 1 ||
-                            !_context.commSystem().isBacklogged(info.getPeer(1))) {
-                            resetConsecutiveTimeoutsOnSuccess();
-                            if (info instanceof PooledTunnelCreatorConfig) {
-                                ((PooledTunnelCreatorConfig) info).recordActivity();
-                            }
-                            return info;
-                        } else {backloggedTunnel = info;}
-                    }
-                }
+                ScanResult pass2 = scanPoolForTunnel(startIdx, now, false, lastResortTunnel);
+                if (pass2.chosen != null) {return pass2.chosen;}
+                lastResortTunnel = pass2.lastResort;
+                backloggedTunnel = pass2.backlogged;
                 // Fall back to last resort tunnel if nothing else available
                 if (lastResortTunnel != null) {
                     if (_log.shouldWarn() && uptime > 120L * 1000 && shouldLogLastResortWarning()) {
                         _log.warn(toString() + " -> Using last resort tunnel as only option");
                     }
-                    ((PooledTunnelCreatorConfig) lastResortTunnel).recordActivity();
+                    recordPooledActivity(lastResortTunnel);
                     return lastResortTunnel;
                 }
                 if (backloggedTunnel != null) {
-                    if (backloggedTunnel instanceof PooledTunnelCreatorConfig) {
-                        ((PooledTunnelCreatorConfig) backloggedTunnel).recordActivity();
-                    }
+                    recordPooledActivity(backloggedTunnel);
                     return backloggedTunnel;
                 }
-                // Accept any non-expired tunnel even with high
-                // consecutive failures. Retained tunnels are kept deliberately
-                // and are better than returning null (which causes "No tunnels
-                // available" and lost build replies). This applies to ALL pools
-                // — even exploratory, since a null return can disrupt exploration.
-                for (int i = 0; i < _tunnels.size(); i++) {
-                    TunnelInfo info = _tunnels.get(i);
-                    if (info.getExpiration() > now) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(toString() + " -> Using degraded tunnel (" +
-                                      info.getConsecutiveFailures() + " failures) as last resort");
-                        }
-                        if (info instanceof PooledTunnelCreatorConfig) {
-                            ((PooledTunnelCreatorConfig) info).recordActivity();
-                        }
-                        return info;
-                    }
-                }
+                TunnelInfo degraded = pickDegradedTunnel(now);
+                if (degraded != null) {return degraded;}
             }
         } finally {_tunnelsLock.unlock();}
 
         if (shouldWarn) {
-            String warning;
-            if (!_settings.isExploratory()) {
-                boolean destReachable = isDestinationReachable();
-                if (!destReachable) {
-                    warning = toString() + " -> Destination not reachable (no LeaseSet found)";
-                } else {
-                    warning = toString() + " -> No tunnels available";
-                }
-            } else {
-                warning = toString() + " -> No tunnels available";
-            }
-            if (!warning.contains("Ping")) {
-                _log.warn(warning);
-            }
+            logNoTunnelsWarning();
         }
 
         if (_alive) {buildFallback();}
         if (allowRecurseOnFail) {return selectTunnel(false);}
         else {return null;}
+    }
+
+    /**
+     *  Result of a pool scan: the chosen tunnel (or null), the backlogged
+     *  fallback candidate, and the recorded last-resort tunnel.
+     */
+    private static class ScanResult {
+        final TunnelInfo chosen;
+        final TunnelInfo backlogged;
+        final TunnelInfo lastResort;
+        ScanResult(TunnelInfo chosen, TunnelInfo backlogged, TunnelInfo lastResort) {
+            this.chosen = chosen;
+            this.backlogged = backlogged;
+            this.lastResort = lastResort;
+        }
+    }
+
+    /**
+     *  Scan the pool from a random start index for a usable tunnel.  Skips
+     *  last-resort tunnels (recording the first seen), failed tunnels, and
+     *  tunnels over the max consecutive-failure cap — test failures are
+     *  often reply-path problems, not tunnel quality, so let data prove the
+     *  tunnel works.  A candidate is accepted when it is non-expired and
+     *  its next peer is not backlogged (inbound pools skip the backlog
+     *  check, and short tunnels are exempt); the first pass additionally
+     *  requires length &gt; 1.  Backlogged candidates are recorded as a
+     *  fallback.
+     *
+     *  @param longTunnelsOnly first-pass mode (zero-hop-avoiding pools): long tunnels only
+     *  @param lastResortTunnel first-pass result, kept by the second pass if set
+     *  @return the scan result
+     */
+    private ScanResult scanPoolForTunnel(int startIdx, long now, boolean longTunnelsOnly, TunnelInfo lastResortTunnel) {
+        TunnelInfo backloggedTunnel = null;
+        for (int i = 0; i < _tunnels.size(); i++) {
+            int idx = (startIdx + i) % _tunnels.size();
+            TunnelInfo info = _tunnels.get(idx);
+            if (info instanceof PooledTunnelCreatorConfig && ((PooledTunnelCreatorConfig) info).isLastResort()) {
+                if (lastResortTunnel == null || longTunnelsOnly) {lastResortTunnel = info;}
+                continue;
+            }
+            if (info.getTunnelFailed()) {continue;}
+            if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {continue;}
+            if (info.getExpiration() <= now) {continue;}
+            if (longTunnelsOnly && info.getLength() <= 1) {continue;}
+            if (!_settings.isInbound() && info.getLength() > 1 &&
+                _context.commSystem().isBacklogged(info.getPeer(1))) {
+                backloggedTunnel = info;
+                continue;
+            }
+            resetConsecutiveTimeoutsOnSuccess();
+            recordPooledActivity(info);
+            return new ScanResult(info, null, lastResortTunnel);
+        }
+        return new ScanResult(null, backloggedTunnel, lastResortTunnel);
+    }
+
+    /**
+     *  Last-resort scan: accept any non-expired tunnel, even one over the
+     *  consecutive-failure cap.  Retained tunnels are kept deliberately and
+     *  are better than returning null (which causes "No tunnels available"
+     *  and lost build replies) — applies to ALL pools, even exploratory,
+     *  since a null return can disrupt exploration.
+     *
+     *  @return a non-expired tunnel, or null
+     */
+    private TunnelInfo pickDegradedTunnel(long now) {
+        for (int i = 0; i < _tunnels.size(); i++) {
+            TunnelInfo info = _tunnels.get(i);
+            if (info.getExpiration() > now) {
+                if (_log.shouldWarn()) {
+                    _log.warn(toString() + " -> Using degraded tunnel (" +
+                              info.getConsecutiveFailures() + " failures) as last resort");
+                }
+                recordPooledActivity(info);
+                return info;
+            }
+        }
+        return null;
+    }
+
+    /**
+     *  Log the no-tunnels warning, distinguishing an unreachable destination
+     *  (no LeaseSet found) from an empty pool.
+     */
+    private void logNoTunnelsWarning() {
+        String warning;
+        if (!_settings.isExploratory()) {
+            boolean destReachable = isDestinationReachable();
+            if (!destReachable) {
+                warning = toString() + " -> Destination not reachable (no LeaseSet found)";
+            } else {
+                warning = toString() + " -> No tunnels available";
+            }
+        } else {
+            warning = toString() + " -> No tunnels available";
+        }
+        if (!warning.contains("Ping")) {
+            _log.warn(warning);
+        }
+    }
+
+    /** Record activity on a pooled tunnel (no-op for non-pooled). */
+    private void recordPooledActivity(TunnelInfo info) {
+        if (info instanceof PooledTunnelCreatorConfig) {
+            ((PooledTunnelCreatorConfig) info).recordActivity();
+        }
     }
 
     /**
@@ -639,29 +672,11 @@ public class TunnelPool {
         _tunnelsLock.lock();
         try {
             if (!_tunnels.isEmpty()) {
-                TunnelInfoComparator comparator = new TunnelInfoComparator(closestTo, avoidZeroHop);
-                for (TunnelInfo info : _tunnels) {
-                    // Skip completely failed tunnels
-                    if (info.getTunnelFailed()) {continue;}
-                    // Only skip tunnels that have exceeded max allowed failures.
-                    // Test failures are often reply-path problems, not tunnel
-                    // quality issues.  Let data prove the tunnel works.
-                    if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {continue;}
-                    if (info.getExpiration() > now) {
-                        if (rv == null || comparator.compare(info, rv) < 0) {
-                            rv = info;
-                        }
-                    }
-                }
+                rv = findClosestTunnel(closestTo, avoidZeroHop, now);
                 // For non-exploratory pools: if nothing found, use any non-expired tunnel
                 // even with high consecutive failures.
                 if (rv == null && !_settings.isExploratory()) {
-                    for (TunnelInfo info : _tunnels) {
-                        if (info.getExpiration() > now) {
-                            rv = info;
-                            break;
-                        }
-                    }
+                    rv = pickAnyNonExpiredTunnel(now);
                 }
             }
             if (rv == null && _log.shouldWarn() && uptime > getStartupTime(_context)) {
@@ -671,22 +686,39 @@ public class TunnelPool {
         if (rv != null) {
             _context.statManager().addRateData("tunnel.matchLease", closestTo.equals(rv.getFarEnd()) ? 1 : 0);
         } else if (shouldWarn) {
-            String warning;
-            if (!_settings.isExploratory()) {
-                boolean destReachable = isDestinationReachable();
-                if (!destReachable) {
-                    warning = toString() + " -> Destination not reachable (no LeaseSet found)";
-                } else {
-                    warning = toString() + " -> No tunnels available";
-                }
-            } else {
-                warning = toString() + " -> No tunnels available";
-            }
-            if (!warning.contains("Ping")) {
-                _log.warn(warning);
+            logNoTunnelsWarning();
+        }
+        return rv;
+    }
+
+    /**
+     *  Find the non-failed tunnel XOR-closest to the target, so OBEP-IBGW
+     *  connections keep some locality network-wide.  Tunnels over the max
+     *  consecutive-failure cap are skipped — test failures are often
+     *  reply-path problems, not tunnel quality.
+     *
+     *  @return the closest tunnel, or null
+     */
+    private TunnelInfo findClosestTunnel(Hash closestTo, boolean avoidZeroHop, long now) {
+        TunnelInfo rv = null;
+        TunnelInfoComparator comparator = new TunnelInfoComparator(closestTo, avoidZeroHop);
+        for (TunnelInfo info : _tunnels) {
+            // Skip completely failed tunnels
+            if (info.getTunnelFailed()) {continue;}
+            if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {continue;}
+            if (info.getExpiration() > now) {
+                if (rv == null || comparator.compare(info, rv) < 0) {rv = info;}
             }
         }
         return rv;
+    }
+
+    /** @return any non-expired tunnel, or null */
+    private TunnelInfo pickAnyNonExpiredTunnel(long now) {
+        for (TunnelInfo info : _tunnels) {
+            if (info.getExpiration() > now) {return info;}
+        }
+        return null;
     }
 
     /**
@@ -1698,36 +1730,92 @@ public class TunnelPool {
         // lease expires.
         long expireAfter = now + LEASE_MIN_REMAINING_MS;
 
-        boolean hasGoodTunnel = false;
+        boolean hasGood = hasGoodTunnel(tunnels, expireAfter);
+        LeaseTunnels selection = collectLeaseTunnels(tunnels, expireAfter, hasGood);
+
+        // Sort by quality — freshest first, then lowest latency, then fewest
+        // failures — so the LeaseSet holds the best tunnels available.
+        Collections.sort(selection.good, QUALITY_COMPARATOR);
+        List<TunnelInfo> goodTunnels = selection.good;
+        int wantedLeases = wanted - (selection.zeroHop != null ? 1 : 0);
+        if (goodTunnels.size() > wantedLeases) {
+            goodTunnels = new ArrayList<>(goodTunnels.subList(0, wantedLeases));
+        }
+
+        TreeSet<Lease> leases = buildLeases(goodTunnels, selection.zeroHop);
+        if (!leases.isEmpty()) {
+            _hasGoodLeaseSet = true;
+        }
+
+        if (leases.isEmpty()) {
+            // If we've never published a LeaseSet with GOOD tunnels, don't
+            // fall back to degraded tunnels — wait for a test cycle to complete.
+            if (!_hasGoodLeaseSet) {
+                if (_log.shouldInfo()) {
+                    _log.info(toString() + "\n* Deferring LeaseSet publication — no GOOD tunnels yet");
+                }
+                return null;
+            }
+            addDegradedFallbackLease(leases, tunnels, isServerPool);
+        }
+        // Rotate out the oldest lease if it matches the previous publish's
+        // earliest end time.  This gives each republished LeaseSet a different
+        // earliest lease end time, so floodfill peers see wasNew=true and
+        // propagate the LS onward.  Without this, a stable tunnel set produces
+        // the same earliest end time every build, and the floodfill never
+        // re-floods the LS — it slowly fades from the network.
+        if (rotateForPropagation) {
+            rotateOldestLeaseForPropagation(leases, tunnels, rotatedOut);
+        }
+
+        return finalizeLeaseSet(leases, wanted, now);
+    }
+
+    /**
+     *  Whether any tunnel in the list is GOOD and expiring after the
+     *  propagation deadline — gates the UNTESTED fallback.
+     */
+    private boolean hasGoodTunnel(List<TunnelInfo> tunnels, long expireAfter) {
         for (TunnelInfo t : tunnels) {
             if (!t.getTunnelFailed() && t.getTestStatus() == TunnelTestStatus.GOOD &&
                 t.getExpiration() > expireAfter) {
-                hasGoodTunnel = true;
-                break;
+                return true;
             }
         }
+        return false;
+    }
 
+    /**
+     *  Selected tunnels for a LeaseSet build: the quality-sorted GOOD (or
+     *  fallback UNTESTED) tunnels and the single best zero-hop tunnel.
+     */
+    private static class LeaseTunnels {
+        final List<TunnelInfo> good;
+        final TunnelInfo zeroHop;
+        LeaseTunnels(List<TunnelInfo> good, TunnelInfo zeroHop) {
+            this.good = good;
+            this.zeroHop = zeroHop;
+        }
+    }
+
+    /**
+     *  Select the tunnels that qualify for a LeaseSet: GOOD tunnels (or
+     *  UNTESTED fallback when no GOOD exists — fully built and functional,
+     *  just not yet verified), expiring after the propagation deadline, with
+     *  the single best zero-hop tunnel kept separately.  Zero-hop tunnels
+     *  are only kept when the pool expressly allows them; bootstrap, build-
+     *  stress, and collapse overrides must never expose the router directly.
+     */
+    private LeaseTunnels collectLeaseTunnels(List<TunnelInfo> tunnels, long expireAfter, boolean hasGoodTunnel) {
         TunnelInfo zeroHopTunnel = null;
         List<TunnelInfo> goodTunnels = new ArrayList<>();
         for (TunnelInfo tunnel : tunnels) {
-            // Only include GOOD tunnels by default. When no GOOD tunnels exist
-            // (e.g. test queue saturated), fall back to UNTESTED tunnels —
-            // they're fully built and functional, just not yet verified.
             if (tunnel.getTunnelFailed()) continue;
-            if (tunnel.getTestStatus() == TunnelTestStatus.GOOD) {
-                // include — known good
-            } else if (hasGoodTunnel) {
-                continue;
-            } else if (tunnel.getTestStatus() != TunnelTestStatus.UNTESTED) {
-                continue;
-            }
+            if (tunnel.getTestStatus() != TunnelTestStatus.GOOD &&
+                (hasGoodTunnel || tunnel.getTestStatus() != TunnelTestStatus.UNTESTED)) continue;
             if (tunnel.getExpiration() <= expireAfter) {continue;}
 
             if (tunnel.getLength() <= 1) {
-                // Never publish zero-hop tunnels to LeaseSets unless the pool
-                // is expressly configured for zero hops (length 0 or
-                // lengthOverride=0).  Bootstrap, build-stress, and collapse
-                // overrides must never expose the router directly.
                 if (!_settings.getAllowZeroHop()) {continue;}
                 // More than one zero-hop tunnel in a lease is pointless
                 // and increases the leaseset size needlessly.
@@ -1747,93 +1835,90 @@ public class TunnelPool {
             }
             goodTunnels.add(tunnel);
         }
+        return new LeaseTunnels(goodTunnels, zeroHopTunnel);
+    }
 
-        // Sort by quality — freshest first, then lowest latency, then fewest
-        // failures — so the LeaseSet holds the best tunnels available.
-        Collections.sort(goodTunnels, QUALITY_COMPARATOR);
-
-        // Take only the best tunnels up to wanted count
-        int wantedLeases = wanted - (zeroHopTunnel != null ? 1 : 0);
-        if (goodTunnels.size() > wantedLeases) {
-            goodTunnels = new ArrayList<>(goodTunnels.subList(0, wantedLeases));
-        }
-
+    /**
+     *  Assemble the Lease objects for the selected tunnels: the single
+     *  zero-hop lease (if any), then the quality-sorted GOOD tunnels.
+     */
+    private TreeSet<Lease> buildLeases(List<TunnelInfo> goodTunnels, TunnelInfo zeroHopTunnel) {
         TreeSet<Lease> leases = new TreeSet<>(new LeaseComparator());
-
-        // Add zero-hop lease if present
         if (zeroHopTunnel != null) {
             Lease lease = buildLeaseFromTunnel(zeroHopTunnel);
             if (lease != null) {
                 leases.add(lease);
             }
         }
-
-        // Add latency-sorted GOOD tunnels
         for (TunnelInfo tunnel : goodTunnels) {
             Lease lease = buildLeaseFromTunnel(tunnel);
             if (lease != null) {
                 leases.add(lease);
             }
         }
+        return leases;
+    }
 
-        if (!leases.isEmpty()) {
-            _hasGoodLeaseSet = true;
+    /**
+     *  Emergency fallback: when the LeaseSet has no leases but one has been
+     *  published before, add the best degraded tunnel so clients don't lose
+     *  the destination.
+     */
+    private void addDegradedFallbackLease(TreeSet<Lease> leases, List<TunnelInfo> tunnels, boolean isServerPool) {
+        TunnelInfo fallback = findBestDegradedTunnel(tunnels, isServerPool);
+        if (fallback != null) {
+            TunnelId inId = fallback.getReceiveTunnelId(0);
+            Hash gw = fallback.getPeer(0);
+            if (inId != null && gw != null) {
+                Lease lease = buildLeaseFromTunnel(fallback);
+                leases.add(lease);
+                if (_log.shouldWarn()) {
+                    _log.warn(toString() + "\n* Emergency fallback lease from degraded tunnel (" +
+                              fallback.getConsecutiveFailures() + " failures)");
+                }
+            }
         }
+    }
 
-        if (leases.isEmpty()) {
-            // If we've never published a LeaseSet with GOOD tunnels, don't
-            // fall back to degraded tunnels — wait for a test cycle to complete.
-            if (!_hasGoodLeaseSet) {
-                if (_log.shouldInfo()) {
-                    _log.info(toString() + "\n* Deferring LeaseSet publication — no GOOD tunnels yet");
-                }
-                return null;
-            }
-            TunnelInfo fallback = findBestDegradedTunnel(tunnels, isServerPool);
-            if (fallback != null) {
-                TunnelId inId = fallback.getReceiveTunnelId(0);
-                Hash gw = fallback.getPeer(0);
-                if (inId != null && gw != null) {
-                    Lease lease = buildLeaseFromTunnel(fallback);
-                    leases.add(lease);
-                    if (_log.shouldWarn()) {
-                        _log.warn(toString() + "\n* Emergency fallback lease from degraded tunnel (" +
-                                  fallback.getConsecutiveFailures() + " failures)");
-                    }
-                }
-            }
-        }
-        // Rotate out the oldest lease if it matches the previous publish's
-        // earliest end time.  This gives each republished LeaseSet a different
-        // earliest lease end time, so floodfill peers see wasNew=true and
-        // propagate the LS onward.  Without this, a stable tunnel set produces
-        // the same earliest end time every build, and the floodfill never
-        // re-floods the LS — it slowly fades from the network.
-        if (rotateForPropagation && _hasGoodLeaseSet && _lastPublishedEarliestLeaseEnd > 0 &&
-            leases.size() >= 2) {
-            long earliest = leases.first().getEndTime();
-            if (earliest > 0 && earliest <= _lastPublishedEarliestLeaseEnd) {
-                Lease rotated = leases.pollFirst();
-                if (_log.shouldInfo())
-                    _log.info(toString() + " -> Rotated out oldest lease (" +
-                              rotated.getGateway() + "/" + rotated.getTunnelId() +
-                              ") for floodfill propagation, earliest=" + earliest);
-                if (rotatedOut != null) {
-                    TunnelId rotatedTunnelId = rotated.getTunnelId();
-                    Hash rotatedGateway = rotated.getGateway();
-                    for (TunnelInfo tunnel : tunnels) {
-                        if (tunnel.getTunnelFailed()) continue;
-                        TunnelId inId = tunnel.getReceiveTunnelId(0);
-                        Hash gw = tunnel.getPeer(0);
-                        if (inId != null && gw != null &&
-                            inId.equals(rotatedTunnelId) && gw.equals(rotatedGateway)) {
-                            rotatedOut.add(tunnel);
-                            break;
-                        }
-                    }
+    /**
+     *  Rotate out the oldest lease when its end time matches the previous
+     *  publication's earliest end time, so floodfill peers see wasNew=true
+     *  and propagate the LeaseSet onward.  Without this, a stable tunnel set
+     *  produces the same earliest end time every build and the floodfill
+     *  never re-floods the LS — it slowly fades from the network.
+     */
+    private void rotateOldestLeaseForPropagation(TreeSet<Lease> leases, List<TunnelInfo> tunnels, List<TunnelInfo> rotatedOut) {
+        if (!_hasGoodLeaseSet || _lastPublishedEarliestLeaseEnd <= 0 || leases.size() < 2) {return;}
+        long earliest = leases.first().getEndTime();
+        if (earliest <= 0 || earliest > _lastPublishedEarliestLeaseEnd) {return;}
+        Lease rotated = leases.pollFirst();
+        if (_log.shouldInfo())
+            _log.info(toString() + " -> Rotated out oldest lease (" +
+                      rotated.getGateway() + "/" + rotated.getTunnelId() +
+                      ") for floodfill propagation, earliest=" + earliest);
+        if (rotatedOut != null) {
+            TunnelId rotatedTunnelId = rotated.getTunnelId();
+            Hash rotatedGateway = rotated.getGateway();
+            for (TunnelInfo tunnel : tunnels) {
+                if (tunnel.getTunnelFailed()) continue;
+                TunnelId inId = tunnel.getReceiveTunnelId(0);
+                Hash gw = tunnel.getPeer(0);
+                if (inId != null && gw != null &&
+                    inId.equals(rotatedTunnelId) && gw.equals(rotatedGateway)) {
+                    rotatedOut.add(tunnel);
+                    break;
                 }
             }
         }
+    }
+
+    /**
+     *  Record completeness state, build the LeaseSet object from the leases,
+     *  and refresh the publication bookkeeping fields.
+     *
+     *  @return the built LeaseSet, or null if there are no leases
+     */
+    private LeaseSet finalizeLeaseSet(TreeSet<Lease> leases, int wanted, long now) {
         if (leases.size() < wanted) {
             if (_log.shouldInfo()) {
                 _log.info(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
