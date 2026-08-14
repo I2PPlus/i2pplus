@@ -2,7 +2,6 @@ package net.i2p.util;
 
 // License: BSD-3-Clause. See docs/LICENSES.md
 
-import gnu.getopt.Getopt;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -591,10 +590,16 @@ public class SSLEepGet extends EepGet {
             throw e;
         }
 
-        if (_out != null) _out.close();
-        _out = null;
-
         if (_isGzippedResponse && pusher != null) {
+            IOException closeFailure = null;
+            if (_out != null) {
+                try {
+                    _out.close();
+                } catch (IOException ioe) {
+                    closeFailure = ioe;
+                }
+            }
+            _out = null;
             try {
                 pusher.join();
             } catch (InterruptedException ie) { /* ignored */ }
@@ -604,6 +609,11 @@ public class SSLEepGet extends EepGet {
                 _keepFetching = false;
                 throw _decompressException;
             }
+            if (closeFailure != null)
+                throw closeFailure;
+        } else if (_out != null) {
+            _out.close();
+            _out = null;
         }
 
         if (_aborted) throw new IOException("Timed out reading the HTTP data");

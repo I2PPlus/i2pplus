@@ -20,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Formatter;
@@ -33,7 +32,6 @@ import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
-import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 
 /**
@@ -1401,11 +1399,16 @@ public class EepGet {
             throw e;
         }
 
-        if (_out != null)
-            _out.close();
-        _out = null;
-
         if (_isGzippedResponse) {
+            IOException closeFailure = null;
+            if (_out != null) {
+                try {
+                    _out.close();
+                } catch (IOException ioe) {
+                    closeFailure = ioe;
+                }
+            }
+            _out = null;
             try {
                 pusher.join();
             } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
@@ -1414,6 +1417,11 @@ public class EepGet {
                 _keepFetching = false;
                 throw _decompressException;
             }
+            if (closeFailure != null)
+                throw closeFailure;
+        } else if (_out != null) {
+            _out.close();
+            _out = null;
         }
 
         if (_aborted)
@@ -2756,7 +2764,6 @@ public class EepGet {
         @Override
         public void run() {
             ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();
-            ByteArray ba = null;
             long written = 0;
             try {
                 // blocking
