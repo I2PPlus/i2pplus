@@ -1033,129 +1033,83 @@ public class ProfileOrganizer {
      * @param shouldCoalesce if {@code true}, coalesce statistics for active profiles
      * @param shouldDecay if {@code true} and coalescing is performed, apply decay to historical stats
      */
-     void reorganize(boolean shouldCoalesce, boolean shouldDecay) {
-         final long now = _context.clock().now();
-         final long start = System.currentTimeMillis();
-         int profileCount = 0;
-         int expiredCount = 0;
+    void reorganize(boolean shouldCoalesce, boolean shouldDecay) {
+        final long now = _context.clock().now();
+        final long start = System.currentTimeMillis();
 
-          // Tiered expiration windows based on interaction level.
-          // Active peers (Tier 1) retain long-term data for tunnel selection quality.
-          // Passive peers (Tier 2) kept for 3 days to capture intermittent interactions.
-          // Gossip-only peers (Tier 3) kept for 24h since floodfill stores are infrequent.
-          final long expireActive = 7 * 24 * 60 * 60 * 1000L;    // 7 days
-          final long expirePassive = 3 * 24 * 60 * 60 * 1000L;   // 3 days
-          final long expireGossip = 24 * 60 * 60 * 1000L;        // 24 hours
-          // Peers that never accepted or rejected a tunnel build for us aren't
-          // useful — drop them from memory eventually. They'll be recreated
-          // on demand if they ever respond to a build request.
-          // Scale the window with the number of profiles stored: the fewer
-          // profiles known, the longer we keep untracked peers around.
-          int storedProfiles = _strictCapacityOrder.size();
-          final long expireUntracked;
-          if (storedProfiles < 2000) {
-              expireUntracked = 4 * 60 * 60 * 1000L;         // 4 hours
-          } else if (storedProfiles < 3000) {
-              expireUntracked = 3 * 60 * 60 * 1000L;         // 3 hours
-          } else if (storedProfiles < 4000) {
-              expireUntracked = 2 * 60 * 60 * 1000L;         // 2 hours
-          } else {
-              expireUntracked = 60 * 60 * 1000L;             // 1 hour
-          }
+        // Tiered expiration windows based on interaction level.
+        // Active peers (Tier 1) retain long-term data for tunnel selection quality.
+        // Passive peers (Tier 2) kept for 3 days to capture intermittent interactions.
+        // Gossip-only peers (Tier 3) kept for 24h since floodfill stores are infrequent.
+        final long expireActive = 7 * 24 * 60 * 60 * 1000L;    // 7 days
+        final long expirePassive = 3 * 24 * 60 * 60 * 1000L;   // 3 days
+        final long expireGossip = 24 * 60 * 60 * 1000L;        // 24 hours
+        // Peers that never accepted or rejected a tunnel build for us aren't
+        // useful — drop them from memory eventually. They'll be recreated
+        // on demand if they ever respond to a build request.
+        // Scale the window with the number of profiles stored: the fewer
+        // profiles known, the longer we keep untracked peers around.
+        int storedProfiles = _strictCapacityOrder.size();
+        final long expireUntracked;
+        if (storedProfiles < 2000) {
+            expireUntracked = 4 * 60 * 60 * 1000L;         // 4 hours
+        } else if (storedProfiles < 3000) {
+            expireUntracked = 3 * 60 * 60 * 1000L;         // 3 hours
+        } else if (storedProfiles < 4000) {
+            expireUntracked = 2 * 60 * 60 * 1000L;         // 2 hours
+        } else {
+            expireUntracked = 60 * 60 * 1000L;             // 1 hour
+        }
 
-         // Optional coalescing (read-only, safe to skip if lock fails)
-         if (shouldCoalesce && _context.router() != null &&
-              _context.router().getUptime() > 30 * 60 * 1000L &&
-             countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
-             getReadLock();
-             try {
-                 for (PeerProfile prof : _strictCapacityOrder) {
-                     long lastSend = prof.getLastSendSuccessful();
-                     long expireWindow = lastSend > 0 ? expireActive : expirePassive;
-                     if (lastSend >= now - expireWindow) {
-                         prof.coalesceOnly(shouldDecay);
-                     }
-                 }
-             } finally {
-                 releaseReadLock();
-             }
-         }
-
-         // Attempt to acquire write lock
-         if (!getWriteLock()) {
-             _log.warn("Write lock unavailable during reorganize; performing lightweight expiration...");
-
-             getReadLock();
-             try {
-                 int estimatedExpired = 0;
-                 for (PeerProfile profile : _strictCapacityOrder) {
-                     long lastSend = profile.getLastSendSuccessful();
-                     long expireWindow = lastSend > 0 ? expireActive : expirePassive;
-                     if (lastSend < now - expireWindow) {
-                         estimatedExpired++;
-                     }
-                 }
-                 _context.statManager().addRateData("peer.profileEstimatedExpired", estimatedExpired, 0);
-             } finally {
-                 releaseReadLock();
-             }
-
-             _context.statManager().addRateData("peer.reorganizeLockFailures", 1, 0);
-             return;
-         }
-
-         try {
-             // Step 1: Build a new set of active, non-expired, non-blacklisted profiles
-             Set<PeerProfile> newStrictCapacityOrder = new TreeSet<>(_comp);
-             double totalCapacity = 0;
-             double totalIntegration = 0;
-
-              for (PeerProfile profile : _strictCapacityOrder) {
-                  if (_us != null && _us.equals(profile.getPeer()) || profile.wasUnreachable()) {
-                      continue;
-                  }
-
-                 // Tiered expiration: Active > Passive > Gossip
-                 long lastSend = profile.getLastSendSuccessful();
-                 long lastHeard = profile.getLastHeardFrom();
-                 long lastHeardAbout = profile.getLastHeardAbout();
-                 long expireWindow;
-                if (lastSend > 0) {
-                    expireWindow = expireActive;
-                } else if (lastHeard > 0 || lastHeardAbout > 0) {
-                    expireWindow = expirePassive;
-                } else {
-                    expireWindow = expireGossip;
+        // Optional coalescing (read-only, safe to skip if lock fails)
+        if (shouldCoalesce && _context.router() != null &&
+            _context.router().getUptime() > 30 * 60 * 1000L &&
+            countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
+            getReadLock();
+            try {
+                for (PeerProfile prof : _strictCapacityOrder) {
+                    long lastSend = prof.getLastSendSuccessful();
+                    long expireWindow = lastSend > 0 ? expireActive : expirePassive;
+                    if (lastSend >= now - expireWindow) {
+                        prof.coalesceOnly(shouldDecay);
+                    }
                 }
-                if (!profile.hasTunnelHistory()) {
-                    // No tunnel build participation — purge from memory quickly
-                    // regardless of activity tier.
-                    expireWindow = Math.min(expireWindow, expireUntracked);
+            } finally {
+                releaseReadLock();
+            }
+        }
+
+        // Attempt to acquire write lock
+        if (!getWriteLock()) {
+            _log.warn("Write lock unavailable during reorganize; performing lightweight expiration...");
+
+            getReadLock();
+            try {
+                int estimatedExpired = 0;
+                for (PeerProfile profile : _strictCapacityOrder) {
+                    long lastSend = profile.getLastSendSuccessful();
+                    long expireWindow = lastSend > 0 ? expireActive : expirePassive;
+                    if (lastSend < now - expireWindow) {
+                        estimatedExpired++;
+                    }
                 }
+                _context.statManager().addRateData("peer.profileEstimatedExpired", estimatedExpired, 0);
+            } finally {
+                releaseReadLock();
+            }
 
-                 long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));
-                  if (cutoff < now - expireWindow) {
-                      expiredCount++;
-                      profile.shrinkProfile();
-                      if (profile.getIsExpandedDB()) {
-                          profile.shrinkDBProfile();
-                      }
-                      continue;
-                  }
+            _context.statManager().addRateData("peer.reorganizeLockFailures", 1, 0);
+            return;
+        }
 
-                  // Skip peers in low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
-                  // With isExcludedFromProfiling() gating profile creation, this is mainly
-                  // a safety net for legacy profiles loaded from disk.
-                  if (isExcludedFromProfiling(profile.getPeer())) {
-                      continue;
-                  }
-
-                 profile.updateValues(); // Refresh values (e.g., speed, capacity, integration)
-                 newStrictCapacityOrder.add(profile);
-                 totalCapacity += profile.getCapacityValue();
-                 totalIntegration += profile.getIntegrationValue();
-                 profileCount++;
-             }
+        try {
+            // Step 1: Build a new set of active, non-expired, non-blacklisted profiles
+            CandidateSet built = buildCandidateProfiles(now, expireActive, expirePassive,
+                                                        expireGossip, expireUntracked);
+            Set<PeerProfile> newStrictCapacityOrder = built.profiles;
+            int expiredCount = built.expiredCount;
+            int profileCount = built.profileCount;
+            double totalIntegration = built.totalIntegration;
 
             // Step 2: Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();
@@ -1174,188 +1128,23 @@ public class ProfileOrganizer {
             _notFailingPeersList.clear();
 
             // Step 4: Reinsert all active profiles and assign tiers
-            for (PeerProfile profile : newStrictCapacityOrder) {
-                locked_placeProfile(profile);
-            }
+            locked_rebuildTiers(newStrictCapacityOrder);
 
             // Step 5: Fallback to ensure minimum fast peers
-            int minFast = getMinimumFastPeers();
-            int added = 0;
-            int target = minFast;
-
-            if (_fastPeers.size() < target) {
-                // First, try from high-capacity peers
-                List<PeerProfile> candidates = new ArrayList<>(_highCapacityPeers.values());
-                if (candidates.isEmpty()) {
-                    candidates = new ArrayList<>(newStrictCapacityOrder);
-                }
-
-                // Sort by speed descending
-                candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
-
-                // First pass: low-latency peers (proven fast via tunnel builds or peer tests)
-                for (int i = 0; i < candidates.size(); i++) {
-                    if (_fastPeers.size() >= target) break;
-                    PeerProfile profile = candidates.get(i);
-                    if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
-                        !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile) &&
-                        !inLossProbation(profile, now)) {
-                        _fastPeers.put(profile.getPeer(), profile);
-                        clearLossIfReadmitted(profile);
-                        added++;
-                    }
-                }
-
-                // Second pass: active peers with current traffic
-                double[] thresholds = { _thresholdSpeedValue, 0.3, 0.1, Double.MIN_VALUE };
-                for (double threshold : thresholds) {
-                    if (_fastPeers.size() >= target) break;
-                    for (int i = 0; i < candidates.size(); i++) {
-                        if (_fastPeers.size() >= target) break;
-                        PeerProfile profile = candidates.get(i);
-                        if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
-                            isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile) &&
-                            !hasRecentTunnelFailures(profile) && !inLossProbation(profile, now)) {
-                            _fastPeers.put(profile.getPeer(), profile);
-                            clearLossIfReadmitted(profile);
-                            added++;
-                        }
-                    }
-                }
-
-                // Third pass: accept any recently-active selectable peer to fill gaps
-                // During startup (first 15 min), skip activity requirement — we have
-                // no lastHeardFrom data yet.  After startup, use dynamic window:
-                // tight when many peers, wide when sparse.
-                if (_fastPeers.size() < target) {
-                    boolean inStartup = _context.router() != null &&
-                                        _context.router().getUptime() < 15 * 60 * 1000L;
-                    long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
-                    for (PeerProfile profile : newStrictCapacityOrder) {
-                        if (_fastPeers.size() >= target) break;
-                        if (profile.getPeer().equals(_us)) continue;
-                        if (!isSelectable(profile.getPeer())) continue;
-                        if (isLowTunnelAcceptance(profile)) continue;
-                        if (hasRecentTunnelFailures(profile)) continue;
-                        if (inLossProbation(profile, now)) continue;
-                        // Require recent activity — don't fill fast tier with stale peers
-                        if (profile.getLastHeardFrom() < activeCutoff &&
-                            profile.getLastSendSuccessful() < activeCutoff) continue;
-                        _fastPeers.put(profile.getPeer(), profile);
-                        clearLossIfReadmitted(profile);
-                        added++;
-                    }
-                }
-            }
+            int added = fillFastTierFallbacks(now, newStrictCapacityOrder);
 
             // Step 6: Fallback to ensure minimum high-capacity peers
-            int minHighCap = getMinimumHighCapacityPeers();
-            int highCapAdded = 0;
-            if (_highCapacityPeers.size() < minHighCap) {
-                boolean inStartup = _context.router() != null &&
-                                    _context.router().getUptime() < 15 * 60 * 1000L;
-                long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
-                for (PeerProfile profile : newStrictCapacityOrder) {
-                    if (_highCapacityPeers.size() >= minHighCap) break;
-                    if (profile.getPeer().equals(_us)) continue;
-                    if (!isSelectable(profile.getPeer())) continue;
-                    if (isLowTunnelAcceptance(profile)) continue;
-                    if (hasRecentTunnelFailures(profile)) continue;
-                    if (inLossProbation(profile, now)) continue;
-                    // Require recent activity — don't fill high-cap tier with stale peers
-                    if (profile.getLastHeardFrom() < activeCutoff &&
-                        profile.getLastSendSuccessful() < activeCutoff) continue;
-                    _highCapacityPeers.put(profile.getPeer(), profile);
-                    clearLossIfReadmitted(profile);
-                    highCapAdded++;
-                }
-            }
+            int highCapAdded = fillHighCapFallback(now, newStrictCapacityOrder);
 
             // Step 6a: Purge peers with recent tunnel failures from fast/high-cap tiers.
-            // Rebuild clears tiers, so this catches peers admitted via locked_promoteProfileToTiers()
-            // that subsequently developed failures during this reorganize window.
-            if (_fastPeers.size() >= MIN_FAST_TIGHT_COUNT) {
-                Iterator<Map.Entry<Hash, PeerProfile>> fastIt = _fastPeers.entrySet().iterator();
-                while (fastIt.hasNext()) {
-                    PeerProfile profile = fastIt.next().getValue();
-                    if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
-                        if (_log.shouldDebug()) {
-                            _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
-                                       "] from fast tier: recent tunnel failures");
-                        }
-                        fastIt.remove();
-                    }
-                }
-            }
-            if (_highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT) {
-                Iterator<Map.Entry<Hash, PeerProfile>> hcIt = _highCapacityPeers.entrySet().iterator();
-                while (hcIt.hasNext()) {
-                    PeerProfile profile = hcIt.next().getValue();
-                    if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
-                        if (_log.shouldDebug()) {
-                            _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
-                                       "] from high-cap tier: recent tunnel failures");
-                        }
-                        hcIt.remove();
-                    }
-                }
-            }
+            purgeUnusableFromTiers(now);
 
             // Step 6c: Fallback to preserved pre-reorganize peers if rebuild shrunk tiers too much.
-            // Prevents starvation when thresholds shift unfavorably — old entries that remain
-            // selectable (no recent failures, no ban, no stale RI) are re-added.
-            int oldFastSize = oldFastPeers.size();
-            if (_fastPeers.size() < oldFastSize / 2 && oldFastSize > 100) {
-                int restored = 0;
-                for (Map.Entry<Hash, PeerProfile> entry : oldFastPeers.entrySet()) {
-                    if (_fastPeers.size() >= oldFastSize) break;
-                    Hash peer = entry.getKey();
-                    if (_fastPeers.containsKey(peer)) continue;
-                    if (!isSelectable(peer)) continue;
-                    PeerProfile profile = entry.getValue();
-                    if (hasRecentTunnelFailures(profile)) continue;
-                    if (inLossProbation(profile, now)) continue;
-                    if (isLowTunnelAcceptance(profile)) continue;
-                    _fastPeers.put(peer, profile);
-                    clearLossIfReadmitted(profile);
-                    restored++;
-                }
-                if (_log.shouldInfo()) {
-                    _log.info("Tier fallback: restored " + restored + " peers to fast tier (was " +
-                              (_fastPeers.size() - restored) + ", old " + oldFastSize + ")");
-                }
-            }
-            int oldHighCapSize = oldHighCapPeers.size();
-            if (_highCapacityPeers.size() < oldHighCapSize / 2 && oldHighCapSize > 100) {
-                int restored = 0;
-                for (Map.Entry<Hash, PeerProfile> entry : oldHighCapPeers.entrySet()) {
-                    if (_highCapacityPeers.size() >= oldHighCapSize) break;
-                    Hash peer = entry.getKey();
-                    if (_highCapacityPeers.containsKey(peer)) continue;
-                    if (!isSelectable(peer)) continue;
-                    PeerProfile profile = entry.getValue();
-                    if (hasRecentTunnelFailures(profile)) continue;
-                    if (hasHighLoss(profile, now)) continue;
-                    if (isLowTunnelAcceptance(profile)) continue;
-                    _highCapacityPeers.put(peer, profile);
-                    restored++;
-                }
-                if (_log.shouldInfo()) {
-                    _log.info("Tier fallback: restored " + restored + " peers to high-cap tier (was " +
-                              (_highCapacityPeers.size() - restored) + ", old " + oldHighCapSize + ")");
-                }
-            }
+            restorePreservedPeers(now, oldFastPeers, oldHighCapPeers);
 
             // Step 6d: Count quality peers (fast/high-cap with good acceptance + recent activity)
             // Used by tuner to adjust tier limits based on viable tunnel candidates
-            int qualityCount = 0;
-            long recentCutoff = now - 24 * 60 * 60 * 1000L; // 24 hours
-            for (PeerProfile profile : _fastPeers.values()) {
-                if (isQualityPeer(profile, recentCutoff)) qualityCount++;
-            }
-            for (PeerProfile profile : _highCapacityPeers.values()) {
-                if (!profile.isLowLatency() && isQualityPeer(profile, recentCutoff)) qualityCount++;
-            }
+            int qualityCount = countQualityPeers(now);
 
             // Step 7: Update global thresholds
             _strictCapacityOrder = newStrictCapacityOrder;
@@ -1392,6 +1181,302 @@ public class ProfileOrganizer {
         } finally {
             releaseWriteLock();
         }
+    }
+
+    /**
+     *  Builds the candidate profile set for this reorganize round, filtering
+     *  expired, unreachable, and excluded profiles.
+     */
+    private CandidateSet buildCandidateProfiles(long now, long expireActive, long expirePassive,
+                                                long expireGossip, long expireUntracked) {
+        Set<PeerProfile> newStrictCapacityOrder = new TreeSet<>(_comp);
+        double totalCapacity = 0;
+        double totalIntegration = 0;
+        int expiredCount = 0;
+        int profileCount = 0;
+
+        for (PeerProfile profile : _strictCapacityOrder) {
+            if (_us != null && _us.equals(profile.getPeer()) || profile.wasUnreachable()) {
+                continue;
+            }
+
+            // Tiered expiration: Active > Passive > Gossip
+            long lastSend = profile.getLastSendSuccessful();
+            long lastHeard = profile.getLastHeardFrom();
+            long lastHeardAbout = profile.getLastHeardAbout();
+            long expireWindow;
+            if (lastSend > 0) {
+                expireWindow = expireActive;
+            } else if (lastHeard > 0 || lastHeardAbout > 0) {
+                expireWindow = expirePassive;
+            } else {
+                expireWindow = expireGossip;
+            }
+            if (!profile.hasTunnelHistory()) {
+                // No tunnel build participation — purge from memory quickly
+                // regardless of activity tier.
+                expireWindow = Math.min(expireWindow, expireUntracked);
+            }
+
+            long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));
+            if (cutoff < now - expireWindow) {
+                expiredCount++;
+                profile.shrinkProfile();
+                if (profile.getIsExpandedDB()) {
+                    profile.shrinkDBProfile();
+                }
+                continue;
+            }
+
+            // Skip peers in low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
+            // With isExcludedFromProfiling() gating profile creation, this is mainly
+            // a safety net for legacy profiles loaded from disk.
+            if (isExcludedFromProfiling(profile.getPeer())) {
+                continue;
+            }
+
+            profile.updateValues(); // Refresh values (e.g., speed, capacity, integration)
+            newStrictCapacityOrder.add(profile);
+            totalCapacity += profile.getCapacityValue();
+            totalIntegration += profile.getIntegrationValue();
+            profileCount++;
+        }
+        return new CandidateSet(newStrictCapacityOrder, totalIntegration, expiredCount, profileCount);
+    }
+
+    /**
+     *  Result of buildCandidateProfiles(): the candidate set plus the totals
+     *  and counts consumed by the threshold and logging sections.
+     */
+    private static final class CandidateSet {
+        final Set<PeerProfile> profiles;
+        final double totalIntegration;
+        final int expiredCount;
+        final int profileCount;
+
+        CandidateSet(Set<PeerProfile> profiles, double totalIntegration, int expiredCount, int profileCount) {
+            this.profiles = profiles;
+            this.totalIntegration = totalIntegration;
+            this.expiredCount = expiredCount;
+            this.profileCount = profileCount;
+        }
+    }
+
+    /**
+     *  Reinserts all active profiles into the tier maps.  Must be called with
+     *  the write lock held.
+     */
+    private void locked_rebuildTiers(Set<PeerProfile> candidates) {
+        for (PeerProfile profile : candidates) {
+            locked_placeProfile(profile);
+        }
+    }
+
+    /**
+     *  Fills the fast tier to the minimum via up to three fallback passes.
+     *  Must be called with the write lock held.  Returns the number added.
+     */
+    private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles) {
+        int minFast = getMinimumFastPeers();
+        int added = 0;
+        int target = minFast;
+
+        if (_fastPeers.size() < target) {
+            // First, try from high-capacity peers
+            List<PeerProfile> candidates = new ArrayList<>(_highCapacityPeers.values());
+            if (candidates.isEmpty()) {
+                candidates = new ArrayList<>(activeProfiles);
+            }
+
+            // Sort by speed descending
+            candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
+
+            // First pass: low-latency peers (proven fast via tunnel builds or peer tests)
+            for (int i = 0; i < candidates.size(); i++) {
+                if (_fastPeers.size() >= target) break;
+                PeerProfile profile = candidates.get(i);
+                if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
+                    !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile) &&
+                    !inLossProbation(profile, now)) {
+                    _fastPeers.put(profile.getPeer(), profile);
+                    clearLossIfReadmitted(profile);
+                    added++;
+                }
+            }
+
+            // Second pass: active peers with current traffic
+            double[] thresholds = { _thresholdSpeedValue, 0.3, 0.1, Double.MIN_VALUE };
+            for (double threshold : thresholds) {
+                if (_fastPeers.size() >= target) break;
+                for (int i = 0; i < candidates.size(); i++) {
+                    if (_fastPeers.size() >= target) break;
+                    PeerProfile profile = candidates.get(i);
+                    if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
+                        isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile) &&
+                        !hasRecentTunnelFailures(profile) && !inLossProbation(profile, now)) {
+                        _fastPeers.put(profile.getPeer(), profile);
+                        clearLossIfReadmitted(profile);
+                        added++;
+                    }
+                }
+            }
+
+            // Third pass: accept any recently-active selectable peer to fill gaps
+            // During startup (first 15 min), skip activity requirement — we have
+            // no lastHeardFrom data yet.  After startup, use dynamic window:
+            // tight when many peers, wide when sparse.
+            if (_fastPeers.size() < target) {
+                boolean inStartup = _context.router() != null &&
+                                    _context.router().getUptime() < 15 * 60 * 1000L;
+                long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
+                for (PeerProfile profile : activeProfiles) {
+                    if (_fastPeers.size() >= target) break;
+                    if (profile.getPeer().equals(_us)) continue;
+                    if (!isSelectable(profile.getPeer())) continue;
+                    if (isLowTunnelAcceptance(profile)) continue;
+                    if (hasRecentTunnelFailures(profile)) continue;
+                    if (inLossProbation(profile, now)) continue;
+                    // Require recent activity — don't fill fast tier with stale peers
+                    if (profile.getLastHeardFrom() < activeCutoff &&
+                        profile.getLastSendSuccessful() < activeCutoff) continue;
+                    _fastPeers.put(profile.getPeer(), profile);
+                    clearLossIfReadmitted(profile);
+                    added++;
+                }
+            }
+        }
+        return added;
+    }
+
+    /**
+     *  Fills the high-capacity tier to the minimum with recently-active
+     *  selectable peers.  Must be called with the write lock held.  Returns
+     *  the number added.
+     */
+    private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles) {
+        int minHighCap = getMinimumHighCapacityPeers();
+        int highCapAdded = 0;
+        if (_highCapacityPeers.size() < minHighCap) {
+            boolean inStartup = _context.router() != null &&
+                                _context.router().getUptime() < 15 * 60 * 1000L;
+            long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
+            for (PeerProfile profile : activeProfiles) {
+                if (_highCapacityPeers.size() >= minHighCap) break;
+                if (profile.getPeer().equals(_us)) continue;
+                if (!isSelectable(profile.getPeer())) continue;
+                if (isLowTunnelAcceptance(profile)) continue;
+                if (hasRecentTunnelFailures(profile)) continue;
+                if (inLossProbation(profile, now)) continue;
+                // Require recent activity — don't fill high-cap tier with stale peers
+                if (profile.getLastHeardFrom() < activeCutoff &&
+                    profile.getLastSendSuccessful() < activeCutoff) continue;
+                _highCapacityPeers.put(profile.getPeer(), profile);
+                clearLossIfReadmitted(profile);
+                highCapAdded++;
+            }
+        }
+        return highCapAdded;
+    }
+
+    /**
+     *  Purges peers with recent tunnel failures or in loss probation from the
+     *  fast and high-capacity tiers.  Must be called with the write lock held.
+     */
+    private void purgeUnusableFromTiers(long now) {
+        // Rebuild clears tiers, so this catches peers admitted via locked_promoteProfileToTiers()
+        // that subsequently developed failures during this reorganize window.
+        if (_fastPeers.size() >= MIN_FAST_TIGHT_COUNT) {
+            Iterator<Map.Entry<Hash, PeerProfile>> fastIt = _fastPeers.entrySet().iterator();
+            while (fastIt.hasNext()) {
+                PeerProfile profile = fastIt.next().getValue();
+                if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
+                                   "] from fast tier: recent tunnel failures");
+                    }
+                    fastIt.remove();
+                }
+            }
+        }
+        if (_highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT) {
+            Iterator<Map.Entry<Hash, PeerProfile>> hcIt = _highCapacityPeers.entrySet().iterator();
+            while (hcIt.hasNext()) {
+                PeerProfile profile = hcIt.next().getValue();
+                if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
+                                   "] from high-cap tier: recent tunnel failures");
+                    }
+                    hcIt.remove();
+                }
+            }
+        }
+    }
+
+    /**
+     *  Re-adds preserved pre-reorganize tier entries when the rebuild shrank
+     *  the tiers too much.  Must be called with the write lock held.
+     */
+    private void restorePreservedPeers(long now, Map<Hash, PeerProfile> oldFastPeers,
+                                       Map<Hash, PeerProfile> oldHighCapPeers) {
+        // Prevents starvation when thresholds shift unfavorably — old entries that remain
+        // selectable (no recent failures, no ban, no stale RI) are re-added.
+        int oldFastSize = oldFastPeers.size();
+        if (_fastPeers.size() < oldFastSize / 2 && oldFastSize > 100) {
+            int restored = 0;
+            for (Map.Entry<Hash, PeerProfile> entry : oldFastPeers.entrySet()) {
+                if (_fastPeers.size() >= oldFastSize) break;
+                Hash peer = entry.getKey();
+                if (_fastPeers.containsKey(peer)) continue;
+                if (!isSelectable(peer)) continue;
+                PeerProfile profile = entry.getValue();
+                if (hasRecentTunnelFailures(profile)) continue;
+                if (inLossProbation(profile, now)) continue;
+                if (isLowTunnelAcceptance(profile)) continue;
+                _fastPeers.put(peer, profile);
+                clearLossIfReadmitted(profile);
+                restored++;
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Tier fallback: restored " + restored + " peers to fast tier (was " +
+                          (_fastPeers.size() - restored) + ", old " + oldFastSize + ")");
+            }
+        }
+        int oldHighCapSize = oldHighCapPeers.size();
+        if (_highCapacityPeers.size() < oldHighCapSize / 2 && oldHighCapSize > 100) {
+            int restored = 0;
+            for (Map.Entry<Hash, PeerProfile> entry : oldHighCapPeers.entrySet()) {
+                if (_highCapacityPeers.size() >= oldHighCapSize) break;
+                Hash peer = entry.getKey();
+                if (_highCapacityPeers.containsKey(peer)) continue;
+                if (!isSelectable(peer)) continue;
+                PeerProfile profile = entry.getValue();
+                if (hasRecentTunnelFailures(profile)) continue;
+                if (hasHighLoss(profile, now)) continue;
+                if (isLowTunnelAcceptance(profile)) continue;
+                _highCapacityPeers.put(peer, profile);
+                restored++;
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Tier fallback: restored " + restored + " peers to high-cap tier (was " +
+                          (_highCapacityPeers.size() - restored) + ", old " + oldHighCapSize + ")");
+            }
+        }
+    }
+
+    /**
+     *  Counts quality peers (fast/high-cap with good acceptance plus recent activity).
+     */
+    private int countQualityPeers(long now) {
+        int qualityCount = 0;
+        long recentCutoff = now - 24 * 60 * 60 * 1000L; // 24 hours
+        for (PeerProfile profile : _fastPeers.values()) {
+            if (isQualityPeer(profile, recentCutoff)) qualityCount++;
+        }
+        for (PeerProfile profile : _highCapacityPeers.values()) {
+            if (!profile.isLowLatency() && isQualityPeer(profile, recentCutoff)) qualityCount++;
+        }
+        return qualityCount;
     }
 
     /**
@@ -1673,26 +1758,7 @@ public class ProfileOrganizer {
         // lower latency = smaller range for random score = higher chance of selection.
         // Moderately-lossy peers get their range widened so they are picked only
         // when the clean candidates run out — lossiness as one signal, not a gate.
-        int sz = candidates.size();
-        float[] priority = new float[sz];
-        long now = _context.clock().now();
-        for (int i = 0; i < sz; i++) {
-            float lat = candidates.get(i).getValue().getPeerTestTimeAverage();
-            float prio = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
-            if (isModeratelyLossy(candidates.get(i).getValue(), now)) {prio *= LOSSY_SELECTION_PENALTY;}
-            priority[i] = prio;
-        }
-        for (int s = 0; s < howMany && s < sz; s++) {
-            int best = s;
-            for (int i = s + 1; i < sz; i++) {
-                if (priority[i] < priority[best]) best = i;
-            }
-            matches.add(candidates.get(best).getKey());
-            float tmp = priority[s]; priority[s] = priority[best]; priority[best] = tmp;
-            Map.Entry<Hash, PeerProfile> tmpE = candidates.get(s);
-            candidates.set(s, candidates.get(best));
-            candidates.set(best, tmpE);
-        }
+        locked_pickLowestPriority(candidates, howMany, matches);
     }
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
@@ -1725,6 +1791,19 @@ public class ProfileOrganizer {
 
         // Select with random priority proportional to latency. Moderately-lossy peers
         // get their range widened so they are picked only after the clean peers.
+        locked_pickLowestPriority(candidates, howMany, matches);
+    }
+
+    /**
+     *  Selects the lowest-priority candidates, penalizing moderately-lossy peers.
+     *  Must be called with the read lock held.
+     */
+    private void locked_pickLowestPriority(List<Map.Entry<Hash, PeerProfile>> candidates, int howMany,
+                                           Set<Hash> matches) {
+        // Select with random priority proportional to latency:
+        // lower latency = smaller range for random score = higher chance of selection.
+        // Moderately-lossy peers get their range widened so they are picked only
+        // when the clean candidates run out — lossiness as one signal, not a gate.
         int sz = candidates.size();
         float[] priority = new float[sz];
         long now = _context.clock().now();
@@ -1785,12 +1864,30 @@ public class ProfileOrganizer {
         NetworkDatabaseFacade netDb = _context.netDb();
         if (netDb == null) return true;
         if (_context.router() == null) return true;
+        if (!passesBasicGates(peer)) return false;
+        if (hasExcessiveLifetimeFailures(peer)) return false;
+        RouterInfo info = (RouterInfo) _context.netDb().lookupRouterInfoLocally(peer);
+        if (info != null) return hasValidRouterInfo(peer, info);
+        return false;
+    }
+
+    /**
+     *  Returns false when the peer is banlisted or recently failed as first hop.
+     */
+    private boolean passesBasicGates(Hash peer) {
         if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) return false;
         // Exclude peers that recently failed as first hop during tunnel builds.
         // Without this, the 5-min cooldown in TunnelPeerSelector is bypassed —
         // peers are selected by the tier system, fail as first hop, cooldown
         // expires, and they're selected again immediately.
         if (TunnelPeerSelector.isFirstHopFailing(_context, peer)) return false;
+        return true;
+    }
+
+    /**
+     *  Returns true when the peer has excessive lifetime tunnel failures.
+     */
+    private boolean hasExcessiveLifetimeFailures(Hash peer) {
         // Exclude peers with excessive cumulative tunnel failures.
         // The blame system (tunnelFailed()) only increments statistics — it never
         // bans.  Without this check, peers with 200+ failures keep getting selected
@@ -1799,49 +1896,59 @@ public class ProfileOrganizer {
         PeerProfile prof = getProfileNonblocking(peer);
         if (prof != null) {
             long lifetimeFailed = prof.getTunnelHistory().getLifetimeFailed();
-            if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return false;
-        }
-
-        RouterInfo info = (RouterInfo) _context.netDb().lookupRouterInfoLocally(peer);
-        if (info != null) {
-            if (info.isHidden()) return false;
-            if (_context.router() != null && _context.router().getUptime() > STARTUP_GRACE_PERIOD_MS &&
-                !_context.commSystem().isEstablished(peer)) {
-                long now = _context.clock().now();
-                long maxAge = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS) * 3600_000L;
-                // RouterInfo is stale — demand proof of life to trust it
-                if (info.getPublished() < now - maxAge) {
-                    PeerProfile profile = _context.profileOrganizer().getProfile(peer);
-                    if (profile == null) return false;
-                    boolean alive = profile.getLastSendSuccessful() > now - PROOF_OF_LIFE_WINDOW_MS ||
-                                    profile.getLastHeardFrom() > now - PROOF_OF_LIFE_WINDOW_MS ||
-                                    profile.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS;
-                    if (!alive) return false;
-                }
-            }
-            // Peers without a reachable NTCP2 or SSU2 address cannot be used
-            // for outbound builds.  Filtering just by transport style misses
-            // peers whose RouterInfo has the right style but null IP, invalid
-            // port, or a private/internal address — selecting them leads to
-            // immediate transport failure and an 8h ban with logspam.
-            boolean hasUsableAddress = false;
-            for (RouterAddress ra : info.getAddresses()) {
-                String style = ra.getTransportStyle();
-                if (!"NTCP".equals(style) && !"NTCP2".equals(style) &&
-                    !"SSU".equals(style) && !"SSU2".equals(style))
-                    continue;
-                byte[] ip = ra.getIP();
-                if (ip == null) continue;
-                if (!TransportUtil.isValidPort(ra.getPort())) continue;
-                hasUsableAddress = true;
-                break;
-            }
-            if (!hasUsableAddress) return false;
-            String tier = DataHelper.stripHTML(info.getBandwidthTier());
-            if (tier.equals("L") || tier.equals("M") || tier.equals("N")) return false;
-            return !TunnelPeerSelector.shouldExclude(_context, info);
+            if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return true;
         }
         return false;
+    }
+
+    /**
+     *  Checks the RouterInfo for hidden flag, stale proof of life, usable
+     *  transport address, bandwidth tier, and tunnel exclusion.
+     */
+    private boolean hasValidRouterInfo(Hash peer, RouterInfo info) {
+        if (info.isHidden()) return false;
+        if (_context.router() != null && _context.router().getUptime() > STARTUP_GRACE_PERIOD_MS &&
+            !_context.commSystem().isEstablished(peer)) {
+            long now = _context.clock().now();
+            long maxAge = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS) * 3600_000L;
+            // RouterInfo is stale — demand proof of life to trust it
+            if (info.getPublished() < now - maxAge) {
+                PeerProfile profile = _context.profileOrganizer().getProfile(peer);
+                if (profile == null) return false;
+                boolean alive = profile.getLastSendSuccessful() > now - PROOF_OF_LIFE_WINDOW_MS ||
+                                profile.getLastHeardFrom() > now - PROOF_OF_LIFE_WINDOW_MS ||
+                                profile.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS;
+                if (!alive) return false;
+            }
+        }
+        // Peers without a reachable NTCP2 or SSU2 address cannot be used
+        // for outbound builds.  Filtering just by transport style misses
+        // peers whose RouterInfo has the right style but null IP, invalid
+        // port, or a private/internal address — selecting them leads to
+        // immediate transport failure and an 8h ban with logspam.
+        if (!hasUsableTransportAddress(info)) return false;
+        String tier = DataHelper.stripHTML(info.getBandwidthTier());
+        if (tier.equals("L") || tier.equals("M") || tier.equals("N")) return false;
+        return !TunnelPeerSelector.shouldExclude(_context, info);
+    }
+
+    /**
+     *  Returns true when the RouterInfo has a reachable NTCP/NTCP2/SSU/SSU2 address.
+     */
+    private boolean hasUsableTransportAddress(RouterInfo info) {
+        boolean hasUsableAddress = false;
+        for (RouterAddress ra : info.getAddresses()) {
+            String style = ra.getTransportStyle();
+            if (!"NTCP".equals(style) && !"NTCP2".equals(style) &&
+                !"SSU".equals(style) && !"SSU2".equals(style))
+                continue;
+            byte[] ip = ra.getIP();
+            if (ip == null) continue;
+            if (!TransportUtil.isValidPort(ra.getPort())) continue;
+            hasUsableAddress = true;
+            break;
+        }
+        return hasUsableAddress;
     }
 
     private void locked_placeProfile(PeerProfile profile) {
