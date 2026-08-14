@@ -238,6 +238,9 @@ class ProfileOrganizerRenderer {
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
                .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
+               .append("<th class=latency data-sort-method=number title=\"")
+               .append(_t("Packets retransmitted / packets sent, as reported by the UDP transport"))
+               .append("\">").append(_t("Loss")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
                .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
@@ -431,6 +434,16 @@ class ProfileOrganizerRenderer {
             if (prof.isLowLatency()) {buf.append("<span class=lowlatency>✔</span>");}
             else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
             else {buf.append("<span>&ensp;</span>");}
+            float lossRatio = prof.getLossRatio();
+            if (lossRatio > 0.0f) {
+                int lossPct = Math.round(lossRatio * 100);
+                buf.append("</td><td data-sort=").append(lossPct)
+                   .append("><span class=\"percentBarOuter\"><span class=percentBarInner style=\"width:")
+                   .append(lossPct).append("%\"><span class=percentBarText>")
+                   .append(lossPct).append("%</span></span></span>");
+            } else {
+                buf.append("</td><td data-sort=0><span hidden>0</span><span>&ensp;</span>");
+            }
             int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
             int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
             buf.append("</td><td data-sort=")

@@ -1575,13 +1575,13 @@ h3[id="udpcon"]{width:auto}
 #floodfills td{padding:3px;text-align:center}
 #floodfills:not(.rid) td:nth-child(2){width:6%;min-width:64px}
 #floodfills:not(.rid) td:nth-child(odd){background:rgba(0,0,0,.3)}
-#floodfills .percentBarInner{margin-left:0;width:inherit;max-width:100%;display:inline-block;background:repeating-linear-gradient(90deg,#0000 2px,rgba(255,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),linear-gradient(90deg,#500 25px,#600 40px,#700 50px)}
-#floodfills .percentBarInner[style="width:0%"],#floodfills .percentBarOuter.nofail>.percentBarInner{width:100%!important;background:repeating-linear-gradient(90deg,rgba(0,0,0,.1) 2px,rgba(0,255,0,.5) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),#151}
-#floodfills .percentBarOuter{text-align:left;background:#000;border:1px solid #151;height:16px}
-#floodfills .percentBarOuter:not(.nofail){background:repeating-linear-gradient(90deg,#000,#000 5%,#300 5%,#300 10%);border:1px solid #700}
-#floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText{box-sizing:border-box;float:none}
-#floodfills .percentBarOuter,#floodfills .percentBarText{margin:0 2px;width:calc(100% - 6px);display:inline-block}
-#floodfills .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
+#profiles .percentBarInner{margin-left:0;width:inherit;max-width:100%;display:inline-block;background:repeating-linear-gradient(90deg,#0000 2px,rgba(255,0,0,.3) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),linear-gradient(90deg,#500 25px,#600 40px,#700 50px)}
+#profiles .percentBarInner[style="width:0%"],#profiles .percentBarOuter.nofail>.percentBarInner{width:100%!important;background:repeating-linear-gradient(90deg,rgba(0,0,0,.1) 2px,rgba(0,255,0,.5) 4px) left center/2px,linear-gradient(180deg,rgba(255,255,255,.05) 50%,rgba(0,0,0,.05)),#151}
+#profiles .percentBarOuter{text-align:left;background:#000;border:1px solid #151;height:16px}
+#profiles .percentBarOuter:not(.nofail){background:repeating-linear-gradient(90deg,#000,#000 5%,#300 5%,#300 10%);border:1px solid #700}
+#profiles .percentBarOuter,#profiles .percentBarOuter,#profiles .percentBarText{box-sizing:border-box;float:none}
+#profiles .percentBarOuter,#profiles .percentBarText{margin:0 2px;width:calc(100% - 6px);display:inline-block}
+#profiles .percentBarText{color:#fff;text-shadow:0 1px 1px #000;display:none}
 #floodfills td:nth-child(2){white-space:nowrap;padding-left:3px;padding-right:3px}
 #floodfills td:nth-child(3),#profilelist th:nth-last-child(3),#profilelist td:nth-last-child(3),#profilelist th:nth-last-child(4),#profilelist th:nth-last-child(5),#profilelist th:nth-last-child(6),#profilelist td:nth-last-child(4),#profilelist td:nth-last-child(5),#profilelist td:nth-last-child(6){text-align:center}
 #floodfills td:nth-child(3) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span,#profilelist td:nth-last-child(2) span{display:inline-block;text-align:right;min-width:20px}
