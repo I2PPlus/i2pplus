@@ -62,6 +62,18 @@ class ProfilePersistenceHelper {
     private final File _profileDir;
     private Hash _us;
 
+    /** Last known number of profile files on disk, from the most recent load or purge */
+    private volatile int _storedProfileCount;
+
+    /**
+     * Last known number of profile files on disk, from the most recent load,
+     * stale-profile cleanup, or purge.
+     *
+     * @return the stored profile count, 0 if the store has never been scanned
+     * @since 0.9.71+
+     */
+    public int getStoredProfileCount() {return _storedProfileCount;}
+
     /**
      * ProfilePersistenceHelper.
      */
@@ -228,6 +240,7 @@ class ProfilePersistenceHelper {
             cutoff = start - 14*24*60*60*1000;  // 14 days default
         }
         List<File> files = selectFiles();
+        _storedProfileCount = files.size();
 
         // Determine deletion threshold
         // If under the limit, be conservative (3 weeks) to preserve historical data.
@@ -333,6 +346,7 @@ class ProfilePersistenceHelper {
         if (_log.shouldWarn() && i > 0) {
             _log.warn("Deleted " + i + " STALE peer profiles");
         }
+        _storedProfileCount = files.size() - i;
         return i;
     }
 
@@ -556,6 +570,7 @@ class ProfilePersistenceHelper {
     public void purgeExcessProfiles(Set<Hash> keepPeers, int maxProfiles) {
         List<File> files = selectFiles();
         if (files.size() <= maxProfiles || keepPeers == null) {
+            _storedProfileCount = files.size();
             return; // within limit
         }
 
@@ -564,6 +579,7 @@ class ProfilePersistenceHelper {
         List<FileMetadata> tier1Candidates = new ArrayList<>(); // Protected, deleted last resort
         long now = System.currentTimeMillis();
         long activeThreshold = now - (24 * 60 * 60 * 1000L); // 24 hours
+        int deleted = 0;
 
         for (File f : files) {
             Hash peer = getHash(f.getName());
@@ -577,6 +593,7 @@ class ProfilePersistenceHelper {
                 String tier = info.getBandwidthTier();
                 if ("K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier)) {
                     f.delete();
+                    deleted++;
                     continue;
                 }
             }
@@ -611,7 +628,10 @@ class ProfilePersistenceHelper {
 
         // Delete Tier 3 and Tier 2 first
         int overage = files.size() - maxProfiles;
-        if (overage <= 0) return;
+        if (overage <= 0) {
+            _storedProfileCount = files.size() - deleted;
+            return;
+        }
 
         // Sort: Tier 3 (Gossip) first, then Tier 2 (Passive), oldest first
         candidates.sort((a, b) -> {
@@ -638,6 +658,7 @@ class ProfilePersistenceHelper {
         if (_log.shouldInfo() && toDelete > 0) {
             _log.info("Purged " + toDelete + " stale profile files from disk");
         }
+        _storedProfileCount = files.size() - deleted - toDelete;
     }
 
     // Helper class

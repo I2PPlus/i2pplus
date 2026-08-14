@@ -81,6 +81,7 @@ public class ProfileOrganizer {
     private double _thresholdSpeedValue;
     private double _thresholdCapacityValue;
     private double _thresholdIntegrationValue;
+    private double _thresholdRTT;
     private final InverseCapacityComparator _comp;
 
     /**
@@ -295,6 +296,15 @@ public class ProfileOrganizer {
      * @return the speed threshold computed during the last reorganize
      */
     public double getSpeedThreshold() {return _thresholdSpeedValue;}
+
+    /**
+     * Average tunnel test time (RTT in ms) of the peer at the fast-tier speed
+     * boundary from the last reorganize, or 0.0 if never reorganized.
+     *
+     * @return the boundary RTT in ms
+     * @since 0.9.71+
+     */
+    public double getFastRTTThreshold() {return _thresholdRTT;}
 
     /**
      * Current minimum capacity value for the high-capacity peer tier.
@@ -946,6 +956,15 @@ public class ProfileOrganizer {
         } finally {releaseReadLock();}
     }
 
+    /**
+     * Last known number of profiles stored on disk, from the most recent load,
+     * cleanup, or purge in the persistence helper.
+     *
+     * @return the stored profile count, 0 if the store has never been scanned
+     * @since 0.9.71+
+     */
+    public int getStoredProfileCount() {return _persistenceHelper.getStoredProfileCount();}
+
     private static final int ENOUGH_PROFILES = getEnoughProfiles();
 
     private static int getEnoughProfiles() {
@@ -1548,6 +1567,8 @@ public class ProfileOrganizer {
         candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
         int cutoff = Math.min((int)(candidates.size() * 0.3), 50); // Top 30% or 50 peers
 
+        // Record the boundary peer's measured latency for display and diagnostics
+        _thresholdRTT = candidates.get(cutoff).getTunnelTestTimeAverage();
         return candidates.get(cutoff).getSpeedValue();
     }
 
@@ -2274,21 +2295,50 @@ public class ProfileOrganizer {
      */
     public float getAverageLossRatio() {
         if (!tryReadLock()) return 0.0f;
-        try {
-            long now = _context.clock().now();
-            long window = _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW);
-            float sum = 0.0f;
-            int count = 0;
-            Set<Hash> seen = new HashSet<>(_fastPeers.size() + _highCapacityPeers.size());
-            for (Map.Entry<Hash, PeerProfile> e : _fastPeers.entrySet()) {
-                seen.add(e.getKey());
-                float ratio = e.getValue().getLossRatio();
-                if (ratio > 0.0f && now - e.getValue().getLossRatioLastUpdate() < window) {
-                    sum += ratio;
-                    count++;
-                }
-            }
-            for (Map.Entry<Hash, PeerProfile> e : _highCapacityPeers.entrySet()) {
+        try {return averageLossRatio(_fastPeers, _highCapacityPeers);}
+        finally {releaseReadLock();}
+    }
+
+    /**
+     * Average loss ratio across the fast tier with a fresh measurement, as a
+     * fraction (0.0 - 1.0); 0.0 if none. See {@link #getAverageLossRatio()}.
+     *
+     * @since 0.9.71+
+     */
+    public float getFastAverageLossRatio() {
+        if (!tryReadLock()) return 0.0f;
+        try {return averageLossRatio(_fastPeers);}
+        finally {releaseReadLock();}
+    }
+
+    /**
+     * Average loss ratio across the high-capacity tier with a fresh measurement,
+     * as a fraction (0.0 - 1.0); 0.0 if none. See {@link #getAverageLossRatio()}.
+     *
+     * @since 0.9.71+
+     */
+    public float getHighCapAverageLossRatio() {
+        if (!tryReadLock()) return 0.0f;
+        try {return averageLossRatio(_highCapacityPeers);}
+        finally {releaseReadLock();}
+    }
+
+    /**
+     * Mean loss ratio of the union of the given tiers, restricted to profiles
+     * with a measurement fresh within {@link #PROP_LOSSY_WINDOW}.
+     *
+     * @param tiers the tier maps to average over
+     * @return the mean as a fraction, 0.0 if no fresh data
+     * @since 0.9.71+
+     */
+    private float averageLossRatio(Map<Hash, PeerProfile>... tiers) {
+        long now = _context.clock().now();
+        long window = _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW);
+        float sum = 0.0f;
+        int count = 0;
+        Set<Hash> seen = new HashSet<>();
+        for (Map<Hash, PeerProfile> tier : tiers) {
+            for (Map.Entry<Hash, PeerProfile> e : tier.entrySet()) {
                 if (!seen.add(e.getKey())) continue;
                 float ratio = e.getValue().getLossRatio();
                 if (ratio > 0.0f && now - e.getValue().getLossRatioLastUpdate() < window) {
@@ -2296,8 +2346,8 @@ public class ProfileOrganizer {
                     count++;
                 }
             }
-            return count > 0 ? sum / count : 0.0f;
-        } finally {releaseReadLock();}
+        }
+        return count > 0 ? sum / count : 0.0f;
     }
 
     /**

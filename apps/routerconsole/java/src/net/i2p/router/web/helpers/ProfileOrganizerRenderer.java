@@ -75,7 +75,7 @@ class ProfileOrganizerRenderer {
             renderFloodfillRings(out, sel.order);
             renderFloodfill(out, sel.order);
         } else {
-            renderProfileRings(out, sel);
+            renderProfileRings(out, mode, sel);
             renderPbody(out, sel.order);
             out.append("</div>\n");
             out.flush();
@@ -104,7 +104,7 @@ class ProfileOrganizerRenderer {
         }
         ProfileSelection sel = loadProfiles(mode);
         if ("pbody".equals(id)) {renderPbody(out, sel.order);}
-        else if ("profilestats".equals(id)) {renderProfileRings(out, sel);}
+        else if ("profilestats".equals(id)) {renderProfileRings(out, mode, sel);}
     }
 
     /**
@@ -504,11 +504,12 @@ class ProfileOrganizerRenderer {
      *  tier counts, activity, and DB health.
      *
      *  @param out the writer to render to
+     *  @param mode the page mode (0=all profiles, 1=fast tier, 2=high capacity tier)
      *  @param sel the selected profiles
      *  @throws IOException if an I/O error occurs
      *  @since 0.9.70+
      */
-    private void renderProfileRings(Writer out, ProfileSelection sel) throws IOException {
+    private void renderProfileRings(Writer out, int mode, ProfileSelection sel) throws IOException {
         Set<PeerProfile> order = sel.order;
         int known = order.size() + sel.older;
         int fast = 0;
@@ -539,11 +540,19 @@ class ProfileOrganizerRenderer {
         StringBuilder buf = new StringBuilder(4096);
         buf.append("<div class=ring-grid id=profilestats>\n");
 
-        // Total profiles: everything in memory, loaded from the store on disk
+        // Total profiles: everything in memory, loaded from the store on disk (all-profiles page only)
         int total = _organizer.selectAllPeers().size();
-        double totalScore = total > 0 ? Math.min(total / 2000.0, 1.0) : -1;
-        buf.append(RingRenderer.renderRingCell(totalScore, _t("Total"), String.valueOf(total),
-                  new String[]{_t("Total profiles, on disk and in memory")}, RingRenderer.MODE_NEUTRAL, null));
+        int stored = _organizer.getStoredProfileCount();
+        if (mode == 0) {
+            double totalScore = total > 0 ? Math.min(total / 2000.0, 1.0) : -1;
+            buf.append(RingRenderer.renderRingCell(totalScore, _t("Total"), String.valueOf(total),
+                      new String[]{Messages.getString("{0} in RAM / {1} on disk", total, stored, _context)},
+                      RingRenderer.MODE_NEUTRAL, null));
+        }
+
+        // Tier pages: tier count first, matching the Total ring position on the all page
+        if (mode == 1) {renderTierCountRing(buf, fast, known, _t("Fast"), "{0} fast peer", "{0} fast peers");}
+        else if (mode == 2) {renderTierCountRing(buf, reliable, known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
 
         // Share of total profiles shown for this page mode
         if (total > 0) {
@@ -565,17 +574,30 @@ class ProfileOrganizerRenderer {
                   new String[]{ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
                   RingRenderer.MODE_NEUTRAL, null));
 
-        // Fast tier
-        double fastScore = known > 0 ? (double) fast / known : -1;
-        buf.append(RingRenderer.renderRingCell(fastScore, _t("Fast"), String.valueOf(fast),
-                  new String[]{ngettext("{0} fast peer", "{0} fast peers", fast)},
-                  RingRenderer.MODE_NEUTRAL, null));
+        // Tier pages: fast-tier latency boundary and tier loss picture instead of Total
+        if (mode != 0) {
+            double fastRTT = _organizer.getFastRTTThreshold();
+            double rttScore = fastRTT > 0 ? Math.min(fastRTT / 2000.0, 1.0) : -1;
+            buf.append(RingRenderer.renderRingCell(rttScore, _t("Fast RTT"),
+                      fastRTT > 0 ? Math.round(fastRTT) + " ms" : "\u2014",
+                      new String[]{_t("Max RTT for fast-tier membership (ms)")},
+                      RingRenderer.MODE_NEUTRAL, null));
 
-        // High capacity tier (includes fast peers)
-        double capScore = known > 0 ? (double) reliable / known : -1;
-        buf.append(RingRenderer.renderRingCell(capScore, _t("High Cap"), String.valueOf(reliable),
-                  new String[]{ngettext("{0} high capacity peer", "{0} high capacity peers", reliable)},
-                  RingRenderer.MODE_NEUTRAL, null));
+            float avgLoss = (mode == 1) ? _organizer.getFastAverageLossRatio()
+                                        : _organizer.getHighCapAverageLossRatio();
+            double lossScore = avgLoss > 0.0f ? Math.max(0.0, 1.0 - avgLoss) : -1;
+            buf.append(RingRenderer.renderRingCell(lossScore, _t("Loss"),
+                      avgLoss > 0.0f ? pct(avgLoss) : "\u2014",
+                      new String[]{mode == 1 ? _t("Average loss of fast-tier peers (%)")
+                                             : _t("Average loss of high-capacity peers (%)")},
+                      RingRenderer.MODE_HEALTH, null));
+        }
+
+        // All page: tier counts after the window ring
+        if (mode == 0) {
+            renderTierCountRing(buf, fast, known, _t("Fast"), "{0} fast peer", "{0} fast peers");
+            renderTierCountRing(buf, reliable, known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");
+        }
 
         // Active share of known profiles
         if (known > 0) {
@@ -618,6 +640,26 @@ class ProfileOrganizerRenderer {
         buf.append("</div>\n");
         out.append(buf);
         out.flush();
+    }
+
+    /**
+     *  Render a tier count ring: share of known profiles in the tier and the
+     *  peer count in the center.
+     *
+     *  @param buf the buffer to append to
+     *  @param count peers in the tier
+     *  @param known total profiles known to this selection
+     *  @param label ring label
+     *  @param singular singular tooltip template ({0} placeholder)
+     *  @param plural plural tooltip template ({0} placeholder)
+     *  @since 0.9.70+
+     */
+    private void renderTierCountRing(StringBuilder buf, int count, int known, String label,
+                                     String singular, String plural) {
+        double score = known > 0 ? (double) count / known : -1;
+        buf.append(RingRenderer.renderRingCell(score, label, String.valueOf(count),
+                  new String[]{ngettext(singular, plural, count)},
+                  RingRenderer.MODE_NEUTRAL, null));
     }
 
     /**
