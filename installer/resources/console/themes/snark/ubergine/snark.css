@@ -197,7 +197,7 @@ tr:not(.peerinfo) .loading{width:24px;height:24px;background-size:24px}
 
 /* torrents */
 th.txd a img{display:inline-block}
-tr:not(.peerinfo) .txd:empty::after{width:1%;display:inline;content:"‒"}
+tr:not(.peerinfo) td.txd:empty::after{width:1%;display:inline;content:"‒"}
 tr:hover .ParentDir a:active{padding-left:0}
 tr:hover .barText{text-shadow:0 1px 1px #313;opacity:1}
 tr:hover .tName a:hover,tr:hover .snarkFileName a:hover,tr:active .ParentDir a{border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,#0000,#0003 70%)}
