@@ -1120,7 +1120,6 @@ public class ProfileOrganizer {
             // Step 3: Preserve existing maps as fallback, then clear and rebuild
             Map<Hash, PeerProfile> oldFastPeers = new HashMap<>(_fastPeers);
             Map<Hash, PeerProfile> oldHighCapPeers = new HashMap<>(_highCapacityPeers);
-            Map<Hash, PeerProfile> oldWellIntegratedPeers = new HashMap<>(_wellIntegratedPeers);
             _fastPeers.clear();
             _highCapacityPeers.clear();
             _wellIntegratedPeers.clear();
@@ -1190,7 +1189,6 @@ public class ProfileOrganizer {
     private CandidateSet buildCandidateProfiles(long now, long expireActive, long expirePassive,
                                                 long expireGossip, long expireUntracked) {
         Set<PeerProfile> newStrictCapacityOrder = new TreeSet<>(_comp);
-        double totalCapacity = 0;
         double totalIntegration = 0;
         int expiredCount = 0;
         int profileCount = 0;
@@ -1237,7 +1235,6 @@ public class ProfileOrganizer {
 
             profile.updateValues(); // Refresh values (e.g., speed, capacity, integration)
             newStrictCapacityOrder.add(profile);
-            totalCapacity += profile.getCapacityValue();
             totalIntegration += profile.getIntegrationValue();
             profileCount++;
         }
