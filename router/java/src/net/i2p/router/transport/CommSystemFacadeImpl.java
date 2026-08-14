@@ -1475,6 +1475,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
             String cached = existingEntry.getHostname();
             if (cached != null && !cached.equals(ipAddress) && !_t("unknown").equals(cached)) {
+                if (("&t").equals(cached) || ("&amp;t").equals(cached)) {
+                    return "AT&T";
+                } else if (("Vodafone Czech Republic .s").equals(cached)) {
+                    return "Vodafone Czech Republic";
+                } else if (("Vodafone Espana S. .u").equals(cached) || ("Vodafone Ono, S").equals(cached)) {
+                    return "Vodafone Espana";
+                } else if (("Vodafone Italia S.p").equals(cached)) {
+                    return "Vodafone Italia";
+                } else if (("Vodafone Portugal - Communicacoes Pessoais S").equals(cached)) {
+                    return "Vodafone Portugal";
+                } else if (("Vodafone Romania S").equals(cached)) {
+                    return "Vodafone Romania";
+                }
                 return cached;
             }
         }

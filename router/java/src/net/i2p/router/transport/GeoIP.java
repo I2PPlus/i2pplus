@@ -807,6 +807,58 @@ public class GeoIP {
         for (String[] b : brands) {BRAND_NAMES.put(b[0], b[1]);}
     }
 
+    /** Vodafone subsidiaries: "Vodafone <Country>" names (longest first for matching) */
+    private static final List<String> VODAFONE_COUNTRIES;
+    /** Vodafone regional brand aliases that are not country names */
+    private static final Map<String, String> VODAFONE_ALIASES;
+    static {
+        List<String> countries = new ArrayList<>(Arrays.asList(
+            // Multi-word first so "Czech Republic" wins over a shorter prefix
+            "Czech Republic", "New Zealand", "South Africa", "United Kingdom",
+            "United States", "Saudi Arabia", "Costa Rica", "Dominican Republic",
+            "El Salvador", "Puerto Rico", "Papua New Guinea", "Trinidad and Tobago",
+            "Bosnia and Herzegovina", "North Macedonia", "Equatorial Guinea",
+            "Ivory Coast", "Cape Verde", "Sierra Leone", "Sri Lanka", "South Korea",
+            "North Korea", "United Arab Emirates", "Hong Kong", "Timor Leste",
+            "Solomon Islands", "Marshall Islands", "Cayman Islands", "Virgin Islands",
+            "Antigua and Barbuda", "Saint Kitts and Nevis", "Saint Lucia",
+            "Saint Vincent and the Grenadines", "San Marino", "Vatican City",
+            "Falkland Islands", "Faroe Islands", "Turks and Caicos",
+            "Netherlands Antilles", "Central African Republic", "South Sudan",
+            "Democratic Republic of the Congo", "Trinidad and Tobago",
+            // Single-word countries (English and local spellings as in the ASN DB)
+            "Albania", "Algeria", "Argentina", "Armenia", "Australia", "Austria",
+            "Azerbaijan", "Bahrain", "Bangladesh", "Belarus", "Belgium", "Bolivia",
+            "Botswana", "Brazil", "Brunei", "Bulgaria", "Cambodia", "Cameroon",
+            "Canada", "Chile", "China", "Colombia", "Congo", "Croatia", "Cuba",
+            "Cyprus", "Denmark", "Ecuador", "Egypt", "Estonia", "Ethiopia",
+            "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany",
+            "Ghana", "Greece", "Guatemala", "Honduras", "Hungary", "Iceland",
+            "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italia",
+            "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya",
+            "Kosovo", "Kuwait", "Kyrgyzstan", "Latvia", "Lebanon", "Lesotho",
+            "Liberia", "Libya", "Lithuania", "Luxembourg", "Madagascar",
+            "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania",
+            "Mauritius", "Mexico", "Moldova", "Mongolia", "Montenegro",
+            "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal",
+            "Netherlands", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman",
+            "Pakistan", "Palestine", "Panama", "Paraguay", "Peru", "Philippines",
+            "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda",
+            "Senegal", "Serbia", "Singapore", "Slovakia", "Slovenia", "Somalia",
+            "Spain", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland",
+            "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo",
+            "Tunisia", "Turkiye", "Turkey", "Turkmenistan", "Uganda", "Ukraine",
+            "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Yemen", "Zambia",
+            "Zimbabwe", "Espana", "UAE", "UK", "USA"
+        ));
+        countries.sort((a, b) -> b.length() - a.length());
+        VODAFONE_COUNTRIES = Collections.unmodifiableList(countries);
+        Map<String, String> aliases = new HashMap<>();
+        // Vodafone Ono was the Spanish cable operator, merged into Vodafone Espana
+        aliases.put("Ono", "Espana");
+        VODAFONE_ALIASES = Collections.unmodifiableMap(aliases);
+    }
+
     /** Trailing generic words to drop (redundant suffixes like "Communications", "Services") */
     private static final Pattern TRAILING_VERBOSE = Pattern.compile(
         "\\s*(?:\\bCommunications?\\b|\\bTelecommunications?\\b|\\bNetworks?\\b|\\bSolutions?\\b|" +
@@ -885,7 +937,7 @@ public class GeoIP {
     private static final Pattern FILLER_DROP = Pattern.compile(
         "\\b(?:de|do|da|dos|das|em|para|por|com|e|y|o|a|os|as|dan|serta|untuk|dari|ke|pada|" +
         "im|am|von|der|den|del|della|delle|dello|alla|alle|il|le|la|i|gli|un|una|sul|negli|nel|" +
-        "ve|fuer|and|of|the|for|in|on|at|to|by|with|from|as|is|or)\\b",
+        "ve|fuer|and|of|the|for|in|on|at(?!&)|to|by|with|from|as|is|or)\\b",
         Pattern.CASE_INSENSITIVE
     );
 
@@ -1268,6 +1320,9 @@ public class GeoIP {
         // Final trim
         name = LEADING_TRAILING_JUNK.matcher(name).replaceAll("");
 
+        // Collapse Vodafone subsidiary names to "Vodafone <Country>"
+        name = collapseVodafoneCountry(name);
+
         // If still too long, trim trailing filler words
         if (name.length() > 40) {
             String[] words = SPACE_SPLIT.split(name);
@@ -1294,6 +1349,52 @@ public class GeoIP {
         }
 
         return name;
+    }
+
+    /**
+     * Collapse "Vodafone <Country> ..." names (with corporate-suffix cruft from
+     * truncated MaxMind entries) to just "Vodafone <Country>".
+     * Country matching is multi-word aware ("Czech Republic", "New Zealand").
+     * Non-country Vodafone names (Group, Idea, etc.) pass through unchanged.
+     *
+     * @param name normalized name
+     * @return collapsed name if a known country was matched, else the input
+     */
+    private static String collapseVodafoneCountry(String name) {
+        if (name == null || name.isEmpty()) {return name;}
+        String lower = name.toLowerCase(Locale.ROOT);
+        if (!lower.startsWith("vodafone")) {return name;}
+        // "Vodafone" alone or followed directly by non-space
+        if (name.length() <= 8 || !Character.isWhitespace(name.charAt(8))) {return name;}
+        String rest = name.substring(9).trim();
+        if (rest.isEmpty()) {return name;}
+        // Some DB entries repeat the brand: "Vodafone Vodafone Germany"
+        while (rest.length() > 8 && rest.regionMatches(true, 0, "Vodafone ", 0, 9)) {
+            rest = rest.substring(9).trim();
+            if (rest.isEmpty()) {return name;}
+        }
+        // Alias: Vodafone Ono (Spanish cable operator) → Espana
+        String alias = VODAFONE_ALIASES.get(firstWord(rest));
+        if (alias != null) {return "Vodafone " + alias;}
+        // Longest country match wins; boundary check after the country name
+        for (String country : VODAFONE_COUNTRIES) {
+            if (rest.regionMatches(true, 0, country, 0, country.length())) {
+                if (rest.length() == country.length() ||
+                    !Character.isLetterOrDigit(rest.charAt(country.length()))) {
+                    return "Vodafone " + country;
+                }
+            }
+        }
+        return name;
+    }
+
+    /** First whitespace-delimited word of a string with trailing punctuation stripped, or the whole string */
+    private static String firstWord(String s) {
+        int i = s.indexOf(' ');
+        String w = i > 0 ? s.substring(0, i) : s;
+        int j = w.length();
+        while (j > 0 && !Character.isLetterOrDigit(w.charAt(j - 1))) {j--;}
+        return w.substring(0, j);
     }
 
     /**
