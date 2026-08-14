@@ -1299,6 +1299,41 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param retries if &gt; 0, set timeout to a few seconds
      * @return the file it is stored in, or null on error
      */
+    /**
+     * Fetch and log the result, truncating the display URL at the first '&amp;'.
+     *
+     * @param get the eepget to fetch
+     * @param url the original request URL
+     * @param timeout the connect timeout in ms
+     * @param size the response size, for the log message
+     * @return true on success
+     * @since 0.9.4
+     */
+    private boolean fetchAndLog(EepGet get, String url, int timeout, long size) {
+        int truncate = url.indexOf("&");
+        String convertedurl = trackerB32ToHostname(url);
+        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
+        if (get.fetch(timeout)) {
+            if (_log.shouldDebug())
+                _log.debug(
+                        "Request successful ["
+                                + convertedurl.substring(0, truncate)
+                                + "...] (Size: "
+                                + size
+                                + " bytes)");
+            return true;
+        } else {
+            if (_log.shouldWarn())
+                _log.warn(
+                        "Timeout ("
+                                + timeout / 1000
+                                + "s) requesting ["
+                                + convertedurl.substring(0, truncate)
+                                + "...]");
+            return false;
+        }
+    }
+
     private File get(String url, boolean rewrite, int retries, I2PSocketManager mgr) {
         if (_log.shouldDebug()) {
             _log.debug(
@@ -1347,20 +1382,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         EepGet get =
                 new I2PSocketEepGet(_context, mgr, retries, out.getAbsolutePath(), fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
-        int truncate = url.indexOf("&");
-        String convertedurl = trackerB32ToHostname(url);
-        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
-        if (get.fetch(timeout)) {
-            if (_log.shouldDebug()) {
-                _log.debug("Request successful [" + convertedurl.substring(0, truncate) + "...] (Size: " +
-                            out.length() + " bytes)");
-            }
+        if (fetchAndLog(get, url, timeout, out.length())) {
             return out;
         } else {
-            if (_log.shouldWarn()) {
-                _log.warn("Timeout (" + timeout / 1000 + "s) requesting [" + convertedurl.substring(0, truncate) +
-                          "...]");
-            }
             out.delete();
             return null;
         }
@@ -1400,26 +1424,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         EepGet get =
                 new I2PSocketEepGet(_context, _manager, retries, -1, maxSize, null, out, fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
-        int truncate = url.indexOf("&");
-        String convertedurl = trackerB32ToHostname(url);
-        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
-        if (get.fetch(timeout)) {
-            if (_log.shouldDebug())
-                _log.debug(
-                        "Request successful ["
-                                + convertedurl.substring(0, truncate)
-                                + "...] (Size: "
-                                + out.size()
-                                + " bytes)");
+        if (fetchAndLog(get, url, timeout, out.size())) {
             return out.toByteArray();
         } else {
-            if (_log.shouldWarn())
-                _log.warn(
-                        "Timeout ("
-                                + timeout / 1000
-                                + "s) requesting ["
-                                + convertedurl.substring(0, truncate)
-                                + "...]");
             return null;
         }
     }
@@ -1462,26 +1469,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         EepGet get =
                 new I2PSocketEepGet(_context, mgr, retries, -1, maxSize, null, out, fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
-        int truncate = url.indexOf("&");
-        String convertedurl = trackerB32ToHostname(url);
-        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
-        if (get.fetch(timeout)) {
-            if (_log.shouldDebug())
-                _log.debug(
-                        "Request successful ["
-                                + convertedurl.substring(0, truncate)
-                                + "...] (Size: "
-                                + out.size()
-                                + " bytes)");
+        if (fetchAndLog(get, url, timeout, out.size())) {
             return out.toByteArray();
         } else {
-            if (_log.shouldWarn())
-                _log.warn(
-                        "Timeout ("
-                                + timeout / 1000
-                                + "s) requesting ["
-                                + convertedurl.substring(0, truncate)
-                                + "...]");
             return null;
         }
     }
