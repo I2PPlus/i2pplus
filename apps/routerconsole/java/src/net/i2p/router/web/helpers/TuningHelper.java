@@ -95,6 +95,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("profileOrganizer.maxFastPeers", _x("Maximum Fast Peers"));
         DISPLAY_NAMES.put("profileOrganizer.minHighCapacityPeers", _x("Minimum High Capacity Peers"));
         DISPLAY_NAMES.put("profileOrganizer.maxHighCapacityPeers", _x("Maximum High Capacity Peers"));
+        DISPLAY_NAMES.put("profileOrganizer.lossyThreshold", _x("Lossy Peer Demotion Threshold"));
         DISPLAY_NAMES.put("i2p.tunnel.build.requestTimeout", _x("Tunnel Build Request Timeout"));
         DISPLAY_NAMES.put("i2p.tunnel.build.firstHopTimeout", _x("Tunnel Build First Hop Timeout"));
         DISPLAY_NAMES.put("tunnel.build.maxConcurrent", _x("Max Concurrent Tunnel Builds"));
@@ -230,6 +231,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxFastPeers", _x("Max fast peers in routing table."));
         PARAM_DESCRIPTIONS.put("profileOrganizer.minHighCapacityPeers", _x("Min high-capacity peers in routing table."));
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxHighCapacityPeers", _x("Max high-capacity peers in routing table."));
+        PARAM_DESCRIPTIONS.put("profileOrganizer.lossyThreshold", _x("Loss ratio that demotes a peer from the fast tiers (%)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.requestTimeout", _x("Build reply timeout (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.firstHopTimeout", _x("First-hop build forward timeout (ms)."));
         PARAM_DESCRIPTIONS.put("tunnel.build.maxConcurrent", _x("Max concurrent tunnel builds."));

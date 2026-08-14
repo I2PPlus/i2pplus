@@ -183,6 +183,10 @@ public class ProfileOrganizer {
     public static final String PROP_LOSSY_WINDOW = "profileOrganizer.lossyWindow";
     /** Default freshness window in ms (10 minutes). */
     private static final long DEFAULT_LOSSY_WINDOW = 10 * 60 * 1000L;
+    /** Config property for the minimum number of transmitted packets before a loss ratio is reported. */
+    public static final String PROP_LOSSY_MIN_PACKETS = "profileOrganizer.lossyMinPackets";
+    /** Default minimum packet sample size (20 = full 5% bucket resolution). */
+    public static final int DEFAULT_LOSSY_MIN_PACKETS = 20;
 
     /** Config property for the maximum number of peer profiles. */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
@@ -2230,6 +2234,70 @@ public class ProfileOrganizer {
             return false;
         return ratio >= _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD) &&
                now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW);
+    }
+
+    /**
+     * Instantly remove a peer from the fast/high-capacity tiers when its reported loss
+     * ratio exceeds the threshold. Called from the transport path via ProfileManagerImpl
+     * so a lossy peer is demoted as soon as its retransmit ratio crosses the bar, instead
+     * of waiting for the next reorganize cycle. Non-blocking: if a reorganize currently
+     * holds the write lock, the reorganize purge catches the peer instead.
+     *
+     * @param peer the peer
+     * @since 0.9.71+
+     */
+    public void demoteIfLossy(Hash peer) {
+        if (!tryWriteLock()) return;
+        try {
+            PeerProfile profile = _fastPeers.get(peer);
+            if (profile == null) {profile = _highCapacityPeers.get(peer);}
+            if (profile != null && hasHighLoss(profile, _context.clock().now())) {
+                _fastPeers.remove(peer);
+                _highCapacityPeers.remove(peer);
+                if (_log.shouldDebug()) {
+                    _log.debug("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                               "] from fast/high-cap tiers: loss " + profile.getLossRatio());
+                }
+            }
+        } finally {releaseWriteLock();}
+    }
+
+    /**
+     * Average loss ratio across the fast and high-capacity tiers with a fresh
+     * measurement, as a fraction (0.0 - 1.0). Peers whose loss data is older than
+     * {@link #PROP_LOSSY_WINDOW} are skipped; 0.0 if no fresh data. The tiers are
+     * the baseline because the threshold governs demotion FROM them: as lossy peers
+     * are evicted the average drops and the bar tightens. Used by the Tuner to
+     * adapt {@link #PROP_LOSSY_THRESHOLD} to the network.
+     *
+     * @since 0.9.71+
+     */
+    public float getAverageLossRatio() {
+        if (!tryReadLock()) return 0.0f;
+        try {
+            long now = _context.clock().now();
+            long window = _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW);
+            float sum = 0.0f;
+            int count = 0;
+            Set<Hash> seen = new HashSet<>(_fastPeers.size() + _highCapacityPeers.size());
+            for (Map.Entry<Hash, PeerProfile> e : _fastPeers.entrySet()) {
+                seen.add(e.getKey());
+                float ratio = e.getValue().getLossRatio();
+                if (ratio > 0.0f && now - e.getValue().getLossRatioLastUpdate() < window) {
+                    sum += ratio;
+                    count++;
+                }
+            }
+            for (Map.Entry<Hash, PeerProfile> e : _highCapacityPeers.entrySet()) {
+                if (!seen.add(e.getKey())) continue;
+                float ratio = e.getValue().getLossRatio();
+                if (ratio > 0.0f && now - e.getValue().getLossRatioLastUpdate() < window) {
+                    sum += ratio;
+                    count++;
+                }
+            }
+            return count > 0 ? sum / count : 0.0f;
+        } finally {releaseReadLock();}
     }
 
     /**

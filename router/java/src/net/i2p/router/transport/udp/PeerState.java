@@ -18,6 +18,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.util.CachedIteratorCollection;
 import net.i2p.router.util.PriBlockingQueue;
 import net.i2p.util.Log;
@@ -1527,12 +1528,18 @@ public class PeerState {
      * boundary since the last report. Bucketing keeps profile writes to at most one
      * per bucket change per connection.
      *
+     * No report until the connection has transmitted at least
+     * {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS} packets, so the ratio is only
+     * ever based on a meaningful sample. The bucket is not advanced in that case, so
+     * the first bucket change after the minimum is reached still fires.
+     *
      * Caller must hold _outboundLock.
      *
      * @since 0.9.71+
      */
     private void reportLossRatio() {
-        if (_packetsTransmitted <= 0)
+        if (_packetsTransmitted < _context.getProperty(ProfileOrganizer.PROP_LOSSY_MIN_PACKETS,
+                                                       ProfileOrganizer.DEFAULT_LOSSY_MIN_PACKETS))
             return;
         int bucket = (int) ((_packetsRetransmitted * 20L) / _packetsTransmitted);
         if (bucket != _lastReportedLossBucket) {

@@ -714,9 +714,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         // Peers
         _params.add(new MaxFastPeersParam());
-        _params.add(new MaxHighCapPeersParam());
         _params.add(new MaxProfilesParam());
         _params.add(new MinFastPeersParam());
+        _params.add(new LossyThresholdParam());
         _params.add(new MinHighCapPeersParam());
 
         // Purge stale tuner.* keys from router.config (one-time cleanup)
@@ -7784,6 +7784,58 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.max(_min, current - _step);
 
             return current;
+        }
+    }
+
+    /**
+     * Lossy peer demotion threshold.
+     *
+     * Dynamic version of {@link ProfileOrganizer#PROP_LOSSY_THRESHOLD}: the demotion
+     * bar is set from the average loss ratio measured across all peers with fresh
+     * loss data, multiplied by the loss factor property (default 2.0), clamped to the
+     * configured min/max range. On a clean network the average is near zero and the
+     * threshold sits at the configured floor; on a lossy network it rises with the
+     * average so only peers meaningfully worse than the network are demoted.
+     *
+     * @since 0.9.71+
+     */
+    private class LossyThresholdParam extends BaseParam {
+
+        /** Config property for the multiplier over the average peer loss ratio. */
+        private static final String PROP_LOSSY_FACTOR = "profileOrganizer.lossyFactor";
+
+        LossyThresholdParam() {
+            super("profileOrganizer.lossyThreshold", "Lossy peer demotion threshold (%)",
+                  SUB_PEER,
+
+                  5, 50, 1, "udp.packetsRetransmitted", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            // Skip redundant writes so router.config isn't rewritten every tuning cycle
+            if (value == getRuntimeValue()) return;
+            _context.router().saveConfig(_name, String.valueOf(value / 100.0f));
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            float ratio = _context.getProperty(_name, 0.20f);
+            return Math.round(ratio * 100.0f);
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            return ctx.profileOrganizer().getAverageLossRatio() * 100.0;
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            // No fresh loss data anywhere: keep the current value, don't chase noise
+            if (observed <= 0.0) return getRuntimeValue();
+            float factor = _context.getProperty(PROP_LOSSY_FACTOR, 2.0f);
+            double target = observed * factor;
+            return (int) Math.max(_min, Math.min(_max, Math.round(target)));
         }
     }
 

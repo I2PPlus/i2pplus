@@ -53,6 +53,7 @@ public class ProfileManagerImpl implements ProfileManager {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
         data.setLossRatio(ratio, _context.clock().now());
+        _context.profileOrganizer().demoteIfLossy(peer);
     }
 
     /**
