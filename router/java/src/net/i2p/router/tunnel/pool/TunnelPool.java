@@ -1061,201 +1061,31 @@ public class TunnelPool {
             return 0;
         }
 
-        int poolSize = size();
-        boolean needsReplacement = false;
-        if (_settings.isInbound() && !_settings.isExploratory()) {
-            Hash dest = _settings.getDestination();
-            TunnelPool oppositePool = _manager.getOutboundPool(dest);
-            if (oppositePool != null && oppositePool.size() <= 1) {
-                needsReplacement = true;
-            }
-        }
-        if (needsReplacement && poolSize > 1) {
-            long nowMs = _context.clock().now();
-            if (nowMs - _lastPreBuildTime >= PRE_BUILD_THROTTLE_MS) {
-                _lastPreBuildTime = nowMs;
-                if (_log.shouldWarn())
-                    _log.warn(toString() + " -> Pre-building tunnel replacement before slow/failed cleanup");
-                _manager.tunnelFailed();
-            }
-        }
+        maybePreBuildReplacement();
 
         long now = _context.clock().now();
         List<TunnelInfo> toRemove = new ArrayList<>();
 
         _tunnelsLock.lock();
         try {
-            poolSize = _tunnels.size();
+            int poolSize = _tunnels.size();
             if (poolSize <= 1) {
                 return 0;
             }
-
-            if (_settings.isInbound() && !_settings.isExploratory()) {
-                Hash dest = _settings.getDestination();
-                TunnelPool oppositePool = _manager.getOutboundPool(dest);
-                if (oppositePool != null) {
-                    int oppositeUsable = oppositePool.size();
-                    int oppositeMin = oppositePool.getSettings().getQuantity();
-                    if (oppositeUsable < oppositeMin) {
-                        // OB pool is below target — don't prune IB tunnels.
-                        // Pruning IB tunnels when OB has 0 active causes a
-                        // synchronized collapse: all IB tunnels built at boot
-                        // expire together, all OB pools lose their paired IB
-                        // tunnels simultaneously, and 5+ EMERGENCY triggers
-                        // fire at once.  Let IB tunnels expire naturally
-                        // (11 min) to stagger the removal.
-                        if (_log.shouldDebug()) {
-                            _log.debug(toString() + " -> Skipping cleanup - paired OB pool below target (" + oppositeUsable + "/" + oppositeMin + ")");
-                        }
-                        return 0;
-                    }
-                }
+            if (isPairedPoolStrained()) {
+                return 0;
             }
-
             int target = _settings.getTotalQuantity();
             int currentSize = _tunnels.size();
             boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
-
-            // Relax pruning threshold when build success is poor.
-            // At 80%+ success, prune at target (normal).
-            // At 60% or below, allow up to 1.5x target — killing spare tunnels
-            // that you can't rebuild just makes pool collapse more likely.
-            // Between 60-80%, linear interpolation of the multiplier.
-            int pruneThreshold = target;
-            if (!isServerPool) {
-                double bsr = getBuildSuccessRate();
-                if (!Double.isNaN(bsr)) {
-                    if (bsr <= 0.6) {
-                        pruneThreshold = Math.max(target + 4, (int)(target * 1.5));
-                    } else if (bsr < 0.8) {
-                        double factor = 1.5 - 0.5 * (bsr - 0.6) / 0.2;
-                        pruneThreshold = Math.max(target + 2, (int)(target * factor));
-                    }
-                }
-            }
-
-            // Unified pruning for all pool types: prune excess tunnels down to threshold.
-            // For server pools, NEVER prune GOOD tunnels — they're published in the
-            // LeaseSet and removing them breaks client connections.
-            // Priority order: FAILED > FAILING/TOO_SLOW/OVER_BUDGET > UNTESTED > TESTING > GOOD
-            // Within same status, prune soonest-expiring first.
+            int pruneThreshold = computePruneThreshold(target, isServerPool);
             if (currentSize > pruneThreshold) {
-                int toPrune = currentSize - pruneThreshold;
-                int goodKept = 0;
-                int goodTarget = _settings.getQuantity(); // how many GOOD we want to keep
-                List<TunnelInfo> sortedTunnels = new ArrayList<>(_tunnels);
-                sortedTunnels.sort(new Comparator<TunnelInfo>() {
-                    /**
-                     * Compare tunnels by prune rank, then expiration.
-                     */
-                    public int compare(TunnelInfo a, TunnelInfo b) {
-                        int pa = pruneRank(a.getTestStatus());
-                        int pb = pruneRank(b.getTestStatus());
-                        if (pa != pb) return pa - pb;
-                        return Long.compare(a.getExpiration(), b.getExpiration());
-                    }
-                    private int pruneRank(TunnelTestStatus s) {
-                        if (s == null) return 0;
-                        switch (s) {
-                            case FAILED: return 0;
-                            case TOO_SLOW: return 1;
-                            case OVER_BUDGET: return 2;
-                            case FAILING: return 3;
-                            case UNTESTED: return 99; // Don't prune untested — let them be tested first
-                            case TESTING: return 5;
-                            default: return 6; // GOOD last
-                        }
-                    }
-                });
-                for (TunnelInfo info : sortedTunnels) {
-                    if (toPrune <= 0) break;
-                    // For server pools: never prune GOOD or FAILING tunnels.
-                    // GOOD tunnels are published in the LeaseSet and removing them
-                    // breaks client connections.  FAILING tunnels were recently GOOD
-                    // and the old LeaseSet (propagated to peers) still references
-                    // them — pruning during the propagation window causes unreachable
-                    // destinations.  Let them expire naturally (11 min).
-                    if (isServerPool && (info.getTestStatus() == TunnelTestStatus.GOOD ||
-                                         info.getTestStatus() == TunnelTestStatus.FAILING)) {continue;}
-                    // For non-server pools: keep at least goodTarget GOOD tunnels
-                    if (!isServerPool && info.getTestStatus() == TunnelTestStatus.GOOD) {
-                        goodKept++;
-                        if (goodKept < goodTarget) {continue;}
-                    }
-                    // Never prune a tunnel actively carrying traffic,
-                    // except for exploratory pools (no LeaseSet, no client impact).
-                    // Without this carve-out, pools running active traffic never get
-                    // pruned because every tunnel is recently active (30s window),
-                    // allowing unbounded accumulation.
-                    if (!_settings.isExploratory() && info instanceof PooledTunnelCreatorConfig &&
-                        ((PooledTunnelCreatorConfig) info).isRecentlyActive()) {continue;}
-                    if (info.getExpiration() < now + getPruneEarlyExpiry()) {continue;}
-                    if (!(info instanceof PooledTunnelCreatorConfig)) {continue;}
-                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                    TunnelId gwId = _settings.isInbound() ? cfg.getReceiveTunnelId(0) : cfg.getSendTunnelId(0);
-                    if (gwId == null || gwId.getTunnelId() == 0) {continue;}
-                    cfg.setExpiration(now + getPruneEarlyExpiry());
-                    cfg.setTestOverBudget();
-                    ExpireJob.scheduleExpiration(_context, cfg);
-                    toRemove.add(info);
-                    toPrune--;
-                    if (_log.shouldDebug()) {
-                        _log.debug(toString() + " -> Scheduling early expiry for excess tunnel: " + gwId);
-                    }
-                }
-
-                // If we still need to prune but only have GOOD tunnels left (non-server),
-                // prune the soonest-expiring GOOD tunnels.
+                int toPrune = markExcessTunnels(toRemove, isServerPool, _settings.getQuantity(), now, currentSize - pruneThreshold);
                 if (toPrune > 0 && !isServerPool) {
-                    List<TunnelInfo> goodTunnels = new ArrayList<>();
-                    for (TunnelInfo info : _tunnels) {
-                        if (!toRemove.contains(info) && info.getTestStatus() == TunnelTestStatus.GOOD &&
-                            info instanceof PooledTunnelCreatorConfig) {
-                            goodTunnels.add(info);
-                        }
-                    }
-                    goodTunnels.sort(EXPIRATION_COMPARATOR);
-                    for (TunnelInfo info : goodTunnels) {
-                        if (toPrune <= 0) break;
-                        // Don't prune if tunnel is actively carrying traffic
-                        if (((PooledTunnelCreatorConfig) info).isRecentlyActive()) {continue;}
-                        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                        cfg.setExpiration(now + getPruneEarlyExpiry());
-                        cfg.setTestOverBudget();
-                        ExpireJob.scheduleExpiration(_context, cfg);
-                        toRemove.add(info);
-                        toPrune--;
-                    }
+                    pruneExcessGoodTunnels(toRemove, toPrune, now);
                 }
             }
-
-            // Schedule early expiry for completely failed tunnels (all pool types).
-            // Caps removal per run and staggers expiry times to prevent
-            // simultaneous removal of all failed tunnels in one ExpireJob batch.
-            int poolSizeAtEnd = _tunnels.size();
-            int minAfterFailed = Math.max(target, 2);
-            int alreadyMarked = toRemove.size();
-            int maxFailedRemove = Math.max(0, poolSizeAtEnd - minAfterFailed - alreadyMarked);
-            int failedRemoved = 0;
-            for (TunnelInfo info : _tunnels) {
-                if (failedRemoved >= maxFailedRemove) break;
-                if (info instanceof PooledTunnelCreatorConfig && !toRemove.contains(info)) {
-                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                    if (cfg.getTunnelFailed()) {
-                        long stagger = failedRemoved * 15000L; // 15s between each
-                        cfg.setTestTooSlow();
-                        cfg.setExpiration(now + getPruneEarlyExpiry() + stagger);
-                        ExpireJob.scheduleExpiration(_context, cfg);
-                        toRemove.add(info);
-                        failedRemoved++;
-                        if (_log.shouldDebug()) {
-                            _log.debug(toString() + " -> Scheduling early expiry for failed tunnel: " +
-                                       cfg.getReceiveTunnelId(0) + " (stagger +" + (stagger / 1000) + "s, " +
-                                       (maxFailedRemove - failedRemoved) + " remaining)");
-                        }
-                    }
-                }
-            }
+            markFailedTunnelsForEarlyExpiry(toRemove, target, now);
         } finally {_tunnelsLock.unlock();}
 
         // Notify manager to trigger tunnel rebuild for pruned tunnels.
@@ -1268,6 +1098,218 @@ public class TunnelPool {
         }
 
         return toRemove.size();
+    }
+
+    /**
+     *  When the paired opposite-direction pool is nearly empty (size &lt;= 1),
+     *  its tunnels are slow/failed and cleanup may not catch up — nudge the
+     *  manager to pre-build a replacement now, throttled.
+     */
+    private void maybePreBuildReplacement() {
+        if (!_settings.isInbound() || _settings.isExploratory()) {return;}
+        Hash dest = _settings.getDestination();
+        TunnelPool oppositePool = _manager.getOutboundPool(dest);
+        if (oppositePool == null || oppositePool.size() > 1) {return;}
+        if (size() <= 1) {return;}
+        long nowMs = _context.clock().now();
+        if (nowMs - _lastPreBuildTime < PRE_BUILD_THROTTLE_MS) {return;}
+        _lastPreBuildTime = nowMs;
+        if (_log.shouldWarn())
+            _log.warn(toString() + " -> Pre-building tunnel replacement before slow/failed cleanup");
+        _manager.tunnelFailed();
+    }
+
+    /**
+     *  Paired-pool gate: skip pruning entirely when this inbound pool's
+     *  opposite outbound pool is below its target.  Pruning IB tunnels when
+     *  OB has 0 active causes a synchronized collapse: all IB tunnels built
+     *  at boot expire together, all OB pools lose their paired IB tunnels
+     *  simultaneously, and 5+ EMERGENCY triggers fire at once.  Let tunnels
+     *  expire naturally (11 min) to stagger the removal.
+     *
+     *  @return true to skip pruning
+     */
+    private boolean isPairedPoolStrained() {
+        if (!_settings.isInbound() || _settings.isExploratory()) {return false;}
+        Hash dest = _settings.getDestination();
+        TunnelPool oppositePool = _manager.getOutboundPool(dest);
+        if (oppositePool == null) {return false;}
+        int oppositeUsable = oppositePool.size();
+        int oppositeMin = oppositePool.getSettings().getQuantity();
+        if (oppositeUsable >= oppositeMin) {return false;}
+        if (_log.shouldDebug()) {
+            _log.debug(toString() + " -> Skipping cleanup - paired OB pool below target (" + oppositeUsable + "/" + oppositeMin + ")");
+        }
+        return true;
+    }
+
+    /**
+     *  Prune threshold: the base target, relaxed when build success is poor —
+     *  killing spare tunnels you can't rebuild just makes pool collapse more
+     *  likely.  80%+ success prunes at target (normal), 60% or below allows
+     *  1.5x target, and between the two the multiplier interpolates linearly.
+     *  Server pools always prune at target.
+     */
+    private int computePruneThreshold(int target, boolean isServerPool) {
+        if (isServerPool) {return target;}
+        double bsr = getBuildSuccessRate();
+        if (Double.isNaN(bsr)) {return target;}
+        if (bsr <= 0.6) {
+            return Math.max(target + 4, (int)(target * 1.5));
+        } else if (bsr < 0.8) {
+            double factor = 1.5 - 0.5 * (bsr - 0.6) / 0.2;
+            return Math.max(target + 2, (int)(target * factor));
+        }
+        return target;
+    }
+
+    /**
+     *  Mark excess tunnels for early expiry, down to the prune threshold.
+     *  Tunnels are sorted by prune rank then expiration: FAILED &gt;
+     *  FAILING/TOO_SLOW/OVER_BUDGET &gt; UNTESTED &gt; TESTING &gt; GOOD, soonest-
+     *  expiring first within a rank.  Server pools never prune GOOD or
+     *  FAILING tunnels — GOOD tunnels are published in the LeaseSet and
+     *  removing them breaks client connections, and FAILING tunnels were
+     *  recently GOOD, still referenced by the propagated LeaseSet; pruning
+     *  during the propagation window causes unreachable destinations.
+     *  Non-server pools keep at least quantity GOOD tunnels.
+     *
+     *  @return the remaining deficit not yet pruned
+     */
+    private int markExcessTunnels(List<TunnelInfo> toRemove, boolean isServerPool, int goodTarget, long now, int toPrune) {
+        List<TunnelInfo> sortedTunnels = new ArrayList<>(_tunnels);
+        sortedTunnels.sort(new Comparator<TunnelInfo>() {
+            /** Compare tunnels by prune rank, then expiration. */
+            public int compare(TunnelInfo a, TunnelInfo b) {
+                int pa = pruneRank(a.getTestStatus());
+                int pb = pruneRank(b.getTestStatus());
+                if (pa != pb) return pa - pb;
+                return Long.compare(a.getExpiration(), b.getExpiration());
+            }
+        });
+        int goodKept = 0;
+        for (TunnelInfo info : sortedTunnels) {
+            if (toPrune <= 0) break;
+            if (info.getTestStatus() == TunnelTestStatus.GOOD && !isServerPool) {
+                goodKept++;
+                if (goodKept < goodTarget) {continue;}
+            }
+            if (isProtectedFromPruning(info, isServerPool, now)) {continue;}
+            PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+            TunnelId gwId = _settings.isInbound() ? cfg.getReceiveTunnelId(0) : cfg.getSendTunnelId(0);
+            scheduleEarlyExpiry(cfg, now, 0, true);
+            toRemove.add(info);
+            toPrune--;
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Scheduling early expiry for excess tunnel: " + gwId);
+            }
+        }
+        return toPrune;
+    }
+
+    /**
+     *  A tunnel is protected from pruning if it is a server-pool GOOD or
+     *  FAILING tunnel, is actively carrying traffic (non-exploratory pools
+     *  only — without this carve-out, pools running live traffic never get
+     *  pruned because every tunnel is recently active within the 30s window,
+     *  so they accumulate unbounded), is already inside the early-expiry
+     *  window, is not a pool config, or has no usable gateway tunnel ID.
+     */
+    private boolean isProtectedFromPruning(TunnelInfo info, boolean isServerPool, long now) {
+        if (isServerPool && (info.getTestStatus() == TunnelTestStatus.GOOD ||
+                             info.getTestStatus() == TunnelTestStatus.FAILING)) {return true;}
+        if (!_settings.isExploratory() && info instanceof PooledTunnelCreatorConfig &&
+            ((PooledTunnelCreatorConfig) info).isRecentlyActive()) {return true;}
+        if (info.getExpiration() < now + getPruneEarlyExpiry()) {return true;}
+        if (!(info instanceof PooledTunnelCreatorConfig)) {return true;}
+        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+        TunnelId gwId = _settings.isInbound() ? cfg.getReceiveTunnelId(0) : cfg.getSendTunnelId(0);
+        return gwId == null || gwId.getTunnelId() == 0;
+    }
+
+    /**
+     *  Schedule an early expiry for a config; the caller records it in
+     *  its removal list.  ExpireJob removes the config after the window.
+     *
+     *  @param staggerMs additional delay to stagger removals
+     *  @param overBudget mark over budget (true) or too slow (false)
+     */
+    private void scheduleEarlyExpiry(PooledTunnelCreatorConfig cfg, long now, long staggerMs, boolean overBudget) {
+        if (overBudget) {
+            cfg.setTestOverBudget();
+        } else {
+            cfg.setTestTooSlow();
+        }
+        cfg.setExpiration(now + getPruneEarlyExpiry() + staggerMs);
+        ExpireJob.scheduleExpiration(_context, cfg);
+    }
+
+    /**
+     *  Fallback prune for non-server pools: when only GOOD tunnels remain
+     *  to prune, mark the soonest-expiring GOOD tunnels for early expiry,
+     *  skipping tunnels actively carrying traffic.
+     */
+    private void pruneExcessGoodTunnels(List<TunnelInfo> toRemove, int toPrune, long now) {
+        List<TunnelInfo> goodTunnels = new ArrayList<>();
+        for (TunnelInfo info : _tunnels) {
+            if (!toRemove.contains(info) && info.getTestStatus() == TunnelTestStatus.GOOD &&
+                info instanceof PooledTunnelCreatorConfig) {
+                goodTunnels.add(info);
+            }
+        }
+        goodTunnels.sort(EXPIRATION_COMPARATOR);
+        for (TunnelInfo info : goodTunnels) {
+            if (toPrune <= 0) break;
+            // Don't prune if tunnel is actively carrying traffic
+            if (((PooledTunnelCreatorConfig) info).isRecentlyActive()) {continue;}
+            scheduleEarlyExpiry((PooledTunnelCreatorConfig) info, now, 0, true);
+            toRemove.add(info);
+            toPrune--;
+        }
+    }
+
+    /**
+     *  Mark completely failed tunnels for early expiry (all pool types).
+     *  Capped so the pool keeps at least target tunnels, and staggered 15s
+     *  apart so one ExpireJob batch doesn't remove them all simultaneously.
+     */
+    private void markFailedTunnelsForEarlyExpiry(List<TunnelInfo> toRemove, int target, long now) {
+        int poolSizeAtEnd = _tunnels.size();
+        int minAfterFailed = Math.max(target, 2);
+        int alreadyMarked = toRemove.size();
+        int maxFailedRemove = Math.max(0, poolSizeAtEnd - minAfterFailed - alreadyMarked);
+        int failedRemoved = 0;
+        for (TunnelInfo info : _tunnels) {
+            if (failedRemoved >= maxFailedRemove) break;
+            if (info instanceof PooledTunnelCreatorConfig && !toRemove.contains(info)) {
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                if (cfg.getTunnelFailed()) {
+                    long stagger = failedRemoved * 15000L; // 15s between each
+                    scheduleEarlyExpiry(cfg, now, stagger, false);
+                    toRemove.add(info);
+                    failedRemoved++;
+                    if (_log.shouldDebug()) {
+                        _log.debug(toString() + " -> Scheduling early expiry for failed tunnel: " +
+                                   cfg.getReceiveTunnelId(0) + " (stagger +" + (stagger / 1000) + "s, " +
+                                   (maxFailedRemove - failedRemoved) + " remaining)");
+                    }
+                }
+            }
+        }
+    }
+
+    /** Prune priority rank — lower prunes first.  UNTESTED ranked last so they get tested first. */
+    private static int pruneRank(TunnelTestStatus s) {
+        if (s == null) return 0;
+        switch (s) {
+            case FAILED: return 0;
+            case TOO_SLOW: return 1;
+            case OVER_BUDGET: return 2;
+            case FAILING: return 3;
+            case UNTESTED: return 99; // Don't prune untested — let them be tested first
+            case TESTING: return 5;
+            default: return 6; // GOOD last
+        }
     }
 
     /**
