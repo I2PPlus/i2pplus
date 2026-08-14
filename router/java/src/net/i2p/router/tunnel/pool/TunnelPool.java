@@ -1617,14 +1617,7 @@ public class TunnelPool {
         // is cleaned up naturally when Phase 2 fires.
 
         _manager.tunnelFailed();
-        _lifetimeProcessed += info.getProcessedMessagesCount();
-        updateRate();
-        long lifetimeConfirmed = info.getVerifiedBytesTransferred();
-        long lifetime = getTunnelLifetime(_context);
-
-        for (int i = 0; i < info.getLength(); i++) {
-            _context.profileManager().tunnelLifetimePushed(info.getPeer(i), lifetime, lifetimeConfirmed);
-        }
+        processRemovalStats(Collections.singletonList(info));
         if (_alive) {
             // Invalidate cached LeaseSet — it may reference the tunnel we just
             // removed.  Without this, refreshLeaseSet(true) returns the stale
@@ -1977,6 +1970,8 @@ public class TunnelPool {
 
     /**
      * Process removal statistics for removed tunnels.
+     * Profiling lifetime must match the tunnel lifetime used at build time
+     * (getTunnelLifetime), or peers of tuned pools get skewed profile data.
      *
      * @param removed list of removed tunnels
      */
@@ -1984,7 +1979,7 @@ public class TunnelPool {
         for (TunnelInfo info : removed) {
             _lifetimeProcessed += info.getProcessedMessagesCount();
             long lifetimeConfirmed = info.getVerifiedBytesTransferred();
-            long lifetime = 10L * 60 * 1000;
+            long lifetime = getTunnelLifetime(_context);
             for (int i = 0; i < info.getLength(); i++) {
                 _context.profileManager().tunnelLifetimePushed(info.getPeer(i), lifetime, lifetimeConfirmed);
             }
@@ -2581,22 +2576,15 @@ public class TunnelPool {
         boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
         _tunnelsLock.lock();
         try {
+            // For server pools: never prune GOOD or FAILING tunnels.
+            // GOOD tunnels are published in the LeaseSet and removing them
+            // breaks client connections.  FAILING tunnels were recently GOOD
+            // and the old LeaseSet (propagated to peers) still references
+            // them — pruning during the propagation window causes unreachable
+            // destinations.  Let them expire naturally (11 min).
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo t = _tunnels.get(i);
-                // For server pools: never prune GOOD or FAILING tunnels.
-                // GOOD tunnels are published in the LeaseSet and removing them
-                // breaks client connections.  FAILING tunnels were recently GOOD
-                // and the old LeaseSet (propagated to peers) still references
-                // them — pruning during the propagation window causes unreachable
-                // destinations.  Let them expire naturally (11 min).
-                if (isServerPool && (t.getTestStatus() == TunnelTestStatus.GOOD ||
-                                     t.getTestStatus() == TunnelTestStatus.FAILING)) {
-                    goodCount++;
-                    continue;
-                }
-                if (t.getTunnelFailed() ||
-                    (t.getTestStatus() != TunnelTestStatus.GOOD &&
-                     t.getTestStatus() != TunnelTestStatus.UNTESTED)) {
+                if (isPrunableNonGood(t, isServerPool)) {
                     toRemove.add(t);
                 } else {
                     goodCount++;
@@ -2609,42 +2597,8 @@ public class TunnelPool {
         // Without this, the pool fills with FAILED tunnels and
         // ensureSufficientTunnels() rejects new builds (totalNow >= target + 8),
         // locking the pool into a permanently degraded state.
-        // Reserve keeps the best (lowest-failure) non-GOOD tunnels as LS
-        // fallback so the LeaseSet never goes empty.
-        // Cap: never keep zombies (>5 failures) as LS fallback — they're
-        // useless and block pool recovery by inflating size().
         int target = _settings.getQuantity();
-        // Use base target for reserve, NOT effectiveTarget — dynamic scaling
-        // must not inflate the LS fallback reserve or pools full of broken
-        // tunnels can never recover (reserve = effectiveTarget - 0 = huge).
-        int reserve;
-        // Non-publishing pools (client outbound) don't have a LeaseSet to
-        // maintain — keeping dead tunnels as LS fallback is pointless and
-        // just inflates the pool size, blocking the addTunnel cap and new
-        // tunnel replacements.  Prune all non-GOOD tunnels aggressively.
-        if (publishesLeaseSet()) {
-            reserve = Math.max(target - goodCount, 0);
-            // When pool has zero good tunnels, cap reserve aggressively —
-            // keeping broken tunnels as LS fallback is counterproductive
-            // when there's nothing good to fall back to.
-            if (goodCount == 0) {
-                reserve = Math.min(reserve, 1);
-            }
-        } else {
-            reserve = 0;
-        }
-        if (reserve > 0) {
-            // Only count low-failure non-zombie tunnels toward the reserve.
-            // Tunnels with >5 consecutive failures are effectively dead —
-            // keeping them blocks pool recovery.
-            int nonZombieCount = 0;
-            for (TunnelInfo t : toRemove) {
-                if (t.getConsecutiveFailures() <= 5) {
-                    nonZombieCount++;
-                }
-            }
-            reserve = Math.min(reserve, nonZombieCount);
-        }
+        int reserve = computeNonGoodReserve(toRemove, goodCount);
         int toPrune = toRemove.size() - reserve;
         if (toPrune <= 0) {
             if (_log.shouldInfo()) {
@@ -2654,38 +2608,14 @@ public class TunnelPool {
             return;
         }
         // Keep the best reserve tunnels (fewest failures), remove the rest
-        if (toRemove.size() > toPrune) {
-            Collections.sort(toRemove, (a, b) -> Integer.compare(a.getConsecutiveFailures(), b.getConsecutiveFailures()));
-            toRemove = new ArrayList<>(toRemove.subList(toPrune, toRemove.size()));
-        }
+        if (toRemove.size() > toPrune) {toRemove = keepBestReserve(toRemove, toPrune);}
         if (_log.shouldInfo()) {
             String boost = _consecutiveEmergencies > 0 ?
                 " (dynamic target " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) + ")" : "";
             _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels from " + toString() +
                       " (good=" + goodCount + ", remaining=" + (goodCount + reserve) + ")" + boost);
         }
-        // Batch removal: remove all at once under the lock, then do stats/cleanup
-        // outside.  Calling removeTunnel() per-tunnel triggers ensureSufficientTunnels()
-        // for each one, creating recursive build storms.
-        // Do NOT cancel ExpireJobs — the 2-phase lifecycle must complete so the
-        // tunnel stays in the dispatcher for the full LEASESET_GRACE_PERIOD
-        // after pool removal, giving clients with cached LeaseSets time to
-        // transition to new tunnels.
-        _tunnelsLock.lock();
-        try {
-            for (TunnelInfo t : toRemove) {
-                _tunnels.remove(t);
-            }
-        } finally {_tunnelsLock.unlock();}
-        for (TunnelInfo t : toRemove) {
-            _manager.tunnelFailed();
-            _lifetimeProcessed += t.getProcessedMessagesCount();
-            updateRate();
-            long lifetime = getTunnelLifetime(_context);
-            for (int i = 0; i < t.getLength(); i++) {
-                _context.profileManager().tunnelLifetimePushed(t.getPeer(i), lifetime, t.getVerifiedBytesTransferred());
-            }
-        }
+        removeTunnelsBatch(toRemove);
         // Refresh LeaseSet after batch removal (normally done per-tunnel in removeTunnel).
         // Invalidate cache first so refreshLeaseSet() builds fresh.
         _cachedLeaseSet = null;
@@ -2693,6 +2623,64 @@ public class TunnelPool {
             refreshLeaseSet(false);
         }
     }
+
+    /**
+     *  True for tunnels that should be pruned: FAILED/FAILING/unknown-status
+     *  or failed in test.  Server pools keep GOOD and FAILING — GOOD are in
+     *  the published LeaseSet, FAILING were recently GOOD and the old
+     *  propagated LeaseSet still references them.
+     */
+    private boolean isPrunableNonGood(TunnelInfo t, boolean isServerPool) {
+        if (isServerPool && (t.getTestStatus() == TunnelTestStatus.GOOD ||
+                             t.getTestStatus() == TunnelTestStatus.FAILING)) {
+            return false;
+        }
+        return t.getTunnelFailed() ||
+            (t.getTestStatus() != TunnelTestStatus.GOOD &&
+             t.getTestStatus() != TunnelTestStatus.UNTESTED);
+    }
+
+    /**
+     *  LS fallback reserve to keep among the pruned candidates.  Publishing
+     *  pools keep up to (target - good) low-failure tunnels so the LeaseSet
+     *  never goes empty; non-publishing pools keep none — dead tunnels just
+     *  inflate size() and block addTunnel/replacement.  Use the base target,
+     *  NOT effectiveTarget — dynamic scaling must not inflate the reserve or
+     *  pools full of broken tunnels can never recover.  Never keep zombies
+     *  (&gt;5 consecutive failures) as fallback — they're useless and block
+     *  pool recovery.
+     */
+    private int computeNonGoodReserve(List<TunnelInfo> toRemove, int goodCount) {
+        int target = _settings.getQuantity();
+        int reserve;
+        if (publishesLeaseSet()) {
+            reserve = Math.max(target - goodCount, 0);
+            // With zero good tunnels, keeping broken tunnels as fallback is
+            // counterproductive — there's nothing good to fall back to.
+            if (goodCount == 0) {
+                reserve = Math.min(reserve, 1);
+            }
+        } else {
+            reserve = 0;
+        }
+        if (reserve > 0) {
+            int nonZombieCount = 0;
+            for (TunnelInfo t : toRemove) {
+                if (t.getConsecutiveFailures() <= 5) {
+                    nonZombieCount++;
+                }
+            }
+            reserve = Math.min(reserve, nonZombieCount);
+        }
+        return reserve;
+    }
+
+    /** Keep the reserve tunnels with the fewest failures, drop the worst {@code toPrune}. */
+    private List<TunnelInfo> keepBestReserve(List<TunnelInfo> toRemove, int toPrune) {
+        Collections.sort(toRemove, (a, b) -> Integer.compare(a.getConsecutiveFailures(), b.getConsecutiveFailures()));
+        return new ArrayList<>(toRemove.subList(toPrune, toRemove.size()));
+    }
+
 
     /**
      *  After publishing a LeaseSet, prune GOOD tunnels that weren't included
@@ -2705,16 +2693,58 @@ public class TunnelPool {
         if (publishedLS == null || !_alive || !_settings.isInbound() || _settings.isExploratory()) {
             return;
         }
-        // Collect set of published gateway hashes from the LeaseSet
+        Set<Hash> publishedGateways = collectPublishedGateways(publishedLS);
+        if (publishedGateways == null) {return;}
+        long now = _context.clock().now();
+        int latencyThreshold = _context.getProperty("router.latencyBuildThreshold", 1500);
+        List<TunnelInfo> toRemove = collectNonPublishedTunnels(publishedGateways, latencyThreshold, now);
+        if (toRemove.isEmpty()) {return;}
+        // Collapse guard: never prune if it would leave the pool below target.
+        // Non-published tunnels are valid backups — they carry data and can be
+        // included in the next LeaseSet.  Pruning them creates churn: build 3
+        // → publish 1 gateway → prune 2 → pool drops to 0-1 → EMERGENCY → repeat.
+        int poolSize = size();
+        if (wouldDropBelowTarget(poolSize, toRemove.size())) {return;}
+        if (_log.shouldInfo()) {
+            _log.info(toString() + " -> Pruning " + toRemove.size() +
+                      " non-published tunnels after LeaseSet publish " +
+                      "(published " + publishedGateways.size() + " gateways, " +
+                      "pool total " + poolSize + ")");
+        }
+        removeTunnelsBatch(toRemove);
+        // Batch removal bypasses removeTunnel() which normally triggers
+        // ensureSufficientTunnels().  Without this, the pool stays short
+        // until the next periodic check cycle, extending the window
+        // where the pool has fewer tunnels than needed.
+        if (_alive) {
+            _cachedLeaseSet = null;
+            ensureSufficientTunnels();
+        }
+    }
+
+    /** @return the gateway hashes published in the LeaseSet, or null when it has no leases */
+    private Set<Hash> collectPublishedGateways(LeaseSet publishedLS) {
         int numLeases = publishedLS.getLeaseCount();
-        if (numLeases <= 0) return;
+        if (numLeases <= 0) {return null;}
         Set<Hash> publishedGateways = new HashSet<>(numLeases);
         for (int i = 0; i < numLeases; i++) {
             publishedGateways.add(publishedLS.getLease(i).getGateway());
         }
-        if (publishedGateways.isEmpty()) return;
-        long now = _context.clock().now();
-        int latencyThreshold = _context.getProperty("router.latencyBuildThreshold", 1500);
+        return publishedGateways.isEmpty() ? null : publishedGateways;
+    }
+
+    /**
+     *  Scan for GOOD tunnels not included in the published LeaseSet.  These
+     *  will just expire unused — they consume slots and their LeaseSet
+     *  presence can't be used because the referencing LeaseSet is already
+     *  published.  Freshly built tunnels stay as reserve whatever their
+     *  latency — measurements aren't stable yet and they're the best
+     *  candidates for the next LeaseSet.  Don't prune UNTESTED tunnels —
+     *  they were just built; pruning before testing creates a
+     *  build→prune→build churn cycle where the pool can never accumulate
+     *  enough GOOD tunnels.
+     */
+    private List<TunnelInfo> collectNonPublishedTunnels(Set<Hash> publishedGateways, int latencyThreshold, long now) {
         List<TunnelInfo> toRemove = new ArrayList<>();
         _tunnelsLock.lock();
         try {
@@ -2722,17 +2752,10 @@ public class TunnelPool {
                 TunnelInfo t = _tunnels.get(i);
                 if (t.getTunnelFailed()) continue;
                 if (t.getLength() <= 1) continue;
-                // Freshly built tunnels stay as reserve whatever their latency —
-                // measurements aren't stable yet and they're the best candidates
-                // for the next LeaseSet.
                 long timeLeft = t.getExpiration() - now;
                 if (timeLeft > PRUNE_KEEP_IF_FRESH_MS) {
                     continue;
                 }
-                // Don't prune UNTESTED tunnels — they were just built and
-                // haven't been tested yet.  Pruning them before testing
-                // creates a build→prune→build churn cycle where the pool
-                // can never accumulate enough GOOD tunnels.
                 if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
                     continue;
                 }
@@ -2755,58 +2778,48 @@ public class TunnelPool {
                 }
             }
         } finally {_tunnelsLock.unlock();}
-        if (toRemove.isEmpty()) return;
-        // Collapse guard: never prune if it would leave the pool below target.
-        // Non-published tunnels are valid backups — they carry data and can be
-        // included in the next LeaseSet.  Pruning them creates churn: build 3
-        // → publish 1 gateway → prune 2 → pool drops to 0-1 → EMERGENCY → repeat.
-        int currentSize = size();
+        return toRemove;
+    }
+
+    /**
+     *  Collapse guard: skip the prune when it would drop the pool below its
+     *  effective target (base + emergency boost).  @return true to skip.
+     */
+    private boolean wouldDropBelowTarget(int currentSize, int removeCount) {
         int target = getEffectiveTarget();
         // Dynamic scaling: keep extra tunnels when pool keeps collapsing
         int effectiveTarget = Math.min(target + _consecutiveEmergencies,
                                        target + MAX_EMERGENCY_BOOST);
-        int afterPrune = currentSize - toRemove.size();
-        if (afterPrune < effectiveTarget) {
-            if (_log.shouldInfo()) {
-                _log.info(toString() + " -> Skipping non-published prune — would drop below target " +
-                          "(" + currentSize + " total, " + toRemove.size() + " candidates, " +
-                          "target " + effectiveTarget + ", after prune " + afterPrune + ")");
-            }
-            return;
-        }
+        int afterPrune = currentSize - removeCount;
+        if (afterPrune >= effectiveTarget) {return false;}
         if (_log.shouldInfo()) {
-            _log.info(toString() + " -> Pruning " + toRemove.size() +
-                      " non-published tunnels after LeaseSet publish " +
-                      "(published " + publishedGateways.size() + " gateways, " +
-                      "pool total " + size() + ")");
+            _log.info(toString() + " -> Skipping non-published prune — would drop below target " +
+                      "(" + currentSize + " total, " + removeCount + " candidates, " +
+                      "target " + effectiveTarget + ", after prune " + afterPrune + ")");
         }
-        // Batch removal under lock
-        // Do NOT cancel ExpireJobs — same reason as pruneNonGoodTunnels():
-        // the 2-phase lifecycle must complete for proper dispatcher cleanup.
+        return true;
+    }
+
+    /**
+     *  Remove tunnels from the pool in one batch under the lock, then update
+     *  stats outside the lock.  Batch removal avoids calling removeTunnel()
+     *  per tunnel, which would trigger ensureSufficientTunnels() for each
+     *  one and create recursive build storms.  ExpireJobs are NOT canceled —
+     *  the 2-phase lifecycle must complete so the tunnel stays in the
+     *  dispatcher for the full LEASESET_GRACE_PERIOD after pool removal,
+     *  giving clients with cached LeaseSets time to transition.
+     */
+    private void removeTunnelsBatch(List<TunnelInfo> toRemove) {
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : toRemove) {
                 _tunnels.remove(t);
             }
         } finally {_tunnelsLock.unlock();}
-        for (TunnelInfo t : toRemove) {
-            _manager.tunnelFailed();
-            _lifetimeProcessed += t.getProcessedMessagesCount();
-            updateRate();
-            long lifetime = getTunnelLifetime(_context);
-            for (int i = 0; i < t.getLength(); i++) {
-                _context.profileManager().tunnelLifetimePushed(t.getPeer(i), lifetime, t.getVerifiedBytesTransferred());
-            }
-        }
-        // Batch removal bypasses removeTunnel() which normally triggers
-        // ensureSufficientTunnels().  Without this, the pool stays short
-        // until the next periodic check cycle, extending the window
-        // where the pool has fewer tunnels than needed.
-        if (_alive) {
-            _cachedLeaseSet = null;
-            ensureSufficientTunnels();
-        }
+        _manager.tunnelFailed();
+        processRemovalStats(toRemove);
     }
+
 
     /**
      * Build a Lease from a single tunnel's gateway.  The lease ends
