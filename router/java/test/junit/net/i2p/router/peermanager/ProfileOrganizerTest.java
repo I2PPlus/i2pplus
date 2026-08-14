@@ -146,6 +146,22 @@ public class ProfileOrganizerTest {
         assertEquals(peer, profile.getPeer());
     }
 
+    @Test
+    public void testDemoteIfLossySetsProbationAndExcludesFromSelection() throws Exception {
+        Hash peer = register(5000);
+        PeerProfile profile = _org.getProfile(peer);
+        assertNotNull(profile);
+        // A high loss ratio triggers an immediate demotion and starts probation.
+        profile.setLossRatio(0.5f, System.currentTimeMillis());
+        _org.demoteIfLossy(peer);
+        assertTrue("peer should be in loss probation after demoteIfLossy", profile.isLossy());
+        // A peer in loss probation is skipped by not-failing selection so it is
+        // not used while its connection remains lossy.
+        Set<Hash> matches = new HashSet<>();
+        _org.selectNotFailingPeers(1, new HashSet<Hash>(), matches);
+        assertFalse("lossy peer must not be selected", matches.contains(peer));
+    }
+
     // ---- static threshold clamps ----
 
     @Test

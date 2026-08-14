@@ -188,6 +188,30 @@ public class ProfileOrganizer {
     public static final String PROP_LOSSY_MIN_PACKETS = "profileOrganizer.lossyMinPackets";
     /** Default minimum packet sample size (20 = full 5% bucket resolution). */
     public static final int DEFAULT_LOSSY_MIN_PACKETS = 20;
+    /**
+     * Config property for the decayed loss score above which a peer is
+     * de-prioritized in tier selection (soft signal, below the demotion
+     * threshold). Default 10%: a peer can be consistently lossy without ever
+     * crossing the hard demotion bar, and this keeps such peers out of the
+     * preferred picks without evicting them.
+     * @since 0.9.71+
+     */
+    public static final String PROP_LOSSY_MODERATE_THRESHOLD = "profileOrganizer.lossyModerateThreshold";
+    private static final float DEFAULT_LOSSY_MODERATE_THRESHOLD = 0.10f;
+    /**
+     * Minimum time after a loss demotion before a peer may be re-admitted,
+     * even with fresh clean evidence. Asymmetric hysteresis: demotion is
+     * instant on weak evidence, re-admission requires both this age and a
+     * fresh clean measurement (see shouldReadmitLossy).
+     */
+    private static final long LOSS_READMIT_MIN_AGE = 30 * 60 * 1000L;
+    /**
+     * Selection penalty for moderately-lossy peers: their random priority
+     * range is multiplied by this factor, so they are this many times less
+     * likely to be picked than an equal-latency clean peer. Lossiness becomes
+     * one of several selection signals instead of a hard gate.
+     */
+    private static final float LOSSY_SELECTION_PENALTY = 4.0f;
 
     /** Config property for the maximum number of peer profiles. */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
@@ -911,12 +935,17 @@ public class ProfileOrganizer {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
             List<Hash> selected = new ArrayList<>(needed);
+            long now = _context.clock().now();
             getReadLock();
             try {
                 for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext(); ) {
                     Hash cur = iter.next();
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
+                    // Keep peers in loss probation out of even the last-resort pool;
+                    // they only get picked if literally nothing else is usable.
+                    PeerProfile prof = locked_getProfile(cur);
+                    if (prof != null && inLossProbation(prof, now)) continue;
                     if (isSelectable(cur)) selected.add(cur);
                 }
             } finally {
@@ -1170,8 +1199,9 @@ public class ProfileOrganizer {
                     PeerProfile profile = candidates.get(i);
                     if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
                         !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile) &&
-                        !hasHighLoss(profile, now)) {
+                        !inLossProbation(profile, now)) {
                         _fastPeers.put(profile.getPeer(), profile);
+                        clearLossIfReadmitted(profile);
                         added++;
                     }
                 }
@@ -1185,8 +1215,9 @@ public class ProfileOrganizer {
                         PeerProfile profile = candidates.get(i);
                         if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
                             isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile) &&
-                            !hasRecentTunnelFailures(profile) && !hasHighLoss(profile, now)) {
+                            !hasRecentTunnelFailures(profile) && !inLossProbation(profile, now)) {
                             _fastPeers.put(profile.getPeer(), profile);
+                            clearLossIfReadmitted(profile);
                             added++;
                         }
                     }
@@ -1206,11 +1237,12 @@ public class ProfileOrganizer {
                         if (!isSelectable(profile.getPeer())) continue;
                         if (isLowTunnelAcceptance(profile)) continue;
                         if (hasRecentTunnelFailures(profile)) continue;
-                        if (hasHighLoss(profile, now)) continue;
+                        if (inLossProbation(profile, now)) continue;
                         // Require recent activity — don't fill fast tier with stale peers
                         if (profile.getLastHeardFrom() < activeCutoff &&
                             profile.getLastSendSuccessful() < activeCutoff) continue;
                         _fastPeers.put(profile.getPeer(), profile);
+                        clearLossIfReadmitted(profile);
                         added++;
                     }
                 }
@@ -1229,11 +1261,12 @@ public class ProfileOrganizer {
                     if (!isSelectable(profile.getPeer())) continue;
                     if (isLowTunnelAcceptance(profile)) continue;
                     if (hasRecentTunnelFailures(profile)) continue;
-                    if (hasHighLoss(profile, now)) continue;
+                    if (inLossProbation(profile, now)) continue;
                     // Require recent activity — don't fill high-cap tier with stale peers
                     if (profile.getLastHeardFrom() < activeCutoff &&
                         profile.getLastSendSuccessful() < activeCutoff) continue;
                     _highCapacityPeers.put(profile.getPeer(), profile);
+                    clearLossIfReadmitted(profile);
                     highCapAdded++;
                 }
             }
@@ -1245,7 +1278,7 @@ public class ProfileOrganizer {
                 Iterator<Map.Entry<Hash, PeerProfile>> fastIt = _fastPeers.entrySet().iterator();
                 while (fastIt.hasNext()) {
                     PeerProfile profile = fastIt.next().getValue();
-                    if (hasRecentTunnelFailures(profile) || hasHighLoss(profile, now)) {
+                    if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
                         if (_log.shouldDebug()) {
                             _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
                                        "] from fast tier: recent tunnel failures");
@@ -1258,7 +1291,7 @@ public class ProfileOrganizer {
                 Iterator<Map.Entry<Hash, PeerProfile>> hcIt = _highCapacityPeers.entrySet().iterator();
                 while (hcIt.hasNext()) {
                     PeerProfile profile = hcIt.next().getValue();
-                    if (hasRecentTunnelFailures(profile) || hasHighLoss(profile, now)) {
+                    if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
                         if (_log.shouldDebug()) {
                             _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
                                        "] from high-cap tier: recent tunnel failures");
@@ -1281,9 +1314,10 @@ public class ProfileOrganizer {
                     if (!isSelectable(peer)) continue;
                     PeerProfile profile = entry.getValue();
                     if (hasRecentTunnelFailures(profile)) continue;
-                    if (hasHighLoss(profile, now)) continue;
+                    if (inLossProbation(profile, now)) continue;
                     if (isLowTunnelAcceptance(profile)) continue;
                     _fastPeers.put(peer, profile);
+                    clearLossIfReadmitted(profile);
                     restored++;
                 }
                 if (_log.shouldInfo()) {
@@ -1636,12 +1670,17 @@ public class ProfileOrganizer {
         }
 
         // Select with random priority proportional to latency:
-        // lower latency = smaller range for random score = higher chance of selection
+        // lower latency = smaller range for random score = higher chance of selection.
+        // Moderately-lossy peers get their range widened so they are picked only
+        // when the clean candidates run out — lossiness as one signal, not a gate.
         int sz = candidates.size();
         float[] priority = new float[sz];
+        long now = _context.clock().now();
         for (int i = 0; i < sz; i++) {
             float lat = candidates.get(i).getValue().getPeerTestTimeAverage();
-            priority[i] = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
+            float prio = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
+            if (isModeratelyLossy(candidates.get(i).getValue(), now)) {prio *= LOSSY_SELECTION_PENALTY;}
+            priority[i] = prio;
         }
         for (int s = 0; s < howMany && s < sz; s++) {
             int best = s;
@@ -1684,12 +1723,16 @@ public class ProfileOrganizer {
             if (ok) candidates.add(entry);
         }
 
-        // Select with random priority proportional to latency
+        // Select with random priority proportional to latency. Moderately-lossy peers
+        // get their range widened so they are picked only after the clean peers.
         int sz = candidates.size();
         float[] priority = new float[sz];
+        long now = _context.clock().now();
         for (int i = 0; i < sz; i++) {
             float lat = candidates.get(i).getValue().getPeerTestTimeAverage();
-            priority[i] = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
+            float prio = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
+            if (isModeratelyLossy(candidates.get(i).getValue(), now)) {prio *= LOSSY_SELECTION_PENALTY;}
+            priority[i] = prio;
         }
         for (int s = 0; s < howMany && s < sz; s++) {
             int best = s;
@@ -1834,7 +1877,7 @@ public class ProfileOrganizer {
         boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
         boolean congested = isCongestedPeer(peer);
         boolean recentFailures = hasRecentTunnelFailures(profile);
-        boolean highLoss = hasHighLoss(profile, _context.clock().now());
+        boolean highLoss = inLossProbation(profile, _context.clock().now());
 
         if (!isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss) {
             if (highLatency && _log.shouldDebug()) {
@@ -1845,6 +1888,10 @@ public class ProfileOrganizer {
             }
             return;
         }
+        // Passing the gate means loss probation is over (either never started
+        // or readmission conditions were met) — clear the flag so the cleared
+        // state is persisted.
+        clearLossIfReadmitted(profile);
 
         int minHighCap = getMinimumHighCapacityPeers();
         double effectiveCapThreshold = Math.max(_thresholdCapacityValue, CapacityCalculator.GROWTH_FACTOR);
@@ -2240,29 +2287,89 @@ public class ProfileOrganizer {
     }
 
     /**
-     * True if the transport recently measured a packet-loss (retransmit) ratio at or above
-     * {@link #PROP_LOSSY_THRESHOLD} on this peer's connection. Lossy peers are demoted from
-     * the fast and high-capacity tiers so tunnel builds stop repeatedly selecting them.
-     * A peer with no loss data, or stale data, is not demoted.
+     * True if the peer's decayed loss score is at or above
+     * {@link #PROP_LOSSY_THRESHOLD}. The score decays by 50% per hour since
+     * the last transport report, so a peer stays gated for roughly an hour
+     * after a severe loss episode even if the transport goes quiet — the
+     * decay, not a freshness window, provides the slow forgiveness.
      *
      * @param profile the profile
      * @param now current time in ms
      * @since 0.9.71+
      */
     private boolean hasHighLoss(PeerProfile profile, long now) {
-        float ratio = profile.getLossRatio();
-        if (ratio <= 0.0f)
-            return false;
-        return ratio >= _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD) &&
-               now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW);
+        float score = profile.getLossScore(now);
+        if (score <= 0.0f) return false;
+        return score >= _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD);
     }
 
     /**
-     * Instantly remove a peer from the fast/high-capacity tiers when its reported loss
-     * ratio exceeds the threshold. Called from the transport path via ProfileManagerImpl
-     * so a lossy peer is demoted as soon as its retransmit ratio crosses the bar, instead
-     * of waiting for the next reorganize cycle. Non-blocking: if a reorganize currently
-     * holds the write lock, the reorganize purge catches the peer instead.
+     * True if the peer is in loss probation: it was demoted from the fast/
+     * high-cap tiers for packet loss and has not yet produced fresh clean
+     * evidence of recovery (see {@link #shouldReadmitLossy}). Also covers
+     * peers whose decayed score is at or above the demotion threshold even if
+     * the demotion flag was never set, e.g. a profile loaded from disk.
+     *
+     * @param profile the profile
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    private boolean inLossProbation(PeerProfile profile, long now) {
+        if (hasHighLoss(profile, now)) return true;
+        if (!profile.isLossy()) return false;
+        return !shouldReadmitLossy(profile, now);
+    }
+
+    /**
+     * True if a demoted peer may be re-admitted to the tiers: at least
+     * {@link #LOSS_READMIT_MIN_AGE} has passed since the demotion AND the
+     * transport has reported a loss ratio below the demotion threshold within
+     * {@link #PROP_LOSSY_WINDOW}. A stale or absent ratio is not evidence of
+     * recovery — this is what breaks the avoid-then-forget loop, because a
+     * peer that recovered organically accumulates new packets (netDb traffic
+     * continues while it is demoted) and reports a fresh clean ratio, while a
+     * peer that is still lossy never does.
+     *
+     * @param profile the profile
+     * @param now current time in ms
+     * @return true if the peer may be re-admitted
+     * @since 0.9.71+
+     */
+    private boolean shouldReadmitLossy(PeerProfile profile, long now) {
+        long since = profile.getLossySince();
+        if (since <= 0) return true;
+        if (now - since < LOSS_READMIT_MIN_AGE) return false;
+        float threshold = _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD);
+        return now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW) &&
+               profile.getLossRatio() < threshold;
+    }
+
+    /**
+     * Clear the loss demotion flag once a peer has been re-admitted, so the
+     * cleared state is persisted and re-admission is not re-evaluated on every
+     * reorganize. Must be called with the write lock held.
+     *
+     * @param profile the profile
+     * @since 0.9.71+
+     */
+    private void clearLossIfReadmitted(PeerProfile profile) {
+        if (profile.isLossy()) {
+            profile.clearLossy();
+            if (_log.shouldDebug()) {
+                _log.debug("Peer [" + profile.getPeer().toBase32().substring(0, 6) +
+                           "] re-admitted after loss probation: loss score " +
+                           profile.getLossScore(_context.clock().now()));
+            }
+        }
+    }
+
+    /**
+     * Instantly remove a peer from the fast/high-capacity tiers when its decayed loss
+     * score exceeds the threshold, and mark it for loss probation. Called from the
+     * transport path via ProfileManagerImpl so a lossy peer is demoted as soon as its
+     * retransmit ratio crosses the bar, instead of waiting for the next reorganize
+     * cycle. Non-blocking: if a reorganize currently holds the write lock, the
+     * reorganize purge catches the peer instead.
      *
      * @param peer the peer
      * @since 0.9.71+
@@ -2270,17 +2377,38 @@ public class ProfileOrganizer {
     public void demoteIfLossy(Hash peer) {
         if (!tryWriteLock()) return;
         try {
-            PeerProfile profile = _fastPeers.get(peer);
-            if (profile == null) {profile = _highCapacityPeers.get(peer);}
+            PeerProfile profile = locked_getProfile(peer);
             if (profile != null && hasHighLoss(profile, _context.clock().now())) {
-                _fastPeers.remove(peer);
-                _highCapacityPeers.remove(peer);
-                if (_log.shouldDebug()) {
+                boolean wasFast = _fastPeers.remove(peer) != null;
+                boolean wasHighCap = _highCapacityPeers.remove(peer) != null;
+                // Start probation even if the peer was already out of the tiers,
+                // so it cannot be re-promoted on stale values before the
+                // readmission conditions are met.
+                profile.setLossySince(_context.clock().now());
+                if ((wasFast || wasHighCap) && _log.shouldDebug()) {
                     _log.debug("Demoting peer [" + peer.toBase32().substring(0, 6) +
-                               "] from fast/high-cap tiers: loss " + profile.getLossRatio());
+                               "] from fast/high-cap tiers: loss " + profile.getLossScore(_context.clock().now()));
                 }
             }
         } finally {releaseWriteLock();}
+    }
+
+    /**
+     * True if the peer's decayed loss score is in the moderate band: at or above
+     * {@link #PROP_LOSSY_MODERATE_THRESHOLD} but below the demotion threshold.
+     * Such peers remain eligible for the tiers — they never crossed the hard bar —
+     * but are de-prioritized at selection time (see LOSSY_SELECTION_PENALTY).
+     *
+     * @param profile the profile
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    private boolean isModeratelyLossy(PeerProfile profile, long now) {
+        float score = profile.getLossScore(now);
+        if (score <= 0.0f) return false;
+        float threshold = _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD);
+        return score >= _context.getProperty(PROP_LOSSY_MODERATE_THRESHOLD, DEFAULT_LOSSY_MODERATE_THRESHOLD) &&
+               score < threshold;
     }
 
     /**

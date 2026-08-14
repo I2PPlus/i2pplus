@@ -177,4 +177,59 @@ public class PeerProfileTest {
         PeerProfile p2 = new PeerProfile(_ctx, peer2);
         assertNotEquals(p1.getPeer(), p2.getPeer());
     }
+
+    @Test
+    public void testLossScoreStartsZero() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PeerProfile profile = new PeerProfile(_ctx, Hash.create(new byte[Hash.HASH_LENGTH]));
+        assertEquals(0.0f, profile.getLossScore(System.currentTimeMillis()), 0.001f);
+    }
+
+    @Test
+    public void testLossRatioSetsScore() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PeerProfile profile = new PeerProfile(_ctx, Hash.create(new byte[Hash.HASH_LENGTH]));
+        long now = System.currentTimeMillis();
+        profile.setLossRatio(0.5f, now);
+        assertEquals(0.5f, profile.getLossScore(now), 0.001f);
+        assertEquals(0.5f, profile.getLossRatio(), 0.001f);
+    }
+
+    @Test
+    public void testLossScoreDecaysOverTime() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PeerProfile profile = new PeerProfile(_ctx, Hash.create(new byte[Hash.HASH_LENGTH]));
+        long now = System.currentTimeMillis();
+        profile.setLossRatio(0.5f, now);
+        // 50% per hour decay, capped at 4 hours (floor = 0.5 * 0.5^4)
+        assertEquals(0.25f, profile.getLossScore(now + 60 * 60 * 1000L), 0.001f);
+        assertEquals(0.125f, profile.getLossScore(now + 2 * 60 * 60 * 1000L), 0.001f);
+        assertEquals(0.03125f, profile.getLossScore(now + 10 * 60 * 60 * 1000L), 0.001f);
+    }
+
+    @Test
+    public void testCleanReportDoesNotEraseLossHistory() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PeerProfile profile = new PeerProfile(_ctx, Hash.create(new byte[Hash.HASH_LENGTH]));
+        long now = System.currentTimeMillis();
+        profile.setLossRatio(0.5f, now);
+        // A single clean report must not erase the loss memory — the score
+        // only declines through time decay (asymmetric hysteresis).
+        profile.setLossRatio(0.0f, now);
+        assertEquals(0.5f, profile.getLossScore(now), 0.001f);
+    }
+
+    @Test
+    public void testLossySinceFlag() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PeerProfile profile = new PeerProfile(_ctx, Hash.create(new byte[Hash.HASH_LENGTH]));
+        assertFalse(profile.isLossy());
+        assertEquals(0, profile.getLossySince());
+        long now = System.currentTimeMillis();
+        profile.setLossySince(now);
+        assertTrue(profile.isLossy());
+        assertEquals(now, profile.getLossySince());
+        profile.clearLossy();
+        assertFalse(profile.isLossy());
+    }
 }

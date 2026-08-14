@@ -168,6 +168,9 @@ class ProfilePersistenceHelper {
         }
         if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");}
         if (profile.isLowLatency()) {add(buf, addComments, "lowLatency", 1, "Low latency flag (fast tunnel builds):");}
+        if (profile.getLossySince() != 0) {
+            add(buf, addComments, "lossySince", profile.getLossySince(), "Time peer was demoted for packet loss (loss probation):");
+        }
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
         if (profile.getLastHeardFrom() != 0) {addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");}
@@ -405,6 +408,7 @@ class ProfilePersistenceHelper {
             profile.setSpeedBonus((int) getLong(props, "speedBonus"));
             profile.setSpeedBonusLastUpdate(getLong(props, "speedBonusLastUpdate"));
             profile.setLowLatency(getLong(props, "lowLatency") > 0);
+            profile.setLossySince(getLong(props, "lossySince"));
 
             long fh = getLong(props, "firstHeardAbout");
             if (fh <= 0) {fh = file.lastModified();}

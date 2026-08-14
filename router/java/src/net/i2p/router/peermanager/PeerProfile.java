@@ -90,6 +90,12 @@ public class PeerProfile {
     private transient volatile float _lossRatio;
     /** When _lossRatio was last reported by the transport. */
     private transient volatile long _lossRatioLastUpdate;
+    /** Decayed loss score (max of past score and reported ratio, 50% per hour time decay). Not persisted. */
+    private transient volatile float _lossScore;
+    /** When _lossScore was last updated. */
+    private transient volatile long _lossScoreLastUpdate;
+    /** When the peer was last demoted from the fast/high-cap tiers for packet loss, 0 = never. Persisted. */
+    private volatile long _lossySince;
 
     /** Keep track of the fastest 8 throughputs unless slow, then 4. */
     private static final int THROUGHPUT_COUNT = SystemVersion.isSlow() ? 4 : 8;
@@ -217,6 +223,10 @@ public class PeerProfile {
 
     /**
      * Record the packet-loss ratio reported by the transport.
+     * <p>
+     * The reported ratio is folded into the decayed loss score (see
+     * {@link #getLossScore(long)}) so a single clean report does not erase
+     * recent loss history — the score only declines with time.
      *
      * @param ratio retransmitted / transmitted packets, 0.0 = healthy
      * @param now time in ms
@@ -225,7 +235,64 @@ public class PeerProfile {
     public void setLossRatio(float ratio, long now) {
         _lossRatio = ratio;
         _lossRatioLastUpdate = now;
+        _lossScore = Math.max(getLossScore(now), ratio);
+        _lossScoreLastUpdate = now;
     }
+
+    /**
+     * Decayed loss score, the maximum of all loss ratios reported within the
+     * last few hours, with time-based decay (50% per hour since the last
+     * report, capped at 4 hours). Unlike {@link #getLossRatio()} this retains
+     * loss memory when the transport stops reporting, so a demoted peer does
+     * not look clean again merely because its last sample went stale.
+     *
+     * @param now current time in ms
+     * @return the decayed loss score, 0.0 if no loss was ever reported
+     * @since 0.9.71+
+     */
+    public float getLossScore(long now) {
+        if (_lossScore <= 0.0f) return 0.0f;
+        long hoursSinceUpdate = (now - _lossScoreLastUpdate) / (60 * 60 * 1000L);
+        if (hoursSinceUpdate <= 0) return _lossScore;
+        // Decay by 50% per hour, cap at 4 hours (effectively zero)
+        float decay = (float) Math.pow(0.5, Math.min(hoursSinceUpdate, 4));
+        return _lossScore * decay;
+    }
+
+    /**
+     * When the peer was last demoted from the fast/high-cap tiers for packet
+     * loss, or 0 if it was never demoted. Persisted across restarts so loss
+     * probation survives a router reboot.
+     *
+     * @return time of the last loss demotion in ms, or 0
+     * @since 0.9.71+
+     */
+    public long getLossySince() {return _lossySince;}
+
+    /**
+     * Set when the peer is demoted from the fast/high-cap tiers for packet
+     * loss. The peer must then produce fresh clean evidence before it is
+     * re-admitted (see ProfileOrganizer.shouldReadmitLossy).
+     *
+     * @param when demotion time in ms
+     * @since 0.9.71+
+     */
+    public void setLossySince(long when) {_lossySince = when;}
+
+    /**
+     * Clear the loss demotion flag after the peer has been re-admitted.
+     *
+     * @since 0.9.71+
+     */
+    public void clearLossy() {_lossySince = 0;}
+
+    /**
+     * Whether the peer is currently in loss probation.
+     *
+     * @return true if the peer was demoted for packet loss and not yet re-admitted
+     * @since 0.9.71+
+     */
+    public boolean isLossy() {return _lossySince != 0;}
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
