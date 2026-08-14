@@ -380,21 +380,21 @@ public class EstablishmentManager {
 
             if ((!_transport.isValid(maybeTo.getIP())) ||
                 (Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()) && !_transport.allowLocal())) {
-                 _transport.failed(msg, "Peer's IP address isn't valid");
+                _transport.failed(msg, "Peer's IP address isn't valid");
                 _transport.markUnreachable(toHash);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
-                 if (toHash != null) {
-                      if (!isBanned) {
+                if (toHash != null) {
+                    if (!isBanned) {
                         _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", 4*60*60*1000L);
                         _context.banlist().banlistRouter(toHash, "Invalid SSU address", null, null, now + 4*60*60*1000L);
                         if (_log.shouldWarn()) {
-                          _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
-                       }
+                            _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
+                        }
                     }
                 } else {
                     if (_log.shouldWarn()) {
                         _log.warn("Invalid or spoofed SSU address detected for: " + ipAddress + ":" + port);
-                     }
+                    }
                 }
                 return;
             }
@@ -402,33 +402,7 @@ public class EstablishmentManager {
             InboundEstablishState inState = _inboundStates.get(maybeTo);
             if (inState != null) {
                 // we have an inbound establishment in progress, queue it there instead
-                synchronized (inState) {
-                    switch (inState.getState()) {
-                      case IB_STATE_UNKNOWN:
-                      case IB_STATE_REQUEST_RECEIVED:
-                      case IB_STATE_CREATED_SENT:
-                      case IB_STATE_CONFIRMED_PARTIALLY:
-                      case IB_STATE_CONFIRMED_COMPLETELY:
-                      case IB_STATE_TOKEN_REQUEST_RECEIVED:
-                      case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
-                      case IB_STATE_RETRY_SENT:
-                        // queue it
-                        inState.addMessage(msg);
-                        if (_log.shouldDebug())
-                            _log.debug("[SSU] Outbound message queued to InboundEstablishState");
-                        break;
-
-                      case IB_STATE_COMPLETE:
-                        // race, send it out (but don't call _transport.send() again and risk a loop)
-                        _transport.sendIfEstablished(msg);
-                        break;
-
-                      case IB_STATE_FAILED:
-                        // race, failed
-                        _transport.failed(msg, "Outbound message failed during InboundEstablish");
-                        break;
-                    }
-                }
+                queueToInboundState(inState, msg);
                 return;
             }
         }
@@ -447,12 +421,7 @@ public class EstablishmentManager {
         boolean rejected = false;
         int queueCount = 0;
 
-        state = _outboundStates.get(to);
-        if (state == null) {
-            state = _outboundByHash.get(toHash);
-            if (state != null && _log.shouldInfo())
-                _log.info("[SSU] Found by hash: " + state);
-        }
+        state = lookupOutboundState(to, toHash);
         if (state == null) {
             if (queueIfMaxExceeded && _outboundStates.size() >= getMaxConcurrentEstablish()) {
                 if (_queuedOutbound.size() >= MAX_QUEUED_OUTBOUND && !_queuedOutbound.containsKey(to)) {
@@ -478,114 +447,9 @@ public class EstablishmentManager {
                     deferred = _queuedOutbound.size();
                 }
             } else {
-                // must have a valid session key
-                byte[] keyBytes;
-                int version = _transport.getSSUVersion(ra);
-                if (isIndirect && version >= 2 && version <= 4 && ra.getTransportStyle().equals("SSU")) {
-                    boolean v2intros = false;
-                    int count = addr.getIntroducerCount();
-                    for (int i = 0; i < count; i++) {
-                        Hash h = addr.getIntroducerHash(i);
-                        long exp = addr.getIntroducerExpiration(i);
-                        if (h != null && (exp > now || exp == 0)) {
-                            break;
-                        }
-                        if (!v2intros) {
-                            _transport.markUnreachable(toHash);
-                            _transport.failed(msg, "No v2 Introducers");
-                            return;
-                        }
-                    }
-                }
-                if (version >= 2 && version <= 4) {
-                    int mtu = addr.getMTU();
-                    boolean isIPv6 = TransportUtil.isIPv6(ra);
-                    int ourMTU = _transport.getMTU(isIPv6);
-                    if ((mtu > 0 && mtu < PeerState2.MIN_MTU) ||
-                        (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
-                        _transport.markUnreachable(toHash);
-                        _transport.failed(msg, "MTU too small");
-                        if (toHash != null) {
-                            if (!isBanned) {
-                                _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Invalid MTU", 4*60*60*1000L);
-                                _context.banlist().banlistRouter(toHash, "Invalid MTU", null, null, now + 4*60*60*1000L);
-                                if (_log.shouldWarn()) {
-                                    _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid MTU");
-                                }
-                            }
-                         } else if (!ipAddress.isEmpty() && _log.shouldWarn()) {
-                             _log.warn("[SSU] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
-                         }
-                        return;
-                    }
-                }
-                if (version == 1) {keyBytes = null;}
-                else {
-                    String siv = ra.getOption("i");
-                    if (siv != null) {keyBytes = Base64.decode(siv);}
-                    else {keyBytes = null;}
-                }
-                if (keyBytes == null) {
-                    _transport.markUnreachable(toHash);
-                    _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
-                    if (toHash != null) {
-                        if (!isBanned) {
-                        _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "No Introduction key", 60*60*1000L);
-                        _context.banlist().banlistRouter(toHash, "No Introduction key", null, null, now + 60*60*1000L);
-                            if (_log.shouldWarn()) {
-                                _log.warn("[SSU] Banning [" + truncHash + "] for 1h -> No Introduction key");
-                            }
-                        }
-                    } else if (!ipAddress.isEmpty() && _log.shouldWarn()) {
-                                _log.warn("[SSU] Received no Introduction key from: " + ipAddress + ":" + maybePort);
-                    }
-                    return;
-                }
-                SessionKey sessionKey;
-                try {
-                    sessionKey = new SessionKey(keyBytes);
-                } catch (IllegalArgumentException iae) {
-                    _transport.markUnreachable(toHash);
-                    _transport.failed(msg, "Peer has BAD key, cannot establish connection -> Marking unreachable");
-                    if (toHash != null) {
-                        if (!isBanned) {
-                            _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Bad Introduction key", 4*60*60*1000L);
-                            _context.banlist().banlistRouter(toHash, "Bad Introduction key", null, null, now + 4*60*60*1000L);
-                            if (_log.shouldWarn()) {
-                                _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
-                            }
-                        }
-                    } else if (!ipAddress.isEmpty() && _log.shouldWarn()) {
-                            _log.warn("[SSU] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
-                    }
-                    return;
-                }
-                    if (version == 2 || version == 3 || version == 4) {
-                        boolean requestIntroduction = !isIndirect && _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
-                        try {
-                            state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
-                                                                toIdentity, requestIntroduction, sessionKey, ra, addr, version);
-                    } catch (IllegalArgumentException iae) {
-                        if (_log.shouldWarn()) {_log.warn("[SSU] OES2 error: " + toRouterInfo, iae);}
-                        _transport.markUnreachable(toHash);
-                        _transport.failed(msg, iae.getMessage());
-                        return;
-                    }
-                } else {
-                    // shouldn't happen
-                    _transport.failed(msg, "OB to bad addr? " + ra);
-                    return;
-                }
-                OutboundEstablishState oldState = _outboundStates.putIfAbsent(to, state);
-                boolean isNew = oldState == null;
-                if (isNew) {
-                    if (isIndirect && maybeTo != null) {_outboundByClaimedAddress.put(maybeTo, state);}
-                    _outboundByHash.put(toHash, state);
-                    if (_log.shouldDebug()) {_log.debug("[SSU] Adding new Outbound connection to: " + state);}
-                } else {
-                    // whoops, somebody beat us to it, throw out the state we just created
-                    state = oldState;
-                }
+                state = createOutboundState(msg, to, maybeTo, toIdentity, isIndirect, addr, ra,
+                                            toHash, truncHash, ipAddress, maybePort, now, isBanned);
+                if (state == null) {return;}
             }
         }
         if (state != null) {
@@ -616,6 +480,186 @@ public class EstablishmentManager {
         notifyActivity();
     }
 
+    /**
+     *  Queue the message on an inbound establish state that's already in progress,
+     *  or send/fail it immediately if the state is already complete or failed.
+     *
+     *  @param inState non-null
+     */
+    private void queueToInboundState(InboundEstablishState inState, OutNetMessage msg) {
+        synchronized (inState) {
+            switch (inState.getState()) {
+              case IB_STATE_UNKNOWN:
+              case IB_STATE_REQUEST_RECEIVED:
+              case IB_STATE_CREATED_SENT:
+              case IB_STATE_CONFIRMED_PARTIALLY:
+              case IB_STATE_CONFIRMED_COMPLETELY:
+              case IB_STATE_TOKEN_REQUEST_RECEIVED:
+              case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
+              case IB_STATE_RETRY_SENT:
+                // queue it
+                inState.addMessage(msg);
+                if (_log.shouldDebug())
+                    _log.debug("[SSU] Outbound message queued to InboundEstablishState");
+                break;
+
+              case IB_STATE_COMPLETE:
+                // race, send it out (but don't call _transport.send() again and risk a loop)
+                _transport.sendIfEstablished(msg);
+                break;
+
+              case IB_STATE_FAILED:
+                // race, failed
+                _transport.failed(msg, "Outbound message failed during InboundEstablish");
+                break;
+            }
+        }
+    }
+
+    /**
+     *  Look up an existing outbound establish state for the peer, first by
+     *  address, then by hash (for indirect connections).
+     *
+     *  @return the state, or null if none
+     */
+    private OutboundEstablishState lookupOutboundState(RemoteHostId to, Hash toHash) {
+        OutboundEstablishState state = _outboundStates.get(to);
+        if (state == null) {
+            state = _outboundByHash.get(toHash);
+            if (state != null && _log.shouldInfo())
+                _log.info("[SSU] Found by hash: " + state);
+        }
+        return state;
+    }
+
+    /**
+     *  Create a new outbound establish state for the peer, after verifying that
+     *  its introducers, MTU, and introduction key are usable.  On failure, marks
+     *  the peer unreachable and fails the message, banning the peer if it isn't
+     *  already banned.
+     *
+     *  @param to the key in _outboundStates: the claimed address (direct) or the hash (indirect)
+     *  @param maybeTo the claimed address, or null if indirect
+     *  @return the new state, or null if the message was failed
+     */
+    private OutboundEstablishState createOutboundState(OutNetMessage msg, RemoteHostId to,
+                                                       RemoteHostId maybeTo, RouterIdentity toIdentity,
+                                                       boolean isIndirect, UDPAddress addr, RouterAddress ra,
+                                                       Hash toHash, String truncHash, String ipAddress,
+                                                       int maybePort, long now, boolean isBanned) {
+        // must have a valid session key
+        byte[] keyBytes;
+        int version = _transport.getSSUVersion(ra);
+        if (isIndirect && version >= 2 && version <= 4 && ra.getTransportStyle().equals("SSU")) {
+            // need at least one valid v2 introducer to reach the peer
+            boolean v2intros = false;
+            int count = addr.getIntroducerCount();
+            for (int i = 0; i < count; i++) {
+                Hash h = addr.getIntroducerHash(i);
+                long exp = addr.getIntroducerExpiration(i);
+                if (h != null && (exp > now || exp == 0)) {
+                    v2intros = true;
+                    break;
+                }
+            }
+            if (!v2intros) {
+                _transport.markUnreachable(toHash);
+                _transport.failed(msg, "No v2 Introducers");
+                return null;
+            }
+        }
+        if (version >= 2 && version <= 4) {
+            int mtu = addr.getMTU();
+            boolean isIPv6 = TransportUtil.isIPv6(ra);
+            int ourMTU = _transport.getMTU(isIPv6);
+            if ((mtu > 0 && mtu < PeerState2.MIN_MTU) ||
+                (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
+                banAndFail(msg, toHash, "MTU too small", "Invalid MTU", "Router has invalid MTU (too small)",
+                           ipAddress, maybePort, truncHash, 4*60*60*1000L, now, isBanned);
+                return null;
+            }
+        }
+        if (version == 1) {keyBytes = null;}
+        else {
+            String siv = ra.getOption("i");
+            if (siv != null) {keyBytes = Base64.decode(siv);}
+            else {keyBytes = null;}
+        }
+        if (keyBytes == null) {
+            banAndFail(msg, toHash, "Peer has no key, cannot establish connection -> Marking unreachable",
+                       "No Introduction key", "Received no Introduction key from",
+                       ipAddress, maybePort, truncHash, 60*60*1000L, now, isBanned);
+            return null;
+        }
+        SessionKey sessionKey;
+        try {
+            sessionKey = new SessionKey(keyBytes);
+        } catch (IllegalArgumentException iae) {
+            banAndFail(msg, toHash, "Peer has BAD key, cannot establish connection -> Marking unreachable",
+                       "Bad Introduction key", "Received Bad Introduction key from",
+                       ipAddress, maybePort, truncHash, 4*60*60*1000L, now, isBanned);
+            return null;
+        }
+        OutboundEstablishState state;
+        if (version == 2 || version == 3 || version == 4) {
+            boolean requestIntroduction = !isIndirect && _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
+            try {
+                state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
+                                                    toIdentity, requestIntroduction, sessionKey, ra, addr, version);
+            } catch (IllegalArgumentException iae) {
+                if (_log.shouldWarn()) {_log.warn("[SSU] OES2 error: " + msg.getTarget(), iae);}
+                _transport.markUnreachable(toHash);
+                _transport.failed(msg, iae.getMessage());
+                return null;
+            }
+        } else {
+            // shouldn't happen
+            _transport.failed(msg, "OB to bad addr? " + ra);
+            return null;
+        }
+        OutboundEstablishState oldState = _outboundStates.putIfAbsent(to, state);
+        boolean isNew = oldState == null;
+        if (isNew) {
+            if (isIndirect && maybeTo != null) {_outboundByClaimedAddress.put(maybeTo, state);}
+            _outboundByHash.put(toHash, state);
+            if (_log.shouldDebug()) {_log.debug("[SSU] Adding new Outbound connection to: " + state);}
+        } else {
+            // whoops, somebody beat us to it, throw out the state we just created
+            state = oldState;
+        }
+        return state;
+    }
+
+    /**
+     *  Mark the peer unreachable and fail the message.  If the peer is known
+     *  (has a hash) and not already banned, ban it for the given duration and
+     *  log a warning; otherwise warn that the claimed address is bad.
+     *
+     *  @param failReason reason given to the failed message
+     *  @param banReason reason used for the ban and the ban log
+     *  @param noHashWarn warning text used when the peer has no hash
+     *  @param ipAddress the claimed IP, may be empty for indirect peers
+     *  @param port the claimed port
+     *  @param banDuration ban duration in ms, e.g. 4*60*60*1000L
+     */
+    private void banAndFail(OutNetMessage msg, Hash toHash, String failReason, String banReason,
+                            String noHashWarn, String ipAddress, int port, String truncHash,
+                            long banDuration, long now, boolean isBanned) {
+        String ipPort = ipAddress + ":" + port;
+        _transport.markUnreachable(toHash);
+        _transport.failed(msg, failReason);
+        if (toHash != null) {
+            if (!isBanned) {
+                _banLogger.logBan(toHash, ipPort, banReason, banDuration);
+                _context.banlist().banlistRouter(toHash, banReason, null, null, now + banDuration);
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU] Banning [" + truncHash + "] for " + (banDuration / (60*60*1000L)) + "h -> " + banReason);
+                }
+            }
+        } else if (!ipAddress.isEmpty() && _log.shouldWarn()) {
+            _log.warn("[SSU] " + noHashWarn + ": " + ipAddress + ":" + port);
+        }
+    }
     /**
      * How many concurrent inbound sessions to deal with
      * @return the max inbound establishers
