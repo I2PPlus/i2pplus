@@ -799,45 +799,58 @@ public class EepGet {
                 _written++;
                 if ((_markSize > 0) && (_written % _markSize == 0) &&
                     (_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0L)) {
-                    long now = _context.clock().now();
-                    long timeToSend = now - _lastComplete;
-                    double timeInSeconds = timeToSend / 1000.0d;
-                    if (timeToSend > 0) {
-                        StringBuilder buf = new StringBuilder(50);
-                        Formatter fmt = new Formatter(buf);
-                        float received = (float) _written / 1024;
-                        if (received > 1024) {
-                            received = received / 1024;
-                            fmt.format("%3.2f", received);
-                            buf.append("M  ");
-                        } else {
-                            fmt.format("%3.0f", received);
-                            buf.append("K  ");
-                        }
-                        double lineKBytes = ((double)_markSize * (double)_lineSize) / 1024.0d;
-                        double kbps = timeInSeconds > 0 ? lineKBytes / timeInSeconds : 0;
-                        String formattedRate = formatSmoothedValue(kbps, true);
-
-                        // Append the formatted rate (e.g., "4.3KB/s" or "12KB/s")
-                        buf.append(formattedRate);
-                        buf.append("KB/s");
-
-                        if (bytesRemaining > 0) {
-                            double pct = 100 * ((double)_written + _previousWritten) /
-                                         ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
-                            buf.append("  [");
-                            fmt.format("%4.1f", Double.valueOf(pct));
-                            buf.append("%]");
-                        }
-                        if (SystemVersion.isWindows())
-                            System.out.println(" ◼ " + buf.toString());
-                        else
-                            System.out.println("\033[1A\033[K\r ◼ " + buf.toString());
-                        fmt.close();
-                    }
-                    _lastComplete = now;
+                    formatProgressLine(bytesRemaining, alreadyTransferred, currentWrite);
                 }
             }
+        }
+
+        /**
+         * Prints one progress line: total received so far and the current transfer rate,
+         * throttled to one line per mark x line size bytes. Uses terminal control
+         * sequences to overwrite the previous line.
+         *
+         * @param bytesRemaining total bytes remaining, or -1 if unknown
+         * @param alreadyTransferred bytes already transferred
+         * @param currentWrite current write count
+         */
+        private void formatProgressLine(long bytesRemaining, long alreadyTransferred, int currentWrite) {
+            long now = _context.clock().now();
+            long timeToSend = now - _lastComplete;
+            double timeInSeconds = timeToSend / 1000.0d;
+            if (timeToSend > 0) {
+                StringBuilder buf = new StringBuilder(50);
+                Formatter fmt = new Formatter(buf);
+                float received = (float) _written / 1024;
+                if (received > 1024) {
+                    received = received / 1024;
+                    fmt.format("%3.2f", received);
+                    buf.append("M  ");
+                } else {
+                    fmt.format("%3.0f", received);
+                    buf.append("K  ");
+                }
+                double lineKBytes = ((double)_markSize * (double)_lineSize) / 1024.0d;
+                double kbps = timeInSeconds > 0 ? lineKBytes / timeInSeconds : 0;
+                String formattedRate = formatSmoothedValue(kbps, true);
+
+                // Append the formatted rate (e.g., "4.3KB/s" or "12KB/s")
+                buf.append(formattedRate);
+                buf.append("KB/s");
+
+                if (bytesRemaining > 0) {
+                    double pct = 100 * ((double)_written + _previousWritten) /
+                                 ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
+                    buf.append("  [");
+                    fmt.format("%4.1f", Double.valueOf(pct));
+                    buf.append("%]");
+                }
+                if (SystemVersion.isWindows())
+                    System.out.println(" ◼ " + buf.toString());
+                else
+                    System.out.println("\033[1A\033[K\r ◼ " + buf.toString());
+                fmt.close();
+            }
+            _lastComplete = now;
         }
 
         /**
@@ -1153,156 +1166,7 @@ public class EepGet {
 
         if (_redirectLocation != null) {
             // we also are here after a 407
-            try {
-                if (_redirectLocation.startsWith("http://")) {
-                    _actualURL = _redirectLocation;
-                } else if (_redirectLocation.startsWith("https://")) {
-                    // _proxy is the socket. It is null when extended by I2PSocketEepGet
-                    if (_proxy == null)
-                        throw new IOException("Redirect to https unsupported");
-                    if (_postData != null)
-                        throw new IOException("Redirect to https unsupported");
-                    try {
-                        _proxy.close();
-                        _proxy = null;
-                    } catch (IOException ioe) { /* ignored */ }
-                    if (timeout != null)
-                        timeout.cancel();
-                    EepGet get;
-                    if (_shouldProxy) {
-                        if (_authState != null)
-                            throw new IOException("Redirect to https with proxy auth unsupported");
-                        if (_outputStream != null)
-                            get = new SSLEepGet(_context, SSLEepGet.ProxyType.HTTP, _proxyHost, _proxyPort, _outputStream, _redirectLocation);
-                        else
-                            get = new SSLEepGet(_context, SSLEepGet.ProxyType.HTTP, _proxyHost, _proxyPort, _outputFile, _redirectLocation);
-                    } else {
-                        if (_outputStream != null)
-                            get = new SSLEepGet(_context, _outputStream, _redirectLocation);
-                        else
-                            get = new SSLEepGet(_context, _outputFile, _redirectLocation);
-                    }
-                    if (_shouldWriteErrorToOutput)
-                        get.setWriteErrorToOutput();
-                    if (_extraHeaders != null) {
-                        for (String s : _extraHeaders) {
-                            String[] kv = DataHelper.split(s, ":", 2);
-                            if (kv.length == 2)
-                                get.addHeader(kv[0].trim(), kv[1].trim());
-                        }
-                    }
-                    synchronized (_listeners) {
-                        for (StatusListener sl : _listeners) {
-                            get.addStatusListener(sl);
-                        }
-                    }
-                    _actualURL = _redirectLocation;
-                    // reset some important variables, we don't want to save the values from the redirect
-                    _bytesRemaining = -1;
-                    _redirectLocation = null;
-                    _etag = _etagOrig;
-                    _lastModified = _lastModifiedOrig;
-                    _contentType = null;
-                    _contentLanguage = null;
-                    _server = null;
-                    _status = null;
-                    _encodingChunked = false;
-                    _contentEncoding = null;
-                    _transferEncoding = null;
-                    _cacheControl = null;
-                    _acceptRanges = null;
-                    _vary = null;
-                    _expiryDate = null;
-                    _cookie = null;
-                    _referrerPolicy = null;
-                    _xframeOptions = null;
-                    _csp = null;
-                    _xssProtection = null;
-                    _xContentTypeOptions = null;
-                    _xPoweredBy = null;
-                    // TODO auth?
-                    // minSize/maxSize/maxRetries discarded
-                    _transferFailed = !get.fetch(_fetchHeaderTimeout, -1, _fetchInactivityTimeout);
-                    _keepFetching = false;
-                    // fixup the getters
-                    _responseCode = get.getStatusCode();
-                    _responseText = get.getStatusText();
-                    _contentType = get.getContentType();
-                    _server = get.getServer();
-                    _status = get.getStatus();
-                    _transferEncoding = get.getTransferEncoding();
-                    _contentEncoding = get.getContentEncoding();
-                    _contentLanguage = get.getContentLanguage();
-                    _cacheControl = get.getCacheControl();
-                    _acceptRanges = get.getAcceptRanges();
-                    _vary = get.getVary();
-                    _expiryDate = get.getExpiryDate();
-                    _etag = get.getEtag();
-                    _lastModified = get.getLastModified();
-                    _notModified = get.getNotModified();
-                    _cookie = get.getCookie();
-                    _referrerPolicy = get.getReferrerPolicy();
-                    _xframeOptions = get.getXframeOptions();
-                    _csp = get.getCSP();
-                    _xssProtection = get.getXSSProtection();
-                    _xContentTypeOptions = get.getXContentTypeOptions();
-                    _xPoweredBy = get.getXPoweredBy();
-                    return;
-                } else {
-                    // the Location: field has been required to be an absolute URI at least since
-                    // RFC 1945 (HTTP/1.0 1996), so it isn't clear what the point of this is.
-                    // This oddly adds a ":" even if no port, but that seems to work.
-                    URI url = new URI(_actualURL);
-                    String host = url.getHost();
-                    if (host == null)
-                        throw new MalformedURLException("Redirected to invalid URL");
-                    int port = url.getPort();
-                    if (port < 0)
-                        port = 80;
-                    if (_redirectLocation.startsWith("/"))
-                        _actualURL = "http://" + host + ":" + port + _redirectLocation;
-                    else
-                        // this blows up completely on a redirect to https://, for example
-                        _actualURL = "http://" + host+ ":" + port + "/" + _redirectLocation;
-                }
-            } catch (URISyntaxException use) {
-                IOException ioe = new MalformedURLException("Redirected to invalid URL");
-                ioe.initCause(use);
-                throw ioe;
-            }
-
-            AuthState as = _authState;
-            if (_responseCode == 407) {
-                if (!_shouldProxy)
-                    throw new IOException("Proxy auth response from non-proxy");
-                if (as == null)
-                    throw new IOException("Proxy requires authentication");
-                if (as.authSent)
-                    throw new IOException("Proxy authentication failed");  // ignore stale
-                if (_log.shouldInfo()) _log.info("Adding auth");
-                // actually happens in getRequest()
-            } else {
-                _redirects.incrementAndGet();
-                if (_redirects.get() > 5) {
-                    String redirectURL = _redirectLocation;
-                    if (redirectURL.startsWith("http://")) {redirectURL = redirectURL.substring(7, redirectURL.length());}
-                    if (redirectURL.contains("b32.i2p")) {redirectURL = redirectURL.substring(0,32) + "...";}
-                    throw new IOException("Too many redirects to " + redirectURL);
-                }
-                if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
-                if (as != null)
-                    as.authSent = false;
-            }
-
-            // reset some important variables, we don't want to save the values from the redirect
-            _bytesRemaining = -1;
-            _redirectLocation = null;
-            _etag = _etagOrig;
-            _lastModified = _lastModifiedOrig;
-            _contentType = null;
-            _encodingChunked = false;
-            sendRequest(timeout);
-            doFetch(timeout);
+            followRedirect(timeout);
             return;
         }
 
@@ -1848,25 +1712,173 @@ public class EepGet {
     private static final byte NL = '\n';
 
     /**
-     *  Open connection and send HTTP request.
+     * Handles a redirect or proxy-auth response, either transferring control to a new
+     * (possibly https) fetch or fixing up the URL and retrying.
      *
-     *  @param timeout may be null
-     *  @throws IOException on IO error
+     * Also reached after a 407 proxy-auth response, to retry through the proxy.
+     *
+     * @param timeout the fetch timeout, may be null
+     * @throws IOException on invalid redirect or auth failure
      */
-    protected void sendRequest(SocketTimeout timeout) throws IOException {
-        if (_outputStream != null) {
-            // We are reading into a stream supplied by a caller,
-            // for which we cannot easily determine how much we've written.
-            // Assume that _alreadyTransferred holds the right value
-            // (we should never be restarted to work on an old stream).
-        } else {
-            File outFile = new File(_outputFile);
-            if (outFile.exists())
-                _alreadyTransferred = outFile.length();
+    private void followRedirect(SocketTimeout timeout) throws IOException {
+        try {
+            if (_redirectLocation.startsWith("http://")) {
+                _actualURL = _redirectLocation;
+            } else if (_redirectLocation.startsWith("https://")) {
+                // _proxy is the socket. It is null when extended by I2PSocketEepGet
+                if (_proxy == null)
+                    throw new IOException("Redirect to https unsupported");
+                if (_postData != null)
+                    throw new IOException("Redirect to https unsupported");
+                try {
+                    _proxy.close();
+                    _proxy = null;
+                } catch (IOException ioe) { /* ignored */ }
+                if (timeout != null)
+                    timeout.cancel();
+                EepGet get;
+                if (_shouldProxy) {
+                    if (_authState != null)
+                        throw new IOException("Redirect to https with proxy auth unsupported");
+                    if (_outputStream != null)
+                        get = new SSLEepGet(_context, SSLEepGet.ProxyType.HTTP, _proxyHost, _proxyPort, _outputStream, _redirectLocation);
+                    else
+                        get = new SSLEepGet(_context, SSLEepGet.ProxyType.HTTP, _proxyHost, _proxyPort, _outputFile, _redirectLocation);
+                } else {
+                    if (_outputStream != null)
+                        get = new SSLEepGet(_context, _outputStream, _redirectLocation);
+                    else
+                        get = new SSLEepGet(_context, _outputFile, _redirectLocation);
+                }
+                if (_shouldWriteErrorToOutput)
+                    get.setWriteErrorToOutput();
+                if (_extraHeaders != null) {
+                    for (String s : _extraHeaders) {
+                        String[] kv = DataHelper.split(s, ":", 2);
+                        if (kv.length == 2)
+                            get.addHeader(kv[0].trim(), kv[1].trim());
+                    }
+                }
+                synchronized (_listeners) {
+                    for (StatusListener sl : _listeners) {
+                        get.addStatusListener(sl);
+                    }
+                }
+                _actualURL = _redirectLocation;
+                // reset some important variables, we don't want to save the values from the redirect
+                _bytesRemaining = -1;
+                _redirectLocation = null;
+                _etag = _etagOrig;
+                _lastModified = _lastModifiedOrig;
+                _contentType = null;
+                _contentLanguage = null;
+                _server = null;
+                _status = null;
+                _encodingChunked = false;
+                _contentEncoding = null;
+                _transferEncoding = null;
+                _cacheControl = null;
+                _acceptRanges = null;
+                _vary = null;
+                _expiryDate = null;
+                _cookie = null;
+                _referrerPolicy = null;
+                _xframeOptions = null;
+                _csp = null;
+                _xssProtection = null;
+                _xContentTypeOptions = null;
+                _xPoweredBy = null;
+                // TODO auth?
+                // minSize/maxSize/maxRetries discarded
+                _transferFailed = !get.fetch(_fetchHeaderTimeout, -1, _fetchInactivityTimeout);
+                _keepFetching = false;
+                // fixup the getters
+                _responseCode = get.getStatusCode();
+                _responseText = get.getStatusText();
+                _contentType = get.getContentType();
+                _server = get.getServer();
+                _status = get.getStatus();
+                _transferEncoding = get.getTransferEncoding();
+                _contentEncoding = get.getContentEncoding();
+                _contentLanguage = get.getContentLanguage();
+                _cacheControl = get.getCacheControl();
+                _acceptRanges = get.getAcceptRanges();
+                _vary = get.getVary();
+                _expiryDate = get.getExpiryDate();
+                _etag = get.getEtag();
+                _lastModified = get.getLastModified();
+                _notModified = get.getNotModified();
+                _cookie = get.getCookie();
+                _referrerPolicy = get.getReferrerPolicy();
+                _xframeOptions = get.getXframeOptions();
+                _csp = get.getCSP();
+                _xssProtection = get.getXSSProtection();
+                _xContentTypeOptions = get.getXContentTypeOptions();
+                _xPoweredBy = get.getXPoweredBy();
+                return;
+            } else {
+                // the Location: field has been required to be an absolute URI at least since
+                // RFC 1945 (HTTP/1.0 1996), so it isn't clear what the point of this is.
+                // This oddly adds a ":" even if no port, but that seems to work.
+                URI url = new URI(_actualURL);
+                String host = url.getHost();
+                if (host == null)
+                    throw new MalformedURLException("Redirected to invalid URL");
+                int port = url.getPort();
+                if (port < 0)
+                    port = 80;
+                if (_redirectLocation.startsWith("/"))
+                    _actualURL = "http://" + host + ":" + port + _redirectLocation;
+                else
+                    // this blows up completely on a redirect to https://, for example
+                    _actualURL = "http://" + host+ ":" + port + "/" + _redirectLocation;
+            }
+        } catch (URISyntaxException use) {
+            IOException ioe = new MalformedURLException("Redirected to invalid URL");
+            ioe.initCause(use);
+            throw ioe;
         }
 
-        String req = getRequest();
+        AuthState as = _authState;
+        if (_responseCode == 407) {
+            if (!_shouldProxy)
+                throw new IOException("Proxy auth response from non-proxy");
+            if (as == null)
+                throw new IOException("Proxy requires authentication");
+            if (as.authSent)
+                throw new IOException("Proxy authentication failed");  // ignore stale
+            if (_log.shouldInfo()) _log.info("Adding auth");
+            // actually happens in getRequest()
+        } else {
+            _redirects.incrementAndGet();
+            if (_redirects.get() > 5) {
+                String redirectURL = _redirectLocation;
+                if (redirectURL.startsWith("http://")) {redirectURL = redirectURL.substring(7, redirectURL.length());}
+                if (redirectURL.contains("b32.i2p")) {redirectURL = redirectURL.substring(0,32) + "...";}
+                throw new IOException("Too many redirects to " + redirectURL);
+            }
+            if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
+            if (as != null)
+                as.authSent = false;
+        }
 
+        // reset some important variables, we don't want to save the values from the redirect
+        _bytesRemaining = -1;
+        _redirectLocation = null;
+        _etag = _etagOrig;
+        _lastModified = _lastModifiedOrig;
+        _contentType = null;
+        _encodingChunked = false;
+        sendRequest(timeout);
+        doFetch(timeout);
+    }
+
+    /**
+     * Opens the connection to the proxy or the destination host.
+     *
+     * @throws IOException on connect failure
+     */
+    private void openConnection() throws IOException {
         if (_proxyIn != null) try { _proxyIn.close(); } catch (IOException ioe) { /* ignored */ }
         if (_proxyOut != null) try { _proxyOut.close(); } catch (IOException ioe) { /* ignored */ }
         if (_proxy != null) try { _proxy.close(); } catch (IOException ioe) { /* ignored */ }
@@ -1916,6 +1928,29 @@ public class EepGet {
                 throw ioe;
             }
         }
+    }
+
+    /**
+     *  Open connection and send HTTP request.
+     *
+     *  @param timeout may be null
+     *  @throws IOException on IO error
+     */
+    protected void sendRequest(SocketTimeout timeout) throws IOException {
+        if (_outputStream != null) {
+            // We are reading into a stream supplied by a caller,
+            // for which we cannot easily determine how much we've written.
+            // Assume that _alreadyTransferred holds the right value
+            // (we should never be restarted to work on an old stream).
+        } else {
+            File outFile = new File(_outputFile);
+            if (outFile.exists())
+                _alreadyTransferred = outFile.length();
+        }
+
+        String req = getRequest();
+
+        openConnection();
         _proxyIn = _proxy.getInputStream();
         if (!(_proxy instanceof InternalSocket))
               _proxyIn = new BufferedInputStream(_proxyIn);
