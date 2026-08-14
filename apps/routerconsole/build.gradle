@@ -13,6 +13,11 @@ sourceSets {
             srcDir "$buildDir/messages-news-src"
         }
     }
+    test {
+        java {
+            srcDir 'java/test/junit'
+        }
+    }
 }
 
 dependencies {
@@ -53,13 +58,14 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
         classpath = java.sourceSets.test.runtimeClasspath
     }
 
+    // The i2ptunnel project ships its jar via the custom i2ptunnelJar task
+    // (default jar disabled); the test classpath uses it as an artifact.
+    test.dependsOn ':apps:i2ptunnel:i2ptunnelJar'
+
     // java.lang.NullPointerException:
     //  at net.i2p.router.update.PluginUpdateHandler.<init>(PluginUpdateHandler.java:36)
     //  at net.i2p.router.update.PluginUpdateHandlerSpec.pluginUpdateHandler(PluginUpdateHandlerSpec.scala:19)
     //test.dependsOn scalaTest
-    
-    // Disable test task due to no discoverable tests
-    test.onlyIf { false }
 }
 
 // Create the java files from the po files. The jar task will compile them.

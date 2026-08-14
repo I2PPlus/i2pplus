@@ -104,7 +104,31 @@ subprojects {
         // are not runnable JUnit classes and are skipped.
         setIncludes(['**/*Test.class'])
         exclude '**/*$*'
+
+        // Write JUnit XML into the same layout as the ant suite (run-tests.sh):
+        // /tmp/test-i2p/<module>/junit, outside the workspace. The aggregate
+        // testReport task below renders dist/test-report.html from these.
+        def junitDir = file("${System.getProperty('java.io.tmpdir')}/test-i2p/${project.name}/junit")
+        reports.junitXml.outputLocation.set(junitDir)
+        doFirst { junitDir.deleteDir() }
     }
+}
+
+// Consolidated HTML report, identical to the ant `test` target's artifact:
+// aggregates each module's JUnit XML (written to /tmp/test-i2p/<module>/junit
+// by the subproject test tasks, which run in parallel via org.gradle.parallel)
+// with the shared tools/test/unit-tests-to-html.py generator.
+def subprojectTestTasks = subprojects.findAll { it.name != 'apps' }.collect { it.tasks.named('test') }
+
+tasks.register('testReport', Exec) {
+    dependsOn subprojectTestTasks
+    def resultsDir = "${System.getProperty('java.io.tmpdir')}/test-i2p"
+    def report = file("${rootDir}/dist/test-report.html")
+    commandLine 'python3', "${rootDir}/tools/test/unit-tests-to-html.py", resultsDir, report
+}
+
+tasks.named('test') {
+    dependsOn tasks.named('testReport')
 }
 
 task codeCoverageReport(type: JacocoReport) {
