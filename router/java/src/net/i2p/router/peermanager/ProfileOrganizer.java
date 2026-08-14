@@ -2324,6 +2324,20 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Median loss ratio of the union of the fast and high-capacity tiers with a
+     * fresh measurement, as a fraction (0.0 - 1.0); 0.0 if none. The median is
+     * robust to the worst peers dragging the mean up, so the auto-tuned demotion
+     * threshold tracks the typical tier member. See {@link #getAverageLossRatio()}.
+     *
+     * @since 0.9.71+
+     */
+    public float getMedianLossRatio() {
+        if (!tryReadLock()) return 0.0f;
+        try {return medianLossRatio(_fastPeers, _highCapacityPeers);}
+        finally {releaseReadLock();}
+    }
+
+    /**
      * Mean loss ratio of the union of the given tiers, restricted to profiles
      * with a measurement fresh within {@link #PROP_LOSSY_WINDOW}.
      *
@@ -2332,22 +2346,51 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private float averageLossRatio(Map<Hash, PeerProfile>... tiers) {
+        List<Float> ratios = freshLossRatios(tiers);
+        if (ratios.isEmpty()) return 0.0f;
+        float sum = 0.0f;
+        for (float ratio : ratios) sum += ratio;
+        return sum / ratios.size();
+    }
+
+    /**
+     * Median loss ratio of the union of the given tiers, restricted to profiles
+     * with a measurement fresh within {@link #PROP_LOSSY_WINDOW}.
+     *
+     * @param tiers the tier maps to average over
+     * @return the median as a fraction, 0.0 if no fresh data
+     * @since 0.9.71+
+     */
+    private float medianLossRatio(Map<Hash, PeerProfile>... tiers) {
+        List<Float> ratios = freshLossRatios(tiers);
+        int n = ratios.size();
+        if (n == 0) return 0.0f;
+        return n % 2 == 1 ? ratios.get(n / 2) : (ratios.get(n / 2 - 1) + ratios.get(n / 2)) / 2.0f;
+    }
+
+    /**
+     * Fresh loss ratios (positive and within {@link #PROP_LOSSY_WINDOW}) of the
+     * union of the given tiers, sorted ascending; empty if none.
+     *
+     * @param tiers the tier maps to sample from
+     * @return the sorted fresh ratios
+     * @since 0.9.71+
+     */
+    private List<Float> freshLossRatios(Map<Hash, PeerProfile>... tiers) {
         long now = _context.clock().now();
         long window = _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW);
-        float sum = 0.0f;
-        int count = 0;
         Set<Hash> seen = new HashSet<>();
+        List<Float> rv = new ArrayList<>();
         for (Map<Hash, PeerProfile> tier : tiers) {
             for (Map.Entry<Hash, PeerProfile> e : tier.entrySet()) {
                 if (!seen.add(e.getKey())) continue;
                 float ratio = e.getValue().getLossRatio();
-                if (ratio > 0.0f && now - e.getValue().getLossRatioLastUpdate() < window) {
-                    sum += ratio;
-                    count++;
-                }
+                if (ratio > 0.0f && now - e.getValue().getLossRatioLastUpdate() < window)
+                    rv.add(ratio);
             }
         }
-        return count > 0 ? sum / count : 0.0f;
+        rv.sort(Float::compare);
+        return rv;
     }
 
     /**

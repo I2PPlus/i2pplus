@@ -7792,10 +7792,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * Dynamic version of {@link ProfileOrganizer#PROP_LOSSY_THRESHOLD}: the demotion
      * bar is set from the average loss ratio measured across all peers with fresh
-     * loss data, multiplied by the loss factor property (default 2.0), clamped to the
-     * configured min/max range. On a clean network the average is near zero and the
+     * loss data, multiplied by the loss factor property (default 1.5), clamped to the
+     * configured min/max range. On a clean network the median is near zero and the
      * threshold sits at the configured floor; on a lossy network it rises with the
-     * average so only peers meaningfully worse than the network are demoted.
+     * median so only peers meaningfully worse than the typical tier member are demoted.
      *
      * @since 0.9.71+
      */
@@ -7826,14 +7826,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
-            return _context.profileOrganizer().getAverageLossRatio() * 100.0;
+            return _context.profileOrganizer().getMedianLossRatio() * 100.0;
         }
 
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             // No fresh loss data anywhere: keep the current value, don't chase noise
             if (observed <= 0.0) return getRuntimeValue();
-            float factor = _context.getProperty(PROP_LOSSY_FACTOR, 2.0f);
+            float factor = _context.getProperty(PROP_LOSSY_FACTOR, 1.5f);
             double target = observed * factor;
             return (int) Math.max(_min, Math.min(_max, Math.round(target)));
         }
