@@ -721,7 +721,7 @@ out.write(graph.getRrdGraphInfo().getBytes());
         for (Map.Entry<String, String> entry : TITLE_REPLACEMENTS) {
             if (entry.getKey().endsWith(".") || entry.getKey().endsWith(" ")) {
                 if (graphTitle.startsWith(entry.getKey())) {
-                    graphTitle = entry.getValue() + graphTitle.substring(entry.getKey().length());
+                    graphTitle = entry.getValue().concat(graphTitle.substring(entry.getKey().length()));
                     break; // longest prefix matched, stop
                 }
             } else {
