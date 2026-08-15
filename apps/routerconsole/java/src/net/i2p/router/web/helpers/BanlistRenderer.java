@@ -9,6 +9,7 @@ package net.i2p.router.web.helpers;
  */
 
 import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -105,7 +106,7 @@ class BanlistRenderer {
         return new Object[] { ipMap, hostnameMap, capsMap, ipBans, versionMap };
         }
         long now = _context.clock().now();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(logFile)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
