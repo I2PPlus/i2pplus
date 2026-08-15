@@ -542,7 +542,8 @@ class MailCache {
                         mail.setBody(pr.getBuffer());
                     }
                     if (setAdditional)
-                        additionalMsg = "\n\n" + mail.sender + '\n' + mail.subject;
+                        additionalMsg = new StringBuilder(mail.sender.length() + mail.subject.length() + 3)
+                            .append("\n\n").append(mail.sender).append('\n').append(mail.subject).toString();
                     rv = true;
                     if (disk.saveMail(mail) && mail.hasBody() &&
                         !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
