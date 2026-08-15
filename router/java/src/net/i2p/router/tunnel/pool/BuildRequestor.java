@@ -145,6 +145,22 @@ public abstract class BuildRequestor {
     }
 
     /**
+     *  The peer that will receive the tunnel build request (TBM): the
+     *  gateway (peer 0) for inbound tunnels, or the next hop (peer 1) for
+     *  outbound tunnels.  BuildExecutor's per-peer pacing guard must target
+     *  the same peer the dispatch code sends the request to, so both use
+     *  this single derivation.
+     *
+     *  @param cfg non-null, must have length &gt; 1 (zero-hop builds never
+     *             reach the dispatcher)
+     *  @return the dispatch target peer
+     *  @since 0.9.71+
+     */
+    public static Hash getBuildRequestPeer(PooledTunnelCreatorConfig cfg) {
+        return cfg.isInbound() ? cfg.getPeer(0) : cfg.getPeer(1);
+    }
+
+    /**
      * Base expiration for the TunnelBuildMessage itself.
      * Randomized per-message by +/- 20s jitter to obscure tunnel length.
      */
@@ -367,7 +383,7 @@ public abstract class BuildRequestor {
 
     private static void handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
                                            TunnelInfo pairedTunnel, I2NPMessage msg, Log log) {
-        Hash ibgw = cfg.getPeer(0);
+        Hash ibgw = getBuildRequestPeer(cfg);
         // Wrap in garlic if IBGW != OBEP (to hide IBGW from OBEP)
         if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !ibgw.equals(pairedTunnel.getEndpoint())) {
             RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
@@ -394,7 +410,7 @@ public abstract class BuildRequestor {
     private static void handleOutboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
                                              TunnelInfo pairedTunnel, I2NPMessage msg,
                                              BuildExecutor exec, Log log, long firstHopTimeout) {
-        Hash nextHop = cfg.getPeer(1);
+        Hash nextHop = getBuildRequestPeer(cfg);
 
         // Add fuzz to expiration to obscure tunnel structure
         msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000L));

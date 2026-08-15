@@ -48,26 +48,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
     }
 
 
-    /** Per-pool cooldown map so one pool's selections don't starve another's. */
-    private static final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<>();
-
-    private static String formatExcludedPeers(Set<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
-        if (peers instanceof Excluder) {
-            return ((Excluder) peers).formatByReasonWithPeers();
-        }
-        if (peers instanceof ExcluderBase) {
-            return ((ExcluderBase) peers).getReasonsSummary();
-        }
-        StringBuilder sb = new StringBuilder(peers.size() * 10);
-        int count = 0;
-        for (Hash h : peers) {
-            if (count % 12 == 0) {sb.append("\n* ");}
-            sb.append('[').append(h.toBase64(), 0, 6).append("] ");
-            count++;
-        }
-        return sb.toString();
-    }
+    /**
+     *  Cooldown entries for client selections, recorded when checkTunnel
+     *  fails.  Only failures are recorded — successful selections never
+     *  cooldown peers.  A single selector instance serves all client pools.
+     *  @since 0.9.71+
+     */
+    private final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<>();
 
     private static String formatPeerList(List<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[empty]";}
@@ -132,8 +119,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     rv = selectMultiHop(settings, length, params, ex, matches);
                     if (rv == null) {return Collections.emptyList();}
                 }
-                if (log.shouldInfo()) {
-                    log.info("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
+                if (log.shouldDebug()) {
+                    log.debug("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
                               ", " + ex.excluder.getReasonsSummary() +
                              "\n* Cooldowns: " + ex.cooldownExcluded + " client(" + _clientCooldowns.size() +
                              "), " + ex.peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
@@ -207,7 +194,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         Excluder excluder = new Excluder(isInbound, false);
         Set<Hash> exclude = excluder;
 
-        // Exclude recently-selected peers to ensure diversity across client pools
+        // Exclude peers recorded on checkTunnel failure (client pool cooldown)
         long nowCooldown = ctx.clock().now();
         long cooldownCutoff = nowCooldown - getClientCooldownMs();
         int cooldownExcluded = 0;
@@ -1029,15 +1016,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                 }
                 rv = null;
-            }
-        }
-        // Record selection cooldown for all selected peers (excluding self)
-        if (rv != null && rv.size() > 1) {
-            long now = ctx.clock().now();
-            for (Hash peer : rv) {
-                if (!peer.equals(ctx.routerHash())) {
-                    _clientCooldowns.put(peer, now);
-                }
             }
         }
         if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}

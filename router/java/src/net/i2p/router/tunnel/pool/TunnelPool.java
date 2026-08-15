@@ -103,6 +103,8 @@ public class TunnelPool {
      */
     private volatile int _consecutiveEmergencies = 0;
     private static final int MAX_EMERGENCY_BOOST = 10;
+    /** Last time buildFallback() logged its zero-hop-refusal warning, to rate-limit it */
+    private volatile long _lastFallbackWarnTime;
     /**
      *  Extra tunnels maintained while the pool is struggling, so LeaseSet
      *  publication always has fresh candidates instead of re-signing the
@@ -1098,9 +1100,10 @@ public class TunnelPool {
 
     /**
      *  Remove a config that was never actually sent to the network (e.g. a
-     *  build skipped by the executor's pacing gate). Unlike buildComplete(),
-     *  no result accounting, peer cooldowns, or profile updates occur; the
-     *  pool's deficit logic will simply request the tunnel again later.
+     *  build skipped because the first-hop peer already had a build in flight).
+     *  Unlike buildComplete(), no result accounting, peer cooldowns, or
+     *  profile updates occur; the pool's deficit logic will simply request
+     *  the tunnel again later.
      *
      *  @param cfg the config to remove from the in-progress list
      *  @since 0.9.70
@@ -1564,8 +1567,8 @@ public class TunnelPool {
                                        int usable, int maxUsable, int target) {
         if (usable >= maxUsable) {
             if (!replaceNonGoodTunnel(info, gatewayId, now, usable, maxUsable, target)) {
-                if (_log.shouldInfo()) {
-                    _log.info(toString() + " -> Pool at capacity, all tunnels GOOD (" +
+                if (_log.shouldDebug()) {
+                    _log.debug(toString() + " -> Pool at capacity, all tunnels GOOD (" +
                               usable + " >= max " + maxUsable + ", target=" + target +
                               ") \n* " + info);
                 }
@@ -2642,6 +2645,9 @@ public class TunnelPool {
     /**
      *  This will build a fallback (zero-hop) tunnel ONLY if
      *  this pool is exploratory, or the settings allow it.
+     *  Matches upstream: client pools with zero-hop disabled must
+     *  never fall back to 0-hop, since such a tunnel would be
+     *  selected for data and would fail every connection through it.
      *
      *  @return true if a fallback tunnel is built, false otherwise
      */
@@ -2649,9 +2655,23 @@ public class TunnelPool {
         if (!_alive) {return false;}
         int usable = getValidTunnelCount();
         if (usable > 0) {return false;}
+        if (!_settings.isExploratory() && !_settings.getAllowZeroHop()) {
+            // Only warn when nothing is being built — if replacement builds are
+            // in flight this is transient and would spam the log.  Rate-limit
+            // to once per 30s regardless, since a collapsed pool that keeps
+            // failing selection otherwise floods the log (observed 940 lines).
+            if (_log.shouldWarn() && getInProgressCount() <= 0) {
+                long now = _context.clock().now();
+                if (now - _lastFallbackWarnTime > 30_000L) {
+                    _lastFallbackWarnTime = now;
+                    _log.warn(toString() + "\n* Refusing to build a fallback (zero-hop) tunnel for a non-exploratory pool with zero-hop disabled (usable: " + usable + ")");
+                }
+            }
+            return false;
+        }
 
         if (_log.shouldInfo()) {
-            _log.info(toString() + "\n* Building a fallback tunnel");
+            _log.info(toString() + "\n* Building a fallback tunnel (usable: " + usable + ")");
         }
         // runs inline, since its 0hop
         _manager.getExecutor().buildTunnel(configureNewTunnel(true));
@@ -3419,7 +3439,10 @@ public class TunnelPool {
                            " replacements (deficit=" + deficit + ", ip=" + currentInProgress + ")" + boost);
             }
             _lastDeficitBuildTime = now;
-            buildReplacementTunnels(needed);
+            // Collapsed pools (zero safe, tunnels expiring) are effectively
+            // in emergency — bypass the per-peer in-flight guard so recovery
+            // builds always go out.
+            buildReplacementTunnels(needed, collapsed);
         }
     }
 
@@ -3500,7 +3523,7 @@ public class TunnelPool {
             _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels, " +
                       "forcing " + needed + " replacement builds" + boost);
         }
-        buildReplacementTunnels(needed);
+        buildReplacementTunnels(needed, true);
     }
 
     /**
@@ -3651,7 +3674,7 @@ public class TunnelPool {
                 _log.info(toString() + " -> Fresh build: " + fresh + "/" + target +
                           " leases fresh, building " + needed + " replacement(s) for re-mint");
             }
-            buildReplacementTunnels(needed);
+            buildReplacementTunnels(needed, false);
         } finally { _ensuringTunnels.set(false); }
     }
 
@@ -3729,11 +3752,16 @@ public class TunnelPool {
     /**
      *  Build the requested number of replacement tunnels, skipping any
      *  configuration failures.
+     *
+     *  @param bypassPacing if true, mark each build as emergency recovery so
+     *  it bypasses the executor's per-peer in-flight guard — used when the
+     *  pool has zero usable tunnels and every build must go out now
      */
-    private void buildReplacementTunnels(int needed) {
+    private void buildReplacementTunnels(int needed, boolean bypassPacing) {
         for (int i = 0; i < needed; i++) {
             PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
             if (cfg != null) {
+                if (bypassPacing) {cfg.setBypassPacing();}
                 _manager.getExecutor().buildTunnel(cfg);
             }
         }

@@ -802,7 +802,7 @@ Long tunnelKey = getTunnelKey(cfg);
                     TunnelPool paired = _pool.getPairedPool();
                     if (paired != null) {
                         for (TunnelInfo t : paired.listTunnels()) {
-                            if (t.getExpiration() > now) {
+                            if (t.getExpiration() > now && t.getLength() > 1) {
                                 _outTunnel = t;
                                 break;
                             }
@@ -874,7 +874,7 @@ Long tunnelKey = getTunnelKey(cfg);
                     TunnelPool paired = _pool.getPairedPool();
                     if (paired != null) {
                         for (TunnelInfo t : paired.listTunnels()) {
-                            if (t.getExpiration() > now) {
+                            if (t.getExpiration() > now && t.getLength() > 1) {
                                 _replyTunnel = t;
                                 break;
                             }
@@ -1212,6 +1212,25 @@ Long tunnelKey = getTunnelKey(cfg);
             return;
         }
 
+        // Reply-path protection: if the partner tunnel — the one the test was
+        // routed through, not the tunnel under test — is 0-hop, the failure is
+        // a partner artifact (the paired pool is degraded), not evidence
+        // against this tunnel.  Defer rather than count, otherwise a degraded
+        // paired pool cascades removals into this pool.
+        TunnelInfo partner = _cfg.isInbound() ? _outTunnel : _replyTunnel;
+        if (partner != null && partner.getLength() <= 1) {
+            if (_log.shouldWarn()) {
+                _log.warn("Tunnel Test failed -> 0-hop partner " + partner +
+                          " -> deferring test of " + _cfg);
+            }
+            getContext().statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
+            if (!scheduleRetest(false)) {
+                cleanupTunnelTracking();
+                decrementIfCounted();
+            }
+            return;
+        }
+
         // Record the failed round so getSuccessRate() reflects reality and
         // getDelay() retests a failing tunnel sooner rather than slower.
         updateSuccessHistory(false);
@@ -1281,7 +1300,7 @@ Long tunnelKey = getTunnelKey(cfg);
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             int currentFailures = _cfg.getTunnelFailures();
-            int maxFailures = isDegraded() ? 3 : 2;
+            int maxFailures = isDegraded() ? 5 : 3;
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> Removing data-carrying tunnel after " +

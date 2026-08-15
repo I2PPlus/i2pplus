@@ -204,29 +204,6 @@ public class BuildExecutor implements Runnable {
 
     private static final int LOOP_TIME = 15000;
     private static final int TUNNEL_POOLS = 8;
-    /** Max multi-hop builds started per second, paces build requests to avoid flooding peers */
-    private static final int MAX_BUILDS_PER_SECOND = 8;
-    private long _paceWindowStart;
-    private int _buildsInPaceWindow;
-
-    /**
-     * Pace build requests to at most {@link #MAX_BUILDS_PER_SECOND} per second.
-     * Only gates multi-hop builds; zero-hop tunnels build inline.
-     *
-     * @return true if the build may proceed
-     */
-    private synchronized boolean paceAllowed() {
-        long now = _context.clock().now();
-        if (now - _paceWindowStart >= 1000) {
-            _paceWindowStart = now;
-            _buildsInPaceWindow = 0;
-        }
-        if (_buildsInPaceWindow >= MAX_BUILDS_PER_SECOND) {
-            return false;
-        }
-        _buildsInPaceWindow++;
-        return true;
-    }
 
     private static long getGracePeriod(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.gracePeriod", 60*1000);
@@ -284,7 +261,7 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildSuccessRate", "Tunnel build success rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel builds skipped due to pacing", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
 
         StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
         String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
@@ -977,14 +954,19 @@ public class BuildExecutor implements Runnable {
 
     /**
      * Build a tunnel with the given configuration.
-     * Multi-hop builds are paced to at most {@link #MAX_BUILDS_PER_SECOND}
-     * per second; when paced out, the build is skipped entirely.
+     * Burst builds to different peers freely, but never start a second
+     * build request to a first-hop peer that already has a build in flight —
+     * stacking requests on one peer floods it and makes the first build
+     * answer slower.  Zero-hop tunnels build inline, unguarded.
      *
      * @param cfg the tunnel configuration to build
      */
     void buildTunnel(PooledTunnelCreatorConfig cfg) {
-        if (cfg.getLength() > 1 && !paceAllowed()) {
+        if (cfg.getLength() > 1 && !cfg.isBypassPacing() && hasBuildInFlightToFirstHop(cfg)) {
             _context.statManager().addRateData("tunnel.buildPacedOut", 1);
+            if (_log.shouldDebug()) {
+                _log.debug("Not starting build for " + cfg + "\n* first hop already has a build in flight");
+            }
             // Never sent to the network, so no timeout will fire — remove it
             // now or the pool's _inProgress count leaks upward forever,
             // starving every cap-guard that gates on in-progress builds.
@@ -1010,6 +992,27 @@ public class BuildExecutor implements Runnable {
                 _recentBuildIds.clear();
             }
         }
+    }
+
+    /**
+     *  Whether another build request is already in flight whose first hop
+     *  (the peer the request is dispatched to) matches this config's.
+     *  Prevents stacking multiple build requests onto a single peer while
+     *  allowing bursts to different peers.  Emergency builds bypass this via
+     *  {@link PooledTunnelCreatorConfig#isBypassPacing()}.
+     *
+     *  @param cfg the prospective build
+     *  @return true if a build to the same first hop is already in flight
+     */
+    private boolean hasBuildInFlightToFirstHop(PooledTunnelCreatorConfig cfg) {
+        Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
+        if (firstHop == null) {return false;}
+        for (PooledTunnelCreatorConfig inFlight : _currentlyBuildingMap.values()) {
+            if (inFlight == cfg) {continue;}
+            Hash otherFirstHop = BuildRequestor.getBuildRequestPeer(inFlight);
+            if (firstHop.equals(otherFirstHop)) {return true;}
+        }
+        return false;
     }
 
     /**

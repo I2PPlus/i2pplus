@@ -85,13 +85,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final Map<Hash, ConditionalOutboundStartup> _pendingOutboundStartups;
 
     /**
-     * Pending bootstrap jobs for newly created client pools, keyed by destination hash.
-     * Cancelled when the pool is actually removed.
-     * @since 0.9.70+
-     */
-    private final Map<Hash, BootstrapClientPool> _pendingBootstrapJobs;
-
-    /**
      * Manage tunnel pools for the given router context.
      *
      * @param ctx the router context
@@ -103,7 +96,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _clientOutboundPools = new ConcurrentHashMap<>(32);
         _pendingCleanups = new ConcurrentHashMap<>(32);
         _pendingOutboundStartups = new ConcurrentHashMap<>(32);
-        _pendingBootstrapJobs = new ConcurrentHashMap<>(32);
         _clientPeerSelector = new ClientPeerSelector(ctx);
         _ghostPeerManager = new GhostPeerManager(ctx);
         ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
@@ -542,7 +534,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         TunnelPool outbound = null;
 
         boolean delayOutbound = false;
-        boolean isClientBootstrapping = false;
         // synch with removeTunnels() below
         synchronized (this) {
             inbound = _clientInboundPools.get(dest);
@@ -550,7 +541,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 inbound = new TunnelPool(_context, this, settings.getInboundSettings(),
                                          _clientPeerSelector);
                 _clientInboundPools.put(dest, inbound);
-                isClientBootstrapping = true;
             } else {inbound.setSettings(settings.getInboundSettings());}
             outbound = _clientOutboundPools.get(dest);
             if (outbound == null) {
@@ -558,7 +548,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                                           _clientPeerSelector);
                 _clientOutboundPools.put(dest, outbound);
                 delayOutbound = true;
-                isClientBootstrapping = true;
             } else {outbound.setSettings(settings.getOutboundSettings());}
             // Set paired pools for client tunnels
             inbound.setPairedPool(outbound);
@@ -572,13 +561,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             _pendingOutboundStartups.put(dest, startEvt);
             _context.simpleTimer2().addEvent(startEvt, 2000);
         } else {outbound.startup();}
-
-        // Bootstrap newly created client pools to ensure they get initial tunnels
-        if (isClientBootstrapping) {
-            BootstrapClientPool boot = new BootstrapClientPool(_context, this, dest, inbound, outbound);
-            _pendingBootstrapJobs.put(dest, boot);
-            _context.jobQueue().addJob(boot);
-        }
     }
 
     /**
@@ -797,7 +779,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
         }
         cancelPendingOutboundStartup(destination);
-        cancelPendingBootstrapJob(destination);
         TunnelPool inbound = _clientInboundPools.remove(destination);
         TunnelPool outbound = _clientOutboundPools.remove(destination);
         if (inbound != null) {
@@ -984,51 +965,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
          * Build the fallback tunnels for the pool.
          */
         public void runJob() {_pool.buildFallback();}
-    }
-
-    private static class BootstrapClientPool extends JobImpl {
-        private final TunnelPoolManager _mgr;
-        private final Hash _dest;
-        private final TunnelPool _inbound;
-        private final TunnelPool _outbound;
-        private volatile boolean _cancelled;
-
-        /**
-         * Build the fallback tunnels for both pools after the startup delay.
-         */
-        public BootstrapClientPool(RouterContext ctx, TunnelPoolManager mgr, Hash dest,
-                                   TunnelPool inbound, TunnelPool outbound) {
-            super(ctx);
-            _mgr = mgr;
-            _dest = dest;
-            _inbound = inbound;
-            _outbound = outbound;
-            getTiming().setStartAfter(ctx.clock().now() + 2*1000);
-        }
-
-        /**
-         * Cancel this job, if it hasn't fired yet.
-         */
-        public void cancelJob() {_cancelled = true;}
-
-        /**
-         * The name of this job.
-         * @return the name
-         */
-        public String getName() { return "Bootstrap Client Tunnel Pool"; }
-
-        /**
-         * Build fallback tunnels for both pools.
-         */
-        public void runJob() {
-            if (_cancelled) {return;}
-            // Pools may have been removed (and possibly recreated) since this was scheduled
-            if (_mgr._clientInboundPools.get(_dest) != _inbound ||
-                _mgr._clientOutboundPools.get(_dest) != _outbound) {return;}
-            _mgr._pendingBootstrapJobs.remove(_dest, this);
-            _inbound.buildFallback();
-            _outbound.buildFallback();
-        }
     }
 
     private static class RemoveSlowTunnelsJob extends JobImpl {
@@ -1456,17 +1392,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private void cancelPendingOutboundStartup(Hash destination) {
         ConditionalOutboundStartup evt = _pendingOutboundStartups.remove(destination);
         if (evt != null) {evt.cancelStartup();}
-    }
-
-    /**
-     * Cancel any pending bootstrap job for the destination.
-     * Called when the pool is actually removed.
-     * @param destination the destination hash
-     * @since 0.9.70+
-     */
-    private void cancelPendingBootstrapJob(Hash destination) {
-        BootstrapClientPool job = _pendingBootstrapJobs.remove(destination);
-        if (job != null) {job.cancelJob();}
     }
 
     private void shutdownExploratory() {

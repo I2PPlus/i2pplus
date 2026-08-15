@@ -5,21 +5,25 @@ import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
 import net.i2p.router.TunnelPoolSettings;
 
 /**
- * Tests that tunnel builds skipped by the executor's pacing gate do not
- * leak their configs in the pool's in-progress list. A leaked config never
- * reaches the timeout sweep (it is never added to the building map), so it
- * would inflate {@link TunnelPool#getInProgressCount()} forever and starve
- * every cap-guard that gates on in-progress builds.
+ * Tests the executor's per-first-hop in-flight guard. A build is skipped
+ * when the peer it would dispatch to (peer 0 for inbound, peer 1 for
+ * outbound) already has a build in flight, so one peer is never flooded
+ * with stacked build requests. Skipped builds must not leak their configs
+ * in the pool's in-progress list, or the count would inflate forever and
+ * starve every cap-guard that gates on in-progress builds. Emergency
+ * builds (setBypassPacing) bypass the guard entirely.
  *
  * @since 0.9.70+
  */
@@ -35,7 +39,7 @@ public class BuildExecutorPacingTest {
     /**
      * Real pool over a real context; client (non-exploratory) settings so
      * the constructor's config-map refresh is skipped. Manager and peer
-     * selector are mocks — they are never touched by the paced-out path.
+     * selector are mocks — they are never touched by the skipped path.
      */
     private static TunnelPool createPool() {
         TunnelPoolSettings settings = new TunnelPoolSettings(false);
@@ -52,14 +56,17 @@ public class BuildExecutorPacingTest {
         ((List<PooledTunnelCreatorConfig>) f.get(pool)).add(cfg);
     }
 
-    /** Force the pace window to be full so the next multi-hop build is paced out. */
-    private static void fillPaceWindow(BuildExecutor exec) throws Exception {
-        Field window = BuildExecutor.class.getDeclaredField("_buildsInPaceWindow");
-        window.setAccessible(true);
-        Field start = BuildExecutor.class.getDeclaredField("_paceWindowStart");
-        start.setAccessible(true);
-        start.setLong(exec, System.currentTimeMillis());
-        window.setInt(exec, Integer.MAX_VALUE);
+    /** Seed the executor's building map with an in-flight build. */
+    @SuppressWarnings("unchecked")
+    private static ConcurrentHashMap<Long, PooledTunnelCreatorConfig> seedBuildingMap(BuildExecutor exec,
+                                                                                      PooledTunnelCreatorConfig inFlight)
+            throws Exception {
+        Field f = BuildExecutor.class.getDeclaredField("_currentlyBuildingMap");
+        f.setAccessible(true);
+        ConcurrentHashMap<Long, PooledTunnelCreatorConfig> map =
+            (ConcurrentHashMap<Long, PooledTunnelCreatorConfig>) f.get(exec);
+        map.put(Long.valueOf(inFlight.getReplyMessageId()), inFlight);
+        return map;
     }
 
     /**
@@ -98,19 +105,26 @@ public class BuildExecutorPacingTest {
     }
 
     /**
-     * Regression test: a build skipped by the pacing gate must be removed
-     * from the pool's in-progress list. Before the fix it stayed there
-     * forever — no timeout fires because the config never entered the
-     * executor's building map.
+     * A build whose first-hop peer already has a build in flight is skipped:
+     * it is removed from the pool's in-progress list and never added to the
+     * executor's building map. Regression test for the leak where a skipped
+     * config stayed in _inProgress forever.
      */
     @Test
-    public void testPacedOutBuildRemovesFromInProgress() throws Exception {
+    public void testBuildSkippedWhenFirstHopBusy() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         TunnelPool pool = createPool();
         BuildExecutor exec = new BuildExecutor(_ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
+
+        Hash firstHop = new Hash(new byte[32]);
+        PooledTunnelCreatorConfig inFlight = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        inFlight.setPeer(0, firstHop);
+        inFlight.setReplyMessageId(1234L);
+        seedBuildingMap(exec, inFlight);
+
         PooledTunnelCreatorConfig cfg = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        cfg.setPeer(0, firstHop);
         seedInProgress(pool, cfg);
-        fillPaceWindow(exec);
 
         exec.buildTunnel(cfg);
 
@@ -119,24 +133,62 @@ public class BuildExecutorPacingTest {
     }
 
     /**
-     * A build that clears the pace gate must remain in the in-progress list;
-     * only paced-out builds are removed.
+     * A build to a different first hop than every in-flight build is not
+     * skipped — bursting to distinct peers is allowed.
      */
     @Test
-    public void testPacedOutRemovesOnlyPacedBuild() throws Exception {
+    public void testBuildNotSkippedWhenFirstHopFree() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         TunnelPool pool = createPool();
         BuildExecutor exec = new BuildExecutor(_ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
-        PooledTunnelCreatorConfig paced = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
-        PooledTunnelCreatorConfig other = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
-        seedInProgress(pool, paced);
-        seedInProgress(pool, other);
-        fillPaceWindow(exec);
 
-        exec.buildTunnel(paced);
+        Hash busy = new Hash(new byte[32]);
+        busy.getData()[0] = 1;
+        Hash other = new Hash(new byte[32]);
+        other.getData()[0] = 2;
+        PooledTunnelCreatorConfig inFlight = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        inFlight.setPeer(0, busy);
+        inFlight.setReplyMessageId(1234L);
+        seedBuildingMap(exec, inFlight);
 
-        assertEquals(1, pool.getInProgressCount());
-        assertTrue(pool.listPending().contains(other));
-        assertFalse(pool.listPending().contains(paced));
+        PooledTunnelCreatorConfig cfg = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        cfg.setPeer(0, other);
+
+        // different first hop -> guard must not fire
+        assertEquals(false, hasBuildInFlightToFirstHop(exec, cfg));
+    }
+
+    /**
+     * Emergency builds bypass the guard: with setBypassPacing, a build to a
+     * busy first hop is still allowed, so a collapsed pool recovers.
+     */
+    @Test
+    public void testBypassPacingSkipsGuard() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool();
+        BuildExecutor exec = new BuildExecutor(_ctx, mock(TunnelPoolManager.class), mock(GhostPeerManager.class));
+
+        Hash firstHop = new Hash(new byte[32]);
+        PooledTunnelCreatorConfig inFlight = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        inFlight.setPeer(0, firstHop);
+        inFlight.setReplyMessageId(1234L);
+        seedBuildingMap(exec, inFlight);
+
+        PooledTunnelCreatorConfig cfg = new PooledTunnelCreatorConfig(_ctx, 3, true, null, pool);
+        cfg.setPeer(0, firstHop);
+        cfg.setBypassPacing();
+
+        // guard sees a busy first hop, but bypass must win
+        assertEquals(true, hasBuildInFlightToFirstHop(exec, cfg));
+        assertEquals(true, cfg.isBypassPacing());
+        assertEquals(false, !cfg.isBypassPacing() && hasBuildInFlightToFirstHop(exec, cfg));
+    }
+
+    /** Reflect the private guard method. */
+    private static boolean hasBuildInFlightToFirstHop(BuildExecutor exec, PooledTunnelCreatorConfig cfg) throws Exception {
+        java.lang.reflect.Method m = BuildExecutor.class.getDeclaredMethod("hasBuildInFlightToFirstHop",
+                                                                           PooledTunnelCreatorConfig.class);
+        m.setAccessible(true);
+        return (Boolean) m.invoke(exec, cfg);
     }
 }

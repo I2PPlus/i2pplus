@@ -15,6 +15,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private TunnelId _pairedGW;
     private volatile long _lastActivity;
     private volatile boolean _lastResort;
+    private volatile boolean _bypassPacing;
     private static final long ACTIVITY_TIMEOUT = 30*1000L;
 
     /**
@@ -88,6 +89,21 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *  @since 0.9.69+
      */
     public void setLastResort() {_lastResort = true;}
+
+    /**
+     *  @return true if this build bypasses the per-peer in-flight guard in
+     *  {@link BuildExecutor#buildTunnel(net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)}
+     *  @since 0.9.71+
+     */
+    public boolean isBypassPacing() {return _bypassPacing;}
+
+    /**
+     *  Mark this build as emergency recovery: it must be sent even if the
+     *  first-hop peer already has a build in flight.  Set by the pool when
+     *  it has zero usable tunnels and cannot wait for the guard to clear.
+     *  @since 0.9.71+
+     */
+    public void setBypassPacing() {_bypassPacing = true;}
 
     /**
      *  Record activity on this tunnel (message processed).

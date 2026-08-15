@@ -166,8 +166,34 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** Shared cooldown map across all peer selectors */
     protected static final Map<Hash, Long> _peerCooldowns = new ConcurrentHashMap<>();
 
-    /** Lock for atomic cooldown check+record across peer selectors */
+    /** Lock for atomic cooldown check+record within client selection.  A single
+     *  selector instance serves all client pools, so concurrent selections from
+     *  different pool threads are serialized.  Exploratory selection does its
+     *  own check+record on a per-selector map and does not take this lock. */
     protected static final Object _cooldownLock = new Object();
+
+    /**
+     *  Format a set of excluded peers for logging, with exclusion reasons when
+     *  the set is an {@link Excluder} or {@link ExcluderBase}.
+     *  @since 0.9.71+
+     */
+    protected static String formatExcludedPeers(Set<Hash> peers) {
+        if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
+        if (peers instanceof Excluder) {
+            return ((Excluder) peers).formatByReasonWithPeers();
+        }
+        if (peers instanceof ExcluderBase) {
+            return ((ExcluderBase) peers).getReasonsSummary();
+        }
+        StringBuilder sb = new StringBuilder(peers.size() * 10);
+        int count = 0;
+        for (Hash h : peers) {
+            if (count % 12 == 0) {sb.append("\n* ");}
+            sb.append('[').append(h.toBase64(), 0, 6).append("] ");
+            count++;
+        }
+        return sb.toString();
+    }
 
     /** Peers that failed as first hop (first hop unreachable) excluded for this long */
     protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 5 * 60 * 1000L;
@@ -180,6 +206,26 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /** Tracks last keepalive send time per peer */
     private static final ConcurrentHashMap<Hash, Long> _lastKeepAlive = new ConcurrentHashMap<>(512);
+
+    /**
+     *  Size bound for the cooldown maps ({@link #_peerCooldowns},
+     *  {@link #_firstHopFails}).  Entries are recorded on selection failures,
+     *  tunnel rejects, and tunnel reuse, and are also expired time-based on
+     *  every selection, so these maps stay small — 128 entries is already
+     *  generous.  This bound only limits growth between selections; it does
+     *  not evict live entries.
+     *  @since 0.9.71+
+     */
+    private static final int FAILURE_MAP_MAX_SIZE = 128;
+
+    /**
+     *  Size bound for {@link #_lastKeepAlive}.  Larger than the failure maps
+     *  because it tracks one entry per Fast/HighCap peer being keepalived
+     *  (keepalive budget is 400 peers per cycle), so hundreds of live entries
+     *  are normal.  Stale entries are expired time-based on every selection.
+     *  @since 0.9.71+
+     */
+    private static final int KEEPALIVE_MAP_MAX_SIZE = 512;
 
     /**
      *  Check if a peer recently failed as first hop and should be excluded.
@@ -249,21 +295,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected static void prunePeerMaps(RouterContext ctx) {
         long now = ctx.clock().now();
-        // Eviction thresholds are deliberately generous: routers hosting many
-        // destinations legitimately cooldown thousands of peers (hundreds of
-        // pools x up to 8 hops each).  Each entry is a Hash + timestamp,
-        // roughly 100-150 bytes, so even 4096 entries cost under 1MB.  The
-        // time-based removeIf below is the leak handling — the maps self-limit
-        // to peers touched within their cooldown window regardless of size.
-        if (_peerCooldowns.size() > 4096) {
+        // Eviction thresholds bound the cooldown maps tightly (128): entries
+        // are recorded on failures, rejects, or reuse and also expire
+        // time-based on every selection, so these maps hold only peers touched
+        // within the current cooldown window.  The keepalive map is larger
+        // because it tracks one entry per Fast/HighCap peer being kept alive.
+        if (_peerCooldowns.size() > FAILURE_MAP_MAX_SIZE) {
             long cutoff = now - PEER_SELECTION_COOLDOWN_MS;
             _peerCooldowns.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
-        if (_lastKeepAlive.size() > 4096) {
+        if (_lastKeepAlive.size() > KEEPALIVE_MAP_MAX_SIZE) {
             long cutoff = now - KEEPALIVE_INTERVAL_MS * 4;
             _lastKeepAlive.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
-        if (_firstHopFails.size() > 4096) {
+        if (_firstHopFails.size() > FAILURE_MAP_MAX_SIZE) {
             long cutoff = now - FIRST_HOP_FAIL_COOLDOWN_MS;
             _firstHopFails.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
@@ -305,7 +350,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
         // Periodically prune all static peer maps
-        if (_peerCooldowns.size() > 4096 || _lastKeepAlive.size() > 4096) {
+        if (_peerCooldowns.size() > FAILURE_MAP_MAX_SIZE || _lastKeepAlive.size() > KEEPALIVE_MAP_MAX_SIZE) {
             prunePeerMaps(ctx);
         }
     }

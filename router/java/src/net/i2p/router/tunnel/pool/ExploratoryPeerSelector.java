@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
@@ -22,22 +23,17 @@ import net.i2p.util.SystemVersion;
  */
 class ExploratoryPeerSelector extends TunnelPeerSelector {
 
-    private static String formatExcludedPeers(Set<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
-        StringBuilder sb = new StringBuilder(peers.size() * 10);
-        int count = 0;
-        for (Hash h : peers) {
-            if (count % 12 == 0) {
-                sb.append("\n* ");
-            }
-            sb.append('[').append(h.toBase64(), 0, 6).append("] ");
-            count++;
-        }
-        return sb.toString();
-    }
+    /**
+     *  Cooldown entries for exploratory selections, recorded when checkTunnel
+     *  fails.  Separate from the shared {@link #_peerCooldowns} so exploratory
+     *  builds cannot pollute the set used by client pools.  Only failures are
+     *  recorded — healthy selections never cooldown peers.
+     *  @since 0.9.71+
+     */
+    private final Map<Hash, Long> _exploratoryCooldowns = new ConcurrentHashMap<>();
 
     /**
-     * ExploratoryPeerSelector.
+     *  ExploratoryPeerSelector.
      */
     public ExploratoryPeerSelector(RouterContext context) {
         super(context);
@@ -63,21 +59,54 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             return null;
         }
 
-        synchronized (_cooldownLock) {
+        List<Hash> rv = selectPeersInternal(settings, length, true);
+        if (rv != null && rv.size() == 1 && length > 0) {
+            // All candidates were excluded by selection cooldowns.
+            // Retry once without cooldowns rather than starving the pool.
+            if (log.shouldDebug())
+                log.debug("EPS all candidates on cooldown, retrying without cooldowns");
+            rv = selectPeersInternal(settings, length, false);
+        }
+        return rv;
+    }
+
+    /**
+     *  The actual peer selection, shared between the normal path and the
+     *  cooldown-bypass retry in {@link #selectPeers(TunnelPoolSettings)}.
+     *
+     *  @param settings the tunnel pool settings
+     *  @param length the desired tunnel length
+     *  @param includeCooldowns whether to exclude peers on selection cooldown
+     *  @return ordered list of Hash objects (ENDPOINT FIRST), or null if no
+     *          peers are available or checkTunnel fails
+     */
+    private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length, boolean includeCooldowns) {
         boolean isInbound = settings.isInbound();
         long now = ctx.clock().now();
         Set<Hash> exclude = getExclude(isInbound, true);
         exclude.add(ctx.routerHash());
-        // Exclude peers on selection cooldown to ensure diversity
-        long cooldownCutoff = now - PEER_SELECTION_COOLDOWN_MS;
-        int cooldownExcluded = 0;
-        _peerCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
-        for (Map.Entry<Hash, Long> entry : _peerCooldowns.entrySet()) {
+        // Exclude peers on selection cooldown to ensure diversity.
+        // Own map: peers that failed checkTunnel here.  Shared map: peers
+        // failed by client pools or rejected at tunnel reuse.
+        if (includeCooldowns) {
+            long cooldownCutoff = now - PEER_SELECTION_COOLDOWN_MS;
+            int cooldownExcluded = 0;
+            _exploratoryCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
+            for (Map.Entry<Hash, Long> entry : _exploratoryCooldowns.entrySet()) {
                 exclude.add(entry.getKey());
                 cooldownExcluded++;
+            }
+            _peerCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
+            for (Map.Entry<Hash, Long> entry : _peerCooldowns.entrySet()) {
+                exclude.add(entry.getKey());
+                cooldownExcluded++;
+            }
+            if (log.shouldDebug())
+                log.debug("EPS cooldown: own=" + _exploratoryCooldowns.size() +
+                          " shared=" + _peerCooldowns.size() +
+                          " excluded=" + cooldownExcluded +
+                          " from=" + Thread.currentThread().getName());
         }
-        if (log.shouldInfo())
-            log.info("EPS cooldown: peers=" + _peerCooldowns.size() + " excluded=" + cooldownExcluded + " from=" + Thread.currentThread().getName());
 
         // Per-pool diversity: exclude peers already in an active tunnel of this pool.
         // No peer should appear in more than 1 tunnel of the same pool.
@@ -329,25 +358,29 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         else
             rv.add(ctx.routerHash());
 
-        // Record selection time for all selected peers (excluding self) to enforce cooldown
-        int recorded = 0;
-        for (Hash peer : rv) {
-            if (!peer.equals(ctx.routerHash())) {
-                _peerCooldowns.put(peer, now);
-                recorded++;
-            }
-        }
-        log.info("EPS cooldown record: recorded=" + recorded + " rvSize=" + rv.size() + " from=" + Thread.currentThread().getName());
-
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, true, rv)) {
+                // Record the failed peers in the exploratory cooldown so the
+                // next selection avoids them.  Only failures are recorded —
+                // successful selections never cooldown peers.
+                long failNow = ctx.clock().now();
+                int recorded = 0;
+                for (Hash peer : rv) {
+                    if (!peer.equals(ctx.routerHash())) {
+                        _exploratoryCooldowns.put(peer, failNow);
+                        recorded++;
+                    }
+                }
+                if (log.shouldDebug())
+                    log.debug("EPS cooldown record: recorded=" + recorded +
+                              " rvSize=" + rv.size() +
+                              " from=" + Thread.currentThread().getName());
                 rv = null;
             }
         }
         if (isInbound && rv != null && rv.size() > 1)
             ctx.commSystem().exemptIncoming(rv.get(1));
         return rv;
-        }
     }
 
     private static int getMinNonfailingPct(RouterContext ctx) {
