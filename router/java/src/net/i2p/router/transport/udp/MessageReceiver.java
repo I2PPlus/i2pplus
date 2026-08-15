@@ -1,7 +1,6 @@
 package net.i2p.router.transport.udp;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
@@ -38,7 +37,6 @@ class MessageReceiver {
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : 3;
     private final AtomicInteger _activeRunners = new AtomicInteger();
     private final AtomicInteger _processingCount = new AtomicInteger();
-    private final CopyOnWriteArrayList<Runner> _runners = new CopyOnWriteArrayList<>();
     private static final long POISON_IMS = -99999999999L;
     private static final int MIN_THREADS = 2;
     private static final int MAX_THREADS = 16;
@@ -124,9 +122,8 @@ class MessageReceiver {
 
     private void startRunner() {
         Runner r = new Runner();
-        _runners.add(r);
         _activeRunners.incrementAndGet();
-                I2PThread t = new I2PThread(r, "UDPMsgRX." + _threadNum.incrementAndGet(), true);
+        I2PThread t = new I2PThread(r, "UDPMsgRX." + _threadNum.incrementAndGet(), true);
         t.start();
     }
 
@@ -158,7 +155,6 @@ class MessageReceiver {
             }
         }
         _completeMessages.clear();
-        _runners.clear();
         _activeRunners.set(0);
     }
 
@@ -175,7 +171,6 @@ class MessageReceiver {
         while (current < target) {
             if (_activeRunners.compareAndSet(current, current + 1)) {
                 Runner r = new Runner();
-                _runners.add(r);
                 I2PThread t = new I2PThread(r, "UDPMsgRX." + _threadNum.incrementAndGet(), true);
                 t.start();
                 _log.info("Added MessageReceiver thread, now " + (current + 1) + "/" + target);
@@ -217,47 +212,43 @@ class MessageReceiver {
     void loop(I2NPMessageHandler handler) {
         InboundMessageState message = null;
         ByteArray buf = new ByteArray(new byte[I2NPMessage.MAX_SIZE]);
-        try {
-            while (_alive) {
-                Tuner.adjustHandlerPriority();
-                int expired = 0;
-                long expiredLifetime = 0;
-                try {
-                    while (message == null) {
-                        message = _completeMessages.take();
-                        if ((message != null) && (message.getMessageId() == POISON_IMS)) {
-                            return;
-                        }
-                        if ((message != null) && (message.isExpired())) {
-                            expiredLifetime += message.getLifetime();
-                            // Return pooled fragment buffers to the ByteCache before discarding
-                            message.releaseResources();
-                            message = null;
-                            expired++;
-                        }
+        while (_alive) {
+            Tuner.adjustHandlerPriority();
+            int expired = 0;
+            long expiredLifetime = 0;
+            try {
+                while (message == null) {
+                    message = _completeMessages.take();
+                    if ((message != null) && (message.getMessageId() == POISON_IMS)) {
+                        return;
                     }
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                }
-
-                if (expired > 0) {_context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);}
-
-                if (message != null) {
-                    int size = message.getCompleteSize();
-                    _processingCount.incrementAndGet();
-                    try {
-                        I2NPMessage msg = readMessage(buf, message, handler);
-                        if (msg != null) {_transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);}
-                    } catch (RuntimeException re) {
-                        _log.error("Error processing UDP message from " + message.getFrom(), re);
-                    } finally {
-                        _processingCount.decrementAndGet();
+                    if ((message != null) && (message.isExpired())) {
+                        expiredLifetime += message.getLifetime();
+                        // Return pooled fragment buffers to the ByteCache before discarding
+                        message.releaseResources();
+                        message = null;
+                        expired++;
                     }
-                    message = null;
                 }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
             }
-        } finally {
-            _runners.remove(this);
+
+            if (expired > 0) {_context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);}
+
+            if (message != null) {
+                int size = message.getCompleteSize();
+                _processingCount.incrementAndGet();
+                try {
+                    I2NPMessage msg = readMessage(buf, message, handler);
+                    if (msg != null) {_transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);}
+                } catch (RuntimeException re) {
+                    _log.error("Error processing UDP message from " + message.getFrom(), re);
+                } finally {
+                    _processingCount.decrementAndGet();
+                }
+                message = null;
+            }
         }
     }
 
@@ -311,7 +302,7 @@ class MessageReceiver {
                     _transport.dropPeer(ps, true, "Corrupt DSM");
                     _banLogger.logBanForever(state.getFrom(), _context, "Sent corrupt message");
                     _context.banlist().banlistRouterForever(state.getFrom(),
-                        "" + "Sent corrupt message");  // don't bother translate
+                        "Sent corrupt message");  // don't bother translate
                 }
             }
             _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(),
