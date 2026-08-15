@@ -985,8 +985,9 @@ public class WebMail extends HttpServlet {
                 synchronized(_so) {
                     mc = _so.caches.get(DIR_FOLDER);
                     if (mc == null) {_so.error += "Internal error, no folder\n"; return;}
-                    while (mc.isLoading()) {
-                        try {_so.wait(5000);}
+                    long end = System.currentTimeMillis() + 5000;
+                    while (mc.isLoading() && System.currentTimeMillis() < end) {
+                        try {_so.wait(end - System.currentTimeMillis());}
                         catch (InterruptedException ie) {
                             if (log.shouldDebug()) {log.debug("Interrupted waiting for load", ie);}
                             return;
@@ -1941,7 +1942,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Blocking wait
+     *  Blocking wait, bounded to 5 seconds so a stuck loader cannot hang the
+     *  servlet thread indefinitely
      *  @since 0.9.35
      */
     private static void waitForLoad(SessionObject sessionObject, MailCache mc) {
@@ -1949,11 +1951,15 @@ public class WebMail extends HttpServlet {
             boolean ok = true;
             if (!mc.isLoading()) {ok = mc.loadFromDisk(new LoadWaiter(sessionObject, mc));}
             if (ok) {
-                while (mc.isLoading()) {
-                    try {sessionObject.wait(5000);}
-                    catch (InterruptedException ie) {
-                        Log log = sessionObject.log;
-                        if (log.shouldDebug()) log.debug("Interrupted waiting for load", ie);
+                synchronized (sessionObject) {
+                    long end = System.currentTimeMillis() + 5000;
+                    while (mc.isLoading() && System.currentTimeMillis() < end) {
+                        try {sessionObject.wait(end - System.currentTimeMillis());}
+                        catch (InterruptedException ie) {
+                            Log log = sessionObject.log;
+                            if (log.shouldDebug()) log.debug("Interrupted waiting for load", ie);
+                            break;
+                        }
                     }
                 }
             }
