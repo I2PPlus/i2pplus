@@ -39,6 +39,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -257,6 +258,11 @@ public class HostChecker {
     // Category retry settings
     private static final long CATEGORY_RETRY_INTERVAL = 10 * 60 * 1000L; // 10 minutes
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
+
+    // Bound on waiting for a single ping task, covering the internal lease-set lookup,
+    // ping, and EepHead fallback plus semaphore wait, so a stalled task cannot hang
+    // the whole update cycle forever.
+    private static final long PING_TASK_TIMEOUT = 5 * 60 * 1000L; // 5 minutes
 
     private volatile long _pingInterval = DEFAULT_PING_INTERVAL;
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
@@ -2094,7 +2100,13 @@ public class HostChecker {
                 // Wait for all pings to complete
                 for (Future<Void> future : futures) {
                     try {
-                        future.get();
+                        future.get(PING_TASK_TIMEOUT, TimeUnit.MILLISECONDS);
+                    } catch (TimeoutException te) {
+                        future.cancel(true);
+                        if (_log.shouldWarn()) {
+                            _log.warn("Timed out waiting for HostChecker task after " +
+                                      PING_TASK_TIMEOUT + "ms");
+                        }
                     } catch (Exception e) {
                         if (_log.shouldWarn()) {
                             _log.warn("Error waiting for HostChecker completion -> " + e.getMessage(), e);
