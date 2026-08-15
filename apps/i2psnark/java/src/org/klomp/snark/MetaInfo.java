@@ -977,10 +977,7 @@ public class MetaInfo {
             System.exit(1);
         }
         for (int i = g.getOptind(); i < args.length; i++) {
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                in = new FileInputStream(args[i]);
+            try (InputStream in = new FileInputStream(args[i])) {
                 MetaInfo meta = new MetaInfo(in);
                 System.out.println(
                         args[i]
@@ -1004,9 +1001,9 @@ public class MetaInfo {
                     File from = new File(args[i]);
                     File to = new File(args[i] + ".bak");
                     if (FileUtil.copy(from, to, true, false)) {
-                        out = new FileOutputStream(from);
-                        out.write(meta2.getTorrentData());
-                        out.close();
+                        try (OutputStream out = new FileOutputStream(from)) {
+                            out.write(meta2.getTorrentData());
+                        }
                         System.out.println("Modified " + from + " and backed up old file to " + to);
                         System.out.println(
                                 args[i]
@@ -1026,17 +1023,6 @@ public class MetaInfo {
                 }
             } catch (IOException ioe) {
                 System.err.println("Error in file " + args[i] + ": " + ioe);
-            } finally {
-                try {
-                    if (in != null) {
-                        in.close();
-                    }
-                } catch (IOException ioe) { /* ignored */ }
-                try {
-                    if (out != null) {
-                        out.close();
-                    }
-                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

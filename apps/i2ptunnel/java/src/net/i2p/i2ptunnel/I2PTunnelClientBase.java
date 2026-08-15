@@ -403,13 +403,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
 
         I2PSocketManager sockManager = null;
-        FileInputStream fis = null;
         String nickname = tunnel.getClientOptions().getProperty("inbound.nickname");
         try {
             if (pkf != null) {
                 // Persistent client dest
-                fis = new FileInputStream(pkf);
-                sockManager = I2PSocketManagerFactory.createDisconnectedManager(fis, tunnel.host, portNum, props);
+                try (FileInputStream fis = new FileInputStream(pkf)) {
+                    sockManager = I2PSocketManagerFactory.createDisconnectedManager(fis, tunnel.host, portNum, props);
+                }
             } else {
                 sockManager = I2PSocketManagerFactory.createDisconnectedManager(null, tunnel.host, portNum, props);
             }
@@ -420,11 +420,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             if (log != null) {log.log("✖ " + failMsg + " -> Please review console logs for more info");}
             logger.error(failMsg + ioe.getMessage());
             throw new IllegalArgumentException("Error opening key file", ioe);
-        } finally {
-            if (fis != null) {
-                try {fis.close();}
-                catch (IOException ioe) { /* ignored */ }
-            }
         }
         sockManager.setName("Client");
         if (logger.shouldInfo()) {logger.info("[" + nickname + "] Built a new socket manager: " + sockManager.getSession());}

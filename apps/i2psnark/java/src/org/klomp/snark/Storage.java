@@ -2284,7 +2284,6 @@ public class Storage implements Closeable {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         I2PSnarkUtil util = new I2PSnarkUtil(ctx);
         File file = null;
-        FileOutputStream out = null;
         try {
             Storage storage =
                     new Storage(
@@ -2300,8 +2299,9 @@ public class Storage implements Closeable {
                             null);
             MetaInfo meta = storage.getMetaInfo();
             file = new File(storage.getBaseName() + ".torrent");
-            out = new FileOutputStream(file);
-            out.write(meta.getTorrentData());
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                out.write(meta.getTorrentData());
+            }
             String hex = DataHelper.toString(meta.getInfoHash());
             System.out.println("Created: " + file);
             System.out.println("InfoHash: " + hex);
@@ -2317,10 +2317,6 @@ public class Storage implements Closeable {
             }
             ioe.printStackTrace();
             System.exit(1);
-        } finally {
-            try {
-                if (out != null) out.close();
-            } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

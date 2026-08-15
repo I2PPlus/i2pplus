@@ -61,17 +61,11 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
                 File f = new File(_context.getRouterDir(), DEFAULT_HOSTS_FILE);
                 if ((f.exists()) && (f.canWrite())) {
                     synchronized (this) {
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(f, true);
+                        try (FileOutputStream fos = new FileOutputStream(f, true)) {
                             String line = hostname + '=' + rv.toBase64() + System.getProperty("line.separator");
                             fos.write(DataHelper.getASCII(line));
                         } catch (IOException ioe) {
                             _log.error("Error appending to hosts.txt", ioe);
-                        } finally {
-                            if (fos != null) try {
-                                    fos.close();
-                                } catch (IOException cioe) { /* ignored */ }
                         }
                     }
                 }

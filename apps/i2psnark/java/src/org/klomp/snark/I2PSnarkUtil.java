@@ -2009,9 +2009,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.9.58
      */
     static void loadProps(Properties props, File f) throws IOException {
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8), 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8), 1024)) {
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.trim().length() <= 0) {
@@ -2031,12 +2029,6 @@ public class I2PSnarkUtil implements DisconnectListener {
                 String val = line.substring(split + 1).trim();
                 props.setProperty(key, val);
             }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 
@@ -2047,13 +2039,10 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.9.58
      */
     static void storeProps(Properties props, File file) throws IOException {
-        FileOutputStream fos = null;
-        PrintWriter out = null;
         IOException ioe = null;
         File tmpFile = new File(file.getPath() + ".tmp");
-        try {
-            fos = new SecureFileOutputStream(tmpFile);
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8)));
+        try (FileOutputStream fos = new SecureFileOutputStream(tmpFile);
+             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8)))) {
             out.println("# NOTE: This I2P config file must use UTF-8 encoding");
             out.println("# Last saved: " + DataHelper.formatTime(System.currentTimeMillis()));
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
@@ -2091,19 +2080,11 @@ public class I2PSnarkUtil implements DisconnectListener {
             }
             out.close();
             if (out.checkError()) {
-                out = null;
                 tmpFile.delete();
                 throw new IOException("Failed to write properties to " + tmpFile);
             }
-            out = null;
             if (!FileUtil.rename(tmpFile, file))
                 throw new IOException("Failed rename from " + tmpFile + " to " + file);
-        } finally {
-            if (out != null) out.close();
-            if (fos != null)
-                try {
-                    fos.close();
-                } catch (IOException e) { /* ignored */ }
         }
         if (ioe != null) {
             throw ioe;

@@ -76,9 +76,7 @@ public final class CertUtil {
      *  @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     public static boolean saveCert(Certificate cert, File file) {
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream(file);
+        try (OutputStream os = new FileOutputStream(file)) {
             exportCert(cert, os);
             return true;
         } catch (CertificateEncodingException cee) {
@@ -87,10 +85,6 @@ public final class CertUtil {
         } catch (IOException ioe) {
             error("Error writing X509 Certificate " + file.getAbsolutePath(), ioe);
             return false;
-        } finally {
-            try {
-                if (os != null) os.close();
-            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -315,9 +309,7 @@ public final class CertUtil {
      *  @since 0.9.24 adapted from SU3File private method
      */
     public static X509Certificate loadCert(File kd) throws IOException, GeneralSecurityException {
-        InputStream fis = null;
-        try {
-            fis = new FileInputStream(kd);
+        try (InputStream fis = new FileInputStream(kd)) {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             X509Certificate cert = (X509Certificate) cf.generateCertificate(fis);
             cert.checkValidity();
@@ -332,10 +324,6 @@ public final class CertUtil {
             // Exception in thread "main" java.lang.IllegalArgumentException: Input byte array has wrong 4-byte ending unit
             // at java.util.Base64$Decoder.decode0(Base64.java:704)
             throw new GeneralSecurityException("cert error", iae);
-        } finally {
-            try {
-                if (fis != null) fis.close();
-            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -412,9 +400,9 @@ public final class CertUtil {
      *  @since 0.9.25
      */
     public static List<X509Certificate> loadCerts(InputStream in) throws IOException, GeneralSecurityException {
-        try {
+        try (InputStream s = in) {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            Collection<? extends Certificate> certs = cf.generateCertificates(in);
+            Collection<? extends Certificate> certs = cf.generateCertificates(s);
             List<X509Certificate> rv = new ArrayList<>(certs.size());
             for (Certificate cert : certs) {
                 if (!(cert instanceof X509Certificate)) {
@@ -433,10 +421,6 @@ public final class CertUtil {
             // Exception in thread "main" java.lang.IllegalArgumentException: Input byte array has wrong 4-byte ending unit
             // at java.util.Base64$Decoder.decode0(Base64.java:704)
             throw new GeneralSecurityException("Certificate error", iae);
-        } finally {
-            try {
-                in.close();
-            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -602,16 +586,8 @@ public final class CertUtil {
      *  @since 0.9.25
      */
     private static X509CRL loadCRL(File file) throws IOException, GeneralSecurityException {
-        InputStream in = null;
-        try {
-            in = new FileInputStream(file);
+        try (InputStream in = new FileInputStream(file)) {
             return loadCRL(in);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 

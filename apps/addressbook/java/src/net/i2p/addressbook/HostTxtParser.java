@@ -140,18 +140,9 @@ public class HostTxtParser {
      *             if file cannot be read.
      */
     public static Map<String, HostTxtEntry> parse(File file) throws IOException {
-        FileInputStream fileStream = null;
-        try {
-            fileStream = new FileInputStream(file);
-            BufferedReader input = new BufferedReader(new InputStreamReader(
-                    fileStream, StandardCharsets.UTF_8));
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(
+                new FileInputStream(file), StandardCharsets.UTF_8))) {
             return parse(input);
-        } finally {
-            if (fileStream != null) {
-                try {
-                    fileStream.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 

@@ -601,13 +601,11 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      *  @since 0.9.49
      */
     private static void loadURLs() {
-        BufferedReader in = null;
-        try {
-            InputStream is = DNSOverHTTPS.class.getResourceAsStream("/net/i2p/util/resources/dohservers.txt");
-            if (is == null) {
-                return;
-            }
-            in = new BufferedReader(new InputStreamReader(is, StandardCharsets.ISO_8859_1), 4096);
+        InputStream is = DNSOverHTTPS.class.getResourceAsStream("/net/i2p/util/resources/dohservers.txt");
+        if (is == null) {
+            return;
+        }
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(is, StandardCharsets.ISO_8859_1), 4096)) {
             int count = 0;
             String line = null;
             while ((line = in.readLine()) != null) {
@@ -627,11 +625,6 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (DEBUG) System.out.println("Loaded " + count + " DoH server entries from resource");
         } catch (Exception e) {
             if (DEBUG) e.printStackTrace();
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -837,21 +830,13 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      *  @since 0.9.62
      */
     private static void decodeStamps(String file) throws IOException {
-        BufferedReader in = null;
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line = null;
             while ((line = in.readLine()) != null) {
                 line = line.trim();
                 if (!line.startsWith("sdns://")) continue;
                 decodeStamp(line, true);
             }
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

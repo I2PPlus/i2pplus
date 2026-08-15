@@ -196,15 +196,11 @@ class AccessFilter implements StatefulConnectionFilter {
 
             // if the file already exists, add previously breached b32s
             if (file.exists() && file.isFile()) {
-                BufferedReader reader = null;
-                try {
-                    reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                     String b32;
                     while((b32 = reader.readLine()) != null) {
                         breached.add(b32);
                     }
-                } finally {
-                    if (reader != null) try { reader.close(); } catch (IOException ignored) { /* ignored */ }
                 }
             }
 
@@ -220,17 +216,13 @@ class AccessFilter implements StatefulConnectionFilter {
             if (breached.isEmpty() || !newBreaches)
                 continue;
 
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(
+            try (BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(
-                        new SecureFileOutputStream(file), StandardCharsets.UTF_8));
+                        new SecureFileOutputStream(file), StandardCharsets.UTF_8))) {
                 for (String b32 : breached) {
                     writer.write(b32);
                     writer.newLine();
                 }
-            } finally {
-                if (writer != null) try { writer.close(); } catch (IOException ignored) { /* ignored */ }
             }
         }
     }

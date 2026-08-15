@@ -607,20 +607,12 @@ public class PrivateKeyFile {
      */
     public Destination createIfAbsent(SigType type) throws I2PException, IOException {
         if (!this.file.exists()) {
-            OutputStream out = null;
-            try {
-                if (this.client != null) {
-                    out = new SecureFileOutputStream(this.file);
+            if (this.client != null) {
+                try (OutputStream out = new SecureFileOutputStream(this.file)) {
                     this.client.createDestination(out, type);
-                } else {
-                    write();
                 }
-            } finally {
-                if (out != null) {
-                    try {
-                        out.close();
-                    } catch (IOException ioe) { /* ignored */ }
-                }
+            } else {
+                write();
             }
         }
         return getDestination();
@@ -638,10 +630,8 @@ public class PrivateKeyFile {
     private Destination createIfAbsent(SigType type, EncType ptype)
             throws I2PException, IOException {
         if (!this.file.exists()) {
-            OutputStream out = null;
-            try {
-                if (this.client != null) {
-                    out = new SecureFileOutputStream(this.file);
+            if (this.client != null) {
+                try (OutputStream out = new SecureFileOutputStream(this.file)) {
                     // no support for this in I2PClient,
                     // so we modify code from CreateRouterInfoJob.createRouterInfo()
                     I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -692,17 +682,11 @@ public class PrivateKeyFile {
                     cert.writeBytes(out);
                     priv.writeBytes(out);
                     spriv.writeBytes(out);
-                } else {
-                    write();
+                } catch (GeneralSecurityException gse) {
+                    throw new RuntimeException("keygen fail", gse);
                 }
-            } catch (GeneralSecurityException gse) {
-                throw new RuntimeException("keygen fail", gse);
-            } finally {
-                if (out != null) {
-                    try {
-                        out.close();
-                    } catch (IOException ioe) { /* ignored */ }
-                }
+            } else {
+                write();
             }
         }
         return getDestination();
@@ -993,16 +977,8 @@ public class PrivateKeyFile {
      *  @throws IOException if there is an error reading the key file
      */
     public I2PSession open(Properties opts) throws I2PSessionException, IOException {
-        InputStream in = null;
-        try {
-            in = new BufferedInputStream(new FileInputStream(this.file));
+        try (InputStream in = new BufferedInputStream(new FileInputStream(this.file))) {
             return this.client.createSession(in, opts);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 
@@ -1014,9 +990,7 @@ public class PrivateKeyFile {
      *  @throws DataFormatException if data encoding fails
      */
     public void write() throws IOException, DataFormatException {
-        OutputStream out = null;
-        try {
-            out = new SecureFileOutputStream(this.file);
+        try (OutputStream out = new SecureFileOutputStream(this.file)) {
             this.dest.writeBytes(out);
             this.privKey.writeBytes(out);
             this.signingPrivKey.writeBytes(out);
@@ -1026,12 +1000,6 @@ public class PrivateKeyFile {
                 _transientSigningPubKey.writeBytes(out);
                 _offlineSignature.writeBytes(out);
                 _transientSigningPrivKey.writeBytes(out);
-            }
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

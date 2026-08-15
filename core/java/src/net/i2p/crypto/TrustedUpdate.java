@@ -229,20 +229,19 @@ public class TrustedUpdate {
             System.out.println("Error: Not overwriting file " + privateKeyFile);
             return false;
         }
-        FileOutputStream fileOutputStream = null;
         I2PAppContext context = I2PAppContext.getGlobalContext();
         try {
             Object[] signingKeypair = context.keyGenerator().generateSigningKeypair();
             SigningPublicKey signingPublicKey = (SigningPublicKey) signingKeypair[0];
             SigningPrivateKey signingPrivateKey = (SigningPrivateKey) signingKeypair[1];
 
-            fileOutputStream = new SecureFileOutputStream(pubFile);
-            signingPublicKey.writeBytes(fileOutputStream);
-            fileOutputStream.close();
-            fileOutputStream = null;
+            try (FileOutputStream pubOut = new SecureFileOutputStream(pubFile)) {
+                signingPublicKey.writeBytes(pubOut);
+            }
 
-            fileOutputStream = new SecureFileOutputStream(privFile);
-            signingPrivateKey.writeBytes(fileOutputStream);
+            try (FileOutputStream privOut = new SecureFileOutputStream(privFile)) {
+                signingPrivateKey.writeBytes(privOut);
+            }
 
             System.out.println("\r\nPrivate key written to: " + privateKeyFile);
             System.out.println("Public key written to: " + publicKeyFile);
@@ -255,10 +254,6 @@ public class TrustedUpdate {
             System.err.println("Error writing keys:");
             e.printStackTrace();
             return false;
-        } finally {
-            if (fileOutputStream != null) try {
-                    fileOutputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }
@@ -366,10 +361,7 @@ public class TrustedUpdate {
      *         is present.
      */
     public static String getVersionString(File signedFile) {
-        FileInputStream fileInputStream = null;
-
-        try {
-            fileInputStream = new FileInputStream(signedFile);
+        try (FileInputStream fileInputStream = new FileInputStream(signedFile)) {
             DataHelper.skip(fileInputStream, Signature.SIGNATURE_BYTES);
             byte[] data = new byte[VERSION_BYTES];
             int bytesRead = DataHelper.read(fileInputStream, data);
@@ -385,10 +377,6 @@ public class TrustedUpdate {
             return new String(data, StandardCharsets.UTF_8);
         } catch (IOException ioe) {
             return "";
-        } finally {
-            if (fileInputStream != null) try {
-                    fileInputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -515,26 +503,14 @@ public class TrustedUpdate {
     public String migrateFile(File signedFile, File outputFile) {
         if (!signedFile.exists()) return "File not found: " + signedFile.getAbsolutePath();
 
-        FileInputStream fileInputStream = null;
-        FileOutputStream fileOutputStream = null;
-
-        try {
-            fileInputStream = new FileInputStream(signedFile);
-            fileOutputStream = new FileOutputStream(outputFile);
+try (FileInputStream fileInputStream = new FileInputStream(signedFile);
+             FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
 
             DataHelper.skip(fileInputStream, HEADER_BYTES);
             DataHelper.copy(fileInputStream, fileOutputStream);
         } catch (IOException ioe) {
             // probably permissions or disk full, so bring the message out to the console
             return "Error copying update: " + ioe;
-        } finally {
-            if (fileInputStream != null) try {
-                    fileInputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
-
-            if (fileOutputStream != null) try {
-                    fileOutputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
 
         return null;
@@ -560,11 +536,9 @@ public class TrustedUpdate {
      *         <code>null</code> if there was an error.
      */
     public Signature sign(String inputFile, String signedFile, String privateKeyFile, String version) {
-        FileInputStream fileInputStream = null;
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
 
-        try {
-            fileInputStream = new FileInputStream(privateKeyFile);
+        try (FileInputStream fileInputStream = new FileInputStream(privateKeyFile)) {
             signingPrivateKey.readBytes(fileInputStream);
         } catch (IOException ioe) {
             if (_log.shouldWarn()) _log.warn("Unable to load the signing key", ioe);
@@ -574,10 +548,6 @@ public class TrustedUpdate {
             if (_log.shouldWarn()) _log.warn("Unable to load the signing key", dfe);
 
             return null;
-        } finally {
-            if (fileInputStream != null) try {
-                    fileInputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
 
         return sign(inputFile, signedFile, signingPrivateKey, version);
@@ -617,51 +587,27 @@ public class TrustedUpdate {
 
         System.arraycopy(versionRawBytes, 0, versionHeader, 0, versionRawBytes.length);
 
-        FileInputStream fileInputStream = null;
         Signature signature = null;
-        SequenceInputStream bytesToSignInputStream = null;
-        ByteArrayInputStream versionHeaderInputStream = null;
 
-        try {
-            fileInputStream = new FileInputStream(inputFile);
-            versionHeaderInputStream = new ByteArrayInputStream(versionHeader);
-            bytesToSignInputStream = new SequenceInputStream(versionHeaderInputStream, fileInputStream);
+        try (FileInputStream sigInput = new FileInputStream(inputFile);
+             SequenceInputStream bytesToSignInputStream = new SequenceInputStream(new ByteArrayInputStream(versionHeader), sigInput)) {
             signature = _context.dsa().sign(bytesToSignInputStream, signingPrivateKey);
 
         } catch (IOException e) {
             if (_log.shouldError()) _log.error("Error signing", e);
 
             return null;
-        } finally {
-            if (bytesToSignInputStream != null) try {
-                    bytesToSignInputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
-            if (fileInputStream != null) try {
-                    fileInputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
 
-        FileOutputStream fileOutputStream = null;
-
-        try {
-            fileOutputStream = new FileOutputStream(signedFile);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(signedFile);
+             FileInputStream copyInput = new FileInputStream(inputFile)) {
             fileOutputStream.write(signature.getData());
             fileOutputStream.write(versionHeader);
-            fileInputStream = new FileInputStream(inputFile);
-            DataHelper.copy(fileInputStream, fileOutputStream);
-            fileOutputStream.close();
+            DataHelper.copy(copyInput, fileOutputStream);
         } catch (IOException ioe) {
             if (_log.shouldWarn()) _log.log(Log.WARN, "Error writing signed file " + signedFile, ioe);
 
             return null;
-        } finally {
-            if (fileInputStream != null) try {
-                    fileInputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
-
-            if (fileOutputStream != null) try {
-                    fileOutputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
 
         return signature;
@@ -715,10 +661,8 @@ public class TrustedUpdate {
      */
     public boolean verify(String signedFile, String publicKeyFile) {
         SigningPublicKey signingPublicKey = new SigningPublicKey();
-        FileInputStream keyStream = null;
 
-        try {
-            keyStream = new FileInputStream(publicKeyFile);
+        try (FileInputStream keyStream = new FileInputStream(publicKeyFile)) {
             signingPublicKey.readBytes(keyStream);
         } catch (IOException ioe) {
             if (_log.shouldWarn()) _log.warn("Unable to load the public key from " + publicKeyFile, ioe);
@@ -726,10 +670,6 @@ public class TrustedUpdate {
         } catch (DataFormatException dfe) {
             if (_log.shouldWarn()) _log.warn("Unable to load the public key from " + publicKeyFile, dfe);
             return false;
-        } finally {
-            if (keyStream != null) try {
-                    keyStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
 
         return verify(new File(signedFile), signingPublicKey);
@@ -747,10 +687,7 @@ public class TrustedUpdate {
      *         <code>false</code>.
      */
     public boolean verify(File signedFile, SigningPublicKey signingPublicKey) {
-        FileInputStream fileInputStream = null;
-
-        try {
-            fileInputStream = new FileInputStream(signedFile);
+        try (FileInputStream fileInputStream = new FileInputStream(signedFile)) {
             Signature signature = new Signature();
 
             signature.readBytes(fileInputStream);
@@ -764,10 +701,6 @@ public class TrustedUpdate {
             if (_log.shouldError()) _log.error("Error reading the signature", dfe);
 
             return false;
-        } finally {
-            if (fileInputStream != null) try {
-                    fileInputStream.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

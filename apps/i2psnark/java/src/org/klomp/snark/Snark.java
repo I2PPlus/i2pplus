@@ -161,17 +161,17 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         // Figure out what the torrent argument represents.
         File f = null;
-        InputStream in = null;
         byte[] x_infoHash = null;
         try {
             f = new File(torrent);
             if (f.exists()) {
-                in = new FileInputStream(f);
+                try (InputStream in = new FileInputStream(f)) {
+                    meta = new MetaInfo(in);
+                    x_infoHash = meta.getInfoHash();
+                }
             } else {
                 throw new IOException("not found");
             }
-            meta = new MetaInfo(in);
-            x_infoHash = meta.getInfoHash();
         } catch (IOException ioe) {
             // OK, so it wasn't a torrent metainfo file.
             if (f != null && f.exists()) {
@@ -197,12 +197,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                             + ": "
                             + oom.getMessage(),
                     oom);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
 
         infoHash = x_infoHash; // final

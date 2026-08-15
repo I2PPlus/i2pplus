@@ -96,10 +96,8 @@ public class FileUtil {
      * @since 0.9.7
      */
     public static boolean extractZip(File zipfile, File targetDir, int logLevel) {
-        ZipFile zip = null;
-        try {
+        try (ZipFile zip = new ZipFile(zipfile)) {
             final byte[] buf = new byte[8192];
-            zip = new ZipFile(zipfile);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry =  entries.nextElement();
@@ -131,26 +129,24 @@ public class FileUtil {
                         }
                     }
                 } else {
-                    InputStream in = null;
-                    FileOutputStream fos = null;
-                    JarOutputStream jos = null;
-                    try {
-                        in = zip.getInputStream(entry);
+                    try (InputStream in = zip.getInputStream(entry)) {
                         if (entry.getName().endsWith(".jar.pack") || entry.getName().endsWith(".war.pack")) {
                             target = new File(targetDir, entry.getName().substring(0, entry.getName().length() - ".pack".length()));
-                            jos = new JarOutputStream(new FileOutputStream(target));
-                            unpack(in, jos);
+                            try (JarOutputStream jos = new JarOutputStream(new FileOutputStream(target))) {
+                                unpack(in, jos);
+                            }
                             if (logLevel <= Log.INFO) System.err.println("INFO: File [" + entry.getName() + "] extracted and unpacked");
                         } else {
-                            fos = new FileOutputStream(target);
-                            // We do NOT use DataHelper.copy() because it loads new classes
-                            // and causes the update to crash.
-                            // DataHelper.copy(in, fos);
-                            int read;
-                            while ((read = in.read(buf)) != -1) {
-                                fos.write(buf, 0, read);
+                            try (FileOutputStream fos = new FileOutputStream(target)) {
+                                // We do NOT use DataHelper.copy() because it loads new classes
+                                // and causes the update to crash.
+                                // DataHelper.copy(in, fos);
+                                int read;
+                                while ((read = in.read(buf)) != -1) {
+                                    fos.write(buf, 0, read);
+                                }
+                                if (logLevel == Log.DEBUG) System.err.println("INFO: File [" + entry.getName() + "] extracted");
                             }
-                            if (logLevel == Log.DEBUG) System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         }
                     } catch (IOException ioe) {
                         if (logLevel <= Log.ERROR) {
@@ -168,16 +164,6 @@ public class FileUtil {
                             e.printStackTrace();
                         }
                         return false;
-                    } finally {
-                        try {
-                            if (in != null) in.close();
-                        } catch (IOException ioe) { /* ignored */ }
-                        try {
-                            if (fos != null) fos.close();
-                        } catch (IOException ioe) { /* ignored */ }
-                        try {
-                            if (jos != null) jos.close();
-                        } catch (IOException ioe) { /* ignored */ }
                     }
                 }
             }
@@ -188,12 +174,6 @@ public class FileUtil {
                 ioe.printStackTrace();
             }
             return false;
-        } finally {
-            if (zip != null) {
-                try {
-                    zip.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 
@@ -211,10 +191,8 @@ public class FileUtil {
      * @return true if ok
      */
     public static boolean verifyZip(File zipfile) {
-        ZipFile zip = null;
-        try {
+        try (ZipFile zip = new ZipFile(zipfile)) {
             byte[] buf = new byte[16 * 1024];
-            zip = new ZipFile(zipfile);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             boolean p200TestRequired = true;
             while (entries.hasMoreElements()) {
@@ -249,12 +227,6 @@ public class FileUtil {
             System.err.println("ERROR: Unable to extract the zip file");
             ioe.printStackTrace();
             return false;
-        } finally {
-            if (zip != null) {
-                try {
-                    zip.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 
@@ -429,17 +401,11 @@ public class FileUtil {
         String rootDirStr = rootDir.getCanonicalPath();
         if (!targetStr.startsWith(rootDirStr)) throw new FileNotFoundException("Requested file is outside the root dir: " + path);
 
-        FileInputStream in = null;
-        try {
-            in = new FileInputStream(target);
+        try (FileInputStream in = new FileInputStream(target)) {
             DataHelper.copy(in, out);
             try {
                 out.close();
             } catch (IOException ioe) { /* ignored */ }
-        } finally {
-            if (in != null) try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -477,11 +443,8 @@ public class FileUtil {
         if (!src.exists()) return false;
         if (dst.exists() && !overwriteExisting) return false;
 
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = new FileInputStream(src);
-            out = new FileOutputStream(dst);
+        try (InputStream in = new FileInputStream(src);
+             OutputStream out = new FileOutputStream(dst)) {
             // We do NOT use DataHelper.copy() because it's used in installer.jar
             // which does not contain DataHelper
             // DataHelper.copy(in, out);
@@ -494,13 +457,6 @@ public class FileUtil {
         } catch (IOException ioe) {
             if (!quiet) ioe.printStackTrace();
             return false;
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException ioe) { /* ignored */ }
-            try {
-                if (out != null) out.close();
-            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

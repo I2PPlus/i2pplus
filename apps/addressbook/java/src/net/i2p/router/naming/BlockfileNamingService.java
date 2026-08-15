@@ -248,10 +248,8 @@ public class BlockfileNamingService extends DummyNamingService {
                 if ((!file.exists()) || !(file.canRead()))
                     continue;
                 int count = 0;
-                BufferedReader in = null;
                 String sourceMsg = "Imported from " + hostsfile + " file";
-                try {
-                    in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8), 16*1024);
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8), 16*1024)) {
                     String line = null;
                     while ( (line = in.readLine()) != null) {
                         if (line.startsWith("#"))
@@ -278,8 +276,6 @@ public class BlockfileNamingService extends DummyNamingService {
                     }
                 } catch (IOException ioe) {
                     _log.error("Failed to read hosts from " + file, ioe);
-                } finally {
-                    if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
                 }
                 total += count;
                 _log.logAlways(Log.INFO, "Migrating " + count + " hosts from " + file + " to new hosts database");

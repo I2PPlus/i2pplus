@@ -48,9 +48,7 @@ abstract class PersistDHT {
     public static synchronized void loadDHT(KRPC krpc, File file) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(PersistDHT.class);
         int count = 0;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1))) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -66,11 +64,6 @@ abstract class PersistDHT {
             }
         } catch (IOException ioe) {
             if (log.shouldWarn() && file.exists()) log.warn("Error reading the DHT File", ioe);
-        } finally {
-            if (br != null)
-                try {
-                    br.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
         if (log.shouldInfo()) log.info("Loaded " + count + " nodes from " + file);
     }
@@ -87,13 +80,10 @@ abstract class PersistDHT {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(PersistDHT.class);
         int count = 0;
         long maxAge = saveAll ? 0 : I2PAppContext.getGlobalContext().clock().now() - MAX_AGE;
-        PrintWriter out = null;
-        try {
-            out =
-                    new PrintWriter(
-                            new BufferedWriter(
-                                    new OutputStreamWriter(
-                                            new SecureFileOutputStream(file), StandardCharsets.ISO_8859_1)));
+        try (PrintWriter out = new PrintWriter(
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                new SecureFileOutputStream(file), StandardCharsets.ISO_8859_1)))) {
             out.println("# DHT nodes, format is NID:Hash:Destination:port");
             for (NodeInfo ni : nodes.values()) {
                 if (ni.lastSeen() < maxAge) continue;
@@ -104,8 +94,6 @@ abstract class PersistDHT {
             if (out.checkError()) throw new IOException("Failed write to " + file);
         } catch (IOException ioe) {
             if (log.shouldWarn()) log.warn("Error writing the DHT File", ioe);
-        } finally {
-            if (out != null) out.close();
         }
         if (log.shouldInfo()) log.info("Wrote " + count + " nodes to " + file);
     }

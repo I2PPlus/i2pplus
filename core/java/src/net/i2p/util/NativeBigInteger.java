@@ -1015,19 +1015,15 @@ public class NativeBigInteger extends BigInteger {
             return false;
         }
 
-        InputStream libStream = null;
         File outFile = null;
-        FileOutputStream fos = null;
         String filename = _libPrefix + "jbigi" + _libSuffix;
-        try {
-            libStream = resource.openStream();
+        try (InputStream libStream = resource.openStream()) {
             outFile = File.createTempFile(
                     "jbigi", _libSuffix, I2PAppContext.getGlobalContext().getTempDir());
             outFile.deleteOnExit();
-            fos = new FileOutputStream(outFile);
-            DataHelper.copy(libStream, fos);
-            fos.close();
-            fos = null;
+            try (FileOutputStream fos = new FileOutputStream(outFile)) {
+                DataHelper.copy(libStream, fos);
+            }
             System.load(outFile.getAbsolutePath());
             info("Loaded library: " + resource);
         } catch (UnsatisfiedLinkError ule) {
@@ -1038,16 +1034,6 @@ public class NativeBigInteger extends BigInteger {
             warn("Problem writing out the temporary native library data: " + ioe);
             if (outFile != null) outFile.delete();
             return false;
-        } finally {
-            if (libStream != null)
-                try {
-                    libStream.close();
-                } catch (IOException ioe) { /* ignored */ }
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
         // copy to install dir, ignore failure
         File newFile = new File(I2PAppContext.getGlobalContext().getBaseDir(), filename);
@@ -1111,9 +1097,7 @@ public class NativeBigInteger extends BigInteger {
      */
     private static Map<String, String> getCPUInfo() {
         Map<String, String> rv = new HashMap<>(32);
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/cpuinfo"), StandardCharsets.ISO_8859_1), 4096);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/cpuinfo"), StandardCharsets.ISO_8859_1), 4096)) {
             String line = null;
             while ((line = in.readLine()) != null) {
                 String[] parts = DataHelper.split(line, ":", 2);
@@ -1123,11 +1107,6 @@ public class NativeBigInteger extends BigInteger {
             }
         } catch (IOException ioe) {
             warn("Unable to read /proc/cpuinfo", ioe);
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }

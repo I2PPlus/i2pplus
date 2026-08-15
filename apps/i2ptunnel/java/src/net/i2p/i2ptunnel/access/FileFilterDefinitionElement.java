@@ -51,9 +51,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
         lastLoading = System.currentTimeMillis();
         synchronized (lastLoaded) {lastLoaded.clear();}
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String b32;
             while((b32 = reader.readLine()) != null) {
                 if (b32.isEmpty())
@@ -71,11 +69,6 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
                 DestTracker newTracker = new DestTracker(hash, threshold);
                 map.put(hash, newTracker);
                 synchronized (lastLoaded) {lastLoaded.put(hash, newTracker);}
-            }
-        } finally {
-            if (reader != null) {
-                try {reader.close();}
-                catch (IOException ignored) { /* ignored */ }
             }
         }
     }

@@ -916,9 +916,7 @@ public abstract class Addresses {
         if (now - ifCacheTime < INET6_CACHE_EXPIRE)
             return;
         _ifCache.clear();
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(IF_INET6_FILE), StandardCharsets.ISO_8859_1), 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(IF_INET6_FILE), StandardCharsets.ISO_8859_1), 1024)) {
             String line = null;
             StringBuilder buf = new StringBuilder(40);
             while ((line = in.readLine()) != null) {
@@ -952,9 +950,7 @@ public abstract class Addresses {
                 Inet6Addr a = new Inet6Addr(addr, flags);
                 _ifCache.put(addr, a);
             }
-        } catch (IOException ioe) { /* ignored */ } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
-        }
+        } catch (IOException ioe) { /* ignored */ }
         ifCacheTime = now;
     }
 
@@ -1308,18 +1304,14 @@ public abstract class Addresses {
         File f = new File(s);
         long rv = -1;
         if (f.exists()) {
-            BufferedReader in = null;
-            try {
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.ISO_8859_1), 64);
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.ISO_8859_1), 64)) {
                 String line = in.readLine();
                 if (line != null) {
                     try {
                         rv = Long.parseLong(line.trim());
                     } catch (NumberFormatException nfe) { /* ignored */ }
                 }
-            } catch (IOException ioe) { /* ignored */ } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
-            }
+            } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }

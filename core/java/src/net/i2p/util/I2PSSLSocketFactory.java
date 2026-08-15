@@ -361,18 +361,12 @@ public class I2PSSLSocketFactory {
                     // want to add some of our own and a PublicSuffixMatcher's
                     // underlying PublicSuffixList is immutable and inaccessible
                     long begin = System.currentTimeMillis();
-                    InputStream in = null;
                     PublicSuffixList list =
                             new PublicSuffixList(Arrays.asList(ADDITIONAL_TLDS), Collections.<String>emptyList());
-                    try {
-                        in = new FileInputStream(geoFile);
+                    try (InputStream in = new FileInputStream(geoFile)) {
                         PublicSuffixList list2 =
                                 new PublicSuffixListParser().parse(new InputStreamReader(in, StandardCharsets.UTF_8));
                         list = merge(list, list2);
-                    } finally {
-                        try {
-                            if (in != null) in.close();
-                        } catch (IOException ioe) { /* ignored */ }
                     }
                     DEFAULT_MATCHER = new PublicSuffixMatcher(list.getRules(), list.getExceptions());
                     if (log.shouldWarn())
@@ -436,9 +430,7 @@ public class I2PSSLSocketFactory {
             if (log.shouldWarn()) log.warn("Country file not found: " + geoFile.getAbsolutePath());
             return;
         }
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), StandardCharsets.UTF_8));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), StandardCharsets.UTF_8))) {
             String line = null;
             int i = 0;
             while ((line = br.readLine()) != null) {
@@ -453,11 +445,6 @@ public class I2PSSLSocketFactory {
             if (log.shouldInfo()) log.info("Loaded " + i + " TLDs from " + geoFile.getAbsolutePath());
         } catch (IOException ioe) {
             log.error("Error reading the Country File", ioe);
-        } finally {
-            if (br != null)
-                try {
-                    br.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

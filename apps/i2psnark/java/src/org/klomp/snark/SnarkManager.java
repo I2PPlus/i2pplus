@@ -3209,23 +3209,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String msg = "Cannot overwrite an existing .torrent file: " + file.getPath();
             throw new IOException(msg);
         }
-        OutputStream out = null;
-        try {
-            if (areFilesPublic) {
-                out = new FileOutputStream(filename);
-            } else {
-                out = new SecureFileOutputStream(filename);
-            }
+        try (OutputStream out = areFilesPublic ? new FileOutputStream(filename) : new SecureFileOutputStream(filename)) {
             out.write(metainfo.getTorrentData());
         } catch (IOException ioe) {
             file.delete(); // remove any partial
             throw ioe;
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

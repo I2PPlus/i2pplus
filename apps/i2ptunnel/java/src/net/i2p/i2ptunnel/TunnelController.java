@@ -319,9 +319,7 @@ public class TunnelController implements Logging {
             if ( (parent != null) && (!parent.exists()) )
                 parent.mkdirs();
         }
-        FileOutputStream fos = null;
-        try {
-            fos = new SecureFileOutputStream(keyFile);
+        try (FileOutputStream fos = new SecureFileOutputStream(keyFile)) {
             SigType stype = PREFERRED_SIGTYPE;
             String st = _config.getProperty(OPT_SIG_TYPE);
             if (st != null) {
@@ -357,8 +355,6 @@ public class TunnelController implements Logging {
                 _log.error("Error creating writing the destination to " + keyFile.getAbsolutePath(), ioe);
             log("✖ Error writing the keys to " + keyFile.getAbsolutePath());
             return false;
-        } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }
@@ -390,7 +386,6 @@ public class TunnelController implements Logging {
         if (altFile.exists())
             return true;
         PrivateKeyFile pkf = new PrivateKeyFile(keyFile);
-        FileOutputStream out = null;
         try {
             Destination dest = pkf.getDestination();
             if (dest == null)
@@ -416,11 +411,11 @@ public class TunnelController implements Logging {
                 // copy of excess data handled in KeyCertificate constructor
             }
 
-            out = new SecureFileOutputStream(altFile);
-            d.writeBytes(out);
-            priv.writeBytes(out);
-            signingPrivKey.writeBytes(out);
-            try { out.close(); } catch (IOException ioe) { /* ignored */ }
+            try (FileOutputStream out = new SecureFileOutputStream(altFile)) {
+                d.writeBytes(out);
+                priv.writeBytes(out);
+                signingPrivKey.writeBytes(out);
+            }
 
             String destStr = d.toBase64();
             log("✔ Alternate private key created and saved in " + altFile.getAbsolutePath());
@@ -453,8 +448,6 @@ public class TunnelController implements Logging {
         } catch (RuntimeException e) {
             log("✖ Error creating keys " + e);
             return false;
-        } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

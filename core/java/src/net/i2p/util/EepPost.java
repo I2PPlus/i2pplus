@@ -237,11 +237,8 @@ public class EepPost extends EepGet {
         out.write(DataHelper.getUTF8(
                 "Content-Disposition: form-data; name=\"" + field + "\"; filename=\"" + file.getName() + "\"" + CRLF));
         out.write(DataHelper.getUTF8("Content-Type: application/octet-stream" + CRLF + CRLF));
-        FileInputStream in = new FileInputStream(file);
-        try {
+        try (FileInputStream in = new FileInputStream(file)) {
             DataHelper.copy(in, out);
-        } finally {
-            in.close();
         }
         out.write(CRLFB);
     }

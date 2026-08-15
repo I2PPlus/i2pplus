@@ -572,6 +572,9 @@ class ConnectionAcceptor implements Runnable {
         @Override
         public void run() {
             try {
+                // The streams are owned by the Peer/socket once connection() hands them
+                // over, so they must NOT be closed here; try-with-resources would kill
+                // every inbound peer connection right after the handshake.
                 InputStream in = _socket.getInputStream();
                 OutputStream out = _socket.getOutputStream();
                 // this is for the readahead in PeerAcceptor.connection()

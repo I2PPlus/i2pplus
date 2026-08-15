@@ -165,16 +165,10 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      */
     public static final void writeSeed(byte[] buf) {
         File f = new File(I2PAppContext.getGlobalContext().getConfigDir(), SEEDFILE);
-        FileOutputStream fos = null;
-        try {
-            fos = new SecureFileOutputStream(f);
+        try (FileOutputStream fos = new SecureFileOutputStream(f)) {
             fos.write(buf);
         } catch (IOException ioe) {
             // ignore
-        } finally {
-            if (fos != null) try {
-                    fos.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -256,9 +250,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      */
     private static final boolean seedFromFile(File f, byte[] buf) {
         if (f.exists()) {
-            FileInputStream fis = null;
-            try {
-                fis = new FileInputStream(f);
+            try (FileInputStream fis = new FileInputStream(f)) {
                 int read = 0;
                 byte[] tbuf = new byte[buf.length];
                 while (read < buf.length) {
@@ -270,10 +262,6 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
                 return true;
             } catch (IOException ioe) {
                 // ignore
-            } finally {
-                if (fis != null) try {
-                        fis.close();
-                    } catch (IOException ioe) { /* ignored */ }
             }
         }
         return false;

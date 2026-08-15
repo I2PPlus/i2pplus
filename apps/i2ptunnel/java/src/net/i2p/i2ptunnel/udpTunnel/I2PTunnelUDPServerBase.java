@@ -74,16 +74,11 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
                            EventDispatcher notifyThis, I2PTunnel tunnel) {
         super("UDPServer <- " + privkeyname, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(I2PTunnelUDPServerBase.class);
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(privkey);
+        try (FileInputStream fis = new FileInputStream(privkey)) {
             init(fis, l);
         } catch (IOException ioe) {
             _log.error("Error starting server", ioe);
             notifyEvent("openServerResult", "error");
-        } finally {
-            if (fis != null)
-                try { fis.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

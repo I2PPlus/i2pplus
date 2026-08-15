@@ -1963,11 +1963,8 @@ public class EepGet {
         if (_postBinaryData != null) {
             _proxyOut.write(_postBinaryData);
         } else if (_postDataFile != null) {
-            InputStream in = new FileInputStream(_postDataFile);
-            try {
+            try (InputStream in = new FileInputStream(_postDataFile)) {
                 DataHelper.copy(in, _proxyOut);
-            } finally {
-                try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         _proxyOut.flush();

@@ -163,29 +163,15 @@ public final class KeyStoreUtil {
         char[] pwchars = password != null ? password.toCharArray() : null;
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         if (exists) {
-            InputStream fis = null;
-            try {
-                fis = new FileInputStream(ksFile);
+            try (InputStream fis = new FileInputStream(ksFile)) {
                 ks.load(fis, pwchars);
-            } finally {
-                if (fis != null)
-                    try {
-                        fis.close();
-                    } catch (IOException ioe) { /* ignored */ }
             }
         }
         if (ksFile != null && !exists) {
-            OutputStream fos = null;
-            try {
+            try (OutputStream fos = new SecureFileOutputStream(ksFile)) {
                 // must be initted
                 ks.load(null, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
-                fos = new SecureFileOutputStream(ksFile);
                 ks.store(fos, pwchars);
-            } finally {
-                if (fos != null)
-                    try {
-                        fos.close();
-                    } catch (IOException ioe) { /* ignored */ }
             }
         }
         return ks;
@@ -248,9 +234,7 @@ public final class KeyStoreUtil {
      */
     private static boolean loadCerts(File file, KeyStore ks) {
         if (!file.exists()) return false;
-        InputStream fis = null;
-        try {
-            fis = new FileInputStream(file);
+        try (InputStream fis = new FileInputStream(file)) {
             // "changeit" is the default password
             ks.load(fis, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
             info("Certs loaded from " + file);
@@ -267,10 +251,6 @@ public final class KeyStoreUtil {
                 ks.load(null, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
             } catch (IOException foo) { /* ignored */ } catch (GeneralSecurityException e) { /* ignored */ }
             return false;
-        } finally {
-            try {
-                if (fis != null) fis.close();
-            } catch (IOException foo) { /* ignored */ }
         }
         return true;
     }
@@ -311,10 +291,8 @@ public final class KeyStoreUtil {
      */
     public static boolean logCertExpiration(File f, String ksPW, long expiresWithin) {
         String location = f.getAbsolutePath();
-        InputStream fis = null;
-        try {
+        try (InputStream fis = new FileInputStream(f)) {
             KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-            fis = new FileInputStream(f);
             ks.load(fis, ksPW.toCharArray());
             return logCertExpiration(ks, location, expiresWithin);
         } catch (IOException ioe) {
@@ -323,10 +301,6 @@ public final class KeyStoreUtil {
         } catch (GeneralSecurityException gse) {
             error("Unable to check certificates in key store " + location, gse);
             return false;
-        } finally {
-            try {
-                if (fis != null) fis.close();
-            } catch (IOException foo) { /* ignored */ }
         }
     }
 
@@ -1075,10 +1049,8 @@ public final class KeyStoreUtil {
      */
     public static PrivateKey getPrivateKey(File ks, String ksPW, String alias, String keyPW)
             throws GeneralSecurityException, IOException {
-        InputStream fis = null;
-        try {
+        try (InputStream fis = new FileInputStream(ks)) {
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            fis = new FileInputStream(ks);
             char[] pwchars = ksPW != null ? ksPW.toCharArray() : null;
             keyStore.load(fis, pwchars);
             char[] keypwchars = keyPW.toCharArray();
@@ -1086,11 +1058,6 @@ public final class KeyStoreUtil {
         } catch (ProviderException pe) {
             // PE is unchecked
             throw new GeneralSecurityException(pe);
-        } finally {
-            if (fis != null)
-                try {
-                    fis.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1106,10 +1073,8 @@ public final class KeyStoreUtil {
      */
     public static void exportPrivateKey(File ks, String ksPW, String alias, String keyPW, OutputStream out)
             throws GeneralSecurityException, IOException {
-        InputStream fis = null;
-        try {
+        try (InputStream fis = new FileInputStream(ks)) {
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            fis = new FileInputStream(ks);
             char[] pwchars = ksPW != null ? ksPW.toCharArray() : null;
             keyStore.load(fis, pwchars);
             char[] keypwchars = keyPW.toCharArray();
@@ -1120,11 +1085,6 @@ public final class KeyStoreUtil {
         } catch (ProviderException pe) {
             // PE is unchecked
             throw new GeneralSecurityException(pe);
-        } finally {
-            if (fis != null)
-                try {
-                    fis.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1143,17 +1103,14 @@ public final class KeyStoreUtil {
     public static X509Certificate renewPrivateKeyCertificate(
             File ks, String ksPW, String alias, String keyPW, int validDays)
             throws GeneralSecurityException, IOException {
-        InputStream fis = null;
-        OutputStream fos = null;
         try {
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            fis = new FileInputStream(ks);
-            char[] pwchars = ksPW != null ? ksPW.toCharArray() : null;
-            keyStore.load(fis, pwchars);
-            try {
-                fis.close();
-            } catch (IOException ioe) { /* ignored */ }
-            fis = null;
+            KeyStore keyStore;
+            char[] pwchars;
+            try (InputStream fis = new FileInputStream(ks)) {
+                keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                pwchars = ksPW != null ? ksPW.toCharArray() : null;
+                keyStore.load(fis, pwchars);
+            }
             char[] keypwchars = keyPW.toCharArray();
             if (alias == null) {
                 Enumeration<String> e = keyStore.aliases();
@@ -1169,21 +1126,13 @@ public final class KeyStoreUtil {
             cert = (X509Certificate) rv[2];
             certs[0] = cert;
             keyStore.setKeyEntry(alias, pk, keypwchars, certs);
-            fos = new SecureFileOutputStream(ks);
-            keyStore.store(fos, pwchars);
+            try (OutputStream fos = new SecureFileOutputStream(ks)) {
+                keyStore.store(fos, pwchars);
+            }
             return cert;
         } catch (ProviderException pe) {
             // PE is unchecked
             throw new GeneralSecurityException(pe);
-        } finally {
-            if (fis != null)
-                try {
-                    fis.close();
-                } catch (IOException ioe) { /* ignored */ }
-            if (fos != null)
-                try {
-                    fos.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1204,7 +1153,6 @@ public final class KeyStoreUtil {
      */
     public static String importPrivateKey(File ks, String ksPW, String alias, String keyPW, InputStream in)
             throws GeneralSecurityException, IOException {
-        OutputStream fos = null;
         try {
             KeyStore keyStore = createKeyStore(ks, ksPW);
             PrivateKey pk = CertUtil.loadPrivateKey(in);
@@ -1217,17 +1165,14 @@ public final class KeyStoreUtil {
             }
             keyStore.setKeyEntry(alias, pk, keyPW.toCharArray(), certs.toArray(new Certificate[certs.size()]));
             char[] pwchars = ksPW != null ? ksPW.toCharArray() : null;
-            fos = new SecureFileOutputStream(ks);
-            keyStore.store(fos, pwchars);
+            try (OutputStream fos = new SecureFileOutputStream(ks)) {
+                keyStore.store(fos, pwchars);
+            }
             return alias;
         } catch (ProviderException pe) {
             // PE is unchecked
             throw new GeneralSecurityException(pe);
         } finally {
-            if (fos != null)
-                try {
-                    fos.close();
-                } catch (IOException ioe) { /* ignored */ }
             try {
                 in.close();
             } catch (IOException ioe) { /* ignored */ }
@@ -1249,21 +1194,16 @@ public final class KeyStoreUtil {
     public static void storePrivateKey(
             File ks, String ksPW, String alias, String keyPW, PrivateKey pk, List<X509Certificate> certs)
             throws GeneralSecurityException, IOException {
-        OutputStream fos = null;
         try {
             KeyStore keyStore = createKeyStore(ks, ksPW);
             keyStore.setKeyEntry(alias, pk, keyPW.toCharArray(), certs.toArray(new Certificate[certs.size()]));
             char[] pwchars = ksPW != null ? ksPW.toCharArray() : null;
-            fos = new SecureFileOutputStream(ks);
-            keyStore.store(fos, pwchars);
+            try (OutputStream fos = new SecureFileOutputStream(ks)) {
+                keyStore.store(fos, pwchars);
+            }
         } catch (ProviderException pe) {
             // PE is unchecked
             throw new GeneralSecurityException(pe);
-        } finally {
-            if (fos != null)
-                try {
-                    fos.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1276,18 +1216,11 @@ public final class KeyStoreUtil {
      *  @return the certificate or null if not found
      */
     public static Certificate getCert(File ks, String ksPW, String alias) throws GeneralSecurityException, IOException {
-        InputStream fis = null;
-        try {
+        try (InputStream fis = new FileInputStream(ks)) {
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            fis = new FileInputStream(ks);
             char[] pwchars = ksPW != null ? ksPW.toCharArray() : null;
             keyStore.load(fis, pwchars);
             return keyStore.getCertificate(alias);
-        } finally {
-            if (fis != null)
-                try {
-                    fis.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1303,7 +1236,6 @@ public final class KeyStoreUtil {
      *  @since 0.8.3 moved from SSLClientListenerRunner in 0.9.9
      */
     public static boolean exportCert(File ks, String ksPW, String alias, File certFile) {
-        InputStream fis = null;
         try {
             Certificate cert = getCert(ks, ksPW, alias);
             if (cert != null) return CertUtil.saveCert(cert, certFile);
@@ -1530,10 +1462,8 @@ public final class KeyStoreUtil {
         }
         File ksf = new File(args[1]);
         if (ksf.exists()) {
-            InputStream fis = null;
-            try {
+            try (InputStream fis = new FileInputStream(ksf)) {
                 KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-                fis = new FileInputStream(ksf);
                 ks.load(fis, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
                 System.out.println("Certificates:");
                 for (Enumeration<String> e = ks.aliases(); e.hasMoreElements(); ) {
@@ -1549,10 +1479,6 @@ public final class KeyStoreUtil {
                 error("Unable to get certificates in key store " + ksf, ioe);
             } catch (GeneralSecurityException gse) {
                 error("Unable to get certificates in key store " + ksf, gse);
-            } finally {
-                try {
-                    if (fis != null) fis.close();
-                } catch (IOException foo) { /* ignored */ }
             }
         } else {
             System.err.println("Keystore file not found: " + ksf);

@@ -177,8 +177,7 @@ public class SocketController implements RouterApp {
          */
         @Override
         public void run() {
-            try {
-                final BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8))) {
                 while (true) {
                     Object o = Jsoner.deserialize(reader);
                     _log.log(Log.WARN, "Unhandled JSON input: " + o);

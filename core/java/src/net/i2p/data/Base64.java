@@ -245,15 +245,10 @@ public class Base64 {
             System.err.println("unknown command " + cmd);
             System.exit(1);
         }
-        InputStream in = System.in;
-        OutputStream out = System.out;
-        try {
-            if (args.length >= 3) {
-                out = new FileOutputStream(args[2]);
-            }
-            if (args.length >= 2) {
-                in = new FileInputStream(args[1]);
-            }
+        try (InputStream fin = args.length >= 2 ? new FileInputStream(args[1]) : null;
+             OutputStream fout = args.length >= 3 ? new FileOutputStream(args[2]) : null) {
+            InputStream in = fin != null ? fin : System.in;
+            OutputStream out = fout != null ? fout : System.out;
             if ("encode".equals(cmd)) {
                 encode(in, out);
             } else {
@@ -261,9 +256,6 @@ public class Base64 {
             }
         } catch (IOException ioe) {
             ioe.printStackTrace(System.err);
-        } finally {
-            try { in.close(); } catch (IOException e) { /* ignored */ }
-            try { out.close(); } catch (IOException e) { /* ignored */ }
         }
     }
 

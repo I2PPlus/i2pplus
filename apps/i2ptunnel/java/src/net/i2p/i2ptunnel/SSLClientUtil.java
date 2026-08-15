@@ -190,11 +190,9 @@ public class SSLClientUtil {
             ks = new File(ks, ksname);
         }
 
-        InputStream fis = null;
-        try {
+        try (InputStream fis = new FileInputStream(ks)) {
             SSLContext sslc = SSLContext.getInstance("TLS");
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            fis = new FileInputStream(ks);
             keyStore.load(fis, ksPass.toCharArray());
             KeyStoreUtil.logCertExpiration(keyStore, ks.getAbsolutePath(), 180*24*60*60*1000L);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
@@ -205,8 +203,6 @@ public class SSLClientUtil {
             IOException ioe = new IOException("keystore error");
             ioe.initCause(gse);
             throw ioe;
-        } finally {
-            if (fis != null) try { fis.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

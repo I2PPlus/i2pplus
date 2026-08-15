@@ -89,12 +89,9 @@ class MimeTypes {
      * @since 0.9.54
      */
     private void loadSystemMimeTypes() {
-        BufferedReader in = null;
-        try {
-            in =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    new FileInputStream("/etc/mime.types"), StandardCharsets.ISO_8859_1));
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream("/etc/mime.types"), StandardCharsets.ISO_8859_1))) {
             while (true) {
                 String line = in.readLine();
                 if (line == null) break;
@@ -105,12 +102,7 @@ class MimeTypes {
                     _mimeMap.put(s[i].toLowerCase(Locale.US), s[0]);
                 }
             }
-        } catch (IOException ioe) { /* ignored */ } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-        }
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**

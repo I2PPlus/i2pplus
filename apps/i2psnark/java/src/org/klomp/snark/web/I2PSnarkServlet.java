@@ -6477,19 +6477,14 @@ public class I2PSnarkServlet extends BasicServlet {
         newCreatedBy = null;
         MetaInfo newMeta = new MetaInfo(meta, thePrimary, newAnnList, newComment, newCreatedBy, meta.getWebSeedURLs());
         File f = new File(_manager.util().getTempDir(), "edit-" + _manager.util().getContext().random().nextLong() + ".torrent");
-        OutputStream out = null;
-        try {
-            out = _manager.areFilesPublic() ? new FileOutputStream(f) : new SecureFileOutputStream(f);
+        try (OutputStream out = _manager.areFilesPublic() ? new FileOutputStream(f) : new SecureFileOutputStream(f)) {
             out.write(newMeta.getTorrentData());
-            out.close();
             boolean ok = FileUtil.rename(f, new File(snark.getName()));
             if (!ok) {
                 _manager.addMessage("Save edit changes failed");
                 return;
             }
         } catch (IOException ioe) {
-            try {if (out != null) out.close();}
-            catch (IOException ioe2) { /* ignored */ }
             _manager.addMessage("Save edit changes failed: " + ioe.getMessage());
             return;
         } finally {f.delete();}

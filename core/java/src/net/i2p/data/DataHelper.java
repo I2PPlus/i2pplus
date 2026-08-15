@@ -665,9 +665,7 @@ public class DataHelper {
      * @throws IOException if there is an error reading
      */
     public static void loadProps(Properties props, InputStream inStr, boolean forceLowerCase) throws IOException {
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(inStr, StandardCharsets.UTF_8), 4 * 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(inStr, StandardCharsets.UTF_8), 4 * 1024)) {
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.trim().isEmpty()) {
@@ -697,12 +695,6 @@ public class DataHelper {
                     props.setProperty(key, val);
                 }
             }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 
@@ -723,13 +715,10 @@ public class DataHelper {
      * @throws IOException if there is an IO error
      */
     public static void storeProps(Properties props, File file) throws IOException {
-        FileOutputStream fos = null;
-        PrintWriter out = null;
         IllegalArgumentException iae = null;
         File tmpFile = new File(file.getPath() + ".tmp");
-        try {
-            fos = new SecureFileOutputStream(tmpFile);
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8)));
+        try (FileOutputStream fos = new SecureFileOutputStream(tmpFile);
+             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8)))) {
             out.println("# NOTE: This I2P config file must use UTF-8 encoding");
             out.println("# Last saved: " + formatTime(System.currentTimeMillis()));
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
@@ -755,24 +744,13 @@ public class DataHelper {
             }
             out.close();
             if (out.checkError()) {
-                out = null;
                 tmpFile.delete();
                 throw new IOException("Failed to write properties to " + tmpFile);
             }
-            out = null;
             if (!FileUtil.rename(tmpFile, file)) {
                 throw new IOException("Failed rename from " + tmpFile + " to " + file);
             }
             SecureFileOutputStream.setGroupPerms(file);
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
         if (iae != null) {
             throw iae;

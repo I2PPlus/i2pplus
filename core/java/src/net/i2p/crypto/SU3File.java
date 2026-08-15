@@ -285,19 +285,12 @@ public class SU3File {
      */
     public void verifyHeader() throws IOException {
         if (_headerVerified) return;
-        InputStream in = null;
-        try {
-            in = new FileInputStream(_file);
+        try (InputStream in = new FileInputStream(_file)) {
             verifyHeader(in);
         } catch (DataFormatException dfe) {
             IOException ioe = new IOException("foo");
             ioe.initCause(dfe);
             throw ioe;
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -419,11 +412,9 @@ public class SU3File {
      *  @return true if signature is good
      */
     public boolean verifyAndMigrate(File migrateTo) throws IOException {
-        InputStream in = null;
         FileOutputStream out = null;
         boolean rv = false;
-        try {
-            in = new BufferedInputStream(new FileInputStream(_file));
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(_file))) {
             // read 10 bytes to get the sig type
             in.mark(10);
             // following is a dup of that in verifyHeader()
@@ -442,9 +433,8 @@ public class SU3File {
             in.reset();
             MessageDigest md = _sigType.getDigestInstance();
             DigestInputStream din = new DigestInputStream(in, md);
-            in = din;
-            if (!_headerVerified) verifyHeader(in);
-            else skip(in, getContentOffset());
+            if (!_headerVerified) verifyHeader(din);
+            else skip(din, getContentOffset());
             if (_verifySignature && _signerPubkey == null) {
                 throw new IOException(
                         "Unknown signer: " + _signer + " for content type: " + _contentType.getName());
@@ -453,7 +443,7 @@ public class SU3File {
             byte[] buf = new byte[16 * 1024];
             long tot = 0;
             while (tot < _contentLength) {
-                int read = in.read(buf, 0, (int) Math.min(buf.length, _contentLength - tot));
+                int read = din.read(buf, 0, (int) Math.min(buf.length, _contentLength - tot));
                 if (read < 0) throw new EOFException();
                 if (migrateTo != null) out.write(buf, 0, read); // else verify only
                 tot += read;
@@ -462,8 +452,8 @@ public class SU3File {
                 byte[] sha = md.digest();
                 din.on(false);
                 Signature signature = new Signature(_sigType);
-                signature.readBytes(in);
-                int avail = in.available();
+                signature.readBytes(din);
+                int avail = din.available();
                 if (avail > 0) throw new IOException(avail + " bytes data after sig");
                 SimpleDataStructure hash = _sigType.getHashInstance();
                 hash.setData(sha);
@@ -476,10 +466,6 @@ public class SU3File {
             ioe.initCause(dfe);
             throw ioe;
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
             if (out != null) {
                 // We will generally be reading this file right back in,
                 // so do a POSIX flush and sync to ensure it will be there.
@@ -516,13 +502,10 @@ public class SU3File {
             PrivateKey privkey,
             SigType sigType)
             throws IOException {
-        InputStream in = null;
-        DigestOutputStream out = null;
+        MessageDigest md = sigType.getDigestInstance();
         boolean ok = false;
-        try {
-            in = new BufferedInputStream(new FileInputStream(content));
-            MessageDigest md = sigType.getDigestInstance();
-            out = new DigestOutputStream(new BufferedOutputStream(new FileOutputStream(_file)), md);
+        try (InputStream in = new BufferedInputStream(new FileInputStream(content));
+             DigestOutputStream out = new DigestOutputStream(new BufferedOutputStream(new FileOutputStream(_file)), md)) {
             out.write(MAGIC_BYTES);
             out.write((byte) 0);
             out.write((byte) FILE_VERSION);
@@ -574,14 +557,6 @@ public class SU3File {
             ioe.initCause(dfe);
             throw ioe;
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-            if (out != null)
-                try {
-                    out.close();
-                } catch (IOException ioe) { /* ignored */ }
             if (!ok) _file.delete();
         }
     }
@@ -1131,17 +1106,17 @@ public class SU3File {
         } catch (IOException ioe) {
             return false;
         }
-        OutputStream out = null;
         try {
             Object[] rv = KeyStoreUtil.createKeysAndCRL(ksFile, kspass, alias, alias, "I2P", 3652, type, keypw);
             X509Certificate cert = (X509Certificate) rv[2];
-            out = new SecureFileOutputStream(publicKeyFile);
-            CertUtil.exportCert(cert, out);
+            try (OutputStream out = new SecureFileOutputStream(publicKeyFile)) {
+                CertUtil.exportCert(cert, out);
+            }
             if (crlFile != null) {
-                out.close();
                 X509CRL crl = (X509CRL) rv[3];
-                out = new SecureFileOutputStream(crlFile);
-                CertUtil.exportCRL(crl, out);
+                try (OutputStream out = new SecureFileOutputStream(crlFile)) {
+                    CertUtil.exportCRL(crl, out);
+                }
             }
         } catch (GeneralSecurityException gse) {
             System.err.println("Error creating keys for " + alias);
@@ -1151,11 +1126,6 @@ public class SU3File {
             System.err.println("Error creating keys for " + alias);
             ioe.printStackTrace();
             return false;
-        } finally {
-            if (out != null)
-                try {
-                    out.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }

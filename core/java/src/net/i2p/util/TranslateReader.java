@@ -399,20 +399,13 @@ public class TranslateReader extends FilterReader {
     }
 
     private static void test(String file) throws IOException {
-        TranslateReader r = null;
-        try {
-            r = new TranslateReader(
-                    I2PAppContext.getGlobalContext(), "net.i2p.router.web.messages", new FileInputStream(file));
+        try (TranslateReader r = new TranslateReader(
+                I2PAppContext.getGlobalContext(), "net.i2p.router.web.messages", new FileInputStream(file))) {
             int c;
             while ((c = r.read()) >= 0) {
                 System.out.print((char) c);
             }
             System.out.flush();
-        } finally {
-            if (r != null)
-                try {
-                    r.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -445,15 +438,11 @@ public class TranslateReader extends FilterReader {
         try {
             tagger = new Tagger(outfile);
             for (String file : filelist) {
-                TranslateReader r = null;
-                try {
-                    r = new TranslateReader(I2PAppContext.getGlobalContext(), null, new FileInputStream(file));
+                try (TranslateReader r = new TranslateReader(I2PAppContext.getGlobalContext(), null, new FileInputStream(file))) {
                     r._hook = tagger;
                     while (r.read(buf, 0, buf.length) >= 0) {
                         // throw away output
                     }
-                } finally {
-                    if (r != null) r.close();
                 }
             }
         } finally {

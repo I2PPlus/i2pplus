@@ -159,19 +159,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         init(host, port, tunnel);
-        InputStream fis = null;
-        try {
-            fis = new BufferedInputStream(new FileInputStream(privkey));
+        try (InputStream fis = new BufferedInputStream(new FileInputStream(privkey))) {
             sockMgr = createManager(fis);
         } catch (IOException ioe) {
             _log.error("Cannot read private key data for " + privkeyname, ioe);
             notifyEvent("openServerResult", "error");
             throw new IllegalArgumentException("Error starting server", ioe);
-        } finally {
-            if (fis != null) {
-                try {fis.close();}
-                catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 
@@ -284,9 +277,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         name = props.getProperty("outbound.nickname");
         if (name != null) {props.setProperty("outbound.nickname", name + " (EdDSA)");}
         props.setProperty(I2PClient.PROP_SIGTYPE, "EdDSA_SHA512_Ed25519");
-        InputStream privData = null;
-        try {
-            privData = new BufferedInputStream(new FileInputStream(altFile));
+        try (InputStream privData = new BufferedInputStream(new FileInputStream(altFile))) {
             I2PSession rv = sMgr.addSubsession(privData, props);
             checkOfflineExpiration(rv, name, " alternate destination");
             return rv;
@@ -296,11 +287,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         } catch (I2PSessionException ise) {
             _log.error("Failed to add sub-session", ise);
             return null;
-        } finally {
-            if (privData != null) {
-                try {privData.close();}
-                catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 

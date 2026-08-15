@@ -286,21 +286,12 @@ class FileLogWriter extends LogWriter {
          */
         public void compress() {
             File to = new File(_f.getPath() + ".gz");
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                in = new BufferedInputStream(new FileInputStream(_f));
-                out = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(to)));
+            try (InputStream in = new BufferedInputStream(new FileInputStream(_f));
+                 OutputStream out = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(to)))) {
                 DataHelper.copy(in, out);
             } catch (IOException ioe) {
                 System.out.println("Error compressing log file " + _f);
             } finally {
-                if (in != null) try {
-                        in.close();
-                    } catch (IOException ioe) { /* ignored */ }
-                if (out != null) try {
-                        out.close();
-                    } catch (IOException ioe) { /* ignored */ }
                 to.setLastModified(_f.lastModified());
                 _f.delete();
             }

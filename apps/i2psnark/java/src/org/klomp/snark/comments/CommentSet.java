@@ -81,22 +81,14 @@ public class CommentSet extends AbstractSet<Comment> {
      */
     public CommentSet(File file) throws IOException {
         this();
-        BufferedReader br = null;
-        try {
-            br =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8));
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8))) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 Comment c = Comment.fromPersistentString(line);
                 if (c != null) add(c);
             }
-        } finally {
-            if (br != null)
-                try {
-                    br.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
         modified = false;
     }
@@ -109,13 +101,10 @@ public class CommentSet extends AbstractSet<Comment> {
      * @throws IOException if an I/O error occurs
      */
     public void save(File file) throws IOException {
-        PrintWriter out = null;
-        try {
-            out =
-                    new PrintWriter(
-                            new OutputStreamWriter(
-                                    new GZIPOutputStream(new SecureFileOutputStream(file)),
-                                    StandardCharsets.UTF_8));
+        try (PrintWriter out = new PrintWriter(
+                new OutputStreamWriter(
+                        new GZIPOutputStream(new SecureFileOutputStream(file)),
+                        StandardCharsets.UTF_8))) {
             for (List<Comment> l : map.values()) {
                 for (Comment c : l) {
                     out.println(c.toPersistentString());
@@ -123,8 +112,6 @@ public class CommentSet extends AbstractSet<Comment> {
             }
             if (out.checkError()) throw new IOException("Failed write to " + file);
             modified = false;
-        } finally {
-            if (out != null) out.close();
         }
     }
 

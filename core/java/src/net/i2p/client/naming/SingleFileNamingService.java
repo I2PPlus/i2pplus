@@ -119,10 +119,8 @@ public class SingleFileNamingService extends NamingService {
     @Override
     public String reverseLookup(Destination dest, Properties options) {
         String destkey = dest.toBase64();
-        BufferedReader in = null;
         getReadLock();
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -137,10 +135,6 @@ public class SingleFileNamingService extends NamingService {
             else if (_log.shouldWarn()) _log.warn("Error loading hosts file " + _file, ioe);
             return null;
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -171,14 +165,12 @@ public class SingleFileNamingService extends NamingService {
      *  @since 0.9.71+
      */
     private void loadKeyCacheLocked() throws IOException {
-        BufferedReader in = null;
-        try {
-            if (!_file.exists()) {
-                _keyCache.clear();
-                _cacheStamp = 0;
-                return;
-            }
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+        if (!_file.exists()) {
+            _keyCache.clear();
+            _cacheStamp = 0;
+            return;
+        }
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
             _keyCache.clear();
             String line = null;
             while ((line = in.readLine()) != null) {
@@ -189,11 +181,6 @@ public class SingleFileNamingService extends NamingService {
                 _keyCache.put(clean.substring(0, split), clean.substring(split + 1));
             }
             _cacheStamp = _file.lastModified();
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -209,31 +196,29 @@ public class SingleFileNamingService extends NamingService {
         // try easy way first, most adds are not replaces
         if (putIfAbsent(hostname, d, options)) return true;
         if (!getWriteLock()) return false;
-        BufferedReader in = null;
-        BufferedWriter out = null;
         try {
             if (_isClosed) return false;
             File tmp = SecureFile.createTempFile(
                     "temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8));
-            if (_file.exists()) {
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
-                String line = null;
-                String search = hostname + '=';
-                while ((line = in.readLine()) != null) {
-                    if (line.startsWith(search)) continue;
-                    out.write(line);
-                    out.newLine();
+            try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8))) {
+                if (_file.exists()) {
+                    try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
+                        String line = null;
+                        String search = hostname + '=';
+                        while ((line = in.readLine()) != null) {
+                            if (line.startsWith(search)) continue;
+                            out.write(line);
+                            out.newLine();
+                        }
+                    }
                 }
-                in.close();
+                out.write(hostname);
+                out.write('=');
+                out.write(d.toBase64());
+                // subscription options
+                if (options != null) writeOptions(options, out);
+                out.newLine();
             }
-            out.write(hostname);
-            out.write('=');
-            out.write(d.toBase64());
-            // subscription options
-            if (options != null) writeOptions(options, out);
-            out.newLine();
-            out.close();
             boolean success = FileUtil.rename(tmp, _file);
             if (success) {
                 _cacheStamp = 0;
@@ -246,14 +231,6 @@ public class SingleFileNamingService extends NamingService {
             _log.error("Error adding " + hostname, ioe);
             return false;
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException e) { /* ignored */ }
-            if (out != null)
-                try {
-                    out.close();
-                } catch (IOException e) { /* ignored */ }
             releaseWriteLock();
         }
     }
@@ -267,7 +244,6 @@ public class SingleFileNamingService extends NamingService {
      */
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
-        BufferedWriter out = null;
         if (!getWriteLock()) return false;
         try {
             if (_isClosed) return false;
@@ -281,14 +257,15 @@ public class SingleFileNamingService extends NamingService {
                 }
                 // else new file
             }
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(_file, true), StandardCharsets.UTF_8));
-            // FIXME fails if previous last line didn't have a trailing \n
-            out.write(hostname);
-            out.write('=');
-            out.write(d.toBase64());
-            // subscription options
-            if (options != null) writeOptions(options, out);
-            out.write('\n');
+            try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(_file, true), StandardCharsets.UTF_8))) {
+                // FIXME fails if previous last line didn't have a trailing \n
+                out.write(hostname);
+                out.write('=');
+                out.write(d.toBase64());
+                // subscription options
+                if (options != null) writeOptions(options, out);
+                out.write('\n');
+            }
             for (NamingServiceListener nsl : _listeners) {
                 nsl.entryAdded(this, hostname, d, options);
             }
@@ -298,10 +275,6 @@ public class SingleFileNamingService extends NamingService {
             _log.error("Error adding " + hostname, ioe);
             return false;
         } finally {
-            if (out != null)
-                try {
-                    out.close();
-                } catch (IOException e) { /* ignored */ }
             releaseWriteLock();
         }
     }
@@ -342,29 +315,26 @@ public class SingleFileNamingService extends NamingService {
      */
     @Override
     public boolean remove(String hostname, Properties options) {
-        BufferedReader in = null;
-        BufferedWriter out = null;
         if (!getWriteLock()) return false;
         try {
             if (!_file.exists()) return false;
             if (_isClosed) return false;
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             File tmp = SecureFile.createTempFile(
                     "temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8));
-            String line = null;
-            String search = hostname + '=';
             boolean success = false;
-            while ((line = in.readLine()) != null) {
-                if (line.startsWith(search)) {
-                    success = true;
-                    continue;
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8))) {
+                String line = null;
+                String search = hostname + '=';
+                while ((line = in.readLine()) != null) {
+                    if (line.startsWith(search)) {
+                        success = true;
+                        continue;
+                    }
+                    out.write(line);
+                    out.newLine();
                 }
-                out.write(line);
-                out.newLine();
             }
-            in.close();
-            out.close();
             if (!success) {
                 tmp.delete();
                 return false;
@@ -381,14 +351,6 @@ public class SingleFileNamingService extends NamingService {
             _log.error("Error removing " + hostname, ioe);
             return false;
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException e) { /* ignored */ }
-            if (out != null)
-                try {
-                    out.close();
-                } catch (IOException e) { /* ignored */ }
             releaseWriteLock();
         }
     }
@@ -429,10 +391,8 @@ public class SingleFileNamingService extends NamingService {
         if (_log.shouldDebug())
             _log.debug("Searching " + " starting with " + startsWith + " search string " + searchOpt
                        + " skip " + skip + " limit " + limit);
-        BufferedReader in = null;
         getReadLock();
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
             String line = null;
             Map<String, Destination> rv = new HashMap<>();
             int skipped = 0;
@@ -471,10 +431,6 @@ public class SingleFileNamingService extends NamingService {
             _log.error("getEntries error", ioe);
             return Collections.emptyMap();
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -502,10 +458,8 @@ public class SingleFileNamingService extends NamingService {
             searchOpt = options.getProperty("search");
             startsWith = options.getProperty("startsWith");
         }
-        BufferedReader in = null;
         getReadLock();
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
             String line = null;
             Map<String, String> rv = new HashMap<>();
             while ((line = in.readLine()) != null) {
@@ -536,10 +490,6 @@ public class SingleFileNamingService extends NamingService {
             _log.error("getEntries error", ioe);
             return Collections.emptyMap();
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -560,20 +510,14 @@ public class SingleFileNamingService extends NamingService {
         out.write("# Exported: ");
         out.write(Instant.now().toString());
         out.write(nl);
-        BufferedReader in = null;
         getReadLock();
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
             String line = null;
             while ((line = in.readLine()) != null) {
                 out.write(line);
                 out.write(nl);
             }
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -587,10 +531,8 @@ public class SingleFileNamingService extends NamingService {
     @Override
     public Set<String> getNames(Properties options) {
         if (!_file.exists()) return Collections.emptySet();
-        BufferedReader in = null;
         getReadLock();
-        try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
             String line = null;
             Set<String> rv = new HashSet<>();
             while ((line = in.readLine()) != null) {
@@ -606,10 +548,6 @@ public class SingleFileNamingService extends NamingService {
             _log.error("getNames error", ioe);
             return Collections.emptySet();
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }
@@ -622,28 +560,24 @@ public class SingleFileNamingService extends NamingService {
     @Override
     public int size(Properties options) {
         if (!_file.exists()) return 0;
-        BufferedReader in = null;
         getReadLock();
         try {
             if (_file.lastModified() <= _lastWrite) return _size;
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
-            String line = null;
-            int rv = 0;
-            while ((line = in.readLine()) != null) {
-                if (line.startsWith("#") || line.length() <= 0) continue;
-                rv++;
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024)) {
+                String line = null;
+                int rv = 0;
+                while ((line = in.readLine()) != null) {
+                    if (line.startsWith("#") || line.length() <= 0) continue;
+                    rv++;
+                }
+                _lastWrite = _file.lastModified();
+                _size = rv;
+                return rv;
             }
-            _lastWrite = _file.lastModified();
-            _size = rv;
-            return rv;
         } catch (IOException ioe) {
             _log.error("size() error", ioe);
             return -1;
         } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
             releaseReadLock();
         }
     }

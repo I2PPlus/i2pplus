@@ -144,14 +144,12 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      */
     private void add(File file) {
         _mgr.addMessageNoEscape(_t("Torrent downloaded from {0}", urlify(_url)));
-        FileInputStream in = null;
         try {
-            in = new FileInputStream(file);
             byte[] fileInfoHash = new byte[20];
-            String name = MetaInfo.getNameAndInfoHash(in, fileInfoHash);
-            try {
-                in.close();
-            } catch (IOException ioe) { /* ignored */ }
+            String name;
+            try (FileInputStream in = new FileInputStream(file)) {
+                name = MetaInfo.getNameAndInfoHash(in, fileInfoHash);
+            }
             Snark snark = _mgr.getTorrentByInfoHash(fileInfoHash);
             if (snark != null) {
                 _mgr.addMessage(
@@ -189,10 +187,6 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
                     _t("ERROR - Out of memory, cannot create torrent from {0}", urlify(_url))
                             + ": "
                             + DataHelper.stripHTML(oom.getMessage()));
-        } finally {
-            try {
-                if (in != null) in.close();
-            } catch (IOException ioe) { /* ignored */ }
         }
     }
 

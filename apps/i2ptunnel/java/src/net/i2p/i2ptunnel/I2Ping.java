@@ -175,9 +175,7 @@ public class I2Ping extends I2PTunnelClientBase {
         }
 
         if (hostListFile != null) {
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(hostListFile), StandardCharsets.UTF_8));
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(hostListFile), StandardCharsets.UTF_8))) {
                 String line;
                 List<PingHandler> pingHandlers = new ArrayList<>();
                 int i = 0;
@@ -199,12 +197,6 @@ public class I2Ping extends I2PTunnelClientBase {
                 }
                 for (Thread t : pingHandlers) {
                     t.join();
-                }
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException ignored) { /* ignored */ }
                 }
             }
             return;

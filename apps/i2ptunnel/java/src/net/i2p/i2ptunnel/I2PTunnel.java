@@ -1400,9 +1400,13 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             File privKeyFile = new File(args[0]);
             if (privKeyFile.exists()) {
                 l.log("File already exists.");
-                showKey(new FileInputStream(privKeyFile), pubdest, l);
+                try (InputStream in = new FileInputStream(privKeyFile)) {
+                    showKey(in, pubdest, l);
+                }
             } else {
-                makeKey(new FileOutputStream(privKeyFile), pubdest, l);
+                try (OutputStream out = new FileOutputStream(privKeyFile)) {
+                    makeKey(out, pubdest, l);
+                }
             }
         } catch (IOException ioe) {
             l.log("Error generating keys - " + ioe.getMessage());
@@ -1527,23 +1531,18 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     private void runRun(String[] args, Logging l) {
         if (args.length == 1) {
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8));
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith("#"))
                         continue;
                     runCommand(line, l);
                 }
-                br.close();
                 notifyEvent("runResult", "ok");
             } catch (IOException ioe) {
                 l.log("IO error running the file");
                 _log.error(getPrefix() + "Error running the file", ioe);
                 notifyEvent("runResult", "error");
-            } finally {
-                if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
             }
         } else {
             l.log("run <commandfile>\n" +
@@ -1874,9 +1873,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         if (name.startsWith("file:")) {
             Destination result = new Destination();
             byte[] content = null;
-            FileInputStream in = null;
-            try {
-                in = new FileInputStream(name.substring("file:".length()));
+            try (FileInputStream in = new FileInputStream(name.substring("file:".length()))) {
                 byte[] buf = new byte[1024];
                 int read = DataHelper.read(in, buf);
                 content = new byte[read];
@@ -1885,10 +1882,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 if (log.shouldLog(Log.WARN))
                     log.warn("Error reading destination from " + name, ioe);
                 return null;
-            } finally {
-                if (in != null) try {
-                    in.close();
-                } catch (IOException io) { /* ignored */ }
             }
             try {
                 result.fromByteArray(content);

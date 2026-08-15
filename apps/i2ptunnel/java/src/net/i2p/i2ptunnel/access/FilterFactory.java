@@ -30,9 +30,7 @@ public class FilterFactory {
         throws IOException, InvalidDefinitionException {
         List<String> linesList = new ArrayList<>();
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(definition), StandardCharsets.UTF_8));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(definition), StandardCharsets.UTF_8))) {
             String line;
             while((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -42,8 +40,6 @@ public class FilterFactory {
                     continue;
                 linesList.add(line);
             }
-        } finally {
-            if (reader != null) try { reader.close(); } catch (IOException ignored) { /* ignored */ }
         }
 
         FilterDefinition parsedDefinition = DefinitionParser.parse(linesList.toArray(new String[0]));
