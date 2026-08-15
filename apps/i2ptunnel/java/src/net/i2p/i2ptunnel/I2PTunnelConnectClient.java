@@ -109,10 +109,10 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * manage their own socket cleanup in their finally blocks, so the
      * caller no longer needs to close sockets after this returns.
      *
-     * @param task Thread task to execute
+     * @param task Runnable task to execute
      * @since 0.9.70+
      */
-    private void executeTask(Thread task) {
+    private void executeTask(Runnable task) {
         if (_executor != null) {
             _executor.execute(task);
         } else {
