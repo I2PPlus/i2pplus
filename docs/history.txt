@@ -1,3 +1,63 @@
+2026-08-15 dr|z3d
+  * Tunnel:
+    - Fix tunnel pool regressions and rework peer cooldowns so pool
+      members are not starved out of rebuilds
+  * Console:
+    - Banlist page: consistent null-port handling (missing ports no
+      longer break sorting)
+    - Fix average response time truncation on the profiles page
+  * AddressBook:
+    - Merge conflict check now compares destinations, so an entry with
+      the same destination under a different name no longer conflicts
+  * GeoIP:
+    - Drop China carrier network labels and region designators from
+      org names
+
+2026-08-14 dr|z3d
+  * Tuner:
+    - Lossy demotion threshold based on median loss (1.5x); lossy
+      peers instantly demoted from fast/high-capacity tiers
+    - Fix missing min fast peers toggle; all tuning params dynamic
+    - Fix lossy threshold autotune (was NPEing) and add manual tuning
+      controls (Default/Min/Max/Step + Auto override)
+  * Peermanager:
+    - Decayed loss score (50%/hr) with 30-min probation replaces the
+      freshness-window check; moderately-lossy peers (10-20%) get a
+      4x selection penalty instead of eviction
+  * Profiles:
+    - Add Fast RTT and loss rings to tier pages
+    - Add Loss percentage bar column after Low Latency
+  * I2PSnark:
+    - Fix StringIndexOutOfBounds on URLs without '&'
+    - Clear the torrent tracker error on any announce/scrape response
+  * Console:
+    - Banlist page: port column sort fix (data-sort '0' when missing)
+  * GeoIP:
+    - Fix AT&T and Vodafone ASN org name mangling
+  * EepGet:
+    - Fix large downloads, gzip failure paths, and gzip resume
+
+2026-08-13 dr|z3d
+  * I2PSnark:
+    - Periodic 10-minute tracker scrape keeps swarm size fresh
+      between announces
+    - Fix AIOOBE on BEP 47 padding files
+  * Tunnel:
+    - Demote lossy peers from fast/high-capacity tiers (10-min window,
+      retransmit ratio >= 20%)
+    - Never select banlisted peers; filter ghosts from exploratory
+      pools
+    - Fix peer cooldown starvation and in-use tunnel pruning
+  * SusiDNS:
+    - Paginate the default book server-side (skip/limit applied after
+      filtering), fix filter and blacklist costs
+  * SusiMail:
+    - Fix temp-file leaks, write locking, headerOnly reads, and
+      idle-closer re-arming after reconnect
+    - Fix renderMailRow mutation (escaped short sender accumulated)
+      and null-mail NPE
+    - Mask SMTP AUTH LOGIN credentials in debug logs
+
 2026-08-12 dr|z3d
   * Build:
     - Fixed the ant i18n generation skipping its locale bundles whenever
@@ -16,6 +76,18 @@
       ui, standalone and SAM client classes live only in the wars; the JspC
       wrapper stays out of jetty-i2p.jar; no vendored jetty/tomcat jars in
       the updater payload), and the payload docs and locale bundles match
+  * I2PSnark:
+    - CompleteBitField saves memory for seeds; recognize i2pd
+      clients; use the inbound banlist for outbound connections too
+    - Disable the old I2CP bandwidth limiter (snark's own limiting is
+      sufficient)
+  * Streaming:
+    - Remove the option to disable protocol number enforcement
+      (always on since 0.9.36)
+  * Console:
+    - Harden iframe postMessage origin validation
+  * Router:
+    - Fix the introducer expiration reuse loop
 
 2026-08-11 dr|z3d
   * Docs:
