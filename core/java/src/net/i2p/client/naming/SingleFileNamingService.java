@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.time.Instant;
 import java.util.Collections;
@@ -124,7 +125,7 @@ public class SingleFileNamingService extends NamingService {
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
+                line = stripComment(line);
                 int split = line.indexOf('=');
                 if (split <= 0) continue;
                 if (destkey.equals(line.substring(split + 1))) return line.substring(0, split);
@@ -175,7 +176,7 @@ public class SingleFileNamingService extends NamingService {
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String clean = line.indexOf('#') > 0 ? line.substring(0, line.indexOf('#')).trim() : line.trim();
+                String clean = stripComment(line);
                 int split = clean.indexOf('=');
                 if (split <= 0) continue;
                 _keyCache.put(clean.substring(0, split), clean.substring(split + 1));
@@ -258,7 +259,8 @@ public class SingleFileNamingService extends NamingService {
                 // else new file
             }
             try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(_file, true), StandardCharsets.UTF_8))) {
-                // FIXME fails if previous last line didn't have a trailing \n
+                if (!endsWithNewline(_file))
+                    out.write('\n'); // otherwise the new entry would merge with the last line
                 out.write(hostname);
                 out.write('=');
                 out.write(d.toBase64());
@@ -406,7 +408,7 @@ public class SingleFileNamingService extends NamingService {
                     }
                 }
                 if (line.startsWith("#")) continue;
-                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
+                line = stripComment(line);
                 int split = line.indexOf('=');
                 if (split <= 0) continue;
                 String key = line.substring(0, split);
@@ -416,7 +418,7 @@ public class SingleFileNamingService extends NamingService {
                     continue;
                 }
                 if (limit > 0 && rv.size() >= limit) break;
-                String b64 = line.substring(split + 1); // .trim() ??????????????
+                String b64 = line.substring(split + 1);
                 try {
                     Destination dest = new Destination(b64);
                     rv.put(key, dest);
@@ -472,12 +474,12 @@ public class SingleFileNamingService extends NamingService {
                     }
                 }
                 if (line.startsWith("#")) continue;
-                if (line.indexOf('#') > 0) line = line.substring(0, line.indexOf('#')).trim(); // trim off any end of line comment
+                line = stripComment(line);
                 int split = line.indexOf('=');
                 if (split <= 0) continue;
                 String key = line.substring(0, split);
                 if (searchOpt != null && key.indexOf(searchOpt) < 0) continue;
-                String b64 = line.substring(split + 1); // .trim() ??????????????
+                String b64 = line.substring(split + 1);
                 if (b64.length() < 387) continue;
                 rv.put(key, b64);
             }
@@ -616,6 +618,31 @@ public class SingleFileNamingService extends NamingService {
 
     private void releaseWriteLock() {
         _fileLock.writeLock().unlock();
+    }
+
+    /**
+     * Strip an end-of-line comment and trim surrounding whitespace.
+     *
+     * @param line a raw hosts file line
+     * @return the line up to (and not including) the first '#', trimmed
+     */
+    private static String stripComment(String line) {
+        int idx = line.indexOf('#');
+        return idx > -1 ? line.substring(0, idx).trim() : line.trim();
+    }
+
+    /**
+     * @return true if the file exists, is non-empty and ends with a newline
+     */
+    private static boolean endsWithNewline(File file) {
+        if (!file.exists() || file.length() == 0)
+            return false;
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            raf.seek(file.length() - 1);
+            return raf.read() == '\n';
+        } catch (IOException ioe) {
+            return false;
+        }
     }
 
 }
