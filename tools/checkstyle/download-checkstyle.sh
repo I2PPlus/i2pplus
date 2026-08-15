@@ -21,6 +21,8 @@ get_installed_version() {
     fi
 }
 
+echo "Checking Checkstyle version..."
+
 INSTALLED=$(get_installed_version)
 
 if [ "$FORCE" = false ] && [ "$INSTALLED" = "$VERSION" ]; then

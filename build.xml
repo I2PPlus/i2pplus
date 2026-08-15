@@ -4037,7 +4037,6 @@
   </target>
 
   <target name="download-spotbugs" unless="spotbugs.present">
-    <echo message="Running SpotBugs download script..."/>
     <exec executable="tools/spotbugs/download-spotbugs.sh" failonerror="true"/>
   </target>
 
@@ -4171,22 +4170,13 @@
 
   <!-- CodeQL -->
   <target name="codeql-setup">
-    <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
-    <available property="codeql.present" file="tools/codeql/codeql-${codeql.version}/codeql"/>
-  </target>
-
-  <target name="codeql-download" unless="codeql.present">
-    <echo message="CodeQL CLI not found. Downloading (~509MB)..."/>
     <exec executable="bash" dir="${basedir}" failonerror="true">
       <arg value="tools/codeql/download-codeql.sh"/>
     </exec>
+    <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
   </target>
 
-  <target name="codeql-download-skip" if="codeql.present">
-    <echo message="CodeQL CLI found"/>
-  </target>
-
-  <target name="codeql-packs-setup" depends="codeql-setup,codeql-download,codeql-download-skip">
+  <target name="codeql-packs-setup" depends="codeql-setup">
     <available property="codeql.packs.present" file="tools/codeql/packs/java-queries"/>
     <available property="codeql.js.packs.present" file="tools/codeql/packs/javascript-queries"/>
   </target>
@@ -4422,16 +4412,11 @@
     <echo message="* Report zip: dist/sonarqube-report.zip"/>
   </target>
 
-  <target name="report-all-java" depends="jar, build2, buildUtilityJar, pmd-setup, checkstyle-setup">
+  <target name="report-all-java" depends="jar, build2, buildUtilityJar, pmd-setup, checkstyle-setup, codeql-setup">
     <echo message="Running analysis tools..."/>
 
     <!-- Suppress verbose build output, keep our progress echoes -->
     <record name="dist/report-all-java.log" action="start" loglevel="warn"/>
-
-    <!-- CodeQL version setup (inline, since codeql-setup has download dependency we handle here) -->
-    <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
-    <available property="codeql.present" file="tools/codeql/codeql-${codeql.version}/codeql"/>
-    <antcall target="codeql-download"/>
 
     <!-- SpotBugs setup -->
     <exec executable="cat" outputproperty="spotbugs.version" failifexecutionfails="false">
@@ -4760,7 +4745,6 @@
   </target>
 
   <target name="download-pmd">
-    <echo message="Checking PMD version..."/>
     <exec executable="tools/pmd/download-pmd.sh" failonerror="true"/>
   </target>
 

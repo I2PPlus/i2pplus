@@ -75,8 +75,6 @@ if [ "$FORCE" = false ] && [ "$INSTALLED" != "none" ]; then
         exit 0
     fi
     echo "Update available: $INSTALLED -> $LATEST"
-    # Remove old version directory
-    rm -rf "${SCRIPT_DIR}/codeql-${INSTALLED}"
 else
     LATEST=$(get_latest_version)
     if [ -z "$LATEST" ]; then
