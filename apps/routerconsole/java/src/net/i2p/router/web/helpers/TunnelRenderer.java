@@ -46,6 +46,10 @@ import net.i2p.util.ObjectCounterUnsafe;
  */
 class TunnelRenderer {
     private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
+    /** "AT&T" followed by anything (whois cleanup) */
+    private static final Pattern ATT_PREFIX = Pattern.compile("(?i)AT\\s*&\\s*T\\s+.*");
+    /** A bare "&T" run (whois cleanup) */
+    private static final Pattern AMP_T_RUN = Pattern.compile("(?i)&\\s*T\\b.*");
     private final RouterContext _context;
 
     /**
@@ -850,11 +854,10 @@ class TunnelRenderer {
                     .replace("Nortex Communications Company", "NORTEX")
                     .replace("ROOT", _t("PRIVATE IP ADDRESS"))
                     .replace("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK", "unknown")
-                    .replace("unknown", _t("unknown"))
-                    .replaceAll(TUNNEL_PAREN.pattern(), "")
-                    .replaceAll("(?i)AT\\s*&\\s*T\\s+.*", "AT&T")
-                    .replaceAll("(?i)&\\s*T\\b.*", "AT&T")
-                    .trim();
+                    .replace("unknown", _t("unknown"));
+                whois = TUNNEL_PAREN.matcher(whois).replaceAll("");
+                whois = ATT_PREFIX.matcher(whois).replaceAll("AT&T");
+                whois = AMP_T_RUN.matcher(whois).replaceAll("AT&T").trim();
                 result.whois = whois;
                 result.domain = null;
             } else if (rl != null) {

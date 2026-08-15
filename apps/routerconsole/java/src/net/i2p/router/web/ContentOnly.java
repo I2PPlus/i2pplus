@@ -3,6 +3,7 @@ package net.i2p.router.web;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -21,6 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 public class ContentOnly {
 
     private ContentOnly() {}
+
+    /** Splits the contentonly parameter on commas and whitespace */
+    private static final Pattern SPLIT = Pattern.compile("[,\\s]+");
+    /** Element ids are [A-Za-z0-9_-] runs */
+    private static final Pattern ELEMENT_ID = Pattern.compile("[A-Za-z0-9_-]+");
 
     /**
      * True when the request asks for fragment rendering.
@@ -44,9 +50,9 @@ public class ContentOnly {
         String param = req.getParameter("contentonly");
         if (param == null) {return Collections.emptySet();}
         Set<String> ids = new HashSet<String>(4);
-        String[] parts = param.split("[,\\s]+");
+        String[] parts = SPLIT.split(param);
         for (String part : parts) {
-            if (part.length() > 0 && part.matches("[A-Za-z0-9_-]+")) {
+            if (part.length() > 0 && ELEMENT_ID.matcher(part).matches()) {
                 ids.add(part);
             }
         }
