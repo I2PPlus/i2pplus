@@ -4128,20 +4128,12 @@
   </target>
 
   <target name="checkstyle-setup">
-    <available property="cs.present" file="tools/checkstyle/checkstyle-all.jar"/>
-  </target>
-
-  <target name="checkstyle-download" unless="cs.present">
     <exec executable="bash" dir="${basedir}" failonerror="true">
       <arg value="tools/checkstyle/download-checkstyle.sh"/>
     </exec>
   </target>
 
-  <target name="checkstyle-download-skip" if="cs.present">
-    <echo message="Checkstyle JAR found"/>
-  </target>
-
-  <target name="checkstyle" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
+  <target name="checkstyle" depends="checkstyle-setup">
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
@@ -4430,7 +4422,7 @@
     <echo message="* Report zip: dist/sonarqube-report.zip"/>
   </target>
 
-  <target name="report-all-java" depends="jar, build2, buildUtilityJar, pmd-setup, checkstyle-setup, checkstyle-download">
+  <target name="report-all-java" depends="jar, build2, buildUtilityJar, pmd-setup, checkstyle-setup">
     <echo message="Running analysis tools..."/>
 
     <!-- Suppress verbose build output, keep our progress echoes -->
@@ -4681,7 +4673,7 @@
     <echo message="Report: dist/report-all-java.html, dist/report-all-java-local.html"/>
   </target>
 
-  <target name="checkstyle-fix-errors" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
+  <target name="checkstyle-fix-errors" depends="checkstyle-setup">
     <echo message="Running fix-java-issues.py --fix checkstyle indent imports (dry run)..."/>
     <exec executable="python3" failonerror="true">
       <arg value="tools/fix-java-issues.py"/>
@@ -4697,7 +4689,7 @@
     </exec>
   </target>
 
-  <target name="checkstyle-fix-errors-apply" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">
+  <target name="checkstyle-fix-errors-apply" depends="checkstyle-setup">
     <echo message="Applying fix-java-issues.py --fix checkstyle indent imports..."/>
     <exec executable="python3" failonerror="true">
       <arg value="tools/fix-java-issues.py"/>
@@ -4734,16 +4726,7 @@
   <target name="pmd-setup">
     <property name="pmd.dir" location="tools/pmd"/>
     <property name="pmd.bin" location="${pmd.dir}/bin/pmd"/>
-    <available file="${pmd.bin}" property="pmd.present"/>
-    <if>
-      <isset property="pmd.present"/>
-      <then>
-        <echo message="PMD found: ${pmd.bin}"/>
-      </then>
-      <else>
-        <antcall target="download-pmd"/>
-      </else>
-    </if>
+    <antcall target="download-pmd"/>
     <!-- PMD 7 requires Java 11+, detect a suitable JVM -->
     <if>
       <not><isset property="pmd.java"/></not>
@@ -4776,8 +4759,8 @@
     </fail>
   </target>
 
-  <target name="download-pmd" unless="pmd.present">
-    <echo message="PMD not found, downloading..."/>
+  <target name="download-pmd">
+    <echo message="Checking PMD version..."/>
     <exec executable="tools/pmd/download-pmd.sh" failonerror="true"/>
   </target>
 
