@@ -154,6 +154,8 @@ tools/
 !tools/pmd/*.css
 !tools/pmd/*.sh
 !tools/pmd/*.xml
+tools/pmd/version.txt
+tools/pmd/ruleset-java-jpinpoint.xml
 !tools/codeql/*.sh
 !tools/codeql/*.py
 !tools/codeql/*.md
