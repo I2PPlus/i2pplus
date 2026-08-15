@@ -675,9 +675,9 @@ public class DataHelper {
                     continue;
                 }
                 if (line.charAt(0) == ';') continue;
-                if (line.indexOf('#') > 0) {
-                    line = line.substring(0, line.indexOf('#')).trim();
-                } // trim off any end of line comment
+                int comment = line.indexOf('#'); // trim off any end of line comment
+                if (comment > -1)
+                    line = line.substring(0, comment).trim();
                 int split = line.indexOf('=');
                 if (split <= 0) {
                     continue;
