@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import net.i2p.util.LHMCache;
+import net.i2p.util.Log;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -37,6 +38,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -83,6 +85,7 @@ import net.i2p.util.VersionComparator;
 class NetDbRenderer {
     private final RouterContext _context;
     private final NetDbRouterCache _routerCache;
+    private final Log _log;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
@@ -93,6 +96,7 @@ class NetDbRenderer {
      */
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
+        _log = ctx.logManager().getLog(NetDbRenderer.class);
         _organizer = ctx.profileOrganizer();
         _routerCache = new NetDbRouterCache(ctx);
     }
@@ -123,6 +127,8 @@ class NetDbRenderer {
     private final Set<Hash> _renderedLeaseSetKeys = new HashSet<>();
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
+    /** Bound on a single parallel render task so a stalled common pool cannot hang the netdb page */
+    private static final long RENDER_TASK_TIMEOUT = 30 * 1000L;
     private long now;
 
     /**
@@ -1813,7 +1819,21 @@ class NetDbRenderer {
                 );
             }
             for (CompletableFuture<StringBuilder> future : futures) {
-                fullHtml.append(future.join());
+                try {
+                    fullHtml.append(future.get(RENDER_TASK_TIMEOUT, TimeUnit.MILLISECONDS));
+                } catch (TimeoutException te) {
+                    future.cancel(true);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Timed out waiting for netdb render task after " +
+                                  RENDER_TASK_TIMEOUT + "ms");
+                    }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                } catch (Exception e) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Error waiting for netdb render task", e);
+                    }
+                }
             }
         }
         return fullHtml.toString();
