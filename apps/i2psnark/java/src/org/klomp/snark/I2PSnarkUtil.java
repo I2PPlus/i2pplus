@@ -779,20 +779,17 @@ public class I2PSnarkUtil implements DisconnectListener {
     static String getNickname(String name) {
         String nick = name != null ? name : "";
         // Remove parenthesized and bracketed segments, e.g. "(2026)", "[WEBRip]"
-        nick = nick.replaceAll("\\([^()]*\\)|\\[[^\\[\\]]*\\]", "");
+        nick = PAREN_SEGMENTS.matcher(nick).replaceAll("");
         // Remove common quality tokens (resolution, codec, source) wherever they appear
-        nick = nick.replaceAll("(?i)(?<=[.\\-_ ]|^)(?:1080p|2160p|720p|480p|4k|8k|x264|x265|h264|h265|hevc" +
-                               "|xvid|divx|web-dl|webdl|webrip|hdtv|pdtv|bluray|bdrip|brrip|dvdrip|remux" +
-                               "|proper|repack|internal|10bit|12bit|8bit|aac|ac3|eac3|dts|ddp5\\.1|dd5\\.1|5\\.1" +
-                               "|7\\.1|atmos|hdr10|hdr)(?=[.\\-_ ]|$)", "");
+        nick = QUALITY_TOKENS.matcher(nick).replaceAll("");
         // Remove a trailing file extension
-        nick = nick.replaceAll("(?i)\\.(?:mkv|mp4|avi|wmv|flv|webm|m4v|mov|mpg|mpeg|ts|m2ts|mp3|flac|m4a|ogg|opus|wav|wma|aac|ac3|dts|zip|rar|7z|tar|iso|torrent|srt|sub|nfo|txt|jpg|jpeg|png|gif|bmp|webp)$", "");
+        nick = TRAILING_EXTENSION.matcher(nick).replaceAll("");
         // Cut a release tag after a dash like "-xRip" or "-NeoNoir"; keep all-caps acronyms
         // like "Pony-FIM" and multi-word tails ("Show - Season 2") that are part of the title
         int dash = nick.indexOf('-');
         if (dash > 0) {
             String tail = nick.substring(dash + 1).trim();
-            boolean releaseTag = !tail.isEmpty() && tail.matches("[A-Za-z0-9]+") && !tail.matches("[A-Z0-9]+");
+            boolean releaseTag = !tail.isEmpty() && ALPHANUMERIC.matcher(tail).matches() && !ALLCAPS.matcher(tail).matches();
             // Cut a release tag like "-xRip" or a long descriptive tail like
             // "- The Most Influential Images..."; keep short multi-word tails
             // ("Show - Season 2") and all-caps acronyms ("Pony-FIM")
@@ -800,9 +797,9 @@ public class I2PSnarkUtil implements DisconnectListener {
                 nick = nick.substring(0, dash);
             }
         }
-        nick = nick.replaceAll("\\.{2,}", ".");
-        nick = nick.replaceAll("\\s+", " ").trim();
-        nick = nick.replaceAll("^[.\\-]+|[.\\-]+$", "");
+        nick = MULTIPLE_DOTS.matcher(nick).replaceAll(".");
+        nick = WHITESPACE.matcher(nick).replaceAll(" ").trim();
+        nick = LEADING_TRAILING.matcher(nick).replaceAll("");
         if (nick.length() > MAX_NAME_LENGTH) {
             nick = nick.substring(0, MAX_NAME_LENGTH) + "...";
         }
@@ -810,6 +807,28 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     private static final int MAX_NAME_LENGTH = 64;
+
+    /** Parenthesized and bracketed segments, e.g. "(2026)", "[WEBRip]" */
+    private static final Pattern PAREN_SEGMENTS = Pattern.compile("\\([^()]*\\)|\\[[^\\[\\]]*\\]");
+    /** Common quality tokens (resolution, codec, source) */
+    private static final Pattern QUALITY_TOKENS = Pattern.compile(
+            "(?i)(?<=[.\\-_ ]|^)(?:1080p|2160p|720p|480p|4k|8k|x264|x265|h264|h265|hevc" +
+            "|xvid|divx|web-dl|webdl|webrip|hdtv|pdtv|bluray|bdrip|brrip|dvdrip|remux" +
+            "|proper|repack|internal|10bit|12bit|8bit|aac|ac3|eac3|dts|ddp5\\.1|dd5\\.1|5\\.1" +
+            "|7\\.1|atmos|hdr10|hdr)(?=[.\\-_ ]|$)");
+    /** A trailing file extension */
+    private static final Pattern TRAILING_EXTENSION = Pattern.compile(
+            "(?i)\\.(?:mkv|mp4|avi|wmv|flv|webm|m4v|mov|mpg|mpeg|ts|m2ts|mp3|flac|m4a|ogg|opus|wav|wma|aac|ac3|dts|zip|rar|7z|tar|iso|torrent|srt|sub|nfo|txt|jpg|jpeg|png|gif|bmp|webp)$");
+    /** Any alphanumeric run (release-tag check) */
+    private static final Pattern ALPHANUMERIC = Pattern.compile("[A-Za-z0-9]+");
+    /** All-caps acronym check */
+    private static final Pattern ALLCAPS = Pattern.compile("[A-Z0-9]+");
+    /** Runs of two or more dots */
+    private static final Pattern MULTIPLE_DOTS = Pattern.compile("\\.{2,}");
+    /** Runs of whitespace */
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+    /** Leading or trailing dots and dashes */
+    private static final Pattern LEADING_TRAILING = Pattern.compile("^[.\\-]+|[.\\-]+$");
 
     /**
      * The destination for a torrent, creating the destination and session on first use,
