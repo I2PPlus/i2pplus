@@ -377,16 +377,17 @@ class BanlistRenderer {
            .append("</th><th class=routerversion>")
            .append(_t("Version"))
            .append("</th><th class=ip>")
-            .append(_t("IP Address"))
+           .append(_t("IP Address"))
            .append("</th><th class=port data-sort-method=number>")
            .append(_t("Port"))
            .append("</th>")
-            .append("<th class=hostname data-sort-method=string data-sort-caseinsensitive>").append(_t("Host")).append("</th>");
-        buf.append("<th class=reason>")
+           .append("<th class=hostname data-sort-method=string data-sort-caseinsensitive>")
+           .append(_t("Host")).append("</th>")
+           .append("<th class=reason>")
            .append(_t("Reason"))
            .append("</th><th class=expires data-sort-method=number data-sort-direction=ascending>")
            .append(_t("Expiry"))
-            .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
+           .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
         }
         int tempBanned = 0;
         boolean stream = entries.size() + ipOnlyBans.size() > MAX_BEFORE_STREAMING;
@@ -525,13 +526,14 @@ class BanlistRenderer {
                .append("</td><td class=routerversion>").append(routerVersion != null ? routerVersion : "")
                .append("</td><td class=ip>")
                .append(ip != null ? ip : "")
-               .append("</td><td class=port data-sort=").append(port != null ? port : "0").append(">")
-               .append(port != null ? port : "")
+               .append("</td><td class=port")
+               .append(port != null && !port.equals("0") ? " data-sort=" + port : "").append(">")
+               .append(port != null && !port.equals("0") ? port : "")
                .append("</td>")
                .append("<td class=hostname>")
                .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
-               .append("</td>");
-            buf.append("<td class=reason>")
+               .append("</td>")
+               .append("<td class=reason>")
                .append(cleanedReason)
                .append("</td><td class=expires data-sort=").append(expires).append(">")
                .append(expireString)
@@ -586,8 +588,8 @@ class BanlistRenderer {
                .append("<td class=ip>")
                .append(ip != null ? ip : "")
                .append("</td><td class=port")
-               .append(port != null ? " data-sort=" + port : "").append(">")
-               .append(port != null ? port : "")
+               .append(port != null && !port.equals("0") ? " data-sort=" + port : "").append(">")
+               .append(port != null && !port.equals("0") ? port : "")
                .append("</td>")
                .append("<td class=hostname>")
                .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
