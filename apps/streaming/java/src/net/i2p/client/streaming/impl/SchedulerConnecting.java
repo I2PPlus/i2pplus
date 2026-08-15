@@ -80,10 +80,11 @@ class SchedulerConnecting extends SchedulerImpl {
                     _log.debug("time till send: " + timeTillSend + " on " + con);
                 reschedule(timeTillSend, con);
             } else if (con.getOptions().getConnectTimeout() > 0) {
-                reschedule(con.getOptions().getConnectTimeout(), con);
-            } else {
+                // no pending send; re-check the connect timeout when it elapses
                 reschedule(con.getOptions().getConnectTimeout(), con);
             }
+            // else: no send pending and no connect timeout configured; the
+            // connection is poked on inbound packets (see ConnectionPacketHandler)
         }
     }
 }
