@@ -2,6 +2,7 @@
 package i2p.susi.dns;
 
 import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -191,7 +192,7 @@ public class AddressbookBean extends BaseBean {
     private Map<String, Properties> parsePropertiesFromFile() {
         Map<String, Properties> rv = new HashMap<>();
         try (BufferedReader reader =
-                new BufferedReader(new InputStreamReader(new FileInputStream(getFileName()), StandardCharsets.UTF_8))) {
+                new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(getFileName())), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Check if this line has properties
