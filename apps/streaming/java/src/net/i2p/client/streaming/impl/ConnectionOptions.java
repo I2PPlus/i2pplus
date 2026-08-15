@@ -819,6 +819,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             break;
         case FIRST:
             _rttState = RttState.STEADY;
+            // fallthrough
         case STEADY:
             _rttDeviation = Math.round((1-RTT_BETA) *_rttDeviation + RTT_BETA * Math.abs(measuredValue-_smoothedRtt));
             int smoothed = Math.round((1-RTT_ALPHA)*_smoothedRtt + RTT_ALPHA*measuredValue);
