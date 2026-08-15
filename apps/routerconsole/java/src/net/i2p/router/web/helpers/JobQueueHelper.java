@@ -640,6 +640,7 @@ public class JobQueueHelper extends HelperBase {
         final String jobName;
         final long time;
         final List<Job> jobs;
+        private static final Collator coll = Collator.getInstance();
 
         JobGroup(String jobName, long time, List<Job> jobs) {
             this.jobName = jobName;
@@ -657,7 +658,20 @@ public class JobQueueHelper extends HelperBase {
                 return 1;
             }
             // If same time, sort by job name
-            return Collator.getInstance().compare(this.jobName, other.jobName);
+            return coll.compare(this.jobName, other.jobName);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == this) return true;
+            if (!(o instanceof JobGroup)) return false;
+            JobGroup other = (JobGroup) o;
+            return this.time == other.time && coll.compare(this.jobName, other.jobName) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return (int) (time ^ (time >>> 32)) ^ jobName.hashCode();
         }
     }
 
