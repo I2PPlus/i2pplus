@@ -319,7 +319,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     if (DataHelper.eq(_aliceIP, infoIP)) {continue;}
                 }
                 // We will ban and throw below after checking signature
-                mismatchMessage = "IP mismatch actual IP " + Addresses.toString(_aliceIP) + " in RI: ";
+                mismatchMessage = "IP mismatch actual IP ".concat(Addresses.toString(_aliceIP)).concat(" in RI: ");
             }
             break;
         }
