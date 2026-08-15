@@ -931,13 +931,15 @@ public class GeoIP {
 
     /** Single-pass abbreviation replacement (was 29× replaceAll) */
     private static String applyAbbreviation(String name) {
-        StringBuffer sb = new StringBuffer(name.length() + 16);
+        StringBuilder sb = new StringBuilder(name.length() + 16);
         Matcher m = ABBREV_ALL.matcher(name);
+        int last = 0;
         while (m.find()) {
-            m.appendReplacement(sb, Matcher.quoteReplacement(
-                ABBREV_MAP.get(m.group(1).toLowerCase(Locale.ROOT))));
+            sb.append(name, last, m.start());
+            sb.append(ABBREV_MAP.get(m.group(1).toLowerCase(Locale.ROOT)));
+            last = m.end();
         }
-        m.appendTail(sb);
+        sb.append(name, last, name.length());
         return sb.toString();
     }
 
