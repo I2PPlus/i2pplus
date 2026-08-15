@@ -866,6 +866,14 @@ public class GeoIP {
         Pattern.CASE_INSENSITIVE
     );
 
+    /** China carrier network labels and region designators to drop (China169 backbone,
+     *  IP Network, Province, Municipality, Autonomous Region); leftover spaces are
+     *  collapsed by the DOUBLE_SPACE step below */
+    private static final Pattern CHINA_VERBOSE = Pattern.compile(
+        "(?:China169|Backbone|IP Networks?|Province|Municipality|Autonomous Region)",
+        Pattern.CASE_INSENSITIVE
+    );
+
     /** Abbreviation map for verbose words */
     private static final Map<String, String> ABBREV_MAP;
     /** Single combined abbreviation pattern */
@@ -1285,6 +1293,10 @@ public class GeoIP {
                 break;
             }
         }
+
+        // Drop China carrier network labels and region designators (China169, Backbone,
+        // IP Network, Province, Municipality, Autonomous Region)
+        name = CHINA_VERBOSE.matcher(name).replaceAll("");
 
         // Abbreviate verbose words
         name = applyAbbreviation(name);
