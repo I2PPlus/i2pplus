@@ -833,7 +833,7 @@ class ProfileOrganizerRenderer {
 
         // Response time
         if (stats.respCount > 0) {
-            double avgMs = stats.respMsSum / stats.respCount;
+            double avgMs = (double) stats.respMsSum / stats.respCount;
             buf.append(RingRenderer.renderRingCell(Math.max(0.0, 1.0 - avgMs / 15000.0),
                       _t("Response"), DataHelper.formatDuration2((long) avgMs).replace("&nbsp;", ""),
                       new String[]{_t("Lookup response time (1h)")},
