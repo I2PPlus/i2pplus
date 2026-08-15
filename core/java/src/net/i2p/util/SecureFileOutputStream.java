@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -88,11 +88,10 @@ public class SecureFileOutputStream extends FileOutputStream {
      */
     public static void setGroupPerms(File f) {
         try {
-            Set<PosixFilePermission> perms = new HashSet<>();
-            perms.add(PosixFilePermission.OWNER_READ);
-            perms.add(PosixFilePermission.OWNER_WRITE);
-            perms.add(PosixFilePermission.GROUP_READ);
-            perms.add(PosixFilePermission.GROUP_WRITE);
+            Set<PosixFilePermission> perms = EnumSet.of(PosixFilePermission.OWNER_READ,
+                                                        PosixFilePermission.OWNER_WRITE,
+                                                        PosixFilePermission.GROUP_READ,
+                                                        PosixFilePermission.GROUP_WRITE);
             Files.setPosixFilePermissions(f.toPath(), perms);
         } catch (IOException e) {
             // not a POSIX filesystem or other error, ignore
