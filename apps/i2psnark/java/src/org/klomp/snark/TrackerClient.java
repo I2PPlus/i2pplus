@@ -565,9 +565,12 @@ public class TrackerClient implements Runnable {
                 } catch (InterruptedException interrupt) { /* ignored */ }
             } // *** end of while loop
         } // try
+        catch (OutOfMemoryError oome) {
+            _log.error("TrackerClient: " + oome, oome);
+            throw oome;
+        }
         catch (Throwable t) {
             _log.error("TrackerClient: " + t, t);
-            if (t instanceof OutOfMemoryError) throw (OutOfMemoryError) t;
         }
     }
 

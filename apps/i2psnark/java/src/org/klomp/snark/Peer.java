@@ -377,9 +377,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             // Ignore, probably just the other side closing the connection.
             // Or refusing the connection, timing out, etc.
             if (_log.shouldDebug()) _log.debug(this.toString(), eofe);
+        } catch (OutOfMemoryError oome) {
+            _log.error(this + ": " + oome.getMessage(), oome);
+            throw oome;
         } catch (Throwable t) {
             _log.error(this + ": " + t.getMessage(), t);
-            if (t instanceof OutOfMemoryError) throw (OutOfMemoryError) t;
         } finally {
             if (deregister) listener.disconnected(this);
             disconnect();
