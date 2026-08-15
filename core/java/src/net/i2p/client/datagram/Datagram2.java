@@ -199,7 +199,9 @@ public class Datagram2 {
                 spk = transientSigningPublicKey;
             }
             int siglen = type.getSigLen();
-            in.skip(in.available() - siglen);
+            int skipLen = in.available() - siglen;
+            if (skipLen > 0 && in.skip(skipLen) < skipLen)
+                throw new DataFormatException("Short read on datagram");
             // end of signed data
             Signature sig = new Signature(type);
             sig.readBytes(in);
