@@ -547,17 +547,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _context = ctx;
         _log = ctx.logManager().getLog(Tuner.class);
         _autotune = new AutotuneConfig(ctx);
-        BaseParam.sharedAutotune = _autotune;
-        // Apply the configured values at startup, clamped to the tunable ranges
-        // enforced by MaxDispatchAgeParam / HandlerThreadPriorityParam. These
-        // fields feed adjustHandlerPriority() and GetBidsJob before the tunable
-        // machinery takes over; an out-of-range priority would make setPriority()
-        // throw in every handler loop, and a negative dispatch age is nonsense.
-        maxDispatchAgeMs = Math.max(2000, Math.min(30000,
-                ctx.getProperty("i2p.router.maxDispatchAge", 3000)));
-        handlerThreadPriority = Math.max(Thread.MIN_PRIORITY + 2,
-                Math.min(Thread.MAX_PRIORITY - 1,
-                ctx.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY)));
+        applyStartupTunables(_autotune, ctx);
         _params = new ArrayList<TunableParam>(72);
 
         // Transport — NTCP/UDP/SSU
@@ -727,6 +717,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _context.statManager().createRequiredRateStat(STAGE_STAT_PREFIX + stage,
                 "CPU usage of " + stage + " worker threads (pct of one core)", "Tuner", cpuRates);
         }
+    }
+
+    /**
+     *  Apply the configured values at startup, clamped to the tunable ranges
+     *  enforced by MaxDispatchAgeParam / HandlerThreadPriorityParam. These
+     *  fields feed adjustHandlerPriority() and GetBidsJob before the tunable
+     *  machinery takes over; an out-of-range priority would make setPriority()
+     *  throw in every handler loop, and a negative dispatch age is nonsense.
+     *  Kept in a static method (called once from the constructor) so the
+     *  statics are not written from instance construction.
+     *
+     *  @param autotune the shared autotune config used as the BaseParam fallback
+     *  @param ctx the router context
+     */
+    private static void applyStartupTunables(AutotuneConfig autotune, RouterContext ctx) {
+        BaseParam.sharedAutotune = autotune;
+        maxDispatchAgeMs = Math.max(2000, Math.min(30000,
+                ctx.getProperty("i2p.router.maxDispatchAge", 3000)));
+        handlerThreadPriority = Math.max(Thread.MIN_PRIORITY + 2,
+                Math.min(Thread.MAX_PRIORITY - 1,
+                ctx.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY)));
     }
 
     /**
