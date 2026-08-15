@@ -1174,9 +1174,8 @@ public class I2PSnarkServlet extends BasicServlet {
             nextSort = poolSort ? "13" : "-2";
         } else if (poolSort && "13".equals(currentSort)) {
             nextSort = "-13";
-        } else if (poolSort && "-13".equals(currentSort)) {
-            nextSort = "-2";
         } else {
+            // status desc, or pool desc (-13) back to status desc
             nextSort = "-2";
         }
         boolean isStatusSort = "2".equals(currentSort) || "-2".equals(currentSort)
