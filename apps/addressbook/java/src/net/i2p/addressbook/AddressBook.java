@@ -322,7 +322,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
             if (isValidKey(otherKey) && isValidDest(otherValue.getDest())) {
                 if (this.addresses.containsKey(otherKey) && !overwrite) {
-                    if (log != null && !this.addresses.get(otherKey).equals(otherValue.getDest())) {
+                    if (log != null && !this.addresses.get(otherKey).getDest().equals(otherValue.getDest())) {
                         log.append("Conflict for " + otherKey + " from " + other.location +
                                    ". Destination in remote address book is " + otherValue);
                     }
