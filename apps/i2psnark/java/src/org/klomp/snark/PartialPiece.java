@@ -201,7 +201,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      *
      * @param subBlock zero-based sub-block index
      */
-    boolean isPaddingSubBlock(int subBlock) {
+    synchronized boolean isPaddingSubBlock(int subBlock) {
         if (_meta == null) {
             return false;
         }
