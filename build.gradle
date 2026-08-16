@@ -66,6 +66,7 @@ ext.fullVersion = fullVersion
 ext.buildExtra = buildExtra
 
 def builtBy = getBuiltBy()
+ext.builtBy = builtBy
 def workspaceVersion = getWorkspaceVersion()
 
 subprojects {

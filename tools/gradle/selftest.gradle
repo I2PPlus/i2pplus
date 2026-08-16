@@ -16,6 +16,7 @@ def documentedTasks = [
     'installer5-nowindows', 'installer5-osx', 'installer5-windows',
     'installer5WExe', 'installer5WJar', 'installerW4Exe', 'installerW4Jar',
     'pkg', 'tarball', 'distclean',
+    'i2psnark', 'i2psnark7zip', 'i2psnark_nozip',
     'jbigi', 'jbigi-linux', 'jbigi-osx', 'jbigi-windows', 'jbigi-freebsd',
     'jbigi-nowindows',
     'buildexe', 'buildDeb', 'poStatus',

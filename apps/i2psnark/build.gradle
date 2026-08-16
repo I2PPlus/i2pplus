@@ -44,7 +44,287 @@ task i2psnarkJar(type: Jar) {
     }
 }
 
-// TODO: standalone jar.  This is rather involved!
+// ---------------------------------------------------------------------------
+// Standalone install, mirrors the ant i2psnark family
+// (build.xml i2psnark / i2psnark7zip / i2psnark_nozip -> dist/)
+// ---------------------------------------------------------------------------
+
+def jettyVersion = '9.3.30.v20211001' // must match apps/jetty/build.gradle
+def jettylibDir = file("${rootDir}/apps/jetty/jettylib")
+def standaloneResourcesDir = file("$buildDir/standalone-resources")
+def standaloneDir = file("$buildDir/standalone")
+def distDir = rootProject.ext.distDir
+
+// Upstream jetty-util minus the stock JavaVersion.class, plus the vendored
+// patch class - mirrors the ant jetty-util.jar (apps/jetty/build.xml)
+def upstreamJettyUtil = configurations.detachedConfiguration(dependencies.create("org.eclipse.jetty:jetty-util:${jettyVersion}"))
+
+task compileJettyUtilPatch(type: JavaCompile) {
+    description = 'Compile the vendored JavaVersion patch class for jetty-util.'
+    source = fileTree("${rootDir}/apps/jetty/patches/jetty-util/src/main/java")
+    classpath = upstreamJettyUtil
+    destinationDirectory = file("$buildDir/jetty-util-patch")
+}
+
+task jettyUtilJar(type: Jar) {
+    description = 'Build the patched jetty-util.jar for the standalone fat jar (ant jetty-util.jar).'
+    dependsOn compileJettyUtilPatch
+    archiveFileName = 'jetty-util.jar'
+    destinationDirectory = buildDir
+    from({ zipTree(upstreamJettyUtil.singleFile) }) {
+        exclude 'org/eclipse/jetty/util/JavaVersion.class'
+    }
+    from compileJettyUtilPatch.destinationDirectory
+}
+
+// The jetty server manifest section (Gradle 9 removed Manifest.section());
+// produced by a task so the fat jar can snapshot it as a normal input
+def standaloneManifestSectionFile = file("$buildDir/standalone-manifest-section.mf")
+
+task standaloneManifestSection {
+    outputs.file(standaloneManifestSectionFile)
+    doLast {
+        standaloneManifestSectionFile.text = """Manifest-Version: 1.0
+
+Name: org/eclipse/jetty/server/
+Implementation-Vendor: Eclipse.org - Jetty
+Implementation-Version: ${jettyVersion}
+
+"""
+    }
+}
+
+// Make a fat jar for standalone (ant standalone_jar)
+task standaloneJar(type: Jar) {
+    description = 'Build the standalone fat jar i2psnark-standalone.jar (ant standalone_jar).'
+    dependsOn i2psnarkJar, ':core:jar', ':apps:ministreaming:jar', ':apps:streaming:jar',
+            ':apps:systray:jar', jettyUtilJar, rootProject.tasks.named('jbigi'),
+            standaloneManifestSection
+    archiveFileName = 'i2psnark-standalone.jar'
+    destinationDirectory = buildDir
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.output) {
+        include 'org/klomp/snark/standalone/**'
+    }
+    from { zipTree(i2psnarkJar.archiveFile) }
+    from { zipTree(project(':core').jar.archiveFile) }
+    from { zipTree(file("$jettylibDir/javax.servlet.jar")) }
+    from { zipTree(file("$jettylibDir/jetty-continuation.jar")) }
+    from { zipTree(file("$jettylibDir/jetty-deploy.jar")) }
+    from { zipTree(file("$jettylibDir/jetty-http.jar")) }
+    from { zipTree(project(':apps:jetty').jar.archiveFile) }
+    from { zipTree(file("$jettylibDir/jetty-io.jar")) }
+    from { zipTree(file("$jettylibDir/jetty-security.jar")) }
+    from { zipTree(file("$jettylibDir/jetty-servlet.jar")) }
+    from { zipTree(jettyUtilJar.archiveFile) }
+    from { zipTree(file("$jettylibDir/jetty-webapp.jar")) }
+    from { zipTree(file("$jettylibDir/jetty-xml.jar")) }
+    from { zipTree(file("$jettylibDir/org.mortbay.jetty.jar")) }
+    from { zipTree(project(':apps:ministreaming').jar.archiveFile) }
+    from { zipTree(project(':apps:streaming').jar.archiveFile) }
+    from { zipTree(project(':apps:systray').jar.archiveFile) }
+    from { zipTree(rootProject.tasks.named('jbigi').get().archiveFile) }
+    manifest {
+        attributes 'Main-Class': 'org.klomp.snark.standalone.RunStandalone',
+                   'Implementation-Version': rootProject.ext.fullVersion,
+                   'Built-By': rootProject.ext.builtBy,
+                   'Build-Date': new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new Date()),
+                   'Base-Revision': 'git',
+                   'Workspace-Changes': '',
+                   // Suppress JNI warning in JRE 24+, and eventual restriction (https://openjdk.org/jeps/472)
+                   'Enable-Native-Access': 'ALL-UNNAMED'
+        // this is so Jetty will report its version correctly
+        from standaloneManifestSectionFile
+    }
+}
+
+// Add css, image, and js files for standalone snark to the war (ant standalone_war)
+task standaloneResources(type: Copy) {
+    description = 'Stage the snark theme resources for the standalone war (ant standalone_war).'
+    destinationDir = standaloneResourcesDir
+    into('.res/themes/snark') {
+        from "${rootDir}/installer/resources/console/themes/snark"
+    }
+    into('.res/themes/snark/classic') {
+        from "${rootDir}/installer/resources/console/themes/console/classic/global.css"
+    }
+    into('.res/themes/snark/dark') {
+        from "${rootDir}/installer/resources/console/themes/console/dark/chromescroll.css"
+        from "${rootDir}/installer/resources/console/themes/console/dark/global.css"
+    }
+    into('.res/themes/snark/light') {
+        from "${rootDir}/installer/resources/console/themes/console/light/global.css"
+    }
+    into('.res/themes/snark/midnight') {
+        from "${rootDir}/installer/resources/console/themes/console/midnight/chromescroll.css"
+        from "${rootDir}/installer/resources/console/themes/console/midnight/global.css"
+        from("${rootDir}/installer/resources/console/themes/console/midnight/images/tile.css") {
+            into 'images'
+        }
+    }
+    into('.res/themes/snark/fonts') {
+        from "${rootDir}/installer/resources/console/themes/fonts"
+    }
+    into('.res/icons') {
+        from "${rootDir}/installer/resources/console/themes/console/images/newtab.svg"
+    }
+    into('.res/themes/snark/dark/images') {
+        from "${rootDir}/installer/resources/console/themes/console/dark/images/camotile2.png"
+    }
+    into('.res/themes/fonts') {
+        from "${rootDir}/installer/resources/console/themes/fonts"
+    }
+    into('.res/js') {
+        from "${rootDir}/apps/routerconsole/jsp/js/onVisible.js"
+        from "${rootDir}/apps/routerconsole/jsp/js/detectPageZoom.js"
+        from "${rootDir}/apps/routerconsole/jsp/js/morphdom.js"
+        from "${rootDir}/apps/i2psnark/res/js/refreshTorrents.js"
+    }
+    doLast {
+        // ant <replace>: retarget console theme urls to the standalone path
+        ['classic', 'dark', 'light', 'midnight'].each { theme ->
+            ['global.css', 'snark.css'].each { css ->
+                def f = new File(standaloneResourcesDir, ".res/themes/snark/${theme}/${css}")
+                if (f.isFile()) {
+                    f.setText(f.getText('UTF-8').replace("/themes/console/${theme}", "/i2psnark/.res/themes/snark/${theme}"), 'UTF-8')
+                }
+            }
+        }
+        new File(standaloneResourcesDir, '.res/themes/snark').traverse(type: groovy.io.FileType.FILES) { f ->
+            if (f.name.endsWith('.css')) {
+                def text = f.getText('UTF-8')
+                def rep = text.replace('url(/themes/console/classic/images/', 'url(/i2psnark/.res/themes/snark/classic/images/')
+                                .replace('url(/themes/console/dark/images/', 'url(/i2psnark/.res/themes/snark/dark/images/')
+                if (rep != text) {
+                    f.setText(rep, 'UTF-8')
+                }
+            }
+        }
+        new File(standaloneResourcesDir, '.res/themes/fonts').traverse(type: groovy.io.FileType.FILES) { f ->
+            if (f.name.endsWith('.css')) {
+                def text = f.getText('UTF-8')
+                def rep = text.replace('url(/themes/fonts/', 'url(/i2psnark/.res/themes/fonts/')
+                if (rep != text) {
+                    f.setText(rep, 'UTF-8')
+                }
+            }
+        }
+        def js = new File(standaloneResourcesDir, '.res/js/refreshTorrents.js')
+        if (js.isFile()) {
+            js.setText(js.getText('UTF-8').replace('/themes/snark/', '/i2psnark/.res/themes/snark/'), 'UTF-8')
+        }
+    }
+}
+
+// The standalone war: the regular war, then the snark theme resources, with
+// the war's own entries winning - mirrors ant "zip update=true preserve"
+// (entries already in the war are not overwritten)
+task standaloneWar(type: Zip) {
+    description = 'Build the standalone war with the snark theme resources (ant standalone_war).'
+    dependsOn war, standaloneResources
+    archiveFileName = 'i2psnark-standalone.war'
+    destinationDirectory = buildDir
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(zipTree(war.archiveFile))
+    from(standaloneResourcesDir)
+}
+
+// Assemble the standalone install dir (ant standalone_prep); Sync removes
+// stale files from the dest, matching ant's delete-then-copy
+task standalonePrep(type: Sync) {
+    description = 'Assemble the standalone install dir (ant standalone_prep).'
+    dependsOn standaloneJar, standaloneWar
+    destinationDir = standaloneDir
+    from "${rootDir}/apps/i2psnark/launch-i2psnark"
+    from "${rootDir}/apps/i2psnark/launch-i2psnark.bat"
+    from "${rootDir}/apps/i2psnark/jetty-i2psnark.xml"
+    from "${rootDir}/apps/i2psnark/i2psnark-appctx.config"
+    from("${rootDir}/apps/i2psnark/readme-standalone.txt") {
+        rename { 'readme.txt' }
+    }
+    from("${rootDir}/apps/i2psnark/standalone-context.xml") {
+        into 'contexts'
+        rename { 'context.xml' }
+    }
+    from("${rootDir}/apps/i2psnark/standalone-index.html") {
+        into 'docroot'
+        rename { 'index.html' }
+    }
+    from({ standaloneWar.archiveFile }) {
+        into 'webapps'
+        rename { 'i2psnark.war' }
+    }
+    from({ standaloneJar.archiveFile }) {
+        rename { 'i2psnark.jar' }
+    }
+    from("${rootDir}/installer/resources/hosts_i2psnark.txt") {
+        rename { 'hosts.txt' }
+    }
+    doLast {
+        new File(standaloneDir, 'logs').mkdirs()
+        new File(standaloneDir, 'launch-i2psnark').setExecutable(true)
+    }
+}
+
+// ant produces a fresh archive per run (the standalone dir is rebuilt
+// first); external zip/7z update in place, so drop the stale archive first
+task cleanSnarkZip(type: Delete) {
+    delete file("$distDir/i2psnark-standalone.zip")
+}
+
+task cleanSnark7z(type: Delete) {
+    delete file("$distDir/i2psnark-standalone.7z")
+}
+
+task i2psnark(type: Exec) {
+    group = 'package'
+    description = 'Build the standalone I2PSnark zip in dist/ (ant i2psnark).'
+    dependsOn standalonePrep, cleanSnarkZip
+    workingDir standaloneDir.parentFile
+    doFirst {
+        distDir.mkdirs()
+    }
+    // External zip like ant (Gradle 9 removed Zip.compressionLevel)
+    commandLine 'zip', '-r', '-9', '-q',
+            new File(distDir, 'i2psnark-standalone.zip').absolutePath, 'standalone'
+    doLast {
+        // ant sha256sum: print "basename: hash"
+        def f = new File(distDir, 'i2psnark-standalone.zip')
+        def pb = new ProcessBuilder('sh', '-c', 'h=$(sha256sum "$0"); echo "$(basename "$0"): ${h%% *}"', f.absolutePath)
+        pb.inheritIO()
+        pb.start().waitFor()
+    }
+}
+
+task i2psnark7zip(type: Exec) {
+    group = 'package'
+    description = 'Build the standalone I2PSnark 7z in dist/ (ant i2psnark7zip).'
+    dependsOn standalonePrep, cleanSnark7z
+    workingDir standaloneDir.parentFile
+    doFirst {
+        distDir.mkdirs()
+    }
+    commandLine '7z', 'a', '-t7z', '-mx=9', '-md=4m', '-mmt2', '-ssw', '-bt',
+            new File(distDir, 'i2psnark-standalone.7z').absolutePath, 'standalone'
+}
+
+// ant deletes the target dir but keeps a hand-placed README.md
+task cleanSnarkNozip(type: Delete) {
+    delete fileTree(new File(distDir, 'i2psnark_standalone')) {
+        exclude 'README.md'
+    }
+}
+
+task i2psnark_nozip(type: Copy) {
+    group = 'package'
+    description = 'Assemble the standalone I2PSnark dir in dist/ (ant i2psnark_nozip).'
+    dependsOn standalonePrep, cleanSnarkNozip
+    destinationDir = new File(distDir, 'i2psnark_standalone')
+    from standaloneDir
+    doLast {
+        new File(destinationDir, 'launch-i2psnark').setExecutable(true)
+    }
+}
 
 // i2psnarkJar above is the shipping jar; the default jar would overwrite it
 jar.enabled = false
@@ -70,12 +350,30 @@ war {
     rootSpec.exclude('/org/klomp/snark/comments/**')
     rootSpec.exclude('/org/klomp/snark/dht/**')
     rootSpec.exclude('/org/klomp/snark/standalone/**')
-    from ('resources', {
+    // ant war packs only the web classes (ant: <classes includes="**/web/*">)
+    rootSpec.exclude('/com/**')
+    // ant war: res/ -> .res, plus the routerconsole js (ant copies them in)
+    from('res', {
         into ".res"
+    })
+    from("${rootDir}/apps/routerconsole/jsp/js/onVisible.js", {
+        into '.res/js'
+    })
+    from("${rootDir}/apps/routerconsole/jsp/js/morphdom.js", {
+        into '.res/js'
     })
     webInf {
         into 'classes/org/klomp/snark/web'
         from 'mime.properties'
     }
     webXml = file('web.xml')
+    manifest {
+        attributes 'Implementation-Version': rootProject.ext.fullVersion,
+                   'Built-By': rootProject.ext.builtBy,
+                   'Build-Date': new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss').format(new Date()),
+                   'Base-Revision': 'git',
+                   'Workspace-Changes': '',
+                   'X-Compile-Source-JDK': '1.8',
+                   'X-Compile-Target-JDK': '1.8'
+    }
 }

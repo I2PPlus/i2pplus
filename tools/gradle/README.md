@@ -92,6 +92,20 @@ Each module can be built independently:
 | `./gradlew :apps:imagegen:war`      | Image generation webapp    |
 | `./gradlew :apps:jrobin:jar`        | JRobin monitoring          |
 
+### Standalone I2PSnark
+
+Mirrors of the Ant `i2psnark` family in `build.xml`. Each builds the fat
+standalone jar (with the patched jetty-util and the jbigi natives) and the
+themed standalone war, then packages the install dir.
+
+| Task                      | Description                                | Output                              |
+| ------------------------- | ------------------------------------------ | ----------------------------------- |
+| `./gradlew i2psnark`      | Standalone zip + sha256 (Ant `i2psnark`)   | `dist/i2psnark-standalone.zip`      |
+| `./gradlew i2psnark7zip`  | Standalone 7z, needs `7z` on PATH          | `dist/i2psnark-standalone.7z`       |
+| `./gradlew i2psnark_nozip`| Standalone dir (Ant `i2psnark_nozip`)      | `dist/i2psnark_standalone/`         |
+
+Prerequisite: `jbigi` (jars the vendored natives from `installer/lib/jbigi`).
+
 ### Other
 
 | Task                  | Description                                                        |
@@ -153,6 +167,12 @@ Configuration cache is enabled in `gradle.properties`. If you see "configuration
 - Jetty runtime jars (vendored in `apps/jetty/jettylib/`) and the Tomcat
   NOTICE are staged into the installer payload only, matching Ant's
   `preppkg-base`; the updater/deb/tarball packages do not include them
+- The standalone war is built as a separate `i2psnark-standalone.war`;
+  Ant mutates the regular `build/i2psnark.war` in place (`zip update`)
+- The standalone fat jar merges with `duplicates=EXCLUDE` (first entry
+  wins); Ant's `jar` task defaults to keeping duplicates
+- `Base-Revision` is `git` in the fat jar manifest (Ant uses the workspace
+  revision; the Gradle `getWorkspaceVersion()` is a placeholder)
 
 ## Notes
 
