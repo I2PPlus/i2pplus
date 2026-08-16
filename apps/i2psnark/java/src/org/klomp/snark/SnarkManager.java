@@ -367,9 +367,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_util.getMultiDest() || !_randomizeStartupDelay) {
             return;
         }
-        try {
-            Thread.sleep(startDelay(_context.random()));
-        } catch (InterruptedException ie) { /* ignored */ }
+        sleep(startDelay(_context.random()));
     }
 
     /**
@@ -382,6 +380,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     static long startDelay(Random rnd) {
         return 30L * 1000 + 1000L * rnd.nextInt(61);
     }
+
+    /**
+     * Sleep, ignoring interruption.
+     *
+     * @param ms delay in milliseconds
+     * @since 0.9.71+
+     */
+    private static void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ie) { /* ignored */ }
+    }
+
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -3839,15 +3850,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         + _t(
                                                 "Adding torrents in {0}" + "&hellip;",
                                                 DataHelper.formatDuration2(delay)));
-                try {
-                    Thread.sleep(delay);
-                } catch (InterruptedException ie) { /* ignored */ }
+                sleep(delay);
                 _messages.clearThrough(id); // Remove that first message
             } else if (_context.isRouterContext()) {
-                try {
-                    Thread.sleep(3000);
-                } // Wait for client manager to be up so we can get bandwidth limits
-                catch (InterruptedException ie) { /* ignored */ }
+                // Wait for client manager to be up so we can get bandwidth limits
+                sleep(3000);
             }
             // Here because we need to delay until I2CP is up although the user will see the default
             // until then
@@ -3955,10 +3962,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         }
                     }
                 }
-                try {
-                    Thread.sleep((long) 30 * 1000);
-                } // Polling period for scanning data dir for new content
-                catch (InterruptedException ie) { /* ignored */ }
+                // Polling period for scanning data dir for new content
+                sleep((long) 30 * 1000);
             }
         }
     }
@@ -4331,9 +4336,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
                 if ((count++ & 0x0f) == 15) {
                     // try to prevent OOMs at startup
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    sleep(250);
                 }
             }
         }
@@ -4677,9 +4680,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         } else {
             snark.setStarting(); // mark it for the UI
             (new I2PAppThread(new ThreadedStarter(snark), "TorrentStarter", true)).start();
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException ie) { /* ignored */ }
+            sleep(200);
         }
     }
 
@@ -4698,9 +4699,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _stopping = false;
         }
         (new I2PAppThread(new ThreadedStarter(null), "TorrentStarterAll", true)).start();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException ie) { /* ignored */ }
+        sleep(200);
     }
 
     /**
@@ -4773,19 +4772,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 // start pool-mates together
                 int pool = _util.getPoolIndex(snark.getInfoHash());
                 if (started++ > 0 && (pool < 0 || seenPools.add(pool))) {
-                    try {
-                        Thread.sleep(MULTI_DEST_STAGGER_MS);
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    sleep(MULTI_DEST_STAGGER_MS);
                 }
             }
             try {
                 snark.startTorrent();
             } catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user message before throwing
             if ((count++ & 0x0f) == 15) {
-                try {
-                    Thread.sleep(250);
-                } // try to prevent OOMs
-                catch (InterruptedException ie) { /* ignored */ }
+                // try to prevent OOMs
+                sleep(250);
             }
         }
     }
@@ -4928,9 +4923,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                   // message before throwing
                 if ((count++ & 0x0f) == 15) {
                     // try to prevent OOMs at startup
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    sleep(250);
                 }
             }
         }
@@ -4972,9 +4965,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         snark.stopTorrent(false);
                     }
                     if (count % 8 == 0) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException ie) { /* ignored */ }
+                        sleep(20);
                     }
                 }
             }
@@ -4995,9 +4986,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 // Throttle since every unannounce is now threaded.
                 // How to do this without creating a ton of threads?
                 if (count % 8 == 0) {
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    sleep(20);
                 }
             } else {
                 CommentSet cs = snark.getComments();
@@ -5023,9 +5012,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (SystemVersion.isARM()) {
                         toWait *= 2;
                     }
-                    try {
-                        Thread.sleep(toWait);
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    sleep(toWait);
                     _util.disconnect();
                     _stopping = false;
                 } else {
@@ -5174,9 +5161,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return;
         }
         (new I2PAppThread(new ThreadedRechecker(snark), "TorrentRechecker", true)).start();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException ie) { /* ignored */ }
+        sleep(200);
     }
 
     /**
