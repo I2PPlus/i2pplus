@@ -3384,7 +3384,7 @@ public class I2PSnarkServlet extends BasicServlet {
             statusBuf.append(iconBuf).append("</td><td class=peerCount><b>");
             snarkSt = "active starting processing";
         } else if (hasTrackerProblems) {
-            String tooltip = snark.getTrackerProblems();
+            String tooltip = _t("Failed to connect to all configured trackers");
             appendIcon(iconBuf, "error", "", tooltip, false, true);
             statusBuf.append(iconBuf).append(peerCountHtml);
             snarkSt = isComplete ? "inactive complete neterror" : "inactive downloading incomplete neterror";
