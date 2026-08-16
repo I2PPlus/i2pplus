@@ -88,6 +88,13 @@ public class TrackerClient implements Runnable {
      *  every other wake per active torrent. */
     private static final long SCRAPE_INTERVAL = 10 * (long) 60 * 1000;
 
+    /** After a scrape with a non-zero swarm size, defer the next scrape this long */
+    private static final long SCRAPE_GOOD_DEFER = 20 * (long) 60 * 1000;
+
+    /** Random jitter added to each scheduled scrape so scrapes from many
+     *  torrents to a shared tracker spread out instead of firing in lockstep */
+    private static final int SCRAPE_JITTER = 5 * 60 * 1000;
+
     /** No guidance in BEP 5; standard practice is K (=8) */
     private static final int DHT_ANNOUNCE_PEERS = 8;
 
@@ -651,9 +658,10 @@ public class TrackerClient implements Runnable {
                         try {
                             TrackerInfo scrape = doScrape(tr);
                             if (scrape != null) {
-                                processScrapeResponse(tr, scrape);
+                                scheduleNextScrape(tr, processScrapeResponse(tr, scrape));
                             }
                         } catch (IOException ioe) {
+                            scheduleNextScrape(tr, false);
                             if (_log.shouldDebug()) {
                                 _log.debug(
                                         "Scrape failed for "
@@ -662,7 +670,6 @@ public class TrackerClient implements Runnable {
                                                 + ioe.getMessage());
                             }
                         }
-                        tr.lastScrapeTime = System.currentTimeMillis();
                     }
                     // auto stop
                     // These are very high thresholds for now, not configurable, just for update
@@ -752,13 +759,14 @@ public class TrackerClient implements Runnable {
                 }
                 // Refresh swarm composition periodically even between announces (BEP 15/48)
                 long now = System.currentTimeMillis();
-                if ((!tr.stop) && now > tr.lastScrapeTime + SCRAPE_INTERVAL) {
+                if ((!tr.stop) && now > tr.nextScrapeTime) {
                     try {
                         TrackerInfo scrape = doScrape(tr);
                         if (scrape != null) {
-                            processScrapeResponse(tr, scrape);
+                            scheduleNextScrape(tr, processScrapeResponse(tr, scrape));
                         }
                     } catch (IOException ioe) {
+                        scheduleNextScrape(tr, false);
                         if (_log.shouldDebug()) {
                             _log.debug(
                                     "Periodic scrape failed for "
@@ -767,7 +775,6 @@ public class TrackerClient implements Runnable {
                                             + ioe.getMessage());
                         }
                     }
-                    tr.lastScrapeTime = now;
                 }
             }
             if ((!tr.stop) && maxSeenPeers < tr.seenPeers) {
@@ -810,16 +817,34 @@ public class TrackerClient implements Runnable {
      *  clear the tracker's error indicator — the response proves the tracker
      *  is reachable, so a "No response from..." announce failure no longer
      *  applies.
+     *
+     * @return true if the response reported a non-zero swarm size
      */
-    private void processScrapeResponse(TCTracker tr, TrackerInfo scrape) {
+    private boolean processScrapeResponse(TCTracker tr, TrackerInfo scrape) {
         tr.trackerProblems = null;
         snark.setLastTrackerResponse(System.currentTimeMillis());
-        if (scrape.getSeedCount() + scrape.getLeechCount() > 0) {
+        boolean good = scrape.getSeedCount() + scrape.getLeechCount() > 0;
+        if (good) {
             snark.updateScrape(
                     scrape.getSeedCount(),
                     scrape.getLeechCount(),
                     scrape.getPartialSeedCount());
         }
+        return good;
+    }
+
+    /**
+     * Schedule the next scrape for a tracker: the standard interval, or the
+     * longer deferral after a good response, plus random jitter so scrapes
+     * from many torrents to a shared tracker do not fire in lockstep.
+     *
+     * @param tr the tracker
+     * @param good true if the last response reported a non-zero swarm size
+     */
+    private void scheduleNextScrape(TCTracker tr, boolean good) {
+        long delay = (good ? SCRAPE_GOOD_DEFER : SCRAPE_INTERVAL)
+                + _util.getContext().random().nextInt(SCRAPE_JITTER);
+        tr.nextScrapeTime = System.currentTimeMillis() + delay;
     }
 
     /**
@@ -1605,7 +1630,7 @@ public class TrackerClient implements Runnable {
         final int port;
         long interval;
         long lastRequestTime;
-        long lastScrapeTime;
+        long nextScrapeTime;
         String trackerProblems;
         boolean stop;
         boolean started;
@@ -1645,7 +1670,7 @@ public class TrackerClient implements Runnable {
          */
         public void reset() {
             lastRequestTime = 0;
-            lastScrapeTime = 0;
+            nextScrapeTime = 0;
             trackerProblems = null;
             stop = false;
             started = false;
