@@ -959,6 +959,25 @@ public class StorageTest {
         assertTrue(pp.isComplete());
     }
 
+    /**
+     * getDownloaded() on an empty piece whose length is not a multiple of the 4K sub-block size
+     * must return 0, not throw (the short-tail correction must not index the bitfield when
+     * nothing is received).
+     */
+    @Test
+    public void testPartialPieceGetDownloadedEmpty() {
+        int pieceLength = PeerState.PARTSIZE + 2048; // not a multiple of 4096
+        PartialPiece pp = new PartialPiece(new Piece(0), pieceLength, _dataDir);
+        assertEquals(0, pp.getDownloaded());
+        // one sub-block received: 4096 - (4096 - 2048) short-tail correction
+        pp.markSubBlock(0);
+        assertEquals(2048, pp.getDownloaded());
+        // fully received: the full length, including the short tail
+        markAll(pp, 1, 4);
+        assertTrue(pp.isComplete());
+        assertEquals(pieceLength, pp.getDownloaded());
+    }
+
     /** Marks the given sub-blocks as received, simulating their arrival. */
     private static void markAll(PartialPiece pp, int start, int count) {
         for (int i = 0; i < count; i++) {

@@ -285,7 +285,7 @@ class PartialPiece implements Comparable<PartialPiece> {
         int count = bitfield.count();
         int downloaded = count * SUB_PARTSIZE;
         int remainder = pclen % SUB_PARTSIZE;
-        if (remainder != 0 && bitfield.get(count - 1)) {
+        if (remainder != 0 && count > 0 && bitfield.get(count - 1)) {
             downloaded -= SUB_PARTSIZE - remainder;
         }
         return downloaded;
