@@ -40,6 +40,8 @@ public class ConfigClientsHelper extends HelperBase {
     public static final String PROP_ENABLE_SSL = "i2cp.SSL";
     /** from ClientMessageEventListener */
     public static final String PROP_AUTH = "i2cp.auth";
+    /** from ClientManager */
+    public static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
     /** Enable/disable client configuration changes in the web UI */
     public static final String PROP_ENABLE_CLIENT_CHANGE = "routerconsole.enableClientChange";
     /** Enable/disable plugin installation in the web UI */
@@ -119,6 +121,18 @@ public class ConfigClientsHelper extends HelperBase {
     public String getAuth() {
         boolean enabled =  _context.getBooleanProperty(PROP_AUTH);
         if (enabled)
+            return CHECKED;
+        return "";
+    }
+
+    /**
+     *  Whether local-local loopback delivery is disabled.
+     *  @return CHECKED if disabled, otherwise ""
+     *  @since 0.9.71+
+     */
+    public String getDisableLoopback() {
+        boolean disabled =  _context.getBooleanProperty(PROP_DISABLE_LOOPBACK);
+        if (disabled)
             return CHECKED;
         return "";
     }

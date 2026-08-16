@@ -32,15 +32,15 @@
 <tr>
 <td>
 <div class=optionlist>
-<label><input type=radio class=optbox name="mode" value="1" <%=clientshelper.i2cpModeChecked(1)%>>
+<label><input type=radio class=optbox name=mode value=1 <%=clientshelper.i2cpModeChecked(1)%>>
 <%=intl._t("Enabled without SSL")%></label><br>
-<label><input type=radio class=optbox name="mode" value="2" <%=clientshelper.i2cpModeChecked(2)%>>
+<label><input type=radio class=optbox name=mode value=2 <%=clientshelper.i2cpModeChecked(2)%>>
 <%=intl._t("Enabled with SSL required")%></label><br>
 <%  // returns nonempty string if disabled
     String disableChecked = clientshelper.i2cpModeChecked(0);
     boolean isDisabled = disableChecked.length() > 0;
 %>
-<label><input type=radio class=optbox name="mode" value="0" <%=disableChecked%>>
+<label><input type=radio class=optbox name=mode value=0 <%=disableChecked%>>
 <%=intl._t("Disabled - Clients outside this Java process may not connect")%></label><br>
 </div>
 </td>
@@ -50,7 +50,7 @@
 <td>
 <div class=optionlist id=i2cp_host>
 <span class=nowrap><b><%=intl._t("I2CP Interface")%>:</b>
-<select name="interface">
+<select name=interface>
 <%      String[] ips = clientshelper.intfcAddresses();
         for (int i = 0; i < ips.length; i++) {
             out.print("<option value=\"");
@@ -65,22 +65,25 @@
 %>
 </select>
 </span><br>
-<span class=nowrap><b><%=intl._t("I2CP Port")%>:</b><input name="port" type=text size=5 maxlength=5 value="<jsp:getProperty name="clientshelper" property="port"/>">
-</span>
+<span class=nowrap><b><%=intl._t("I2CP Port")%>:</b><input name=port type=text size=5 maxlength=5 value="<jsp:getProperty name="clientshelper" property="port"/>">
+</span><br>
+<span class=nowrap><label title="<%=intl._t("Do not bypass the network when accessing locally hosted services")%>"><b><%=intl._t("Disable Loopback")%>:</b>
+<input type=checkbox class="optbox slider" name=disableLoopback value=true <jsp:getProperty name="clientshelper" property="disableLoopback"/>>
+</label></span>
 </div>
 </td>
 </tr>
 <tr>
 <td>
 <b class=suboption>
-<label><input type=checkbox class="optbox slider" name="auth" value=true <jsp:getProperty name="clientshelper" property="auth"/>>
+<label><input type=checkbox class="optbox slider" name=auth value=true <jsp:getProperty name="clientshelper" property="auth"/>>
 <%=intl._t("Require username and password")%></label>
 </b><br>
 <div class=optionlist id=i2cp_userpass>
 <span class=nowrap><b><%=intl._t("Username")%>:</b>
-<input name="user" type=text value=""></span><br>
+<input name=user type=text value=""></span><br>
 <span class=nowrap><b><%=intl._t("Password")%>:</b>
-<input name="nofilter_pw" type=password value=""></span>
+<input name=nofilter_pw type=password value=""></span>
 </div>
 </td>
 </tr>

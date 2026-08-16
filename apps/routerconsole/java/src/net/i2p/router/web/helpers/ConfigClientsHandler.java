@@ -698,6 +698,10 @@ public class ConfigClientsHandler extends FormHandler {
             restart = true;
         }
         changes.put(ConfigClientsHelper.PROP_AUTH, Boolean.toString((_settings.get("auth") != null)));
+        boolean dl = _settings.get("disableLoopback") != null;
+        if (dl != _context.getBooleanProperty(ConfigClientsHelper.PROP_DISABLE_LOOPBACK)) {
+            changes.put(ConfigClientsHelper.PROP_DISABLE_LOOPBACK, Boolean.toString(dl));
+        }
         boolean all = "0.0.0.0".equals(intfc) || "0:0:0:0:0:0:0:0".equals(intfc) || "::".equals(intfc);
         if (all != _context.getProperty(ConfigClientsHelper.BIND_ALL_INTERFACES, false)) {
             changes.put(ConfigClientsHelper.BIND_ALL_INTERFACES, Boolean.toString(all));
