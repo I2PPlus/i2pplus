@@ -609,7 +609,7 @@ public class MetaInfo {
      * @param offset global byte offset into the torrent
      * @param length number of bytes
      * @return true if the whole range is covered by padding files
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     public boolean isRangePadding(long offset, int length) {
         if (files == null || length <= 0) {

@@ -2385,7 +2385,7 @@ public class TunnelPool {
      * Unlike refreshLeaseSet() which republishes when tunnels are EXPIRING SOON,
      * this republishes when tunnels are ALL HEALTHY to reset the LeaseSet lifetime.
      *
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     void proactiveRepublishIfHealthy() {
         if (!isServerPool() || !_alive) {

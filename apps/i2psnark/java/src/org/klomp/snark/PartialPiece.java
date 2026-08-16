@@ -72,7 +72,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      * @param len Length of this piece in bytes (must match piece length)
      * @param tempDir Directory for temporary file storage if needed
      * @param meta the torrent meta info, for skipping BEP 47 padding-only chunks, or null
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     public PartialPiece(Piece piece, int len, File tempDir, MetaInfo meta) {
         this.piece = Objects.requireNonNull(piece);
@@ -146,7 +146,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      * remaining chunks arrive. Does not advance the sequential offset; the caller's scan does that.
      *
      * @param chunk zero-based chunk index
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     public synchronized void markChunk(int chunk) {
         piece.setActive();
