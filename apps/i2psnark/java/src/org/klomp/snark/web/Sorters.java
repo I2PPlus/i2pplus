@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.klomp.snark.MetaInfo;
@@ -136,7 +137,7 @@ class Sorters {
     private static class TorrentNameComparator implements Comparator<Snark>, Serializable {
 
         private final Pattern _p;
-        private static final Collator _c = Collator.getInstance();
+        private final Collator _c;
 
         /**
          * Create the comparator for the language.
@@ -145,18 +146,20 @@ class Sorters {
          */
         private TorrentNameComparator(String lang) {
             _p = getPattern(lang);
+            _c = getCollator(lang);
         }
 
         public int compare(Snark l, Snark r) {
-            return comp(l, r, _p);
+            return comp(l, r, _p, _c);
         }
 
         /**
          * Compare two torrents by name.
          *
          * @param p may be null
+         * @param c may be null
          */
-        public static int comp(Snark l, Snark r, Pattern p) {
+        public static int comp(Snark l, Snark r, Pattern p, Collator c) {
             // put downloads and magnets first
             if (l.getStorage() == null && r.getStorage() != null) {
                 return -1;
@@ -176,8 +179,21 @@ class Sorters {
                     rs = rs.substring(m.group(1).length());
                 }
             }
-            return _c.compare(ls, rs);
+            return c.compare(ls, rs);
         }
+    }
+
+    /**
+     * The collator for the language, case-insensitive at secondary strength
+     * (accents distinct, case not), the default locale when null.
+     *
+     * @param lang may be null
+     * @return the collator
+     */
+    private static Collator getCollator(String lang) {
+        Collator c = lang != null ? Collator.getInstance(new Locale(lang)) : Collator.getInstance();
+        c.setStrength(Collator.SECONDARY);
+        return c;
     }
 
     /** Forward or reverse sort, but the fallback is always forward */
@@ -185,10 +201,12 @@ class Sorters {
 
         private final boolean _rev;
         private final Pattern _p;
+        private final Collator _c;
 
         public Sort(boolean rev, String lang) {
             _rev = rev;
             _p = getPattern(lang);
+            _c = getCollator(lang);
         }
 
         public int compare(Snark l, Snark r) {
@@ -196,7 +214,7 @@ class Sorters {
             if (rv != 0) {
                 return _rev ? 0 - rv : rv;
             }
-            return TorrentNameComparator.comp(l, r, _p);
+            return TorrentNameComparator.comp(l, r, _p, _c);
         }
 
         /**
@@ -244,21 +262,23 @@ class Sorters {
          * for idle, inactive and magnet states, otherwise by active peer count.
          */
         static int comp(Snark l, Snark r) {
-            int rv = getStatus(l) - getStatus(r);
+            int sl = getStatus(l);
+            int sr = getStatus(r);
+            int rv = sl - sr;
             if (rv != 0) {
                 return rv;
-            } else if ((getStatus(l) == STATUS_SEEDING_IDLE && getStatus(r) == STATUS_SEEDING_IDLE)
-                    || (getStatus(l) == STATUS_SEEDING_INACTIVE
-                            && getStatus(r) == STATUS_SEEDING_INACTIVE)
-                    || (getStatus(l) == STATUS_MAGNET && getStatus(r) == STATUS_MAGNET)
-                    || (getStatus(l) == STATUS_NO_ACTIVE_PEERS
-                            && getStatus(r) == STATUS_NO_ACTIVE_PEERS)) {
-                return compLong(
-                        r.getTrackerSeenPeers(),
-                        l.getTrackerSeenPeers()); // first tie break by swarm size
-            } else {
-                return compLong(r.getPeerCount(), l.getPeerCount());
-            } // tie break by active peer count
+            }
+            switch (sl) {
+                case STATUS_SEEDING_IDLE:
+                case STATUS_SEEDING_INACTIVE:
+                case STATUS_MAGNET:
+                case STATUS_NO_ACTIVE_PEERS:
+                    // first tie break by swarm size
+                    return compLong(r.getTrackerSeenPeers(), l.getTrackerSeenPeers());
+                default:
+                    // tie break by active peer count
+                    return compLong(r.getPeerCount(), l.getPeerCount());
+            }
         }
 
         static int getStatus(Snark snark) {
@@ -290,8 +310,6 @@ class Sorters {
             }
             if (downBps > 0) {
                 return STATUS_DOWNLOADING;
-            } else if (downBps <= 0 && remaining > 0) {
-                return STATUS_STALLED;
             } else if (remaining == 0) {
                 if (activePeers > 0) {
                     return STATUS_SEEDING_ACTIVE;
@@ -300,17 +318,14 @@ class Sorters {
                 } else {
                     return STATUS_SEEDING_IDLE;
                 }
-            }
-            if (snark.getNeededLength() <= 0) {
+            } else if (snark.getNeededLength() <= 0) {
                 return STATUS_UNKNOWN;
-            }
-            if (peers <= 0) {
-                return STATUS_NO_PEERS;
-            }
-            if (activePeers <= 0) {
+            } else if (activePeers > 0) {
+                return STATUS_STALLED;
+            } else if (peers > 0) {
                 return STATUS_NO_ACTIVE_PEERS;
             } else {
-                return STATUS_UNKNOWN;
+                return STATUS_NO_PEERS;
             }
         }
     }
@@ -318,7 +333,8 @@ class Sorters {
     /**
      * Sort strictly by pool number, then by status; ties fall back to the
      * status tie-breaks. Torrents without a destination (stopped, or
-     * multi-dest off) share pool -1 and sort first in ascending order.
+     * multi-dest off) share pool -1 and sort after pool entries in ascending
+     * order, first in descending.
      */
     private static class StatusPoolComparator extends Sort {
 
@@ -327,7 +343,7 @@ class Sorters {
         }
 
         public int compareIt(Snark l, Snark r) {
-            int rv = compLong(poolNum(l), poolNum(r));
+            int rv = compLong(pool(l), pool(r));
             if (rv != 0) {
                 return rv;
             }
@@ -335,15 +351,19 @@ class Sorters {
         }
 
         /**
-         * The pool number of a torrent's shared destination, -1 when the
-         * torrent has no destination.
+         * The pool number of a torrent's shared destination, Long.MAX_VALUE when
+         * the torrent has no destination.
          *
          * @param snark the torrent
-         * @return the pool number, or -1
+         * @return the pool number, or Long.MAX_VALUE when there is none
          */
-        private static int poolNum(Snark snark) {
+        private static long pool(Snark snark) {
             TorrentDest td = snark.getDest();
-            return td != null ? td.getPoolNum() : -1;
+            int p = td != null ? td.getPoolNum() : -1;
+            if (p < 0) {
+                return Long.MAX_VALUE;
+            }
+            return p;
         }
     }
 
@@ -641,6 +661,13 @@ class Sorters {
      */
     private static class FileNameComparator implements Comparator<FileAndIndex>, Serializable {
 
+        /** Cached, case-insensitive at secondary strength */
+        private static final Collator _c = Collator.getInstance();
+
+        static {
+            _c.setStrength(Collator.SECONDARY);
+        }
+
         public int compare(FileAndIndex l, FileAndIndex r) {
             return comp(l, r);
         }
@@ -654,7 +681,7 @@ class Sorters {
             if (rd && !ld) {
                 return 1;
             }
-            return Collator.getInstance().compare(l.file.getName(), r.file.getName());
+            return _c.compare(l.file.getName(), r.file.getName());
         }
     }
 
