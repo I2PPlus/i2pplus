@@ -55,6 +55,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private final Log _log;
     private final PeerCoordinatorSet _peerCoordinatorSet;
     private volatile String trackerProblems;
+    private volatile long lastTrackerResponse;
     private volatile int trackerSeenPeers;
     private volatile int _scrapeSeeders;
     private volatile int _scrapeLeechers;
@@ -922,6 +923,27 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public void setTrackerProblems(String p) {
         trackerProblems = p;
+    }
+
+    /**
+     * The wall-clock time of the last valid tracker announce or scrape
+     * response, or 0 if none was ever received.
+     *
+     * @return milliseconds since epoch
+     * @since 0.9.68
+     */
+    public long getLastTrackerResponse() {
+        return lastTrackerResponse;
+    }
+
+    /**
+     * Record a valid tracker announce or scrape response.
+     *
+     * @param t milliseconds since epoch
+     * @since 0.9.68
+     */
+    public void setLastTrackerResponse(long t) {
+        lastTrackerResponse = t;
     }
 
     /**

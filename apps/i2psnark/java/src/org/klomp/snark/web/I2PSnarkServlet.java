@@ -3359,7 +3359,8 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isAllocating = snark.isAllocating();
         boolean isChecking = snark.isChecking();
         boolean isStarting = snark.isStarting();
-        boolean hasTrackerProblems = snark.getTrackerProblems() != null && isRunning && curPeers == 0;
+        boolean hasTrackerProblems = snark.getTrackerProblems() != null && isRunning && curPeers == 0
+            && System.currentTimeMillis() - snark.getLastTrackerResponse() > 60 * 60 * 1000L;
         boolean isComplete = remaining == 0 || needed == 0;
         boolean isSeeding = isComplete && isRunning;
         boolean isStopped = !isRunning;

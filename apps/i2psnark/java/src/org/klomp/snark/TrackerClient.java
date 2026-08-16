@@ -633,6 +633,7 @@ public class TrackerClient implements Runnable {
                     }
                     TrackerInfo info = doRequest(tr, uploaded, downloaded, left, event);
                     tr.trackerProblems = null;
+                    snark.setLastTrackerResponse(System.currentTimeMillis());
                     tr.registerFails = 0;
                     tr.consecutiveFails = 0;
                     if (tr.isPrimary) {
@@ -812,6 +813,7 @@ public class TrackerClient implements Runnable {
      */
     private void processScrapeResponse(TCTracker tr, TrackerInfo scrape) {
         tr.trackerProblems = null;
+        snark.setLastTrackerResponse(System.currentTimeMillis());
         if (scrape.getSeedCount() + scrape.getLeechCount() > 0) {
             snark.updateScrape(
                     scrape.getSeedCount(),
