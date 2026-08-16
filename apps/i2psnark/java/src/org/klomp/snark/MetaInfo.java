@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -617,17 +616,7 @@ public class MetaInfo {
         }
         long[] ends = fileEnds();
         long end = offset + length;
-        int idx = Arrays.binarySearch(ends, offset);
-        if (idx >= 0) {
-            // offset sits exactly on a file boundary; the next file starts here
-            idx++;
-        } else {
-            idx = -idx - 1;
-            if (idx >= ends.length) {
-                return false;
-            }
-        }
-        // idx is the first file whose exclusive end is above offset
+        int idx = fileIndex(offset);
         while (offset < end) {
             if (idx >= files.size()) {
                 return false;
@@ -641,8 +630,37 @@ public class MetaInfo {
         return true;
     }
 
+    /**
+     * Index of the first file whose cumulative exclusive end offset is above the given position,
+     * mapping a torrent byte offset to the file containing it. A position exactly on a file
+     * boundary maps to the following file. Single-file torrents always return 0.
+     *
+     * @param pos torrent byte offset
+     * @return file index
+     */
+    int fileIndex(long pos) {
+        long[] ends = fileEnds();
+        if (ends == null) {
+            return 0;
+        }
+        int lo = 0;
+        int hi = ends.length;
+        while (lo < hi) {
+            int mid = (lo + hi) >>> 1;
+            if (ends[mid] <= pos) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        return lo;
+    }
+
     /** Cumulative exclusive end offset of each file; single-file torrents return null. */
-    private long[] fileEnds() {
+    long[] fileEnds() {
+        if (lengths == null) {
+            return null;
+        }
         long[] ends = _fileEnds;
         if (ends == null) {
             long[] computed = new long[lengths.size()];

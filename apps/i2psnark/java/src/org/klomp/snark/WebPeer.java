@@ -236,25 +236,14 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                         List<Long> lengths = metainfo.getLengths();
                         long limit = 0;
                         if (filenum < 0) {
-                            // find the first file number and limit
-                            // inclusive
-                            long fstart = 0;
-                            // exclusive
-                            long fend = 0;
-                            foff = 0; // keep compiler happy, will always be re-set
-                            for (int f = 0; f < lengths.size(); f++) {
-                                long filelen = lengths.get(f).longValue();
-                                fend = fstart + filelen;
-                                if (toff < fend) {
-                                    filenum = f;
-                                    foff = toff - fstart;
-                                    limit = fend - toff;
-                                    break;
-                                }
-                                fstart += filelen;
-                            }
-                            if (filenum < 0)
+                            // find the first file number and limit, inclusive/exclusive
+                            long[] ends = metainfo.fileEnds();
+                            filenum = metainfo.fileIndex(toff);
+                            if (filenum >= ends.length) {
                                 throw new IllegalStateException(lastRequest.toString());
+                            }
+                            foff = toff - (filenum == 0 ? 0 : ends[filenum - 1]);
+                            limit = ends[filenum] - toff;
                         } else {
                             // next file
                             filenum++;

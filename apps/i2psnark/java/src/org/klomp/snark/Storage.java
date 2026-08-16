@@ -2001,14 +2001,20 @@ public class Storage implements Closeable {
          * @param pos the byte position in the torrent
          */
         FileCursor(long pos) {
-            start = pos;
-            i = 0;
-            raflen = _torrentFiles.get(i).length;
-            while (start > raflen) {
-                i++;
-                start -= raflen;
-                raflen = _torrentFiles.get(i).length;
+            long[] ends = metainfo != null ? metainfo.fileEnds() : null;
+            if (ends != null) {
+                i = metainfo.fileIndex(pos);
+                start = pos - (i == 0 ? 0 : ends[i - 1]);
+            } else {
+                // torrent creation path: metainfo is not built yet, walk the file list
+                i = 0;
+                start = pos;
+                while (start > _torrentFiles.get(i).length) {
+                    start -= _torrentFiles.get(i).length;
+                    i++;
+                }
             }
+            raflen = _torrentFiles.get(i).length;
         }
 
         /**
