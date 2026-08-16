@@ -43,6 +43,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     private static final long TOTAL_TIMEOUT = 10 * (long) 60 * 1000;
     private static final long INACTIVITY_TIMEOUT = 2 * (long) 60 * 1000;
     private static final long TARGET_FETCH_TIME = 2 * (long) 60 * 1000;
+    /** BEP 47: zeros for serving padding ranges, written in blocks */
+    private static final byte[] ZERO_BUFFER = new byte[4096];
     // 128 KB
     private static final int ABSOLUTE_MIN_REQUESTS = 8;
     // 2 MB
@@ -263,8 +265,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                         if (limit > 0 && flen > limit) flen = (int) limit;
 
                         if (metainfo.isPaddingFile(filenum)) {
-                            for (int i = 0; i < flen; i++) {
-                                out.write((byte) 0);
+                            // BEP 47: padding bytes are all zeros, written in blocks
+                            for (int done = 0; done < flen; done += ZERO_BUFFER.length) {
+                                out.write(ZERO_BUFFER, 0, Math.min(ZERO_BUFFER.length, flen - done));
                             }
                             if (_log.shouldDebug()) _log.debug("Skipped padding file " + filenum);
                             continue;
