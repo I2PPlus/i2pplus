@@ -580,7 +580,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     /** Stop contacting the tracker and talking with peers */
     public void stopTorrent() {
-        stopTorrent(false);
+        stopTorrent(false, false);
     }
 
     /**
@@ -589,7 +589,19 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param fast if true, limit the life of the unannounce threads
      * @since 0.9.1
      */
-    public synchronized void stopTorrent(boolean fast) {
+    public void stopTorrent(boolean fast) {
+        stopTorrent(fast, false);
+    }
+
+    /**
+     * Stop contacting the tracker and talking with peers, optionally leaving the
+     * I2P session open so the caller can dispatch unannounces before teardown.
+     *
+     * @param fast if true, limit the life of the unannounce threads
+     * @param deferTeardown if true, keep the session for teardownSession()
+     * @since 0.9.71+
+     */
+    synchronized void stopTorrent(boolean fast, boolean deferTeardown) {
         cancelRetry();
         resetRetry();
         _stopCount++;
@@ -645,6 +657,23 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         if (fast) {
             stopped = true;
         } // HACK: See above if(!fast)
+        if (!deferTeardown) {
+            if (tc != null) {
+                tc.awaitUnannounces(TrackerClient.unannounceDispatchWait());
+            }
+            teardownSession();
+        }
+    }
+
+    /**
+     * Destroy the I2P session for this stopped torrent. Called by stopTorrent()
+     * or, after the stop's unannounces have had a chance to dispatch, by
+     * stopAllTorrents().
+     *
+     * @since 0.9.71+
+     */
+    void teardownSession() {
+        PeerCoordinator pc = coordinator;
         if (_peerCoordinatorSet != null) {
             if (pc != null) {
                 _peerCoordinatorSet.remove(pc);
@@ -657,6 +686,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             } else {
                 _util.disconnect();
             }
+        }
+    }
+
+    /**
+     * Wait, capped at ms, for this torrent's unannounces to dispatch.
+     *
+     * @since 0.9.71+
+     */
+    void awaitUnannounces(long ms) {
+        TrackerClient tc = trackerclient;
+        if (tc != null) {
+            tc.awaitUnannounces(ms);
         }
     }
 

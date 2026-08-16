@@ -4945,11 +4945,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             addMessageAndPrint(msg);
         }
         count++;
-        if (finalShutdown) {
-            snark.stopTorrent(true);
-        } else {
-            snark.stopTorrent(false);
-        }
+        snark.stopTorrent(finalShutdown, true);
         return count;
     }
 
@@ -4968,6 +4964,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _log.warn("SnarkManager final shutdown");
         }
         int count = 0;
+        List<Snark> stopped = new ArrayList<Snark>();
         Collection<Snark> snarks = _snarks.values();
         /*
          * We do two passes so we shutdown the high-priority snarks first.
@@ -4979,6 +4976,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 Storage storage = snark.getStorage();
                 if (storage != null && !storage.complete()) {
                     count = stopTorrent(snark, count, finalShutdown);
+                    stopped.add(snark);
                 }
             }
         }
@@ -4986,6 +4984,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (Snark snark : snarks) {
             if (!snark.isStopped()) {
                 count = stopTorrent(snark, count, finalShutdown);
+                stopped.add(snark);
             } else {
                 CommentSet cs = snark.getComments();
                 if (cs != null) {
@@ -4996,6 +4995,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                 }
             }
+        }
+        // Give the sessions one bounded window to dispatch their unannounces
+        // before any teardown, then tear the stopped destinations down
+        long deadline = System.currentTimeMillis() + TrackerClient.unannounceDispatchWait();
+        for (Snark snark : stopped) {
+            snark.awaitUnannounces(deadline - System.currentTimeMillis());
+        }
+        for (Snark snark : stopped) {
+            snark.teardownSession();
         }
         if (_util.connected()) {
             if (count > 0) {

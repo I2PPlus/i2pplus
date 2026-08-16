@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -84,6 +85,13 @@ public class TrackerClient implements Runnable {
     private static final int UNANNOUNCE_THREADS = 32;
     private static final int UNANNOUNCE_QUEUE = 16384;
     private static final long UNANNOUNCE_KEEPALIVE = 60 * 1000;
+    /** One wave of unannounces, latency-bound, through an established tunnel */
+    private static final long UNANNOUNCE_WAVE = 3 * 1000;
+    /** Dispatch window is scaled to the batch, clamped between these */
+    private static final long UNANNOUNCE_MIN_WAIT = UNANNOUNCE_WAVE;
+    private static final long UNANNOUNCE_MAX_WAIT = 10 * 1000;
+    /** When the queue is this many waves deep, only the primary tracker per torrent gets a slot */
+    private static final int UNANNOUNCE_PRIMARY_THRESHOLD = UNANNOUNCE_THREADS * 2;
 
     /**
      * Unannounces are sent from a shared, bounded pool instead of one thread
@@ -118,6 +126,19 @@ public class TrackerClient implements Runnable {
 
     static {
         _unannouncers.allowCoreThreadTimeOut(true);
+    }
+    /** Released when this client's last unannounce dispatch finishes; awaited by halt() callers */
+    private volatile CountDownLatch _unannounceLatch;
+
+    /**
+     * How long a stop should keep its sessions open for unannounces to
+     * dispatch: one wave per 32-tracker batch, so small swarms wait ~3s and
+     * bigger swarms scale up to UNANNOUNCE_MAX_WAIT.
+     */
+    static long unannounceDispatchWait() {
+        int pending = _unannouncers.getActiveCount() + _unannouncers.getQueue().size();
+        long window = ((pending / UNANNOUNCE_THREADS) + 1) * UNANNOUNCE_WAVE;
+        return Math.max(UNANNOUNCE_MIN_WAIT, Math.min(UNANNOUNCE_MAX_WAIT, window));
     }
     private static final int DELAY_MIN = 2000; // 2 secs.
     private static final int DELAY_RAND = 6 * 1000;
@@ -301,6 +322,23 @@ public class TrackerClient implements Runnable {
         _fastUnannounce = true;
         if (!wasStopped) {
             unannounce();
+        }
+    }
+
+    /**
+     * Wait, capped at ms, for the unannounces submitted by the last halt() to
+     * dispatch. Returns immediately when nothing was submitted or they are done.
+     *
+     * @since 0.9.71+
+     */
+    public void awaitUnannounces(long ms) {
+        CountDownLatch latch = _unannounceLatch;
+        if (latch != null) {
+            try {
+                latch.await(ms, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -1106,10 +1144,21 @@ public class TrackerClient implements Runnable {
         if (dht != null) {
             dht.unannounce(snark.getInfoHash());
         }
+        CountDownLatch latch = new CountDownLatch(1);
+        _unannounceLatch = latch;
+        int submitted = 0;
+        // Over budget? Give every dest one slot (its primary tracker) instead
+        // of letting the dispatch window starve the tail randomly
+        boolean primaryOnly = _unannouncers.getQueue().size() >= UNANNOUNCE_PRIMARY_THRESHOLD;
         for (TCTracker tr : trackers) {
             if (_util.connected() && tr.started && (!tr.stop) && tr.trackerProblems == null) {
+                if (primaryOnly && submitted > 0) {
+                    tr.reset();
+                    continue;
+                }
                 try {
-                    _unannouncers.execute(new Unannouncer(tr));
+                    _unannouncers.execute(new Unannouncer(tr, latch));
+                    submitted++;
                 } catch (RejectedExecutionException ree) {
                     tr.reset();
                 } catch (OutOfMemoryError oom) {
@@ -1118,6 +1167,9 @@ public class TrackerClient implements Runnable {
             } else {
                 tr.reset();
             }
+        }
+        if (submitted == 0) {
+            latch.countDown();
         }
     }
 
@@ -1128,34 +1180,40 @@ public class TrackerClient implements Runnable {
      */
     private class Unannouncer implements Runnable {
         private final TCTracker tr;
+        private final CountDownLatch latch;
 
-        public Unannouncer(TCTracker tr) {
+        public Unannouncer(TCTracker tr, CountDownLatch latch) {
             this.tr = tr;
+            this.latch = latch;
         }
 
         public void run() {
-            if (_log.shouldDebug()) {
-                _log.debug("Running unannounce " + _threadName + " to " + tr.announce);
-            }
-            long uploaded = coordinator.getUploaded();
-            long downloaded = coordinator.getDownloaded();
-            long len = snark.getTotalLength();
-            if (len > 0 && downloaded > len) {
-                downloaded = len;
-            }
-            long left = coordinator.getLeft();
             try {
-                // Don't try to restart I2CP connection just to say goodbye
-                if (_util.connected()) {
-                    if (tr.started && (!tr.stop) && tr.trackerProblems == null) {
-                        doRequest(
-                                tr, uploaded, downloaded, left, UDPTrackerClient.EVENT_STOPPED);
-                    }
+                if (_log.shouldDebug()) {
+                    _log.debug("Running unannounce " + _threadName + " to " + tr.announce);
                 }
-            } catch (IOException ioe) {
-                /* ignored */
+                long uploaded = coordinator.getUploaded();
+                long downloaded = coordinator.getDownloaded();
+                long len = snark.getTotalLength();
+                if (len > 0 && downloaded > len) {
+                    downloaded = len;
+                }
+                long left = coordinator.getLeft();
+                try {
+                    // Don't try to restart I2CP connection just to say goodbye
+                    if (_util.connected()) {
+                        if (tr.started && (!tr.stop) && tr.trackerProblems == null) {
+                            doRequest(
+                                    tr, uploaded, downloaded, left, UDPTrackerClient.EVENT_STOPPED);
+                        }
+                    }
+                } catch (IOException ioe) {
+                    /* ignored */
+                }
+                tr.reset();
+            } finally {
+                latch.countDown();
             }
-            tr.reset();
         }
     }
 
