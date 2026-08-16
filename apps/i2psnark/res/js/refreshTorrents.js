@@ -141,9 +141,10 @@ let chimpIsCached = false;
 
 /**
  * @type {boolean}
- * @description Whether the server is currently unreachable.
+ * @description Whether the server was previously unreachable; triggers a forced
+ * refresh on the first successful connectivity check so nonces re-sync promptly.
  */
-let noConnection = false;
+let wasDown = false;
 
 /**
  * @type {?number}
@@ -983,9 +984,18 @@ async function checkIfUp(minDelay = 14000) {
       if (isIframed) {parentDoc.documentElement.classList.remove("isDown");}
       if (overlay) {overlay.remove();}
       if (offlineStylesheet) {offlineStylesheet.remove();}
+      if (wasDown) {
+        wasDown = false;
+        try {
+          await doRefresh({forceFetch: true});
+        } catch (error) {
+          if (debugging) {console.error(error);}
+        }
+      }
     }
   } catch (error) {
     if (debugging) {console.error(error);}
+    wasDown = true;
     if (isIframed) {parentDoc.documentElement.classList.add("isDown");}
     setTimeout(isDown, 3000);
     await refreshTorrents();
