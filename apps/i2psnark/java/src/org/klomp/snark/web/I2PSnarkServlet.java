@@ -2123,7 +2123,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     String msg = _t("Torrent already in the queue: {0}", canonical);
                     _manager.addMessageAndPrint(msg);
                 }
-            } catch (IOException ignored) { /* ignored */ }
+            } catch (IOException ioe) {
+                String msg = _t("Error adding the torrent: {0}", DataHelper.escapeHTML(newFile)) +
+                             ": " + DataHelper.stripHTML(ioe.getMessage());
+                _manager.addMessageNoEscapeAndPrint(msg);
+            }
             return;
         }
 
