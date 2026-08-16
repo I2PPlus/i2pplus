@@ -298,6 +298,28 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_MULTI_DEST_MAX = "i2psnark.multiDestMax";
 
     /**
+     * Whether running torrents are periodically stopped and restarted so their
+     * destinations rotate to fresh identities, breaking long-lived linkage
+     * between the router's IP and the torrents' destinations at trackers and in
+     * the DHT. Destinations are ephemeral anyway, changing on every router
+     * restart; this extends that to within a run. The cycle is skipped while
+     * any torrent is actively downloading, and only the torrents running when
+     * the cycle fires are restarted.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_DEST_CYCLE = "i2psnark.destCycle";
+
+    /** Destinations cycle every this long, plus a random jitter */
+    private static final long DEST_CYCLE_INTERVAL = 3 * (long) 60 * 60 * 1000;
+
+    /** Random jitter added to each destination cycle, so routers do not rotate in lockstep */
+    private static final int DEST_CYCLE_JITTER = 60 * 60 * 1000;
+
+    /** Delay after the stop-all before restarting, long enough for the Disconnector to close the old session */
+    private static final long DEST_CYCLE_RESTART_DELAY = 70 * 1000;
+
+    /**
      * Stagger batched starts with a random delay, so torrents that start together
      * cannot be correlated by trackers or DHT peers, and tunnel builds are spread
      * out. Disable to start all torrents in a batch immediately.
@@ -519,6 +541,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         _idleChecker = new IdleChecker(this, _peerCoordinatorSet);
         _idleChecker.schedule(3 * (long) 60 * 1000);
+        new DestCycle().schedule(DEST_CYCLE_INTERVAL + _context.random().nextInt(DEST_CYCLE_JITTER));
         if (!_context.isRouterContext()) {
             String lang = _config.getProperty(PROP_LANG);
             if (lang != null) {
@@ -690,6 +713,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public boolean getRandomizeStartupDelay() {
         return _randomizeStartupDelay;
+    }
+
+    /**
+     * Whether running torrents are periodically restarted with fresh
+     * destinations.
+     *
+     * @return true to cycle destinations (default)
+     * @since 0.9.71+
+     */
+    public boolean shouldDestCycle() {
+        return Boolean.parseBoolean(_config.getProperty(PROP_DEST_CYCLE, "true"));
     }
 
     /**
@@ -5184,6 +5218,111 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _util.disconnect();
                 _stopping = false;
                 addMessage(_t("I2P tunnel closed."));
+            }
+        }
+    }
+
+    /**
+     * Restart all running torrents on fresh destinations: stop them all (which
+     * destroys their sessions, and schedules the Disconnector to close the main
+     * session too), then restart only the torrents that were running when the
+     * cycle fired, once the old session is gone. Skipped while any torrent is
+     * actively downloading, and when the router is already stopping.
+     *
+     * @since 0.9.71+
+     */
+    private void cycleDestinations() {
+        if (_stopping || !shouldDestCycle()) {
+            return;
+        }
+        List<Snark> running = new ArrayList<>(_snarks.size());
+        int downloading = 0;
+        for (Snark snark : _snarks.values()) {
+            if (!snark.isStopped()) {
+                Storage storage = snark.getStorage();
+                if (storage != null && !storage.complete()) {
+                    downloading++;
+                } else {
+                    running.add(snark);
+                }
+            }
+        }
+        if (downloading > 0) {
+            String msg = downloading == 1
+                    ? _t("Skipping destination cycle - {0} active download in progress", "1")
+                    : _t("Skipping destination cycle - {0} active downloads in progress", String.valueOf(downloading));
+            if (_log.shouldInfo()) {
+                _log.info(msg);
+            }
+            if (!_context.isRouterContext()) {
+                System.out.println(" • " + msg);
+            }
+            return; // active download; rotating now would disrupt it
+        }
+        if (running.isEmpty()) {
+            if (_log.shouldInfo()) {
+                _log.info("Skipping destination cycle - no running torrents");
+            }
+            return;
+        }
+        String msg = _t("No actively downloading torrents - cycling destinations") + "..";
+        addMessage(msg);
+        if (!_context.isRouterContext()) {
+            System.out.println(" • " + msg);
+        }
+        stopAllTorrents(false);
+        new DestCycleRestart(running).schedule(DEST_CYCLE_RESTART_DELAY);
+    }
+
+    /**
+     * Periodically cycle destinations: stop all running torrents and restart
+     * them so their sessions - and with them their destinations - are recreated
+     * fresh. Self-reschedules with a random jitter.
+     *
+     * @since 0.9.71+
+     */
+    private class DestCycle extends SimpleTimer2.TimedEvent {
+        public void timeReached() {
+            try {
+                cycleDestinations();
+            } finally {
+                schedule(DEST_CYCLE_INTERVAL + _context.random().nextInt(DEST_CYCLE_JITTER));
+            }
+        }
+    }
+
+    /**
+     * Restart the torrents that were running when the cycle fired, once the
+     * stop-all's Disconnector has closed the old session, so the new session -
+     * and with it the new destinations - is created on start. Multi-dest pools
+     * restart in random order with the startup stagger.
+     *
+     * @since 0.9.71+
+     */
+    private class DestCycleRestart extends SimpleTimer2.TimedEvent {
+        private final List<Snark> _running;
+
+        public DestCycleRestart(List<Snark> running) {
+            _running = running;
+        }
+
+        public void timeReached() {
+            _stopping = false;
+            Set<Integer> seenPools = new HashSet<>(_running.size() / 2);
+            int started = 0;
+            for (Snark snark : _running) {
+                if (!snark.isStopped()) {
+                    continue; // already running, or removed
+                }
+                if (_util.getMultiDest() && _util.getMaxDest() > 0) {
+                    int pool = _util.getPoolIndex(snark.getInfoHash());
+                    boolean newPool = (pool < 0) || seenPools.add(pool);
+                    if (started++ > 0 && newPool) {
+                        multiDestStartDelay();
+                    }
+                }
+                snark.setStarting();
+                (new I2PAppThread(new ThreadedStarter(snark), "TorrentStarter", true)).start();
             }
         }
     }
