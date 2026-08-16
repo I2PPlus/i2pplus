@@ -2206,15 +2206,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     return;
                 }
                 // Prevent nested torrents
-                for (Snark s : _manager.getTorrents()) {
-                    Storage storage = s.getStorage();
-                    if (storage == null) continue;
-                    File sbase = storage.getBase();
-                    if (isParentOf(sbase, dir)) {
-                        String msg = _t("Cannot add torrent {0} inside another torrent: {1}", dir.getAbsolutePath(), sbase);
-                        _manager.addMessageAndPrint(msg);
-                        return;
-                    }
+                if (checkNestedTorrent(dir, false)) {
+                    return;
                 }
             }
         }
@@ -2619,20 +2612,8 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         // Check nested torrents
-        for (Snark s : _manager.getTorrents()) {
-            Storage storage = s.getStorage();
-            if (storage == null) continue;
-            File sbase = storage.getBase();
-            if (isParentOf(sbase, baseFile)) {
-                String msg = _t("Cannot add torrent {0} inside another torrent: {1}", baseFile.getAbsolutePath(), sbase);
-                _manager.addMessageAndPrint(msg);
-                return;
-            }
-            if (isParentOf(baseFile, sbase)) {
-                String msg = _t("Cannot add torrent {0} including another torrent: {1}", baseFile.getAbsolutePath(), sbase);
-                _manager.addMessageAndPrint(msg);
-                return;
-            }
+        if (checkNestedTorrent(baseFile, true)) {
+            return;
         }
 
         String announceURL = req.getParameter("announceURL");
@@ -6481,6 +6462,41 @@ public class I2PSnarkServlet extends BasicServlet {
      * file or directory "b", canonically speaking.
      *
      * @return whether parent of
+     * @since 0.9.15
+     */
+    /**
+     * Reject a torrent whose data directory lies inside another torrent's data
+     * directory, or (when checkContained) would contain another torrent's data
+     * directory. Adds a message explaining the rejection.
+     *
+     * @param dataDir the data directory for the torrent being added or created
+     * @param checkContained also reject when it would contain another torrent's data
+     * @return true to reject
+     * @since 0.9.71+
+     */
+    private boolean checkNestedTorrent(File dataDir, boolean checkContained) {
+        for (Snark s : _manager.getTorrents()) {
+            Storage storage = s.getStorage();
+            if (storage == null) continue;
+            File sbase = storage.getBase();
+            if (isParentOf(sbase, dataDir)) {
+                String msg = _t("Cannot add torrent {0} inside another torrent: {1}", dataDir.getAbsolutePath(), sbase);
+                _manager.addMessageAndPrint(msg);
+                return true;
+            }
+            if (checkContained && isParentOf(dataDir, sbase)) {
+                String msg = _t("Cannot add torrent {0} including another torrent: {1}", dataDir.getAbsolutePath(), sbase);
+                _manager.addMessageAndPrint(msg);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Does File a contain File b, or are they the same?
+     * Parent directories must exist for b to be contained in a.
+     *
      * @since 0.9.15
      */
     private static boolean isParentOf(File a, File b) {
