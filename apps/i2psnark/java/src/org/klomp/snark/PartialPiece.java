@@ -400,7 +400,7 @@ class PartialPiece implements Comparable<PartialPiece> {
         int end = (offset + len + SUB_PARTSIZE - 1) / SUB_PARTSIZE;
         for (int i = subBlock; i < end; i++) {
             if (bitfield.get(i)) {
-                info("Already have sub-block " + i + " on " + this);
+                debug("Already have sub-block " + i + " on " + this);
             } else {
                 bitfield.set(i);
             }
@@ -411,12 +411,12 @@ class PartialPiece implements Comparable<PartialPiece> {
             int sz = bitfield.size();
             for (int i = subBlock + 1; i < sz; i++) {
                 if (!bitfield.get(i)) break;
-                info("Hole filled in before sub-block " + i + " on " + this + ' ' + bitfield);
+                debug("Hole filled in before sub-block " + i + " on " + this + ' ' + bitfield);
                 if (i == sz - 1) off = pclen;
                 else off += SUB_PARTSIZE;
             }
         } else {
-            info("Out of order chunk " + subBlock + " on " + this + ' ' + bitfield);
+            debug("Out of order chunk " + subBlock + " on " + this + ' ' + bitfield);
         }
     }
 
@@ -522,6 +522,16 @@ class PartialPiece implements Comparable<PartialPiece> {
      */
     public static void warn(String s) {
         I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class).warn(s);
+    }
+
+    /**
+     * Logs a debug message for this class.
+     *
+     * @param s debug message string
+     * @since 0.9.71+
+     */
+    public static void debug(String s) {
+        I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class).debug(s);
     }
 
     /**
