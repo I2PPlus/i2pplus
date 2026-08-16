@@ -1624,9 +1624,11 @@ public class Storage implements Closeable {
             for (int i = 0; i < pieces; i++) {
                 _checkProgress.set(i);
                 boolean trusted = pieceTrusted != null && pieceTrusted[i];
+                boolean padOnly = pieceTrusted == null && isPaddingPiece(pieceEnd);
                 int length;
                 boolean correctHash;
-                if (trusted) {
+                if (trusted || padOnly) {
+                    // trusted: saved state says complete; padOnly: hashes as zeros, never on disk
                     length = (int) Math.min(piece_size, total_length - pieceEnd);
                     correctHash = false;
                 } else {
@@ -1648,15 +1650,17 @@ public class Storage implements Closeable {
                 if (trusted) {
                     continue;
                 }
-                if (correctHash) {
+                if (correctHash || padOnly) {
                     bfield.set(i);
                     need--;
+                    if (listener != null) {
+                        listener.storageChecked(this, i, true);
+                    }
                 } else {
                     bfield.clear(i);
-                }
-
-                if (listener != null) {
-                    listener.storageChecked(this, i, correctHash);
+                    if (listener != null) {
+                        listener.storageChecked(this, i, false);
+                    }
                 }
             }
         }
@@ -1682,6 +1686,12 @@ public class Storage implements Closeable {
             }
         }
         return rv;
+    }
+
+    /** BEP 47: true if the piece lies entirely within padding files, so it hashes as zeros. */
+    private boolean isPaddingPiece(long pieceStart) {
+        return metainfo.isRangePadding(
+                pieceStart, (int) Math.min(piece_size, total_length - pieceStart));
     }
 
     /**

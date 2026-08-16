@@ -268,6 +268,37 @@ public class StorageTest {
         assertEquals(Arrays.asList(0, 1, 2, 3), l.checked);
     }
 
+    /** BEP 47: a pad-only piece is counted complete on a full recheck without hashing. */
+    @Test
+    public void testRecheckTrustsPadOnlyPiece() throws Exception {
+        // a.dat [0, 16K) real piece, pad [16K, 32K) pad-only piece
+        int pieceLength = PIECE_LENGTH;
+        List<String> names = Arrays.asList("a.dat", ".pad/16384");
+        List<Long> sizes = Arrays.asList(Long.valueOf(pieceLength), Long.valueOf(pieceLength));
+        List<String> attrs = Arrays.asList("", "p");
+        byte[] content = new byte[2 * pieceLength];
+        for (int i = 0; i < pieceLength; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        // a.dat must exist so the recheck hashes; pad bytes are zeros
+        writeFile(new File(_dataDir, "a.dat"), content, 0, pieceLength);
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        names,
+                                        sizes,
+                                        attrs,
+                                        pieceLength,
+                                        computeHashes(content, pieceLength))));
+        RecordingListener l = new RecordingListener();
+        Storage s = newStorage(mi, l);
+        s.check(0, null);
+        assertTrue(s.complete());
+        assertEquals(0, s.needed());
+        assertTrue(s.getBitField().get(1)); // pad-only piece trusted without hashing
+    }
+
     /** All files unchanged (mtime <= savedTime, lengths match): no hashing at all, bitfield trusted. */
     @Test
     public void testTrustPathSkipsHashingWhenFilesUnchanged() throws Exception {
