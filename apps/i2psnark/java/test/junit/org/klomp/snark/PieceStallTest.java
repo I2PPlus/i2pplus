@@ -89,7 +89,7 @@ public class PieceStallTest {
         DataInputStream din = new DataInputStream(new ByteArrayInputStream(data));
         pp.read(din, 0, data.length, new StubBWL());
         assertTrue(piece.getLastActive() > before);
-        assertTrue(pp.hasChunk(0));
+        assertTrue(pp.hasSubBlock(0));
     }
 
     /** Minimal BandwidthListener for the chunk read test. */

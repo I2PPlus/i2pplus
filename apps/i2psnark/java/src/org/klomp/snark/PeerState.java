@@ -1451,52 +1451,22 @@ class PeerState implements DataLoader {
                     }
                     more_pieces = requestNextPiece(fastPieces);
                 } else if (more_pieces) { // We want something
-                    int pieceLength;
-                    boolean isLastChunk;
-                    pieceLength = metainfo.getPieceLength(lastRequest.getPiece());
-                    isLastChunk = lastRequest.off + lastRequest.len == pieceLength;
-
-                    // Last part of a piece?
-                    if (isLastChunk) {
+                    // Continue requesting the rest of the current piece; padding-only
+                    // sub-blocks are marked as received (zeros) and skipped inside
+                    PartialPiece nextPiece = lastRequest.getPartialPiece();
+                    Request req = nextPiece.getRequest(lastRequest.off + lastRequest.len);
+                    if (req == null) {
                         more_pieces = requestNextPiece(fastPieces);
                     } else {
-                        PartialPiece nextPiece = lastRequest.getPartialPiece();
-                        int nextBegin = lastRequest.off + PARTSIZE;
-                        while (true) {
-                            // don't rerequest chunks we already have
-                            if (!nextPiece.hasChunk(nextBegin / PARTSIZE)) {
-                                int maxLength = pieceLength - nextBegin;
-                                int nextLength = maxLength > PARTSIZE ? PARTSIZE : maxLength;
-                                if (nextPiece.isPaddingChunk(nextBegin / PARTSIZE)) {
-                                    // BEP 47: padding-only chunk, mark as received (zeros), never
-                                    // request it
-                                    nextPiece.markChunk(nextBegin / PARTSIZE);
-                                    nextBegin += nextLength;
-                                    if (nextBegin >= pieceLength) {
-                                        more_pieces = requestNextPiece(fastPieces);
-                                        break;
-                                    }
-                                    continue;
-                                }
-                                Request req = new Request(nextPiece, nextBegin, nextLength);
-                                outstandingRequests.add(req);
-                                // BEP 6: allowed fast pieces are requested even while choked
-                                if (!choked
-                                        || (fastPieces != null
-                                                && fastPieces.contains(
-                                                        Integer.valueOf(nextPiece.getPiece())))) {
-                                    out.sendRequest(req);
-                                }
-                                lastRequest = req;
-                                break;
-                            } else {
-                                nextBegin += PARTSIZE;
-                                if (nextBegin >= pieceLength) {
-                                    more_pieces = requestNextPiece(fastPieces);
-                                    break;
-                                }
-                            }
+                        outstandingRequests.add(req);
+                        // BEP 6: allowed fast pieces are requested even while choked
+                        if (!choked
+                                || (fastPieces != null
+                                        && fastPieces.contains(
+                                                Integer.valueOf(nextPiece.getPiece())))) {
+                            out.sendRequest(req);
                         }
+                        lastRequest = req;
                     }
                 }
             }

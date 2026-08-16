@@ -796,10 +796,10 @@ public class StorageTest {
         assertFalse(single.isRangePadding(0, 2048));
     }
 
-    /** BEP 47: getRequest() never requests padding-only chunks and the piece still completes. */
+    /** BEP 47: getRequest() never requests padding-only sub-blocks and the piece still completes. */
     @Test
     public void testPartialPieceSkipsPaddingChunks() throws Exception {
-        int pieceLength = 2 * PeerState.PARTSIZE; // one piece, two chunks
+        int pieceLength = 2 * PeerState.PARTSIZE; // one piece, eight 4K sub-blocks
         // a.dat [0, 128K) real, pad [128K, 256K) padding
         List<String> names = Arrays.asList("a.dat", ".pad/131072");
         List<Long> sizes =
@@ -829,21 +829,24 @@ public class StorageTest {
         Request r = pp.getRequest();
         assertNotNull(r);
         assertEquals(0, r.off);
+        // the real sub-blocks merge into one full-size request
         assertEquals(PeerState.PARTSIZE, r.len);
-        // chunk 0 arrives; the padding-only chunk 1 must never be requested
-        pp.markChunk(0);
+        // chunk 0 arrives; the padding-only sub-blocks must never be requested
+        markAll(pp, 0, 4);
         assertNull(pp.getRequest());
         assertTrue(pp.isComplete());
 
-        // without metainfo the padding chunk is requested as usual
+        // without metainfo nothing is padding, so the second half is requested in full
         PartialPiece noMeta = new PartialPiece(new Piece(0), pieceLength, _dataDir);
         Request r2 = noMeta.getRequest();
         assertNotNull(r2);
         assertEquals(0, r2.off);
-        noMeta.markChunk(0);
+        assertEquals(PeerState.PARTSIZE, r2.len);
+        markAll(noMeta, 0, 4);
         Request r3 = noMeta.getRequest();
         assertNotNull(r3);
         assertEquals(PeerState.PARTSIZE, r3.off);
+        assertEquals(PeerState.PARTSIZE, r3.len);
         assertFalse(noMeta.isComplete());
 
         // four chunks [pad, real, real, real]: out-of-order arrival of chunk 1 must not
@@ -868,15 +871,98 @@ public class StorageTest {
                                         pieceLength4,
                                         computeHashes(new byte[pieceLength4], pieceLength4))));
         PartialPiece pp4 = new PartialPiece(new Piece(0), pieceLength4, _dataDir, mi4);
-        pp4.markChunk(1); // out-of-order arrival of chunk 1
+        markAll(pp4, 4, 4); // out-of-order arrival of chunk 1
         Request r4 = pp4.getRequest();
         assertNotNull(r4);
         assertEquals(2 * PeerState.PARTSIZE, r4.off);
         assertEquals(PeerState.PARTSIZE, r4.len);
-        pp4.markChunk(2);
-        pp4.markChunk(3);
+        markAll(pp4, 8, 4);
+        markAll(pp4, 12, 4);
         // chunk 0 was padding: skipped, no request, piece complete
         assertNull(pp4.getRequest());
         assertTrue(pp4.isComplete());
+    }
+
+    /**
+     * BEP 47: a chunk straddling a padding file is fetched at sub-block granularity, so the
+     * fully-padding sub-block is never requested and at most one 4K sub-block of padding is
+     * wasted.
+     */
+    @Test
+    public void testPartialPieceCapsStraddlingPad() throws Exception {
+        // a.dat [0, 10K) real, pad [10K, 16K): sub-block 2 straddles, sub-block 3 is all padding
+        int pieceLength = PeerState.PARTSIZE;
+        List<String> names = Arrays.asList("a.dat", ".pad/6144");
+        List<Long> sizes = Arrays.asList(Long.valueOf(10240), Long.valueOf(6144));
+        List<String> attrs = Arrays.asList("", "p");
+        byte[] content = new byte[pieceLength];
+        for (int i = 0; i < pieceLength; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        for (int i = 10240; i < pieceLength; i++) {
+            content[i] = 0; // pad bytes are zeros
+        }
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        names,
+                                        sizes,
+                                        attrs,
+                                        pieceLength,
+                                        computeHashes(content, pieceLength))));
+        assertTrue(mi.isRangePadding(12288, 4096)); // sub-block 3 fully padding
+        assertFalse(mi.isRangePadding(8192, 4096)); // sub-block 2 straddles
+
+        PartialPiece pp = new PartialPiece(new Piece(0), pieceLength, _dataDir, mi);
+        // the real run [0, 12K) is one request; the all-padding sub-block [12K, 16K) is skipped
+        Request r = pp.getRequest();
+        assertNotNull(r);
+        assertEquals(0, r.off);
+        assertEquals(12288, r.len);
+        // the three real sub-blocks arrive; the pad sub-block is marked as received, piece complete
+        markAll(pp, 0, 3);
+        assertNull(pp.getRequest());
+        assertTrue(pp.isComplete());
+    }
+
+    /** BEP 47: a long padding tail leaves a single real sub-block; no padding is requested. */
+    @Test
+    public void testPartialPieceSkipsLongPadTail() throws Exception {
+        // a.dat [0, 4K) real, pad [4K, 16K)
+        int pieceLength = PeerState.PARTSIZE;
+        List<String> names = Arrays.asList("a.dat", ".pad/12288");
+        List<Long> sizes = Arrays.asList(Long.valueOf(4096), Long.valueOf(12288));
+        List<String> attrs = Arrays.asList("", "p");
+        byte[] content = new byte[pieceLength];
+        for (int i = 0; i < 4096; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        names,
+                                        sizes,
+                                        attrs,
+                                        pieceLength,
+                                        computeHashes(content, pieceLength))));
+        assertTrue(mi.isRangePadding(4096, 4096));
+
+        PartialPiece pp = new PartialPiece(new Piece(0), pieceLength, _dataDir, mi);
+        Request r = pp.getRequest();
+        assertNotNull(r);
+        assertEquals(0, r.off);
+        assertEquals(4096, r.len); // only the real sub-block, no padding requested
+        markAll(pp, 0, 1);
+        assertNull(pp.getRequest());
+        assertTrue(pp.isComplete());
+    }
+
+    /** Marks the given sub-blocks as received, simulating their arrival. */
+    private static void markAll(PartialPiece pp, int start, int count) {
+        for (int i = 0; i < count; i++) {
+            pp.markSubBlock(start + i);
+        }
     }
 }

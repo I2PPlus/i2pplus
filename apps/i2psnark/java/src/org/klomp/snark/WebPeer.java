@@ -630,35 +630,16 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                 // we have nothing in the queue right now
                 more_pieces = requestNextPiece();
             } else if (more_pieces) {
-                // We want something
-                int pieceLength;
-                boolean isLastChunk;
-                pieceLength = metainfo.getPieceLength(lastRequest.getPiece());
-                isLastChunk = lastRequest.off + lastRequest.len == pieceLength;
-
-                // Last part of a piece?
-                if (isLastChunk) {
+                // Continue requesting the rest of the current piece; padding-only
+                // sub-blocks are marked as received (zeros) and skipped inside
+                PartialPiece nextPiece = lastRequest.getPartialPiece();
+                Request req = nextPiece.getRequest(lastRequest.off + lastRequest.len);
+                if (req == null) {
                     more_pieces = requestNextPiece();
                 } else {
-                    PartialPiece nextPiece = lastRequest.getPartialPiece();
-                    int nextBegin = lastRequest.off + PeerState.PARTSIZE;
-                    int maxLength = pieceLength - nextBegin;
-                    int nextLength =
-                            maxLength > PeerState.PARTSIZE ? PeerState.PARTSIZE : maxLength;
-                    if (nextPiece.isPaddingChunk(nextBegin / PeerState.PARTSIZE)) {
-                        // BEP 47: padding-only chunk, mark as received (zeros), never request it;
-                        // advance the sequential cursor without adding to the pipeline
-                        nextPiece.markChunk(nextBegin / PeerState.PARTSIZE);
-                        lastRequest = new Request(nextPiece, nextBegin, nextLength);
-                        if (nextBegin + nextLength >= pieceLength) {
-                            more_pieces = requestNextPiece();
-                        }
-                        continue;
-                    }
-                    Request req = new Request(nextPiece, nextBegin, nextLength);
                     outstandingRequests.add(req);
                     lastRequest = req;
-                    if (shouldRequest(maxLength)) this.notifyAll();
+                    if (shouldRequest(req.len)) this.notifyAll();
                 }
             }
         }

@@ -36,19 +36,33 @@ class PartialPiece implements Comparable<PartialPiece> {
     private final File tempDir;
     /** BEP 47: to recognize padding-only chunks and skip requesting them; may be null */
     private final MetaInfo _meta;
-    /** BEP 47: per-piece padding chunk mask, lazily computed; null until first use */
+    /** BEP 47: per-piece padding sub-block mask, lazily computed; null until first use */
     private volatile BitField _paddingMask;
 
     private File tempfile;
     private RandomAccessFile raf;
 
-    // BitField tracking which chunks have been downloaded
+    // BitField tracking which sub-blocks have been downloaded
     private final BitField bitfield;
 
     private int off; // offset of next expected chunk start
 
     private static final int BUFSIZE = PeerState.PARTSIZE; // size of chunk parts
     private static final ByteCache _cache = ByteCache.getInstance(64, BUFSIZE);
+
+    /**
+     * BEP 47: sub-block granularity for requests that straddle padding files. A request is a run
+     * of consecutive real sub-blocks capped at PARTSIZE, so at most SUB_PARTSIZE bytes of padding
+     * are ever requested per boundary. A power of two, so it is the same class of block size as
+     * the short tail block every client accepts.
+     *
+     * <p>Next logical step: request the exact real sub-range of a straddling sub-block instead of
+     * the whole sub-block, eliminating the remaining pad waste entirely. Risk: arbitrary (non
+     * power-of-two) block sizes are rejected by a few strict peers; reward: up to ~2K average pad
+     * bytes per boundary, tens of MB on pad-heavy torrents. Would require a per-peer fallback to
+     * sub-block requests.
+     */
+    private static final int SUB_PARTSIZE = PeerState.PARTSIZE / 4;
 
     // Threshold for using in-memory storage vs temp file; can be dynamically reduced on OOM
     private static final int MAX_IN_MEM = 1024 * 1024;
@@ -81,7 +95,7 @@ class PartialPiece implements Comparable<PartialPiece> {
         this.pclen = len;
         this.tempDir = tempDir;
         this._meta = meta;
-        this.bitfield = new BitField((len + PeerState.PARTSIZE - 1) / PeerState.PARTSIZE);
+        this.bitfield = new BitField((len + SUB_PARTSIZE - 1) / SUB_PARTSIZE);
 
         byte[] tempBs = null;
         try {
@@ -124,46 +138,70 @@ class PartialPiece implements Comparable<PartialPiece> {
      * @since 0.9.1
      */
     public synchronized Request getRequest() {
-        int chunk = off / PeerState.PARTSIZE;
+        return getRequest(0);
+    }
+
+    /**
+     * Creates a Request object for the next missing chunk at or after the given offset. Chunks
+     * lying entirely within BEP 47 padding files are marked as received (their data is all zeros)
+     * and never requested. A request is a run of consecutive real sub-blocks capped at PARTSIZE,
+     * so a chunk straddling a padding file is fetched at sub-block granularity, wasting at most
+     * SUB_PARTSIZE bytes of padding.
+     *
+     * @param minOffset byte offset to start scanning at; the caller advances it past the last
+     *        request so in-flight chunks are not re-requested
+     * @return the next Request for downloading or null if complete
+     */
+    public synchronized Request getRequest(int minOffset) {
         int sz = bitfield.size();
-        for (int i = chunk; i < sz; i++) {
-            if (!bitfield.get(i)) {
-                if (isPaddingChunk(i)) {
-                    markChunk(i);
-                    if (i == sz - 1) off = pclen;
-                    else off += PeerState.PARTSIZE;
-                    continue;
-                }
-                return new Request(this, off, Math.min(pclen - off, PeerState.PARTSIZE));
+        int s = (minOffset + SUB_PARTSIZE - 1) / SUB_PARTSIZE;
+        for (; s < sz; s++) {
+            if (bitfield.get(s)) {
+                continue;
             }
-            if (i == sz - 1) off = pclen;
-            else off += PeerState.PARTSIZE;
+            if (isPaddingSubBlock(s)) {
+                markSubBlock(s);
+                continue;
+            }
+            int offset = s * SUB_PARTSIZE;
+            int len = SUB_PARTSIZE;
+            int s2 = s + 1;
+            // merge consecutive real sub-blocks up to a full PARTSIZE request
+            while (len < PeerState.PARTSIZE
+                    && s2 < sz
+                    && !bitfield.get(s2)
+                    && !isPaddingSubBlock(s2)) {
+                len += SUB_PARTSIZE;
+                s2++;
+            }
+            return new Request(this, offset, Math.min(len, pclen - offset));
         }
         return null;
     }
 
     /**
-     * Marks a chunk as received without any data, for BEP 47 padding-only chunks whose bytes are
-     * all zeros. The in-memory buffer stays zero-filled, so the piece hashes correctly once the
-     * remaining chunks arrive. Does not advance the sequential offset; the caller's scan does that.
+     * Marks a sub-block as received without any data, for BEP 47 padding-only sub-blocks whose
+     * bytes are all zeros. The in-memory buffer stays zero-filled, so the piece hashes correctly
+     * once the remaining sub-blocks arrive. Does not advance the sequential offset; the caller's
+     * scan does that.
      *
-     * @param chunk zero-based chunk index
+     * @param subBlock zero-based sub-block index
      * @since 0.9.71+
      */
-    public synchronized void markChunk(int chunk) {
+    public synchronized void markSubBlock(int subBlock) {
         piece.setActive();
-        if (!bitfield.get(chunk)) {
-            bitfield.set(chunk);
+        if (!bitfield.get(subBlock)) {
+            bitfield.set(subBlock);
         }
     }
 
     /**
-     * True if the chunk lies entirely within BEP 47 padding files. The padding layout of a piece
-     * never changes, so the chunk mask is computed once on first use.
+     * True if the sub-block lies entirely within BEP 47 padding files. The padding layout of a
+     * piece never changes, so the sub-block mask is computed once on first use.
      *
-     * @param chunk zero-based chunk index
+     * @param subBlock zero-based sub-block index
      */
-    boolean isPaddingChunk(int chunk) {
+    boolean isPaddingSubBlock(int subBlock) {
         if (_meta == null) {
             return false;
         }
@@ -174,15 +212,15 @@ class PartialPiece implements Comparable<PartialPiece> {
             long pieceStart = (long) piece.getId() * _meta.getPieceLength(0);
             int sz = bitfield.size();
             for (int i = 0; i < sz; i++) {
-                int offset = i * PeerState.PARTSIZE;
-                int len = Math.min(pclen - offset, PeerState.PARTSIZE);
+                int offset = i * SUB_PARTSIZE;
+                int len = Math.min(pclen - offset, SUB_PARTSIZE);
                 if (_meta.isRangePadding(pieceStart + offset, len)) {
                     mask.set(i);
                 }
             }
             _paddingMask = mask;
         }
-        return mask.get(chunk);
+        return mask.get(subBlock);
     }
 
     /**
@@ -225,14 +263,14 @@ class PartialPiece implements Comparable<PartialPiece> {
     }
 
     /**
-     * Checks if the given chunk index has been downloaded.
+     * Checks if the given sub-block index has been downloaded.
      *
-     * @param chunk zero-based chunk index
-     * @return true if chunk downloaded, false otherwise
+     * @param subBlock zero-based sub-block index
+     * @return true if sub-block downloaded, false otherwise
      * @since 0.9.63
      */
-    public synchronized boolean hasChunk(int chunk) {
-        return bitfield.get(chunk);
+    public synchronized boolean hasSubBlock(int subBlock) {
+        return bitfield.get(subBlock);
     }
 
     /**
@@ -245,10 +283,10 @@ class PartialPiece implements Comparable<PartialPiece> {
         if (bitfield.complete()) return pclen;
 
         int count = bitfield.count();
-        int downloaded = count * PeerState.PARTSIZE;
-        int remainder = pclen % PeerState.PARTSIZE;
+        int downloaded = count * SUB_PARTSIZE;
+        int remainder = pclen % SUB_PARTSIZE;
         if (remainder != 0 && bitfield.get(count - 1)) {
-            downloaded -= PeerState.PARTSIZE - remainder;
+            downloaded -= SUB_PARTSIZE - remainder;
         }
         return downloaded;
     }
@@ -302,8 +340,8 @@ class PartialPiece implements Comparable<PartialPiece> {
      */
     public void read(DataInputStream din, int offset, int len, BandwidthListener bwl)
             throws IOException {
-        if (offset % PeerState.PARTSIZE != 0) throw new IOException("Bad offset " + offset);
-        int chunk = offset / PeerState.PARTSIZE;
+        if (offset % SUB_PARTSIZE != 0) throw new IOException("Bad offset " + offset);
+        int subBlock = offset / SUB_PARTSIZE;
 
         if (bs != null) {
             // Read directly into the memory buffer
@@ -315,7 +353,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                 bwl.downloaded(n);
             }
             synchronized (this) {
-                handleChunkReception(chunk, offset, len);
+                handleChunkReception(subBlock, offset, len);
             }
         } else {
             // Use temporary file
@@ -339,7 +377,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                     if (raf == null) createTemp();
                     raf.seek(offset);
                     raf.write(tmp);
-                    handleChunkReception(chunk, offset, len);
+                    handleChunkReception(subBlock, offset, len);
                 }
             } finally {
                 if (ba != null) {
@@ -353,29 +391,32 @@ class PartialPiece implements Comparable<PartialPiece> {
      * Handles updating the bitfield and offset when a chunk is received. Logs warnings if
      * out-of-order chunks or holes are detected. Caller must synchronize before calling.
      *
-     * @param chunk chunk index received
-     * @param offset byte offset in the piece corresponding to chunk
-     * @param len length of chunk in bytes
+     * @param subBlock first sub-block index received (may span several)
+     * @param offset byte offset in the piece corresponding to the sub-block
+     * @param len length of data in bytes
      */
-    private void handleChunkReception(int chunk, int offset, int len) {
+    private void handleChunkReception(int subBlock, int offset, int len) {
         piece.setActive();
-        if (bitfield.get(chunk)) {
-            info("Already have chunk " + chunk + " on " + this);
-        } else {
-            bitfield.set(chunk);
-            if (this.off == offset) {
-                this.off += len;
-                // Advance offset if holes filled
-                int sz = bitfield.size();
-                for (int i = chunk + 1; i < sz; i++) {
-                    if (!bitfield.get(i)) break;
-                    info("Hole filled in before chunk " + i + " on " + this + ' ' + bitfield);
-                    if (i == sz - 1) off = pclen;
-                    else off += PeerState.PARTSIZE;
-                }
+        int end = (offset + len + SUB_PARTSIZE - 1) / SUB_PARTSIZE;
+        for (int i = subBlock; i < end; i++) {
+            if (bitfield.get(i)) {
+                info("Already have sub-block " + i + " on " + this);
             } else {
-                info("Out of order chunk " + chunk + " on " + this + ' ' + bitfield);
+                bitfield.set(i);
             }
+        }
+        if (this.off == offset) {
+            this.off += len;
+            // Advance offset if holes filled
+            int sz = bitfield.size();
+            for (int i = subBlock + 1; i < sz; i++) {
+                if (!bitfield.get(i)) break;
+                info("Hole filled in before sub-block " + i + " on " + this + ' ' + bitfield);
+                if (i == sz - 1) off = pclen;
+                else off += SUB_PARTSIZE;
+            }
+        } else {
+            info("Out of order chunk " + subBlock + " on " + this + ' ' + bitfield);
         }
     }
 
