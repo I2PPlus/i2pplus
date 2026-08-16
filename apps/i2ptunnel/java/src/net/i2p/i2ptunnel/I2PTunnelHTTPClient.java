@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
+import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -1432,18 +1433,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 try {sktOpts = getDefaultOptions(opts);}
                 catch (RuntimeException re) {
                     // tunnel build failure
-                    StringBuilder buf = new StringBuilder(128);
-                    buf.append("HTTP/1.1 503 Service Unavailable");
-                    if (re.getMessage() != null) {buf.append(" - ").append(re.getMessage());}
-                    buf.append("\r\n\r\n");
-                    try {out.write(buf.toString().getBytes(StandardCharsets.UTF_8));}
-                    catch (IOException ioe) { /* ignored */ }
-                    throw re;
+                    writeServiceUnavailable(out, re.getMessage());
+                    return;
                 }
                 if (remotePort > 0) {sktOpts.setPort(remotePort);}
-                // Retry once on transient connection failures (tunnel build failure,
+                // Retry on transient connection failures (tunnel build failure,
                 // temporary no-routes). NoRouteToHostException is thrown when the
                 // destination is unreachable or tunnels fail to build.
+                // Fail fast when the client tunnel pool provably has no tunnels
+                // and none are being built - further retries cannot succeed.
                 int connectAttempts = 0;
                 while (true) {
                     try {
@@ -1451,7 +1449,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         break;
                     } catch (IOException ioe) {
                         connectAttempts++;
-                        if (connectAttempts >= I2P_CONNECT_MAX_RETRIES) {
+                        if (connectAttempts >= I2P_CONNECT_MAX_RETRIES || poolIsDefinitivelyDown()) {
                             throw ioe;
                         }
                         if (_log.shouldInfo()) {
@@ -1541,12 +1539,76 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             IOException ex = new IOException("OOM");
             _log.error(getPrefix(requestId) + "Error trying to connect", oom);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
+        } catch(RuntimeException ex) {
+            // e.g. IllegalArgumentException from verifySocketManager() while rebuilding
+            // the shared client session, or a tunnel build failure.
+            // Without this the browser gets a dead connection instead of an error page.
+            if (_log.shouldWarn()) {
+                _log.warn(getPrefix(requestId) + "Error trying to connect", ex);
+            }
+            writeServiceUnavailable(out, ex.getMessage());
         } finally {
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
                 try { i2ps.close(); } catch (IOException ioe) { /* ignored */ }
             }
+        }
+    }
+
+    /**
+     *  Write a minimal 503 response and close the connection.
+     *  The socket close in the caller's finally block flushes the response.
+     *
+     *  @param out the output stream for the error response
+     *  @param message the reason, or null
+     */
+    static void writeServiceUnavailable(OutputStream out, String message) {
+        if (out == null) {return;}
+        StringBuilder buf = new StringBuilder(128);
+        buf.append("HTTP/1.1 503 Service Unavailable");
+        if (message != null && !message.isEmpty()) {buf.append(" - ").append(message);}
+        buf.append("\r\nConnection: close\r\n\r\n");
+        try {out.write(buf.toString().getBytes(StandardCharsets.UTF_8));}
+        catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
+     *  @return true if the client tunnel pool provably has no tunnels and none
+     *          are being built, so further connect retries cannot succeed
+     */
+    private boolean poolIsDefinitivelyDown() {
+        return poolState() <= -1;
+    }
+
+    /**
+     *  Router-context only, best-effort check of the client outbound tunnel pool.
+     *  Uses reflection so i2ptunnel compiles against core alone.
+     *  The router creates a per-client pool keyed by session hash;
+     *  getValidTunnelCount() counts non-failed, non-expired tunnels,
+     *  getInProgressCount() counts builds in progress.
+     *
+     *  @return 1 if the pool has valid tunnels, 0 if it exists but is still
+     *          building, -1 if it exists but is dead (no valid, none building),
+     *          -2 if unknown (standalone client, no router pool)
+     */
+    private int poolState() {
+        I2PAppContext ctx = getTunnel().getContext();
+        if (ctx == null || !ctx.isRouterContext()) {return -2;}
+        try {
+            Object tm = ctx.getClass().getMethod("tunnelManager").invoke(ctx);
+            if (tm == null) {return -2;}
+            I2PSession session = sockMgr.getSession();
+            if (session == null || session.getMyDestination() == null) {return -2;}
+            Hash client = session.getMyDestination().calculateHash();
+            Object pool = tm.getClass().getMethod("getOutboundPool", Hash.class).invoke(tm, client);
+            if (pool == null) {return -2;}
+            int valid = ((Number) pool.getClass().getMethod("getValidTunnelCount").invoke(pool)).intValue();
+            int inProgress = ((Number) pool.getClass().getMethod("getInProgressCount").invoke(pool)).intValue();
+            if (valid > 0) {return 1;}
+            return inProgress > 0 ? 0 : -1;
+        } catch (Exception e) {
+            return -2;
         }
     }
 
