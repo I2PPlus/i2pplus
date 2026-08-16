@@ -1998,6 +1998,32 @@ public class I2PSnarkUtil implements DisconnectListener {
         return buf.toString();
     }
 
+    /**
+     * Parse an int, returning the default on null or parse failure.
+     *
+     * @param s may be null
+     * @param dflt returned on failure
+     * @since 0.9.71+
+     */
+    public static int parseInt(String s, int dflt) {
+        if (s == null) {return dflt;}
+        try {return Integer.parseInt(s);}
+        catch (NumberFormatException nfe) {return dflt;}
+    }
+
+    /**
+     * Parse a long, returning the default on null or parse failure.
+     *
+     * @param s may be null
+     * @param dflt returned on failure
+     * @since 0.9.71+
+     */
+    public static long parseLong(String s, long dflt) {
+        if (s == null) {return dflt;}
+        try {return Long.parseLong(s);}
+        catch (NumberFormatException nfe) {return dflt;}
+    }
+
     private static final String BUNDLE_NAME = "org.klomp.snark.web.messages";
 
     /**

@@ -887,8 +887,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String refresh = String.valueOf(_manager.getRefreshDelaySeconds());
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=utf-8");
-        int maxAge = 60;
-        try { maxAge = Math.min(Integer.parseInt(refresh), 60); } catch (NumberFormatException nfe) {}
+        int maxAge = Math.min(I2PSnarkUtil.parseInt(refresh, 60), 60);
         resp.setHeader("Cache-Control", "private, no-cache, max-age=" + maxAge);
         resp.setHeader("Content-Security-Policy", "default-src 'none'; child-src 'self'");
     }
@@ -1001,14 +1000,14 @@ public class I2PSnarkServlet extends BasicServlet {
 
         int start = 0;
         if (stParam != null) {
-            try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) { /* ignored */ }
+            start = Math.max(0, Math.min(total - 1, I2PSnarkUtil.parseInt(stParam, 0)));
         }
 
         int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
         String ps = req.getParameter("ps");
         if ("null".equals(ps)) ps = Integer.toString(pageSize);
         if (ps != null) {
-            try { pageSize = Math.min(Math.max(Integer.parseInt(ps), 10), 9999); } catch(NumberFormatException ignored) { /* ignored */ }
+            pageSize = Math.min(Math.max(I2PSnarkUtil.parseInt(ps, pageSize), 10), 9999);
         }
 
         boolean isDegraded = false;
@@ -2803,10 +2802,10 @@ public class I2PSnarkServlet extends BasicServlet {
     private void handleClearMessages(HttpServletRequest req) {
         String sid = req.getParameter("id");
         if (sid != null) {
-            try {
-                int id = Integer.parseInt(sid);
+            int id = I2PSnarkUtil.parseInt(sid, -1);
+            if (id >= 0) {
                 _manager.clearMessages(id);
-            } catch (NumberFormatException ignored) { /* ignored */ }
+            }
         }
     }
 
@@ -3016,8 +3015,7 @@ public class I2PSnarkServlet extends BasicServlet {
             int sort = 0;
             String ssort = normalizeSortParam(req.getParameter("sort"));
             if (ssort != null) {
-                try {sort = Integer.parseInt(ssort);}
-                catch (NumberFormatException nfe) { /* ignored */ }
+                sort = I2PSnarkUtil.parseInt(ssort, 0);
             }
             String lang;
             if (_manager.isSmartSortEnabled()) {
@@ -4622,9 +4620,7 @@ public class I2PSnarkServlet extends BasicServlet {
     * @since 0.7.14 Modified from ConfigTunnelsHelper
     */
     private String renderOptions(int min, int max, int dflt, String strNow, String selName, String name) {
-       int now = dflt;
-       try {now = Integer.parseInt(strNow);}
-       catch (Throwable t) { /* ignored */ }
+       int now = I2PSnarkUtil.parseInt(strNow, dflt);
        StringBuilder buf = new StringBuilder(128);
        buf.append("<select name=\"").append(selName);
        if (selName.contains("quantity")) {
@@ -4932,8 +4928,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showSort) {
             int sort = 0;
             if (sortParam != null) {
-                try {sort = Integer.parseInt(sortParam);}
-                catch (NumberFormatException nfe) { /* ignored */ }
+                sort = I2PSnarkUtil.parseInt(sortParam, 0);
             }
             DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
         }
@@ -5815,8 +5810,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int sort = 0;
         if (showSort) {
             if (sortParam != null) {
-                try {sort = Integer.parseInt(sortParam);}
-                catch (NumberFormatException nfe) { /* ignored */ }
+                sort = I2PSnarkUtil.parseInt(sortParam, 0);
             }
             DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
         }
@@ -6200,13 +6194,14 @@ public class I2PSnarkServlet extends BasicServlet {
         for (Map.Entry<String, String[]> entry : postParams.entrySet()) {
             String key = entry.getKey();
             if (key.startsWith("pri_")) {
-                try {
-                    int fileIndex = Integer.parseInt(key.substring(4));
-                    String val = entry.getValue()[0]; // jetty arrays
-                    int pri = Integer.parseInt(val);
-                    storage.setPriority(fileIndex, pri);
-                    _manager.addMessage(_t("File downloading priorities updated for torrent ") + storage.getBaseName());
-                } catch (Throwable t) {t.printStackTrace();}
+                int fileIndex = I2PSnarkUtil.parseInt(key.substring(4), -1);
+                if (fileIndex < 0) {continue;}
+                String[] values = entry.getValue(); // jetty arrays
+                if (values.length == 0) {continue;}
+                int pri = I2PSnarkUtil.parseInt(values[0], -1);
+                if (pri < 0) {continue;}
+                storage.setPriority(fileIndex, pri);
+                _manager.addMessage(_t("File downloading priorities updated for torrent ") + storage.getBaseName());
             }
         }
         snark.updatePiecePriorities();
@@ -6225,9 +6220,7 @@ public class I2PSnarkServlet extends BasicServlet {
         a = postParams.get("nofilter_newComment");
         String c = (a != null) ? a[0] : null;
         if ((r == null || r.equals("0")) && (c == null || c.isEmpty())) {return;}
-        int rat = 0;
-        try {rat = Integer.parseInt(r);}
-        catch (NumberFormatException nfe) { /* ignored */ }
+        int rat = I2PSnarkUtil.parseInt(r, 0);
         Comment com = new Comment(c, _manager.util().getCommentsName(), rat);
         boolean changed = snark.addComments(Collections.singletonList(com));
         if (!changed) {_log.warn("Add of comment ID " + com.getID() + " failed");}
@@ -6246,11 +6239,11 @@ public class I2PSnarkServlet extends BasicServlet {
             for (Map.Entry<String, String[]> entry : postParams.entrySet()) {
                 String key = entry.getKey();
                 if (key.startsWith("cdelete.")) {
-                    try {
-                        int id = Integer.parseInt(key.substring(8));
+                    int id = I2PSnarkUtil.parseInt(key.substring(8), -1);
+                    if (id >= 0) {
                         boolean changed = cs.remove(id);
                         if (!changed) {_log.warn("Delete of comment ID " + id + " failed");}
-                    } catch (NumberFormatException nfe) { /* ignored */ }
+                    }
                 }
             }
         }
@@ -6400,14 +6393,14 @@ public class I2PSnarkServlet extends BasicServlet {
             String key = entry.getKey();
             String val = entry.getValue()[0];   // jetty arrays
             if (key.startsWith("addTracker-")) {
-                try {toAdd.add(Integer.parseInt(key.substring(11)));}
-                catch (NumberFormatException nfe) { /* ignored */ }
+                int id = I2PSnarkUtil.parseInt(key.substring(11), -1);
+                if (id >= 0) {toAdd.add(id);}
             } else if (key.startsWith("removeTracker-")) {
-                try {toDel.add(Integer.parseInt(key.substring(14)));}
-                catch (NumberFormatException nfe) { /* ignored */ }
+                int id = I2PSnarkUtil.parseInt(key.substring(14), -1);
+                if (id >= 0) {toDel.add(id);}
             } else if (key.equals("primary")) {
-                try {primary = Integer.parseInt(val);}
-                catch (NumberFormatException nfe) { /* ignored */ }
+                int p = I2PSnarkUtil.parseInt(val, -1);
+                if (p >= 0) {primary = p;}
             } else if (key.equals("nofilter_newTorrentComment")) {
                 newComment = val.trim();
             } else if (key.equals("nofilter_newTorrentCreatedBy")) {

@@ -960,11 +960,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.8.9
      */
     public int getRefreshDelaySeconds() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_REFRESH_DELAY));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_REFRESH_DELAY_SECS;
-        }
+        return I2PSnarkUtil.parseInt(_config.getProperty(PROP_REFRESH_DELAY), DEFAULT_REFRESH_DELAY_SECS);
     }
 
     /**
@@ -974,11 +970,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.46 (I2P+)
      */
     public int getMaxFilesPerTorrent() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_MAX_FILES_PER_TORRENT;
-        }
+        return I2PSnarkUtil.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT), DEFAULT_MAX_FILES_PER_TORRENT);
     }
 
     /**
@@ -988,11 +980,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.61+ (I2P+)
      */
     public int getMaxLogMessages() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_MAX_MESSAGES));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_MAX_MESSAGES;
-        }
+        return I2PSnarkUtil.parseInt(_config.getProperty(PROP_MAX_MESSAGES), DEFAULT_MAX_MESSAGES);
     }
 
     /**
@@ -1002,11 +990,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.6
      */
     public int getPageSize() {
-        try {
-            return Integer.parseInt(_config.getProperty(PROP_PAGE_SIZE));
-        } catch (NumberFormatException nfe) {
-            return DEFAULT_PAGE_SIZE;
-        }
+        return I2PSnarkUtil.parseInt(_config.getProperty(PROP_PAGE_SIZE), DEFAULT_PAGE_SIZE);
     }
 
     /**
@@ -1676,11 +1660,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     private int getInt(String prop, int defaultVal) {
         String p = _config.getProperty(prop);
-        try {
-            if ((p != null) && (!p.trim().isEmpty())) {
-                return Integer.parseInt(p.trim());
-            }
-        } catch (NumberFormatException nfe) { /* ignored */ } // ignore
+        if (p != null) {
+            return I2PSnarkUtil.parseInt(p.trim(), defaultVal);
+        }
         return defaultVal;
     }
 
@@ -1693,11 +1675,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private static int parseMaxDest(String s) {
         int rv = 0;
-        try {
-            if ((s != null) && (!s.trim().isEmpty())) {
-                rv = Integer.parseInt(s.trim());
-            }
-        } catch (NumberFormatException nfe) { /* ignored */ }
+        if (s != null) {
+            rv = I2PSnarkUtil.parseInt(s.trim(), 0);
+        }
         if (rv < 0 || rv > MAX_MULTI_DEST) {
             rv = 0;
         }
@@ -1818,10 +1798,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         boolean interruptMonitor = false;
 
         if (upLimit != null) {
-            int limit = _util.getMaxUploaders();
-            try {
-                limit = Integer.parseInt(upLimit.trim());
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            int limit = I2PSnarkUtil.parseInt(upLimit.trim(), _util.getMaxUploaders());
             if (limit != _util.getMaxUploaders()) {
                 if (limit >= Snark.MIN_TOTAL_UPLOADERS) {
                     _util.setMaxUploaders(limit);
@@ -1842,10 +1819,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         if (upBW != null) {
-            int limit = _util.getMaxUpBW();
-            try {
-                limit = Integer.parseInt(upBW.trim());
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            int limit = I2PSnarkUtil.parseInt(upBW.trim(), _util.getMaxUpBW());
             if (limit != _util.getMaxUpBW()) {
                 if (limit >= MIN_UP_BW) {
                     _util.setMaxUpBW(limit);
@@ -1866,10 +1840,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         if (downBW != null) {
-            int limit = (int) (_bwManager.getDownBWLimit() / 1024);
-            try {
-                limit = Integer.parseInt(downBW.trim());
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            int limit = I2PSnarkUtil.parseInt(downBW.trim(), (int) (_bwManager.getDownBWLimit() / 1024));
             if (limit != _bwManager.getDownBWLimit() / 1024) {
                 if (limit >= MIN_DOWN_BW) {
                     _bwManager.setDownBWLimit(limit * 1024L);
@@ -1958,15 +1929,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
         if (startDelayMin != null && _context.isRouterContext()) {
-            int min = _util.getStartupDelayMin();
-            try {
-                min = Integer.parseInt(startDelayMin.trim());
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            int min = I2PSnarkUtil.parseInt(startDelayMin.trim(), _util.getStartupDelayMin());
             int max = _util.getStartupDelayMax();
             if (startDelayMax != null) {
-                try {
-                    max = Integer.parseInt(startDelayMax.trim());
-                } catch (NumberFormatException nfe) { /* ignored */ }
+                max = I2PSnarkUtil.parseInt(startDelayMax.trim(), max);
             }
             if (max < min) {
                 int tmp = max;
@@ -1990,46 +1956,42 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
         if (refreshDelay != null) {
-            try {
-                int secs = Integer.parseInt(refreshDelay.trim());
-                if (secs != getRefreshDelaySeconds()) {
-                    changed = true;
-                    _config.setProperty(PROP_REFRESH_DELAY, Integer.toString(secs));
-                    if (secs >= 0) {
-                        String msg =
-                                _t(
-                                        "Refresh time changed to {0}",
-                                        DataHelper.formatDuration2(secs * 1000L));
-                        addMessageNoEscape(msg);
-                        if (!_context.isRouterContext()) {
-                            System.out.println(" • " + msg.replace("&nbsp;", " "));
-                        }
-                    } else {
-                        String msg = _t("Refresh disabled");
-                        addMessage(msg);
-                        if (!_context.isRouterContext()) {
-                            System.out.println(" • " + msg);
-                        }
+            int secs = I2PSnarkUtil.parseInt(refreshDelay.trim(), getRefreshDelaySeconds());
+            if (secs != getRefreshDelaySeconds()) {
+                changed = true;
+                _config.setProperty(PROP_REFRESH_DELAY, Integer.toString(secs));
+                if (secs >= 0) {
+                    String msg =
+                            _t(
+                                    "Refresh time changed to {0}",
+                                    DataHelper.formatDuration2(secs * 1000L));
+                    addMessageNoEscape(msg);
+                    if (!_context.isRouterContext()) {
+                        System.out.println(" • " + msg.replace("&nbsp;", " "));
+                    }
+                } else {
+                    String msg = _t("Refresh disabled");
+                    addMessage(msg);
+                    if (!_context.isRouterContext()) {
+                        System.out.println(" • " + msg);
                     }
                 }
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            }
         }
 
         if (pageSize != null) {
-            try {
-                int size = Integer.parseInt(pageSize.trim());
-                if (size <= 0) {
-                    size = 999999;
-                } else if (size < 5) {
-                    size = 5;
-                }
-                if (size != getPageSize()) {
-                    changed = true;
-                    pageSize = Integer.toString(size);
-                    _config.setProperty(PROP_PAGE_SIZE, pageSize);
-                    addMessage(_t("Page size changed to {0}", pageSize));
-                }
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            int size = I2PSnarkUtil.parseInt(pageSize.trim(), getPageSize());
+            if (size <= 0) {
+                size = 999999;
+            } else if (size < 5) {
+                size = 5;
+            }
+            if (size != getPageSize()) {
+                changed = true;
+                pageSize = Integer.toString(size);
+                _config.setProperty(PROP_PAGE_SIZE, pageSize);
+                addMessage(_t("Page size changed to {0}", pageSize));
+            }
         }
 
         // set this before we check the data dir
@@ -2136,9 +2098,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         String oldI2CPHost = _util.getI2CPHost();
         int port = oldI2CPPort;
         if (i2cpPort != null) {
-            try {
-                port = Integer.parseInt(i2cpPort);
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            port = I2PSnarkUtil.parseInt(i2cpPort, oldI2CPPort);
         }
 
         Map<String, String> opts = new HashMap<>();
@@ -2877,10 +2837,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         boolean running = prop == null || Boolean.parseBoolean(prop);
         prop = config.getProperty(PROP_META_ACTIVITY);
         if (prop != null && torrent.getStorage() != null) {
-            try {
-                long activity = Long.parseLong(prop);
-                torrent.getStorage().setActivity(activity);
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            long activity = I2PSnarkUtil.parseLong(prop, torrent.getStorage().getActivity());
+            torrent.getStorage().setActivity(activity);
         }
 
         // Were we running last time?
@@ -3277,10 +3235,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (time == null) {
             return 0;
         }
-        try {
-            return Long.parseLong(time);
-        } catch (NumberFormatException nfe) { /* ignored */ }
-        return 0;
+        return I2PSnarkUtil.parseLong(time, 0);
     }
 
     /**
@@ -3340,9 +3295,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String[] arr = DataHelper.split(pri, ",");
             for (int i = 0; i < filecount && i < arr.length; i++) {
                 if (!arr[i].isEmpty()) {
-                    try {
-                        rv[i] = Integer.parseInt(arr[i]);
-                    } catch (Throwable t) { /* ignored */ }
+                    rv[i] = I2PSnarkUtil.parseInt(arr[i], 0);
                 }
             }
             storage.setFilePriorities(rv);
@@ -3388,9 +3341,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public long getSavedUploaded(Snark snark) {
         Properties config = getConfig(snark);
         if (config != null) {
-            try {
-                return Long.parseLong(config.getProperty(PROP_META_UPLOADED));
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            return I2PSnarkUtil.parseLong(config.getProperty(PROP_META_UPLOADED), 0);
         }
         return 0;
     }
@@ -3405,12 +3356,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         long[] rv = new long[2];
         Properties config = getConfig(snark);
         if (config != null) {
-            try {
-                rv[0] = Long.parseLong(config.getProperty(PROP_META_ADDED));
-            } catch (NumberFormatException nfe) { /* ignored */ }
-            try {
-                rv[1] = Long.parseLong(config.getProperty(PROP_META_COMPLETED));
-            } catch (NumberFormatException nfe) { /* ignored */ }
+            rv[0] = I2PSnarkUtil.parseLong(config.getProperty(PROP_META_ADDED), 0);
+            rv[1] = I2PSnarkUtil.parseLong(config.getProperty(PROP_META_COMPLETED), 0);
         }
         return rv;
     }
