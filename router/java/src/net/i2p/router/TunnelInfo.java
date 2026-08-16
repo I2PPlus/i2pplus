@@ -98,6 +98,23 @@ public interface TunnelInfo {
     public void incrementVerifiedBytesTransferred(int numBytes);
 
     /**
+     *  Record that the tunnel carried real (non-test) traffic.  Updated only
+     *  at the real traffic delivery sites — inbound data arrival
+     *  (InboundEndpointProcessor) and outbound message dispatch
+     *  (OutboundClientMessageOneShotJob) — never by TestJob, so test traffic
+     *  cannot pollute the proof that the tunnel works.
+     *  @since 0.9.71+
+     */
+    public void recordRealTraffic();
+
+    /**
+     *  When the tunnel last carried real traffic.
+     *  @return the timestamp, or 0 if it never carried real traffic
+     *  @since 0.9.71+
+     */
+    public long getLastRealTraffic();
+
+    /**
      *  Did we reuse this tunnel?
      *
      *  @since 0.8.11

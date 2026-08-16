@@ -3327,6 +3327,53 @@ public class TunnelPool {
     }
 
     /**
+     *  Clear the FAILING flag on inbound tunnels that have provably carried
+     *  real traffic recently.  Data that actually arrived through the tunnel
+     *  (InboundEndpointProcessor) is end-to-end proof it works — the tunnel
+     *  has not failed, so it must stay selectable and in the pool.  A test
+     *  failure on such a tunnel is a reply-path false negative.
+     *
+     *  Inbound-only: for an outbound tunnel, dispatched bytes prove only
+     *  that the gateway accepted the message, not that the tunnel delivered
+     *  it — clearing on dispatch would keep a dead-tailed tunnel alive
+     *  while messages vanish into it.  Outbound tunnels are resolved by the
+     *  test itself (deferred while active, arbiter when quiet).
+     *
+     *  Only FAILING (1-2 consecutive failures) tunnels are cleared; FAILED
+     *  (3+) tunnels stay removal-bound so a genuinely dead tunnel is still
+     *  replaced.  Combined with the test deferral while traffic is fresh,
+     *  failures can only accumulate during quiet periods, so no tunnel
+     *  becomes immortal.
+     *
+     *  Called from the periodic pool maintenance sweep (~15s).
+     *  @since 0.9.71+
+     */
+    public void clearFailingOnTraffic() {
+        long now = System.currentTimeMillis();
+        _tunnelsLock.lock();
+        try {
+            for (int i = 0; i < _tunnels.size(); i++) {
+                TunnelInfo info = _tunnels.get(i);
+                if (info instanceof PooledTunnelCreatorConfig &&
+                    info.isInbound() &&
+                    info.getTestStatus() == TunnelTestStatus.FAILING &&
+                    !info.getTunnelFailed()) {
+                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                    long lastTraffic = cfg.getLastRealTraffic();
+                    if (lastTraffic > 0 && now - lastTraffic < TestJob.TRAFFIC_PROOF_MS) {
+                        long age = now - lastTraffic;
+                        cfg.clearTestFailures();
+                        if (_log.shouldWarn()) {
+                            _log.warn(toString() + " -> Cleared FAILING flag on inbound tunnel... \n* " +
+                                      cfg + " -> Failures reset, marked GOOD (last real traffic " + age + "ms ago)");
+                        }
+                    }
+                }
+            }
+        } finally {_tunnelsLock.unlock();}
+    }
+
+    /**
      *  Count a live non-UNTESTED tunnel: safe when it outlives the
      *  pre-build window, else near expiry.
      */

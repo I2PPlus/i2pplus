@@ -287,6 +287,29 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public synchronized long getLastTransferred() { return _lastTransferredTime; }
 
     /**
+     *  When the tunnel last carried real (non-test) traffic, or 0 if never.
+     *  Updated only at the real traffic delivery sites — inbound data arrival
+     *  (InboundEndpointProcessor) and outbound message dispatch
+     *  (OutboundClientMessageOneShotJob) — never by TestJob, so test traffic
+     *  cannot pollute the proof that the tunnel works.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastRealTraffic;
+
+    /**
+     *  Record that the tunnel carried real traffic.
+     *  @since 0.9.71+
+     */
+    public void recordRealTraffic() {_lastRealTraffic = System.currentTimeMillis();}
+
+    /**
+     *  When the tunnel last carried real traffic.
+     *  @return the timestamp, or 0 if it never carried real traffic
+     *  @since 0.9.71+
+     */
+    public long getLastRealTraffic() {return _lastRealTraffic;}
+
+    /**
      * The tunnel failed a test, so (maybe) stop using it
      *
      * @return false if we stopped using it, true if still ok

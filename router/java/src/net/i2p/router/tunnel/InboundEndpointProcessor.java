@@ -83,6 +83,7 @@ class InboundEndpointProcessor {
                 }
             }
             _config.incrementVerifiedBytesTransferred(length);
+            _config.recordRealTraffic();
         }
 
         return true;

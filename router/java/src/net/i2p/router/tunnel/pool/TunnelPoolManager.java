@@ -1325,6 +1325,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 if (pruned > 0 && _log.shouldInfo()) {
                     _log.info("Pruned " + pruned + " excess tunnels from " + pool);
                 }
+                // Clear FAILING flags on inbound tunnels provably carrying
+                // real traffic — the traffic is end-to-end proof the tunnel
+                // works, so it must not be removed for failing tests.
+                pool.clearFailingOnTraffic();
             } catch (Exception e) {
                 if (_log.shouldWarn())
                     _log.warn("Error pruning tunnels from pool", e);

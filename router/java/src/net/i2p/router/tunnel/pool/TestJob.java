@@ -196,6 +196,27 @@ public class TestJob extends JobImpl {
     private static final long RECENT_TRAFFIC_MS = 30 * 1000L;
 
     /**
+     *  How recently a tunnel must have carried real (non-test) traffic for
+     *  the pool to clear its FAILING flag and mark it GOOD.  Real traffic is
+     *  proof the tunnel works — a tunnel receiving or sending data has not
+     *  failed.  Only FAILING (not FAILED) tunnels are cleared, so a genuinely
+     *  dead tunnel still accumulates failures during quiet periods and is
+     *  removed.
+     *  @since 0.9.71+
+     */
+    static final long TRAFFIC_PROOF_MS = 2 * 60 * 1000L;
+
+    /**
+     *  How long after the last real traffic a tunnel test may run.  Tests are
+     *  deferred while the tunnel is carrying real traffic: the traffic proves
+     *  it works, and testing now would waste a job-queue slot and risk a
+     *  false negative under load.  Tests fire TRAFFIC_DEFER_MS after the
+     *  traffic stops.
+     *  @since 0.9.71+
+     */
+    private static final long TRAFFIC_DEFER_MS = 3 * 60 * 1000L;
+
+    /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      * Tunable via i2p.tunnel.testJob.maxQueued (default: 96 fast / 64 slow).
@@ -765,29 +786,37 @@ Long tunnelKey = getTunnelKey(cfg);
         _found.set(false);
         long now = ctx.clock().now();
 
+        // Defer retests of GOOD tunnels that are provably carrying real
+        // traffic — the traffic shows they're in active use, and testing
+        // them now wastes a job-queue slot and risks a false negative on
+        // high-bandwidth tunnels.  Deferral is GOOD-only: UNTESTED tunnels
+        // must be tested regardless (otherwise active clients receive data
+        // on every new tunnel before the test runs, the test is perpetually
+        // skipped, the tunnel stays UNTESTED forever, and the pool never
+        // accumulates GOOD tunnels → EMERGENCY build storm), and FAILING
+        // tunnels are tested promptly — the test is the arbiter for a
+        // suspect tunnel, since outbound dispatch alone is not proof of
+        // delivery.  Must run before setTestStarted() flips the status to
+        // TESTING.
+        long lastTraffic = _cfg.getLastRealTraffic();
+        if (lastTraffic > 0 &&
+            _cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
+            now - lastTraffic < TRAFFIC_DEFER_MS) {
+            if (_log.shouldInfo()) {
+                _log.info("Deferring test on " + _cfg + " -> Real traffic " +
+                          (now - lastTraffic) + "ms ago");
+            }
+            if (!scheduleRetest(false, true)) {
+                cleanupTunnelTracking();
+                decrementIfCounted();
+            }
+            return;
+        }
+
         // Set test status to TESTING
         _cfg.setTestStarted();
 
         if (_cfg.isInbound()) {
-            // Skip testing inbound tunnels that recently received data —
-            // they're obviously working and testing risks false failures on
-            // high-bandwidth tunnels.  BUT only for tunnels already marked
-            // GOOD — UNTESTED tunnels must be tested regardless.  Otherwise
-            // active clients (e.g. I2PSnark) receive data on every new tunnel
-            // before the test runs, the test is perpetually skipped, the
-            // tunnel stays UNTESTED forever, and the pool never accumulates
-            // GOOD tunnels → EMERGENCY build storm.
-            if (_cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
-                ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
-                if (_log.shouldInfo()) {
-                    _log.info("Skipping test on " + _cfg + " -> Data recently received");
-                }
-                if (!scheduleRetest(false)) {
-                    cleanupTunnelTracking();
-                    decrementIfCounted();
-                }
-                return;
-            }
             _replyTunnel = _cfg;
             if (isExploratory) {
                 _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
@@ -1474,7 +1503,19 @@ Long tunnelKey = getTunnelKey(cfg);
         return floor;
     }
 
-    private boolean scheduleRetest(boolean asap) {
+    private boolean scheduleRetest(boolean asap) {return scheduleRetest(asap, false);}
+
+    /**
+     *  Schedule a retest of this tunnel.
+     *
+     *  @param asap expedite the retest (failing tunnels)
+     *  @param deferWhileActive when true, extend the delay so the retest
+     *         fires TRAFFIC_DEFER_MS after the last real traffic, keeping
+     *         the job out of the active window (queue pressure + false
+     *         negatives) without dropping the retest chain
+     *  @return true if the retest was scheduled
+     */
+    private boolean scheduleRetest(boolean asap, boolean deferWhileActive) {
         if (_pool == null || !_pool.isAlive()) return false;
 
         // Skip retest if the tunnel doesn't have a valid gateway ID anymore
@@ -1492,6 +1533,19 @@ Long tunnelKey = getTunnelKey(cfg);
 
         final RouterContext ctx = getContext();
         int delay = getDelay();
+
+        if (deferWhileActive) {
+            // Push the retest past the active window: fire TRAFFIC_DEFER_MS
+            // after the last real traffic, but never sooner than the normal
+            // retest delay.
+            long lastTraffic = _cfg.getLastRealTraffic();
+            if (lastTraffic > 0) {
+                long remaining = TRAFFIC_DEFER_MS - (ctx.clock().now() - lastTraffic);
+                if (remaining > delay) {
+                    delay = (int) remaining;
+                }
+            }
+        }
 
         if (asap) {
             // As soon as possible: only skip if tunnel is about to expire

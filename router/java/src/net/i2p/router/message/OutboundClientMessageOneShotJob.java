@@ -1223,6 +1223,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     getContext().profileManager().tunnelDataPushed(_outTunnel.getPeer(i), sendTime, size);
                 }
                 _outTunnel.incrementVerifiedBytesTransferred(size);
+                _outTunnel.recordRealTraffic();
             }
             if (_inTunnel != null) {
                 // skip ourselves at last hop
