@@ -5,10 +5,15 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystemException;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.NotDirectoryException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -632,24 +637,72 @@ public class StorageTest {
         }
     }
 
-    /** classifyStorageError maps OS errno text to short, human-readable reasons. */
+    /** classify maps OS errno text and typed NIO exceptions to classified errors. */
     @Test
     public void testClassifyStorageError() {
-        assertClassify("No space left on device", "No space left on device");
-        assertClassify("Permission denied", "Permission denied");
-        assertClassify("Read-only file system", "Read-only file system");
-        assertClassify("Disk quota exceeded", "Disk quota exceeded");
-        assertClassify("Input/output error", "Input/output error");
-        assertClassify("Too many open files", "Too many open files");
-        assertClassify("Stale or invalid file handle", "Bad file descriptor");
-        assertClassify("File or directory missing", "No such file or directory");
-        assertClassify("Path is a directory", "Is a directory");
-        assertClassify("File name too long", "File name too long");
-        assertClassify("I/O error", (String) null);
-        assertClassify("I/O error: something odd", "something odd");
+        // Unix errno text via plain java.io exceptions
+        assertClassify(StorageError.NO_SPACE, new IOException("No space left on device"));
+        assertClassify(StorageError.PERMISSION, new IOException("Permission denied"));
+        assertClassify(StorageError.READ_ONLY, new IOException("Read-only file system"));
+        assertClassify(StorageError.QUOTA, new IOException("Disk quota exceeded"));
+        assertClassify(StorageError.IO_ERROR, new IOException("Input/output error"));
+        assertClassify(StorageError.TOO_MANY_OPEN, new IOException("Too many open files"));
+        assertClassify(StorageError.STALE_HANDLE, new IOException("Bad file descriptor"));
+        assertClassify(StorageError.MISSING, new IOException("No such file or directory"));
+        assertClassify(StorageError.IS_DIRECTORY, new IOException("Is a directory"));
+        assertClassify(StorageError.NAME_TOO_LONG, new IOException("File name too long"));
+        assertClassify(StorageError.OTHER, new IOException((String) null));
+        assertClassify(StorageError.OTHER, new IOException("something odd"));
+        // Windows canonical texts
+        assertClassify(StorageError.NO_SPACE, new IOException("There is not enough space on the disk."));
+        assertClassify(StorageError.MISSING, new IOException("The system cannot find the file specified"));
+        assertClassify(StorageError.PERMISSION, new IOException("Access is denied"));
+        assertClassify(StorageError.PERMISSION, new IOException("A required privilege is not held by the client"));
+        assertClassify(StorageError.IO_ERROR, new IOException("The device is not ready"));
+        assertClassify(StorageError.STALE_HANDLE, new IOException("The process cannot access the file because it is being used by another process"));
     }
 
-    private static void assertClassify(String expected, String errnoText) {
-        assertEquals(expected, Storage.classifyStorageError(new IOException(errnoText)));
+    /** typed NIO exceptions classify without any message parsing */
+    @Test
+    public void testClassifyTypedExceptions() {
+        assertClassify(StorageError.MISSING, new NoSuchFileException("/data/torrent/file1"));
+        assertClassify(StorageError.MISSING, new FileNotFoundException("/data/torrent/file1"));
+        assertClassify(StorageError.PERMISSION, new AccessDeniedException("/data/torrent/file1"));
+        assertClassify(StorageError.IS_DIRECTORY, new NotDirectoryException("/data/torrent/file1"));
+        assertClassify(StorageError.READ_ONLY, new FileSystemException("/data/torrent/file1", null, "Read-only file system"));
+        assertClassify(StorageError.STALE_HANDLE, new FileSystemException("/data/torrent/file1", null, "Bad file descriptor"));
+        assertClassify(StorageError.MISSING, new FileSystemException("/data/torrent/file1", null, "No such file or directory"));
+        // a path containing an errno phrase must not mislead the reason-only match
+        assertClassify(StorageError.OTHER, new FileSystemException("/data/no space left on device/file1", null, "Something else went wrong"));
+        assertClassify(StorageError.OTHER, new FileSystemException("/data/torrent/file1"));
+    }
+
+    /** describe preserves the raw text only for unclassified errors */
+    @Test
+    public void testDescribe() {
+        assertEquals("No space left on device", StorageError.describe(new IOException("No space left on device")));
+        assertEquals("Permission denied", StorageError.describe(new AccessDeniedException("/x")));
+        assertEquals("I/O error: something odd", StorageError.describe(new IOException("something odd")));
+        assertEquals("I/O error", StorageError.describe(new IOException((String) null)));
+    }
+
+    /** the fatal set is the deduplicated single source of truth for stopping a torrent */
+    @Test
+    public void testFatalFlags() {
+        StorageError[] fatal = {StorageError.NO_SPACE, StorageError.PERMISSION, StorageError.READ_ONLY,
+                                StorageError.QUOTA, StorageError.IO_ERROR, StorageError.IS_DIRECTORY,
+                                StorageError.NAME_TOO_LONG};
+        for (StorageError e : fatal) {
+            assertTrue(e.name(), e.isFatal());
+        }
+        StorageError[] transientErrors = {StorageError.TOO_MANY_OPEN, StorageError.STALE_HANDLE,
+                                          StorageError.MISSING, StorageError.OTHER};
+        for (StorageError e : transientErrors) {
+            assertFalse(e.name(), e.isFatal());
+        }
+    }
+
+    private static void assertClassify(StorageError expected, IOException ioe) {
+        assertEquals(expected.name(), expected, StorageError.classify(ioe));
     }
 }

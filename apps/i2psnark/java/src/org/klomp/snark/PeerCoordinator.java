@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -1498,7 +1497,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             // not a reason to stop the torrent, but say why in the console
             String msg =
                     "Storage error: "
-                            + Storage.classifyStorageError(ioe)
+                            + StorageError.describe(ioe)
                             + " reading [piece "
                             + piece
                             + "] for "
@@ -1506,6 +1505,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             _log.error(msg, ioe);
             if (listener != null) {
                 listener.addMessage(msg);
+            }
+            if (!I2PAppContext.getGlobalContext().isRouterContext()) {
+                System.out.println(" • " + msg);
             }
             return null;
         }
@@ -1523,18 +1525,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.9.71+
      */
     private static boolean isFatalStorageError(IOException ioe) {
-        String msg = ioe.getMessage();
-        if (msg == null) {
+        if (ioe.getMessage() == null) {
+            // unclassifiable; stop rather than retry forever
             return true;
         }
-        String lc = msg.toLowerCase(Locale.US);
-        return lc.contains("no space left on device") ||
-               lc.contains("permission denied") ||
-               lc.contains("read-only file system") ||
-               lc.contains("disk quota exceeded") ||
-               lc.contains("input/output error") ||
-               lc.contains("is a directory") ||
-               lc.contains("file name too long");
+        return StorageError.classify(ioe).isFatal();
     }
 
     /**
@@ -1645,7 +1640,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
         } catch (IOException ioe) {
-            String reason = Storage.classifyStorageError(ioe);
+            String reason = StorageError.describe(ioe);
             if (isFatalStorageError(ioe)) {
                 String msg =
                         "Storage error: "
@@ -1659,6 +1654,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (listener != null) {
                     listener.addMessage(msg);
                     listener.addMessage("Fatal storage error: Stopping torrent " + metainfo.getName());
+                }
+                if (!I2PAppContext.getGlobalContext().isRouterContext()) {
+                    System.out.println(" • " + msg);
                 }
                 // deadlock was here
                 snark.stopTorrent();
@@ -1678,6 +1676,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             _log.error(msg, ioe);
             if (listener != null) {
                 listener.addMessage(msg);
+            }
+            if (!I2PAppContext.getGlobalContext().isRouterContext()) {
+                System.out.println(" • " + msg);
             }
             markUnrequested(peer, piece);
             removePartialPiece(piece); // just in case

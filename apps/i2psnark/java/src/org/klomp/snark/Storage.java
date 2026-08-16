@@ -1755,38 +1755,6 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Map a storage IOException to a short, human-readable reason, so the
-     * console and logs say why a torrent stopped or why a piece was skipped,
-     * instead of a bare "Error writing to storage".
-     *
-     * <p>Java exception messages carry the OS errno text, so this matches on
-     * the standard messages (Linux: "No space left on device", "Permission
-     * denied", ...).  Unknown messages fall back to the raw text.
-     *
-     * @param ioe the storage error
-     * @return the human-readable reason
-     * @since 0.9.71+
-     */
-    public static String classifyStorageError(IOException ioe) {
-        String msg = ioe.getMessage();
-        if (msg == null) {
-            return "I/O error";
-        }
-        String lc = msg.toLowerCase(Locale.US);
-        if (lc.contains("no space left on device")) { return "No space left on device"; }
-        if (lc.contains("permission denied")) { return "Permission denied"; }
-        if (lc.contains("read-only file system")) { return "Read-only file system"; }
-        if (lc.contains("disk quota exceeded")) { return "Disk quota exceeded"; }
-        if (lc.contains("input/output error")) { return "Input/output error"; }
-        if (lc.contains("too many open files")) { return "Too many open files"; }
-        if (lc.contains("bad file descriptor")) { return "Stale or invalid file handle"; }
-        if (lc.contains("no such file or directory")) { return "File or directory missing"; }
-        if (lc.contains("is a directory")) { return "Path is a directory"; }
-        if (lc.contains("file name too long")) { return "File name too long"; }
-        return "I/O error: " + msg;
-    }
-
-    /**
      * Write a (hash-verified) partial piece to the data files.
      *
      * @param pp the verified partial piece to write
