@@ -645,9 +645,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     int maxLength = pieceLength - nextBegin;
                     int nextLength =
                             maxLength > PeerState.PARTSIZE ? PeerState.PARTSIZE : maxLength;
-                    if (metainfo.isRangePadding(
-                            (long) nextPiece.getPiece() * metainfo.getPieceLength(0) + nextBegin,
-                            nextLength)) {
+                    if (nextPiece.isPaddingChunk(nextBegin / PeerState.PARTSIZE)) {
                         // BEP 47: padding-only chunk, mark as received (zeros), never request it;
                         // advance the sequential cursor without adding to the pipeline
                         nextPiece.markChunk(nextBegin / PeerState.PARTSIZE);

@@ -36,6 +36,8 @@ class PartialPiece implements Comparable<PartialPiece> {
     private final File tempDir;
     /** BEP 47: to recognize padding-only chunks and skip requesting them; may be null */
     private final MetaInfo _meta;
+    /** BEP 47: per-piece padding chunk mask, lazily computed; null until first use */
+    private volatile BitField _paddingMask;
 
     private File tempfile;
     private RandomAccessFile raf;
@@ -156,19 +158,31 @@ class PartialPiece implements Comparable<PartialPiece> {
     }
 
     /**
-     * True if the chunk lies entirely within BEP 47 padding files.
+     * True if the chunk lies entirely within BEP 47 padding files. The padding layout of a piece
+     * never changes, so the chunk mask is computed once on first use.
      *
      * @param chunk zero-based chunk index
      */
-    private boolean isPaddingChunk(int chunk) {
+    boolean isPaddingChunk(int chunk) {
         if (_meta == null) {
             return false;
         }
-        int offset = chunk * PeerState.PARTSIZE;
-        int len = Math.min(pclen - offset, PeerState.PARTSIZE);
-        // every piece except the last is full length, so the piece start is id * full piece length
-        long pieceStart = (long) piece.getId() * _meta.getPieceLength(0);
-        return _meta.isRangePadding(pieceStart + offset, len);
+        BitField mask = _paddingMask;
+        if (mask == null) {
+            mask = new BitField(bitfield.size());
+            // every piece except the last is full length, so the piece start is id * full piece length
+            long pieceStart = (long) piece.getId() * _meta.getPieceLength(0);
+            int sz = bitfield.size();
+            for (int i = 0; i < sz; i++) {
+                int offset = i * PeerState.PARTSIZE;
+                int len = Math.min(pclen - offset, PeerState.PARTSIZE);
+                if (_meta.isRangePadding(pieceStart + offset, len)) {
+                    mask.set(i);
+                }
+            }
+            _paddingMask = mask;
+        }
+        return mask.get(chunk);
     }
 
     /**

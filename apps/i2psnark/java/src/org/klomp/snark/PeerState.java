@@ -1462,13 +1462,12 @@ class PeerState implements DataLoader {
                     } else {
                         PartialPiece nextPiece = lastRequest.getPartialPiece();
                         int nextBegin = lastRequest.off + PARTSIZE;
-                        long pieceStart = (long) nextPiece.getPiece() * metainfo.getPieceLength(0);
                         while (true) {
                             // don't rerequest chunks we already have
                             if (!nextPiece.hasChunk(nextBegin / PARTSIZE)) {
                                 int maxLength = pieceLength - nextBegin;
                                 int nextLength = maxLength > PARTSIZE ? PARTSIZE : maxLength;
-                                if (metainfo.isRangePadding(pieceStart + nextBegin, nextLength)) {
+                                if (nextPiece.isPaddingChunk(nextBegin / PARTSIZE)) {
                                     // BEP 47: padding-only chunk, mark as received (zeros), never
                                     // request it
                                     nextPiece.markChunk(nextBegin / PARTSIZE);
