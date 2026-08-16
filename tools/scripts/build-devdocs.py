@@ -361,7 +361,7 @@ def related_html(p, pages, up=""):
 
 
 CSS = """<style>
-:root{--bg:#1f2630;--fg:#d5dbe4;--navbg:#171c24;--navfg:#c8cfd9;--link:#6cb4e8;--hl:#343d4a;--code:#262f3b;--third:#e0b341;--ident:url("data:image/svg+xml,__IDENT_SVG__")}
+:root{--bg:#1f2630;--fg:#d5dbe4;--navbg:#171c24;--navfg:var(--link);--link:#6cb4e8;--hl:#343d4a;--code:#262f3b;--third:#e0b341;--ident:url("data:image/svg+xml,__IDENT_SVG__")}
 *{box-sizing:border-box}
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -389,8 +389,9 @@ th{background:#2a3340}
 .related h3{margin:0 0 6px;font-size:14px}
 .related ul{margin:0;padding-left:18px}
 .related{background:#232c38;border:1px solid var(--hl);border-radius:6px;padding:10px 16px;margin-top:24px;font-size:14px}
+.sidebar{width:320px;min-width:320px;background:var(--navbg);color:var(--navfg);padding:14px 10px;overflow-y:auto;max-height:100vh;position:sticky;top:0;font-size:14px;border-right:4px solid #0004}
 .sidebar .ident:hover{color:#7cc0ff;text-decoration:none}
-.sidebar .ident{color:#fff;font-weight:700;font-size:16px;padding:2px 6px 10px 34px;display:block;background-image:var(--ident);background-repeat:no-repeat;background-size:auto 18px;background-position:4px 3px}
+.sidebar .ident{color:#fff;font-weight:700;font-size:20px;padding:0 0 12px}
 .sidebar a{color:var(--navfg);display:block;line-height:1.35;margin:1px 0}
 .sidebar details{margin-left:2px}
 .sidebar form{padding:0 0 8px}
@@ -403,8 +404,7 @@ th{background:#2a3340}
 .sidebar ul.sub{margin:0 0 6px;padding-left:8px}
 .sidebar ul{list-style:none;margin:2px 0 4px;padding-left:10px}
 .sidebar ul a{font-size:90%}
-.sidebar{width:320px;min-width:320px;background:var(--navbg);color:var(--navfg);padding:14px 10px;overflow-y:auto;max-height:100vh;position:sticky;top:0;font-size:14px}
-.sub li a{margin-bottom:3px;padding-bottom:3px;border-bottom:1px solid #fff1}
+.sub li a{margin-bottom:3px;padding-bottom:5px;border-bottom:1px dotted #fff1}
 .wrap{display:flex;min-height:100vh;position:relative;contain:paint}
 .wrap::after{width:500px;height:500px;display:inline-block;position:absolute;right:0;bottom:0;background:var(--ident) no-repeat right 10px bottom/500px;content:'';pointer-events:none}
 #list .pth,#list-tp .pth{color:#7a8490;font-size:12px}
