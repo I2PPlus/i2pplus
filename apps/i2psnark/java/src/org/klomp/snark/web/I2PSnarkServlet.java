@@ -2118,12 +2118,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (_manager.getTorrent(canonical) != null ||
                     (canonicalFiltered != null && _manager.getTorrent(canonicalFiltered) != null)) {
                     String msg = _t("Torrent already running: {0}", canonical);
-                    _manager.addMessage(msg);
-                    if (isStandalone()) {System.out.println(" • " + msg);}
+                    _manager.addMessageAndPrint(msg);
                 } else {
                     String msg = _t("Torrent already in the queue: {0}", canonical);
-                    _manager.addMessage(msg);
-                    if (isStandalone()) {System.out.println(" • " + msg);}
+                    _manager.addMessageAndPrint(msg);
                 }
             } catch (IOException ignored) { /* ignored */ }
             return;
@@ -2138,8 +2136,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } catch (IOException ioe) {
             String msg = _t("Error uploading the torrent file: {0}", DataHelper.escapeHTML(newFile)) +
                          ": " + DataHelper.stripHTML(ioe.getMessage());
-            _manager.addMessageNoEscape(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageNoEscapeAndPrint(msg);
             tmp.delete();
             return;
         }
@@ -2152,8 +2149,7 @@ public class I2PSnarkServlet extends BasicServlet {
             Snark snark = _manager.getTorrentByInfoHash(infoHash);
             if (snark != null) {
                 String msg = _t("Torrent with this info hash is already running: {0}", snark.getBaseName());
-                _manager.addMessage(msg);
-                if (isStandalone()) {System.out.println(" • " + msg);}
+                _manager.addMessageAndPrint(msg);
                 tmp.delete();
                 return;
             }
@@ -2174,13 +2170,11 @@ public class I2PSnarkServlet extends BasicServlet {
         } catch (IOException ioe) {
             String msg = _t("Torrent at {0} was not valid", DataHelper.escapeHTML(newFile)) + ": " +
                          DataHelper.stripHTML(ioe.getMessage());
-            _manager.addMessageNoEscape(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageNoEscapeAndPrint(msg);
         } catch (OutOfMemoryError oom) {
             String msg = _t("ERROR - Out of memory, cannot create torrent from {0}", DataHelper.escapeHTML(newFile)) +
                          ": " + DataHelper.stripHTML(oom.getMessage());
-            _manager.addMessageNoEscape(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageNoEscapeAndPrint(msg);
         } finally {
             tmp.delete();
         }
@@ -2203,14 +2197,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 dir = new SecureFile(newDir);
                 if (!dir.isAbsolute()) {
                     String msg = _t("Data directory must be an absolute path") + ": " + dir;
-                    _manager.addMessage(msg);
-                    if (isStandalone()) {System.out.println(" • " + msg);}
+                    _manager.addMessageAndPrint(msg);
                     return;
                 }
                 if (!dir.isDirectory() && !dir.mkdirs()) {
                     String msg = _t("Data directory cannot be created") + ": " + dir;
-                    _manager.addMessage(msg);
-                    if (isStandalone()) {System.out.println(" • " + msg);}
+                    _manager.addMessageAndPrint(msg);
                     return;
                 }
                 // Prevent nested torrents
@@ -2220,8 +2212,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     File sbase = storage.getBase();
                     if (isParentOf(sbase, dir)) {
                         String msg = _t("Cannot add torrent {0} inside another torrent: {1}", dir.getAbsolutePath(), sbase);
-                        _manager.addMessage(msg);
-                        if (isStandalone()) {System.out.println(" • " + msg);}
+                        _manager.addMessageAndPrint(msg);
                         return;
                     }
                 }
@@ -2234,8 +2225,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.addDownloader(fetch);
             } else {
                 String msg = _t("Download from non-I2P location {0} is not supported", urlify(newURL));
-                _manager.addMessageNoEscape(msg);
-                if (isStandalone()) {System.out.println(" • " + msg);}
+                _manager.addMessageNoEscapeAndPrint(msg);
             }
         } else if (newURL.startsWith(MagnetURI.MAGNET) || newURL.startsWith(MagnetURI.MAGGOT)) {
             addMagnet(newURL, dir);
@@ -2245,8 +2235,7 @@ public class I2PSnarkServlet extends BasicServlet {
             addMagnet(MagnetURI.MAGNET_FULL + newURL.toUpperCase(Locale.US), dir);
         } else if (isValidV2InfoHash(newURL)) {
             String msg = _t("Error: Version 2 info hashes are not supported");
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
         } else {
             handleAddFromFilePath(newURL, dataDir);
         }
@@ -2289,14 +2278,12 @@ public class I2PSnarkServlet extends BasicServlet {
         File file = new File(newURL);
         if (!file.isAbsolute() || !file.exists()) {
             String msg = _t("Invalid URL: Must start with \"{0}\" or \"{1}\"", "http://", MagnetURI.MAGNET);
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
             return;
         }
         if (!newURL.endsWith(".torrent")) {
             String msg = _t("Torrent at {0} was not valid", DataHelper.escapeHTML(newURL));
-            _manager.addMessageNoEscape(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageNoEscapeAndPrint(msg);
             return;
         }
 
@@ -2307,8 +2294,7 @@ public class I2PSnarkServlet extends BasicServlet {
             Snark snark = _manager.getTorrentByInfoHash(infoHash);
             if (snark != null) {
                 String msg = _t("Torrent with this info hash is already running: {0}", snark.getBaseName());
-                _manager.addMessage(msg);
-                if (isStandalone()) {System.out.println(" • " + msg);}
+                _manager.addMessageAndPrint(msg);
                 return;
             }
 
@@ -2319,13 +2305,11 @@ public class I2PSnarkServlet extends BasicServlet {
             if (torrentFile.exists()) {
                 if (_manager.getTorrent(canonical) != null) {
                     String msg = _t("Torrent already running: {0}", filteredName);
-                    _manager.addMessage(msg);
-                    if (isStandalone()) {System.out.println(" • " + msg);}
+                    _manager.addMessageAndPrint(msg);
                     return;
                 } else {
                     String msg = _t("Torrent already in the queue: {0}", filteredName);
-                    _manager.addMessage(msg);
-                    if (isStandalone()) {System.out.println(" • " + msg);}
+                    _manager.addMessageAndPrint(msg);
                     return;
                 }
             } else {
@@ -2343,13 +2327,11 @@ public class I2PSnarkServlet extends BasicServlet {
         } catch (IOException ioe) {
             String msg = _t("Torrent at {0} was not valid", DataHelper.escapeHTML(newURL)) +
                          ": " + DataHelper.stripHTML(ioe.getMessage());
-            _manager.addMessageNoEscape(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageNoEscapeAndPrint(msg);
         } catch (OutOfMemoryError oom) {
             String msg = _t("ERROR - Out of memory, cannot create torrent from {0}",
                             DataHelper.escapeHTML(newURL)) + ": " + DataHelper.stripHTML(oom.getMessage());
-            _manager.addMessageNoEscape(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageNoEscapeAndPrint(msg);
         }
     }
 
@@ -2593,8 +2575,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String baseData = req.getParameter("nofilter_baseFile");
         if (baseData == null || baseData.trim().isEmpty()) {
             String msg = _t("Error creating torrent - you must specify a file or directory");
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
             return;
         }
 
@@ -2605,31 +2586,27 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (!baseFile.exists()) {
             String msg = _t("Cannot create a torrent for the nonexistent data: {0}", baseFile.getAbsolutePath());
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
             return;
         }
 
         File dataDir = _manager.getDataDir();
         if (!dataDir.canWrite()) {
             String msg = _t("No write permissions for data directory") + ": " + dataDir;
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
             return;
         }
 
         String baseName = baseFile.getName();
         if (baseName.toLowerCase(Locale.US).endsWith(".torrent")) {
             String msg = _t("Cannot add a torrent ending in \".torrent\": {0}", baseFile.getAbsolutePath());
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
             return;
         }
 
         if (_manager.getTorrentByBaseName(baseName) != null) {
             String msg = _t("Torrent with this name is already running: {0}", baseName);
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
             return;
         }
 
@@ -2637,8 +2614,7 @@ public class I2PSnarkServlet extends BasicServlet {
             isParentOf(baseFile, _manager.util().getContext().getBaseDir()) ||
             isParentOf(baseFile, _manager.util().getContext().getConfigDir())) {
             String msg = _t("Cannot add a torrent including an I2P directory: {0}", baseFile.getAbsolutePath());
-            _manager.addMessage(msg);
-            if (isStandalone()) {System.out.println(" • " + msg);}
+            _manager.addMessageAndPrint(msg);
             return;
         }
 
@@ -2649,14 +2625,12 @@ public class I2PSnarkServlet extends BasicServlet {
             File sbase = storage.getBase();
             if (isParentOf(sbase, baseFile)) {
                 String msg = _t("Cannot add torrent {0} inside another torrent: {1}", baseFile.getAbsolutePath(), sbase);
-                _manager.addMessage(msg);
-                if (isStandalone()) {System.out.println(" • " + msg);}
+                _manager.addMessageAndPrint(msg);
                 return;
             }
             if (isParentOf(baseFile, sbase)) {
                 String msg = _t("Cannot add torrent {0} including another torrent: {1}", baseFile.getAbsolutePath(), sbase);
-                _manager.addMessage(msg);
-                if (isStandalone()) {System.out.println(" • " + msg);}
+                _manager.addMessageAndPrint(msg);
                 return;
             }
         }
@@ -2683,8 +2657,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!backupURLs.isEmpty()) {
             if (announceURL == null) {
                 String msg = _t("Error - Cannot include alternate trackers without a primary tracker");
-                _manager.addMessage(msg);
-                if (isStandalone()) {System.out.println(" • " + msg);}
+                _manager.addMessageAndPrint(msg);
                 return;
             }
             backupURLs.add(0, announceURL);
@@ -2696,8 +2669,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (hasPrivate && hasPublic) {
                 String msg = _t("Error - Cannot mix private and public trackers in a torrent");
-                _manager.addMessage(msg);
-                if (isStandalone()) {System.out.println(" • " + msg);}
+                _manager.addMessageAndPrint(msg);
                 return;
             }
             announceList = new ArrayList<>(backupURLs.size());
