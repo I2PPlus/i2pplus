@@ -21,6 +21,7 @@ import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
@@ -109,9 +110,9 @@ class PeerState implements DataLoader {
     private static final int DEFAULT_MAX_PARTSIZE = 128 * 1024;
 
     /** Discard-ratio auto-ban: minimum cancelled+uploaded bytes before evaluation */
-    private static final long DISCARD_MIN_BYTES = 1024 * 1024;
+    private static final long DISCARD_MIN_BYTES = 5L * 1024 * 1024;
 
-    /** Discard-ratio auto-ban: cancelled percentage above which the peer is disconnected */
+    /** Discard-ratio auto-ban: cancelled percentage above which the peer is banned */
     private static final int DISCARD_BAN_PERCENT = 90;
 
     /** Absolute cap on pipeline depth, outbound or inbound. */
@@ -849,7 +850,7 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Count cancelled bytes and disconnect the peer if it cancels most of what it requests.
+     * Count cancelled bytes and ban the peer if it cancels most of what it requests.
      * Conservative: requires at least DISCARD_MIN_BYTES of volume and a cancel ratio above
      * DISCARD_BAN_PERCENT, so legitimate peers under congestion are not affected.
      *
@@ -863,11 +864,18 @@ class PeerState implements DataLoader {
             long total = _cancelledBytes + uploaded;
             if (total >= DISCARD_MIN_BYTES
                     && _cancelledBytes * 100 >= total * DISCARD_BAN_PERCENT) {
+                long period = listener.getUtil().getBanDiscardPeriod();
+                Destination dest = peer.getPeerID().getAddress();
+                if (dest != null) {
+                    listener.getUtil().banPeer(dest.calculateHash(), period);
+                }
                 if (_log.shouldWarn()) {
                     _log.warn(
-                            "Disconnecting ["
+                            "Banning ["
                                     + peer
-                                    + "] for excessive discard ratio "
+                                    + "] for "
+                                    + (period / 60000)
+                                    + " minutes for excessive discard ratio "
                                     + (_cancelledBytes * 100 / total)
                                     + "% ("
                                     + _cancelledBytes

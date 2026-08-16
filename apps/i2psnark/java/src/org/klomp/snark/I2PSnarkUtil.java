@@ -99,6 +99,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _maxConnections;
     /** Discard-ratio auto-ban toggle, set by SnarkManager from config */
     private volatile boolean _banDiscardRatio;
+    /** Discard-ratio auto-ban period in ms, set by SnarkManager from config */
+    private volatile long _banDiscardPeriod;
     private final File _tmpDir;
     private int _startupDelayMin;
     private int _startupDelayMax;
@@ -303,6 +305,50 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setBanDiscardRatio(boolean ban) {
         _banDiscardRatio = ban;
+    }
+
+    /**
+     * Duration of the ban applied to peers with an excessive discard ratio.
+     *
+     * @return the ban period in milliseconds
+     * @since 0.9.71+
+     */
+    public long getBanDiscardPeriod() {
+        return _banDiscardPeriod;
+    }
+
+    /**
+     * Set the duration of the ban applied to peers with an excessive discard ratio.
+     *
+     * @param period the ban period in milliseconds
+     * @since 0.9.71+
+     */
+    public void setBanDiscardPeriod(long period) {
+        _banDiscardPeriod = period;
+    }
+
+    /**
+     * Is the given destination hash banned?
+     *
+     * @param h the hash
+     * @return true if banned
+     * @since 0.9.71+
+     */
+    public boolean isBanned(Hash h) {
+        return _banlist.contains(h);
+    }
+
+    /**
+     * Ban the given destination hash for the given period.
+     * Does not remove any existing ban of the same hash.
+     *
+     * @param h the hash
+     * @param period the ban period in milliseconds
+     * @since 0.9.71+
+     */
+    public void banPeer(Hash h, long period) {
+        _banlist.add(h);
+        new Unbanlist(h).schedule(period);
     }
 
     public void setStartupDelayMin(int minutes) {

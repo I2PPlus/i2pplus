@@ -392,7 +392,7 @@ class ConnectionAcceptor implements Runnable {
             return;
         }
         int bad = _badCounter.count(h);
-        if (bad >= MAX_BAD) {
+        if (bad >= MAX_BAD || _util.isBanned(h)) {
             if (_log.shouldWarn()) {
                 String reason = _badReasons.get(h);
                 _log.warn(
@@ -403,7 +403,7 @@ class ConnectionAcceptor implements Runnable {
                                 + " failures (Max is "
                                 + MAX_BAD
                                 + "), last reason: "
-                                + (reason != null ? reason : "unknown"));
+                                + (reason != null ? reason : "banlisted"));
             }
             try {
                 socket.reset();
@@ -629,7 +629,7 @@ class ConnectionAcceptor implements Runnable {
      * @since 0.9.71
      */
     public boolean isBanned(Hash h) {
-        return _badCounter.count(h) >= MAX_BAD;
+        return _badCounter.count(h) >= MAX_BAD || _util.isBanned(h);
     }
 
     /**

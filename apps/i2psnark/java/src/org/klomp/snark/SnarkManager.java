@@ -197,7 +197,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_BAN_DISCARD_RATIO = "i2psnark.banDiscardRatio";
 
-    public static final String DEFAULT_BAN_DISCARD_RATIO = "false";
+    public static final String DEFAULT_BAN_DISCARD_RATIO = "true";
+
+    /**
+     * Duration of the ban applied to peers with an excessive discard ratio, in minutes.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_BAN_DISCARD_PERIOD = "i2psnark.banDiscardPeriod";
+
+    public static final int DEFAULT_BAN_DISCARD_PERIOD = 60;
     public static final String PROP_OLD_AUTO_START = "i2snark.autoStart"; // oops
     public static final String PROP_AUTO_START =
             "i2psnark.autoStart"; // convert in migration to new config file
@@ -1428,6 +1437,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_config.containsKey(PROP_BAN_DISCARD_RATIO)) {
             _config.setProperty(PROP_BAN_DISCARD_RATIO, DEFAULT_BAN_DISCARD_RATIO);
         }
+        if (!_config.containsKey(PROP_BAN_DISCARD_PERIOD)) {
+            // One-time migration: configs saved before the discard-ratio ban upgrade
+            // persist the old default (false); re-apply the new default.
+            _config.setProperty(PROP_BAN_DISCARD_RATIO, DEFAULT_BAN_DISCARD_RATIO);
+            _config.setProperty(
+                    PROP_BAN_DISCARD_PERIOD, Integer.toString(DEFAULT_BAN_DISCARD_PERIOD));
+        }
         // Pipeline tunables. Apply before any PeerState exists so standalone config is honored.
         int minPipe = getInt(PROP_MIN_PIPELINE, PeerState.MIN_PIPELINE);
         int maxPipe = getInt(PROP_MAX_PIPELINE, PeerState.MAX_PIPELINE);
@@ -1442,6 +1458,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _bwManager.setUpBWLimit(maxup * 1024L);
         _util.setBanDiscardRatio(
                 Boolean.parseBoolean(_config.getProperty(PROP_BAN_DISCARD_RATIO)));
+        _util.setBanDiscardPeriod(
+                getInt(PROP_BAN_DISCARD_PERIOD, DEFAULT_BAN_DISCARD_PERIOD) * (long) 60 * 1000);
     }
 
     /**
