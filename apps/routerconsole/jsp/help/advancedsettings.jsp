@@ -587,17 +587,6 @@
 <tr class=config><th>i2cp.disableLoopback={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]")%></td></tr>
 
-<tr class=section><th><%=intl._t("miscellaneous")%></th></tr>
-
-<tr class=config><th>desktopgui.enabled={true|false}</th></tr>
-<tr><td><%=intl._t("If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]")%></td></tr>
-
-<tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
-<tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
-
-<tr class=config id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
-<tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
-
 <tr class=section><th>I2NP</th></tr>
 
 <tr class=config><th>i2np.blockMyCountry={true|false} <span class=plus>I2P+</span></th></tr>
@@ -654,6 +643,17 @@
 
 <tr class=config><th>i2psnark.maxLogMessages={n}</th></tr>
 <tr><td><%=intl._t("This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]")%></td></tr>
+
+<tr class=section><th><%=intl._t("miscellaneous")%></th></tr>
+
+<tr class=config><th>desktopgui.enabled={true|false}</th></tr>
+<tr><td><%=intl._t("If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]")%></td></tr>
+
+<tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
+<tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
+
+<tr class=config id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
+<tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
 
 </table>
 
