@@ -567,6 +567,27 @@
 <tr class=config><th>i2psnark.destCycle={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]")%></td></tr>
 
+<tr class=config><th>i2psnark.preallocateFiles={true|false}</th></tr>
+<tr><td><%=intl._t("This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.smartSort={true|false}</th></tr>
+<tr><td><%=intl._t("This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.privatetrackers={tracker1,tracker2,...}</th></tr>
+<tr><td><%=intl._t("This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.trackers={name1,url1,name2,url2,...}</th></tr>
+<tr><td><%=intl._t("This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.banDiscardRatio={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.banDiscardPeriod={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.maxLogMessages={n}</th></tr>
+<tr><td><%=intl._t("This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]")%></td></tr>
+
 <tr class=config><th>i2p.streaming.answerPings={true|false}</th></tr>
 <tr><td><%=intl._t("This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager.")%></td></tr>
 
