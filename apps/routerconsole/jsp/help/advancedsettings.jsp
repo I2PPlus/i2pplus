@@ -33,7 +33,7 @@
 
 <table id=configinfo>
 
-<tr class=section><th>routerconsole</th></tr>
+<tr class=section><th>RouterConsole</th></tr>
 
 <tr class=config><th id=advancedconsole>routerconsole.advanced={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?show=sybils'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar.")%></td></tr>
@@ -83,7 +83,7 @@
 <tr class=config><th>routerconsole.sidebarGraphDirection={ltr|rtl} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Sets the render direction for the sidebar bandwidth graph. When set to rtl (the default), the graph renders right-to-left with newest data on the right. When set to ltr, the graph renders left-to-right with newest data on the left. [Default is rtl]")%></td></tr>
 
-<tr class=section><th>router</th></tr>
+<tr class=section><th>Router</th></tr>
 
 <tr class=config><th>router.blocklist.enable={true|false}</th></tr>
 <tr><td><%=intl._t("This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]")%></td></tr>
@@ -102,6 +102,12 @@
 
 <tr class=config><th>router.banlogger.maxArchives={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]")%></td></tr>
+
+<tr class=config><th>router.banlistXG={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]")%></td></tr>
+
+<tr class=config><th>router.banlistLU={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]")%></td></tr>
 
 <tr class=config><th>router.hashScan.frequency={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]")%></td></tr>
@@ -303,6 +309,24 @@
 <tr class=config><th>router.relaxCongestionCaps={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]")%></td></tr>
 
+<tr class=config><th>router.idleTunnelDetectionPeriod={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]")%></td></tr>
+
+<tr class=config><th>router.idleTunnelMinMessages={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]")%></td></tr>
+
+<tr class=config><th>router.idleTunnelScanInterval={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]")%></td></tr>
+
+<tr class=config><th>router.updateUnsigned={true|false}</th></tr>
+<tr><td><%=intl._t("If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default.")%></td></tr>
+
+<tr class=config><th>router.updateUnsignedURL={url}</th></tr>
+<tr><td><%=intl._t("This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!")%></td></tr>
+
+<tr class=config><th>router.validateRoutersAfter={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted.")%></td></tr>
+
 <tr class=config><th>router.tunnelConcurrentBuilds={n}</th></tr>
 <tr><td><%=intl._t("When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart.")%></td></tr>
 
@@ -339,7 +363,7 @@
 <tr class=config><th>router.tunnel.pruneEarlyExpiryDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The time in milliseconds before expiration to mark tunnels for early expiry when the Remove Slow Tunnels job prunes slow or excess tunnels. Higher values allow more time for new tunnels to build. [Default is 30000]")%></td></tr>
 
-<tr class=section><th>i2p.tunnel</th></tr>
+<tr class=section><th>Tunnel</th></tr>
 
 <tr class=config><th>i2p.tunnel.testJob.hardLimit={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Hard limit on total tunnel test jobs (queued + active). Prevents runaway test backlogs from causing job queue lag. Once reached, no new tests are scheduled until the count drops. [Default is 128 (96 on slower systems)]")%></td></tr>
@@ -488,32 +512,66 @@
 <tr class=config><th>i2p.tunnel.exploratoryPeer.minActivePeersStartup={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]")%></td></tr>
 
-<tr class=config><th>i2p.streaming.maxSlowStartWindow={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxRtt={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxRetransmissions={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.destinationCooldownMs={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxPingTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.dropOverLimit={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.defaultStreamDelayMax={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]")%></td></tr>
+<tr class=section><th>Streaming</th></tr>
 
 <tr class=config><th>i2p.streaming.acceptTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]")%></td></tr>
 
+<tr class=config><th>i2p.streaming.answerPings={true|false}</th></tr>
+<tr><td><%=intl._t("This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager.")%></td></tr>
+
+<tr class=config><th>i2p.streaming.defaultStreamDelayMax={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.destinationCooldownMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.disconnectTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.dropOverLimit={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.enablePongDelay={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.initialWindowSize={n}</th></tr>
+<tr><td><%=intl._t("Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxConnectTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxPingTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxPongDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used.")%></td></tr>
+
 <tr class=config><th>i2p.streaming.maxQueueSize={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxResendDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxRetransmissions={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxRTO={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxRtt={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxSlowStartWindow={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxWindowSize={n}</th></tr>
+<tr><td><%=intl._t("Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.minResendDelay={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]")%></td></tr>
+
+<tr class=section><th>NetDb</th></tr>
 
 <tr class=config><th>i2p.netdb.republishInterval={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]")%></td></tr>
@@ -521,34 +579,29 @@
 <tr class=config><th>i2p.netdb.proactiveRepublishThreshold={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]")%></td></tr>
 
-<tr class=config><th>router.idleTunnelDetectionPeriod={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]")%></td></tr>
+<tr class=section><th>I2CP</th></tr>
 
-<tr class=config><th>router.idleTunnelMinMessages={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]")%></td></tr>
+<tr class=config><th>i2cp.maxSessions={n}</th></tr>
+<tr><td><%=intl._t("The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]")%></td></tr>
 
-<tr class=config><th>router.idleTunnelScanInterval={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]")%></td></tr>
+<tr class=config><th>i2cp.disableLoopback={true|false}</th></tr>
+<tr><td><%=intl._t("When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]")%></td></tr>
 
-<tr class=config><th>router.updateUnsigned={true|false}</th></tr>
-<tr><td><%=intl._t("If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default.")%></td></tr>
+<tr class=section><th><%=intl._t("miscellaneous")%></th></tr>
 
-<tr class=config><th>router.updateUnsignedURL={url}</th></tr>
-<tr><td><%=intl._t("This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!")%></td></tr>
+<tr class=config><th>desktopgui.enabled={true|false}</th></tr>
+<tr><td><%=intl._t("If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]")%></td></tr>
 
-<tr class=config><th>router.validateRoutersAfter={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted.")%></td></tr>
+<tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
+<tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
 
-<tr class=section><th>i2np</th></tr>
+<tr class=config id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
+<tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
+
+<tr class=section><th>I2NP</th></tr>
 
 <tr class=config><th>i2np.blockMyCountry={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]")%></td></tr>
-
-<tr class=config><th>router.banlistXG={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]")%></td></tr>
-
-<tr class=config><th>router.banlistLU={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]")%></td></tr>
 
 <tr class=config><th>i2np.udp.disablePeerTest={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]")%></td></tr>
@@ -556,10 +609,24 @@
 <tr class=config><th>i2np.udp.preferred={true|false|always}</th></tr>
 <tr><td><%=intl._t("This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]")%></td></tr>
 
-<tr class=section><th><%=intl._t("miscellaneous")%></th></tr>
+<tr class=section><th>EepGet</th></tr>
 
-<tr class=config><th>desktopgui.enabled={true|false}</th></tr>
-<tr><td><%=intl._t("If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]")%></td></tr>
+<tr class=config><th>eepget.connectTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]")%></td></tr>
+
+<tr class=config><th>eepget.defaultRetries={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]")%></td></tr>
+
+<tr class=config><th>eepget.inactivityTimeout={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]")%></td></tr>
+
+<tr class=config><th>eepget.maxCompleteFails={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]")%></td></tr>
+
+<tr class=config><th>eepget.useDNSOverHTTPS={true|false}</th></tr>
+<tr><td><%=intl._t("When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]")%></td></tr>
+
+<tr class=section><th>I2PSnark</th></tr>
 
 <tr class=config><th>i2psnark.maxFilesPerTorrent={n}</th></tr>
 <tr><td><%=intl._t("This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]")%></td></tr>
@@ -587,57 +654,6 @@
 
 <tr class=config><th>i2psnark.maxLogMessages={n}</th></tr>
 <tr><td><%=intl._t("This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.answerPings={true|false}</th></tr>
-<tr><td><%=intl._t("This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager.")%></td></tr>
-
-<tr class=config><th>i2p.streaming.enablePongDelay={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxPongDelay={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used.")%></td></tr>
-
-<tr class=config><th>eepget.connectTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]")%></td></tr>
-
-<tr class=config><th>eepget.inactivityTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]")%></td></tr>
-
-<tr class=config><th>eepget.maxCompleteFails={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]")%></td></tr>
-
-<tr class=config><th>eepget.defaultRetries={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.disconnectTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxConnectTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.initialWindowSize={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxWindowSize={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.minResendDelay={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxResendDelay={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]")%></td></tr>
-
-<tr class=config><th>i2p.streaming.maxRTO={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]")%></td></tr>
-
-<tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
-<tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
-
-<tr class=config><th>i2cp.disableLoopback={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]")%></td></tr>
-
-<tr class=config id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
-<tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
 
 </table>
 
