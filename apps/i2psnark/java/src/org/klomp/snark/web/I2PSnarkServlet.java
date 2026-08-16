@@ -3137,7 +3137,9 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isValid = meta != null;
         boolean isMultiFile = isValid && meta.getFiles() != null;
 
-        int knownPeers = Math.max(curPeers, snark.getTrackerSeenPeers());
+        int swarmPeers = snark.getSwarmPeerCount();
+        int scrapePeers = snark.getScrapeSeeders() + snark.getScrapeLeechers() + snark.getScrapePartialSeeds();
+        int knownPeers = Math.max(curPeers, Math.max(swarmPeers, Math.max(scrapePeers, snark.getTrackerSeenPeers())));
         StatusResult statusResult = buildStatusString(snark, curPeers, knownPeers, downBps, upBps, isRunning, remaining, needed, noThinsp);
         String snarkStatusLocal = statusResult.snarkStatus;
 

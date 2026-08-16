@@ -1004,6 +1004,9 @@ public class TrackerClient implements Runnable {
         if (peers.isEmpty()) {
             return;
         }
+        for (Peer peer : peers) {
+            coordinator.recordSwarmPeer(peer);
+        }
         List<Peer> ordered = new ArrayList<>(peers);
         Random r = _util.getContext().random();
         if (ordered.size() > 1) {

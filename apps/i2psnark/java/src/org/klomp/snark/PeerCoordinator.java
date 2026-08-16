@@ -129,6 +129,15 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** Peers we heard about via PEX */
     private final Set<PeerID> pexPeers;
 
+    /** Max distinct swarm peers remembered per torrent */
+    private static final int MAX_SWARM_PEERS = 512;
+
+    /** How long a remembered swarm peer stays valid without resurfacing */
+    private static final long SWARM_PEER_TTL = 2 * 60 * 60 * 1000L;
+
+    /** Distinct swarm peers, keyed by destination hash, value is the last-seen wall time */
+    private final Map<Hash, Long> swarmSeen = new HashMap<>(64);
+
     /** Estimate of the peers, without requiring any synchronization. */
     private volatile int peerCount;
 
@@ -371,6 +380,74 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     public List<Peer> peerList() {
         return new ArrayList<>(peers);
+    }
+
+    /**
+     * Record a peer surfaced by any source (announce, PEX, DHT, inbound) as a
+     * distinct swarm member, keyed by destination hash. Web seeds are not
+     * swarm members. Bounded; refreshes the last-seen time.
+     *
+     * @param peer the peer, non-null
+     */
+    void recordSwarmPeer(Peer peer) {
+        if (peer instanceof WebPeer) {
+            return;
+        }
+        byte[] destHash = peer.getPeerID().getDestHash();
+        if (destHash == null) {
+            return;
+        }
+        Hash key = new Hash(destHash);
+        long now = System.currentTimeMillis();
+        synchronized (swarmSeen) {
+            if (!swarmSeen.containsKey(key) && swarmSeen.size() >= MAX_SWARM_PEERS) {
+                // stay bounded, drop the oldest entry
+                long oldest = Long.MAX_VALUE;
+                Hash oldestKey = null;
+                for (Map.Entry<Hash, Long> e : swarmSeen.entrySet()) {
+                    if (e.getValue().longValue() < oldest) {
+                        oldest = e.getValue().longValue();
+                        oldestKey = e.getKey();
+                    }
+                }
+                if (oldestKey != null) {
+                    swarmSeen.remove(oldestKey);
+                }
+            }
+            swarmSeen.put(key, Long.valueOf(now));
+        }
+    }
+
+    /**
+     * Distinct swarm peers seen recently (within {@link #SWARM_PEER_TTL}) or
+     * currently connected, for the torrent view peer count. Prunes stale
+     * entries lazily.
+     *
+     * @return the count, 0 if none
+     */
+    public int getSwarmPeerCount() {
+        long cutoff = System.currentTimeMillis() - SWARM_PEER_TTL;
+        Set<Hash> connected = new HashSet<>(peers.size());
+        for (Peer p : peers) {
+            byte[] destHash = p.getPeerID().getDestHash();
+            if (destHash != null) {
+                connected.add(new Hash(destHash));
+            }
+        }
+        synchronized (swarmSeen) {
+            Iterator<Map.Entry<Hash, Long>> it = swarmSeen.entrySet().iterator();
+            int rv = 0;
+            while (it.hasNext()) {
+                Map.Entry<Hash, Long> e = it.next();
+                long lastSeen = e.getValue().longValue();
+                if (lastSeen < cutoff && !connected.contains(e.getKey())) {
+                    it.remove();
+                } else {
+                    rv++;
+                }
+            }
+            return rv;
+        }
     }
 
     /**

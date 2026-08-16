@@ -906,6 +906,21 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Distinct swarm peers seen recently (via announce, PEX or DHT) or
+     * currently connected, for the torrent view peer count.
+     *
+     * @return the count, 0 if no coordinator
+     * @since 0.9.71+
+     */
+    public int getSwarmPeerCount() {
+        PeerCoordinator coord = coordinator;
+        if (coord != null) {
+            return coord.getSwarmPeerCount();
+        }
+        return 0;
+    }
+
+    /**
      * Not HTML escaped.
      *
      * @return String returned from tracker, or null if no error
