@@ -24,6 +24,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -75,6 +81,44 @@ public class TrackerClient implements Runnable {
     private static final String SCRAPE = "scrape";
 
     private static final int SLEEP = 5; // 5 minutes.
+    private static final int UNANNOUNCE_THREADS = 32;
+    private static final int UNANNOUNCE_QUEUE = 16384;
+    private static final long UNANNOUNCE_KEEPALIVE = 60 * 1000;
+
+    /**
+     * Unannounces are sent from a shared, bounded pool instead of one thread
+     * per tracker, so stopping thousands of torrents cannot exhaust threads.
+     * Threads exist only while unannounces are pending and die back after
+     * UNANNOUNCE_KEEPALIVE of idle time; the pool is capped at
+     * UNANNOUNCE_THREADS, sized to saturate the I2P tunnel (requests are
+     * latency-bound, so a few dozen workers drain a burst as fast as the
+     * network allows). The bounded queue absorbs the burst; only when the
+     * queue and pool are full is the unannounce skipped and the tracker
+     * reset, the same degradation as the previous OutOfMemoryError fallback.
+     * Threads are daemons, so they never hold up router shutdown.
+     *
+     * @since 0.9.71+
+     */
+    private static final ThreadPoolExecutor _unannouncers =
+            new ThreadPoolExecutor(
+                    UNANNOUNCE_THREADS,
+                    UNANNOUNCE_THREADS,
+                    UNANNOUNCE_KEEPALIVE,
+                    TimeUnit.MILLISECONDS,
+                    new ArrayBlockingQueue<Runnable>(UNANNOUNCE_QUEUE),
+                    new ThreadFactory() {
+                        private final AtomicInteger _n = new AtomicInteger();
+
+                        public Thread newThread(Runnable r) {
+                            Thread t = new Thread(r, "SnarkUnannounce-" + _n.incrementAndGet());
+                            t.setDaemon(true);
+                            return t;
+                        }
+                    });
+
+    static {
+        _unannouncers.allowCoreThreadTimeOut(true);
+    }
     private static final int DELAY_MIN = 2000; // 2 secs.
     private static final int DELAY_RAND = 6 * 1000;
     private static final int MAX_REGISTER_FAILS = 15; // * INITIAL_SLEEP = 15m to register
@@ -1062,15 +1106,15 @@ public class TrackerClient implements Runnable {
         if (dht != null) {
             dht.unannounce(snark.getInfoHash());
         }
-        int i = 0;
         for (TCTracker tr : trackers) {
             if (_util.connected() && tr.started && (!tr.stop) && tr.trackerProblems == null) {
                 try {
-                    (new I2PAppThread(new Unannouncer(tr), _threadName + ".U." + (++i), true))
-                            .start();
+                    _unannouncers.execute(new Unannouncer(tr));
+                } catch (RejectedExecutionException ree) {
+                    tr.reset();
                 } catch (OutOfMemoryError oom) {
                     tr.reset();
-                } // probably ran out of threads, ignore
+                } // queue full or out of threads, ignore
             } else {
                 tr.reset();
             }

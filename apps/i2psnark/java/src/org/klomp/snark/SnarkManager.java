@@ -4930,6 +4930,30 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Stop one torrent, notifying trackers per finalShutdown, and adding the
+     * "stopping all" message on the first stop.
+     *
+     * @param snark the torrent to stop
+     * @param count number of torrents stopped so far
+     * @param finalShutdown if true, notify trackers immediately
+     * @return the incremented count
+     * @since 0.9.71+
+     */
+    private int stopTorrent(Snark snark, int count, boolean finalShutdown) {
+        if (count == 0) {
+            String msg = _t("Stopping all torrents and closing the I2P tunnel.") + "..";
+            addMessageAndPrint(msg);
+        }
+        count++;
+        if (finalShutdown) {
+            snark.stopTorrent(true);
+        } else {
+            snark.stopTorrent(false);
+        }
+        return count;
+    }
+
+    /**
      * Stop all running torrents, and close the tunnel after a delay to allow for announces. If
      * called at router shutdown via Jetty shutdown hook -&gt; webapp destroy() -&gt; stop(), the
      * tunnel won't actually be closed as the SimpleTimer2 is already shutdown or will be soon, so
@@ -4954,40 +4978,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (!snark.isStopped()) {
                 Storage storage = snark.getStorage();
                 if (storage != null && !storage.complete()) {
-                    if (count == 0) {
-                        String msg = _t("Stopping all torrents and closing the I2P tunnel.") + "..";
-                        addMessageAndPrint(msg);
-                    }
-                    count++;
-                    if (finalShutdown) {
-                        snark.stopTorrent(true);
-                    } else {
-                        snark.stopTorrent(false);
-                    }
-                    if (count % 8 == 0) {
-                        sleep(20);
-                    }
+                    count = stopTorrent(snark, count, finalShutdown);
                 }
             }
         }
         // Pass 2: All the rest of the torrents
         for (Snark snark : snarks) {
             if (!snark.isStopped()) {
-                if (count == 0) {
-                    String msg = _t("Stopping all torrents and closing the I2P tunnel.") + "..";
-                    addMessageAndPrint(msg);
-                }
-                count++;
-                if (finalShutdown) {
-                    snark.stopTorrent(true);
-                } else {
-                    snark.stopTorrent(false);
-                }
-                // Throttle since every unannounce is now threaded.
-                // How to do this without creating a ton of threads?
-                if (count % 8 == 0) {
-                    sleep(20);
-                }
+                count = stopTorrent(snark, count, finalShutdown);
             } else {
                 CommentSet cs = snark.getComments();
                 if (cs != null) {
