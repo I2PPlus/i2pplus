@@ -564,6 +564,9 @@
 <tr class=config><th>i2psnark.maxFilesPerTorrent={n}</th></tr>
 <tr><td><%=intl._t("This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]")%></td></tr>
 
+<tr class=config><th>i2psnark.destCycle={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]")%></td></tr>
+
 <tr class=config><th>i2p.streaming.answerPings={true|false}</th></tr>
 <tr><td><%=intl._t("This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager.")%></td></tr>
 
