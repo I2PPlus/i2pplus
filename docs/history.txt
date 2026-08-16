@@ -1,160 +1,100 @@
-2026-08-15 dr|z3d
-  * Tunnel:
-    - Fix tunnel pool regressions and rework peer cooldowns so pool
-      members are not starved out of rebuilds
+2026-08-16 dr|z3d
+  * I2PSnark:
+    - Classify storage errors (no space, permission denied etc)
+    - Retry transient storage failures, stop torrent on real disk problems
+    - Force refresh on reconnect to re-sync stale nonces
+    - Generic tooltip when all trackers unreachable
+    - Status/sort fixes: pool-first, live stalled states, per-locale collators
+    - Defer scrapes after good responses, jitter scrape times
+    - Cycle torrent destinations when idle (i2psnark.destCycle, default on)
+    - Ban peers with excessive discard ratio (default on, 60 min period)
+  * Tunnel: Keep traffic-proven tunnels in pools, defer tests while active
+  * I2PTunnel: 503 on infra errors, fail fast on dead tunnel pool (HTTP proxy)
   * Console:
-    - Banlist page: consistent null-port handling (missing ports no
-      longer break sorting)
-    - Fix average response time truncation on the profiles page
-  * AddressBook:
-    - Merge conflict check now compares destinations, so an entry with
-      the same destination under a different name no longer conflicts
-  * GeoIP:
-    - Drop China carrier network labels and region designators from
-      org names
+    - Add Disable Loopback toggle to I2CP config page
+    - Reorganize advanced settings help into categorized sections
+2026-08-15 dr|z3d
+  * Tunnel: Fix tunnel pool regressions and peer cooldown starvation
+  * Console:
+    - Banlist: consistent null-port handling (missing ports don't break sorting)
+    - Fix average response time truncation on profiles page
+  * AddressBook: Merge conflict check compares destinations, not names
+  * GeoIP: Drop China carrier labels and region designators from org names
 
 2026-08-14 dr|z3d
   * Tuner:
-    - Lossy demotion threshold based on median loss (1.5x); lossy
-      peers instantly demoted from fast/high-capacity tiers
+    - Lossy demotion at 1.5x median loss; instant demotion from fast/high tiers
     - Fix missing min fast peers toggle; all tuning params dynamic
-    - Fix lossy threshold autotune (was NPEing) and add manual tuning
-      controls (Default/Min/Max/Step + Auto override)
-  * Peermanager:
-    - Decayed loss score (50%/hr) with 30-min probation replaces the
-      freshness-window check; moderately-lossy peers (10-20%) get a
-      4x selection penalty instead of eviction
+    - Fix lossy threshold autotune NPE; add manual tuning controls
   * Profiles:
     - Add Fast RTT and loss rings to tier pages
-    - Add Loss percentage bar column after Low Latency
+    - Add Loss % bar column after Low Latency
   * I2PSnark:
     - Fix StringIndexOutOfBounds on URLs without '&'
-    - Clear the torrent tracker error on any announce/scrape response
-  * Console:
-    - Banlist page: port column sort fix (data-sort '0' when missing)
-  * GeoIP:
-    - Fix AT&T and Vodafone ASN org name mangling
-  * EepGet:
-    - Fix large downloads, gzip failure paths, and gzip resume
+    - Clear tracker error on any announce/scrape response
+  * GeoIP: Fix AT&T and Vodafone ASN org name mangling
+  * EepGet: Fix large downloads, gzip failure paths, and gzip resume
 
 2026-08-13 dr|z3d
   * I2PSnark:
-    - Periodic 10-minute tracker scrape keeps swarm size fresh
-      between announces
+    - 10-minute tracker scrape keeps swarm size fresh
     - Fix AIOOBE on BEP 47 padding files
   * Tunnel:
-    - Demote lossy peers from fast/high-capacity tiers (10-min window,
-      retransmit ratio >= 20%)
-    - Never select banlisted peers; filter ghosts from exploratory
-      pools
+    - Demote lossy peers from fast/high tiers (10-min window, retransmit >= 20%)
+    - Never select banlisted peers; filter ghosts from exploratory pools
     - Fix peer cooldown starvation and in-use tunnel pruning
   * SusiDNS:
-    - Paginate the default book server-side (skip/limit applied after
-      filtering), fix filter and blacklist costs
+    - Paginate default book server-side; fix filter and blacklist costs
   * SusiMail:
-    - Fix temp-file leaks, write locking, headerOnly reads, and
-      idle-closer re-arming after reconnect
-    - Fix renderMailRow mutation (escaped short sender accumulated)
-      and null-mail NPE
+    - Fix temp-file leaks, write locking, headerOnly reads, re-arm idle-closer
+    - Fix renderMailRow mutation (escaped short sender) and null-mail NPE
     - Mask SMTP AUTH LOGIN credentials in debug logs
 
 2026-08-12 dr|z3d
   * Build:
-    - Fixed the ant i18n generation skipping its locale bundles whenever
-      another build system's output (e.g. the gradle build) sat under the
-      shared build root: the up-to-date check in bundle-messages.sh now
-      only looks at the module's own generated classes, so the router jar
-      again carries all 96 translated message bundles
-    - Excluded the phantom legacy package-info.class files (major 49,
-      annotation-free, unique to the ant javac path) from the router jar so
-      the ant and gradle router jars now carry the identical 1205 classes
-    - Extended that package-info exclusion to the jrobin and pack200 jars,
-      making every ant and gradle module jar class-identical
-    - Aligned the gradle packaging with ant: the gradle updater zip is now
-      entry-identical to the ant one (841 files). Module jars and webapps
-      wars carry the same classes, the ant jar layouts are mirrored (web,
-      ui, standalone and SAM client classes live only in the wars; the JspC
-      wrapper stays out of jetty-i2p.jar; no vendored jetty/tomcat jars in
-      the updater payload), and the payload docs and locale bundles match
+    - Fix ant i18n skipping locale bundles (gradle output in shared build root)
+    - Exclude phantom legacy package-info.class files from router jar;
+      ant and gradle jars now class-identical (1205 classes)
+    - Extend package-info exclusion to jrobin and pack200 jars
+    - Align gradle packaging with ant: updater zip entry-identical
+      (841 files), jar layouts mirrored, no vendored jetty/tomcat jars
   * I2PSnark:
-    - CompleteBitField saves memory for seeds; recognize i2pd
-      clients; use the inbound banlist for outbound connections too
-    - Disable the old I2CP bandwidth limiter (snark's own limiting is
-      sufficient)
-  * Streaming:
-    - Remove the option to disable protocol number enforcement
-      (always on since 0.9.36)
-  * Console:
-    - Harden iframe postMessage origin validation
-  * Router:
-    - Fix the introducer expiration reuse loop
+    - CompleteBitField saves memory for seeds; recognize i2pd clients;
+      use inbound banlist for outbound connections
+    - Disable the old I2CP bandwidth limiter (snark's own limiting suffices)
+  * Streaming: Remove option to disable protocol number enforcement
+  * Console: Harden iframe postMessage origin validation
+  * Router: Fix the introducer expiration reuse loop
 
 2026-08-11 dr|z3d
   * Docs:
-    - Corrected the Java requirement in the build docs (1.8 minimum; 17 will
-      come with the Jetty 12 migration), fixed broken index links in the docs
-      index, repointed the English-language flags in the translated READMEs,
-      added a translation how-to (TRANSLATING.md), and dropped the stale SBT
-      launcher sections from the developer guide
+    - Fix Java requirement in build docs (1.8 min; 17 with Jetty 12),
+      broken index links, README language flags; add TRANSLATING.md;
+      drop stale SBT docs
   * I2PSnark:
-    - Stopped torrents no longer silently restart: a torrent stopped while
-      its per-torrent session retry was pending (e.g. router still starting
-      up) could reconnect in the background and keep its destination and
-      tunnels alive, so pools appeared to persist after stopping all members
-    - Batched torrent starts (auto-start, Start All, magnets, reconnect)
-      now stagger once per shared destination instead of once per torrent,
-      so pool-mates start immediately and tunnel builds are spread across
-      pools; when the batch exceeds the destination cap the pools are
-      calculated up front and their start order randomized
-    - New "Randomize startup delay" option in the tunnels section of the
-      configuration (default on) staggers batched starts with a random
-      delay so simultaneously started torrents cannot be correlated by
-      trackers or DHT peers; disable it to start a batch immediately
-    - Torrents running on shared pool destinations now show a pool badge
-      (pool number, destination tooltip) in the status column, and the
-      status header sorts by status then pool in both directions when
-      more than one destination is active
+    - Stopped torrents no longer silently restart (pending session retry)
+    - Batched starts stagger once per shared destination, not per torrent
+    - New "Randomize startup delay" option (default on) staggers batch starts
+    - Pool destinations show pool badge + tooltip in status column
 
 2026-08-10 dr|z3d
-  * Tunnel:
-    - Collapse guard in fail() now uses getTunnelFailed() (failures > 3)
-      instead of a hardcoded > 4 threshold, so a tunnel that failed
-      completely (counter set to exactly MAX+1 = 4) is removed even when
-      it is the pool's last one instead of being kept as a dead zombie
+  * Tunnel: Collapse guard uses getTunnelFailed() (failures > 3); dead last pool
+    member is removed, not kept as a zombie
   * NetDB:
-    - Missing local LeaseSet: rebuild request dropped from every 5s to
-      every 30s, downgraded from WARN to throttled INFO, and skipped
-      entirely while the pool is already building or testing tunnels
-      (the pool requests a re-sign itself on every completed build), so
-      a store race can't feed a request loop back into tunnel builds
-    - Revert the 10-minute re-mint floor: it made every pool-backed
-      copy take the re-mint path, starving the direct floodfill (no
-      LeaseSet store reached the network), so locally hosted services
-      became unreachable shortly after restart; floodfilling resumes
-      for copies older than the 4-minute expiry window
-    - Expiry window narrowed to 4 minutes so the 10-minute lease cap
-      still lets the 5-minute republish cycle present fresh copies
-      above the window and flood them directly instead of re-minting
-      at the boundary forever
-    - LeaseSet lease cap now 10 minutes (was 11m30s), configurable via
-      i2p.tunnel.leaseMaxDuration; the 5-minute republish cycle re-checks
-      inside the expiry window, so the stored copy is always refreshed
-      (re-minted or re-flooded) before any lease dies
+    - Missing LeaseSet rebuild request: 30s instead of 5s, INFO, skipped
+      while building/testing; no request loop into tunnel builds
+    - Revert 10-minute re-mint floor (starved direct floodfill; local
+      services unreachable after restart)
+    - Narrow expiry window to 4 minutes so fresh copies flood directly
+    - Lease cap 10 minutes (was 11m30s), i2p.tunnel.leaseMaxDuration;
+      5-minute republish keeps a fresh copy stored
   * I2PSnark:
-    - DHT: main instance in multi-dest mode serves no tracker queries
-      (routing-table-only), per-torrent instances serve only their own
-      torrent, so probing one destination never reveals other swarms
-    - Maximum destinations option (0-1000, default 50): when more
-      torrents run than the cap, the extras share destinations in
-      randomized, variable-size pools (salted per run), so destination
-      count stays bounded to limit memory use; pooled destinations show
-      as "I2PSnark - Pool N" on the console's tunnels page with a
-      data-tip tooltip listing the pooled torrents
-    - Pool naming: a shared destination keeps the name of its first
-      torrent while it holds one; it renames to "I2PSnark - Pool N"
-      (sequential per run) when a second torrent joins, and back when
-      it reverts to one. The pool tooltip now shows for single-torrent
-      pools too, with the full torrent name
+    - DHT: main instance serves no tracker queries in multi-dest mode;
+      per-torrent instances serve only their own swarm
+    - Maximum destinations option (0-1000, default 50); extras share
+      randomized pools, shown as "I2PSnark - Pool N"
+    - Pool naming: keeps first torrent's name; "I2PSnark - Pool N" when
+      a second joins, back on revert; tooltip for single-torrent pools
 
 2026-08-09 dr|z3d
   * Tunnel:
