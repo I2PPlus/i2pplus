@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -1493,28 +1494,54 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         try {
             return storage.getPiece(piece, off, len);
         } catch (IOException ioe) {
-            snark.stopTorrent();
+            // a failed read drops just this request; the peer will re-request.
+            // not a reason to stop the torrent, but say why in the console
             String msg =
-                    "Error reading the storage (piece "
+                    "Storage error: "
+                            + Storage.classifyStorageError(ioe)
+                            + " reading [piece "
                             + piece
-                            + ") for "
-                            + metainfo.getName()
-                            + ": "
-                            + ioe;
+                            + "] for "
+                            + metainfo.getName();
             _log.error(msg, ioe);
             if (listener != null) {
                 listener.addMessage(msg);
-                listener.addMessage("Fatal storage error: Stopping torrent " + metainfo.getName());
             }
-            throw new RuntimeException(msg, ioe);
+            return null;
         }
+    }
+
+    /**
+     * Whether the storage error is a genuine filesystem problem (no space,
+     * permissions, read-only filesystem, hardware I/O error) that should stop
+     * the torrent with an explicit reason, as opposed to a transient or
+     * stale-handle condition (EBADF, fd exhaustion, vanished file) that the
+     * torrent can retry.
+     *
+     * @param ioe the storage error
+     * @return true if the torrent should stop
+     * @since 0.9.71+
+     */
+    private static boolean isFatalStorageError(IOException ioe) {
+        String msg = ioe.getMessage();
+        if (msg == null) {
+            return true;
+        }
+        String lc = msg.toLowerCase(Locale.US);
+        return lc.contains("no space left on device") ||
+               lc.contains("permission denied") ||
+               lc.contains("read-only file system") ||
+               lc.contains("disk quota exceeded") ||
+               lc.contains("input/output error") ||
+               lc.contains("is a directory") ||
+               lc.contains("file name too long");
     }
 
     /**
      * Returns false if the piece is no good (according to the hash). In that case the peer that
      * supplied the piece should probably be blacklisted.
      *
-     * @throws RuntimeException on IOE saving the piece
+     * @throws RuntimeException on a genuine storage error saving the piece
      */
     @Override
     public boolean gotPiece(Peer peer, PartialPiece pp) {
@@ -1523,13 +1550,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return true;
         }
         int piece = pp.getPiece();
+        // hoisted so the catch below can re-queue the piece
+        Piece wantedPiece = null;
 
         // try/catch outside the sync to avoid deadlock in the catch
         try {
-            Piece p;
             synchronized (wantedPieces) {
-                p = wantedMap.get(Integer.valueOf(piece));
-                if (p == null) {
+                wantedPiece = wantedMap.get(Integer.valueOf(piece));
+                if (wantedPiece == null) {
                     if (_log.shouldDebug()) {
                         _log.debug(
                                 "Received unwanted piece ["
@@ -1553,7 +1581,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 } else {
                     // claim the piece so no other peer writes it while we do the disk I/O
                     wantedMap.remove(Integer.valueOf(piece));
-                    wantedPieces.remove(p);
+                    wantedPieces.remove(wantedPiece);
                 }
             }
 
@@ -1577,17 +1605,17 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 removePartialPiece(piece); // just in case
                 // Mark this peer as not having the piece. PeerState will update its bitfield.
                 synchronized (wantedPieces) {
-                    if (p != null) {
+                    if (wantedPiece != null) {
                         Piece dup = wantedMap.remove(Integer.valueOf(piece));
                         if (dup != null) {
                             wantedPieces.remove(dup);
                         } else {
                             wantedBytes += metainfo.getPieceLength(piece);
                         }
-                        p.removePeer(peer);
-                        p.setRequested(peer, false);
-                        wantedPieces.add(p);
-                        wantedMap.put(Integer.valueOf(piece), p);
+                        wantedPiece.removePeer(peer);
+                        wantedPiece.setRequested(peer, false);
+                        wantedPieces.add(wantedPiece);
+                        wantedMap.put(Integer.valueOf(piece), wantedPiece);
                         wantedDirty = true;
                     }
                 }
@@ -1604,7 +1632,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
                 return false; // No need to announce BAD piece to peers.
             }
-            if (p != null) {
+            if (wantedPiece != null) {
                 synchronized (wantedPieces) {
                     // discard a stale re-add from updatePiecePriorities during the write
                     Piece dup = wantedMap.remove(Integer.valueOf(piece));
@@ -1617,16 +1645,58 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
         } catch (IOException ioe) {
-            String msg = "Error writing to storage [piece " + piece + "] for " + metainfo.getName();
-            msg = msg + "\n* ";
+            String reason = Storage.classifyStorageError(ioe);
+            if (isFatalStorageError(ioe)) {
+                String msg =
+                        "Storage error: "
+                                + reason
+                                + " writing [piece "
+                                + piece
+                                + "] for "
+                                + metainfo.getName()
+                                + "\n* Torrent stopped - resolve the storage problem and restart";
+                _log.error(msg, ioe);
+                if (listener != null) {
+                    listener.addMessage(msg);
+                    listener.addMessage("Fatal storage error: Stopping torrent " + metainfo.getName());
+                }
+                // deadlock was here
+                snark.stopTorrent();
+                throw new RuntimeException(msg, ioe);
+            }
+            // transient or stale-handle failure (e.g. EBADF from a read-only
+            // handle, fd exhaustion, file vanished): keep the torrent alive,
+            // release the piece so it is re-downloaded and the write retried
+            String msg =
+                    "Storage error: "
+                            + reason
+                            + " writing [piece "
+                            + piece
+                            + "] for "
+                            + metainfo.getName()
+                            + " - re-queuing piece, will retry";
             _log.error(msg, ioe);
             if (listener != null) {
                 listener.addMessage(msg);
-                listener.addMessage("Fatal storage error: Stopping torrent " + metainfo.getName());
             }
-            // deadlock was here
-            snark.stopTorrent();
-            throw new RuntimeException(msg, ioe);
+            markUnrequested(peer, piece);
+            removePartialPiece(piece); // just in case
+            synchronized (wantedPieces) {
+                if (wantedPiece != null) {
+                    Piece dup = wantedMap.remove(Integer.valueOf(piece));
+                    if (dup != null) {
+                        wantedPieces.remove(dup);
+                    } else {
+                        wantedBytes += metainfo.getPieceLength(piece);
+                    }
+                    wantedPiece.removePeer(peer);
+                    wantedPiece.setRequested(peer, false);
+                    wantedPieces.add(wantedPiece);
+                    wantedMap.put(Integer.valueOf(piece), wantedPiece);
+                    wantedDirty = true;
+                }
+            }
+            return false; // No need to announce BAD piece to peers.
         }
         // just in case
         removePartialPiece(piece);

@@ -1755,6 +1755,122 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Map a storage IOException to a short, human-readable reason, so the
+     * console and logs say why a torrent stopped or why a piece was skipped,
+     * instead of a bare "Error writing to storage".
+     *
+     * <p>Java exception messages carry the OS errno text, so this matches on
+     * the standard messages (Linux: "No space left on device", "Permission
+     * denied", ...).  Unknown messages fall back to the raw text.
+     *
+     * @param ioe the storage error
+     * @return the human-readable reason
+     * @since 0.9.71+
+     */
+    public static String classifyStorageError(IOException ioe) {
+        String msg = ioe.getMessage();
+        if (msg == null) {
+            return "I/O error";
+        }
+        String lc = msg.toLowerCase(Locale.US);
+        if (lc.contains("no space left on device")) { return "No space left on device"; }
+        if (lc.contains("permission denied")) { return "Permission denied"; }
+        if (lc.contains("read-only file system")) { return "Read-only file system"; }
+        if (lc.contains("disk quota exceeded")) { return "Disk quota exceeded"; }
+        if (lc.contains("input/output error")) { return "Input/output error"; }
+        if (lc.contains("too many open files")) { return "Too many open files"; }
+        if (lc.contains("bad file descriptor")) { return "Stale or invalid file handle"; }
+        if (lc.contains("no such file or directory")) { return "File or directory missing"; }
+        if (lc.contains("is a directory")) { return "Path is a directory"; }
+        if (lc.contains("file name too long")) { return "File name too long"; }
+        return "I/O error: " + msg;
+    }
+
+    /**
+     * Write a (hash-verified) partial piece to the data files.
+     *
+     * @param pp the verified partial piece to write
+     * @param piece the piece number
+     * @param shouldPreallocate whether to balloon sparse files
+     * @param forceRW if true, open the data files read-write even when the
+     *        storage thinks they are complete, and try to make them writable
+     *        if permissions deny it.  Without this, checkRAF() opens files
+     *        read-only for a complete torrent, and the write (or the
+     *        pre-allocation ballooning) then fails with EBADF on a healthy
+     *        disk.
+     * @throws IOException when some storage related error occurs.
+     * @since 0.9.71+
+     */
+    private void writePiece(
+            PartialPiece pp, int piece, boolean shouldPreallocate, boolean forceRW) throws IOException {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        // Early typecast, avoid possibly overflowing a temp integer
+        FileCursor fc = new FileCursor((long) piece * (long) piece_size);
+        int written = 0;
+        int length = metainfo.getPieceLength(piece);
+        while (written < length) {
+            int need = length - written;
+            int len = fc.chunk(need);
+            TorrentFile tf = fc.getFile();
+            if (tf.isPadding) {
+                // Padding never touches disk; the piece hash already verified it as zeros
+                written += len;
+                fc.advance(len, need);
+                continue;
+            }
+            synchronized (tf) {
+                try {
+                    RandomAccessFile raf = tf.checkRAF(forceRW);
+                    if (tf.isSparse && shouldPreallocate) {
+                        /*
+                         * If the file is a newly created sparse file, AND we aren't skipping it,
+                         * balloon it with all zeros to un-sparse it by allocating the space.
+                         * Obviously this could take a while. Once we have written to it,
+                         * it isn't empty/sparse any more.
+                         */
+                        if (tf.priority >= 0) {
+                            if (_log.shouldInfo()) {
+                                String msg = "Pre-allocating file: " + tf + "...";
+                                _log.info("[I2PSnark] " + msg);
+                                if (!ctx.isRouterContext()) {
+                                    System.out.println(" • " + msg);
+                                }
+                            }
+                            tf.balloonFile();
+                        } else {
+                            tf.isSparse = false;
+                        }
+                    } else {
+                        if (_log.shouldInfo()) {
+                            String msg =
+                                    "Not pre-allocating file: "
+                                            + tf
+                                            + " -> Disabled by configuration";
+                            _log.info("[I2PSnark] " + msg);
+                            if (!ctx.isRouterContext()) {
+                                System.out.println(" • " + msg);
+                            }
+                        }
+                    }
+                    raf.seek(fc.getOffset());
+                    pp.write(raf, written, len);
+                } catch (IOException ioe) {
+                    try {
+                        tf.closeRAF();
+                    } catch (IOException ioe2) { /* ignored */ }
+                    // get the file name in the logs
+                    IOException ioe2 =
+                            new IOException("Error writing " + tf.RAFfile.getAbsolutePath());
+                    ioe2.initCause(ioe);
+                    throw ioe2;
+                }
+            }
+            written += len;
+            fc.advance(len, need);
+        }
+    }
+
+    /**
      * Put the piece in the Storage if it is correct. Warning - takes a LONG time if complete as it
      * does the recheck here. TODO thread the recheck?
      *
@@ -1781,69 +1897,26 @@ public class Storage implements Closeable {
                 return false;
             }
 
-            // Early typecast, avoid possibly overflowing a temp integer
-            FileCursor fc = new FileCursor((long) piece * (long) piece_size);
-            int written = 0;
-            int length = metainfo.getPieceLength(piece);
-            while (written < length) {
-                int need = length - written;
-                int len = fc.chunk(need);
-                TorrentFile tf = fc.getFile();
-                if (tf.isPadding) {
-                    // Padding never touches disk; the piece hash already verified it as zeros
-                    written += len;
-                    fc.advance(len, need);
-                    continue;
+            try {
+                writePiece(pp, piece, shouldPreallocate, true);
+            } catch (IOException ioe) {
+                // Rectify before giving up.  The failure is often a stale
+                // read-only handle: when the storage thinks the file is
+                // complete, checkRAF() opens it "r", and any write (piece data
+                // or pre-allocation ballooning) then fails with EBADF on a
+                // perfectly healthy disk.  Close, try to make the file
+                // writable, and retry the whole write once with a forced RW
+                // reopen.
+                if (_log.shouldWarn()) {
+                    _log.warn(
+                            "[I2PSnark] Write failed on piece "
+                                    + piece
+                                    + " for "
+                                    + metainfo.getName()
+                                    + " - retrying with forced RW reopen: "
+                                    + ioe);
                 }
-                synchronized (tf) {
-                    try {
-                        RandomAccessFile raf = tf.checkRAF();
-                        if (tf.isSparse && shouldPreallocate) {
-                            /*
-                             * If the file is a newly created sparse file, AND we aren't skipping it,
-                             * balloon it with all zeros to un-sparse it by allocating the space.
-                             * Obviously this could take a while. Once we have written to it,
-                             * it isn't empty/sparse any more.
-                             */
-                            if (tf.priority >= 0) {
-                                if (_log.shouldInfo()) {
-                                    String msg = "Pre-allocating file: " + tf + "...";
-                                    _log.info("[I2PSnark] " + msg);
-                                    if (!ctx.isRouterContext()) {
-                                        System.out.println(" • " + msg);
-                                    }
-                                }
-                                tf.balloonFile();
-                            } else {
-                                tf.isSparse = false;
-                            }
-                        } else {
-                            if (_log.shouldInfo()) {
-                                String msg =
-                                        "Not pre-allocating file: "
-                                                + tf
-                                                + " -> Disabled by configuration";
-                                _log.info("[I2PSnark] " + msg);
-                                if (!ctx.isRouterContext()) {
-                                    System.out.println(" • " + msg);
-                                }
-                            }
-                        }
-                        raf.seek(fc.getOffset());
-                        pp.write(raf, written, len);
-                    } catch (IOException ioe) {
-                        try {
-                            tf.closeRAF();
-                        } catch (IOException ioe2) { /* ignored */ }
-                        // get the file name in the logs
-                        IOException ioe2 =
-                                new IOException("Error writing " + tf.RAFfile.getAbsolutePath());
-                        ioe2.initCause(ioe);
-                        throw ioe2;
-                    }
-                }
-                written += len;
-                fc.advance(len, need);
+                writePiece(pp, piece, shouldPreallocate, true);
             }
         } finally {
             pp.release();
@@ -2092,6 +2165,35 @@ public class Storage implements Closeable {
             return raf;
         }
 
+        /**
+         * Like checkRAF(), but force a read-write open.  When the storage is
+         * thought complete the files are opened read-only, and any write through
+         * such a handle fails with EBADF on a perfectly healthy disk.  The write
+         * path calls this to force a true RW handle, closing any existing
+         * read-only one first, and attempts to make the file writable if
+         * permissions deny it.
+         *
+         * @return the read-write handle
+         * @throws IOException if the file cannot be opened read-write
+         * @since 0.9.71+
+         */
+        public synchronized RandomAccessFile checkRAF(boolean forceRW) throws IOException {
+            if (raf != null && !forceRW) {
+                RAFtime = System.currentTimeMillis();
+            } else {
+                if (raf != null) {
+                    closeRAF();
+                }
+                if (forceRW && !RAFfile.canWrite() && !RAFfile.setWritable(true)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[I2PSnark] Unable to make file writable: " + RAFfile.getAbsolutePath());
+                    }
+                }
+                openRAF(false, forceRW);
+            }
+            return raf;
+        }
+
         /** Locking: this. */
         private synchronized void openRAF() throws IOException {
             openRAF(_probablyComplete);
@@ -2099,7 +2201,12 @@ public class Storage implements Closeable {
 
         /** Locking: this. */
         private synchronized void openRAF(boolean readonly) throws IOException {
-            raf = new RandomAccessFile(RAFfile, (readonly || !RAFfile.canWrite()) ? "r" : "rw");
+            openRAF(readonly, false);
+        }
+
+        /** Locking: this. */
+        private synchronized void openRAF(boolean readonly, boolean forceRW) throws IOException {
+            raf = new RandomAccessFile(RAFfile, forceRW ? "rw" : (readonly || !RAFfile.canWrite()) ? "r" : "rw");
             RAFtime = System.currentTimeMillis();
         }
 
@@ -2132,7 +2239,10 @@ public class Storage implements Closeable {
          */
         public synchronized void allocateFile() throws IOException {
             // caller synchronized
-            openRAF(false); // RW
+            // force RW via checkRAF(true): openRAF(false) still falls back to
+            // "r" when the file is not writable, and setLength() then fails
+            // with EINVAL (or the open fails with EACCES)
+            checkRAF(true); // RW
             raf.setLength(length);
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
             boolean shouldPreallocate =

@@ -3,6 +3,7 @@ package org.klomp.snark;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -545,5 +546,110 @@ public class StorageTest {
 
     private static void setMtime(File f, long time) {
         assertTrue("setLastModified failed for " + f, f.setLastModified(time));
+    }
+
+    // ----- putPiece rectification -----
+
+    /** A no-op bandwidth listener for filling PartialPieces. */
+    private static class NullBandwidthListener implements BandwidthListener {
+        @Override
+        public long getUploadRate() { return 0; }
+
+        @Override
+        public long getDownloadRate() { return 0; }
+
+        @Override
+        public void uploaded(int size) {}
+
+        @Override
+        public void downloaded(int size) {}
+
+        @Override
+        public boolean shouldSend(int size) { return false; }
+
+        @Override
+        public boolean shouldRequest(Peer peer, int size) { return false; }
+
+        @Override
+        public long getUpBWLimit() { return 0; }
+
+        @Override
+        public long getDownBWLimit() { return 0; }
+
+        @Override
+        public boolean overUpBWLimit() { return false; }
+
+        @Override
+        public boolean overDownBWLimit() { return false; }
+    }
+
+    /** Builds a PartialPiece filled with the deterministic content of the given piece. */
+    private PartialPiece fullPiece(MetaInfo mi, int piece) throws Exception {
+        int len = mi.getPieceLength(piece);
+        PartialPiece pp = new PartialPiece(new Piece(piece), len, null);
+        byte[] data = new byte[len];
+        long base = (long) piece * PIECE_LENGTH;
+        for (int i = 0; i < data.length; i++) {
+            data[i] = (byte) ((base + i) * 31 + 7 & 0xff);
+        }
+        pp.read(new DataInputStream(new ByteArrayInputStream(data)), 0, len, new NullBandwidthListener());
+        return pp;
+    }
+
+    /**
+     * When the data file cannot be opened read-write (read-only storage state
+     * or file permissions), checkRAF() opens it "r" and the write fails with
+     * EBADF - the exact failure seen in the field ("Error writing to storage
+     * [piece N]", "Caused by: Bad file descriptor"). putPiece must close the
+     * handle, make the file writable, and retry with a forced RW reopen, so
+     * the piece lands instead of the torrent stopping.
+     */
+    @Test
+    public void testPutPieceRetriesAfterReadOnlyHandle() throws Exception {
+        File f = new File(_dataDir, "single.dat");
+        MetaInfo mi = buildSingleFileTorrent(f, PIECE_LENGTH * 3);
+        corrupt(f, PIECE_LENGTH); // piece 1 no longer matches its hash, so it stays wanted
+        assertTrue(f.setWritable(false));
+        try {
+            I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+            RecordingListener l = new RecordingListener();
+            Storage s = new Storage(util, f, mi, l, true);
+            // piece 1 is re-verified bad; the file handle stays open read-only
+            s.check(0, null);
+            assertFalse(s.getBitField().get(1));
+            assertTrue(s.putPiece(fullPiece(mi, 1)));
+            assertTrue(s.getBitField().get(1));
+            // the retried write must have landed on disk, restoring the original byte
+            RandomAccessFile raf = new RandomAccessFile(f, "r");
+            try {
+                raf.seek(PIECE_LENGTH);
+                assertEquals((byte) ((PIECE_LENGTH) * 31 + 7 & 0xff), raf.readByte());
+            } finally {
+                raf.close();
+            }
+        } finally {
+            f.setWritable(true);
+        }
+    }
+
+    /** classifyStorageError maps OS errno text to short, human-readable reasons. */
+    @Test
+    public void testClassifyStorageError() {
+        assertClassify("No space left on device", "No space left on device");
+        assertClassify("Permission denied", "Permission denied");
+        assertClassify("Read-only file system", "Read-only file system");
+        assertClassify("Disk quota exceeded", "Disk quota exceeded");
+        assertClassify("Input/output error", "Input/output error");
+        assertClassify("Too many open files", "Too many open files");
+        assertClassify("Stale or invalid file handle", "Bad file descriptor");
+        assertClassify("File or directory missing", "No such file or directory");
+        assertClassify("Path is a directory", "Is a directory");
+        assertClassify("File name too long", "File name too long");
+        assertClassify("I/O error", (String) null);
+        assertClassify("I/O error: something odd", "something odd");
+    }
+
+    private static void assertClassify(String expected, String errnoText) {
+        assertEquals(expected, Storage.classifyStorageError(new IOException(errnoText)));
     }
 }
