@@ -148,12 +148,16 @@ public class StorageTest {
     }
 
     private static byte[] computeHashes(byte[] content) {
-        int pieceCount = (int) ((content.length + PIECE_LENGTH - 1) / PIECE_LENGTH);
+        return computeHashes(content, PIECE_LENGTH);
+    }
+
+    private static byte[] computeHashes(byte[] content, int pieceLength) {
+        int pieceCount = (int) ((content.length + pieceLength - 1) / pieceLength);
         byte[] hashes = new byte[20 * pieceCount];
         MessageDigest md = SHA1.getInstance();
         for (int p = 0; p < pieceCount; p++) {
-            int start = p * PIECE_LENGTH;
-            int len = Math.min(PIECE_LENGTH, content.length - start);
+            int start = p * pieceLength;
+            int len = Math.min(pieceLength, content.length - start);
             md.reset();
             md.update(content, start, len);
             System.arraycopy(md.digest(), 0, hashes, 20 * p, 20);
@@ -163,6 +167,18 @@ public class StorageTest {
 
     /** Builds a bencoded multi-file torrent byte stream. */
     private static byte[] buildTorrentBytes(List<String> names, List<Long> sizes, byte[] pieceHashes) {
+        return buildTorrentBytes(names, sizes, null, PIECE_LENGTH, pieceHashes);
+    }
+
+    /**
+     * Builds a bencoded multi-file torrent byte stream with optional per-file BEP 47 attributes and
+     * a custom piece length.
+     *
+     * @param attrs per-file attribute strings, or null for no attr keys
+     * @param pieceLength the piece length in bytes
+     */
+    private static byte[] buildTorrentBytes(
+            List<String> names, List<Long> sizes, List<String> attrs, int pieceLength, byte[] pieceHashes) {
         StringBuilder sb = new StringBuilder(512);
         sb.append('d');
         sb.append("8:announce").append("19:http://tracker.test");
@@ -170,6 +186,10 @@ public class StorageTest {
         sb.append("5:files").append('l');
         for (int i = 0; i < names.size(); i++) {
             sb.append('d');
+            if (attrs != null) {
+                String attr = attrs.get(i);
+                sb.append("4:attr").append(attr.length()).append(':').append(attr);
+            }
             sb.append("6:length").append('i').append(sizes.get(i)).append('e');
             sb.append("4:path").append('l');
             byte[] nb = names.get(i).getBytes(StandardCharsets.ISO_8859_1);
@@ -179,7 +199,7 @@ public class StorageTest {
         }
         sb.append('e');
         sb.append("4:name").append("4:data");
-        sb.append("12:piece length").append('i').append(PIECE_LENGTH).append('e');
+        sb.append("12:piece length").append('i').append(pieceLength).append('e');
         sb.append("6:pieces").append(pieceHashes.length).append(':');
         byte[] head = sb.toString().getBytes(StandardCharsets.ISO_8859_1);
         byte[] tail = "ee".getBytes(StandardCharsets.ISO_8859_1);
@@ -704,5 +724,128 @@ public class StorageTest {
 
     private static void assertClassify(StorageError expected, IOException ioe) {
         assertEquals(expected.name(), expected, StorageError.classify(ioe));
+    }
+
+    /** BEP 47: isRangePadding() maps byte ranges onto padding files. */
+    @Test
+    public void testIsRangePadding() throws Exception {
+        // a.dat [0,1000), pad [1000,1500), b.dat [1500,2500) — one 4096-byte piece
+        List<String> names = Arrays.asList("a.dat", ".pad/500", "b.dat");
+        List<Long> sizes =
+                Arrays.asList(Long.valueOf(1000), Long.valueOf(500), Long.valueOf(1000));
+        List<String> attrs = Arrays.asList("", "p", "");
+        byte[] content = new byte[2500];
+        for (int i = 0; i < content.length; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        names,
+                                        sizes,
+                                        attrs,
+                                        PIECE_LENGTH,
+                                        computeHashes(content, PIECE_LENGTH))));
+
+        assertFalse(mi.isRangePadding(0, 999)); // inside a.dat
+        assertFalse(mi.isRangePadding(0, 1));
+        assertTrue(mi.isRangePadding(1000, 500)); // exactly the pad file
+        assertTrue(mi.isRangePadding(1000, 1));
+        assertTrue(mi.isRangePadding(1499, 1));
+        assertFalse(mi.isRangePadding(999, 3)); // spans a.dat -> pad
+        assertFalse(mi.isRangePadding(1000, 501)); // spans pad -> b.dat
+        assertFalse(mi.isRangePadding(1500, 500)); // inside b.dat, exact pad boundary
+        assertFalse(mi.isRangePadding(0, 2500)); // whole torrent
+        assertFalse(mi.isRangePadding(1000, 0)); // zero length
+
+        // single-file torrents have no padding
+        MetaInfo single = buildSingleFileTorrent(new File(_dataDir, "s.dat"), 2048);
+        assertFalse(single.isRangePadding(0, 100));
+        assertFalse(single.isRangePadding(0, 2048));
+    }
+
+    /** BEP 47: getRequest() never requests padding-only chunks and the piece still completes. */
+    @Test
+    public void testPartialPieceSkipsPaddingChunks() throws Exception {
+        int pieceLength = 2 * PeerState.PARTSIZE; // one piece, two chunks
+        // a.dat [0, 128K) real, pad [128K, 256K) padding
+        List<String> names = Arrays.asList("a.dat", ".pad/131072");
+        List<Long> sizes =
+                Arrays.asList(
+                        Long.valueOf(PeerState.PARTSIZE), Long.valueOf(PeerState.PARTSIZE));
+        List<String> attrs = Arrays.asList("", "p");
+        byte[] content = new byte[pieceLength];
+        for (int i = 0; i < content.length; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        for (int i = PeerState.PARTSIZE; i < pieceLength; i++) {
+            content[i] = 0; // pad bytes are zeros
+        }
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        names,
+                                        sizes,
+                                        attrs,
+                                        pieceLength,
+                                        computeHashes(content, pieceLength))));
+        assertFalse(mi.isRangePadding(0, PeerState.PARTSIZE));
+        assertTrue(mi.isRangePadding(PeerState.PARTSIZE, PeerState.PARTSIZE));
+
+        PartialPiece pp = new PartialPiece(new Piece(0), pieceLength, _dataDir, mi);
+        Request r = pp.getRequest();
+        assertNotNull(r);
+        assertEquals(0, r.off);
+        assertEquals(PeerState.PARTSIZE, r.len);
+        // chunk 0 arrives; the padding-only chunk 1 must never be requested
+        pp.markChunk(0);
+        assertNull(pp.getRequest());
+        assertTrue(pp.isComplete());
+
+        // without metainfo the padding chunk is requested as usual
+        PartialPiece noMeta = new PartialPiece(new Piece(0), pieceLength, _dataDir);
+        Request r2 = noMeta.getRequest();
+        assertNotNull(r2);
+        assertEquals(0, r2.off);
+        noMeta.markChunk(0);
+        Request r3 = noMeta.getRequest();
+        assertNotNull(r3);
+        assertEquals(PeerState.PARTSIZE, r3.off);
+        assertFalse(noMeta.isComplete());
+
+        // four chunks [pad, real, real, real]: out-of-order arrival of chunk 1 must not
+        // corrupt the request offset (a bogus-offset or zero-length Request would be
+        // generated otherwise)
+        int pieceLength4 = 4 * PeerState.PARTSIZE;
+        List<String> names4 = Arrays.asList(".pad/131072", "x.dat", "y.dat", "z.dat");
+        List<Long> sizes4 =
+                Arrays.asList(
+                        Long.valueOf(PeerState.PARTSIZE),
+                        Long.valueOf(PeerState.PARTSIZE),
+                        Long.valueOf(PeerState.PARTSIZE),
+                        Long.valueOf(PeerState.PARTSIZE));
+        List<String> attrs4 = Arrays.asList("p", "", "", "");
+        MetaInfo mi4 =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        names4,
+                                        sizes4,
+                                        attrs4,
+                                        pieceLength4,
+                                        computeHashes(new byte[pieceLength4], pieceLength4))));
+        PartialPiece pp4 = new PartialPiece(new Piece(0), pieceLength4, _dataDir, mi4);
+        pp4.markChunk(1); // out-of-order arrival of chunk 1
+        Request r4 = pp4.getRequest();
+        assertNotNull(r4);
+        assertEquals(2 * PeerState.PARTSIZE, r4.off);
+        assertEquals(PeerState.PARTSIZE, r4.len);
+        pp4.markChunk(2);
+        pp4.markChunk(3);
+        // chunk 0 was padding: skipped, no request, piece complete
+        assertNull(pp4.getRequest());
+        assertTrue(pp4.isComplete());
     }
 }

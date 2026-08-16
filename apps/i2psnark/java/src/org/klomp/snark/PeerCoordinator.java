@@ -348,6 +348,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             for (int i = 0; i < metainfo.getPieces(); i++) {
                 // only add if we don't have and the priority is >= 0
                 if ((!bitfield.get(i)) && (pri == null || pri[i] >= 0)) {
+                    // BEP 47: padding-only pieces hash as zeros and are always trusted,
+                    // so never request them
+                    if (metainfo.isRangePadding(
+                            (long) i * metainfo.getPieceLength(0), metainfo.getPieceLength(i))) {
+                        continue;
+                    }
                     Piece p = new Piece(i);
                     if (pri != null) p.setPriority(pri[i]);
                     wantedPieces.add(p);
@@ -1990,9 +1996,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         // Temporary? So PeerState never calls wantPiece() directly for now...
         Piece piece = wantPiece(peer, havePieces, true, allowed);
         if (piece != null) {
-            // TODO padding
             return new PartialPiece(
-                    piece, metainfo.getPieceLength(piece.getId()), _util.getTempDir());
+                    piece, metainfo.getPieceLength(piece.getId()), _util.getTempDir(), metainfo);
         }
         if (_log.shouldDebug()) {
             _log.debug("We have no partial piece to return");
@@ -2034,7 +2039,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (_log.shouldInfo()) {
                 _log.info("Suggest: requesting piece [" + p + "] from [" + peer + "]");
             }
-            return new PartialPiece(p, metainfo.getPieceLength(piece), _util.getTempDir());
+            return new PartialPiece(p, metainfo.getPieceLength(piece), _util.getTempDir(), metainfo);
         }
     }
 

@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,6 +59,8 @@ public class MetaInfo {
     private final List<Long> lengths;
     private final int piece_length;
     private final byte[] piece_hashes;
+    /** Cumulative exclusive end offset of each file, lazily computed; null for single-file. */
+    private volatile long[] _fileEnds;
     private final long length;
     private final int privateTorrent; // 0: not present; 1: = 1; -1: = 0
     private final List<List<String>> announce_list;
@@ -595,6 +598,62 @@ public class MetaInfo {
             return false;
         }
         return attributes.get(filenum).indexOf('p') >= 0;
+    }
+
+    /**
+     * True if every byte in the given range lies within BEP 47 padding files.
+     *
+     * <p>Padding bytes are all zeros and are never stored on disk, so chunks or pieces
+     * entirely within padding need not be requested from peers (BEP 47).
+     *
+     * @param offset global byte offset into the torrent
+     * @param length number of bytes
+     * @return true if the whole range is covered by padding files
+     * @since 0.9.72
+     */
+    public boolean isRangePadding(long offset, int length) {
+        if (files == null || length <= 0) {
+            return false;
+        }
+        long[] ends = fileEnds();
+        long end = offset + length;
+        int idx = Arrays.binarySearch(ends, offset);
+        if (idx >= 0) {
+            // offset sits exactly on a file boundary; the next file starts here
+            idx++;
+        } else {
+            idx = -idx - 1;
+            if (idx >= ends.length) {
+                return false;
+            }
+        }
+        // idx is the first file whose exclusive end is above offset
+        while (offset < end) {
+            if (idx >= files.size()) {
+                return false;
+            }
+            if (!isPaddingFile(idx)) {
+                return false;
+            }
+            offset = ends[idx];
+            idx++;
+        }
+        return true;
+    }
+
+    /** Cumulative exclusive end offset of each file; single-file torrents return null. */
+    private long[] fileEnds() {
+        long[] ends = _fileEnds;
+        if (ends == null) {
+            long[] computed = new long[lengths.size()];
+            long sum = 0;
+            for (int i = 0; i < computed.length; i++) {
+                sum += lengths.get(i).longValue();
+                computed[i] = sum;
+            }
+            _fileEnds = ends = computed;
+        }
+        return ends;
     }
 
     /**

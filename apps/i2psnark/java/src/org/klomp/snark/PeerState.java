@@ -1063,6 +1063,11 @@ class PeerState implements DataLoader {
                 return; // not wanted or already being fetched elsewhere
             }
             Request r = pp.getRequest();
+            if (r == null) {
+                // BEP 47: piece is all padding, nothing to fetch
+                pp.release();
+                return;
+            }
             outstandingRequests.add(r);
             lastRequest = r;
             out.sendRequest(r);
@@ -1457,11 +1462,23 @@ class PeerState implements DataLoader {
                     } else {
                         PartialPiece nextPiece = lastRequest.getPartialPiece();
                         int nextBegin = lastRequest.off + PARTSIZE;
+                        long pieceStart = (long) nextPiece.getPiece() * metainfo.getPieceLength(0);
                         while (true) {
                             // don't rerequest chunks we already have
                             if (!nextPiece.hasChunk(nextBegin / PARTSIZE)) {
                                 int maxLength = pieceLength - nextBegin;
                                 int nextLength = maxLength > PARTSIZE ? PARTSIZE : maxLength;
+                                if (metainfo.isRangePadding(pieceStart + nextBegin, nextLength)) {
+                                    // BEP 47: padding-only chunk, mark as received (zeros), never
+                                    // request it
+                                    nextPiece.markChunk(nextBegin / PARTSIZE);
+                                    nextBegin += nextLength;
+                                    if (nextBegin >= pieceLength) {
+                                        more_pieces = requestNextPiece(fastPieces);
+                                        break;
+                                    }
+                                    continue;
+                                }
                                 Request req = new Request(nextPiece, nextBegin, nextLength);
                                 outstandingRequests.add(req);
                                 // BEP 6: allowed fast pieces are requested even while choked
@@ -1513,6 +1530,11 @@ class PeerState implements DataLoader {
                 // Double-check that r not already in outstandingRequests
                 if (!getRequestedPieces().contains(Integer.valueOf(pp.getPiece()))) {
                     Request r = pp.getRequest();
+                    if (r == null) {
+                        // BEP 47: piece is all padding, nothing to fetch
+                        pp.release();
+                        return false;
+                    }
                     outstandingRequests.add(r);
                     // BEP 6: allowed fast pieces are requested even while choked
                     if (!choked

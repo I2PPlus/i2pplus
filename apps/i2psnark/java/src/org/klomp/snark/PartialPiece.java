@@ -34,6 +34,8 @@ class PartialPiece implements Comparable<PartialPiece> {
     private final byte[] bs; // in-memory storage if piece is small
     private final int pclen; // piece length in bytes
     private final File tempDir;
+    /** BEP 47: to recognize padding-only chunks and skip requesting them; may be null */
+    private final MetaInfo _meta;
 
     private File tempfile;
     private RandomAccessFile raf;
@@ -59,9 +61,24 @@ class PartialPiece implements Comparable<PartialPiece> {
      * @param tempDir Directory for temporary file storage if needed
      */
     public PartialPiece(Piece piece, int len, File tempDir) {
+        this(piece, len, tempDir, null);
+    }
+
+    /**
+     * A PartialPiece for the given piece with the specified length. If piece length exceeds
+     * threshold or memory is constrained, stores on disk.
+     *
+     * @param piece The Piece identifier object
+     * @param len Length of this piece in bytes (must match piece length)
+     * @param tempDir Directory for temporary file storage if needed
+     * @param meta the torrent meta info, for skipping BEP 47 padding-only chunks, or null
+     * @since 0.9.72
+     */
+    public PartialPiece(Piece piece, int len, File tempDir, MetaInfo meta) {
         this.piece = Objects.requireNonNull(piece);
         this.pclen = len;
         this.tempDir = tempDir;
+        this._meta = meta;
         this.bitfield = new BitField((len + PeerState.PARTSIZE - 1) / PeerState.PARTSIZE);
 
         byte[] tempBs = null;
@@ -98,7 +115,8 @@ class PartialPiece implements Comparable<PartialPiece> {
 
     /**
      * Creates a Request object for the next missing chunk in this piece. Returns null if the entire
-     * piece is complete.
+     * piece is complete. Chunks lying entirely within BEP 47 padding files are marked as received
+     * (their data is all zeros) and never requested.
      *
      * @return the next Request for downloading or null if complete
      * @since 0.9.1
@@ -107,12 +125,50 @@ class PartialPiece implements Comparable<PartialPiece> {
         int chunk = off / PeerState.PARTSIZE;
         int sz = bitfield.size();
         for (int i = chunk; i < sz; i++) {
-            if (!bitfield.get(i))
+            if (!bitfield.get(i)) {
+                if (isPaddingChunk(i)) {
+                    markChunk(i);
+                    if (i == sz - 1) off = pclen;
+                    else off += PeerState.PARTSIZE;
+                    continue;
+                }
                 return new Request(this, off, Math.min(pclen - off, PeerState.PARTSIZE));
+            }
             if (i == sz - 1) off = pclen;
             else off += PeerState.PARTSIZE;
         }
         return null;
+    }
+
+    /**
+     * Marks a chunk as received without any data, for BEP 47 padding-only chunks whose bytes are
+     * all zeros. The in-memory buffer stays zero-filled, so the piece hashes correctly once the
+     * remaining chunks arrive. Does not advance the sequential offset; the caller's scan does that.
+     *
+     * @param chunk zero-based chunk index
+     * @since 0.9.72
+     */
+    public synchronized void markChunk(int chunk) {
+        piece.setActive();
+        if (!bitfield.get(chunk)) {
+            bitfield.set(chunk);
+        }
+    }
+
+    /**
+     * True if the chunk lies entirely within BEP 47 padding files.
+     *
+     * @param chunk zero-based chunk index
+     */
+    private boolean isPaddingChunk(int chunk) {
+        if (_meta == null) {
+            return false;
+        }
+        int offset = chunk * PeerState.PARTSIZE;
+        int len = Math.min(pclen - offset, PeerState.PARTSIZE);
+        // every piece except the last is full length, so the piece start is id * full piece length
+        long pieceStart = (long) piece.getId() * _meta.getPieceLength(0);
+        return _meta.isRangePadding(pieceStart + offset, len);
     }
 
     /**

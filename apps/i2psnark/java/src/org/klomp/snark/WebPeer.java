@@ -653,6 +653,18 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     int maxLength = pieceLength - nextBegin;
                     int nextLength =
                             maxLength > PeerState.PARTSIZE ? PeerState.PARTSIZE : maxLength;
+                    if (metainfo.isRangePadding(
+                            (long) nextPiece.getPiece() * metainfo.getPieceLength(0) + nextBegin,
+                            nextLength)) {
+                        // BEP 47: padding-only chunk, mark as received (zeros), never request it;
+                        // advance the sequential cursor without adding to the pipeline
+                        nextPiece.markChunk(nextBegin / PeerState.PARTSIZE);
+                        lastRequest = new Request(nextPiece, nextBegin, nextLength);
+                        if (nextBegin + nextLength >= pieceLength) {
+                            more_pieces = requestNextPiece();
+                        }
+                        continue;
+                    }
                     Request req = new Request(nextPiece, nextBegin, nextLength);
                     outstandingRequests.add(req);
                     lastRequest = req;
@@ -673,6 +685,11 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             // Double-check that r not already in outstandingRequests
             if (!getRequestedPieces().contains(Integer.valueOf(pp.getPiece()))) {
                 Request r = pp.getRequest();
+                if (r == null) {
+                    // BEP 47: piece is all padding, nothing to fetch
+                    pp.release();
+                    return false;
+                }
                 outstandingRequests.add(r);
                 lastRequest = r;
                 if (shouldRequest(r.len)) this.notifyAll();
