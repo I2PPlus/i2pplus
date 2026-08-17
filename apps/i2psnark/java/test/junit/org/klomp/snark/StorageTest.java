@@ -978,6 +978,74 @@ public class StorageTest {
         assertEquals(pieceLength, pp.getDownloaded());
     }
 
+    /**
+     * A temp-file piece (piece length above MAX_IN_MEM) whose trailing sub-blocks are padding is
+     * only written up to the last real sub-block, leaving the temp file shorter than the piece.
+     * getHash() must still complete: the pad suffix reads back as zeros, not EOF.
+     */
+    @Test
+    public void testPartialPieceTempFilePadSuffixHash() throws Exception {
+        int pieceLength = 1024 * 1024 + 8192; // > MAX_IN_MEM: temp-file path
+        PartialPiece pp = new PartialPiece(new Piece(0), pieceLength, _dataDir);
+        byte[] data = new byte[1024 * 1024];
+        pp.read(new DataInputStream(new ByteArrayInputStream(data)), 0, data.length, new StubBWL());
+        int subBlocks = pieceLength / 4096;
+        pp.markSubBlock(subBlocks - 2); // trailing pad sub-blocks, never written to disk
+        pp.markSubBlock(subBlocks - 1);
+        assertTrue(pp.isComplete());
+        assertEquals(20, pp.getHash().length);
+    }
+
+    /** Minimal BandwidthListener for partial piece read tests. */
+    private static class StubBWL implements BandwidthListener {
+
+        @Override
+        public long getUploadRate() {
+            return 0;
+        }
+
+        @Override
+        public long getDownloadRate() {
+            return 0;
+        }
+
+        @Override
+        public void uploaded(int size) {}
+
+        @Override
+        public void downloaded(int size) {}
+
+        @Override
+        public boolean shouldSend(int size) {
+            return true;
+        }
+
+        @Override
+        public boolean shouldRequest(Peer peer, int size) {
+            return true;
+        }
+
+        @Override
+        public long getUpBWLimit() {
+            return -1;
+        }
+
+        @Override
+        public long getDownBWLimit() {
+            return -1;
+        }
+
+        @Override
+        public boolean overUpBWLimit() {
+            return false;
+        }
+
+        @Override
+        public boolean overDownBWLimit() {
+            return false;
+        }
+    }
+
     /** Marks the given sub-blocks as received, simulating their arrival. */
     private static void markAll(PartialPiece pp, int start, int count) {
         for (int i = 0; i < count; i++) {

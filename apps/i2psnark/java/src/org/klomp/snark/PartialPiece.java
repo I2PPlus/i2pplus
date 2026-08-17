@@ -127,6 +127,10 @@ class PartialPiece implements Comparable<PartialPiece> {
     private synchronized void createTemp() throws IOException {
         tempfile = SecureFile.createTempFile("piece_" + piece.getId() + '_', null, tempDir);
         raf = new RandomAccessFile(tempfile, "rw");
+        // Pad sub-blocks are marked received without ever being written, so a piece whose last
+        // real sub-block ends early (pad suffix) would otherwise leave the temp file shorter
+        // than the piece and readFully() in getHash()/write() would throw EOFException.
+        raf.setLength(pclen);
     }
 
     /**
