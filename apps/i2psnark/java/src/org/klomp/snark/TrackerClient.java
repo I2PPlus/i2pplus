@@ -1248,7 +1248,7 @@ public class TrackerClient implements Runnable {
                 return null;
             }
             UDPTrackerClient.TrackerResponse fetched =
-                    udptc.scrape(snark.getInfoHash(), 30 * 1000, tr.host, tr.port);
+                    udptc.scrape(snark.getInfoHash(), 15 * 1000, tr.host, tr.port);
             if (fetched == null || fetched.getFailureReason() != null) {
                 return null;
             }
@@ -1281,7 +1281,9 @@ public class TrackerClient implements Runnable {
         if (_log.shouldDebug()) {
             _log.debug("Sending TrackerClient scrape\n* URL: " + url);
         }
-        byte[] fetched = _util.get(url, true, 1, 256, 2048, snark.getInfoHash());
+        // Single-torrent scrapes are ~60 bytes, but trackers may return the full files dict
+        // (about 40 bytes per torrent), so allow up to 128K; only very large trackers exceed it
+        byte[] fetched = _util.get(url, true, 1, 256, 128 * 1024, snark.getInfoHash());
         if (fetched == null || fetched.length == 0) {
             throw new IOException("No scrape response from " + tr.host);
         }
@@ -1348,22 +1350,27 @@ public class TrackerClient implements Runnable {
 
     /**
      * Build the BEP 48 scrape URL from the announce URL: drop any query string and replace the
-     * last path segment with "scrape".
+     * last path segment with "scrape". A trailing slash is stripped first, so the last non-empty
+     * segment is replaced.
      *
      * @param announce the announce URL
      * @return the scrape URL
      */
-    private static String scrapeURL(String announce) {
+    static String scrapeURL(String announce) {
         String base = announce;
         int q = base.indexOf('?');
         if (q >= 0) {
             base = base.substring(0, q);
         }
-        int slash = base.lastIndexOf('/');
-        if (slash < 0) {
-            return base + '/' + SCRAPE;
+        while (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
         }
-        return base.substring(0, slash + 1) + SCRAPE;
+        int schemeEnd = base.indexOf("://");
+        int slash = base.lastIndexOf('/');
+        if (slash >= 0 && (schemeEnd < 0 || slash > schemeEnd + 2)) {
+            return base.substring(0, slash + 1) + SCRAPE;
+        }
+        return base + '/' + SCRAPE;
     }
 
     /**
