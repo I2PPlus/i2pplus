@@ -1289,6 +1289,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (allowed != null && !allowed.contains(Integer.valueOf(p.getId()))) {
                     continue; // BEP 6: only allowed fast pieces while choked
                 }
+                if (peer.dontHave(p.getId())) {
+                    continue; // BEP 54: peer said it no longer has this piece
+                }
                 if (havePieces.get(p.getId()) && !p.isRequested()) {
                     // never ever choose one that's in partialPieces, or we
                     // will create a second one and leak
@@ -1340,6 +1343,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     Piece p = it2.next();
                     if (allowed != null && !allowed.contains(Integer.valueOf(p.getId()))) {
                         continue; // BEP 6: only allowed fast pieces while choked
+                    }
+                    if (peer.dontHave(p.getId())) {
+                        continue; // BEP 54: peer said it no longer has this piece
                     }
                     if (havePieces.get(p.getId())) {
                         // limit number of parallel requests
@@ -1922,6 +1928,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 int savedPiece = pp.getPiece();
                 if (allowed != null && !allowed.contains(Integer.valueOf(savedPiece))) {
                     continue; // BEP 6: only allowed fast pieces while choked
+                }
+                if (peer.dontHave(savedPiece)) {
+                    continue; // BEP 54: peer said it no longer has this piece
                 }
                 if (havePieces.get(savedPiece)) {
                     // this is just a double-check, it should be in there

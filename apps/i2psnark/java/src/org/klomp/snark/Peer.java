@@ -101,6 +101,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private long options;
     private final boolean _isIncoming;
     private volatile boolean _uploadOnly;
+    private final DontHaveMemo _dontHave = new DontHaveMemo();
     private int _totalCommentsSent;
     private int _maxPipeline = PeerState.MIN_PIPELINE;
     private long connected;
@@ -184,6 +185,28 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      */
     public boolean isUploadOnly() {
         return _uploadOnly;
+    }
+
+    /**
+     * Remember that this peer said it no longer has the piece (BEP 54 dont_have), so it is not
+     * re-requested from this peer until the remembered state expires, even if it re-announces HAVE.
+     *
+     * @param piece the piece index
+     * @since 0.9.71+
+     */
+    public void addDontHave(int piece) {
+        _dontHave.add(piece);
+    }
+
+    /**
+     * Whether this peer recently said it does not have the piece (BEP 54 dont_have).
+     *
+     * @param piece the piece index
+     * @return true if within the retention window
+     * @since 0.9.71+
+     */
+    public boolean dontHave(int piece) {
+        return _dontHave.contains(piece);
     }
 
     /** Returns the id of the peer. */

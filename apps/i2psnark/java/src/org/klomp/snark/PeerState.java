@@ -959,6 +959,8 @@ class PeerState implements DataLoader {
             if (bitfield != null) {
                 bitfield.clear(piece);
             }
+            // Remember so the piece is not re-requested from this peer even if it re-haves it
+            peer.addDontHave(piece);
         }
         if (!peer.supportsFast()) {
             out.cancelRequestMessages(piece);
