@@ -7,8 +7,10 @@ package org.klomp.snark.dht;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -24,6 +26,15 @@ class DHTTracker {
 
     private final I2PAppContext _context;
     private final Torrents _torrents;
+
+    /** How long built bloom filters are reused before being rebuilt. */
+    private static final long FILTER_CACHE_TIME = 60 * 1000;
+
+    /** Cached BEP 33 bloom filters per torrent, keyed by info hash. */
+    private final Map<InfoHash, FilterCache> _filterCache = new HashMap<>(16);
+
+    /** How long built bloom filters are reused before being rebuilt. */
+    private final long _filterCacheTime;
     private long _expireTime;
     private final Log _log;
     private volatile boolean _isRunning;
@@ -44,6 +55,9 @@ class DHTTracker {
     private static final int MAX_PEERS_PER_TORRENT = 60;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
     private static final int MAX_TORRENTS = 2000;
+
+    /** Upper bound on cached filter entries; the swarm map holds up to {@link #MAX_TORRENTS}. */
+    private static final int MAX_FILTER_CACHE = MAX_TORRENTS / 4;
 
     /**
      * The maximum expiration period, scaled by how many peers are known:
@@ -70,8 +84,17 @@ class DHTTracker {
      * @param ctx the app context
      */
     DHTTracker(I2PAppContext ctx) {
+        this(ctx, FILTER_CACHE_TIME);
+    }
+
+    /**
+     * @param ctx the app context
+     * @param filterCacheTime how long built bloom filters are reused, milliseconds; for tests
+     */
+    DHTTracker(I2PAppContext ctx, long filterCacheTime) {
         _context = ctx;
         _torrents = new Torrents();
+        _filterCacheTime = filterCacheTime;
         _expireTime = getMaxExpireTime(0);
         _log = _context.logManager().getLog(DHTTracker.class);
     }
@@ -186,21 +209,59 @@ class DHTTracker {
      * @since 0.9.71+
      */
     BloomFilter[] getBloomFilters(InfoHash ih) {
-        Peers peers = _torrents.get(ih);
-        if (peers == null || peers.isEmpty()) {
-            return null;
-        }
-        BloomFilter seeds = new BloomFilter();
-        BloomFilter nons = new BloomFilter();
-        for (Peer peer : peers.values()) {
-            byte[] data = peer.getData();
-            if (peer.isSeed()) {
-                seeds.insert(data);
-            } else {
-                nons.insert(data);
+        synchronized (_filterCache) {
+            // Swarm lookup first so an emptied torrent stops serving stale filters immediately
+            Peers peers = _torrents.get(ih);
+            if (peers == null || peers.isEmpty()) {
+                _filterCache.remove(ih);
+                return null;
             }
+            long now = System.currentTimeMillis();
+            FilterCache cached = _filterCache.get(ih);
+            if (cached != null && now - cached.created < _filterCacheTime) {
+                return cached.filters;
+            }
+            BloomFilter seeds = new BloomFilter();
+            BloomFilter nons = new BloomFilter();
+            for (Peer peer : peers.values()) {
+                byte[] data = peer.getData();
+                if (peer.isSeed()) {
+                    seeds.insert(data);
+                } else {
+                    nons.insert(data);
+                }
+            }
+            // Bound the cache: drop everything stale, then everything if still over
+            if (_filterCache.size() >= MAX_FILTER_CACHE) {
+                Iterator<Map.Entry<InfoHash, FilterCache>> it = _filterCache.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<InfoHash, FilterCache> e = it.next();
+                    if (now - e.getValue().created >= _filterCacheTime) {
+                        it.remove();
+                    }
+                }
+                if (_filterCache.size() >= MAX_FILTER_CACHE) {
+                    _filterCache.clear();
+                }
+            }
+            BloomFilter[] rv = new BloomFilter[] {seeds, nons};
+            _filterCache.put(ih, new FilterCache(rv, now));
+            return rv;
         }
-        return new BloomFilter[] {seeds, nons};
+    }
+
+    /**
+     * Bloom filters for a torrent, with the time they were built, so the per-query rebuild cost
+     * is amortized and the filters are rebuilt once they age out.
+     */
+    private static class FilterCache {
+        final BloomFilter[] filters;
+        final long created;
+
+        FilterCache(BloomFilter[] filters, long created) {
+            this.filters = filters;
+            this.created = created;
+        }
     }
 
     /**
