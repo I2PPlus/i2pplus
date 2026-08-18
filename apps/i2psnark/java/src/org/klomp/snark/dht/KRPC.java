@@ -369,7 +369,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     @SuppressWarnings("unchecked")
     private void explore(NID target, int maxNodes, long maxWait, int parallel) {
-        List<NodeInfo> nodes = _knownNodes.findClosest(target, maxNodes);
+        List<NodeInfo> nodes = removeSelf(_knownNodes.findClosest(target, maxNodes), _myNodeInfo);
         if (nodes.isEmpty()) {
             if (_log.shouldWarn()) _log.info("DHT is empty, cannot explore");
             return;
@@ -479,7 +479,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // at first and we will give up too early
         int maxNodes = 30;
         // Initial set to try, will get added to as we go
-        List<NodeInfo> nodes = _knownNodes.findClosest(iHash, maxNodes);
+        List<NodeInfo> nodes = removeSelf(_knownNodes.findClosest(iHash, maxNodes), _myNodeInfo);
         NodeInfoComparator comp = new NodeInfoComparator(iHash);
         SortedSet<NodeInfo> toTry = new TreeSet<>(comp);
         SortedSet<NodeInfo> heardFrom = new TreeSet<>(comp);
@@ -669,7 +669,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         int rv = 0;
         long start = _context.clock().now();
         InfoHash iHash = new InfoHash(ih);
-        List<NodeInfo> nodes = _knownNodes.findClosest(iHash, max);
+        List<NodeInfo> nodes = removeSelf(_knownNodes.findClosest(iHash, max), _myNodeInfo);
         if (_log.shouldInfo()) _log.info("Found " + nodes.size() + " to announce to for " + iHash);
         for (NodeInfo nInfo : nodes) {
             if (!_isRunning || Thread.currentThread().isInterrupted()) break;
@@ -1080,8 +1080,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     @SuppressWarnings("unchecked")
     private ReplyWaiter sendQuery(NodeInfo nInfo, Map<String, Object> map, boolean repliable) {
+        // Peers may echo our own node entry back to us; drop rather than throw,
+        // which used to kill the DHTFetcher thread and disable DHT lookups.
         if (nInfo.equals(_myNodeInfo)) {
-            throw new IllegalArgumentException("Don't send to ourselves");
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping query to ourselves: " + nInfo);
+            }
+            return null;
         }
         if (_log.shouldDebug()) {
             _log.debug("Sending query to " + nInfo);
@@ -1138,8 +1143,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     @SuppressWarnings("unchecked")
     private boolean sendResponse(NodeInfo nInfo, MsgID msgID, Map<String, Object> map) {
+        // drop rather than throw, see sendQuery()
         if (nInfo.equals(_myNodeInfo)) {
-            throw new IllegalArgumentException("Don't send to ourselves");
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping response to ourselves: " + nInfo);
+            }
+            return false;
         }
         if (_log.shouldDebug()) {
             _log.debug("Sending response to " + nInfo);
@@ -1216,8 +1225,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             return false; // Don't allow DHT to open a closed session
         }
         Hash destHash = dest.calculateHash();
+        // drop rather than throw, see sendQuery(); also covers stale self
+        // entries from a previous run persisted in the DHT file
         if (destHash.equals(_myNodeInfo.getHash())) {
-            throw new IllegalArgumentException("Don't send to ourselves");
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping message to ourselves: " + destHash);
+            }
+            return false;
         }
         byte[] payload = BEncoder.bencode(map);
         if (_log.shouldDebug()) {
@@ -1397,6 +1411,28 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 _log.warn("Received unknown query method: " + method);
             }
         }
+    }
+
+    /**
+     * Remove any entries equal to ourselves from a list of candidate nodes.
+     * Peers may echo our own node entry back to us (we include our NID in every
+     * query), and we must never query, respond to, or announce to ourselves.
+     * Near-misses (same hash with a different NID or port) are kept; they are
+     * distinct nodes and only the exact self entry is dropped here.
+     *
+     * @param nodes candidate nodes, not modified
+     * @param self our own node info
+     * @return a list without any entry equal to self, possibly empty, never null
+     * @since 0.9.71+
+     */
+    static List<NodeInfo> removeSelf(List<NodeInfo> nodes, NodeInfo self) {
+        List<NodeInfo> rv = new ArrayList<>(nodes.size());
+        for (NodeInfo n : nodes) {
+            if (!n.equals(self)) {
+                rv.add(n);
+            }
+        }
+        return rv;
     }
 
     /**
@@ -1765,7 +1801,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldDebug()) {
             _log.debug("Received nodes from " + nInfo + ": " + DataHelper.toString(rv));
         }
-        return rv;
+        return removeSelf(rv, _myNodeInfo);
     }
 
     /**
