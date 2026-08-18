@@ -31,11 +31,14 @@ Changes take effect after restarting I2PSnark.
 
 * i2psnark.maxFilesPerTorrent={n}
   Maximum number of files per torrent permitted when downloading or creating a
-  torrent. [Default is 2000]
+  torrent. Applies to torrents added afterwards; restart not required when
+  changed on the I2PSnark configuration page. [Default is 2000]
 
 * i2psnark.preallocateFiles={true|false}
-  Preallocate the full file sizes on disk when a download starts, to reduce
-  fragmentation. [Default is true]
+  Extend new torrent files to their full size and allocate the space on disk
+  immediately when the torrent starts, rather than growing as data is
+  written. Prevents a full disk from interrupting downloads and avoids
+  fragmentation from pieces arriving out of order. [Default is true]
 
 * i2psnark.smartSort={true|false}
   Sort torrent names using the configured language for correct alphabetical
@@ -62,6 +65,18 @@ Changes take effect after restarting I2PSnark.
 * i2psnark.maxLogMessages={n}
   Maximum number of messages kept in the web interface message area.
   [Default is 50]
+
+* i2psnark.tempDir={/path/to/tempdir}
+  When set to a directory path, incomplete downloads are written to a staging
+  folder in this directory instead of the data directory, and each file is
+  copied into the data directory only when all of its pieces have been
+  downloaded. Useful for keeping partial downloads off the main data volume
+  (for example on a separate, faster or less heavily used disk). The staging
+  directory must have enough free space to hold the largest in-progress
+  downloads. When unset or empty, downloads are written directly to the data
+  directory as before. Applies to torrents added afterwards; restart not
+  required when changed on the I2PSnark configuration page. [Disabled by
+  default]
 
 
 LOGGING

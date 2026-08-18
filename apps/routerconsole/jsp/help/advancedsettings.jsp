@@ -618,7 +618,7 @@
 <tr class=section><th>I2PSnark</th></tr>
 
 <tr class=config><th>i2psnark.maxFilesPerTorrent={n}</th></tr>
-<tr><td><%=intl._t("This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]")%></td></tr>
+<tr><td><%=intl._t("This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards.")%></td></tr>
 
 <tr class=config><th>i2psnark.destCycle={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]")%></td></tr>
@@ -643,6 +643,12 @@
 
 <tr class=config><th>i2psnark.maxLogMessages={n}</th></tr>
 <tr><td><%=intl._t("This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.tempDir={/path/to/tempdir} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]")%></td></tr>
+
+<tr class=config><th>i2psnark.preallocateFiles={true|false}</th></tr>
+<tr><td><%=intl._t("This setting defines whether new torrent files are extended to their full size and the space allocated on disk immediately when the torrent starts, rather than growing as data is written. This prevents a full disk from interrupting downloads and avoids fragmentation from pieces arriving out of order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Default is true]")%></td></tr>
 
 <tr class=section><th><%=intl._t("miscellaneous")%></th></tr>
 
