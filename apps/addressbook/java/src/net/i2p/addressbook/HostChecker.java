@@ -112,6 +112,8 @@ public class HostChecker {
     private static final int DEFAULT_MAX_CONCURRENT = 16;
     /** Cap on outbound tunnels for the shared ping session; pings are a bonus check, each tunnel costs a network build */
     private static final int MAX_SHARED_PING_TUNNELS = 4;
+    /** A host confirmed up within this window stays up when its LeaseSet can't be fetched this cycle */
+    private static final long KEEP_UP_MS = 24 * 60 * 60 * 1000L;
 
     // Configuration property names
     private static final String PROP_PING_INTERVAL = "pingInterval";
@@ -779,6 +781,16 @@ public class HostChecker {
                 removeFromClientTracking(destHash);
                 return result;
             } else {
+                PingResult retained = retainRecentUp(hostname, startTime);
+                if (retained != null) {
+                    synchronized (_pingResults) {
+                        _pingResults.put(hostname, retained);
+                    }
+                    savePingResults();
+                    removeFromClientTracking(destHash);
+                    return retained;
+                }
+
                 PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
@@ -798,6 +810,16 @@ public class HostChecker {
                 _log.warn("HostChecker LeaseSet lookup error for " + hostname + " -> " + e.getMessage());
             }
 
+            PingResult retained = retainRecentUp(hostname, startTime);
+            if (retained != null) {
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, retained);
+                }
+                savePingResults();
+                removeFromClientTracking(destHash);
+                return retained;
+            }
+
             PingResult result = createPingResult(false, startTime, -1, hostname, "[]");
             synchronized (_pingResults) {
                 _pingResults.put(hostname, result);
@@ -807,6 +829,28 @@ public class HostChecker {
             removeFromClientTracking(destHash);
             return result;
         }
+    }
+
+    /**
+     * If the host was confirmed up within the last 24h, keep it up when the
+     * current cycle can't fetch its LeaseSet - an unverifiable host is not a
+     * confirmed-down host.
+     *
+     * @param hostname the host to check
+     * @param now current time for the age comparison and result timestamp
+     * @return a fresh up-result retaining the last response time and LeaseSet
+     *         types, or null when there is nothing to retain
+     */
+    private PingResult retainRecentUp(String hostname, long now) {
+        PingResult existing = _pingResults.get(hostname);
+        if (existing != null && existing.reachable && (now - existing.timestamp) < KEEP_UP_MS) {
+            if (_log.shouldInfo()) {
+                _log.info("HostChecker lset [RETAINED] -> " + hostname + " still up (confirmed " +
+                          ((now - existing.timestamp) / 60000L) + "m ago)");
+            }
+            return createPingResult(true, now, existing.responseTime, hostname, existing.leaseSetTypes);
+        }
+        return null;
     }
 
     /**
