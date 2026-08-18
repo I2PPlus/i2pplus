@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -759,8 +760,10 @@ public class Storage implements Closeable {
      */
     public int indexOf(File file) {
         for (int i = 0; i < _torrentFiles.size(); i++) {
-            File f = _torrentFiles.get(i).finalFile;
-            if (f.equals(file)) {
+            TorrentFile tf = _torrentFiles.get(i);
+            // Match the physical file (staging while incomplete, data dir
+            // after the move) or the final data-directory location
+            if (tf.finalFile.equals(file) || tf.RAFfile.equals(file)) {
                 return i;
             }
         }
@@ -1628,6 +1631,58 @@ public class Storage implements Closeable {
      */
     public File getBase() {
         return _base;
+    }
+
+    /**
+     * The directory this torrent's incomplete files are staged in while
+     * downloading, or null when the staging feature is disabled. Paths
+     * inside it mirror the data-directory layout of the torrent.
+     *
+     * @since 0.9.71+
+     */
+    public File getStagingDir() {
+        return _stagingBase;
+    }
+
+    /**
+     * Lists a directory within the torrent, merging the staging tree while
+     * the download is incomplete, so completed files already moved to the
+     * data directory and files still staged in the temp dir both appear.
+     * Entries are deduplicated by name, data-directory entries first.
+     *
+     * @param pathInTorrent the directory path within the torrent, "/" or empty for the root
+     * @return the merged children, or null if neither tree contains the directory
+     * @since 0.9.71+
+     */
+    public File[] listMerged(String pathInTorrent) {
+        boolean root = pathInTorrent.equals("/") || pathInTorrent.isEmpty();
+        File dataDir = root ? _base : new File(_base, pathInTorrent);
+        File[] data = dataDir.isDirectory() ? dataDir.listFiles() : null;
+        if (_stagingBase == null || complete()) {
+            return data;
+        }
+        File stagingDir = root ? _stagingBase : new File(_stagingBase, pathInTorrent);
+        File[] staging = stagingDir.isDirectory() ? stagingDir.listFiles() : null;
+        if (staging == null || staging.length == 0) {
+            return data;
+        }
+        if (data == null || data.length == 0) {
+            return staging;
+        }
+        Set<String> names = new HashSet<>(data.length);
+        for (File f : data) {
+            names.add(f.getName());
+        }
+        List<File> merged = new ArrayList<>(data.length + staging.length);
+        for (File f : data) {
+            merged.add(f);
+        }
+        for (File f : staging) {
+            if (names.add(f.getName())) {
+                merged.add(f);
+            }
+        }
+        return merged.toArray(new File[merged.size()]);
     }
 
     /**

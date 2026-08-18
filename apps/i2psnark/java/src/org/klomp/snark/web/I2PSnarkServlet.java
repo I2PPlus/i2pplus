@@ -374,15 +374,35 @@ public class I2PSnarkServlet extends BasicServlet {
         if (snark != null) {
             Storage storage = snark.getStorage();
             if (storage != null) {
-                File sbase = storage.getBase();
                 String child = pathInContext.substring(top.getPath().length());
-                return new File(sbase, child);
+                return resolveTorrentPath(storage, child);
             }
         }
 
         return new File(_resourceBase, pathInContext);
 
         }
+    }
+
+    /**
+     * The on-disk location of a path within a torrent. While an incomplete
+     * download is staged in the temp dir, the data-directory tree may not
+     * exist yet; paths are then resolved against the staging tree, which
+     * mirrors the data-directory layout.
+     *
+     * @param storage the torrent's storage
+     * @param pathInTorrent the path within the torrent, "/" or empty for the root
+     * @return the physical file
+     * @since 0.9.71+
+     */
+    private static File resolveTorrentPath(Storage storage, String pathInTorrent) {
+        File sbase = storage.getBase();
+        File r = pathInTorrent.equals("/") ? sbase : new File(sbase, pathInTorrent);
+        if (!r.exists() && storage.getStagingDir() != null) {
+            File staging = storage.getStagingDir();
+            r = pathInTorrent.equals("/") ? staging : new File(staging, pathInTorrent);
+        }
+        return r;
     }
 
     /**
@@ -5089,9 +5109,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (snark != null) {
             Storage storage = snark.getStorage();
             if (storage != null) {
-                File sbase = storage.getBase();
-                if (pathInTorrent.equals("/")) {r = sbase;}
-                else {r = new File(sbase, pathInTorrent);}
+                r = resolveTorrentPath(storage, pathInTorrent);
             } else {r = new File("");} // magnet, dummy}
         } else {r = new File("");} // dummy
 
@@ -5180,7 +5198,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         File[] ls = null;
-        if (r.isDirectory()) {ls = r.listFiles();} // if r is not a directory, we are only showing torrent info section
+        if (r.isDirectory()) {ls = storage != null ? storage.listMerged(pathInTorrent) : r.listFiles();} // if r is not a directory, we are only showing torrent info section
         if (ls == null) {
             // We are only showing the torrent info section unless audio or video...
             if (storage != null && storage.complete()) {
@@ -6122,10 +6140,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (snark == null) {return null;}
         Storage storage = snark.getStorage();
         if (storage == null) {return null;}
-        File sbase = storage.getBase();
-        File r;
-        if (pathInTorrent.equals("/")) {r = sbase;}
-        else {r = new File(sbase, pathInTorrent);}
+        File r = resolveTorrentPath(storage, pathInTorrent);
         if (!r.isDirectory()) {return null;}
         // precompute remaining for all files for efficiency
         long[] remainingArray = storage.remaining();

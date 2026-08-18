@@ -17,7 +17,9 @@ import java.nio.file.NotDirectoryException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
@@ -299,6 +301,7 @@ public class StorageTest {
         MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH * 2, PIECE_LENGTH * 2);
         RecordingListener l = new RecordingListener();
         Storage s = newStorage(mi, l);
+        assertNull(s.getStagingDir());
         s.check(0, null);
         assertTrue(s.complete());
         assertEquals(0, s.needed());
@@ -1292,11 +1295,26 @@ public class StorageTest {
         s.check(0, null);
         File staging = Storage.getStagingBase(tempDir.getAbsolutePath(), s.getBaseName(), mi);
         assertTrue(staging.isDirectory());
+        assertEquals(staging, s.getStagingDir());
         // zero-length work files in staging, nothing in the data dir
         assertFalse(new File(_dataDir, "a.dat").exists());
         assertFalse(new File(_dataDir, "b.dat").exists());
         assertTrue(new File(staging, "a.dat").isFile());
         assertTrue(new File(staging, "b.dat").isFile());
+        // indexOf resolves the staging (physical) location as well as the
+        // final data-dir path, so a staging-tree listing still shows status
+        assertEquals(0, s.indexOf(new File(staging, "a.dat")));
+        assertEquals(1, s.indexOf(new File(staging, "b.dat")));
+        assertEquals(0, s.indexOf(new File(_dataDir, "a.dat")));
+        assertEquals(1, s.indexOf(new File(_dataDir, "b.dat")));
+        // the merged listing shows the staged files although the data dir is empty
+        File[] merged = s.listMerged("/");
+        assertEquals(2, merged.length);
+        Set<String> mergedNames = new HashSet<>();
+        for (File f : merged) {
+            mergedNames.add(f.getName());
+        }
+        assertEquals(new HashSet<>(Arrays.asList("a.dat", "b.dat")), mergedNames);
         // zero-length files force a full recheck; nothing hashes, nothing completes
         assertEquals(0, l.checked.size());
         assertEquals(4, s.needed());
@@ -1337,6 +1355,14 @@ public class StorageTest {
         // b.dat is still staged
         assertTrue(new File(staging, "b.dat").exists());
         assertFalse(finalB.exists());
+        // the merged listing shows the moved file and the staged one
+        File[] merged = s.listMerged("/");
+        assertEquals(2, merged.length);
+        Set<String> mergedNames = new HashSet<>();
+        for (File f : merged) {
+            mergedNames.add(f.getName());
+        }
+        assertEquals(new HashSet<>(Arrays.asList("a.dat", "b.dat")), mergedNames);
         // the remaining pieces complete b.dat
         assertTrue(s.putPiece(fullPiece(mi, 2)));
         assertTrue(s.putPiece(fullPiece(mi, 3)));
@@ -1414,7 +1440,13 @@ public class StorageTest {
         s.check(0, null);
         // work file in staging, nothing in the data dir, nothing hashed
         assertFalse(base.exists());
-        assertTrue(new File(Storage.getStagingBase(tempDir.getAbsolutePath(), s.getBaseName(), mi), "single.dat").isFile());
+        File staging = Storage.getStagingBase(tempDir.getAbsolutePath(), s.getBaseName(), mi);
+        File workFile = new File(staging, "single.dat");
+        assertTrue(workFile.isFile());
+        assertEquals(staging, s.getStagingDir());
+        // indexOf resolves both the staging (physical) and final locations
+        assertEquals(0, s.indexOf(workFile));
+        assertEquals(0, s.indexOf(base));
         assertEquals(0, l.checked.size());
         assertEquals(2, s.needed());
         // completing the torrent moves the file into the data dir
