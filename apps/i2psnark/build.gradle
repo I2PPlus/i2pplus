@@ -340,8 +340,17 @@ task bundle(type: Exec) {
     workingDir rootDir
     commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/i2psnark/java', '--build-dir', buildDirPath.absolutePath
 }
-compileJava.dependsOn bundle
-war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar'
+// The I2PSnark Bridge webextension XPI: the browser-side magnet:
+    // protocol handler with add-notifications, built from the sources in
+    // res/browser/i2psnark-bridge/ (an XPI is a zip of the extension files)
+    task i2psnarkBridgeXpi(type: Zip) {
+        description = 'Build the I2PSnark Bridge webextension XPI.'
+        archiveFileName = 'i2psnark-bridge.xpi'
+        destinationDirectory = buildDir
+        from("${rootDir}/apps/i2psnark/res/browser/i2psnark-bridge")
+    }
+    compileJava.dependsOn bundle
+    war.dependsOn bundle, ':apps:i2ptunnel:i2ptunnelJar', i2psnarkBridgeXpi
 
 war {
     rootSpec.exclude('**/*.jar')
@@ -355,6 +364,12 @@ war {
     // ant war: res/ -> .res, plus the routerconsole js (ant copies them in)
     from('res', {
         into ".res"
+    })
+    // prebuilt I2PSnark Bridge webextension, fetched from /i2psnark/.res/browser/
+    // by the logged-in user and opened in the running browser (the extension
+    // sources ship in .res/browser/i2psnark-bridge/ via the res/ rule above)
+    from({ i2psnarkBridgeXpi.archiveFile }, {
+        into '.res/browser'
     })
     from("${rootDir}/apps/routerconsole/jsp/js/onVisible.js", {
         into '.res/js'

@@ -487,6 +487,22 @@ public class I2PSnarkServlet extends BasicServlet {
             return;
         }
 
+        // Browser API: nonce-free add of magnet links, torrent URLs, or info hashes.
+        // POST only; authorized by the enable flag plus loopback / allowed hosts / API key.
+        if ("/_add".equals(path)) {
+            handleBrowserApiAdd(req, resp);
+            return;
+        }
+
+        // Magnet handler page for the I2PSnark Bridge extension: the browser opens
+        // this page when a magnet: link is handed to the extension; the page's
+        // magnetHandler.js script POSTs the magnet to /_add on the same origin and
+        // the extension shows a notification. GET only; no server-side side effects.
+        if ("/magnet".equals(path)) {
+            handleMagnetPage(req, resp);
+            return;
+        }
+
         boolean isIndex = (path.isEmpty() || "/".equals(path) || "index.jsp".equals(path));
 
         // Handle non index, configure, or known special paths
@@ -547,7 +563,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (nonce != null) {
             if (( "POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
                 isValidNonce(nonce)) {
-                processRequest(req);
+                if (processRequest(req, resp)) {return;} // response fully handled (e.g. install redirect)
             } else if (!(method.equals("POST") || "Clear".equals(req.getParameter("action")))) {
                 // Lynx bug?
                 _manager.addMessage("Bad form method, POST required");
@@ -2012,15 +2028,14 @@ public class I2PSnarkServlet extends BasicServlet {
      * Process HTTP request to handle torrent-related actions.
      * Delegates to specific handlers based on the action parameter.
      */
-    private void processRequest(HttpServletRequest req) {
+    private boolean processRequest(HttpServletRequest req, HttpServletResponse resp) {
         String action = extractAction(req);
-        if (action == null) {return;} // No action specified
+        if (action == null) {return false;} // No action specified
 
         switch (action) {
             case "Add": handleAdd(req);
                 break;
-            case "Save": handleSave(req);
-                break;
+            case "Save": return handleSave(req, resp);
             case "SaveTrackers": handleSaveTrackers(req);
                 break;
             case "SaveCreateFilters": handleSaveCreateFilters(req);
@@ -2046,6 +2061,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     _manager.addMessage("Unknown POST action: \"" + action + '\"');
                 }
         }
+        return false;
     }
 
     /**
@@ -2094,6 +2110,155 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {
             _manager.addMessage(_t("Enter URL or select torrent file"));
         }
+    }
+
+    /**
+     * Nonce-free browser API: adds a magnet link, torrent URL, info hash, or local
+     * torrent file path. POST only. Authorized when the browser API is enabled and
+     * the client is loopback, in the configured allowed hosts list, or presents a
+     * valid API key. Replies with a single text/plain status line.
+     *
+     * @param req the HTTP request
+     * @param resp the HTTP response
+     * @throws IOException on write failure
+     * @since 0.9.71+
+     */
+    private void handleBrowserApiAdd(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String msg;
+        if (!"POST".equals(req.getMethod())) {
+            resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            resp.setContentType("text/plain; charset=UTF-8");
+            resp.getWriter().println("ERR: POST required");
+            return;
+        }
+        if (!browserApiAuthorized(req)) {
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            resp.setContentType("text/plain; charset=UTF-8");
+            resp.getWriter().println("ERR: not authorized (browser API disabled, host not allowed, or bad API key)");
+            return;
+        }
+        // nofilter_ prefix bypasses the XSSFilter parameter whitelist, which
+        // strips values containing '&' (present in every real magnet link)
+        String url = req.getParameter("nofilter_newURL");
+        if (url == null || url.trim().isEmpty()) {
+            url = req.getParameter("nofilter_magnet");
+        }
+        if (url == null || url.trim().isEmpty()) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.setContentType("text/plain; charset=UTF-8");
+            resp.getWriter().println("ERR: missing newURL or magnet parameter");
+            return;
+        }
+        url = url.trim();
+        String name = browserApiName(url);
+        if (name == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.setContentType("text/plain; charset=UTF-8");
+            resp.getWriter().println("ERR: unsupported URL or info hash");
+            return;
+        }
+        File dataDir = _manager.getDataDir();
+        handleAddURL(url, dataDir, new RequestWrapper(req));
+        resp.setContentType("text/plain; charset=UTF-8");
+        resp.getWriter().println("OK: " + name);
+    }
+
+    /**
+     * The page the browser opens when a magnet: link is handed to the I2PSnark
+     * Bridge extension (registered via protocol_handlers in the extension
+     * manifest). The page itself performs no server-side action; the external
+     * script magnetHandler.js reads the magnet from the URL, POSTs it to the
+     * browser API /_add on the same origin, displays the result, and dispatches
+     * a CustomEvent the extension's content script forwards to the background
+     * script for a browser notification.
+     *
+     * <p>The magnet arrives in the URL, so the nofilter_ parameter name is
+     * required: the XSS filter strips '&' from filtered parameter values, and
+     * every real magnet link contains '&amp;'.
+     *
+     * <p>GET only; the existing /_add authorization applies to the actual add.
+     *
+     * @param req the HTTP request
+     * @param resp the HTTP response
+     * @throws IOException on write failure
+     * @since 0.9.72+
+     */
+    private void handleMagnetPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (!"GET".equals(req.getMethod()) && !"HEAD".equals(req.getMethod())) {
+            resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            return;
+        }
+        resp.setContentType("text/html; charset=UTF-8");
+        resp.setHeader("X-Content-Type-Options", "nosniff");
+        resp.setHeader("X-Frame-Options", "DENY");
+        resp.getWriter().write(
+            "<!DOCTYPE HTML>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n" +
+            "<title>I2PSnark</title>\n</head>\n<body>\n" +
+            "<p id=\"status\">Adding to I2PSnark&hellip;</p>\n" +
+            "<script src=\"" + _contextPath + WARBASE + "js/magnetHandler.js\"></script>\n" +
+            "</body>\n</html>\n");
+    }
+
+    /**
+     * Whether the browser API request is authorized. Requires the API to be
+     * enabled and the client to be loopback, on the allowed hosts list, or to
+     * present the configured API key.
+     */
+    private boolean browserApiAuthorized(HttpServletRequest req) {
+        if (!_manager.browserApiEnabled()) {return false;}
+        boolean hostAllowed = _manager.isBrowserApiHost(req.getRemoteAddr());
+        String key = req.getParameter("apiKey");
+        String apikey = _manager.util().getAPIKey();
+        return browserApiAuthorized(true, hostAllowed, key, apikey);
+    }
+
+    /**
+     * Pure decision function for browser API authorization (unit-testable):
+     * requires the API to be enabled and the client to be an allowed host or
+     * to present the configured API key.
+     *
+     * @param enabled the browser API enable flag
+     * @param hostAllowed whether the client address is loopback or on the allowlist
+     * @param providedKey the apiKey request parameter, may be null
+     * @param configuredKey the configured API key, may be null or empty
+     * @return whether the request is authorized
+     * @since 0.9.71+
+     */
+    public static boolean browserApiAuthorized(boolean enabled, boolean hostAllowed, String providedKey, String configuredKey) {
+        if (!enabled) {return false;}
+        if (hostAllowed) {return true;}
+        return providedKey != null && configuredKey != null && !configuredKey.isEmpty()
+               && DataHelper.eqCT(providedKey, configuredKey);
+    }
+
+    /**
+     * Validate the browser API payload and extract a display name for the OK reply.
+     * Mirrors the formats accepted by handleAddURL().
+     *
+     * @param url the URL, magnet, info hash, or file path
+     * @return a display name, or null if unsupported
+     */
+    private String browserApiName(String url) {
+        if (url.startsWith(MagnetURI.MAGNET) || url.startsWith(MagnetURI.MAGGOT)) {
+            try {
+                MagnetURI magnet = new MagnetURI(_manager.util(), url);
+                String name = magnet.getName();
+                return (name != null && !name.isEmpty()) ? name : url;
+            } catch (IllegalArgumentException iae) {
+                return null;
+            }
+        } else if (url.startsWith("http://") || url.startsWith("https://")) {
+            if (!isI2PTracker(url)) {return null;}
+            return url;
+        } else if (isValidHexInfoHash(url) || isValidBase32InfoHash(url)) {
+            return url.toUpperCase(Locale.US);
+        } else if (isValidV2InfoHash(url)) {
+            return null;
+        } else if (url.endsWith(".torrent")) {
+            String path = url.startsWith("file://") ? url.substring(7) : url;
+            if (new File(path).isFile()) {return url;}
+        }
+        return null;
     }
 
     /**
@@ -2241,25 +2406,28 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Validates if a string is a valid 40-hex character info hash.
      * @return whether valid hex info hash
+     * @since 0.9.71+
      */
-    private boolean isValidHexInfoHash(String s) {
-        return s.length() == 40 && HEX_PATTERN.matcher(s).matches();
+    public static boolean isValidHexInfoHash(String s) {
+        return s != null && s.length() == 40 && HEX_PATTERN.matcher(s).matches();
     }
 
     /**
      * Validates if a string is a valid 32-base32 character info hash.
      * @return whether valid base32 info hash
+     * @since 0.9.71+
      */
-    private boolean isValidBase32InfoHash(String s) {
-        return s.length() == 32 && BASE32_PATTERN.matcher(s).matches();
+    public static boolean isValidBase32InfoHash(String s) {
+        return s != null && s.length() == 32 && BASE32_PATTERN.matcher(s).matches();
     }
 
     /**
      * Validates if string is version 2 hex multihash (68 characters starting with "1220").
      * @return whether valid v2 info hash
+     * @since 0.9.71+
      */
-    private boolean isValidV2InfoHash(String s) {
-        return s.length() == 68 && s.startsWith("1220") && HEX_PATTERN.matcher(s).matches();
+    public static boolean isValidV2InfoHash(String s) {
+        return s != null && s.length() == 68 && s.startsWith("1220") && HEX_PATTERN.matcher(s).matches();
     }
 
     /**
@@ -2492,7 +2660,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param req the HTTP request with config parameters
      */
-    private void handleSave(HttpServletRequest req) {
+    private boolean handleSave(HttpServletRequest req, HttpServletResponse resp) {
         // Extract parameters and update configuration
         boolean filesPublic = req.getParameter("filesPublic") != null;
         boolean autoStart = req.getParameter("autoStart") != null;
@@ -2537,6 +2705,54 @@ public class I2PSnarkServlet extends BasicServlet {
         try {
             setResourceBase(_manager.getDataDir());
         } catch (ServletException ignored) { /* ignored */ }
+        String browserApiHosts = req.getParameter("nofilter_browserApiHosts");
+        if (browserApiHosts != null) {
+            _manager.setBrowserApi(req.getParameter("browserApi") != null, browserApiHosts);
+        }
+        if (req.getParameter("installBrowserApi") != null) {
+            return installBrowserApi(req, resp);
+        }
+        return false;
+    }
+
+    /**
+     * Installs the I2PSnark Bridge extension that forwards magnet links to the
+     * browser API endpoint. Called from the main config save when the install
+     * button was used; enables the API if it is off.
+     *
+     * <p>The server writes no files: the browser is redirected to the bundled
+     * extension XPI, which opens the install prompt in the logged-in user's
+     * own browser session.
+     *
+     * @param req the HTTP request
+     * @param resp the HTTP response
+     * @return true if the response was fully handled (redirect sent)
+     */
+    private boolean installBrowserApi(HttpServletRequest req, HttpServletResponse resp) {
+        if (!_manager.browserApiEnabled()) {
+            _manager.setBrowserApi(true, _manager.getBrowserApiHosts());
+            _manager.addMessage(_t("Browser API enabled."));
+        }
+        String url = browserApiBaseUrl(req) + WARBASE + "browser/i2psnark-bridge.xpi";
+        try {
+            resp.sendRedirect(url);
+            return true;
+        } catch (IOException ioe) {
+            _manager.addMessageAndPrint(_t("Failed to open the I2PSnark Bridge extension: {0}", ioe.getMessage()));
+            return false;
+        }
+    }
+
+    /**
+     * The console base URL for this request, e.g. http://127.0.0.1:7657/i2psnark
+     * (no trailing slash), used as the default endpoint of the installed handler.
+     */
+    private String browserApiBaseUrl(HttpServletRequest req) {
+        String url = req.getRequestURL().toString();
+        String context = _contextPath;
+        int idx = url.indexOf(context);
+        if (idx > 0) {return url.substring(0, idx + context.length());}
+        return url;
     }
 
     /**
@@ -2703,8 +2919,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.addMessage(_t("Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\"", baseFile.getName()));
             }
         } catch (IOException ioe) {
-            _manager.addMessage(_t("Error creating a torrent for \"{0}\"", baseFile.getAbsolutePath()) + ": " + ioe);
-            _log.error("Error creating a torrent", ioe);
+            String msg = ioe.getMessage() != null ? ioe.getMessage() : ioe.toString();
+            _manager.addMessage(_t("Error creating a torrent for \"{0}\"", baseFile.getAbsolutePath()) + ": " + msg);
+            _log.warn("Error creating a torrent: " + msg);
         }
     }
 
@@ -4167,7 +4384,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
            .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
-            .append("\" value=\"").append(_manager.getMaxFilesPerTorrent()).append("\" spellcheck=false disabled></label></span><br>\n")
+           .append("\" value=\"").append(_manager.getMaxFilesPerTorrent()).append("\" spellcheck=false disabled></label></span><br>\n")
            .append("</div></td></tr>\n");
 
 /* i2cp/tunnel configuration */
@@ -4291,23 +4508,107 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.util().setVaryOutboundHops(false);
             }
         }
-        String spacer = "<tr class=spacer><td></td></tr>\n";
         buf.append("<span class=configOption id=i2cpOptions><label><b>")
            .append(_t("I2CP options"))
            .append("</b> <input type=text id=i2cpOpts name=i2cpOpts value=\"")
            .append(opts.toString().trim()).append("\" size=60></label></span>\n")
-           .append("</div>\n</td></tr>\n")
-           .append(spacer);
+           .append("</div>\n</td></tr>\n");
+
+/* browser integration */
+
+        buf.append("<tr><th class=suboption>")
+           .append(_t("Browser Integration"))
+           .append("</th></tr><tr><td>\n<div class=optionlist>\n")
+           .append("<span class=configOption><label for=browserApi><b>")
+           .append(_t("Enable browser API"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
+           .append("name=browserApi id=browserApi ")
+           .append((_manager.browserApiEnabled() ? "checked " : ""))
+           .append("title=\"")
+           .append(_t("Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"))
+           .append("\"></span><br>\n")
+           .append("<span class=configOption><label for=browserApiHosts><b>")
+           .append(_t("Allowed hosts"))
+           .append("</b> </label><input type=text name=nofilter_browserApiHosts id=browserApiHosts size=40 value=\"")
+           .append(DataHelper.escapeHTML(_manager.getBrowserApiHosts()))
+           .append("\" spellcheck=false title=\"")
+           .append(_t("Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"))
+           .append("\"></span><br>\n")
+           .append("<span class=configOption><label for=browserApiKey><b>")
+           .append(_t("API key"))
+           .append("</b> </label><input type=text name=apiKey id=browserApiKey size=40 value=\"\" autocomplete=off title=\"")
+           .append(_t("Optional password for remote access, bypasses host allow list"))
+           .append("\"></span>\n")
+           .append("<input type=hidden name=apiTarget value=\"")
+           .append(DataHelper.escapeHTML(browserApiTarget()))
+           .append("\">\n")
+           .append("</div></td></tr>\n");
 
 /* save config */
 
-        buf.append("<tr><td><input type=submit class=accept value=\"")
+        String spacer = "<tr class=spacer><td></td></tr>\n";
+        buf.append(spacer)
+           .append("<tr><td>");
+        if (isFirefoxFamilyUserAgent(req.getHeader("User-Agent"))) {
+            buf.append("<input type=submit name=installBrowserApi class=accept value=\"")
+               .append(_t("Install browser handler"))
+               .append("\" title=\"")
+               .append(_t("Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"))
+               .append("\" style=float:left> ");
+        } else {
+            String script = isWindowsUserAgent(req.getHeader("User-Agent"))
+                ? "install-i2psnark-browser-handler.ps1"
+                : "install-i2psnark-browser-handler.sh";
+            String title = isWindowsUserAgent(req.getHeader("User-Agent"))
+                ? _t("Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser")
+                : _t("Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser");
+            buf.append("<a class=accept href=\"")
+               .append(_contextPath).append(WARBASE).append("browser/").append(script)
+               .append("\" title=\"").append(title)
+               .append("\" style=float:left>")
+               .append(_t("Download browser handler script"))
+               .append("</a> ");
+        }
+        buf.append("<input type=submit class=accept value=\"")
            .append(_t("Save configuration"))
            .append("\" name=foo></td></tr>\n")
            .append(spacer).append("</table></div></div></form>");
         out.append(buf);
         out.flush();
         buf.setLength(0);
+    }
+
+    /**
+     * Whether the given User-Agent header indicates a Firefox-family browser
+     * (Firefox, LibreWolf, Waterfox, Pale Moon, Tor Browser), which can install
+     * the I2PSnark Bridge extension. Unit-testable; other browsers get the
+     * installer-script fallback instead.
+     *
+     * @param ua the User-Agent header, may be null
+     * @return true if the UA names Firefox
+     * @since 0.9.72+
+     */
+    public static boolean isFirefoxFamilyUserAgent(String ua) {
+        return ua != null && ua.contains("Firefox");
+    }
+
+    /**
+     * Whether the given User-Agent header indicates Windows, which gets the
+     * PowerShell installer script instead of the shell one.
+     *
+     * @param ua the User-Agent header, may be null
+     * @return true if the UA names Windows
+     * @since 0.9.72+
+     */
+    public static boolean isWindowsUserAgent(String ua) {
+        return ua != null && ua.contains("Windows");
+    }
+
+    /** The API key target for the Browser API panel, defaulting to the context name. */
+    private String browserApiTarget() {
+        String t = _manager.util().getAPITarget();
+        if (t != null && !t.isEmpty()) {return t;}
+        return _contextName;
     }
 
     /**

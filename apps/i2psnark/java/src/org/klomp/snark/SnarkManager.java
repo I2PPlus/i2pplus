@@ -11,6 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -128,6 +130,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private UpdateHandler _uhandler;
     private SimpleTimer2.TimedEvent _idleChecker;
     private volatile boolean _randomizeStartupDelay = true;
+    private volatile boolean _browserApiEnabled;
+    /** Raw comma-separated config value, for the config form. */
+    private volatile String _browserApiHosts = "";
+    /** Resolved allowed hosts (excluding loopback, which is always allowed). */
+    private volatile Set<InetAddress> _browserApiHostSet = new HashSet<>();
 
     public static final String PROP_I2CP_HOST = "i2psnark.i2cpHost";
     public static final String PROP_I2CP_PORT = "i2psnark.i2cpPort";
@@ -279,6 +286,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.67
      */
     private static final String PROP_API_PREFIX = "i2psnark.apikey.";
+
+    /**
+     * Whether the nonce-free browser API (magnet/torrent add) is enabled.
+     * @since 0.9.71+
+     */
+    public static final String PROP_BROWSER_API = "i2psnark.browserApi";
+
+    /**
+     * Comma-separated hosts (IPs or hostnames) allowed to use the browser API
+     * without a nonce, in addition to loopback. Ignored when PROP_BROWSER_API is false.
+     * @since 0.9.71+
+     */
+    public static final String PROP_BROWSER_API_HOSTS = "i2psnark.browserApiHosts";
 
     /**
      * @since 0.9.61+
@@ -1705,6 +1725,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
 
+        _browserApiEnabled = Boolean.parseBoolean(_config.getProperty(PROP_BROWSER_API, "false"));
+        _browserApiHosts = _config.getProperty(PROP_BROWSER_API_HOSTS, "");
+        _browserApiHostSet = resolveBrowserApiHosts(_browserApiHosts);
+
         File dd = getDataDir();
 
         if (dd.isDirectory()) {
@@ -2395,6 +2419,138 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public List<String> getPrivateTrackers() {
         return getListConfig(PROP_PRIVATETRACKERS, null);
+    }
+
+    /**
+     * Whether the nonce-free browser API for adding torrents is enabled.
+     * @since 0.9.71+
+     */
+    public boolean browserApiEnabled() {
+        return _browserApiEnabled;
+    }
+
+    /**
+     * The raw comma-separated browser API allowed hosts config, for the config form.
+     * @return non-null, may be empty
+     * @since 0.9.71+
+     */
+    public String getBrowserApiHosts() {
+        return _browserApiHosts;
+    }
+
+    /**
+     * Set and persist the browser API enable flag and allowed hosts list.
+     * The change takes effect immediately; no restart required.
+     *
+     * @param enable whether the browser API is enabled at all
+     * @param hosts comma-separated hostnames or IPs, may be null/empty
+     * @since 0.9.71+
+     */
+    public void setBrowserApi(boolean enable, String hosts) {
+        synchronized (_configLock) {
+            if (hosts == null) {hosts = "";}
+            hosts = hosts.trim();
+            if (enable != _browserApiEnabled || !hosts.equals(_browserApiHosts)) {
+                _browserApiEnabled = enable;
+                _browserApiHosts = hosts;
+                _browserApiHostSet = resolveBrowserApiHosts(hosts);
+                _config.setProperty(PROP_BROWSER_API, Boolean.toString(enable));
+                if (hosts.isEmpty()) {
+                    _config.remove(PROP_BROWSER_API_HOSTS);
+                } else {
+                    _config.setProperty(PROP_BROWSER_API_HOSTS, hosts);
+                }
+                saveConfig();
+            }
+        }
+    }
+
+    /**
+     * Set and persist the API key for remote access, mirroring the apiKey/apiTarget
+     * handling in updateConfig. Empty key clears nothing (existing behavior).
+     *
+     * @param target the API target base path
+     * @param key the API key
+     * @since 0.9.71+
+     */
+    public void setAPI(String target, String key) {
+        synchronized (_configLock) {
+            if (key != null && !key.isEmpty() && target != null && !target.isEmpty()) {
+                key = DataHelper.stripHTML(key.trim());
+                target = DataHelper.stripHTML(target.trim());
+                String oldk = _util.getAPIKey();
+                String oldt = _util.getAPITarget();
+                if (!key.equals(oldk) || !target.equals(oldt)) {
+                    _config.setProperty(PROP_API_PREFIX + target, key);
+                    _util.setAPI(target, key);
+                    addMessage(_t("API key updated."));
+                    saveConfig();
+                }
+            }
+        }
+    }
+
+    /**
+     * Whether the given remote address may use the browser API without a nonce.
+     * Loopback is always allowed; otherwise the host must be listed in the
+     * PROP_BROWSER_API_HOSTS config. Does not check the enable flag.
+     *
+     * @param host remote address string from the request
+     * @return whether allowed
+     * @since 0.9.71+
+     */
+    public boolean isBrowserApiHost(String host) {
+        if (host == null) {return false;}
+        if (isLoopbackHost(host)) {return true;}
+        Set<InetAddress> allowed = _browserApiHostSet;
+        if (allowed.isEmpty()) {return false;}
+        try {
+            InetAddress addr = InetAddress.getByName(host);
+            return allowed.contains(addr);
+        } catch (UnknownHostException uhe) {
+            return false;
+        }
+    }
+
+    /**
+     * Parse a comma-separated host list into resolved addresses.
+     * Unresolvable or malformed entries are skipped; loopback entries are
+     * redundant (always allowed) and skipped.
+     *
+     * @param hosts comma-separated hostnames or IPs, may be null
+     * @return non-null set of resolved addresses, may be empty
+     * @since 0.9.71+
+     */
+    public static Set<InetAddress> resolveBrowserApiHosts(String hosts) {
+        Set<InetAddress> rv = new HashSet<>(8);
+        if (hosts == null || hosts.isEmpty()) {return rv;}
+        StringTokenizer tok = new StringTokenizer(hosts, ",");
+        while (tok.hasMoreTokens()) {
+            String entry = tok.nextToken().trim();
+            if (entry.isEmpty() || isLoopbackHost(entry)) {continue;}
+            try {
+                InetAddress[] addrs = InetAddress.getAllByName(entry);
+                for (InetAddress addr : addrs) {
+                    rv.add(addr);
+                }
+            } catch (UnknownHostException uhe) {
+                continue;
+            }
+        }
+        return rv;
+    }
+
+    /**
+     * IPv4 loopback (127/8), IPv6 loopback, and "localhost".
+     * @since 0.9.71+
+     */
+    public static boolean isLoopbackHost(String host) {
+        if (host == null) {return false;}
+        if (host.equals("localhost")) {return true;}
+        if (host.startsWith("127.")) {return true;}
+        if (host.equals("::1")) {return true;}
+        if (host.equals("0:0:0:0:0:0:0:1")) {return true;}
+        return false;
     }
 
     /**

@@ -4,6 +4,8 @@
  * @description Message type identifiers used to coordinate fetch and abort requests
  * between the main thread and the snarkWork worker. Each fetch request carries a
  * requestId so multiple requests can be in flight concurrently.
+ * @author dr|z3d
+ * @license AGPL3 or later
  */
 
 /**

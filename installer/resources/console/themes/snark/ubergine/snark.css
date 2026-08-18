@@ -258,7 +258,7 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 #totals #torrentCount.counter{margin-left:10px;border-left:var(--border_inner)}
 
 /* peer count */
-.peerCount{padding-right:0;width:1%;min-width:110px;white-space:nowrap;font-weight:700}
+.peerCount{padding-right:0;width:1%;min-width:109px;white-space:nowrap;font-weight:700}
 th.peerCount:empty::after{min-width:100px;display:inline-block;content:""}
 th.peerCount img{margin-left:-4px}
 td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-weight:700}
@@ -472,7 +472,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #dirInfo img[src$="priority.png"]{margin:0}
 #setPriority{border-top:1px solid #000}
 #setPriority th{text-align:right}
-#togglePriorities{border-bottom:var(--border_inner);border-top}
+#togglePriorities{border-bottom:var(--border_inner);border-top:var(--border_inner)}
 #togglePriorities th{border-bottom:var(--border_inner);border-top:var(--border_inner);background:var(--th)}
 
 /* panel titles */
@@ -525,7 +525,7 @@ input,input[type=submit] textarea,select,input[type=text],input.r,input[name="no
 input[type=text],input.r,input[name="nofilter_dataDir"]{padding:6px 8px;box-shadow:var(--txtInputBevel);letter-spacing:.03em;background:#101 var(--tile);transition:box-shadow ease .05s,ease color .05s}
 input[type=text]:disabled{color:rgba(192,160,192,.5);box-shadow:inset 1px 1px 2px 1px #101;background:#101 var(--tile);cursor:not-allowed}
 input[name="nofilter_commentsName"]:focus::placeholder{opacity:0}
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 166px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 166px)}
 input[name="i2cpOpts"],input[name="nofilter_dataDir"]{font-size:90%;transform:translateY(-1px)}
 input[name="nofilter_commentsName"]{max-width:248px}
 input[type=text]:active,input[type=text]:focus,input.r:focus,input[name="nofilter_dataDir"]:focus,textarea:focus:not([readonly]){outline:none;color:#fff;box-shadow:inset 0 0 0 1px #ffffcf,var(--shadow_inset);background:linear-gradient(180deg,#d60,#c50);transition:box-shadow ease 16ms}
@@ -587,13 +587,14 @@ a.controld img{display:none}
 .script .control{padding-left:0}
 .script .control img{margin-right:1px}
 #addSection input.add,#createSection input.create{padding:6px 8px 6px 23px}
+#browserApiHosts,#browserApiKey{font-size:80%}
 #hopVariance label+label{margin-left:12px}
 #hopVariance .optbox{margin-right:4px}
 #i2cpOptions{display:block;column-span:all}
 #hopVariance .optbox+span{width:22px;height:22px;display:inline-block;font-size:0;vertical-align:middle;background:var(--inbound) no-repeat center center/22px}
 #hopVariance .optbox:not(:checked)+span{filter:saturate(0)}
 #hopVariance #varyOutbound+span{background:var(--outbound) no-repeat center center/22px}
-.depress{transition:ease all .2s;border}
+.depress{transition:ease all .2s;border:var(--border_hard)}
 .inert{transition:ease-out all .5s, ease-out box-shadow .1s}
 .tempDisabled{filter:opacity(.3);pointer-events:none;transition:filter ease .5s}
 
@@ -1181,11 +1182,12 @@ td.peerCount:empty::after{display:none}
 .lang_de #trackerconfig input.trackername,.lang_ru #trackerconfig input.trackername{width:120px;max-width:120px;min-width:0}
 .tAction input[type=submit],#actionStopAll,#actionStartAll,#actionStopAll:hover,#actionStartAll:hover,#actionStopAll:focus,#actionStartAll:focus{padding:10px;background-size:auto 12px,100%}
 .tAction input[type=submit]:active,#actionStopAll:active,#actionStartAll:active{background-size:auto 10px,100%}
-#torrents .txd,#torrents.rateUp,.iframed #torrents .txd,.iframed #torrents .rateUp{padding:0;width:0;min-width:0!important;font-size:0}
-.txd>*,.rateUp>*,.iframed .txd>*,.iframed .rateUp>*{display:none}
+.ETA,.txd>*,.rateUp>*,.iframed .txd>*,.iframed .rateUp>*{display:none}
+.peerCount b, .inactive.seeding .peerCount b{min-width:89px}
 #actionStopAll,#actionStartAll,#actionStopAll:hover,#actionStartAll:hover,#actionStopAll:focus,#actionStartAll:focus{padding:10px 17px}
 #snarkSearch input[type=search]{width:140px}
 .iframed #snarkSearch{top:5px}
+#torrents .txd,#torrents.rateUp,.iframed #torrents .txd,.iframed #torrents .rateUp{padding:0;width:0;min-width:0!important;font-size:0}
 }
 
 @media (max-width:1180px){
@@ -1248,7 +1250,7 @@ td.status img{margin-left:1px;height:20px;width:auto}
 #filterBar .filter{flex-grow:1.1}
 #filterBar{margin-top:1px;margin-bottom:1px;padding:0;display:flex;border-bottom:0}
 #torrentlist{margin-top:-1px}
-#torrents a,.ETA,#torrents td,#torrents tfoot th,.peerinfo td,#torrentInfo td,#dirInfo td{font-size:9pt}
+#torrents a:not(#debugMode),.ETA,#torrents td,#torrents tfoot th,.peerinfo td,#torrentInfo td,#dirInfo td{font-size:9pt}
 #torrents td[colspan="10"]{white-space:normal}
 #torrents thead img{max-height:20px}
 #trackerselect td a{max-width:350px}

@@ -52,6 +52,7 @@
         <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/obj"/>
         <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <!-- jsp-api.jar only present for debian builds -->
         <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
       </classpath>
@@ -87,6 +88,7 @@
         <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
         <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <!-- jsp-api.jar only present for debian builds -->
         <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
         <!-- Following jars only for standalone builds -->
@@ -534,6 +536,8 @@
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
         <pathelement location="${build.dir}/obj"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
@@ -559,6 +563,8 @@
       <classpath>
         <pathelement location="${build.dir}/obj_test"/>
         <pathelement location="${build.dir}/obj"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
