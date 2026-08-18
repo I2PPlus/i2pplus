@@ -600,6 +600,69 @@ public class StorageTest {
         assertArrayEquals(first.getInfoHash(), third.getInfoHash());
     }
 
+    /** Creation from a truly empty folder fails with the plain no-data message. */
+    @Test
+    public void testCreationEmptyDirThrowsNoData() throws Exception {
+        File empty = new File(_dataDir, "empty");
+        assertTrue(empty.mkdir());
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        try {
+            new Storage(
+                    util,
+                    empty,
+                    "http://tracker.test",
+                    null,
+                    null,
+                    false,
+                    null,
+                    new ArrayList<>());
+            fail("expected IOException");
+        } catch (IOException ioe) {
+            assertEquals("Torrent contains no data", ioe.getMessage());
+        }
+    }
+
+    /** Creation skips unreadable files with a warning; only readable data is torrented. */
+    @Test
+    public void testCreationSkipsUnreadableFile() throws Exception {
+        File sub = new File(_dataDir, "mixed");
+        assertTrue(sub.mkdir());
+        byte[] c = content(2000);
+        writeFile(new File(sub, "good.dat"), c, 0, 1000);
+        File bad = new File(sub, "bad.dat");
+        writeFile(bad, c, 1000, 1000);
+        assertTrue(bad.setReadable(false));
+        org.junit.Assume.assumeFalse("running as root, cannot test permissions", bad.canRead());
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        MetaInfo mi =
+                new Storage(
+                                util,
+                                sub,
+                                "http://tracker.test",
+                                null,
+                                null,
+                                false,
+                                null,
+                                new ArrayList<>())
+                        .getMetaInfo();
+        assertEquals(1, mi.getFiles().size());
+        assertEquals(1000, mi.getTotalLength());
+    }
+
+    /** The no-data message distinguishes a permission problem from an empty folder. */
+    @Test
+    public void testNoDataMessage() {
+        assertEquals(
+                "Torrent contains no data",
+                Storage.noDataMessage(new File("/data"), new ArrayList<String>()));
+        String msg =
+                Storage.noDataMessage(
+                        new File("/data"), Arrays.asList("/data/sub1", "/data/sub2"));
+        assertTrue(msg, msg.contains("2 file(s)"));
+        assertTrue(msg, msg.contains("/data/sub1"));
+        assertFalse(msg, msg.contains("empty"));
+    }
+
     private static void setMtime(File f, long time) {
         assertTrue("setLastModified failed for " + f, f.setLastModified(time));
     }

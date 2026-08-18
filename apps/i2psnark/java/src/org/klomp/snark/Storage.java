@@ -91,6 +91,8 @@ public class Storage implements Closeable {
     private final AtomicInteger _checkProgress = new AtomicInteger();
     private final AtomicLong _activity = new AtomicLong();
     private List<String> _filesExcluded = new ArrayList<>();
+    /** Files or folders that exist but could not be read (e.g. permissions). */
+    private List<String> _unreadableFiles = new ArrayList<>();
 
     /** The default piece size for new torrents. */
     private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
@@ -237,7 +239,7 @@ public class Storage implements Closeable {
         }
 
         if (total <= 0) {
-            throw new IOException("Torrent contains no data");
+            throw new IOException(noDataMessage(baseFile, _unreadableFiles));
         }
         if (total > MAX_TOTAL_SIZE) {
             throw new IOException(
@@ -398,6 +400,44 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Record a file or folder that exists but could not be read, and warn.
+     * The creation proceeds with the readable data; if there is none, the
+     * caller fails with noDataMessage() naming the unreadable paths.
+     *
+     * @param f the unreadable file or folder
+     * @param reason a short human-readable reason
+     * @since 0.9.71+
+     */
+    private void addUnreadable(File f, String reason) {
+        _unreadableFiles.add(f.getPath());
+        if (_log.shouldWarn()) {
+            _log.warn("[I2PSnark] Skipping '" + f + "' -> " + reason);
+        }
+    }
+
+    /**
+     * The message for a failed torrent creation with no readable data, so a
+     * permission problem is reported as such rather than as an empty folder.
+     *
+     * @param base the data folder or file
+     * @param unreadable paths that exist but could not be read, may be empty
+     * @return the message
+     * @since 0.9.71+
+     */
+    static String noDataMessage(File base, List<String> unreadable) {
+        if (!unreadable.isEmpty()) {
+            return "Cannot read "
+                    + unreadable.size()
+                    + " file(s) or folder(s) under \""
+                    + base
+                    + "\", first: \""
+                    + unreadable.get(0)
+                    + "\"";
+        }
+        return "Torrent contains no data";
+    }
+
+    /**
      * The excluded files.
      *
      * @return the excluded files
@@ -460,6 +500,14 @@ public class Storage implements Closeable {
         }
 
         if (!f.isDirectory()) {
+            if (!f.exists()) {
+                addUnreadable(f, "does not exist");
+                return;
+            }
+            if (!f.canRead()) {
+                addUnreadable(f, "cannot be read, check permissions");
+                return;
+            }
             int sz = l.size() + 1;
             if (sz > max) {
                 throw new IOException(
@@ -479,6 +527,14 @@ public class Storage implements Closeable {
             }
             l.add(f);
         } else {
+            if (!f.exists()) {
+                addUnreadable(f, "does not exist");
+                return;
+            }
+            if (!f.canRead()) {
+                addUnreadable(f, "cannot be read, check permissions");
+                return;
+            }
             File[] files = f.listFiles();
             if (files == null) {
                 if (_log.shouldWarn()) {
