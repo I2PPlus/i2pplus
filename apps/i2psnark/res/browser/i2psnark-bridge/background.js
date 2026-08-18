@@ -5,12 +5,28 @@
  * I2PSnark browser API itself (POST /_add, nofilter_newURL so the router's XSS
  * filter does not strip the '&' separators). The content script forwards the
  * page's result event here, and this script shows a browser notification with
- * the result.
+ * the result. This page also adds an X-I2PSnark-Bridge version header to every
+ * request to the router so the router can tell whether the installed extension
+ * is current and offer an update on the config page.
  * @author dr|z3d
  * @license AGPL3 or later
  */
 (function () {
   "use strict";
+
+  const BRIDGE_TARGETS = ["http://127.0.0.1/*", "http://localhost/*"];
+
+  chrome.webRequest.onBeforeSendHeaders.addListener(
+    function (details) {
+      details.requestHeaders.push({
+        name: "X-I2PSnark-Bridge",
+        value: chrome.runtime.getManifest().version
+      });
+      return { requestHeaders: details.requestHeaders };
+    },
+    { urls: BRIDGE_TARGETS },
+    ["blocking", "requestHeaders"]
+  );
 
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (!msg || msg.type !== "magnetResult") {

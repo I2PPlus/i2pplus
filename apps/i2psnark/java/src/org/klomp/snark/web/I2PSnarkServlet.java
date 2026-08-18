@@ -121,6 +121,10 @@ public class I2PSnarkServlet extends BasicServlet {
     /** Last rotation. */
     private long _lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
+    /** Version of the bundled I2PSnark Bridge XPI, read lazily from the war; null if unknown. */
+    private static volatile String _bridgeVersion;
+    /** Set once when an outdated I2PSnark Bridge extension reported itself; one screen-log notice per webapp start. */
+    private static volatile boolean _bridgeUpdateLogged;
 
     private static final Pattern INFOHASH_PAREN = Pattern.compile(" \\(");
     /** Cumulative stats array indices: [downloaded, uploaded, download rate, upload rate, peers, total size] */
@@ -501,6 +505,18 @@ public class I2PSnarkServlet extends BasicServlet {
         if ("/magnet".equals(path)) {
             handleMagnetPage(req, resp);
             return;
+        }
+
+        // I2PSnark Bridge self-report: the extension adds its version header to
+        // every request to the router. Notify once per webapp start, via the
+        // screen log, when an update is available.
+        if ("GET".equals(method)) {
+            String installed = req.getHeader(BridgeVersion.HEADER);
+            String bundled = getBridgeVersion();
+            if (BridgeVersion.isUpdateAvailable(installed, bundled) && !_bridgeUpdateLogged) {
+                _bridgeUpdateLogged = true;
+                _manager.addMessage(_t("I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page", DataHelper.escapeHTML(installed), bundled));
+            }
         }
 
         boolean isIndex = (path.isEmpty() || "/".equals(path) || "index.jsp".equals(path));
@@ -2168,9 +2184,11 @@ public class I2PSnarkServlet extends BasicServlet {
      * Bridge extension (registered via protocol_handlers in the extension
      * manifest). The page itself performs no server-side action; the external
      * script magnetHandler.js reads the magnet from the URL, POSTs it to the
-     * browser API /_add on the same origin, displays the result, and dispatches
-     * a CustomEvent the extension's content script forwards to the background
-     * script for a browser notification.
+     * browser API /_add on the same origin, dispatches a CustomEvent the
+     * extension's content script forwards to the background script for a
+     * browser notification, and closes the tab immediately. The page body is
+     * intentionally blank so the tab the protocol handler opens is never
+     * noticed; the result is only shown in the browser notification.
      *
      * <p>The magnet arrives in the URL, so the nofilter_ parameter name is
      * required: the XSS filter strips '&' from filtered parameter values, and
@@ -2194,7 +2212,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.getWriter().write(
             "<!DOCTYPE HTML>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n" +
             "<title>I2PSnark</title>\n</head>\n<body>\n" +
-            "<p id=\"status\">Adding to I2PSnark&hellip;</p>\n" +
+            "<div id=\"status\" style=\"display:none\"></div>\n" +
             "<script src=\"" + _contextPath + WARBASE + "js/magnetHandler.js\"></script>\n" +
             "</body>\n</html>\n");
     }
@@ -2741,6 +2759,26 @@ public class I2PSnarkServlet extends BasicServlet {
             _manager.addMessageAndPrint(_t("Failed to open the I2PSnark Bridge extension: {0}", ioe.getMessage()));
             return false;
         }
+    }
+
+    /**
+     * The version of the I2PSnark Bridge extension bundled in this war, read
+     * once from the XPI's manifest.json; null if it cannot be determined.
+     */
+    private String getBridgeVersion() {
+        String v = _bridgeVersion;
+        if (v == null) {
+            synchronized (BridgeVersion.class) {
+                v = _bridgeVersion;
+                if (v == null) {
+                    InputStream in = getServletContext().getResourceAsStream(WARBASE + "browser/i2psnark-bridge.xpi");
+                    v = BridgeVersion.readXpiVersion(in);
+                    if (v == null) {v = "";} // negative-cache failures
+                    _bridgeVersion = v;
+                }
+            }
+        }
+        return v.isEmpty() ? null : v;
     }
 
     /**
@@ -4550,11 +4588,22 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(spacer)
            .append("<tr><td>");
         if (isFirefoxFamilyUserAgent(req.getHeader("User-Agent"))) {
-            buf.append("<input type=submit name=installBrowserApi class=accept value=\"")
-               .append(_t("Install browser handler"))
-               .append("\" title=\"")
-               .append(_t("Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"))
-               .append("\" style=float:left> ");
+            String installed = req.getHeader(BridgeVersion.HEADER);
+            String bundled = getBridgeVersion();
+            boolean update = BridgeVersion.isUpdateAvailable(installed, bundled);
+            if (installed != null && !update) {
+                buf.append("<span class=configOption><b>")
+                   .append(_t("I2PSnark Bridge extension installed (v{0})", DataHelper.escapeHTML(installed)))
+                   .append("</b></span> ");
+            } else {
+                buf.append("<input type=submit name=installBrowserApi class=accept value=\"")
+                   .append(update ? _t("Update browser handler") : _t("Install browser handler"))
+                   .append("\" title=\"")
+                   .append(update
+                       ? _t("Update the installed I2PSnark Bridge extension to v{0}", bundled)
+                       : _t("Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"))
+                   .append("\" style=float:left> ");
+            }
         } else {
             String script = isWindowsUserAgent(req.getHeader("User-Agent"))
                 ? "install-i2psnark-browser-handler.ps1"

@@ -5,6 +5,8 @@
  * torrent list, screen log, header/footer stats, and file listings. Uses a web worker for
  * fetch operations, caches responses, handles visibility changes, and orchestrates
  * initialization of sub-modules (sorting, pagination, filter bar, lightbox, debug toggle).
+ * Refreshes immediately on form submission and on cross-tab refresh pings from the
+ * magnet handler page.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -1052,5 +1054,25 @@ document.addEventListener("DOMContentLoaded", () => {
   convertEncodedSpaces();
   document.body.removeAttribute("style");
 });
+
+/**
+ * @type {?BroadcastChannel}
+ * @description Cross-tab refresh channel: the magnet handler page posts a message
+ * here after an add completes, so the torrent display and screen log refresh
+ * immediately instead of waiting for the next interval tick. Mirrors the
+ * form-submit refresh path in refreshOnSubmit. Null when BroadcastChannel is
+ * unsupported, in which case the next interval tick covers the update.
+ */
+const refreshChannel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("i2psnark:refresh") : null;
+
+if (refreshChannel) {
+  refreshChannel.addEventListener("message", () => {
+    if (!isDocumentVisible) {return;}
+    invalidateCache();
+    doRefresh({forceFetch: true})
+      .then(() => refreshScreenLog(undefined, true))
+      .catch((error) => { if (debugging) {console.error(error);} });
+  });
+}
 
 export { doRefresh, fetchTunnelCounts, getURL, initSnarkRefresh, markStartingRows, refreshScreenLog, refreshTorrents, setActiveSearch, snarkRefreshIntervalId, isDocumentVisible };
