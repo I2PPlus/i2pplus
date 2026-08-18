@@ -626,6 +626,9 @@
 <tr class=config><th>i2psnark.preallocateFiles={true|false}</th></tr>
 <tr><td><%=intl._t("This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]")%></td></tr>
 
+<tr class=config><th>i2psnark.shouldPadFiles={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]")%></td></tr>
+
 <tr class=config><th>i2psnark.smartSort={true|false}</th></tr>
 <tr><td><%=intl._t("This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]")%></td></tr>
 
@@ -646,9 +649,6 @@
 
 <tr class=config><th>i2psnark.tempDir={/path/to/tempdir} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]")%></td></tr>
-
-<tr class=config><th>i2psnark.preallocateFiles={true|false}</th></tr>
-<tr><td><%=intl._t("This setting defines whether new torrent files are extended to their full size and the space allocated on disk immediately when the torrent starts, rather than growing as data is written. This prevents a full disk from interrupting downloads and avoids fragmentation from pieces arriving out of order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Default is true]")%></td></tr>
 
 <tr class=section><th><%=intl._t("miscellaneous")%></th></tr>
 

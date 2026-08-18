@@ -19,7 +19,8 @@ CONFIGURATION FILE OPTIONS
 Most settings are available in the web interface on the Configuration page.
 The following options are configuration-file only - add them to the file
 i2psnark.config in your standalone install directory (UTF-8 encoded).
-Changes take effect after restarting I2PSnark.
+The configuration file is re-read every 30 seconds, so changes apply
+without a restart.
 
 * i2psnark.destCycle={true|false}
   When enabled (the default), running torrents are periodically stopped and
@@ -39,6 +40,12 @@ Changes take effect after restarting I2PSnark.
   immediately when the torrent starts, rather than growing as data is
   written. Prevents a full disk from interrupting downloads and avoids
   fragmentation from pieces arriving out of order. [Default is true]
+
+* i2psnark.shouldPadFiles={true|false}
+  Add BEP 47 padding files to new torrents created by I2PSnark, so each file
+  except the last ends on a piece boundary. Downloading and verifying padded
+  torrents is unaffected. [Default is false; changes to the config file are
+  applied within 30 seconds without a restart]
 
 * i2psnark.smartSort={true|false}
   Sort torrent names using the configured language for correct alphabetical

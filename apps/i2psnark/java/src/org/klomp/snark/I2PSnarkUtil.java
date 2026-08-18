@@ -115,6 +115,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     private String _commentsName;
     private boolean _areFilesPublic;
     private boolean _shouldPreallocateFiles = true;
+    private boolean _shouldPadFiles = false;
     private String _tempDirProp;
     private boolean _varyInboundHops;
     private boolean _varyOutboundHops;
@@ -505,6 +506,27 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setPreallocateFiles(boolean yes) {
         _shouldPreallocateFiles = yes;
+    }
+
+    /**
+     * Whether BEP 47 padding files are added to new torrents created by
+     * I2PSnark, so each file except the last ends on a piece boundary.
+     * Set by SnarkManager when the config is loaded or re-read; consumed
+     * by Storage when creating torrents.
+     *
+     * @since 0.9.71+
+     */
+    public boolean getShouldPadFiles() {
+        return _shouldPadFiles;
+    }
+
+    /**
+     * Sets whether BEP 47 padding files are added to new torrents.
+     *
+     * @since 0.9.71+
+     */
+    public void setShouldPadFiles(boolean yes) {
+        _shouldPadFiles = yes;
     }
 
     /**

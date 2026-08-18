@@ -504,6 +504,7 @@ public class StorageTest {
     /** Creates a torrent from _dataDir and returns the resulting metainfo. */
     private MetaInfo createTorrent() throws Exception {
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        util.setShouldPadFiles(true);
         Storage created =
                 new Storage(
                         util,
@@ -609,6 +610,47 @@ public class StorageTest {
         s.check(0, null);
         assertTrue(s.complete());
         assertFalse(new File(_dataDir, ".pad").exists());
+    }
+
+    /**
+     * Creation with padding disabled adds no pads even for unaligned files, and the
+     * metainfo has no padding attributes.
+     */
+    @Test
+    public void testCreationNoPadsWhenDisabled() throws Exception {
+        byte[] c = content(2000);
+        writeFile(new File(_dataDir, "a.dat"), c, 0, 1000);
+        writeFile(new File(_dataDir, "b.dat"), c, 1000, 1000);
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        util.setShouldPadFiles(false);
+        Storage created =
+                new Storage(
+                        util,
+                        _dataDir,
+                        "http://tracker.test",
+                        null,
+                        null,
+                        false,
+                        null,
+                        new ArrayList<>());
+        MetaInfo mi = created.getMetaInfo();
+        assertEquals(2, mi.getFiles().size());
+        assertEquals(Arrays.asList("a.dat"), mi.getFiles().get(0));
+        assertEquals(Arrays.asList("b.dat"), mi.getFiles().get(1));
+        assertEquals(Long.valueOf(1000), mi.getLengths().get(0));
+        assertEquals(Long.valueOf(1000), mi.getLengths().get(1));
+        assertEquals(2000, mi.getTotalLength());
+        assertFalse(mi.isPaddingFile(0));
+        assertFalse(mi.isPaddingFile(1));
+        // Round-trip: no pad entries may appear
+        MetaInfo reparsed = new MetaInfo(new ByteArrayInputStream(mi.getTorrentData()));
+        assertEquals(mi.getFiles(), reparsed.getFiles());
+        assertEquals(mi.getLengths(), reparsed.getLengths());
+        assertFalse(reparsed.isPaddingFile(0));
+        assertFalse(reparsed.isPaddingFile(1));
+        // Padding disabled never touches disk
+        assertFalse(new File(_dataDir, ".pad").exists());
+        assertFalse(new File(_dataDir, "_pad").exists());
     }
 
     /**

@@ -291,7 +291,7 @@ public class Storage implements Closeable {
         // The piece growth loop above ran on the real total, so pc_size is final; padding adds
         // at most one piece per file, which the 3x headroom of that guard absorbs.
         List<String> attributes = null;
-        if (_torrentFiles.size() > 1) {
+        if (_util.getShouldPadFiles() && _torrentFiles.size() > 1) {
             attributes = new ArrayList<>(_torrentFiles.size());
             List<TorrentFile> realFiles = new ArrayList<>(_torrentFiles);
             Map<Long, Integer> padNames = new HashMap<>(4);

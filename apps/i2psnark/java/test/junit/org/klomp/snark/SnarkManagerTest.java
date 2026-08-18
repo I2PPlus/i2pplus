@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 import org.junit.Test;
@@ -64,5 +65,23 @@ public class SnarkManagerTest {
         assertEquals(1, SnarkManager.countRealFiles(nested));
 
         assertEquals(0, SnarkManager.countRealFiles(null));
+    }
+
+    /**
+     * parseShouldPadFiles reads the config property with a false default,
+     * so an absent or unparsable value disables padding.
+     */
+    @Test
+    public void testParseShouldPadFiles() {
+        assertFalse(SnarkManager.parseShouldPadFiles(new Properties()));
+        Properties yes = new Properties();
+        yes.setProperty(SnarkManager.PROP_SHOULD_PAD_FILES, "true");
+        assertTrue(SnarkManager.parseShouldPadFiles(yes));
+        Properties no = new Properties();
+        no.setProperty(SnarkManager.PROP_SHOULD_PAD_FILES, "false");
+        assertFalse(SnarkManager.parseShouldPadFiles(no));
+        Properties garbage = new Properties();
+        garbage.setProperty(SnarkManager.PROP_SHOULD_PAD_FILES, "maybe");
+        assertFalse(SnarkManager.parseShouldPadFiles(garbage));
     }
 }

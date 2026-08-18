@@ -208,6 +208,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String DEFAULT_PREALLOCATE_FILES = "true";
 
     /**
+     * Add BEP 47 padding files to new torrents.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_SHOULD_PAD_FILES = "i2psnark.shouldPadFiles";
+
+    public static final String DEFAULT_SHOULD_PAD_FILES = "false";
+
+    /**
      * Disconnect peers that cancel most of what they request. Off by default; conservative
      * thresholds and a minimum-volume guard protect legitimate peers under congestion.
      *
@@ -1670,6 +1679,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
         _util.setMaxFilesPerTorrent(
                 getInt(PROP_MAX_FILES_PER_TORRENT, DEFAULT_MAX_FILES_PER_TORRENT));
+        _util.setShouldPadFiles(parseShouldPadFiles(_config));
         int startDelayMin = getInt(PROP_STARTUP_DELAY_MIN, DEFAULT_STARTUP_DELAY_MIN);
         int startDelayMax = getInt(PROP_STARTUP_DELAY_MAX, DEFAULT_STARTUP_DELAY_MAX);
         if (startDelayMax < startDelayMin) {
@@ -1760,6 +1770,61 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setTempDirProp(tempDir);
         initTrackerMap();
         initTorrentCreateFilterMap();
+    }
+
+    /**
+     * Re-reads the entire config file from disk and activates any settings
+     * that differ from the applied ones, so edits to i2psnark.config take
+     * effect without a restart. Called by the directory monitor on its
+     * periodic scan. Changed values are re-applied through the same
+     * updateConfig() path used at startup; settings removed from the file
+     * keep their current value.
+     *
+     * @since 0.9.71+
+     */
+    private void rereadConfig() {
+        if (_configFile == null || !_configFile.exists()) {
+            return;
+        }
+        Properties props = new OrderedProperties();
+        try {
+            DataHelper.loadProps(props, _configFile);
+        } catch (IOException ioe) {
+            _log.error("Error re-reading I2PSnark config " + _configFile, ioe);
+            return;
+        }
+        synchronized (_configLock) {
+            boolean differs = false;
+            for (String key : props.stringPropertyNames()) {
+                if (!props.getProperty(key).equals(_config.getProperty(key))) {
+                    differs = true;
+                    break;
+                }
+            }
+            if (!differs) {
+                return;
+            }
+            _config.putAll(props);
+            updateConfig();
+            PeerState.setPipelineParams(
+                    getInt(PROP_MIN_PIPELINE, PeerState.MIN_PIPELINE),
+                    getInt(PROP_MAX_PIPELINE, PeerState.MAX_PIPELINE),
+                    getInt(PROP_PARTSIZE, PeerState.PARTSIZE),
+                    getInt(PROP_MAX_PARTSIZE, PeerState.MAX_PARTSIZE));
+        }
+    }
+
+    /**
+     * Parses the {@link #PROP_SHOULD_PAD_FILES} value from the given
+     * properties, applying the default when absent or unparsable.
+     *
+     * @param props the config properties
+     * @return whether BEP 47 padding files are added to new torrents
+     * @since 0.9.71+
+     */
+    static boolean parseShouldPadFiles(Properties props) {
+        return Boolean.parseBoolean(
+                props.getProperty(PROP_SHOULD_PAD_FILES, DEFAULT_SHOULD_PAD_FILES));
     }
 
     /**
@@ -4272,6 +4337,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                 }
                 // Polling period for scanning data dir for new content
+                rereadConfig();
                 sleep((long) 30 * 1000);
             }
         }
