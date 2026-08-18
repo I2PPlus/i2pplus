@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>I2PSnark Magnet Bridge Options</title>
+<style>
+  :root { color-scheme: light dark; --text: #222; --bg: #fff; --muted: #666; --accent: #0a0; }
+  @media (prefers-color-scheme: dark) {
+    :root { --text: #eee; --bg: #23222b; --muted: #aaa; --accent: #4c4; }
+  }
+  body { font-family: sans-serif; margin: 1.5em; max-width: 42em; background: var(--bg); color: var(--text); }
+  h1 { font-size: 1.15em; margin-bottom: .2em; }
+  p.hint { color: var(--muted); font-size: .88em; margin: .2em 0 0 1.7em; }
+  label { display: block; margin: .8em 0; }
+  input[type=checkbox] { vertical-align: middle; margin-right: .3em; }
+  #saved { color: var(--accent); visibility: hidden; }
+</style>
+</head>
+<body>
+<h1>I2PSnark Magnet Bridge</h1>
+<p class="hint" style="margin-left:0">Settings are saved immediately.</p>
+
+<label><input type="checkbox" id="notifySuccess">Show a notification when a torrent is added</label>
+
+<label><input type="checkbox" id="notifyFailure">Show a notification when adding a torrent fails</label>
+
+<label><input type="checkbox" id="handleTorrentLinks">Add .torrent links to I2PSnark when clicked
+  <p class="hint">Clicks on links ending in .torrent are sent to the router, which downloads
+  and adds the torrent, instead of opening the link in the browser.</p></label>
+
+<label><input type="checkbox" id="i2pOnly">Only handle .i2p links
+  <p class="hint">Restrict .torrent link handling to i2p hosts only.
+  Magnet links are not affected.</p></label>
+
+<p id="saved">Saved.</p>
+<script src="options.js"></script>
+</body>
+</html>
