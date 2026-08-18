@@ -177,16 +177,19 @@
           <then>
         <length property="js.size.before" mode="all">
           <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
+          <fileset dir="${build.dir}/res/.res/browser/i2psnark-bridge" includes="*.js"/>
         </length>
         <parallel>
           <foreach target="compressJavascript" param="file" parallel="true">
             <path>
               <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
+              <fileset dir="${build.dir}/res/.res/browser/i2psnark-bridge" includes="*.js"/>
             </path>
           </foreach>
         </parallel>
         <length property="js.size.after" mode="all">
           <fileset dir="${build.dir}/res/.res/js" includes="*.js"/>
+          <fileset dir="${build.dir}/res/.res/browser/i2psnark-bridge" includes="*.js"/>
         </length>
         <math result="js.saved" operand1="${js.size.before}" operand2="${js.size.after}" operation="-" datatype="int"/>
         <math result="js.pct" operand1="${js.saved}" operand2="100" operation="*" datatype="int"/>
@@ -207,6 +210,19 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
+    <!-- The I2PSnark Bridge webextension, zipped up for the /i2psnark/.res/browser/
+         install link; an XPI is just a zip of the extension directory. Zipped from
+         the build-dir copy so the extension js ships compressed (uglify with the
+         compress option only, no name mangling) in the xpi too; the sources stay
+         pristine in res/browser/. Delete first: ant's zip task only adds/replaces
+         entries newer than the archive, so removed sources would otherwise linger
+         in a stale xpi -->
+    <sequential>
+      <delete file="${build.dir}/res/.res/browser/i2psnark-bridge.xpi" quiet="true"/>
+      <zip destfile="${build.dir}/res/.res/browser/i2psnark-bridge.xpi" duplicate="preserve">
+        <fileset dir="${build.dir}/res/.res/browser/i2psnark-bridge"/>
+      </zip>
+    </sequential>
     <war destfile="${build.dir}/i2psnark.war" webxml="../web.xml">
       <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
       <classes dir="${build.dir}/obj" includes="**/web/*"/>
@@ -226,7 +242,7 @@
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${build.dir}/i2psnark.war">
-      <srcfiles dir="." includes="build/obj/org/klomp/snark/web/*.class ../res/**/* ../web.xml ../../routerconsole/jsp/js/onVisible.js ../../routerconsole/jsp/js/morphdom.js"/>
+      <srcfiles dir="." includes="build/obj/org/klomp/snark/web/*.class ../res/**/* ../web.xml build.xml ../../routerconsole/jsp/js/onVisible.js ../../routerconsole/jsp/js/morphdom.js"/>
     </uptodate>
   </target>
 
