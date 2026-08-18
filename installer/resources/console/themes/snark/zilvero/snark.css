@@ -608,7 +608,7 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 #torrentSort .ascending,th#torrentSort .descending{right:-14px}
 
 /* configure */
-input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 220px);font-size:90%!important}
+input[name="i2cpOpts"],input[name="nofilter_dataDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 220px);font-size:90%!important}
 input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-bottom:6px}
 .configOption{margin-top:3px;margin-bottom:3px;display:inline-block}
 .configOption::after{min-height:34px;display:inline-block;vertical-align:middle;content:""}
@@ -837,7 +837,8 @@ html:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
 }
 
 @media (min-width:1600px){
-.lang_en input[name="i2cpOpts"],.lang_en input[name="nofilter_dataDir"]{width:calc(100% - 190px)}.lang_en .configOption b{min-width:170px}.lang_en .optionlist{columns:3 520px}
+.lang_en input[name="i2cpOpts"],.lang_en input[name="nofilter_dataDir"],.lang_en #browserApiHosts,.lang_en #browserApiKey{width:calc(100% - 190px)}
+.lang_en .configOption b{min-width:170px}.lang_en .optionlist{columns:3 520px}
 #createSection input[type=text]{width:calc(100% - 126px)}
 }
 

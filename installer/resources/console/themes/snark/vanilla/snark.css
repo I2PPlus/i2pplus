@@ -412,7 +412,7 @@ input[type=submit]{color:#4d2200;border:var(--btn_border)}
 input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#4d2100;border:var(--btn_border_hover);box-shadow:var(--highlight)7ef,inset 0 0 0 2px #d50;background-blend-mode:luminosity}
 input[type=submit]:active,input[type=submit].depress,a.control:active,a.control.depress{color:#70645c;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.5)}
 input[type=text],input.r,textarea,input[name="nofilter_dataDir"]{padding:5px 8px;vertical-align:middle;box-shadow:var(--highlight),inset 2px 2px 2px rgba(16,12,0,.3)}
-input[name="i2cpOpts"],input[name="nofilter_dataDir"]{font-size:90%}
+input[name="i2cpOpts"],input[name="nofilter_dataDir"],#browserApiHosts,#browserApiKey{font-size:90%}
 input[type=text]:focus,input[type=text]:focus,input.r:focus,textarea:focus,input[name="nofilter_dataDir"]:focus{background:#fffcdf;color:#5f1227;text-shadow:none;border:var(--btn_border_hover);box-shadow:var(--highlight),inset 3px 3px 3px rgba(16,12,0,.4);transition:ease box-shadow .15s}
 input.default{width:1px;height:1px;display:none;visibility:hidden}
 input.disabled,input.disabled:hover,input.disabled:focus,input.disabled:active,a.controld,a.controld:hover,a.controld:focus,a.controld:active{font-weight:400;opacity:.6;color:#4d2200;box-shadow:none;cursor:not-allowed;background-blend-mode:luminosity;filter:none}
@@ -629,7 +629,7 @@ img{font-size:0;overflow:hidden}
 .info_tracker a[href*="b32.i2p"]{max-width:60px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* configs */
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 172px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 172px)}
 .configOption{margin:5px 0;padding:4px 5px 4px 0;width:calc(100% - 10px);display:inline-block;position:relative;white-space:nowrap;vertical-align:middle;text-align:left;border-radius:2px;box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #fef6f0,0 0 2px #aaa;background:var(--option);transition:ease-in-out box-shadow .1s}
 .configOption:hover{box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #cf0f00,0 0 2px #aaa;transition:ease-in-out .1s all .1s}
 .configOption::after{height:40px;display:inline-block;vertical-align:middle;content:""}

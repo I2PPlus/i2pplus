@@ -493,7 +493,7 @@ input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:
 .priorityHigh,.priorityNormal,.prioritySkip,.priorityHigh:hover,.priorityNormal:hover,.prioritySkip:hover{width:52px;display:inline-block;color:#0000;background-size:18px}
 
 /* configure */
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 176px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 176px)}
 .configPanel td[colspan="5"]{border-top:var(--border)}
 .configPanel td:first-child{padding-right:10px;padding-left:5px;font-weight:700}
 .configPanel tr:last-child td[colspan="3"]{display:none}
