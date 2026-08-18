@@ -54,9 +54,27 @@ String compat(String src) {
     }
 }
 
-String getWorkspaceVersion() {
-    "git" // TODO: extract revision
+// Lazily resolved provider: the short git revision (ant workspace.version,
+// git rev-parse --short=8 HEAD), "unknown" when not a git checkout
+ext.workspaceVersion = providers.exec {
+    commandLine 'git', 'rev-parse', '--short=8', 'HEAD'
+    workingDir = rootDir
+}.standardOutput.asText.map { it.trim() }.orElse('unknown')
+
+// Mirrors ant setBuildTimestamp: "reproducible" when -Dbuild.reproducible is
+// set, else the current UTC time
+ext.buildTimestamp = providers.provider {
+    if (System.getProperty('build.reproducible') != null) {
+        'reproducible'
+    } else {
+        def fmt = new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss z', Locale.ENGLISH)
+        fmt.setTimeZone(TimeZone.getTimeZone('UTC'))
+        fmt.format(new Date())
+    }
 }
+
+// JDK 8 javac used for all compilation, matching the ant build
+ext.jdk8Home = providers.gradleProperty('jdk8Home').orElse('/usr/lib/jvm/java-8-openjdk-amd64').get()
 
 def releaseVersion = getReleaseVersion()
 def buildVersion = getBuildVersion()
@@ -67,7 +85,6 @@ ext.buildExtra = buildExtra
 
 def builtBy = getBuiltBy()
 ext.builtBy = builtBy
-def workspaceVersion = getWorkspaceVersion()
 
 subprojects {
     // Only apply to actual projects, not container directories
@@ -81,11 +98,15 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'jacoco'
 
-    // Match the ant build (javac.version=1.8, javac.release=8) so both
-    // produce Java 8 bytecode and identical synthetic classes
+    // Match the ant build (JDK 8 javac, -source/-target 1.8, debug on) so
+    // both produce identical bytecode and synthetic classes; newer javac
+    // versions don't emit the synthetic switch-map classes (EepGet$2 etc.),
+    // so bytecode wouldn't match ant's jars
     tasks.withType(JavaCompile).configureEach {
-        options.release = 8
         options.encoding = 'UTF-8'
+        options.fork = true
+        options.forkOptions.javaHome = file(rootProject.ext.jdk8Home)
+        options.compilerArgs += ['-source', '1.8', '-target', '1.8']
     }
 
     repositories {

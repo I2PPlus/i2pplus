@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -130,18 +129,38 @@ public class JspC {
             largs.add("1");
         }
 
-        // add all the files as individual args
-        File[] files = dir.listFiles(new FileSuffixFilter(".jsp"));
-        if (files == null || files.length == 0)
+        // add all the files as individual args, recursing so subdirectory
+        // JSPs (e.g. help/*.jsp) keep their package and url-pattern
+        List<File> files = new ArrayList<File>();
+        collectJspFiles(dir, files);
+        if (files.isEmpty())
             throw new IllegalArgumentException("no jsp files in webapp dir: " + sdir);
-        Arrays.sort(files);
-        for (int i = 0; i < files.length; i++) {
-            largs.add(files[i].getName());
+        for (File f : files) {
+            // relative path from the webapp root, so jasper derives the
+            // subpackage (net.i2p.router.web.jsp.help.*) as with -webapp
+            largs.add(dir.toURI().relativize(f.toURI()).getPath());
         }
         System.out.println("JspC arguments for reproducible build: " + largs);
         String[] rv = new String[largs.size()];
         rv = largs.toArray(rv);
         return rv;
+    }
+
+    /**
+     *  Recursively collect the *.jsp files under dir, sorted.
+     */
+    private static void collectJspFiles(File dir, List<File> files) {
+        File[] listed = dir.listFiles();
+        if (listed == null)
+            return;
+        Arrays.sort(listed);
+        for (File f : listed) {
+            if (f.isDirectory()) {
+                collectJspFiles(f, files);
+            } else if (f.getName().endsWith(".jsp")) {
+                files.add(f);
+            }
+        }
     }
 
     /**

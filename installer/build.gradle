@@ -16,11 +16,39 @@ sourceSets {
             include '*.jnilib'
         }
     }
+    // build-only tools (ant tools.jar): net.i2p.util.TranslationStatus etc.
+    tools {
+        java {
+            srcDir 'tools/java/src'
+        }
+    }
 }
 
 dependencies {
     implementation project(':core')
     runtimeOnly files('lib/wrapper/all/wrapper.jar')
+    toolsImplementation project(':core')
+    // ant's tools build classpath: i2p.jar + router.jar + gnu-getopt.jar
+    toolsImplementation project(':router')
+    toolsImplementation 'gnu.getopt:java-getopt:1.0.13'
+}
+
+// ant build-tools/tools.jar: build-only utilities, not shipped
+task toolsJar(type: Jar) {
+    archiveBaseName = 'tools'
+    from sourceSets.tools.output
+    manifest {
+        // mirrors ant installer/tools/java/build.xml <jar>
+        attributes(
+            'Ant-Version': 'Apache Ant 1.10.17',
+            'Created-By': '1.8.0_502-8u502-ga~us1-0ubuntu1-b07 (Private Build)',
+            'Built-By': rootProject.ext.builtBy,
+            'Build-Date': rootProject.ext.buildTimestamp,
+            'Base-Revision': rootProject.ext.workspaceVersion,
+            'X-Compile-Source-JDK': '1.8',
+            'X-Compile-Target-JDK': '1.8',
+        )
+    }
 }
 
 jar {

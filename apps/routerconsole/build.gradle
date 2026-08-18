@@ -73,6 +73,32 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
 // We don't support the "slow way"
 // bundle-messages.sh exits fast when all locale classes are current
 def buildDirPath = buildDir
+
+// Mirrors the ant <manifest> blocks for routerconsole.jar and routerconsole.war
+// (Ant-Version and Created-By are attributes ant's jar/war tasks add
+// automatically, derived from the JDK 8 the ant build runs on)
+def consoleManifestAttrs = [
+    'Ant-Version': 'Apache Ant 1.10.17',
+    'Created-By': '1.8.0_502-8u502-ga~us1-0ubuntu1-b07 (Private Build)',
+    'Implementation-Version': rootProject.ext.fullVersion,
+    'Built-By': rootProject.ext.builtBy,
+    'Build-Date': rootProject.ext.buildTimestamp,
+    'Base-Revision': rootProject.ext.workspaceVersion,
+    'X-Compile-Source-JDK': '1.8',
+    'X-Compile-Target-JDK': '1.8',
+]
+
+// Mirrors ant listChangedFiles (jar) / listChangedFiles2 (war): the paths
+// changed vs HEAD plus untracked files, whitespace collapsed to commas, as
+// ant does with `git ... && git ...` piped through `tr -s '[:space:]' ','`.
+// A clean tree yields "" in both builds; git failure falls back to "" too
+// (ant's failifexecutionfails="false").
+def workspaceChanges = { List<String> paths ->
+    providers.exec {
+        commandLine 'sh', '-c', "git diff --name-only HEAD -- ${paths.join(' ')} && git ls-files --others --exclude-standard ${paths.join(' ')}"
+        workingDir = rootDir
+    }.standardOutput.asText.map { it.replaceAll(/[[:space:]]+/, ',').trim() }.orElse('')
+}
 task bundleCountries(type: Exec) {
     workingDir rootDir
     commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'apps/routerconsole/java', '--cfg', 'bundle-messages-countries.cfg', '--build-dir', buildDirPath.absolutePath
@@ -103,11 +129,22 @@ task consoleJar(type: Jar) {
         // very old installs don't have i2psnark,jstl,standard in the classpath...
         // not added in WebAppConfiguration any more
         // All new jetty 7 jars should have been in 0.9.6, added in 0.9.7
-        attributes 'Class-Path': 'i2p.jar router.jar jrobin.jar desktopgui.jar i2psnark.jar jstl.jar standard.jar jetty-continuation.jar jetty-http.jar jetty-io.jar jetty-security.jar jetty-servlet.jar jetty-servlets.jar jetty-util.jar jetty-webapp.jar'
+        attributes consoleManifestAttrs + [
+            'Class-Path': 'i2p.jar router.jar jrobin.jar desktopgui.jar i2psnark.jar jstl.jar standard.jar jstlel.jar jetty-continuation.jar jetty-http.jar jetty-io.jar jetty-security.jar jetty-servlet.jar jetty-servlets.jar jetty-util.jar jetty-webapp.jar',
+            'Main-Class': 'net.i2p.router.news.CommandLine',
+            'Workspace-Changes': workspaceChanges(['apps/routerconsole/java', 'apps/routerconsole/locale']),
+        ]
     }
-    from ('resources-news', {
-        into "net/i2p/router/news/resources"
+    // NDT translations (ant jar1 copies these into the jar)
+    from ('java/src/edu/internet2/ndt/locale', {
+        include 'Tcpbw100_msgs_*.properties'
+        into 'edu/internet2/ndt/locale'
     })
+    // English as the default/fallback bundle (no locale suffix), as ant does
+    from ('java/src/edu/internet2/ndt/locale/Tcpbw100_msgs_en.properties') {
+        into 'edu/internet2/ndt/locale'
+        rename { 'Tcpbw100_msgs.properties' }
+    }
 }
 
 task helpersJar(type: Jar) {
@@ -140,9 +177,8 @@ task precompileJsp(type: JavaExec) {
     def jspcJarFile = project.provider { project(':apps:jetty').jspcJar.archiveFile.get().asFile }
     classpath = java.sourceSets.main.runtimeClasspath + files(jspcJarFile)
     def classpathStr = java.sourceSets.main.runtimeClasspath.asPath
-    def sourceCompat = java.sourceCompatibility
-    def targetCompat = java.targetCompatibility
     def projectDirPath = projectDir
+    def jdk8Javac = "${rootProject.ext.jdk8Home}/bin/javac"
     mainClass.set('net.i2p.servlet.util.JspC')
     doFirst {
         new File("${buildDirPath}/jsp_classes").mkdirs()
@@ -163,13 +199,17 @@ task precompileJsp(type: JavaExec) {
     doLast {
         def output = new File("${buildDirPath}/compiledJsps")
         output.mkdirs()
+        // fork JDK 8 javac, matching the ant build's jsp compilation
         ant.javac(srcDir: "${buildDirPath}/jsp_classes",
                     classpath: classpathStr,
                     debug : true,
                     includeAntRuntime : false,
                     deprecation : "on",
-                    source: sourceCompat,
-                    target: targetCompat,
+                    encoding : 'UTF-8',
+                    fork: 'true',
+                    executable: jdk8Javac,
+                    source: '1.8',
+                    target: '1.8',
                     destDir:new File("${buildDirPath}/compiledJsps"))
         
         def fragment = new File("${buildDirPath}/web-fragment.xml").text
@@ -199,18 +239,58 @@ task precompileJsp(type: JavaExec) {
         
 }
 
+// Mirrors ant bundleTranslationReport: run net.i2p.util.TranslationStatus -h
+// (tools.jar + i2p.jar) and bundle the report plus its md5 into the war
+task generateTxStatus(type: JavaExec) {
+    dependsOn ':installer:toolsJar', ':core:jar'
+    mainClass.set('net.i2p.util.TranslationStatus')
+    classpath = files(
+        project(':installer').tasks.named('toolsJar').flatMap { it.archiveFile },
+        project(':core').tasks.named('jar').flatMap { it.archiveFile }
+    )
+    systemProperty 'i2p.src.dir', rootDir
+    args '-h'
+    doFirst {
+        def outFile = new File("${buildDirPath}/txstatus/WEB-INF/classes/net/i2p/router/web/resources/translationstatus.html")
+        outFile.parentFile.mkdirs()
+        standardOutput = new FileOutputStream(outFile)
+    }
+    doLast {
+        def html = new File("${buildDirPath}/txstatus/WEB-INF/classes/net/i2p/router/web/resources/translationstatus.html")
+        def digest = java.security.MessageDigest.getInstance('MD5')
+        html.eachByte { digest.update(it) }
+        def md5 = digest.digest().collect { String.format('%02x', it) }.join()
+        def md5File = new File("${buildDirPath}/txstatus/txstatus.md5")
+        if (!md5File.exists() || md5File.text != md5 + '\n') {
+            // trailing newline matches ant's <echo file>, for byte equality
+            md5File.text = md5 + '\n'
+        }
+    }
+}
+
 consoleJar.dependsOn bundleJar
-war.dependsOn(bundle,precompileJsp)
+war.dependsOn(bundle,precompileJsp,generateTxStatus)
 
 war {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // ant's war carries only the helpers/servlets/resources classes and the
+    // precompiled JSPs; the rest of the classes ship in routerconsole.jar
     rootSpec.exclude('**/*.jar')
-    rootSpec.exclude('/com/vuze/**/*')
-    rootSpec.exclude('/edu/internet2/**/*')
-    rootSpec.exclude('/net/i2p/router/news/*')
-    rootSpec.exclude('/net/i2p/router/sybil/*')
-    rootSpec.exclude('/net/i2p/router/update/*')
-    rootSpec.exclude('/net/i2p/router/web/*.class')
+    rootSpec.exclude('com/**')
+    rootSpec.exclude('edu/**')
+    rootSpec.exclude('net/i2p/router/countries/**')
+    rootSpec.exclude('net/i2p/router/news/**')
+    rootSpec.exclude('net/i2p/router/update/**')
+    // ant's war carries only helpers/servlets/resources plus the precompiled
+    // JSPs; the top-level web classes and the generated message classes ship
+    // in routerconsole.jar
+    rootSpec.exclude('net/i2p/router/web/*.class')
+    rootSpec.exclude('net/i2p/router/web/messages/**')
+    rootSpec.exclude('net/i2p/servlet/**')
+    // jasper-generated sources and classes; ant has both under WEB-INF/classes
+    from ("$buildDir/jsp_classes") {
+        into "WEB-INF/classes"
+    }
     from ("$buildDir/compiledJsps") {
         into "WEB-INF/classes"
     }
@@ -223,6 +303,12 @@ war {
     from ('resources', {
         into "WEB-INF/classes/net/i2p/router/web/resources"
     })
+    from ("$buildDir/txstatus")
+    manifest {
+        attributes consoleManifestAttrs + [
+            'Workspace-Changes': workspaceChanges(['apps/routerconsole/jsp']),
+        ]
+    }
 }
 
 // consoleJar above is the shipping jar; the default jar would overwrite it
