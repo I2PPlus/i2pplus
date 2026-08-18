@@ -157,6 +157,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_MAX_PARTSIZE = "i2psnark.pipeline.maxPartsize";
 
     public static final String PROP_DIR = "i2psnark.dir";
+
+    /**
+     * Configuration key for the staging directory where incomplete files are
+     * written until a file's pieces are all downloaded, at which point the
+     * file is copied into the data directory. Unset or empty disables the
+     * feature.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_TEMP_DIR = "i2psnark.tempDir";
+
     private static final String PROP_META_PREFIX = "i2psnark.zmeta.";
     private static final String PROP_META_RUNNING = "running";
     private static final String PROP_META_STAMP = "stamp";
@@ -1669,6 +1680,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setStartupDelayMin(startDelayMin);
         _util.setStartupDelayMax(startDelayMax);
         _util.setFilesPublic(areFilesPublic());
+        _util.setPreallocateFiles(shouldPreallocateFiles());
         _util.setOpenTrackers(getListConfig(PROP_OPENTRACKERS, DEFAULT_OPENTRACKERS));
         String useOT = _config.getProperty(PROP_USE_OPENTRACKERS);
         boolean bOT = useOT == null || Boolean.parseBoolean(useOT);
@@ -1742,8 +1754,72 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 addMessageAndPrint(msg);
             }
         }
+
+        String tempDir = validateTempDir(getTempDirProp());
+        // Apply to new storages via the util, like the other config options
+        _util.setTempDirProp(tempDir);
         initTrackerMap();
         initTorrentCreateFilterMap();
+    }
+
+    /**
+     * Reads the {@link #PROP_TEMP_DIR} property, trimming whitespace and
+     * stripping surrounding double quotes (so the value may contain spaces).
+     * An unset, blank, or quoted-empty value disables the staging feature.
+     *
+     * @return the staging directory, or null if disabled
+     * @since 0.9.71+
+     */
+    private String getTempDirProp() {
+        return cleanTempDirProp(_config.getProperty(PROP_TEMP_DIR));
+    }
+
+    /**
+     * Trims whitespace and strips surrounding double quotes (so the value may
+     * contain spaces). An unset, blank, or quoted-empty value disables the
+     * staging feature.
+     *
+     * @return the staging directory, or null if disabled
+     * @since 0.9.71+
+     */
+    private static String cleanTempDirProp(String s) {
+        if (s != null) {
+            s = s.trim();
+            while (s.length() >= 2 && s.charAt(0) == '"' && s.charAt(s.length() - 1) == '"') {
+                s = s.substring(1, s.length() - 1).trim();
+            }
+            if (s.isEmpty()) {
+                s = null;
+            }
+        }
+        return s;
+    }
+
+    /**
+     * Validates the staging directory: creates it if missing, checks write
+     * permission, and warns (returning null) when it is unusable.
+     *
+     * @param tempDir the raw configured value, or null
+     * @return the cleaned usable staging directory, or null if disabled or unusable
+     * @since 0.9.71+
+     */
+    private String validateTempDir(String tempDir) {
+        String cleaned = cleanTempDirProp(tempDir);
+        if (cleaned != null) {
+            File td = new File(cleaned);
+            if (td.isDirectory()) {
+                if (!td.canWrite()) {
+                    String msg = _t("No write permissions for temp directory") + ": " + td;
+                    addMessageAndPrint(msg);
+                    cleaned = null;
+                }
+            } else if (!td.mkdirs()) {
+                String msg = _t("Temp directory cannot be created") + ": " + td;
+                addMessageAndPrint(msg);
+                cleaned = null;
+            }
+        }
+        return cleaned;
     }
 
     private int getInt(String prop, int defaultVal) {
@@ -1807,7 +1883,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String multiDestMax,
             boolean randomizeStartup,
             String apiTarget,
-            String apiKey) {
+            String apiKey,
+            String maxFiles,
+            boolean preallocateFiles,
+            String tempDir) {
         synchronized (_configLock) {
             locked_updateConfig(
                     dataDir,
@@ -1843,7 +1922,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     multiDestMax,
                     randomizeStartup,
                     apiTarget,
-                    apiKey);
+                    apiKey,
+                    maxFiles,
+                    preallocateFiles,
+                    tempDir);
         }
     }
 
@@ -1881,7 +1963,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String multiDestMax,
             boolean randomizeStartup,
             String apiTarget,
-            String apiKey) {
+            String apiKey,
+            String maxFiles,
+            boolean preallocateFiles,
+            String tempDir) {
         boolean changed = false;
         boolean interruptMonitor = false;
 
@@ -2400,6 +2485,50 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 addMessage(_t("API key updated."));
                 changed = true;
             }
+        }
+
+        if (_util.getPreallocateFiles() != preallocateFiles) {
+            _config.setProperty(PROP_PREALLOCATE_FILES, Boolean.toString(preallocateFiles));
+            _util.setPreallocateFiles(preallocateFiles);
+            if (preallocateFiles) {
+                addMessage(_t("Preallocate files for new torrents enabled."));
+            } else {
+                addMessage(_t("Preallocate files for new torrents disabled."));
+            }
+            changed = true;
+        }
+
+        if (maxFiles != null) {
+            int limit = I2PSnarkUtil.parseInt(maxFiles.trim(), _util.getMaxFilesPerTorrent());
+            if (limit != _util.getMaxFilesPerTorrent()) {
+                if (limit >= 1) {
+                    _util.setMaxFilesPerTorrent(limit);
+                    changed = true;
+                    _config.setProperty(PROP_MAX_FILES_PER_TORRENT, Integer.toString(limit));
+                    String msg = _t("Maximum files per torrent changed to {0}", limit);
+                    addMessageAndPrint(msg);
+                } else {
+                    String msg = _t("Invalid maximum files per torrent: {0}", limit);
+                    addMessageAndPrint(msg);
+                }
+            }
+        }
+
+        String newTempDir = validateTempDir(tempDir);
+        String oldTempDir = _util.getTempDirProp();
+        boolean tempDirChanged =
+                newTempDir != null ? !newTempDir.equals(oldTempDir) : oldTempDir != null;
+        if (tempDirChanged) {
+            if (newTempDir != null) {
+                _config.setProperty(PROP_TEMP_DIR, newTempDir);
+                _util.setTempDirProp(newTempDir);
+                addMessage(_t("Temp directory for staging changed to {0}", newTempDir));
+            } else {
+                _config.remove(PROP_TEMP_DIR);
+                _util.setTempDirProp(null);
+                addMessage(_t("Temp directory staging disabled."));
+            }
+            changed = true;
         }
 
         if (changed) {
@@ -4178,6 +4307,58 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (_log.shouldWarn()) {
                 _log.warn(
                         "[I2PSnark] Partition containing data directory only has "
+                                + freeSpaceMB
+                                + "MB free");
+            }
+        }
+
+        addMessageAndPrint(msg);
+
+        // Also report space on the staging partition when it differs from the data partition
+        String tempDir = getTempDirProp();
+        if (tempDir != null) {
+            checkTempDirSpace(new File(tempDir));
+        }
+    }
+
+    /**
+     * Checks free space on the partition containing the staging (temp)
+     * directory and warns when it is low. Incomplete files are written there,
+     * so a full temp partition stalls all downloads.
+     *
+     * @param dir the staging directory
+     * @since 0.9.71+
+     */
+    private void checkTempDirSpace(File dir) {
+        long freeSpace = dir.getUsableSpace();
+        double freeSpaceGB = freeSpace / (1024.0 * 1024 * 1024);
+        int freeSpaceMB = (int) (freeSpace / (1024 * 1024));
+
+        DecimalFormat df = new DecimalFormat("#.#");
+        String msg;
+        if (freeSpaceMB > 1024) {
+            msg =
+                    _t(
+                            "Temp storage: {0}GB currently available for downloads on configured"
+                                + " temp partition",
+                            df.format(freeSpaceGB));
+        } else {
+            msg =
+                    _t(
+                            "Temp storage: {0}MB currently available for downloads on configured"
+                                + " temp partition",
+                            freeSpaceMB);
+        }
+
+        if (freeSpaceMB < 100) {
+            msg =
+                    _t(
+                            "Warning - Only {0}MB available for downloads on configured temp"
+                                + " partition",
+                            freeSpaceMB);
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "[I2PSnark] Partition containing temp directory only has "
                                 + freeSpaceMB
                                 + "MB free");
             }

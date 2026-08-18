@@ -114,7 +114,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _enableComments;
     private String _commentsName;
     private boolean _areFilesPublic;
-    private boolean _shouldPreallocateFiles;
+    private boolean _shouldPreallocateFiles = true;
+    private String _tempDirProp;
     private boolean _varyInboundHops;
     private boolean _varyOutboundHops;
     private List<String> _openTrackers;
@@ -504,6 +505,29 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setPreallocateFiles(boolean yes) {
         _shouldPreallocateFiles = yes;
+    }
+
+    /**
+     * The staging directory configured via {@code i2psnark.tempDir} in
+     * i2psnark.config, or null if the staging feature is disabled. Set by
+     * SnarkManager at startup and from the I2PSnark configuration page;
+     * consumed by Storage.
+     *
+     * @return the staging directory, or null
+     * @since 0.9.71+
+     */
+    public String getTempDirProp() {
+        return _tempDirProp;
+    }
+
+    /**
+     * Sets the staging directory (or null to disable the feature). The value
+     * should already be trimmed and unquoted.
+     *
+     * @since 0.9.71+
+     */
+    public void setTempDirProp(String tempDir) {
+        _tempDirProp = tempDir;
     }
 
     /**

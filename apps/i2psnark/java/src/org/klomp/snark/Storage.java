@@ -9,8 +9,11 @@ package org.klomp.snark;
 import gnu.getopt.Getopt;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -29,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -40,6 +44,8 @@ import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.util.ByteCache;
+import net.i2p.util.FileUtil;
+import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
@@ -94,8 +100,19 @@ public class Storage implements Closeable {
     /** Files or folders that exist but could not be read (e.g. permissions). */
     private List<String> _unreadableFiles = new ArrayList<>();
 
-    /** The default piece size for new torrents. */
-    private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
+    /**
+     * Directory where incomplete files are written while downloading, when the
+     * {@code i2psnark.tempDir} property is configured. Files are moved to the
+     * data directory only when complete. Null when the feature is disabled.
+     */
+    private final File _stagingBase;
+
+    /**
+     * Files currently being copied from the staging directory to the data
+     * directory, to prevent concurrent duplicate copies (putPiece may be
+     * called concurrently).
+     */
+    private final Set<TorrentFile> _copying = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     /** BEP 47 directory holding synthetic padding files; skipped when walking a source dir. */
     static final String PAD_DIR = ".pad";
@@ -127,11 +144,14 @@ public class Storage implements Closeable {
     private static final int BUFSIZE = PeerState.PARTSIZE;
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
-    /** Configuration key for enabling file pre-allocation. */
-    public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
+    /** The default piece size for new torrents. */
+    private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
 
-    /** Default value for file pre-allocation (true). */
-    public static final boolean DEFAULT_PREALLOCATE_FILES = true;
+    /** Number of attempts to copy a completed file out of the staging directory. */
+    private static final int MAX_COPY_RETRIES = 5;
+
+    /** Delay in milliseconds between copy attempts. */
+    private static final long COPY_RETRY_DELAY = 30 * 1000;
 
     /**
      * Creates a new storage based on the supplied MetaInfo.
@@ -161,6 +181,7 @@ public class Storage implements Closeable {
         int sz = files != null ? files.size() : 1;
         _torrentFiles = new ArrayList<>(sz);
         _preserveFileNames = preserveFileNames;
+        _stagingBase = getStagingBase(_util.getTempDirProp(), getBaseName(), metainfo);
     }
 
     /**
@@ -227,6 +248,8 @@ public class Storage implements Closeable {
         _base = baseFile;
         this.listener = listener;
         _preserveFileNames = true;
+        // New torrents are created directly in the data directory, no staging.
+        _stagingBase = null;
         // Create names, rafs and lengths arrays.
         _torrentFiles = getFiles(baseFile, filters);
 
@@ -353,6 +376,32 @@ public class Storage implements Closeable {
                         created_by,
                         url_list,
                         comment);
+    }
+
+    /**
+     * The staging directory for a torrent: the configured temp dir plus a
+     * subdirectory unique to the torrent. Null when the feature is disabled
+     * or the infohash is unavailable.
+     *
+     * @param tempDir the configured staging directory, or null
+     * @param baseName the torrent's base name
+     * @param metainfo the torrent
+     * @return the per-torrent staging dir, or null
+     * @since 0.9.71+
+     */
+    static File getStagingBase(String tempDir, String baseName, MetaInfo metainfo) {
+        if (tempDir == null) {
+            return null;
+        }
+        byte[] hash = metainfo.getInfoHash();
+        if (hash == null) {
+            return null;
+        }
+        String hash8 = DataHelper.toString(hash);
+        if (hash8.length() > 8) {
+            hash8 = hash8.substring(0, 8);
+        }
+        return new File(tempDir, baseName + '-' + hash8);
     }
 
     /**
@@ -710,7 +759,7 @@ public class Storage implements Closeable {
      */
     public int indexOf(File file) {
         for (int i = 0; i < _torrentFiles.size(); i++) {
-            File f = _torrentFiles.get(i).RAFfile;
+            File f = _torrentFiles.get(i).finalFile;
             if (f.equals(file)) {
                 return i;
             }
@@ -1052,18 +1101,43 @@ public class Storage implements Closeable {
             if (_log.shouldInfo()) {
                 _log.info("[I2PSnark] Creating/checking file: " + _base);
             }
-            // createNewFile() can throw a "Permission denied" IOE even if the file exists???
-            // so do it second
-            if (!_base.exists() && !_base.createNewFile()) {
+            File active = _base;
+            File workFile = null;
+            if (_stagingBase != null) {
+                // Incomplete downloads go to the staging dir; only a file whose
+                // full length is already in the data directory stays there.
+                workFile = new File(_stagingBase, _base.getName());
+                if (_base.exists() && _base.length() == metainfo.getTotalLength()) {
+                    if (!workFile.delete()) {
+                        _log.warn("[I2PSnark] Unable to delete stale file: " + workFile);
+                    }
+                    // already in the data dir; the movedToDataDir flag must reflect that
+                    workFile = null;
+                } else {
+                    if (_base.exists() && !_base.delete()) {
+                        throw new IOException("Could not delete file " + _base);
+                    }
+                    if (!_stagingBase.mkdir() && !_stagingBase.isDirectory()) {
+                        throw new IOException("Could not create directory " + _stagingBase);
+                    }
+                    if (!workFile.exists() && !workFile.createNewFile()) {
+                        throw new IOException("Could not create file " + workFile);
+                    }
+                    active = workFile;
+                }
+            } else if (!_base.exists() && !_base.createNewFile()) {
+                // createNewFile() can throw a "Permission denied" IOE even if the file exists???
+                // so do it second
                 throw new IOException("Could not create file " + _base);
             }
-
-            _torrentFiles.add(new TorrentFile(_base, _base, metainfo.getTotalLength()));
+            _torrentFiles.add(
+                    new TorrentFile(
+                            _base, active, _base, workFile, metainfo.getTotalLength(), false));
             if (useSavedBitField) {
-                long lm = _base.lastModified();
+                long lm = active.lastModified();
                 if (lm <= 0 || lm > savedTime) {
                     useSavedBitField = false;
-                } else if (_base.length() != metainfo.getTotalLength()) {
+                } else if (active.length() != metainfo.getTotalLength()) {
                     useSavedBitField = false;
                 }
             }
@@ -1082,19 +1156,10 @@ public class Storage implements Closeable {
             for (int i = 0; i < size; i++) {
                 List<String> path = files.get(i);
                 boolean isPad = metainfo.isPaddingFile(i);
-                File f;
-                if (isPad) {
-                    // BEP 47: a padding file is never on disk; build the path only
-                    f = _base;
-                    for (String component : path) {
-                        f = new File(f, component);
-                    }
-                } else {
-                    f = createFileFromNames(_base, path, areFilesPublic);
-                }
+                File finalFile = buildFilePath(_base, path);
                 // dup file name check after filtering
                 for (int j = 0; j < i; j++) {
-                    if (f.equals(_torrentFiles.get(j).RAFfile)) {
+                    if (finalFile.equals(_torrentFiles.get(j).finalFile)) {
                         // Rename and start the check over again
                         // Copy path since metainfo list is unmodifiable
                         path = new ArrayList<>(path);
@@ -1108,16 +1173,49 @@ public class Storage implements Closeable {
                             lastPath = '_' + lastPath;
                         }
                         path.set(last, lastPath);
-                        f = createFileFromNames(_base, path, areFilesPublic);
+                        finalFile = buildFilePath(_base, path);
                         j = 0;
                     }
                 }
                 long len = ls.get(i).longValue();
-                _torrentFiles.add(new TorrentFile(_base, f, len, isPad));
+                File active = finalFile;
+                File workFile = null;
+                if (!isPad && _stagingBase != null) {
+                    // Incomplete downloads go to the staging dir. A file whose
+                    // full length is already in the data directory stays there;
+                    // otherwise download into staging, salvaging any partial
+                    // data found in the data directory.
+                    File stagingFile = buildFilePath(_stagingBase, path);
+                    if (finalFile.exists() && finalFile.length() == len) {
+                        if (!stagingFile.delete()) {
+                            _log.warn("[I2PSnark] Unable to delete stale file: " + stagingFile);
+                        }
+                    } else {
+                        if (!_stagingBase.mkdir() && !_stagingBase.isDirectory()) {
+                            throw new IOException("Could not create directory " + _stagingBase);
+                        }
+                        workFile = createFileFromNames(_stagingBase, path, areFilesPublic);
+                        active = workFile;
+                        if (finalFile.exists()) {
+                            // Salvage the partial data (rename may fail across filesystems)
+                            if (!finalFile.renameTo(workFile)) {
+                                if (!workFile.delete() && workFile.exists()) {
+                                    throw new IOException("Could not delete file " + workFile);
+                                }
+                                if (!workFile.createNewFile()) {
+                                    throw new IOException("Could not create file " + workFile);
+                                }
+                            }
+                        }
+                    }
+                } else if (!isPad) {
+                    active = createFileFromNames(_base, path, areFilesPublic);
+                }
+                _torrentFiles.add(new TorrentFile(_base, active, finalFile, workFile, len, isPad));
                 total += len;
                 if (useSavedBitField && !isPad) {
-                    long lm = f.lastModified();
-                    trusted.add(Boolean.valueOf(lm > 0 && lm <= savedTime && f.length() == len));
+                    long lm = active.lastModified();
+                    trusted.add(Boolean.valueOf(lm > 0 && lm <= savedTime && active.length() == len));
                 } else {
                     // Padding never touches disk, so its hashes can never go stale
                     trusted.add(isPad ? Boolean.TRUE : Boolean.FALSE);
@@ -1168,6 +1266,9 @@ public class Storage implements Closeable {
             }
             checkCreateFiles(false);
         }
+        // Move any file whose pieces are all downloaded out of the staging dir;
+        // needed e.g. after a restart where the torrent was already complete
+        checkFileCompletions();
         if (complete()) {
             if (_log.shouldInfo()) {
                 _log.info("[I2PSnark] Torrent is complete");
@@ -1244,16 +1345,10 @@ public class Storage implements Closeable {
                 continue;
             }
             if (!tf.RAFfile.exists()) {
-                // File should exist when we get here, but could have vanished
-                List<List<String>> files = metainfo.getFiles();
-                if (files != null) {
-                    createFileFromNames(_base, files.get(i), _util.getFilesPublic());
-                } else {
-                    if (!_base.createNewFile()) {
-                        throw new IOException(
-                                "File '" + tf.name + "' was deleted, unable to recreate");
-                    }
-                }
+                // File should exist when we get here, but could have vanished.
+                // Recreate at the active location (staging dir while incomplete,
+                // data dir otherwise).
+                recreateFile(tf);
                 synchronized (tf) {
                     tf.allocateFile();
                     // close as we go so we don't run out of file descriptors
@@ -1488,6 +1583,44 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Builds a file path under the given base from filtered path elements,
+     * without creating anything on disk.
+     *
+     * @param base a directory
+     * @param names path elements
+     * @return the File
+     * @since 0.9.71+
+     */
+    private File buildFilePath(File base, List<String> names) {
+        File f = base;
+        for (String name : names) {
+            f = new File(f, optFilterName(name));
+        }
+        return f;
+    }
+
+    /**
+     * Recreates a missing file at its active location (the staging dir while
+     * incomplete, the data dir otherwise).
+     *
+     * @param tf the file to recreate
+     * @throws IOException if the file cannot be created
+     * @since 0.9.71+
+     */
+    private void recreateFile(TorrentFile tf) throws IOException {
+        File f = tf.RAFfile;
+        File parent = f.getParentFile();
+        if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {
+            throw new IOException("Could not create directory " + parent);
+        }
+        // createNewFile() can throw a "Permission denied" IOE even if the file exists???
+        // so do it second
+        if (!f.exists() && !f.createNewFile()) {
+            throw new IOException("Could not create file " + f);
+        }
+    }
+
+    /**
      * The base file or directory.
      *
      * @return the File
@@ -1500,13 +1633,16 @@ public class Storage implements Closeable {
     /**
      * Does not include directories. Unsorted.
      *
+     * <p>In staging mode, returns the final data-directory location of each
+     * file, even while the data is still being written to the staging dir.
+     *
      * @return a new List
      * @since 0.9.15
      */
     public List<File> getFiles() {
         List<File> rv = new ArrayList<>(_torrentFiles.size());
         for (TorrentFile tf : _torrentFiles) {
-            rv.add(tf.RAFfile);
+            rv.add(tf.finalFile);
         }
         return rv;
     }
@@ -1533,12 +1669,32 @@ public class Storage implements Closeable {
         SortedSet<File> rv = new TreeSet<>(Collections.reverseOrder());
         rv.add(_base);
         for (TorrentFile tf : _torrentFiles) {
-            File f = tf.RAFfile;
+            File f = tf.finalFile;
             do {
                 f = f.getParentFile();
             } while (f != null && rv.add(f));
         }
         return rv;
+    }
+
+    /**
+     * Removes all partially downloaded data from the staging directory for
+     * this torrent. No-op when the staging feature is disabled.
+     *
+     * @since 0.9.71+
+     */
+    public void deleteStagingData() {
+        if (_stagingBase == null) {
+            return;
+        }
+        // remove any empty dirs too; only the torrent's own subdir is touched
+        if (FileUtil.rmdir(_stagingBase, false)) {
+            if (_log.shouldInfo()) {
+                _log.info("[I2PSnark] Deleted staging data: " + _stagingBase);
+            }
+        } else if (_log.shouldWarn()) {
+            _log.warn("[I2PSnark] Unable to delete staging data: " + _stagingBase);
+        }
     }
 
     /**
@@ -1550,6 +1706,8 @@ public class Storage implements Closeable {
      */
     public boolean recheck() throws IOException {
         boolean changed = checkCreateFiles(true);
+        // files may have been recreated in the staging dir; move any complete ones
+        checkFileCompletions();
         if (listener != null && changed) listener.setWantedPieces(this);
         return changed;
     }
@@ -1638,14 +1796,9 @@ public class Storage implements Closeable {
             } else if (length == 0) {
                 if (!exists) {
                     // File should exist when we get here, but could have vanished
-                    // and we're now doing a recheck
-                    List<List<String>> files = metainfo.getFiles();
-                    if (files != null) {
-                        createFileFromNames(_base, files.get(i), _util.getFilesPublic());
-                    } else if (!_base.createNewFile()) {
-                        throw new IOException(
-                                "File '" + tf.name + "' was deleted, unable to recreate");
-                    }
+                    // and we're now doing a recheck. Recreate at the active
+                    // location (staging dir while incomplete, data dir otherwise).
+                    recreateFile(tf);
                     String msg =
                             "Corrupt file '"
                                     + tf.name
@@ -1942,10 +2095,8 @@ public class Storage implements Closeable {
      * @throws IOException when some storage related error occurs.
      */
     public boolean putPiece(PartialPiece pp) throws IOException {
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
         int piece = pp.getPiece();
-        boolean shouldPreallocate =
-                ctx.getProperty(PROP_PREALLOCATE_FILES, DEFAULT_PREALLOCATE_FILES);
+        boolean shouldPreallocate = _util.getPreallocateFiles();
         try {
             synchronized (bitfield) {
                 if (bitfield.get(piece)) return true; // No need to store twice.
@@ -2020,7 +2171,233 @@ public class Storage implements Closeable {
                 }
             }
         }
+        // Move any file whose pieces are all downloaded out of the staging dir
+        checkFileCompletions();
         return true;
+    }
+
+    /**
+     * Moves any file whose pieces are all downloaded out of the staging
+     * directory into the data directory. No-op when the staging feature is
+     * disabled.
+     *
+     * <p>Called after every piece write and after checks/rechecks. The move
+     * itself happens on a background thread; this method only starts it.
+     *
+     * @since 0.9.71+
+     */
+    private void checkFileCompletions() {
+        if (_stagingBase == null) {
+            return;
+        }
+        long[] ends = metainfo.fileEnds();
+        long start = 0;
+        boolean complete = false;
+        if (ends == null) {
+            // single-file torrent
+            complete = complete();
+        }
+        for (int i = 0; i < _torrentFiles.size(); i++) {
+            TorrentFile tf = _torrentFiles.get(i);
+            if (tf.isPadding || tf.movedToDataDir) {
+                start += tf.length;
+                continue;
+            }
+            boolean done;
+            if (ends == null) {
+                done = complete;
+            } else {
+                long end = start + tf.length;
+                done = fileComplete(start, end);
+            }
+            start += tf.length;
+            if (done) {
+                startCopy(tf);
+            }
+        }
+    }
+
+    /**
+     * Whether all pieces overlapping the byte range [start, end) are set in the bitfield.
+     *
+     * @param start first byte offset of the file in the torrent
+     * @param end one past the last byte of the file
+     * @return true if the file's pieces are all downloaded
+     * @since 0.9.71+
+     */
+    private boolean fileComplete(long start, long end) {
+        int startPiece = (int) (start / piece_size);
+        int endPiece = (int) ((end - 1) / piece_size);
+        if (endPiece >= pieces) {
+            endPiece = pieces - 1;
+        }
+        // piece may span a file boundary; require every piece it overlaps to be set
+        for (int i = startPiece; i <= endPiece; i++) {
+            if (!bitfield.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Starts copying a completed file from the staging directory to the data
+     * directory on a background thread, unless a copy for the file is already
+     * running.
+     *
+     * <p>The staging file is read with its open RAF handle; the handle is
+     * closed before the file is renamed away, so a concurrent write to the
+     * same file (which would be a hash failure anyway) is not a concern.
+     *
+     * @param tf the completed file, still located in the staging directory
+     * @since 0.9.71+
+     */
+    private void startCopy(TorrentFile tf) {
+        // serialize with any concurrent checkFileCompletions() caller
+        synchronized (tf) {
+            if (tf.movedToDataDir || !_copying.add(tf)) {
+                return;
+            }
+        }
+        I2PAppThread t =
+                new I2PAppThread("SnarkStorageCopy-" + tf.name) {
+                    @Override
+                    public void run() {
+                        copyToFinal(tf);
+                    }
+                };
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /**
+     * Copies the file to the data directory with a bounded number of retries
+     * in case the destination is temporarily unavailable. Always runs on a
+     * daemon thread.
+     *
+     * @param tf the completed file
+     * @since 0.9.71+
+     */
+    private void copyToFinal(TorrentFile tf) {
+        try {
+            for (int i = 0; i < MAX_COPY_RETRIES; i++) {
+                if (copyOnce(tf)) {
+                    return;
+                }
+                sleep();
+            }
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "[I2PSnark] Giving up copying "
+                                + tf.name
+                                + " to the data directory after "
+                                + MAX_COPY_RETRIES
+                                + " attempts");
+            }
+        } finally {
+            _copying.remove(tf);
+        }
+    }
+
+    /**
+     * Copies the file from the staging directory to the data directory once.
+     *
+     * @param tf the completed file
+     * @return true if the file was moved, false if it must be retried
+     * @since 0.9.71+
+     */
+    private boolean copyOnce(TorrentFile tf) {
+        File finalFile = tf.finalFile;
+        File workFile = tf.RAFfile;
+        File tmp;
+        try {
+            // close the read handle so the file can be renamed; any piece write
+            // after this point would be a hash mismatch and is lost
+            synchronized (tf) {
+                try {
+                    tf.closeRAF();
+                } catch (IOException ioe) { /* ignored */ }
+            }
+            File parent = finalFile.getParentFile();
+            if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {
+                throw new IOException("Could not create directory " + parent);
+            }
+            // a previous failed attempt may have left a temp file
+            tmp = new File(finalFile.getParentFile(), finalFile.getName() + ".part");
+            if (tmp.exists() && !tmp.delete()) {
+                throw new IOException("Could not delete stale temp file " + tmp);
+            }
+            if (!copyFile(workFile, tmp)) {
+                return false;
+            }
+            if (!tmp.renameTo(finalFile)) {
+                return false;
+            }
+            synchronized (tf) {
+                if (!workFile.delete()) {
+                    _log.warn("[I2PSnark] Unable to delete staging file: " + workFile);
+                }
+                tf.RAFfile = finalFile;
+                tf.isSparse = false;
+                tf.movedToDataDir = true;
+            }
+            if (_log.shouldInfo()) {
+                _log.info("[I2PSnark] Moved " + tf.name + " to " + finalFile);
+            }
+            return true;
+        } catch (IOException ioe) {
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "[I2PSnark] Error copying "
+                                + tf.name
+                                + " to the data directory: "
+                                + ioe);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Copies a file's contents to the destination, truncating the destination
+     * first.
+     *
+     * @return true on success, false on transient failure (e.g. disk full)
+     * @since 0.9.71+
+     */
+    private boolean copyFile(File src, File dst) {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = new FileInputStream(src);
+            out = new FileOutputStream(dst);
+            byte[] buf = new byte[BUFSIZE];
+            int read;
+            while ((read = in.read(buf)) >= 0) {
+                out.write(buf, 0, read);
+            }
+            return true;
+        } catch (IOException ioe) {
+            if (_log.shouldWarn()) {
+                _log.warn("[I2PSnark] Error copying " + src + " to " + dst + ": " + ioe);
+            }
+            return false;
+        } finally {
+            try {
+                if (in != null) in.close();
+            } catch (IOException ioe) { /* ignored */ }
+            try {
+                if (out != null) out.close();
+            } catch (IOException ioe) { /* ignored */ }
+        }
+    }
+
+    /** Delays between copy attempts; returns immediately on interruption. */
+    private void sleep() {
+        try {
+            Thread.sleep(COPY_RETRY_DELAY);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
@@ -2176,7 +2553,33 @@ public class Storage implements Closeable {
     private class TorrentFile implements Comparable<TorrentFile> {
         public final long length;
         public final String name;
-        public final File RAFfile;
+
+        /**
+         * The active file: the staging-dir file while the file is incomplete,
+         * the data-dir file after it has been moved. Never null. Not final:
+         * replaced by the final file when the move completes. Locking: this.
+         */
+        public File RAFfile;
+
+        /**
+         * The final data-directory location of the file. Constant even while
+         * the data is still being written to the staging dir, so paths shown
+         * in the UI and used for file matching never change. Locking: none.
+         */
+        public final File finalFile;
+
+        /**
+         * The staging-dir location while the file is incomplete, null once the
+         * file lives in the data directory (or when staging is disabled).
+         * Locking: none.
+         */
+        public final File workFile;
+
+        /**
+         * Whether the file lives in the data directory; set when the copy out
+         * of the staging dir completes. Locking: this.
+         */
+        public volatile boolean movedToDataDir;
 
         /** When the RAF was last accessed, or 0 if closed; locking: this. */
         private long RAFtime;
@@ -2210,14 +2613,39 @@ public class Storage implements Closeable {
          * hash as zeros. The runtime never creates, allocates, or writes it to disk.
          */
         public TorrentFile(File base, File f, long len, boolean padding) {
-            String n = f.getPath();
+            this(base, f, f, null, len, padding);
+        }
+
+        /**
+         * Full constructor supporting the staging feature.
+         *
+         * @param base the data dir (or the base file for a single-file torrent)
+         * @param active the file to read and write now (staging or data dir)
+         * @param finalFile the data-directory location
+         * @param workFile the staging-dir location, or null when the file is
+         *     already in the data directory
+         * @param len expected length
+         * @param padding whether this is a BEP 47 padding placeholder
+         * @since 0.9.71+
+         */
+        public TorrentFile(
+                File base,
+                File active,
+                File finalFile,
+                File workFile,
+                long len,
+                boolean padding) {
+            String n = finalFile.getPath();
             if (base.isDirectory() && n.startsWith(base.getPath())) {
                 n = n.substring(base.getPath().length() + 1);
             }
             name = n;
             length = len;
-            RAFfile = f;
+            RAFfile = active;
+            this.finalFile = finalFile;
+            this.workFile = workFile;
             isPadding = padding;
+            movedToDataDir = workFile == null;
         }
 
         /*
@@ -2314,9 +2742,7 @@ public class Storage implements Closeable {
             // with EINVAL (or the open fails with EACCES)
             checkRAF(true); // RW
             raf.setLength(length);
-            I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            boolean shouldPreallocate =
-                    ctx.getProperty(PROP_PREALLOCATE_FILES, DEFAULT_PREALLOCATE_FILES);
+            boolean shouldPreallocate = _util.getPreallocateFiles();
             /**
              * Don't bother ballooning later on Windows since there is no sparse file support until
              * JDK7 using the JSR-203 interface.
@@ -2384,11 +2810,14 @@ public class Storage implements Closeable {
         /**
          * Whether hash code is present.
          *
+         * <p>Keyed on the final data-directory path, which is constant while
+         * the file is moved from staging to the data dir.
+         *
          * @return whether h code is present
          */
         @Override
         public int hashCode() {
-            return RAFfile.getAbsolutePath().hashCode();
+            return finalFile.getAbsolutePath().hashCode();
         }
 
         /**
@@ -2397,8 +2826,8 @@ public class Storage implements Closeable {
         @Override
         public boolean equals(Object o) {
             return (o instanceof TorrentFile)
-                    && RAFfile.getAbsolutePath()
-                            .equals(((TorrentFile) o).RAFfile.getAbsolutePath());
+                    && finalFile.getAbsolutePath()
+                            .equals(((TorrentFile) o).finalFile.getAbsolutePath());
         }
 
         /**

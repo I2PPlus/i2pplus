@@ -127,12 +127,29 @@ public class StorageTest {
             content[i] = (byte) ((i * 31 + 7) & 0xff);
         }
         writeFile(file, content, 0, content.length);
+        return buildSingleFileTorrent(file, content);
+    }
+
+    /**
+     * Same metainfo as {@link #buildSingleFileTorrent(File, long)}, without
+     * writing the data file to disk, so check() can take the staging branch.
+     */
+    private MetaInfo buildSingleFileTorrentNoData(File file, long size) throws Exception {
+        byte[] content = new byte[(int) size];
+        for (int i = 0; i < content.length; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        return buildSingleFileTorrent(file, content);
+    }
+
+    /** Builds the single-file bencode for the given content and parses it. */
+    private MetaInfo buildSingleFileTorrent(File file, byte[] content) throws Exception {
         byte[] hashes = computeHashes(content);
         StringBuilder sb = new StringBuilder(256);
         sb.append('d');
         sb.append("8:announce").append("19:http://tracker.test");
         sb.append("4:info").append('d');
-        sb.append("6:length").append('i').append(size).append('e');
+        sb.append("6:length").append('i').append(content.length).append('e');
         sb.append("4:name");
         byte[] nb = file.getName().getBytes(StandardCharsets.ISO_8859_1);
         sb.append(nb.length).append(':').append(file.getName());
@@ -145,6 +162,23 @@ public class StorageTest {
         System.arraycopy(hashes, 0, rv, head.length, hashes.length);
         System.arraycopy(tail, 0, rv, head.length + hashes.length, tail.length);
         return new MetaInfo(new ByteArrayInputStream(rv));
+    }
+
+    /**
+     * Same metainfo as {@link #buildTorrent(List, List)}, without writing any
+     * data files to disk, so check() can take the staging branch.
+     */
+    private MetaInfo buildTorrentNoData(List<String> names, List<Long> sizes) throws Exception {
+        long total = 0;
+        for (Long size : sizes) {
+            total += size.longValue();
+        }
+        byte[] content = new byte[(int) total];
+        for (int i = 0; i < content.length; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        return new MetaInfo(
+                new ByteArrayInputStream(buildTorrentBytes(names, sizes, computeHashes(content))));
     }
 
     private static byte[] computeHashes(byte[] content) {
@@ -233,7 +267,10 @@ public class StorageTest {
     }
 
     private Storage newStorage(MetaInfo mi, StorageListener listener) {
-        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        return newStorage(mi, listener, new I2PSnarkUtil(I2PAppContext.getGlobalContext()));
+    }
+
+    private Storage newStorage(MetaInfo mi, StorageListener listener, I2PSnarkUtil util) {
         return new Storage(util, _dataDir, mi, listener, true);
     }
 
@@ -1154,5 +1191,195 @@ public class StorageTest {
         assertEquals(6, dir.listFiles().length);
         assertEquals(4, Storage.countNonPad(dir.listFiles()));
         assertEquals(0, Storage.countNonPad(null));
+    }
+
+    // ----- i2psnark.tempDir staging -----
+
+    /**
+     * Blocks until the background copy has moved the file to the data dir
+     * (finalFile present, workFile gone).
+     */
+    private static void waitForMove(File finalFile, File workFile) throws Exception {
+        long deadline = System.currentTimeMillis() + 30000;
+        while (System.currentTimeMillis() < deadline) {
+            if (finalFile.exists() && !workFile.exists()) {
+                return;
+            }
+            Thread.sleep(50);
+        }
+        fail("file was not moved to " + finalFile);
+    }
+
+    /**
+     * Asserts that the file's bytes match the deterministic torrent content
+     * (byte i of the torrent = (i * 31 + 7) & 0xff). The file is a contiguous
+     * run of the torrent starting at offset <code>start</code>.
+     */
+    private static void assertContent(File f, long start, int len) throws IOException {
+        assertEquals((long) len, f.length());
+        RandomAccessFile raf = new RandomAccessFile(f, "r");
+        try {
+            byte[] buf = new byte[len];
+            raf.readFully(buf);
+            for (int i = 0; i < len; i++) {
+                assertEquals("byte " + (start + i), (byte) (((start + i) * 31 + 7) & 0xff), buf[i]);
+            }
+        } finally {
+            raf.close();
+        }
+    }
+
+    /**
+     * With i2psnark.tempDir set, check() writes incomplete files into the
+     * per-torrent staging subdir, leaves the data dir empty, reports
+     * data-dir paths through getFiles(), and deleteStagingData() removes the
+     * staging data.
+     */
+    @Test
+    public void testStagingFilesCreatedInTempDir() throws Exception {
+        File tempDir = new File(_baseDir, "temp");
+        assertTrue(tempDir.mkdir());
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        util.setTempDirProp(tempDir.getAbsolutePath());
+        MetaInfo mi =
+                buildTorrentNoData(
+                        Arrays.asList("a.dat", "b.dat"),
+                        Arrays.asList(Long.valueOf(PIECE_LENGTH * 2), Long.valueOf(PIECE_LENGTH * 2)));
+        RecordingListener l = new RecordingListener();
+        Storage s = newStorage(mi, l, util);
+        s.check(0, null);
+        File staging = Storage.getStagingBase(tempDir.getAbsolutePath(), s.getBaseName(), mi);
+        assertTrue(staging.isDirectory());
+        // zero-length work files in staging, nothing in the data dir
+        assertFalse(new File(_dataDir, "a.dat").exists());
+        assertFalse(new File(_dataDir, "b.dat").exists());
+        assertTrue(new File(staging, "a.dat").isFile());
+        assertTrue(new File(staging, "b.dat").isFile());
+        // zero-length files force a full recheck; nothing hashes, nothing completes
+        assertEquals(0, l.checked.size());
+        assertEquals(4, s.needed());
+        // getFiles() exposes the final data-dir paths
+        assertEquals(
+                Arrays.asList(new File(_dataDir, "a.dat"), new File(_dataDir, "b.dat")),
+                s.getFiles());
+        // deleting the torrent clears the staging dir
+        s.deleteStagingData();
+        assertFalse(staging.exists());
+    }
+
+    /**
+     * A file whose pieces are all downloaded is copied into the data dir on a
+     * background thread, with content intact; other files stay staged until
+     * their pieces complete.
+     */
+    @Test
+    public void testStagingMovesFileOnCompletion() throws Exception {
+        File tempDir = new File(_baseDir, "temp");
+        assertTrue(tempDir.mkdir());
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        util.setTempDirProp(tempDir.getAbsolutePath());
+        MetaInfo mi =
+                buildTorrentNoData(
+                        Arrays.asList("a.dat", "b.dat"),
+                        Arrays.asList(Long.valueOf(PIECE_LENGTH * 2), Long.valueOf(PIECE_LENGTH * 2)));
+        Storage s = newStorage(mi, new RecordingListener(), util);
+        s.check(0, null);
+        File staging = Storage.getStagingBase(tempDir.getAbsolutePath(), s.getBaseName(), mi);
+        File finalA = new File(_dataDir, "a.dat");
+        File finalB = new File(_dataDir, "b.dat");
+        // pieces 0 and 1 complete a.dat: it moves to the data dir
+        assertTrue(s.putPiece(fullPiece(mi, 0)));
+        assertTrue(s.putPiece(fullPiece(mi, 1)));
+        waitForMove(finalA, new File(staging, "a.dat"));
+        assertContent(finalA, 0, PIECE_LENGTH * 2);
+        // b.dat is still staged
+        assertTrue(new File(staging, "b.dat").exists());
+        assertFalse(finalB.exists());
+        // the remaining pieces complete b.dat
+        assertTrue(s.putPiece(fullPiece(mi, 2)));
+        assertTrue(s.putPiece(fullPiece(mi, 3)));
+        waitForMove(finalB, new File(staging, "b.dat"));
+        assertTrue(s.complete());
+        assertContent(finalB, PIECE_LENGTH * 2, PIECE_LENGTH * 2);
+        assertFalse(new File(staging, "b.dat").exists());
+    }
+
+    /**
+     * After a restart (simulated with a saved bitfield), a data-dir file is
+     * trusted from the saved state without re-hashing, and a staging file with
+     * matching length and mtime is trusted too; unfinished pieces keep their
+     * saved clear bits and complete in place, moving out on completion.
+     */
+    @Test
+    public void testStagingResumeTrustsSavedState() throws Exception {
+        File tempDir = new File(_baseDir, "temp");
+        assertTrue(tempDir.mkdir());
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        util.setTempDirProp(tempDir.getAbsolutePath());
+        MetaInfo mi =
+                buildTorrentNoData(
+                        Arrays.asList("a.dat", "b.dat"),
+                        Arrays.asList(Long.valueOf(PIECE_LENGTH * 2), Long.valueOf(PIECE_LENGTH * 2)));
+        Storage s1 = newStorage(mi, new RecordingListener(), util);
+        s1.check(0, null);
+        assertTrue(s1.putPiece(fullPiece(mi, 0)));
+        assertTrue(s1.putPiece(fullPiece(mi, 1)));
+        File staging = Storage.getStagingBase(tempDir.getAbsolutePath(), s1.getBaseName(), mi);
+        File finalA = new File(_dataDir, "a.dat");
+        waitForMove(finalA, new File(staging, "a.dat"));
+        // b.dat is still staged (ballooned to full length by check()):
+        // a.dat lives in the data dir
+        BitField partial = new BitField(mi.getPieces());
+        partial.set(0);
+        partial.set(1);
+        long savedTime = System.currentTimeMillis();
+        setMtime(finalA, savedTime - 60000);
+
+        RecordingListener l2 = new RecordingListener();
+        Storage s2 = newStorage(mi, l2, util);
+        s2.check(savedTime, partial);
+        // both files trusted: nothing re-hashed, saved bits kept
+        assertTrue(l2.checked.isEmpty());
+        assertTrue(l2.results.isEmpty());
+        assertTrue(s2.getBitField().get(0));
+        assertTrue(s2.getBitField().get(1));
+        assertFalse(s2.getBitField().get(2));
+        assertFalse(s2.getBitField().get(3));
+        assertEquals(2, s2.needed());
+        assertTrue(finalA.exists());
+        // completing b.dat moves it into the data dir
+        assertTrue(s2.putPiece(fullPiece(mi, 2)));
+        assertTrue(s2.putPiece(fullPiece(mi, 3)));
+        waitForMove(new File(_dataDir, "b.dat"), new File(staging, "b.dat"));
+        assertTrue(s2.complete());
+        assertContent(new File(_dataDir, "b.dat"), PIECE_LENGTH * 2, PIECE_LENGTH * 2);
+    }
+
+    /**
+     * Single-file torrents: check() creates the work file in staging (the data
+     * file appears only once the torrent is complete).
+     */
+    @Test
+    public void testStagingSingleFileMovesOnCompletion() throws Exception {
+        File tempDir = new File(_baseDir, "temp");
+        assertTrue(tempDir.mkdir());
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        util.setTempDirProp(tempDir.getAbsolutePath());
+        File base = new File(_dataDir, "single.dat");
+        MetaInfo mi = buildSingleFileTorrentNoData(base, PIECE_LENGTH * 2);
+        RecordingListener l = new RecordingListener();
+        Storage s = new Storage(util, base, mi, l, true);
+        s.check(0, null);
+        // work file in staging, nothing in the data dir, nothing hashed
+        assertFalse(base.exists());
+        assertTrue(new File(Storage.getStagingBase(tempDir.getAbsolutePath(), s.getBaseName(), mi), "single.dat").isFile());
+        assertEquals(0, l.checked.size());
+        assertEquals(2, s.needed());
+        // completing the torrent moves the file into the data dir
+        assertTrue(s.putPiece(fullPiece(mi, 0)));
+        assertTrue(s.putPiece(fullPiece(mi, 1)));
+        waitForMove(base, new File(Storage.getStagingBase(tempDir.getAbsolutePath(), s.getBaseName(), mi), "single.dat"));
+        assertTrue(s.complete());
+        assertContent(base, 0, PIECE_LENGTH * 2);
     }
 }

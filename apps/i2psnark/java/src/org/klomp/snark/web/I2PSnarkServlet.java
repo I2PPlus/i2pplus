@@ -2629,6 +2629,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 Storage storage = snark.getStorage();
                 if (storage == null) break;
 
+                // remove partial downloads from the staging dir, if any
+                storage.deleteStagingData();
+
                 List<List<String>> files = meta.getFiles();
                 if (files == null) {
                     for (File file : storage.getFiles()) {
@@ -2715,11 +2718,15 @@ public class I2PSnarkServlet extends BasicServlet {
         String commentsName = req.getParameter("nofilter_commentsName");
         String apiTarget = req.getParameter("apiTarget");
         String apiKey = req.getParameter("apiKey");
+        String maxFiles = req.getParameter("maxFiles");
+        String tempDir = req.getParameter("nofilter_tempDir");
+        boolean preallocateFiles = req.getParameter("preallocateFiles") != null;
 
         _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDelMin, startupDelMax, pageSize, seedPct, eepHost, eepPort,
                               i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
                               ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
-                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, randomizeStartup, apiTarget, apiKey);
+                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, randomizeStartup, apiTarget, apiKey,
+                              maxFiles, preallocateFiles, tempDir);
         try {
             setResourceBase(_manager.getDataDir());
         } catch (ServletException ignored) { /* ignored */ }
@@ -4158,6 +4165,8 @@ public class I2PSnarkServlet extends BasicServlet {
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         boolean filesPublic = _manager.areFilesPublic();
         boolean autoStart = _manager.shouldAutoStart();
+        boolean preallocateFiles = _manager.util().getPreallocateFiles();
+        String tempDir = _manager.util().getTempDirProp();
         boolean useOpenTrackers = _manager.util().shouldUseOpenTrackers();
         boolean useDHT = _manager.util().shouldUseDHT();
         boolean useRatings = _manager.util().ratingsEnabled();
@@ -4422,7 +4431,18 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
            .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
-           .append("\" value=\"").append(_manager.getMaxFilesPerTorrent()).append("\" spellcheck=false disabled></label></span><br>\n")
+           .append("\" value=\"").append(_manager.getMaxFilesPerTorrent()).append("\" spellcheck=false></label></span><br>\n")
+           .append("<span class=configOption><label><b>")
+           .append(_t("Temp directory"))
+           .append("</b> <input type=text name=nofilter_tempDir size=60").append(" title=\"")
+           .append(_t("Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."))
+           .append("\" value=\"").append(tempDir != null ? DataHelper.escapeHTML(tempDir) : "").append("\" spellcheck=false></label></span><br>\n")
+           .append("<span class=configOption><label for=preallocateFiles><b>")
+           .append(_t("Preallocate files"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preallocateFiles id=preallocateFiles ")
+           .append(preallocateFiles ? "checked " : "").append("title=\"")
+           .append(_t("Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"))
+           .append("\"></span>")
            .append("</div></td></tr>\n");
 
 /* i2cp/tunnel configuration */
