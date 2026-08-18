@@ -4591,19 +4591,18 @@ public class I2PSnarkServlet extends BasicServlet {
             String installed = req.getHeader(BridgeVersion.HEADER);
             String bundled = getBridgeVersion();
             boolean update = BridgeVersion.isUpdateAvailable(installed, bundled);
-            if (installed != null && !update) {
-                buf.append("<span class=configOption><b>")
-                   .append(_t("I2PSnark Bridge extension installed (v{0})", DataHelper.escapeHTML(installed)))
-                   .append("</b></span> ");
-            } else {
-                buf.append("<input type=submit name=installBrowserApi class=accept value=\"")
-                   .append(update ? _t("Update browser handler") : _t("Install browser handler"))
-                   .append("\" title=\"")
-                   .append(update
-                       ? _t("Update the installed I2PSnark Bridge extension to v{0}", bundled)
-                       : _t("Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"))
-                   .append("\" style=float:left> ");
+            boolean current = installed != null && !update;
+            buf.append("<input type=submit name=installBrowserApi class=accept value=\"")
+               .append(update ? _t("Update browser handler") : _t("Install browser handler"))
+               .append("\" title=\"")
+               .append(update
+                   ? _t("Update the installed I2PSnark Bridge extension to v{0}", bundled)
+                   : _t("Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"))
+               .append("\" style=float:left");
+            if (current) {
+                buf.append(" disabled");
             }
+            buf.append("> ");
         } else {
             String script = isWindowsUserAgent(req.getHeader("User-Agent"))
                 ? "install-i2psnark-browser-handler.ps1"

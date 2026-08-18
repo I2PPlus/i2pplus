@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "I2PSnark Magnet Bridge",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "Adds magnet links to I2PSnark on your local I2P router and shows a notification when a torrent is added.",
   "browser_specific_settings": {
     "gecko": {
@@ -9,8 +9,13 @@
       "strict_min_version": "115.0"
     }
   },
+  "supported_color_schemes": [
+    "light",
+    "dark"
+  ],
   "permissions": [
     "notifications",
+    "storage",
     "webRequest",
     "webRequestBlocking"
   ],
@@ -23,6 +28,10 @@
       "background.js"
     ],
     "persistent": true
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
   },
   "content_scripts": [
     {
