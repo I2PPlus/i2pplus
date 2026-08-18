@@ -499,6 +499,8 @@ public class WorkingDir {
      *
      * @param src not a directory, must exist
      * @param dst not a directory, will be overwritten if existing, will be mode 600
+ *            (best effort; on non-POSIX filesystems such as Windows only the
+ *            read-only attribute is affected)
      * @return true if it was copied successfully
      */
     static boolean copyFile(File src, File dst) {

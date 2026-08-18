@@ -35,7 +35,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     *  Sets file to mode 600 if the file is created
+     *  Tries to set file to mode 600 if the file is created
      */
     @Override
     public boolean createNewFile() throws IOException {
@@ -45,7 +45,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     *  Sets file to mode 600 when the file is created
+     *  Tries to set file to mode 600 when the file is created
      */
     public static File createTempFile(String prefix, String suffix) throws IOException {
         File rv = File.createTempFile(prefix, suffix);
@@ -55,7 +55,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     *  Sets file to mode 600 when the file is created
+     *  Tries to set file to mode 600 when the file is created
      */
     public static File createTempFile(String prefix, String suffix, File directory) throws IOException {
         File rv = File.createTempFile(prefix, suffix, directory);

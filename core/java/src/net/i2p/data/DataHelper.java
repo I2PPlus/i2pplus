@@ -701,7 +701,8 @@ public class DataHelper {
     /**
      * Writes the props to the file, unsorted (unless props is an OrderedProperties)
      * Note that this does not escape the \r or \n that are unescaped in loadProps() above.
-     * As of 0.8.1, file will be mode 600.
+     * As of 0.8.1, file will be mode 600 (best effort; group read/write is
+     * also granted where POSIX permissions are supported, e.g. 660 on Linux).
      *
      * Properties from the defaults table of props (if any) are not written out by this method.
      *

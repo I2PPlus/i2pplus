@@ -13,7 +13,9 @@ import java.util.Set;
 
 /**
  * Same as FileOutputStream but sets the file mode so it can only
- * be read and written by the owner only (i.e. 600 on linux)
+ * be read and written by the owner only (i.e. 600 on POSIX).
+ * Best effort: on filesystems without POSIX permission support,
+ * such as Windows, only the read-only attribute can be affected.
  *
  * @author zzz
  * @since 0.8.1
@@ -23,7 +25,7 @@ public class SecureFileOutputStream extends FileOutputStream {
     private static final boolean oneDotSix = SystemVersion.isJava6();
 
     /**
-     *  Sets output file to mode 600
+     *  Tries to set output file to mode 600
      */
     public SecureFileOutputStream(String file) throws FileNotFoundException {
         super(file);
@@ -31,7 +33,7 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Sets output file to mode 600 whether append = true or false
+     *  Tries to set output file to mode 600 whether append = true or false
      */
     public SecureFileOutputStream(String file, boolean append) throws FileNotFoundException {
         super(file, append);
@@ -39,7 +41,7 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Sets output file to mode 600
+     *  Tries to set output file to mode 600
      */
     public SecureFileOutputStream(File file) throws FileNotFoundException {
         super(file);
@@ -47,7 +49,7 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Sets output file to mode 600 only if append = false
+     *  Tries to set output file to mode 600 only if append = false
      *  (otherwise it is presumed to be 600 already)
      */
     public SecureFileOutputStream(File file, boolean append) throws FileNotFoundException {
@@ -82,7 +84,8 @@ public class SecureFileOutputStream extends FileOutputStream {
 
     /**
      *  Tries to set the permissions to 660 (owner+group rw),
-     *  ignores errors. Uses PosixFilePermission API.
+     *  ignores errors, including on filesystems without POSIX
+     *  permission support (e.g. Windows). Uses the PosixFilePermission API.
      *
      *  @since 0.9.70+
      */
@@ -95,6 +98,8 @@ public class SecureFileOutputStream extends FileOutputStream {
             Files.setPosixFilePermissions(f.toPath(), perms);
         } catch (IOException e) {
             // not a POSIX filesystem or other error, ignore
+        } catch (UnsupportedOperationException e) {
+            // not a POSIX filesystem (e.g. Windows), ignore
         }
     }
 }
