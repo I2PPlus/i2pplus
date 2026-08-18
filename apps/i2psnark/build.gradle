@@ -239,9 +239,7 @@ task standalonePrep(type: Sync) {
     from "${rootDir}/apps/i2psnark/launch-i2psnark.bat"
     from "${rootDir}/apps/i2psnark/jetty-i2psnark.xml"
     from "${rootDir}/apps/i2psnark/i2psnark-appctx.config"
-    from("${rootDir}/apps/i2psnark/readme-standalone.txt") {
-        rename { 'readme.txt' }
-    }
+    from "${rootDir}/apps/i2psnark/README-STANDALONE.md"
     from("${rootDir}/apps/i2psnark/standalone-context.xml") {
         into 'contexts'
         rename { 'context.xml' }

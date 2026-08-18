@@ -484,7 +484,7 @@
         <copy file="../jetty-i2psnark.xml" tofile="${standalone.dir}/jetty-i2psnark.xml" quiet="true"/>
         <copy file="../i2psnark-appctx.config" tofile="${standalone.dir}/i2psnark-appctx.config" quiet="true"/>
         <copy file="${build.dir}/i2psnark-standalone.jar" tofile="${standalone.dir}/i2psnark.jar" quiet="true"/>
-        <copy file="../readme-standalone.txt" tofile="${standalone.dir}/readme.txt" quiet="true"/>
+        <copy file="../README-STANDALONE.md" tofile="${standalone.dir}/README-STANDALONE.md" quiet="true"/>
         <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="${standalone.dir}/hosts.txt" quiet="true"/>
       </parallel>
     </parallel>
@@ -510,7 +510,7 @@
         <copy file="../jetty-i2psnark.xml" tofile="${standalone.dir}/jetty-i2psnark.xml" quiet="true"/>
         <copy file="../i2psnark-appctx.config" tofile="${standalone.dir}/i2psnark-appctx.config" quiet="true"/>
         <copy file="${build.dir}/i2psnark-standalone.jar" tofile="${standalone.dir}/i2psnark.jar" quiet="true"/>
-        <copy file="../readme-standalone.txt" tofile="${standalone.dir}/readme.txt" quiet="true"/>
+        <copy file="../README-STANDALONE.md" tofile="${standalone.dir}/README-STANDALONE.md" quiet="true"/>
         <copy file="../../../installer/resources/hosts_i2psnark.txt" tofile="${standalone.dir}/hosts.txt" quiet="true"/>
       </parallel>
     </parallel>
