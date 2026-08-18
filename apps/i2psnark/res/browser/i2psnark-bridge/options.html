@@ -20,17 +20,12 @@
 <h1>I2PSnark Magnet Bridge</h1>
 <p class="hint" style="margin-left:0">Settings are saved immediately.</p>
 
-<label><input type="checkbox" id="notifySuccess">Show a notification when a torrent is added</label>
+<label><input type="checkbox" id="notifySuccess">Show a notification when a magnet is added</label>
 
-<label><input type="checkbox" id="notifyFailure">Show a notification when adding a torrent fails</label>
+<label><input type="checkbox" id="notifyFailure">Show a notification when adding a magnet fails</label>
 
-<label><input type="checkbox" id="handleTorrentLinks">Add .torrent links to I2PSnark when clicked
-  <p class="hint">Clicks on links ending in .torrent are sent to the router, which downloads
-  and adds the torrent, instead of opening the link in the browser.</p></label>
-
-<label><input type="checkbox" id="i2pOnly">Only handle .i2p links
-  <p class="hint">Restrict .torrent link handling to i2p hosts only.
-  Magnet links are not affected.</p></label>
+<label><input type="checkbox" id="i2pOnly">Only handle magnet links on .i2p pages
+  <p class="hint">Magnet links on other pages are ignored, and nothing is sent to the router.</p></label>
 
 <p id="saved">Saved.</p>
 <script src="options.js"></script>

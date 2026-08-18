@@ -23,15 +23,22 @@ const MAGNET_RESULT_EVENT = "i2psnark:magnet-result";
     const magnet = params.get("nofilter_magnet") || params.get("magnet");
 
     function closeNow() {
-        // The tab only exists to hand the magnet to the browser API. Firefox may
-        // open the protocol-handler URI in the current tab, replacing the page
-        // we were on; if so, navigate back to it. If the handler opened in its
-        // own tab, close the tab instead.
-        if (history.length > 1) {
-            history.back();
-        } else {
-            try { window.close(); } catch (e) {}
-        }
+        // The tab exists only to hand the magnet to the browser API. The
+        // extension tags magnet links with target="_blank", so the handler
+        // always lands in a fresh tab; close it. Firefox seeds a fresh
+        // handler tab with the source page in its history, so history.back()
+        // would re-render the source page here — only use it as a last
+        // resort when window.close() is ignored (handler replaced the tab
+        // of a page the tagger never ran on). If the close succeeded the
+        // page is gone and the fallback never fires.
+        try {
+            window.close();
+        } catch (e) {}
+        setTimeout(function () {
+            if (!window.closed && history.length > 1) {
+                history.back();
+            }
+        }, 100);
     }
 
     if (!magnet) {

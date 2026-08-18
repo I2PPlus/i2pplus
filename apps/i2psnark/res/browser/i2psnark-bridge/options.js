@@ -2,9 +2,9 @@
  * @module i2psnarkBridgeOptions
  * @file options.js - I2PSnark Bridge options page logic.
  * @description Loads and saves the extension settings in chrome.storage.local:
- * notification toggles, .torrent link handling, and the .i2p-only restriction.
+ * notification toggles, and the .i2p-only restriction on magnet link handling.
  * Changes are applied immediately through the storage.onChanged listener in
- * background.js, so no reload of the extension is needed.
+ * tagLinks.js and background.js, so no reload of the extension is needed.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -14,11 +14,10 @@
   const DEFAULTS = {
     notifySuccess: true,
     notifyFailure: true,
-    handleTorrentLinks: false,
     i2pOnly: true
   };
 
-  const CHECKBOXES = ["notifySuccess", "notifyFailure", "handleTorrentLinks", "i2pOnly"];
+  const CHECKBOXES = ["notifySuccess", "notifyFailure", "i2pOnly"];
   const saved = document.getElementById("saved");
 
   function showSaved() {

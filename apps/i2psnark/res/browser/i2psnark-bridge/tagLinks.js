@@ -1,14 +1,13 @@
 /**
  * @module i2psnarkBridgeTagLinks
- * @file tagLinks.js - I2PSnark Bridge link tagger and .torrent click handler.
+ * @file tagLinks.js - I2PSnark Bridge magnet link tagger.
  * @description Tags magnet: links with target="_blank" so the protocol handler
  * page Firefox opens never replaces the page the user is on (with
  * target="_blank" the handler always lands in a fresh tab, and the handler page
- * magnetHandler.js closes that tab the moment it is done). When enabled in the
- * options page, clicks on .torrent links are intercepted and sent to the
- * background script, which asks the router to fetch and add the torrent; the
- * .i2p-only option restricts that handling to hosts ending in .i2p, otherwise
- * the link behaves normally.
+ * magnetHandler.js closes that tab the moment it is done). When the .i2p-only
+ * option is enabled, magnet links on pages outside .i2p are ignored entirely:
+ * the click is prevented, so the registered protocol handler never opens and
+ * nothing about them is sent to the router.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -16,12 +15,25 @@
   "use strict";
 
   const MAGNET_SELECTOR = 'a[href^="magnet:"]';
-  const TORRENT_SELECTOR = 'a[href$=".torrent"]';
-  const PREFS_DEFAULTS = { handleTorrentLinks: false, i2pOnly: true };
+  const PREFS_DEFAULTS = { i2pOnly: true };
 
-  function isI2pUrl(url) {
+  let prefs = PREFS_DEFAULTS;
+
+  chrome.storage.local.get(PREFS_DEFAULTS, (stored) => {
+    prefs = Object.assign({}, PREFS_DEFAULTS, stored);
+  });
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "local") {return;}
+    for (const key of Object.keys(changes)) {
+      if (key in prefs) {
+        prefs[key] = changes[key].newValue;
+      }
+    }
+  });
+
+  function isI2pPage() {
     try {
-      return /\.i2p$/i.test(new URL(url).hostname);
+      return /\.i2p$/i.test(window.location.hostname);
     } catch (e) {
       return false;
     }
@@ -40,14 +52,21 @@
   }
 
   document.addEventListener("click", function (event) {
-    const link = event.target && event.target.closest ? event.target.closest(TORRENT_SELECTOR) : null;
-    if (!link) {return;}
-    chrome.storage.local.get(PREFS_DEFAULTS, function (prefs) {
-      if (!prefs.handleTorrentLinks) {return;}
-      if (prefs.i2pOnly && !isI2pUrl(link.href)) {return;}
+    const magnet = event.target && event.target.closest ? event.target.closest(MAGNET_SELECTOR) : null;
+    if (!magnet) {return;}
+    if (prefs.i2pOnly && !isI2pPage()) {
+      // The browser would otherwise open the registered magnet handler page.
+      // preventDefault must run synchronously within the event dispatch, so
+      // the prefs are cached above, not fetched here.
       event.preventDefault();
-      chrome.runtime.sendMessage({ type: "addTorrent", url: link.href });
-    });
+      return;
+    }
+    // Enforce target="_blank" at click time too: pages may add or rewrite
+    // magnet links after initial tagging (dynamic hrefs, fast clicks), and
+    // without the new-tab behavior the handler page would replace the page
+    // the user is on. Setting the target during the click affects the
+    // default navigation, which only runs after the event dispatch completes.
+    magnet.target = "_blank";
   });
 
   tag(document);
