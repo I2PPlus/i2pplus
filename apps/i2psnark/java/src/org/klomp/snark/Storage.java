@@ -465,6 +465,39 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Is this a padding directory (BEP 47 ".pad" or a parse-renamed "_pad")?
+     * Padding entries hold only synthetic zero files: they must not count
+     * toward the max files per torrent limit, nor be included as data when
+     * creating a torrent.
+     *
+     * @param name directory name
+     * @return true if it is a padding directory
+     */
+    static boolean isPadDir(String name) {
+        return PAD_DIR.equals(name) || "_pad".equals(name);
+    }
+
+    /**
+     * Count the entries in a directory listing for the max files per torrent
+     * check, excluding padding directories.
+     *
+     * @param files directory listing, may be null
+     * @return the number of non-padding entries
+     */
+    static int countNonPad(File[] files) {
+        if (files == null) {
+            return 0;
+        }
+        int count = files.length;
+        for (File f : files) {
+            if (f.isDirectory() && isPadDir(f.getName())) {
+                count--;
+            }
+        }
+        return count;
+    }
+
+    /**
      * Count the files in the torrent.
      *
      * @throws IOException if too many total files
@@ -542,7 +575,7 @@ public class Storage implements Closeable {
                 }
                 return;
             }
-            int sz = l.size() + files.length;
+            int sz = l.size() + countNonPad(files);
             if (sz > max) {
                 throw new IOException(
                         _util.getString(
@@ -562,11 +595,8 @@ public class Storage implements Closeable {
             for (int i = 0; i < files.length; i++) {
                 // Skip BEP 47 padding directories so re-creating a padded torrent does not
                 // include the synthetic zero files as data; parse renames dotfiles to _pad
-                if (files[i].isDirectory()) {
-                    String n = files[i].getName();
-                    if (n.equals(PAD_DIR) || n.equals("_pad")) {
-                        continue;
-                    }
+                if (files[i].isDirectory() && isPadDir(files[i].getName())) {
+                    continue;
                 }
                 addFiles(l, files[i], filters);
             }

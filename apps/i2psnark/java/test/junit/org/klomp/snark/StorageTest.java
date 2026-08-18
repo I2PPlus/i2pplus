@@ -1115,4 +1115,44 @@ public class StorageTest {
             pp.markSubBlock(start + i);
         }
     }
+
+    /**
+     * Padding directory names are recognized by exact case-sensitive match.
+     */
+    @Test
+    public void testIsPadDir() {
+        assertTrue(Storage.isPadDir(".pad"));
+        assertTrue(Storage.isPadDir("_pad"));
+        assertFalse(Storage.isPadDir(".Pad"));
+        assertFalse(Storage.isPadDir("_Pad"));
+        assertFalse(Storage.isPadDir("pad"));
+        assertFalse(Storage.isPadDir(".pads"));
+        assertFalse(Storage.isPadDir(""));
+        assertFalse(Storage.isPadDir(null));
+    }
+
+    /**
+     * countNonPad excludes padding directories from a directory listing, so
+     * they do not count toward the max files per torrent limit.
+     */
+    @Test
+    public void testCountNonPad() throws Exception {
+        File dir = new File(_dataDir, "src");
+        assertTrue(dir.mkdir());
+        File pad = new File(dir, ".pad");
+        assertTrue(pad.mkdir());
+        File pad2 = new File(dir, "_pad");
+        assertTrue(pad2.mkdir());
+        File real = new File(dir, "real");
+        assertTrue(real.mkdir());
+        File f1 = new File(dir, "a.bin");
+        assertTrue(f1.createNewFile());
+        File f2 = new File(dir, "b.bin");
+        assertTrue(f2.createNewFile());
+        File f3 = new File(dir, ".hidden");
+        assertTrue(f3.createNewFile());
+        assertEquals(6, dir.listFiles().length);
+        assertEquals(4, Storage.countNonPad(dir.listFiles()));
+        assertEquals(0, Storage.countNonPad(null));
+    }
 }

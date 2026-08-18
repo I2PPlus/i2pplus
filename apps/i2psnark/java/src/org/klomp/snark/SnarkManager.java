@@ -3826,6 +3826,29 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Count the files in a metainfo file list for the max files per torrent
+     * check, excluding BEP 47 padding files (.pad) and parse-renamed padding
+     * (_pad); a padded torrent must not be rejected because of its synthetic
+     * zero files. Padding is only recognized at the top level, matching the
+     * BEP 47 layout and Storage's create-side handling.
+     *
+     * @param files from MetaInfo.getFiles(), may be null
+     * @return the number of non-padding files
+     */
+    static int countRealFiles(List<List<String>> files) {
+        if (files == null) {
+            return 0;
+        }
+        int count = files.size();
+        for (List<String> f : files) {
+            if (Storage.isPadDir(f.get(0))) {
+                count--;
+            }
+        }
+        return count;
+    }
+
+    /**
      * Does not really delete on failure, that's the caller's responsibility. Warning - does not
      * validate announce URL - use TrackerClient.isValidAnnounce()
      *
@@ -3833,14 +3856,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private String validateTorrent(MetaInfo info) {
         List<List<String>> files = info.getFiles();
-        if (files != null && files.size() > _util.getMaxFilesPerTorrent()) {
-            return _t("Too many files in \"{0}\" ({1})!", info.getName(), files.size())
+        int fileCount = files != null ? countRealFiles(files) : 0;
+        if (fileCount > _util.getMaxFilesPerTorrent()) {
+            return _t("Too many files in \"{0}\" ({1})!", info.getName(), fileCount)
                     + " - limit is "
                     + _util.getMaxFilesPerTorrent()
                     + ", zip them or set "
                     + PROP_MAX_FILES_PER_TORRENT
                     + '='
-                    + files.size()
+                    + fileCount
                     + " in "
                     + _configFile.getAbsolutePath()
                     + " and restart";
