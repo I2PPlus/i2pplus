@@ -137,7 +137,7 @@ public class SendMessageDirectJob extends JobImpl {
         if (_expiration < now) {
             if (_log.shouldWarn())
                 _log.warn("Timed out sending direct message to [" + _targetHash.toBase64().substring(0,6) + "]" +
-                          "\n* Expires: " + new Date(_expiration) + "\n* " + _message);
+                          "\n* Expires: " + new Date(_expiration) + _message);
             if (_onFail != null)
                 getContext().jobQueue().addJob(_onFail);
             return;
@@ -165,7 +165,7 @@ public class SendMessageDirectJob extends JobImpl {
                     if (_log.shouldWarn())
                         _log.warn("Unable to find router [" + _targetHash.toBase64().substring(0,6)
                                   + "] to send to after searching for " + (getContext().clock().now()-_searchOn)
-                                  + "ms \n* " + _message);
+                                  + "ms" + _message);
                     if (_onFail != null)
                         getContext().jobQueue().addJob(_onFail);
                 }
