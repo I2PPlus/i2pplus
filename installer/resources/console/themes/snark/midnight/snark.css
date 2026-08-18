@@ -622,7 +622,7 @@ td .commentAuthorName{padding-right:8px;width:120px;white-space:nowrap;overflow:
 .configOption::after{content:"";display:inline-block;height:38px;vertical-align:middle}
 .numeric{min-width:0;width:70px}
 .numeric:focus{text-align:center}
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 193px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 193px)}
 input[name="nofilter_commentsName"]{max-width:248px}
 #configs th{padding:6px 8px;font-size:10pt;background:var(--title);background-size:4px 100%,100%}
 #configs td,#configs td:first-child{padding:0}

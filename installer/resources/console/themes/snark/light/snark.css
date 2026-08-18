@@ -369,7 +369,7 @@ input.create:hover,input.create:focus{background:var(--create) no-repeat center 
 
 /* configure */
 form:last-child .configPanel{margin-top:10px}
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 180px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 180px)}
 .configOption::after{height:40px;display:inline-block;vertical-align:middle;content:""}
 .configOption{padding:0 4px;display:inline-block;vertical-align:middle;white-space:nowrap;width:calc(100% - 20px)}
 .configPanel{margin:-2px 0 0;box-shadow:var(--highlight),inset 0 0 2px 1px #ddf}
