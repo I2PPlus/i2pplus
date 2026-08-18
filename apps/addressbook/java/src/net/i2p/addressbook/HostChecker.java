@@ -110,6 +110,8 @@ public class HostChecker {
     private static final long DEFAULT_PING_INTERVAL = 4 * 60 * 60 * 1000L; // 4 hours
     private static final long DEFAULT_PING_TIMEOUT = 60 * 1000L; // 60 seconds
     private static final int DEFAULT_MAX_CONCURRENT = 16;
+    /** Cap on outbound tunnels for the shared ping session; pings are a bonus check, each tunnel costs a network build */
+    private static final int MAX_SHARED_PING_TUNNELS = 4;
 
     // Configuration property names
     private static final String PROP_PING_INTERVAL = "pingInterval";
@@ -556,8 +558,9 @@ public class HostChecker {
 
     /**
      * Perform LeaseSet lookup as the first check
-     * A current cached LeaseSet marks the host up directly; a stale cached
-     * LeaseSet triggers a fresh remote fetch. If the lookup fails, responseTime
+     * Any cached LeaseSet marks the host up directly — even an expired one
+     * proves the host exists. Only when no LeaseSet is cached locally do we
+     * trigger a fresh remote fetch. If the lookup fails, responseTime
      * is set to -1 and we skip ping/eephead
      *
      * @param hostname hostname to test
@@ -593,18 +596,20 @@ public class HostChecker {
         try {
             LeaseSet leaseSet = netDb.lookupLeaseSetLocally(destHash);
 
-            if (leaseSet != null && leaseSet.isCurrent(_context.clock().now())) {
+            if (leaseSet != null) {
                 leaseSetTypes = formatLeaseSetTypes(leaseSet);
 
-                // A current LeaseSet means the host is up — this is the primary
-                // check, no ping needed.
+                // Any LeaseSet presence means the host is up — this is the primary
+                // check, no ping needed. An expired LeaseSet still proves the host
+                // exists; a remote refetch would likely fail or return the same data.
                 PingResult result = createPingResult(true, startTime, existingResponseTime, hostname, leaseSetTypes);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetTypes + " found for " + hostname);
+                    _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetTypes + " found for " + hostname +
+                              (leaseSet.isCurrent(_context.clock().now()) ? "" : " (expired, but present)"));
                 }
 
                 savePingResults();
@@ -612,12 +617,7 @@ public class HostChecker {
                 return result;
             }
 
-            if (leaseSet != null && _log.shouldInfo()) {
-                _log.info("HostChecker lset [STALE] -> Found expired LeaseSet " + formatLeaseSetTypes(leaseSet) +
-                          " for " + hostname + ", re-fetching remotely");
-            }
-
-            // Not in local cache (or stale) — fetch remotely for HostChecker.
+            // Not in local cache — fetch remotely for HostChecker.
             // The fetched LeaseSet is kept in the netdb cache so later cycles
             // hit it locally instead of re-fetching over the network.
             return lookupLeaseSetRemotely(hostname, destHash, startTime, existingResponseTime);
@@ -835,6 +835,32 @@ public class HostChecker {
     }
 
     /**
+     * Build the I2CP options for a HostChecker ping session.
+     * Inbound tunnels only carry tiny pong replies; inboundQuantity of 1 is
+     * enough, 2 adds redundancy if a tunnel drops. The outbound quantity is
+     * caller-controlled since it scales with ping concurrency.
+     *
+     * @param nickname nickname for the inbound and outbound pools
+     * @param inboundQuantity number of inbound tunnels to build
+     * @param outboundQuantity number of outbound tunnels to build
+     */
+    private static Properties createPingSessionOptions(String nickname, int inboundQuantity, int outboundQuantity) {
+        Properties options = new Properties();
+        options.setProperty("i2cp.host", "127.0.0.1");
+        options.setProperty("i2cp.port", "7611");
+        options.setProperty("inbound.nickname", nickname);
+        options.setProperty("outbound.nickname", nickname);
+        options.setProperty("inbound.quantity", String.valueOf(inboundQuantity));
+        options.setProperty("outbound.quantity", String.valueOf(outboundQuantity));
+        options.setProperty("inbound.backupQuantity", "0");
+        options.setProperty("outbound.backupQuantity", "0");
+        options.setProperty("i2cp.leaseSetType", "3");
+        options.setProperty("i2cp.leaseSetEncType", "6,4");
+        options.setProperty("i2cp.dontPublishLeaseSet", "true");
+        return options;
+    }
+
+    /**
      * Ping destination using single tunnel and I2Ping-style retry handling
      * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter
      */
@@ -873,20 +899,8 @@ public class HostChecker {
             if (shared) {
                 pingSocketManager = _sharedPingSocketManager;
             } else {
-                Properties options = new Properties();
-                options.setProperty("i2cp.host", "127.0.0.1");
-                options.setProperty("i2cp.port", "7611");
-                options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
-                options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
-                options.setProperty("inbound.quantity", "1");
-                options.setProperty("outbound.quantity", "1");
-                options.setProperty("inbound.backupQuantity", "0");
-                options.setProperty("outbound.backupQuantity", "0");
-                options.setProperty("i2cp.leaseSetType", "3");
-                options.setProperty("i2cp.leaseSetEncType", "6,4");
-                options.setProperty("i2cp.dontPublishLeaseSet", "true");
-
-                pingSocketManager = I2PSocketManagerFactory.createManager(options);
+                pingSocketManager = I2PSocketManagerFactory.createManager(
+                    createPingSessionOptions("Ping [" + hostname.replace(".i2p", "") + "]", 1, 1));
 
                 if (pingSocketManager == null) {
                     if (_log.shouldWarn()) {
@@ -2020,21 +2034,14 @@ public class HostChecker {
                 int success = 0;
                 int skipped = 0;
 
-                // Create shared socket manager for all pings in this cycle
+                // Create shared socket manager for all pings in this cycle.
+                // Scale outbound tunnels to the concurrency limit but cap at
+                // MAX_SHARED_PING_TUNNELS — pings are a bonus check (never
+                // downgrade an LS-up host), and each tunnel costs a network
+                // build on an already busy router.
                 if (_sharedPingSocketManager == null || _sharedPingSocketManager.isDestroyed()) {
-                    Properties options = new Properties();
-                    options.setProperty("i2cp.host", "127.0.0.1");
-                    options.setProperty("i2cp.port", "7611");
-                    options.setProperty("inbound.nickname", "HostChecker");
-                    options.setProperty("outbound.nickname", "HostChecker");
-                    options.setProperty("inbound.quantity", "1");
-                    options.setProperty("outbound.quantity", "1");
-                    options.setProperty("inbound.backupQuantity", "0");
-                    options.setProperty("outbound.backupQuantity", "0");
-                    options.setProperty("i2cp.leaseSetType", "3");
-                    options.setProperty("i2cp.leaseSetEncType", "6,4");
-                    options.setProperty("i2cp.dontPublishLeaseSet", "true");
-                    _sharedPingSocketManager = I2PSocketManagerFactory.createManager(options);
+                    _sharedPingSocketManager = I2PSocketManagerFactory.createManager(
+                        createPingSessionOptions("HostChecker", 2, Math.min(_maxConcurrent, MAX_SHARED_PING_TUNNELS)));
                 }
 
                 // Create a list of ping tasks to run concurrently
