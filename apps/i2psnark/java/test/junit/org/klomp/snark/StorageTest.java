@@ -23,6 +23,7 @@ import java.util.Set;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
+import net.i2p.util.SystemVersion;
 
 import org.junit.After;
 import org.junit.Before;
@@ -347,6 +348,70 @@ public class StorageTest {
         assertTrue(s2.getBitField().get(0));
         assertFalse(s2.getBitField().get(1));
         assertFalse(s2.complete());
+    }
+
+    /**
+     * Verification runs on multiple worker threads: with more pieces than verify threads, every
+     * piece must still be checked, corrupted pieces detected, and callbacks delivered in order.
+     */
+    @Test
+    public void testParallelRecheckVerifiesAllPieces() throws Exception {
+        int pieceLength = PIECE_LENGTH;
+        int pieces = 8;
+        byte[] content = new byte[pieces * pieceLength];
+        java.util.Random rnd = new java.util.Random(7);
+        rnd.nextBytes(content);
+        writeFile(new File(_dataDir, "a.dat"), content, 0, pieces * pieceLength);
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        Arrays.asList("a.dat"),
+                                        Arrays.asList(Long.valueOf(pieces * pieceLength)),
+                                        null,
+                                        pieceLength,
+                                        computeHashes(content, pieceLength))));
+        List<Integer> expected = new ArrayList<Integer>();
+        for (int i = 0; i < pieces; i++) {
+            expected.add(Integer.valueOf(i));
+        }
+
+        RecordingListener l = new RecordingListener();
+        Storage s = newStorage(mi, l);
+        s.check(0, null);
+        assertTrue(s.complete());
+        assertEquals(0, s.needed());
+        assertEquals(expected, l.checked);
+
+        corrupt(new File(_dataDir, "a.dat"), 3 * pieceLength + pieceLength / 2); // piece 3
+        corrupt(new File(_dataDir, "a.dat"), 6 * pieceLength + 7); // piece 6
+        RecordingListener l2 = new RecordingListener();
+        Storage s2 = newStorage(mi, l2);
+        s2.check(0, null);
+        for (int i = 0; i < pieces; i++) {
+            if (i == 3 || i == 6) {
+                assertFalse("piece " + i + " should be bad", s2.getBitField().get(i));
+            } else {
+                assertTrue("piece " + i + " should be good", s2.getBitField().get(i));
+            }
+        }
+        assertFalse(s2.complete());
+        assertEquals(2, s2.needed());
+        assertEquals(expected, l2.checked);
+    }
+
+    /** i2psnark.verifyThreads overrides the CPU-scaled default; unset falls back to the formula. */
+    @Test
+    public void testVerifyThreadsProperty() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        System.setProperty("i2psnark.verifyThreads", "7");
+        try {
+            assertEquals(7, Storage.getVerifyThreads(ctx));
+        } finally {
+            System.clearProperty("i2psnark.verifyThreads");
+        }
+        int fallback = Math.max(SystemVersion.getCores() / 4, 4);
+        assertEquals(fallback, Storage.getVerifyThreads(ctx));
     }
 
     /** BEP 47: a pad-only piece is counted complete on a full recheck without hashing. */

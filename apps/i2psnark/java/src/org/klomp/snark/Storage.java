@@ -38,8 +38,10 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
@@ -148,6 +150,18 @@ public class Storage implements Closeable {
     /** Cap on the buffer used for piece verification during a full recheck; checking never
      *  allocates a whole piece-sized buffer (piece_size can be 64MB+ on large-piece torrents). */
     private static final int VERIFY_BUFSIZE = 256 * 1024;
+
+    /** Number of worker threads that verify pieces in parallel during a full recheck;
+     *  scaled to the CPU count, at least 4. Override with the i2psnark.verifyThreads property. */
+    private static final int DEFAULT_VERIFY_THREADS = Math.max(SystemVersion.getCores() / 4, 4);
+
+    /** Cap on simultaneous storage checks across all torrents; prevents a disk I/O storm when many
+     *  torrents start or are rechecked at the same time. Override with the
+     *  i2psnark.maxConcurrentChecks property (read once at class load; restart to change). */
+    private static final int MAX_CONCURRENT_CHECKS = Math.max(1,
+            I2PAppContext.getGlobalContext().getProperty("i2psnark.maxConcurrentChecks", 4));
+
+    private static final Semaphore _checkSemaphore = new Semaphore(MAX_CONCURRENT_CHECKS, true);
 
     /** The default piece size for new torrents. */
     private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
@@ -1785,6 +1799,13 @@ public class Storage implements Closeable {
         return checkCreateFiles(recheck, null);
     }
 
+    /** Worker threads for a parallel piece verification: the i2psnark.verifyThreads property
+     *  when set, otherwise scaled to the CPU count (at least 4). */
+    static int getVerifyThreads(I2PAppContext ctx) {
+        int configured = ctx.getProperty("i2psnark.verifyThreads", 0);
+        return configured > 0 ? configured : DEFAULT_VERIFY_THREADS;
+    }
+
     /**
      * Variant that skips hashing pieces marked trusted, for resuming with a partially trusted
      * saved state.
@@ -1792,13 +1813,23 @@ public class Storage implements Closeable {
      * @param pieceTrusted array indexed by piece, or null to hash everything
      */
     private boolean checkCreateFiles(boolean recheck, boolean[] pieceTrusted) throws IOException {
-        synchronized (this) {
-            _isChecking = true;
-            try {
-                return locked_checkCreateFiles(recheck, pieceTrusted);
-            } finally {
-                _isChecking = false;
+        try {
+            _checkSemaphore.acquire();
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Interrupted waiting to check storage", ie);
+        }
+        try {
+            synchronized (this) {
+                _isChecking = true;
+                try {
+                    return locked_checkCreateFiles(recheck, pieceTrusted);
+                } finally {
+                    _isChecking = false;
+                }
             }
+        } finally {
+            _checkSemaphore.release();
         }
     }
 
@@ -1916,50 +1947,121 @@ public class Storage implements Closeable {
         // Check which pieces match and which don't
         if (resume) {
             // verify in windows capped at VERIFY_BUFSIZE, never allocating a whole
-            // piece-sized buffer (piece_size can be 64MB+ on large-piece torrents)
-            byte[] piece = new byte[Math.min(piece_size, VERIFY_BUFSIZE)];
-            int file = 0;
-            long fileEnd = _torrentFiles.get(0).length;
-            long pieceEnd = 0;
+            // piece-sized buffer (piece_size can be 64MB+ on large-piece torrents);
+            // hash pieces on verify-thread workers in parallel, but apply results
+            // in piece order so bitfield, progress and callbacks stay deterministic
+            boolean[] padOnly = new boolean[pieces];
+            int[] lengths = new int[pieces];
             for (int i = 0; i < pieces; i++) {
-                _checkProgress.set(i);
-                boolean trusted = pieceTrusted != null && pieceTrusted[i];
-                boolean padOnly = pieceTrusted == null && isPaddingPiece(pieceEnd);
-                int length = (int) Math.min(piece_size, total_length - pieceEnd);
-                boolean correctHash;
-                if (trusted || padOnly) {
-                    // trusted: saved state says complete; padOnly: hashes as zeros, never on disk
-                    correctHash = false;
-                } else {
-                    correctHash = checkPieceHash(i, piece, length);
+                long pieceStart = (long) i * piece_size;
+                lengths[i] = (int) Math.min(piece_size, total_length - pieceStart);
+                if (pieceTrusted == null) {
+                    // pad-only pieces hash as zeros (BEP 47), never on disk: skip hashing
+                    padOnly[i] = isPaddingPiece(pieceStart);
                 }
-                // close as we go so we don't run out of file descriptors
-                pieceEnd += length;
-                while (fileEnd <= pieceEnd) {
-                    TorrentFile tf = _torrentFiles.get(file);
-                    try {
-                        tf.closeRAF();
-                    } catch (IOException ioe) { /* ignored */ }
-                    if (++file >= _torrentFiles.size()) {
-                        break;
-                    }
-                    fileEnd += _torrentFiles.get(file).length;
-                }
-                if (trusted) {
+            }
+            final Object lock = new Object();
+            final boolean[] verified = new boolean[pieces];
+            final boolean[] done = new boolean[pieces];
+            final AtomicInteger nextPiece = new AtomicInteger();
+            final AtomicReference<Throwable> err = new AtomicReference<Throwable>();
+            int threads = Math.min(pieces, getVerifyThreads(ctx));
+            Thread[] workers = new Thread[threads];
+            for (int t = 0; t < threads; t++) {
+                final byte[] buf = new byte[Math.min(piece_size, VERIFY_BUFSIZE)];
+                workers[t] =
+                        new I2PAppThread(
+                                new Runnable() {
+                                    public void run() {
+                                        while (err.get() == null) {
+                                            int i = nextPiece.getAndIncrement();
+                                            if (i >= pieces) {
+                                                break;
+                                            }
+                                            if (padOnly[i]
+                                                    || (pieceTrusted != null && pieceTrusted[i])) {
+                                                continue;
+                                            }
+                                            boolean ok;
+                                            try {
+                                                ok = checkPieceHash(i, buf, lengths[i]);
+                                            } catch (Throwable t) {
+                                                err.compareAndSet(null, t);
+                                                synchronized (lock) {
+                                                    lock.notifyAll();
+                                                }
+                                                break;
+                                            }
+                                            synchronized (lock) {
+                                                verified[i] = ok;
+                                                done[i] = true;
+                                                lock.notifyAll();
+                                            }
+                                        }
+                                    }
+                                },
+                                "SnarkVerify-" + _base.getName(),
+                                true);
+                workers[t].start();
+            }
+            int next = 0;
+            while (next < pieces) {
+                if (pieceTrusted != null && pieceTrusted[next]) {
+                    // trusted: saved state says complete, no callback
+                    _checkProgress.set(next);
+                    next++;
                     continue;
                 }
-                if (correctHash || padOnly) {
-                    bfield.set(i);
-                    need--;
-                    if (listener != null) {
-                        listener.storageChecked(this, i, true);
-                    }
-                } else {
-                    bfield.clear(i);
-                    if (listener != null) {
-                        listener.storageChecked(this, i, false);
+                if (!padOnly[next]) {
+                    synchronized (lock) {
+                        // wait for the worker's result; a false result (bad hash) is still a
+                        // completion, so track "done" separately from the verified value
+                        while (!done[next] && err.get() == null) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException ie) {
+                                // ignore: checks run to completion, like the old serial loop
+                            }
+                        }
                     }
                 }
+                if (err.get() != null) {
+                    break;
+                }
+                if (padOnly[next] || verified[next]) {
+                    bfield.set(next);
+                    need--;
+                    if (listener != null) {
+                        listener.storageChecked(this, next, true);
+                    }
+                } else {
+                    bfield.clear(next);
+                    if (listener != null) {
+                        listener.storageChecked(this, next, false);
+                    }
+                }
+                _checkProgress.set(next);
+                next++;
+            }
+            for (Thread worker : workers) {
+                try {
+                    worker.join();
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            if (err.get() != null) {
+                Throwable t = err.get();
+                if (t instanceof IOException) {
+                    throw (IOException) t;
+                }
+                throw new IOException("Error checking storage", t);
+            }
+            // close as we go was order-dependent; close all now that the parallel check is done
+            for (TorrentFile tf : _torrentFiles) {
+                try {
+                    tf.closeRAF();
+                } catch (IOException ioe) { /* ignored */ }
             }
         }
 

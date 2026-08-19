@@ -617,6 +617,9 @@
 
 <tr class=section><th>I2PSnark</th></tr>
 
+<tr class=config><th>i2psnark.maxConcurrentChecks={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]")%></td></tr>
+
 <tr class=config><th>i2psnark.maxFilesPerTorrent={n}</th></tr>
 <tr><td><%=intl._t("This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards.")%></td></tr>
 
@@ -646,6 +649,9 @@
 
 <tr class=config><th>i2psnark.maxLogMessages={n}</th></tr>
 <tr><td><%=intl._t("This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]")%></td></tr>
+
+<tr class=config><th>i2psnark.verifyThreads={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]")%></td></tr>
 
 <tr class=config><th>i2psnark.tempDir={/path/to/tempdir} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]")%></td></tr>

@@ -27,6 +27,11 @@ without a restart.
   1 to 60 minutes, is skipped while any torrent is actively downloading, and
   restarts only the torrents that were running.
 
+- `i2psnark.maxConcurrentChecks={n}`
+  Maximum number of torrents whose storage is checked at the same time, when
+  several torrents start or are rechecked together. Bounds the disk I/O storm
+  on startup or after a crash. [Default is 4; restart required to change]
+
 - `i2psnark.maxFilesPerTorrent={n}`
   Maximum number of files per torrent permitted when downloading or creating a
   torrent. Applies to torrents added afterwards; restart not required when
@@ -81,6 +86,12 @@ without a restart.
   directory as before. Applies to torrents added afterwards; restart not
   required when changed on the I2PSnark configuration page. [Disabled by
   default]
+
+- `i2psnark.verifyThreads={n}`
+  Number of worker threads used to verify pieces in parallel during a full
+  storage check of a single torrent, e.g. when resuming or rechecking. When
+  unset, scales with the CPU count, at least 4. [Default is max(cores / 4, 4);
+  read per check, so no restart required]
 
 ## Logging
 
