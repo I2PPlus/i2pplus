@@ -145,6 +145,10 @@ public class Storage implements Closeable {
     private static final int BUFSIZE = PeerState.PARTSIZE;
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
+    /** Cap on the buffer used for piece verification during a full recheck; checking never
+     *  allocates a whole piece-sized buffer (piece_size can be 64MB+ on large-piece torrents). */
+    private static final int VERIFY_BUFSIZE = 256 * 1024;
+
     /** The default piece size for new torrents. */
     private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
 
@@ -1911,7 +1915,9 @@ public class Storage implements Closeable {
 
         // Check which pieces match and which don't
         if (resume) {
-            byte[] piece = new byte[piece_size];
+            // verify in windows capped at VERIFY_BUFSIZE, never allocating a whole
+            // piece-sized buffer (piece_size can be 64MB+ on large-piece torrents)
+            byte[] piece = new byte[Math.min(piece_size, VERIFY_BUFSIZE)];
             int file = 0;
             long fileEnd = _torrentFiles.get(0).length;
             long pieceEnd = 0;
@@ -1919,15 +1925,13 @@ public class Storage implements Closeable {
                 _checkProgress.set(i);
                 boolean trusted = pieceTrusted != null && pieceTrusted[i];
                 boolean padOnly = pieceTrusted == null && isPaddingPiece(pieceEnd);
-                int length;
+                int length = (int) Math.min(piece_size, total_length - pieceEnd);
                 boolean correctHash;
                 if (trusted || padOnly) {
                     // trusted: saved state says complete; padOnly: hashes as zeros, never on disk
-                    length = (int) Math.min(piece_size, total_length - pieceEnd);
                     correctHash = false;
                 } else {
-                    length = getUncheckedPiece(i, piece);
-                    correctHash = metainfo.checkPiece(i, piece, 0, length);
+                    correctHash = checkPieceHash(i, piece, length);
                 }
                 // close as we go so we don't run out of file descriptors
                 pieceEnd += length;
@@ -2474,6 +2478,39 @@ public class Storage implements Closeable {
 
     private int getUncheckedPiece(int piece, byte[] bs) throws IOException {
         return getUncheckedPiece(piece, bs, 0, getPieceLength(piece));
+    }
+
+    /**
+     * Verify a piece's hash without a whole piece-sized buffer: reads the piece
+     * in windows no larger than the supplied buffer, feeding each window to the
+     * SHA1 digest before comparing against the stored hash. Padding regions
+     * hash as zeros (BEP 47) via getUncheckedPiece, which never touches disk
+     * for them.
+     *
+     * @param piece the piece index
+     * @param buf the reusable read buffer, also the window size cap
+     * @param length the piece length
+     * @return true if the computed SHA1 matches the stored piece hash
+     * @throws IOException on read failure
+     */
+    private boolean checkPieceHash(int piece, byte[] buf, int length) throws IOException {
+        if (length <= 0 || buf.length <= 0) {
+            return false;
+        }
+        MessageDigest sha1 = SHA1.getInstance();
+        for (int off = 0; off < length; off += buf.length) {
+            int len = Math.min(buf.length, length - off);
+            getUncheckedPiece(piece, buf, off, len);
+            sha1.update(buf, 0, len);
+        }
+        byte[] hash = sha1.digest();
+        byte[] hashes = metainfo.getPieceHashes();
+        for (int i = 0; i < 20; i++) {
+            if (hash[i] != hashes[20 * piece + i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int getUncheckedPiece(int piece, byte[] bs, int off, int length) throws IOException {

@@ -308,6 +308,47 @@ public class StorageTest {
         assertEquals(Arrays.asList(0, 1, 2, 3), l.checked);
     }
 
+    /**
+     * Pieces larger than the verify window cap must still hash correctly: the full recheck reads
+     * each piece in windows of at most VERIFY_BUFSIZE, so a correct piece passes and a corrupted
+     * piece is detected across window boundaries.
+     */
+    @Test
+    public void testFullCheckHashesPieceLargerThanVerifyWindow() throws Exception {
+        int pieceLength = 1024 * 1024; // > VERIFY_BUFSIZE: forces multi-window hashing
+        // random, NOT linear: linear content is periodic with period 256KB, which would mask a
+        // windowing bug (re-reading the first window in place of each window still hashes equal)
+        java.util.Random rnd = new java.util.Random(42);
+        byte[] content = new byte[2 * pieceLength];
+        rnd.nextBytes(content);
+        writeFile(new File(_dataDir, "a.dat"), content, 0, pieceLength);
+        writeFile(new File(_dataDir, "b.dat"), content, pieceLength, pieceLength);
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        Arrays.asList("a.dat", "b.dat"),
+                                        Arrays.asList(Long.valueOf(pieceLength), Long.valueOf(pieceLength)),
+                                        null,
+                                        pieceLength,
+                                        computeHashes(content, pieceLength))));
+
+        RecordingListener l = new RecordingListener();
+        Storage s = newStorage(mi, l);
+        s.check(0, null);
+        assertTrue(s.complete());
+        assertEquals(0, s.needed());
+        assertEquals(Arrays.asList(0, 1), l.checked);
+
+        corrupt(new File(_dataDir, "b.dat"), pieceLength / 2);
+        RecordingListener l2 = new RecordingListener();
+        Storage s2 = newStorage(mi, l2);
+        s2.check(0, null);
+        assertTrue(s2.getBitField().get(0));
+        assertFalse(s2.getBitField().get(1));
+        assertFalse(s2.complete());
+    }
+
     /** BEP 47: a pad-only piece is counted complete on a full recheck without hashing. */
     @Test
     public void testRecheckTrustsPadOnlyPiece() throws Exception {
