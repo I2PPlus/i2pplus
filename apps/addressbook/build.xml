@@ -78,7 +78,7 @@
     </javac>
   </target>
 
-  <target name="bundleTranslations" depends="init">
+  <target name="bundleTranslations" depends="init" unless="no.bundle">
     <exec executable="sh" failonerror="false">
       <arg value="../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>

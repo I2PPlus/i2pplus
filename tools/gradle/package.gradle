@@ -5,6 +5,9 @@
 //
 // NOT ported (Ant-only today): jbigi native builds (buildJbigi*), the zip /
 // 7z platform packages, AppImage, pkg200, updater200, and build-buildtools.
+// updater200Compact is ported below (daily dev builds, no locale translations).
+// Pass -PnoBundle to also skip the per-module translation bundling (matches
+// ant's compact targets, which set no.bundle for the whole compact chain).
 //
 // Configuration-cache safe: file sets and exec commands are declared at
 // configuration time, never inside doLast closures.
@@ -82,11 +85,62 @@ task prepUpdateCompact(type: Copy) {
 
 task updaterCompact(type: Zip) {
     group = 'package'
-    description = 'Build the compact update zip dist/i2pupdate.zip (mirrors ant updaterCompact).'
+    description = 'Build the compact update zip dist/i2pupdate.zip (mirrors ant updaterCompact; add -PnoBundle to skip translation bundling).'
     dependsOn prepUpdateCompact
     archiveFileName.set('i2pupdate.zip')
     destinationDirectory.set(distDir)
     from pkgTmpDirAbs
+}
+
+// Pack200-compress lib jars and webapps in pkg-temp before zipping (mirrors ant pack200).
+// Needs the JDK 8 pack200 tool and GNU parallel, like the ant target.
+def rootDirAbs = rootDir.absolutePath
+def pack200MarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before"
+task pack200Updater(type: Exec) {
+    group = 'package'
+    description = 'Pack200-compress pkg-temp lib jars and webapps (mirrors ant pack200).'
+    dependsOn prepUpdateCompact
+    commandLine 'sh', '-c', '''before=0; count=0;
+for f in __PKGDIR__/lib/*.jar __PKGDIR__/webapps/*war; do
+  before=$((before + $(wc -c < "$f"))); count=$((count+1));
+done &&
+b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))) &&
+echo "Pack200: Compressing $count files (${b_mb}MB)..." &&
+echo $before > __MARKER__ &&
+find __PKGDIR__/lib/*.jar __PKGDIR__/webapps/*war -type f | parallel '
+  mv {} {}.jar && pack200 --effort=5 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &&
+  rm -f {}.jar' &&
+after=0;
+for f in __PKGDIR__/lib/*.pack __PKGDIR__/webapps/*.pack; do
+  after=$((after + $(wc -c < "$f")));
+done &&
+saved=$((before - after)) &&
+a_mb=$(printf "%d.%02d" $((after/1000000)) $(((after%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))) &&
+echo "Pack200 done: $b_mb -> ${a_mb}MB (saved ${s_mb}MB)"'''
+        .replace('__PKGDIR__', pkgTmpDirAbs)
+        .replace('__MARKER__', pack200MarkerAbs)
+}
+
+task updater200Compact(type: Zip) {
+    group = 'package'
+    description = 'Build the pack200 compact update zip dist/i2pupdate200.zip (mirrors ant updater200Compact; add -PnoBundle to skip translation bundling).'
+    dependsOn pack200Updater
+    archiveFileName.set('i2pupdate200.zip')
+    destinationDirectory.set(distDir)
+    from pkgTmpDirAbs
+    doLast {
+        // Pack200 savings vs. the raw payload and the SHA-256 (mirrors ant zipit200)
+        if (new File(pack200MarkerAbs).exists()) {
+            ant.exec(executable: 'sh', failonerror: 'false', dir: rootDirAbs) {
+                arg(value: '-c')
+                arg(value: '''if [ -f __MARKER__ ]; then before=$(cat __MARKER__); zipsize=$(wc -c < dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf "%d.%02d" $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))); echo "Pack200: jars (${b_mb}MB) -> zip (${z_mb}MB) (saved ${s_mb}MB)"; rm -f __MARKER__; fi'''.replace('__MARKER__', pack200MarkerAbs))
+            }
+        }
+        ant.exec(executable: 'sh', failonerror: 'false', dir: rootDirAbs) {
+            arg(value: '-c')
+            arg(value: 'h=$(sha256sum "dist/i2pupdate200.zip"); echo "$(basename "dist/i2pupdate200.zip"): ${h%% *}"')
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------

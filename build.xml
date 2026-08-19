@@ -115,14 +115,14 @@
     <echo message="  updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
     <echo message="  updaterWithJettyFixes                        Updater + local Jetty patches"/>
     <echo message="  updaterWithJetty                             Updater + Jetty"/>
-    <echo message="  updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
+    <echo message="  updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme, translations"/>
     <echo message="  updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
     <echo message="  updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only"/>
     <echo message="  updaterCompactWithDocs                       Compact updater with readme and proxy docs"/>
     <echo message="  updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
     <echo message="  updaterCompactWithGeoIP                      Compact updater with GeoIP database"/>
     <echo message="  updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./dist/i2pupdate200.zip"/>
-    <echo message="  updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
+    <echo message="  updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme, translations"/>
     <echo message="  updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
     <echo message="  updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
     <echo message="  updater200WithGeoIPAndJavadoc                Updater (pack200) + GeoIP database + javadocs"/>
@@ -2837,6 +2837,7 @@
   <target name="updaterWithJettyRepack" depends="timestamp.started, prepjupdate, repack200, zipit, timestamp.stopped"/>
   <target name="updaterWithLicenses" depends="timestamp.started, prepupdate, preplicenses, zipit, timestamp.stopped"/>
   <target name="check-updater">
+    <mkdir dir="${build.dir}"/>
     <uptodate property="updater.sources.clean" targetfile="dist/i2pupdate.zip">
       <srcfiles dir="core/java/src" includes="**/*.java"/>
       <srcfiles dir="router/java/src" includes="**/*.java"/>
@@ -2863,6 +2864,7 @@
     </uptodate>
   </target>
   <target name="check-updater200">
+    <mkdir dir="${build.dir}"/>
     <uptodate property="updater200.sources.clean" targetfile="dist/i2pupdate200.zip">
       <srcfiles dir="core/java/src" includes="**/*.java"/>
       <srcfiles dir="router/java/src" includes="**/*.java"/>
@@ -3168,7 +3170,14 @@
     </parallel>
   </target>
 
-  <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
+  <!-- Updater for existing installs; translations are omitted - they are regenerated
+       only just before a release (prepupdate). prepcompactNoBundle sets no.bundle for
+       the whole compact chain (per-module message bundles and the top-level locale/
+       gettext .mo files); pass -Dno.bundle=false to force them -->
+  <target name="prepcompactNoBundle" description="Compact updaters skip translation bundling (dev builds)">
+    <property name="no.bundle" value="true"/>
+  </target>
+  <target name="prepupdatecompact" depends="prepcompactNoBundle, build2, prepupdateEssential, prepProxyDocs, prepCertificates, truncatehistory">
     <parallel>
       <copy quiet="true" verbose="false" file="${build.root}build/i2psnark.jar" todir="${pkg.temp.dir}/lib"/>
       <copy quiet="true" verbose="false" file="${build.root}build/i2psnark.war" todir="${pkg.temp.dir}/webapps/"/>
@@ -3183,6 +3192,13 @@
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/eepget" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/eephead" todir="${pkg.temp.dir}/"/>
     </parallel>
+    <!-- Drop any translation classes that survived inside the jars/wars (e.g. stale
+         from earlier bundled builds) - dev updaters carry no translations.
+         messages_*.class is the bundle convention, see the per-module build.xml -->
+    <exec executable="sh" failonerror="false">
+      <arg value="-c"/>
+      <arg value="for f in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*.war; do if unzip -l &quot;$f&quot; 2&gt;/dev/null | grep -q 'messages_.*class'; then zip -q -d &quot;$f&quot; '*messages_*.class'; fi; done"/>
+    </exec>
   </target>
 
   <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">

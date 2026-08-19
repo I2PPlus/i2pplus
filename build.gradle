@@ -137,6 +137,21 @@ subprojects {
     }
 }
 
+// Skip translation bundling for dev builds: gradle -PnoBundle
+// The bundle tasks run bundle-messages.sh, compiling .po translations into
+// ResourceBundle classes inside the jars/wars. Translations are regenerated
+// only just before a release, so daily zips (updaterCompact / updater200Compact)
+// can omit them, matching ant's compact targets (no.bundle)
+if (gradle.startParameter.projectProperties.containsKey('noBundle')) {
+    allprojects {
+        tasks.configureEach {
+            if (name in ['bundle', 'bundleProxy', 'bundleCountries', 'bundleNews']) {
+                enabled = false
+            }
+        }
+    }
+}
+
 // Consolidated HTML report, identical to the ant `test` target's artifact:
 // aggregates each module's JUnit XML (written to /tmp/test-i2p/<module>/junit
 // by the subproject test tasks, which run in parallel via org.gradle.parallel)

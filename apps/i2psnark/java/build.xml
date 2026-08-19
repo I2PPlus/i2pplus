@@ -223,6 +223,9 @@
         <fileset dir="${build.dir}/res/.res/browser/i2psnark-bridge"/>
       </zip>
     </sequential>
+    <!-- Always present (may be empty): the bundle classes are compiled here only
+         when no.bundle is unset, but the war includes the dir unconditionally -->
+    <mkdir dir="${build.dir}/messages-obj"/>
     <war destfile="${build.dir}/i2psnark.war" webxml="../web.xml">
       <!-- Include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
       <classes dir="${build.dir}/obj" includes="**/web/*"/>

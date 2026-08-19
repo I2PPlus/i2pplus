@@ -161,6 +161,9 @@
         <echo message="UglifyJS not found, skipping Javascript file compression..."/>
       </else>
     </if>
+    <!-- Always present (may be empty): the bundle classes are compiled here only
+         when no.bundle is unset, but the war includes the dir unconditionally -->
+    <mkdir dir="${build.dir}/messages-obj"/>
     <war destfile="${build.dir}/susimail.war" webxml="src/WEB-INF/web.xml" update="true" basedir="src/"
          excludes="WEB-INF/web.xml LICENSE src src/**/* susimail.properties js/*.js">
       <classes dir="${classes.dir}"/>
