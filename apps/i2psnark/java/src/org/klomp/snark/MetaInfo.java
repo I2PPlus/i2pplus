@@ -814,6 +814,26 @@ public class MetaInfo {
     }
 
     /**
+     * Returns the total length of the non-padding files in this torrent, or
+     * {@link #getTotalLength()} if there are no padding files. The projected downloaded size.
+     *
+     * @return the length of all non-padding files
+     */
+    public long getDataLength() {
+        if (files == null) {
+            return length;
+        }
+        List<Long> lengths = getLengths();
+        long data = 0;
+        for (int i = 0; i < lengths.size(); i++) {
+            if (!isPaddingFile(i)) {
+                data += lengths.get(i).longValue();
+            }
+        }
+        return data;
+    }
+
+    /**
      * Returns a human-readable summary of this torrent's metadata.
      *
      * @return string containing name, infohash, announce URL, size, file count, and piece count

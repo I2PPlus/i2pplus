@@ -459,7 +459,7 @@ class Sorters {
         }
 
         public int compareIt(Snark l, Snark r) {
-            return compLong(l.getTotalLength(), r.getTotalLength());
+            return compLong(l.getDataLength(), r.getDataLength());
         }
     }
 
@@ -516,9 +516,9 @@ class Sorters {
         }
 
         public int compareIt(Snark l, Snark r) {
-            double lt = l.getTotalLength();
+            double lt = l.getDataLength();
             double ld = lt > 0 ? (l.getUploaded() / lt) : 0d;
-            double rt = r.getTotalLength();
+            double rt = r.getDataLength();
             double rd = rt > 0 ? (r.getUploaded() / rt) : 0d;
             if (ld < rd) {
                 return -1;

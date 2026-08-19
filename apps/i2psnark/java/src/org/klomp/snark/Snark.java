@@ -1119,6 +1119,19 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * The total length of all non-padding torrent files; equals {@link #getTotalLength()} for
+     * torrents without BEP 47 padding files. The projected downloaded size.
+     *
+     * @return total of all non-padding files, or -1 if unavailable
+     */
+    public long getDataLength() {
+        if (meta != null) {
+            return meta.getDataLength();
+        }
+        return -1;
+    }
+
+    /**
      * Bytes not yet in storage. Does NOT account for skipped files.
      *
      * @return exact value. or -1 if no storage yet. getNeeded() * pieceLength(0) isn't accurate if

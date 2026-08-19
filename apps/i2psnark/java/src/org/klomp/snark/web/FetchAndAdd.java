@@ -246,6 +246,16 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     }
 
     /**
+     * The torrent file size, or -1. No padding information is available while fetching.
+     *
+     * @return torrent file size or -1
+     */
+    @Override
+    public long getDataLength() {
+        return _total;
+    }
+
+    /**
      * The remaining bytes, or -1 when done so the web lists us as "complete" instead of "seeding".
      *
      * @return -1 when done so the web will list us as "complete" instead of "seeding"

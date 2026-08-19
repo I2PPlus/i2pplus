@@ -49,6 +49,38 @@ public class MetaInfoTest {
         sb.append("4:name").append("9:test.file");
         sb.append("12:piece length").append('i').append(PIECE_LENGTH).append('e');
         sb.append("6:pieces").append(pieceHashes.length).append(':');
+        return assemble(sb, pieceHashes);
+    }
+
+    /** build a bencoded multi-file torrent byte stream with per-file BEP 47 attributes */
+    private static byte[] buildMultiFileTorrentBytes(byte[] pieceHashes, long[] fileLengths,
+                                                     String[] paths, String[] attrs) {
+        StringBuilder sb = new StringBuilder(512);
+        sb.append('d');
+        sb.append("8:announce");
+        sb.append("19:http://tracker.test");
+        sb.append("4:info");
+        sb.append('d');
+        sb.append("5:files");
+        sb.append('l');
+        for (int i = 0; i < fileLengths.length; i++) {
+            sb.append('d');
+            sb.append("6:length").append('i').append(fileLengths[i]).append('e');
+            sb.append("4:path").append('l').append(paths[i].length()).append(':').append(paths[i]).append('e');
+            if (attrs[i] != null) {
+                sb.append("4:attr").append(attrs[i].length()).append(':').append(attrs[i]);
+            }
+            sb.append('e');
+        }
+        sb.append('e');
+        sb.append("4:name").append("4:dir");
+        sb.append("12:piece length").append('i').append(PIECE_LENGTH).append('e');
+        sb.append("6:pieces").append(pieceHashes.length).append(':');
+        return assemble(sb, pieceHashes);
+    }
+
+    /** close the info dict, append the piece hash bytes, and close the root dict */
+    private static byte[] assemble(StringBuilder sb, byte[] pieceHashes) {
         byte[] head = sb.toString().getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
         byte[] tail = "ee".getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
         byte[] rv = new byte[head.length + pieceHashes.length + tail.length];
@@ -145,5 +177,26 @@ public class MetaInfoTest {
             fail("Expected InvalidBEncodingException");
         } catch (java.io.IOException expected) {
         }
+    }
+
+    /** getDataLength excludes BEP 47 padding files; getTotalLength includes them. */
+    @Test
+    public void testGetDataLengthExcludesPaddingFiles() throws Exception {
+        long[] lengths = {16384, 16384, 16384};
+        String[] paths = {"a.dat", "16384", "b.dat"};
+        String[] attrs = {null, "p", null};
+        MetaInfo mi =
+                new MetaInfo(new ByteArrayInputStream(buildMultiFileTorrentBytes(new byte[60], lengths, paths, attrs)));
+        assertEquals(3 * PIECE_LENGTH, mi.getTotalLength());
+        assertEquals(2 * PIECE_LENGTH, mi.getDataLength());
+    }
+
+    /** getDataLength equals getTotalLength for torrents without padding files. */
+    @Test
+    public void testGetDataLengthNoPaddingEqualsTotal() throws Exception {
+        byte[] hashes = new byte[40];
+        MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(hashes)));
+        assertEquals(TOTAL_LENGTH, mi.getTotalLength());
+        assertEquals(TOTAL_LENGTH, mi.getDataLength());
     }
 }

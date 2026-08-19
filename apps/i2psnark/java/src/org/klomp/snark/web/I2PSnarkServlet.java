@@ -3372,7 +3372,8 @@ public class I2PSnarkServlet extends BasicServlet {
         int curPeers = snark.getPeerCount();
         stats[STAT_PEERS] += curPeers;
         long total = snark.getTotalLength();
-        if (total > 0) stats[STAT_TOTAL_SIZE] += total;
+        long dataLength = snark.getDataLength();
+        if (dataLength > 0) stats[STAT_TOTAL_SIZE] += dataLength;
         if (statsOnly) return;
 
         // Cache repeated computations
@@ -3509,7 +3510,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
                 String date = fmt.format(new Date(dates[1]));
                 buf.append("<div class=barComplete title=\"").append(_t("Completed")).append(": ").append(date).append("\">")
-                   .append(formatSize(total).replaceAll("iB", "")).append("</div>");
+                   .append(formatSize(dataLength).replaceAll("iB", "")).append("</div>");
             }
 
             buf.append("</td><td class=\"rateDown");
@@ -3523,12 +3524,12 @@ public class I2PSnarkServlet extends BasicServlet {
 
             buf.append("</td><td class=txd>");
             if (isValid) {
-                double ratio = total > 0 ? uploaded / (double) total : 0;
+                double ratio = dataLength > 0 ? uploaded / (double) dataLength : 0;
                 String txPercent = new DecimalFormat(ratio <= 0.01 && ratio > 0 ? "0.00" : "0").format(ratio * 100);
                 String txPercentBar = ratio > 1 ? "100%" : txPercent + "%";
 
                 if (showRatios) {
-                    if (total > 0) {
+                    if (dataLength > 0) {
                         buf.append("<span class=tx><span class=txBarText>").append(txPercent).append(" %")
                            .append("</span><span class=txBarInner style=\"width:calc(")
                            .append(txPercentBar).append(" - 2px)\"></span></span>");
@@ -5709,15 +5710,27 @@ public class I2PSnarkServlet extends BasicServlet {
         long dat = (meta != null) ? meta.getCreationDate() : 0;
         long[] dates = _manager.getSavedAddedAndCompleted(snark);
         DateFormat fmt = _DATE_FMT2.get();
+        long dataLength = snark.getDataLength();
+        long totalLength = snark.getTotalLength();
 
         buf.append("<tr id=torrentInfoStats>").append("<td colspan=3><span class=nowrap");
+        StringBuilder sizeTitle = new StringBuilder(64);
         if (dat > 0) {
-            String date = _DATE_FMT2.get().format(new Date(dat));
-            buf.append(" title=\"").append(_t("Created")).append(": ").append(date).append("\"");
+            sizeTitle.append(_t("Created")).append(": ").append(fmt.format(new Date(dat)));
+        }
+        if (totalLength > dataLength) {
+            if (sizeTitle.length() > 0) {
+                sizeTitle.append('\n');
+            }
+            sizeTitle.append(_t("Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files",
+                                 formatSize(dataLength), formatSize(totalLength - dataLength)));
+        }
+        if (sizeTitle.length() > 0) {
+            buf.append(" title=\"").append(sizeTitle).append("\"");
         }
         buf.append(">");
         appendIcon(buf, "file", "", "", true, false);
-        buf.append("<b>").append(_t("Size")).append(":</b> ").append(formatSize(snark.getTotalLength()));
+        buf.append("<b>").append(_t("Size")).append(":</b> ").append(formatSize(dataLength));
         if (storage != null) {
             int fileCount = storage.getFileCount();
             buf.append("</span>&nbsp;<span class=nowrap>");
@@ -5766,7 +5779,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<b>").append(_t("Share ratio")).append(":</b> ");
         long uploaded = snark.getUploaded();
         if (uploaded > 0) {
-            double ratio = uploaded / ((double) snark.getTotalLength());
+            double ratio = uploaded / ((double) snark.getDataLength());
             if (ratio < 0.1) {
                 buf.append((new DecimalFormat("0.000")).format(ratio));
             } else {
