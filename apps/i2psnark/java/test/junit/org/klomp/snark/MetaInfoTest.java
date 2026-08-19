@@ -65,15 +65,15 @@ public class MetaInfoTest {
         sb.append('l');
         for (int i = 0; i < fileLengths.length; i++) {
             sb.append('d');
-            sb.append("6:length").append('i').append(fileLengths[i]).append('e');
-            sb.append("4:path").append('l').append(paths[i].length()).append(':').append(paths[i]).append('e');
             if (attrs[i] != null) {
                 sb.append("4:attr").append(attrs[i].length()).append(':').append(attrs[i]);
             }
+            sb.append("6:length").append('i').append(fileLengths[i]).append('e');
+            sb.append("4:path").append('l').append(paths[i].length()).append(':').append(paths[i]).append('e');
             sb.append('e');
         }
         sb.append('e');
-        sb.append("4:name").append("4:dir");
+        sb.append("4:name").append("3:dir");
         sb.append("12:piece length").append('i').append(PIECE_LENGTH).append('e');
         sb.append("6:pieces").append(pieceHashes.length).append(':');
         return assemble(sb, pieceHashes);
