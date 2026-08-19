@@ -22,7 +22,7 @@ public class RouterVersion {
     /** For example: "beta", "alpha", "rc" */
     public static final String STATUS = "";
     /** The router build number. */
-    public static final long BUILD = 7;
+    public static final long BUILD = 8;
 
     /** For example "-test" */
     public static final String EXTRA = "+";

@@ -1,3 +1,43 @@
+2026-08-19 dr|z3d
+  * I2PSnark:
+    - Verify pieces in parallel, cap concurrent rechecks, bound
+      verification memory (i2psnark.verifyThreads, i2psnark.maxConcurrentChecks)
+    - Show torrent sizes and share ratios excluding BEP 47 padding files
+    - Auto-detect bridge base URL for magnet links on any port
+  * Router:
+    - Skip search peers on cooldown or overload only when alternatives remain
+    - Adapt tunnel test failure window to measured success time,
+      widen RI lookup cap
+  * Build: Omit translation bundles from compact dev updaters
+    (ant no.bundle, gradle -PnoBundle)
+
+2026-08-18 dr|z3d
+  * I2PSnark:
+    - Add magnet:// browser handler with per-OS installers and bridge
+      extension options page
+    - Gate magnets to .i2p pages by default; make bridge extension magnet-only
+    - Refresh UI immediately on magnet add; self-report bridge extension version
+    - Show staged and moved files together in torrent listings
+    - New shouldPadFiles option; tempDir and preallocateFiles apply
+      live from config page
+    - Exclude padding files from the max files per torrent limit
+    - Report unreadable data folders distinctly from empty ones
+      when creating torrents
+    - Stop DHT queries to ourselves from killing the fetcher thread
+    - Convert standalone readme to markdown (README-STANDALONE.md)
+  * Hostchecker:
+    - Treat any cached leaseSet as up
+    - Retain up status for 24h when a leaseSet can't be fetched
+  * Core: Ignore unsupported POSIX permissions on non-POSIX filesystems
+  * Build: Align gradle outputs with ant (JDK8 fork, JspC help
+    recursion, routerconsole war/jar parity)
+
+2026-08-17 dr|z3d
+  * I2PSnark:
+    - Harden tracker scrape fetching and URL building
+    - Remember BEP 54 dont_have per peer to avoid request ping-pong
+    - Preallocate partial piece temp files to full piece length
+
 2026-08-16 dr|z3d
   * I2PSnark:
     - Classify storage errors (no space, permission denied etc)
@@ -8,11 +48,17 @@
     - Defer scrapes after good responses, jitter scrape times
     - Cycle torrent destinations when idle (i2psnark.destCycle, default on)
     - Ban peers with excessive discard ratio (default on, 60 min period)
+    - Show error message when adding an existing torrent file
+    - Skip requesting BEP 47 padding-only chunks and pieces; serve
+      padding ranges in blocks
+    - Skip hashing pad-only pieces on recheck; cap pad-straddling requests
+    - Fix getDownloaded() AIOOBE on empty partial pieces
   * Tunnel: Keep traffic-proven tunnels in pools, defer tests while active
   * I2PTunnel: 503 on infra errors, fail fast on dead tunnel pool (HTTP proxy)
   * Console:
     - Add Disable Loopback toggle to I2CP config page
     - Reorganize advanced settings help into categorized sections
+
 2026-08-15 dr|z3d
   * Tunnel: Fix tunnel pool regressions and peer cooldown starvation
   * Console:
