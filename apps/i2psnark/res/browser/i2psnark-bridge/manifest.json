@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "I2PSnark Magnet Bridge",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Adds magnet links to I2PSnark on your local I2P router and shows a notification when a magnet is added.",
   "browser_specific_settings": {
     "gecko": {
@@ -16,6 +16,7 @@
   "permissions": [
     "notifications",
     "storage",
+    "tabs",
     "webRequest",
     "webRequestBlocking"
   ],

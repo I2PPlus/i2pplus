@@ -205,6 +205,30 @@ public class BrowserApiTest {
         assertFalse(I2PSnarkServlet.isWindowsUserAgent(""));
     }
 
+    // ----- bridge base-url meta -----
+
+    @Test
+    public void testBuildBridgeMetaTag() {
+        String meta = I2PSnarkServlet.buildBridgeMetaTag("http://127.0.0.1:8002/i2psnark");
+        assertTrue(meta.startsWith("<meta name=\"i2psnark-base-url\""));
+        assertTrue(meta.contains("http://127.0.0.1:8002/i2psnark"));
+        assertTrue(meta.endsWith(">\n"));
+    }
+
+    @Test
+    public void testBuildBridgeMetaTagEscapesAttribute() {
+        String meta = I2PSnarkServlet.buildBridgeMetaTag("http://x/\"><script>alert(1)</script>");
+        assertFalse(meta.contains("<script>"));
+        assertTrue(meta.contains("&quot;"));
+        assertTrue(meta.contains("&lt;"));
+    }
+
+    @Test
+    public void testBuildBridgeMetaTagEmpty() {
+        assertEquals("", I2PSnarkServlet.buildBridgeMetaTag(null));
+        assertEquals("", I2PSnarkServlet.buildBridgeMetaTag(""));
+    }
+
     private static void deleteRecursive(File f) {
         File[] children = f.listFiles();
         if (children != null) {

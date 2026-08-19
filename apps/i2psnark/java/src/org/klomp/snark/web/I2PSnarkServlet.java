@@ -2231,10 +2231,29 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("X-Frame-Options", "DENY");
         resp.getWriter().write(
             "<!DOCTYPE HTML>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n" +
-            "<title>I2PSnark</title>\n</head>\n<body>\n" +
+            "<title>I2PSnark</title>\n" +
+            buildBridgeMetaTag(browserApiBaseUrl(req)) +
+            "</head>\n<body>\n" +
             "<div id=\"status\" style=\"display:none\"></div>\n" +
             "<script src=\"" + _contextPath + WARBASE + "js/magnetHandler.js\"></script>\n" +
             "</body>\n</html>\n");
+    }
+
+    /**
+     * The meta element advertising the base URL of the I2PSnark webapp that
+     * served this page, so the I2PSnark Bridge extension's content script can
+     * discover the exact origin + context path (host, port, https) and route
+     * subsequent magnet: handoffs to it. This is authoritative even when the
+     * context path or listening port differs from the extension's manifest
+     * default (e.g. standalone I2PSnark on port 8002, custom console port).
+     *
+     * @param baseUrl the webapp base URL, e.g. http://127.0.0.1:8002/i2psnark
+     * @return a single HTML meta line, or empty string when no URL is available
+     * @since 0.9.72+
+     */
+    public static String buildBridgeMetaTag(String baseUrl) {
+        if (baseUrl == null || baseUrl.isEmpty()) {return "";}
+        return "<meta name=\"i2psnark-base-url\" content=\"" + DataHelper.escapeHTML(baseUrl) + "\">\n";
     }
 
     /**

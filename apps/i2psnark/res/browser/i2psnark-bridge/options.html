@@ -13,6 +13,7 @@
   p.hint { color: var(--muted); font-size: .88em; margin: .2em 0 0 1.7em; }
   label { display: block; margin: .8em 0; }
   input[type=checkbox] { vertical-align: middle; margin-right: .3em; }
+  input[type=text] { width: 100%; max-width: 32em; box-sizing: border-box; }
   #saved { color: var(--accent); visibility: hidden; }
 </style>
 </head>
@@ -26,6 +27,10 @@
 
 <label><input type="checkbox" id="i2pOnly">Only handle magnet links on .i2p pages
   <p class="hint">Magnet links on other pages are ignored, and nothing is sent to I2PSnark.</p></label>
+
+<label>I2PSnark URL
+  <input type="text" id="overrideBaseUrl" placeholder="http://127.0.0.1:7657/i2psnark" spellcheck="false" autocomplete="off">
+  <p class="hint">Leave empty to auto-detect the instance that served this extension. Set this to pin a specific instance, e.g. a standalone I2PSnark on http://127.0.0.1:8002/i2psnark.</p></label>
 
 <p id="saved">Saved.</p>
 <script src="options.js"></script>
