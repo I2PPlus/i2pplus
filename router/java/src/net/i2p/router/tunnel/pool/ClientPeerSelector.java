@@ -534,9 +534,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         } else {
             ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, randomKey, SLICE_2_3, params.ipRestriction, params.ipSet);
-            if (matches.size() < middleCount) {
-                ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, randomKey, SLICE_2_3, params.ipRestriction, params.ipSet);
-            }
+            // Single pass over the slice-2/3 subtier; a re-run with identical
+            // parameters cannot add peers, so escalate straight to the
+            // slice-unrestricted pass below.
             if (matches.size() < middleCount) {
                 ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, 0, null);
             }
@@ -630,10 +630,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
                 }
             } else {
+                // Single pass over the fast tier; a re-run with identical
+                // parameters cannot add peers (candidates are consumed into
+                // matches in one pass), so the no-slice escalation below is
+                // the only retry that can differ.
                 ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, params.ipRestriction, params.ipSet);
-                if (matches.isEmpty()) {
-                    ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, params.ipRestriction, params.ipSet);
-                }
             }
         }
         // Fallback to connected peers. KeepAlive job maintains active peer count

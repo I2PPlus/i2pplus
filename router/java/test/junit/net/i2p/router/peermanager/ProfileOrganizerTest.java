@@ -139,6 +139,24 @@ public class ProfileOrganizerTest {
     }
 
     @Test
+    public void testIdenticalReselectionAddsNothing() throws Exception {
+        for (int i = 0; i < 3; i++) {
+            register(6000 + i);
+        }
+        Set<Hash> exclude = new HashSet<>();
+        Set<Hash> matches = new HashSet<>();
+        // Ask for far more than available so the first pass exhausts the pool.
+        _org.selectNotFailingPeers(100, exclude, matches);
+        int first = matches.size();
+        assertTrue("selection should find at least the registered peers", first >= 3);
+        // A second pass with identical parameters over the same state cannot
+        // add peers: the candidate pool was fully consumed into matches.
+        Set<Hash> matches2 = new HashSet<>(matches);
+        _org.selectNotFailingPeers(100 - matches2.size(), exclude, matches2);
+        assertEquals("identical re-selection must not add peers", first, matches2.size());
+    }
+
+    @Test
     public void testGetProfileReturnsRegistered() throws Exception {
         Hash peer = register(4000);
         PeerProfile profile = _org.getProfile(peer);
