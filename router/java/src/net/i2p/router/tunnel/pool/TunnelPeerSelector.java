@@ -575,6 +575,22 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Current tunnel build success ratio, 0.0 when no data is available.
+     *  <p>
+     *  Expensive: each call performs 6 RateStat lookups and 6 rate fetches
+     *  ({@link ProfileOrganizer#getTunnelBuildSuccess()}).  Fetch once per
+     *  selection or scan and pass the value down; never call per candidate
+     *  peer.  A value of 0.0 (no data) relaxes the attack-threshold gates,
+     *  matching the conservative startup behavior.
+     *
+     *  @param ctx the router context
+     *  @return the ratio in [0.0, 1.0]
+     */
+    static double getBuildSuccess(RouterContext ctx) {
+        return ctx.profileOrganizer().getTunnelBuildSuccess();
+    }
+
+    /**
      * Check if a peer should be excluded from closest hop selection.
      * This performs connectivity checks and version capability validation.
      * Used by Excluder to classify exclusion reasons for diagnostics.
@@ -582,10 +598,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param peerHash the peer hash to check
      * @param isInbound true if this is for an inbound tunnel
      * @param isExploratory true if this is for exploratory tunnels
+     * @param buildSuccess the build success ratio, fetched once per selection
      * @return the exclusion reason, or null if peer should not be excluded
      * @since 0.9.58
      */
-    private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory) {
+    private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory, double buildSuccess) {
         final long BANDWIDTH_REJECTION_CUTOFF_MS = 20_000L;
 
         // A banlisted peer must never be pre-selected for tunnel builds.
@@ -616,7 +633,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         if (filterUnreachable(isInbound, isExploratory)) {
             if (routerInfo.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
-                if (!allowFirewalledUnderAttack(routerInfo)) {
+                if (!allowFirewalledUnderAttack(routerInfo.getCapabilities(), buildSuccess)) {
                     return "U-cap";
                 }
             }
@@ -630,8 +647,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) {
                 return "moderate-congestion";
             }
-            String excludeCaps = getEffectiveExcludeCaps(ctx);
-            if (shouldExclude(ctx, routerInfo, excludeCaps, isExploratory)) {
+            String excludeCaps = getEffectiveExcludeCaps(ctx, buildSuccess);
+            if (shouldExclude(ctx, routerInfo, excludeCaps, isExploratory, buildSuccess)) {
                 return "slow/capped";
             }
         }
@@ -665,7 +682,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             // Has a recent successful tunnel test (dynamic window)
             if (!hasSignal && profile != null) {
                 long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
-                if (lastTested > 0 && now - lastTested < getActivityWindow(ctx)) {
+                if (lastTested > 0 && now - lastTested < getActivityWindow(ctx, buildSuccess)) {
                     hasSignal = true;
                 }
             }
@@ -690,33 +707,40 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Effective exclude caps, adapting to build success.
-     * During low build success (<40%), relax exclusions for M, N, O, D, and P caps.
-     * Also relax during first 10 minutes of uptime when build success is unknown.
+     * During low build success (&lt;40%), relax exclusions for M, N, O, D, and P caps.
+     * Also relax during first 5 minutes of uptime when build success is unknown.
+     *
+     * @param ctx the router context
+     * @param buildSuccess the build success ratio, fetched once per selection
      * @return non-null, possibly empty
      */
-    private static String getEffectiveExcludeCaps(RouterContext ctx) {
-        String configured = getExcludeCaps(ctx);
+    private static String getEffectiveExcludeCaps(RouterContext ctx, double buildSuccess) {
+        return relaxedExcludeCaps(getExcludeCaps(ctx), buildSuccess, ctx.router().getUptime());
+    }
+
+    /**
+     *  Strip the M, N, O, D, P capability exclusions from the configured caps
+     *  when the build success ratio is below {@link #ATTACK_THRESHOLD} or the
+     *  router is within its first {@link #STARTUP_WARNING_SUPPRESS_MS} of
+     *  uptime (when the ratio is not yet meaningful).  A ratio of 0.0 (no
+     *  data) relaxes as well, matching the conservative startup behavior.
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param configured the configured exclude caps, possibly null or empty
+     *  @param buildSuccess the build success ratio in [0.0, 1.0]
+     *  @param uptimeMs router uptime in milliseconds
+     *  @return the configured caps with M/N/O/D/P removed when relaxing, otherwise unchanged
+     */
+    static String relaxedExcludeCaps(String configured, double buildSuccess, long uptimeMs) {
         if (configured == null || configured.isEmpty()) {
             return configured;
         }
 
-        boolean shouldRelax = false;
-        double buildSuccess = 0;
-        try {
-            buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-        } catch (Exception e) {
-            return configured;
-        }
-
-        if (buildSuccess < ATTACK_THRESHOLD) {
-            shouldRelax = true;
-        }
+        boolean shouldRelax = buildSuccess < ATTACK_THRESHOLD;
         if (buildSuccess >= 0.45) {
             shouldRelax = false;
         }
-
-        long uptime = ctx.router().getUptime();
-        if (uptime > 0 && uptime < STARTUP_WARNING_SUPPRESS_MS) {
+        if (uptimeMs > 0 && uptimeMs < STARTUP_WARNING_SUPPRESS_MS) {
             shouldRelax = true;
         }
 
@@ -738,23 +762,22 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * Should we allow firewalled (U-cap) peers?
-     * During attacks (build success < 40%), allow U-cap peers if they have M, N, O, P, or X capability.
+     *  Should we allow a firewalled (U-cap) peer?
+     *  During attacks (build success below {@link #ATTACK_THRESHOLD}), allow
+     *  U-cap peers that also publish M, N, O, P, or X capability.  Peers
+     *  without the U cap are always allowed.  Pure decision — no context
+     *  access, safe for unit tests.
+     *
+     *  @param capabilities the peer's capability string, possibly null
+     *  @param buildSuccess the build success ratio, fetched once per selection
+     *  @return true if the peer may be used despite the U cap
      */
-    private boolean allowFirewalledUnderAttack(RouterInfo routerInfo) {
-        if (routerInfo == null) return false;
-        String cap = routerInfo.getCapabilities();
-        if (!cap.contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
+    static boolean allowFirewalledUnderAttack(String capabilities, double buildSuccess) {
+        if (capabilities == null || !capabilities.contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
             return true;
         }
-        if (cap.contains("M") || cap.contains("N") || cap.contains("O") ||
-            cap.contains("P") || cap.contains("X")) {
-            double buildSuccess = 0;
-            try {
-                buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-            } catch (Exception e) {
-                return false;
-            }
+        if (capabilities.contains("M") || capabilities.contains("N") || capabilities.contains("O") ||
+            capabilities.contains("P") || capabilities.contains("X")) {
             return buildSuccess < ATTACK_THRESHOLD;
         }
         return false;
@@ -874,7 +897,23 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.17
      */
     public static boolean shouldExclude(RouterContext ctx, RouterInfo peer) {
-        return shouldExclude(ctx, peer, getExcludeCaps(ctx), false);
+        return shouldExclude(ctx, peer, getExcludeCaps(ctx), false, getBuildSuccess(ctx));
+    }
+
+    /**
+     * Should the peer be excluded based on its published caps, crypto, and version?
+     * <p>
+     * Variant for per-peer selection loops that already fetched the build
+     * success ratio once; avoids re-reading router statistics per peer.
+     *
+     * @param ctx Router context for peer count checks
+     * @param peer The peer to evaluate
+     * @param buildSuccess the build success ratio in [0.0, 1.0]
+     * @return true if the peer should be excluded
+     * @since 0.9.17
+     */
+    public static boolean shouldExclude(RouterContext ctx, RouterInfo peer, double buildSuccess) {
+        return shouldExclude(ctx, peer, getExcludeCaps(ctx), false, buildSuccess);
     }
 
     /**
@@ -897,9 +936,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param peer The peer to evaluate
      * @param excl Characters representing capabilities we want to exclude
      * @param isExploratory true if this check is for an exploratory pool
+     * @param buildSuccess the build success ratio, fetched once per selection
      * @return true if the peer should be excluded
      */
-    private static boolean shouldExclude(RouterContext ctx, RouterInfo peer, String excl, boolean isExploratory) {
+    private static boolean shouldExclude(RouterContext ctx, RouterInfo peer, String excl, boolean isExploratory,
+                                         double buildSuccess) {
         String cap = peer.getCapabilities();
         RouterIdentity ident = peer.getIdentity();
 
@@ -923,12 +964,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // Avoid degraded peers
         // Allow E cap with 1/6 probability during attacks (build success < 40%)
         if (cap.contains("E") || cap.contains("G")) {
-            double buildSuccess = 0;
-            try {
-                buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-            } catch (Exception e) {
-                return true;
-            }
             // During attacks, allow E cap with 1/6 chance
             if (cap.contains("E") && buildSuccess < ATTACK_THRESHOLD) {
                 return ctx.random().nextInt(6) != 0;  // 5/6 chance: Exclude, 1/6: Allow
@@ -1261,35 +1296,62 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
         private final boolean _isIn;
         private final boolean _isExpl;
+        /** Build success ratio, fetched once per Excluder construction. */
+        private final double _buildSuccess;
 
         /**
          *  Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
+         *  Fetches the build success ratio once, so the per-peer exclusion
+         *  checks in {@link #contains(Object)} never re-read router statistics.
          */
         public Excluder(boolean isInbound, boolean isExploratory) {
+            this(isInbound, isExploratory, getBuildSuccess(ctx));
+        }
+
+        /**
+         *  Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
+         *  Uses a build success ratio already fetched by the caller.
+         */
+        public Excluder(boolean isInbound, boolean isExploratory, double buildSuccess) {
             super(ctx.getBooleanProperty("i2np.allowLocal") ? new LinkedHashSet<>()
                                                               : new LinkedHashSet<>(ctx.tunnelManager().selectPeersInTooManyTunnels()));
             _isIn = isInbound;
             _isExpl = isExploratory;
+            _buildSuccess = buildSuccess;
             for (Hash h : s) {recordExclusion(h, "too-many-tunnels");}
         }
 
         /**
          *  Does not add selectPeersInTooManyTunnels().
-         *  Makes a copy of toAdd
+         *  Makes a copy of toAdd.
+         *  Fetches the build success ratio once, so the per-peer exclusion
+         *  checks in {@link #contains(Object)} never re-read router statistics.
          *
          *  @param toAdd initial contents, copied
          */
         public Excluder(boolean isInbound, boolean isExploratory, Set<Hash> toAdd) {
+            this(isInbound, isExploratory, toAdd, getBuildSuccess(ctx));
+        }
+
+        /**
+         *  Does not add selectPeersInTooManyTunnels().
+         *  Makes a copy of toAdd.  Uses a build success ratio already fetched
+         *  by the caller.
+         *
+         *  @param toAdd initial contents, copied
+         */
+        public Excluder(boolean isInbound, boolean isExploratory, Set<Hash> toAdd, double buildSuccess) {
             super(new LinkedHashSet<>(toAdd));
             _isIn = isInbound;
             _isExpl = isExploratory;
+            _buildSuccess = buildSuccess;
         }
 
     @Override
     public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             Hash h = (Hash) o;
-            String reason = getExclusionReason(h, _isIn, _isExpl);
+            String reason = getExclusionReason(h, _isIn, _isExpl, _buildSuccess);
             if (reason != null) {
                 s.add(h);
                 recordExclusion(h, reason);
@@ -1528,13 +1590,32 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @return true if the peer has not been heard from or about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer) {
+        return isStalePeer(ctx, peer, getBuildSuccess(ctx));
+    }
+
+    /**
+     *  Check whether a peer is stale — no contact (heard from or heard about)
+     *  within the dynamic activity window.  The window adapts to network
+     *  visibility: 500+ active peers use 1 hour, 200+ use 2 hours, 100+ use
+     *  4 hours, fewer than 100 use 8 hours (fresh router building up picture).
+     *
+     *  Stale peers are skipped during first-hop selection and keepalive to
+     *  avoid wasting resources on peers that are likely offline.  Skipped
+     *  during the first 15 minutes of uptime (startup grace).
+     *
+     *  @param ctx the router context
+     *  @param peer hash of the peer to check
+     *  @param buildSuccess the build success ratio, fetched once by the caller
+     *  @return true if the peer has not been heard from or about within the activity window
+     */
+    static boolean isStalePeer(RouterContext ctx, Hash peer, double buildSuccess) {
         if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000L)
             return false;
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
         if (profile == null)
             return true;
         long now = ctx.clock().now();
-        long cutoff = now - getActivityWindow(ctx);
+        long cutoff = now - getActivityWindow(ctx, buildSuccess);
         return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
     }
 
@@ -1555,6 +1636,27 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.70+
      */
     public static long getActivityWindow(RouterContext ctx) {
+        return getActivityWindow(ctx, getBuildSuccess(ctx));
+    }
+
+    /**
+     *  Compute the activity window for peer selection based on current network
+     *  visibility.  When we hear from many peers, we can be selective (short window).
+     *  When the router is fresh or the network is sparse, use a wider window to
+     *  avoid starving peer pools.
+     *
+     *  The base window (from active-peer count) is scaled by the Tuner-controlled
+     *  multiplier ({@link #setWindowMultiplier}) and floored to at least 6 hours
+     *  when build success is in the degraded/purgatory band, so good peers whose
+     *  last successful test has aged out are re-admitted instead of pruned in a
+     *  self-reinforcing loop.
+     *
+     *  @param ctx the router context
+     *  @param buildSuccess the build success ratio, fetched once by the caller
+     *  @return activity window in milliseconds
+     *  @since 0.9.70+
+     */
+    public static long getActivityWindow(RouterContext ctx, double buildSuccess) {
         int active = ctx.commSystem().countActivePeers();
         long base;
         if (active >= 500) {base = 1 * 60 * 60 * 1000L;}        // 1 hour
@@ -1569,7 +1671,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // (the Tuner multiplier reacts more slowly across cycles).
         // Raised from 4h to 6h to retain more peer candidates during sustained
         // degradation — the old 4h floor still excluded too many viable peers.
-        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
         if (buildSuccess > 0 && buildSuccess < DEGRADED_BUILD_THRESHOLD) {
             window = Math.max(window, 6 * 60 * 60 * 1000L);
         }
@@ -1613,6 +1714,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         long now = ctx.clock().now();
         Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
         RouterContext rctx = ctx;
+        // Fetch once for the whole keepalive cycle; isStalePeer() per peer
+        // would otherwise re-read router statistics up to 400 times.
+        double buildSuccess = getBuildSuccess(ctx);
 
         // Collect top Fast + HighCap peers that aren't in first-hop fail cooldown
         Set<Hash> targets = new HashSet<>(512);
@@ -1637,8 +1741,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (isFirstHopFailing(rctx, peer))
                 continue;
 
-            // Skip stale peers — no activity in the last 4 hours
-            if (isStalePeer(rctx, peer))
+            // Skip stale peers — no activity in the last activity window
+            if (isStalePeer(rctx, peer, buildSuccess))
                 continue;
 
             Long lastKa = _lastKeepAlive.get(peer);

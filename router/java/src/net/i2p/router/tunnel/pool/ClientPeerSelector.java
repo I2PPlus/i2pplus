@@ -111,7 +111,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (length > 0) {
                 SelectionParams params = computeSelectionParams(settings, length, isInbound);
                 if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
-                SelectionExclusions ex = buildExclusions(settings, isInbound);
+                SelectionExclusions ex = buildExclusions(settings, isInbound, params.buildSuccess);
                 ArraySet<Hash> matches = new ArraySet<>(length);
                 if (length == 1) {
                     rv = selectSingleHop(settings, length, params, ex, matches);
@@ -188,10 +188,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
     }
 
     /** Build the lazy Excluder with client/shared cooldowns, first/last peer and pool diversity exclusions. */
-    private SelectionExclusions buildExclusions(TunnelPoolSettings settings, boolean isInbound) {
+    private SelectionExclusions buildExclusions(TunnelPoolSettings settings, boolean isInbound, double buildSuccess) {
         // Excluder is lazy — contains() auto-classifies and tracks reasons.
         // Don't copy to HashSet or reason tracking is lost.
-        Excluder excluder = new Excluder(isInbound, false);
+        Excluder excluder = new Excluder(isInbound, false, buildSuccess);
         Set<Hash> exclude = excluder;
 
         // Exclude peers recorded on checkTunnel failure (client pool cooldown)
@@ -722,7 +722,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     matches.remove(firstHop);
                     continue;
                 }
-                if (isStalePeer(ctx, firstHop)) {
+                if (isStalePeer(ctx, firstHop, params.buildSuccess)) {
                     if (log.shouldInfo()) {
                         log.info("First hop " + firstHop.toBase64().substring(0,6) +
                                  " is stale (no contact >4hrs), retrying selection...");

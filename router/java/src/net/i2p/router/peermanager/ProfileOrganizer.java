@@ -622,8 +622,9 @@ public class ProfileOrganizer {
      * @param ipSet mutable set tracking already-selected subnets
      */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
+        double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
-        try {locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet);}
+        try {locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess);}
         finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
@@ -648,6 +649,7 @@ public class ProfileOrganizer {
      */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, SessionKey randomKey,
                                 Slice subTierMode, int mask, MaskedIPSet ipSet) {
+        double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
         try {
             if (subTierMode != Slice.SLICE_ALL) {
@@ -656,9 +658,9 @@ public class ProfileOrganizer {
                     subTierMode = Slice.SLICE_ALL;
             }
             if (subTierMode != Slice.SLICE_ALL)
-                locked_selectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode, mask, ipSet);
+                locked_selectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode, mask, ipSet, buildSuccess);
             else
-                locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet);
+                locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess);
         } finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
@@ -730,9 +732,10 @@ public class ProfileOrganizer {
      * @param ipSet mutable set tracking already-selected subnets
      */
     public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
+        double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
         try {
-            locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet);
+            locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet, buildSuccess);
         } finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
@@ -792,7 +795,7 @@ public class ProfileOrganizer {
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                      int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask);
+            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, getTunnelBuildSuccess());
         }
     }
 
@@ -820,8 +823,9 @@ public class ProfileOrganizer {
         if (matches.size() < howMany) {
             List<Hash> connected = _context.commSystem().getEstablished();
             if (connected != null && !connected.isEmpty()) {
+                double buildSuccess = getTunnelBuildSuccess();
                 getReadLock();
-                try {locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);}
+                try {locked_selectActive(connected, howMany, exclude, matches, mask, ipSet, buildSuccess);}
                 finally {releaseReadLock();}
             }
         }
@@ -852,7 +856,7 @@ public class ProfileOrganizer {
     public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches,
                                          boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
-            selectHighBandwidthPeers(howMany, exclude, matches, onlyNotFailing);
+            selectHighBandwidthPeers(howMany, exclude, matches, onlyNotFailing, getTunnelBuildSuccess());
         }
     }
 
@@ -864,8 +868,10 @@ public class ProfileOrganizer {
      * @param exclude peers to exclude (may be null)
      * @param matches output set populated with selected peer hashes
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     * @param buildSuccess the build success ratio, fetched once per scan
      */
-    private void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
+    private void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
+                                          double buildSuccess) {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
             List<Hash> selected = new ArrayList<>(needed);
@@ -878,7 +884,7 @@ public class ProfileOrganizer {
                     Hash cur = iter.next();
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
-                    if (!isSelectable(cur)) continue;
+                    if (!isSelectable(cur, buildSuccess)) continue;
                     RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(cur);
                     if (info != null) {
                         String tier = DataHelper.stripHTML(info.getBandwidthTier());
@@ -904,7 +910,7 @@ public class ProfileOrganizer {
             matches.addAll(selected);
         }
         if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0);
+            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, buildSuccess);
         }
     }
 
@@ -918,7 +924,7 @@ public class ProfileOrganizer {
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      */
     public void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
-        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0);
+        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, getTunnelBuildSuccess());
     }
 
     /**
@@ -931,7 +937,8 @@ public class ProfileOrganizer {
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      * @param mask bitmask length for /n diversity restriction (0 to disable, unused here)
      */
-    private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing, int mask) {
+    private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
+                                      int mask, double buildSuccess) {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
             List<Hash> selected = new ArrayList<>(needed);
@@ -946,7 +953,7 @@ public class ProfileOrganizer {
                     // they only get picked if literally nothing else is usable.
                     PeerProfile prof = locked_getProfile(cur);
                     if (prof != null && inLossProbation(prof, now)) continue;
-                    if (isSelectable(cur)) selected.add(cur);
+                    if (isSelectable(cur, buildSuccess)) selected.add(cur);
                 }
             } finally {
                 releaseReadLock();
@@ -964,7 +971,7 @@ public class ProfileOrganizer {
             for (Hash peer : allPeers) {
                 if (matches.size() >= howMany) break;
                 if (matches.contains(peer) || (exclude != null && exclude.contains(peer))) continue;
-                if (isSelectable(peer)) matches.add(peer);
+                if (isSelectable(peer, buildSuccess)) matches.add(peer);
             }
         }
     }
@@ -1111,6 +1118,10 @@ public class ProfileOrganizer {
             int profileCount = built.profileCount;
             double totalIntegration = built.totalIntegration;
 
+            // Fetch once for the whole cycle; tier rebuild and quality counting
+            // would otherwise re-read router statistics per profile.
+            double buildSuccess = getTunnelBuildSuccess();
+
             // Step 2: Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();
             double newIntegrationThreshold = numNotFailing > 0 ? totalIntegration / numNotFailing : 1.0d;
@@ -1127,23 +1138,23 @@ public class ProfileOrganizer {
             _notFailingPeersList.clear();
 
             // Step 4: Reinsert all active profiles and assign tiers
-            locked_rebuildTiers(newStrictCapacityOrder);
+            locked_rebuildTiers(newStrictCapacityOrder, buildSuccess);
 
             // Step 5: Fallback to ensure minimum fast peers
-            int added = fillFastTierFallbacks(now, newStrictCapacityOrder);
+            int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess);
 
             // Step 6: Fallback to ensure minimum high-capacity peers
-            int highCapAdded = fillHighCapFallback(now, newStrictCapacityOrder);
+            int highCapAdded = fillHighCapFallback(now, newStrictCapacityOrder, buildSuccess);
 
             // Step 6a: Purge peers with recent tunnel failures from fast/high-cap tiers.
             purgeUnusableFromTiers(now);
 
             // Step 6c: Fallback to preserved pre-reorganize peers if rebuild shrunk tiers too much.
-            restorePreservedPeers(now, oldFastPeers, oldHighCapPeers);
+            restorePreservedPeers(now, oldFastPeers, oldHighCapPeers, buildSuccess);
 
             // Step 6d: Count quality peers (fast/high-cap with good acceptance + recent activity)
             // Used by tuner to adjust tier limits based on viable tunnel candidates
-            int qualityCount = countQualityPeers(now);
+            int qualityCount = countQualityPeers(now, buildSuccess);
 
             // Step 7: Update global thresholds
             _strictCapacityOrder = newStrictCapacityOrder;
@@ -1263,9 +1274,9 @@ public class ProfileOrganizer {
      *  Reinserts all active profiles into the tier maps.  Must be called with
      *  the write lock held.
      */
-    private void locked_rebuildTiers(Set<PeerProfile> candidates) {
+    private void locked_rebuildTiers(Set<PeerProfile> candidates, double buildSuccess) {
         for (PeerProfile profile : candidates) {
-            locked_placeProfile(profile);
+            locked_placeProfile(profile, buildSuccess);
         }
     }
 
@@ -1273,7 +1284,7 @@ public class ProfileOrganizer {
      *  Fills the fast tier to the minimum via up to three fallback passes.
      *  Must be called with the write lock held.  Returns the number added.
      */
-    private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles) {
+    private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
         int minFast = getMinimumFastPeers();
         int added = 0;
         int target = minFast;
@@ -1292,7 +1303,7 @@ public class ProfileOrganizer {
             for (int i = 0; i < candidates.size(); i++) {
                 if (_fastPeers.size() >= target) break;
                 PeerProfile profile = candidates.get(i);
-                if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
+                if (profile.isLowLatency() && isSelectable(profile.getPeer(), buildSuccess) &&
                     !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile) &&
                     !inLossProbation(profile, now)) {
                     _fastPeers.put(profile.getPeer(), profile);
@@ -1309,7 +1320,7 @@ public class ProfileOrganizer {
                     if (_fastPeers.size() >= target) break;
                     PeerProfile profile = candidates.get(i);
                     if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
-                        isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile) &&
+                        isSelectable(profile.getPeer(), buildSuccess) && !isLowTunnelAcceptance(profile) &&
                         !hasRecentTunnelFailures(profile) && !inLossProbation(profile, now)) {
                         _fastPeers.put(profile.getPeer(), profile);
                         clearLossIfReadmitted(profile);
@@ -1325,11 +1336,11 @@ public class ProfileOrganizer {
             if (_fastPeers.size() < target) {
                 boolean inStartup = _context.router() != null &&
                                     _context.router().getUptime() < 15 * 60 * 1000L;
-                long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
+                long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
                 for (PeerProfile profile : activeProfiles) {
                     if (_fastPeers.size() >= target) break;
                     if (profile.getPeer().equals(_us)) continue;
-                    if (!isSelectable(profile.getPeer())) continue;
+                    if (!isSelectable(profile.getPeer(), buildSuccess)) continue;
                     if (isLowTunnelAcceptance(profile)) continue;
                     if (hasRecentTunnelFailures(profile)) continue;
                     if (inLossProbation(profile, now)) continue;
@@ -1350,17 +1361,17 @@ public class ProfileOrganizer {
      *  selectable peers.  Must be called with the write lock held.  Returns
      *  the number added.
      */
-    private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles) {
+    private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
         int minHighCap = getMinimumHighCapacityPeers();
         int highCapAdded = 0;
         if (_highCapacityPeers.size() < minHighCap) {
             boolean inStartup = _context.router() != null &&
                                 _context.router().getUptime() < 15 * 60 * 1000L;
-            long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
+            long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
             for (PeerProfile profile : activeProfiles) {
                 if (_highCapacityPeers.size() >= minHighCap) break;
                 if (profile.getPeer().equals(_us)) continue;
-                if (!isSelectable(profile.getPeer())) continue;
+                if (!isSelectable(profile.getPeer(), buildSuccess)) continue;
                 if (isLowTunnelAcceptance(profile)) continue;
                 if (hasRecentTunnelFailures(profile)) continue;
                 if (inLossProbation(profile, now)) continue;
@@ -1415,7 +1426,7 @@ public class ProfileOrganizer {
      *  the tiers too much.  Must be called with the write lock held.
      */
     private void restorePreservedPeers(long now, Map<Hash, PeerProfile> oldFastPeers,
-                                       Map<Hash, PeerProfile> oldHighCapPeers) {
+                                       Map<Hash, PeerProfile> oldHighCapPeers, double buildSuccess) {
         // Prevents starvation when thresholds shift unfavorably — old entries that remain
         // selectable (no recent failures, no ban, no stale RI) are re-added.
         int oldFastSize = oldFastPeers.size();
@@ -1425,7 +1436,7 @@ public class ProfileOrganizer {
                 if (_fastPeers.size() >= oldFastSize) break;
                 Hash peer = entry.getKey();
                 if (_fastPeers.containsKey(peer)) continue;
-                if (!isSelectable(peer)) continue;
+                if (!isSelectable(peer, buildSuccess)) continue;
                 PeerProfile profile = entry.getValue();
                 if (hasRecentTunnelFailures(profile)) continue;
                 if (inLossProbation(profile, now)) continue;
@@ -1446,7 +1457,7 @@ public class ProfileOrganizer {
                 if (_highCapacityPeers.size() >= oldHighCapSize) break;
                 Hash peer = entry.getKey();
                 if (_highCapacityPeers.containsKey(peer)) continue;
-                if (!isSelectable(peer)) continue;
+                if (!isSelectable(peer, buildSuccess)) continue;
                 PeerProfile profile = entry.getValue();
                 if (hasRecentTunnelFailures(profile)) continue;
                 if (hasHighLoss(profile, now)) continue;
@@ -1464,14 +1475,14 @@ public class ProfileOrganizer {
     /**
      *  Counts quality peers (fast/high-cap with good acceptance plus recent activity).
      */
-    private int countQualityPeers(long now) {
+    private int countQualityPeers(long now, double buildSuccess) {
         int qualityCount = 0;
         long recentCutoff = now - 24 * 60 * 60 * 1000L; // 24 hours
         for (PeerProfile profile : _fastPeers.values()) {
-            if (isQualityPeer(profile, recentCutoff)) qualityCount++;
+            if (isQualityPeer(profile, recentCutoff, buildSuccess)) qualityCount++;
         }
         for (PeerProfile profile : _highCapacityPeers.values()) {
-            if (!profile.isLowLatency() && isQualityPeer(profile, recentCutoff)) qualityCount++;
+            if (!profile.isLowLatency() && isQualityPeer(profile, recentCutoff, buildSuccess)) qualityCount++;
         }
         return qualityCount;
     }
@@ -1734,7 +1745,7 @@ public class ProfileOrganizer {
     }
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
-                                    Set<Hash> matches, int mask, MaskedIPSet ipSet) {
+                                    Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess) {
         // Build candidate list, filtering exclusions and checking selectability
         List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
         for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
@@ -1742,7 +1753,7 @@ public class ProfileOrganizer {
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
             if (_us != null && _us.equals(peer)) continue;
-            boolean ok = isSelectable(peer);
+            boolean ok = isSelectable(peer, buildSuccess);
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
             } else {
@@ -1760,7 +1771,7 @@ public class ProfileOrganizer {
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, SessionKey randomKey, Slice subTierMode,
-                                    int mask, MaskedIPSet ipSet) {
+                                    int mask, MaskedIPSet ipSet, double buildSuccess) {
         byte[] rk = randomKey.getData();
         long k0 = DataHelper.fromLong8(rk, 0);
         long k1 = DataHelper.fromLong8(rk, 8);
@@ -1776,7 +1787,7 @@ public class ProfileOrganizer {
             int subTier = getSubTier(peer, k0, k1);
             if ((subTier & subTierMode.mask) != subTierMode.val) continue;
 
-            boolean ok = isSelectable(peer);
+            boolean ok = isSelectable(peer, buildSuccess);
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
             } else if (toExclude != null) {
@@ -1824,13 +1835,13 @@ public class ProfileOrganizer {
     }
 
     private void locked_selectActive(List<Hash> connected, int howMany, Set<Hash> toExclude,
-                                    Set<Hash> matches, int mask, MaskedIPSet ipSet) {
+                                    Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess) {
         for (Iterator<Hash> iter = new RandomIterator<>(connected); matches.size() < howMany && iter.hasNext(); ) {
             Hash peer = iter.next();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
             if (_us != null && _us.equals(peer)) continue;
-            boolean ok = isSelectable(peer);
+            boolean ok = isSelectable(peer, buildSuccess);
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
             } else if (toExclude != null) {
@@ -1854,17 +1865,29 @@ public class ProfileOrganizer {
 
     /**
      * Whether the given peer is eligible for selection.
+     * Fetches the build success ratio once; per-peer callers should use
+     * {@link #isSelectable(Hash, double)} with a value fetched once per scan.
      *
      * @return whether selectable
      */
     public boolean isSelectable(Hash peer) {
+        return isSelectable(peer, getTunnelBuildSuccess());
+    }
+
+    /**
+     * Whether the given peer is eligible for selection.
+     *
+     * @param buildSuccess the build success ratio, fetched once per scan
+     * @return whether selectable
+     */
+    private boolean isSelectable(Hash peer, double buildSuccess) {
         NetworkDatabaseFacade netDb = _context.netDb();
         if (netDb == null) return true;
         if (_context.router() == null) return true;
         if (!passesBasicGates(peer)) return false;
         if (hasExcessiveLifetimeFailures(peer)) return false;
         RouterInfo info = (RouterInfo) _context.netDb().lookupRouterInfoLocally(peer);
-        if (info != null) return hasValidRouterInfo(peer, info);
+        if (info != null) return hasValidRouterInfo(peer, info, buildSuccess);
         return false;
     }
 
@@ -1902,7 +1925,7 @@ public class ProfileOrganizer {
      *  Checks the RouterInfo for hidden flag, stale proof of life, usable
      *  transport address, bandwidth tier, and tunnel exclusion.
      */
-    private boolean hasValidRouterInfo(Hash peer, RouterInfo info) {
+    private boolean hasValidRouterInfo(Hash peer, RouterInfo info, double buildSuccess) {
         if (info.isHidden()) return false;
         if (_context.router() != null && _context.router().getUptime() > STARTUP_GRACE_PERIOD_MS &&
             !_context.commSystem().isEstablished(peer)) {
@@ -1926,7 +1949,7 @@ public class ProfileOrganizer {
         if (!hasUsableTransportAddress(info)) return false;
         String tier = DataHelper.stripHTML(info.getBandwidthTier());
         if (tier.equals("L") || tier.equals("M") || tier.equals("N")) return false;
-        return !TunnelPeerSelector.shouldExclude(_context, info);
+        return !TunnelPeerSelector.shouldExclude(_context, info, buildSuccess);
     }
 
     /**
@@ -1948,7 +1971,7 @@ public class ProfileOrganizer {
         return hasUsableAddress;
     }
 
-    private void locked_placeProfile(PeerProfile profile) {
+    private void locked_placeProfile(PeerProfile profile, double buildSuccess) {
         Hash peer = profile.getPeer();
 
         // Remove existing entries (idempotent)
@@ -1961,7 +1984,7 @@ public class ProfileOrganizer {
         _notFailingPeersList.add(peer); // Note: O(n), but acceptable during reorg
 
         // Evaluate tier placement
-        locked_promoteProfileToTiers(profile);
+        locked_promoteProfileToTiers(profile, buildSuccess);
     }
 
     /**
@@ -1970,13 +1993,13 @@ public class ProfileOrganizer {
      * does not add duplicates to _notFailingPeersList.
      * Must be called with write lock held.
      */
-    private void locked_promoteProfileToTiers(PeerProfile profile) {
+    private void locked_promoteProfileToTiers(PeerProfile profile, double buildSuccess) {
         Hash peer = profile.getPeer();
         PeerProfile notFailingProfile = _notFailingPeers.get(peer);
 
         // Basic eligibility gates (mirrors locked_placeProfile)
         boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
-        boolean isPeerSelectable = isSelectable(peer);
+        boolean isPeerSelectable = isSelectable(peer, buildSuccess);
         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile);
         boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
         boolean congested = isCongestedPeer(peer);
@@ -2063,6 +2086,10 @@ public class ProfileOrganizer {
                        " highCap=" + highCapBefore + "/" + highCapTarget);
         }
 
+        // Fetch once for the whole scan; promotion checks per profile would
+        // otherwise re-read router statistics for every candidate.
+        double buildSuccess = getTunnelBuildSuccess();
+
         for (PeerProfile profile : _strictCapacityOrder) {
             if (_fastPeers.size() >= fastTarget && _highCapacityPeers.size() >= highCapTarget)
                 break;
@@ -2077,9 +2104,9 @@ public class ProfileOrganizer {
             // capacityBonus, capacityValue, etc. — the TreeSet's copy may be stale
             PeerProfile liveProfile = _notFailingPeers.get(peer);
             if (liveProfile != null)
-                locked_promoteProfileToTiers(liveProfile);
+                locked_promoteProfileToTiers(liveProfile, buildSuccess);
             else
-                locked_promoteProfileToTiers(profile);
+                locked_promoteProfileToTiers(profile, buildSuccess);
 
             if (_log.shouldInfo()) {
                 boolean nowFast = _fastPeers.containsKey(peer);
@@ -2353,9 +2380,9 @@ public class ProfileOrganizer {
      * @return whether quality peer
      * @since 0.9.70+
      */
-    private boolean isQualityPeer(PeerProfile profile, long recentCutoff) {
+    private boolean isQualityPeer(PeerProfile profile, long recentCutoff, double buildSuccess) {
         if (profile.getPeer().equals(_us)) return false;
-        if (!isSelectable(profile.getPeer())) return false;
+        if (!isSelectable(profile.getPeer(), buildSuccess)) return false;
 
         // Must have recent activity (last send within 24h)
         long lastSend = profile.getLastSendSuccessful();
