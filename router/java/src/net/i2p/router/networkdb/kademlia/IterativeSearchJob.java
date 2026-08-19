@@ -102,6 +102,21 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static volatile long _maxSearchTime = MAX_SEARCH_TIME_DEFAULT;
 
     /**
+     *  Skip policy for candidate floodfill peers: a peer is skipped only when
+     *  at least one other candidate remains, so a starved search always makes
+     *  progress. Cooldown, overload, and IP-closeness are soft signals.
+     *
+     *  @param recentlyQueried true if the peer was queried within the cooldown period
+     *  @param overloaded true if the peer already has MAX_CONCURRENT_PER_FLOODFILL active queries
+     *  @param ipClose true if the peer shares IPs with an already-queried peer
+     *  @param remainingCandidates number of candidate peers left after this one is removed
+     *  @return true if the peer should be skipped
+     */
+    static boolean shouldSkipPeer(boolean recentlyQueried, boolean overloaded, boolean ipClose, int remainingCandidates) {
+        return (recentlyQueried || overloaded || ipClose) && remainingCandidates > 1;
+    }
+
+    /**
      * The current total search time cap.
      * @return the cap in ms
      * @since 0.9.71+
@@ -478,27 +493,22 @@ public class IterativeSearchJob extends FloodSearchJob {
                     for (Iterator<Hash> iter = _toTry.iterator(); iter.hasNext(); ) {
                         Hash h = iter.next();
                         iter.remove();
-                        // Skip if recently queried by another concurrent search
-                        if (FloodfillNetworkDatabaseFacade.isRecentlyQueried(h)) {
-                            _skippedPeers.add(h);
-                            continue;
-                        }
-                        // Skip if this floodfill already has too many active queries from us
-                        if (FloodfillNetworkDatabaseFacade.isFloodfillOverloaded(h)) {
-                            _skippedPeers.add(h);
-                            continue;
-                        }
+                        boolean recentlyQueried = _facade.isRecentlyQueried(h);
+                        boolean overloaded = _facade.isFloodfillOverloaded(h);
                         Set<String> peerIPs = new MaskedIPSet(getContext(), h, IP_CLOSE_BYTES);
-                        if (!_ipSet.containsAny(peerIPs)) {
-                            _ipSet.addAll(peerIPs);
-                            peer = h;
-                            break;
+                        boolean ipClose = _ipSet.containsAny(peerIPs);
+                        if (shouldSkipPeer(recentlyQueried, overloaded, ipClose, _toTry.size())) {
+                            // Only skip when alternatives remain - a starved search must still make progress
+                            if (ipClose && _log.shouldInfo()) {
+                                _log.info("Skipping query: Router [" +  h.toBase64().substring(0,6) + "] is too close to others");
+                            }
+                            _skippedPeers.add(h);
+                            // go around again
+                            continue;
                         }
-                        if (_log.shouldInfo()) {
-                            _log.info("Skipping query: Router [" +  h.toBase64().substring(0,6) + "] is too close to others");
-                        }
-                        _skippedPeers.add(h);
-                        // go around again
+                        _ipSet.addAll(peerIPs);
+                        peer = h;
+                        break;
                     }
                     if (peer == null) {return;}
                 }
@@ -766,7 +776,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (!isDead) {_queriedFloodfills.add(peer);}
             }
             if (!isDead) {
-                FloodfillNetworkDatabaseFacade.incrementActiveFloodfillQuery(peer);
+                _facade.incrementActiveFloodfillQuery(peer);
             }
         }
 
@@ -814,7 +824,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             _queriedFloodfills.remove(peer);
             isNewFail = _failedPeers.add(peer);
         }
-        FloodfillNetworkDatabaseFacade.decrementActiveFloodfillQuery(peer);
+        _facade.decrementActiveFloodfillQuery(peer);
         if (isNewFail) {
             boolean isKnown = _facade.lookupLocallyWithoutValidation(peer) != null;
             if (timedOut) {
@@ -935,7 +945,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             _queriedFloodfills.clear();
         }
         for (Hash h : toRelease) {
-            FloodfillNetworkDatabaseFacade.decrementActiveFloodfillQuery(h);
+            _facade.decrementActiveFloodfillQuery(h);
         }
     }
 
