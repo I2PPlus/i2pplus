@@ -978,7 +978,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 List<Hash> nonSelf = new ArrayList<>(rv);
                 nonSelf.remove(ctx.routerHash());
                 if (!isDuplicateSequence(settings, nonSelf)) {break;}
-                List<Hash> regenerated = regeneratePeers(settings, nonSelf);
+                List<Hash> regenerated = regeneratePeers(settings, nonSelf, attempts + 1);
                 if (regenerated == null || regenerated.equals(nonSelf)) {break;}
                 // Rebuild with self in correct position
                 rv.clear();

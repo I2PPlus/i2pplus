@@ -1123,24 +1123,37 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Regenerate tunnel peers to avoid duplicate sequence.
-     * Shuffles the peer selection and re-orders.
+     * <p>
+     * The canonical order is the key-distance sort from
+     * {@link #orderPeers}.  Because that sort is deterministic, regenerating
+     * always reproduced the identical sequence and could not avoid
+     * duplicates.  Each regeneration attempt now rotates the canonical order
+     * by a step derived from the pool key, so successive attempts yield
+     * different sequences while staying key-derived (attacker-unpredictable).
      *
      * @param settings the tunnel pool settings
-     * @param peers the peers to regenerate
+     * @param peers the peers to regenerate (not modified)
+     * @param attempt 1-based regeneration attempt number
      * @return regenerated peer list (same or different)
      * @since 0.9.68+
      */
-    protected List<Hash> regeneratePeers(TunnelPoolSettings settings, List<Hash> peers) {
+    protected List<Hash> regeneratePeers(TunnelPoolSettings settings, List<Hash> peers, int attempt) {
         if (peers == null || peers.isEmpty()) {return peers;}
 
         SessionKey randomKey = settings.getRandomKey();
-        if (randomKey != null && peers.size() > 1) {
-            Collections.shuffle(peers, ctx.random());
-            List<Hash> reordered = new ArrayList<>(peers);
-            orderPeers(reordered, randomKey);
-            return reordered;
-        }
-        return peers;
+        if (randomKey == null || peers.size() < 2) {return peers;}
+
+        List<Hash> ordered = new ArrayList<>(peers);
+        orderPeers(ordered, randomKey);
+        if (attempt <= 0) {return ordered;}
+
+        // Rotate by step * attempt mod size; nonzero for attempt 1 and
+        // distinct across the bounded attempts, so each retry differs.
+        // floorMod keeps the step positive for negative key bytes.
+        byte[] rk = randomKey.getData();
+        long step = Math.floorMod(DataHelper.fromLong8(rk, 0), ordered.size() - 1) + 1;
+        Collections.rotate(ordered, (int) (Math.floorMod(step * attempt, ordered.size())));
+        return ordered;
     }
 
     private static final Comparator<Hash> HASH_BASE64_COMPARATOR = Comparator.comparing(h -> h.toBase64());
