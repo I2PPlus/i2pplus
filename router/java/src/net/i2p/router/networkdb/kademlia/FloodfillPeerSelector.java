@@ -10,10 +10,12 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import net.i2p.stat.RateConstants;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import net.i2p.data.DataHelper;
@@ -25,6 +27,7 @@ import net.i2p.kademlia.SelectionCollector;
 import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
+import net.i2p.router.Router;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
@@ -42,6 +45,7 @@ import net.i2p.stat.RateStat;
 class FloodfillPeerSelector extends PeerSelector {
 
     private BanLogger _banLogger;
+    private final KademliaNetworkDatabaseFacade _facade;
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -85,8 +89,9 @@ class FloodfillPeerSelector extends PeerSelector {
     /**
      * FloodfillPeerSelector.
      */
-    public FloodfillPeerSelector(RouterContext ctx) {
+    public FloodfillPeerSelector(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
+        _facade = facade;
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
     }
@@ -95,21 +100,9 @@ class FloodfillPeerSelector extends PeerSelector {
      * Pick out peers with the floodfill capacity set, returning them first, but then
      * after they're complete, sort via kademlia.
      *
-     * Puts the floodfill peers that are directly connected first in the list.
-     * List will not include our own hash. Returns new list, may be modified.
-     *
-     * @param key the ROUTING key (NOT the original key)
-     * @param peersToIgnore can be null
-     * @return List of Hash for the peers selected
-     */
-    @Override
-    List<Hash> selectMostReliablePeers(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
-        return selectNearestExplicitThin(key, maxNumRouters, peersToIgnore, kbuckets, true);
-    }
-
-    /**
-     * Pick out peers with the floodfill capacity set, returning them first, but then
-     * after they're complete, sort via kademlia.
+     * Walks the kbuckets with a FloodfillSelectionCollector, which gathers floodfill
+     * peers in groups (good floodfills first, then bad, then non-floodfills sorted by
+     * Kademlia distance to the key).
      *
      * Does not prefer the floodfill peers that are directly connected.
      * List will not include our own hash. Returns new list, may be modified.
@@ -120,31 +113,13 @@ class FloodfillPeerSelector extends PeerSelector {
      */
     @Override
     List<Hash> selectNearestExplicit(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
-        return selectNearestExplicitThin(key, maxNumRouters, peersToIgnore, kbuckets, false);
-    }
-
-    @Override
-    List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
-        return selectNearestExplicitThin(key, maxNumRouters, peersToIgnore, kbuckets, false);
-    }
-
-    /**
-     * Pick out peers with the floodfill capacity set, returning them first, but then
-     * after they're complete, sort via kademlia.
-     * List will not include our own hash. Returns new list, may be modified.
-     *
-     * @param key the ROUTING key (NOT the original key)
-     * @param peersToIgnore can be null
-     * @return List of Hash for the peers selected
-     */
-    List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets, boolean preferConnected) {
         if (peersToIgnore == null) {peersToIgnore = Collections.singleton(_context.routerHash());}
         else {peersToIgnore.add(_context.routerHash());}
         // TODO this is very slow
         FloodfillSelectionCollector matches = new FloodfillSelectionCollector(key, peersToIgnore, maxNumRouters);
         if (kbuckets == null) {return new ArrayList<>();}
         kbuckets.getAll(matches);
-        List<Hash> rv = matches.get(maxNumRouters, preferConnected);
+        List<Hash> rv = matches.get(maxNumRouters);
         if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder();
             buf.append("Searching for ").append(maxNumRouters).append(" peers close to [").append(key.toBase64().substring(0,6)).append("]");
@@ -182,9 +157,9 @@ class FloodfillPeerSelector extends PeerSelector {
      *
      *  @param kbuckets now unused
      *  @param toIgnore can be null
-     *  @return all floodfills not banlisted forever.
+     *  @return all floodfills not banlisted forever and not flagged unreachable.
      */
-    private List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets) {
+    List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         List<Hash> rv = new ArrayList<>(set.size());
         for (Hash h : set) {
@@ -192,6 +167,10 @@ class FloodfillPeerSelector extends PeerSelector {
                 _context.banlist().isBanlisted(h) ||
                 _context.banlist().isBanlistedForever(h) ||
                 _context.profileOrganizer().peerSendsBadReplies(h)) {
+                continue;
+            }
+            RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
+            if (ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {
                 continue;
             }
             rv.add(h);
@@ -233,6 +212,8 @@ class FloodfillPeerSelector extends PeerSelector {
     // before we can do this. Old profiles get deleted.
     private static final long HEARD_AGE = 45*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
+    /** Floodfills with RouterInfo published longer ago than this are skipped. */
+    private static final long MAX_RI_AGE = 3*60*60*1000L;
 
     /**
      *  See above for description
@@ -282,9 +263,10 @@ class FloodfillPeerSelector extends PeerSelector {
         List<Hash> badff = new ArrayList<>(howMany);
         for (int i = 0; found < howMany && i < sorted.size(); i++) {
             Hash entry = sorted.get(i);
-            if (entry == null || uptime < 45*1000L) {break;} // shouldn't happen
+            if (entry == null) {continue;} // shouldn't happen
+            if (uptime < 45*1000L) {break;}
             // Skip recently-queried floodfills to spread load across concurrent searches
-            if (FloodfillNetworkDatabaseFacade.isRecentlyQueried(entry)) {
+            if (_facade.isRecentlyQueried(entry)) {
                 continue;
             }
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
@@ -321,7 +303,7 @@ class FloodfillPeerSelector extends PeerSelector {
         // this lets us detect and ban unresponsive floodfills that we'd otherwise never query
         int profiled = 0;
         for (Hash bad : badff) {
-            if (profiled >= 2) break;
+            if (profiled >= 2 || rv.size() >= howMany) break;
             if (!rv.contains(bad)) {
                 rv.add(bad);
                 profiled++;
@@ -338,14 +320,15 @@ class FloodfillPeerSelector extends PeerSelector {
 
     /**
      *  Compute the maximum acceptable failure rate for a floodfill peer,
-     *  based on the network average. Returns a value between 0.20 and 0.95.
+     *  based on the network average over the last 10 minutes.
+     *  Returns a value between 0.20 and 0.95.
      */
     private double computeMaxFailRate(long uptime) {
         double maxFailRate = 0.95;
         if (uptime > 2*60*60*1000L) {
             RateStat rs = getRateStat(_failedLookupRateStatSlot, "peer.failedLookupRate");
             if (rs != null) {
-                Rate r = rs.getRate(RateConstants.ONE_HOUR);
+                Rate r = rs.getRate(RateConstants.TEN_MINUTES);
                 if (r != null) {
                     double currentFailRate = r.getAverageValue();
                     maxFailRate = Math.min(0.95d, Math.max(0.20d, 1.25d * currentFailRate));
@@ -380,7 +363,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Same /16, family, or port");
             return PeerClass.BAD;
         }
-        if (now - info.getPublished() > 3*60*60*1000L) {
+        if (now - info.getPublished() > MAX_RI_AGE) {
             if (_log.shouldDebug())
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo published over 3 hours ago");
             return PeerClass.BAD;
@@ -395,11 +378,9 @@ class FloodfillPeerSelector extends PeerSelector {
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L or M tier)");
             if (info.getBandwidthTier().equals("L")) {
                 if (_context.banlist().isLuBanEnabled()) {
-                    String ipPort = getIPFromRouterInfo(info);
                     String verCaps = "(" + info.getVersion() + " / " + caps + ")";
-                    _context.banlist().banlistRouter(entry, "L tier Floodfill " + verCaps, null, null, now + 4*60*60*1000L);
-                    _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill " + verCaps, 4*60*60*1000L, info);
-                    _context.commSystem().forceDisconnect(entry, "L tier Floodfill");
+                    banAndDisconnect(entry, info, "L tier Floodfill " + verCaps, "L tier Floodfill " + verCaps,
+                                     "L tier Floodfill", 4*60*60*1000L, 4*60*60*1000L, now);
                     if (_log.shouldWarn()) {
                         _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier " + verCaps);
                     }
@@ -430,10 +411,13 @@ class FloodfillPeerSelector extends PeerSelector {
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Profile contains no history");
             return PeerClass.BAD;
         }
-        if (prof.getDbResponseTime().getRate(RateConstants.ONE_HOUR).getAvgOrLifetimeAvg() < maxGoodRespTime
+        Rate dbRespRate = prof.getDbResponseTime().getRate(RateConstants.ONE_HOUR);
+        Rate goodFailRate = prof.getDBHistory().getFailedLookupRate().getRate(RateConstants.ONE_HOUR);
+        if (dbRespRate != null && goodFailRate != null &&
+            dbRespRate.getAvgOrLifetimeAvg() < maxGoodRespTime
             && prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
             && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
-            && prof.getDBHistory().getFailedLookupRate().getRate(RateConstants.ONE_HOUR).getAverageValue() < maxFailRate) {
+            && goodFailRate.getAverageValue() < maxFailRate) {
             if (_log.shouldDebug())
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Good");
             return PeerClass.GOOD;
@@ -456,9 +440,8 @@ class FloodfillPeerSelector extends PeerSelector {
             if (getEnableUnresponsiveFloodfillBan(_context)) {
                 String ipPort = getIPFromRouterInfo(info);
                 String verCaps = "(" + info.getVersion() + " / " + caps + ")";
-                _context.banlist().banlistRouter(entry, "Unresponsive Floodfill", null, null, now + 60*60*1000L);
-                _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "Unresponsive Floodfill " + verCaps, 30*60*1000L, info);
-                _context.commSystem().forceDisconnect(entry, "Unresponsive Floodfill");
+                banAndDisconnect(entry, info, "Unresponsive Floodfill", "Unresponsive Floodfill " + verCaps,
+                                 "Unresponsive Floodfill", 60*60*1000L, 30*60*1000L, now);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning for 30m and disconnecting from unresponsive Floodfill [" + entry.toBase64().substring(0,6) + "] -> " +
                               "Fail rate: " + String.format("%.2f", failRate.getAverageValue()) +
@@ -472,6 +455,27 @@ class FloodfillPeerSelector extends PeerSelector {
         if (_log.shouldDebug())
             _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Poor profile history for this router");
         return PeerClass.BAD;
+    }
+
+    /**
+     *  Ban, log, and disconnect from a floodfill peer, with separate texts for
+     *  the banlist, the ban log, and the disconnect reason.
+     *
+     *  @param entry the peer hash
+     *  @param info the peer's RouterInfo
+     *  @param banReason the reason recorded in the banlist
+     *  @param logReason the reason recorded in the ban log
+     *  @param disconnectReason the reason passed to forceDisconnect
+     *  @param banDuration the ban length in ms
+     *  @param logDuration the ban log length in ms
+     *  @param now the current time in ms
+     */
+    private void banAndDisconnect(Hash entry, RouterInfo info, String banReason, String logReason,
+                                  String disconnectReason, long banDuration, long logDuration, long now) {
+        String ipPort = getIPFromRouterInfo(info);
+        _context.banlist().banlistRouter(entry, banReason, null, null, now + banDuration);
+        _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", logReason, logDuration, info);
+        _context.commSystem().forceDisconnect(entry, disconnectReason);
     }
 
     /**
@@ -510,6 +514,7 @@ class FloodfillPeerSelector extends PeerSelector {
         private final Set<Hash> _toIgnore;
         private int _matches;
         private final int _wanted;
+        private final Map<Hash, RouterInfo> _infoCache = new HashMap<>(64);
 
         /**
          *  Warning - may return our router hash - add to toIgnore if necessary
@@ -533,7 +538,7 @@ class FloodfillPeerSelector extends PeerSelector {
         public void add(Hash entry) {
             if ((_toIgnore != null) && (_toIgnore.contains(entry))) {return;}
             if (_context.banlist().isBanlisted(entry)) {return;}
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
+            RouterInfo info = cachedInfo(entry);
             if (info != null && FloodfillNetworkDatabaseFacade.isFloodfill(info)) {_floodfillMatches.add(entry);}
             else {
                 // This didn't really work because we stopped filling up when _wanted == _matches,
@@ -548,30 +553,20 @@ class FloodfillPeerSelector extends PeerSelector {
         }
 
         /**
-         * The first howMany matching entries.
+         * The first howMany matching entries, floodfills with the 'f' mark in their
+         * NetDb except for banlisted ones; non-floodfills only if there aren't enough floodfills.
+         *
+         * The list is in 3 groups - unsorted (shuffled) within each group.
+         * Group 1: NetDb published less than 3h ago, no bad send in last 30m.
+         * Group 2: All others
+         * Group 3: Non-floodfills, sorted by closest-to-the-key
          *
          * @param howMany the maximum number of entries to return
          * @return the list of matching peer hashes
          */
         public List<Hash> get(int howMany) {
-            return get(howMany, false);
-        }
-
-        /**
-         *  @return list of all with the 'f' mark in their NetDb except for banlisted ones.
-         *  Will return non-floodfills only if there aren't enough floodfills.
-         *
-         *  The list is in 3 groups - unsorted (shuffled) within each group.
-         *  Group 1: If preferConnected = true, the peers we are directly
-         *           connected to, that meet the group 2 criteria
-         *  Group 2: NetDb published less than 3h ago, no bad send in last 30m.
-         *  Group 3: All others
-         *  Group 4: Non-floodfills, sorted by closest-to-the-key
-         */
-        public List<Hash> get(int howMany, boolean preferConnected) {
             List<Hash> rv = new ArrayList<>(howMany);
             List<Hash> badff = new ArrayList<>(howMany);
-            List<Hash> unconnectedff = new ArrayList<>(howMany);
             int found = 0;
             long now = _context.clock().now();
             // Only add in "good" floodfills here...
@@ -579,8 +574,8 @@ class FloodfillPeerSelector extends PeerSelector {
             // (Forever banlisted ones are excluded in add() above)
             for (Iterator<Hash> iter = new RandomIterator<>(_floodfillMatches); (found < howMany) && iter.hasNext(); ) {
                 Hash entry = iter.next();
-                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
-                if (info != null && now - info.getPublished() > 3*60*60*1000L) {
+                RouterInfo info = cachedInfo(entry);
+                if (info != null && now - info.getPublished() > MAX_RI_AGE) {
                     badff.add(entry);
                     if (_log.shouldDebug())
                         _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> RouterInfo published over 3h ago");
@@ -590,20 +585,11 @@ class FloodfillPeerSelector extends PeerSelector {
                         badff.add(entry);
                         if (_log.shouldDebug())
                             _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Poor send success rate for the last 5m");
-                    } else if (preferConnected && !_context.commSystem().isEstablished(entry)) {
-                        unconnectedff.add(entry);
-                        if (_log.shouldDebug())
-                            _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Not connected");
                     } else {
                         rv.add(entry);
                         found++;
                     }
                 }
-            }
-            // Put the unconnected floodfills after the connected floodfills
-            for (int i = 0; found < howMany && i < unconnectedff.size(); i++) {
-                rv.add(unconnectedff.get(i));
-                found++;
             }
             // Put the "bad" floodfills at the end of the floodfills but before the kademlias
             for (int i = 0; found < howMany && i < badff.size(); i++) {
@@ -619,6 +605,20 @@ class FloodfillPeerSelector extends PeerSelector {
                 _sorted.remove(entry);
             }
             return rv;
+        }
+
+        /**
+         *  Look up the RouterInfo for an entry, caching the result.
+         *  Null results are cached too, so unknown peers are not re-looked-up.
+         *
+         *  @param entry the router hash
+         *  @return the RouterInfo, or null if not found
+         */
+        private RouterInfo cachedInfo(Hash entry) {
+            if (_infoCache.containsKey(entry)) {return _infoCache.get(entry);}
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
+            _infoCache.put(entry, info);
+            return info;
         }
         /**
          * Number of entries collected so far.
@@ -642,9 +642,10 @@ class FloodfillPeerSelector extends PeerSelector {
     List<Hash> selectNearest(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
         Hash rkey = _context.routingKeyGenerator().getRoutingKey(key);
         if (peersToIgnore != null && peersToIgnore.contains(Hash.FAKE_HASH)) {
-            peersToIgnore.addAll(selectFloodfillParticipants(peersToIgnore, kbuckets));
+            Set<Hash> ignore = new HashSet<>(peersToIgnore);
+            ignore.addAll(selectFloodfillParticipants(ignore, kbuckets));
             // TODO this is very slow
-            FloodfillSelectionCollector matches = new FloodfillSelectionCollector(rkey, peersToIgnore, maxNumRouters);
+            FloodfillSelectionCollector matches = new FloodfillSelectionCollector(rkey, ignore, maxNumRouters);
             kbuckets.getAll(matches);
             return matches.get(maxNumRouters);
         } else {
