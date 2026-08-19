@@ -85,8 +85,8 @@ public class TestJob extends JobImpl {
             return;
         _cachedMaxConcurrent = ctx.getProperty("i2p.tunnel.testJob.maxConcurrent",
                                                SystemVersion.isSlow() ? 32 : 64);
-        _cachedMinTestPeriod = ctx.getProperty("i2p.tunnel.testJob.minTestPeriod", 20*1000);
-        _cachedMaxTestPeriod = ctx.getProperty("i2p.tunnel.testJob.maxTestPeriod", 30*1000);
+        _cachedMinTestPeriod = ctx.getProperty("i2p.tunnel.testJob.minTestPeriod", 3*1000);
+        _cachedMaxTestPeriod = ctx.getProperty("i2p.tunnel.testJob.maxTestPeriod", 15*1000);
         _cachedMinTestDelay = ctx.getProperty("i2p.tunnel.testJob.minTestDelay", 30*1000);
         _cachedMaxTestDelay = ctx.getProperty("i2p.tunnel.testJob.maxTestDelay", 90*1000);
         _cachedMaxExploratoryPerPool = ctx.getProperty("i2p.tunnel.testJob.maxExploratoryPerPool", 12);
@@ -123,20 +123,18 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * The minimum test period from config or default (15s).
-     * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 15000).
+     * The minimum test period from config or default (3s).
+     * Tunable via i2p.tunnel.testJob.minTestPeriod (default: 3000).
      * @return the min test period
      */
     private int getMinTestPeriod() {
-        // Must be >= the 20s minimum in dispatchOutbound to prevent the
-        // ReplySelector from expiring before the message arrives.
         refreshTestJobConfig(getContext());
         return _cachedMinTestPeriod;
     }
 
     /**
-     * The maximum test period from config or default (30s).
-     * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 30000).
+     * The maximum test period from config or default (15s).
+     * Tunable via i2p.tunnel.testJob.maxTestPeriod (default: 15000).
      * @return the max test period
      */
     private int getMaxTestPeriod() {
@@ -963,6 +961,7 @@ Long tunnelKey = getTunnelKey(cfg);
         // Compute the test period once for this round and reuse it when judging
         // the reply — recomputing from live stats could shift the window.
         _testPeriod = getTestPeriod();
+        ctx.statManager().addRateData("tunnel.testPeriod", _testPeriod);
         long testExpiration = now + _testPeriod;
 
         DeliveryStatusMessage m = new DeliveryStatusMessage(ctx);
@@ -1448,32 +1447,72 @@ Long tunnelKey = getTunnelKey(cfg);
         }
     }
 
+    /**
+     * Compute the tunnel test failure window: how long a test may take before
+     * the tunnel is declared failed.
+     *
+     * When a recent successful-test measurement exists, the window is 2x that
+     * average — a test answered in ~2.3s is almost certainly dead if it needs
+     * more than ~4.6s.  Before any measurements exist, fall back to mainline's
+     * formula (3x transport send processing + 2.5s per hop), which assumes a
+     * slow network so early tests don't false-fail.
+     *
+     * Always clamped to [minPeriod, maxPeriod], with min &lt;= max enforced by
+     * construction so a crossed config can't widen the window unintentionally.
+     * The pending-message expiration (and thus the reply selector) is tied to
+     * the period itself, so a short window never strands a selector.
+     *
+     * @param successTimeAvgMs average tunnel.testSuccessTime over the last minute,
+     *                          NaN if never measured
+     * @param sendProcessingMs average transport.sendProcessingTime, NaN if unknown
+     * @param outLen outbound tunnel length, &lt;= 0 if no outbound tunnel
+     * @param replyLen reply tunnel length, &lt;= 0 if no reply tunnel
+     * @param minPeriod minTestPeriod config
+     * @param maxPeriod maxTestPeriod config
+     * @return the failure window in ms
+     * @since 0.9.70+
+     */
+    static int computeTestPeriod(double successTimeAvgMs, double sendProcessingMs,
+                                 int outLen, int replyLen, int minPeriod, int maxPeriod) {
+        int period;
+        if (outLen <= 0 || replyLen <= 0) {
+            period = 15*1000;
+        } else if (!Double.isNaN(successTimeAvgMs) && successTimeAvgMs > 0) {
+            period = (int) Math.round(2 * successTimeAvgMs);
+        } else {
+            int base = (!Double.isNaN(sendProcessingMs) && sendProcessingMs > 0) ?
+                       (int) (3 * sendProcessingMs) : 15*1000;
+            period = base + (2500 * (outLen + replyLen));
+        }
+        int lo = Math.min(minPeriod, maxPeriod);
+        int hi = Math.max(minPeriod, maxPeriod);
+        return Math.max(lo, Math.min(hi, period));
+    }
+
     private int getTestPeriod() {
         final RouterContext ctx = getContext();
-        int period;
-        if (_outTunnel == null || _replyTunnel == null) {
-            period = 15*1000;
-        } else {
-            // Use mainline's formula: 3x transport avg + 2.5s per hop.
-            // No upper cap — slow networks need generous timeouts to avoid
-            // false test failures that trigger unnecessary pool churn.
+        double successTime = Double.NaN;
+        double sendProcessing = Double.NaN;
+        int outLen = 0;
+        int replyLen = 0;
+        if (_outTunnel != null && _replyTunnel != null) {
+            outLen = _outTunnel.getLength();
+            replyLen = _replyTunnel.getLength();
+            RateStat st = ctx.statManager().getRate("tunnel.testSuccessTime");
+            if (st != null) {
+                Rate r = st.getRate(60*1000L);
+                if (r != null && r.getLastEventCount() > 0)
+                    successTime = r.getAverageValue();
+            }
             RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
             if (tspt != null) {
                 Rate r = tspt.getRate(60*1000L);
-                if (r != null) {
-                    int delay = 3 * (int) r.getAverageValue();
-                    period = delay + (2500 * (_outTunnel.getLength() + _replyTunnel.getLength()));
-                } else {
-                    period = 15*1000;
-                }
-            } else {
-                period = 15*1000;
+                if (r != null && r.getLastEventCount() > 0)
+                    sendProcessing = r.getAverageValue();
             }
         }
-        // Clamp to the configured window; the min must stay >= the 20s
-        // dispatchOutbound minimum so the ReplySelector doesn't expire
-        // before the message arrives.
-        return Math.max(getMinTestPeriod(), Math.min(getMaxTestPeriod(), period));
+        return computeTestPeriod(successTime, sendProcessing, outLen, replyLen,
+                                 getMinTestPeriod(), getMaxTestPeriod());
     }
 
     /**

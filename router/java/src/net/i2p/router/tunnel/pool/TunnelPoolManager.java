@@ -132,6 +132,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         ctx.statManager().createRequiredRateStat("tunnel.testExploratoryFailedCompletelyTime", "Time to complete fail for exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testSuccessLength", "Length (hops) of tunnels passing test", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testSuccessTime", "Time for tunnel test success (ms)", "Tunnels", TEST_RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testPeriod", "Tunnel test failure window (ms)", "Tunnels", RATES);
     }
 
     /**

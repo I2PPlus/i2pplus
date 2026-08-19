@@ -610,8 +610,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new SelectorLoopDelayParam());
         _params.add(new PumperIdleLpsParam());
         _params.add(new TestJobMaxDelayParam());
+        _params.add(new TestJobMaxPeriodParam());
         _params.add(new TestJobMaxQueuedParam());
         _params.add(new TestJobMinDelayParam());
+        _params.add(new TestJobMinPeriodParam());
         _params.add(new TunnelGrowthFactorParam());
         _params.add(new I2PTunnelServerHandlerThreadsParam());
         _params.add(new I2PTunnelClientRunnerMaxParam());
@@ -7323,6 +7325,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Grows toward the ceiling when failing RI lookups run up against the deadline
      * (netDb.lookupsFailedRouterInfo elevated and netDb.failedTime near the cap),
      * and won't shrink while lookups are failing or the system is congested.
+     * Range widened to 8s: BuildHandler drops transit builds when the next-hop
+     * lookup exceeds the cap (no reject is sent, so the originator burns its full
+     * request timeout), and a truncated-but-viable search directly inflates the
+     * network-wide build timeout rate.
      */
     private class RiLookupTimeoutParam extends BaseParam {
 
@@ -7334,7 +7340,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_RI_LOOKUP_TIME", "RouterInfo lookup timeout (ms)",
                   SUB_NETDB,
 
-                  3000, 5000, 500, "netDb.successTime", _context);
+                  // 3000..8000: 8s is ~1.6x the old ceiling, room to let
+                  // congested nets finish a search that is merely slow.
+                  // The min stays 3s so a healthy net keeps fast failure.
+                  // Step 500 keeps changes gradual across the wider range.
+
+                  3000, 8000, 500, "netDb.successTime", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -10168,6 +10179,131 @@ protected int computeTarget(double observed) {
             }
 
             return current;
+        }
+    }
+
+    /**
+     * Tunes the maximum tunnel test failure window (i2p.tunnel.testJob.maxTestPeriod).
+     * The window is how long a tunnel test may take before the tunnel is declared
+     * failed. Target is 2x the measured successful-test RTT (tunnel.testSuccessTime):
+     * a test answered in ~2.3s is almost certainly dead if it needs more than ~4.6s.
+     * Shrinking the window lets pools fail and rebuild fast instead of waiting tens
+     * of seconds on tunnels that will never answer — the dominant cause of the
+     * network-wide build timeout rate. Grows when failing tests run far past the
+     * window, which is the signature of a genuinely degraded network.
+     * Cross-refs: tunnel.testFailedTime (failing tests), tunnel.testPeriod (the
+     * window actually applied by TestJob).
+     */
+    private class TestJobMaxPeriodParam extends BaseParam {
+
+        TestJobMaxPeriodParam() {
+            super("i2p.tunnel.testJob.maxTestPeriod", "Tunnel test failure window (ms)",
+                  SUB_TUNNEL,
+
+                  3000, 15000, 1000, "tunnel.testSuccessTime", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.tunnel.testJob.maxTestPeriod", String.valueOf(value));
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return _context.getProperty("i2p.tunnel.testJob.maxTestPeriod", 15000);
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = tunnel.testSuccessTime (ms): measured RTT of successful tests.
+            double failTime = getAdditionalStat(_context, "tunnel.testFailedTime");
+            double minPeriod = _context.getProperty("i2p.tunnel.testJob.minTestPeriod", 3000);
+
+            // No measurements yet — hold the current window rather than guessing.
+            if (Double.isNaN(observed) || observed <= 0)
+                return current;
+
+            int target = (int) Math.round(2 * observed);
+            // Never let the window drift below the configured floor.
+            if (target < minPeriod)
+                target = (int) minPeriod;
+
+            // Failing tests taking far longer than the window means the network
+            // degraded — give it room before shrinking back.
+            if (!Double.isNaN(failTime) && failTime > current * 2 && current < _max)
+                return Math.min(_max, current + _step);
+
+            // Hysteresis: leave alone when already close to target.
+            if (current >= target - _step && current <= target + _step)
+                return current;
+
+            return clamp(current, target, _step);
+        }
+    }
+
+    /**
+     * Tunes the minimum tunnel test failure window floor
+     * (i2p.tunnel.testJob.minTestPeriod). Anchored at 1x the measured
+     * successful-test RTT so the 2x window in TestJobMaxPeriodParam can't
+     * collapse below the typical success time on very fast networks, which
+     * would invite flapping. Never pushed above the configured max window.
+     * Cross-refs: tunnel.testSuccessTime (primary), tunnel.testPeriod.
+     */
+    private class TestJobMinPeriodParam extends BaseParam {
+
+        TestJobMinPeriodParam() {
+            super("i2p.tunnel.testJob.minTestPeriod", "Tunnel test failure window floor (ms)",
+                  SUB_TUNNEL,
+
+                  1000, 10000, 1000, "tunnel.testSuccessTime", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.tunnel.testJob.minTestPeriod", String.valueOf(value));
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return _context.getProperty("i2p.tunnel.testJob.minTestPeriod", 3000);
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = tunnel.testSuccessTime (ms)
+            if (Double.isNaN(observed) || observed <= 0)
+                return current;
+
+            int target = (int) Math.round(observed);
+            // Never push the floor above the max window.
+            int maxPeriod = _context.getProperty("i2p.tunnel.testJob.maxTestPeriod", 15000);
+            target = Math.min(target, maxPeriod);
+
+            // Hysteresis: leave alone when already close to target.
+            if (current >= target - _step && current <= target + _step)
+                return current;
+
+            return clamp(current, target, _step);
         }
     }
 

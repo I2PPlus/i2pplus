@@ -298,6 +298,10 @@ public class TuningFormHandler extends FormHandler {
         TUNED.add(t);
         t = new Tunable("tunnel.testJob.minTestDelay", "tunnelTestjobMintestdelay", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
+        t = new Tunable("i2p.tunnel.testJob.maxTestPeriod", "tunnelTestjobMaxtestperiod", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("i2p.tunnel.testJob.minTestPeriod", "tunnelTestjobMintestperiod", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
 // Transport
         t = new Tunable("udp.establish.maxQueuedOutbound", "udpEstablishMaxqueuedoutbound", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
@@ -874,6 +878,16 @@ public class TuningFormHandler extends FormHandler {
     public void setTunnelTestjobMintestdelayMin(String v) { _formValues.put("tunnelTestjobMintestdelayMin", v); }
     public void setTunnelTestjobMintestdelayOverride(String v) { _formValues.put("tunnelTestjobMintestdelayOverride", v); }
     public void setTunnelTestjobMintestdelayStep(String v) { _formValues.put("tunnelTestjobMintestdelayStep", v); }
+    public void setTunnelTestjobMaxtestperiodDefault(String v) { _formValues.put("tunnelTestjobMaxtestperiodDefault", v); }
+    public void setTunnelTestjobMaxtestperiodMax(String v) { _formValues.put("tunnelTestjobMaxtestperiodMax", v); }
+    public void setTunnelTestjobMaxtestperiodMin(String v) { _formValues.put("tunnelTestjobMaxtestperiodMin", v); }
+    public void setTunnelTestjobMaxtestperiodOverride(String v) { _formValues.put("tunnelTestjobMaxtestperiodOverride", v); }
+    public void setTunnelTestjobMaxtestperiodStep(String v) { _formValues.put("tunnelTestjobMaxtestperiodStep", v); }
+    public void setTunnelTestjobMintestperiodDefault(String v) { _formValues.put("tunnelTestjobMintestperiodDefault", v); }
+    public void setTunnelTestjobMintestperiodMax(String v) { _formValues.put("tunnelTestjobMintestperiodMax", v); }
+    public void setTunnelTestjobMintestperiodMin(String v) { _formValues.put("tunnelTestjobMintestperiodMin", v); }
+    public void setTunnelTestjobMintestperiodOverride(String v) { _formValues.put("tunnelTestjobMintestperiodOverride", v); }
+    public void setTunnelTestjobMintestperiodStep(String v) { _formValues.put("tunnelTestjobMintestperiodStep", v); }
     public void setUdpEstablishMaxqueuedoutboundDefault(String v) { _formValues.put("udpEstablishMaxqueuedoutboundDefault", v); }
     public void setUdpEstablishMaxqueuedoutboundMax(String v) { _formValues.put("udpEstablishMaxqueuedoutboundMax", v); }
     public void setUdpEstablishMaxqueuedoutboundMin(String v) { _formValues.put("udpEstablishMaxqueuedoutboundMin", v); }
