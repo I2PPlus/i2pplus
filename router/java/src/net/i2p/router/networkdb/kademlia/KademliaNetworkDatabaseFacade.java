@@ -172,6 +172,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private final ConcurrentHashMap<Hash, Long> _clientLeaseSetAccessTime = new ConcurrentHashMap<>(32);
 
+    /**
+     * Count of active outbound iterative-search queries per floodfill peer;
+     * incremented when a query is dispatched, decremented when it completes or fails.
+     */
+    private final ConcurrentHashMap<Hash, AtomicInteger> _activeFloodfillQueries = new ConcurrentHashMap<>(1024);
+
+    /**
+     * Tracks recently-queried floodfill peers across all concurrent searches to
+     * avoid hammering the same floodfill. Entries expire after 60s.
+     */
+    private final ConcurrentHashMap<Hash, Long> _recentlyQueriedFloodfills = new ConcurrentHashMap<>(1024);
+
+    /** Cooldown before a floodfill can be queried again in ms. */
+    private static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
+
     /** Cached set of blocked countries - lazily initialized */
     private volatile Set<String> _blockedCountries;
 
@@ -347,7 +362,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     protected PeerSelector createPeerSelector() {
         if (isClientDb()) {throw new IllegalStateException();}
-        return new FloodfillPeerSelector(_context);
+        return new FloodfillPeerSelector(_context, this);
     }
 
     /**
@@ -596,6 +611,81 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) {
         if (!_initialized) {return Collections.emptySet();}
         return new HashSet<>(_peerSelector.selectNearest(key, maxNumRouters, peersToIgnore, _kb));
+    }
+
+    /**
+     * Check if a floodfill peer was queried recently (within cooldown period).
+     *
+     * @param peer the floodfill peer
+     * @return true if the peer was queried within the last 60s
+     */
+    boolean isRecentlyQueried(Hash peer) {
+        Long expiration = _recentlyQueriedFloodfills.get(peer);
+        if (expiration == null)
+            return false;
+        if (expiration > System.currentTimeMillis())
+            return true;
+        _recentlyQueriedFloodfills.remove(peer, expiration);
+        return false;
+    }
+
+    /**
+     * Mark a floodfill peer as recently queried. Other searches will avoid
+     * this peer for the cooldown period.
+     *
+     * @param peer the floodfill peer
+     */
+    void markQueried(Hash peer) {
+        _recentlyQueriedFloodfills.put(peer, System.currentTimeMillis() + RECENTLY_QUERIED_COOLDOWN);
+    }
+
+    /**
+     * Max concurrent outbound IterativeSearch queries per floodfill peer.
+     * Above this we'll pick a different floodfill to distribute load.
+     */
+    private static final int MAX_CONCURRENT_PER_FLOODFILL = 5;
+
+    /**
+     * Increment the active outbound query count for a floodfill peer.
+     * Call when sendQuery() dispatches a DatabaseLookupMessage to this peer.
+     *
+     * @param floodfill the floodfill peer
+     * @return the new count
+     */
+    int incrementActiveFloodfillQuery(Hash floodfill) {
+        AtomicInteger count = _activeFloodfillQueries.get(floodfill);
+        if (count == null) {
+            AtomicInteger created = new AtomicInteger(0);
+            AtomicInteger raced = _activeFloodfillQueries.putIfAbsent(floodfill, created);
+            count = raced != null ? raced : created;
+        }
+        return count.incrementAndGet();
+    }
+
+    /**
+     * Decrement the active outbound query count for a floodfill peer.
+     * Call when the search for this peer completes, fails, or times out.
+     *
+     * @param floodfill the floodfill peer
+     */
+    void decrementActiveFloodfillQuery(Hash floodfill) {
+        _activeFloodfillQueries.compute(floodfill, (k, v) -> {
+            if (v == null || v.get() <= 1) return null;
+            return new AtomicInteger(v.get() - 1);
+        });
+    }
+
+    /**
+     * Check if a floodfill peer already has too many active outbound queries
+     * from this router. Spreads the load across available floodfills so no
+     * single peer is saturated.
+     *
+     * @param floodfill the floodfill peer
+     * @return true if the peer should be skipped for now
+     */
+    boolean isFloodfillOverloaded(Hash floodfill) {
+        AtomicInteger count = _activeFloodfillQueries.get(floodfill);
+        return count != null && count.get() >= MAX_CONCURRENT_PER_FLOODFILL;
     }
 
     /** Hashes for all known routers. */

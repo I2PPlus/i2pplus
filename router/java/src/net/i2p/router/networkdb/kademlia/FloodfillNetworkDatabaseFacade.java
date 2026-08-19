@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
@@ -20,7 +19,6 @@ import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
-import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
@@ -90,15 +88,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private final BatchedSearchTimeoutProcessor _timeoutProcessor;
 
     /**
-     *  Tracks active outbound IterativeSearch queries per floodfill peer
-     *  so we don't saturate any single floodfill with concurrent lookups.
-     *  Incremented when sendQuery() is called, decremented when the search
-     *  completes or fails for that peer.
-     *  @since 0.9.70+
-     */
-    private static final ConcurrentHashMap<Hash, AtomicInteger> _activeFloodfillQueries = new ConcurrentHashMap<>();
-
-    /**
      *  This is the flood redundancy. Entries are
      *  sent to this many other floodfills.
      *  Was 7 through release 0.9; 5 for 0.9.1.
@@ -107,82 +96,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     public static final int MAX_TO_FLOOD = 3;
     /** Priority for flood outbound messages. */
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
-
-    /**
-     *  Tracks recently-queried floodfill peers across all concurrent searches
-     *  to avoid hammering the same floodfill. Entries expire after 60s.
-     *  @since 0.9.70+
-     */
-    static final ConcurrentHashMap<Hash, Long> _recentlyQueriedFloodfills = new ConcurrentHashMap<>(1024);
-    /** Cooldown before a floodfill can be queried again in ms. */
-    static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
-
-    /**
-     *  Check if a floodfill peer was queried recently (within cooldown period).
-     *  @return true if the peer was queried within the last 60s
-     *  @since 0.9.70+
-     */
-    static boolean isRecentlyQueried(Hash peer) {
-        Long expiration = _recentlyQueriedFloodfills.get(peer);
-        if (expiration == null)
-            return false;
-        if (expiration > System.currentTimeMillis())
-            return true;
-        _recentlyQueriedFloodfills.remove(peer, expiration);
-        return false;
-    }
-
-    /**
-     *  Mark a floodfill peer as recently queried. Other searches will avoid
-     *  this peer for the cooldown period.
-     *  @since 0.9.70+
-     */
-    static void markQueried(Hash peer) {
-        _recentlyQueriedFloodfills.put(peer, System.currentTimeMillis() + RECENTLY_QUERIED_COOLDOWN);
-    }
-
-    /**
-     *  Max concurrent outbound IterativeSearch queries per floodfill peer.
-     *  Above this we'll pick a different floodfill to distribute load.
-     */
-    private static final int MAX_CONCURRENT_PER_FLOODFILL = 5;
-
-    /**
-     *  Increment the active outbound query count for a floodfill peer.
-     *  Call when sendQuery() dispatches a DatabaseLookupMessage to this peer.
-     *  @return the new count
-     *  @since 0.9.70+
-     */
-    static int incrementActiveFloodfillQuery(Hash floodfill) {
-        return _activeFloodfillQueries.compute(floodfill, (k, v) -> {
-            int next = (v != null ? v.get() : 0) + 1;
-            return new AtomicInteger(next);
-        }).get();
-    }
-
-    /**
-     *  Decrement the active outbound query count for a floodfill peer.
-     *  Call when the search for this peer completes, fails, or times out.
-     *  @since 0.9.70+
-     */
-    static void decrementActiveFloodfillQuery(Hash floodfill) {
-        _activeFloodfillQueries.compute(floodfill, (k, v) -> {
-            if (v == null || v.get() <= 1) return null;
-            return new AtomicInteger(v.get() - 1);
-        });
-    }
-
-    /**
-     *  Check if a floodfill peer already has too many active outbound queries
-     *  from this router.  Spreads the load across available floodfills so no
-     *  single peer is saturated.
-     *  @return true if the peer should be skipped for now
-     *  @since 0.9.70+
-     */
-    static boolean isFloodfillOverloaded(Hash floodfill) {
-        AtomicInteger count = _activeFloodfillQueries.get(floodfill);
-        return count != null && count.get() >= MAX_CONCURRENT_PER_FLOODFILL;
-    }
 
     /**
      *  Max age (ms) for a RouterInfo stored in our NetDB before we consider
@@ -516,7 +429,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         int concurrent = INITIAL_CONCURRENT;
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
         // of the flooding - instead, send them to random floodfill peers so they can flood 'em out.
-        Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets(), concurrent);
+        Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, concurrent);
         if (floodfillParticipants == null || floodfillParticipants.isEmpty()) {
             if (onFailure != null) {
                 _context.jobQueue().addJob(onFailure);
@@ -525,10 +438,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {flood(ds);}
         else {
-            List<Hash> participantList = new ArrayList<>(floodfillParticipants);
-            Collections.shuffle(participantList);
-            floodfillParticipants = new HashSet<>(participantList);
-
             int idx = 0;
             for (Hash peer : floodfillParticipants) {
                 // Schedule FloodfillStoreJob for each peer, passing onSuccess/onFailure
@@ -547,8 +456,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                             key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
                     }
                 }.schedule(delay);
-                if (idx > 9) {concurrent = 3;}
-                else if (idx > 4) {concurrent = 2;}
                 if (_log.shouldInfo()) {
                     String name;
                     if (ds instanceof LeaseSet) {
@@ -566,45 +473,56 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     * Selects a set of floodfill participant peers to which data should be sent.
-     *
-     * <p>The method filters peers having the floodfill capability and excludes peers that are
-     * unreachable, banned, ignored, or known to send bad replies. It then randomly selects
-     * up to the specified number of concurrent peers.
+     * Selects a set of floodfill participant peers to which data should be sent:
+     * random selection among the filtered floodfill participants, preferring peers
+     * not queried in the last 60s to spread load, with a fallback top-up so store
+     * operations never starve.
      *
      * @param toIgnore the set of peer hashes to exclude from selection, may be null
-     * @param kbuckets the KBucketSet representing the routing table (currently unused in logic)
      * @param concurrent the maximum number of peers to select
      * @return a set of floodfill participant Hashes; never null but possibly empty if no suitable peers found
      */
-    private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets, int concurrent) {
-        Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
-        if (set == null || set.isEmpty()) {
-            // Return early if no floodfill peers available
+    private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, int concurrent) {
+        List<Hash> participants = ((FloodfillPeerSelector) getPeerSelector()).selectFloodfillParticipants(toIgnore, getKBuckets());
+        if (participants.isEmpty()) {
             return Collections.emptySet();
         }
+        Collections.shuffle(participants, _context.random());
+        Set<Hash> recentlyQueried = new HashSet<>(Math.min(concurrent, participants.size()));
+        for (Hash h : participants) {
+            if (isRecentlyQueried(h)) {recentlyQueried.add(h);}
+        }
+        return selectStoreParticipants(participants, concurrent, recentlyQueried);
+    }
 
-        List<Hash> rv = new ArrayList<>(set.size());
-        for (Hash h : set) {
-            RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
-            String caps = ri != null ? ri.getCapabilities() : "";
-            boolean isUnreachable = ri != null && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-            if (ri != null && (toIgnore != null && toIgnore.contains(h)) || _context.banlist().isBanlisted(h) || isUnreachable ||
-                _context.banlist().isBanlistedForever(h) || _context.profileOrganizer().peerSendsBadReplies(h)) {
-                continue;
+    /**
+     *  Select up to {@code concurrent} store participants, preferring peers not
+     *  queried in the last 60s to spread load, with a fallback top-up so store
+     *  operations never starve.
+     *
+     *  @param shuffled the shuffled candidate peers (may be empty)
+     *  @param concurrent the maximum number of peers to select
+     *  @param recentlyQueried hashes of peers queried within the cooldown period
+     *  @return the selected peers; never null, possibly empty
+     */
+    static Set<Hash> selectStoreParticipants(List<Hash> shuffled, int concurrent, Set<Hash> recentlyQueried) {
+        Set<Hash> rv = new HashSet<>(concurrent);
+        for (Hash h : shuffled) {
+            if (rv.size() >= concurrent) {break;}
+            if (!recentlyQueried.contains(h)) {
+                rv.add(h);
             }
-            rv.add(h);
         }
-
-        if (rv.isEmpty()) {
-            // Return early if no suitable peers remain after filtering
-            return Collections.emptySet();
+        // Top up with recently-queried peers if we fell short, so stores never starve
+        if (rv.size() < concurrent) {
+            for (Hash h : shuffled) {
+                if (rv.size() >= concurrent) {break;}
+                if (!rv.contains(h)) {
+                    rv.add(h);
+                }
+            }
         }
-
-        Collections.shuffle(rv);
-
-        // Return up to 'concurrent' number of participants
-        return new HashSet<>(rv.subList(0, Math.min(concurrent, rv.size())));
+        return rv;
     }
 
     /**
