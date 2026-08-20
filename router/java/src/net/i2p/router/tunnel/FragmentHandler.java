@@ -111,10 +111,7 @@ class FragmentHandler {
 
     /**
      * For unit tests only, others use 3-arg constructor
-     *
-     * @deprecated
      */
-    @Deprecated
     public FragmentHandler(RouterContext context, DefragmentedReceiver receiver) {
         this(context, receiver, true);
     }

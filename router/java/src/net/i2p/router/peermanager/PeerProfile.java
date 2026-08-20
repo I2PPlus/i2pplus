@@ -52,16 +52,13 @@ public class PeerProfile {
     // calculation bonuses
     // ints to save some space
     /**
-     * @deprecated Replaced by {@link #isLowLatency()}. This field is no longer
-     * used for routing decisions; it is retained only for backward compatibility
-     * with stored profile data. New reads/write go through the lowLatency flag.
+     * Retained for backward compatibility with stored profile data. No longer
+     * used for routing decisions; reads/writes go through the lowLatency flag.
      */
-    @Deprecated
     private int _speedBonus;
     /**
-     * @deprecated Replaced by lowLatency flag for routing decisions.
+     * Last update time of the speed bonus, for the 4-hour expiry.
      */
-    @Deprecated
     private long _speedBonusLastUpdate;
     private int _capacityBonus;
     private long _capacityBonusLastUpdate;
@@ -570,9 +567,9 @@ public class PeerProfile {
     }
 
     /**
-     * Obsolete — prefer {@link #isLowLatency()}. Retained for backward compatibility
-     * with stored profile data. Returns 0 unconditionally if not set, or the stored
-     * value with a 4-hour expiry for existing profiles that still carry it.
+     * Retained for backward compatibility with stored profile data. Returns 0
+     * unconditionally if not set, or the stored value with a 4-hour expiry for
+     * existing profiles that still carry it.
      *
      * @return the speed bonus
      */
@@ -583,21 +580,24 @@ public class PeerProfile {
         return hoursSinceUpdate >= 4 ? 0 : _speedBonus;
     }
     /**
-     * Obsolete — prefer {@link #setLowLatency(boolean)}. Retained for
-     * backward compatibility with stored profile data.
+     * Retained for backward compatibility with stored profile data.
      *
      * @param bonus the speed bonus
      */
     public void setSpeedBonus(int bonus) {_speedBonus = bonus; _speedBonusLastUpdate = _context.clock().now();}
     /**
-     * @deprecated No longer used for routing decisions.
+     * Last update time of the speed bonus, for the 4-hour expiry.
+     * Only used by profile persistence.
+     *
+     * @return the last update time
      */
-    @Deprecated
     long getSpeedBonusLastUpdate() {return _speedBonusLastUpdate;}
     /**
-     * @deprecated No longer used for routing decisions.
+     * Last update time of the speed bonus, for the 4-hour expiry.
+     * Only used by profile persistence.
+     *
+     * @param ts the last update time
      */
-    @Deprecated
     void setSpeedBonusLastUpdate(long ts) {_speedBonusLastUpdate = ts;}
 
     /**

@@ -1092,7 +1092,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * Sort peers by quality for tunnel building preference.
      * Higher quality peers (recently tested, active, connected) sort first.
      */
-    @SuppressWarnings("deprecation")
     private void sortByPeerQuality(List<Hash> peers, Set<Hash> exclude) {
         if (peers == null || peers.isEmpty()) {
             return;

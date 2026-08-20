@@ -1152,11 +1152,8 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Render status HTML.
-     *
-     * @deprecated Moved to routerconsole
+     * Required by {@link Service}; status rendering moved to routerconsole.
      */
-    @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
         // Deprecated - moved to routerconsole
     }

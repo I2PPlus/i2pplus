@@ -1447,8 +1447,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public int getInboundBuildQueueSize() { return _handler.getInboundBuildQueueSize(); }
 
-    /** @deprecated moved to routerconsole */
-    @Deprecated
+    /**
+     * Required by {@link Service}; status rendering moved to routerconsole.
+     */
     public void renderStatusHTML(Writer out) throws IOException {
         // Deprecated - moved to routerconsole
     }
