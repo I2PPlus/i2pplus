@@ -142,7 +142,7 @@ public class BuildExecutor implements Runnable {
      */
     public static void setPoolBackoffMs(long val) { POOL_BACKOFF_MS = Math.max(1000, Math.min(60000, val)); }
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
-    private int _keepAliveCounter;
+    private long _lastKeepAliveTime;
     private volatile long _adaptiveTimeout;
     private volatile long _adaptiveFirstHopTimeout;
 
@@ -204,6 +204,8 @@ public class BuildExecutor implements Runnable {
 
     private static final int LOOP_TIME = 15000;
     private static final int TUNNEL_POOLS = 8;
+    /** keepAlive() cadence in the executor loop (see run2()) */
+    private static final long KEEPALIVE_INTERVAL_MS = 30 * 1000L;
 
     private static long getGracePeriod(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.gracePeriod", 60*1000);
@@ -527,7 +529,6 @@ public class BuildExecutor implements Runnable {
 
         // Cache repeated system version calls and constants
         final boolean isSlow = SystemVersion.isSlow();
-        final Hash selfHash = _context.routerHash();
         final long now = _context.clock().now();
 
         final int maxKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
@@ -617,25 +618,7 @@ public class BuildExecutor implements Runnable {
                     _log.info("Timeout (" + (_adaptiveTimeout / 1000) + "s) waiting for tunnel build reply -> " + cfg);
                 }
 
-                final int length = cfg.getLength();
-                for (int iPeer = 0; iPeer < length; iPeer++) {
-                    Hash peer = cfg.getPeer(iPeer);
-                    if (peer.equals(selfHash)) {
-                        continue; // Skip self
-                    }
-                    RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-                    String bwTier = "Unknown";
-                    if (ri != null) {
-                        bwTier = ri.getBandwidthTier();
-                    }
-                    _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
-                    didNotReply(cfg.getReplyMessageId(), peer);
-                    _context.profileManager().tunnelTimedOut(peer);
-                    // Record timeout for ghost peer detection
-                    if (_ghostPeerManager != null) {
-                        _ghostPeerManager.recordTimeout(peer);
-                    }
-                }
+                penalizeTimeout(cfg);
 
                 TunnelPool pool = cfg.getTunnelPool();
                 if (pool != null) {
@@ -667,6 +650,47 @@ public class BuildExecutor implements Runnable {
         _context.statManager().addRateData("tunnel.concurrentBuilds", concurrent);
 
         return allowed;
+    }
+
+    /**
+     *  Penalize the peers of an expired build.  Only the hop the build
+     *  request was dispatched to — the gateway (peer 0) for inbound, the
+     *  next hop (peer 1) for outbound, per
+     *  {@link BuildRequestor#getBuildRequestPeer(PooledTunnelCreatorConfig)} —
+     *  failed to deliver a reply; the other hops may never have received
+     *  the request, or may be waiting downstream of a silent peer.  Blaming
+     *  them all shrinks the pool on innocent peers during network-wide
+     *  no-reply events, so the profile penalty and ghost mark go to the
+     *  contacted hop only.  The per-tier expire stat and the didNotReply
+     *  debug log stay per-hop for accounting and triage.
+     *
+     *  @param cfg the expired build config, non-null
+     *  @since 0.9.71+
+     */
+    void penalizeTimeout(PooledTunnelCreatorConfig cfg) {
+        if (cfg.getLength() <= 1) {return;}
+        final int length = cfg.getLength();
+        final Hash contacted = BuildRequestor.getBuildRequestPeer(cfg);
+        for (int iPeer = 0; iPeer < length; iPeer++) {
+            Hash peer = cfg.getPeer(iPeer);
+            if (peer.equals(_context.routerHash())) {
+                continue; // Skip self
+            }
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+            String bwTier = "Unknown";
+            if (ri != null) {
+                bwTier = ri.getBandwidthTier();
+            }
+            _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
+            if (peer.equals(contacted)) {
+                didNotReply(cfg.getReplyMessageId(), peer);
+                _context.profileManager().tunnelTimedOut(peer);
+                // Record timeout for ghost peer detection
+                if (_ghostPeerManager != null) {
+                    _ghostPeerManager.recordTimeout(peer);
+                }
+            }
+        }
     }
 
     /**
@@ -719,10 +743,14 @@ public class BuildExecutor implements Runnable {
                 }
 
                 /* Periodic keepalive to maintain transport sessions with top-tier peers.
-                 * Runs every ~30s. Always pre-connects to non-established eligible
-                 * peers to warm connections before builds need them.
+                 * Runs every ~30s (time-based; the loop itself runs every 15s, so a
+                 * counter-based cadence would only fire every ~7.5 min).
+                 * Always pre-connects to non-established eligible peers to warm
+                 * connections before builds need them.
                  */
-                if (++_keepAliveCounter % 30 == 0) {
+                long keepAliveNow = _context.clock().now();
+                if (keepAliveNow - _lastKeepAliveTime >= KEEPALIVE_INTERVAL_MS) {
+                    _lastKeepAliveTime = keepAliveNow;
                     TunnelPeerSelector.keepAlive(_context, true);
                 }
 
