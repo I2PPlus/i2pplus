@@ -31,30 +31,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final double SEVERE_ATTACK_THRESHOLD = 0.30;
 
 
-    /** Cooldown duration for client peer selections — shorter than exploratory
-     *  to avoid exhausting the smaller client Fast pool (~447 peers vs full netdb).
-     *  Tunable via i2p.tunnel.peerSelector.clientCooldownMs (default: 15000).
-     * @return the client cooldown ms
-     */
-    private long getClientCooldownMs() {
-        String strat = ctx.getProperty(PROP_STRATEGY, STRATEGY_DEFAULT);
-        if (STRATEGY_DIVERSITY.equals(strat))
-            return 5000L;
-        return ctx.getProperty("i2p.tunnel.peerSelector.clientCooldownMs", 15000L);
-    }
-
     private String getStrategy() {
         return ctx.getProperty(PROP_STRATEGY, STRATEGY_DEFAULT);
     }
 
-
-    /**
-     *  Cooldown entries for client selections, recorded when checkTunnel
-     *  fails.  Only failures are recorded — successful selections never
-     *  cooldown peers.  A single selector instance serves all client pools.
-     *  @since 0.9.71+
-     */
-    private final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<>();
 
     private static String formatPeerList(List<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[empty]";}
@@ -121,8 +101,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (log.shouldDebug()) {
                     log.debug("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
                               ", " + ex.excluder.getReasonsSummary() +
-                             "\n* Cooldowns: " + ex.cooldownExcluded + " client(" + _clientCooldowns.size() +
-                             "), " + ex.peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
+                             "\n* Cooldowns: " + ex.peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
                              "), firstHopFails=" + ex.firstHopFailCount +
                              (ex.firstPeerExclusions != null && !ex.firstPeerExclusions.isEmpty() ?
                               ", " + ex.firstPeerExclusions.size() + " first-hop diversity" : ""));
@@ -185,18 +164,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
         Excluder excluder = new Excluder(isInbound, false, buildSuccess);
         Set<Hash> exclude = excluder;
 
-        // Exclude peers recorded on checkTunnel failure (client pool cooldown)
-        long nowCooldown = ctx.clock().now();
-        long cooldownCutoff = nowCooldown - getClientCooldownMs();
-        int cooldownExcluded = 0;
-        // Evict stale client cooldowns EVERY selection (not every ~20)
-        // to prevent map bloat (was growing to 300+ entries with stale data)
-        _clientCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
-        for (Map.Entry<Hash, Long> entry : _clientCooldowns.entrySet()) {
-            exclude.add(entry.getKey());
-            cooldownExcluded++;
-        }
         // Check shared peer cooldowns (from checkTunnel failures across ALL pools)
+        long nowCooldown = ctx.clock().now();
         long sharedCooldownCutoff = nowCooldown - PEER_SELECTION_COOLDOWN_MS;
         int peerCooldownExcluded = 0;
         // Evict stale shared cooldowns EVERY selection
@@ -239,7 +208,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 exclude.addAll(poolPeers);
             }
         }
-        return new SelectionExclusions(excluder, exclude, cooldownExcluded,
+        return new SelectionExclusions(excluder, exclude,
                                        peerCooldownExcluded, firstHopFailCount, firstPeerExclusions);
     }
 
@@ -912,7 +881,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
     }
 
     /** Insert self, sort by quality, ghost-filter, strategy post-processing, duplicate re-check, and cooldowns. */
-    private List<Hash> finalizeSelection(TunnelPoolSettings settings, List<Hash> rv, boolean isInbound) {
+    List<Hash> finalizeSelection(TunnelPoolSettings settings, List<Hash> rv, boolean isInbound) {
         if (isInbound) {rv.add(0, ctx.routerHash());}
         else {rv.add(ctx.routerHash());}
 
@@ -990,16 +959,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     log.warn("CPS checkTunnel failed for " + settings.getDestinationNickname() +
                              " (" + (settings.isInbound() ? "in" : "out") + ") rv=" + formatPeerList(rv));
                 }
-                // Add all selected peers to cooldown (excluding self)
+                // No blanket client cooldown here: checkTunnel already blames
+                // the specific peers of the failing edge via tunnelTimedOut(),
+                // and penalizing every selected peer collapses the pool to
+                // degraded tier choices on each retry. Only the peer adjacent
+                // to us (IBGW for inbound, OBEP for outbound) gets shared
+                // cooldown (60s) across ALL pools, since an address-family
+                // mismatch with us is fundamental and won't change between
+                // retries.
                 long now = ctx.clock().now();
-                for (Hash peer : rv) {
-                    if (!peer.equals(ctx.routerHash())) {
-                        _clientCooldowns.put(peer, now);
-                    }
-                }
-                // The peer adjacent to us (IBGW for inbound, OBEP for outbound) gets shared
-                // cooldown (60s) across ALL pools, since an address-family mismatch with us
-                // is fundamental and won't change between retries.
                 int adjIdx = isInbound ? 1 : rv.size() - 2;
                 if (adjIdx >= 0 && adjIdx < rv.size()) {
                     Hash adjPeer = rv.get(adjIdx);
@@ -1007,10 +975,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         TunnelPeerSelector._peerCooldowns.put(adjPeer, now);
                     }
                 }
-                rv = null;
+                rv = Collections.emptyList();
             }
         }
-        if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
+        if (isInbound && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
         return rv;
     }
 
@@ -1043,29 +1011,18 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final class SelectionExclusions {
         final Excluder excluder;
         Set<Hash> exclude;
-        final int cooldownExcluded;
         final int peerCooldownExcluded;
         final int firstHopFailCount;
         final Set<Hash> firstPeerExclusions;
-        SelectionExclusions(Excluder excluder, Set<Hash> exclude, int cooldownExcluded,
+        SelectionExclusions(Excluder excluder, Set<Hash> exclude,
                             int peerCooldownExcluded, int firstHopFailCount, Set<Hash> firstPeerExclusions) {
             this.excluder = excluder;
             this.exclude = exclude;
-            this.cooldownExcluded = cooldownExcluded;
             this.peerCooldownExcluded = peerCooldownExcluded;
             this.firstHopFailCount = firstHopFailCount;
             this.firstPeerExclusions = firstPeerExclusions;
         }
     }
-    /**
-     * Filter candidates through reliability scoring (acceptance ratio, recent test, activity, connection).
-     * Applies consistent quality filtering to any tier selection.
-     *
-     * @param candidates peers to filter
-     * @param exclude peers to exclude
-     * @param max max peers to return
-     * @return list of best peers filtered by reliability
-     */
     /**
      * Filter candidates through the reliability gate: a peer must have an
      * adequate acceptance ratio and at least one recent activity or
