@@ -335,6 +335,59 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Add cooldown entries still inside their window (value &gt; cutoff) to the
+     *  exclusion set without mutating the map; returns the count added.
+     *  Shared by both selectors; the maps themselves stay separate
+     *  ({@link #_peerCooldowns} for client pools, the exploratory map for
+     *  exploratory selections).
+     *
+     *  @param cooldowns the cooldown map to scan (never mutated)
+     *  @param cutoff entries with value &lt;= cutoff are expired and skipped
+     *  @param exclude the exclusion set to add fresh entries to
+     *  @return the number of entries added
+     *  @since 0.9.71+ (moved from ClientPeerSelector)
+     */
+    protected static int addFreshCooldownExclusions(Map<Hash, Long> cooldowns, long cutoff, Set<Hash> exclude) {
+        int count = 0;
+        for (Map.Entry<Hash, Long> entry : cooldowns.entrySet()) {
+            if (entry.getValue() > cutoff) {
+                exclude.add(entry.getKey());
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     *  True if the settings describe a zero-hop pair: length &lt;= 0, length
+     *  override == 0, or length + variance &lt;= 0.  Used to decide whether the
+     *  paired (inbound) pool needs a connected furthest hop (OBEP) so the
+     *  build reply can be delivered.
+     *
+     *  @param settings the paired pool's settings
+     *  @return true if the pair is effectively zero-hop
+     *  @since 0.9.71+ (extracted from ClientPeerSelector/ExploratoryPeerSelector)
+     */
+    protected static boolean isZeroHopSettings(TunnelPoolSettings settings) {
+        int len = settings.getLength();
+        return len <= 0 || settings.getLengthOverride() == 0 || len + settings.getLengthVariance() <= 0;
+    }
+
+    /**
+     *  True if the pool has at least one active tunnel longer than one hop.
+     *
+     *  @param pool the tunnel pool to scan (non-null)
+     *  @return true if any tunnel has length &gt; 1
+     *  @since 0.9.71+ (extracted from ClientPeerSelector/ExploratoryPeerSelector)
+     */
+    protected static boolean hasTunnelLongerThanOne(TunnelPool pool) {
+        for (TunnelInfo ti : pool.listTunnels()) {
+            if (ti.getLength() > 1) {return true;}
+        }
+        return false;
+    }
+
+    /**
      * Record that a peer failed during peer selection (first-hop or adjacent).
      * Used by ClientPeerSelector and ExploratoryPeerSelector to mark peers
      * that failed selection criteria, preventing re-selection for the cooldown.

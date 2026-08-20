@@ -155,21 +155,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                    hidden, hiddenInbound, hiddenOutbound, ipRestriction, ipSet);
     }
 
-    /** Add cooldown entries still inside their window (value > cutoff) to the
-     *  exclusion set without mutating the map; returns the count added.
-     *  @since 0.9.71+
-     */
-    static int addFreshCooldownExclusions(Map<Hash, Long> cooldowns, long cutoff, Set<Hash> exclude) {
-        int count = 0;
-        for (Map.Entry<Hash, Long> entry : cooldowns.entrySet()) {
-            if (entry.getValue() > cutoff) {
-                exclude.add(entry.getKey());
-                count++;
-            }
-        }
-        return count;
-    }
-
     /** Build the lazy Excluder with client/shared cooldowns, first/last peer and pool diversity exclusions. */
     private SelectionExclusions buildExclusions(TunnelPoolSettings settings, boolean isInbound, double buildSuccess) {
         // Excluder is lazy — contains() auto-classifies and tracks reasons.
@@ -385,39 +370,16 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (tp != null) {
                 pickFurthest = true;
                 TunnelPoolSettings tps = tp.getSettings();
-                int len = tps.getLength();
-                if (len <= 0 || tps.getLengthOverride() == 0 ||
-                    len + tps.getLengthVariance() <= 0) { /* ignored */ } // leave it true
-                else {
+                if (!isZeroHopSettings(tps)) {
                     List<TunnelInfo> tunnels = tp.listTunnels();
                     if (!tunnels.isEmpty()) {
-                        for (TunnelInfo ti : tp.listTunnels()) {
-                            if (ti.getLength() > 1) {
-                                pickFurthest = false;
-                                break;
-                            }
-                        }
+                        pickFurthest = !hasTunnelLongerThanOne(tp);
                     } else {
                         // no tunnels in the paired tunnel pool
                         // BuildRequester will be using exploratory
                         tp = tmf.getInboundExploratoryPool();
                         tps = tp.getSettings();
-                        len = tps.getLength();
-                        if (len <= 0 ||
-                            tps.getLengthOverride() == 0 ||
-                            len + tps.getLengthVariance() <= 0) {
-                            // leave it true
-                        } else {
-                            tunnels = tp.listTunnels();
-                            if (!tunnels.isEmpty()) {
-                                for (TunnelInfo ti : tp.listTunnels()) {
-                                    if (ti.getLength() > 1) {
-                                        pickFurthest = false;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        pickFurthest = isZeroHopSettings(tps) || !hasTunnelLongerThanOne(tp);
                     }
                 }
             } else {pickFurthest = false;} // shouldn't happen

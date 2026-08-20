@@ -102,8 +102,8 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // the own map (see the checkTunnel failure path below).
         if (includeCooldowns) {
             long cooldownCutoff = now - PEER_SELECTION_COOLDOWN_MS;
-            int cooldownExcluded = ClientPeerSelector.addFreshCooldownExclusions(_exploratoryCooldowns, cooldownCutoff, exclude);
-            cooldownExcluded += ClientPeerSelector.addFreshCooldownExclusions(_peerCooldowns, cooldownCutoff, exclude);
+            int cooldownExcluded = addFreshCooldownExclusions(_exploratoryCooldowns, cooldownCutoff, exclude);
+            cooldownExcluded += addFreshCooldownExclusions(_peerCooldowns, cooldownCutoff, exclude);
             if (log.shouldDebug())
                 log.debug("EPS cooldown: own=" + _exploratoryCooldowns.size() +
                           " shared=" + _peerCooldowns.size() +
@@ -233,20 +233,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             TunnelManagerFacade tmf = ctx.tunnelManager();
             TunnelPool tp = tmf.getInboundExploratoryPool();
             TunnelPoolSettings tps = tp.getSettings();
-            int len = tps.getLength();
-            boolean pickFurthest = true;
-            if (len <= 0 ||
-                tps.getLengthOverride() == 0 ||
-                len + tps.getLengthVariance() <= 0) {
-                // leave it true
-            } else {
-                for (TunnelInfo ti : tp.listTunnels()) {
-                    if (ti.getLength() > 1) {
-                        pickFurthest = false;
-                        break;
-                    }
-                }
-            }
+            boolean pickFurthest = isZeroHopSettings(tps) || !hasTunnelLongerThanOne(tp);
             if (pickFurthest) {
                 ArraySet<Hash> furthest = new ArraySet<>(1);
                 if (log.shouldInfo())
