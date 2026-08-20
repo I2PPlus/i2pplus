@@ -38,37 +38,28 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         migrateConsole();
     }
 
-    /**
-     *  The username is the salt
-     *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return if pw verified
-     */
-
-    /**
+/**
      *  Straight MD5. Compatible with Jetty.
      *
      *  @param realm e.g. i2cp, routerconsole, etc.
+     *  @param subrealm the subrealm
      *  @param user null or "" for no user, already trimmed
      *  @param pw plain text, already trimmed
      *  @return if pw verified
-      * @param subrealm the subrealm
      */
- public boolean checkMD5(String realm, String subrealm, String user, String pw) {
-     // Check PBKDF2 first (new format)
-     if (checkPBKDF2(realm, user, pw))
-         return true;
-     // Fall back to MD5 for backward compatibility
-     String pfx = realm;
-     if (user != null && !user.isEmpty())
-         pfx += '.' + user;
-     String hex = _context.getProperty(pfx + PROP_MD5);
-     if (hex == null)
-         return false;
-     return DataHelper.eqCT(md5Hex(subrealm, user, pw), hex);
- }
+    public boolean checkMD5(String realm, String subrealm, String user, String pw) {
+        // Check PBKDF2 first (new format)
+        if (checkPBKDF2(realm, user, pw))
+            return true;
+        // Fall back to MD5 for backward compatibility
+        String pfx = realm;
+        if (user != null && !user.isEmpty())
+            pfx += '.' + user;
+        String hex = _context.getProperty(pfx + PROP_MD5);
+        if (hex == null)
+            return false;
+        return DataHelper.eqCT(md5Hex(subrealm, user, pw), hex);
+    }
 
     /**
      *  PBKDF2 hash for password storage.
@@ -103,14 +94,16 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         }
     }
 
+    /**
+     *  Decode a hex string to a byte array.
+     *  Delegates to {@link DataHelper#fromHexString(String)}.
+     *
+     *  @param hex the hex string to decode (even length, no prefix)
+     *  @return the decoded byte array
+     *  @since 0.9.71+
+     */
     private static byte[] HexDecode(String hex) {
-        int len = hex.length();
-        byte[] out = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            out[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                                 + Character.digit(hex.charAt(i + 1), 16));
-        }
-        return out;
+        return DataHelper.fromHexString(hex);
     }
 
     /**
@@ -184,25 +177,16 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  This will fail if
-     *  user contains '#' or '=' or starts with '!'
-     *  The user is the salt.
-     *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return success
-     */
-
-    /**
      *  Straight MD5, no salt
      *  Compatible with Jetty and RFC 2617.
+     *  <p>
+     *  Upgrades to PBKDF2 on save (subrealm is unused for PBKDF2).
      *
      *  @param realm The full realm, e.g. routerconsole.auth.i2prouter, etc.
-     *  @param subrealm to be used in creating the checksum
+     *  @param subrealm unused (for backward compatibility)
      *  @param user non-null, non-empty, already trimmed
      *  @param pw plain text
-     *  @return if pw verified
+     *  @return if saved
      */
     public boolean saveMD5(String realm, String subrealm, String user, String pw) {
         // Upgrade to PBKDF2 on save
@@ -243,6 +227,14 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         }
     }
 
+    /**
+     *  Encode a byte array to a lowercase hex string.
+     *  Two hex characters per byte with leading zeros.
+     *
+     *  @param data the byte array to encode
+     *  @return lowercase hex string
+     *  @since 0.9.71+
+     */
     private static String HexEncode(byte[] data) {
         StringBuilder sb = new StringBuilder(data.length * 2);
         for (byte b : data) {
