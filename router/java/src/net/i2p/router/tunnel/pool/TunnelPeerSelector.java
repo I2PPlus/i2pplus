@@ -708,48 +708,39 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // (wider than the old 10-minute window) to avoid starving peer
         // selection when the network is sparse or under load.
         if (!isExploratory && !isInStartupGracePeriod(ctx)) {
-            boolean hasSignal = false;
-            long now = ctx.clock().now();
-            // Connected peers always pass
-            if (ctx.commSystem().isEstablished(peerHash)) {
-                hasSignal = true;
-            }
-            // Recently heard from or successfully sent to (30-minute window)
-            if (!hasSignal && profile != null) {
-                long heardWindow = 30 * 60 * 1000L;
-                if (profile.getLastHeardFrom() > 0 &&
-                    now - profile.getLastHeardFrom() < heardWindow) {
-                    hasSignal = true;
-                }
-                if (profile.getLastSendSuccessful() > 0 &&
-                    now - profile.getLastSendSuccessful() < heardWindow) {
-                    hasSignal = true;
-                }
-            }
-            // Has a recent successful tunnel test (dynamic window)
-            if (!hasSignal && profile != null) {
-                long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
-                if (lastTested > 0 && now - lastTested < getActivityWindow(ctx, buildSuccess)) {
-                    hasSignal = true;
-                }
-            }
-            // Soft fallback: accept peers with ANY tunnel test history
-            // (even old) if they have a reasonable acceptance ratio (>50%).
-            // These peers are proven-capable but simply haven't been contacted
-            // recently — better than excluding them entirely.
-            if (!hasSignal && profile != null) {
-                double acceptanceRatio = profile.getTunnelAcceptanceRatio();
-                long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
-                if (acceptanceRatio > 0.5 && lastTested > 0) {
-                    hasSignal = true;
-                }
-            }
-            if (!hasSignal) {
+            boolean established = ctx.commSystem().isEstablished(peerHash);
+            // Connected peers always pass; others need profile evidence of
+            // connectivity within the activity window (see hasConnectivitySignal).
+            if (!established &&
+                (profile == null || !hasConnectivitySignal(profile, ctx.clock().now(),
+                                                           getActivityWindow(ctx, buildSuccess)))) {
                 return "no-signal";
             }
         }
 
         return null;
+    }
+
+    /**
+     *  Pre-qualification signal check: does the peer profile show recent
+     *  connectivity evidence?  Heard from or successfully sent to within the
+     *  last 30 minutes, a successful tunnel test within the activity window,
+     *  or any test history at all with a &gt;50% acceptance ratio.
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param profile the peer profile (non-null)
+     *  @param now current time in milliseconds
+     *  @param activityWindow the dynamic activity window in milliseconds
+     *  @return true if the profile shows recent connectivity signal
+     *  @since 0.9.71+ (extracted from getExclusionReason)
+     */
+    static boolean hasConnectivitySignal(PeerProfile profile, long now, long activityWindow) {
+        long heardWindow = 30 * 60 * 1000L;
+        if (profile.getLastHeardFrom() > 0 && now - profile.getLastHeardFrom() < heardWindow) {return true;}
+        if (profile.getLastSendSuccessful() > 0 && now - profile.getLastSendSuccessful() < heardWindow) {return true;}
+        long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
+        if (lastTested > 0 && now - lastTested < activityWindow) {return true;}
+        return profile.getTunnelAcceptanceRatio() > 0.5 && lastTested > 0;
     }
 
     /**
@@ -1019,11 +1010,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         // Count meaningful capabilities
-        int knownCaps = 0;
-        if (cap.contains("F")) knownCaps++;
-        if (cap.contains("R")) knownCaps++;
-        if (cap.contains("L") || cap.contains("M") || cap.contains("N") || cap.contains("O") ||
-            cap.contains("P") || cap.contains("Q") || cap.contains("X")) knownCaps++;
+        int knownCaps = countKnownCaps(cap);
 
         // Relax single-capability restriction when peer count is low
         int fastPeerCount = ctx.profileOrganizer().countFastPeers();
@@ -1032,12 +1019,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         // Exclude outdated versions
-        String v = peer.getVersion();
-        if (v.equals(CoreVersion.PUBLISHED_VERSION)) {
-            return false;
-        }
-
-        if (VersionComparator.comp(v, MIN_VERSION) < 0) {
+        if (isOutdatedVersion(peer.getVersion())) {
             return true;
         }
 
@@ -1051,6 +1033,38 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // Peer is acceptable — pre-qualification by build-success rate is no
         // longer applied here; capability/version filtering above is sufficient.
         return false;
+    }
+
+    /**
+     *  Count the meaningful capabilities a peer publishes, used to reject
+     *  peers with no useful caps when there are plenty of fast peers.
+     *  Pure — safe for unit tests.
+     *
+     *  @param cap the peer's capability string
+     *  @return the count of known caps (0-2+)
+     *  @since 0.9.71+ (extracted from shouldExclude)
+     */
+    static int countKnownCaps(String cap) {
+        int knownCaps = 0;
+        if (cap.contains("F")) knownCaps++;
+        if (cap.contains("R")) knownCaps++;
+        if (cap.contains("L") || cap.contains("M") || cap.contains("N") || cap.contains("O") ||
+            cap.contains("P") || cap.contains("Q") || cap.contains("X")) knownCaps++;
+        return knownCaps;
+    }
+
+    /**
+     *  True if the peer runs a version too old to interoperate: not the
+     *  published version and older than {@link #MIN_VERSION}.
+     *  Pure — safe for unit tests.
+     *
+     *  @param version the peer's version string
+     *  @return true if the version is outdated
+     *  @since 0.9.71+ (extracted from shouldExclude)
+     */
+    static boolean isOutdatedVersion(String version) {
+        return !version.equals(CoreVersion.PUBLISHED_VERSION) &&
+               VersionComparator.comp(version, MIN_VERSION) < 0;
     }
 
     private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = "router.outboundExploratoryExcludeUnreachable";
@@ -1145,20 +1159,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (existingTunnels == null || existingTunnels.isEmpty()) {return false;}
 
         for (TunnelInfo existing : existingTunnels) {
-            if (existing.getLength() != newPeers.size() + 1) {continue;}
-
-            // newPeers excludes self. Compare from gateway side for inbound
-            // (existing index 0) or after self for outbound (existing index 1).
-            boolean match = true;
-            int offset = settings.isInbound() ? 0 : 1;
-            for (int i = 0; i < newPeers.size(); i++) {
-                Hash existingPeer = existing.getPeer(i + offset);
-                if (existingPeer == null || !existingPeer.equals(newPeers.get(i))) {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) {
+            if (matchesExistingTunnel(existing, newPeers, settings.isInbound())) {
                 if (log.shouldDebug()) {
                     log.debug("Detected duplicate tunnel sequence for " + settings.getDestinationNickname());
                 }
@@ -1166,6 +1167,32 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             }
         }
         return false;
+    }
+
+    /**
+     *  Compare a newly selected peer sequence (excluding self) against one
+     *  existing tunnel.  Lengths must match (existing includes self, so one
+     *  longer than newPeers) and every peer must be equal in order, starting
+     *  from the gateway side for inbound (index 0) or after self for outbound
+     *  (index 1).
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param existing the existing tunnel to compare against
+     *  @param newPeers the newly selected peers (excluding self)
+     *  @param isInbound true for inbound tunnels
+     *  @return true if the sequences match
+     *  @since 0.9.71+ (extracted from isDuplicateSequence)
+     */
+    static boolean matchesExistingTunnel(TunnelInfo existing, List<Hash> newPeers, boolean isInbound) {
+        if (existing.getLength() != newPeers.size() + 1) {return false;}
+        int offset = isInbound ? 0 : 1;
+        for (int i = 0; i < newPeers.size(); i++) {
+            Hash existingPeer = existing.getPeer(i + offset);
+            if (existingPeer == null || !existingPeer.equals(newPeers.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -1549,25 +1576,37 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
         if (ri == null) return false;
         for (RouterAddress ra : ri.getAddresses()) {
-            String style = ra.getTransportStyle();
-            byte[] ip = ra.getIP();
-            int port = ra.getPort();
-            if ("SSU".equals(style)) {
-                if (!"2".equals(ra.getOption("v")))
-                    continue;
-                if (ip != null && TransportUtil.isValidPort(port))
-                    return true;
-                if (ra.getOption("itag0") != null)
-                    return true;
-            } else if ("SSU2".equals(style)) {
-                if (ip != null && TransportUtil.isValidPort(port))
-                    return true;
-                if (ra.getOption("itag0") != null)
-                    return true;
-            } else if ("NTCP".equals(style) || "NTCP2".equals(style)) {
-                if (ip != null && TransportUtil.isValidPort(port))
-                    return true;
-            }
+            if (isUsableRouterAddress(ra)) {return true;}
+        }
+        return false;
+    }
+
+    /**
+     *  Is the RouterAddress usable for tunnel building?  SSU requires
+     *  protocol v2 plus a valid IP/port or an introduction; SSU2 requires a
+     *  valid IP/port or an introduction; NTCP/NTCP2 require a valid IP/port.
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param ra the router address to check (non-null)
+     *  @return true if the address is usable
+     *  @since 0.9.71+ (extracted from hasValidTransportAddress)
+     */
+    static boolean isUsableRouterAddress(RouterAddress ra) {
+        String style = ra.getTransportStyle();
+        byte[] ip = ra.getIP();
+        int port = ra.getPort();
+        if ("SSU".equals(style)) {
+            if (!"2".equals(ra.getOption("v")))
+                return false;
+            if (ip != null && TransportUtil.isValidPort(port))
+                return true;
+            return ra.getOption("itag0") != null;
+        } else if ("SSU2".equals(style)) {
+            if (ip != null && TransportUtil.isValidPort(port))
+                return true;
+            return ra.getOption("itag0") != null;
+        } else if ("NTCP".equals(style) || "NTCP2".equals(style)) {
+            return ip != null && TransportUtil.isValidPort(port);
         }
         return false;
     }
