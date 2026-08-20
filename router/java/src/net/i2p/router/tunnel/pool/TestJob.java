@@ -362,39 +362,28 @@ public class TestJob extends JobImpl {
         // Skip testing if tunnel doesn't have valid IDs yet (not fully built).
         // Outbound tunnels only have a send tunnel ID at hop 0 (the gateway);
         // inbound tunnels only have a receive tunnel ID at hop 0.
-        try {
-            if (cfg.isInbound()) {
-                long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
-                if (recvId == 0) return false;
-            } else {
-                long sendId = cfg.getSendTunnelId(0).getTunnelId();
-                if (sendId == 0) return false;
-            }
-        } catch (Exception e) {
+        if (!hasValidTunnelIds(cfg)) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
-                log.debug("Skipping test - tunnel not ready: " + cfg, e);
+                log.debug("Skipping test - tunnel not ready: " + cfg);
             }
             return false;
         }
 
         // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
         TunnelPool pool = cfg.getTunnelPool();
-        if (pool != null) {
-            String tunnelNickname = pool.getSettings().getDestinationNickname();
-            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
-                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
-                Log log = ctx.logManager().getLog(TestJob.class);
-                if (log.shouldDebug()) {
-                    log.debug("Skipping test scheduling for ping tunnel: " + tunnelNickname);
-                }
-                return false;
+        if (isPingTunnel(cfg)) {
+            Log log = ctx.logManager().getLog(TestJob.class);
+            if (log.shouldDebug()) {
+                log.debug("Skipping test scheduling for ping tunnel: " +
+                          pool.getSettings().getDestinationNickname());
             }
+            return false;
         }
 
         // Skip testing if tunnel is scheduled for early expiry (already pruned)
         long now = ctx.clock().now();
-        if (cfg.getExpiration() < now + TunnelPool.DEFAULT_PRUNE_EARLY_EXPIRY) {
+        if (isEarlyExpiry(cfg, now)) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
                 log.debug("Skipping test - tunnel scheduled for early expiry: " + cfg);
@@ -415,8 +404,7 @@ public class TestJob extends JobImpl {
             // Check capacity: critical pools (0 GOOD) always get through,
             // non-critical ones wait until queue headroom frees up.
             if (current >= maxQueuedTests) {
-                if (pool != null && !pool.getSettings().isExploratory() &&
-                    pool.getActiveTunnelCount() == 0) {
+                if (isZeroActivePool(pool)) {
                     // critical — bypass the cap
                 } else {
                     return false;
@@ -466,25 +454,25 @@ public class TestJob extends JobImpl {
         } else {
             numPools = 0;
         }
-        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 3, 12)));
+        int maxTestJobs = computeMaxTestJobs(maxQueuedTests, activeRunners, numPools);
         int currentTestJobs = getTotalTestJobCount();
         boolean isCritical = false;
         if (pool != null && !pool.getSettings().isExploratory()) {
             int activeCount = pool.getActiveTunnelCount();
             int target = pool.getSettings().getTotalQuantity();
-            isCritical = activeCount == 0 || (activeCount < target && activeCount <= 2);
+            isCritical = isPoolCritical(activeCount, target);
             if (isCritical && !cfg.needsExpeditedTest()) {
                 cfg.requestExpeditedTest();
             }
         }
-        if (!cfg.needsExpeditedTest() && pool != null && !pool.getSettings().isExploratory() &&
-            pool.getActiveTunnelCount() == 0) {
+        if (!cfg.needsExpeditedTest() && isZeroActivePool(pool)) {
             cfg.requestExpeditedTest();
         }
         boolean isExpedited = cfg.needsExpeditedTest();
         long expeditedLagLimit = isExpedited ? MAX_LAG_FOR_SCHEDULE * 2 : MAX_LAG_FOR_SCHEDULE;
         int expeditedJobLimit = isExpedited ? maxTestJobs + maxTestJobs / 2 : maxTestJobs;
-        if (!isCritical && (readyCount > activeRunners || maxLag > expeditedLagLimit || currentTestJobs >= expeditedJobLimit)) {
+        if (isTestQueueOverloaded(isCritical, readyCount, activeRunners, maxLag, expeditedLagLimit,
+                                  currentTestJobs, expeditedJobLimit)) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
                 if (maxLag > expeditedLagLimit) {
@@ -538,8 +526,7 @@ Long tunnelKey = getTunnelKey(cfg);
             // UNTESTED tunnels must always get test priority to prevent pool
             // collapse — without tested tunnels, the LeaseSet expires and
             // the destination becomes unreachable.
-            int activeCount = pool.getActiveTunnelCount();
-            boolean poolCritical = !pool.getSettings().isExploratory() && activeCount == 0;
+            boolean poolCritical = isZeroActivePool(pool);
             if (!poolCritical) {
                 int poolTestBudget;
                 if (pool.getSettings().isExploratory()) {
@@ -563,6 +550,127 @@ Long tunnelKey = getTunnelKey(cfg);
         }
 
         return true;
+    }
+
+    /**
+     *  Whether the tunnel config has non-zero tunnel IDs at hop 0, i.e. the
+     *  tunnel is fully built and can carry a test message.  Outbound tunnels
+     *  only have a send tunnel ID at hop 0 (the gateway), inbound tunnels only
+     *  a receive tunnel ID.  Any failure reading the IDs (not yet built) is
+     *  treated as not ready; the caller logs the debug detail.
+     *
+     *  @param cfg the tunnel config, never null
+     *  @return true if the applicable hop-0 ID is non-zero
+     *  @since 0.9.71+
+     */
+    static boolean hasValidTunnelIds(PooledTunnelCreatorConfig cfg) {
+        try {
+            if (cfg.isInbound()) {
+                return cfg.getReceiveTunnelId(0).getTunnelId() != 0;
+            }
+            return cfg.getSendTunnelId(0).getTunnelId() != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     *  Whether the tunnel belongs to a ping pool, which is short-lived and
+     *  does not need testing.  Ping pools are named "I2Ping" or "Ping*[n]".
+     *
+     *  @param cfg the tunnel config, never null
+     *  @return true if the pool nickname identifies a ping pool
+     *  @since 0.9.71+
+     */
+    static boolean isPingTunnel(PooledTunnelCreatorConfig cfg) {
+        TunnelPool pool = cfg.getTunnelPool();
+        if (pool == null) return false;
+        String nickname = pool.getSettings().getDestinationNickname();
+        return nickname != null && (nickname.equals("I2Ping") ||
+               (nickname.startsWith("Ping") && nickname.contains("[")));
+    }
+
+    /**
+     *  Whether the tunnel expires so soon it is not worth testing — it has
+     *  already been pruned for early expiry.
+     *
+     *  @param cfg the tunnel config, never null
+     *  @param now current time in ms
+     *  @return true if the tunnel expires within the early-expiry window
+     *  @since 0.9.71+
+     */
+    static boolean isEarlyExpiry(PooledTunnelCreatorConfig cfg, long now) {
+        return cfg.getExpiration() < now + TunnelPool.DEFAULT_PRUNE_EARLY_EXPIRY;
+    }
+
+    /**
+     *  Whether a client pool has zero active tunnels, i.e. it is collapsed
+     *  and its test jobs must bypass the queue cap and per-pool budget.
+     *  Exploratory pools are never critical — they have no LeaseSet to feed.
+     *
+     *  @param pool the pool, may be null (then not critical)
+     *  @return true if a non-exploratory pool with no active tunnels
+     *  @since 0.9.71+
+     */
+    static boolean isZeroActivePool(TunnelPool pool) {
+        return pool != null && !pool.getSettings().isExploratory() &&
+               pool.getActiveTunnelCount() == 0;
+    }
+
+    /**
+     *  Whether a pool is critically low on tunnels: no active tunnels at all,
+     *  or at most 2 active against a larger target.  Critical pools get test
+     *  priority so replacement tunnels are validated before the pool drains.
+     *  NOTE: BuildExecutor.calculatePairedBuilds() carries an identical
+     *  inline predicate — dedupe candidate if either side changes again.
+     *
+     *  @param activeCount current active tunnel count
+     *  @param target configured total quantity
+     *  @return true if the pool is critical
+     *  @since 0.9.71+
+     */
+    static boolean isPoolCritical(int activeCount, int target) {
+        return activeCount == 0 || (activeCount < target && activeCount <= 2);
+    }
+
+    /**
+     *  Test-job capacity derived from the queue state: at least 12 jobs (or
+     *  3 per pool), scaled up by active runners, but never above the hard
+     *  queued limit.
+     *
+     *  @param maxQueuedTests hard cap from {@link #maxQueuedTests}
+     *  @param activeRunners current job-queue runner count
+     *  @param numPools number of tunnel pools
+     *  @return the capacity in test jobs
+     *  @since 0.9.71+
+     */
+    static int computeMaxTestJobs(int maxQueuedTests, int activeRunners, int numPools) {
+        return Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 3, 12)));
+    }
+
+    /**
+     *  Whether the job queue is too backed up to accept another test job.
+     *  Non-critical pools are deferred when the ready queue outruns the
+     *  runners, the max lag exceeds the (possibly expedited) limit, or the
+     *  current test job count meets the (possibly expedited) job limit.
+     *  Critical pools always get through.
+     *
+     *  @param critical whether the pool is critical (bypasses the gate)
+     *  @param readyCount jobs waiting in the queue
+     *  @param activeRunners jobs being processed
+     *  @param maxLag measured queue lag in ms
+     *  @param expeditedLagLimit lag threshold (doubled for expedited)
+     *  @param currentTestJobs running test job count
+     *  @param expeditedJobLimit job threshold (1.5x for expedited)
+     *  @return true if scheduling should be deferred
+     *  @since 0.9.71+
+     */
+    static boolean isTestQueueOverloaded(boolean critical, int readyCount, int activeRunners,
+                                         long maxLag, long expeditedLagLimit,
+                                         int currentTestJobs, int expeditedJobLimit) {
+        return !critical && (readyCount > activeRunners ||
+                             maxLag > expeditedLagLimit ||
+                             currentTestJobs >= expeditedJobLimit);
     }
 
     /**
