@@ -2169,17 +2169,11 @@ public class ProfileOrganizer {
         Hash peer = profile.getPeer();
         PeerProfile notFailingProfile = _notFailingPeers.get(peer);
 
-        // Basic eligibility gates (mirrors locked_placeProfile)
-        boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
-        boolean isPeerSelectable = isSelectable(peer, buildSuccess);
-        boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess);
-        boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
-        boolean congested = isCongestedPeer(peer);
         boolean recentFailures = hasRecentTunnelFailures(profile);
-        boolean highLoss = inLossProbation(profile, _context.clock().now());
 
-        if (!isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss) {
-            if (highLatency && _log.shouldDebug()) {
+        if (skipsPromotion(profile, peer, buildSuccess)) {
+            if ((profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30) &&
+                _log.shouldDebug()) {
                 _log.debug("Skipping peer [" + peer.toBase32().substring(0, 6) +
                            "] from promotion: highLatency=true capBonus=" +
                            profile.getCapacityBonus() + " raw=" + profile.getCapacityBonusRaw() +
@@ -2237,6 +2231,30 @@ public class ProfileOrganizer {
             profile.getIntegrationValue() >= _thresholdIntegrationValue) {
             _wellIntegratedPeers.put(peer, profile);
         }
+    }
+
+    /**
+     *  Whether the peer should be skipped for tier promotion: not selectable,
+     *  in a strict country, low tunnel acceptance, high-latency penalty,
+     *  congested, or in loss probation.  Mirrors the eligibility gates of
+     *  locked_placeProfile().
+     *  <p>
+     *  No side effects — safe to evaluate without holding locks.
+     *
+     *  @param profile the profile under consideration
+     *  @param peer the peer hash
+     *  @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     *  @return whether promotion should be skipped
+     *  @since 0.9.71+
+     */
+    boolean skipsPromotion(PeerProfile profile, Hash peer, double buildSuccess) {
+        boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
+        boolean isPeerSelectable = isSelectable(peer, buildSuccess);
+        boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess);
+        boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
+        boolean congested = isCongestedPeer(peer);
+        boolean highLoss = inLossProbation(profile, _context.clock().now());
+        return !isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss;
     }
 
     /**
