@@ -99,11 +99,9 @@ public class ClientPeerSelectorQualityTest {
     public void testCompareAcceptanceDeadVsGood() {
         PeerProfile dead = deadActiveFast();
         PeerProfile good = goodActiveFast();
-        // NOTE: mirrors original 0.9.70+ behavior — a dead (<= 0) peer sorts
-        // BEFORE a good (> 0.3) peer here, while the low-tier branch below
-        // sorts low (< 0.3) AFTER good.  Asymmetric; may be a latent sign bug.
-        assertEquals(-1, ClientPeerSelector.compareAcceptance(dead, good));
-        assertEquals(1, ClientPeerSelector.compareAcceptance(good, dead));
+        // Dead (<= 0) ranks BELOW good (> 0.3): good sorts first
+        assertEquals(1, ClientPeerSelector.compareAcceptance(dead, good));
+        assertEquals(-1, ClientPeerSelector.compareAcceptance(good, dead));
     }
 
     @Test
@@ -179,8 +177,9 @@ public class ClientPeerSelectorQualityTest {
 
     @Test
     public void testCascadeAcceptanceBeatsSlow() {
-        // Low ratio beats slow latency in stage order: dead/low ratio loses first
-        assertEquals(1, cascadeCompare(null, goodInactiveSlow(), deadActiveFast()));
+        // Acceptance ratio decides before slow latency: good-ratio peer wins
+        // over the dead-ratio peer even though the good one is slow
+        assertEquals(-1, cascadeCompare(null, goodInactiveSlow(), deadActiveFast()));
     }
 
     @Test

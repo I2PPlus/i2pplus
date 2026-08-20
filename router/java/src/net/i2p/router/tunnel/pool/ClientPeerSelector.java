@@ -1169,8 +1169,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
     }
 
     /**
-     *  Acceptance ratio tiers: dead (<= 0) ranks below good (> 0.3), and low
-     *  (< 0.3) ranks below good.  Missing profiles default to 1.0.
+     *  Acceptance ratio tiers: good (&gt; 0.3) ranks above low (&lt; 0.3), which
+     *  ranks above dead (&lt;= 0).  Missing profiles default to 1.0.
      *
      *  @param prof1 first peer's profile, or null
      *  @param prof2 second peer's profile, or null
@@ -1180,8 +1180,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
     static int compareAcceptance(PeerProfile prof1, PeerProfile prof2) {
         double ar1 = prof1 != null ? prof1.getTunnelAcceptanceRatio() : 1.0;
         double ar2 = prof2 != null ? prof2.getTunnelAcceptanceRatio() : 1.0;
-        if (ar1 <= 0 && ar2 > 0.3) {return -1;}
-        if (ar2 <= 0 && ar1 > 0.3) {return 1;}
+        if (ar1 <= 0 && ar2 > 0.3) {return 1;}
+        if (ar2 <= 0 && ar1 > 0.3) {return -1;}
         if (ar1 < 0.3 && ar2 >= 0.3) {return 1;}
         if (ar2 < 0.3 && ar1 >= 0.3) {return -1;}
         return 0;
