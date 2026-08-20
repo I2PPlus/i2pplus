@@ -619,10 +619,7 @@ public class TunnelPool {
                 if (lastResortTunnel == null || longTunnelsOnly) {lastResortTunnel = info;}
                 continue;
             }
-            if (info.getTunnelFailed()) {continue;}
-            if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {continue;}
-            if (info.getExpiration() <= now) {continue;}
-            if (longTunnelsOnly && info.getLength() <= 1) {continue;}
+            if (!passesScanGates(info, now, longTunnelsOnly)) {continue;}
             if (!_settings.isInbound() && info.getLength() > 1 &&
                 _context.commSystem().isBacklogged(info.getPeer(1))) {
                 backloggedTunnel = info;
@@ -633,6 +630,27 @@ public class TunnelPool {
             return new ScanResult(info, null, lastResortTunnel);
         }
         return new ScanResult(null, backloggedTunnel, lastResortTunnel);
+    }
+
+    /**
+     *  Whether a pooled tunnel passes the scan eligibility gates: not
+     *  failed, not over the consecutive-test-failure cap (test failures are
+     *  often reply-path problems, not tunnel quality), non-expired, and —
+     *  on the first pass — longer than a single hop.  Pure decision — no
+     *  side effects.
+     *
+     *  @param info the candidate tunnel
+     *  @param now current time in ms
+     *  @param longTunnelsOnly first-pass mode (zero-hop-avoiding pools): long tunnels only
+     *  @return whether the tunnel is a scan candidate
+     *  @since 0.9.71+
+     */
+    static boolean passesScanGates(TunnelInfo info, long now, boolean longTunnelsOnly) {
+        if (info.getTunnelFailed()) {return false;}
+        if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {return false;}
+        if (info.getExpiration() <= now) {return false;}
+        if (longTunnelsOnly && info.getLength() <= 1) {return false;}
+        return true;
     }
 
     /**
