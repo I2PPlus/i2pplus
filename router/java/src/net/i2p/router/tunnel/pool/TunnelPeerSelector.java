@@ -568,13 +568,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Current tunnel build success ratio, 0.0 when no data is available.
+     *  Current tunnel build success ratio, 1.0 when no data is available.
      *  <p>
      *  Expensive: each call performs 6 RateStat lookups and 6 rate fetches
      *  ({@link ProfileOrganizer#getTunnelBuildSuccess()}).  Fetch once per
      *  selection or scan and pass the value down; never call per candidate
-     *  peer.  A value of 0.0 (no data) relaxes the attack-threshold gates,
-     *  matching the conservative startup behavior.
+     *  peer.  A value of 1.0 (no data) keeps the attack-threshold gates
+     *  closed at boot instead of treating missing stats as an attack.
      *
      *  @param ctx the router context
      *  @return the ratio in [0.0, 1.0]

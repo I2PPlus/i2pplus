@@ -2772,9 +2772,17 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Recent tunnel build success ratio, from router statistics.
+     *  Recent tunnel build success ratio, from router statistics.
+     *  <p>
+     *  TEN_MINUTES window: a short window reacts quickly to network health
+     *  changes, so the attack-mode gates below track the current situation
+     *  instead of lifetime averages.  When no data is available (stats not
+     *  yet created at boot, or an empty window), the ratio is 1.0 — no data
+     *  means neutral, not "under attack"; a missing-stat 0.0 put the router
+     *  into permanent attack mode before stats existed.
      *
-     * @return the tunnel build success
+     *  @return the tunnel build success in [0.0, 1.0], 1.0 when no data
+     *  @since 0.9.71+
      */
     public double getTunnelBuildSuccess() {
         try {
@@ -2786,26 +2794,43 @@ public class ProfileOrganizer {
             RateStat sClient = _context.statManager().getRate("tunnel.buildClientSuccess");
             if (eExpl != null && rExpl != null && sExpl != null &&
                 eClient != null && rClient != null && sClient != null) {
-                Rate er = eExpl.getRate(RateConstants.TEN_MINUTES);
-                Rate rr = rExpl.getRate(RateConstants.TEN_MINUTES);
-                Rate sr = sExpl.getRate(RateConstants.TEN_MINUTES);
-                Rate erClient = eClient.getRate(RateConstants.TEN_MINUTES);
-                Rate rrClient = rClient.getRate(RateConstants.TEN_MINUTES);
-                Rate srClient = sClient.getRate(RateConstants.TEN_MINUTES);
-                if (er != null && rr != null && sr != null &&
-                    erClient != null && rrClient != null && srClient != null) {
-                    double expire = er.getCurrentTotalValue() + erClient.getCurrentTotalValue();
-                    double reject = rr.getCurrentTotalValue() + rrClient.getCurrentTotalValue();
-                    double success = sr.getCurrentTotalValue() + srClient.getCurrentTotalValue();
-                    double total = expire + reject + success;
-                    if (total > 0) {
-                        return success / total;
-                    }
-                }
+                return buildSuccessRatio(eExpl.getRate(RateConstants.TEN_MINUTES),
+                                         rExpl.getRate(RateConstants.TEN_MINUTES),
+                                         sExpl.getRate(RateConstants.TEN_MINUTES),
+                                         eClient.getRate(RateConstants.TEN_MINUTES),
+                                         rClient.getRate(RateConstants.TEN_MINUTES),
+                                         sClient.getRate(RateConstants.TEN_MINUTES));
             }
         } catch (Exception e) {
         }
-        return 0;
+        return 1.0;
+    }
+
+    /**
+     *  Build-success ratio from the six TEN_MINUTES rates, 1.0 when any rate
+     *  is missing or the window is empty.
+     *
+     *  @param er exploratory expire rate
+     *  @param rr exploratory reject rate
+     *  @param sr exploratory success rate
+     *  @param erC client expire rate
+     *  @param rrC client reject rate
+     *  @param srC client success rate
+     *  @return the ratio in [0.0, 1.0], 1.0 when no data
+     *  @since 0.9.71+
+     */
+    static double buildSuccessRatio(Rate er, Rate rr, Rate sr, Rate erC, Rate rrC, Rate srC) {
+        if (er == null || rr == null || sr == null || erC == null || rrC == null || srC == null) {
+            return 1.0;
+        }
+        double expire = er.getCurrentTotalValue() + erC.getCurrentTotalValue();
+        double reject = rr.getCurrentTotalValue() + rrC.getCurrentTotalValue();
+        double success = sr.getCurrentTotalValue() + srC.getCurrentTotalValue();
+        double total = expire + reject + success;
+        if (total > 0) {
+            return success / total;
+        }
+        return 1.0;
     }
 
     /**
