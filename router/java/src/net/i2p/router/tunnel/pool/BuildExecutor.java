@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -82,7 +83,7 @@ public class BuildExecutor implements Runnable {
                 return Integer.compare(System.identityHashCode(a[1]), System.identityHashCode(b[1]));
             };
 
-    private final Set<Long> _recentBuildIds = ConcurrentHashMap.newKeySet();
+    private final Set<Long> _recentBuildIds = new LinkedHashSet<>(129);
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
@@ -627,6 +628,7 @@ public class BuildExecutor implements Runnable {
         }
 
         List<PooledTunnelCreatorConfig> expired = null;
+        Map<Long, Long> expiredTimeouts = null;
 
         /* Expire old build requests from currentlyBuilding map, move them to recentlyBuilding
          * NOTE: cfg.getExpiration() includes TUNNEL stagger (0-300s), so comparing against it
@@ -644,7 +646,13 @@ public class BuildExecutor implements Runnable {
                     if (expired == null) {
                         expired = new ArrayList<>();
                     }
+                    if (expiredTimeouts == null) {
+                        expiredTimeouts = new HashMap<>(8);
+                    }
                     expired.add(cfg);
+                    // Remember the timeout actually used: calculateAdaptiveTimeout()
+                    // varies per config (length, load, outbound, RTT floor).
+                    expiredTimeouts.put(cfg.getReplyMessageId(), adaptiveTimeout);
                 }
             }
         }
@@ -655,7 +663,9 @@ public class BuildExecutor implements Runnable {
         if (expired != null) {
             for (PooledTunnelCreatorConfig cfg : expired) {
                 if (_log.shouldInfo()) {
-                    _log.info("Timeout (" + (_adaptiveTimeout / 1000) + "s) waiting for tunnel build reply -> " + cfg);
+                    Long used = expiredTimeouts.get(cfg.getReplyMessageId());
+                    long secs = used != null ? used / 1000 : _adaptiveTimeout / 1000;
+                    _log.info("Timeout (" + secs + "s) waiting for tunnel build reply -> " + cfg);
                 }
 
                 penalizeTimeout(cfg);
@@ -1072,10 +1082,12 @@ public class BuildExecutor implements Runnable {
         }
         long id = cfg.getReplyMessageId();
         if (id > 0) {
-            _recentBuildIds.add(id);
-            // ConcurrentHashMap.newKeySet() has no ordering, so just clear excess
-            if (_recentBuildIds.size() > 128) {
-                _recentBuildIds.clear();
+            synchronized (_recentBuildIds) {
+                _recentBuildIds.add(id);
+                // LinkedHashSet keeps insertion order: trim the oldest, not
+                // everything, so wasRecentlyBuilding() still detects late
+                // duplicate replies.
+                trimFifo(_recentBuildIds, 128);
             }
         }
     }
@@ -1253,7 +1265,24 @@ public class BuildExecutor implements Runnable {
      * @return true if the build was recently attempted, false otherwise
      */
     public boolean wasRecentlyBuilding(long replyId) {
-        return _recentBuildIds.contains(replyId);
+        synchronized (_recentBuildIds) {
+            return _recentBuildIds.contains(replyId);
+        }
+    }
+
+    /**
+     *  Trim a FIFO id set to at most {@code max} entries, dropping the oldest
+     *  (head) entries first.  Insertion order is preserved by the caller.
+     *
+     *  @param ids the id set, held by the caller's monitor
+     *  @param max the maximum size to keep
+     *  @since 0.9.71+
+     */
+    static void trimFifo(Set<Long> ids, int max) {
+        while (ids.size() > max) {
+            Long oldest = ids.iterator().next();
+            ids.remove(oldest);
+        }
     }
 
     /**
