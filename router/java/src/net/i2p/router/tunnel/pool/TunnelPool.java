@@ -2494,41 +2494,70 @@ public class TunnelPool {
             // LeaseSets are sent to the client asynchronously and may not
             // be stored in NetDB yet when this check runs, causing every
             // call to auto-force and bypass the throttle.
-            boolean hasPublishedBefore = _lastRefreshTime > 0;
-            if (!force && !hasPublishedBefore) {
-                force = true;
-            }
-            if (isRefreshThrottled(now) && !force) {
-                // If the currently published LeaseSet is missing (already expired)
-                // or will expire before the deferred refresh fires, throttling
-                // would leave the network with a stale/expired LeaseSet for the
-                // rest of the throttle window.  Force the refresh now instead so
-                // the new LeaseSet is pushed to the republish queue immediately.
-                // lookupLeaseSetLocally() returns null once the published
-                // LeaseSet expires, so null means it is already stale.
-                if (shouldDeferRefresh(now)) {
-                    return;
-                }
-                if (_log.shouldDebug()) {
-                    _log.debug(toString() + " -> Published LeaseSet missing or expiring within throttle, forcing refresh now");
-                }
-                force = true;
+            Boolean effectiveForce = resolveRefreshForce(now, force);
+            if (effectiveForce == null) {
+                return;
             }
             _lastRefreshTime = now;
             if (_log.shouldDebug()) {
-                _log.debug(toString() + "\n* Refreshing LeaseSet (force=" + force + ", count=" + size() + ")");
+                _log.debug(toString() + "\n* Refreshing LeaseSet (force=" + effectiveForce + ", count=" + size() + ")");
             }
-            LeaseSet ls;
-            _tunnelsLock.lock();
-            try {ls = locked_buildNewLeaseSet();} finally {_tunnelsLock.unlock();}
-            if (ls != null) {
-                requestLeaseSet(ls);
-                _lastLeaseSetPublishTime = now;
-                pruneNonPublishedTunnels(ls);
-            }
+            publishRefreshedLeaseSet(now);
             // On each publish cycle, clean out tunnels that haven't passed
             // testing so ensureSufficientTunnels() builds replacements.
             pruneNonGoodTunnels();
+        }
+    }
+
+    /**
+     *  Resolve whether this refresh must bypass the throttle, or defer it.
+     *  When the published LeaseSet is missing (already expired) or will
+     *  expire before the deferred refresh fires, throttling would leave the
+     *  network with a stale/expired LeaseSet for the rest of the throttle
+     *  window — force the refresh now instead so the new LeaseSet is pushed
+     *  to the republish queue immediately.  lookupLeaseSetLocally() returns
+     *  null once the published LeaseSet expires, so null means it is stale.
+     *  <p>
+     *  Note: {@link #shouldDeferRefresh(long)} has the side effect of
+     *  scheduling a deferred refresh, so it must only run when throttled
+     *  and not already forced.
+     *
+     *  @param now current time in ms
+     *  @param force caller-supplied force flag
+     *  @return null to defer this refresh, otherwise the effective force flag
+     *  @since 0.9.71+ (extracted from refreshLeaseSet to reduce complexity)
+     */
+    private Boolean resolveRefreshForce(long now, boolean force) {
+        boolean hasPublishedBefore = _lastRefreshTime > 0;
+        if (!force && !hasPublishedBefore) {
+            force = true;
+        }
+        if (isRefreshThrottled(now) && !force) {
+            if (shouldDeferRefresh(now)) {
+                return null;
+            }
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Published LeaseSet missing or expiring within throttle, forcing refresh now");
+            }
+            force = true;
+        }
+        return force;
+    }
+
+    /**
+     *  Build the current LeaseSet from the pool and publish it, pruning
+     *  tunnels that were dropped from the LeaseSet.
+     *  @param now current time in ms
+     *  @since 0.9.71+ (extracted from refreshLeaseSet to reduce complexity)
+     */
+    private void publishRefreshedLeaseSet(long now) {
+        LeaseSet ls;
+        _tunnelsLock.lock();
+        try {ls = locked_buildNewLeaseSet();} finally {_tunnelsLock.unlock();}
+        if (ls != null) {
+            requestLeaseSet(ls);
+            _lastLeaseSetPublishTime = now;
+            pruneNonPublishedTunnels(ls);
         }
     }
 
