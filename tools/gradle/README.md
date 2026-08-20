@@ -98,29 +98,29 @@ Mirrors of the Ant `i2psnark` family in `build.xml`. Each builds the fat
 standalone jar (with the patched jetty-util and the jbigi natives) and the
 themed standalone war, then packages the install dir.
 
-| Task                      | Description                                | Output                              |
-| ------------------------- | ------------------------------------------ | ----------------------------------- |
-| `./gradlew i2psnark`      | Standalone zip + sha256 (Ant `i2psnark`)   | `dist/i2psnark-standalone.zip`      |
-| `./gradlew i2psnark7zip`  | Standalone 7z, needs `7z` on PATH          | `dist/i2psnark-standalone.7z`       |
-| `./gradlew i2psnark_nozip`| Standalone dir (Ant `i2psnark_nozip`)      | `dist/i2psnark_standalone/`         |
+| Task                       | Description                                | Output                              |
+| -------------------------- | ------------------------------------------ | ----------------------------------- |
+| `./gradlew i2psnark`       | Standalone zip + sha256 (Ant `i2psnark`)   | `dist/i2psnark-standalone.zip`      |
+| `./gradlew i2psnark7zip`   | Standalone 7z, needs `7z` on PATH          | `dist/i2psnark-standalone.7z`       |
+| `./gradlew i2psnark_nozip` | Standalone dir (Ant `i2psnark_nozip`)      | `dist/i2psnark_standalone/`         |
 
 Prerequisite: `jbigi` (jars the vendored natives from `installer/lib/jbigi`).
 
 ### Other
 
-| Task                  | Description                                                        |
-| --------------------- | ------------------------------------------------------------------ |
-| `./gradlew test`      | Run unit tests                                                     |
-| `./gradlew clean`     | Delete build output                                                |
-| `./gradlew jar`       | Build all jars                                                     |
-| `./gradlew war`       | Build all wars                                                     |
-| `./gradlew pkg`       | Full distribution: update zip, deb, tarball, installer (Ant `pkg`) |
-| `./gradlew buildDeb`  | Debian package                                                     |
-| `./gradlew tarball`   | Source-less tarball                                                |
-| `./gradlew distclean` | Wipe all build state                                               |
-| `./gradlew sonarqube-report-full` | Full analysis with local rule docs (mirrors `ant sonarqube-report-full`) |
-| `./gradlew sonarqube-report-zip`  | Zip the report + rules into `dist/sonarqube-report.zip` (mirrors `ant sonarqube-report-zip`) |
-| `./gradlew selftest`  | Verify the documented task inventory, then run `updaterCompact` (compiles and packages every module); all other targets are name-checked only |
+| Task                              | Description                                                                                                                                   |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `./gradlew test`                  | Run unit tests                                                                                                                                |
+| `./gradlew clean`                 | Delete build output                                                                                                                           |
+| `./gradlew jar`                   | Build all jars                                                                                                                                |
+| `./gradlew war`                   | Build all wars                                                                                                                                |
+| `./gradlew pkg`                   | Full distribution: update zip, deb, tarball, installer (Ant `pkg`)                                                                            |
+| `./gradlew buildDeb`              | Debian package                                                                                                                                |
+| `./gradlew tarball`               | Source-less tarball                                                                                                                           |
+| `./gradlew distclean`             | Wipe all build state                                                                                                                          |
+| `./gradlew sonarqube-report-full` | Full analysis with local rule docs (mirrors `ant sonarqube-report-full`)                                                                      |
+| `./gradlew sonarqube-report-zip`  | Zip the report + rules into `dist/sonarqube-report.zip` (mirrors `ant sonarqube-report-zip`)                                                  |
+| `./gradlew selftest`              | Verify the documented task inventory, then run `updaterCompact` (compiles and packages every module); all other targets are name-checked only |
 
 ## Running
 
