@@ -83,38 +83,36 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
             return Collections.emptyList();
         }
-        synchronized (_cooldownLock) {
-            List<Hash> rv;
-            boolean isInbound = settings.isInbound();
+        List<Hash> rv;
+        boolean isInbound = settings.isInbound();
 
-            if (length > 0) {
-                SelectionParams params = computeSelectionParams(settings, length, isInbound);
-                if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
-                SelectionExclusions ex = buildExclusions(settings, isInbound, params.buildSuccess);
-                ArraySet<Hash> matches = new ArraySet<>(length);
-                if (length == 1) {
-                    rv = selectSingleHop(settings, length, params, ex, matches);
-                } else {
-                    rv = selectMultiHop(settings, length, params, ex, matches);
-                    if (rv.isEmpty()) {return Collections.emptyList();}
-                }
-                if (log.shouldDebug()) {
-                    log.debug("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
-                              ", " + ex.excluder.getReasonsSummary() +
-                             "\n* Cooldowns: " + ex.peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
-                             "), firstHopFails=" + ex.firstHopFailCount +
-                             (ex.firstPeerExclusions != null && !ex.firstPeerExclusions.isEmpty() ?
-                              ", " + ex.firstPeerExclusions.size() + " first-hop diversity" : ""));
-                }
-                if (rv.size() < length) {
-                    rv = applyShortfallFallbacks(settings, rv, length, params, ex);
-                    if (rv.isEmpty()) {return Collections.emptyList();}
-                }
+        if (length > 0) {
+            SelectionParams params = computeSelectionParams(settings, length, isInbound);
+            if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
+            SelectionExclusions ex = buildExclusions(settings, isInbound, params.buildSuccess);
+            ArraySet<Hash> matches = new ArraySet<>(length);
+            if (length == 1) {
+                rv = selectSingleHop(settings, length, params, ex, matches);
             } else {
-                rv = new ArrayList<>(1);
+                rv = selectMultiHop(settings, length, params, ex, matches);
+                if (rv.isEmpty()) {return Collections.emptyList();}
             }
-            return finalizeSelection(settings, rv, isInbound);
+            if (log.shouldDebug()) {
+                log.debug("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
+                          ", " + ex.excluder.getReasonsSummary() +
+                         "\n* Cooldowns: " + ex.peerCooldownExcluded + " shared(" + _peerCooldowns.size() +
+                         "), firstHopFails=" + ex.firstHopFailCount +
+                         (ex.firstPeerExclusions != null && !ex.firstPeerExclusions.isEmpty() ?
+                          ", " + ex.firstPeerExclusions.size() + " first-hop diversity" : ""));
+            }
+            if (rv.size() < length) {
+                rv = applyShortfallFallbacks(settings, rv, length, params, ex);
+                if (rv.isEmpty()) {return Collections.emptyList();}
+            }
+        } else {
+            rv = new ArrayList<>(1);
         }
+        return finalizeSelection(settings, rv, isInbound);
     }
 
     /** Compute the shared selection parameters (tier priority, closest-hop checks, hidden flags, IP restriction). */

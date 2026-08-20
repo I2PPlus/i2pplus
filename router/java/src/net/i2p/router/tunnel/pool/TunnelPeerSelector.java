@@ -166,12 +166,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** Shared cooldown map across all peer selectors */
     protected static final Map<Hash, Long> _peerCooldowns = new ConcurrentHashMap<>();
 
-    /** Lock for atomic cooldown check+record within client selection.  A single
-     *  selector instance serves all client pools, so concurrent selections from
-     *  different pool threads are serialized.  Exploratory selection does its
-     *  own check+record on a per-selector map and does not take this lock. */
-    protected static final Object _cooldownLock = new Object();
-
     /**
      *  Format a set of excluded peers for logging, with exclusion reasons when
      *  the set is an {@link Excluder} or {@link ExcluderBase}.
