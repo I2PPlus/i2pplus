@@ -67,6 +67,13 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 log.debug("EPS all candidates on cooldown, retrying without cooldowns");
             rv = selectPeersInternal(settings, length, false);
         }
+        if (rv == null) {
+            // checkTunnel() rejected the selection — honor the never-null
+            // contract so callers can rely on isEmpty() without null checks.
+            if (log.shouldDebug())
+                log.debug("EPS checkTunnel failed -> empty selection");
+            return Collections.emptyList();
+        }
         return rv;
     }
 
@@ -88,19 +95,15 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // Exclude peers on selection cooldown to ensure diversity.
         // Own map: peers that failed checkTunnel here.  Shared map: peers
         // failed by client pools or rejected at tunnel reuse.
+        // Read-time filtering: expired entries are ignored, never swept.
+        // Sweeping the shared map on every selection races the other
+        // selectors (see ClientPeerSelector.buildExclusions); bulk hygiene
+        // is done by prunePeerMaps() for the shared map and on record for
+        // the own map (see the checkTunnel failure path below).
         if (includeCooldowns) {
             long cooldownCutoff = now - PEER_SELECTION_COOLDOWN_MS;
-            int cooldownExcluded = 0;
-            _exploratoryCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
-            for (Map.Entry<Hash, Long> entry : _exploratoryCooldowns.entrySet()) {
-                exclude.add(entry.getKey());
-                cooldownExcluded++;
-            }
-            _peerCooldowns.entrySet().removeIf(e -> e.getValue() <= cooldownCutoff);
-            for (Map.Entry<Hash, Long> entry : _peerCooldowns.entrySet()) {
-                exclude.add(entry.getKey());
-                cooldownExcluded++;
-            }
+            int cooldownExcluded = ClientPeerSelector.addFreshCooldownExclusions(_exploratoryCooldowns, cooldownCutoff, exclude);
+            cooldownExcluded += ClientPeerSelector.addFreshCooldownExclusions(_peerCooldowns, cooldownCutoff, exclude);
             if (log.shouldDebug())
                 log.debug("EPS cooldown: own=" + _exploratoryCooldowns.size() +
                           " shared=" + _peerCooldowns.size() +
@@ -375,6 +378,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     log.debug("EPS cooldown record: recorded=" + recorded +
                               " rvSize=" + rv.size() +
                               " from=" + Thread.currentThread().getName());
+                // Bound the own map: entries expire on read, but sweep only
+                // when the map is large (mirrors prunePeerMaps()).
+                if (_exploratoryCooldowns.size() > FAILURE_MAP_MAX_SIZE) {
+                    long cutoff = failNow - PEER_SELECTION_COOLDOWN_MS;
+                    _exploratoryCooldowns.entrySet().removeIf(e -> e.getValue() < cutoff);
+                }
                 rv = null;
             }
         }

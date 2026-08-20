@@ -203,14 +203,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      *  Size bound for the cooldown maps ({@link #_peerCooldowns},
-     *  {@link #_firstHopFails}).  Entries are recorded on selection failures,
-     *  tunnel rejects, and tunnel reuse, and are also expired time-based on
-     *  every selection, so these maps stay small — 128 entries is already
-     *  generous.  This bound only limits growth between selections; it does
-     *  not evict live entries.
+     *  {@link #_firstHopFails}, {@link ExploratoryPeerSelector#_exploratoryCooldowns}).
+     *  Entries are recorded on selection failures, tunnel rejects, and tunnel
+     *  reuse.  They expire lazily (read-time filtering during selection) and
+     *  are bulk-pruned only when a map exceeds this bound, so these maps stay
+     *  small — 128 entries is already generous.  This bound only limits
+     *  growth between selections; it does not evict live entries.
      *  @since 0.9.71+
      */
-    private static final int FAILURE_MAP_MAX_SIZE = 128;
+    protected static final int FAILURE_MAP_MAX_SIZE = 128;
 
     /**
      *  Size bound for {@link #_lastKeepAlive}.  Larger than the failure maps
