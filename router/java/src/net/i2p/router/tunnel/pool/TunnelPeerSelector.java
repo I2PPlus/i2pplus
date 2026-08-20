@@ -50,8 +50,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     private static final String DEFAULT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
                                                         String.valueOf(Router.CAPABILITY_NO_TUNNELS);
-    private static final String ALT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
-                                                   String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -959,9 +957,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @return non-null, possibly empty
      */
     private static String getExcludeCaps(RouterContext ctx) {
-        String dflt = (ctx.random().nextInt(4) != 0) ? DEFAULT_EXCLUDE_CAPS : ALT_EXCLUDE_CAPS;
         String val = getCachedExcludeCaps(ctx);
-        return val != null ? val : dflt;
+        return val != null ? val : DEFAULT_EXCLUDE_CAPS;
     }
 
     /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0) */
@@ -1700,19 +1697,23 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *
      *  Stale peers are skipped during first-hop selection and keepalive to
      *  avoid wasting resources on peers that are likely offline.  Skipped
-     *  during the first 15 minutes of uptime (startup grace).
+     *  during the first 15 minutes of uptime (startup grace).  Unprofiled
+     *  (never-heard-of) peers are NOT stale: excluding them would starve the
+     *  pool of newcomers during recovery — the activity window below only
+     *  applies once we have profile data to judge.
      *
      *  @param ctx the router context
      *  @param peer hash of the peer to check
      *  @param buildSuccess the build success ratio, fetched once by the caller
-     *  @return true if the peer has not been heard from or about within the activity window
+     *  @return true if the peer has a profile and has not been heard from or
+     *          about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer, double buildSuccess) {
         if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000L)
             return false;
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
         if (profile == null)
-            return true;
+            return false;
         long now = ctx.clock().now();
         long cutoff = now - getActivityWindow(ctx, buildSuccess);
         return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
