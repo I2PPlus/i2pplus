@@ -95,6 +95,7 @@ public class TunnelPool {
     private final RateStat[] _avgBWStatSlot = new RateStat[1];
     private long _lastNoTunnelsWarningTime;
     private long _lastLastResortLogTime;
+    private long _lastSelectPeersFailureWarnTime;
     /**
      *  Dynamic pool scaling: when a pool repeatedly collapses (EMERGENCY fires),
      *  increase the effective tunnel count. More parallel tunnels = more
@@ -3958,10 +3959,14 @@ public class TunnelPool {
         }
     }
 
-    /** Warn when selectPeers returned null or empty, naming the destination. */
+    /** Warn when selectPeers returned null or empty, naming the destination.
+     *  Rate-limited: every event is logged at debug, one WARN at most per
+     *  interval per pool, silent in the first 3 minutes of uptime while
+     *  peers are still being discovered.
+     */
     private void logSelectPeersFailure(TunnelPoolSettings settings, List<Hash> peers) {
         long uptime = _context.router().getUptime();
-        if (_log.shouldWarn() && uptime > 3L * 60 * 1000) {
+        if (_log.shouldDebug() || _log.shouldWarn()) {
             String nick = settings.getDestinationNickname();
             Hash dest = settings.getDestination();
             String destName;
@@ -3972,11 +3977,40 @@ public class TunnelPool {
             } else {
                 destName = "null";
             }
-            _log.warn("TPool cfgNewTunnel: selectPeers returned " + (peers == null ? "null" : "empty") +
-                      " for " + destName +
-                      " (" + (settings.isInbound() ? "in" : "out") + ")");
+            String what = peers == null ? "null" : "empty";
+            String where = "TPool cfgNewTunnel: selectPeers returned " + what + " for " + destName +
+                           " (" + (settings.isInbound() ? "in" : "out") + ")";
+            if (_log.shouldDebug()) {
+                _log.debug(where);
+            }
+            long now = _context.clock().now();
+            if (_log.shouldWarn() && shouldWarnSelectPeersFailure(uptime, now, _lastSelectPeersFailureWarnTime)) {
+                _lastSelectPeersFailureWarnTime = now;
+                _log.warn(where);
+            }
         }
     }
+
+    /**
+     *  The selectPeers-failure WARN is rate-limited: never before
+     *  {@link #SELECT_PEERS_FAILURE_SILENCE_MS} of uptime, then at most
+     *  once per {@link #SELECT_PEERS_FAILURE_WARN_INTERVAL_MS} per pool.
+     *
+     *  @param uptime the router uptime in ms
+     *  @param now the current time in ms
+     *  @param lastWarnTime the last WARN time in ms
+     *  @return true if the WARN should fire
+     *  @since 0.9.71+
+     */
+    static boolean shouldWarnSelectPeersFailure(long uptime, long now, long lastWarnTime) {
+        return uptime > SELECT_PEERS_FAILURE_SILENCE_MS &&
+               now - lastWarnTime >= SELECT_PEERS_FAILURE_WARN_INTERVAL_MS;
+    }
+
+    /** Silent in the first 3 minutes of uptime: peers are still being discovered. */
+    private static final long SELECT_PEERS_FAILURE_SILENCE_MS = 3L * 60 * 1000;
+    /** At most one selectPeers-failure WARN per interval per pool. */
+    private static final long SELECT_PEERS_FAILURE_WARN_INTERVAL_MS = 60 * 1000L;
 
     /**
      *  Build the config with the given peers, endpoint first.  cfg.getPeer()
