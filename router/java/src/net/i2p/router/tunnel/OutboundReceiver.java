@@ -6,7 +6,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
 import net.i2p.util.Log;
 
 /**
@@ -19,7 +18,7 @@ import net.i2p.util.Log;
 class OutboundReceiver implements TunnelGateway.Receiver {
     private final RouterContext _context;
     private final Log _log;
-    private final PooledTunnelCreatorConfig _config;
+    private final TunnelCreatorConfig _config;
     private RouterInfo _nextHopCache;
     private final int _priority;
     // same job used for all messages
@@ -29,9 +28,9 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_DATA;
 
     /**
-     * Binds the context and pool config, caching the first hop router info.
+     * Binds the context and tunnel config, caching the first hop router info.
      */
-    public OutboundReceiver(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
+    public OutboundReceiver(RouterContext ctx, TunnelCreatorConfig cfg) {
         _context = ctx;
         _log = ctx.logManager().getLog(OutboundReceiver.class);
         _config = cfg;

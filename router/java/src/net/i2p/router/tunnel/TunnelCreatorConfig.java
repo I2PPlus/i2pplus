@@ -342,6 +342,22 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
+     * We failed to contact the first hop for an outbound tunnel,
+     * so immediately stop using it.
+     * For outbound non-zero-hop tunnels only.
+     * <p>
+     * Base hook: marks the tunnel as failed.  Subclasses with a pool
+     * (PooledTunnelCreatorConfig) also notify the pool of the failure.
+     *
+     * @since 0.9.71+ (moved up from PooledTunnelCreatorConfig to break the
+     *        tunnel -> pool package cycle)
+     */
+    public void tunnelFailedFirstHop() {
+        if (isInbound() || getLength() <= 1) {return;}
+        tunnelFailedCompletely();
+    }
+
+    /**
      * Has the tunnel failed completely?
      *
      * @return the tunnel failed

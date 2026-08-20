@@ -23,7 +23,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.Service;
 import net.i2p.router.peermanager.PeerProfile;
-import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
@@ -441,7 +440,7 @@ public class TunnelDispatcher implements Service {
      * @param cfg config for the outbound tunnel we created
      * @return true if successful, false if tunnel ID is a duplicate
      */
-    public boolean joinOutbound(PooledTunnelCreatorConfig cfg) {
+    public boolean joinOutbound(TunnelCreatorConfig cfg) {
         if (_log.shouldInfo())
             _log.info("Outbound Gateway built successfully: " + cfg);
 

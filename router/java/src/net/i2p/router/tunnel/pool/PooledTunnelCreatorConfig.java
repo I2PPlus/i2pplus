@@ -61,9 +61,10 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *
      * @since 0.9.53
      */
+    @Override
     public void tunnelFailedFirstHop() {
         if (isInbound() || getLength() <= 1) {return;}
-        tunnelFailedCompletely();
+        super.tunnelFailedFirstHop();
         _pool.tunnelFailed(this, getPeer(1));
     }
 
