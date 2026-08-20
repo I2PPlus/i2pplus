@@ -4029,12 +4029,14 @@ public class TunnelPool {
     }
 
     /**
-     *  Record cooldown for reused peers so selectPeers respects them.
+     *  Record a diversity cooldown for every reused peer so selectPeers
+     *  respects them on the next selection.  Healthy reused peers are cooled
+     *  down too — the point is to spread reuse across the pool, and peers
+     *  still inside their first-hop failure window are excluded anyway.
      */
     private void recordPeerCooldowns(List<Hash> peers, long now) {
         for (Hash p : peers) {
-            if (!p.equals(_context.routerHash()) &&
-                !TunnelPeerSelector.hasRecoveredFromFailure(_context, p)) {
+            if (!p.equals(_context.routerHash())) {
                 TunnelPeerSelector._peerCooldowns.put(p, now);
             }
         }
