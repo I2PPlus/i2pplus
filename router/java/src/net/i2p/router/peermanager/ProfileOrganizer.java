@@ -1493,31 +1493,75 @@ public class ProfileOrganizer {
         // Rebuild clears tiers, so this catches peers admitted via locked_promoteProfileToTiers()
         // that subsequently developed failures during this reorganize window.
         if (_fastPeers.size() >= MIN_FAST_TIGHT_COUNT) {
-            Iterator<Map.Entry<Hash, PeerProfile>> fastIt = _fastPeers.entrySet().iterator();
-            while (fastIt.hasNext()) {
-                PeerProfile profile = fastIt.next().getValue();
-                if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
-                                   "] from fast tier: recent tunnel failures");
-                    }
-                    fastIt.remove();
-                }
-            }
+            purgeUnusableFromMap(_fastPeers, "fast", now);
         }
         if (_highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT) {
-            Iterator<Map.Entry<Hash, PeerProfile>> hcIt = _highCapacityPeers.entrySet().iterator();
-            while (hcIt.hasNext()) {
-                PeerProfile profile = hcIt.next().getValue();
-                if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
-                                   "] from high-cap tier: recent tunnel failures");
-                    }
-                    hcIt.remove();
+            purgeUnusableFromMap(_highCapacityPeers, "high-cap", now);
+        }
+    }
+
+    /**
+     *  Removes peers with recent tunnel failures or in loss probation from
+     *  the given tier map.  Must be called with the write lock held.
+     *
+     *  @param tier the tier map to purge
+     *  @param tierName "fast" or "high-cap" for the log message
+     *  @param now current time in ms
+     */
+    private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now) {
+        Iterator<Map.Entry<Hash, PeerProfile>> it = tier.entrySet().iterator();
+        while (it.hasNext()) {
+            PeerProfile profile = it.next().getValue();
+            if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
+                               "] from " + tierName + " tier: recent tunnel failures");
                 }
+                it.remove();
             }
         }
+    }
+
+    /**
+     *  Whether a shrunken tier needs restoration: below half its old size
+     *  and the old size was substantial.  Prevents starvation when
+     *  thresholds shift unfavorably.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param currentSize current tier size
+     *  @param oldSize pre-reorganize tier size
+     *  @return whether the tier should be restored
+     *  @since 0.9.71+
+     */
+    static boolean needsTierRestore(int currentSize, int oldSize) {
+        return currentSize < oldSize / 2 && oldSize > 100;
+    }
+
+    /**
+     *  Whether a preserved pre-reorganize tier entry may be re-added: not
+     *  already present in the tier, selectable, no recent tunnel failures,
+     *  not in loss probation (fast tier) or below the loss demotion
+     *  threshold (high-cap tier), and acceptable tunnel acceptance.
+     *  Evaluation order matches the original restore loops.
+     *
+     *  @param peer the peer hash
+     *  @param profile the preserved profile
+     *  @param tier the tier map being restored into
+     *  @param buildSuccess the build success ratio in [0.0, 1.0]
+     *  @param now current time in ms
+     *  @param highCap whether restoring the high-cap tier (loss-demotion
+     *         gate instead of loss probation)
+     *  @return whether the peer may be restored
+     *  @since 0.9.71+
+     */
+    private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
+                                         double buildSuccess, long now, boolean highCap) {
+        if (tier.containsKey(peer)) return false;
+        if (!isSelectable(peer, buildSuccess)) return false;
+        if (hasRecentTunnelFailures(profile)) return false;
+        if (highCap ? hasHighLoss(profile, now) : inLossProbation(profile, now)) return false;
+        return !isLowTunnelAcceptance(profile, buildSuccess);
     }
 
     /**
@@ -1529,20 +1573,17 @@ public class ProfileOrganizer {
         // Prevents starvation when thresholds shift unfavorably — old entries that remain
         // selectable (no recent failures, no ban, no stale RI) are re-added.
         int oldFastSize = oldFastPeers.size();
-        if (_fastPeers.size() < oldFastSize / 2 && oldFastSize > 100) {
+        if (needsTierRestore(_fastPeers.size(), oldFastSize)) {
             int restored = 0;
             for (Map.Entry<Hash, PeerProfile> entry : oldFastPeers.entrySet()) {
                 if (_fastPeers.size() >= oldFastSize) break;
                 Hash peer = entry.getKey();
-                if (_fastPeers.containsKey(peer)) continue;
-                if (!isSelectable(peer, buildSuccess)) continue;
                 PeerProfile profile = entry.getValue();
-                if (hasRecentTunnelFailures(profile)) continue;
-                if (inLossProbation(profile, now)) continue;
-                if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
-                _fastPeers.put(peer, profile);
-                clearLossIfReadmitted(profile);
-                restored++;
+                if (isRestorableTierPeer(peer, profile, _fastPeers, buildSuccess, now, false)) {
+                    _fastPeers.put(peer, profile);
+                    clearLossIfReadmitted(profile);
+                    restored++;
+                }
             }
             if (_log.shouldInfo()) {
                 _log.info("Tier fallback: restored " + restored + " peers to fast tier (was " +
@@ -1550,19 +1591,16 @@ public class ProfileOrganizer {
             }
         }
         int oldHighCapSize = oldHighCapPeers.size();
-        if (_highCapacityPeers.size() < oldHighCapSize / 2 && oldHighCapSize > 100) {
+        if (needsTierRestore(_highCapacityPeers.size(), oldHighCapSize)) {
             int restored = 0;
             for (Map.Entry<Hash, PeerProfile> entry : oldHighCapPeers.entrySet()) {
                 if (_highCapacityPeers.size() >= oldHighCapSize) break;
                 Hash peer = entry.getKey();
-                if (_highCapacityPeers.containsKey(peer)) continue;
-                if (!isSelectable(peer, buildSuccess)) continue;
                 PeerProfile profile = entry.getValue();
-                if (hasRecentTunnelFailures(profile)) continue;
-                if (hasHighLoss(profile, now)) continue;
-                if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
-                _highCapacityPeers.put(peer, profile);
-                restored++;
+                if (isRestorableTierPeer(peer, profile, _highCapacityPeers, buildSuccess, now, true)) {
+                    _highCapacityPeers.put(peer, profile);
+                    restored++;
+                }
             }
             if (_log.shouldInfo()) {
                 _log.info("Tier fallback: restored " + restored + " peers to high-cap tier (was " +
@@ -1720,6 +1758,26 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Whether the peer's last activity (send, heard-from, or heard-about)
+     *  is older than the absent threshold — i.e. it has been absent from
+     *  the netDb for at least that long.  A peer that was never contacted
+     *  (all-zero timestamps) counts as stale.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param profile the profile
+     *  @param now current time in ms
+     *  @param absentThreshold stale threshold in ms
+     *  @return whether the peer is stale-absent
+     *  @since 0.9.71+
+     */
+    static boolean isStaleAbsentPeer(PeerProfile profile, long now, long absentThreshold) {
+        long lastActivity = Math.max(profile.getLastSendSuccessful(),
+                              Math.max(profile.getLastHeardFrom(), profile.getLastHeardAbout()));
+        return now - lastActivity > absentThreshold;
+    }
+
+    /**
      *  Evict profiles for peers no longer in the network database.
      *  Keeps profile files on disk — they'll be reloaded if the peer reappears.
      *  Acquires the write lock.
@@ -1738,10 +1796,7 @@ public class ProfileOrganizer {
                     continue;
                 RouterInfo info = netDb.lookupRouterInfoLocally(peer);
                 if (info != null) continue;
-                long lastActivity = Math.max(profile.getLastSendSuccessful(),
-                                              Math.max(profile.getLastHeardFrom(),
-                                                       profile.getLastHeardAbout()));
-                if (now - lastActivity > netdbAbsentThreshold) {
+                if (isStaleAbsentPeer(profile, now, netdbAbsentThreshold)) {
                     profile.shrinkProfile();
                     if (profile.getIsExpandedDB())
                         profile.shrinkDBProfile();
