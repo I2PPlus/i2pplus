@@ -350,14 +350,22 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, true, rv)) {
-                // Record the failed peers in the exploratory cooldown so the
-                // next selection avoids them.  Only failures are recorded —
-                // successful selections never cooldown peers.
+                // Record only the peer adjacent to us (IBGW for inbound, OBEP
+                // for outbound) in the exploratory cooldown so the next
+                // selection avoids it.  An address-family mismatch with us is
+                // fundamental and won't change between retries, while innocent
+                // middle hops must not be penalized for a failure elsewhere in
+                // the chain — blanket-cooldown collapses the pool during
+                // cascades (mirrors ClientPeerSelector rationale).
+                // Only failures are recorded — successful selections never
+                // cooldown peers.
                 long failNow = ctx.clock().now();
+                int adjIdx = isInbound ? 1 : rv.size() - 2;
                 int recorded = 0;
-                for (Hash peer : rv) {
-                    if (!peer.equals(ctx.routerHash())) {
-                        _exploratoryCooldowns.put(peer, failNow);
+                if (adjIdx >= 0 && adjIdx < rv.size()) {
+                    Hash adjPeer = rv.get(adjIdx);
+                    if (!adjPeer.equals(ctx.routerHash())) {
+                        _exploratoryCooldowns.put(adjPeer, failNow);
                         recorded++;
                     }
                 }
