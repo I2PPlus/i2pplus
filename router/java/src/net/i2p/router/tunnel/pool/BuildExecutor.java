@@ -1357,23 +1357,7 @@ public class BuildExecutor implements Runnable {
          * Used for proportional build allocation so one direction of a pair
          * can't cannibalize the other's share of the build pool.
          */
-        Map<Hash, int[]> pairTargets = new HashMap<>(pools.size());
-        for (TunnelPool p : pools) {
-            if (!p.isAlive()) continue;
-            Hash dest = p.getSettings().getDestination();
-            if (dest == null) continue;
-            int qty = p.getSettings().getTotalQuantity();
-            int[] dirs = pairTargets.get(dest);
-            if (dirs == null) {
-                dirs = new int[2]; // [inboundQty, outboundQty]
-                pairTargets.put(dest, dirs);
-            }
-            if (p.getSettings().isInbound()) {
-                if (dirs[0] == 0 || qty > dirs[0]) dirs[0] = qty;
-            } else {
-                if (dirs[1] == 0 || qty > dirs[1]) dirs[1] = qty;
-            }
-        }
+        Map<Hash, int[]> pairTargets = collectPairTargets(pools);
 
         // Track per-direction builds requested in this iteration for capping
         Map<Hash, int[]> pairRequested = new HashMap<>(pools.size());
@@ -1389,14 +1373,8 @@ public class BuildExecutor implements Runnable {
         Object[][] scored2 = new Object[ss][2];
         for (int si = 0; si < ss; si++) {
             TunnelPool p = sorted.get(si);
-            int usable = p.getUsableTunnelCount();
-            int target = Math.max(2, p.getSettings().getTotalQuantity());
-            int deficit = target - usable;
-            int s;
-            if (usable == 0) {s = 1 << 20;}
-            else if (usable <= 2) {s = 1 << 16;}
-            else {s = Math.max(0, deficit);}
-            scored2[si][0] = s;
+            scored2[si][0] = computeUrgencyScore(p.getUsableTunnelCount(),
+                                                 Math.max(2, p.getSettings().getTotalQuantity()));
             scored2[si][1] = p;
         }
         Arrays.sort(scored2, SCORE_COMPARATOR);
@@ -1421,83 +1399,22 @@ public class BuildExecutor implements Runnable {
             List<TunnelInfo> tunnels = pool.listTunnels();
             boolean allowZeroHop = pool.getSettings().getAllowZeroHop();
 
-            int expire30s = 0;
-            int expire90s = 0;
-            int expire150s = 0;
-            int expire210s = 0;
-            int expire270s = 0;
-            int expire330s = 0;
-            int expireLater = 0;
-            int fallbackCount = 0;
-            int goodExpire30s = 0;
-            int goodExpire90s = 0;
-            int goodExpire150s = 0;
-            int goodExpire210s = 0;
-            int goodExpire270s = 0;
-            int goodExpire330s = 0;
-            int goodExpireLater = 0;
-            int goodCount = 0;
-            long totalLatency = 0;
-
-            for (TunnelInfo info : tunnels) {
-                if (!allowZeroHop && info.getLength() <= 1) {
-                    fallbackCount++;
-                    continue;
-                }
-
-                /* Skip completely dead tunnels — they'll be removed by ExpireJob
-                 * and must NOT fill the deficit or they'll block replacement builds.
-                 */
-                if (info.getTunnelFailed() || info.getConsecutiveFailures() > 3) {continue;}
-                boolean isGood = info.getTestStatus() == TunnelTestStatus.GOOD &&
-                                 info.getConsecutiveFailures() <= 1;
-                if (isGood) {
-                    goodCount++;
-                    int lat = TunnelPool.getTunnelAvgLatency(info);
-                    if (lat > 0) totalLatency += lat;
-                }
-                long timeToExpire = info.getExpiration() - now;
-                if (timeToExpire <= 0) {
-                    expire30s++;
-                    if (isGood) goodExpire30s++;
-                } else if (timeToExpire <= 30*1000) {
-                    expire30s++;
-                    if (isGood) goodExpire30s++;
-                } else if (timeToExpire <= 90*1000) {
-                    expire90s++;
-                    if (isGood) goodExpire90s++;
-                } else if (timeToExpire <= 150*1000) {
-                    expire150s++;
-                    if (isGood) goodExpire150s++;
-                } else if (timeToExpire <= 210*1000) {
-                    expire210s++;
-                    if (isGood) goodExpire210s++;
-                } else if (timeToExpire <= 270*1000) {
-                    expire270s++;
-                    if (isGood) goodExpire270s++;
-                } else if (timeToExpire <= 330*1000) {
-                    expire330s++;
-                    if (isGood) goodExpire330s++;
-                } else {
-                    expireLater++;
-                    if (isGood) goodExpireLater++;
-                }
-            }
+            ExpiryBuckets buckets = countExpiryBuckets(tunnels, now, allowZeroHop);
 
             int inProgress = pool.getInProgressCount();
-            int remainingWanted = target - expireLater;
-            if (allowZeroHop) remainingWanted -= fallbackCount;
+            int remainingWanted = target - buckets.expireLater;
+            if (allowZeroHop) remainingWanted -= buckets.fallbackCount;
 
             /* Walk through urgency windows, counting what's covered by later-expiring tunnels.
              * This uses ALL tunnels (including FAILING) so retained tunnels fill the deficit
              * and prevent unnecessary builds.
              */
-            for (int i = 0; i < expire330s && remainingWanted > 0; i++) remainingWanted--;
-            for (int i = 0; i < expire270s && remainingWanted > 0; i++) remainingWanted--;
-            for (int i = 0; i < expire210s && remainingWanted > 0; i++) remainingWanted--;
-            for (int i = 0; i < expire150s && remainingWanted > 0; i++) remainingWanted--;
-            for (int i = 0; i < expire90s && remainingWanted > 0; i++) remainingWanted--;
-            for (int i = 0; i < expire30s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < buckets.expire330s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < buckets.expire270s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < buckets.expire210s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < buckets.expire150s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < buckets.expire90s && remainingWanted > 0; i++) remainingWanted--;
+            for (int i = 0; i < buckets.expire30s && remainingWanted > 0; i++) remainingWanted--;
 
             int builds;
             /* Check if pool is critically low on GOOD tunnels before entering
@@ -1536,7 +1453,7 @@ public class BuildExecutor implements Runnable {
                  * 60s loop catches subsequent needs and ensureSufficientTunnels
                  * covers event-driven fills between loops.
                  */
-                builds = expire330s + expire270s + expire210s + expire150s + expire90s + expire30s + remainingWanted;
+                builds = buckets.expire330s + buckets.expire270s + buckets.expire210s + buckets.expire150s + buckets.expire90s + buckets.expire30s + remainingWanted;
             } else {
                 /* At capacity — skip proactive building, addTunnel() would reject.
                  * Only deficit builds (above) bypass this check since they fill
@@ -1555,8 +1472,8 @@ public class BuildExecutor implements Runnable {
                  * Without this, when all tunnels are FAILING the pool has zero viable tunnels but
                  * doesn't trigger builds (numerical deficit is satisfied by FAILING tunnels).
                  */
-                builds = Math.min(goodExpire330s + goodExpire270s + goodExpire210s, target);
-                int goodDeficit = target - goodExpireLater;
+                builds = Math.min(buckets.goodExpire330s + buckets.goodExpire270s + buckets.goodExpire210s, target);
+                int goodDeficit = target - buckets.goodExpireLater;
                 if (goodDeficit > 0) {
                     /* Don't build when untested tunnels can cover the deficit.
                      * UNTESTED tunnels are recently built and awaiting testing —
@@ -1589,8 +1506,8 @@ public class BuildExecutor implements Runnable {
              * the next LeaseSet publication.  Only when the pool isn't critical
              * (has at least some GOOD tunnels) — capacity takes priority.
              */
-            if (goodCount > 0 && !isCritical) {
-                long avgLatency = totalLatency / goodCount;
+            if (buckets.goodCount > 0 && !isCritical) {
+                long avgLatency = buckets.totalLatency / buckets.goodCount;
                 int latencyThreshold = _context.getProperty("router.latencyBuildThreshold", 1500);
                 if (avgLatency > latencyThreshold) {
                     int excess = (int)((avgLatency - latencyThreshold) / 500);
@@ -1671,6 +1588,182 @@ public class BuildExecutor implements Runnable {
             for (int i = 0; i < builds; i++) {
                 wanted.add(pool);
             }
+        }
+    }
+
+    /**
+     *  Collect per-direction build quantity targets for paired destinations,
+     *  used by the proportional per-direction cap in calculatePairedBuilds().
+     *  For each destination the inbound and outbound quantities are the maxima
+     *  of the quantities configured on the pools for that direction, so a pair
+     *  with asymmetric quantities (e.g. 4 inbound / 2 outbound) splits the
+     *  build budget proportionally instead of 50/50.
+     *
+     *  @param pools pools to scan; dead pools and pools without a destination
+     *               are skipped
+     *  @return destination -&gt; int[2] {inboundQty, outboundQty}, never null
+     *  @since 0.9.71+
+     */
+    static Map<Hash, int[]> collectPairTargets(List<TunnelPool> pools) {
+        Map<Hash, int[]> pairTargets = new HashMap<>(pools.size());
+        for (TunnelPool p : pools) {
+            if (!p.isAlive()) continue;
+            Hash dest = p.getSettings().getDestination();
+            if (dest == null) continue;
+            int qty = p.getSettings().getTotalQuantity();
+            int[] dirs = pairTargets.get(dest);
+            if (dirs == null) {
+                dirs = new int[2]; // [inboundQty, outboundQty]
+                pairTargets.put(dest, dirs);
+            }
+            if (p.getSettings().isInbound()) {
+                if (dirs[0] == 0 || qty > dirs[0]) dirs[0] = qty;
+            } else {
+                if (dirs[1] == 0 || qty > dirs[1]) dirs[1] = qty;
+            }
+        }
+        return pairTargets;
+    }
+
+    /**
+     *  Urgency score used to sort pools before build allocation, so a
+     *  collapsed or near-collapse pool earlier in the list cannot consume
+     *  build slots (or trigger the proportional cap) before an urgent pool
+     *  later in the list gets any.  Scores are tiered far apart on purpose:
+     *  0 usable tunnels (1 &lt;&lt; 20) outrank 1-2 usable (1 &lt;&lt; 16) which outrank
+     *  any numerical deficit, so the sort order is stable regardless of
+     *  configured quantities.
+     *
+     *  @param usableCount current usable tunnel count of the pool
+     *  @param target minimum desired tunnel count (already clamped to >= 2)
+     *  @return urgency score; larger sorts earlier
+     *  @since 0.9.71+
+     */
+    static int computeUrgencyScore(int usableCount, int target) {
+        if (usableCount == 0) {return 1 << 20;}
+        else if (usableCount <= 2) {return 1 << 16;}
+        else {return Math.max(0, target - usableCount);}
+    }
+
+    /**
+     *  Count a pool's tunnels into cumulative expiry-window buckets.
+     *  Tunnels at or below one window boundary fall into that window (and no
+     *  later one), so expire30s is "expires within 30s", expire90s is
+     *  "within 90s but not 30s", and so on; expireLater covers everything
+     *  beyond 330s.  Each bucket has a GOOD-only twin (good status and at
+     *  most 1 consecutive failure) used for proactive replacement, plus
+     *  aggregates: zero-hop fallback count, GOOD count and their total
+     *  latency.
+     *
+     *  @param tunnels tunnels of one pool, never null
+     *  @param now current time, used to compute time-to-expiry
+     *  @param allowZeroHop if false, length-1 tunnels are counted as
+     *                      fallbackCount and skipped; if true they are
+     *                      counted normally
+     *  @return bucket counts, never null
+     *  @since 0.9.71+
+     */
+    static ExpiryBuckets countExpiryBuckets(List<TunnelInfo> tunnels, long now, boolean allowZeroHop) {
+        int fallbackCount = 0;
+        int expire30s = 0;
+        int expire90s = 0;
+        int expire150s = 0;
+        int expire210s = 0;
+        int expire270s = 0;
+        int expire330s = 0;
+        int expireLater = 0;
+        int goodExpire30s = 0;
+        int goodExpire90s = 0;
+        int goodExpire150s = 0;
+        int goodExpire210s = 0;
+        int goodExpire270s = 0;
+        int goodExpire330s = 0;
+        int goodExpireLater = 0;
+        int goodCount = 0;
+        long totalLatency = 0;
+
+        for (TunnelInfo info : tunnels) {
+            if (!allowZeroHop && info.getLength() <= 1) {
+                fallbackCount++;
+                continue;
+            }
+
+            /* Skip completely dead tunnels — they'll be removed by ExpireJob
+             * and must NOT fill the deficit or they'll block replacement builds.
+             */
+            if (info.getTunnelFailed() || info.getConsecutiveFailures() > 3) {continue;}
+            boolean isGood = info.getTestStatus() == TunnelTestStatus.GOOD &&
+                             info.getConsecutiveFailures() <= 1;
+            if (isGood) {
+                goodCount++;
+                int lat = TunnelPool.getTunnelAvgLatency(info);
+                if (lat > 0) totalLatency += lat;
+            }
+            long timeToExpire = info.getExpiration() - now;
+            if (timeToExpire <= 0) {
+                expire30s++;
+                if (isGood) goodExpire30s++;
+            } else if (timeToExpire <= 30*1000) {
+                expire30s++;
+                if (isGood) goodExpire30s++;
+            } else if (timeToExpire <= 90*1000) {
+                expire90s++;
+                if (isGood) goodExpire90s++;
+            } else if (timeToExpire <= 150*1000) {
+                expire150s++;
+                if (isGood) goodExpire150s++;
+            } else if (timeToExpire <= 210*1000) {
+                expire210s++;
+                if (isGood) goodExpire210s++;
+            } else if (timeToExpire <= 270*1000) {
+                expire270s++;
+                if (isGood) goodExpire270s++;
+            } else if (timeToExpire <= 330*1000) {
+                expire330s++;
+                if (isGood) goodExpire330s++;
+            } else {
+                expireLater++;
+                if (isGood) goodExpireLater++;
+            }
+        }
+        return new ExpiryBuckets(fallbackCount, expire30s, expire90s, expire150s, expire210s, expire270s,
+                                 expire330s, expireLater, goodExpire30s, goodExpire90s, goodExpire150s,
+                                 goodExpire210s, goodExpire270s, goodExpire330s, goodExpireLater,
+                                 goodCount, totalLatency);
+    }
+
+    /**
+     *  Immutable result of {@link #countExpiryBuckets(List, long, boolean)}.
+     */
+    static class ExpiryBuckets {
+        public final int fallbackCount;
+        public final int expire30s, expire90s, expire150s, expire210s, expire270s, expire330s, expireLater;
+        public final int goodExpire30s, goodExpire90s, goodExpire150s, goodExpire210s, goodExpire270s,
+                         goodExpire330s, goodExpireLater;
+        public final int goodCount;
+        public final long totalLatency;
+
+        ExpiryBuckets(int fallbackCount, int expire30s, int expire90s, int expire150s, int expire210s,
+                      int expire270s, int expire330s, int expireLater, int goodExpire30s, int goodExpire90s,
+                      int goodExpire150s, int goodExpire210s, int goodExpire270s, int goodExpire330s,
+                      int goodExpireLater, int goodCount, long totalLatency) {
+            this.fallbackCount = fallbackCount;
+            this.expire30s = expire30s;
+            this.expire90s = expire90s;
+            this.expire150s = expire150s;
+            this.expire210s = expire210s;
+            this.expire270s = expire270s;
+            this.expire330s = expire330s;
+            this.expireLater = expireLater;
+            this.goodExpire30s = goodExpire30s;
+            this.goodExpire90s = goodExpire90s;
+            this.goodExpire150s = goodExpire150s;
+            this.goodExpire210s = goodExpire210s;
+            this.goodExpire270s = goodExpire270s;
+            this.goodExpire330s = goodExpire330s;
+            this.goodExpireLater = goodExpireLater;
+            this.goodCount = goodCount;
+            this.totalLatency = totalLatency;
         }
     }
 
