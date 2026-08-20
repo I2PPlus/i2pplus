@@ -732,6 +732,41 @@ class ClientPeerSelector extends TunnelPeerSelector {
         return softExclude;
     }
 
+    /**
+     *  Whether the selection may use the progressive stress fallbacks and
+     *  the shortened-tunnel allowance: network stress (build success below
+     *  the attack threshold) or HighCap-primary mode, with at least one peer
+     *  already selected.  Pure decision — no side effects.
+     *
+     *  @param buildSuccess current tunnel build success rate
+     *  @param useHighCapPrimary whether the selection prefers high-capacity peers
+     *  @param rvSize current number of selected peers
+     *  @return whether stress fallbacks may be attempted
+     *  @since 0.9.71+
+     */
+    static boolean canUseStressFallback(double buildSuccess, boolean useHighCapPrimary, int rvSize) {
+        return (buildSuccess < ATTACK_THRESHOLD || useHighCapPrimary) && rvSize > 0;
+    }
+
+    /**
+     *  Adopts the fallback peer set when it has candidates: clears the
+     *  running selection and replaces it with the fallback.  Returns whether
+     *  the fallback was adopted so callers can log success with the adopted
+     *  size.  Mutates only {@code rv}.
+     *
+     *  @param rv the running selection, replaced when {@code fallback} is non-empty
+     *  @param fallback the fallback candidates (self already removed)
+     *  @return whether the fallback was adopted
+     *  @since 0.9.71+
+     */
+    static boolean adoptIfFilled(List<Hash> rv, Set<Hash> fallback) {
+        if (fallback.isEmpty())
+            return false;
+        rv.clear();
+        rv.addAll(fallback);
+        return true;
+    }
+
     /** Progressive fallbacks when the selected peers are short of the requested length. @return the final rv, or null to abort (returns empty list) */
     private List<Hash> applyShortfallFallbacks(TunnelPoolSettings settings, List<Hash> rv, int length,
                                                SelectionParams params, SelectionExclusions ex) {
@@ -759,15 +794,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 ArraySet<Hash> fallback = new ArraySet<>(min);
                 ctx.profileOrganizer().selectFastPeers(min, exclude, fallback, 0, null);
                 fallback.remove(ctx.routerHash());
-                if (!fallback.isEmpty()) {
-                    rv.clear();
-                    rv.addAll(fallback);
-                }
+                adoptIfFilled(rv, fallback);
             } else {
                 // Progressive fallback under network stress based on build success rate
-                boolean isUnderStress = params.buildSuccess < ATTACK_THRESHOLD;
-
-                if ((isUnderStress || params.useHighCapPrimary) && !rv.isEmpty()) {
+                if (canUseStressFallback(params.buildSuccess, params.useHighCapPrimary, rv.size())) {
                     // Network stress or HighCap mode: try fallback with relaxed restrictions
                     if (log.shouldInfo()) {
                         log.info("Network stress or HighCap primary (" + (int) (params.buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
@@ -778,12 +808,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     ctx.profileOrganizer().selectHighCapacityPeers(min, exclude, fallback, 0, null);
                     fallback.remove(ctx.routerHash());
 
-                    if (!fallback.isEmpty()) {
-                        rv.clear();
-                        rv.addAll(fallback);
-                        if (log.shouldDebug()) {
-                            log.debug("HighCap fallback successful: found " + rv.size() + " peers for tunnel");
-                        }
+                    if (adoptIfFilled(rv, fallback) && log.shouldDebug()) {
+                        log.debug("HighCap fallback successful: found " + rv.size() + " peers for tunnel");
                     }
 
                     // If still not enough, try fast peers
@@ -791,10 +817,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         fallback.clear();
                         ctx.profileOrganizer().selectFastPeers(min, exclude, fallback, 0, null);
                         fallback.remove(ctx.routerHash());
-                        if (!fallback.isEmpty()) {
-                            rv.clear();
-                            rv.addAll(fallback);
-                        }
+                        adoptIfFilled(rv, fallback);
                     }
 
                     // If still not enough, try active (connected) peers
@@ -803,12 +826,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectActiveNotFailingPeers(min, exclude, fallback, 0, null);
                         fallback.remove(ctx.routerHash());
 
-                        if (!fallback.isEmpty()) {
-                            rv.clear();
-                            rv.addAll(fallback);
-                            if (log.shouldDebug()) {
-                                log.debug("Active fallback successful: found " + rv.size() + " peers for tunnel");
-                            }
+                        if (adoptIfFilled(rv, fallback) && log.shouldDebug()) {
+                            log.debug("Active fallback successful: found " + rv.size() + " peers for tunnel");
                         }
                     }
 
@@ -818,12 +837,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectNotFailingPeers(min, exclude, nfFallback, false, 0, null);
                         nfFallback.remove(ctx.routerHash());
 
-                        if (!nfFallback.isEmpty()) {
-                            rv.clear();
-                            rv.addAll(nfFallback);
-                            if (log.shouldDebug()) {
-                                log.debug("Not-failing fallback successful: found " + rv.size() + " peers for tunnel");
-                            }
+                        if (adoptIfFilled(rv, nfFallback) && log.shouldDebug()) {
+                            log.debug("Not-failing fallback successful: found " + rv.size() + " peers for tunnel");
                         }
                     }
 
@@ -832,10 +847,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ArraySet<Hash> allFallback = new ArraySet<>(min);
                         ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, allFallback, false);
                         allFallback.remove(ctx.routerHash());
-                        if (!allFallback.isEmpty()) {
-                            rv.clear();
-                            rv.addAll(allFallback);
-                        }
+                        adoptIfFilled(rv, allFallback);
                     }
 
                     // If still not enough, try with even more relaxed criteria but prefer better peers
@@ -850,9 +862,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectActiveNotFailingPeers(min, exclude, qualityFallback);
                         qualityFallback.remove(ctx.routerHash());
 
-                        if (!qualityFallback.isEmpty()) {
-                            rv.clear();
-                            rv.addAll(qualityFallback);
+                        if (adoptIfFilled(rv, qualityFallback)) {
                             if (log.shouldDebug()) {
                                 log.debug("Quality-aware fallback successful: found " + rv.size() + " peers");
                             }
@@ -865,12 +875,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
                             relaxedFallback.remove(ctx.routerHash());
 
-                            if (!relaxedFallback.isEmpty()) {
-                                rv.clear();
-                                rv.addAll(relaxedFallback);
-                                if (log.shouldDebug()) {
-                                    log.debug("Emergency fallback: found " + rv.size() + " peers");
-                                }
+                            if (adoptIfFilled(rv, relaxedFallback) && log.shouldDebug()) {
+                                log.debug("Emergency fallback: found " + rv.size() + " peers");
                             }
                         }
                     }
@@ -878,7 +884,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
                 // Final check - if still not enough peers and we have some, allow shorter tunnel
                 if (rv.size() < min) {
-                    if ((isUnderStress || params.useHighCapPrimary) && !rv.isEmpty()) {
+                    if (canUseStressFallback(params.buildSuccess, params.useHighCapPrimary, rv.size())) {
                         // Under stress but have some peers - allow shorter tunnel instead of null
                         if (log.shouldDebug()) {
                             log.debug("Network stress: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
