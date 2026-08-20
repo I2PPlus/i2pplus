@@ -982,17 +982,30 @@ public class ProfileOrganizer {
         }
 
         if (matches.size() < howMany) {
-            if (_log.shouldDebug()) {
-                _log.debug("Need " + howMany + " Not Failing peers -> " + matches.size() +
-                           " found, selecting remainder from general peers...");
-            }
+            selectRemainderFromAllPeers(howMany, exclude, matches, buildSuccess);
+        }
+    }
 
-            Set<Hash> allPeers = selectAllPeers();
-            for (Hash peer : allPeers) {
-                if (matches.size() >= howMany) break;
-                if (matches.contains(peer) || (exclude != null && exclude.contains(peer))) continue;
-                if (isSelectable(peer, buildSuccess)) matches.add(peer);
-            }
+    /**
+     *  Fallback selection: fill the remaining slots from the union of all
+     *  peers (fast + high-capacity + not-failing).
+     *
+     *  @param howMany target number of peers
+     *  @param exclude peers to exclude (may be null)
+     *  @param matches output set populated with selected peer hashes
+     *  @param buildSuccess the build success ratio, fetched once per scan
+     */
+    private void selectRemainderFromAllPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, double buildSuccess) {
+        if (_log.shouldDebug()) {
+            _log.debug("Need " + howMany + " Not Failing peers -> " + matches.size() +
+                       " found, selecting remainder from general peers...");
+        }
+
+        Set<Hash> allPeers = selectAllPeers();
+        for (Hash peer : allPeers) {
+            if (matches.size() >= howMany) break;
+            if (matches.contains(peer) || (exclude != null && exclude.contains(peer))) continue;
+            if (isSelectable(peer, buildSuccess)) matches.add(peer);
         }
     }
 
@@ -1214,6 +1227,47 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Whether a profile has expired from its activity tier and should be
+     *  purged: no activity (send/heard/heard-about) within the tier's
+     *  expiration window.  Tiered expiration: Active > Passive > Gossip;
+     *  profiles with no tunnel history are purged on the tighter untracked
+     *  window regardless of tier.  A profile with zero timestamps sits in
+     *  the gossip tier.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param profile the profile
+     *  @param now current time in ms
+     *  @param expireActive active-tier window in ms
+     *  @param expirePassive passive-tier window in ms
+     *  @param expireGossip gossip-tier window in ms
+     *  @param expireUntracked untracked window in ms
+     *  @return whether the profile is expired
+     *  @since 0.9.71+
+     */
+    static boolean isExpiredProfile(PeerProfile profile, long now, long expireActive, long expirePassive,
+                                    long expireGossip, long expireUntracked) {
+        long lastSend = profile.getLastSendSuccessful();
+        long lastHeard = profile.getLastHeardFrom();
+        long lastHeardAbout = profile.getLastHeardAbout();
+        long expireWindow;
+        if (lastSend > 0) {
+            expireWindow = expireActive;
+        } else if (lastHeard > 0 || lastHeardAbout > 0) {
+            expireWindow = expirePassive;
+        } else {
+            expireWindow = expireGossip;
+        }
+        if (!profile.hasTunnelHistory()) {
+            // No tunnel build participation — purge from memory quickly
+            // regardless of activity tier.
+            expireWindow = Math.min(expireWindow, expireUntracked);
+        }
+        long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));
+        return cutoff < now - expireWindow;
+    }
+
+    /**
      *  Builds the candidate profile set for this reorganize round, filtering
      *  expired, unreachable, and excluded profiles.
      */
@@ -1229,26 +1283,7 @@ public class ProfileOrganizer {
                 continue;
             }
 
-            // Tiered expiration: Active > Passive > Gossip
-            long lastSend = profile.getLastSendSuccessful();
-            long lastHeard = profile.getLastHeardFrom();
-            long lastHeardAbout = profile.getLastHeardAbout();
-            long expireWindow;
-            if (lastSend > 0) {
-                expireWindow = expireActive;
-            } else if (lastHeard > 0 || lastHeardAbout > 0) {
-                expireWindow = expirePassive;
-            } else {
-                expireWindow = expireGossip;
-            }
-            if (!profile.hasTunnelHistory()) {
-                // No tunnel build participation — purge from memory quickly
-                // regardless of activity tier.
-                expireWindow = Math.min(expireWindow, expireUntracked);
-            }
-
-            long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));
-            if (cutoff < now - expireWindow) {
+            if (isExpiredProfile(profile, now, expireActive, expirePassive, expireGossip, expireUntracked)) {
                 expiredCount++;
                 profile.shrinkProfile();
                 if (profile.getIsExpandedDB()) {
@@ -1301,6 +1336,65 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Common gate for fast/high-cap tier fill passes: the peer must be
+     *  selectable, have acceptable tunnel acceptance, no recent tunnel
+     *  failures, and not be in loss probation.  Evaluation order preserves
+     *  the original short-circuit chain (cheap pure checks before the
+     *  netDb-backed selectability check is already handled by callers that
+     *  test other cheap conditions first).
+     *  <p>
+     *  No side effects — safe to evaluate without holding locks.
+     *
+     *  @param profile the candidate profile
+     *  @param buildSuccess the build success ratio in [0.0, 1.0]
+     *  @param now current time in ms
+     *  @return whether the peer passes the tier gates
+     *  @since 0.9.71+
+     */
+    boolean passesTierGates(PeerProfile profile, double buildSuccess, long now) {
+        return isSelectable(profile.getPeer(), buildSuccess) &&
+               !isLowTunnelAcceptance(profile, buildSuccess) &&
+               !hasRecentTunnelFailures(profile) &&
+               !inLossProbation(profile, now);
+    }
+
+    /**
+     *  True if the peer showed recent activity within the given cutoff: a
+     *  heard-from or successful send at or after the cutoff.  Used to keep
+     *  stale peers out of the fast/high-cap tiers.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param profile the profile
+     *  @param activeCutoff earliest allowed activity timestamp in ms
+     *  @return whether the peer has recent activity
+     *  @since 0.9.71+
+     */
+    static boolean hasRecentTierActivity(PeerProfile profile, long activeCutoff) {
+        return profile.getLastHeardFrom() >= activeCutoff ||
+               profile.getLastSendSuccessful() >= activeCutoff;
+    }
+
+    /**
+     *  Full eligibility gate for filling the fast/high-cap tiers from the
+     *  active profile set: not ourselves, passes the tier gates, and active
+     *  within the cutoff window.
+     *
+     *  @param profile the candidate profile
+     *  @param buildSuccess the build success ratio in [0.0, 1.0]
+     *  @param now current time in ms
+     *  @param activeCutoff earliest allowed activity timestamp in ms
+     *  @return whether the peer may be added to the tier
+     *  @since 0.9.71+
+     */
+    private boolean isEligibleForTierFill(PeerProfile profile, double buildSuccess, long now, long activeCutoff) {
+        if (profile.getPeer().equals(_us)) return false;
+        if (!passesTierGates(profile, buildSuccess, now)) return false;
+        // Require recent activity — don't fill fast tier with stale peers
+        return hasRecentTierActivity(profile, activeCutoff);
+    }
+
+    /**
      *  Fills the fast tier to the minimum via up to three fallback passes.
      *  Must be called with the write lock held.  Returns the number added.
      */
@@ -1323,9 +1417,7 @@ public class ProfileOrganizer {
             for (int i = 0; i < candidates.size(); i++) {
                 if (_fastPeers.size() >= target) break;
                 PeerProfile profile = candidates.get(i);
-                if (profile.isLowLatency() && isSelectable(profile.getPeer(), buildSuccess) &&
-                    !isLowTunnelAcceptance(profile, buildSuccess) && !hasRecentTunnelFailures(profile) &&
-                    !inLossProbation(profile, now)) {
+                if (profile.isLowLatency() && passesTierGates(profile, buildSuccess, now)) {
                     _fastPeers.put(profile.getPeer(), profile);
                     clearLossIfReadmitted(profile);
                     added++;
@@ -1340,8 +1432,7 @@ public class ProfileOrganizer {
                     if (_fastPeers.size() >= target) break;
                     PeerProfile profile = candidates.get(i);
                     if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
-                        isSelectable(profile.getPeer(), buildSuccess) && !isLowTunnelAcceptance(profile, buildSuccess) &&
-                        !hasRecentTunnelFailures(profile) && !inLossProbation(profile, now)) {
+                        passesTierGates(profile, buildSuccess, now)) {
                         _fastPeers.put(profile.getPeer(), profile);
                         clearLossIfReadmitted(profile);
                         added++;
@@ -1359,17 +1450,11 @@ public class ProfileOrganizer {
                 long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
                 for (PeerProfile profile : activeProfiles) {
                     if (_fastPeers.size() >= target) break;
-                    if (profile.getPeer().equals(_us)) continue;
-                    if (!isSelectable(profile.getPeer(), buildSuccess)) continue;
-                    if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
-                    if (hasRecentTunnelFailures(profile)) continue;
-                    if (inLossProbation(profile, now)) continue;
-                    // Require recent activity — don't fill fast tier with stale peers
-                    if (profile.getLastHeardFrom() < activeCutoff &&
-                        profile.getLastSendSuccessful() < activeCutoff) continue;
-                    _fastPeers.put(profile.getPeer(), profile);
-                    clearLossIfReadmitted(profile);
-                    added++;
+                    if (isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
+                        _fastPeers.put(profile.getPeer(), profile);
+                        clearLossIfReadmitted(profile);
+                        added++;
+                    }
                 }
             }
         }
@@ -1390,17 +1475,11 @@ public class ProfileOrganizer {
             long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
             for (PeerProfile profile : activeProfiles) {
                 if (_highCapacityPeers.size() >= minHighCap) break;
-                if (profile.getPeer().equals(_us)) continue;
-                if (!isSelectable(profile.getPeer(), buildSuccess)) continue;
-                if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
-                if (hasRecentTunnelFailures(profile)) continue;
-                if (inLossProbation(profile, now)) continue;
-                // Require recent activity — don't fill high-cap tier with stale peers
-                if (profile.getLastHeardFrom() < activeCutoff &&
-                    profile.getLastSendSuccessful() < activeCutoff) continue;
-                _highCapacityPeers.put(profile.getPeer(), profile);
-                clearLossIfReadmitted(profile);
-                highCapAdded++;
+                if (isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
+                    _highCapacityPeers.put(profile.getPeer(), profile);
+                    clearLossIfReadmitted(profile);
+                    highCapAdded++;
+                }
             }
         }
         return highCapAdded;
