@@ -1677,16 +1677,14 @@ public class ProfileOrganizer {
      * <ol>
      *   <li>Peers in _fastPeers (fast + reliable)</li>
      *   <li>Peers in _highCapacityPeers</li>
-     *   <li>Peers with recent activity (last 2 hours)</li>
+     *   <li>Peers with recent activity (last 48 hours)</li>
      *   <li>Peers with higher capacity value</li>
      * </ol>
      * <p>
      * This method assumes the write lock is held.
      */
     private void enforceProfileCap() {
-        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, _defaultMaxProfiles);
-        if (maxProfiles < 100) maxProfiles = 100;
-        if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
+        int maxProfiles = clampMaxProfiles(_context.getProperty(PROP_MAX_PROFILES, _defaultMaxProfiles));
 
         if (_notFailingPeers.size() <= maxProfiles) {
             return; // within limits
@@ -1717,19 +1715,10 @@ public class ProfileOrganizer {
         int highCapacityLimit = isFirewalledRouter ? 2400 : 1200;
 
         for (PeerProfile profile : _notFailingPeers.values()) {
-            Hash peer = profile.getPeer();
-
-            if ((_fastPeers.containsKey(peer) && _fastPeers.size() <= fastPeerLimit) ||
-                (_highCapacityPeers.containsKey(peer) && _highCapacityPeers.size() <= highCapacityLimit)) {
-                continue; // protected
+            if (isEvictable(profile, _fastPeers, _highCapacityPeers, activeThreshold,
+                            fastPeerLimit, highCapacityLimit)) {
+                candidates.add(profile);
             }
-
-            // Keep peers active in last 48 hours
-            if (profile.getLastSendSuccessful() >= activeThreshold ||
-                profile.getLastHeardFrom() >= activeThreshold) {
-                continue;
-            }
-            candidates.add(profile);
         }
 
         // Sort by capacity (lowest first) → evict low-capacity, inactive peers first
@@ -1755,6 +1744,49 @@ public class ProfileOrganizer {
         if (_log.shouldInfo()) {
             _log.info("Evicted " + evicted + " low-priority profiles to enforce cap (" + maxProfiles + ")");
         }
+    }
+
+    /**
+     *  Clamps the configured max-profiles value into [100, ABSOLUTE_MAX_PROFILES].
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param maxProfiles the configured or default value
+     *  @return the clamped value
+     *  @since 0.9.71+
+     */
+    static int clampMaxProfiles(int maxProfiles) {
+        if (maxProfiles < 100) maxProfiles = 100;
+        if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
+        return maxProfiles;
+    }
+
+    /**
+     *  Whether a profile is eligible for eviction under the profile cap:
+     *  not protected by a fast/high-cap tier slot that still has room below
+     *  its limit, and no send or heard-from activity within the active window.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param profile the profile under consideration
+     *  @param fastPeers the current fast tier map
+     *  @param highCapPeers the current high-cap tier map
+     *  @param activeThreshold the activity window cutoff (now - 48h)
+     *  @param fastPeerLimit fast tier size threshold for protection
+     *  @param highCapacityLimit high-cap tier size threshold for protection
+     *  @return whether the profile may be evicted
+     *  @since 0.9.71+
+     */
+    static boolean isEvictable(PeerProfile profile, Map<Hash, PeerProfile> fastPeers,
+                               Map<Hash, PeerProfile> highCapPeers, long activeThreshold,
+                               int fastPeerLimit, int highCapacityLimit) {
+        Hash peer = profile.getPeer();
+        if ((fastPeers.containsKey(peer) && fastPeers.size() <= fastPeerLimit) ||
+            (highCapPeers.containsKey(peer) && highCapPeers.size() <= highCapacityLimit)) {
+            return false;
+        }
+        return profile.getLastSendSuccessful() < activeThreshold &&
+               profile.getLastHeardFrom() < activeThreshold;
     }
 
     /**
