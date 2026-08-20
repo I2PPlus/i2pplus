@@ -1104,65 +1104,151 @@ class ClientPeerSelector extends TunnelPeerSelector {
     /**
      *  Build a comparator that orders peers by tunnel-building quality: excluded
      *  peers last, then by acceptance ratio, activity recency, and tunnel-test latency.
+     *  <p>
+     *  Stage order is significant — each stage short-circuits the ones below it.
      *
      *  @param exclude peers to deprioritize, or null
      *  @param now current time from the router clock
      *  @param thirtyMinutes activity window in ms
      *  @since 0.9.70+
      */
-    private Comparator<Hash> peerQualityComparator(Set<Hash> exclude, long now, long thirtyMinutes) {
-        return (p1, p2) -> {
-            if (exclude != null && exclude.contains(p1)) {
-                if (exclude.contains(p2)) return 0;
-                return 1;
-            }
-            if (exclude != null && exclude.contains(p2)) return -1;
+    Comparator<Hash> peerQualityComparator(Set<Hash> exclude, long now, long thirtyMinutes) {
+        return (p1, p2) -> compareQuality(p1, p2, exclude,
+                                          ctx.profileOrganizer().getProfile(p1),
+                                          ctx.profileOrganizer().getProfile(p2),
+                                          now, thirtyMinutes);
+    }
 
-            PeerProfile prof1 = ctx.profileOrganizer().getProfile(p1);
-            PeerProfile prof2 = ctx.profileOrganizer().getProfile(p2);
-            double ar1 = prof1 != null ? prof1.getTunnelAcceptanceRatio() : 1.0;
-            double ar2 = prof2 != null ? prof2.getTunnelAcceptanceRatio() : 1.0;
+    /**
+     *  Full quality comparison cascade.  Stage order is significant — each
+     *  stage short-circuits the ones below it: excluded last, then acceptance
+     *  ratio, slow tunnel-test latency, activity recency, and latency.
+     *
+     *  @param p1 first peer
+     *  @param p2 second peer
+     *  @param exclude peers to deprioritize, or null
+     *  @param prof1 first peer's profile, or null
+     *  @param prof2 second peer's profile, or null
+     *  @param now current time from the router clock
+     *  @param thirtyMinutes activity window in ms
+     *  @return negative, zero, or positive
+     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     */
+    static int compareQuality(Hash p1, Hash p2, Set<Hash> exclude, PeerProfile prof1, PeerProfile prof2,
+                              long now, long thirtyMinutes) {
+        int c = compareExcluded(p1, p2, exclude);
+        if (c != 0) {return c;}
+        c = compareAcceptance(prof1, prof2);
+        if (c != 0) {return c;}
+        float lat1 = prof1 != null ? prof1.getTunnelTestTimeAverage() : 0;
+        float lat2 = prof2 != null ? prof2.getTunnelTestTimeAverage() : 0;
+        c = compareSlowLatency(lat1, lat2);
+        if (c != 0) {return c;}
+        c = compareActivity(prof1, prof2, now, thirtyMinutes);
+        if (c != 0) {return c;}
+        return compareLatency(lat1, lat2);
+    }
 
-            if (ar1 <= 0 && ar2 > 0.3) return -1;
-            if (ar2 <= 0 && ar1 > 0.3) return 1;
+    /**
+     *  Excluded peers sort last; two excluded peers compare equal.
+     *
+     *  @param p1 first peer
+     *  @param p2 second peer
+     *  @param exclude peers to deprioritize, or null
+     *  @return negative, zero, or positive
+     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     */
+    static int compareExcluded(Hash p1, Hash p2, Set<Hash> exclude) {
+        if (exclude == null) {return 0;}
+        if (exclude.contains(p1)) {
+            if (exclude.contains(p2)) {return 0;}
+            return 1;
+        }
+        if (exclude.contains(p2)) {return -1;}
+        return 0;
+    }
 
-            if (ar1 < 0.3 && ar2 >= 0.3) return 1;
-            if (ar2 < 0.3 && ar1 >= 0.3) return -1;
+    /**
+     *  Acceptance ratio tiers: dead (<= 0) ranks below good (> 0.3), and low
+     *  (< 0.3) ranks below good.  Missing profiles default to 1.0.
+     *
+     *  @param prof1 first peer's profile, or null
+     *  @param prof2 second peer's profile, or null
+     *  @return negative, zero, or positive
+     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     */
+    static int compareAcceptance(PeerProfile prof1, PeerProfile prof2) {
+        double ar1 = prof1 != null ? prof1.getTunnelAcceptanceRatio() : 1.0;
+        double ar2 = prof2 != null ? prof2.getTunnelAcceptanceRatio() : 1.0;
+        if (ar1 <= 0 && ar2 > 0.3) {return -1;}
+        if (ar2 <= 0 && ar1 > 0.3) {return 1;}
+        if (ar1 < 0.3 && ar2 >= 0.3) {return 1;}
+        if (ar2 < 0.3 && ar1 >= 0.3) {return -1;}
+        return 0;
+    }
 
-            boolean active1 = prof1 != null && (prof1.getLastHeardFrom() > 0 && now - prof1.getLastHeardFrom() < thirtyMinutes ||
-                                              prof1.getLastSendSuccessful() > 0 && now - prof1.getLastSendSuccessful() < thirtyMinutes);
-            boolean active2 = prof2 != null && (prof2.getLastHeardFrom() > 0 && now - prof2.getLastHeardFrom() < thirtyMinutes ||
-                                              prof2.getLastSendSuccessful() > 0 && now - prof2.getLastSendSuccessful() < thirtyMinutes);
-            // Push high-latency peers (>15s tunnel test time) to the bottom
-            // so that fast peers are preferred. 0 = no data yet, treat as unknown.
-            float lat1 = prof1 != null ? prof1.getTunnelTestTimeAverage() : 0;
-            float lat2 = prof2 != null ? prof2.getTunnelTestTimeAverage() : 0;
-            boolean slow1 = lat1 > 15_000;
-            boolean slow2 = lat2 > 15_000;
-            if (slow1 && !slow2) return 1;
-            if (!slow1 && slow2) return -1;
-            if (slow1 && slow2) {
-                // Both slow — prefer the less slow one
-                if (lat1 < lat2) return -1;
-                if (lat1 > lat2) return 1;
-            }
+    /**
+     *  Peers with tunnel test latency over 15s sort last; when both are slow,
+     *  the less slow one sorts first.  0 latency means no data (unknown).
+     *
+     *  @param lat1 first peer's tunnel test time average
+     *  @param lat2 second peer's tunnel test time average
+     *  @return negative, zero, or positive
+     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     */
+    static int compareSlowLatency(float lat1, float lat2) {
+        boolean slow1 = lat1 > 15_000;
+        boolean slow2 = lat2 > 15_000;
+        if (slow1 && !slow2) {return 1;}
+        if (!slow1 && slow2) {return -1;}
+        if (slow1 && slow2) {
+            // Both slow — prefer the less slow one
+            if (lat1 < lat2) {return -1;}
+            if (lat1 > lat2) {return 1;}
+        }
+        return 0;
+    }
 
-            if (active1 && !active2) return -1;
-            if (!active1 && active2) return 1;
+    /**
+     *  Peers active within the activity window sort first.
+     *
+     *  @param prof1 first peer's profile, or null
+     *  @param prof2 second peer's profile, or null
+     *  @param now current time from the router clock
+     *  @param thirtyMinutes activity window in ms
+     *  @return negative, zero, or positive
+     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     */
+    static int compareActivity(PeerProfile prof1, PeerProfile prof2, long now, long thirtyMinutes) {
+        boolean active1 = prof1 != null && (prof1.getLastHeardFrom() > 0 && now - prof1.getLastHeardFrom() < thirtyMinutes ||
+                                          prof1.getLastSendSuccessful() > 0 && now - prof1.getLastSendSuccessful() < thirtyMinutes);
+        boolean active2 = prof2 != null && (prof2.getLastHeardFrom() > 0 && now - prof2.getLastHeardFrom() < thirtyMinutes ||
+                                          prof2.getLastSendSuccessful() > 0 && now - prof2.getLastSendSuccessful() < thirtyMinutes);
+        if (active1 && !active2) {return -1;}
+        if (!active1 && active2) {return 1;}
+        return 0;
+    }
 
-            // Prefer lower latency — peers with recent fast tunnel tests
-            // get priority over peers with high or no latency data.
-            if (lat1 > 0 && lat2 > 0) {
-                if (lat1 < lat2) return -1;
-                if (lat1 > lat2) return 1;
-            } else if (lat1 > 0) {
-                return -1;  // only p1 has measured latency
-            } else if (lat2 > 0) {
-                return 1;   // only p2 has measured latency
-            }
-
-            return 0;
-        };
+    /**
+     *  Lower measured tunnel-test latency sorts first; measured beats unknown.
+     *
+     *  @param lat1 first peer's tunnel test time average
+     *  @param lat2 second peer's tunnel test time average
+     *  @return negative, zero, or positive
+     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     */
+    static int compareLatency(float lat1, float lat2) {
+        // Prefer lower latency — peers with recent fast tunnel tests
+        // get priority over peers with high or no latency data.
+        if (lat1 > 0 && lat2 > 0) {
+            if (lat1 < lat2) {return -1;}
+            if (lat1 > lat2) {return 1;}
+        } else if (lat1 > 0) {
+            return -1;  // only p1 has measured latency
+        } else if (lat2 > 0) {
+            return 1;   // only p2 has measured latency
+        }
+        return 0;
     }
 
     /**
