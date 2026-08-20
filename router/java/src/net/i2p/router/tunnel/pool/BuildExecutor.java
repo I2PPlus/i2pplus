@@ -92,6 +92,7 @@ public class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
+    private long _lastBuildPassTime;
     private final AtomicInteger _buildSuccessCount = new AtomicInteger();
     private final AtomicInteger _buildFailureCount = new AtomicInteger();
     private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<>(64);
@@ -203,6 +204,43 @@ public class BuildExecutor implements Runnable {
     public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(8, Math.min(256, val)); }
 
     private static final int LOOP_TIME = 15000;
+
+    /**
+     *  Minimum time between consecutive build passes.  Fast build completions
+     *  wake the loop (buildComplete notifyAll), so without a floor the loop
+     *  re-passes near-continuously during a cascade (~180 builds/min observed)
+     *  instead of building in fewer, higher-quality bursts.
+     *  @since 0.9.71+
+     */
+    private static final int MIN_BUILD_SPACING_MS = 2000;
+
+    /**
+     *  Pool-backoff counting excludes results that are not peer failures:
+     *  SUCCESS, DUP_ID (already handled), REJECT (peer said no), and
+     *  NO_TUNNELS (local resource condition).
+     *
+     *  @param result the build result
+     *  @return true if the result increments the pool consecutive-failure counter
+     *  @since 0.9.71+
+     */
+    static boolean countsAsPoolFailure(Result result) {
+        return result != Result.SUCCESS && result != Result.DUP_ID &&
+               result != Result.REJECT && result != Result.NO_TUNNELS;
+    }
+
+    /**
+     *  Remaining build-pass spacing in ms: 0 when the spacing floor since the
+     *  last pass is satisfied, otherwise the time still left to wait.
+     *
+     *  @param lastPassTime the end of the last build pass in ms
+     *  @param now the current time in ms
+     *  @return ms still to wait, 0 if the floor is met
+     *  @since 0.9.71+
+     */
+    static long spacingDelay(long lastPassTime, long now) {
+        return Math.max(0, MIN_BUILD_SPACING_MS - (now - lastPassTime));
+    }
+
     private static final int TUNNEL_POOLS = 8;
     /** keepAlive() cadence in the executor loop (see run2()) */
     private static final long KEEPALIVE_INTERVAL_MS = 30 * 1000L;
@@ -229,6 +267,8 @@ public class BuildExecutor implements Runnable {
         BAD_RESPONSE,
         /** Duplicate build ID */
         DUP_ID,
+        /** No paired or exploratory tunnel was available to send the build */
+        NO_TUNNELS,
         /** Other failure */
         OTHER_FAILURE
     }
@@ -891,6 +931,24 @@ public class BuildExecutor implements Runnable {
                             }
                         }
                     }
+
+                    /* Build-pass spacing: cap how often the loop re-passes.
+                     * buildComplete notifyAll's the loop on every completion
+                     * (buildTime > 250ms), so without this floor a cascade
+                     * cycles near-continuously instead of batching builds.
+                     * The floor applies even when repolled (tunnel failed):
+                     * state changes still gate, just not faster than the
+                     * spacing allows.  Sleep outside the monitor.
+                     */
+                    long spacingLeft = spacingDelay(_lastBuildPassTime, System.currentTimeMillis());
+                    if (spacingLeft > 0) {
+                        try {
+                            Thread.sleep(spacingLeft);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    _lastBuildPassTime = System.currentTimeMillis();
                 }
             } catch (RuntimeException e) {
                 _log.log(Log.CRIT, "Catastrophic Tunnel Manager failure", e);
@@ -1064,7 +1122,7 @@ public class BuildExecutor implements Runnable {
      */
     public void buildComplete(PooledTunnelCreatorConfig cfg, Result result, String detail) {
         if (_log.shouldInfo()) {
-            if (result == Result.OTHER_FAILURE && detail != null) {
+            if ((result == Result.OTHER_FAILURE || result == Result.NO_TUNNELS) && detail != null) {
                 _log.info("Build failed -> " + detail + " for " + cfg);
             } else {
                 _log.info("Build complete (" + result + ") for " + cfg);
@@ -1085,10 +1143,13 @@ public class BuildExecutor implements Runnable {
          * respond at all (TIMEOUT).  Backoff doesn't fix capacity issues
          * and prevents builds for pools that could succeed with a different
          * peer selection.
+         * NO_TUNNELS is excluded too — no paired tunnel is a local resource
+         * condition, not a peer failure; counting it would push healthy
+         * pools into backoff during cascades.
          */
         if (result == Result.SUCCESS) {
             _poolFailureState.remove(pool);
-        } else if (result != Result.DUP_ID && result != Result.REJECT) {
+        } else if (countsAsPoolFailure(result)) {
             long[] state = getOrCreatePoolState(pool);
             synchronized (state) {
                 if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {

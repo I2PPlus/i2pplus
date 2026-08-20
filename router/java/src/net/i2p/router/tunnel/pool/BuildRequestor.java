@@ -66,9 +66,7 @@ public abstract class BuildRequestor {
     private static volatile long _cfgRefreshed;
     private static volatile int _cachedRequestTimeout;
     private static volatile int _cachedFirstHopTimeout;
-    private static volatile int _cachedExploratoryBackoff;
     private static volatile int _cachedMaxConsecutiveFails;
-    private static volatile int _cachedClientBackoff;
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -82,9 +80,7 @@ public abstract class BuildRequestor {
             return;
         _cachedRequestTimeout = ctx.getProperty("i2p.tunnel.build.requestTimeout", 15*1000);
         _cachedFirstHopTimeout = ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10*1000);
-        _cachedExploratoryBackoff = ctx.getProperty("i2p.tunnel.build.exploratoryBackoff", 200);
         _cachedMaxConsecutiveFails = ctx.getProperty("i2p.tunnel.buildRequest.maxConsecutiveFails", 3);
-        _cachedClientBackoff = ctx.getProperty("i2p.tunnel.build.clientBackoff", 50);
         _cfgCtx = ctx;
         _cfgRefreshed = now;
     }
@@ -165,10 +161,6 @@ public abstract class BuildRequestor {
      * Randomized per-message by +/- 20s jitter to obscure tunnel length.
      */
     private static final int BUILD_MSG_TIMEOUT = 60*1000;
-    private static int getExploratoryBackoff(RouterContext ctx) {
-        refreshBuildConfig(ctx);
-        return _cachedExploratoryBackoff;
-    }
 
     /**
      *  Maximum consecutive client build timeouts before forcing exploratory tunnel for replies.
@@ -180,10 +172,6 @@ public abstract class BuildRequestor {
     static int getMaxConsecutiveClientBuildFails(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedMaxConsecutiveFails;
-    }
-    private static int getClientBackoff(RouterContext ctx) {
-        refreshBuildConfig(ctx);
-        return _cachedClientBackoff;
     }
 
     /** Proposal 168 minimum bandwidth property key */
@@ -269,9 +257,13 @@ public abstract class BuildRequestor {
         TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {
             log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
-            int ms = settings.isExploratory() ? getExploratoryBackoff(ctx) : getClientBackoff(ctx);
-            try {Thread.sleep(ms);} catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
-            exec.buildComplete(cfg, OTHER_FAILURE, "No paired tunnel");
+            // No blocking sleep here: the BuildExecutor thread serves ALL pools,
+            // so sleeping on it stalls every pool's building.  Retries are
+            // paced by the executor loop (build-pass spacing) plus the per-pool
+            // consecutive-failure backoff.  NO_TUNNELS is not a peer failure,
+            // so it is excluded from both the pool backoff counter and the
+            // adaptive timeout stats.
+            exec.buildComplete(cfg, NO_TUNNELS, "No paired tunnel");
             return false;
         }
 
