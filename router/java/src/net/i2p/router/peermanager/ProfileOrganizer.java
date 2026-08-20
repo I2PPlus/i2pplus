@@ -1304,7 +1304,7 @@ public class ProfileOrganizer {
                 if (_fastPeers.size() >= target) break;
                 PeerProfile profile = candidates.get(i);
                 if (profile.isLowLatency() && isSelectable(profile.getPeer(), buildSuccess) &&
-                    !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile) &&
+                    !isLowTunnelAcceptance(profile, buildSuccess) && !hasRecentTunnelFailures(profile) &&
                     !inLossProbation(profile, now)) {
                     _fastPeers.put(profile.getPeer(), profile);
                     clearLossIfReadmitted(profile);
@@ -1320,7 +1320,7 @@ public class ProfileOrganizer {
                     if (_fastPeers.size() >= target) break;
                     PeerProfile profile = candidates.get(i);
                     if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
-                        isSelectable(profile.getPeer(), buildSuccess) && !isLowTunnelAcceptance(profile) &&
+                        isSelectable(profile.getPeer(), buildSuccess) && !isLowTunnelAcceptance(profile, buildSuccess) &&
                         !hasRecentTunnelFailures(profile) && !inLossProbation(profile, now)) {
                         _fastPeers.put(profile.getPeer(), profile);
                         clearLossIfReadmitted(profile);
@@ -1341,7 +1341,7 @@ public class ProfileOrganizer {
                     if (_fastPeers.size() >= target) break;
                     if (profile.getPeer().equals(_us)) continue;
                     if (!isSelectable(profile.getPeer(), buildSuccess)) continue;
-                    if (isLowTunnelAcceptance(profile)) continue;
+                    if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
                     if (hasRecentTunnelFailures(profile)) continue;
                     if (inLossProbation(profile, now)) continue;
                     // Require recent activity — don't fill fast tier with stale peers
@@ -1372,7 +1372,7 @@ public class ProfileOrganizer {
                 if (_highCapacityPeers.size() >= minHighCap) break;
                 if (profile.getPeer().equals(_us)) continue;
                 if (!isSelectable(profile.getPeer(), buildSuccess)) continue;
-                if (isLowTunnelAcceptance(profile)) continue;
+                if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
                 if (hasRecentTunnelFailures(profile)) continue;
                 if (inLossProbation(profile, now)) continue;
                 // Require recent activity — don't fill high-cap tier with stale peers
@@ -1440,7 +1440,7 @@ public class ProfileOrganizer {
                 PeerProfile profile = entry.getValue();
                 if (hasRecentTunnelFailures(profile)) continue;
                 if (inLossProbation(profile, now)) continue;
-                if (isLowTunnelAcceptance(profile)) continue;
+                if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
                 _fastPeers.put(peer, profile);
                 clearLossIfReadmitted(profile);
                 restored++;
@@ -1461,7 +1461,7 @@ public class ProfileOrganizer {
                 PeerProfile profile = entry.getValue();
                 if (hasRecentTunnelFailures(profile)) continue;
                 if (hasHighLoss(profile, now)) continue;
-                if (isLowTunnelAcceptance(profile)) continue;
+                if (isLowTunnelAcceptance(profile, buildSuccess)) continue;
                 _highCapacityPeers.put(peer, profile);
                 restored++;
             }
@@ -2000,7 +2000,7 @@ public class ProfileOrganizer {
         // Basic eligibility gates (mirrors locked_placeProfile)
         boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
         boolean isPeerSelectable = isSelectable(peer, buildSuccess);
-        boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile);
+        boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess);
         boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
         boolean congested = isCongestedPeer(peer);
         boolean recentFailures = hasRecentTunnelFailures(profile);
@@ -2313,9 +2313,17 @@ public class ProfileOrganizer {
      * Check if peer has low tunnel acceptance ratio (< 40%)
      * Uses persisted accept/reject counts even with low sample sizes at startup.
      * Also checks for recent bandwidth rejections and applies cooldown.
+     * <p>
+     * Takes the build success ratio as a parameter — it is fetched once per
+     * selection and passed down; {@link #getTunnelBuildSuccess()} performs 6
+     * stat lookups and must never run per candidate peer.
+     *
+     * @param profile the peer profile
+     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
      * @return whether low tunnel acceptance
+     * @since 0.9.71+
      */
-    private boolean isLowTunnelAcceptance(PeerProfile profile) {
+    private boolean isLowTunnelAcceptance(PeerProfile profile, double buildSuccess) {
         TunnelHistory th = profile.getTunnelHistory();
         if (th == null) return false;
 
@@ -2332,20 +2340,51 @@ public class ProfileOrganizer {
         // During high-stress (many peers rejecting), lower the threshold
         // to avoid excluding peers that are only rejecting due to network-
         // wide congestion rather than their own limitations.
-        boolean highStress = getTunnelBuildSuccess() < ATTACK_THRESHOLD;
-        double effectiveMinRatio = highStress ? 0.10 : MIN_TUNNEL_ACCEPTANCE_RATIO;
+        boolean highStress = buildSuccess < ATTACK_THRESHOLD;
 
         if (totalRequests < MIN_TUNNEL_REQUESTS) {
-            double threshold = highStress ? 0.10 : 0.20;
-            if (ratio >= threshold) return false;
-            if (_log.shouldDebug()) {
-                _log.debug("Demoting peer from fast tier (startup): " +
-                           profile.getPeer().toBase32().substring(0, 6) +
-                           " ratio: " + String.format("%.2f", ratio * 100) + "% below " + String.format("%.0f", threshold * 100) + "% threshold");
-            }
-            return true;
+            return isLowAcceptanceLowSample(profile, ratio, highStress);
         }
+        return isLowAcceptanceMature(profile, th, ratio, agreed, rejected, highStress);
+    }
 
+    /**
+     *  Small-sample decision: below {@link #MIN_TUNNEL_REQUESTS} lifetime
+     *  requests, apply the loose startup thresholds.
+     *
+     *  @param profile the peer profile
+     *  @param ratio the acceptance ratio in [0.0, 1.0]
+     *  @param highStress whether build success is below the attack threshold
+     *  @return whether low tunnel acceptance
+     *  @since 0.9.71+ (extracted from isLowTunnelAcceptance)
+     */
+    private boolean isLowAcceptanceLowSample(PeerProfile profile, double ratio, boolean highStress) {
+        double threshold = highStress ? 0.10 : 0.20;
+        if (ratio >= threshold) return false;
+        if (_log.shouldDebug()) {
+            _log.debug("Demoting peer from fast tier (startup): " +
+                       profile.getPeer().toBase32().substring(0, 6) +
+                       " ratio: " + String.format("%.2f", ratio * 100) + "% below " + String.format("%.0f", threshold * 100) + "% threshold");
+        }
+        return true;
+    }
+
+    /**
+     *  Mature decision: effective minimum ratio, with a cooldown for
+     *  recent bandwidth rejections.
+     *
+     *  @param profile the peer profile
+     *  @param th the tunnel history (non-null)
+     *  @param ratio the acceptance ratio in [0.0, 1.0]
+     *  @param agreed lifetime accepted requests
+     *  @param rejected lifetime rejected requests
+     *  @param highStress whether build success is below the attack threshold
+     *  @return whether low tunnel acceptance
+     *  @since 0.9.71+ (extracted from isLowTunnelAcceptance)
+     */
+    private boolean isLowAcceptanceMature(PeerProfile profile, TunnelHistory th, double ratio,
+                                          long agreed, long rejected, boolean highStress) {
+        double effectiveMinRatio = highStress ? 0.10 : MIN_TUNNEL_ACCEPTANCE_RATIO;
         if (ratio >= effectiveMinRatio) {
             return false;
         }
