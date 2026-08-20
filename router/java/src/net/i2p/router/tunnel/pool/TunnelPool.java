@@ -2915,7 +2915,18 @@ public class TunnelPool {
             }
         } finally {_tunnelsLock.unlock();}
         if (toRemove.isEmpty()) {return;}
+        pruneOverReserve(toRemove, goodCount);
+    }
 
+    /**
+     *  Prune the non-GOOD tunnels down to the LS fallback reserve, keeping
+     *  the best (fewest failures), then refresh the published LeaseSet.
+     *
+     *  @param toRemove the prunable tunnels, non-empty
+     *  @param goodCount count of GOOD/FAILING tunnels in the pool
+     *  @since 0.9.71+ (extracted from pruneNonGoodTunnels)
+     */
+    private void pruneOverReserve(List<TunnelInfo> toRemove, int goodCount) {
         // Always prune FAILED/FAILING tunnels down to a small reserve.
         // Without this, the pool fills with FAILED tunnels and
         // ensureSufficientTunnels() rejects new builds (totalNow >= target + 8),
