@@ -350,23 +350,23 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
                 if (matches.isEmpty()) {
                     // Fallback to any not-failing peer if active not available
-                    if (log.shouldWarn()) {
-                        log.warn("No active peers found, falling back to any non-failing peers");
+                    if (log.shouldDebug()) {
+                        log.debug("No active peers found, falling back to any non-failing peers");
                     }
                     ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, params.ipRestriction, params.ipSet);
                 }
                 if (matches.isEmpty()) {
                     // Fallback to all peers as last resort
-                    if (log.shouldWarn()) {
-                        log.warn("No non-failing peers found, falling back to all peers");
+                    if (log.shouldDebug()) {
+                        log.debug("No non-failing peers found, falling back to all peers");
                     }
                     ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
                 }
             }
             if (matches.isEmpty()) {
                 // Emergency: try all-not-failing before giving up
-                if (log.shouldWarn()) {
-                    log.warn("No peers found after standard fallbacks -> Attempting emergency all-peers fallback");
+                if (log.shouldDebug()) {
+                    log.debug("No peers found after standard fallbacks -> Attempting emergency all-peers fallback");
                 }
                 ctx.profileOrganizer().selectAllNotFailingPeers(1, lastHopExclude, matches, false);
             }
@@ -441,8 +441,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (matches.isEmpty()) {
                         // Fallback to non-failing peers
                         ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, params.ipRestriction, params.ipSet);
-                        if (matches.isEmpty() && log.shouldWarn()) {
-                            log.warn("No active peers found for OutboundEndpoint, falling back to all peers");
+                        if (matches.isEmpty() && log.shouldDebug()) {
+                            log.debug("No active peers found for OutboundEndpoint, falling back to all peers");
                         }
                     }
                     if (matches.isEmpty()) {
@@ -731,8 +731,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // client tunnels do not use overrides
         // Suppress warnings during startup
         long uptime = ctx.router() != null ? ctx.router().getUptime() : 0;
-        if (log.shouldWarn() && uptime > STARTUP_WARNING_SUPPRESS_MS) {
-            log.warn("Not enough peers to build requested " + length + " hop tunnel (" + rv.size() + " available)");
+        if (log.shouldDebug() && uptime > STARTUP_WARNING_SUPPRESS_MS) {
+            log.debug("Not enough peers to build requested " + length + " hop tunnel (" + rv.size() + " available)");
         }
         int min = settings.getLength();
         int skew = settings.getLengthVariance();
@@ -833,8 +833,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // If still not enough, try with even more relaxed criteria but prefer better peers
                     // Instead of "any peer", allow some previously-failing peers with good recent performance
                     if (rv.size() < min && params.buildSuccess < SEVERE_ATTACK_THRESHOLD && rv.isEmpty()) {
-                        if (log.shouldWarn()) {
-                            log.warn("Severe network stress (" + (int) (params.buildSuccess * 100) + "% success) -> Trying quality-aware fallback with speed-adjusted peer selection...");
+                        if (log.shouldDebug()) {
+                            log.debug("Severe network stress (" + (int) (params.buildSuccess * 100) + "% success) -> Trying quality-aware fallback with speed-adjusted peer selection...");
                         }
                         // Use a quality-ordered fallback that prefers faster peers even if they recently failed
                         ArraySet<Hash> qualityFallback = new ArraySet<>(min);
@@ -850,8 +850,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             }
                         } else {
                             // Only use "any peer" as last resort
-                            if (log.shouldWarn()) {
-                                log.warn("All quality peers exhausted -> Using emergency fallback (any peer)");
+                            if (log.shouldDebug()) {
+                                log.debug("All quality peers exhausted -> Using emergency fallback (any peer)");
                             }
                             ArraySet<Hash> relaxedFallback = new ArraySet<>(min);
                             ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
@@ -872,8 +872,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (rv.size() < min) {
                     if ((isUnderStress || params.useHighCapPrimary) && !rv.isEmpty()) {
                         // Under stress but have some peers - allow shorter tunnel instead of null
-                        if (log.shouldWarn()) {
-                            log.warn("Network stress: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
+                        if (log.shouldDebug()) {
+                            log.debug("Network stress: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
                         }
                         // Continue with shorter tunnel
                     } else {
