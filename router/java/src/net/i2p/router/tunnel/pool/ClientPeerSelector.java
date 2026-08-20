@@ -90,9 +90,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
      *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     *         the local router in the list.  If there are no tunnels or peers
-     *         to build through, and the settings reject 0hop tunnels, this will
-     *         return null.
+     *         the local router in the list.  Never null; an empty list means
+     *         no peers could be selected.
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         int length = getLength(settings);
@@ -102,7 +101,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                          " for " + settings.getDestinationNickname() +
                          " (" + (settings.isInbound() ? "in" : "out") + ")");
             }
-            return null;
+            return Collections.emptyList();
         }
         synchronized (_cooldownLock) {
             List<Hash> rv;
@@ -117,7 +116,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     rv = selectSingleHop(settings, length, params, ex, matches);
                 } else {
                     rv = selectMultiHop(settings, length, params, ex, matches);
-                    if (rv == null) {return Collections.emptyList();}
+                    if (rv.isEmpty()) {return Collections.emptyList();}
                 }
                 if (log.shouldDebug()) {
                     log.debug("ClientPeerSelector " + length + (isInbound ? " Inbound" : " Outbound") +
@@ -130,15 +129,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
                 if (rv.size() < length) {
                     rv = applyShortfallFallbacks(settings, rv, length, params, ex);
-                    if (rv == null) {return Collections.emptyList();}
-                }
-                if (rv.isEmpty()) {
-                    if (log.shouldWarn()) {
-                        log.warn("CPS empty rv for " + settings.getDestinationNickname() +
-                                 " (" + (settings.isInbound() ? "in" : "out") +
-                                 ") length=" + length + " return empty");
-                    }
-                    return Collections.emptyList();
+                    if (rv.isEmpty()) {return Collections.emptyList();}
                 }
             } else {
                 rv = new ArrayList<>(1);
@@ -317,7 +308,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         Set<Hash> lastHopExclude = buildLastHopExclude(params, ex.exclude);
         if (!selectLastHop(settings, length, params, randomKey, lastHopExclude, matches)) {
             // selectLastHop already logged the reason
-            return null;
+            return Collections.emptyList();
         }
         matches.remove(ctx.routerHash());
         ex.exclude.addAll(matches);
@@ -912,7 +903,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                      " (" + (settings.isInbound() ? "in" : "out") + "): rv=" + rv.size() +
                                      " min=" + min + " length=" + length);
                         }
-                        return null;
+                        return Collections.emptyList();
                     }
                 }
             }
@@ -947,7 +938,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         rv = filterGhostPeers(rv);
 
         // Strategy-specific post-processing
-        if (rv != null && rv.size() > 2) {
+        if (rv.size() > 2) {
             String strategy = getStrategy();
             if (STRATEGY_RELIABILITY.equals(strategy)) {
                 // Apply reliability filter on non-self peers
@@ -971,7 +962,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         }
 
         // Check for duplicate sequence and regenerate if needed
-        if (rv != null && rv.size() > 2) {
+        if (rv.size() > 2) {
             int attempts = 0;
             int maxAttempts = 3;
             while (attempts < maxAttempts) {
@@ -993,7 +984,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         }
 
-        if (rv != null && rv.size() > 1) {
+        if (rv.size() > 1) {
             if (!checkTunnel(isInbound, false, rv)) {
                 if (log.shouldWarn()) {
                     log.warn("CPS checkTunnel failed for " + settings.getDestinationNickname() +
@@ -1215,9 +1206,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * Ghost peers are those with consistent tunnel build timeouts.
      *
      * @param peers the list of selected peers (excluding self)
-     * @return filtered list without ghost peers
+     * @return filtered list without ghost peers; never null
      */
-    private List<Hash> filterGhostPeers(List<Hash> peers) {
+    List<Hash> filterGhostPeers(List<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return peers;}
 
         TunnelManagerFacade tmf = ctx.tunnelManager();
@@ -1237,9 +1228,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
         if (filtered.isEmpty() && !peers.isEmpty()) {
             if (log.shouldWarn()) {
-                log.warn("All selected peers were ghosts -> Returning null to allow fallback selection...");
+                log.warn("All selected peers were ghosts -> returning empty to allow fallback selection...");
             }
-            return null;
+            return Collections.emptyList();
         }
 
         return filtered;

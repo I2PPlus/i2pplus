@@ -411,9 +411,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param settings the tunnel pool settings
      * @return ordered list of Hash objects (one per peer) specifying what order
      *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     *         the local router in the list.  If there are no tunnels or peers
-     *         to build through, and the settings reject 0 hop tunnels, this will
-     *         return null.
+     *         the local router in the list.  Never null; an empty list means
+     *         no peers could be selected.
      */
     public abstract List<Hash> selectPeers(TunnelPoolSettings settings);
 

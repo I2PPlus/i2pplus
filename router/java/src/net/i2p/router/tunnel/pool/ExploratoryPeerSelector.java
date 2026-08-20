@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,9 +47,8 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
      *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     *         the local router in the list.  If there are no tunnels or peers
-     *         to build through, and the settings reject 0 hop tunnels, this will
-     *         return null.
+     *         the local router in the list.  Never null; an empty list means
+     *         no peers could be selected.
      */
     @Override
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
@@ -56,7 +56,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         if (length < 0) {
             if (log.shouldDebug())
                 log.debug("Tunnel length requested is zero: " + settings);
-            return null;
+            return Collections.emptyList();
         }
 
         List<Hash> rv = selectPeersInternal(settings, length, true);
