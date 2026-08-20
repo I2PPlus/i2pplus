@@ -876,8 +876,6 @@ public class ProfileOrganizer {
             int needed = howMany - matches.size();
             List<Hash> selected = new ArrayList<>(needed);
             long now = _context.clock().now();
-            long tenMinutes = 10 * 60 * 1000L;
-            long thirtyMinutes = 30 * 60 * 1000L;
             getReadLock();
             try {
                 for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext(); ) {
@@ -891,14 +889,9 @@ public class ProfileOrganizer {
                         if ("O".equals(tier) || "P".equals(tier) || "X".equals(tier)) {
                             // Reliability check: skip peers with low acceptance or no recent activity
                             PeerProfile profile = _notFailingPeers.get(cur);
-                            if (profile != null) {
-                                if (profile.getTunnelAcceptanceRatio() < 0.3) continue;
-                                boolean recentTest = profile.getLastTestedSuccessfully() > 0 &&
-                                    now - profile.getLastTestedSuccessfully() < tenMinutes;
-                                boolean recentActivity =
-                                    (profile.getLastHeardFrom() > 0 && now - profile.getLastHeardFrom() < thirtyMinutes) ||
-                                    (profile.getLastSendSuccessful() > 0 && now - profile.getLastSendSuccessful() < thirtyMinutes);
-                                if (!recentTest && !recentActivity && !_context.commSystem().isEstablished(cur)) continue;
+                            if (profile != null && !isReliableBandwidthPeer(profile, now,
+                                                                            _context.commSystem().isEstablished(cur))) {
+                                continue;
                             }
                             selected.add(cur);
                         }
@@ -912,6 +905,33 @@ public class ProfileOrganizer {
         if (matches.size() < howMany) {
             selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, buildSuccess);
         }
+    }
+
+    /**
+     *  Reliability gate for high-bandwidth (O/P/X tier) selection: the peer
+     *  must show a tunnel acceptance ratio of at least 0.3 AND evidence of
+     *  recent activity — a successful peer test within 10 minutes, a heard-
+     *  from/send-success within 30 minutes, or an established commSystem
+     *  connection.  Peers with no profile are not gated (no data yet).
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param profile the peer profile (non-null)
+     *  @param now current time in ms
+     *  @param established whether commSystem has an established connection
+     *  @return whether the peer passes the reliability gate
+     *  @since 0.9.71+
+     */
+    static boolean isReliableBandwidthPeer(PeerProfile profile, long now, boolean established) {
+        if (profile.getTunnelAcceptanceRatio() < 0.3) return false;
+        long tenMinutes = 10 * 60 * 1000L;
+        long thirtyMinutes = 30 * 60 * 1000L;
+        boolean recentTest = profile.getLastTestedSuccessfully() > 0 &&
+            now - profile.getLastTestedSuccessfully() < tenMinutes;
+        boolean recentActivity =
+            (profile.getLastHeardFrom() > 0 && now - profile.getLastHeardFrom() < thirtyMinutes) ||
+            (profile.getLastSendSuccessful() > 0 && now - profile.getLastSendSuccessful() < thirtyMinutes);
+        return recentTest || recentActivity || established;
     }
 
     /**
@@ -1932,13 +1952,9 @@ public class ProfileOrganizer {
             long now = _context.clock().now();
             long maxAge = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS) * 3600_000L;
             // RouterInfo is stale — demand proof of life to trust it
-            if (info.getPublished() < now - maxAge) {
-                PeerProfile profile = _context.profileOrganizer().getProfile(peer);
-                if (profile == null) return false;
-                boolean alive = profile.getLastSendSuccessful() > now - PROOF_OF_LIFE_WINDOW_MS ||
-                                profile.getLastHeardFrom() > now - PROOF_OF_LIFE_WINDOW_MS ||
-                                profile.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS;
-                if (!alive) return false;
+            if (info.getPublished() < now - maxAge &&
+                !hasRecentProofOfLife(_context.profileOrganizer().getProfile(peer), now)) {
+                return false;
             }
         }
         // Peers without a reachable NTCP2 or SSU2 address cannot be used
@@ -1969,6 +1985,28 @@ public class ProfileOrganizer {
             break;
         }
         return hasUsableAddress;
+    }
+
+    /**
+     *  True if the peer has shown proof of life within
+     *  {@link #PROOF_OF_LIFE_WINDOW_MS}: a successful send, heard-from, or
+     *  heard-about within the last hour.  A null profile (never seen) is not
+     *  evidence of life.  Used to trust a RouterInfo that is older than the
+     *  maximum age — the RouterInfo alone is not enough, the peer must have
+     *  been active recently.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param profile the peer profile, null if none
+     *  @param now current time in ms
+     *  @return whether the peer has recent proof of life
+     *  @since 0.9.71+
+     */
+    static boolean hasRecentProofOfLife(PeerProfile profile, long now) {
+        if (profile == null) return false;
+        return profile.getLastSendSuccessful() > now - PROOF_OF_LIFE_WINDOW_MS ||
+               profile.getLastHeardFrom() > now - PROOF_OF_LIFE_WINDOW_MS ||
+               profile.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS;
     }
 
     private void locked_placeProfile(PeerProfile profile, double buildSuccess) {
