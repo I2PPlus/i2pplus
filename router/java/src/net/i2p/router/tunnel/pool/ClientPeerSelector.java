@@ -945,7 +945,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 List<Hash> nonSelf = new ArrayList<>(rv);
                 nonSelf.remove(ctx.routerHash());
                 Set<Hash> nonSelfSet = new HashSet<>(nonSelf);
-                List<Hash> reliable = filterByReliability(nonSelfSet, null, nonSelf.size());
+                List<Hash> reliable = filterByReliability(nonSelfSet, null);
                 if (!reliable.isEmpty()) {
                     rv.clear();
                     if (isInbound) {
@@ -1066,8 +1066,19 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * @param max max peers to return
      * @return list of best peers filtered by reliability
      */
-    private List<Hash> filterByReliability(Set<Hash> candidates, Set<Hash> exclude, int max) {
-        if (candidates == null || candidates.isEmpty() || max <= 0) {
+    /**
+     * Filter candidates through the reliability gate: a peer must have an
+     * adequate acceptance ratio and at least one recent activity or
+     * connection signal to remain. The input order is preserved; ranking
+     * is left to the caller's quality sort so each reliability signal
+     * plays a single role.
+     *
+     * @param candidates peers to filter
+     * @param exclude peers to exclude
+     * @return list of peers passing the reliability gate, in input order
+     */
+    List<Hash> filterByReliability(Set<Hash> candidates, Set<Hash> exclude) {
+        if (candidates == null || candidates.isEmpty()) {
             return Collections.emptyList();
         }
         List<Hash> result = new ArrayList<>();
@@ -1080,47 +1091,36 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 continue;
             }
             PeerProfile profile = ctx.profileOrganizer().getProfile(peer);
-            if (profile == null) {
-                continue;
-            }
-
-            double score = scorePeer(profile, now, tenMinutes, thirtyMinutes);
-            if (score > 0) {
+            if (profile != null && isReliable(profile, now, tenMinutes, thirtyMinutes)) {
                 result.add(peer);
             }
         }
-
-        result.sort((p1, p2) -> {
-            PeerProfile prof1 = ctx.profileOrganizer().getProfile(p1);
-            PeerProfile prof2 = ctx.profileOrganizer().getProfile(p2);
-            double s1 = scorePeer(prof1, now, tenMinutes, thirtyMinutes);
-            double s2 = scorePeer(prof2, now, tenMinutes, thirtyMinutes);
-            return Double.compare(s2, s1);
-        });
-
-        return result.subList(0, Math.min(max, result.size()));
+        return result;
     }
 
-    private double scorePeer(PeerProfile profile, long now, long tenMinutes, long thirtyMinutes) {
-        if (profile == null) return 0;
-        double score = 0;
-        double acceptanceRatio = profile.getTunnelAcceptanceRatio();
-        if (acceptanceRatio < 0.3) return 0;
-        if (acceptanceRatio > 0.5) score += 30;
-        else if (acceptanceRatio > 0.3) score += 10;
-
+    /**
+     *  Reliability gate: the acceptance ratio must be at least 0.3, and the
+     *  peer must show a recent tunnel-test success, recent activity, or an
+     *  established connection. Each signal is consulted exactly once.
+     *
+     *  @param profile the peer profile (may be null)
+     *  @param now current time from the router clock
+     *  @param tenMinutes tunnel-test recency window in ms
+     *  @param thirtyMinutes activity recency window in ms
+     *  @return true if the peer passes the reliability gate
+     */
+    boolean isReliable(PeerProfile profile, long now, long tenMinutes, long thirtyMinutes) {
+        if (profile == null) {return false;}
+        if (profile.getTunnelAcceptanceRatio() < 0.3) {return false;}
         long lastTested = profile.getLastTestedSuccessfully();
-        if (lastTested > 0 && now - lastTested < tenMinutes) score += 40;
-
+        if (lastTested > 0 && now - lastTested < tenMinutes) {return true;}
         long lastHeardFrom = profile.getLastHeardFrom();
         long lastSendSuccessful = profile.getLastSendSuccessful();
         if ((lastHeardFrom > 0 && now - lastHeardFrom < thirtyMinutes) ||
             (lastSendSuccessful > 0 && now - lastSendSuccessful < thirtyMinutes)) {
-            score += 20;
+            return true;
         }
-
-        if (ctx.commSystem().isEstablished(profile.getPeer())) score += 20;
-        return score;
+        return ctx.commSystem().isEstablished(profile.getPeer());
     }
 
     /**
