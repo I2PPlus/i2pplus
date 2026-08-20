@@ -29,6 +29,12 @@ import net.i2p.util.ArraySet;
 class ClientPeerSelector extends TunnelPeerSelector {
 
     private static final double SEVERE_ATTACK_THRESHOLD = 0.30;
+    /** Startup grace period: strict first-hop gates and soft fallbacks are relaxed for the first 15 minutes. */
+    private static final long STARTUP_GRACE_MS = 15 * 60 * 1000L;
+    /** First-hop quality attempts before preferring connecting peers. */
+    private static final int ESTABLISHED_PREF_ATTEMPTS = 3;
+    /** First-hop quality attempts before accepting any tier-passing peer. */
+    private static final int CONNECTING_PREF_ATTEMPTS = 5;
 
 
     private String getStrategy() {
@@ -583,21 +589,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // (acceptance ratio > 50%, have been tested before).  These peers
         // are capable but simply haven't been contacted recently — better
         // than failing the build entirely.
-        boolean softInStartup = ctx.router() != null && ctx.router().getUptime() < 15*60*1000;
+        boolean softInStartup = isStartupGracePeriod(ctx);
         if (matches.isEmpty() && !softInStartup) {
-            Set<Hash> softExclude = new HashSet<>(exclude);
-            // Remove no-signal peers from the exclusion set to give them
-            // a chance, but only if they have good historical metrics
-            for (Hash h : new ArrayList<>(softExclude)) {
-                String reason = ex.excluder._reasons.get(h);
-                if ("no-signal".equals(reason)) {
-                    PeerProfile prof = ctx.profileOrganizer().getProfile(h);
-                    if (prof != null && prof.getTunnelAcceptanceRatio() > 0.5 &&
-                        prof.getTunnelHistory().getLastTestedSuccessfully() > 0) {
-                        softExclude.remove(h);
-                    }
-                }
-            }
+            Set<Hash> softExclude = buildSoftFallbackExclude(exclude, ex);
             if (softExclude.size() < exclude.size()) {
                 ctx.profileOrganizer().selectNotFailingPeers(1, softExclude, matches, false, 0, null);
                 if (matches.isEmpty()) {
@@ -621,26 +615,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // peers.  33/min first-hop failures mean we're selecting peers
             // that look fast on paper but can't actually receive the build.
             // More attempts = higher chance of finding a connected peer.
-            final int ESTABLISHED_PREF_ATTEMPTS = 3;
-            final int CONNECTING_PREF_ATTEMPTS = 5;
             int qualityAttempts = 0;
-            int tier = 0;
-            boolean inStartup = ctx.router() != null && ctx.router().getUptime() < 15*60*1000;
-            if (inStartup)
-                tier = 2;
+            boolean inStartup = isStartupGracePeriod(ctx);
             // When very few candidates remain, skip established preference
             // to avoid exhausting the pool entirely.
-            if (matches.size() < 3)
-                tier = 2;
+            int tier = (inStartup || matches.size() < 3) ? 2 : 0;
             while (qualityAttempts < 8 && !matches.isEmpty()) {
                 qualityAttempts++;
-                if (!inStartup) {
-                    if (qualityAttempts > CONNECTING_PREF_ATTEMPTS) {
-                        tier = 2;
-                    } else if (qualityAttempts > ESTABLISHED_PREF_ATTEMPTS) {
-                        tier = 1;
-                    }
-                }
+                tier = firstHopQualityTier(qualityAttempts, inStartup, tier);
                 Hash firstHop = matches.iterator().next();
                 // During startup grace (first 15 min), skip the first-hop
                 // failing check. We have too few peers and too many transient
@@ -682,6 +664,72 @@ class ClientPeerSelector extends TunnelPeerSelector {
         }
         // Shortfall fallback below reuses the (wrapped) exclude
         ex.exclude = exclude;
+    }
+
+    /**
+     *  Whether the router is still in the startup grace period (first
+     *  {@code STARTUP_GRACE_MS} ms of uptime), during which strict first-hop
+     *  quality gates and soft fallbacks are relaxed because few peers are
+     *  available and transient transport failures are common.
+     *  <p>
+     *  Pure decision — no side effects.
+     *
+     *  @param ctx the router context
+     *  @return whether the router is within the startup grace period
+     *  @since 0.9.71+
+     */
+    static boolean isStartupGracePeriod(RouterContext ctx) {
+        return ctx.router() != null && ctx.router().getUptime() < STARTUP_GRACE_MS;
+    }
+
+    /**
+     *  First-hop quality tier for the current attempt: 0 = prefer
+     *  established peers, 1 = also accept connecting peers, 2 = accept any
+     *  peer that passed the tier filters.  Escalates with attempts; during
+     *  the startup grace period the tier never changes.  Note the quirk:
+     *  attempts 4-5 downgrade a tier-2 selection to 1 (preserved verbatim).
+     *  <p>
+     *  Pure decision — no side effects.
+     *
+     *  @param attempts number of quality-check attempts already made
+     *  @param inStartup whether the router is in the startup grace period
+     *  @param currentTier the tier before this attempt
+     *  @return the tier for this attempt
+     *  @since 0.9.71+
+     */
+    static int firstHopQualityTier(int attempts, boolean inStartup, int currentTier) {
+        if (inStartup) return currentTier;
+        if (attempts > CONNECTING_PREF_ATTEMPTS) return 2;
+        if (attempts > ESTABLISHED_PREF_ATTEMPTS) return 1;
+        return currentTier;
+    }
+
+    /**
+     *  Builds the soft-fallback exclusion set: a copy of the first-hop
+     *  exclusion set without no-signal-excluded peers that have proven track
+     *  records (tunnel acceptance > 50% and at least one successful test),
+     *  giving them a chance when all standard tiers fail.  No side effects.
+     *
+     *  @param exclude the current first-hop exclusion set
+     *  @param ex the selection exclusions with the per-peer reason map
+     *  @return the reduced exclusion set
+     *  @since 0.9.71+
+     */
+    private Set<Hash> buildSoftFallbackExclude(Set<Hash> exclude, SelectionExclusions ex) {
+        Set<Hash> softExclude = new HashSet<>(exclude);
+        // Remove no-signal peers from the exclusion set to give them
+        // a chance, but only if they have good historical metrics
+        for (Hash h : new ArrayList<>(softExclude)) {
+            String reason = ex.excluder._reasons.get(h);
+            if ("no-signal".equals(reason)) {
+                PeerProfile prof = ctx.profileOrganizer().getProfile(h);
+                if (prof != null && prof.getTunnelAcceptanceRatio() > 0.5 &&
+                    prof.getTunnelHistory().getLastTestedSuccessfully() > 0) {
+                    softExclude.remove(h);
+                }
+            }
+        }
+        return softExclude;
     }
 
     /** Progressive fallbacks when the selected peers are short of the requested length. @return the final rv, or null to abort (returns empty list) */
