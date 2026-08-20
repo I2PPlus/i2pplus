@@ -481,16 +481,43 @@ public class TunnelPool {
      */
     TunnelInfo selectTunnel() {return selectTunnel(true);}
 
+    /**
+     *  Select a tunnel for use, falling back to last-resort and degraded
+     *  tunnels, then to a fresh zero-hop build, then to a retry.
+     *
+     *  @param allowRecurseOnFail true to retry once after building a fallback
+     *  @return null on failure, but it should always build and return a fallback
+     */
     private TunnelInfo selectTunnel(boolean allowRecurseOnFail) {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
-
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
+
+        TunnelInfo selected = selectFromPool(now, uptime, avoidZeroHop);
+        if (selected != null) {return selected;}
+
+        if (_alive) {buildFallback();}
+        if (allowRecurseOnFail) {return selectTunnel(false);}
+        return null;
+    }
+
+    /**
+     *  One selection pass over the pool: normal scan (long tunnels only when
+     *  avoiding zero-hop), then backlogged/last-resort, then degraded.  Logs
+     *  the no-tunnels warning (rate-limited) when the pool is empty.
+     *
+     *  @param now current time in ms
+     *  @param uptime router uptime in ms
+     *  @param avoidZeroHop true to skip zero-hop tunnels on the first pass
+     *  @return a usable tunnel, or null
+     *  @since 0.9.71+ (extracted from selectTunnel to reduce complexity)
+     */
+    private TunnelInfo selectFromPool(long now, long uptime, boolean avoidZeroHop) {
         boolean shouldWarn = false;
         _tunnelsLock.lock();
         try {
             if (_tunnels.isEmpty()) {
-               shouldWarn = _log.shouldWarn() && uptime > getStartupTime(_context) && shouldLogNoTunnelsWarning();
+                shouldWarn = _log.shouldWarn() && uptime > getStartupTime(_context) && shouldLogNoTunnelsWarning();
             } else {
                 // Random start index for statistical load balancing
                 int startIdx = _context.random().nextInt(_tunnels.size());
@@ -507,18 +534,14 @@ public class TunnelPool {
                 if (pass2.chosen != null) {return pass2.chosen;}
                 TunnelInfo selected = useLastResortOrBacklogged(pass2.lastResort, pass2.backlogged, uptime);
                 if (selected != null) {return selected;}
-                TunnelInfo degraded = pickDegradedTunnel(now);
-                if (degraded != null) {return degraded;}
+                return pickDegradedTunnel(now);
             }
         } finally {_tunnelsLock.unlock();}
-
+        // Only reached when the pool was empty
         if (shouldWarn) {
             logNoTunnelsWarning();
         }
-
-        if (_alive) {buildFallback();}
-        if (allowRecurseOnFail) {return selectTunnel(false);}
-        else {return null;}
+        return null;
     }
 
     /**
