@@ -157,6 +157,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                    hidden, hiddenInbound, hiddenOutbound, ipRestriction, ipSet);
     }
 
+    /** Add cooldown entries still inside their window (value > cutoff) to the
+     *  exclusion set without mutating the map; returns the count added.
+     *  @since 0.9.71+
+     */
+    static int addFreshCooldownExclusions(Map<Hash, Long> cooldowns, long cutoff, Set<Hash> exclude) {
+        int count = 0;
+        for (Map.Entry<Hash, Long> entry : cooldowns.entrySet()) {
+            if (entry.getValue() > cutoff) {
+                exclude.add(entry.getKey());
+                count++;
+            }
+        }
+        return count;
+    }
+
     /** Build the lazy Excluder with client/shared cooldowns, first/last peer and pool diversity exclusions. */
     private SelectionExclusions buildExclusions(TunnelPoolSettings settings, boolean isInbound, double buildSuccess) {
         // Excluder is lazy — contains() auto-classifies and tracks reasons.
@@ -164,24 +179,19 @@ class ClientPeerSelector extends TunnelPeerSelector {
         Excluder excluder = new Excluder(isInbound, false, buildSuccess);
         Set<Hash> exclude = excluder;
 
-        // Check shared peer cooldowns (from checkTunnel failures across ALL pools)
+        // Check shared peer cooldowns (from checkTunnel failures across ALL pools).
+        // Filter expired entries at read time instead of mutating the shared map
+        // on every selection: the exclusion window is identical and concurrent
+        // selections no longer sweep the map (which is iterated by other
+        // selectors too). Bulk hygiene is handled by prunePeerMaps() when a
+        // map exceeds its size cap.
         long nowCooldown = ctx.clock().now();
         long sharedCooldownCutoff = nowCooldown - PEER_SELECTION_COOLDOWN_MS;
-        int peerCooldownExcluded = 0;
-        // Evict stale shared cooldowns EVERY selection
-        _peerCooldowns.entrySet().removeIf(e -> e.getValue() <= sharedCooldownCutoff);
-        for (Map.Entry<Hash, Long> entry : _peerCooldowns.entrySet()) {
-            exclude.add(entry.getKey());
-            peerCooldownExcluded++;
-        }
-        // Evict expired firstHopFails entries (3min TTL) for map hygiene.
-        // Do NOT add to global exclude — firstHopFails only filter first-hop
-        // selection via isFirstHopFailing() in the quality loop. Adding them
-        // to the global set would exclude 300+ peers from ALL hops (first,
-        // middle, last), which is overkill and starves middle/last hop selection.
+        int peerCooldownExcluded = addFreshCooldownExclusions(_peerCooldowns, sharedCooldownCutoff, exclude);
+        // firstHopFails entries expire lazily in isFirstHopFailing() /
+        // hasRecoveredFromFailure() and are bulk-pruned by prunePeerMaps();
+        // no per-selection sweep needed. They filter first-hop selection only.
         int firstHopFailCount = _firstHopFails.size();
-        _firstHopFails.entrySet().removeIf(e -> e.getValue() <=
-                (nowCooldown - FIRST_HOP_FAIL_COOLDOWN_MS));
 
         // Add first peer exclusions for diversity
         Set<Hash> firstPeerExclusions = settings.getFirstPeerExclusions();
