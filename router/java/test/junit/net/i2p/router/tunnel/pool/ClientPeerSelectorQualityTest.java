@@ -105,6 +105,16 @@ public class ClientPeerSelectorQualityTest {
     }
 
     @Test
+    public void testCompareAcceptanceDeadVsLow() {
+        PeerProfile dead = deadActiveFast();
+        PeerProfile low = mock(PeerProfile.class);
+        when(low.getTunnelAcceptanceRatio()).thenReturn(0.2);
+        // Dead (<= 0) ranks BELOW low (0 < r < 0.3): low sorts first
+        assertEquals(1, ClientPeerSelector.compareAcceptance(dead, low));
+        assertEquals(-1, ClientPeerSelector.compareAcceptance(low, dead));
+    }
+
+    @Test
     public void testCompareAcceptanceLowVsGood() {
         PeerProfile low = mock(PeerProfile.class);
         when(low.getTunnelAcceptanceRatio()).thenReturn(0.2);

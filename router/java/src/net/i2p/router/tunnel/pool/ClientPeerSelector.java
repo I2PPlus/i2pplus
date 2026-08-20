@@ -111,6 +111,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
                          (ex.firstPeerExclusions != null && !ex.firstPeerExclusions.isEmpty() ?
                           ", " + ex.firstPeerExclusions.size() + " first-hop diversity" : ""));
             }
+            // Filter ghosts BEFORE the shortfall fallback so replacements are
+            // drawn from non-ghost candidates.  Previously the filter ran in
+            // finalizeSelection() after the fallback, so an all-ghost
+            // selection aborted the whole cycle with no replacement attempt.
+            rv = filterGhostPeers(rv);
             if (rv.size() < length) {
                 rv = applyShortfallFallbacks(settings, rv, length, params, ex);
                 if (rv.isEmpty()) {return Collections.emptyList();}
@@ -904,13 +909,24 @@ class ClientPeerSelector extends TunnelPeerSelector {
         return rv;
     }
 
-    /** Insert self, sort by quality, ghost-filter, strategy post-processing, duplicate re-check, and cooldowns. */
+    /**
+     *  Insert self, ghost-filter, strategy post-processing, duplicate re-check,
+     *  and cooldowns.  Quality-sorts the non-self hops for inbound selections
+     *  only (see below).
+     */
     List<Hash> finalizeSelection(TunnelPoolSettings settings, List<Hash> rv, boolean isInbound) {
         if (isInbound) {rv.add(0, ctx.routerHash());}
         else {rv.add(ctx.routerHash());}
 
-        // Sort non-self peers by reliability so better peers are preferred
-        if (rv.size() > 2) {
+        // Sort non-self peers by reliability so better peers are preferred.
+        // Inbound only: rv[1] is the IBGW (the direct TBM recipient via
+        // paired-tunnel dispatch) where best-first is benign and desirable.
+        // For outbound the adjacent slot (cfg.getPeer(1), the direct transport
+        // send target) must stay the vetted first hop chosen by
+        // selectFirstHop(); re-sorting exiled the best peer to the OBEP and
+        // put the worst-ranked peer adjacent to us, and destroyed the
+        // key-distance ordering from orderPeers() (position predictability).
+        if (isInbound && rv.size() > 2) {
             List<Hash> nonSelf = new ArrayList<>(rv);
             nonSelf.remove(ctx.routerHash());
             if (nonSelf.size() > 1) {
@@ -1196,8 +1212,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
     static int compareAcceptance(PeerProfile prof1, PeerProfile prof2) {
         double ar1 = prof1 != null ? prof1.getTunnelAcceptanceRatio() : 1.0;
         double ar2 = prof2 != null ? prof2.getTunnelAcceptanceRatio() : 1.0;
-        if (ar1 <= 0 && ar2 > 0.3) {return 1;}
-        if (ar2 <= 0 && ar1 > 0.3) {return -1;}
+        // Good (> 0.3) > Low (0 < r < 0.3) > Dead (<= 0): decide the dead
+        // tier first so dead never ties with low.
+        if (ar1 <= 0 && ar2 > 0) {return 1;}
+        if (ar2 <= 0 && ar1 > 0) {return -1;}
         if (ar1 < 0.3 && ar2 >= 0.3) {return 1;}
         if (ar2 < 0.3 && ar1 >= 0.3) {return -1;}
         return 0;
