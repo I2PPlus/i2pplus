@@ -273,6 +273,8 @@ public class RequestThrottler {
     public static void setSustainedModerateLoadMs(long val) { _sustainedModerateLoadMs = Math.max(10_000, Math.min(300_000, val)); }
 
     private static final long CLEAN_TIME = 90 * 1000L; // Reset limits every 90 seconds
+    /** Ban length for LU prev-hops under load */
+    private static final long LU_BAN_MS = 5 * 60 * 1000L;
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     // Burst detection configuration
@@ -293,6 +295,21 @@ public class RequestThrottler {
     static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     static final boolean DEFAULT_SHOULD_DISCONNECT = false;
     static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+
+    /**
+     *  Probability of enforcing the LU prev-hop ban at a given load score:
+     *  zero when idle, linear up to full enforcement at 50% load and beyond,
+     *  so unloaded routers carry LU traffic while loaded ones shed it.
+     *
+     *  @param loadScore the 0.0-1.0 load score from
+     *         {@link ParticipatingThrottler#calculateLoadScore}
+     *  @return the enforcement probability, clamped to 0.0-1.0
+     *  @since 0.9.71+
+     */
+    static float luEnforcementProbability(float loadScore) {
+        return Math.max(0.0f, Math.min(1.0f, loadScore * 2.0f));
+    }
+
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = true;
@@ -350,24 +367,34 @@ public class RequestThrottler {
      */
     boolean shouldThrottle(Hash h) {
         String routerId = h.toBase64().substring(0, 6);
-        RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
+        // Presence-only lookup: this runs on the hottest path in the router,
+        // and a background revalidation must neither fire lookups nor skip
+        // the capability checks below.
+        RouterInfo ri = (RouterInfo) context.netDb().lookupLocallyWithoutValidation(h);
 
-        // Ban LU routers unconditionally at throttler level too
-        if (ri != null) {
+        // LU routers (low-share + unreachable): enforce only under load, via a
+        // short ban whose probability scales with the load score, so unloaded
+        // routers still carry LU traffic instead of silently dropping it all.
+        if (ri != null && context.banlist().isLuBanEnabled()) {
             String caps = ri.getCapabilities();
             boolean isLowTier = caps != null && (caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                             caps.indexOf(Router.CAPABILITY_BW32) >= 0);
             boolean isUnreachable = caps != null && (caps.indexOf('U') >= 0 || caps.indexOf('R') < 0);
             if (isLowTier && isUnreachable) {
-                if (context.banlist().isLuBanEnabled() && !context.banlist().isBanlisted(h)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Banning LU Router at throttle: " + routerId);
+                float prob = luEnforcementProbability(ParticipatingThrottler.calculateLoadScore(context));
+                if (context.random().nextFloat() < prob || context.banlist().isBanlisted(h)) {
+                    if (!context.banlist().isBanlisted(h)) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Banning LU Router [" + routerId + "] for " +
+                                      (LU_BAN_MS / 60000) + "m under load");
+                        }
+                        String ipPort = TransportImpl.getRouterIPPort(ri);
+                        _banLogger.logBan(h, ipPort, "LU Router", LU_BAN_MS);
+                        context.banlist().banlistRouter(h, "LU Router", null, null, context.clock().now() + LU_BAN_MS);
                     }
-                    String ipPort = TransportImpl.getRouterIPPort(ri);
-                    _banLogger.logBan(h, ipPort, "LU Router", 60*60*1000L);
-                    context.banlist().banlistRouter(h, "LU Router", null, null, context.clock().now() + 60*60*1000);
+                    return true;
                 }
-                return true;
+                // Unloaded: fall through to the normal per-peer limits below
             }
         }
 
