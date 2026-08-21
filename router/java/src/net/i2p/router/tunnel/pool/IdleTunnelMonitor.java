@@ -12,19 +12,20 @@ import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.SystemVersion;
 
 /**
  * Monitors transit tunnels for idle behavior.
  *
- * This class periodically scans participating tunnels and:
- * 1. Drops tunnels carrying no traffic at all after the detection period
- *
- * With the default message floor of 1, only tunnels that have carried zero
- * messages since joining are dropped; quiet-but-active tunnels live out their
- * full lifetime, since expiration handles normal lifecycle.
+ * This class periodically scans participating tunnels and drops those that
+ * have carried no traffic at all since joining — but only as a pressure
+ * valve: culling is skipped unless the transit population is near the
+ * configured capacity, because every dropped tunnel looks like a failed
+ * tunnel to its originator. With defaults, quiet-but-alive tunnels live out
+ * their full lifetime; expiration handles normal lifecycle.
  *
  * Configurable properties:
- * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 180000ms)
+ * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 300000ms)
  * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 1)
  * - router.idleTunnelScanInterval: How often to scan (default: 60000ms)
  *
@@ -47,7 +48,9 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     }
 
     // Configuration
-    private static final long DEFAULT_DETECTION_PERIOD = 180 * 1000L; // 180 seconds
+    /** Five minutes: half of a tunnel's typical lifetime, so genuinely dead
+     *  tunnels are still reaped well before expiry */
+    private static final long DEFAULT_DETECTION_PERIOD = 300 * 1000L;
     /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling */
     private static final int DEFAULT_MIN_MESSAGES = 1;
     private static final long DEFAULT_SCAN_INTERVAL = 60 * 1000L; // 60 seconds
@@ -56,6 +59,13 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     private static final String PROP_DETECTION_PERIOD = "router.idleTunnelDetectionPeriod";
     private static final String PROP_MIN_MESSAGES = "router.idleTunnelMinMessages";
     private static final String PROP_SCAN_INTERVAL = "router.idleTunnelScanInterval";
+
+    /**
+     * Transit usage fraction at or above which idle culling runs; below it,
+     * capacity is not under pressure and expiration alone handles lifecycle.
+     */
+    protected static final double CULL_CAPACITY_FRACTION = 0.80;
+    private static final String PROP_MAX_PARTICIPATING = "router.maxParticipatingTunnels";
 
     private volatile boolean _isShutdown = false;
 
@@ -123,6 +133,20 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
             return;
         }
 
+        // Pressure valve: skip culling unless the transit population is near
+        // the configured capacity. Below that, dropped tunnels cost reputation
+        // with originators while freeing nothing we need.
+        int participating = _context.tunnelManager().getParticipatingCount();
+        int maxParticipating = _context.getProperty(
+                PROP_MAX_PARTICIPATING, SystemVersion.isSlow() ? 4000 : 10000);
+        if (!nearCapacity(participating, maxParticipating)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping idle tunnel scan -> Transit usage " + participating +
+                           " / " + maxParticipating + " below cull threshold");
+            }
+            return;
+        }
+
         // Collect all participating tunnels
         List<HopConfig> allTunnels = dispatcher.listParticipatingTunnels();
 
@@ -179,6 +203,22 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
         Hash from = tunnel.getReceiveFrom();
         if (from != null) return from;
         return tunnel.getSendTo();
+    }
+
+    /**
+     *  Whether the transit population is close enough to configured capacity
+     *  that idle culling is worthwhile. Pure decision helper, package visible
+     *  for tests.
+     *
+     *  @param participating current transit tunnel count
+     *  @param maxParticipating the configured participating-tunnel capacity
+     *  @return true if usage is at or above {@link #CULL_CAPACITY_FRACTION};
+     *          false when capacity is unknown or usage is below it
+     *  @since 0.9.71+
+     */
+    static boolean nearCapacity(int participating, int maxParticipating) {
+        if (maxParticipating <= 0) {return false;}
+        return (long) participating * 100 >= (long) maxParticipating * CULL_CAPACITY_FRACTION * 100;
     }
 
     /**
