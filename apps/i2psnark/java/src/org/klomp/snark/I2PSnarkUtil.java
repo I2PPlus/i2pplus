@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,6 +28,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSession;
+import net.i2p.client.impl.I2PSessionImpl;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
@@ -36,6 +38,7 @@ import net.i2p.client.streaming.I2PSocketManager.DisconnectListener;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.Base32;
+import net.i2p.data.LeaseSet;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -1184,6 +1187,57 @@ public class I2PSnarkUtil implements DisconnectListener {
     public Collection<TorrentDest> getTorrentDests() {
         return _torrentDests.values();
     }
+
+    /**
+     * The inbound and outbound tunnel counts allocated to our sessions, summed
+     * over the primary session and all per-torrent destinations, so both grow
+     * with the number of sessions in multi-dest mode. Inbound tunnels are
+     * counted exactly as the number of leases in each session's current lease
+     * set, one lease per allocated inbound tunnel. Outbound tunnels are not
+     * visible to an I2CP client, so the count is the effective outbound.quantity
+     * configured for each session, which this application assigns dynamically
+     * (build options and the IdleChecker ramp) and the router maintains as the
+     * session's outbound pool. Counts are zero before the sessions are connected.
+     *
+     * @return int[] of {inbound, outbound}, never null
+     * @since 0.9.71+
+     */
+    public int[] getTunnelCounts() {
+        int in = 0;
+        int out = 0;
+        List<I2PSession> sessions = new ArrayList<I2PSession>(_torrentDests.size() + 1);
+        I2PSocketManager mgr = _manager;
+        if (mgr != null) {
+            sessions.add(mgr.getSession());
+        }
+        for (TorrentDest td : _torrentDests.values()) {
+            sessions.add(td.getSocketManager().getSession());
+        }
+        for (I2PSession s : sessions) {
+            if (!(s instanceof I2PSessionImpl)) {
+                continue;
+            }
+            I2PSessionImpl impl = (I2PSessionImpl) s;
+            LeaseSet ls = impl.getLeaseSet();
+            if (ls != null) {
+                in += ls.getLeaseCount();
+            }
+            String q = impl.getOptions().getProperty("outbound.quantity");
+            if (q != null) {
+                try {
+                    out += Integer.parseInt(q);
+                } catch (NumberFormatException nfe) {
+                    out += DEFAULT_OUTBOUND_QUANTITY;
+                }
+            } else {
+                out += DEFAULT_OUTBOUND_QUANTITY;
+            }
+        }
+        return new int[] {in, out};
+    }
+
+    /** Router default for outbound.quantity when a session sets none */
+    private static final int DEFAULT_OUTBOUND_QUANTITY = 2;
 
     /**
      * Destroy all transient destinations. Called on shutdown.

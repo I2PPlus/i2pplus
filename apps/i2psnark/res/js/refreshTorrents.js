@@ -343,8 +343,8 @@ function initWorker() {
             const pending = workerRequests.get(requestId);
             if (!pending) {return;}
             workerRequests.delete(requestId);
-            if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_RESPONSE || type === MESSAGE_TYPES.FETCH_TUNNEL_COUNTS_RESPONSE) {pending.resolve(payload);}
-            else if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_ERROR || type === MESSAGE_TYPES.FETCH_TUNNEL_COUNTS_ERROR) {pending.reject(new Error(message || "Worker fetch failed"));}
+            if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_RESPONSE) {pending.resolve(payload);}
+            else if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_ERROR) {pending.reject(new Error(message || "Worker fetch failed"));}
         });
         worker.addEventListener("error", () => {workerFailed();});
     } catch {workerFailed();}
@@ -394,18 +394,6 @@ function fetchViaWorker(url, signal, type = MESSAGE_TYPES.FETCH_HTML_DOCUMENT, t
         signal.addEventListener("abort", onAbort, {once: true});
         worker.postMessage({type, requestId, url});
     });
-}
-
-/**
- * @function fetchTunnelCounts
- * @description Fetches the snark tunnel counts through the worker, which downloads and
- * parses the tunnel configuration page off the main thread. Rejects when the worker is
- * unavailable so callers can fall back to a direct fetch.
- * @returns {Promise<?Object>} An object with inCount and outCount properties, or null
- * when the page contains neither count.
- */
-function fetchTunnelCounts() {
-    return fetchViaWorker("/configtunnels", new AbortController().signal, MESSAGE_TYPES.FETCH_TUNNEL_COUNTS, 10000);
 }
 
 /**
@@ -546,13 +534,6 @@ async function refreshTorrents(payload) {
       initialized = true;
       if (window.top !== window.self && !document.documentElement.classList.contains("iframed")) {
         document.documentElement.classList.add("iframed");
-      }
-      if (!document.getElementById("tnlInCount")) {
-        snarkHead.classList.add("initializing");
-        await new Promise(resolve => setTimeout(() => {
-          snarkHead.classList.remove("initializing");
-          resolve();
-        }, 3 * 1000));
       }
     }
 
@@ -1075,4 +1056,4 @@ if (refreshChannel) {
   });
 }
 
-export { doRefresh, fetchTunnelCounts, getURL, initSnarkRefresh, markStartingRows, refreshScreenLog, refreshTorrents, setActiveSearch, snarkRefreshIntervalId, isDocumentVisible };
+export { doRefresh, getURL, initSnarkRefresh, markStartingRows, refreshScreenLog, refreshTorrents, setActiveSearch, snarkRefreshIntervalId, isDocumentVisible };

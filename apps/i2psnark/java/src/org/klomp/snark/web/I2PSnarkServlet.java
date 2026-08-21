@@ -787,8 +787,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isConfigure && !isStandalone()) {
             buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>\n")
                .append("<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>\n")
-               .append("<link rel=modulepreload href=/js/setupIframe.js>\n")
-               .append("<link rel=modulepreload href=").append(resourcePath).append("js/tunnelCounter.js>\n");
+               .append("<link rel=modulepreload href=/js/setupIframe.js>\n");
         }
         if (!isConfigure) {
             buf.append("<link rel=modulepreload href=").append(resourcePath).append("js/refreshTorrents.js>\n")
@@ -835,11 +834,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-               .append("  window.totalSnarks = totalSnarks;\n</script>\n");
-            if (!isStandalone()) {
-                buf.append("<script src=").append(resourcePath).append("js/tunnelCounter.js type=module></script>\n");
-            }
-            buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
+             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             if (delay > 0) {
@@ -1596,24 +1592,23 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</span></span>");
         out.write(buf.toString());
 
-        // Tunnel counter if not standalone
-        if (!isStandalone) {
-            buf.setLength(0);
-            buf.append("<span id=tnlInCount class=counter title=\"");
-            buf.append(titleInboundTunnels);
-            buf.append("\" hidden>");
-            appendIcon(buf, "inbound", "", "", true, true);
-            buf.append("<span class=badge></span></span>");
-            out.write(buf.toString());
+        // Tunnel counters, computed from our own sessions so they also work in standalone
+        int[] tnl = _manager.util().getTunnelCounts();
+        buf.setLength(0);
+        buf.append("<span id=tnlInCount class=counter title=\"");
+        buf.append(titleInboundTunnels);
+        buf.append("\">");
+        appendIcon(buf, "inbound", "", "", true, true);
+        buf.append("<span class=badge>").append(tnl[0]).append("</span></span>");
+        out.write(buf.toString());
 
-            buf.setLength(0);
-            buf.append("<span id=tnlOutCount class=counter title=\"");
-            buf.append(titleOutboundTunnels);
-            buf.append("\" hidden>");
-            appendIcon(buf, "outbound", "", "", true, true);
-            buf.append("<span class=badge></span></span>");
-            out.write(buf.toString());
-        }
+        buf.setLength(0);
+        buf.append("<span id=tnlOutCount class=counter title=\"");
+        buf.append(titleOutboundTunnels);
+        buf.append("\">");
+        appendIcon(buf, "outbound", "", "", true, true);
+        buf.append("<span class=badge>").append(tnl[1]).append("</span></span>");
+        out.write(buf.toString());
 
         out.write("</span></th>");
 

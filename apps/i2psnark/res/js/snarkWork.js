@@ -11,7 +11,7 @@
  */
 
 import {MESSAGE_TYPES} from "./messageTypes.js";
-import {extractRefreshPayload, extractTunnelCounts} from "./refreshPayload.js";
+import {extractRefreshPayload} from "./refreshPayload.js";
 
 /**
  * @type {Map<number, AbortController>}
@@ -67,42 +67,7 @@ async function handleFetch(requestId, url) {
 }
 
 /**
- * @async
- * @function handleTunnelCounts
- * @description Fetches the tunnel configuration page and posts the extracted snark
- * tunnel counts back to the main thread. Uses the same per-request abort tracking as
- * handleFetch so an ABORT message cancels the in-flight download.
- * @param {number} requestId - Correlates the response with the original request.
- * @returns {Promise<void>}
- */
-async function handleTunnelCounts(requestId) {
-    const controller = new AbortController();
-    activeRequests.set(requestId, controller);
-    try {
-        const response = await fetch("/configtunnels", {signal: controller.signal});
-        if (!response.ok) {throw new Error("HTTP " + response.status);}
-        self.postMessage({
-            type: MESSAGE_TYPES.FETCH_TUNNEL_COUNTS_RESPONSE,
-            requestId: requestId,
-            url: "/configtunnels",
-            payload: extractTunnelCounts(await response.text())
-        });
-    } catch (error) {
-        if (error.name !== "AbortError") {
-            self.postMessage({
-                type: MESSAGE_TYPES.FETCH_TUNNEL_COUNTS_ERROR,
-                requestId: requestId,
-                url: "/configtunnels",
-                message: error.message
-            });
-        }
-    } finally {
-        activeRequests.delete(requestId);
-    }
-}
-
-/**
- * @description Handles FETCH_HTML_DOCUMENT, FETCH_TUNNEL_COUNTS, and ABORT messages
+ * @description Handles FETCH_HTML_DOCUMENT and ABORT messages
  * from the main thread.
  * @param {MessageEvent} event - The message event.
  * @returns {void}
@@ -111,8 +76,6 @@ self.addEventListener("message", (event) => {
     const {type, requestId, url} = event.data || {};
     if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT && url) {
         handleFetch(requestId, url);
-    } else if (type === MESSAGE_TYPES.FETCH_TUNNEL_COUNTS) {
-        handleTunnelCounts(requestId);
     } else if (type === MESSAGE_TYPES.ABORT) {
         const controller = activeRequests.get(requestId);
         if (controller) {controller.abort();}

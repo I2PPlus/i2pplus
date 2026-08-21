@@ -3,8 +3,7 @@
  * @file refreshPayload.js - Extracts refresh data from an I2PSnark AJAX response.
  * @description Parses a fetched HTML document into a structured payload of container
  * strings and cell texts, so the main thread can update the page without parsing the
- * whole document. Also extracts the snark tunnel counts from the raw tunnel
- * configuration page text. Runs inside the snarkWork worker, on the main-thread
+ * whole document. Runs inside the snarkWork worker, on the main-thread
  * fallback path, and in tests.
  * @author dr|z3d
  * @license AGPL3 or later
@@ -56,22 +55,4 @@ function extractRefreshPayload(doc) {
     };
 }
 
-/**
- * @function extractTunnelCounts
- * @description Extracts the snark inbound and outbound tunnel counts from the raw tunnel
- * configuration page text, matching the <span id=snarkIn> and <span id=snarkOut> elements
- * rendered by ConfigTunnelsHelper. Avoids parsing the full page into a DOM.
- * @param {string} text - The raw response text of the tunnel configuration page.
- * @returns {?Object} An object with inCount and outCount string properties, or null when
- * either count is missing.
- */
-function extractTunnelCounts(text) {
-    const inMatch = text.match(/id\s*=\s*["']?snarkIn(?![-\w])["']?[^>]*>([^<]+)</);
-    const outMatch = text.match(/id\s*=\s*["']?snarkOut(?![-\w])["']?[^>]*>([^<]+)</);
-    const inCount = inMatch ? inMatch[1].trim() : "";
-    const outCount = outMatch ? outMatch[1].trim() : "";
-    if (inCount && outCount) {return {inCount, outCount};}
-    return null;
-}
-
-export {extractRefreshPayload, extractTunnelCounts};
+export {extractRefreshPayload};

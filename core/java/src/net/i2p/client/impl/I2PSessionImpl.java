@@ -642,9 +642,13 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Current lease set published by this session.
-     * @return the current lease set
+     * Each lease in the lease set corresponds to one inbound tunnel allocated
+     * to this session by the router, so the lease count is the number of
+     * active inbound tunnels for this destination.
+     *
+     * @return the current lease set, or null if not yet published
      */
-    LeaseSet getLeaseSet() {return _leaseSet;}
+    public LeaseSet getLeaseSet() {return _leaseSet;}
 
     /** Change the session state */
     protected void changeState(State state) {
@@ -1241,10 +1245,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Retrieve the configuration options, filtered.
      * All defaults passed in via constructor have been promoted to the primary map.
+     * Reflects updates applied via {@link #updateOptions(Properties)}, including
+     * router-side reconfiguration, so the effective tunnel quantity settings for
+     * this session may be read from the returned properties.
      *
      * @return non-null, if instantiated with null options, this will be the System properties.
+     * @since 0.9.71+
      */
-    Properties getOptions() {return _options;}
+    public Properties getOptions() {return _options;}
 
     /**
      * Retrieve the session's ID
