@@ -3929,6 +3929,16 @@ public class TunnelPool {
                 logSelectPeersFailure(settings, peers);
                 return null;
             }
+            // Final gate before dispatch: a peer whose RouterInfo vanished
+            // between selection and now would fail the build instantly.
+            // Returning null re-queues the pool for the next build pass,
+            // where selection will exclude the peer.
+            if (!hasAllPeerRIs(peers)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Peer RouterInfo missing after selection, deferring build for " + toString());
+                }
+                return null;
+            }
         } else {peers = Collections.singletonList(_context.routerHash());}
 
         PooledTunnelCreatorConfig cfg = createConfig(settings, peers, now, expiration);
@@ -3939,21 +3949,38 @@ public class TunnelPool {
     }
 
     /**
-     *  Expiration for a new tunnel, staggered 0-240s (4 min) to prevent all
-     *  tunnels expiring simultaneously.  With an 11-min lifetime, 240s
-     *  stagger spreads expirations over a 4-minute window.  When 11+ pools
-     *  all build at boot, their IB tunnels all expire at ~11 min, causing
-     *  ExpireJob.phase1 to remove them all in one batch → mass EMERGENCY
-     *  triggers → build storm → death spiral.  The stagger gives builds time
-     *  to complete before the next pool's tunnels expire.
-     *  Capped at 240s because NetDb rejects LeaseSets expiring >15 min in
-     *  the future (MAX_LEASE_FUTURE): with an 11-min lifetime, stagger must
-     *  stay under 4 min to avoid "Future LeaseSet" errors.
+     *  Expiration for a new tunnel, staggered to prevent all tunnels expiring
+     *  simultaneously.  With an 11-min lifetime, un-staggered tunnels across
+     *  many pools all expire at ~11 min, causing ExpireJob.phase1 to remove
+     *  them all in one batch → mass EMERGENCY triggers → build storm → death
+     *  spiral.  The stagger gives builds time to complete before the next
+     *  pool's tunnels expire.
+     *  Lifetime plus stagger must stay under the NetDb's 15-minute future-
+     *  lease rejection boundary (MAX_LEASE_FUTURE); the cap leaves a 15s
+     *  margin below it and the stagger no-ops entirely when the configured
+     *  lifetime alone reaches the boundary.
      */
     private long expirationWithStagger(long now) {
         long expiration = now + getTunnelLifetime(_context);
-        int stagger = _context.random().nextInt(240001);
-        return expiration + stagger;
+        long maxStagger = maxExpirationStagger(getTunnelLifetime(_context));
+        if (maxStagger <= 0) {return expiration;}
+        return expiration + _context.random().nextLong(maxStagger + 1);
+    }
+
+    /**
+     *  Upper bound for the expiration stagger: keeps lifetime plus stagger
+     *  under the NetDb's 15-minute future-lease rejection boundary with a
+     *  15-second margin, and never exceeds 4 minutes.
+     *
+     *  @param lifetimeMs the configured tunnel lifetime in ms
+     *  @return the maximum stagger in ms, 0 when the lifetime alone reaches
+     *          the boundary
+     *  @since 0.9.71+
+     */
+    static long maxExpirationStagger(long lifetimeMs) {
+        long rv = (15L * 60 * 1000) - (15 * 1000) - lifetimeMs;
+        if (rv <= 0) {return 0;}
+        return Math.min(rv, 240 * 1000L);
     }
 
     /**
@@ -3983,10 +4010,35 @@ public class TunnelPool {
                 peers = null;
                 continue; // try the next tunnel
             }
+            // Skip reuse if any peer's RouterInfo has dropped out of our
+            // local netdb since the tunnel was built; building through it
+            // would fail fast at dispatch.
+            if (!hasAllPeerRIs(peers)) {
+                peers = null;
+                continue; // try the next tunnel
+            }
             // Record cooldown for reused peers so selectPeers respects them
             recordPeerCooldowns(peers, now);
         }
         return peers;
+    }
+
+    /**
+     *  Whether every non-self peer in the list still has a RouterInfo cached
+     *  locally. Presence-only: uses the unvalidated lookup so a background
+     *  revalidation does not fail the check, matching the build requestor's
+     *  acceptance of unvalidated entries.
+     *
+     *  @param peers peer list to check, endpoint first, may include ourselves
+     *  @return true if all non-self peers have a cached RouterInfo
+     *  @since 0.9.71+
+     */
+    private boolean hasAllPeerRIs(List<Hash> peers) {
+        for (Hash p : peers) {
+            if (p.equals(_context.routerHash())) {continue;}
+            if (_context.netDb().lookupLocallyWithoutValidation(p) == null) {return false;}
+        }
+        return true;
     }
 
     /**
