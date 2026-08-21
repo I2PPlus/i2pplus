@@ -269,8 +269,9 @@ public abstract class BuildRequestor {
 
         I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         if (msg == null) {
-            log.warn("Tunnel build failed -> Could not create TunnelBuildMessage for " + cfg);
-            exec.buildComplete(cfg, OTHER_FAILURE, "No build message");
+            log.warn("Tunnel build failed -> Hop RouterInfo unavailable for " + cfg);
+            // Local netdb miss, not a peer failure: excluded from pool backoff
+            exec.buildComplete(cfg, NO_NETDB, "Hop RouterInfo unavailable");
             return false;
         }
 
@@ -283,10 +284,9 @@ public abstract class BuildRequestor {
         }
 
         if (isInbound) {
-            handleInboundBuild(ctx, cfg, pairedTunnel, msg, log);
-        } else {
-            handleOutboundBuild(ctx, cfg, pairedTunnel, msg, exec, log, firstHopTimeout);
+            return handleInboundBuild(ctx, cfg, pairedTunnel, msg, exec, log);
         }
+        handleOutboundBuild(ctx, cfg, pairedTunnel, msg, exec, log, firstHopTimeout);
         return true;
     }
 
@@ -373,30 +373,45 @@ public abstract class BuildRequestor {
         return null;
     }
 
-    private static void handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
-                                           TunnelInfo pairedTunnel, I2NPMessage msg, Log log) {
+    /**
+     * Dispatch an inbound build request through the paired tunnel, garlic-wrapping
+     * the ShortTBM when the IBGW differs from the paired tunnel's endpoint so the
+     * IBGW identity stays hidden.
+     *
+     * @return true if the request was dispatched
+     */
+    private static boolean handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
+                                              TunnelInfo pairedTunnel, I2NPMessage msgIn,
+                                              BuildExecutor exec, Log log) {
+        I2NPMessage msg = msgIn;
         Hash ibgw = getBuildRequestPeer(cfg);
         // Wrap in garlic if IBGW != OBEP (to hide IBGW from OBEP)
         if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !ibgw.equals(pairedTunnel.getEndpoint())) {
             RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
-            if (peer != null) {
-                I2NPMessage enc = MessageWrapper.wrap(ctx, msg, peer);
-                if (enc != null) {
-                    msg = enc;
-                } else if (log.shouldWarn()) {
-                    log.warn("Failed to garlic-wrap Inbound TunnelBuildMessage to " + ibgw);
+            if (peer == null) {
+                peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(ibgw);
+            }
+            I2NPMessage enc = peer != null ? MessageWrapper.wrap(ctx, msg, peer) : null;
+            if (enc != null) {
+                msg = enc;
+            } else {
+                // Sending the raw ShortTBM would expose the IBGW identity to
+                // the paired tunnel's endpoint; fail instead of leaking.
+                if (log.shouldWarn()) {
+                    log.warn("Cannot garlic-wrap Inbound TunnelBuildMessage to " + ibgw + " for " + cfg);
                 }
-            } else if (log.shouldWarn()) {
-                log.warn("No RouterInfo for " + ibgw + " -> Cannot wrap Inbound TunnelBuildMessage");
+                exec.buildComplete(cfg, peer != null ? OTHER_FAILURE : NO_NETDB, "Cannot wrap inbound TBM");
+                return false;
             }
         }
 
         if (log.shouldInfo()) {
             log.info("Sending Inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] for " + cfg +
                      "\n* Via: " + pairedTunnel + " to [" + ibgw.toBase64().substring(0,6) +
-                     "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
+                      "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
+        return true;
     }
 
     private static void handleOutboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
@@ -409,8 +424,13 @@ public abstract class BuildRequestor {
 
         RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(nextHop);
         if (peer == null) {
+            // Same revalidation-race fallback as the record builder
+            peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(nextHop);
+        }
+        if (peer == null) {
             log.warn("Next hop RouterInfo not found for outbound build: " + cfg);
-            exec.buildComplete(cfg, OTHER_FAILURE, "Next hop not in netdb");
+            // Local netdb miss, not a peer failure: excluded from pool backoff
+            exec.buildComplete(cfg, NO_NETDB, "Next hop not in netdb");
             return;
         }
 
@@ -517,7 +537,16 @@ public abstract class BuildRequestor {
         // Pre-fetch RouterInfos once for all hops, reused by ShortTBM check and record population
         RouterInfo[] hopRIs = new RouterInfo[cfg.getLength()];
         for (int i = 0; i < cfg.getLength(); i++) {
-            hopRIs[i] = ctx.netDb().lookupRouterInfoLocally(cfg.getPeer(i));
+            Hash peer = cfg.getPeer(i);
+            RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+            if (ri == null) {
+                // Accept an unvalidated cached entry rather than failing the
+                // build: the entry passed store-time validation and selection,
+                // so a background revalidation race must not turn healthy
+                // builds into instant failures.
+                ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peer);
+            }
+            hopRIs[i] = ri;
         }
 
         // Validate all hops support ShortTBM if we plan to use it

@@ -217,8 +217,8 @@ public class BuildExecutor implements Runnable {
 
     /**
      *  Pool-backoff counting excludes results that are not peer failures:
-     *  SUCCESS, DUP_ID (already handled), REJECT (peer said no), and
-     *  NO_TUNNELS (local resource condition).
+     *  SUCCESS, DUP_ID (already handled), REJECT (peer said no),
+     *  NO_TUNNELS (local resource condition), and NO_NETDB (local netdb miss).
      *
      *  @param result the build result
      *  @return true if the result increments the pool consecutive-failure counter
@@ -226,7 +226,8 @@ public class BuildExecutor implements Runnable {
      */
     static boolean countsAsPoolFailure(Result result) {
         return result != Result.SUCCESS && result != Result.DUP_ID &&
-               result != Result.REJECT && result != Result.NO_TUNNELS;
+               result != Result.REJECT && result != Result.NO_TUNNELS &&
+               result != Result.NO_NETDB;
     }
 
     /**
@@ -270,6 +271,8 @@ public class BuildExecutor implements Runnable {
         DUP_ID,
         /** No paired or exploratory tunnel was available to send the build */
         NO_TUNNELS,
+        /** A hop's RouterInfo was not available in the local netdb */
+        NO_NETDB,
         /** Other failure */
         OTHER_FAILURE
     }
@@ -1134,7 +1137,8 @@ public class BuildExecutor implements Runnable {
      */
     public void buildComplete(PooledTunnelCreatorConfig cfg, Result result, String detail) {
         if (_log.shouldInfo()) {
-            if ((result == Result.OTHER_FAILURE || result == Result.NO_TUNNELS) && detail != null) {
+            if ((result == Result.OTHER_FAILURE || result == Result.NO_TUNNELS ||
+                 result == Result.NO_NETDB) && detail != null) {
                 _log.info("Build failed -> " + detail + " for " + cfg);
             } else {
                 _log.info("Build complete (" + result + ") for " + cfg);
