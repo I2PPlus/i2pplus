@@ -667,7 +667,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return "unreachable";
         }
 
-        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupRouterInfoLocally(peerHash);
+        // Presence-only check: the validating lookup may fire network lookups
+        // per candidate during hot-path selection, and the build requestor
+        // accepts unvalidated cached entries, so selection matches that.
+        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peerHash);
         if (routerInfo == null) {
             return "no-routerinfo";
         }
