@@ -82,6 +82,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private final ProbeStalePeerJob _probeStalePeerJob;
     /** Job to refresh RouterInfo on contact. */
     private final ContactDrivenRefreshJob _contactRefreshJob;
+    /** Job to prefetch introducer RIs of unreachable peers. */
+    private final IntroducerLookupJob _introducerLookupJob;
     /** Batched search timeout entries keyed by bucket. */
     private final ConcurrentHashMap<Long, List<TimeoutEntry>> _searchTimeouts;
     /** Periodic processor for elapsed search timeouts. */
@@ -167,11 +169,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRateStat("netDb.lateReplyCacheSize", "Size of late reply grace period cache", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.lateReplyTimedOut", "Timed out peers added to late reply cache", "NetworkDatabase", rate);
         // No need to start the FloodfillMonitorJob for client subDb.
-        if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null; _contactRefreshJob = null;}
+        if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null; _contactRefreshJob = null; _introducerLookupJob = null;}
         else {
             _ffMonitor = new FloodfillMonitorJob(_context, this);
             _probeStalePeerJob = new ProbeStalePeerJob(_context, this);
             _contactRefreshJob = new ContactDrivenRefreshJob(_context, this);
+            _introducerLookupJob = new IntroducerLookupJob(_context, this);
         }
     }
 
@@ -183,6 +186,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (_ffMonitor != null) {_context.jobQueue().addJob(_ffMonitor);}
         if (_probeStalePeerJob != null) {_context.jobQueue().addJob(_probeStalePeerJob);}
         if (_contactRefreshJob != null) {_context.jobQueue().addJob(_contactRefreshJob);}
+        // Self-staggered: the job sets its own randomized initial delay.
+        if (_introducerLookupJob != null) {_context.jobQueue().addJob(_introducerLookupJob);}
         if (isClientDb()) {isFF = false;}
         else {
             isFF = _context.getBooleanProperty(PROP_FLOODFILL_PARTICIPANT);
