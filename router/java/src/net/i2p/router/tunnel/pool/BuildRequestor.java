@@ -9,6 +9,7 @@ import java.util.Properties;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.EmptyProperties;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
 import net.i2p.data.TunnelId;
@@ -66,7 +67,6 @@ public abstract class BuildRequestor {
     private static volatile long _cfgRefreshed;
     private static volatile int _cachedRequestTimeout;
     private static volatile int _cachedFirstHopTimeout;
-    private static volatile int _cachedMaxConsecutiveFails;
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -80,7 +80,6 @@ public abstract class BuildRequestor {
             return;
         _cachedRequestTimeout = ctx.getProperty("i2p.tunnel.build.requestTimeout", 15*1000);
         _cachedFirstHopTimeout = ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10*1000);
-        _cachedMaxConsecutiveFails = ctx.getProperty("i2p.tunnel.buildRequest.maxConsecutiveFails", 3);
         _cfgCtx = ctx;
         _cfgRefreshed = now;
     }
@@ -161,18 +160,6 @@ public abstract class BuildRequestor {
      * Randomized per-message by +/- 20s jitter to obscure tunnel length.
      */
     private static final int BUILD_MSG_TIMEOUT = 60*1000;
-
-    /**
-     *  Maximum consecutive client build timeouts before forcing exploratory tunnel for replies.
-     *  Tunable via i2p.tunnel.buildRequest.maxConsecutiveFails (default: 3)
-     *
-     *  @param ctx the router context
-     *  @return max consecutive failures
-     */
-    static int getMaxConsecutiveClientBuildFails(RouterContext ctx) {
-        refreshBuildConfig(ctx);
-        return _cachedMaxConsecutiveFails;
-    }
 
     /** Proposal 168 minimum bandwidth property key */
     static final String PROP_MIN_BW = "m";
@@ -292,9 +279,15 @@ public abstract class BuildRequestor {
 
     /**
      * Selects an appropriate tunnel for sending the build reply.
-     * Exploratory pools use exploratory tunnels; client pools try their
-     * own tunnels first, then any client tunnel, then exploratory as a
-     * last-resort bootstrap when zero client tunnels exist system-wide.
+     * Exploratory pools use exploratory tunnels. Client pools pair strictly
+     * within their own pool: borrowing another pool's tunnel for build
+     * traffic would correlate otherwise-isolated clients. If the pool has no
+     * tunnel yet (cold start), an exploratory tunnel bootstraps the first
+     * builds until the pool can pair with its own.
+     *
+     * On failure, the hops of a timed-out or refused build are cooled down
+     * out of selection (see BuildExecutor.penalizeTimeout / cooldownFailedPeers),
+     * so retries reselect peers rather than retrying the same failing set.
      */
     private static TunnelInfo selectPairedTunnel(RouterContext ctx, TunnelPool pool,
                                                   PooledTunnelCreatorConfig cfg,
@@ -317,55 +310,35 @@ public abstract class BuildRequestor {
             return expl; // null => zero-hop fallback
         }
 
-        // Client tunnel: try matching pool first, then any pool, then
-        // exploratory as last resort (cold-start bootstrap only).
-        // Using exploratory for replies congests the exploratory path
-        // and causes OB builds to timeout at 2x the rate of IB builds
-        // (54% vs 80%), so it's strictly a last resort.
+        // Client tunnel: pair within the pool only. Timeouts cool the failed
+        // config's hops down (penalizeTimeout), so a pool recovering from
+        // failures rebuilds with fresh peers instead of borrowing elsewhere
+        // or masking the problem on the exploratory path.
         Hash from = settings.getDestination();
-        int fails = pool.getConsecutiveBuildTimeouts();
-        TunnelInfo paired;
+        TunnelInfo paired = isInbound
+            ? mgr.selectOutboundTunnel(from, farEnd)
+            : mgr.selectInboundTunnel(from, farEnd);
 
-        // Step 1: try this pool's own tunnels (preferred).
-        // Skip when the pool itself has too many consecutive failures
-        // (its tunnels are likely stale/dropping replies).
-        if (fails < getMaxConsecutiveClientBuildFails(ctx)) {
-            paired = isInbound
-                ? mgr.selectOutboundTunnel(from, farEnd)
-                : mgr.selectInboundTunnel(from, farEnd);
-
-            if (paired != null) {
-                SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
-                if (skm != null || cfg.getGarlicReplyKeys() == null) {
-                    return paired;
-                }
-                if (log.shouldInfo()) {
-                    log.info("Client SKM unavailable for garlic reply, cannot build: " + cfg);
-                }
-                return null;
-            }
-        }
-
-        // Step 2: try any client tunnel (cross-pool — the reply just
-        // needs to reach the gateway, any tunnel of the right type works).
-        paired = isInbound
-            ? mgr.selectAnyOutboundTunnel()
-            : mgr.selectAnyInboundTunnel();
         if (paired != null) {
-            if (log.shouldInfo()) {
-                log.info("Cross-pool reply tunnel for " + cfg + ": " + paired);
+            SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
+            if (skm != null || cfg.getGarlicReplyKeys() == null) {
+                return paired;
             }
-            return paired;
+            if (log.shouldInfo()) {
+                log.info("Client SKM unavailable for garlic reply, cannot build: " + cfg);
+            }
+            return null;
         }
 
-        // Step 3: fall back to exploratory tunnels for cold-start bootstrap.
-        // Only when zero client tunnels exist system-wide.
+        // Cold start only: no own-pool tunnel exists yet. Exploratory bootstrap
+        // lets the first client builds complete; once the pool has tunnels this
+        // path is unreachable.
         TunnelInfo expl = isInbound
             ? mgr.selectOutboundExploratoryTunnel(farEnd)
             : mgr.selectInboundExploratoryTunnel(farEnd);
         if (expl != null) {
             if (log.shouldInfo()) {
-                log.info("Exploratory reply tunnel for " + cfg + ": " + expl);
+                log.info("Exploratory bootstrap reply tunnel for " + cfg + ": " + expl);
             }
             return expl;
         }
@@ -691,6 +664,9 @@ public abstract class BuildRequestor {
         @Override
         public void runJob() {
             Hash hopPeer = _cfg.getPeer(1);
+            // Keep the failed first hop out of the immediate retry selection
+            // regardless of which branch below applies.
+            TunnelPeerSelector._peerCooldowns.put(hopPeer, getContext().clock().now());
             RouterContext ctx = getContext();
             boolean connected = ctx.commSystem().isEstablished(hopPeer);
             boolean connecting = ctx.commSystem().isConnecting(hopPeer);
@@ -727,13 +703,15 @@ public abstract class BuildRequestor {
                 if (log.shouldInfo()) {
                     int estCount = ctx.commSystem().getEstablished() != null ?
                         ctx.commSystem().getEstablished().size() : 0;
-                    StringBuilder sb = new StringBuilder(256);
+StringBuilder sb = new StringBuilder(256);
                     sb.append("First hop ").append(backlogged ? "backlogged" : "unreachable")
                       .append(" for ").append(_cfg)
                       .append("\n * Peer [").append(hopPeer.toBase64().substring(0, 8)).append("]")
                       .append(" | inEst=").append(ctx.commSystem().getEstablished().contains(hopPeer))
-                      .append(" | estCount=").append(estCount)
-                      .append(" | ri=").append(ctx.netDb().lookupRouterInfoLocally(hopPeer) != null)
+                      .append(" | estCount=").append(estCount);
+                    // Presence-only check: this is for logging only, unvalidated lookup is sufficient
+                    DatabaseEntry de = ctx.netDb().lookupLocallyWithoutValidation(hopPeer);
+                    sb.append(" | ri=").append(de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
                       .append(" | connecting=").append(connecting)
                       .append(" | backlog=").append(backlogged)
                       .append(" | fast=").append(ctx.profileOrganizer().isFast(hopPeer))

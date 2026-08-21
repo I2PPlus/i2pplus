@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.EncType;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
 import net.i2p.data.EmptyProperties;
 import net.i2p.stat.RateConstants;
@@ -461,6 +462,9 @@ public class BuildHandler implements Runnable {
                     }
                     // penalize peer based on their reported error level
                     _context.profileManager().tunnelRejected(peer, rtt, howBad);
+                    // and keep them out of the immediate retry selection: we
+                    // know exactly who said no
+                    TunnelPeerSelector._peerCooldowns.put(peer, _context.clock().now());
                     _context.messageHistory().tunnelParticipantRejected(peer, "peer rejected after " + rtt + " with " + howBad + ": " + cfg.toString());
                     if (_log.shouldInfo()) {
                         _log.info("Received reply from [" + peer.toBase64().substring(0,6) + "] for [MsgID " + msg.getUniqueId() +
@@ -520,7 +524,9 @@ public class BuildHandler implements Runnable {
             }
             _context.statManager().addRateData("tunnel.corruptBuildReply", 1);
             _exec.buildComplete(cfg, BAD_RESPONSE); // don't leak
-            // TODO blame everybody
+            // The corrupt record is unattributable, so cool down every hop of
+            // the failed build out of the immediate retry selection.
+            _exec.cooldownFailedPeers(cfg);
         }
     }
 
@@ -552,8 +558,10 @@ public class BuildHandler implements Runnable {
                     if (_log.shouldWarn() && from != null) {
                         _log.warn("Dropped request from [" + from.toBase64().substring(0,6) + "] -> Local congestion");
                     }
-                    RouterInfo fromRI = _context.netDb().lookupRouterInfoLocally(from);
-                    if (fromRI != null) {
+                    // Presence-only check: this is a hot path, unvalidated lookup is sufficient
+                    DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(from);
+                    if (de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+                        RouterInfo fromRI = (RouterInfo) de;
                         String fromVersion = fromRI.getVersion();
                         // If fromVersion is greater than 0.9.58, then then ban the router due to it
                         // disrespecting our congestion flags
@@ -858,8 +866,10 @@ public class BuildHandler implements Runnable {
                 _pendingLookups.addFirst(pending);
                 break;
             }
-            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(pending.nextPeer);
-            if (ri != null) {
+            // Presence-only check: this is a hot path, unvalidated lookup is sufficient
+            DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(pending.nextPeer);
+            if (de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+                RouterInfo ri = (RouterInfo) de;
                 handleReq(ri, pending.state, pending.req, pending.nextPeer);
                 continue;
             }
@@ -1548,8 +1558,10 @@ public class BuildHandler implements Runnable {
      */
     private String getIPPortFromHash(Hash h) {
         try {
-            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
-            if (ri != null) {
+            // Presence-only check: this is for logging only, unvalidated lookup is sufficient
+            DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(h);
+            if (de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+                RouterInfo ri = (RouterInfo) de;
                 for (RouterAddress ra : ri.getAddresses()) {
                     if (ra != null) {
                         String host = ra.getHost();

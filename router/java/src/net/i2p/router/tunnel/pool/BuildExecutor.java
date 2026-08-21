@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.stat.RateConstants;
@@ -720,11 +721,16 @@ public class BuildExecutor implements Runnable {
      *  contacted hop only.  The per-tier expire stat and the didNotReply
      *  debug log stay per-hop for accounting and triage.
      *
+     *  Every non-self hop is additionally cooled down out of the immediate
+     *  retry selection ({@link #cooldownFailedPeers(PooledTunnelCreatorConfig)}),
+     *  since any of them may have been the silent one.
+     *
      *  @param cfg the expired build config, non-null
      *  @since 0.9.71+
      */
     void penalizeTimeout(PooledTunnelCreatorConfig cfg) {
         if (cfg.getLength() <= 1) {return;}
+        cooldownFailedPeers(cfg);
         final int length = cfg.getLength();
         final Hash contacted = BuildRequestor.getBuildRequestPeer(cfg);
         for (int iPeer = 0; iPeer < length; iPeer++) {
@@ -732,9 +738,11 @@ public class BuildExecutor implements Runnable {
             if (peer.equals(_context.routerHash())) {
                 continue; // Skip self
             }
-            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+            // Presence-only check: this is for blame logging, unvalidated lookup is sufficient
+            DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(peer);
             String bwTier = "Unknown";
-            if (ri != null) {
+            if (de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+                RouterInfo ri = (RouterInfo) de;
                 bwTier = ri.getBandwidthTier();
             }
             _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
@@ -745,6 +753,28 @@ public class BuildExecutor implements Runnable {
                 if (_ghostPeerManager != null) {
                     _ghostPeerManager.recordTimeout(peer);
                 }
+            }
+        }
+    }
+
+    /**
+     *  Cool down every non-self hop of a failed build so the immediate retry
+     *  selects different peers. Selection-scope only — entries live for
+     *  {@link TunnelPeerSelector#PEER_SELECTION_COOLDOWN_MS} and both peer
+     *  selectors consult this map; profile penalties are separate and, for
+     *  timeouts, go to the contacted hop only via
+     *  {@link #penalizeTimeout(PooledTunnelCreatorConfig)}.
+     *
+     *  @param cfg the failed build config
+     *  @since 0.9.71+
+     */
+    void cooldownFailedPeers(PooledTunnelCreatorConfig cfg) {
+        if (cfg == null || cfg.getLength() <= 1) {return;}
+        long now = _context.clock().now();
+        for (int iPeer = 0; iPeer < cfg.getLength(); iPeer++) {
+            Hash peer = cfg.getPeer(iPeer);
+            if (peer != null && !peer.equals(_context.routerHash())) {
+                TunnelPeerSelector._peerCooldowns.put(peer, now);
             }
         }
     }
