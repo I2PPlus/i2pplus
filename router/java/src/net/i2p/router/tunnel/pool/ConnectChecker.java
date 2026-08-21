@@ -106,9 +106,10 @@ import net.i2p.util.Log;
                 return true;
             }
         }
-        RouterInfo rt = (RouterInfo) ctx.netDb().lookupRouterInfoLocally(to);
+        // Presence-only checks: the build requestor accepts unvalidated cached entries
+        RouterInfo rt = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(to);
         if (rt == null) {return false;}
-        RouterInfo rf = (RouterInfo) ctx.netDb().lookupRouterInfoLocally(from);
+        RouterInfo rf = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(from);
         if (rf == null) {return false;}
         int ct;
         if (ust) {ct = getInboundMask(rt);} // to us

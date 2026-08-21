@@ -223,7 +223,7 @@ public class Banlist {
      *  Reload configuration from properties.
      *  Called when settings are changed in the console.
      *
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public void reloadConfig() {
         initConfig();
@@ -232,7 +232,7 @@ public class Banlist {
     /**
      *  Clear all session-based bans.
      *
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public void clearSessionBans() {
         _entries.clear();
@@ -245,7 +245,7 @@ public class Banlist {
      *  Get the current max offenses setting.
      *
      *  @return the maximum offenses before auto-ban
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public int getMaxOffenses() { return _maxOffenses; }
 
@@ -253,7 +253,7 @@ public class Banlist {
      *  Get the current offense window setting in ms.
      *
      *  @return the offense window in milliseconds
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public long getOffenseWindow() { return _offenseWindow; }
 
@@ -261,7 +261,7 @@ public class Banlist {
      *  Get the current startup grace period in ms.
      *
      *  @return the startup grace period in milliseconds
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public long getStartupGrace() { return _startupGrace; }
 
@@ -269,7 +269,7 @@ public class Banlist {
      *  Get the current bad packet ban duration in ms.
      *
      *  @return the bad packet ban duration in milliseconds
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public long getBadPacketDuration() { return _badPacketDuration; }
 
@@ -277,7 +277,7 @@ public class Banlist {
      *  Check if bad packet auto-ban is enabled.
      *
      *  @return true if bad packet auto-ban is enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isBadPacketBanEnabled() { return _enableBadPacketBan; }
 
@@ -285,7 +285,7 @@ public class Banlist {
      *  Check if corrupt connection auto-ban is enabled.
      *
      *  @return true if corrupt connection auto-ban is enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isCorruptConnectionBanEnabled() { return _enableCorruptConnectionBan; }
 
@@ -293,7 +293,7 @@ public class Banlist {
      *  Check if port hopping auto-ban is enabled.
      *
      *  @return true if port hopping auto-ban is enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isPortHoppingBanEnabled() { return _enablePortHoppingBan; }
 
@@ -301,7 +301,7 @@ public class Banlist {
      *  Check if IP blocklist is enabled.
      *
      *  @return true if IP blocklist is enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isBlocklistEnabled() { return _enableBlocklist; }
 
@@ -309,7 +309,7 @@ public class Banlist {
      *  Check if Tor exit node blocklist is enabled.
      *
      *  @return true if Tor exit node blocklist is enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isTorBlocklistEnabled() { return _enableTorBlocklist; }
 
@@ -317,7 +317,7 @@ public class Banlist {
      *  Check if country-based bans are enabled.
      *
      *  @return true if country-based bans are enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isCountryBanEnabled() { return _enableCountryBan; }
 
@@ -326,16 +326,16 @@ public class Banlist {
      *  XG = unlimited bandwidth (X), no transit tunnels (G) - often botnet indicators
      *
      *  @return true if XG router bans are enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isXgBanEnabled() { return _enableXgBan; }
 
-/**
+    /**
      *  Check if LU router bans are enabled.
      *  LU = low bandwidth tier (L) + unreachable/firewalled (U)
      *
      *  @return true if LU router bans are enabled
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean isLuBanEnabled() { return _enableLuBan; }
 
@@ -344,7 +344,7 @@ public class Banlist {
      *  True if LU/XG bans or custom capability bans are enabled.
      *
      *  @return true if existing routers should be purged
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public boolean shouldPurgeExistingRouters() {
         return _enableLuBan || _enableXgBan ||
@@ -356,7 +356,7 @@ public class Banlist {
      *  Format: string of capability letters (e.g., "DG", "UX")
      *
      *  @return the custom capability ban pattern, or empty string if none
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public String getCustomCapabilityBans() { return _customCapabilityBans != null ? _customCapabilityBans : ""; }
 
@@ -365,7 +365,7 @@ public class Banlist {
      *
      *  @param capabilities router capabilities string (e.g., "XfP")
      *  @return the matched pattern (e.g., "G") or null if no match
-     *  @since 0.9.70
+     *  @since 0.9.70+
      */
     public String shouldBanlistByCapability(String capabilities) {
         if (_customCapabilityBans == null || _customCapabilityBans.isEmpty() || capabilities == null) {

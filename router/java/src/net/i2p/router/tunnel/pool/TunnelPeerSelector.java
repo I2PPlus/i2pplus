@@ -20,6 +20,7 @@ import net.i2p.crypto.SigType;
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterIdentity;
@@ -1554,8 +1555,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @return true if the peer has an NTCP2 address
      */
     protected static boolean supportsNTCP2(RouterContext ctx, Hash peer) {
-        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
-        if (ri == null) return false;
+        // Presence-only check: the validating lookup may fire network lookups
+        // per candidate during hot-path selection, and the build requestor
+        // accepts unvalidated cached entries, so selection matches that.
+        DatabaseEntry de = ctx.netDb().lookupLocallyWithoutValidation(peer);
+        if (de == null || de.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) return false;
+        RouterInfo ri = (RouterInfo) de;
         for (RouterAddress ra : ri.getAddresses()) {
             if ("NTCP2".equals(ra.getTransportStyle()))
                 return true;
@@ -1573,8 +1578,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @return true if the peer has a valid SSU or NTCP address
      */
     protected static boolean hasValidTransportAddress(RouterContext ctx, Hash peer) {
-        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
-        if (ri == null) return false;
+        // Presence-only check: the validating lookup may fire network lookups
+        // per candidate during hot-path selection, and the build requestor
+        // accepts unvalidated cached entries, so selection matches that.
+        DatabaseEntry de = ctx.netDb().lookupLocallyWithoutValidation(peer);
+        if (de == null || de.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) return false;
+        RouterInfo ri = (RouterInfo) de;
         for (RouterAddress ra : ri.getAddresses()) {
             if (isUsableRouterAddress(ra)) {return true;}
         }

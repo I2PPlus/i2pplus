@@ -92,6 +92,7 @@ public class ClientPeerSelectorOrderTest {
         // and the selection survives finalizeSelection.
         NetworkDatabaseFacade ndb = mock(NetworkDatabaseFacade.class);
         when(ndb.lookupRouterInfoLocally(any(Hash.class))).thenReturn(ssuRouterInfo());
+        when(ndb.lookupLocallyWithoutValidation(any(Hash.class))).thenReturn(ssuRouterInfo());
         when(_ctx.netDb()).thenReturn(ndb);
 
         CommSystemFacade cs = mock(CommSystemFacade.class);

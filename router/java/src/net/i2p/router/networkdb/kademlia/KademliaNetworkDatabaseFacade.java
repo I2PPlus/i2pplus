@@ -1127,7 +1127,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private void handleCustomCapabilityBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {
         String caps = ri.getCapabilities();
         String routerId = key.toBase64().substring(0,6);
-        long banDuration = _context.banlist().getBadPacketDuration();
+        long banDuration = 4*60*60*1000;
         String matchedCap = _context.banlist().shouldBanlistByCapability(caps);
         String reason = "Custom ban: " + matchedCap + " Router";
         if (_log.shouldWarn()) {
