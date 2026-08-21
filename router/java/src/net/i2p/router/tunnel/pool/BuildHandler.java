@@ -5,7 +5,7 @@ import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,7 +67,8 @@ public class BuildHandler implements Runnable {
     private final IdleTunnelMonitor _idleTunnelMonitor;
     private final BanLogger _banLogger;
     private final AtomicInteger _currentLookups = new AtomicInteger();
-    private final ConcurrentLinkedQueue<PendingLookup> _pendingLookups = new ConcurrentLinkedQueue<>();
+    /** FIFO of deferred lookups waiting for a concurrent-lookup slot */
+    private final ConcurrentLinkedDeque<PendingLookup> _pendingLookups = new ConcurrentLinkedDeque<>();
     private volatile boolean _isRunning;
     private final Object _startupLock = new Object();
     private ExplState _explState = ExplState.NONE; // NOSONAR S1170
@@ -133,6 +134,22 @@ public class BuildHandler implements Runnable {
     private static int getPercentLookupLimit(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedPercentLookupLimit;
+    }
+
+    /**
+     * How long a queued next-hop lookup may wait before it is discarded as
+     * stale. Capped by the originator's build request timeout less the lookup
+     * timeout: past that budget the originator has given up, so completing
+     * the join is wasted work, while discarding earlier abandons builds that
+     * could still have succeeded within the originator's budget.
+     *
+     * @param requestTimeoutMs the originator's build request timeout in ms
+     * @param nextHopLookupTimeoutMs the per-lookup timeout in ms
+     * @return the pending entry max age in ms, always positive
+     */
+    static long pendingLookupMaxAge(long requestTimeoutMs, long nextHopLookupTimeoutMs) {
+        long rv = requestTimeoutMs - nextHopLookupTimeoutMs;
+        return rv > 0 ? rv : Math.max(2 * nextHopLookupTimeoutMs, 1);
     }
     private static long getMaxRequestFuture(RouterContext ctx) {
         refreshBuildConfig(ctx);
@@ -208,6 +225,7 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.rejectFuture", "Rejected tunnel build (time in future)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout", "Rejected tunnel build (unknown next hop)", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.dropLookupStale", "Dropped deferred next-hop lookup (expired in queue)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTooOld", "Rejected tunnel build (too old)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.buildHandler.queueSize", "Build handler inbound queue depth", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.acceptLoad", "Delay processing accepted request (ms)", "Tunnels [Participating]", RATES);
@@ -396,7 +414,9 @@ public class BuildHandler implements Runnable {
                     return;
                 }
                 int howBad = statuses[record].code;
-                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+                // Label-only lookup: use the cached entry without triggering
+                // validation or network lookups while processing replies.
+                RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
                 String bwTier = "Unknown";
                 if (ri != null) {
                     bwTier = ri.getBandwidthTier();
@@ -617,6 +637,10 @@ public class BuildHandler implements Runnable {
                                   "] -> Queue size: " + _pendingLookups.size() + " / Lookups: " + currentLookups + " / " + limit + req);
                     }
                 } else {
+                    // No explicit reject is possible here: the build reply can
+                    // only travel back through the next hop we failed to
+                    // resolve, so the originator sees a timeout. The pending
+                    // queue and its stale window keep these drops rare.
                     _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                     if (_log.shouldInfo()) {
                         _log.info("Dropping tunnel build [MsgID " + (state.msg != null ? String.valueOf(state.msg.getUniqueId()) : "null") + "] -> Lookup queue full (" + _pendingLookups.size() + ")");
@@ -698,7 +722,7 @@ public class BuildHandler implements Runnable {
                 _log.debug("Request " + _state.msg.getUniqueId() + " handled with a successful deferred lookup: " + _req);
             }
             RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(_nextPeer);
-            if (ri != null) {
+            if (ri != null && _state.claimHandled()) {
                 long lookupTime = now - lookupStartTime;
                 handleReq(ri, _state, _req, _nextPeer);
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 1);
@@ -708,7 +732,7 @@ public class BuildHandler implements Runnable {
                 if (_log.shouldInfo()) {
                     _log.info("Successful lookup for [" + _nextPeer.toBase64().substring(0,6) + "] took " + lookupTime + "ms");
                 }
-            } else {
+            } else if (ri == null) {
                 if (_log.shouldInfo()) {
                     _log.info("Lookup deferred, but we couldn't find [" + _nextPeer.toBase64().substring(0,6) + "] ? " + _req);
                 }
@@ -749,22 +773,28 @@ public class BuildHandler implements Runnable {
         public String getName() {return "Timeout Locating Peer for Tunnel Join";}
 
         /**
-         * Reject the request and blame the peer that could not be located.
+         * Reject the request. The lookup timeout is a local netdb miss, not a
+         * fault of the next hop, so the peer's profile is left untouched and
+         * any established connection is kept: blaming healthy peers here
+         * degraded selection quality over time, and mayDisconnect() shed
+         * connections that later builds could have used.
          */
         @Override
         public void runJob() {
-            getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
-            getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
-            Hash from = _state.fromHash;
-            if (_log.shouldInfo()) {
-                if (from == null && _state.from != null) {from = _state.from.calculateHash();}
-                _log.info("Timeout (" + getNextHopLookupTimeout(_context) / 1000 + "s) locating peer for next hop " + _req +
-                          "\n* From: " + from + " [MsgID " + _state.msg.getUniqueId() + "]");
+            if (_state.claimHandled()) {
+                getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
+                getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
+                Hash from = _state.fromHash;
+                if (_log.shouldInfo()) {
+                    if (from == null && _state.from != null) {from = _state.from.calculateHash();}
+                    _log.info("Timeout (" + getNextHopLookupTimeout(_context) / 1000 + "s) locating peer for next hop " + _req +
+                              "\n* From: " + from + " [MsgID " + _state.msg.getUniqueId() + "]");
+                }
+                _context.messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");
+            } else if (_log.shouldInfo()) {
+                _log.info("Lookup for [" + _nextPeer.toBase64().substring(0,6) + "] completed after timeout fired, ignoring [MsgID " +
+                          _state.msg.getUniqueId() + "]");
             }
-            if (_nextPeer != null) {_context.commSystem().mayDisconnect(_nextPeer);}
-            _context.profileManager().tunnelFailed(_nextPeer, 100); // blame
-            _context.profileManager().tunnelTimedOut(_nextPeer);
-            _context.messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");
 
             if (!_decremented.getAndSet(true)) {
                 if (_currentLookups.decrementAndGet() < 0) {
@@ -806,21 +836,23 @@ public class BuildHandler implements Runnable {
     private void drainPendingLookups() {
         int numTunnels = _context.tunnelManager().getParticipatingCount();
         int limit = Math.max(getMinLookupLimit(_context), Math.min(getMaxLookupLimit(_context), numTunnels * getPercentLookupLimit(_context) / 100));
-        long maxAge = (long) getNextHopLookupTimeout(_context) * 2;
+        long maxAge = pendingLookupMaxAge(BuildRequestor.getRequestTimeout(_context), getNextHopLookupTimeout(_context));
 
         PendingLookup pending;
-        while ((pending = _pendingLookups.poll()) != null) {
+        while ((pending = _pendingLookups.pollFirst()) != null) {
             long age = System.currentTimeMillis() - pending.queuedTime;
             if (age > maxAge) {
                 if (_log.shouldInfo()) {
                     _log.info("Discarding stale pending lookup for [" + pending.nextPeer.toBase64().substring(0,6) + "] after " + age + "ms");
                 }
-                _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
+                _context.statManager().addRateData("tunnel.dropLookupStale", 1);
                 continue;
             }
             int currentLookups = _currentLookups.get();
             if (currentLookups >= limit) {
-                _pendingLookups.offer(pending);
+                // Re-insert at the head so FIFO order is preserved for the
+                // next drain once a lookup slot frees up.
+                _pendingLookups.addFirst(pending);
                 break;
             }
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(pending.nextPeer);
@@ -1353,6 +1385,8 @@ public class BuildHandler implements Runnable {
         final Hash fromHash;
         final long recvTime;
         private long lookupStartTime = -1;
+        /** Guards against a deferred lookup completing after its timeout fired, or vice versa */
+        private final AtomicBoolean _handled = new AtomicBoolean(false);
 
         /**
          *  Either f or h may be null, but both should be null only if we're to be a IBGW and it came from us as a OBEP.
@@ -1388,6 +1422,13 @@ public class BuildHandler implements Runnable {
          * @return the lookup start time
          */
         public long getLookupStartTime() {return lookupStartTime;}
+        /**
+         * Claim exclusive handling of this request: exactly one of the
+         * deferred-lookup success job and its timeout job may act.
+         *
+         * @return true if this caller won and should process the request
+         */
+        boolean claimHandled() {return _handled.compareAndSet(false, true);}
         /**
          * Mark the request as dropped due to queue overload.
          */
