@@ -1074,7 +1074,9 @@ public class BuildHandler implements Runnable {
             }
         }
         if (response == 0 && (!isOutEnd) && _throttler != null && shouldThrottle) {
-            ParticipatingThrottler.Result result = _throttler.shouldThrottle(nextPeer);
+            // Consult-only for the next hop: this request did not advance its
+            // counter, so it must not DROP or ban on it.
+            ParticipatingThrottler.Result result = _throttler.shouldThrottle(nextPeer, false);
             if (result == ParticipatingThrottler.Result.DROP) {
                 if (_log.shouldInfo()) {
                     _log.info("Dropping Tunnel Request at next hop (throttled) -> [" + nextHop + "] " + (_log.shouldInfo() ? req : ""));

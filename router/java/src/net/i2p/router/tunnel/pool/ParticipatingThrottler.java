@@ -183,15 +183,29 @@ public class ParticipatingThrottler {
     }
 
     /**
-     * Determines whether to throttle tunnel participation for the given router.
-     * Increments the participation count for the router and evaluates conditions
-     * including router version, capabilities, and request count limits to decide
-     * if the tunnel request should be accepted, rejected, or dropped.
+     * Determines whether to throttle tunnel participation for the given router,
+     * counting the request against the peer's limit.
      *
      * @param h the hash of the router to check
      * @return the throttling Result (ACCEPT, REJECT, or DROP)
      */
     Result shouldThrottle(Hash h) {
+        return shouldThrottle(h, true);
+    }
+
+    /**
+     * Determines whether to throttle tunnel participation for the given router.
+     * When {@code countRequest} is set the request increments the peer's counter;
+     * consult-only checks read the current count without advancing it, and never
+     * DROP or ban on it: a count this request did not contribute to must not
+     * silently kill it, and mid-chain hops would otherwise accumulate roughly
+     * twice per tunnel via both their prev-hop and next-hop roles.
+     *
+     * @param h the hash of the router to check
+     * @param countRequest true to increment the peer's counter
+     * @return the throttling Result (ACCEPT, REJECT, or DROP)
+     */
+    Result shouldThrottle(Hash h, boolean countRequest) {
         RouterInfo ri = (RouterInfo) context.netDb().lookupLocallyWithoutValidation(h);
         Hash us = context.routerHash();
         String caps = ri != null ? ri.getCapabilities() : "";
@@ -212,7 +226,7 @@ public class ParticipatingThrottler {
         boolean isCompressible = padding != null && padding.length >= 64 && DataHelper.eq(padding, 0, padding, 32, 32);
         int numTunnels = context.tunnelManager().getParticipatingCount();
         int limit = calculateLimit(numTunnels, isUnreachable, isLowShare, isFast);
-        int count = counter.increment(h);
+        int count = countRequest ? counter.increment(h) : counter.count(h);
         Result rv;
         int bantime = isLU || isLowShare || isUnreachable ? 60*60*1000 : 4*60*60*1000;
         boolean shouldThrottle = context.getProperty(RequestThrottler.PROP_SHOULD_THROTTLE, RequestThrottler.DEFAULT_SHOULD_THROTTLE);
@@ -234,7 +248,7 @@ public class ParticipatingThrottler {
         if (checkLowShareAndVersion(version, isLU, shouldBlockOldRouters, h, shouldDisconnect, isBanned, caps, bantime, ri)) return Result.DROP;
         if (checkUnreachableAndOld(version, isUnreachable, isFast, shouldBlockOldRouters, h, shouldDisconnect, isBanned, caps)) return Result.DROP;
 
-        rv = evaluateThrottleConditions(count, limit, shouldThrottle, isFast, isLowShare, isUnreachable, h, caps, isBanned, bantime, ri);
+        rv = evaluateThrottleConditions(count, limit, shouldThrottle, isFast, isLowShare, isUnreachable, h, caps, isBanned, bantime, ri, countRequest);
         if (rv == Result.ACCEPT) {
             context.statManager().addRateData("tunnel.throttleParticipatingAccept", 1);
         } else if (rv == Result.REJECT) {
@@ -422,7 +436,7 @@ public class ParticipatingThrottler {
     /**
      * Evaluates whether to accept, reject, or drop tunnel requests based on
      * probabilistic rejection curve modulated by system load.
-     * Replaces the old deterministic count > limit cutoff with a smooth
+     * Replaces the old deterministic count &gt; limit cutoff with a smooth
      * probability function that ramps from 0 at the reject threshold to
      * near-1 under load or high ratio.
      *
@@ -436,10 +450,15 @@ public class ParticipatingThrottler {
      * @param caps router capabilities string
      * @param isBanned true if router is already banned
      * @param bantime ban duration in milliseconds
+     * @param ri the RouterInfo, for ban logging
+     * @param countRequest true when this request advanced the counter;
+     *                     consult-only checks downgrade DROP to REJECT and
+     *                     never ban on a count they did not contribute to
      * @return Result indicating ACCEPT, REJECT, or DROP action
      */
     private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,
-                                              boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime, RouterInfo ri) {
+                                              boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime, RouterInfo ri,
+                                              boolean countRequest) {
         if (!shouldThrottle || limit <= 0)
             return Result.ACCEPT;
 
@@ -463,10 +482,16 @@ public class ParticipatingThrottler {
             prob = Math.min(1.0f, Math.max(0.0f, prob));
 
             if (context.random().nextFloat() < prob) {
-                if (ratio >= 2.0f || (isUnreachable && count > limit + 30) ||
-                    (isLowShare && count > limit + 20)) {
+                if ((countRequest && (ratio >= 2.0f || (isUnreachable && count > limit + 30) ||
+                     (isLowShare && count > limit + 20)))) {
                     handleExcessiveRequests(h, caps, count, limit, bantime, ri);
                     return Result.DROP;
+                }
+                if (!countRequest && ratio >= 2.0f) {
+                    // Consult-only: too high to accept silently, but this request
+                    // did not advance the counter — reject instead of dropping,
+                    // and leave bans to counting requests.
+                    return Result.REJECT;
                 }
                 _logHighRequestCount(h, caps, count, limit);
                 return Result.REJECT;

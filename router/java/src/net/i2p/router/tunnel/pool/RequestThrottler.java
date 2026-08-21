@@ -275,6 +275,12 @@ public class RequestThrottler {
     private static final long CLEAN_TIME = 90 * 1000L; // Reset limits every 90 seconds
     /** Ban length for LU prev-hops under load */
     private static final long LU_BAN_MS = 5 * 60 * 1000L;
+    /** Burst offenses before a ban issues; earlier offenses only throttle the request */
+    private static final int BURST_BAN_OFFENSES = 3;
+    /** Ban length for the first banning burst offense, scaling with further offenses */
+    private static final long BURST_BAN_BASE_MS = 5 * 60 * 1000L;
+    /** Ceiling for burst bans */
+    private static final long BURST_BAN_MAX_MS = 30 * 60 * 1000L;
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     // Burst detection configuration
@@ -308,6 +314,37 @@ public class RequestThrottler {
      */
     static float luEnforcementProbability(float loadScore) {
         return Math.max(0.0f, Math.min(1.0f, loadScore * 2.0f));
+    }
+
+    /**
+     *  Effective single-second burst threshold for a peer: the configured
+     *  floor, raised so peers whose limit permits heavy traffic are not
+     *  banned for bursts that limit allows (one tenth of the 90-second
+     *  request limit as a per-second ceiling).
+     *
+     *  @param configuredThreshold the i2p.tunnel.requestThrottle.burst1sThreshold value
+     *  @param limit the peer's request limit for the current window
+     *  @return the burst threshold in requests per second
+     *  @since 0.9.71+
+     */
+    static int burstThreshold(int configuredThreshold, int limit) {
+        return Math.max(configuredThreshold, limit / 10);
+    }
+
+    /**
+     *  Ban length for a repeated burst offense: zero for the first
+     *  {@link #BURST_BAN_OFFENSES} - 1 offenses (throttle-only), then five
+     *  minutes growing by five minutes per further offense, capped at
+     *  thirty minutes.
+     *
+     *  @param offenses the consecutive offense count, 1-based
+     *  @return the ban duration in ms, 0 when only throttling applies
+     *  @since 0.9.71+
+     */
+    static long burstBanDurationMs(int offenses) {
+        if (offenses < BURST_BAN_OFFENSES) {return 0;}
+        long rv = BURST_BAN_BASE_MS * (offenses - BURST_BAN_OFFENSES + 1);
+        return Math.min(rv, BURST_BAN_MAX_MS);
     }
 
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
@@ -428,51 +465,33 @@ public class RequestThrottler {
         boolean rv = count > limit;
         boolean enableThrottle = cachedShouldThrottle;
 
-        // Check for severe burst (10+ requests in 1 second) - immediate ban
+        // Burst detection, graduated: busy hops legitimately exceed short
+        // windows during build storms, so the first offenses only throttle
+        // this request; bans come after repeated distinct bursts and stay
+        // short and capped. The 1s threshold scales with the peer's limit so
+        // high-limit peers are not banned for traffic their limit allows.
         if (enableThrottle && !rv) {
-            int burstThreshold = _reqBurst1sThreshold;
-            int currentBucketCount = _burstCounter.getCurrentBucketCount(h);
-            if (currentBucketCount >= burstThreshold) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Severe transit request burst detected from Router [" + routerId + "] -> " +
-                              "Requests: " + currentBucketCount + " in 1s (threshold: " + burstThreshold + ")");
-                }
-                String ipPort = TransportImpl.getRouterIPPort(ri);
-                _banLogger.logBan(h, ipPort, "Transit request burst (10 in 1s)", 4*60*60*1000L);
-                context.banlist().banlistRouter(h, "Transit request burst", null, null, context.clock().now() + 4*60*60*1000);
-                if (cachedShouldDisconnect) {
-                    context.commSystem().forceDisconnect(h, "Transit request burst");
-                }
-                return true;
-            }
-
-            // Check 10-second burst threshold (escalating bans)
-            if (_burstCounter.isBursting(h, limit)) {
+            boolean burst = _burstCounter.getCurrentBucketCount(h) >=
+                            burstThreshold(_reqBurst1sThreshold, limit) ||
+                            _burstCounter.isBursting(h, limit);
+            if (burst) {
                 BurstOffenseRecord record = _burstOffenses.computeIfAbsent(h, k -> new BurstOffenseRecord());
                 record.recordOffense();
                 int offenses = record.getConsecutiveOffenses();
-                int banTime;
-                String reason;
-                if (offenses >= 3) {
-                    banTime = 4 * 60 * 60 * 1000;
-                    reason = "Transit request burst (" + offenses + " offenses)";
-                } else if (offenses == 2) {
-                    banTime = 2 * 60 * 60 * 1000;
-                    reason = "Transit request burst (" + offenses + " offenses)";
-                } else {
-                    banTime = 60 * 60 * 1000;
-                    reason = "Transit request burst";
-                }
+                long banTime = burstBanDurationMs(offenses);
                 if (_log.shouldWarn()) {
-                    _log.warn("Transit request burst from Router [" + routerId + "] -> " + reason +
-                              " (ban: " + (banTime/60/60) + "h)");
+                    _log.warn("Transit request burst from Router [" + routerId + "] -> " +
+                              "Offense " + offenses + (banTime > 0 ?
+                              (" -> banning for " + (banTime / 60000) + "m") : " -> throttling request"));
                 }
-                String ipPort = TransportImpl.getRouterIPPort(ri);
-                _banLogger.logBan(h, ipPort, reason, banTime);
-                context.banlist().banlistRouter(h, "" + reason, null, null,
-                    context.clock().now() + banTime);
-                if (cachedShouldDisconnect) {
-                    context.commSystem().forceDisconnect(h, reason);
+                if (banTime > 0) {
+                    String ipPort = TransportImpl.getRouterIPPort(ri);
+                    _banLogger.logBan(h, ipPort, "Transit request burst", banTime);
+                    context.banlist().banlistRouter(h, "Transit request burst", null, null,
+                        context.clock().now() + banTime);
+                    if (cachedShouldDisconnect) {
+                        context.commSystem().forceDisconnect(h, "Transit request burst");
+                    }
                 }
                 return true;
             }
