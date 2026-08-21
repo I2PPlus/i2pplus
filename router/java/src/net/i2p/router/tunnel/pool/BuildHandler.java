@@ -337,7 +337,10 @@ public class BuildHandler implements Runnable {
         if (state.msg == null) {Thread.currentThread().interrupt(); return;}
         long now = System.currentTimeMillis();
         long uptime = _context.router().getUptime();
-        long dropBefore = now - (BuildRequestor.getRequestTimeout(_context) / 4);
+        // Half the originator's adaptive budget: a request older than this can
+        // no longer reliably reach its originator before they give up, but
+        // dropping earlier abandons builds that would still have succeeded.
+        long dropBefore = now - (BuildRequestor.getRequestTimeout(_context) / 2);
         int maxTunnels = getMaxParticipatingTunnels(_context);
         long lag = _context.jobQueue().getMaxLag();
         boolean isLagged = lag > getJobLagLimitTunnel(_context) && maxTunnels > 0 && uptime > 5*60*1000L;
@@ -1308,7 +1311,8 @@ public class BuildHandler implements Runnable {
                     boolean accept = true;
                     if (cur != null) {
                         long age = System.currentTimeMillis() - cur.recvTime;
-                        if (age >= BuildRequestor.getRequestTimeout(_context)/4) {
+                        // Half the originator's budget: see handleInboundRequest()
+                        if (age >= BuildRequestor.getRequestTimeout(_context)/2) {
                             _context.statManager().addRateData("tunnel.dropLoad", age, sz);
                             _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: High load"));
                             // if the queue is backlogged, stop adding new messages
