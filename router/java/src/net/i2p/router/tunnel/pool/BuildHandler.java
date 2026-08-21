@@ -1062,9 +1062,6 @@ public class BuildHandler implements Runnable {
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 _context.throttle().setTunnelStatus("[rejecting/transit]" + _x("Transit throttle drop"));
-                _context.commSystem().mayDisconnect(from);
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(from, 400);
                 return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
@@ -1074,8 +1071,6 @@ public class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 _context.throttle().setTunnelStatus("[rejecting/transit]" + _x("Transit throttle reject"));
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(from, 200);
             }
         }
         if (response == 0 && (!isOutEnd) && _throttler != null && shouldThrottle) {
@@ -1086,9 +1081,6 @@ public class BuildHandler implements Runnable {
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 _context.throttle().setTunnelStatus("[rejecting/transit]" + _x("Transit throttle drop"));
-                if (from != null) {_context.commSystem().mayDisconnect(from);}
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(nextPeer, 400);
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
                 if (_log.shouldInfo()) {
@@ -1097,8 +1089,6 @@ public class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 _context.throttle().setTunnelStatus("[rejecting/transit]" + _x("Transit throttle reject"));
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(nextPeer, 200);
             }
         }
         // BW params
@@ -1333,8 +1323,6 @@ public class BuildHandler implements Runnable {
                             }
                             _context.statManager().addRateData("tunnel.dropReqThrottle", 1);
                             _context.throttle().setTunnelStatus("[rejecting/transit]" + _x("Transit request throttle"));
-                            // fake failed so we won't use him for our tunnels
-                            _context.profileManager().tunnelFailed(fh, 400);
                             accept = false;
                         }
                     }
