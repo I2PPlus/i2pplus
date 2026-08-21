@@ -156,10 +156,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         this.rootDataDir = new File(rootDir);
         stopped = true;
         activity = "Network setup";
-        id = generateID();
-        if (_log.shouldInfo()) {
-            _log.info("Our PeerID for this session is: " + PeerID.idencode(id));
-        }
         // Figure out what the torrent argument represents.
         File f = null;
         byte[] x_infoHash = null;
@@ -201,6 +197,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
 
         infoHash = x_infoHash; // final
+        id = generateID();
         if (_log.shouldInfo()) _log.info(meta.toString());
 
         // When the metainfo torrent was created from an existing file/dir
@@ -330,7 +327,33 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         // storage remains null
     }
 
-    private static byte[] generateID() {
+    /**
+     * Our peer ID for trackers and peers: the spoofed client identity selected
+     * for this torrent's destination when i2psnark.clientId is configured, else
+     * the legacy anonymous ID of nine zero bytes, three 0x03 bytes, then eight
+     * random bytes.
+     *
+     * @return 20-byte peer ID
+     * @throws RouterException if the router is shutting down
+     */
+    private byte[] generateID() {
+        ClientID.Profile profile = _util.getClientID(infoHash);
+        if (profile != null) {
+            try {
+                byte[] rv = profile.buildPeerId(_util.getContext().random());
+                if (_log.shouldInfo()) {
+                    _log.info(
+                            "Our PeerID for this session is: "
+                                    + PeerID.idencode(rv)
+                                    + " ["
+                                    + profile.getName()
+                                    + ']');
+                }
+                return rv;
+            } catch (IllegalStateException ise) {
+                throw new RouterException("Router shutdown", ise);
+            }
+        }
         // Create a new ID and fill it with something random. First nine
         // zeros bytes, then three bytes filled with snark and then
         // eight random bytes.
@@ -344,6 +367,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         } catch (IllegalStateException ise) {
             throw new RouterException("Router shutdown", ise);
         } // random is shut down
+        if (_log.shouldInfo()) {
+            _log.info("Our PeerID for this session is: " + PeerID.idencode(rv));
+        }
         return rv;
     }
 

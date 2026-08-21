@@ -55,6 +55,7 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
+import org.klomp.snark.ClientID;
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
@@ -3415,7 +3416,12 @@ public class I2PSnarkServlet extends BasicServlet {
                     Destination dest = td.getMyDestination();
                     if (dest != null) {
                         poolBadge.append(" title=\"").append(_t("Destination")).append(": ")
-                                 .append(dest.toBase64().substring(0, 4)).append('"');
+                                 .append(dest.toBase64().substring(0, 4));
+                        ClientID.Profile cid = _manager.util().getClientID(snark.getInfoHash());
+                        if (cid != null) {
+                            poolBadge.append(" [").append(cid.getName()).append(']');
+                        }
+                        poolBadge.append('"');
                     }
                     poolBadge.append('>').append(td.getPoolNum()).append("</span>");
                     int tdEnd = statusString.indexOf("</td>");
@@ -3867,22 +3873,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String ch = pid.toString().substring(0, 4); // First 4 chars of PeerID
 
-        if ("AwMD".equals(ch)) {return "I2PSnark";}
-        else if ("LUFa".equals(ch)) {return "Vuze";}
-        else if ("LUJJ".equals(ch)) {return "BiglyBT";}
-        else if ("LVhE".equals(ch)) {return "XD";}
-        else if (ch.startsWith("LV")) {return "Transmission";}
-        else if ("LUtU".equals(ch)) {return "KTorrent";}
-        else if ("LUVU".equals(ch)) {return "EepTorrent";}
-        else if ("LURF".equals(ch)) {return "Deluge";}
-        else if ("LXFC".equals(ch)) {return "qBittorrent";}
-        else if ("LUxU".equals(ch)) {return "libtorrent";}
-        else if ("VElY".equals(ch)) {return "Tixati";}
-        else if ("LUky".equals(ch)) {return "i2pd";}
-        else if ("ZV".equals(ch.substring(2, 4)) || "VUZP".equals(ch)) {return "Robert";}
-        else if ("CwsL".equals(ch)) {return "I2PSnarkXL";}
-        else if ("BFJT".equals(ch)) {return "I2PRufus";}
-        else if ("TTMt".equals(ch)) {return "I2P-BT";}
+        String known = ClientID.getClientName(ch);
+        if (known != null) {return known;}
 
         // Try to extract client name from handshake "v" field
         Map<String, BEValue> handshake = peer.getHandshakeMap();
@@ -4505,7 +4497,14 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 buf.append(_t("Dest."));
             }
-            buf.append("<code>").append(IPString.substring(0,4)).append("</code></span>");
+            buf.append("<code>").append(IPString.substring(0,4));
+            if (!_manager.util().getMultiDest()) {
+                ClientID.Profile cid = _manager.util().getClientID(null);
+                if (cid != null) {
+                    buf.append(" [").append(cid.getName()).append(']');
+                }
+            }
+            buf.append("</code></span>");
         }
         buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
            .append("<span class=configOption><b>")

@@ -104,6 +104,7 @@ abstract class ExtensionHandler {
      * @param dht true to advertise DHT capability
      * @param uploadOnly true to advertise upload-only mode (BEP 21)
      * @param comment true to advertise ut_comment extension
+     * @param clientName the "v" value, or null for the default "I2PSnark"
      * @return bencoded outgoing handshake message
      */
     public static byte[] getHandshake(
@@ -111,7 +112,8 @@ abstract class ExtensionHandler {
             boolean pexAndMetadata,
             boolean dht,
             boolean uploadOnly,
-            boolean comment) {
+            boolean comment,
+            String clientName) {
         Map<String, Object> handshake = new HashMap<>();
         Map<String, Integer> m = new HashMap<>();
         if (pexAndMetadata) {
@@ -130,7 +132,7 @@ abstract class ExtensionHandler {
         // include the map even if empty so the far-end doesn't NPE
         handshake.put("m", m);
         handshake.put("p", Integer.valueOf(TrackerClient.PORT));
-        handshake.put("v", "I2PSnark");
+        handshake.put("v", clientName != null ? clientName : "I2PSnark");
         handshake.put("reqq", Integer.valueOf(PeerState.MAX_PIPELINE));
         // BEP 21
         if (uploadOnly) handshake.put("upload_only", Integer.valueOf(1));

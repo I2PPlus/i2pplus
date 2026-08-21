@@ -365,10 +365,16 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 boolean pexAndMetadata = metainfo == null || !metainfo.isPrivate();
                 boolean dht = util.getDHT() != null;
                 boolean comment = util.utCommentsEnabled();
+                ClientID.Profile cid = util.getClientID(infohash);
                 out.sendExtension(
                         0,
                         ExtensionHandler.getHandshake(
-                                metasize, pexAndMetadata, dht, uploadOnly, comment));
+                                metasize,
+                                pexAndMetadata,
+                                dht,
+                                uploadOnly,
+                                comment,
+                                cid != null ? cid.getExtHandshakeName() : null));
             }
 
             // Send our bitmap

@@ -27,6 +27,26 @@ without a restart.
   1 to 60 minutes, is skipped while any torrent is actively downloading, and
   restarts only the torrents that were running.
 
+- `i2psnark.clientId={random|i2psnark|Vuze|BiglyBT|Transmission|KTorrent|Deluge|qBittorrent|libtorrent|Tixati}`
+  Client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent
+  handshake peer ID, the extension handshake client name, and web seed fetches
+  all present as the selected well-known client instead of I2PSnark. In
+  multi-destination mode each destination pool is assigned its own random
+  client by default; in single-destination mode I2PSnark identifies as itself
+  unless a client name or "random" is set. Set to "random" to force random
+  selection in all modes, "i2psnark" to keep the classic identity even in
+  multi-destination mode, or to a client name to always impersonate that
+  client. Version strings are pinned to current upstream releases and are
+  consistent across the peer ID, User-Agent and extension handshake.
+  [Default is random per pool in multi-destination mode; applies to torrents
+  started afterwards]
+
+- `i2psnark.clientIds={name1,name2,...}`
+  Optionally restricts the clients chosen by random selection for
+  `i2psnark.clientId` to a comma-separated subset of known client names;
+  unknown names are ignored and an empty value selects from all supported
+  clients. [Default is unset; applies to torrents started afterwards]
+
 - `i2psnark.maxConcurrentChecks={n}`
   Maximum number of torrents whose storage is checked at the same time, when
   several torrents start or are rechecked together. Bounds the disk I/O storm

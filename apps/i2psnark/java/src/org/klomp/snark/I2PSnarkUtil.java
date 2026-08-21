@@ -128,6 +128,25 @@ public class I2PSnarkUtil implements DisconnectListener {
     private int _maxDest = SnarkManager.DEFAULT_MULTI_DEST_MAX;
     /** Per-run random salt mixing pool assignments so the grouping is unlearnable */
     private final int _destSalt;
+    /**
+     * Client identity spoofing setting. Empty (the default) means random
+     * profiles per pool when multi-dest is on and no spoofing otherwise;
+     * "random" forces random selection in all modes; "i2psnark" forces the
+     * classic identity even in multi-dest mode; a profile name always
+     * impersonates that client. Cached profiles are not recomputed when this
+     * changes mid-run, so running torrents keep a consistent identity.
+     */
+    private volatile String _clientIdSetting = "";
+    /** Restricted candidate set for random selection, empty for all */
+    private volatile List<ClientID.Profile> _clientIdCandidates = Collections.emptyList();
+    /** The profile for the shared destination, when multi-dest is off */
+    private ClientID.Profile _sharedClientId;
+    /** Profiles by pool index, so all torrents in a pool share one identity */
+    private final ConcurrentHashMap<Integer, ClientID.Profile> _poolClientIds =
+            new ConcurrentHashMap<Integer, ClientID.Profile>();
+    /** Profiles by info hash for dedicated destinations in multi-dest mode */
+    private final ConcurrentHashMap<String, ClientID.Profile> _dedicatedClientIds =
+            new ConcurrentHashMap<String, ClientID.Profile>();
     /** Sequential pool number for the tunnel nickname, one per pool destination created */
     private int _nextPoolNum;
     private final Map<String, TorrentDest> _torrentDests = new ConcurrentHashMap<>();
@@ -155,6 +174,21 @@ public class I2PSnarkUtil implements DisconnectListener {
      * User agent for eepget requests.
      */
     public static final String EEPGET_USER_AGENT = "I2PSnark";
+    /**
+     * Client identity spoofing setting: empty (default, identify as I2PSnark),
+     * "random" to pick a random known client profile per destination per run,
+     * or the name of a known client to always impersonate it.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_CLIENT_ID = "i2psnark.clientId";
+    /**
+     * Optional comma-separated subset of client names to choose from when
+     * {@link #PROP_CLIENT_ID} is "random"; unknown names are ignored.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_CLIENT_IDS = "i2psnark.clientIds";
     private static final boolean ENABLE_UDP_TRACKER = true;
     private static final List<String> HIDDEN_I2CP_OPTS =
             Arrays.asList(
@@ -843,6 +877,110 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setMaxDest(int maxDest) {
         _maxDest = maxDest;
+    }
+
+    /**
+     * Client identity spoofing. Empty (default): random known client profiles
+     * per pool in multi-dest mode, classic I2PSnark identity otherwise.
+     * "random": random profiles in all modes. "i2psnark": classic identity
+     * even in multi-dest mode. Any other value: the name of a known client to
+     * always impersonate, as accepted by {@link ClientID#getByName}.
+     *
+     * @param setting the i2psnark.clientId value
+     * @since 0.9.71+
+     */
+    public void setClientId(String setting) {
+        _clientIdSetting = setting != null ? setting.trim() : "";
+    }
+
+    /**
+     * Restrict the candidate set for random client selection. Unknown names
+     * are dropped; an empty list selects from all known clients.
+     *
+     * @param candidates the parsed candidate list, may be empty
+     * @since 0.9.71+
+     */
+    public void setClientIdCandidates(List<ClientID.Profile> candidates) {
+        _clientIdCandidates =
+                candidates != null ? candidates : Collections.<ClientID.Profile>emptyList();
+    }
+
+    /**
+     * The spoofed client identity for the torrent's destination, or null when
+     * identifying as I2PSnark. All torrents sharing a destination share one
+     * identity: a single profile per run when multi-dest is off, one profile
+     * per pool index otherwise, and one profile per torrent for dedicated
+     * destinations. With no i2psnark.clientId configured, multi-dest pools get
+     * random profiles by default and single-dest mode keeps the classic
+     * I2PSnark identity.
+     *
+     * @param ih the torrent's info hash, or null
+     * @return the profile, or null for no spoofing
+     * @since 0.9.71+
+     */
+    public ClientID.Profile getClientID(byte[] ih) {
+        String setting = _clientIdSetting;
+        if (!_multiDest || ih == null) {
+            // Unset stays unspoofed outside multi-dest mode
+            if (setting.isEmpty()) {
+                return null;
+            }
+            return getSharedClientId();
+        }
+        int poolIndex = getPoolIndex(ih);
+        if (poolIndex >= 0) {
+            return _poolClientIds.computeIfAbsent(poolIndex, k -> pickClientId());
+        }
+        return _dedicatedClientIds.computeIfAbsent(Base64.encode(ih), k -> pickClientId());
+    }
+
+    /**
+     * The HTTP User-Agent to send for the torrent's requests: the spoofed
+     * profile's UA when spoofing is on, else the default I2PSnark UA.
+     *
+     * @param ih the torrent's info hash, or null
+     * @return the User-Agent string, never null
+     * @since 0.9.71+
+     */
+    public String getUserAgent(byte[] ih) {
+        ClientID.Profile p = getClientID(ih);
+        return p != null ? p.getUserAgent() : EEPGET_USER_AGENT;
+    }
+
+    /**
+     * The lazily-resolved profile for the shared destination; synchronized so
+     * concurrent first uses cannot pick different profiles.
+     *
+     * @return the profile, or null if the setting names no known client
+     */
+    private synchronized ClientID.Profile getSharedClientId() {
+        if (_sharedClientId == null) {
+            _sharedClientId = pickClientId();
+        }
+        return _sharedClientId;
+    }
+
+    /**
+     * Resolve the configured setting to a profile: unset or "random" picks
+     * randomly from the candidate set, "i2psnark" explicitly keeps the classic
+     * identity, and a client name selects that profile. Unknown names log a
+     * warning and disable spoofing rather than sending inconsistent strings.
+     *
+     * @return the profile, or null for no spoofing
+     */
+    private ClientID.Profile pickClientId() {
+        String setting = _clientIdSetting;
+        if (setting.isEmpty() || "random".equalsIgnoreCase(setting)) {
+            return ClientID.getRandomProfile(_context.random(), _clientIdCandidates);
+        }
+        if ("i2psnark".equalsIgnoreCase(setting)) {
+            return null;
+        }
+        ClientID.Profile p = ClientID.getByName(setting);
+        if (p == null && _log.shouldWarn()) {
+            _log.warn("Unknown " + PROP_CLIENT_ID + " [" + setting + "], identifying as I2PSnark");
+        }
+        return p;
     }
 
     /**
@@ -1579,7 +1717,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         ByteArrayOutputStream out = new ByteArrayOutputStream(initialSize);
         EepGet get =
                 new I2PSocketEepGet(_context, mgr, retries, -1, maxSize, null, out, fetchURL);
-        get.addHeader("User-Agent", EEPGET_USER_AGENT);
+        get.addHeader("User-Agent", getUserAgent(ih));
         if (fetchAndLog(get, url, timeout, out.size())) {
             return out.toByteArray();
         } else {

@@ -289,7 +289,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     EepGet get =
                             new I2PSocketEepGet(
                                     util.getContext(), mgr, 0, flen, flen, null, out, url);
-                    get.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
+                    get.addHeader("User-Agent", util.getUserAgent(infohash));
                     get.addHeader("Range", "bytes=" + foff + '-' + (foff + flen - 1));
                     get.addStatusListener(this);
                     int osz = out.size();

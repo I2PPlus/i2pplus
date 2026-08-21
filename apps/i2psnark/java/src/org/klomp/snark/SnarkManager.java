@@ -347,6 +347,26 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_MULTI_DEST_MAX = "i2psnark.multiDestMax";
 
     /**
+     * Client identity spoofing: empty (default) to identify as I2PSnark,
+     * "random" to pick a random known client profile per destination per run,
+     * or the name of a known client (e.g. "Vuze") to always impersonate it.
+     * Applies to the tracker peer ID and User-Agent, the BT handshake peer ID,
+     * the BEP 10 extension handshake "v" string, and webseed fetches.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_CLIENT_ID = "i2psnark.clientId";
+
+    /**
+     * Optional comma-separated subset of client names (see
+     * {@link org.klomp.snark.ClientID#profiles()}) to choose from when
+     * {@link #PROP_CLIENT_ID} is "random"; unknown names are ignored.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_CLIENT_IDS = "i2psnark.clientIds";
+
+    /**
      * Whether running torrents are periodically stopped and restarted so their
      * destinations rotate to fresh identities, breaking long-lived linkage
      * between the router's IP and the torrents' destinations at trackers and in
@@ -1736,6 +1756,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setMultiDest(Boolean.parseBoolean(_config.getProperty(PROP_MULTI_DEST, "false")));
         _randomizeStartupDelay = Boolean.parseBoolean(_config.getProperty(PROP_RANDOMIZE_STARTUP, "true"));
         _util.setMaxDest(parseMaxDest(_config.getProperty(PROP_MULTI_DEST_MAX, Integer.toString(DEFAULT_MULTI_DEST_MAX))));
+        _util.setClientId(_config.getProperty(PROP_CLIENT_ID, ""));
+        _util.setClientIdCandidates(ClientID.parseCandidateList(_config.getProperty(PROP_CLIENT_IDS, "")));
 
         for (String c : _config.stringPropertyNames()) {
             if (c.startsWith(PROP_API_PREFIX)) {
