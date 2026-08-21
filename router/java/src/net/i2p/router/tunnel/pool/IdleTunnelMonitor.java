@@ -17,11 +17,15 @@ import net.i2p.util.SimpleTimer2;
  * Monitors transit tunnels for idle behavior.
  *
  * This class periodically scans participating tunnels and:
- * 1. Drops tunnels with no/low traffic after detection period (messages only)
+ * 1. Drops tunnels carrying no traffic at all after the detection period
+ *
+ * With the default message floor of 1, only tunnels that have carried zero
+ * messages since joining are dropped; quiet-but-active tunnels live out their
+ * full lifetime, since expiration handles normal lifecycle.
  *
  * Configurable properties:
  * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 180000ms)
- * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 5)
+ * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 1)
  * - router.idleTunnelScanInterval: How often to scan (default: 60000ms)
  *
  * @since 2.11.0
@@ -44,7 +48,8 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
 
     // Configuration
     private static final long DEFAULT_DETECTION_PERIOD = 180 * 1000L; // 180 seconds
-    private static final int DEFAULT_MIN_MESSAGES = 5; // At least 5 messages
+    /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling */
+    private static final int DEFAULT_MIN_MESSAGES = 1;
     private static final long DEFAULT_SCAN_INTERVAL = 60 * 1000L; // 60 seconds
 
     // Only these properties are configurable
