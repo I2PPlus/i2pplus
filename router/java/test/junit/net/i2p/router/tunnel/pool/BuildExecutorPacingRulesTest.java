@@ -41,6 +41,7 @@ public class BuildExecutorPacingRulesTest {
         assertFalse(BuildExecutor.countsAsPoolFailure(BuildExecutor.Result.REJECT));
         assertFalse("no paired tunnel is not a peer failure", BuildExecutor.countsAsPoolFailure(BuildExecutor.Result.NO_TUNNELS));
         assertFalse("local netdb miss is not a peer failure", BuildExecutor.countsAsPoolFailure(BuildExecutor.Result.NO_NETDB));
+        assertFalse("policy skip is not a peer failure", BuildExecutor.countsAsPoolFailure(BuildExecutor.Result.SKIPPED));
     }
 
     @Test

@@ -218,7 +218,8 @@ public class BuildExecutor implements Runnable {
     /**
      *  Pool-backoff counting excludes results that are not peer failures:
      *  SUCCESS, DUP_ID (already handled), REJECT (peer said no),
-     *  NO_TUNNELS (local resource condition), and NO_NETDB (local netdb miss).
+     *  NO_TUNNELS (local resource condition), NO_NETDB (local netdb miss),
+     *  and SKIPPED (local policy, no build dispatched).
      *
      *  @param result the build result
      *  @return true if the result increments the pool consecutive-failure counter
@@ -227,7 +228,7 @@ public class BuildExecutor implements Runnable {
     static boolean countsAsPoolFailure(Result result) {
         return result != Result.SUCCESS && result != Result.DUP_ID &&
                result != Result.REJECT && result != Result.NO_TUNNELS &&
-               result != Result.NO_NETDB;
+               result != Result.NO_NETDB && result != Result.SKIPPED;
     }
 
     /**
@@ -273,6 +274,8 @@ public class BuildExecutor implements Runnable {
         NO_TUNNELS,
         /** A hop's RouterInfo was not available in the local netdb */
         NO_NETDB,
+        /** Build configuration skipped by local policy before dispatch */
+        SKIPPED,
         /** Other failure */
         OTHER_FAILURE
     }
@@ -891,7 +894,9 @@ public class BuildExecutor implements Runnable {
                                         _log.debug("We don't need more fallbacks for " + pool);
                                     }
                                     i--;
-                                    pool.buildComplete(cfg, Result.OTHER_FAILURE);
+                                    // Local policy skip, not a build failure:
+                                    // must not feed the pool-backoff counter.
+                                    pool.buildComplete(cfg, Result.SKIPPED);
                                     continue;
                                 }
                                 if (_log.shouldDebug()) {
