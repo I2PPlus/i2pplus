@@ -281,6 +281,24 @@ public class RouterThrottleImpl implements RouterThrottle {
 
         double bytesAllocated = messagesPerTunnel * numTunnels * PREPROCESSED_SIZE;
 
+        // Transient overload: a 1-minute rate above our cap indicates a recent spike,
+        // not sustained saturation. Reject probabilistically in proportion to the
+        // overage but signal TRANSIENT_OVERLOAD so peers retry soon instead of
+        // deprioritizing us as bandwidth-starved; the graduated saturation curve in
+        // allowTunnel() below handles genuine, sustained shortage.
+        int maxKBpsIn = _context.bandwidthLimiter().getInboundKBytesPerSecond();
+        int maxKBpsOut = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
+        long overage = Math.max(
+                _context.router().get1mRateIn() - (maxKBpsIn*1024L),
+                _context.router().get1mRate(true) - (maxKBpsOut*1024L));
+        if ((overage > 0) && ((overage/(Math.min(maxKBpsIn, maxKBpsOut)*1024f)) > _context.random().nextFloat())) {
+            if (_log.shouldWarn()) {
+                _log.warn("Rejecting participating Tunnel Request \n* 1 minute rate (" + overage + " over) indicates overload.");
+            }
+            setTunnelStatus("[rejecting/overload]" + LIMIT_STR);
+            return TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD;
+        }
+
         if (!allowTunnel(bytesAllocated, numTunnels)) {
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
@@ -332,6 +350,9 @@ public class RouterThrottleImpl implements RouterThrottle {
         int maxKBpsIn = _context.bandwidthLimiter().getInboundKBytesPerSecond();
         int maxKBpsOut = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
         int maxKBps = Math.min(maxKBpsIn, maxKBpsOut);
+        // Deliberately permissive: taking the lower of the two windows biases
+        // toward accepting tunnels during traffic ramps, letting WRED shed the
+        // overflow gracefully on transit tunnels instead of rejecting them.
         int usedIn = Math.min(_context.router().get1sRateIn(), _context.router().get15sRateIn());
         int usedOut = Math.min(_context.router().get1sRate(true), _context.router().get15sRate(true));
         int used = Math.max(usedIn, usedOut);
@@ -358,16 +379,6 @@ public class RouterThrottleImpl implements RouterThrottle {
         double share = _context.router().getSharePercentage();
         used = Math.min(used, (int) (bytesAllocated / (10*60L)));
         availBps = Math.min(availBps, (int)(((maxKBps*1024L)*share) - used));
-
-        // Now see if 1m rates are too high
-        int used1mIn = _context.router().get1mRateIn();
-        int used1mOut = _context.router().get1mRate(true);
-        long overage = Math.max(used1mIn - (maxKBpsIn*1024L), used1mOut - (maxKBpsOut*1024L));
-        if ((overage > 0) && ((overage/(maxKBps*1024f)) > _context.random().nextFloat())) {
-            _log.warn("Rejecting participating Tunnel Request \n* 1 minute rate (" + overage + " over) indicates overload.");
-            setTunnelStatus("[rejecting/overload]" + LIMIT_STR);
-            return false;
-        }
 
         double probReject;
         boolean reject;
