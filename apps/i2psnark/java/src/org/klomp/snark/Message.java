@@ -111,6 +111,23 @@ class Message {
     // Used to do deferred fetch of data
     private final DataLoader dataLoader;
 
+    // Prefetch coordination for PIECE messages with a deferred loader.
+    // The buffer may be loaded off the sender thread by PeerConnectionOut's
+    // prefetch executor; all state transitions below are guarded by 'this'
+    // so the sender thread, the executor, and purge paths agree.
+    /** Cache-backed buffer owned by this message, non-null between successful load and release. */
+    private ByteArray _ba;
+    /** Set exactly once by the winner of the race to execute the loader. */
+    private boolean _loadClaimed;
+    /** True while the loader is executing somewhere; cleared by completeLoad(). */
+    private boolean _pendingLoad;
+    /** Loader completed and returned no data. */
+    private boolean _failed;
+    /** Message dropped unsent; the buffer must be released and not stored late. */
+    private boolean _discarded;
+    /** Max time the sender thread will wait for an in-flight prefetch before falling back to a drop. */
+    private static final int AWAIT_PREFETCH_TIMEOUT = 30 * 1000;
+
     private static final int BUFSIZE = PeerState.PARTSIZE;
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
@@ -205,14 +222,11 @@ class Message {
             return true;
         }
 
-        ByteArray ba;
-        // Get deferred data
+        // Get deferred data. Usually already prefetched by PeerConnectionOut;
+        // otherwise await the in-flight load, or load inline as a fallback.
         if (data == null && dataLoader != null) {
-            ba = dataLoader.loadData(piece, begin, length);
-            if (ba == null) return false; // dropped, caller must not count it as sent
-            data = ba.getData();
-        } else {
-            ba = null;
+            loadDataForSend();
+            if (data == null) return false; // dropped, caller must not count it as sent
         }
 
         // Calculate the total length in bytes
@@ -267,9 +281,183 @@ class Message {
         // Send actual data
         if (type == BITFIELD || type == PIECE || type == EXTENSION) dos.write(data, off, len);
 
-        // Was pulled from cache in Storage.getPiece() via dataLoader
-        if (ba != null && ba.getData().length == BUFSIZE) _cache.release(ba, false);
+        // Buffer was pulled from cache in Storage.getPiece() via dataLoader
+        releaseOwned();
         return true;
+    }
+
+    /**
+     * Ensure the deferred PIECE data is available before sending.
+     *
+     * <p>Exactly one execution site runs the loader, decided by {@link #claimLoad()}: either this
+     * sender thread (inline fallback, the pre-prefetch behavior) or PeerConnectionOut's prefetch
+     * task. If a prefetch is in flight, wait briefly for it rather than duplicating the disk read;
+     * on timeout or discard the message is dropped and the peer will re-request. The loader always
+     * runs outside the message monitor so purge paths are never blocked by disk I/O.
+     *
+     * @since 0.9.71+
+     */
+    private void loadDataForSend() {
+        long start = System.currentTimeMillis();
+        if (claimLoad()) {
+            ByteArray ba = runLoader();
+            PeerConnectionOut.recordLoad(System.currentTimeMillis() - start);
+            completeLoad(ba);
+        } else {
+            // prefetch won the claim; wait for its result instead of re-reading from disk
+            awaitLoad();
+        }
+    }
+
+    /**
+     * Invoke the deferred loader. Must be called only after winning {@link #claimLoad()};
+     * executes with no locks held so slow reads never block purge paths.
+     *
+     * @return the loaded buffer, or null on error (a REJECT has already been queued upstream)
+     * @since 0.9.71+
+     */
+    ByteArray runLoader() {
+        return dataLoader.loadData(piece, begin, length);
+    }
+
+    /**
+     * Claim exclusive right to execute the loader for this message.
+     *
+     * @return true if the caller must run the loader and later call {@link #completeLoad(ByteArray)};
+     *         false if already claimed, completed, failed, discarded, or not loader-backed
+     * @since 0.9.71+
+     */
+    synchronized boolean claimLoad() {
+        if (dataLoader == null || _loadClaimed || _discarded || _failed || data != null) {
+            return false;
+        }
+        _loadClaimed = true;
+        _pendingLoad = true;
+        return true;
+    }
+
+    /**
+     * Abort a claimed-but-not-yet-started prefetch because the message was purged unsent,
+     * saving the disk read entirely.
+     *
+     * @return true if the caller should skip loading; pending state is cleared either way
+     * @since 0.9.71+
+     */
+    synchronized boolean abortIfDiscarded() {
+        if (_discarded) {
+            _pendingLoad = false;
+            notifyAll();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Deliver the result of a loader run started after {@link #claimLoad()} returned true.
+     * Stores the buffer unless the message was discarded meanwhile, in which case the buffer
+     * is released immediately; failure is recorded so the sender drops the message.
+     *
+     * @param ba the loaded buffer, or null on load failure
+     * @since 0.9.71+
+     */
+    synchronized void completeLoad(ByteArray ba) {
+        _pendingLoad = false;
+        if (ba == null) {
+            _failed = true;
+        } else if (_discarded || data != null) {
+            // lost the race with a purge or a duplicate completion: release, don't store
+            releaseBuffer(ba);
+        } else {
+            _ba = ba;
+            data = ba.getData();
+        }
+        notifyAll();
+    }
+
+    /**
+     * Wait for an in-flight prefetch to finish. Bounded so a wedged executor degrades to a
+     * dropped block instead of stalling the sender thread indefinitely.
+     *
+     * @since 0.9.71+
+     */
+    private void awaitLoad() {
+        long deadline = System.currentTimeMillis() + AWAIT_PREFETCH_TIMEOUT;
+        synchronized (this) {
+            while (_pendingLoad && !_discarded) {
+                long remain = deadline - System.currentTimeMillis();
+                if (remain <= 0) break;
+                try {
+                    wait(remain);
+                } catch (InterruptedException ie) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Mark this message as dropped without sending and release any loaded buffer exactly once.
+     * Called from all purge paths (choke, cancel, disconnect, queue overflow); safe to call
+     * repeatedly and concurrently with an in-flight prefetch.
+     *
+     * @since 0.9.71+
+     */
+    synchronized void discard() {
+        if (!_discarded) {
+            _discarded = true;
+            releaseOwnedInLock();
+        }
+        notifyAll();
+    }
+
+    /**
+     * Release this message's buffer after a successful send. Exactly once; a no-op for
+     * messages without loader-loaded data.
+     *
+     * @since 0.9.71+
+     */
+    private synchronized void releaseOwned() {
+        releaseOwnedInLock();
+    }
+
+    /** Caller must hold the monitor. */
+    private void releaseOwnedInLock() {
+        ByteArray ba = _ba;
+        if (ba != null) {
+            _ba = null;
+            data = null;
+            releaseBuffer(ba);
+        }
+    }
+
+    /**
+     * Return a cache-acquired buffer to the pool, mirroring Storage.getPiece()'s acquire
+     * condition; non-cache-backed partial-read buffers are simply dropped for GC.
+     *
+     * @param ba the buffer to release
+     */
+    private static void releaseBuffer(ByteArray ba) {
+        if (ba.getData().length == BUFSIZE) _cache.release(ba, false);
+    }
+
+    /**
+     * Whether the deferred data has been loaded and not yet released.
+     *
+     * @return true if ready to send without further loading
+     * @since 0.9.71+
+     */
+    synchronized boolean isDataReady() {
+        return data != null;
+    }
+
+    /**
+     * Whether this message was dropped without sending.
+     *
+     * @return true if discarded
+     * @since 0.9.71+
+     */
+    synchronized boolean isDiscarded() {
+        return _discarded;
     }
 
     /**

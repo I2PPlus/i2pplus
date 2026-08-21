@@ -13,8 +13,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
+import net.i2p.data.ByteArray;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
@@ -37,10 +43,83 @@ class PeerConnectionOut implements Runnable {
     /** Max consecutive PIECE messages the priority scan walks before giving up. */
     private static final int MAX_PRIORITY_SCAN = 16;
     private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
+
+    // ---- PIECE prefetch --------------------------------------------------
+    // Disk reads for queued PIECE messages run on this shared elastic pool
+    // instead of inline on the sender thread, so a slow (cold) read no longer
+    // stalls the bytes already ready to go out behind it. The pool spawns a
+    // thread per concurrent burst up to MAX_PREFETCH_THREADS and lets idle
+    // threads die, so cost at rest is zero. When all threads are busy or the
+    // per-connection depth cap is hit, new pieces simply stay lazy and fall
+    // back to the pre-existing inline load in Message.sendMessage().
+    /** Max threads across all connections; Storage reads lock per-file, so more buys little. */
+    private static final int MAX_PREFETCH_THREADS = 4;
+    /** Idle prefetch threads exit after this long. */
+    private static final long PREFETCH_THREAD_IDLE_MS = 60 * 1000;
+    /** Max uncompleted prefetches per connection; bounds pinned buffers to depth x 16KB. */
+    static volatile int MAX_PREFETCH_INFLIGHT = 2;
+    /** Loads slower than this are logged; sustained counts confirm cold-read stalls. */
+    private static final long SLOW_LOAD_WARN_MS = 1000;
+    private static final AtomicInteger _prefetchThreadId = new AtomicInteger();
+    private static final ThreadPoolExecutor _prefetchExec =
+            new ThreadPoolExecutor(
+                    0,
+                    MAX_PREFETCH_THREADS,
+                    PREFETCH_THREAD_IDLE_MS,
+                    TimeUnit.MILLISECONDS,
+                    new SynchronousQueue<>(),
+                    r -> {
+                        Thread t =
+                                new I2PAppThread(
+                                        r, "SnarkPrefetch." + _prefetchThreadId.incrementAndGet());
+                        t.setDaemon(true);
+                        return t;
+                    },
+                    new ThreadPoolExecutor.AbortPolicy());
+
+    static {
+        _prefetchExec.allowCoreThreadTimeOut(true);
+    }
+
+    // Load timing stats: cheap instrumentation to verify cold-read stall share.
+    private static final AtomicLong _loadCount = new AtomicLong();
+    private static final AtomicLong _loadTotalMs = new AtomicLong();
+    private static volatile long _maxLoadMs;
+
+    /**
+     * Record a deferred-load duration. Called from both the prefetch task and the inline fallback
+     * in {@link Message#sendMessage(DataOutputStream)}.
+     *
+     * @param ms load duration in milliseconds
+     * @since 0.9.71+
+     */
+    static void recordLoad(long ms) {
+        if (ms <= 0) return;
+        _loadCount.incrementAndGet();
+        _loadTotalMs.addAndGet(ms);
+        if (ms > _maxLoadMs) _maxLoadMs = ms;
+        if (ms >= SLOW_LOAD_WARN_MS) {
+            Log log = I2PAppContext.getGlobalContext().logManager().getLog(PeerConnectionOut.class);
+            log.logAlways(
+                    Log.WARN,
+                    "Slow piece load: "
+                            + ms
+                            + "ms (loads="
+                            + _loadCount.get()
+                            + ", total="
+                            + _loadTotalMs.get()
+                            + "ms, max="
+                            + _maxLoadMs
+                            + "ms)");
+        }
+    }
+
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
     /** Last send time. */
     long lastSent;
+    /** Uncompleted prefetch tasks for this connection; bounds memory to depth x block size. */
+    private final AtomicInteger _prefetchInFlight = new AtomicInteger();
 
     /**
      * Creates a new outgoing connection handler.
@@ -76,6 +155,31 @@ class PeerConnectionOut implements Runnable {
             }
         }
         return false;
+    }
+
+    /**
+     * The first queued PIECE message in send order.
+     *
+     * @return the oldest pending PIECE message, or null if none queued
+     * @since 0.9.71+
+     */
+    Message headPiece() {
+        synchronized (sendQueue) {
+            for (Message m : sendQueue) {
+                if (m.type == Message.PIECE) return m;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Current number of uncompleted prefetch loads for this connection.
+     *
+     * @return in-flight prefetch count, capped by MAX_PREFETCH_INFLIGHT
+     * @since 0.9.71+
+     */
+    int prefetchInFlight() {
+        return _prefetchInFlight.get();
     }
 
     /**
@@ -129,6 +233,7 @@ class PeerConnectionOut implements Runnable {
                                 // BEP 6: keep serving allowed fast pieces when we choke
                                 if (state.choking && !state.isAllowedFast(nm.piece)) {
                                     it.remove();
+                                    nm.discard();
                                     if (peer.supportsFast()) {
                                         Message r =
                                                 new Message(
@@ -238,6 +343,13 @@ class PeerConnectionOut implements Runnable {
             if (thread != null) {
                 thread.interrupt();
             }
+            // release any prefetched piece buffers before dropping the queue
+            for (Iterator<Message> it = sendQueue.iterator(); it.hasNext(); ) {
+                Message m = it.next();
+                if (m.type == Message.PIECE) {
+                    m.discard();
+                }
+            }
             sendQueue.clear();
             sendQueue.notifyAll();
         }
@@ -286,6 +398,7 @@ class PeerConnectionOut implements Runnable {
                 Message m = it.next();
                 if (m.type == type) {
                     it.remove();
+                    if (type == Message.PIECE) m.discard();
                     removed = true;
                     if (type == Message.PIECE && peer.supportsFast()) {
                         Message r = new Message(Message.REJECT, m.piece, m.begin, m.length);
@@ -479,6 +592,57 @@ class PeerConnectionOut implements Runnable {
         // except save the PeerState instead of the bytes.
         Message m = new Message(piece, begin, length, loader);
         addMessage(m);
+        kickPrefetch(m);
+    }
+
+    /**
+     * Submit an off-thread load for a freshly queued PIECE so its data is ready before the sender
+     * thread reaches it, decoupling disk latency from the write path. Best-effort: when the depth
+     * cap or thread pool is saturated the message stays lazy and loads inline as before. The
+     * cap check is racy in principle, but enqueues are single-threaded per connection
+     * (PeerState's reader), so the bound holds exactly.
+     *
+     * @param m the queued PIECE message
+     * @since 0.9.71+
+     */
+    private void kickPrefetch(Message m) {
+        if (_prefetchInFlight.get() >= MAX_PREFETCH_INFLIGHT) return;
+        _prefetchInFlight.incrementAndGet();
+        try {
+            _prefetchExec.execute(() -> runPrefetch(m));
+        } catch (RejectedExecutionException ree) {
+            // pool saturated; message stays lazy, inline load covers it
+            _prefetchInFlight.decrementAndGet();
+        }
+    }
+
+    /**
+     * Prefetch task: claim exclusive load rights, skip if purged meanwhile, read outside all
+     * locks, then publish. Storage errors already surface as a null result (with REJECT) via
+     * PeerCoordinator; an unexpected Throwable here drops only this block instead of killing
+     * the connection as the old inline path would have.
+     *
+     * @param m the PIECE message to load
+     * @since 0.9.71+
+     */
+    private void runPrefetch(Message m) {
+        try {
+            if (!m.claimLoad()) return;
+            if (m.abortIfDiscarded()) return;
+            long start = System.currentTimeMillis();
+            ByteArray ba;
+            try {
+                ba = m.runLoader();
+            } finally {
+                recordLoad(System.currentTimeMillis() - start);
+            }
+            m.completeLoad(ba);
+        } catch (Throwable t) {
+            _log.error("Prefetch failed for [" + peer + "] " + m, t);
+            m.completeLoad(null);
+        } finally {
+            _prefetchInFlight.decrementAndGet();
+        }
     }
 
     /**
@@ -556,6 +720,7 @@ class PeerConnectionOut implements Runnable {
                         && m.begin == begin
                         && m.length == length) {
                     it.remove();
+                    m.discard();
                 }
             }
         }

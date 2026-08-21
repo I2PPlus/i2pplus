@@ -23,7 +23,7 @@ public class PeerStateTest {
     private static final long TOTAL_LENGTH = 30000L;
 
     /** Build a bencoded single-file torrent byte stream. */
-    private static byte[] buildTorrentBytes(byte[] pieceHashes) {
+    static byte[] buildTorrentBytes(byte[] pieceHashes) {
         StringBuilder sb = new StringBuilder(256);
         sb.append('d');
         sb.append("8:announce");
