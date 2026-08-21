@@ -8563,9 +8563,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Cross-refs: {@code tunnel.pendingLookupQueue}, {@code tunnel.dropLookupThrottle},
      *             {@code tunnel.rejectTimeout}.
      *
-     * <p>Increases when lookups are fast — the netdb is responsive, so
-     * more peer vetting costs little. Decreases when lookups are slow or
-     * the lookup queue/drop/timeout pressure indicates overload.
+     * <p>Policy is starvation-first: a backed-up queue or lookup drops with a
+     * responsive netdb means demand exceeds concurrency, so the limit rises
+     * aggressively — lowering it there ratchets toward the floor and converts
+     * resolvable lookups into build drops. The limit only falls when lookups
+     * are genuinely slow while nothing is queued (netdb overload, spare
+     * vetting is pure cost).
      *
      * @since 0.9.70+
      */
@@ -8594,7 +8597,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!Double.isNaN(observed))
                 return observed;
             // No success data — fall back to rejectTimeout. If lookups are timing
-            // out, return a high value (>5000) to trigger decrease.
+            // out, return a high value (>5000) to signal netdb slowness; whether
+            // that raises or lowers the limit is decided with the queue state.
             double rejectTimeout = getAdditionalEventCount(_context, "tunnel.rejectTimeout");
             if (!Double.isNaN(rejectTimeout) && rejectTimeout > 5)
                 return 10000.0;
@@ -8606,25 +8610,55 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
             double dropThrottle = getAdditionalEventCount(_context, "tunnel.dropLookupThrottle");
-            double rejectTimeout = getAdditionalEventCount(_context, "tunnel.rejectTimeout");
 
             boolean hasData = !Double.isNaN(observed);
             boolean lookupsSlow = hasData && observed > 5000;
             boolean lookupsFast = hasData && observed < 2000;
             boolean queueBackedUp = !Double.isNaN(pendingQueue) && pendingQueue > 10;
             boolean dropsHappening = !Double.isNaN(dropThrottle) && dropThrottle > 5;
-            boolean timeoutsHappening = !Double.isNaN(rejectTimeout) && rejectTimeout > 5;
 
-            // Slow lookups or queue/drops/timeout pressure = ease off
-            if (lookupsSlow || queueBackedUp || dropsHappening || timeoutsHappening)
-                return Math.max(_min, current - _step);
-
-            // Fast lookups, no pressure = more vetting is cheap
-            if (lookupsFast && !queueBackedUp && !dropsHappening && !timeoutsHappening)
-                return Math.min(_max, current + _step);
-
-            return current;
+            return lookupLimitTarget(current, _min, _max, _step,
+                                     lookupsSlow, queueBackedUp, dropsHappening, lookupsFast);
         }
+    }
+
+    /**
+     *  Pure starvation-first decision for next-hop lookup concurrency
+     *  (see PercentLookupLimitParam):
+     *
+     *  <ul>
+     *    <li>queue full or overflowing while lookups succeed in time →
+     *        demand exceeds the lid; raise aggressively so queued entries
+     *        convert instead of expiring as silent build drops</li>
+     *    <li>lookups genuinely slow with nothing queued → netdb overload;
+     *        less vetting is cheaper</li>
+     *    <li>fast and quiet → more vetting is cheap</li>
+     *    <li>anything else (mixed signals) → hold</li>
+     *  </ul>
+     *
+     *  Static and package visible for tests.
+     *
+     *  @param current current percent value
+     *  @param min minimum allowed value
+     *  @param max maximum allowed value
+     *  @param step adjustment increment
+     *  @param lookupsSlow true when successful lookups average &gt; 5000ms
+     *  @param queueBackedUp true when the pending-lookup queue averages high
+     *  @param dropsHappening true when queue-full drops occurred recently
+     *  @param lookupsFast true when successful lookups average &lt; 2000ms
+     *  @return the target percent value, clamped to [min, max]
+     *  @since 0.9.71+
+     */
+    static int lookupLimitTarget(int current, int min, int max, int step,
+                                 boolean lookupsSlow, boolean queueBackedUp,
+                                 boolean dropsHappening, boolean lookupsFast) {
+        if ((queueBackedUp || dropsHappening) && !lookupsSlow)
+            return Math.min(max, current + step * 2);
+        if (lookupsSlow && !queueBackedUp)
+            return Math.max(min, current - step);
+        if (lookupsFast && !queueBackedUp && !dropsHappening)
+            return Math.min(max, current + step);
+        return current;
     }
 
     /**
