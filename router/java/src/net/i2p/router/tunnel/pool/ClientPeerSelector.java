@@ -1153,8 +1153,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
     /**
      *  Full quality comparison cascade.  Stage order is significant — each
-     *  stage short-circuits the ones below it: excluded last, then acceptance
-     *  ratio, slow tunnel-test latency, activity recency, and latency.
+     *  stage short-circuits the ones below it: excluded last, then proven
+     *  responders (recent successful participation), then acceptance ratio,
+     *  slow tunnel-test latency, activity recency, and latency.
      *
      *  @param p1 first peer
      *  @param p2 second peer
@@ -1170,10 +1171,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                               long now, long thirtyMinutes) {
         int c = compareExcluded(p1, p2, exclude);
         if (c != 0) {return c;}
-        c = compareAcceptance(prof1, prof2);
+        long t1 = _provenResponders.getOrDefault(p1, 0L);
+        long t2 = _provenResponders.getOrDefault(p2, 0L);
+        c = compareProven(t1, t2, now);
         if (c != 0) {return c;}
         float lat1 = prof1 != null ? prof1.getTunnelTestTimeAverage() : 0;
         float lat2 = prof2 != null ? prof2.getTunnelTestTimeAverage() : 0;
+        c = compareAcceptance(prof1, prof2);
+        if (c != 0) {return c;}
         c = compareSlowLatency(lat1, lat2);
         if (c != 0) {return c;}
         c = compareActivity(prof1, prof2, now, thirtyMinutes);

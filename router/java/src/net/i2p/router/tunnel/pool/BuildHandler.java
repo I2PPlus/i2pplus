@@ -431,6 +431,9 @@ public class BuildHandler implements Runnable {
                     // Record that a peer of the given tier agreed or rejected
                     _context.statManager().addRateData("tunnel.tierAgree" + bwTier, 1);
                     _context.profileManager().tunnelJoined(peer, rtt);
+                    // Proven-responder proof: this hop just carried a build to
+                    // completion, so prefer it in future selections
+                    TunnelPeerSelector._provenResponders.put(peer, _context.clock().now());
                     Properties props = statuses[record].props;
                     if (props != null) {
                         String avail = props.getProperty(BuildRequestor.PROP_AVAIL_BW);

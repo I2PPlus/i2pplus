@@ -162,6 +162,19 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** Peers selected within this window are excluded from further selection to ensure diversity */
     protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
 
+    /**
+     *  Peers whose most recent tunnel participation succeeded, mapped to the
+     *  time of that success. Selection prefers fresh entries via
+     *  {@code ClientPeerSelector.compareQuality}; entries older than
+     *  {@link #PROVEN_RESPONDER_WINDOW_MS} carry no weight and are pruned.
+     *
+     *  @since 0.9.71+
+     */
+    protected static final Map<Hash, Long> _provenResponders = new ConcurrentHashMap<>();
+
+    /** Recency window for proven-responder proof */
+    protected static final long PROVEN_RESPONDER_WINDOW_MS = 60 * 60 * 1000L;
+
     /** Shared cooldown map across all peer selectors */
     protected static final Map<Hash, Long> _peerCooldowns = new ConcurrentHashMap<>();
 
@@ -298,6 +311,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             long cutoff = now - PEER_SELECTION_COOLDOWN_MS;
             _peerCooldowns.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
+        if (_provenResponders.size() > FAILURE_MAP_MAX_SIZE) {
+            long cutoff = now - PROVEN_RESPONDER_WINDOW_MS;
+            _provenResponders.entrySet().removeIf(e -> e.getValue() < cutoff);
+        }
         if (_lastKeepAlive.size() > KEEPALIVE_MAP_MAX_SIZE) {
             long cutoff = now - KEEPALIVE_INTERVAL_MS * 4;
             _lastKeepAlive.entrySet().removeIf(e -> e.getValue() < cutoff);
@@ -306,6 +323,37 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             long cutoff = now - FIRST_HOP_FAIL_COOLDOWN_MS;
             _firstHopFails.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
+    }
+
+    /**
+     *  Proven-responder comparison for the quality cascade: a peer whose last
+     *  tunnel participation succeeded within the recency window sorts before
+     *  one without; two peers on the same side compare equal so later cascade
+     *  stages decide.
+     *
+     *  @param t1 last proven-join time of the first peer, 0 if none
+     *  @param t2 last proven-join time of the second peer, 0 if none
+     *  @param now current time from the router clock
+     *  @return negative if only p1 is proven, positive if only p2 is, else 0
+     *  @since 0.9.71+
+     */
+    static int compareProven(long t1, long t2, long now) {
+        boolean p1 = isProvenResponder(t1, now);
+        boolean p2 = isProvenResponder(t2, now);
+        if (p1 == p2) {return 0;}
+        return p1 ? -1 : 1;
+    }
+
+    /**
+     *  Whether a proven-join timestamp falls inside the recency window.
+     *
+     *  @param lastJoin the last successful-participation time, 0 if none
+     *  @param now current time from the router clock
+     *  @return true if the proof is fresh
+     *  @since 0.9.71+
+     */
+    static boolean isProvenResponder(long lastJoin, long now) {
+        return lastJoin > 0 && now - lastJoin <= PROVEN_RESPONDER_WINDOW_MS;
     }
 
     /**
