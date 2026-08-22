@@ -1001,27 +1001,37 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return caps != null && caps.indexOf(capability) >= 0;
     }
 
+    /**
+     *  Look up a RouterInfo, resolving over the network when not cached locally.
+     *
+     *  Screening (country/capability bans, blocklists) applies only to an
+     *  entry we actually hold; a screened-out entry fails the callback
+     *  instead of succeeding. A cache miss always starts a real search:
+     *  data-plane callers (transit next-hop resolution in BuildHandler and
+     *  TunnelParticipant, tunnel receivers, message distributors) depend on
+     *  this actually finding the peer, and an instant fail here turns every
+     *  next-hop miss into a rejected join or a silently dropped message.
+     *  Negatively-cached keys short-circuit inside IterativeSearchJob, so
+     *  repeated searches for known-dead peers stay cheap.
+     */
     @Override
-    /** Lookup router info */
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
-        if (!_initialized) return;
-        RouterInfo ri = lookupRouterInfoLocally(key);
-        if (ri == null) {
-            // Not cached locally: fail fast rather than leaving the caller (e.g. a
-            // transit next-hop lookup) hanging with no scheduled job. This prevents
-            // a transit message from vanishing silently when its next hop is absent.
+        if (!_initialized || key == null) {
             if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
             return;
         }
-        if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
+        RouterInfo ri = lookupRouterInfoLocally(key);
+        if (ri == null) {
+            search(key, onFindJob, onFailedLookupJob, timeoutMs, false);
+            return;
+        }
         if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistXG(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistLU(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistByCapability(ri)) {handleCustomCapabilityBan(ri, key, onFailedLookupJob);}
         else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
         else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
-        else if (isNegativeCached(key)) {handleNegativeCache(ri, key, onFailedLookupJob);}
-        else {search(key, onFindJob, onFailedLookupJob, timeoutMs, false);}
+        else if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
     }
 
     /**
@@ -1295,18 +1305,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _kb.remove(key);
 
         // Trigger the failed job callback if present
-        if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
-    }
-
-    /** Handle negative cache */
-    private void handleNegativeCache(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
-        if (_log.shouldInfo()) {
-            _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
-        }
-
-        _ds.remove(key);
-        _kb.remove(key);
-
         if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
     }
 
@@ -2818,39 +2816,39 @@ return false;
     }
 
     /**
-     * Begin a kademlia style search for the key specified, which can take up to timeoutMs and
-     * will fire the appropriate jobs on success or timeout (or if the kademlia search completes
-     * without any match)
+     *  Begin a kademlia-style iterative search for the key, which can take up
+     *  to timeoutMs and will fire the appropriate jobs on success or timeout
+     *  (or if the search completes without any match).
      *
-     * Unused - called only by FNDF.searchFull() from FloodSearchJob which is overridden - don't use this.
+     *  Abstract because only a concrete facade knows how to reach floodfills;
+     *  {@link FloodfillNetworkDatabaseFacade} implements this with
+     *  IterativeSearchJob. Data-plane callers such as {@link #lookupRouterInfo}
+     *  route transit traffic through here, so there is deliberately no base
+     *  fallback: a facade that cannot search must say so at compile time.
      *
-     * @param key the hash to search for
-     * @param onFindJob job on find
-     * @param onFailedLookupJob job on failure
-     * @param timeoutMs timeout in ms
-     * @param isLease whether searching for lease
-     * @throws UnsupportedOperationException always
-     * @return never returns
+     *  @param key the hash to search for
+     *  @param onFindJob job on find
+     *  @param onFailedLookupJob job on failure
+     *  @param timeoutMs timeout in ms
+     *  @param isLease whether searching for lease
+     *  @return implementation-defined; results are delivered via the callbacks
      */
-    SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease) {
-        throw new UnsupportedOperationException();
-    }
+    abstract SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease);
 
     /**
-     * Unused - see FNDF
-     * @param key the hash to search for
-     * @param onFindJob job on find
-     * @param onFailedLookupJob job on failure
-     * @param timeoutMs timeout in ms
-     * @param isLease whether searching for lease
-     * @param fromLocalDest the local destination
-     * @throws UnsupportedOperationException always
-     * @return never returns
+     *  Search using the client's tunnels; see
+     *  {@link #search(Hash, Job, Job, long, boolean)}.
+     *
+     *  @param key the hash to search for
+     *  @param onFindJob job on find
+     *  @param onFailedLookupJob job on failure
+     *  @param timeoutMs timeout in ms
+     *  @param isLease whether searching for lease
+     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     *  @return implementation-defined; results are delivered via the callbacks
      */
-    SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease,
-                     Hash fromLocalDest) {
-        throw new UnsupportedOperationException();
-    }
+    abstract SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease,
+                              Hash fromLocalDest);
 
     @Override
     public Set<LeaseSet> getLeases() {
@@ -3002,17 +3000,6 @@ return false;
      *  @param key for Destinations or RouterIdentities
      */
     void lookupFailed(Hash key) {_negativeCache.lookupFailed(key);}
-
-    /**
-     *  Immediately negative-cache a key (set to its max fail count) so the next
-     *  lookup short-circuits via {@link #isNegativeCached} instead of running a
-     *  full search. Used for transit next-hop RouterInfo misses: a peer that is
-     *  gone or unreachable should fail fast for subsequent transit messages
-     *  rather than each one waiting out the full lookup timeout.
-     *
-     *  @param key RouterInfo or Destination hash
-     */
-    void negativeCacheNow(Hash key) {_negativeCache.cache(key);}
 
     /**
      *  Is the key in the negative lookup cache?

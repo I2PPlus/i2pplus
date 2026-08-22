@@ -801,7 +801,11 @@ public class BuildHandler implements Runnable {
                 Hash from = _state.fromHash;
                 if (_log.shouldInfo()) {
                     if (from == null && _state.from != null) {from = _state.from.calculateHash();}
-                    _log.info("Timeout (" + getNextHopLookupTimeout(_context) / 1000 + "s) locating peer for next hop " + _req +
+                    long started = _state.getLookupStartTime();
+                    long elapsed = started > 0 ? System.currentTimeMillis() - started : -1;
+                    String how = elapsed >= 0 ? "after " + elapsed + "ms"
+                                              : getNextHopLookupTimeout(_context) / 1000 + "s budget";
+                    _log.info("Lookup for next hop failed " + how + " " + _req +
                               "\n* From: " + from + " [MsgID " + _state.msg.getUniqueId() + "]");
                 }
                 _context.messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");

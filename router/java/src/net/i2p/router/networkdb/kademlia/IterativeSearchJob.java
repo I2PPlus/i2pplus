@@ -968,12 +968,12 @@ public class IterativeSearchJob extends FloodSearchJob {
         _facade.complete(_key);
         releaseFloodfillQueries();
         if (getContext().commSystem().getStatus() != Status.DISCONNECTED) {
+            // Count-based negative caching: NegativeLookupCache trips after
+            // netdb.negativeCache.maxFails failures within its cleaner window,
+            // so a peer that is truly gone starts failing fast for subsequent
+            // lookups, while a single transient blip (one dropped search)
+            // doesn't poison the key and cut off transit traffic through it.
             _facade.lookupFailed(_key);
-            // For RouterInfo (transit next-hop) misses, immediately negative-cache
-            // the key so subsequent transit messages for this hop fail fast instead
-            // of each waiting out the full lookup timeout. LeaseSet misses are left
-            // to the normal repeat-fail counter to avoid caching transient blips.
-            if (!_isLease) {_facade.negativeCacheNow(_key);}
         }
         getContext().messageRegistry().unregisterPending(_out);
         int tries;

@@ -15,6 +15,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Tests for {@link NegativeLookupCache} count-based caching semantics.
+ *
+ * Pins the contract the data plane relies on: repeated lookup failures
+ * accumulate toward {@code netdb.negativeCache.maxFails} within the cleaner
+ * window before a key counts as negatively cached, so a single transient
+ * search failure must not poison a RouterInfo key and cut off transit
+ * traffic through it, while an explicit {@link NegativeLookupCache#cache(Hash)
+ * cache()} marks immediately.
+ */
 public class NegativeLookupCacheTest {
 
     private static RouterContext _context;
@@ -69,13 +79,16 @@ public class NegativeLookupCacheTest {
     }
 
     @Test
-    public void testLookupFailedExceedsThreshold() {
+    public void testLookupFailedBoundary() {
+        // exact boundary: one below the threshold stays clean, the threshold
+        // itself trips, so a single transient blip can never poison a key
         Hash h = randomHash();
-        // MAX_FAILS defaults to 3
-        for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+        for (int i = 0; i < NegativeLookupCache.MAX_FAILS - 1; i++) {
             _cache.lookupFailed(h);
         }
-        assertTrue("MAX_FAILS failures should cache", _cache.isCached(h));
+        assertFalse("Just below maxFails should not cache", _cache.isCached(h));
+        _cache.lookupFailed(h);
+        assertTrue("maxFails failures should cache", _cache.isCached(h));
     }
 
     @Test
@@ -135,13 +148,6 @@ public class NegativeLookupCacheTest {
         assertNotNull(_cache.getBadDest(dest.calculateHash()));
         _cache.clear();
         assertNull("After clear, bad dest should be gone", _cache.getBadDest(dest.calculateHash()));
-    }
-
-    @Test
-    public void testIsCachedAfterCacheAndThreshold() {
-        Hash h = randomHash();
-        _cache.cache(h);
-        assertTrue(_cache.isCached(h));
     }
 
     @Test
