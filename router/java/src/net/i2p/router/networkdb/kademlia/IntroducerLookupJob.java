@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.Base64;
 import net.i2p.data.Hash;
@@ -33,14 +34,23 @@ import net.i2p.util.Log;
  * issues remote RouterInfo lookups for any introducer missing locally, so
  * hole-punching has its prerequisites ready before a connection is attempted.
  *
- * Lookups are aggressively staggered so floodfills never see a burst:
- * a randomized ~10 minute cycle, at most {@link #MAX_LOOKUPS_PER_CYCLE}
- * searches per cycle, per-introducer exponential backoff after failures,
- * and a dedup/backoff map shared across cycles. Concurrent duplicate
- * searches of the same key are additionally coalesced by IterativeSearchJob.
- * SSU1 introducers carry no router hash (IP/port/intro-key only) and cannot
- * be resolved by netDB lookup; they are skipped here and handled by the
- * transport's existing IP-based introduction path.
+ * Pacing and politeness toward floodfills:
+ * a randomized 5-7 minute cycle whose query phase is capped at 30s wall time
+ * per cycle (no per-cycle count cap), at most {@link #MAX_CONCURRENT_LOOKUPS}
+ * searches in flight, per-introducer exponential backoff after failures, and
+ * a dedup/backoff map shared across cycles (which also gates keys already
+ * covered by an overlapping search elsewhere). Each search inherits the
+ * standard adaptive RouterInfo lookup deadline used by peer lookups.
+ * Floodfill diversity is provided by the netdb selection layer itself:
+ * FloodfillPeerSelector shuffles candidates within quality tiers, skips
+ * floodfills queried in the last 60s (markQueried cooldown), and spreads
+ * same-/16 IP clusters, so repeated keys don't repeatedly land on the same
+ * floodfills and no single one sees enough volume to trigger throttling.
+ * Concurrent duplicate searches of the same key are additionally coalesced
+ * by IterativeSearchJob. SSU1 introducers carry no router hash
+ * (IP/port/intro-key only) and cannot be resolved by netDB lookup; they are
+ * skipped here and handled by the transport's existing IP-based introduction
+ * path.
  *
  * @since 0.9.71+
  */
@@ -54,20 +64,29 @@ class IntroducerLookupJob extends JobImpl {
      */
     private final Map<Hash, long[]> _attempts = new ConcurrentHashMap<>();
 
+    /** Remote introducer searches currently in flight. */
+    private final AtomicInteger _inFlight = new AtomicInteger();
+
     /** Base delay between cycles, jittered ±CYCLE_JITTER before each requeue. */
-    private static final long CYCLE_INTERVAL = 10 * 60 * 1000L;
+    private static final long CYCLE_INTERVAL = 5 * 60 * 1000L;
     private static final long CYCLE_JITTER = 2 * 60 * 1000L;
     /** First run 8-12 minutes after startup: let the netdb fill from bootstrap first. */
     private static final long STARTUP_DELAY_MIN = 8 * 60 * 1000L;
     private static final long STARTUP_DELAY_JITTER = 4 * 60 * 1000L;
     /**
-     * Per-cycle search budget. Three searches every ~10 minutes (~18/hour
-     * worst case) is far below any floodfill's throttle threshold even if
-     * several routers run this job against the same introducers.
+     * Wall-time budget for one cycle's query phase: lookups are issued until
+     * this window closes (no per-cycle count cap), and each lookup's deadline
+     * is clamped to the budget left at issue time, so every query of a cycle
+     * completes within ~30s of cycle start.
      */
-    private static final int MAX_LOOKUPS_PER_CYCLE = 3;
-    /** IterativeSearchJob caps this internally at its adaptive maximum. */
-    private static final long LOOKUP_TIMEOUT_MS = 12 * 1000L;
+    private static final long CYCLE_QUERY_BUDGET_MS = 30 * 1000L;
+    /** Maximum remote searches in flight during the query phase. */
+    private static final int MAX_CONCURRENT_LOOKUPS = 4;
+    /**
+     * Issue floor: IterativeSearchJob floors RouterInfo lookup deadlines at
+     * 2s anyway, so a search with less budget left is not worth issuing.
+     */
+    private static final int MIN_USEFUL_TIMEOUT_MS = 2000;
     /** Re-attempt gate while a lookup may still be in flight (fails == 0). */
     private static final long MIN_RETRY_MS = 10 * 60 * 1000L;
     /** Base backoff after a failed lookup, doubling per consecutive failure. */
@@ -128,44 +147,58 @@ class IntroducerLookupJob extends JobImpl {
                     if (!canAttempt(now, _attempts.get(h)))
                         continue;
                     if (pending == null)
-                        pending = new HashSet<>(MAX_LOOKUPS_PER_CYCLE);
+                        pending = new HashSet<>();
                     pending.add(h);
                 }
             }
         }
         pruneAttempts(now);
-        int requested = 0;
+        long deadline = now + CYCLE_QUERY_BUDGET_MS;
+        int issued = 0;
         if (pending != null) {
             for (Hash h : pending) {
-                if (requested >= MAX_LOOKUPS_PER_CYCLE)
+                if (_inFlight.get() >= MAX_CONCURRENT_LOOKUPS)
                     break;
-                requestLookup(ctx, h, now);
-                requested++;
+                int timeoutMs = issueTimeout(deadline - ctx.clock().now(),
+                                             IterativeSearchJob.getMaxRouterInfoLookupTime());
+                if (timeoutMs <= 0)
+                    break;  // query budget exhausted
+                requestLookup(ctx, h, now, timeoutMs);
+                issued++;
             }
-            // Leave the rest gated by canAttempt() until later cycles.
+            // Keys left unissued were never gated in _attempts, so they stay
+            // eligible and are picked up first next cycle.
         }
-        if (_log.shouldDebug() && requested > 0) {
-            _log.debug("IntroducerLookupJob: requested " + requested + " of " +
-                       pending.size() + " missing introducer RIs" +
-                       " (" + _attempts.size() + " tracked)");
+        if (_log.shouldDebug() && issued > 0) {
+            _log.debug("IntroducerLookupJob: issued " + issued + " of " +
+                       pending.size() + " missing introducer RI lookups" +
+                       " (" + _inFlight.get() + " in flight, " +
+                       _attempts.size() + " tracked)");
         }
         requeue(nextInterval(ctx));
     }
 
     /**
-     *  Record the attempt and issue one non-blocking remote RI lookup.
+     *  Record the attempt and issue one non-blocking remote RI lookup with
+     *  the given deadline (never past this cycle's query budget, never above
+     *  the standard adaptive RouterInfo lookup cap).
      *  Success clears the tracking entry (the RI is then cached locally and
      *  expires through the normal netdb lifecycle); failure increments the
-     *  consecutive-failure count, which lengthens the retry backoff.
+     *  consecutive-failure count, which lengthens the retry backoff. Both
+     *  outcomes release a concurrency slot.
      */
-    private void requestLookup(RouterContext ctx, final Hash h, long now) {
+    private void requestLookup(RouterContext ctx, final Hash h, long now, final int timeoutMs) {
         _attempts.compute(h, (k, v) -> v == null ? new long[] {now, 0}
                                                  : new long[] {now, v[1]});
+        _inFlight.incrementAndGet();
         Job onFind = new JobImpl(ctx) {
             @Override
             public String getName() { return "Introducer Lookup"; }
             @Override
-            public void runJob() { _attempts.remove(h); }
+            public void runJob() {
+                _attempts.remove(h);
+                _inFlight.decrementAndGet();
+            }
         };
         Job onFail = new JobImpl(ctx) {
             @Override
@@ -173,9 +206,10 @@ class IntroducerLookupJob extends JobImpl {
             @Override
             public void runJob() {
                 _attempts.computeIfPresent(h, (k, v) -> new long[] {v[0], v[1] + 1});
+                _inFlight.decrementAndGet();
             }
         };
-        _facade.lookupRouterInfoRemote(h, onFind, onFail, LOOKUP_TIMEOUT_MS);
+        _facade.lookupRouterInfoRemote(h, onFind, onFail, timeoutMs);
         ctx.statManager().addRateData("netDb.introducerRILookups", 1);
     }
 
@@ -298,5 +332,22 @@ class IntroducerLookupJob extends JobImpl {
         if (state == null)
             return true;
         return now - state[0] >= backoffMillis((int) state[1]);
+    }
+
+    /**
+     *  Deadline for one issued lookup: the standard adaptive RouterInfo
+     *  lookup cap (the same deadline peer/transit next-hop lookups get),
+     *  never extended past this cycle's remaining query budget, and zero
+     *  when too little budget remains to fund a useful search.
+     *  Pure decision — safe for unit tests.
+     *
+     *  @param remainingBudgetMs ms left in this cycle's query phase
+     *  @param adaptiveCapMs current adaptive RouterInfo lookup deadline cap
+     *  @return timeout in ms, or 0 when no useful lookup remains
+     *  @since 0.9.71+
+     */
+    static int issueTimeout(long remainingBudgetMs, int adaptiveCapMs) {
+        if (remainingBudgetMs < MIN_USEFUL_TIMEOUT_MS) {return 0;}
+        return (int) Math.min(remainingBudgetMs, adaptiveCapMs);
     }
 }

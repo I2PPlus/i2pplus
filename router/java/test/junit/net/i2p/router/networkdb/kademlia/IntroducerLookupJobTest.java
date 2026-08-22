@@ -30,6 +30,8 @@ public class IntroducerLookupJobTest {
     private static final long TEN_MIN = 10 * 60 * 1000L;
     private static final long THIRTY_MIN = 30 * 60 * 1000L;
     private static final long SIX_HOURS = 6L * 60 * 60 * 1000L;
+    /** Mirrors IntroducerLookupJob.MIN_USEFUL_TIMEOUT_MS / the ISJ RI floor. */
+    private static final int MIN_USEFUL = 2000;
 
     // ---- getIntroducerHashes ------------------------------------------------
 
@@ -193,6 +195,29 @@ public class IntroducerLookupJobTest {
         assertFalse(IntroducerLookupJob.canAttempt(NOW, state));
         long[] elapsed = {NOW - THIRTY_MIN * 4, 3};
         assertTrue(IntroducerLookupJob.canAttempt(NOW, elapsed));
+    }
+
+    // ---- issueTimeout -------------------------------------------------------
+
+    @Test
+    public void exhaustedBudgetIssuesNothing() {
+        assertEquals(0, IntroducerLookupJob.issueTimeout(MIN_USEFUL - 1, 5000));
+        assertEquals(0, IntroducerLookupJob.issueTimeout(0, 15000));
+    }
+
+    @Test
+    public void floorBudgetStillIssues() {
+        assertEquals(MIN_USEFUL, IntroducerLookupJob.issueTimeout(MIN_USEFUL, 15000));
+    }
+
+    @Test
+    public void remainingBudgetClampsBelowCap() {
+        assertEquals(7000, IntroducerLookupJob.issueTimeout(7000, 15000));
+    }
+
+    @Test
+    public void capClampsBelowRemainingBudget() {
+        assertEquals(4000, IntroducerLookupJob.issueTimeout(25000, 4000));
     }
 
     // ---- helpers ------------------------------------------------------------
