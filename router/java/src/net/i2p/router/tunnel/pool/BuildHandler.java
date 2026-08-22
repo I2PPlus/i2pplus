@@ -83,7 +83,22 @@ public class BuildHandler implements Runnable {
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 3*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores(), 32);
-    private static final int MAX_PENDING_LOOKUPS = 64;
+    /**
+     * Pending next-hop lookups waiting for a free slot while their build
+     * request is still inside the originator's budget. Sized to absorb the
+     * cold-start burst when the local netDb miss rate is high and real
+     * lookups hold slots for seconds; entries past the originator's budget
+     * are discarded by the staleness check either way.
+     */
+    private static final int MAX_PENDING_LOOKUPS = 128;
+    /**
+     * Cold-start window for next-hop lookup concurrency: until this long
+     * after startup, the lookup limit uses its full configured ceiling,
+     * because the netDb miss rate is high while {@code participating x pct}
+     * would clamp concurrency to near the floor exactly when inbound builds
+     * need it most.
+     */
+    private static final long STARTUP_LOOKUP_BOOST_MS = 10 * 60 * 1000L;
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -135,6 +150,31 @@ public class BuildHandler implements Runnable {
     private static int getPercentLookupLimit(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedPercentLookupLimit;
+    }
+
+    /**
+     *  Concurrent next-hop lookup limit for the current request.
+     *
+     *  Within {@link #STARTUP_LOOKUP_BOOST_MS} of startup the full ceiling
+     *  applies regardless of participating count: the netDb is still filling,
+     *  so cache misses dominate and the proportional formula would clamp
+     *  concurrency to near its floor exactly when inbound builds queue up.
+     *  Afterward, scale with transit population as before, floored at
+     *  minLimit so a drained pool can't zero out lookups.
+     *
+     *  Pure decision — safe for unit tests.
+     *
+     *  @param numTunnels current participating (transit) tunnel count
+     *  @param minLimit configured floor for the proportional formula
+     *  @param maxLimit configured ceiling
+     *  @param percentLimit percent of participating count usable as slots
+     *  @param uptimeMs router uptime in ms
+     *  @return the concurrent lookup limit, never below minLimit
+     *  @since 0.9.71+
+     */
+    static int lookupLimit(int numTunnels, int minLimit, int maxLimit, int percentLimit, long uptimeMs) {
+        if (uptimeMs < STARTUP_LOOKUP_BOOST_MS) {return maxLimit;}
+        return Math.max(minLimit, Math.min(maxLimit, numTunnels * percentLimit / 100));
     }
 
     /**
@@ -630,7 +670,8 @@ public class BuildHandler implements Runnable {
             long lookupStartTime = System.currentTimeMillis();
             state.setLookupStartTime(lookupStartTime);
             int numTunnels = _context.tunnelManager().getParticipatingCount();
-            int limit = Math.max(getMinLookupLimit(_context), Math.min(getMaxLookupLimit(_context), numTunnels * getPercentLookupLimit(_context) / 100));
+            int limit = lookupLimit(numTunnels, getMinLookupLimit(_context), getMaxLookupLimit(_context),
+                                    getPercentLookupLimit(_context), _context.router().getUptime());
 
             AtomicBoolean decremented = new AtomicBoolean(false);
             int currentLookups = _currentLookups.get();
@@ -853,7 +894,8 @@ public class BuildHandler implements Runnable {
      */
     private void drainPendingLookups() {
         int numTunnels = _context.tunnelManager().getParticipatingCount();
-        int limit = Math.max(getMinLookupLimit(_context), Math.min(getMaxLookupLimit(_context), numTunnels * getPercentLookupLimit(_context) / 100));
+        int limit = lookupLimit(numTunnels, getMinLookupLimit(_context), getMaxLookupLimit(_context),
+                                getPercentLookupLimit(_context), _context.router().getUptime());
         long maxAge = pendingLookupMaxAge(BuildRequestor.getRequestTimeout(_context), getNextHopLookupTimeout(_context));
 
         PendingLookup pending;
