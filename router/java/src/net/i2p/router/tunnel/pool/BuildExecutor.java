@@ -21,6 +21,7 @@ import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.stat.Rate;
@@ -49,6 +50,9 @@ public class BuildExecutor implements Runnable {
      *  Priority score for build urgency.
      *  Higher = build sooner. Must be a pure function of pool state so the
      *  snapshot comparator remains a consistent total order.
+     *  Zero-hop emergency pools are not ranked here — they are ordered by
+     *  {@link #DISPATCH_COMPARATOR} ahead of every scored pool, so this
+     *  score only arbitrates among ordinary demand.
      */
     private static int score(TunnelPool p) {
         int active = p.getActiveTunnelCount();
@@ -83,6 +87,67 @@ public class BuildExecutor implements Runnable {
                 if (cmp != 0) return cmp;
                 return Integer.compare(System.identityHashCode(a[1]), System.identityHashCode(b[1]));
             };
+
+    /**
+     *  Dispatch comparator for snapshotted {@code Object[3]} rows where
+     *  {@code row[0]} is the score (Integer), {@code row[1]} the pool and
+     *  {@code row[2]} the zero-hop emergency flag (Boolean): emergency
+     *  replacements go first regardless of deficit, then higher score
+     *  first.  Deliberately no identity-hash tiebreaker — Arrays.sort is
+     *  stable, so full ties keep their allocation order from
+     *  calculatePairedBuilds() instead of an arbitrary per-session order
+     *  that could starve one of two equally-ranked pools indefinitely.
+     *
+     *  @since 0.9.71+
+     */
+    static final Comparator<Object[]> DISPATCH_COMPARATOR =
+            (a, b) -> {
+                int cmp = Boolean.compare((Boolean) b[2], (Boolean) a[2]);
+                if (cmp != 0) {return cmp;}
+                return Integer.compare((int) b[0], (int) a[0]);
+            };
+
+    /**
+     *  Whether this pass should treat the pool as a zero-hop emergency:
+     *  a multi-hop-configured, non-ping pool currently serving traffic
+     *  through a length-1 bootstrap fallback.  Such tunnels provide no
+     *  anonymity, so their replacement gets an unconditional build floor
+     *  in calculatePairedBuilds() and first claim on dispatch slots in
+     *  run2().  Single shared definition so the allocation stage and the
+     *  dispatch stage can never disagree about which pools are urgent.
+     *
+     *  @param pool candidate pool, non-null
+     *  @return true if the pool carries a zero-hop fallback it did not ask for
+     *  @since 0.9.71+
+     */
+    static boolean isZeroHopEmergency(TunnelPool pool) {
+        String nick = pool.getSettings().getDestinationNickname();
+        boolean isPing = nick != null && nick.startsWith("Ping");
+        return !isPing && !pool.getSettings().isZeroHop()
+               && pool.hasZeroHopFallback();
+    }
+
+    /**
+     *  Effective tunnel-count target a pool builds toward.  Pools flagged
+     *  keepConfiguredQty (ping pools, and pools expressly configured for
+     *  zero hops where a length-1 tunnel IS the product) keep their
+     *  configured quantity; all others hold at least targetMin tunnels
+     *  per direction so a single failure can't empty the pool or starve
+     *  the LeaseSet.
+     *
+     *  @param ctx router context, for the configurable floor and tuner buffer
+     *  @param s settings of the pool in question
+     *  @param keepConfiguredQuantity true to return the configured quantity verbatim
+     *  @return the effective target: the configured quantity when flagged,
+     *          else at least 2
+     *  @since 0.9.71+
+     */
+    static int effectiveTarget(RouterContext ctx, TunnelPoolSettings s, boolean keepConfiguredQuantity) {
+        int wantedCount = s.getTotalQuantity();
+        if (keepConfiguredQuantity) {return wantedCount;}
+        return Math.max(2, Math.max(getTunnelTargetMin(ctx),
+                                    wantedCount + getTunnelTargetBuffer(ctx)));
+    }
 
     private final Set<Long> _recentBuildIds = new LinkedHashSet<>(129);
     private final RouterContext _context;
@@ -898,17 +963,22 @@ public class BuildExecutor implements Runnable {
                         // Snapshot scores before sorting to avoid TimSort crash from
                         // concurrent tunnel state changes during comparison (activeTunnelCount
                         // can change as TestJobs complete or tunnels expire mid-sort).
-                        // Sort by build priority: collapsed pools first, then near-collapse,
-                        // then by deficit (largest first).
+                        // Sort by dispatch priority: zero-hop emergency replacements first
+                        // (they provide no anonymity and must cycle out ahead of ordinary
+                        // demand), then collapsed pools, then near-collapse, then by deficit
+                        // (largest first).  Ties are left to the stable sort so equal-priority
+                        // pools keep their allocation order from calculatePairedBuilds()
+                        // instead of an arbitrary identity-hash order.
                         // For paired destinations, prioritize the direction further behind its pair
                         int sz = wanted.size();
-                        Object[][] scored = new Object[sz][2];
+                        Object[][] scored = new Object[sz][3];
                         for (int si = 0; si < sz; si++) {
                             TunnelPool p = wanted.get(si);
                             scored[si][0] = score(p);
                             scored[si][1] = p;
+                            scored[si][2] = isZeroHopEmergency(p);
                         }
-                        Arrays.sort(scored, SCORE_COMPARATOR);
+                        Arrays.sort(scored, DISPATCH_COMPARATOR);
                         for (int si = 0; si < sz; si++) {
                             wanted.set(si, (TunnelPool) scored[si][1]);
                         }
@@ -952,14 +1022,12 @@ public class BuildExecutor implements Runnable {
                             if (!pool.isAlive()) {
                                 continue;
                             }
-                            int wantedCount = pool.getSettings().getTotalQuantity();
                             int buildingCount = pool.getInProgressCount();
                             // Zero-hop pools keep their configured quantity; the
                             // 2-tunnel floor ensures a single failure can't
                             // starve the pool.
-                            int target = pool.getSettings().isZeroHop() ? wantedCount :
-                                         Math.max(2, Math.max(getTunnelTargetMin(_context),
-                                                               wantedCount + getTunnelTargetBuffer(_context)));
+                            int target = effectiveTarget(_context, pool.getSettings(),
+                                                         pool.getSettings().isZeroHop());
                             int maxBuilding = Math.max(4, target * 2);
                             if (buildingCount > maxBuilding) {
                                 for (PooledTunnelCreatorConfig cfg : pool.cancelExcessInProgress(maxBuilding)) {
@@ -1424,16 +1492,14 @@ public class BuildExecutor implements Runnable {
         for (TunnelPool pool : sorted) {
             if (!pool.isAlive()) {continue;}
 
-            int wantedCount = pool.getSettings().getTotalQuantity();
             String nickname = pool.getSettings().getDestinationNickname();
             boolean isPing = nickname != null && nickname.startsWith("Ping");
 
             // Ping and zero-hop pools keep their configured quantity; all
             // others hold at least 2 tunnels per direction so a single
             // failure can't empty the pool or starve the LeaseSet.
-            int target = (isPing || pool.getSettings().isZeroHop()) ? wantedCount :
-                         Math.max(2, Math.max(getTunnelTargetMin(_context),
-                                               wantedCount + getTunnelTargetBuffer(_context)));
+            int target = effectiveTarget(_context, pool.getSettings(),
+                                         isPing || pool.getSettings().isZeroHop());
 
             List<TunnelInfo> tunnels = pool.listTunnels();
 
@@ -1470,8 +1536,7 @@ public class BuildExecutor implements Runnable {
             // fast as possible, bypassing budget/cap gating like a critical
             // pool. Replacement demand for it is added after the normal
             // build calculation below.
-            boolean zeroEmergency = !isPing && !pool.getSettings().isZeroHop()
-                                    && pool.hasZeroHopFallback();
+            boolean zeroEmergency = isZeroHopEmergency(pool);
             /* Don't overbuild when we already have untested tunnels queued for testing.
              * If enough pending tunnels are waiting for test results to cover the target,
              * let those complete before building more. Otherwise we pile up untested tunnels
