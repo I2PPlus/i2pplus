@@ -1,3 +1,50 @@
+2026-08-21 dr|z3d
+  * I2PSnark:
+    - Serve piece data to peers from an async prefetch pool, so slow
+      disk reads no longer stall uploads waiting to go out
+    - Per-pool client identity spoofing behind i2psnark.clientId
+    - Compute torrent tunnel counts from our own sessions instead of
+      scraping /configtunnels
+  * Tunnel:
+    - Bias peer selection toward proven responders; pair tunnels within
+      their pool only and cool down failed builders for retry
+    - Prefetch missing introducer RouterInfos for unreachable (U-cap)
+      peers in the background; non-validating RI lookups for candidate
+      exclusion checks in hot paths
+    - Gate tunnel reuse and dispatch on cached peer RIs with a staggered
+      safety margin; ride out netdb revalidation races in build requestor
+    - Starvation-first autotuning of next-hop lookup concurrency, so
+      ramp-time queue pressure raises the limit instead of ratcheting
+      it to the floor
+    - Graduated burst bans for throttled hops; load-scaled lookup
+      prev-hop ban replaces unconditional throttle; stop penalizing
+      peer profiles for transit-side throttle conditions
+    - Blame only the contacted hop on build and lookup timeouts; record
+      zero-hop policy skips as skipped rather than failed
+    - Drop idle transit tunnels only after a full zero-message window,
+      and only when transit usage approaches configured capacity;
+      widen ingress build staleness window to half the originator timeout
+  * Router:
+    - Signal transient overload for 1m-rate tunnel rejects
+
+2026-08-20 dr|z3d
+  * Tunnel:
+    - Rework tunnel pool peer selection: staged quality comparator with
+      dead peers sorted last, inbound-only sort, dead-tier acceptance
+    - Treat missing build-success stats as neutral instead of attack
+      mode at startup; never return null from peer selection
+    - Filter cooldown exclusions at read time instead of sweeping shared
+      maps; drop the lock serializing client pool selections
+    - Real ghost-stress cooldowns snapshotted at mark time; cooldown only
+      the adjacent peer on exploratory failure; diversity cooldowns for
+      healthy reused peers; remove unconditional failure cooldowns
+    - Space out build passes without blocking sleeps; blame only the
+      contacted hop on timeouts; fix keepalive cadence (30s actual)
+    - Keep unprofiled peers non-stale; drop exclude-caps randomization;
+      FIFO-trim recent build ids to preserve duplicate detection
+    - Rate-limit selection failure warnings; demote fallback logging
+      to debug
+
 2026-08-19 dr|z3d
   * I2PSnark:
     - Verify pieces in parallel, cap concurrent rechecks, bound
@@ -10,6 +57,11 @@
       widen RI lookup cap
   * Build: Omit translation bundles from compact dev updaters
     (ant no.bundle, gradle -PnoBundle)
+
+2026-08-19 zzz
+  * I2PSnark:
+    - Faster SHA-1 hashing when creating torrents
+    - Fail cleanly on duplicate dictionary keys in bencoded metadata
 
 2026-08-18 dr|z3d
   * I2PSnark:
