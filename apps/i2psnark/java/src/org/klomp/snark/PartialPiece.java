@@ -416,7 +416,10 @@ class PartialPiece implements Comparable<PartialPiece> {
             int sz = bitfield.size();
             for (int i = subBlock + 1; i < sz; i++) {
                 if (!bitfield.get(i)) break;
-                debug("Hole filled in before sub-block " + i + " on " + this + ' ' + bitfield);
+                // log only the first contiguous fill - the rest follow by
+                // definition and the per-sub-block lines are pure spam
+                if (i == subBlock + 1)
+                    debug("Hole filled in before sub-block " + i + " on " + this + ' ' + bitfield);
                 if (i == sz - 1) off = pclen;
                 else off += SUB_PARTSIZE;
             }
