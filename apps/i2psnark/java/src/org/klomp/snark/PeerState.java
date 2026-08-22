@@ -64,10 +64,19 @@ class PeerState implements DataLoader {
     final Set<Integer> _peerAllowedFast = new HashSet<>(8);
 
     /**
-     * BEP 6: pieces a conforming sender may advertise, derived from our own destination hash;
-     * null until computed, or when our destination cannot be determined.
+     * BEP 6: pieces a conforming sender may advertise to us. The union of two
+     * derivations: our own destination-hash-based set (I2PSnark peers) and the
+     * libtorrent-style set derived from a zeroed IPv4 address (qBittorrent and
+     * other libtorrent clients over I2P, whose "remote address" is 0.0.0.0 for
+     * every I2P connection). Null until computed, or when nothing can be derived.
      */
     Set<Integer> _expectedAllowedFast;
+
+    /**
+     * The four zero bytes libtorrent uses in place of an IPv4 address when its
+     * remote peer is an I2P destination; shared read-only.
+     */
+    private static final byte[] LT_I2P_ADDR_PREFIX = new byte[4];
 
     /** The pieces the peer has. Locking: this. */
     BitField bitfield;
@@ -1167,8 +1176,9 @@ class PeerState implements DataLoader {
      * Handle an allowed fast message (BEP 6): the peer will serve this piece even while it chokes
      * us. Store it and pull a request now, while we are still choked.
      *
-     * <p>Indices outside the deterministic set derived from our own destination hash are dropped,
-     * defending against buggy or malicious senders that invent pieces.
+     * <p>Indices outside the accepted derivations (see {@link #expectedAllowedFast()}) are
+     * dropped, defending against buggy or malicious senders that invent pieces. Membership
+     * bounds what such a sender can get us to request while choked to at most the union size.
      *
      * @param piece the piece index
      * @since 0.9.21
@@ -1201,8 +1211,19 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * The set of pieces a conforming sender may advertise, derived from our own destination hash,
-     * or null when our destination cannot be determined.
+     * The set of piece indices a conforming sender may advertise to us, or null when nothing
+     * can be derived. The union of two derivations:
+     *
+     * <ul>
+     *   <li>our own destination-hash-based set - matches other I2PSnark peers</li>
+     *   <li>the libtorrent-style set derived from a zeroed IPv4 address - qBittorrent and
+     *       other libtorrent clients over I2P see 0.0.0.0 as their remote address for every
+     *       I2P connection, so their advertised set is torrent-wide and computable by anyone</li>
+     * </ul>
+     *
+     * <p>Membership is still enforced: indices outside this union are dropped, bounding what
+     * a malicious peer can get us to request while choked to at most the union size, and the
+     * requests remain subject to normal pipeline limits.
      *
      * <p>Computed once per connection; called only from the reader thread.
      *
@@ -1211,14 +1232,20 @@ class PeerState implements DataLoader {
     Set<Integer> expectedAllowedFast() {
         Set<Integer> expected = _expectedAllowedFast;
         if (expected == null) {
+            byte[] infohash = metainfo.getInfoHash();
+            int pieces = metainfo.getPieces();
+            // libtorrent-style: constant per torrent, enables qBittorrent interop
+            expected = generateAllowedFastSet(LT_I2P_ADDR_PREFIX, infohash, pieces);
             Destination myDest = null;
             I2PSocket mySock = peer.getI2PSocket();
             if (mySock != null) {
                 myDest = mySock.getThisDestination();
             }
             if (myDest != null) {
-                expected = generateAllowedFastSet(
-                        myDest.calculateHash().getData(), metainfo.getInfoHash(), metainfo.getPieces());
+                // I2PSnark-style: per-peer set from our own destination hash
+                Set<Integer> mine = generateAllowedFastSet(
+                        myDest.calculateHash().getData(), infohash, pieces);
+                expected.addAll(mine);
             }
             _expectedAllowedFast = expected;
         }
@@ -1306,7 +1333,7 @@ class PeerState implements DataLoader {
      */
     static Set<Integer> generateAllowedFastSet(byte[] peerHash, byte[] infohash, int pieces) {
         Set<Integer> rv = new HashSet<>(10);
-        if (peerHash == null || infohash == null || pieces <= 0) {
+        if (peerHash == null || infohash == null || pieces <= 0 || peerHash.length < 4) {
             return rv;
         }
         // torrents with fewer pieces than the target set size: every piece is

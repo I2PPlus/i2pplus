@@ -94,4 +94,46 @@ public class AllowedFastSetTest {
         assertNotNull(PeerState.generateAllowedFastSet(dhash(1), infohash(1), 0));
         assertTrue(PeerState.generateAllowedFastSet(null, null, 0).isEmpty());
     }
+
+    // ---- libtorrent interop (zeroed IPv4 prefix) ----------------------------
+
+    @Test
+    public void zeroPrefixSetIsDeterministic() {
+        // libtorrent derives the same torrent-wide set for every i2p peer;
+        // two computations must agree
+        byte[] zeros = new byte[4];
+        Set<Integer> a = PeerState.generateAllowedFastSet(zeros, infohash(20), 3000);
+        Set<Integer> b = PeerState.generateAllowedFastSet(zeros, infohash(20), 3000);
+        assertEquals(a, b);
+    }
+
+    @Test
+    public void zeroPrefixSetBoundedAndInRange() {
+        byte[] zeros = new byte[4];
+        Set<Integer> set = PeerState.generateAllowedFastSet(zeros, infohash(21), 4096);
+        assertFalse(set.isEmpty());
+        assertTrue(set.size() <= 10);
+        for (int p : set) {
+            assertTrue("index out of range: " + p, p >= 0 && p < 4096);
+        }
+    }
+
+    @Test
+    public void zeroPrefixSmallTorrentReturnsAllPieces() {
+        byte[] zeros = new byte[4];
+        Set<Integer> set = PeerState.generateAllowedFastSet(zeros, infohash(22), 7);
+        assertEquals(7, set.size());
+        for (int i = 0; i < 7; i++) {
+            assertTrue(set.contains(i));
+        }
+    }
+
+    @Test
+    public void zeroPrefixDiffersFromDestHashDerivation() {
+        // the two accepted derivations must produce different sets for a
+        // typical torrent, otherwise the union adds nothing
+        Set<Integer> ltStyle = PeerState.generateAllowedFastSet(new byte[4], infohash(23), 4096);
+        Set<Integer> destStyle = PeerState.generateAllowedFastSet(dhash(24), infohash(23), 4096);
+        assertNotEquals(ltStyle, destStyle);
+    }
 }
