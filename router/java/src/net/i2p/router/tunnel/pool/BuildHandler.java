@@ -102,6 +102,12 @@ public class BuildHandler implements Runnable {
     /** i2p.tunnel.build.maxPendingLookups property; see {@link #getMaxPendingLookups}. */
     private static final String PROP_MAX_PENDING_LOOKUPS = "i2p.tunnel.build.maxPendingLookups";
     /**
+     * Grace added to the lookup timeout for the independent slot-release
+     * deadline, so the normal callbacks (which release earlier) win the race
+     * in the common case and the deadline only catches leaks.
+     */
+    private static final long LOOKUP_DEADLINE_MARGIN_MS = 2 * 1000L;
+    /**
      * Cold-start window for next-hop lookup concurrency: until this long
      * after startup, the lookup limit uses its full configured ceiling,
      * because the netDb miss rate is high while {@code participating x pct}
@@ -258,6 +264,48 @@ public class BuildHandler implements Runnable {
         if (counter != null && counter.decrementAndGet() <= 0) {
             inFlight.remove(key, counter);
         }
+    }
+
+    /**
+     *  Schedule an independent deadline that releases this request's lookup
+     *  attachment if neither callback has done so by then.
+     *
+     *  Slot release must never depend solely on the netdb callbacks: any
+     *  silent path between attach and callback registration (a dropped job,
+     *  a search that never schedules, a constructor failure) would leak the
+     *  key forever, pinning the distinct-key set at its ceiling and - since
+     *  the pending queue drains only from release callbacks - freezing the
+     *  queue full until restart. Observed live as exactly that deadlock.
+     *  With this deadline, every attachment is guaranteed to release within
+     *  lookupTimeout + margin, so leaks self-heal and the queue always has
+     *  a drain trigger.
+     *
+     *  @param state the build request state carrying the per-request
+     *               released flag shared with the callbacks
+     *  @param nextPeer the attached next hop
+     *  @param decremented exactly-once flag shared with HandleReq/TimeoutReq
+     */
+    private void scheduleLookupDeadline(BuildMessageState state, Hash nextPeer, AtomicBoolean decremented) {
+        JobImpl deadline = new JobImpl(_context) {
+            @Override
+            public String getName() { return "Next-hop lookup slot deadline"; }
+            @Override
+            public void runJob() {
+                if (!decremented.getAndSet(true)) {
+                    // callbacks never fired (or fired without releasing) -
+                    // reclaim the slot on deadline and wake the queue
+                    releaseLookupKey(_lookupKeys, nextPeer);
+                    drainPendingLookups();
+                    if (_log.shouldInfo()) {
+                        _log.info("Lookup slot reclaimed at deadline for [" +
+                                  nextPeer.toBase64().substring(0,6) + "]");
+                    }
+                }
+            }
+        };
+        deadline.getTiming().setStartAfter(_context.clock().now() +
+                                           getNextHopLookupTimeout(_context) + LOOKUP_DEADLINE_MARGIN_MS);
+        _context.jobQueue().addJob(deadline);
     }
 
     /**
@@ -763,6 +811,7 @@ public class BuildHandler implements Runnable {
                 }
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer, decremented),
                                                   new TimeoutReq(_context, state, req, nextPeer, decremented), getNextHopLookupTimeout(_context));
+                scheduleLookupDeadline(state, nextPeer, decremented);
             } else {
                 int maxPending = getMaxPendingLookups(_context);
                 if (_pendingLookups.size() < maxPending) {
@@ -1001,6 +1050,7 @@ public class BuildHandler implements Runnable {
                 new HandleReq(_context, pending.state, pending.req, pending.nextPeer, decremented),
                 new TimeoutReq(_context, pending.state, pending.req, pending.nextPeer, decremented),
                 getNextHopLookupTimeout(_context));
+            scheduleLookupDeadline(pending.state, pending.nextPeer, decremented);
         }
     }
 
