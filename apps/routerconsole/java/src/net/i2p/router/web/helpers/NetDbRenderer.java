@@ -1140,11 +1140,7 @@ class NetDbRenderer {
 
             for (RouterInfo ri : pageList) {
                 StringBuilder sb = new StringBuilder();
-                if (rdnsLookups.isEmpty()) {
-                    renderRouterInfo(sb, ri, isLocal);
-                } else {
-                    renderRouterInfo(sb, ri, isLocal, rdnsLookups);
-                }
+                renderRouterInfoSafe(sb, ri, isLocal, rdnsLookups.isEmpty() ? null : rdnsLookups);
                 out.append(sb);
                 out.flush();
             }
@@ -1299,19 +1295,25 @@ class NetDbRenderer {
             Collections.sort(countryList, new NetDbComparators.CountryComparator(_context));
             buf.append("<tbody id=cclist>\n");
             for (String country : countryList) {
-                int totalCount = Math.max(countries.count(country) - 1, 0);
-                int[] tier = countryTiers.get(country);
-                int xtier = tier != null ? tier[0] : 0;
-                int flood = tier != null ? tier[1] : 0;
-                buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
-                   .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
-                   .append(" src=\"/flags.jsp?c=").append(country).append("\" loading=lazy>")
-                   .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
-                   .append("<td class=countX><a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
-                   .append(xtier).append("</a></td>")
-                   .append("<td class=countFF><a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
-                   .append(flood).append("</a></td>")
-                   .append("<td class=countCC>").append(totalCount).append("</td></tr>\n");
+                try {
+                    int totalCount = Math.max(countries.count(country) - 1, 0);
+                    int[] tier = countryTiers.get(country);
+                    int xtier = tier != null ? tier[0] : 0;
+                    int flood = tier != null ? tier[1] : 0;
+                    buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
+                       .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
+                       .append(" src=\"/flags.jsp?c=").append(country).append("\" loading=lazy>")
+                       .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
+                       .append("<td class=countX><a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
+                       .append(xtier).append("</a></td>")
+                       .append("<td class=countFF><a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
+                       .append(flood).append("</a></td>")
+                       .append("<td class=countCC>").append(totalCount).append("</td></tr>\n");
+                } catch (RuntimeException e) {
+                    // one untranslatable country code must not kill the summary
+                    if (_log.shouldWarn())
+                        _log.warn("Error rendering country row [" + country + ']', e);
+                }
             }
             buf.append("</tbody>\n</table>\n");
         } else {
@@ -1581,16 +1583,22 @@ class NetDbRenderer {
             buf.append("</span></span>");
         }
         buf.append("</td><td class=keys>");
+        // unknown key types report as null from getType(); RIs with exotic
+        // crypto must render, not throw
+        net.i2p.crypto.SigType sigType = identity.getSigningPublicKey().getType();
+        String sigTypeName = sigType != null ? sigType.toString() : _t("Unknown");
+        net.i2p.crypto.EncType encType = identity.getPublicKey().getType();
+        String encTypeName = encType != null ? encType.toString() : _t("Unknown");
         buf.append("<span class=signingkey title=\"")
            .append(_t("Show all routers with this signature type in the NetDb"))
            .append("\"><a class=keysearch href=\"/netdb?type=")
-           .append(identity.getSigningPublicKey().getType().toString())
-           .append("\">").append(identity.getSigningPublicKey().getType().toString())
+           .append(sigTypeName)
+           .append("\">").append(sigTypeName)
            .append("</a></span>&nbsp;<span class=\"signingkey encryption\" title=\"")
            .append(_t("Show all routers with this encryption type in the NetDb"))
            .append("\"><a class=keysearch href=\"/netdb?etype=")
-           .append(identity.getPublicKey().getType().toString())
-           .append("\">").append(identity.getPublicKey().getType().toString())
+           .append(encTypeName)
+           .append("\">").append(encTypeName)
            .append("</a></span></td></tr>\n");
         if (!isUnreachable) {
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
@@ -1701,9 +1709,12 @@ class NetDbRenderer {
                     String value = (String) entry.getValue();
                     if (key != null && key.startsWith("ih")) {
                         hasIntroducer = true;
-                        String ih = (String) entry.getValue();
-                        Hash ihost = ConvertToHash.getHash(ih);
-                        buf.append(_context.commSystem().renderPeerHTML(ihost, true));
+                        // option value is attacker-controlled base64; getHash
+                        // returns null for malformed values
+                        Hash ihost = ConvertToHash.getHash(value);
+                        if (ihost != null) {
+                            buf.append(_context.commSystem().renderPeerHTML(ihost, true));
+                        }
                     }
                 }
             }
@@ -1779,6 +1790,35 @@ class NetDbRenderer {
     }
 
     /**
+     *  Renders a single RouterInfo, isolating any failure to this one entry.
+     *
+     *  The netdb listing streams progressively (flush per router), so an
+     *  exception escaping a single render would truncate the rest of the
+     *  page with no way to re-render. Malformed options on adversarial
+     *  RouterInfos (e.g. invalid introducer hashes on U-cap routers) must
+     *  degrade to an error marker instead.
+     *
+     *  @param sb output buffer
+     *  @param ri the router to render
+     *  @param isLocalRouter true if this is the local router
+     *  @param rdnsLookups map of IP to hostname for reverse DNS, may be null
+     */
+    private void renderRouterInfoSafe(StringBuilder sb, RouterInfo ri, boolean isLocalRouter,
+                                      Map<String, String> rdnsLookups) {
+        try {
+            if (rdnsLookups != null) {
+                renderRouterInfo(sb, ri, isLocalRouter, rdnsLookups);
+            } else {
+                renderRouterInfo(sb, ri, isLocalRouter);
+            }
+        } catch (Throwable t) {
+            if (_log.shouldWarn())
+                _log.warn("Error rendering RouterInfo [" + ri.getHash().toBase64() + ']', t);
+            sb.append("<!-- error rendering ").append(ri.getHash().toBase64()).append(" -->\n");
+        }
+    }
+
+    /**
      *  Renders multiple RouterInfo objects in parallel, in ordered chunks
      *  of BATCH_SIZE. Falls back to synchronous rendering when the set is
      *  larger than one batch, to bound peak memory.
@@ -1795,7 +1835,7 @@ class NetDbRenderer {
             for (int i = 0; i < list.size(); i += BATCH_SIZE) {
                 int end = Math.min(i + BATCH_SIZE, list.size());
                 for (int j = i; j < end; j++) {
-                    renderRouterInfo(sb, list.get(j), isLocalRouter);
+                    renderRouterInfoSafe(sb, list.get(j), isLocalRouter, null);
                 }
             }
             return sb.toString();
@@ -1813,7 +1853,7 @@ class NetDbRenderer {
                 futures.add(
                     CompletableFuture.supplyAsync(() -> {
                         StringBuilder buffer = new StringBuilder();
-                        renderRouterInfo(buffer, routerInfo, isLocalRouter);
+                        renderRouterInfoSafe(buffer, routerInfo, isLocalRouter, null);
                         return buffer;
                     }, executor)
                 );
