@@ -1533,6 +1533,11 @@ public class TunnelPool {
         if (isRecentlyAddedDuplicate(info, gatewayId, now)) {return;}
 
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
+        // Reuse handover: a successor cloned from a reused expiring tunnel
+        // replaces its predecessor immediately, so identical peer sets never
+        // coexist in the pool during the overlap window.
+        TunnelInfo reusedPredecessor = findReusedPredecessor(info);
+        if (reusedPredecessor != null) {removeTunnel(reusedPredecessor);}
         LeaseSet ls = null;
         _tunnelsLock.lock();
         try {
@@ -4039,6 +4044,31 @@ public class TunnelPool {
             if (_context.netDb().lookupLocallyWithoutValidation(p) == null) {return false;}
         }
         return true;
+    }
+
+    /**
+     *  The active tunnel whose peer set matches the given newly built
+     *  tunnel (matched by exact gateway-first peer-list equality), or null.
+     *  Callers retire it on the successor's successful build so identical
+     *  peer sets never coexist in the pool.
+     *
+     *  @param successor the tunnel just added to the pool, non-null
+     *  @return the predecessor tunnel info, or null
+     *  @since 0.9.71+
+     */
+    private TunnelInfo findReusedPredecessor(TunnelInfo successor) {
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo ti : _tunnels) {
+                if (!ti.wasReused() || ti.getLength() != successor.getLength()) {continue;}
+                boolean same = true;
+                for (int i = 0; i < ti.getLength(); i++) {
+                    if (!DataHelper.eq(ti.getPeer(i), successor.getPeer(i))) {same = false; break;}
+                }
+                if (same) {return ti;}
+            }
+        } finally {_tunnelsLock.unlock();}
+        return null;
     }
 
     /**

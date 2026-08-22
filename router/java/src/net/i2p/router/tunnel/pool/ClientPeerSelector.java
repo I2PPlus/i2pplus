@@ -940,16 +940,31 @@ class ClientPeerSelector extends TunnelPeerSelector {
         List<Hash> nonSelf = new ArrayList<>(rv);
         nonSelf.remove(ctx.routerHash());
         if (!nonSelf.isEmpty()) {
+            // Peers already active in this destination's pools: excluded from
+            // swap candidates (a swap must not create a per-pool duplicate)
+            Hash dest = settings.getDestination();
+            Set<Hash> poolActive = new HashSet<>();
+            if (dest != null) {
+                TunnelManagerFacade tmf = ctx.tunnelManager();
+                TunnelPool ibp = tmf.getInboundPool(dest);
+                if (ibp != null) {poolActive.addAll(getPeersInPool(ctx, ibp));}
+                TunnelPool obp = tmf.getOutboundPool(dest);
+                if (obp != null) {poolActive.addAll(getPeersInPool(ctx, obp));}
+            }
             // Outbound protects both endpoint slots: slot 0 is the vetted
             // transport send target, the OBEP slot the far-end delivery exit.
             int from = isInbound ? 0 : 1;
             int to = isInbound ? nonSelf.size() : nonSelf.size() - 1;
             int swaps = preferProven(nonSelf, from, to,
                                      _provenResponders, ctx.clock().now(),
-                                     PROVEN_RESPONDER_WINDOW_MS, provenCandidates().iterator());
+                                     PROVEN_RESPONDER_WINDOW_MS,
+                                     provenCandidates(poolActive).iterator());
             Set<Hash> unreliable = findUnreliable(nonSelf, ctx.clock().now());
-            // Never shrink below two non-self hops: a shorter live tunnel
-            // beats a longer dead one, but not a zero-hop one.
+            // Entry/exit role-correlation guard: a peer slated to hold both a
+            // monitoring position here and the opposite one in another of our
+            // tunnels is swapped above when proof allows, else dropped while
+            // surplus hops remain
+            unreliable.addAll(positionalConflicts(nonSelf, isInbound, dest, ctx.clock().now()));
             boolean dropped = dropUnreliable(nonSelf, unreliable, 2);
             if (swaps > 0 || dropped) {
                 if (log.shouldInfo()) {
@@ -1122,12 +1137,16 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
     /**
      *  Fresh proven responders, freshest first, filtered for basic
-     *  eligibility: not us, not banlisted, not on selection cooldown, and
-     *  with a locally cached RouterInfo so a build can reach them.
+     *  eligibility: not us, not banlisted, not on selection cooldown,
+     *  with a locally cached RouterInfo so a build can reach them, and
+     *  not already active in the destination's pools (a swap must never
+     *  introduce a per-pool duplicate).
      *
+     *  @param excludePeers peers to exclude because they are already active
+     *         in this destination's tunnels
      *  @return eligible proven candidates for hop swaps, never null
      */
-    private List<Hash> provenCandidates() {
+    private List<Hash> provenCandidates(Set<Hash> excludePeers) {
         long now = ctx.clock().now();
         List<Map.Entry<Hash, Long>> entries = new ArrayList<>(_provenResponders.entrySet());
         entries.removeIf(e -> !isProvenResponder(e.getValue(), now));
@@ -1136,11 +1155,70 @@ class ClientPeerSelector extends TunnelPeerSelector {
         for (Map.Entry<Hash, Long> e : entries) {
             Hash h = e.getKey();
             if (h.equals(ctx.routerHash())) {continue;}
+            if (excludePeers != null && excludePeers.contains(h)) {continue;}
             if (ctx.banlist().isBanlisted(h)) {continue;}
             Long cd = _peerCooldowns.get(h);
             if (cd != null && now - cd < PEER_SELECTION_COOLDOWN_MS) {continue;}
             if (ctx.netDb().lookupLocallyWithoutValidation(h) == null) {continue;}
             rv.add(h);
+        }
+        // Anti-concentration: randomize within the freshest few so repeated
+        // swaps never funnel this destination's traffic through one popular
+        // proven peer (a magnet hop is a monitoring target)
+        int k = Math.min(4, rv.size());
+        Collections.shuffle(rv.subList(0, k), ctx.random());
+        return rv;
+    }
+
+    /**
+     *  Selected hops whose placement would give a single peer concurrent
+     *  entry and exit visibility across this destination's pools — the
+     *  pairing that enables traffic correlation. Two rules are checked:
+     *
+     *  <ul>
+     *    <li>inbound selection: the chosen IBGW already serves as the OBEP
+     *        of one of our active outbound tunnels</li>
+     *    <li>outbound selection: the chosen OBEP already serves as the IBGW
+     *        of one of our active inbound tunnels</li>
+     *  </ul>
+     *
+     *  @param nonSelf the selected non-self peers, gateway-first order
+     *  @param isInbound true when selecting for an inbound tunnel
+     *  @param dest the destination hash, or null
+     *  @param now current time from the router clock
+     *  @return conflicting peers, possibly empty
+     */
+    private Set<Hash> positionalConflicts(List<Hash> nonSelf, boolean isInbound,
+                                          Hash dest, long now) {
+        Set<Hash> rv = new HashSet<>(0);
+        if (dest == null || nonSelf.isEmpty()) {return rv;}
+        TunnelManagerFacade tmf = ctx.tunnelManager();
+        Hash us = ctx.routerHash();
+        Set<Hash> ibGateways = new HashSet<>(4);
+        Set<Hash> obEndpoints = new HashSet<>(4);
+        TunnelPool ibPool = tmf.getInboundPool(dest);
+        if (ibPool != null) {
+            for (TunnelInfo ti : ibPool.listTunnels()) {
+                Hash gw = ti.getPeer(0);
+                if (gw != null && !us.equals(gw)) {ibGateways.add(gw);}
+            }
+        }
+        TunnelPool obPool = tmf.getOutboundPool(dest);
+        if (obPool != null) {
+            for (TunnelInfo ti : obPool.listTunnels()) {
+                int last = ti.getLength() - 1;
+                if (last >= 0) {
+                    Hash ep = ti.getPeer(last);
+                    if (ep != null && !us.equals(ep)) {obEndpoints.add(ep);}
+                }
+            }
+        }
+        if (isInbound) {
+            Hash gw = nonSelf.get(0);
+            if (obEndpoints.contains(gw)) {rv.add(gw);}
+        } else {
+            Hash ep = nonSelf.get(nonSelf.size() - 1);
+            if (ibGateways.contains(ep)) {rv.add(ep);}
         }
         return rv;
     }
