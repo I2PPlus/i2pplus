@@ -1000,7 +1000,7 @@ public class BuildExecutor implements Runnable {
                                     continue;
                                 }
                                 if (_log.shouldDebug()) {
-                                    _log.debug("Configuring new tunnel [" + i + "] for " + pool + " -> " + cfg);
+                                    _log.debug("Configuring new tunnel [" + i + "] for " + pool);
                                 }
                                 buildTunnel(cfg);
                             } else {
