@@ -27,8 +27,20 @@ public class PeerQualityFilterTest {
     private static final long NOW = 50_000_000L;
     private static final long WINDOW = TunnelPeerSelector.PROVEN_RESPONDER_WINDOW_MS;
 
+    /**
+     *  Deterministic 32-byte hash seeded from the given string, built
+     *  without an I2PAppContext: Hash.create() routes through SDSCache,
+     *  which requires a live context and fails standalone.
+     */
     private static Hash h(String s) {
-        return Hash.create(s.getBytes());
+        byte[] seed = s.getBytes();
+        byte[] data = new byte[Hash.HASH_LENGTH];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = seed[i % seed.length];
+        }
+        Hash rv = new Hash();
+        rv.setData(data);
+        return rv;
     }
 
     private static Map<Hash, Long> proof(Hash h, long t) {
