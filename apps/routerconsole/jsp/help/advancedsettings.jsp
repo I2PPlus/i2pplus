@@ -402,10 +402,13 @@
 <tr><td><%=intl._t("Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.build.maxLookupLimit={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]")%></td></tr>
+<tr><td><%=intl._t("Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.build.percentLookupLimit={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]")%></td></tr>
+<tr><td><%=intl._t("Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]")%></td></tr>
+
+<tr class=config><th>i2p.tunnel.build.maxPendingLookups={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.build.maxRequestFuture={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]")%></td></tr>

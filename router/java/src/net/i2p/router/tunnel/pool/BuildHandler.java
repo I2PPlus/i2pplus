@@ -5,6 +5,7 @@ import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -67,7 +68,14 @@ public class BuildHandler implements Runnable {
     private final BuildReplyHandler _buildReplyHandler;
     private final IdleTunnelMonitor _idleTunnelMonitor;
     private final BanLogger _banLogger;
-    private final AtomicInteger _currentLookups = new AtomicInteger();
+    /**
+     * Distinct next-hop keys currently being resolved, each carrying the
+     * refcount of build requests waiting on it. Slots count KEYS, not
+     * requests: N builds missing the same hop attach to one shared search,
+     * because the netdb coalesces duplicate lookups into a single network
+     * round trip.
+     */
+    private final ConcurrentHashMap<Hash, AtomicInteger> _lookupKeys = new ConcurrentHashMap<>(32);
     /** FIFO of deferred lookups waiting for a concurrent-lookup slot */
     private final ConcurrentLinkedDeque<PendingLookup> _pendingLookups = new ConcurrentLinkedDeque<>();
     private volatile boolean _isRunning;
@@ -82,15 +90,17 @@ public class BuildHandler implements Runnable {
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 3*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
-    private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores(), 32);
     /**
-     * Pending next-hop lookups waiting for a free slot while their build
-     * request is still inside the originator's budget. Sized to absorb the
-     * cold-start burst when the local netDb miss rate is high and real
-     * lookups hold slots for seconds; entries past the originator's budget
-     * are discarded by the staleness check either way.
+     *  Concurrent next-hop search ceiling. Deliberately NOT cores-scaled:
+     *  a lookup slot is an I/O-bound wait on floodfill replies, not CPU
+     *  work, so hardware size doesn't change how many can be in flight.
+     *  Network load is bounded downstream by per-key search coalescing,
+     *  IterativeSearchJob fan-out caps, and the recently-queried floodfill
+     *  cooldowns. Overridable via i2p.tunnel.build.maxLookupLimit.
      */
-    private static final int MAX_PENDING_LOOKUPS = 128;
+    private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 32 : 64;
+    /** i2p.tunnel.build.maxPendingLookups property; see {@link #getMaxPendingLookups}. */
+    private static final String PROP_MAX_PENDING_LOOKUPS = "i2p.tunnel.build.maxPendingLookups";
     /**
      * Cold-start window for next-hop lookup concurrency: until this long
      * after startup, the lookup limit uses its full configured ceiling,
@@ -106,6 +116,7 @@ public class BuildHandler implements Runnable {
     private static volatile int _cachedMinLookupLimit;
     private static volatile int _cachedMaxLookupLimit;
     private static volatile int _cachedPercentLookupLimit;
+    private static volatile int _cachedMaxPendingLookups;
     private static volatile long _cachedMaxRequestFuture;
     private static volatile long _cachedMaxRequestAge;
     private static volatile long _cachedMaxRequestAgeEcies;
@@ -124,8 +135,9 @@ public class BuildHandler implements Runnable {
             return;
         _cachedNextHopLookupTimeout = ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", NEXT_HOP_LOOKUP_TIMEOUT);
         _cachedMinLookupLimit = ctx.getProperty("i2p.tunnel.build.minLookupLimit", SystemVersion.isSlow() ? 4 : 10);
-        _cachedMaxLookupLimit = ctx.getProperty("i2p.tunnel.build.maxLookupLimit", IS_SLOW ? 10 : MAX_LOOKUP_LIMIT);
+        _cachedMaxLookupLimit = ctx.getProperty("i2p.tunnel.build.maxLookupLimit", MAX_LOOKUP_LIMIT);
         _cachedPercentLookupLimit = ctx.getProperty("i2p.tunnel.build.percentLookupLimit", SystemVersion.isSlow() ? 15 : 40);
+        _cachedMaxPendingLookups = ctx.getProperty(PROP_MAX_PENDING_LOOKUPS, 256);
         _cachedMaxRequestFuture = ctx.getProperty("i2p.tunnel.build.maxRequestFuture", 5*60*1000L);
         _cachedMaxRequestAge = ctx.getProperty("i2p.tunnel.build.maxRequestAge", 65*60*1000L);
         _cachedMaxRequestAgeEcies = ctx.getProperty("i2p.tunnel.build.maxRequestAgeEcies", 8*60*1000L);
@@ -153,6 +165,22 @@ public class BuildHandler implements Runnable {
     }
 
     /**
+     *  Pending next-hop lookups allowed to wait for a free slot while their
+     *  build request is still inside the originator's budget. Sized near the
+     *  useful maximum - a full queue drains inside the staleness window
+     *  (drain rate x window is roughly 200) - so bursts absorb instead of
+     *  dying; entries past the originator's budget are discarded by the
+     *  staleness check either way.
+     *
+     *  @param ctx router context, for config lookup
+     *  @return the queue depth cap
+     */
+    private static int getMaxPendingLookups(RouterContext ctx) {
+        refreshBuildConfig(ctx);
+        return _cachedMaxPendingLookups;
+    }
+
+    /**
      *  Concurrent next-hop lookup limit for the current request.
      *
      *  Within {@link #STARTUP_LOOKUP_BOOST_MS} of startup the full ceiling
@@ -175,6 +203,61 @@ public class BuildHandler implements Runnable {
     static int lookupLimit(int numTunnels, int minLimit, int maxLimit, int percentLimit, long uptimeMs) {
         if (uptimeMs < STARTUP_LOOKUP_BOOST_MS) {return maxLimit;}
         return Math.max(minLimit, Math.min(maxLimit, numTunnels * percentLimit / 100));
+    }
+
+    /**
+     *  Attach a build request's next hop to the in-flight lookup set.
+     *  Capacity counts DISTINCT keys: requests joining an already-attached
+     *  key consume no extra slot, because the netdb coalesces duplicate
+     *  lookups for one key into a single network round trip. Without this,
+     *  N builds missing the same popular hop would burn N slots to run one
+     *  search and starve unrelated keys.
+     *
+     *  The limit is soft: racing handler threads may transiently overshoot
+     *  by at most the thread count, which is harmless.
+     *
+     *  Pure decision on its map argument — safe for unit tests.
+     *
+     *  @param inFlight distinct next-hop keys currently being resolved
+     *  @param key next hop of this request
+     *  @param limit concurrent distinct-key ceiling
+     *  @return true if attached and a lookup should be issued; false when
+     *          the ceiling is reached and the request must queue
+     *  @since 0.9.71+
+     */
+    static boolean attachLookupKey(ConcurrentHashMap<Hash, AtomicInteger> inFlight, Hash key, int limit) {
+        AtomicInteger counter = inFlight.get(key);
+        if (counter != null) {
+            // joining an in-flight search: no additional slot consumed
+            counter.incrementAndGet();
+            return true;
+        }
+        if (inFlight.size() >= limit) {return false;}
+        AtomicInteger created = new AtomicInteger(1);
+        AtomicInteger prev = inFlight.putIfAbsent(key, created);
+        if (prev != null) {
+            // lost the race; join the winner's refcount
+            prev.incrementAndGet();
+        }
+        return true;
+    }
+
+    /**
+     *  Release one build request's attachment to an in-flight lookup key,
+     *  dropping the key entry once its last waiting request completes so
+     *  released slots become visible to new arrivals.
+     *
+     *  Pure decision on its map argument — safe for unit tests.
+     *
+     *  @param inFlight distinct next-hop keys currently being resolved
+     *  @param key next hop being released by one request
+     *  @since 0.9.71+
+     */
+    static void releaseLookupKey(ConcurrentHashMap<Hash, AtomicInteger> inFlight, Hash key) {
+        AtomicInteger counter = inFlight.get(key);
+        if (counter != null && counter.decrementAndGet() <= 0) {
+            inFlight.remove(key, counter);
+        }
     }
 
     /**
@@ -672,24 +755,22 @@ public class BuildHandler implements Runnable {
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             int limit = lookupLimit(numTunnels, getMinLookupLimit(_context), getMaxLookupLimit(_context),
                                     getPercentLookupLimit(_context), _context.router().getUptime());
-
-            AtomicBoolean decremented = new AtomicBoolean(false);
-            int currentLookups = _currentLookups.get();
-            if (currentLookups < limit) {
-                _currentLookups.incrementAndGet();
+            if (attachLookupKey(_lookupKeys, nextPeer, limit)) {
+                AtomicBoolean decremented = new AtomicBoolean(false);
                 if (_log.shouldInfo()) {
                     _log.info("Looking up next hop [" + nextPeer.toBase64().substring(0,6) +
-                              "] -> Concurrent lookups: " + (currentLookups + 1) + " / " + limit + req);
+                              "] -> Distinct lookups: " + _lookupKeys.size() + " / " + limit + req);
                 }
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer, decremented),
                                                   new TimeoutReq(_context, state, req, nextPeer, decremented), getNextHopLookupTimeout(_context));
             } else {
-                if (_pendingLookups.size() < MAX_PENDING_LOOKUPS) {
+                int maxPending = getMaxPendingLookups(_context);
+                if (_pendingLookups.size() < maxPending) {
                     _pendingLookups.offer(new PendingLookup(state, req, nextPeer));
                     _context.statManager().addRateData("tunnel.pendingLookupQueue", _pendingLookups.size());
                     if (_log.shouldInfo()) {
                         _log.info("Queuing pending lookup for [" + nextPeer.toBase64().substring(0,6) +
-                                  "] -> Queue size: " + _pendingLookups.size() + " / Lookups: " + currentLookups + " / " + limit + req);
+                                  "] -> Queue size: " + _pendingLookups.size() + " / Lookups: " + _lookupKeys.size() + " / " + limit + req);
                     }
                 } else {
                     // No explicit reject is possible here: the build reply can
@@ -794,12 +875,7 @@ public class BuildHandler implements Runnable {
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
             }
             if (!_decremented.getAndSet(true)) {
-                if (_currentLookups.decrementAndGet() < 0) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Count for concurrent next-hop lookups reports " + _currentLookups + " active (underflow) ➜ Resetting to 0...");
-                    }
-                    _currentLookups.set(0);
-                }
+                releaseLookupKey(_lookupKeys, _nextPeer);
                 drainPendingLookups();
             }
         }
@@ -856,12 +932,7 @@ public class BuildHandler implements Runnable {
             }
 
             if (!_decremented.getAndSet(true)) {
-                if (_currentLookups.decrementAndGet() < 0) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Count for concurrent next-hop lookups reports " + _currentLookups.get() + " active (underflow) ➜ Resetting to 0...");
-                    }
-                    _currentLookups.set(0);
-                }
+                releaseLookupKey(_lookupKeys, _nextPeer);
                 drainPendingLookups();
             }
         }
@@ -908,13 +979,6 @@ public class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.dropLookupStale", 1);
                 continue;
             }
-            int currentLookups = _currentLookups.get();
-            if (currentLookups >= limit) {
-                // Re-insert at the head so FIFO order is preserved for the
-                // next drain once a lookup slot frees up.
-                _pendingLookups.addFirst(pending);
-                break;
-            }
             // Presence-only check: this is a hot path, unvalidated lookup is sufficient
             DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(pending.nextPeer);
             if (de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -922,11 +986,16 @@ public class BuildHandler implements Runnable {
                 handleReq(ri, pending.state, pending.req, pending.nextPeer);
                 continue;
             }
-            _currentLookups.incrementAndGet();
+            if (!attachLookupKey(_lookupKeys, pending.nextPeer, limit)) {
+                // Re-insert at the head so FIFO order is preserved for the
+                // next drain once a lookup slot frees up.
+                _pendingLookups.addFirst(pending);
+                break;
+            }
             AtomicBoolean decremented = new AtomicBoolean(false);
             if (_log.shouldInfo()) {
                 _log.info("Draining pending lookup for [" + pending.nextPeer.toBase64().substring(0,6) +
-                          "] -> Concurrent lookups: " + _currentLookups.get() + " / " + limit);
+                          "] -> Distinct lookups: " + _lookupKeys.size() + " / " + limit);
             }
             _context.netDb().lookupRouterInfo(pending.nextPeer,
                 new HandleReq(_context, pending.state, pending.req, pending.nextPeer, decremented),
