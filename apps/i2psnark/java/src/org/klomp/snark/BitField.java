@@ -204,18 +204,32 @@ public class BitField {
                 && (count == size || Arrays.equals(data, bf.getFieldBytes()));
     }
 
+    /**
+     *  Compact range representation - "BitField(128)[0-4 9 22-30]" instead
+     *  of enumerating every set bit. Piece counts run into the thousands,
+     *  and this is called from logging on hot paths.
+     */
     @Override
     public String toString() {
-        // Not very efficient
         StringBuilder sb = new StringBuilder("BitField(");
         sb.append(size).append(")[");
-        for (int i = 0; i < size; i++)
-            if (get(i)) {
-                sb.append(' ');
-                sb.append(i);
+        int base = sb.length();
+        // open run start, or -1 when no run is open; the loop sentinel
+        // i == size closes any run that reaches the end of the field
+        int runStart = -1;
+        for (int i = 0; i <= size; i++) {
+            boolean set = i < size && get(i);
+            if (set) {
+                if (runStart < 0) {runStart = i;}
+            } else if (runStart >= 0) {
+                // lazy separator keeps spacing exact regardless of what ends the run
+                if (sb.length() > base) {sb.append(' ');}
+                sb.append(runStart);
+                if (i - 1 > runStart) {sb.append('-').append(i - 1);}
+                runStart = -1;
             }
-        sb.append(" ]");
-
+        }
+        sb.append(']');
         return sb.toString();
     }
 }
