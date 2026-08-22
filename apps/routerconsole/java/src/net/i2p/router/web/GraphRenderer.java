@@ -533,6 +533,9 @@ class GraphRenderer {
 
     private void configureCommentsAndSignature(RrdGraphDef def, GraphRenderConfig cfg) {
         if (!cfg.hideLegend) {
+            // Small vertical space (\s advances by small leading only) to
+            // separate the date line from the legend rows above it
+            def.comment("\\s");
             cfg.legendSdf = cfg.useUtc ? UTC_DATE_FMT.get() : LOCAL_DATE_FMT.get();
             def.comment(cfg.legendSdf.format(new Date(cfg.start)) + " \u2014 " + cfg.legendSdf.format(new Date(cfg.end)) + cfg.timeLabel + "\\r");
         }
@@ -860,6 +863,9 @@ out.write(graph.getRrdGraphInfo().getBytes());
         String numberFormat;
         Color restartColor;
         SimpleDateFormat legendSdf;
+        /** Date suffix for the legend/signature; " UTC" when rendering in UTC.
+         *  Derived from useUtc here so every path prints a consistent label,
+         *  never a literal "null". */
         String timeLabel;
         String plotName;
         String descr;
@@ -889,6 +895,9 @@ out.write(graph.getRrdGraphInfo().getBytes());
             this.rate = b.rate;
             this.lsnr2 = b.lsnr2;
             this.useUtc = b.useUtc;
+            // Derived here so every legend/signature path prints a
+            // consistent date suffix, never a literal "null"
+            this.timeLabel = b.useUtc ? " UTC" : "";
             this.lang = b.lang;
             this.listener = b.listener;
         }
