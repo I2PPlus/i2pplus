@@ -1291,9 +1291,31 @@ class PeerState implements DataLoader {
      * @return the allowed fast set, never null
      * @since 0.9.71+
      */
+    /**
+     * Generate the BEP 6 allowed fast set for a peer.
+     *
+     * <p>The first four bytes of the peer's destination hash stand in for the masked IP
+     * address, so both ends of an I2P connection can compute the same up to ten piece
+     * indices from the torrent infohash.
+     *
+     * @param peerHash the 32-byte destination hash of the peer
+     * @param infohash the infohash of the torrent
+     * @param pieces the number of pieces in the torrent
+     * @return the allowed fast set, never null
+     * @since 0.9.71+
+     */
     static Set<Integer> generateAllowedFastSet(byte[] peerHash, byte[] infohash, int pieces) {
         Set<Integer> rv = new HashSet<>(10);
         if (peerHash == null || infohash == null || pieces <= 0) {
+            return rv;
+        }
+        // torrents with fewer pieces than the target set size: every piece is
+        // fast, and the modular loop below could never terminate otherwise
+        // (same guard as libtorrent's allowed_fast_set_size handling)
+        if (pieces <= 10) {
+            for (int i = 0; i < pieces; i++) {
+                rv.add(Integer.valueOf(i));
+            }
             return rv;
         }
         // x = first four destination hash bytes ++ first 20 of the infohash
@@ -1301,7 +1323,9 @@ class PeerState implements DataLoader {
         System.arraycopy(peerHash, 0, x, 0, 4);
         System.arraycopy(infohash, 0, x, 4, Math.min(20, infohash.length));
         MessageDigest md = SHA1.getInstance();
-        while (rv.size() < 10) {
+        // bounded like libtorrent's 500-loop safety net, unreachable in practice
+        int attempts = 500;
+        while (rv.size() < 10 && attempts-- > 0) {
             x = md.digest(x);
             for (int i = 0; i < 5 && rv.size() < 10; i++) {
                 long y = DataHelper.fromLong(x, i * 4, 4) & 0xffffffffL;
