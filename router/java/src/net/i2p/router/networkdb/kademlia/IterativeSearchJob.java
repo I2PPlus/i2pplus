@@ -15,7 +15,6 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.XORComparator;
@@ -25,7 +24,6 @@ import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.ReplyJob;
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
@@ -38,7 +36,6 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.NativeBigInteger;
 import net.i2p.util.SystemVersion;
-import net.i2p.util.VersionComparator;
 
 /**
  * Traditional Kademlia iterative search with enhanced robustness.
@@ -332,49 +329,20 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
-        String MIN_VERSION = "0.9.64";
-        boolean isHidden = getContext().router().isHidden();
-        RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(_key);
-        RouterInfo isUs = getContext().netDb().lookupRouterInfoLocally(getContext().routerHash());
-        long uptime = getContext().router().getUptime();
-        boolean enableReverseLookups = getContext().commSystem().enableReverseLookups();
-
-        if (ri != null && ri != isUs) {
-            String v = ri.getVersion();
-            String caps = ri.getCapabilities();
-            boolean uninteresting = caps != null && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                    caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                    caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                    (v.isEmpty() || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
-                                    !isHidden && getContext().netDb().getKnownRouters() > 1000;
-
-            if (enableReverseLookups) {
-                RouterAddress address = null;
-                for (RouterAddress ra : ri.getAddresses()) {
-                    if (ra.getTransportStyle().contains("SSU")) {
-                        address = ra;
-                        break;
-                    }
-                }
-                if (address != null) {
-                    String ipAddress = address.getHost();
-                    if (ipAddress != null && !ipAddress.isEmpty()) {
-                        String rdns = getContext().commSystem().getCanonicalHostName(ipAddress);
-                        if (_log.shouldInfo()) {
-                            _log.info("Reverse DNS for " + ipAddress + ": " + rdns);
-                        }
-                    }
-                }
+        // Resolved while this search sat in the job queue - a store or flood
+        // landed the RI locally after the caller's own local check missed it.
+        // Succeed immediately instead of querying floodfills for data we
+        // already hold (and instead of timing out against our own deadline).
+        RouterInfo local = getContext().netDb().lookupRouterInfoLocally(_key);
+        if (local != null) {
+            if (_log.shouldInfo()) {
+                _log.info("Search for [" + _key.toBase64().substring(0,6) + "] resolved locally before first query");
             }
-
-            if (uninteresting) {
-                if (_log.shouldInfo()) {
-                    _log.info("Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
-                }
-                cancelJob();
-                return;
-            }
+            success();
+            return;
         }
+
+        long uptime = getContext().router().getUptime();
 
         // Pick some floodfill peers and send out the searches
         List<Hash> floodfillPeers;
@@ -919,8 +887,13 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * Cancels the job without performing full failure handling.
-     * @since 0.9.65+
+     *  Cancels the search and delivers failure to all registered waiters.
+     *  Cancellation is terminal for callers - negative-cache skip, banlist
+     *  skip, exhausted search window - so this fires the onFailed jobs.
+     *  Earlier versions returned silently here, which leaked caller
+     *  resources: observed live as transit next-hop slots held until their
+     *  deadline while builds timed out with no reply at all.
+     *  @since 0.9.65+
      */
     void cancelJob() {
         synchronized (this) {
@@ -929,6 +902,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         _facade.complete(_key);
         releaseFloodfillQueries();
+        for (Job j : _onFailed) {getContext().jobQueue().addJob(j);}
+        _onFailed.clear();
     }
 
     /**
