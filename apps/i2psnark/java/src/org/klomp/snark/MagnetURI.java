@@ -19,6 +19,7 @@ public class MagnetURI {
     private final List<String> _trackers;
     private final String _name;
     private final byte[] _ih;
+    private final long _length;
 
     /** BEP 9 magnet prefix. */
     public static final String MAGNET = "magnet:";
@@ -46,6 +47,7 @@ public class MagnetURI {
         String ihash;
         String name;
         List<String> trackerURLs = null;
+        long length = 0;
         if (url.startsWith(MAGNET)) {
             // magnet:?xt=urn:btih:0691e40aae02e552cfcb57af1dca56214680c0c5&tr=http://tracker2.postman.i2p/announce.php
             String xt = getParam("xt", url);
@@ -59,6 +61,12 @@ public class MagnetURI {
             String dn = getParam("dn", url);
             if (dn != null) {
                 name += " (" + dn + ')';
+            }
+            String xl = getParam("xl", url);
+            if (xl != null) {
+                try {
+                    length = Long.parseLong(xl);
+                } catch (NumberFormatException nfe) {}
             }
         } else if (url.startsWith(MAGGOT)) {
             // maggot://0691e40aae02e552cfcb57af1dca56214680c0c5:0b557bbdf8718e95d352fbe994dec3a383e2ede7
@@ -94,6 +102,7 @@ public class MagnetURI {
         _ih = ih;
         _name = name;
         _trackers = trackerURLs;
+        _length = length;
     }
 
     /**
@@ -103,6 +112,16 @@ public class MagnetURI {
      */
     public byte[] getInfoHash() {
         return _ih;
+    }
+
+    /**
+     * Returns the length from the xl parameter of the magnet link.
+     *
+     * @return the length or 0 if not specified.
+     * @since 0.9.71
+     */
+    public long getLength() {
+        return _length;
     }
 
     /**
