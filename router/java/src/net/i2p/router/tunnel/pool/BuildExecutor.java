@@ -1436,13 +1436,16 @@ public class BuildExecutor implements Runnable {
                                                wantedCount + getTunnelTargetBuffer(_context)));
 
             List<TunnelInfo> tunnels = pool.listTunnels();
-            boolean allowZeroHop = pool.getSettings().getAllowZeroHop();
 
-            ExpiryBuckets buckets = countExpiryBuckets(tunnels, now, allowZeroHop);
+            ExpiryBuckets buckets = countExpiryBuckets(tunnels, now);
 
             int inProgress = pool.getInProgressCount();
             int remainingWanted = target - buckets.expireLater;
-            if (allowZeroHop) remainingWanted -= buckets.fallbackCount;
+            // Zero-hop tunnels never satisfy demand in multi-hop pools: they
+            // stay in fallbackCount so replacement builds are prioritized.
+            // Only pools explicitly configured as zero-hop credit their
+            // fallbacks, since there a length-1 tunnel IS the product.
+            if (pool.getSettings().isZeroHop()) remainingWanted -= buckets.fallbackCount;
 
             /* Walk through urgency windows, counting what's covered by later-expiring tunnels.
              * This uses ALL tunnels (including FAILING) so retained tunnels fill the deficit
@@ -1462,6 +1465,13 @@ public class BuildExecutor implements Runnable {
              */
             int activeCount = pool.getActiveTunnelCount();
             boolean isCritical = !isPing && (activeCount == 0 || (activeCount < target && activeCount <= 2));
+            // A zero-hop fallback in a multi-hop-configured pool is an
+            // emergency: it provides no anonymity and must be replaced as
+            // fast as possible, bypassing budget/cap gating like a critical
+            // pool. Replacement demand for it is added after the normal
+            // build calculation below.
+            boolean zeroEmergency = !isPing && !pool.getSettings().isZeroHop()
+                                    && pool.hasZeroHopFallback();
             /* Don't overbuild when we already have untested tunnels queued for testing.
              * If enough pending tunnels are waiting for test results to cover the target,
              * let those complete before building more. Otherwise we pile up untested tunnels
@@ -1566,6 +1576,12 @@ public class BuildExecutor implements Runnable {
              * trim them, wasting build slots.
              */
             builds -= inProgress;
+            // Zero-hop emergency floor: one replacement build per fallback
+            // tunnel per pass, ahead of any cap or budget arithmetic — the
+            // placeholders must cycle out as fast as selection allows.
+            if (zeroEmergency) {
+                builds = Math.max(builds, pool.countZeroHopFallbacks());
+            }
             if (builds <= 0) continue;
 
             /* Cap at 2x target to prevent overbuilding.
@@ -1578,7 +1594,7 @@ public class BuildExecutor implements Runnable {
              */
             int maxBuilds = Math.max(target * 2, 2);
             if (builds > maxBuilds) builds = maxBuilds;
-            if (!isCritical) {
+            if (!isCritical && !zeroEmergency) {
                 int testJobs = TestJob.getCurrentTestJobCount();
                 int maxTestJobs = TestJob.getMaxTestJobs();
                 if (testJobs > maxTestJobs * 4 / 5) {
@@ -1598,7 +1614,7 @@ public class BuildExecutor implements Runnable {
              * direction has.
              */
             Hash dest = pool.getSettings().getDestination();
-            if (dest != null && activeCount > 0) {
+            if (dest != null && activeCount > 0 && !zeroEmergency) {
                 int[] pt = pairTargets.get(dest);
                 if (pt != null && pt[0] > 0 && pt[1] > 0) {
                     int totalTarget = pt[0] + pt[1];
@@ -1694,15 +1710,16 @@ public class BuildExecutor implements Runnable {
      *  aggregates: zero-hop fallback count, GOOD count and their total
      *  latency.
      *
+     *  Length-1 tunnels always land in fallbackCount and never fill the
+     *  expiry buckets, so pools that don't explicitly request zero-hop
+     *  tunnels keep building replacements until the fallback is gone.
+     *
      *  @param tunnels tunnels of one pool, never null
      *  @param now current time, used to compute time-to-expiry
-     *  @param allowZeroHop if false, length-1 tunnels are counted as
-     *                      fallbackCount and skipped; if true they are
-     *                      counted normally
      *  @return bucket counts, never null
      *  @since 0.9.71+
      */
-    static ExpiryBuckets countExpiryBuckets(List<TunnelInfo> tunnels, long now, boolean allowZeroHop) {
+    static ExpiryBuckets countExpiryBuckets(List<TunnelInfo> tunnels, long now) {
         int fallbackCount = 0;
         int expire30s = 0;
         int expire90s = 0;
@@ -1722,7 +1739,10 @@ public class BuildExecutor implements Runnable {
         long totalLatency = 0;
 
         for (TunnelInfo info : tunnels) {
-            if (!allowZeroHop && info.getLength() <= 1) {
+            // Length-1 tunnels are fallbacks, never demand-satisfiers: route
+            // them to fallbackCount regardless of pool settings so pools that
+            // don't explicitly request zero-hop keep replacing them
+            if (info.getLength() <= 1) {
                 fallbackCount++;
                 continue;
             }

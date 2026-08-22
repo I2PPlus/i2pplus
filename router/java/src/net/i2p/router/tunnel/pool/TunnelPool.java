@@ -837,6 +837,44 @@ public class TunnelPool {
     }
 
     /**
+     *  Whether any active tunnel in this pool is a zero-hop fallback while
+     *  the pool is configured for multi-hop. Such tunnels are bootstrap
+     *  placeholders: they provide no anonymity and must be replaced as fast
+     *  as possible, so the executor treats their presence as an emergency
+     *  that bypasses build budget caps.
+     *
+     *  @return true if a length-1 tunnel exists in this pool
+     *  @since 0.9.71+
+     */
+    boolean hasZeroHopFallback() {
+        if (_settings.isZeroHop()) {return false;}
+        _tunnelsLock.lock();
+        try {
+            for (int i = 0; i < _tunnels.size(); i++) {
+                if (_tunnels.get(i).getLength() <= 1) {return true;}
+            }
+        } finally {_tunnelsLock.unlock();}
+        return false;
+    }
+
+    /**
+     *  Count the zero-hop fallback tunnels in this pool.
+     *
+     *  @return number of length-1 tunnels
+     *  @since 0.9.71+
+     */
+    int countZeroHopFallbacks() {
+        _tunnelsLock.lock();
+        try {
+            int rv = 0;
+            for (int i = 0; i < _tunnels.size(); i++) {
+                if (_tunnels.get(i).getLength() <= 1) {rv++;}
+            }
+            return rv;
+        } finally {_tunnelsLock.unlock();}
+    }
+
+    /**
      *  Shorten the length when under extreme stress, else clear the override.
      *  We only do this for exploratory tunnels, since we have to build a fallback
      *  if we run out. It's much better to have a shorter tunnel than a fallback.
@@ -1538,6 +1576,13 @@ public class TunnelPool {
         // coexist in the pool during the overlap window.
         TunnelInfo reusedPredecessor = findReusedPredecessor(info);
         if (reusedPredecessor != null) {removeTunnel(reusedPredecessor);}
+        // Exploratory upgrade: a newly built multi-hop tunnel supersedes any
+        // zero-hop bootstrap fallback in this pool — expire the fallbacks
+        // immediately so real coverage replaces them without waiting out
+        // their full lifetime.
+        if (info.getLength() > 1 && _settings.isExploratory()) {
+            expireZeroHopFallbacks();
+        }
         LeaseSet ls = null;
         _tunnelsLock.lock();
         try {
@@ -1744,6 +1789,29 @@ public class TunnelPool {
         }
     }
 
+
+    /**
+     *  Expire all zero-hop tunnels in this pool immediately. Called when a
+     *  multi-hop tunnel joins an exploratory pool: the zero-hop fallbacks
+     *  were bootstrap placeholders, and a real replacement supersedes them.
+     *  Setting expiration to now routes them through normal removal, which
+     *  keeps LeaseSet lifecycle (refresh + grace) intact.
+     */
+    private void expireZeroHopFallbacks() {
+        _tunnelsLock.lock();
+        try {
+            boolean changed = false;
+            for (TunnelInfo ti : _tunnels) {
+                if (ti.getLength() <= 1) {
+                    ti.setExpiration(_context.clock().now());
+                    changed = true;
+                }
+            }
+            if (changed && _log.shouldInfo()) {
+                _log.info(toString() + " -> Zero-hop bootstrap fallbacks expired (replaced by multi-hop tunnel)");
+            }
+        } finally {_tunnelsLock.unlock();}
+    }
 
     /**
      *  Remove a tunnel from the pool.

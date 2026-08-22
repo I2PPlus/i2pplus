@@ -54,7 +54,7 @@ public class BuildExecutorPairedBuildsTest {
 
     @Test
     public void testEmptyListAllZeros() {
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>emptyList(), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>emptyList(), NOW);
         assertEquals(0, b.expire30s);
         assertEquals(0, b.expire90s);
         assertEquals(0, b.expire150s);
@@ -85,7 +85,7 @@ public class BuildExecutorPairedBuildsTest {
         tunnels.add(cfg(3, NOW + 270 * 1000 + 1)); // 330s
         tunnels.add(cfg(3, NOW + 330 * 1000)); // 330s
         tunnels.add(cfg(3, NOW + 330 * 1000 + 1)); // later
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(tunnels, NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(tunnels, NOW);
         assertEquals(2, b.expire30s);
         assertEquals(2, b.expire90s);
         assertEquals(2, b.expire150s);
@@ -100,7 +100,7 @@ public class BuildExecutorPairedBuildsTest {
     public void testGoodBucketTrackedInParallel() {
         TCConfig good = cfg(3, NOW + 90 * 1000);
         good.testSuccessful(250);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(good), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(good), NOW);
         assertEquals(1, b.expire90s);
         assertEquals(1, b.goodExpire90s);
         assertEquals(1, b.goodCount);
@@ -116,7 +116,7 @@ public class BuildExecutorPairedBuildsTest {
         when(info.getTunnelFailed()).thenReturn(false);
         when(info.getConsecutiveFailures()).thenReturn(1);
         when(info.getTestStatus()).thenReturn(TunnelTestStatus.GOOD);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(info), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(info), NOW);
         assertEquals(1, b.goodCount);
         assertEquals(1, b.goodExpire90s);
     }
@@ -128,7 +128,7 @@ public class BuildExecutorPairedBuildsTest {
         failing.testSuccessful(100);
         failOnce(failing);
         failOnce(failing);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(failing), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(failing), NOW);
         assertEquals(1, b.expire90s);
         assertEquals(0, b.goodExpire90s);
         assertEquals(0, b.goodCount);
@@ -143,7 +143,7 @@ public class BuildExecutorPairedBuildsTest {
         failOnce(failed);
         failOnce(failed);
         failOnce(failed);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(failed), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(failed), NOW);
         assertEquals(0, b.expire30s);
         assertEquals(0, b.goodCount);
     }
@@ -156,7 +156,7 @@ public class BuildExecutorPairedBuildsTest {
         failOnce(deadish);
         failOnce(deadish);
         failOnce(deadish);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(deadish), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(deadish), NOW);
         assertEquals(1, b.expire30s);
         assertEquals(0, b.goodExpire30s);
     }
@@ -169,32 +169,26 @@ public class BuildExecutorPairedBuildsTest {
         when(info.getTunnelFailed()).thenReturn(true);
         when(info.getConsecutiveFailures()).thenReturn(0);
         when(info.getTestStatus()).thenReturn(TunnelTestStatus.GOOD);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(info), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(info), NOW);
         assertEquals(0, b.expire30s);
         assertEquals(0, b.goodCount);
     }
 
     @Test
-    public void testZeroHopExcludedWhenNotAllowed() {
+    public void testZeroHopAlwaysFallback() {
+        // Zero-hop tunnels never satisfy demand, regardless of the pool's
+        // allowZeroHop setting: they must be replaced with real hops
         TCConfig zh = cfg(1, NOW + 90 * 1000);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(zh), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(zh), NOW);
         assertEquals(1, b.fallbackCount);
         assertEquals(0, b.expire90s);
-    }
-
-    @Test
-    public void testZeroHopCountedWhenAllowed() {
-        TCConfig zh = cfg(1, NOW + 90 * 1000);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(zh), NOW, true);
-        assertEquals(0, b.fallbackCount);
-        assertEquals(1, b.expire90s);
     }
 
     @Test
     public void testZeroLatencyNotSummed() {
         TCConfig good = cfg(3, NOW + 90 * 1000);
         good.testSuccessful(0);
-        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(good), NOW, false);
+        BuildExecutor.ExpiryBuckets b = BuildExecutor.countExpiryBuckets(Collections.<TunnelInfo>singletonList(good), NOW);
         assertEquals(1, b.goodCount);
         assertEquals(0L, b.totalLatency);
     }
