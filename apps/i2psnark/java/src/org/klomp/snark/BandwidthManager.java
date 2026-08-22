@@ -140,7 +140,12 @@ public class BandwidthManager implements BandwidthListener {
      */
     @Override
     public boolean shouldRequest(Peer peer, int size) {
-        boolean rv = !overDownBWLimit() && _req.offer(size, 1.0f);
+        // We always call both limiters,
+        // so that both the Westwood estimates will be
+        // decayed appropriately in all cases
+        boolean a = _req.offer(size, 1.0f);
+        boolean b = _down.offer(0, 1.0f);
+        boolean rv = a && b;
         if (!rv && _log.shouldWarn())
             _log.warn(
                     "Not requesting "

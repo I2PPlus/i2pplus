@@ -23,6 +23,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
+import net.i2p.util.RandomSource;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 
@@ -1463,9 +1464,19 @@ class PeerState implements DataLoader {
         // currentMaxPipeline counter.
         // Avoid cross-peer deadlocks from PeerCoordinator, call this outside the lock
         if (!bwListener.shouldRequest(peer, 0)) {
+            // This gets called linearly, on reception of each chunk, so
+            // we decrease currentMaxPipeline linearly as well.
+            // As reqq drops with each chunk received, we will rapidly drop the
+            // reqq to zero within a couple windows unless we reduce
+            // currentMaxPipeline more slowly, to prevent returning the
+            // partial piece to the coordinator and thrashing the piece
+            // back and forth between the peer state and the coordinator.
+            // And sitting idle-and-interested for a few windows which is bad.
             synchronized (this) {
                 // Due to changes elsewhere we can let this go down to zero now
-                currentMaxPipeline /= 2;
+                if (currentMaxPipeline > 0) {
+                    if (RandomSource.getInstance().nextBoolean()) {currentMaxPipeline--;}
+                }
             }
             if (_log.shouldWarn())
                 _log.warn(
@@ -1486,19 +1497,22 @@ class PeerState implements DataLoader {
             long rate = bwListener.getDownloadRate();
             long limit = bwListener.getDownBWLimit();
             if (rate < limit * 7 / 10) {
-                if (currentMaxPipeline < getPipelineLimit()) {
-                    currentMaxPipeline++;
-                } else if (rate > limit * 9 / 10) {
-                    currentMaxPipeline = 1;
-                } else if (currentMaxPipeline < 2) {
-                    currentMaxPipeline++;
-                }
+                if (currentMaxPipeline < getPipelineLimit()) {currentMaxPipeline++;}
+            } else if (rate > limit * 9 / 10) {
+                currentMaxPipeline = 1;
+            } else if (currentMaxPipeline < 2) {
+                currentMaxPipeline++;
             }
             // BEP 6: pieces requestable while choked, null when none allowed
             Set<Integer> fastPieces = null;
             if (choked && !_peerAllowedFast.isEmpty()) {
                 fastPieces = new HashSet<>(_peerAllowedFast);
             }
+            // assume 3 sec RTT, only request this much, but
+            // minimum 1 request (check at bottom of loop)
+            // to avoid filling up the request queue all at once
+            // and rapid throttle/unthrottle cycles
+            long maxReq = (limit - rate) * 3;
             boolean more_pieces = true;
             while (more_pieces) {
                 more_pieces = outstandingRequests.size() < currentMaxPipeline;
@@ -1529,6 +1543,7 @@ class PeerState implements DataLoader {
                         return;
                     }
                     more_pieces = requestNextPiece(fastPieces);
+                    maxReq -= PARTSIZE;
                 } else if (more_pieces) { // We want something
                     // Continue requesting the rest of the current piece; padding-only
                     // sub-blocks are marked as received (zeros) and skipped inside
@@ -1536,6 +1551,7 @@ class PeerState implements DataLoader {
                     Request req = nextPiece.getRequest(lastRequest.off + lastRequest.len);
                     if (req == null) {
                         more_pieces = requestNextPiece(fastPieces);
+                        maxReq -= PARTSIZE;
                     } else {
                         outstandingRequests.add(req);
                         // BEP 6: allowed fast pieces are requested even while choked
@@ -1546,8 +1562,11 @@ class PeerState implements DataLoader {
                             out.sendRequest(req);
                         }
                         lastRequest = req;
+                        maxReq -= req.len;
                     }
                 }
+                // don't exceed the download limit calculated above
+                if (maxReq <= 0) {more_pieces = false;}
             }
         }
 
