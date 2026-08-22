@@ -918,20 +918,45 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (isInbound) {rv.add(0, ctx.routerHash());}
         else {rv.add(ctx.routerHash());}
 
-        // Sort non-self peers by reliability so better peers are preferred.
-        // Inbound only: rv[1] is the IBGW (the direct TBM recipient via
-        // paired-tunnel dispatch) where best-first is benign and desirable.
-        // For outbound the adjacent slot (cfg.getPeer(1), the direct transport
-        // send target) must stay the vetted first hop chosen by
-        // selectFirstHop(); re-sorting exiled the best peer to the OBEP and
-        // put the worst-ranked peer adjacent to us, and destroyed the
-        // key-distance ordering from orderPeers() (position predictability).
+        // Inbound keeps its quality preference ordering (rv[1] is the IBGW,
+        // best-first is benign there).
         if (isInbound && rv.size() > 2) {
             List<Hash> nonSelf = new ArrayList<>(rv);
             nonSelf.remove(ctx.routerHash());
             if (nonSelf.size() > 1) {
                 sortByPeerQuality(nonSelf, null);
-                // Rebuild with self in correct position
+                rv.clear();
+                rv.add(ctx.routerHash());
+                rv.addAll(nonSelf);
+            }
+        }
+
+        // Same quality pre-filtering both directions: swap poorly performing
+        // hops for proven responders, then drop anything still unreliable
+        // when surplus hops remain. Outbound slot 0 (cfg.getPeer(1)) stays
+        // the vetted first hop chosen by selectFirstHop(); re-sorting exiled
+        // it to the OBEP and put the worst-ranked peer adjacent to us, which
+        // is why the swap below replaces hops in place.
+        List<Hash> nonSelf = new ArrayList<>(rv);
+        nonSelf.remove(ctx.routerHash());
+        if (!nonSelf.isEmpty()) {
+            // Outbound protects both endpoint slots: slot 0 is the vetted
+            // transport send target, the OBEP slot the far-end delivery exit.
+            int from = isInbound ? 0 : 1;
+            int to = isInbound ? nonSelf.size() : nonSelf.size() - 1;
+            int swaps = preferProven(nonSelf, from, to,
+                                     _provenResponders, ctx.clock().now(),
+                                     PROVEN_RESPONDER_WINDOW_MS, provenCandidates().iterator());
+            Set<Hash> unreliable = findUnreliable(nonSelf, ctx.clock().now());
+            // Never shrink below two non-self hops: a shorter live tunnel
+            // beats a longer dead one, but not a zero-hop one.
+            boolean dropped = dropUnreliable(nonSelf, unreliable, 2);
+            if (swaps > 0 || dropped) {
+                if (log.shouldInfo()) {
+                    log.info("Quality pre-filter for " + settings.getDestinationNickname() +
+                              " (" + (isInbound ? "in" : "out") + "): " + swaps +
+                              " proven swap(s), " + (dropped ? 1 : 0) + " drop(s)");
+                }
                 rv.clear();
                 if (isInbound) {
                     rv.add(ctx.routerHash());
@@ -951,9 +976,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
             String strategy = getStrategy();
             if (STRATEGY_RELIABILITY.equals(strategy)) {
                 // Apply reliability filter on non-self peers
-                List<Hash> nonSelf = new ArrayList<>(rv);
-                nonSelf.remove(ctx.routerHash());
-                Set<Hash> nonSelfSet = new HashSet<>(nonSelf);
+                List<Hash> filtered = new ArrayList<>(rv);
+                filtered.remove(ctx.routerHash());
+                Set<Hash> nonSelfSet = new HashSet<>(filtered);
                 List<Hash> reliable = filterByReliability(nonSelfSet, null);
                 if (!reliable.isEmpty()) {
                     rv.clear();
@@ -975,11 +1000,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
             int attempts = 0;
             int maxAttempts = 3;
             while (attempts < maxAttempts) {
-                List<Hash> nonSelf = new ArrayList<>(rv);
-                nonSelf.remove(ctx.routerHash());
-                if (!isDuplicateSequence(settings, nonSelf)) {break;}
-                List<Hash> regenerated = regeneratePeers(settings, nonSelf, attempts + 1);
-                if (regenerated == null || regenerated.equals(nonSelf)) {break;}
+                List<Hash> existing = new ArrayList<>(rv);
+                existing.remove(ctx.routerHash());
+                if (!isDuplicateSequence(settings, existing)) {break;}
+                List<Hash> regenerated = regeneratePeers(settings, existing, attempts + 1);
+                if (regenerated == null || regenerated.equals(existing)) {break;}
                 // Rebuild with self in correct position
                 rv.clear();
                 if (isInbound) {
@@ -1093,6 +1118,52 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         }
         return result;
+    }
+
+    /**
+     *  Fresh proven responders, freshest first, filtered for basic
+     *  eligibility: not us, not banlisted, not on selection cooldown, and
+     *  with a locally cached RouterInfo so a build can reach them.
+     *
+     *  @return eligible proven candidates for hop swaps, never null
+     */
+    private List<Hash> provenCandidates() {
+        long now = ctx.clock().now();
+        List<Map.Entry<Hash, Long>> entries = new ArrayList<>(_provenResponders.entrySet());
+        entries.removeIf(e -> !isProvenResponder(e.getValue(), now));
+        entries.sort(Map.Entry.<Hash, Long>comparingByValue().reversed());
+        List<Hash> rv = new ArrayList<>(entries.size());
+        for (Map.Entry<Hash, Long> e : entries) {
+            Hash h = e.getKey();
+            if (h.equals(ctx.routerHash())) {continue;}
+            if (ctx.banlist().isBanlisted(h)) {continue;}
+            Long cd = _peerCooldowns.get(h);
+            if (cd != null && now - cd < PEER_SELECTION_COOLDOWN_MS) {continue;}
+            if (ctx.netDb().lookupLocallyWithoutValidation(h) == null) {continue;}
+            rv.add(h);
+        }
+        return rv;
+    }
+
+    /**
+     *  The selected hops that fail the reliability gate. Peers without a
+     *  profile are unknown rather than poor — they are never returned.
+     *
+     *  @param hops the selected non-self peers
+     *  @param now current time from the router clock
+     *  @return the subset failing the reliability gate, never null
+     */
+    private Set<Hash> findUnreliable(List<Hash> hops, long now) {
+        Set<Hash> rv = new HashSet<>(hops.size());
+        long tenMinutes = 10 * 60 * 1000L;
+        long thirtyMinutes = 30 * 60 * 1000L;
+        for (Hash h : hops) {
+            PeerProfile profile = ctx.profileOrganizer().getProfile(h);
+            if (profile != null && !isReliable(profile, now, tenMinutes, thirtyMinutes)) {
+                rv.add(h);
+            }
+        }
+        return rv;
     }
 
     /**

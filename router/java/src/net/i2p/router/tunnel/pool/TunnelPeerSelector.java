@@ -357,6 +357,75 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Replace hops lacking fresh proof with proven replacements, in order.
+     *  Slots outside {@code [from, to)} are protected (never replaced);
+     *  hops with fresh proof are kept and their peers reserved, so
+     *  replacements stay unique and proven peers are never duplicated into
+     *  another slot. Pure decision helper; package visible for tests.
+     *
+     *  @param hops selected peers, modified in place
+     *  @param from first replaceable slot index
+     *  @param to index after the last replaceable slot
+     *  @param proof peer -> last successful-participation time
+     *  @param now current time from the router clock
+     *  @param window recency window for proof
+     *  @param replacements eligible proven candidates, most preferred first;
+     *         consumed as used
+     *  @return number of swaps performed
+     *  @since 0.9.71+
+     */
+    static int preferProven(List<Hash> hops, int from, int to,
+                            Map<Hash, Long> proof, long now, long window,
+                            Iterator<Hash> replacements) {
+        // Reserve every current occupant up front, so replacements can never
+        // duplicate a peer already sitting in another slot of this tunnel
+        Set<Hash> taken = new HashSet<>(hops);
+        int swaps = 0;
+        for (int i = from; i < to; i++) {
+            Hash h = hops.get(i);
+            Long t = proof.get(h);
+            if (t != null && now - t <= window) {
+                continue; // fresh proof: keep
+            }
+            boolean swapped = false;
+            while (replacements.hasNext()) {
+                Hash cand = replacements.next();
+                if (!taken.contains(cand)) {
+                    hops.set(i, cand);
+                    taken.remove(h);
+                    taken.add(cand);
+                    swaps++;
+                    swapped = true;
+                    break;
+                }
+            }
+        }
+        return swaps;
+    }
+
+    /**
+     *  Remove unreliable hops while at least {@code minKeep} remain.
+     *  Pure decision helper; package visible for tests.
+     *
+     *  @param hops selected peers, modified in place
+     *  @param unreliable the peers to remove
+     *  @param minKeep minimum list size to leave
+     *  @return true if any hop was removed
+     *  @since 0.9.71+
+     */
+    static boolean dropUnreliable(List<Hash> hops, Set<Hash> unreliable, int minKeep) {
+        if (hops.size() <= minKeep || unreliable.isEmpty()) {return false;}
+        boolean dropped = false;
+        for (Iterator<Hash> iter = hops.iterator(); iter.hasNext() && hops.size() > minKeep;) {
+            if (unreliable.contains(iter.next())) {
+                iter.remove();
+                dropped = true;
+            }
+        }
+        return dropped;
+    }
+
+    /**
      * All non-self peers in active tunnels of the given pool.
      * Used to enforce per-pool diversity: no peer in more than 1 tunnel per pool.
      *
