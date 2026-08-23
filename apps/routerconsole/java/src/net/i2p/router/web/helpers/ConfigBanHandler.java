@@ -11,14 +11,11 @@ import net.i2p.router.web.FormHandler;
  * @since 0.9.70
  */
 public class ConfigBanHandler extends FormHandler {
-    private final net.i2p.util.Log _log;
 
     /**
      * Constructs the handler.
      */
-    public ConfigBanHandler() {
-        _log = net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(ConfigBanHandler.class);
-    }
+    public ConfigBanHandler() {}
 
     private String _maxOffenses;
     private String _offenseWindow;
@@ -250,13 +247,7 @@ public class ConfigBanHandler extends FormHandler {
             _context.blocklist().clearAll();
         }
 
-        if (_log.shouldWarn()) {
-            _log.warn("saveChanges: raw caps input=[" + _customCapabilityBans + "] nextHop=" + _banNextHop);
-        }
         String validatedCaps = validateCapabilityBans(_customCapabilityBans);
-        if (_log.shouldWarn()) {
-            _log.warn("saveChanges: validated caps=[" + validatedCaps + "]");
-        }
         changes.put(PROP_CUSTOM_CAPABILITY_BANS, validatedCaps);
 
         String validatedCountries = validateCountryCodes(_customCountryCodes);
@@ -315,8 +306,12 @@ public class ConfigBanHandler extends FormHandler {
         return out.toString();
     }
 
-    /** Recognized router capability letters, case-sensitive ('f' = floodfill). */
-    private static final String VALID_CAP_CHARS = "KLMNOPXfGDEURH";
+    /**
+     * Recognized characters in capability ban patterns.
+     * Case-sensitive: lowercase 'f' = floodfill.
+     * Includes '!' for exclusion group separator (e.g. "G!f").
+     */
+    private static final String VALID_CAP_CHARS = "KLMNOPXfGDEURH!";
 
     private static boolean isValidCaps(String s) {
         for (int i = 0; i < s.length(); i++) {
@@ -342,5 +337,3 @@ public class ConfigBanHandler extends FormHandler {
         return result.toString();
     }
 }
-
-
