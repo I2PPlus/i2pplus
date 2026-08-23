@@ -94,8 +94,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  sent to this many other floodfills.
      *  Was 7 through release 0.9; 5 for 0.9.1.
      *  4 as of 0.9.2; 3 as of 0.9.9
+     *  Raised to 10: wider RI/LS propagation improves lookup success
+     *  and reduces dead-zone risk from date-based routing key rotation.
+     *  Bandwidth cost is negligible (~2KB per store × 10 FFs).
      */
-    public static final int MAX_TO_FLOOD = 3;
+    public static final int MAX_TO_FLOOD = 10;
     /** Priority for flood outbound messages. */
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
 
