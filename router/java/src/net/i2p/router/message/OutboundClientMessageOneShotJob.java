@@ -295,8 +295,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         KademliaNetworkDatabaseFacade kndf = (KademliaNetworkDatabaseFacade) getContext().clientNetDb(_from.calculateHash());
         // set in constructor
         if (_leaseSet != null) {
-            if (!kndf.isClientDb() && !_leaseSet.getReceivedAsReply() &&
-                !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4)) {
+            // A ReceivedAsPublished copy (e.g. heard via flood on our own
+            // floodfill) must be converted to ReceivedAsReply by an explicit
+            // remote search before we can send - getNextLease() rejects RAP
+            // entries regardless of freshness. Do NOT shortcut fresh RAP
+            // leases here: doing so sent every flood-heard destination into
+            // getNextLease()'s unconditional RAP rejection.
+            if (!kndf.isClientDb() && !_leaseSet.getReceivedAsReply()) {
                 boolean shouldFetch = true;
                 if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
                     LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
