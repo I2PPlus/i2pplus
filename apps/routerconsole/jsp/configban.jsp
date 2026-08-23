@@ -48,14 +48,15 @@
 <div class=optionlist>
 <label title="<%=intl._t("Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels (probably botnet participant)")%>"><input type=checkbox class="optbox slider" name=enableXgBan value=true <jsp:getProperty name="banhelper" property="xgBanChecked"/>><%=intl._t("Ban XG routers")%></label><br>
 <label title="<%=intl._t("Ban LU tier routers - low bandwidth and unreachable/firewalled")%>"><input type=checkbox class="optbox slider" name=enableLuBan value=true <jsp:getProperty name="banhelper" property="luBanChecked"/>><%=intl._t("Ban LU routers")%></label></br>
-<label><span class=nowrap><%=intl._t("Additional Router Caps")%>:</span> <input title="<%=intl._t("Add caps groups, separated by spaces or commas e.g. LUf,PUG")%>" name=customCapabilityBans type=text size=30 value="<jsp:getProperty name="banhelper" property="customCapabilityBans"/>"></label>
+<label><span class=nowrap><%=intl._t("Additional Router Caps")%>:</span> <input title="<%=intl._t("Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill")%>" name=customCapabilityBans type=text size=30 value="<jsp:getProperty name="banhelper" property="customCapabilityBans"/>"></label>
 </div>
 </td></tr>
-<tr><td><b class=suboption><%=intl._t("Misc Reasons")%></b><br>
+<tr><td><b class=suboption><%=intl._t("Misc")%></b><br>
 <div class=optionlist>
 <label title="<%=intl._t("Ban floodfill peers that fail to respond to queries (failure rate >95%)")%>"><input type=checkbox class="optbox slider" name=enableUnresponsiveFloodfillBan value=true <jsp:getProperty name="banhelper" property="unresponsiveFloodfillBanChecked"/>><%=intl._t("Ban unresponsive floodfills")%></label><br>
 <label title="<%=intl._t("Ban routers whose RouterInfo has no version field")%>"><input type=checkbox class="optbox slider" name=enableNoVersionBan value=true <jsp:getProperty name="banhelper" property="noVersionBanChecked"/>><%=intl._t("Ban routers with no version")%></label><br>
-<label title="<%=intl._t("Ban routers that send excessive tunnel participation requests")%>"><input type=checkbox class="optbox slider" name=enableExcessiveTunnelRequestsBan value=true <jsp:getProperty name="banhelper" property="excessiveTunnelRequestsBanChecked"/>><%=intl._t("Ban excessive tunnel requests")%></label>
+<label title="<%=intl._t("Ban routers that send excessive tunnel participation requests")%>"><input type=checkbox class="optbox slider" name=enableExcessiveTunnelRequestsBan value=true <jsp:getProperty name="banhelper" property="excessiveTunnelRequestsBanChecked"/>><%=intl._t("Ban excessive tunnel requests")%></label><br>
+<label title="<%=intl._t("When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected.")%>"><input type=checkbox class="optbox slider" name=banNextHop value=true <jsp:getProperty name="banhelper" property="banNextHopChecked"/>><%=intl._t("Ban next-hop peers")%></label>
 </div>
 </td></tr>
 <tr><td class=optionsave>

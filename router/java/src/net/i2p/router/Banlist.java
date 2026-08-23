@@ -363,8 +363,12 @@ public class Banlist {
     /**
      *  Check if router capabilities match any of the custom ban patterns.
      *
+     *  A pattern may carry an exclusion group after '!': "G!f" matches
+     *  routers with G in their caps unless they are also floodfills.
+     *  Exclusions require at least one required character.
+     *
      *  @param capabilities router capabilities string (e.g., "XfP")
-     *  @return the matched pattern (e.g., "G") or null if no match
+     *  @return the matched pattern (e.g., "G" or "G!F") or null if no match
      *  @since 0.9.70+
      */
     public String shouldBanlistByCapability(String capabilities) {
@@ -376,15 +380,18 @@ public class Banlist {
         for (String pattern : patterns) {
             pattern = pattern.trim().toUpperCase();
             if (pattern.isEmpty()) continue;
-            boolean matches = true;
-            for (int i = 0; i < pattern.length(); i++) {
-                char c = pattern.charAt(i);
-                if (caps.indexOf(c) < 0) {
-                    matches = false;
-                    break;
-                }
+            int bang = pattern.indexOf('!');
+            String required = bang >= 0 ? pattern.substring(0, bang) : pattern;
+            String excluded = bang >= 0 ? pattern.substring(bang + 1) : "";
+            if (required.isEmpty() && excluded.isEmpty()) continue;
+            boolean ok = true;
+            for (int i = 0; i < required.length() && ok; i++) {
+                if (caps.indexOf(required.charAt(i)) < 0) {ok = false;}
             }
-            if (matches) return pattern;
+            for (int i = 0; i < excluded.length() && ok; i++) {
+                if (caps.indexOf(excluded.charAt(i)) >= 0) {ok = false;}
+            }
+            if (ok) return pattern;
         }
         return null;
     }

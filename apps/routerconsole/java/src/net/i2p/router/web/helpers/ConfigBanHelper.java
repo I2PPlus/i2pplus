@@ -31,6 +31,8 @@ public class ConfigBanHelper extends HelperBase {
     public static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
     public static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
     public static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
+    /** When false, peers seen only as transit next hops are exempt from policy bans */
+    public static final String PROP_BAN_NEXT_HOP = "router.banlist.banNextHop";
 
     /**
      * Get the maximum number of offenses before a peer is banned.
@@ -206,6 +208,22 @@ public class ConfigBanHelper extends HelperBase {
      */
     public String getExcessiveTunnelRequestsBanChecked() {
         boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+
+    /**
+     * Get the checked status of the next-hop ban option.
+     *
+     * When enabled (default), peers resolved from the network that we are
+     * not directly connected to - transit next hops as well as client
+     * tunnel endpoints - are subject to policy bans like any other peer.
+     * When disabled, such peers are exempt from policy bans unless we are
+     * directly connected to them.
+     *
+     * @return "checked" if enabled, empty string otherwise
+     */
+    public String getBanNextHopChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_BAN_NEXT_HOP, "true"));
         return enabled ? "checked" : "";
     }
 }

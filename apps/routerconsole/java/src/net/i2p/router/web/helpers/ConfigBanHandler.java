@@ -34,6 +34,7 @@ public class ConfigBanHandler extends FormHandler {
     private boolean _enableUnresponsiveFloodfillBan;
     private boolean _enableNoVersionBan;
     private boolean _enableExcessiveTunnelRequestsBan;
+    private boolean _banNextHop;
     private String _customCapabilityBans;
     private String _customCountryCodes;
 
@@ -75,6 +76,7 @@ public class ConfigBanHandler extends FormHandler {
         defaults.put(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, "true");
         defaults.put(PROP_ENABLE_NO_VERSION_BAN, "true");
         defaults.put(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "true");
+        defaults.put(PROP_BAN_NEXT_HOP, "true");
         defaults.put(PROP_CUSTOM_CAPABILITY_BANS, "");
         defaults.put(PROP_COUNTRY_CODES, "");
         _context.router().saveConfig(defaults, null);
@@ -164,6 +166,11 @@ public class ConfigBanHandler extends FormHandler {
      */
     public void setEnableExcessiveTunnelRequestsBan(String val) { _enableExcessiveTunnelRequestsBan = true; }
     /**
+     * Enable or disable banning of next-hop peers.
+     * @param val the value
+     */
+    public void setBanNextHop(String val) { _banNextHop = true; }
+    /**
      * Set custom capability bans.
      * @param val the capability patterns
      */
@@ -231,6 +238,7 @@ public class ConfigBanHandler extends FormHandler {
         changes.put(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, Boolean.toString(_enableUnresponsiveFloodfillBan));
         changes.put(PROP_ENABLE_NO_VERSION_BAN, Boolean.toString(_enableNoVersionBan));
         changes.put(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, Boolean.toString(_enableExcessiveTunnelRequestsBan));
+        changes.put(PROP_BAN_NEXT_HOP, Boolean.toString(_banNextHop));
 
         if ((blocklistWasEnabled && !_enableBlocklist) || (torBlocklistWasEnabled && !_enableTorBlocklist)) {
             _context.blocklist().clearAll();
@@ -267,7 +275,9 @@ public class ConfigBanHandler extends FormHandler {
      * Validate custom capability ban pattern.
      * Only allows valid router capability letters: K,L,M,N,O,P,X,f,D,E,G,U,R
      * Separates multiple patterns with comma or space.
-     * Sorts characters alphabetically within each pattern.
+     * A pattern may carry an exclusion group after '!': "G!f" bans G routers
+     * unless floodfill; exclusions require at least one required character.
+     * Sorts characters alphabetically within each group.
      */
     private String validateCapabilityBans(String input) {
         if (input == null || input.isEmpty()) return "";
@@ -277,25 +287,35 @@ public class ConfigBanHandler extends FormHandler {
         for (String pattern : patterns) {
             pattern = pattern.trim().toUpperCase();
             if (pattern.isEmpty()) continue;
-            // Sort characters alphabetically
-            char[] chars = pattern.toCharArray();
-            Arrays.sort(chars);
-            String sortedPattern = new String(chars);
-            // Verify all characters are valid
-            boolean valid = true;
-            for (int i = 0; i < sortedPattern.length(); i++) {
-                char c = sortedPattern.charAt(i);
-                if (validChars.indexOf(c) < 0) {
-                    valid = false;
-                    break;
-                }
-            }
-            if (valid) {
-                if (result.length() > 0) result.append(",");
-                result.append(sortedPattern);
-            }
+            int bang = pattern.indexOf('!');
+            String reqPart = bang >= 0 ? pattern.substring(0, bang) : pattern;
+            String exclPart = bang >= 0 ? pattern.substring(bang + 1) : "";
+            String req = sortCaps(reqPart, validChars);
+            // require at least one positive cap, so a bare exclusion can never
+            // ban the entire network
+            if (req == null || req.isEmpty()) continue;
+            String excl = exclPart.isEmpty() ? "" : sortCaps(exclPart, validChars);
+            if (excl == null) continue;
+            if (result.length() > 0) result.append(",");
+            result.append(excl.isEmpty() ? req : req + "!" + excl);
         }
         return result.toString();
+    }
+
+    /**
+     * Sort capability letters alphabetically after verifying all are valid.
+     *
+     * @param in the caps characters to sort
+     * @param validChars allowed characters
+     * @return the sorted string, or null if any character is invalid
+     */
+    private static String sortCaps(String in, String validChars) {
+        char[] chars = in.toCharArray();
+        for (char c : chars) {
+            if (validChars.indexOf(c) < 0) {return null;}
+        }
+        Arrays.sort(chars);
+        return new String(chars);
     }
 
     /**

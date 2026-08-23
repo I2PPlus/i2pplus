@@ -1025,10 +1025,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             search(key, onFindJob, onFailedLookupJob, timeoutMs, false);
             return;
         }
-        if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-        else if (shouldBanlistXG(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-        else if (shouldBanlistLU(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-        else if (shouldBanlistByCapability(ri)) {handleCustomCapabilityBan(ri, key, onFailedLookupJob);}
+        // Policy bans (country/XG/LU/capability) apply to peers we hold RIs
+        // for; with next-hop banning disabled they are limited to peers we
+        // are directly connected to. Security screening below (permanent and
+        // hostile blocklists) is unconditional.
+        boolean policyBanAllowed = allowPolicyBan(key);
+        if (policyBanAllowed && shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (policyBanAllowed && shouldBanlistXG(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (policyBanAllowed && shouldBanlistLU(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (policyBanAllowed && shouldBanlistByCapability(ri)) {handleCustomCapabilityBan(ri, key, onFailedLookupJob);}
         else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
         else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
         else if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
@@ -1133,9 +1138,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return _context.banlist().shouldBanlistByCapability(caps) != null;
     }
 
+    /**
+     *  Whether policy bans (country/XG/LU/capability) may be applied to this
+     *  router during resolution. Controlled by router.banlist.banNextHop:
+     *  when false, peers we are not directly connected to - transit next-hop
+     *  candidates and client tunnel endpoints heard from the network - are
+     *  exempt, so transit and client traffic never banlist a peer merely
+     *  because it appeared as a resolution target. Security screening
+     *  (permanent/hostile blocklists) is unaffected.
+     *
+     *  @param key the router being resolved
+     *  @return true if policy bans may fire for this lookup
+     */
+    private boolean allowPolicyBan(Hash key) {
+        if ("true".equals(_context.getProperty("router.banlist.banNextHop", "true"))) {return true;}
+        return _context.commSystem().getEstablished().contains(key);
+    }
+
     /** Handle banning a router that matches custom capability ban patterns. */
-    private void handleCustomCapabilityBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {
-        String caps = ri.getCapabilities();
+    private void handleCustomCapabilityBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {        String caps = ri.getCapabilities();
         String routerId = key.toBase64().substring(0,6);
         long banDuration = 4*60*60*1000;
         String matchedCap = _context.banlist().shouldBanlistByCapability(caps);
