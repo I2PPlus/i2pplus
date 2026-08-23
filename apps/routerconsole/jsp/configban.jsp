@@ -60,8 +60,8 @@
 </div>
 </td></tr>
 <tr><td class=optionsave>
-<input style=float:left type=submit class=cancel name=action value="<%=intl._t("Clear all bans")%>">
-<input type=submit class=cancel name=action value="<%=intl._t("Reset to defaults")%>">
+<button type=submit class=cancel name=action value=clearBans style=float:left><%=intl._t("Clear all bans")%></button>
+<button type=submit class=cancel name=action value=resetDefaults><%=intl._t("Reset to defaults")%></button>
 <input type=submit class=accept name=save value="<%=intl._t("Save changes")%>">
 </td></tr>
 </table>

@@ -45,12 +45,16 @@ public class ConfigBanHandler extends FormHandler {
 
     @Override
     protected void processForm() {
-        if (_action != null && _action.equals("blah")) {
-            saveChanges();
-        } else if (_action != null && _action.equals("clearBans")) {
+        if (_action == null) {return;}
+        if (_action.equals("clearBans")) {
             clearAllBans();
-        } else if (_action != null && _action.equals("resetDefaults")) {
+        } else if (_action.equals("resetDefaults")) {
             resetToDefaults();
+        } else {
+            // Save changes: default action when no other operation matches.
+            // Covers the "Save changes" button and Enter-key submission from
+            // any form field (hidden input sends action=blah).
+            saveChanges();
         }
     }
 
