@@ -773,7 +773,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _clientExecutor.execute(runner);
             } catch (RejectedExecutionException ree) {
                 // pool saturated: close the local socket we just opened, the runner never ran
-                if (_log.shouldWarn()) {_log.warn("Client handler pool saturated -> closing connection to " + getSocketString(socket.getLocalPort()));}
+                if (_log.shouldWarn()) {_log.warn("Client handler pool saturated -> Closing connection to " +
+                                                  getSocketString(socket.getLocalPort()));}
                 try {s.close();}
                 catch (IOException ioe) { /* ignored */ }
                 try {socket.reset();}
@@ -791,8 +792,13 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             int port = socket.getLocalPort();
             try {socket.reset();}
             catch (IOException ioe) { /* ignored */ }
-            if (_log.shouldError()) {_log.error("Error connecting to server " + getSocketString(port));}
-        } catch (IOException ex) {_log.error("Error while waiting for I2PConnections", ex);}
+            if (_log.shouldWarn()) {_log.warn("Failed to connect to server " + getSocketString(port));}
+        } catch (IOException ex) {
+            if (_log.shouldWarn()) {
+                _log.warn("Failure attempting to connect to server " + getSocketString(socket.getLocalPort()) +
+                          " -> " + ex.getMessage());
+            }
+        }
     }
 
     /**
