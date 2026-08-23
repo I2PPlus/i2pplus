@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -145,6 +146,14 @@ public class TrackerClient implements Runnable {
     private static final int MAX_REGISTER_FAILS = 15; // * INITIAL_SLEEP = 15m to register
     private static final int INITIAL_SLEEP = 90 * 1000;
     private static final int MAX_CONSEC_FAILS = 10; // slow down after this
+    /**
+     *  Global cap on tracker HTTP requests in flight across ALL torrents, so
+     *  simultaneous announce/scrape rounds cannot stampede a tracker (or our
+     *  own netdb lookup path) when many TrackerClient threads wake together.
+     *  Requests beyond the cap queue on the permit; the fetch timeout clock
+     *  only starts once the permit is held.
+     */
+    private static final Semaphore ANNOUNCE_PERMITS = new Semaphore(3);
     private static final int LONG_SLEEP = 10 * 60 * 1000; // sleep a while after lots of fails
     private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * (long) 60 * 1000;
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
@@ -395,8 +404,10 @@ public class TrackerClient implements Runnable {
             }
             if (!_initialized) {
                 _initialized = true;
-                // FIXME only when starting everybody at once, not for a single torrent
-                long delay = _util.getContext().random().nextInt(30 * 1000);
+                // Spread first rounds across a full initial-sleep window so a
+                // batch start (router restart, many torrents added together)
+                // does not fire every announce at once.
+                long delay = _util.getContext().random().nextInt(INITIAL_SLEEP);
                 try {
                     Thread.sleep(delay);
                 } catch (InterruptedException ie) { /* ignored */ }
@@ -720,7 +731,22 @@ public class TrackerClient implements Runnable {
                     } else {
                         event = UDPTrackerClient.EVENT_NONE;
                     }
-                    TrackerInfo info = doRequest(tr, uploaded, downloaded, left, event);
+                    TrackerInfo info;
+                    // Global concurrency cap: space announces/scrapes across
+                    // torrents so we never stampede trackers with parallel
+                    // requests. The fetch timeout only begins once a permit
+                    // is held.
+                    ANNOUNCE_PERMITS.acquireUninterruptibly();
+                    if (stop || tr.stop) {
+                        // stopped while queued: give back the permit unused
+                        ANNOUNCE_PERMITS.release();
+                        break;
+                    }
+                    try {
+                        info = doRequest(tr, uploaded, downloaded, left, event);
+                    } finally {
+                        ANNOUNCE_PERMITS.release();
+                    }
                     tr.trackerProblems = null;
                     snark.setLastTrackerResponse(System.currentTimeMillis());
                     tr.registerFails = 0;
