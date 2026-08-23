@@ -208,6 +208,47 @@ public class DataHelperTest {
         assertEquals(0, failures.get());
     }
 
+    /**
+     * DataHelper.copyOfRange: happy path, full-copy, empty range,
+     * and the invalid-bounds error paths.
+     *
+     * @since 0.9.70+
+     */
+    @Test
+    public void testCopyOfRange() throws Exception {
+        byte[] src = new byte[10];
+        for (int i = 0; i < src.length; i++) {src[i] = (byte) (i + 1);}
+
+        // middle range
+        assertTrue(DataHelper.eq(new byte[] {3, 4, 5}, DataHelper.copyOfRange(src, 2, 5)));
+        // full copy
+        assertTrue(DataHelper.eq(src, DataHelper.copyOfRange(src, 0, src.length)));
+        // empty range is legal
+        assertEquals(0, DataHelper.copyOfRange(src, 4, 4).length);
+        // to end
+        assertTrue(DataHelper.eq(new byte[] {9, 10}, DataHelper.copyOfRange(src, 8, 10)));
+
+        try {
+            DataHelper.copyOfRange(null, 0, 1);
+            fail("null source accepted");
+        } catch (DataFormatException expected) {}
+
+        try {
+            DataHelper.copyOfRange(src, -1, 3);
+            fail("negative from accepted");
+        } catch (DataFormatException expected) {}
+
+        try {
+            DataHelper.copyOfRange(src, 0, src.length + 1);
+            fail("to past end accepted");
+        } catch (DataFormatException expected) {}
+
+        try {
+            DataHelper.copyOfRange(src, 5, 2);
+            fail("from > to accepted");
+        } catch (DataFormatException expected) {}
+    }
+
     private static class TestInputStream extends ByteArrayInputStream {
         private final Random r = new Random();
 

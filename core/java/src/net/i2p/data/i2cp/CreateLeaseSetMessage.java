@@ -9,12 +9,17 @@ package net.i2p.data.i2cp;
  *
  */
 
+import net.i2p.crypto.EncType;
+import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.util.ByteArrayStream;
 
+import java.io.ByteArrayInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -117,26 +122,121 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Read the message body from the input stream.
+     *
+     * The signing and encryption private keys precede the LeaseSet but carry no
+     * type or length prefix, so their sizes cannot be known up front. The
+     * historical reader assumed DSA (20 bytes) + ElGamal (256 bytes); an external
+     * client sending ECIES or EdDSA keys therefore shifts every following field,
+     * and the recovered "LeaseSet" is garbage (insane lease dates, wrong
+     * destination). We now buffer the payload and try the known key layouts in
+     * turn, taking the first that yields a parseable LeaseSet. The classic
+     * layout is tried first so well-formed legacy messages behave exactly as
+     * before.
      */
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
             _sessionId = new SessionId();
             _sessionId.readBytes(in);
-            // Revocation is unimplemented.
-            // As the SPK comes before the LeaseSet, we don't know the key type.
-            // We could have some sort of callback or state setting so we get the
-            // expected type from the session. But for now, we just assume it's 20 bytes.
-            // Clients outside router context should throw in a dummy 20 bytes.
+            int hdr = 2; // sessionId is a fixed 2-byte value (see SessionId.writeBytes)
+            if (size < hdr) {
+                throw new EOFException("Short CreateLeaseSetMessage");
+            }
+            byte[] buf = new byte[size - hdr];
+            DataHelper.read(in, buf);
+            // signing private key lengths by type: DSA 20, ECDSA-256 32, EdDSA 64.
+            // encryption private key lengths: ElGamal 256, ECIES-X25519 32.
+            // Order: classic first for exact legacy compatibility.
+            int[][] layouts = {
+                {SigningPrivateKey.KEYSIZE_BYTES, PrivateKey.KEYSIZE_BYTES},   // DSA + ElGamal
+                {SigningPrivateKey.KEYSIZE_BYTES, EncType.ECIES_X25519.getPrivkeyLen()}, // DSA + ECIES
+                {64, PrivateKey.KEYSIZE_BYTES},                                // EdDSA + ElGamal
+                {64, EncType.ECIES_X25519.getPrivkeyLen()},                    // EdDSA + ECIES
+                {32, PrivateKey.KEYSIZE_BYTES},                                // ECDSA + ElGamal
+                {32, EncType.ECIES_X25519.getPrivkeyLen()}                     // ECDSA + ECIES
+            };
+            // A parse that consumes the buffer exactly is authoritative: a
+            // misaligned attempt virtually never lands the signature flush
+            // with the end of payload. Fall back to first-parseable only if
+            // no layout consumes everything.
+            SigningPrivateKey fallbackSpk = null;
+            PrivateKey fallbackPk = null;
+            LeaseSet fallbackLs = null;
+            for (int[] layout : layouts) {
+                int spkLen = layout[0];
+                int pkLen = layout[1];
+                int off = spkLen + pkLen;
+                if (off > buf.length) {
+                    continue;
+                }
+                SigningPrivateKey spk = new SigningPrivateKey(spkTypeForLen(spkLen));
+                spk.setData(DataHelper.copyOfRange(buf, 0, spkLen));
+                PrivateKey pk = new PrivateKey(pkTypeForLen(pkLen));
+                pk.setData(DataHelper.copyOfRange(buf, spkLen, off));
+                try {
+                    ByteArrayInputStream bin = new ByteArrayInputStream(buf, off, buf.length - off);
+                    LeaseSet ls = new LeaseSet();
+                    ls.readBytes(bin);
+                    if (bin.available() == 0) {
+                        _signingPrivateKey = spk;
+                        _privateKey = pk;
+                        _leaseSet = ls;
+                        return;
+                    }
+                    if (fallbackSpk == null) {
+                        fallbackSpk = spk;
+                        fallbackPk = pk;
+                        fallbackLs = ls;
+                    }
+                } catch (DataFormatException dfe) {
+                    // try next layout
+                } catch (IOException ioe) {
+                    // Ran past the buffer end at this misalignment; try next.
+                }
+            }
+            if (fallbackSpk != null) {
+                _signingPrivateKey = fallbackSpk;
+                _privateKey = fallbackPk;
+                _leaseSet = fallbackLs;
+                return;
+            }
+            // No layout parsed. Re-run the classic parse so callers see the
+            // familiar exception for genuinely malformed messages.
+            ByteArrayInputStream bin = new ByteArrayInputStream(buf);
             _signingPrivateKey = new SigningPrivateKey();
-            _signingPrivateKey.readBytes(in);
+            _signingPrivateKey.readBytes(bin);
             _privateKey = new PrivateKey();
-            _privateKey.readBytes(in);
+            _privateKey.readBytes(bin);
             _leaseSet = new LeaseSet();
-            _leaseSet.readBytes(in);
+            _leaseSet.readBytes(bin);
         } catch (DataFormatException dfe) {
             throw new I2CPMessageException("Error reading the CreateLeaseSetMessage", dfe);
         }
+    }
+
+    /**
+     * Map a known signing private key length to its most likely type.
+     *
+     * @param len key length in bytes
+     * @return DSA_SHA1 for 20, EdDSA_SHA512_Ed25519 for 64, else ECDSA_SHA256_P256
+     * @since 0.9.70+
+     */
+    private static SigType spkTypeForLen(int len) {
+        if (len == 20) {return SigType.DSA_SHA1;}
+        if (len == 64) {return SigType.EdDSA_SHA512_Ed25519;}
+        return SigType.ECDSA_SHA256_P256;
+    }
+
+    /**
+     * Map a known encryption private key length to its most likely type.
+     *
+     * @param len key length in bytes
+     * @return ELGAMAL_2048 for 256, else ECIES_X25519
+     * @since 0.9.70+
+     */
+    private static EncType pkTypeForLen(int len) {
+        if (len == PrivateKey.KEYSIZE_BYTES) {return EncType.ELGAMAL_2048;}
+        return EncType.ECIES_X25519;
     }
 
     /**

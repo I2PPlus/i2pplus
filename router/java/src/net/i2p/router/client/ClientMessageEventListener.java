@@ -676,21 +676,24 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 if (dest != null) {_runner.getFloodfillNetworkDatabaseFacade().store(dest.getHash(), encls.getDecryptedLeaseSet());}
             }
         } catch (IllegalArgumentException iae) {
+            // Detect lease expiry rejections without relying on a single keyword:
+            // KNDF.validateLeaseSetExpiry() throws "expiry date in the past",
+            // which does not contain the literal "expired".
             String msg = iae.getMessage();
-            boolean isExpired = msg != null && msg.contains("expired");
-            if (_log.shouldError()) {
-                if (isExpired) {
-                    _log.error("Invalid (expired) LeaseSet from client, will retry: " + iae.getMessage());
-                } else {
-                    _log.error("Invalid LeaseSet from client", iae);
-                }
-            }
+            boolean isExpired = msg != null &&
+                    (msg.contains("expired") || msg.contains("expiry date"));
             String destDesc = dest != null ? dest.toBase32().substring(0, Math.min(8, dest.toBase32().length())) + "..." : "unknown";
             if (isExpired) {
+                // Transient: the rerequest timer will mint a fresh LS. Disconnecting
+                // here would kill every tunnel on the session (seen with slow external
+                // I2CP clients such as BiglyBT), so log and return instead.
                 if (_log.shouldWarn()) {
-                    _log.warn("LeaseSet for [" + destDesc + "] expired before publication; rerequest timer will retry");
+                    _log.warn("Rejected expired LeaseSet from [" + destDesc + "] (will rerequest): " + iae.getMessage());
                 }
                 return;
+            }
+            if (_log.shouldError()) {
+                _log.error("Invalid LeaseSet from client", iae);
             }
             _runner.disconnectClient("Invalid LeaseSet: " + iae.getMessage() + " [dest: " + destDesc + "]");
             return;

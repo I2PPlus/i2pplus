@@ -1348,6 +1348,33 @@ public class DataHelper {
     }
 
     /**
+     *  Copy a range of a byte array into a new array, mirroring
+     *  java.util.Arrays.copyOfRange() but throwing DataFormatException on
+     *  invalid bounds so callers in the data layer can handle it with their
+     *  existing exception flow.
+     *
+     *  @param src source array, must not be null
+     *  @param from starting index, inclusive
+     *  @param to ending index, exclusive; must be &gt;= from and &lt;= src.length
+     *  @return new byte[to - from] containing src[from..to-1]
+     *  @throws DataFormatException if src is null or the range is invalid
+     *  @since 0.9.70+
+     */
+    public static byte[] copyOfRange(byte[] src, int from, int to) throws DataFormatException {
+        if (src == null) {
+            throw new DataFormatException("Null source array for copyOfRange");
+        }
+        if (from < 0 || to > src.length || from > to) {
+            throw new DataFormatException("Invalid range [" + from + ',' + to + ") for copyOfRange of " +
+                                          src.length + " bytes");
+        }
+        int len = to - from;
+        byte[] out = new byte[len];
+        System.arraycopy(src, from, out, 0, len);
+        return out;
+    }
+
+    /**
      *  Constant time string comparison.
      *  Null-safe. Different lengths handled in constant time.
      *
