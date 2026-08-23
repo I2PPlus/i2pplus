@@ -1,7 +1,6 @@
 package net.i2p.router.web.helpers;
 
 import static net.i2p.router.web.helpers.ConfigBanHelper.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -12,11 +11,14 @@ import net.i2p.router.web.FormHandler;
  * @since 0.9.70
  */
 public class ConfigBanHandler extends FormHandler {
+    private final net.i2p.util.Log _log;
 
     /**
      * Constructs the handler.
      */
-    public ConfigBanHandler() {}
+    public ConfigBanHandler() {
+        _log = net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(ConfigBanHandler.class);
+    }
 
     private String _maxOffenses;
     private String _offenseWindow;
@@ -244,7 +246,13 @@ public class ConfigBanHandler extends FormHandler {
             _context.blocklist().clearAll();
         }
 
+        if (_log.shouldWarn()) {
+            _log.warn("saveChanges: raw caps input=[" + _customCapabilityBans + "] nextHop=" + _banNextHop);
+        }
         String validatedCaps = validateCapabilityBans(_customCapabilityBans);
+        if (_log.shouldWarn()) {
+            _log.warn("saveChanges: validated caps=[" + validatedCaps + "]");
+        }
         changes.put(PROP_CUSTOM_CAPABILITY_BANS, validatedCaps);
 
         String validatedCountries = validateCountryCodes(_customCountryCodes);
@@ -272,50 +280,45 @@ public class ConfigBanHandler extends FormHandler {
     }
 
     /**
-     * Validate custom capability ban pattern.
-     * Only allows valid router capability letters: K,L,M,N,O,P,X,f,D,E,G,U,R
-     * Separates multiple patterns with comma or space.
-     * A pattern may carry an exclusion group after '!': "G!f" bans G routers
-     * unless floodfill; exclusions require at least one required character.
-     * Sorts characters alphabetically within each group.
+     * Validate custom capability ban patterns.
+     *
+     * Capability letters are case-sensitive: lowercase 'f' is floodfill,
+     * uppercase letters are the remaining tiers and flags. Input is
+     * validated per character and passed through as entered - no sorting,
+     * no case folding.
+     *
+     * Separates multiple patterns with comma or space. A pattern may carry
+     * an exclusion group after '!': "G!f" bans G routers unless floodfill;
+     * exclusions require at least one required character.
      */
     private String validateCapabilityBans(String input) {
         if (input == null || input.isEmpty()) return "";
-        String validChars = "KLMNOPXFGDEUR";
-        StringBuilder result = new StringBuilder();
+        StringBuilder out = new StringBuilder();
         String[] patterns = COMMA_SPLIT.split(input);
         for (String pattern : patterns) {
-            pattern = pattern.trim().toUpperCase();
+            pattern = pattern.trim();
             if (pattern.isEmpty()) continue;
             int bang = pattern.indexOf('!');
             String reqPart = bang >= 0 ? pattern.substring(0, bang) : pattern;
             String exclPart = bang >= 0 ? pattern.substring(bang + 1) : "";
-            String req = sortCaps(reqPart, validChars);
             // require at least one positive cap, so a bare exclusion can never
             // ban the entire network
-            if (req == null || req.isEmpty()) continue;
-            String excl = exclPart.isEmpty() ? "" : sortCaps(exclPart, validChars);
-            if (excl == null) continue;
-            if (result.length() > 0) result.append(",");
-            result.append(excl.isEmpty() ? req : req + "!" + excl);
+            if (!isValidCaps(reqPart) || reqPart.isEmpty()) continue;
+            if (!exclPart.isEmpty() && !isValidCaps(exclPart)) continue;
+            if (out.length() > 0) out.append(",");
+            out.append(pattern);
         }
-        return result.toString();
+        return out.toString();
     }
 
-    /**
-     * Sort capability letters alphabetically after verifying all are valid.
-     *
-     * @param in the caps characters to sort
-     * @param validChars allowed characters
-     * @return the sorted string, or null if any character is invalid
-     */
-    private static String sortCaps(String in, String validChars) {
-        char[] chars = in.toCharArray();
-        for (char c : chars) {
-            if (validChars.indexOf(c) < 0) {return null;}
+    /** Recognized router capability letters, case-sensitive ('f' = floodfill). */
+    private static final String VALID_CAP_CHARS = "KLMNOPXfGDEURH";
+
+    private static boolean isValidCaps(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (VALID_CAP_CHARS.indexOf(s.charAt(i)) < 0) {return false;}
         }
-        Arrays.sort(chars);
-        return new String(chars);
+        return true;
     }
 
     /**
