@@ -13,6 +13,7 @@ import net.i2p.router.transport.TransportImpl;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
+import net.i2p.util.LHMCache;
 import net.i2p.util.ObjectCounter;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.SystemVersion;
@@ -238,11 +239,36 @@ public class ParticipatingThrottler {
 
         if (!isUs && isBanned) {return Result.DROP;} // return early if router's already banned
 
-        String version = ri != null ? ri.getVersion() : "";
+        // Router absent from our local netDb: we cannot classify it, so apply
+        // count-based throttling only and resolve it in the background. This
+        // branch previously fell through to the no-version handler below,
+        // treating the missing RI as "no version" and banning innocent
+        // previous hops for four hours - observed live as a 12k-entry
+        // banlist while transit volume grew.
+        if (ri == null) {
+            scheduleRouterLookup(h);
+            // count was already advanced above for this join
+            int ucCount = counter.count(h);
+            int ucLimit = calculateLimit(numTunnels, false, false, false);
+            Result ucRv = evaluateThrottleConditions(ucCount, ucLimit, shouldThrottle,
+                    false, false, false, h, "", false, 4*60*60*1000, null, countRequest);
+            if (ucRv == Result.ACCEPT)
+                {context.statManager().addRateData("tunnel.throttleParticipatingAccept", 1);}
+            else if (ucRv == Result.REJECT)
+                {context.statManager().addRateData("tunnel.throttleParticipatingReject", 1);}
+            else
+                {context.statManager().addRateData("tunnel.throttleParticipatingDrop", 1);}
+            return ucRv;
+        }
+
+        String version = ri.getVersion();
 
         if (version.equals("0") || version.isEmpty()) {
-            handleNoVersion(shouldDisconnect, h, isBanned, caps, bantime, ri, "none");
-            return Result.DROP;
+            // transient reject for minor infractions; handleNoVersion escalates
+            // to a ban only after repeated offenses inside its window
+            handleNoVersion(shouldDisconnect, h, isBanned, caps, ri, "none");
+            context.statManager().addRateData("tunnel.throttleParticipatingReject", 1);
+            return Result.REJECT;
         }
         if (checkVersionAndCompressibility(version, isCompressible, shouldDisconnect, h, isBanned, caps, ri)) return Result.DROP;
         if (checkLowShareAndVersion(version, isLU, shouldBlockOldRouters, h, shouldDisconnect, isBanned, caps, bantime, ri)) return Result.DROP;
@@ -335,18 +361,77 @@ public class ParticipatingThrottler {
      * @param ri RouterInfo for IP extraction and logging
      * @param version router version string, used if disconnect is scheduled
      */
-    private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime, RouterInfo ri, String version) {
+    /**
+     * Handles joins from routers whose held RouterInfo carries no version.
+     *
+     * Minor infraction: the offending join is answered with a transient
+     * reject (the caller maps Result.REJECT accordingly) and only repeated
+     * no-version offenses within {@link #NO_VERSION_ESCALATION_MS} graduate
+     * to a banlist entry. A single sighting is far more likely a stale or
+     * buggy router than an attacker, and an immediate multi-hour ban on
+     * first sight was poisoning the peer pool.
+     *
+     * @param shouldDisconnect whether to disconnect the router after banning
+     * @param h the router hash
+     * @param isBanned true if already banned
+     * @param caps router capabilities string
+     *     escalated bans are fixed at one hour regardless of the default
+     * @param ri RouterInfo for IP extraction and logging
+     * @param version router version string, used if disconnect is scheduled
+     */
+    private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, RouterInfo ri, String version) {
         if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000L);}
-        if (!isBanned && "true".equals(context.getProperty("router.banlist.enableNoVersionBan", "true"))) {
+        long[] off = _noVersionOffenses.get(h);
+        long now = context.clock().now();
+        if (off == null || now - off[1] > NO_VERSION_ESCALATION_MS) {
+            off = new long[] {1, now};
+            _noVersionOffenses.put(h, off);
+        } else {
+            off[0]++;
+            off[1] = now;
+        }
+        if (_log.shouldWarn()) {
+            _log.warn("Join from Router [" + h.toBase64().substring(0,6) + "] with no version" +
+                      " -> rejecting transient (offense " + off[0] + ')');
+        }
+        if (!isBanned && off[0] >= NO_VERSION_BAN_THRESHOLD &&
+            "true".equals(context.getProperty("router.banlist.enableNoVersionBan", "true"))) {
+            // one hour: the escalated ban only stops repeated wasted joins
+            // from one identity, which rotation defeats anyway - keep it
+            // short enough to self-heal if we misclassified
+            int escalatedBanTime = 60*60*1000;
             String ipPort = TransportImpl.getRouterIPPort(ri);
-            String banReason = "No version in RouterInfo";
-            _banLogger.logBan(h, ipPort, banReason, bantime, ri);
-            context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
+            String banReason = "Repeated no-version RouterInfo";
+            _banLogger.logBan(h, ipPort, banReason, escalatedBanTime, ri);
+            context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + escalatedBanTime);
             if (_log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
+                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (escalatedBanTime / 60000) +
+                          "m after " + off[0] + " no-version joins");
             }
         }
     }
+
+    /** No-version offense state per hash: {count, lastOffenseMs}. Bounded LRU. */
+    private final LHMCache<Hash, long[]> _noVersionOffenses = new LHMCache<>(64);
+    /** Repeated no-version joins inside this window escalate to a ban. */
+    private static final long NO_VERSION_ESCALATION_MS = 30*60*1000L;
+    /** Offenses inside the escalation window before a ban is issued. */
+    private static final int NO_VERSION_BAN_THRESHOLD = 3;
+
+    /**
+     *  Rate-limited background resolution for transit peers missing from our
+     *  local netDb, so throttler decisions graduate from count-only to full
+     *  classification without blocking or hammering the netdb.
+     */
+    private void scheduleRouterLookup(Hash h) {
+        Long last = _recentLookups.get(h);
+        long now = context.clock().now();
+        if (last != null && now - last < ROUTER_LOOKUP_RETRY_MS) {return;}
+        _recentLookups.put(h, Long.valueOf(now));
+        context.netDb().lookupRouterInfo(h, null, null, 15*1000);
+    }
+    private final LHMCache<Hash, Long> _recentLookups = new LHMCache<>(256);
+    private static final long ROUTER_LOOKUP_RETRY_MS = 10*60*1000L;
 
     /**
      * Checks router version and compressibility of RouterInfo to decide on banning.
