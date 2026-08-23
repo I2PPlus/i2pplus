@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -210,7 +211,29 @@ public class TunnelDispatcher implements Service {
         public void timeReached() {
             updateThrottleFactors();
             cleanupExpiredTunnels();
+            logTransitSummary();
             schedule(getCleanupInterval());
+        }
+    }
+
+    // Transit pool trend counters, reset each summary period
+    private final AtomicLong _joinsSinceLast = new AtomicLong();
+    private final AtomicLong _expiresSinceLast = new AtomicLong();
+
+    /**
+     *  Per-minute transit pool summary for trend monitoring.
+     *
+     *  Logs participating count plus join and expiry rates so that a
+     *  transition from growth to decline is visible in the log trace
+     *  without needing the stats graphing framework.
+     */
+    private void logTransitSummary() {
+        long joins = _joinsSinceLast.getAndSet(0);
+        long expires = _expiresSinceLast.getAndSet(0);
+        int count = getParticipatingCount();
+        if (_log.shouldInfo()) {
+            _log.info("[transit] pool=" + count + " joins=" + joins + " expires=" + expires +
+                      (joins < expires ? " * DECLINING *" : ""));
         }
     }
 
@@ -320,6 +343,7 @@ public class TunnelDispatcher implements Service {
         // Record net churn: +joined (recorded at join time) minus -expired here.
         if (cleaned > 0) {
             _context.statManager().addRateData("tunnel.participatingTunnelChurn", -cleaned);
+            _expiresSinceLast.addAndGet(cleaned);
         }
         return cleaned;
     }
@@ -522,6 +546,7 @@ public class TunnelDispatcher implements Service {
         _context.messageHistory().tunnelJoined("participant", cfg);
         _context.statManager().addRateData("tunnel.joinParticipant", 1);
         _context.statManager().addRateData("tunnel.participatingTunnelChurn", 1);
+        _joinsSinceLast.incrementAndGet();
 
         if (cfg.getExpiration() > _lastParticipatingExpiration)
             _lastParticipatingExpiration = cfg.getExpiration();
