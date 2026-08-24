@@ -5652,177 +5652,22 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
-        }
+}
 
-        boolean showSaveButton = false;
+        FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
+        FileRowCounters counters = new FileRowCounters();
         boolean rowEven = true;
-        int videoCount = 0;
-        int imgCount = 0;
-        int txtCount = 0;
         for (Sorters.FileAndIndex fai : fileList) {
-            /*
-             * String encoded = encodePath(ls[i].getName());
-             * bugfix for I2P - Backport from Jetty 6 (zero file lengths and last-modified times)
-             * http: *jira.codehaus.org/browse/JETTY-361?page=com.atlassian.jira.plugin.system.issuetabpanels%3Achangehistory-tabpanel#issue-tabs
-             * See resource.diff attachment
-             * Resource item = addPath(encoded);
-             */
-            File item = fai.file;
-            // Get completeness and status string
-            boolean complete = false;
-            String status = "";
-            long length = item.length();
-            int fileIndex = fai.index;
-            int priority = 0;
-            if (fai.isDirectory) {complete = true;}
-            else {
-                if (storage == null) {
-                    complete = true;
-                    StringBuilder ico = new StringBuilder();
-                    appendIcon(ico, "warn", _t("Not found"), _t("Torrent not found"), false, true, true);
-                    status = ico.toString();
-                } else {
-                    long remaining = fai.remaining;
-                    if (remaining < 0) {
-                        complete = true;
-                        StringBuilder ico = new StringBuilder();
-                        appendIcon(ico, "warn", _t("Unrecognized"), _t("File not found in torrent"), false, true, true);
-                        status = ico.toString();
-                    } else if (remaining == 0 || length <= 0) {
-                        complete = true;
-                        StringBuilder ico = new StringBuilder();
-                        appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true, true);
-                        status = ico.toString();
-                    } else {
-                        priority = fai.priority;
-                        StringBuilder ico = new StringBuilder();
-                        ico.append("<div class=priorityIndicator>");
-                        if (priority < 0) {
-                            appendIcon(buf, "block", "", "", false, false, true);
-                        } else if (priority == 0) {
-                            appendIcon(ico, "clock", "", "", false, false, true);
-                        } else {
-                            appendIcon(ico, "clock_red", "", "", false, false, true);
-                        }
-                        ico.append("</div>");
-                        long percent = 100 * (length - remaining) / length;
-                        status = ico.toString() + buildProgressBar(length, remaining, true, false, false, true);
-                    }
-                }
-            }
-
-            String rowClass = (rowEven ? "rowEven" : "rowOdd");
-            String completed = (complete ? "completed" : "incomplete");
-            rowEven = !rowEven;
-            buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
-            String path = addPaths(decodedBase, item.getName());
-            if (fai.isDirectory) {
-                complete = true;
-                if (!path.endsWith("/")) {path=addPaths(path, "/");}
-            }
-            path = encodePath(path);
-            String icon = toIcon(item);
-            String mime = getMimeType(path);
-            if (mime == null) {mime = "";}
-            boolean isAudio = isAudio(mime);
-            boolean isVideo = !isAudio && isVideo(mime);
-            boolean isImage = mime.startsWith("image/");
-            boolean isText = mime.startsWith("text/") || mime.equals("application/javascript") ||
-                             mime.equals("application/json") || mime.equals("application/xml") ||
-                             path.toLowerCase().endsWith(".asc") || path.toLowerCase().endsWith(".bat") ||
-                             path.toLowerCase().endsWith(".ini") || path.toLowerCase().endsWith(".md5") ||
-                             path.toLowerCase().endsWith(".sh") || path.toLowerCase().endsWith(".url");
-            boolean isPDF = mime.equals("application/pdf");
-            // For binary files, strip charset if present
-            if (isAudio || isImage || isVideo || mime.equals("application/pdf")) {
-                int semicolonIndex = mime.indexOf(';');
-                if (semicolonIndex != -1) {mime = mime.substring(0, semicolonIndex).trim();}
-            }
-            buf.append("<td class=\"fileIcon");
-            if (!complete) {buf.append(" volatile");}
-            else if (isText) {
-              buf.append(" text");
-              txtCount++;
-            }
-            buf.append("\">");
-            String preview = null;
-            if (isVideo && complete) {videoCount++;}
-            if (complete || (isAudio && fai.preview > 100*1024) ||
-                (isVideo && fai.preview > 5*1024*1024 && fai.preview / (double) fai.length >= 0.01d)) {
-                String ppath = complete ? path : path + "?limit=" + fai.preview;
-                if (!complete) {
-                    double pct = fai.preview / (double) fai.length;
-                    preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " +
-                               (new DecimalFormat("0.00%")).format(pct) + "</span>";
-                }
-                if (isAudio || isVideo) {
-                    // scale up image thumbnails if directory also contains audio/video
-                    buf.append("\n<style>.thumb{max-height:inherit!important;max-width:240px!important}</style>\n");
-                    // HTML5
-                    if (isAudio) {buf.append("<audio");}
-                    else {buf.append("<video");}
-                    buf.append(" controls><source src=\"").append(ppath);
-                    // display video 20 seconds in for a better chance of a thumbnail
-                    if (isVideo) {buf.append("#t=20");}
-                    buf.append("\" type=\"").append(mime).append("\">");
-                }
-                buf.append("<a href=\"").append(ppath).append("\">");
-                if (mime.startsWith("image/") && !ppath.endsWith(".ico")) {
-                    // thumbnail
-                    buf.append("<img alt=\"\" border=0 class=thumb src=\"")
-                       .append(ppath).append("\" data-lb data-lb-caption=\"")
-                       .append(DataHelper.escapeHTML(item.getName())).append("\" data-lb-group=allInDir></a>");
-                   imgCount++;
-                } else if (mime.startsWith("image/") && ppath.endsWith(".ico")) {
-                    // favicon without scaling
-                    buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
-                       .append(ppath).append("\" data-lb data-lb-caption=\"")
-                       .append(DataHelper.escapeHTML(item.getName())).append("\" data-lb-group=allInDir></a>");
-                } else {
-                    appendIcon(buf, icon, _t("Open"), "", false, true);
-                    buf.append("</a>");
-                }
-                if (isAudio) {buf.append("</audio>");}
-                else if (isVideo) {buf.append("</video>");}
-            } else {appendIcon(buf, icon, "", "", false, true);}
-            buf.append("</td><td class=\"snarkFileName");
-            if (!complete) {buf.append(" volatile");}
-            buf.append("\">");
-            if (complete) {
-                buf.append("<a href=\"").append(path).append("\"");
-                // send browser-viewable files to new tab to avoid potential display in iframe
-                if (isAudio || isVideo || isText || isImage || isPDF) {buf.append(" target=_blank");}
-                if (mime.equals("audio/mpeg")) {buf.append(" class=targetfile");}
-                buf.append(">");
-            }
-            buf.append(DataHelper.escapeHTML(item.getName()));
-            if (complete) {
-                buf.append("</a>");
-                if (mime.equals("audio/mpeg")) {
-                    String tags = Mp3Tags.getTags(item);
-                    buf.append("<a class=tags href=\"").append(path).append("\" target=_blank hidden>");
-                    if (tags != null) {buf.append(tags);}
-                    else {buf.append(DataHelper.escapeHTML(item.getName()));}
-                    buf.append("</a>");
-                }
-            } else if (preview != null) {buf.append(preview);}
-            buf.append("</td><td class=fileSize>");
-            if (!fai.isDirectory) {buf.append(formatSize(length));}
-            buf.append("</td><td class=\"fileStatus volatile\">").append(status).append("</td>");
-            if (showPriority) {
-                showSaveButton = true;
-                appendPriority(buf, showPriority, complete, fai.isDirectory, priority, fileIndex);
-            }
-            buf.append("</tr>\n");
+            rowEven = renderFileRow(buf, ctx, fai, rowEven, counters);
         }
-        if (showSaveButton) {
+        if (counters.showSaveButton) {
             buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5><input type=submit class=accept value=\"")
                .append(_t("Save priorities"))
                .append("\" name=savepri>\n</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
-        if (imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
-        if (txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
+        if (counters.imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
+        if (counters.txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
         buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n");
 
         CommentSet comments = snark.getComments();
@@ -7080,6 +6925,39 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Immutable context for rendering a single file row in the torrent file browser.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class FileRowContext {
+        final String decodedBase;
+        final Storage storage;
+        final boolean showPriority;
+        final boolean isTopLevel;
+
+        FileRowContext(String decodedBase, Storage storage, boolean showPriority, boolean isTopLevel) {
+            this.decodedBase = decodedBase;
+            this.storage = storage;
+            this.showPriority = showPriority;
+            this.isTopLevel = isTopLevel;
+        }
+    }
+
+    /**
+     * Mutable counters for file row rendering.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class FileRowCounters {
+        int videoCount = 0;
+        int imgCount = 0;
+        int txtCount = 0;
+        boolean showSaveButton = false;
+    }
+
+    /**
      * Parsed edit form parameters. Package-visible for testing.
      */
     static class EditParams {
@@ -7145,6 +7023,168 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         return new EditParams(toAdd, toDel, primary, newComment, newCreatedBy);
+    }
+
+    /**
+     * Renders a single file row for the torrent file browser table.
+     * Extracted from getListHTML for testability and UI responsiveness.
+     *
+     * @param buf the StringBuilder to append HTML to
+     * @param ctx immutable context (decoded base path, storage, priority flag, top-level flag)
+     * @param fai the file and its metadata from the sorted file list
+     * @param rowEven true for even row (alternating row class)
+     * @param counters mutable accumulators (video/img/text counts, save button flag)
+     * @return the next rowEven value (toggled)
+     * @since 0.9.71+
+     */
+    private boolean renderFileRow(StringBuilder buf, FileRowContext ctx, Sorters.FileAndIndex fai,
+                                   boolean rowEven, FileRowCounters counters) {
+        File item = fai.file;
+        boolean complete = false;
+        String status = "";
+        long length = item.length();
+        int fileIndex = fai.index;
+        int priority = 0;
+
+        if (fai.isDirectory) {
+            complete = true;
+        } else if (ctx.storage == null) {
+            complete = true;
+            StringBuilder ico = new StringBuilder();
+            appendIcon(ico, "warn", _t("Not found"), _t("Torrent not found"), false, true, true);
+            status = ico.toString();
+        } else {
+            long remaining = fai.remaining;
+            if (remaining < 0) {
+                complete = true;
+                StringBuilder ico = new StringBuilder();
+                appendIcon(ico, "warn", _t("Unrecognized"), _t("File not found in torrent"), false, true, true);
+                status = ico.toString();
+            } else if (remaining == 0 || length <= 0) {
+                complete = true;
+                StringBuilder ico = new StringBuilder();
+                appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true, true);
+                status = ico.toString();
+            } else {
+                priority = fai.priority;
+                StringBuilder ico = new StringBuilder();
+                ico.append("<div class=priorityIndicator>");
+                if (priority < 0) {
+                    appendIcon(ico, "block", "", "", false, false, true);
+                } else if (priority == 0) {
+                    appendIcon(ico, "clock", "", "", false, false, true);
+                } else {
+                    appendIcon(ico, "clock_red", "", "", false, false, true);
+                }
+                ico.append("</div>");
+                long percent = 100 * (length - remaining) / length;
+                status = ico.toString() + buildProgressBar(length, remaining, true, false, false, true);
+            }
+        }
+
+        String rowClass = (rowEven ? "rowEven" : "rowOdd");
+        String completed = (complete ? "completed" : "incomplete");
+        buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
+
+        String path = addPaths(ctx.decodedBase, item.getName());
+        if (fai.isDirectory) {
+            complete = true;
+            if (!path.endsWith("/")) {path = addPaths(path, "/");}
+        }
+        path = encodePath(path);
+        String icon = toIcon(item);
+        String mime = getMimeType(path);
+        if (mime == null) {mime = "";}
+        boolean isAudio = isAudio(mime);
+        boolean isVideo = !isAudio && isVideo(mime);
+        boolean isImage = mime.startsWith("image/");
+        boolean isText = mime.startsWith("text/") || mime.equals("application/javascript") ||
+                         mime.equals("application/json") || mime.equals("application/xml") ||
+                         path.toLowerCase().endsWith(".asc") || path.toLowerCase().endsWith(".bat") ||
+                         path.toLowerCase().endsWith(".ini") || path.toLowerCase().endsWith(".md5") ||
+                         path.toLowerCase().endsWith(".sh") || path.toLowerCase().endsWith(".url");
+        boolean isPDF = mime.equals("application/pdf");
+        if (isAudio || isImage || isVideo || mime.equals("application/pdf")) {
+            int semicolonIndex = mime.indexOf(';');
+            if (semicolonIndex != -1) {mime = mime.substring(0, semicolonIndex).trim();}
+        }
+
+        buf.append("<td class=\"fileIcon");
+        if (!complete) {buf.append(" volatile");}
+        else if (isText) {
+            buf.append(" text");
+            counters.txtCount++;
+        }
+        buf.append("\">");
+
+        String preview = null;
+        if (isVideo && complete) {counters.videoCount++;}
+        if (complete || (isAudio && fai.preview > 100 * 1024) ||
+            (isVideo && fai.preview > 5 * 1024 * 1024 && fai.preview / (double) fai.length >= 0.01d)) {
+            String ppath = complete ? path : path + "?limit=" + fai.preview;
+            if (!complete) {
+                double pct = fai.preview / (double) fai.length;
+                preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " +
+                           (new DecimalFormat("0.00%")).format(pct) + "</span>";
+            }
+            if (isAudio || isVideo) {
+                buf.append("\n<style>.thumb{max-height:inherit!important;max-width:240px!important}</style>\n");
+                if (isAudio) {buf.append("<audio");}
+                else {buf.append("<video");}
+                buf.append(" controls><source src=\"").append(ppath);
+                if (isVideo) {buf.append("#t=20");}
+                buf.append("\" type=\"").append(mime).append("\">");
+            }
+            buf.append("<a href=\"").append(ppath).append("\">");
+            if (mime.startsWith("image/") && !ppath.endsWith(".ico")) {
+                buf.append("<img alt=\"\" border=0 class=thumb src=\"")
+                   .append(ppath).append("\" data-lb data-lb-caption=\"")
+                   .append(DataHelper.escapeHTML(item.getName())).append("\" data-lb-group=allInDir></a>");
+                counters.imgCount++;
+            } else if (mime.startsWith("image/") && ppath.endsWith(".ico")) {
+                buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
+                   .append(ppath).append("\" data-lb data-lb-caption=\"")
+                   .append(DataHelper.escapeHTML(item.getName())).append("\" data-lb-group=allInDir></a>");
+            } else {
+                appendIcon(buf, icon, _t("Open"), "", false, true);
+                buf.append("</a>");
+            }
+            if (isAudio) {buf.append("</audio>");}
+            else if (isVideo) {buf.append("</video>");}
+        } else {
+            appendIcon(buf, icon, "", "", false, true);
+        }
+        buf.append("</td><td class=\"snarkFileName");
+        if (!complete) {buf.append(" volatile");}
+        buf.append("\">");
+
+        if (complete) {
+            buf.append("<a href=\"").append(path).append("\"");
+            if (isAudio || isVideo || isText || isImage || isPDF) {buf.append(" target=_blank");}
+            if (mime.equals("audio/mpeg")) {buf.append(" class=targetfile");}
+            buf.append(">");
+        }
+        buf.append(DataHelper.escapeHTML(item.getName()));
+        if (complete) {
+            buf.append("</a>");
+            if (mime.equals("audio/mpeg")) {
+                String tags = Mp3Tags.getTags(item);
+                buf.append("<a class=tags href=\"").append(path).append("\" target=_blank hidden>");
+                if (tags != null) {buf.append(tags);}
+                else {buf.append(DataHelper.escapeHTML(item.getName()));}
+                buf.append("</a>");
+            }
+        } else if (preview != null) {buf.append(preview);}
+        buf.append("</td><td class=fileSize>");
+        if (!fai.isDirectory) {buf.append(formatSize(length));}
+        buf.append("</td><td class=\"fileStatus volatile\">").append(status).append("</td>");
+
+        if (ctx.showPriority) {
+            counters.showSaveButton = true;
+            appendPriority(buf, ctx.showPriority, complete, fai.isDirectory, priority, fileIndex);
+        }
+        buf.append("</tr>\n");
+        return !rowEven;
     }
 
     /**
@@ -7249,9 +7289,28 @@ public class I2PSnarkServlet extends BasicServlet {
      * Whether "a" equals "b", or "a" is a directory and a parent of
      * file or directory "b", canonically speaking.
      *
-     * @return whether parent of
+     * @param a the parent directory candidate
+     * @param b the file or directory to check
+     * @return true if a contains b or they are the same
      * @since 0.9.15
      */
+    private static boolean isParentOf(File a, File b) {
+        try {
+            a = a.getCanonicalFile();
+            b = b.getCanonicalFile();
+        } catch (IOException ioe) {return false;}
+        if (a.equals(b)) {return true;}
+        if (!a.isDirectory()) {return false;}
+        // easy case
+        if (!b.getPath().startsWith(a.getPath())) {return false;}
+        // dir by dir
+        while (!a.equals(b)) {
+            b = b.getParentFile();
+            if (b == null) {return false;}
+        }
+        return true;
+    }
+
     /**
      * Reject a torrent whose data directory lies inside another torrent's data
      * directory, or (when checkContained) would contain another torrent's data
@@ -7279,29 +7338,6 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         return false;
-    }
-
-    /**
-     * Does File a contain File b, or are they the same?
-     * Parent directories must exist for b to be contained in a.
-     *
-     * @since 0.9.15
-     */
-    private static boolean isParentOf(File a, File b) {
-        try {
-            a = a.getCanonicalFile();
-            b = b.getCanonicalFile();
-        } catch (IOException ioe) {return false;}
-        if (a.equals(b)) {return true;}
-        if (!a.isDirectory()) {return false;}
-        // easy case
-        if (!b.getPath().startsWith(a.getPath())) {return false;}
-        // dir by dir
-        while (!a.equals(b)) {
-            b = b.getParentFile();
-            if (b == null) {return false;}
-        }
-        return true;
     }
 
     /**
