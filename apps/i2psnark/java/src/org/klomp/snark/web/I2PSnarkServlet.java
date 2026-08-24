@@ -367,15 +367,15 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         pathInContext = pathInContext.substring(1); // files in the i2psnark/ directory - get top level
-        File top = new File(pathInContext);
-        File parent;
-
-        while ((parent = top.getParentFile()) != null) {top = parent;}
-        Snark snark = _manager.getTorrentByBaseName(top.getPath());
+        // The first path segment is the torrent's (filtered) base name;
+        // everything after it resolves inside that torrent's storage.
+        int slash = pathInContext.indexOf('/');
+        String baseName = slash >= 0 ? pathInContext.substring(0, slash) : pathInContext;
+        Snark snark = _manager.getTorrentByBaseName(baseName);
         if (snark != null) {
             Storage storage = snark.getStorage();
             if (storage != null) {
-                String child = pathInContext.substring(top.getPath().length());
+                String child = slash >= 0 ? pathInContext.substring(slash) : "";
                 return resolveTorrentPath(storage, child);
             }
         }
