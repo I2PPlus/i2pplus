@@ -44,6 +44,9 @@ jobs:
       - name: Enable quiet logger for subsequent builds
         run: cp tools/ant/.antrc ~/.antrc
 
+      - name: Install python deps for test reporting
+        run: pip install --quiet --break-system-packages markdown-it-py
+
       - name: Build all artifacts
         run: ant updaterWithGeoIP installer i2psnark buildDeb
 

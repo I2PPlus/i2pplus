@@ -23,6 +23,17 @@ if [ ! -f "${HAMCREST}/hamcrest-core.jar" ] || [ ! -f "${JUNIT}/junit4.jar" ]; t
   "${SCRIPT_DIR}/ensure-testdeps.sh" --quiet
 fi
 
+# Ensure the python dep for HTML report generation is present. Kept here so
+# the report works regardless of when the calling CI step runs relative to
+# other steps that may install python packages.
+if ! python3 -c 'import markdown_it' >/dev/null 2>&1; then
+  echo "Installing markdown-it-py for test report generation..."
+  if ! python3 -m pip install --quiet --user markdown-it-py 2>/dev/null \
+     && ! python3 -m pip install --quiet --break-system-packages markdown-it-py 2>/dev/null; then
+    echo "WARNING: could not install markdown-it-py; the HTML test report will not be generated" >&2
+  fi
+fi
+
 RESULTS_DIR="/tmp/test-i2p"
 ANT_PROPS="-Dhamcrest.home=${HAMCREST} -Djunit.home=${JUNIT} -Dmockito.home=${MOCKITO} -Dscalatest.libs=${SCALA} -Djunit.reports.dir=${RESULTS_DIR}"
 
