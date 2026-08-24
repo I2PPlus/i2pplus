@@ -19,7 +19,6 @@
 <tr>
 <td>
 <input type=hidden name=nonce value="<%=pageNonce%>">
-<input type=hidden name=group value=0>
 <%  String rval;
     if (intl.getDisableRefresh()) {rval = "0";}
     else {rval = intl.getRefresh();}
@@ -37,7 +36,7 @@
 <%=intl._t("Enable conditional fixed sidebar")%></label>
 <input type=hidden name=stickySidebar value=false>
 </td>
-<td class=right><input type=submit name=action class=accept value="<%=intl._t("Save")%>"></td>
+<td class=right><button type=submit name=action class=accept value=savesidebar><%=intl._t("Save")%></button></td>
 </tr>
 </table>
 </form>
@@ -47,7 +46,6 @@
 <tr>
 <td>
 <input type=hidden name=nonce value="<%=pageNonce%>">
-<input type=hidden name=group value=1>
 <label id=legacyGraph><b><%=intl._t("Legacy renderer")%>:</b>
 <input type=checkbox class="optbox slider" name=sidebarGraphLegacy value=true <%=(intl.useLegacySidebarGraph() ? "checked" : "")%>>
 <%=intl._t("Use RRD4J renderer")%></label>
@@ -68,18 +66,17 @@
 <%=intl._t("Update graph every second")%></label>
 <input type=hidden name=sidebarGraphContinuous value=false>
 </td>
-<td class=right><input type=submit name=action class=accept value="<%=intl._t("Save")%>"></td>
+<td class=right><button type=submit name=action class=accept value=savegraph><%=intl._t("Save")%></button></td>
 </tr>
 </table>
 </form>
 <h3 class=tabletitle><%=intl._t("Customize Sidebar")%></h3>
 <form id=form_sidebar action=/updatesidebar method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
-<input type=hidden name=group value=2>
 <jsp:getProperty name="sidebarhelper" property="configTable"/>
 <div class=formaction id=sidebardefaults>
-<input type=submit class=reload name=action value="<%=intl._t("Restore full default")%>">
-<input type=submit class=reload name=action value="<%=intl._t("Restore minimal default")%>">
+<button type=submit class=reload name=action value=restorefull><%=intl._t("Restore full default")%></button>
+<button type=submit class=reload name=action value=restoremin><%=intl._t("Restore minimal default")%></button>
 </div>
 </form>
 </div>

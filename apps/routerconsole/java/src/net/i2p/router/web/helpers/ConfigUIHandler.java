@@ -40,9 +40,10 @@ public class ConfigUIHandler extends FormHandler {
 
     @Override
     protected void processForm() {
+        String action = resolveEffectiveAction(_action, _settings);
         if (_shouldSave) {saveChanges();}
-        else if (_action.equals(_t("Delete selected"))) {delUser();}
-        else if (_action.equals(_t("Add user"))) {addUser();}
+        else if ("delusers".equals(action)) {delUser();}
+        else if ("adduser".equals(action)) {addUser();}
     }
 
     /**

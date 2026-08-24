@@ -1818,8 +1818,8 @@ public class SidebarHelper extends HelperBase {
             }
             buf.append("</td></tr>\n");
         }
-        buf.append("<tr><td><input type=submit name=action class=delete value=\"")
-           .append(_t("Delete selected")).append("\"></td><td>")
+        buf.append("<tr><td><button type=submit name=action class=delete value=deleteitems>")
+           .append(_t("Delete selected")).append("</button></td><td>")
            .append("<select name=name>\n<option value=\"\" selected>")
            .append(_t("Select a section to add"))
            .append("</option>\n");
@@ -1832,8 +1832,8 @@ public class SidebarHelper extends HelperBase {
 
         buf.append("</select>\n<input type=hidden name=order value=\"")
            .append(sections.size()).append("\"></td><td colspan=2>")
-           .append("<input type=submit name=action class=add value=\"")
-           .append(_t("Add item")).append("\"></td></tr>\n").append("</table>\n");
+           .append("<button type=submit name=action class=add value=additem>")
+           .append(_t("Add item")).append("</button></td></tr>\n").append("</table>\n");
         return buf.toString();
     }
 }

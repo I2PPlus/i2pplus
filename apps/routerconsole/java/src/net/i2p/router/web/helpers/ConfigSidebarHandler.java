@@ -33,26 +33,24 @@ public class ConfigSidebarHandler extends FormHandler {
      */
     @Override
     protected void processForm() {
-        if (_action == null) {
+        String action = resolveEffectiveAction(_action, _settings);
+        if (action == null) {
             return;
         }
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        String group = getJettyString("group");
 
-        boolean adding = _action.equals(_t("Add item"));
-        boolean deleting = _action.equals(_t("Delete selected"));
-        boolean moving = _action.startsWith(MOVE_PREFIX);
-        boolean saving = _action.equals(_t("Save order"));
-        boolean editing = adding || deleting || moving || saving;
+        boolean adding = "additem".equals(action);
+        boolean deleting = "deleteitems".equals(action);
+        boolean moving = action.startsWith(MOVE_PREFIX);
 
         boolean unifiedSidebar = ctx.getBooleanProperty("routerconsole.unifiedSidebar");
         boolean stickySidebar = ctx.getBooleanProperty("routerconsole.stickySidebar");
 
-        if (_action.equals(_t("Save")) && "0".equals(group)) {handleSave(unifiedSidebar, stickySidebar);}
-        else if (_action.equals(_t("Save")) && "1".equals(group)) {handleGraphSave();}
-        else if (_action.equals(_t("Restore full default"))) {restoreDefault(true);}
-        else if (_action.equals(_t("Restore minimal default"))) {restoreDefault(false);}
-        else if (editing) {moveSection();}
+        if ("savesidebar".equals(action)) {handleSave(unifiedSidebar, stickySidebar);}
+        else if ("savegraph".equals(action)) {handleGraphSave();}
+        else if ("restorefull".equals(action)) {restoreDefault(true);}
+        else if ("restoremin".equals(action)) {restoreDefault(false);}
+        else if (adding || deleting || moving) {moveSection(action);}
     }
 
     private void handleSave(boolean currentUnifiedSidebar, boolean currentStickySidebar) {
@@ -132,13 +130,16 @@ public class ConfigSidebarHandler extends FormHandler {
     }
 
     /**
-     * Moves, adds, deletes, or saves sidebar sections ordering based on the current _action.
+     * Moves, adds, deletes, or saves sidebar sections ordering based on the
+     * requested action.
      * Updates the sidebar sections order and persists the changes.
+     *
+     * @param action the resolved fixed action value (additem, deleteitems, or move_N)
      */
-    public void moveSection() {
-        boolean adding = _action.equals(_t("Add item"));
-        boolean deleting = _action.equals(_t("Delete selected"));
-        boolean moving = _action.startsWith(MOVE_PREFIX);
+    public void moveSection(String action) {
+        boolean adding = "additem".equals(action);
+        boolean deleting = "deleteitems".equals(action);
+        boolean moving = action.startsWith(MOVE_PREFIX);
 
         Map<Integer, String> sections = new TreeMap<>();
 

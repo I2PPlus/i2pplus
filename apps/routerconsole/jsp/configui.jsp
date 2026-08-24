@@ -43,9 +43,9 @@
 <div class=formaction id=submitconsolepass>
 <%  if (uihelper.hasUsers()) {
 %>
-<input type=submit name=action class=delete value="<%=intl._t("Delete selected")%>">
+<button type=submit name=action class=delete value=delusers><%=intl._t("Delete selected")%></button>
 <%  } %>
-<input type=submit name=action class=add value="<%=intl._t("Add user")%>">
+<button type=submit name=action class=add value=adduser><%=intl._t("Add user")%></button>
 </div>
 </form>
 <h3 id=langheading><%=uihelper._t("Router Console Language")%></h3>

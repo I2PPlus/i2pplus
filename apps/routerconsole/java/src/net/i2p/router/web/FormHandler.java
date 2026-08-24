@@ -193,6 +193,34 @@ public abstract class FormHandler {
         return val;
     }
 
+    /**
+     * Resolve which operation the user actually requested.
+     *
+     * Forms commonly carry both a hidden action=blah fallback (so Enter-key
+     * submission triggers the default save) and real submit buttons named
+     * action with their own values. When a button is clicked, the browser
+     * submits BOTH values and the servlet layer exposes only the first one -
+     * the hidden blah - to setAction(), which would silently run the default
+     * save instead of the requested operation. This helper scans the raw
+     * parameter array for any real action value before falling back.
+     *
+     * @param action the single action value seen by setAction(), may be null
+     * @param settings raw parameter map as passed to setSettings(), may be null
+     * @return the clicked operation if present, else the fallback, else null
+     * @since 0.9.70+
+     */
+    public static String resolveEffectiveAction(String action, Map<?, ?> settings) {
+        Object arr = settings != null ? settings.get("action") : null;
+        if (arr instanceof String[]) {
+            for (String val : (String[]) arr) {
+                if (val != null && !val.trim().isEmpty() && !"blah".equals(val)) {
+                    return val;
+                }
+            }
+        }
+        return action;
+    }
+
     /** Check for common XSS patterns @since 0.9.70+ */
     private boolean containsXSS(String val) {
         if (val == null || val.isEmpty()) return false;
