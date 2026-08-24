@@ -30,7 +30,7 @@
       validate caps bans case-sensitively as entered; recognize !
       exclusions; add next-hop ban toggle and capability exclusion
       syntax
-  * i2ptunnel:
+  * I2PTunnel:
     - Log server connect failures at WARN with local port detail
 
 2026-08-22 dr|z3d
@@ -43,7 +43,7 @@
     - Per-pool hop uniqueness, entry-exit role guard, randomized
       proven swaps; symmetric proven-responder pre-filtering for
       selected hops
-  * Netdb:
+  * NetDb:
     - Time-budgeted introducer prefetch on a five-minute cycle
     - Deliver lookup callbacks on cancelled iterative searches and
       succeed immediately on local hits
@@ -58,8 +58,9 @@
     - Fix graph date labels: trailing null, UTC mode, legend padding
 
 2026-08-22 zzz
-  * I2PSnark: Smooth out request throttling to avoid pipeline thrash
-  * I2PSnark: Add support for the magnet xl (length) parameter
+  * I2PSnark:
+    - Smooth out request throttling to avoid pipeline thrash
+    - Add support for the magnet xl (length) parameter
 
 2026-08-21 dr|z3d
   * I2PSnark:
