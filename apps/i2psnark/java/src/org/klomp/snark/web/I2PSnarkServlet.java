@@ -6112,31 +6112,45 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String SIGMA_B32 = "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p";
 
     /**
-     * Rewrite known tracker b64 and b32 announces to their domain names for display.
+     * Known tracker announce keys (base64 postman blobs and base32 hostnames)
+     * mapped to their display names. Package-visible for testing.
+     * Matched literally - entries are plain strings, not regexes.
+     */
+    static final String[][] KNOWN_TRACKERS = {
+        {POSTMAN_B64, "tracker2.postman.i2p"},
+        {POSTMAN_B64_NEW, "tracker2.postman.i2p"},
+        {POSTMAN_B32_NEW, "tracker2.postman.i2p"},
+        {BT_B32, "opentracker.bt.i2p"},
+        {CHUDO_B32, "tracker.chudo.i2p"},
+        {CRYPT_B32, "tracker.crypthost.i2p"},
+        {FREEDOM_B32, "torrfreedom.i2p"},
+        {ICU812_B32, "tracker.icu812.i2p"},
+        {LODIKON_B32, "tracker.lodikon.i2p"},
+        {LYOKO_B32, "lyoko.i2p"},
+        {ODIFT_B32, "opendiftracker.i2p"},
+        {OMITRACK_B32, "omitracker.i2p"},
+        {OTDG_B32, "opentracker.dg2.i2p"},
+        {R4SAS_B32, "opentracker.r4sas.i2p"},
+        {SKANK_B32, "opentracker.skank.i2p"},
+        {SIMP_B32, "opentracker.simp.i2p"},
+        {THEBLAND_B32, "tracker.thebland.i2p"},
+        {SIGMA_B32, "sigmatracker.i2p"}
+    };
+
+    /**
+     * Rewrite known tracker b64 and b32 announces to their domain names for
+     * display. Literal matching only; no per-call regex compilation, and
+     * unmatched announces pass through allocation-free.
      *
      * @param announce the raw announce URL, non-null
      * @return the rewritten URL
      */
-    private static String prettyAnnounce(String announce) {
-        return DataHelper.stripHTML(announce)
-                .replace(POSTMAN_B64, "tracker2.postman.i2p")
-                .replace(POSTMAN_B64_NEW, "tracker2.postman.i2p")
-                .replace(POSTMAN_B32_NEW, "tracker2.postman.i2p")
-                .replaceAll(BT_B32, "opentracker.bt.i2p")
-                .replaceAll(CHUDO_B32, "tracker.chudo.i2p")
-                .replaceAll(CRYPT_B32, "tracker.crypthost.i2p")
-                .replaceAll(FREEDOM_B32, "torrfreedom.i2p")
-                .replaceAll(ICU812_B32, "tracker.icu812.i2p")
-                .replaceAll(LODIKON_B32, "tracker.lodikon.i2p")
-                .replaceAll(LYOKO_B32, "lyoko.i2p")
-                .replaceAll(ODIFT_B32, "opendiftracker.i2p")
-                .replaceAll(OMITRACK_B32, "omitracker.i2p")
-                .replaceAll(OTDG_B32, "opentracker.dg2.i2p")
-                .replaceAll(R4SAS_B32, "opentracker.r4sas.i2p")
-                .replaceAll(SKANK_B32, "opentracker.skank.i2p")
-                .replaceAll(SIMP_B32, "opentracker.simp.i2p")
-                .replaceAll(THEBLAND_B32, "tracker.thebland.i2p")
-                .replaceAll(SIGMA_B32, "sigmatracker.i2p");
+    static String prettyAnnounce(String announce) {
+        String s = DataHelper.stripHTML(announce);
+        for (String[] tracker : KNOWN_TRACKERS) {
+            if (s.contains(tracker[0])) {s = s.replace(tracker[0], tracker[1]);}
+        }
+        return s;
     }
 
     /**
