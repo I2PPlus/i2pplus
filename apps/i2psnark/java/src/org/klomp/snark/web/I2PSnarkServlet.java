@@ -1827,32 +1827,37 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Hidden inputs for the nonce and parameters p, st, and sort.
+     * Emitted in a fixed order; absent request values are omitted.
      *
      * @param buf appends to it
      * @param action if non-null, add it as the action
      * @since 0.9.16
      */
     private void writeHiddenInputs(StringBuilder buf, HttpServletRequest req, String action) {
-        Map<String, String> params = new HashMap<>();
-        params.put("nonce", String.valueOf(getNonce()));
-        params.put("p", req.getParameter("p"));
-        params.put("st", req.getParameter("st"));
-        params.put("sort", normalizeSortParam(req.getParameter("sort")));
-        params.put("action", action);
-        params.put("search", req.getParameter("search"));
+        appendHiddenInput(buf, "nonce", String.valueOf(getNonce()), false);
+        String p = req.getParameter("p");
+        if (p != null) {appendHiddenInput(buf, "p", DataHelper.stripHTML(p), false);}
+        String st = req.getParameter("st");
+        if (st != null) {appendHiddenInput(buf, "st", DataHelper.stripHTML(st), false);}
+        String sort = normalizeSortParam(req.getParameter("sort"));
+        if (sort != null) {appendHiddenInput(buf, "sort", DataHelper.stripHTML(sort), false);}
+        if (action != null) {appendHiddenInput(buf, "action", DataHelper.stripHTML(action), false);}
+        // for buttons, keep the search term readable rather than stripped
+        String search = req.getParameter("search");
+        if (search != null) {appendHiddenInput(buf, "search", DataHelper.escapeHTML(search), true);}
+        buf.append('\n');
+    }
 
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            if (value != null) {
-                if (key.equals("search")) { // for buttons, keep the search term
-                    buf.append("<input type=hidden name=").append(key).append(" value=\"").append(DataHelper.escapeHTML(value)).append("\">");
-                } else {
-                    buf.append("<input type=hidden name=").append(key).append(" value=\"").append(DataHelper.stripHTML(value)).append("\">");
-                }
-            }
-        }
-        buf.append("\n");
+    /**
+     * Append a single hidden form input.
+     *
+     * @param esc true to HTML-escape the value (free-text fields such as
+     *            search), false to strip HTML (numeric and enum fields)
+     */
+    private static void appendHiddenInput(StringBuilder buf, String name, String value, boolean esc) {
+        buf.append("<input type=hidden name=").append(name).append(" value=\"")
+           .append(esc ? DataHelper.escapeHTML(value) : DataHelper.stripHTML(value))
+           .append("\">");
     }
 
     /**
