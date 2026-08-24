@@ -4320,18 +4320,18 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</label></span><br>\n");
 
         if (isStandalone()) {
+            // Reflectively probe the standalone-only ConfigUIHelper; in the
+            // webapp build it is absent and the option is simply not shown.
             try {
-                // class only in standalone builds
                 Class<?> helper = Class.forName("org.klomp.snark.standalone.ConfigUIHelper");
                 Method getLangSettings = helper.getMethod("getLangSettings", I2PAppContext.class);
                 String langSettings = (String) getLangSettings.invoke(null, _context);
-                // If we get to here, we have the language settings
                 buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
                    .append(langSettings).append("</span><br>\n");
-            } catch (ClassNotFoundException e) { /* ignored */ }
-            catch (NoSuchMethodException e) { /* ignored */ }
-            catch (IllegalAccessException e) { /* ignored */ }
-            catch (InvocationTargetException e) { /* ignored */ }
+            } catch (ClassNotFoundException | NoSuchMethodException |
+                     IllegalAccessException | InvocationTargetException e) {
+                // expected in non-standalone builds
+            }
         } else {
             buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
                .append("<span id=snarkLang>").append(lang).append("</span> ")
