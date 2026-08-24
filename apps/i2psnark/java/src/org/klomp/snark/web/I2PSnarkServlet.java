@@ -2813,6 +2813,7 @@ public class I2PSnarkServlet extends BasicServlet {
             synchronized (BridgeVersion.class) {
                 v = _bridgeVersion;
                 if (v == null) {
+                    // stream ownership transfers to readXpiVersion(), which closes it
                     InputStream in = getServletContext().getResourceAsStream(WARBASE + "browser/i2psnark-bridge.xpi");
                     v = BridgeVersion.readXpiVersion(in);
                     if (v == null) {v = "";} // negative-cache failures
