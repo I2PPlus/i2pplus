@@ -3986,6 +3986,59 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Immutable context for rendering a peer row.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class PeerRowContext {
+        final Snark snark;
+        final MetaInfo meta;
+        final boolean noThinsp;
+
+        PeerRowContext(Snark snark, MetaInfo meta, boolean noThinsp) {
+            this.snark = snark;
+            this.meta = meta;
+            this.noThinsp = noThinsp;
+        }
+    }
+
+    /**
+     * Peer status classification result.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class PeerStatus {
+        final String status; // "active" or "inactive"
+        final boolean isTx;
+        final boolean isRx;
+
+        PeerStatus(String status, boolean isTx, boolean isRx) {
+            this.status = status;
+            this.isTx = isTx;
+            this.isRx = isRx;
+        }
+    }
+
+    /**
+     * Determines the peer status (active/inactive with TX/RX flags).
+     *
+     * @param peer the peer to check
+     * @return peer status with flags
+     * @since 0.9.71+
+     */
+    static PeerStatus classifyPeerStatus(Peer peer) {
+        long t = peer.getInactiveTime();
+        if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
+            boolean isTx = peer.getUploadRate() > 0 && !peer.isInteresting() && !peer.isChoking();
+            boolean isRx = peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked();
+            return new PeerStatus("active", isTx, isRx);
+        }
+        return new PeerStatus("inactive", false, false);
+    }
+
+    /**
      * Appends HTML for a single peer row to the given StringBuilder.
      *
      * @param buf the StringBuilder to append to
@@ -3995,30 +4048,44 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param noThinsp whether to suppress thin space characters
      */
     private void appendPeerRow(StringBuilder buf, Peer peer, Snark snark, MetaInfo meta, boolean noThinsp) {
-        long t = peer.getInactiveTime();
-        String snarkStatus;
-        if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
-            snarkStatus = "active";
-            if (peer.getUploadRate() > 0 && !peer.isInteresting() && !peer.isChoking()) {
-                snarkStatus += " TX";
-            }
-            if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked()) {
-                snarkStatus += " RX";
-            }
-        } else {snarkStatus = "inactive";}
+        PeerRowContext ctx = new PeerRowContext(snark, meta, noThinsp);
+        PeerStatus ps = classifyPeerStatus(peer);
 
         if (!peer.isConnected()) {return;}
 
         buf.append("<tr class=\"peerinfo ")
-           .append(snarkStatus)
+           .append(ps.status)
            .append(" volatile\">\n<td class=status title=\"")
            .append(_t("Peer attached to swarm"))
            .append("\"></td><td class=peerdata colspan=5>");
 
+        renderPeerIdentity(buf, peer, ctx);
+        renderPeerInactivity(buf, peer.getInactiveTime());
+
+        buf.append("</td><td class=ETA></td><td class=rxd>");
+        float pct = renderPeerProgress(buf, peer, ctx);
+
+        renderDownloadRate(buf, peer, ctx, ctx.meta != null ? ctx.snark.getNeededLength() : -1);
+
+        renderUploadRate(buf, peer, ctx, pct, ctx.meta != null);
+
+        buf.append("</td><td class=tAction></td></tr>\n");
+    }
+
+    /**
+     * Renders the peer identity/client section.
+     *
+     * @param buf the StringBuilder to append to
+     * @param peer the peer to render
+     * @param ctx the rendering context
+     * @since 0.9.71+
+     */
+    private void renderPeerIdentity(StringBuilder buf, Peer peer, PeerRowContext ctx) {
         PeerID pid = peer.getPeerID();
         String ch = pid != null ? pid.toString() : "????";
-        if (ch.startsWith("WebSeed@")) {buf.append(ch);}
-        else {
+        if (ch.startsWith("WebSeed@")) {
+            buf.append(ch);
+        } else {
             String client = getClientName(peer);
             buf.append("<span class=peerclient><code title=\"")
                .append(_t("Destination (identity) of peer"))
@@ -4028,33 +4095,67 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(client)
                .append("</span></span>");
         }
+    }
 
-        if (t >= 5000) {
-            buf.append("<span class=inactivity style=width:").append(t / 2000)
+    /**
+     * Renders the peer inactivity bar if applicable.
+     *
+     * @param buf the StringBuilder to append to
+     * @param inactiveTime the peer's inactive time in milliseconds
+     * @since 0.9.71+
+     */
+    private void renderPeerInactivity(StringBuilder buf, long inactiveTime) {
+        if (inactiveTime >= 5000) {
+            buf.append("<span class=inactivity style=width:").append(inactiveTime / 2000)
                .append("px title=\"").append(_t("Inactive")).append(": ")
-               .append(t / 1000).append(' ').append(_t("seconds")).append("\"></span>");
+               .append(inactiveTime / 1000).append(' ').append(_t("seconds")).append("\"></span>");
         }
+    }
 
-        buf.append("</td><td class=ETA></td><td class=rxd>");
+    /**
+     * Renders the peer progress bar or seed indicator.
+     *
+     * @param buf the StringBuilder to append to
+     * @param peer the peer to render
+     * @param ctx the rendering context
+     * @return the completion percentage (101.0f if unknown)
+     * @since 0.9.71+
+     */
+    private float renderPeerProgress(StringBuilder buf, Peer peer, PeerRowContext ctx) {
         float pct;
-        boolean isValid = meta != null;
+        boolean isValid = ctx.meta != null;
         if (isValid) {
-            pct = (float) (100.0 * peer.completed() / meta.getPieces());
+            pct = (float) (100.0 * peer.completed() / ctx.meta.getPieces());
             if (pct >= 100.0) {
                 buf.append("<span class=peerSeed title=\"")
                    .append(_t("Seed"))
                    .append("\">");
                 appendIcon(buf, "peerseed", _t("Seed"), "", false, true);
                 buf.append("</span>");
-            } else {buf.append(buildProgressBar(100, (int) (100 - pct), true, false, noThinsp, false));}
-        } else {pct = 101.0f;} // Indicates unknown
+            } else {
+                buf.append(buildProgressBar(100, (int) (100 - pct), true, false, ctx.noThinsp, false));
+            }
+        } else {
+            pct = 101.0f;
+        }
+        return pct;
+    }
 
+    /**
+     * Renders the download rate cell.
+     *
+     * @param buf the StringBuilder to append to
+     * @param peer the peer to render
+     * @param ctx the rendering context
+     * @param needed the needed length
+     * @since 0.9.71+
+     */
+    private void renderDownloadRate(StringBuilder buf, Peer peer, PeerRowContext ctx, long needed) {
         buf.append("</td><td class=\"rateDown");
         if (peer.getDownloadRate() >= 100000) {buf.append(" hundred");}
         else if (peer.getDownloadRate() >= 10000) {buf.append(" ten");}
         buf.append("\">");
 
-        long needed = meta != null ? snark.getNeededLength() : -1;
         if (needed > 0) {
             if (peer.isInteresting() && !peer.isChoked() && peer.getDownloadRate() > 0) {
                 buf.append("<span class=unchoked><span class=right>")
@@ -4073,12 +4174,24 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
                    .append("/s</span></span>");
             }
-        } else if (!isValid) {
+        } else if (ctx.meta == null) {
             buf.append("<span class=unchoked><span class=right>")
                .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
                .append("/s</span></span>");
         }
+    }
 
+    /**
+     * Renders the upload rate cell.
+     *
+     * @param buf the StringBuilder to append to
+     * @param peer the peer to render
+     * @param ctx the rendering context
+     * @param pct the completion percentage
+     * @param isValid whether meta is valid
+     * @since 0.9.71+
+     */
+    private void renderUploadRate(StringBuilder buf, Peer peer, PeerRowContext ctx, float pct, boolean isValid) {
         buf.append("</td><td class=txd></td><td class=\"rateUp");
         if (peer.getUploadRate() >= 100000) {buf.append(" hundred");}
         else if (peer.getUploadRate() >= 10000) {buf.append(" ten");}
@@ -4105,8 +4218,6 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("/s</span></span>");
             }
         }
-
-        buf.append("</td><td class=tAction></td></tr>\n");
     }
 
     /**
