@@ -3928,17 +3928,34 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Make it JS and HTML-safe
+     *  Escape a string for embedding in an HTML attribute value that page
+     *  scripts read back into JavaScript strings, e.g. the data-name and
+     *  client attributes on the torrent action buttons. The backslash is
+     *  escaped first so the generated escape sequences are not re-escaped,
+     *  followed by the quote characters, the HTML-significant angle brackets
+     *  and ampersand, and the line-break characters that cannot appear
+     *  literally inside a JavaScript string literal. Output is ASCII-only.
+     *
+     *  Escapes are emitted as JS short escapes for line breaks and two-digit
+     *  hex escapes for everything else; they are deliberately spelled without
+     *  the four-hex-digit unicode form because java's lexer processes such
+     *  sequences before string escapes, even inside this comment.
+     *
+     *  Not for use in URL or CSS contexts.
+     *
+     *  @param s non-null string to escape
+     *  @return the escaped string, ASCII-only
      *  @since 0.9.15
-     *  http://stackoverflow.com/questions/8749001/escaping-html-entities-in-javascript-string-literals-within-the-script-block
      */
-    private static String escapeJSString(String s) {
-        return s.replace("\\", "\\u005c")
-                .replace("<", "\\u003c")
-                .replace(">", "\\u003e")
-                .replace("\"", "\\u0022")
-                .replace("'", "\\u0027")
-                .replace("&", "\\u0026");
+    static String escapeJSString(String s) {
+        return s.replace("\\", "\\\\")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("<", "\\x3c")
+                .replace(">", "\\x3e")
+                .replace("\"", "\\x22")
+                .replace("'", "\\x27")
+                .replace("&", "\\x26");
     }
 
     /** @since 0.8.2 */
