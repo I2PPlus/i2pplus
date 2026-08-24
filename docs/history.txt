@@ -1,19 +1,39 @@
 2026-08-24 dr|z3d
   * I2PSnark:
     - Eliminate startup and in-page stalls: torrents load immediately,
-      staggered auto-start runs off the request path, and torrent
-      lookups no longer block on directory monitor batching
-    - Support the magnet xl (length) parameter
+      staggered auto-start runs off the request path via background
+      batch starting, and torrent lookups no longer block on directory
+      monitor batching
     - Escape line breaks in torrent names embedded in page scripts
     - Show pool/destination badges for all torrents in multi-dest
       mode; status+pool sorting now requires multi-dest
-    - Stagger announces and cap concurrent tracker requests
-    - Accept libtorrent-derived allowed-fast sets on i2p connections;
-      cap the set size on small torrents
-    - Handle chunks received out of order and reject duplicate requests
-    - Compact BitField range logging
-    - Ubergine theme cosmetic fixes
+  * Console:
+    - Fix console login failures for passwords stored with PBKDF2
+    - Ban config: re-evaluate the existing netdb when bans change,
+      with case-sensitive capability matching
+    - Fix Add/Delete user and sidebar config buttons that dispatched
+      on translated button text or shadowed form actions
 
+2026-08-23 dr|z3d
+  * Router:
+    - Fix LeaseSet corruption for external ECIES/EdDSA clients whose
+      LS1 private keys were misparsed, which also caused repeated
+      client disconnects on expired lease sets
+    - Restore remote search for ReceivedAsPublished lease sets before
+      sending, fixing unreachable destinations after netdb churn
+    - Never ban routers for missing local RouterInfos; transient-first
+      handling for no-version peers instead of immediate bans
+    - Increase flood redundancy from 3 to 10 for wider netdb dispersal
+    - Log a per-minute transit pool trend line for decline monitoring
+  * Console:
+    - Ban config: fix Clear All Bans and Reset To Defaults buttons;
+      validate caps bans case-sensitively as entered; recognize !
+      exclusions; add next-hop ban toggle and capability exclusion
+      syntax
+  * i2ptunnel:
+    - Log server connect failures at WARN with local port detail
+
+2026-08-22 dr|z3d
   * Tunnel:
     - Search the network for transit peers missing local RouterInfos,
       with cold-start headroom, per-key lookup accounting and
@@ -23,38 +43,23 @@
     - Per-pool hop uniqueness, entry-exit role guard, randomized
       proven swaps; symmetric proven-responder pre-filtering for
       selected hops
-
   * Netdb:
     - Time-budgeted introducer prefetch on a five-minute cycle
     - Deliver lookup callbacks on cancelled iterative searches and
       succeed immediately on local hits
-    - Never ban routers for missing local RouterInfo; transient-first
-      handling for no-version peers
-
-  * Router:
-    - Fix LeaseSet corruption for external ECIES/EdDSA clients whose
-      LS1 private keys were misparsed, which also caused repeated
-      client disconnects on expired lease sets
-    - Restore remote search for ReceivedAsPublished lease sets before
-      sending, fixing unreachable destinations after netdb churn
-    - Increase flood redundancy from 3 to 10 for wider netdb dispersal
-    - Log a per-minute transit pool trend line for decline monitoring
-
+  * I2PSnark:
+    - Accept libtorrent-derived allowed-fast sets on i2p connections;
+      cap the set size on small torrents
+    - Handle chunks received out of order and reject duplicate requests
+    - Compact BitField range logging
   * Console:
-    - Fix console login failures for passwords stored with PBKDF2
-    - Ban config: fix Clear All Bans and Reset To Defaults buttons;
-      validate caps bans case-sensitively as entered; recognize !
-      exclusions; add next-hop ban toggle and capability exclusion
-      syntax; re-evaluate the existing netdb when caps bans change
-    - Fix Add/Delete user and sidebar config buttons that dispatched
-      on translated button text
     - Isolate per-router netdb rendering failures so one bad router
       cannot truncate the page
     - Fix graph date labels: trailing null, UTC mode, legend padding
-    - Dark theme cosmetics
 
-2026-08-24 zzz
+2026-08-22 zzz
   * I2PSnark: Smooth out request throttling to avoid pipeline thrash
+  * I2PSnark: Add support for the magnet xl (length) parameter
 
 2026-08-21 dr|z3d
   * I2PSnark:
