@@ -6239,15 +6239,24 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return whether i2 p tracker
      * @since 0.9.46
      */
-    private boolean isI2PTracker(String url) {
+    static boolean isI2PTracker(String url, boolean udpEnabled) {
+        if (url == null) return false;
         try {
             URI uri = new URI(url);
             String method = uri.getScheme();
-            if (!("http".equals(method) || (_manager.util().udpEnabled() && "udp".equals(method)))) {return false;}
+            if (!("http".equals(method) || (udpEnabled && "udp".equals(method)))) {return false;}
             String host = uri.getHost();
             if (host == null || !host.endsWith(".i2p")) {return false;}
         } catch (URISyntaxException use) {return false;}
         return true;
+    }
+
+    /**
+     * @since 0.9.46
+     * @deprecated Use {@link #isI2PTracker(String, boolean)} for testability
+     */
+    private boolean isI2PTracker(String url) {
+        return isI2PTracker(url, _manager.util().udpEnabled());
     }
 
     /**
@@ -6935,6 +6944,81 @@ public class I2PSnarkServlet extends BasicServlet {
             _manager.addMessage(_t("Torrent must be stopped")); // shouldn't happen
             return;
         }
+        EditParams ep = parseEditParams(postParams);
+        MetaInfo meta = snark.getMetaInfo();
+        if (meta == null) {
+            _manager.addMessage("Can't edit magnet"); // shouldn't happen
+            return;
+        }
+        if (!hasChanges(meta, ep)) {
+            _manager.addMessage("No changes to torrent, not saved");
+            return;
+        }
+        AnnounceListResult alr = buildAnnounceList(meta, ep, _manager.getSortedTrackers(), _manager.util().udpEnabled());
+        if (alr.newAnnList == null) {
+            alr.thePrimary = null;
+        }
+        String newComment = ep.newComment.isEmpty() ? null : ep.newComment;
+        String newCreatedBy = null; // createdBy field disabled per spec
+        MetaInfo newMeta = new MetaInfo(meta, alr.thePrimary, alr.newAnnList, newComment, newCreatedBy, meta.getWebSeedURLs());
+        File f = new File(_manager.util().getTempDir(), "edit-" + _manager.util().getContext().random().nextLong() + ".torrent");
+        try (OutputStream out = _manager.areFilesPublic() ? new FileOutputStream(f) : new SecureFileOutputStream(f)) {
+            out.write(newMeta.getTorrentData());
+            boolean ok = FileUtil.rename(f, new File(snark.getName()));
+            if (!ok) {
+                _manager.addMessage("Save edit changes failed");
+                return;
+            }
+        } catch (IOException ioe) {
+            _manager.addMessage("Save edit changes failed: " + ioe.getMessage());
+            return;
+        } finally {f.delete();}
+        snark.replaceMetaInfo(newMeta);
+        _manager.addMessage("Torrent changes saved");
+    }
+
+    /**
+     * Parsed edit form parameters. Package-visible for testing.
+     */
+    static class EditParams {
+        final List<Integer> toAdd;
+        final List<Integer> toDel;
+        final Integer primary;
+        final String newComment;
+        final String newCreatedBy;
+
+        EditParams(List<Integer> toAdd, List<Integer> toDel, Integer primary, String newComment, String newCreatedBy) {
+            this.toAdd = toAdd;
+            this.toDel = toDel;
+            this.primary = primary;
+            this.newComment = newComment;
+            this.newCreatedBy = newCreatedBy;
+        }
+    }
+
+    /**
+     * Result of building the new announce list. Package-visible for testing.
+     */
+    static class AnnounceListResult {
+        final List<List<String>> newAnnList;
+        String thePrimary;
+
+        AnnounceListResult(List<List<String>> newAnnList, String thePrimary) {
+            this.newAnnList = newAnnList;
+            this.thePrimary = thePrimary;
+        }
+    }
+
+    /**
+     * Parses the edit form POST parameters into an {@link EditParams} object.
+     * Recognized keys: "addTracker-{id}", "removeTracker-{id}", "primary",
+     * "nofilter_newTorrentComment", "nofilter_newTorrentCreatedBy".
+     *
+     * @param postParams the request parameter map (Jetty-style String[] values)
+     * @return parsed parameters, never null
+     * @since 0.9.71+
+     */
+    static EditParams parseEditParams(Map<String, String[]> postParams) {
         List<Integer> toAdd = new ArrayList<>();
         List<Integer> toDel = new ArrayList<>();
         Integer primary = null;
@@ -6958,43 +7042,63 @@ public class I2PSnarkServlet extends BasicServlet {
                 newCreatedBy = val.trim();
             }
         }
-        MetaInfo meta = snark.getMetaInfo();
-        if (meta == null) {
-            _manager.addMessage("Can't edit magnet"); // shouldn't happen
-            return;
-        }
+        return new EditParams(toAdd, toDel, primary, newComment, newCreatedBy);
+    }
+
+    /**
+     * Determines whether the edit parameters represent any actual change to
+     * the torrent's metadata. Avoids a save cycle when the form is submitted
+     * without modifications.
+     *
+     * @param meta current torrent MetaInfo
+     * @param ep parsed edit parameters
+     * @return true if any field differs, false if identical
+     * @since 0.9.71+
+     */
+    static boolean hasChanges(MetaInfo meta, EditParams ep) {
         String oldPrimary = meta.getAnnounce();
-        String oldComment = meta.getComment();
-        if (oldComment == null) {oldComment = "";}
-        String oldCreatedBy = meta.getCreatedBy();
-        if (oldCreatedBy == null) {oldCreatedBy = "";}
-        if (toAdd.isEmpty() && toDel.isEmpty() &&
-            (primary == null || String.valueOf(primary).equals(oldPrimary)) &&
-            oldComment.equals(newComment) && oldCreatedBy.equals(newCreatedBy)) {
-            _manager.addMessage("No changes to torrent, not saved");
-            return;
-        }
+        String oldComment = meta.getComment() == null ? "" : meta.getComment();
+        String oldCreatedBy = meta.getCreatedBy() == null ? "" : meta.getCreatedBy();
+        return !ep.toAdd.isEmpty()
+            || !ep.toDel.isEmpty()
+            || (ep.primary != null && !String.valueOf(ep.primary).equals(oldPrimary))
+            || !oldComment.equals(ep.newComment)
+            || !oldCreatedBy.equals(ep.newCreatedBy);
+    }
+
+    /**
+     * Builds the new announce list and primary tracker from the current
+     * MetaInfo and edit parameters.
+     *
+     * @param meta current torrent MetaInfo
+     * @param ep parsed edit parameters
+     * @param trackers the sorted list of known trackers (for resolving add IDs)
+     * @param udpEnabled whether UDP trackers are enabled in config
+     * @return new announce list (may be null) and primary tracker URL
+     * @since 0.9.71+
+     */
+    static AnnounceListResult buildAnnounceList(MetaInfo meta, EditParams ep, List<Tracker> trackers, boolean udpEnabled) {
         List<List<String>> alist = meta.getAnnounceList();
         Set<String> annlist = new TreeSet<>();
         if (alist != null && !alist.isEmpty()) {
             for (List<String> alist2 : alist) { // strip non-i2p trackers
                 for (String s : alist2) {
-                    if (isI2PTracker(s)) {annlist.add(s);}
+                    if (isI2PTracker(s, udpEnabled)) {annlist.add(s);}
                 }
             }
         }
-        if (oldPrimary != null) {annlist.add(oldPrimary);}
-        List<Tracker> newTrackers = _manager.getSortedTrackers();
-        for (Integer i : toDel) {
+        String oldPrimary = meta.getAnnounce();
+        if (oldPrimary != null && isI2PTracker(oldPrimary, udpEnabled)) {annlist.add(oldPrimary);}
+        for (Integer i : ep.toDel) {
             int hc = i.intValue();
             for (Iterator<String> iter = annlist.iterator(); iter.hasNext(); ) {
                 String s = iter.next();
                 if (s.hashCode() == hc) {iter.remove();}
             }
         }
-        for (Integer i : toAdd) {
+        for (Integer i : ep.toAdd) {
             int hc = i.intValue();
-            for (Tracker t : newTrackers) {
+            for (Tracker t : trackers) {
                 if (t.announceURL.hashCode() == hc) {
                     annlist.add(t.announceURL);
                     break;
@@ -7002,8 +7106,8 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         String thePrimary = oldPrimary;
-        if (primary != null) {
-            int hc = primary.intValue();
+        if (ep.primary != null) {
+            int hc = ep.primary.intValue();
             for (String s : annlist) {
                 if (s.hashCode() == hc) {
                     thePrimary = s;
@@ -7020,23 +7124,7 @@ public class I2PSnarkServlet extends BasicServlet {
             newAnnList = Collections.singletonList(aalist);
             if (!aalist.contains(thePrimary)) {thePrimary = aalist.get(0);}
         }
-        if (newComment.isEmpty()) {newComment = null;}
-        newCreatedBy = null;
-        MetaInfo newMeta = new MetaInfo(meta, thePrimary, newAnnList, newComment, newCreatedBy, meta.getWebSeedURLs());
-        File f = new File(_manager.util().getTempDir(), "edit-" + _manager.util().getContext().random().nextLong() + ".torrent");
-        try (OutputStream out = _manager.areFilesPublic() ? new FileOutputStream(f) : new SecureFileOutputStream(f)) {
-            out.write(newMeta.getTorrentData());
-            boolean ok = FileUtil.rename(f, new File(snark.getName()));
-            if (!ok) {
-                _manager.addMessage("Save edit changes failed");
-                return;
-            }
-        } catch (IOException ioe) {
-            _manager.addMessage("Save edit changes failed: " + ioe.getMessage());
-            return;
-        } finally {f.delete();}
-        snark.replaceMetaInfo(newMeta);
-        _manager.addMessage("Torrent changes saved");
+        return new AnnounceListResult(newAnnList, thePrimary);
     }
 
     /**
