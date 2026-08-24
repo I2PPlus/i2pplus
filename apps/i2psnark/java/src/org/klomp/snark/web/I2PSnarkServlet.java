@@ -1036,7 +1036,6 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean noSnarks = snarks.isEmpty();
         boolean isForm = isConnected || !noSnarks;
         boolean showStatusFilter = _manager.util().showStatusFilter();
-        boolean sortEnabled = srt != null && !srt.isEmpty();
         boolean searchActive = search != null && !search.isEmpty();
         boolean isUploading = false;
         boolean hasPeers = false;
@@ -1079,7 +1078,6 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
         out.flush();
 
-        String uri = _contextPath + '/';
         boolean showDebug = "2".equals(peerParam);
         int end = Math.min(start + pageSize, snarks.size());
         StringBuilder buf = new StringBuilder(2048);
@@ -1087,10 +1085,8 @@ public class I2PSnarkServlet extends BasicServlet {
         for (int i = start; i < end; i++) {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
-            boolean hide = false;
             buf.setLength(0);
-            displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug,
-                         hide, false, canWrite, filter, filterEnabled, srt, sortEnabled, buf);
+            displaySnark(out, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt), buf);
 
             // additionally accumulate downloads, uploads, ETA, flags
             if (snark.getPeerCount() >= 1) {
@@ -3324,38 +3320,62 @@ public class I2PSnarkServlet extends BasicServlet {
 
 
     /**
-     * Displays a single snark (torrent) as an HTML table row, including optional peer rows.
-     * Updates the provided statistics array with cumulative data (uploaded, downloaded, rates,
-     * peer counts, and size). Controls filtering and sorting behavior based on provided
-     * parameters, showing detailed information with status, progress bars, and action buttons.
-     * Appends generated HTML to the provided StringBuilder buffer instead of writing directly
-     * to output, allowing batching and improved rendering performance.
+     * Per-row and per-render inputs for {@link #displaySnark}, replacing an
+     * eighteen-parameter signature. Immutable view over render-scope state.
      *
-     * @param out the PrintWriter for output (used only for final append)
-     * @param req the HttpServletRequest containing request parameters and context
-     * @param snark the Snark instance representing the torrent to display
-     * @param uri base URI context path for links and references
-     * @param row the index of this snark in the listing, used for styling
-     * @param stats a six-element long array accumulating totals: [downloaded, uploaded, down rate, up rate, peers, total size]
-     * @param showPeers whether to display peer detail rows below this snark
-     * @param isDegraded true if the browser environment is text-mode or limited, affecting formatting
-     * @param noThinsp true if thin spaces should be omitted due to browser quirks
-     * @param showDebug if true, enables debug mode showing additional details
-     * @param statsOnly if true, only updates stats array and output is suppressed
-     * @param showRatios if true, display upload ratio bars instead of raw data
-     * @param canWrite indicates if the i2psnark data directory is writable (affects action buttons)
-     * @param filterParam filter parameter from request for conditional row inclusion
-     * @param filterEnabled true if filtering is active (non-default filter applied)
-     * @param sortParam current sort field parameter from request
-     * @param sortEnabled true if sorting is active
-     * @param buf StringBuilder buffer to append the generated HTML output for this snark
+     * @since 0.9.71+
+     */
+    private static class RowContext {
+        final Snark snark;
+        /** zero-based index within the current page; drives parity styling */
+        final int index;
+        final boolean showPeers;
+        /** render-scope accumulator; reference is shared, contents mutate */
+        final long[] stats;
+        final boolean noThinsp;
+        final boolean canWrite;
+        /** active filter value, "" for none; never null */
+        final String filterParam;
+        /** normalized sort parameter, or null */
+        final String sortParam;
+
+        RowContext(Snark snark, int index, boolean showPeers, long[] stats,
+                   boolean noThinsp, boolean canWrite, String filterParam, String sortParam) {
+            this.snark = snark;
+            this.index = index;
+            this.showPeers = showPeers;
+            this.stats = stats;
+            this.noThinsp = noThinsp;
+            this.canWrite = canWrite;
+            this.filterParam = filterParam;
+            this.sortParam = sortParam;
+        }
+    }
+
+    /**
+     * Displays a single snark (torrent) as an HTML table row, including optional peer rows.
+     * Updates {@link RowContext#stats} with cumulative data (uploaded, downloaded, rates,
+     * peer counts, and size). Filtering is applied here: rows not matching the active
+     * filter contribute to stats but emit no HTML. Appends generated HTML to the provided
+     * StringBuilder buffer instead of writing directly to output, allowing batching and
+     * improved rendering performance.
+     *
+     * @param out the PrintWriter the completed row buffer is appended to
+     * @param rc per-row and per-render inputs; stats contents are updated in place
+     * @param buf scratch buffer reset by the caller between rows
      * @throws IOException if an I/O error occurs during output operations
      */
-    private void displaySnark(PrintWriter out, HttpServletRequest req, Snark snark, String uri, int row, long[] stats,
-                              boolean showPeers, boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
-                              boolean showRatios, boolean canWrite,
-                              String filterParam, boolean filterEnabled, String sortParam, boolean sortEnabled,
-                              StringBuilder buf) throws IOException {
+    private void displaySnark(PrintWriter out, RowContext rc, StringBuilder buf) throws IOException {
+        Snark snark = rc.snark;
+        int row = rc.index;
+        long[] stats = rc.stats;
+        boolean noThinsp = rc.noThinsp;
+        boolean canWrite = rc.canWrite;
+        boolean showPeers = rc.showPeers;
+        String filterParam = rc.filterParam;
+        String sortParam = rc.sortParam;
+        boolean filterEnabled = !filterParam.isEmpty() && !"all".equals(filterParam);
+
         // Update stats first (minimal processing)
         long uploaded = snark.getUploaded();
         stats[STAT_DOWNLOADED] += snark.getDownloaded();
@@ -3372,7 +3392,6 @@ public class I2PSnarkServlet extends BasicServlet {
         long total = snark.getTotalLength();
         long dataLength = snark.getDataLength();
         if (dataLength > 0) stats[STAT_TOTAL_SIZE] += dataLength;
-        if (statsOnly) return;
 
         // Cache repeated computations
         String basename = snark.getBaseName();
@@ -3536,20 +3555,12 @@ public class I2PSnarkServlet extends BasicServlet {
             }
 
             buf.append("</td><td class=txd>");
-            if (isValid) {
-                double ratio = dataLength > 0 ? uploaded / (double) dataLength : 0;
-                String txPercent = new DecimalFormat(ratio <= 0.01 && ratio > 0 ? "0.00" : "0").format(ratio * 100);
-                String txPercentBar = ratio > 1 ? "100%" : txPercent + "%";
+                if (isValid) {
+                    double ratio = dataLength > 0 ? uploaded / (double) dataLength : 0;
+                    String txPercent = new DecimalFormat(ratio <= 0.01 && ratio > 0 ? "0.00" : "0").format(ratio * 100);
+                    String txPercentBar = ratio > 1 ? "100%" : txPercent + "%";
 
-                if (showRatios) {
-                    if (dataLength > 0) {
-                        buf.append("<span class=tx><span class=txBarText>").append(txPercent).append(" %")
-                           .append("</span><span class=txBarInner style=\"width:calc(")
-                           .append(txPercentBar).append(" - 2px)\"></span></span>");
-                    } else {
-                        buf.append("&mdash;");
-                    }
-                } else if (uploaded > 0) {
+                    if (uploaded > 0) {
                     buf.append("<span class=tx title=\"").append(_t("Share ratio")).append(": ").append(txPercent).append(" %");
                     DateFormat fmt = _DATE_FMT1.get();
                     Storage storage = snark.getStorage();
