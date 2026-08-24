@@ -3,13 +3,33 @@
     - Eliminate startup and in-page stalls: torrents load immediately,
       staggered auto-start runs off the request path, and torrent
       lookups no longer block on directory monitor batching
-    - Smooth out request throttling to avoid pipeline thrash
     - Support the magnet xl (length) parameter
     - Escape line breaks in torrent names embedded in page scripts
     - Show pool/destination badges for all torrents in multi-dest
       mode; status+pool sorting now requires multi-dest
     - Stagger announces and cap concurrent tracker requests
+    - Accept libtorrent-derived allowed-fast sets on i2p connections;
+      cap the set size on small torrents
+    - Handle chunks received out of order and reject duplicate requests
+    - Compact BitField range logging
     - Ubergine theme cosmetic fixes
+
+  * Tunnel:
+    - Search the network for transit peers missing local RouterInfos,
+      with cold-start headroom, per-key lookup accounting and
+      independent slot deadlines so the lookup queue cannot deadlock
+    - Urgent-first dispatch and prioritized replacement of zero-hop
+      exploratory tunnels, ending zero-hop starvation
+    - Per-pool hop uniqueness, entry-exit role guard, randomized
+      proven swaps; symmetric proven-responder pre-filtering for
+      selected hops
+
+  * Netdb:
+    - Time-budgeted introducer prefetch on a five-minute cycle
+    - Deliver lookup callbacks on cancelled iterative searches and
+      succeed immediately on local hits
+    - Never ban routers for missing local RouterInfo; transient-first
+      handling for no-version peers
 
   * Router:
     - Fix LeaseSet corruption for external ECIES/EdDSA clients whose
@@ -17,8 +37,7 @@
       client disconnects on expired lease sets
     - Restore remote search for ReceivedAsPublished lease sets before
       sending, fixing unreachable destinations after netdb churn
-    - Increase flood redundancy from 3 to 10 for wider netdb
-      propagation
+    - Increase flood redundancy from 3 to 10 for wider netdb dispersal
     - Log a per-minute transit pool trend line for decline monitoring
 
   * Console:
@@ -29,9 +48,13 @@
       syntax; re-evaluate the existing netdb when caps bans change
     - Fix Add/Delete user and sidebar config buttons that dispatched
       on translated button text
+    - Isolate per-router netdb rendering failures so one bad router
+      cannot truncate the page
+    - Fix graph date labels: trailing null, UTC mode, legend padding
+    - Dark theme cosmetics
 
-  * i2ptunnel:
-    - Log server connect failures at WARN with local port detail
+2026-08-24 zzz
+  * I2PSnark: Smooth out request throttling to avoid pipeline thrash
 
 2026-08-21 dr|z3d
   * I2PSnark:
