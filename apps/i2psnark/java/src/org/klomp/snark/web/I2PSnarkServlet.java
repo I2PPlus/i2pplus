@@ -191,7 +191,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Current CSRF nonce, rotating every 5 minutes.
      *
      * @return the nonce
-     * @since 0.9.70+
+     * @since 2.x.x
      */
     private synchronized long getNonce() {
         if (_currentNonce == 0) {
@@ -211,7 +211,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  Validate nonce against current and recent nonces (backward compatibility).
      *  @param nonce the nonce to validate
      *  @return true if valid
-     *  @since 0.9.70+
+     *  @since 2.x.x
      */
     private synchronized boolean isValidNonce(String nonce) {
         if (nonce == null) {return false;}
@@ -3200,55 +3200,80 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param action the action
      * @param req the request
      */
-private void processTrackerForm(String action, HttpServletRequest req) {
+    private void processTrackerForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save tracker configuration"))) {
+            boolean changed = false;
             Map<String, Tracker> trackers = _manager.getTrackerMap();
-            List<String> openTrackers = _manager.util().getOpenTrackers();
-            List<String> privateTrackers = _manager.getPrivateTrackers();
-
-            TrackerFormParams params = parseTrackerFormDeleteSave(req);
-            TrackerFormResult result = processTrackerFormDeleteSave(params, trackers, openTrackers, privateTrackers);
-
-            if (result.changed) {
-                _manager.saveTrackerMap();
-                if (!result.newOpen.equals(openTrackers)) {
-                    _manager.saveOpenTrackers(result.newOpen);
-                }
-                if (!result.newPrivate.equals(privateTrackers)) {
-                    _manager.savePrivateTrackers(result.newPrivate);
-                }
-                for (String url : result.removedUrls) {
-                    _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(url));
+            List<String> removed = new ArrayList<>();
+            List<String> open = new ArrayList<>();
+            List<String> priv = new ArrayList<>();
+            Enumeration<?> e = req.getParameterNames();
+            while (e.hasMoreElements()) {
+                 Object o = e.nextElement();
+                 if (!(o instanceof String)) {continue;}
+                 String k = (String) o;
+                 if (k.startsWith("delete_")) {
+                     k = k.substring(7);
+                     Tracker t;
+                     if ((t = trackers.remove(k)) != null) {
+                        removed.add(t.announceURL);
+                        _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(k));
+                        changed = true;
+                     }
+                } else if (k.startsWith("ttype_")) {
+                     String val = req.getParameter(k);
+                     k = k.substring(6);
+                     if ("1".equals(val)) {open.add(k);}
+                     else if ("2".equals(val)) {priv.add(k);}
                 }
             }
+            if (changed) {_manager.saveTrackerMap();}
+
+            open.removeAll(removed);
+            List<String> oldOpen = new ArrayList<>(_manager.util().getOpenTrackers());
+            Collections.sort(oldOpen);
+            Collections.sort(open);
+            if (!open.equals(oldOpen)) {_manager.saveOpenTrackers(open);}
+
+            priv.removeAll(removed);
+            // open trumps private
+            priv.removeAll(open);
+            List<String> oldPriv = new ArrayList<>(_manager.getPrivateTrackers());
+            Collections.sort(oldPriv);
+            Collections.sort(priv);
+            if (!priv.equals(oldPriv)) {_manager.savePrivateTrackers(priv);}
+
         } else if (action.equals(_t("Add tracker"))) {
-            AddTrackerParams params = parseAddTrackerParams(req);
-            if (validateAddTrackerParams(params)) {
-                Map<String, Tracker> trackers = _manager.getTrackerMap();
-                List<String> openTrackers = _manager.util().getOpenTrackers();
-                List<String> privateTrackers = _manager.getPrivateTrackers();
-                if (processAddTracker(params, trackers, openTrackers, privateTrackers)) {
+            String name = req.getParameter("tname");
+            String hurl = req.getParameter("thurl");
+            String aurl = req.getParameter("taurl");
+            if (name != null && hurl != null && aurl != null) {
+                name = DataHelper.stripHTML(name.trim());
+                hurl = DataHelper.stripHTML(hurl.trim());
+                if (!hurl.startsWith("http://") && !hurl.startsWith("udp://")) {hurl = "http://" + hurl;} // Add http:// if not present
+                aurl = DataHelper.stripHTML(aurl.trim()).replace("=", "&#61;");
+                if (!aurl.startsWith("http://") && !aurl.startsWith("udp://")) {aurl = "http://" + aurl;}  // Add http:// if not present
+                if (!name.isEmpty() && hurl.startsWith("http://") && TrackerClient.isValidAnnounce(aurl)) {
+                    Map<String, Tracker> trackers = _manager.getTrackerMap();
+                    trackers.put(name, new Tracker(name, aurl, hurl));
                     _manager.saveTrackerMap();
-                    if ("1".equals(params.type)) {
+                    String type = req.getParameter("add_tracker_type");
+                    if ("1".equals(type)) {
                         List<String> newOpen = new ArrayList<>(_manager.util().getOpenTrackers());
-                        newOpen.add(params.announceUrl);
+                        newOpen.add(aurl);
                         _manager.saveOpenTrackers(newOpen);
-                    } else if ("2".equals(params.type)) {
+                    } else if ("2".equals(type)) {
                         List<String> newPriv = new ArrayList<>(_manager.getPrivateTrackers());
-                        newPriv.add(params.announceUrl);
+                        newPriv.add(aurl);
                         _manager.savePrivateTrackers(newPriv);
                     }
-                }
-            } else {
-                _manager.addMessage(_t("Enter valid tracker name and URLs"));
-            }
+                } else {_manager.addMessage(_t("Enter valid tracker name and URLs"));}
+            } else {_manager.addMessage(_t("Enter valid tracker name and URLs"));}
         } else if (action.equals(_t("Restore defaults"))) {
             _manager.setDefaultTrackerMap();
             _manager.saveOpenTrackers(null);
             _manager.addMessage(_t("Restored default trackers"));
-        } else {
-            _manager.addMessage("Unknown POST action: \"" + action + '\"');
-        }
+        } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
     }
 
     /**
@@ -7356,42 +7381,90 @@ private void processTrackerForm(String action, HttpServletRequest req) {
     }
 
     /**
-     * Immutable context for rendering comments and ratings.
-     * Package-visible for testing.
+     * Whether the user agent cannot handle collapsible panels.
      *
-     * @since 0.9.71+
+     * @param req the request
+     * @return true if panels should not be collapsed
      */
-    static class CommentsContext {
-        final Snark snark;
-        final boolean er;
-        final boolean ec;
-        final boolean esc;
-        final String authorName;
-        final boolean canRate;
-
-        CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
-                        String authorName, boolean canRate) {
-            this.snark = snark;
-            this.er = er;
-            this.ec = ec;
-            this.esc = esc;
-            this.authorName = authorName;
-            this.canRate = canRate;
-        }
+    private static boolean noCollapsePanels(HttpServletRequest req) {
+        // check for user agents that can't toggle the collapsible panels...
+        // TODO: QupZilla supports panel collapse as of circa v2.1.2, so disable conditionally
+        // TODO: Konqueror supports panel collapse as of circa v5 (5.34), so disable conditionally
+        String ua = req.getHeader("user-agent");
+        return ua != null && (ua.contains("Konq") || ua.contains("konq") ||
+                              ua.contains("QupZilla") || ua.contains("Dillo") ||
+                              ua.contains("Netsurf") || ua.contains("Midori"));
     }
 
     /**
-     * Immutable result of rendering the comments header table.
-     * Package-visible for testing.
+     * Whether "a" equals "b", or "a" is a directory and a parent of
+     * file or directory "b", canonically speaking.
      *
+     * @param a the parent directory candidate
+     * @param b the file or directory to check
+     * @return true if a contains b or they are the same
+     * @since 0.9.15
+     */
+    private static boolean isParentOf(File a, File b) {
+        try {
+            a = a.getCanonicalFile();
+            b = b.getCanonicalFile();
+        } catch (IOException ioe) {return false;}
+        if (a.equals(b)) {return true;}
+        if (!a.isDirectory()) {return false;}
+        // easy case
+        if (!b.getPath().startsWith(a.getPath())) {return false;}
+        // dir by dir
+        while (!a.equals(b)) {
+            b = b.getParentFile();
+            if (b == null) {return false;}
+        }
+        return true;
+    }
+
+    /**
+     * Reject a torrent whose data directory lies inside another torrent's data
+     * directory, or (when checkContained) would contain another torrent's data
+     * directory. Adds a message explaining the rejection.
+     *
+     * @param dataDir the data directory for the torrent being added or created
+     * @param checkContained also reject when it would contain another torrent's data
+     * @return true to reject
      * @since 0.9.71+
      */
-    static class CommentsHeaderResult {
-        final int myRating;
-        CommentsHeaderResult(int myRating) {
-            this.myRating = myRating;
+    private boolean checkNestedTorrent(File dataDir, boolean checkContained) {
+        for (Snark s : _manager.getTorrents()) {
+            Storage storage = s.getStorage();
+            if (storage == null) continue;
+            File sbase = storage.getBase();
+            if (isParentOf(sbase, dataDir)) {
+                String msg = _t("Cannot add torrent {0} inside another torrent: {1}", dataDir.getAbsolutePath(), sbase);
+                _manager.addMessageAndPrint(msg);
+                return true;
+            }
+            if (checkContained && isParentOf(dataDir, sbase)) {
+                String msg = _t("Cannot add torrent {0} including another torrent: {1}", dataDir.getAbsolutePath(), sbase);
+                _manager.addMessageAndPrint(msg);
+                return true;
+            }
         }
+        return false;
     }
+
+    /**
+     * Whether we are running in standalone mode.
+     *
+     * @return whether standalone
+     * @since 0.9.54+
+     */
+    private boolean isStandalone() {
+        if (_context.isRouterContext()) {return false;}
+        else {return true;}
+    }
+
+    // =========================================================================
+    // processTrackerForm static helpers (original)
+    // =========================================================================
 
     /**
      * Parsed tracker form parameters for delete/save actions.
@@ -7606,86 +7679,162 @@ private void processTrackerForm(String action, HttpServletRequest req) {
         return true;
     }
 
-    /**
-     * Whether the user agent cannot handle collapsible panels.
-     *
-     * @param req the request
-     * @return true if panels should not be collapsed
-     */
-    private static boolean noCollapsePanels(HttpServletRequest req) {
-        // check for user agents that can't toggle the collapsible panels...
-        // TODO: QupZilla supports panel collapse as of circa v2.1.2, so disable conditionally
-        // TODO: Konqueror supports panel collapse as of circa v5 (5.34), so disable conditionally
-        String ua = req.getHeader("user-agent");
-        return ua != null && (ua.contains("Konq") || ua.contains("konq") ||
-                              ua.contains("QupZilla") || ua.contains("Dillo") ||
-                              ua.contains("Netsurf") || ua.contains("Midori"));
-    }
+    // =========================================================================
+    // appendTorrentInfo static helpers (new)
+    // =========================================================================
 
     /**
-     * Whether "a" equals "b", or "a" is a directory and a parent of
-     * file or directory "b", canonically speaking.
+     * Immutable context for rendering tracker list.
+     * Package-visible for testing.
      *
-     * @param a the parent directory candidate
-     * @param b the file or directory to check
-     * @return true if a contains b or they are the same
-     * @since 0.9.15
-     */
-    private static boolean isParentOf(File a, File b) {
-        try {
-            a = a.getCanonicalFile();
-            b = b.getCanonicalFile();
-        } catch (IOException ioe) {return false;}
-        if (a.equals(b)) {return true;}
-        if (!a.isDirectory()) {return false;}
-        // easy case
-        if (!b.getPath().startsWith(a.getPath())) {return false;}
-        // dir by dir
-        while (!a.equals(b)) {
-            b = b.getParentFile();
-            if (b == null) {return false;}
-        }
-        return true;
-    }
-
-    /**
-     * Reject a torrent whose data directory lies inside another torrent's data
-     * directory, or (when checkContained) would contain another torrent's data
-     * directory. Adds a message explaining the rejection.
-     *
-     * @param dataDir the data directory for the torrent being added or created
-     * @param checkContained also reject when it would contain another torrent's data
-     * @return true to reject
      * @since 0.9.71+
      */
-    private boolean checkNestedTorrent(File dataDir, boolean checkContained) {
-        for (Snark s : _manager.getTorrents()) {
-            Storage storage = s.getStorage();
-            if (storage == null) continue;
-            File sbase = storage.getBase();
-            if (isParentOf(sbase, dataDir)) {
-                String msg = _t("Cannot add torrent {0} inside another torrent: {1}", dataDir.getAbsolutePath(), sbase);
-                _manager.addMessageAndPrint(msg);
-                return true;
-            }
-            if (checkContained && isParentOf(dataDir, sbase)) {
-                String msg = _t("Cannot add torrent {0} including another torrent: {1}", dataDir.getAbsolutePath(), sbase);
-                _manager.addMessageAndPrint(msg);
-                return true;
-            }
+    static class TorrentTrackersContext {
+        final List<List<String>> announceList;
+        final byte[] infoHash;
+
+        TorrentTrackersContext(List<List<String>> announceList, byte[] infoHash) {
+            this.announceList = announceList;
+            this.infoHash = infoHash;
         }
-        return false;
     }
 
     /**
-     * Whether we are running in standalone mode.
+     * Result of preparing tracker display data.
+     * Package-visible for testing.
      *
-     * @return whether standalone
-     * @since 0.9.54+
+     * @since 0.9.71+
      */
-    private boolean isStandalone() {
-        if (_context.isRouterContext()) {return false;}
-        else {return true;}
+    static class TrackerDisplayData {
+        final List<List<String>> tiers;
+        final String primaryAnnounce;
+        final boolean hasTrackers;
+
+        TrackerDisplayData(List<List<String>> tiers, String primaryAnnounce, boolean hasTrackers) {
+            this.tiers = tiers;
+            this.primaryAnnounce = primaryAnnounce;
+            this.hasTrackers = hasTrackers;
+        }
     }
 
+    /**
+     * Prepares tracker display data from the announce list.
+     * Filters to I2P trackers, organizes into tiers, identifies primary.
+     *
+     * @param ctx the rendering context
+     * @return display data with tiers and primary announce
+     * @since 0.9.71+
+     */
+    static TrackerDisplayData prepareTrackerDisplayData(TorrentTrackersContext ctx) {
+        List<List<String>> alist = ctx.announceList;
+        if (alist == null || alist.isEmpty()) {
+            return new TrackerDisplayData(Collections.emptyList(), null, false);
+        }
+        // Filter to I2P trackers and organize
+        List<List<String>> tiers = new ArrayList<>();
+        for (List<String> alist2 : alist) {
+            if (alist2.isEmpty()) continue;
+            List<String> tier = new ArrayList<>();
+            for (String s : alist2) {
+                if (isI2PTracker(s, true)) {
+                    tier.add(s);
+                }
+            }
+            if (!tier.isEmpty()) {
+                tiers.add(tier);
+            }
+        }
+        if (tiers.isEmpty()) {
+            return new TrackerDisplayData(Collections.emptyList(), null, false);
+        }
+        String primaryAnnounce = tiers.get(0).get(0);
+        return new TrackerDisplayData(tiers, primaryAnnounce, true);
+    }
+
+    /**
+     * Immutable context for rendering web seeds.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class WebSeedsContext {
+        final List<String> webSeedUrls;
+
+        WebSeedsContext(List<String> webSeedUrls) {
+            this.webSeedUrls = webSeedUrls;
+        }
+    }
+
+    /**
+     * Result of preparing web seeds display data.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class WebSeedsDisplayData {
+        final List<String> filteredSeeds;
+        final boolean hasWebSeeds;
+
+        WebSeedsDisplayData(List<String> filteredSeeds, boolean hasWebSeeds) {
+            this.filteredSeeds = filteredSeeds;
+            this.hasWebSeeds = hasWebSeeds;
+        }
+    }
+
+    /**
+     * Prepares web seeds display data.
+     * Filters to I2P trackers only.
+     *
+     * @param ctx the rendering context
+     * @return filtered web seeds
+     * @since 0.9.71+
+     */
+    static WebSeedsDisplayData prepareWebSeedsDisplayData(WebSeedsContext ctx) {
+        if (ctx.webSeedUrls == null || ctx.webSeedUrls.isEmpty()) {
+            return new WebSeedsDisplayData(Collections.emptyList(), false);
+        }
+        List<String> wlist = new ArrayList<>();
+        for (String s : ctx.webSeedUrls) {
+            if (isI2PTracker(s, true)) { wlist.add(s); }
+        }
+        return new WebSeedsDisplayData(wlist, !wlist.isEmpty());
+    }
+
+    /**
+     * Immutable context for rendering comments and ratings.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsContext {
+        final Snark snark;
+        final boolean er;
+        final boolean ec;
+        final boolean esc;
+        final String authorName;
+        final boolean canRate;
+
+        CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
+                        String authorName, boolean canRate) {
+            this.snark = snark;
+            this.er = er;
+            this.ec = ec;
+            this.esc = esc;
+            this.authorName = authorName;
+            this.canRate = canRate;
+        }
+    }
+
+    /**
+     * Immutable result of rendering the comments header table.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsHeaderResult {
+        final int myRating;
+        CommentsHeaderResult(int myRating) {
+            this.myRating = myRating;
+        }
+    }
 }
