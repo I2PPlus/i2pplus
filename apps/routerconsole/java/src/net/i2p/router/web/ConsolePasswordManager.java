@@ -95,15 +95,36 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Decode a hex string to a byte array.
-     *  Delegates to {@link DataHelper#fromHexString(String)}.
+     *  Decode a fixed-width hex string into exactly hex.length()/2 bytes.
      *
-     *  @param hex the hex string to decode (even length, no prefix)
-     *  @return the decoded byte array
-     *  @since 0.9.71+
+     *  DELIBERATE DEVIATION from the DataHelper canonical-source rule:
+     *  DataHelper.fromHexString() decodes via BigInteger and returns the
+     *  minimum-length, sign-aware representation - a leading '0' nibble is
+     *  stripped and a first nibble of 8-f gains an extra 0x00 byte. Password
+     *  salts and hashes must round-trip at their exact stored width; using
+     *  fromHexString here corrupted ~15/16 of PBKDF2 credentials and locked
+     *  users out of the console (see bd6fb3cc0a regression, DH-001).
+     *
+     *  @param hex even-length hex string, either case, no prefix
+     *  @return decoded bytes, always exactly hex.length()/2 long
+     *  @throws IllegalArgumentException on odd length or non-hex character
+     *  @since 0.9.70+
      */
-    private static byte[] HexDecode(String hex) {
-        return DataHelper.fromHexString(hex);
+    static byte[] HexDecode(String hex) {
+        int len = hex.length();
+        if ((len & 1) != 0) {
+            throw new IllegalArgumentException("Odd-length hex string");
+        }
+        byte[] out = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            int hi = Character.digit(hex.charAt(i), 16);
+            int lo = Character.digit(hex.charAt(i + 1), 16);
+            if (hi < 0 || lo < 0) {
+                throw new IllegalArgumentException("Invalid hex character in: " + hex);
+            }
+            out[i / 2] = (byte) ((hi << 4) + lo);
+        }
+        return out;
     }
 
     /**
@@ -235,7 +256,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @return lowercase hex string
      *  @since 0.9.71+
      */
-    private static String HexEncode(byte[] data) {
+    static String HexEncode(byte[] data) {
         StringBuilder sb = new StringBuilder(data.length * 2);
         for (byte b : data) {
             sb.append(String.format("%02x", b));
