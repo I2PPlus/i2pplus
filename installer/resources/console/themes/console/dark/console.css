@@ -2282,10 +2282,12 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #graphoptions label b,,#refreshsidebar label b{display:inline-block;vertical-align:middle;text-align:right}
 #config_summarybar td{padding:6px 4px;background:var(--th)}
 #config_summarybar td:last-child{padding-right:10px;background:var(--th)}
+#config_summarybar #graphoptions td:last-child,#config_summarybar #refreshsidebar td:last-child{padding:0 4px 3px;vertical-align:bottom}
 #sidebarconf{margin-top:-1px}
 #sidebarconf tr:hover,.homelinkedit tr:hover{background:#002000}
 #sidebarconf+.formaction{margin-bottom:-3px}
-#sidebarconf button{margin:5px 3px;padding:5px 4px;min-width:0;display:inline-block}
+#sidebarconf button[value^="move"]{margin:5px 3px;padding:5px 4px;min-width:0;display:inline-block}
+#sidebarconf button.add{width:calc(100% - 16px)}
 #sidebarconf button img{width:12px;height:auto}
 #sidebarconf th:nth-child(1){text-align:center}
 #sidebarconf th:nth-child(2){text-align:left}
