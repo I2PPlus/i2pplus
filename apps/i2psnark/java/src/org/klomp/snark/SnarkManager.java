@@ -4309,15 +4309,23 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         autostart = false;
                     }
                 }
-                boolean ok;
+                List<Snark> added;
+                boolean ok = true;
                 try {
                     // Don't let this interfere with .torrent files being added or deleted
                     synchronized (_snarks) {
-                        ok = monitorTorrents(dir, autostart);
+                        added = monitorTorrents(dir);
                     }
                 } catch (RuntimeException e) {
                     _log.error("Error in the DirectoryMonitor", e);
+                    added = Collections.emptyList();
                     ok = false;
+                }
+                if (autostart && !added.isEmpty()) {
+                    // Start OUTSIDE the _snarks lock: startBatch staggers pool
+                    // startups with multi-second sleeps that must never block
+                    // torrent lookups, or the UI stalls for minutes
+                    startBatch(added);
                 }
                 if (doMagnets) {
                     // first run only
@@ -4725,13 +4733,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Add torrents found in the given directory. Caller must synchronize on _snarks.
+     * Add torrents found in the given directory. Caller must synchronize on
+     * _snarks, and must keep the critical section short - the returned batch
+     * is started by the caller AFTER releasing the lock, since starting
+     * staggers pools with long sleeps.
      *
-     * @param shouldStart should we autostart the torrents
-     * @return success, false if an error adding any torrent.
+     * @return the newly added torrents; empty if none were added, or null
+     *         if a fatal error aborted the pass
      */
-    private boolean monitorTorrents(File dir, boolean shouldStart) {
-        boolean rv = true;
+    private List<Snark> monitorTorrents(File dir) {
         File[] files = dir.listFiles(new FileSuffixFilter(".torrent"));
         List<String> foundNames = new ArrayList<>(0);
         if (files != null) {
@@ -4763,19 +4773,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         addMessage(_t("Error: Could not add torrent: {0}", name));
                         _log.error("Unable to add torrent: " + name);
                         disableTorrentFile(name);
-                        rv = false;
                     }
                 } catch (Snark.RouterException e) {
                     addMessage(
                             _t("Error: Could not add torrent: {0}", name) + ": " + e.getMessage());
                     _log.error("Unable to add torrent: " + name + "\n* Reason: " + e.getMessage());
-                    return false;
+                    // fatal: abort the pass; null tells the caller to skip
+                    // both cleanup and autostart for this cycle
+                    return null;
                 } catch (RuntimeException e) {
                     addMessage(
                             _t("Error: Could not add torrent: {0}", name) + ": " + e.getMessage());
                     _log.error("Unable to add torrent: " + name + "\n* Reason: " + e.getMessage());
                     disableTorrentFile(name);
-                    rv = false;
                 }
                 if (ok) {
                     Snark snark = getTorrent(name);
@@ -4783,16 +4793,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         added.add(snark);
                     }
                 }
-                if ((count++ & 0x0f) == 15) {
-                    // try to prevent OOMs at startup
-                    sleep(250);
-                }
             }
-        }
-        if (shouldStart) {
-            // Start the whole batch now that all stored torrents are known,
-            // keeping pool-mates together with a delay between pools
-            startBatch(added);
         }
         // Don't remove magnet torrents that don't have a torrent file yet
         existingNames.removeAll(_magnets);
@@ -4807,7 +4808,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 } catch (RuntimeException e) { /* ignored */ } // don't bother with message
             }
         }
-        return rv;
+        return added;
     }
 
     /** Translate the given string. */
@@ -5280,6 +5281,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (batch.isEmpty()) {
             return true;
         }
+        // Mark scheduled torrents up front so the UI shows them as queued
+        // for autostart from schedule time, not only once their pool begins
+        for (Snark snark : batch) {
+            if (snark.isStopped()) {snark.setStarting();}
+        }
         // Group by pool; in single-dest mode this is one group of all torrents
         Map<Integer, List<Snark>> byPool = new HashMap<>(batch.size() / 2);
         for (Snark snark : batch) {
@@ -5397,10 +5403,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                   // message before throwing
                 catch (RuntimeException re) { /* ignored */ } // Snark.fatal() will log and call fatal() here for user
                   // message before throwing
-                if ((count++ & 0x0f) == 15) {
-                    // try to prevent OOMs at startup
-                    sleep(250);
-                }
             }
         }
     }

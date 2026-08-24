@@ -354,12 +354,16 @@ public class I2PSnarkServlet extends BasicServlet {
      *  We override this to set the file relative to the storage directory
      *  for the torrent.
      *
+     *  Deliberately unsynchronized: this runs for every snark request, and
+     *  the only shared field it reads (_resourceBase) is volatile and swapped
+     *  rarely by setResourceBase(). Holding the servlet monitor here
+     *  serialized all requests behind slow torrent lookups and stalled the UI.
+     *
      *  @param pathInContext should always start with /
      *  @return the resource
      */
     @Override
     public File getResource(String pathInContext) {
-        synchronized(this) {
         if (pathInContext == null || pathInContext.equals("/") || pathInContext.equals("/index.jsp") ||
             !pathInContext.startsWith("/") || pathInContext.isEmpty() || pathInContext.equals("/index.html") ||
             pathInContext.startsWith(WARBASE) || pathInContext.contains("..")) {
@@ -381,8 +385,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         return new File(_resourceBase, pathInContext);
-
-        }
     }
 
     /**
@@ -485,10 +487,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // AJAX for mainsection
         if ("/.ajax/xhr1.html".equals(path)) {
             setXHRHeaders(resp, cspNonce, false);
-            boolean canWrite;
-            synchronized (this) {
-                canWrite = _resourceBase.canWrite();
-            }
+            // volatile read; disk probe stays out of any shared lock
+            boolean canWrite = _resourceBase.canWrite();
             out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
             writeTorrents(out, req, canWrite);
@@ -500,10 +500,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // AJAX for screenlog
         if ("/.ajax/xhrscreenlog.html".equals(path)) {
             setXHRHeaders(resp, cspNonce, false);
-            boolean canWrite;
-            synchronized (this) {
-                canWrite = _resourceBase.canWrite();
-            }
+            boolean canWrite = _resourceBase.canWrite();
             out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhrlogs>\n");
             writeMessages(out, isConfigure, peerString);
@@ -717,10 +714,7 @@ public class I2PSnarkServlet extends BasicServlet {
             writeTorrentCreateFilterForm(out, req);
             writeTrackerForm(out, req);
         } else {
-            boolean canWrite;
-            synchronized (this) {
-                canWrite = _resourceBase.canWrite();
-            }
+            boolean canWrite = _resourceBase.canWrite();
             boolean pageOne = writeTorrents(out, req, canWrite);
 
             out.write("</div>\n"); // close mainsection div
@@ -1101,7 +1095,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (total == 0) {
             out.write("<tbody id=noTorrents><tr id=noload class=noneLoaded><td colspan=12><i>");
-            synchronized(this) {
+            {
                 File dd = _resourceBase;
                 if (!dd.exists() && !dd.mkdirs()) out.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
                 else if (!dd.isDirectory()) out.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
@@ -3424,6 +3418,9 @@ public class I2PSnarkServlet extends BasicServlet {
             String statusString = statusResult.statusHtml;
             String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
             String rowStatus = rowClass + ' ' + snarkStatusLocal;
+            // queued for autostart: scheduled by the batch starter, tunnels
+            // not built yet
+            if (snark.isStarting()) {rowStatus += " autostart";}
 
             // In multi-dest mode every running torrent carries a pool/destination
             // badge after its status icon when sorted by status+pool (13/-13):
@@ -3595,14 +3592,12 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("\" title=\"").append(_t("Start torrent")).append("\"").append(shouldDisable ? " disabled" : "").append(">");
 
                 if (isValid && canWrite) {
-                    buf.append("<input type=submit class=actionRemove name=\"action_Remove_").append(b64).append("\" value=\"").append(_t("Remove"))
-                       .append("\" title=\"").append(_t("Remove and delete torrent, retaining downloaded files")).append("\" client=\"")
-                       .append(escapeJSString(snark.getName())).append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
+                    appendTorrentActionButton(buf, "Remove", b64, snark,
+                            _t("Remove and delete torrent, retaining downloaded files"));
                 }
                 if (!isValid || canWrite) {
-                    buf.append("<input type=submit class=actionDelete name=\"action_Delete_").append(b64).append("\" value=\"").append(_t("Delete"))
-                       .append("\" title=\"").append(_t("Delete .torrent file and associated data files")).append("\" client=\"")
-                       .append(escapeJSString(snark.getName())).append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
+                    appendTorrentActionButton(buf, "Delete", b64, snark,
+                            _t("Delete .torrent file and associated data files"));
                 }
             }
             buf.append("</td></tr>\n");
@@ -3617,6 +3612,26 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             out.append(buf);
         }
+    }
+
+    /**
+     * Append a Remove or Delete submit button for a torrent row. Both carry
+     * the JS-escaped torrent names consumed by the row's confirmation script.
+     *
+     * @param buf destination buffer for the row HTML
+     * @param action action suffix appended to the request parameter name
+     * @param b64 base64 info hash forming the parameter name with the action
+     * @param snark the torrent the button acts on
+     * @param title tooltip text describing what will be removed or deleted
+     * @since 0.9.71+
+     */
+    private void appendTorrentActionButton(StringBuilder buf, String action,
+                                           String b64, Snark snark, String title) {
+        buf.append("<input type=submit class=action").append(action)
+           .append(" name=\"action_").append(action).append('_').append(b64).append("\" value=\"")
+           .append(_t(action)).append("\" title=\"").append(title).append("\" client=\"")
+           .append(escapeJSString(snark.getName())).append("\" data-name=\"")
+           .append(escapeJSString(snark.getBaseName())).append(".torrent\">");
     }
 
     /**

@@ -76,7 +76,8 @@ class BasicServlet extends HttpServlet {
     /**
      * Base directory for serving static files.
      */
-    protected File _resourceBase;
+    /** effectively immutable after startup; volatile so request threads never lock to read it */
+    protected volatile File _resourceBase;
     private String _warBase;
 
     private final transient MimeTypes _mimeTypes;
