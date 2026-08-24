@@ -1340,7 +1340,7 @@ th.peerCount img{display:none}
 @media (max-width:897px){
 select[name$=".quantity"],select[name$=".length"]{min-width:95px}
 .lang_en #configs td b{min-width:200px;transition:ease width .2s}
-.lang_en input[name="nofilter_commentsName"],.lang_en input[name="i2cpOpts"],.lang_en input[name="nofilter_dataDir"]{width:calc(100% - 215px)}
+.lang_en input[name="nofilter_commentsName"],.lang_en input[name="i2cpOpts"],.lang_en input[name="nofilter_dataDir"],.lang_en input[name="nofilter_tempDir"],.lang_en input#browserApiHosts,.lang_en input#browserApiKey{width:calc(100% - 215px)}
 }
 
 @media (max-width:840px){
