@@ -3034,14 +3034,9 @@ public class I2PSnarkServlet extends BasicServlet {
         if (search != null && !search.isEmpty()) {
             List<Snark> matches = search(search, _manager.getTorrents());
             if (matches != null) {
-                int count = 0;
-                for (Snark snark : matches) {
-                    if (!snark.isStopped()) continue;
-                    _manager.startTorrent(snark);
-                    if ((count++ & 0x0f) == 15) {
-                        try { Thread.sleep(200); } catch (InterruptedException ignored) { /* ignored */ }
-                    }
-                }
+                // staggered, pool-aware start on a background thread; the
+                // request returns immediately so the page never stalls
+                _manager.startStoppedTorrents(matches);
                 return;
             }
         }

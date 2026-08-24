@@ -5152,6 +5152,33 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Start all currently-stopped torrents of the given batch in the
+     * background using the same pool-aware staggering and parallel pool
+     * startup as startBatch(). Returns immediately so the caller's request
+     * thread is never blocked by tunnel builds.
+     *
+     * Torrents that are not stopped are ignored, so a repeated invocation
+     * while a previous batch is still starting is naturally a no-op.
+     *
+     * @param batch the candidate torrents
+     * @since 0.9.71+
+     */
+    public void startStoppedTorrents(List<Snark> batch) {
+        if (batch == null || batch.isEmpty()) {return;}
+        List<Snark> stopped = new ArrayList<>(batch.size());
+        for (Snark snark : batch) {
+            if (snark.isStopped()) {stopped.add(snark);}
+        }
+        if (stopped.isEmpty()) {return;}
+        if ((!_util.connected()) && !_util.isConnecting()) {
+            addMessage(_t("Opening the I2P tunnel") + "...");
+            // mark it for the UI until the tunnel comes up
+            for (Snark snark : stopped) {snark.setStarting();}
+        }
+        (new I2PAppThread(() -> startBatch(stopped), "TorrentStarterBatch", true)).start();
+    }
+
+    /**
      * Use null constructor param for all
      *
      * @since 0.9.1
