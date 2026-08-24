@@ -1461,12 +1461,12 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Whether pool badges and pool-based sorting apply: multi-dest mode
-     * with more than one active destination.
+     * with at least one active destination.
      *
      * @return true when pooled destinations are in use
      */
     boolean multiDestSortEnabled() {
-        return _manager.util().getMultiDest() && _manager.util().getTorrentDests().size() > 1;
+        return _manager.util().getMultiDest() && _manager.util().getTorrentDests().size() >= 1;
     }
 
     /**
@@ -3271,6 +3271,12 @@ public class I2PSnarkServlet extends BasicServlet {
             if (ssort != null) {
                 sort = I2PSnarkUtil.parseInt(ssort, 0);
             }
+            // Pool-aware sorting exists only in multi-dest mode; ignore stale
+            // 13/-13 parameters from old URLs instead of applying
+            // StatusPoolComparator outside its domain.
+            if (!multiDestSortEnabled() && (sort == 13 || sort == -13)) {
+                sort = 0;
+            }
             String lang;
             if (_manager.isSmartSortEnabled()) {
                 lang = Translate.getLanguage(_manager.util().getContext());
@@ -3402,11 +3408,14 @@ public class I2PSnarkServlet extends BasicServlet {
             String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
             String rowStatus = rowClass + ' ' + snarkStatusLocal;
 
-            // Append a pool badge after the status icon when the torrent runs on a shared destination
-            // and the list is sorted by status and pool
+            // In multi-dest mode every running torrent carries a pool/destination
+            // badge after its status icon when sorted by status+pool (13/-13):
+            // the sequential pool number for torrents sharing a pooled
+            // destination, or D for one on a dedicated destination.
             if (isRunning && multiDestSortEnabled() && sortParam != null && sortParam.contains("13")) {
                 TorrentDest td = snark.getDest();
-                if (td != null && td.getPoolNum() >= 0) {
+                if (td != null && td.getMyDestination() != null) {
+                    int poolNum = td.getPoolNum();
                     StringBuilder poolBadge = new StringBuilder(64).append("<span class=pool");
                     Destination dest = td.getMyDestination();
                     if (dest != null) {
@@ -3418,7 +3427,14 @@ public class I2PSnarkServlet extends BasicServlet {
                         }
                         poolBadge.append('"');
                     }
-                    poolBadge.append('>').append(td.getPoolNum()).append("</span>");
+                    poolBadge.append('>');
+                    if (poolNum >= 1) {
+                        // pools are numbered from 1; -1 marks a dedicated destination
+                        poolBadge.append(poolNum);
+                    } else {
+                        poolBadge.append('D');
+                    }
+                    poolBadge.append("</span>");
                     int tdEnd = statusString.indexOf("</td>");
                     if (tdEnd >= 0) {
                         statusString = statusString.substring(0, tdEnd) + poolBadge
