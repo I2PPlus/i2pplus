@@ -122,6 +122,10 @@ class Sorters {
 
             case -13:
             case 13:
+                // Status+pool ordering; only reachable for multi-dest
+                // requests because I2PSnarkServlet.getSortedSnarks()
+                // clamps these values elsewhere. The "pool" name in
+                // normalizeSortParam() must keep mapping to 13.
                 rv = new StatusPoolComparator(rev, lang);
                 break;
         }

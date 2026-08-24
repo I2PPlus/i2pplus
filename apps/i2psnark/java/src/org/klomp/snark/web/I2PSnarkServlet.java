@@ -1883,6 +1883,9 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (name.equals("status")) {
             type = 2;
         } else if (name.equals("pool")) {
+            // Must stay 13: getSortedSnarks() clamps sort values 13/-13 to
+            // the default outside multi-dest mode, and Sorters maps them
+            // to StatusPoolComparator. Changing this number breaks both.
             type = 13;
         } else if (name.equals("peers")) {
             type = 3;
