@@ -367,29 +367,52 @@ public class Banlist {
      *  routers with G in their caps unless they are also floodfills.
      *  Exclusions require at least one required character.
      *
+     *  Comparison is case-sensitive throughout: capability letters are
+     *  case-significant (lowercase 'f' is floodfill, uppercase letters are
+     *  separate meanings), so neither the stored patterns nor the router's
+     *  caps may be case-folded before matching.
+     *
      *  @param capabilities router capabilities string (e.g., "XfP")
-     *  @return the matched pattern (e.g., "G" or "G!F") or null if no match
+     *  @return the matched pattern exactly as configured (e.g., "G!f") or null if no match
      *  @since 0.9.70+
      */
     public String shouldBanlistByCapability(String capabilities) {
-        if (_customCapabilityBans == null || _customCapabilityBans.isEmpty() || capabilities == null) {
+        return matchCapabilityPattern(capabilities, _customCapabilityBans);
+    }
+
+    /**
+     *  Pure decision helper: match a capabilities string against a
+     *  comma/space-separated list of capability ban patterns.
+     *
+     *  Each pattern is a set of required characters, optionally followed by
+     *  '!'. A router matches when it carries every required character and
+     *  none of the excluded ones. A pattern with an empty required part can
+     *  never match, so a bare exclusion cannot ban the entire network.
+     *  Case-sensitive: see shouldBanlistByCapability().
+     *
+     *  @param capabilities router capabilities string, may be null
+     *  @param patternsStr configured patterns, may be null or empty
+     *  @return the first matching pattern as configured, or null if none match
+     *  @since 0.9.70+
+     */
+    static String matchCapabilityPattern(String capabilities, String patternsStr) {
+        if (patternsStr == null || patternsStr.isEmpty() || capabilities == null || capabilities.isEmpty()) {
             return null;
         }
-        String caps = capabilities.toUpperCase();
-        String[] patterns = COMMA_SPLIT.split(_customCapabilityBans);
+        String[] patterns = COMMA_SPLIT.split(patternsStr);
         for (String pattern : patterns) {
-            pattern = pattern.trim().toUpperCase();
+            pattern = pattern.trim();
             if (pattern.isEmpty()) continue;
             int bang = pattern.indexOf('!');
             String required = bang >= 0 ? pattern.substring(0, bang) : pattern;
             String excluded = bang >= 0 ? pattern.substring(bang + 1) : "";
-            if (required.isEmpty() && excluded.isEmpty()) continue;
+            if (required.isEmpty()) continue;
             boolean ok = true;
             for (int i = 0; i < required.length() && ok; i++) {
-                if (caps.indexOf(required.charAt(i)) < 0) {ok = false;}
+                if (capabilities.indexOf(required.charAt(i)) < 0) {ok = false;}
             }
             for (int i = 0; i < excluded.length() && ok; i++) {
-                if (caps.indexOf(excluded.charAt(i)) >= 0) {ok = false;}
+                if (capabilities.indexOf(excluded.charAt(i)) >= 0) {ok = false;}
             }
             if (ok) return pattern;
         }

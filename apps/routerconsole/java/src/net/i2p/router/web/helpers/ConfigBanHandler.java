@@ -42,10 +42,11 @@ public class ConfigBanHandler extends FormHandler {
 
     @Override
     protected void processForm() {
-        if (_action == null) {return;}
-        if (_action.equals("clearBans")) {
+        String action = resolveEffectiveAction(_action, _settings);
+        if (action == null) {return;}
+        if (action.equals("clearBans")) {
             clearAllBans();
-        } else if (_action.equals("resetDefaults")) {
+        } else if (action.equals("resetDefaults")) {
             resetToDefaults();
         } else {
             // Save changes: default action when no other operation matches.
@@ -253,15 +254,19 @@ public class ConfigBanHandler extends FormHandler {
         String validatedCountries = validateCountryCodes(_customCountryCodes);
         changes.put(PROP_COUNTRY_CODES, validatedCountries);
 
-        // Check if retroactive NetDb purge is needed (LU/XG enabled or custom caps added)
+        // Check if retroactive NetDb purge is needed (LU/XG enabled or custom caps changed)
         boolean xgWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_XG_BAN, "false"));
         boolean luWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_LU_BAN, "true"));
         String existingCaps = _context.getProperty(PROP_CUSTOM_CAPABILITY_BANS, "");
-        boolean capsWereEmpty = existingCaps.isEmpty();
+        // Re-evaluate the existing netdb whenever the pattern list actually
+        // changes - not only when it goes from empty to non-empty. Without
+        // this, edits to an already-populated list (e.g. adding "Lf" next to
+        // "G!f") never take effect for routers we already know.
+        boolean capsChanged = !validatedCaps.equals(existingCaps);
 
         boolean purgeNeeded = (_enableXgBan && !xgWasEnabled) ||
                               (_enableLuBan && !luWasEnabled) ||
-                              (!validatedCaps.isEmpty() && capsWereEmpty);
+                              (!validatedCaps.isEmpty() && capsChanged);
 
         if (!changes.isEmpty()) {
             _context.router().saveConfig(changes, null);
