@@ -1,3 +1,38 @@
+2026-08-24 dr|z3d
+  * I2PSnark:
+    - Eliminate startup and in-page stalls: torrents load immediately,
+      staggered auto-start runs off the request path, and torrent
+      lookups no longer block on directory monitor batching
+    - Smooth out request throttling to avoid pipeline thrash
+    - Support the magnet xl (length) parameter
+    - Escape line breaks in torrent names embedded in page scripts
+    - Show pool/destination badges for all torrents in multi-dest
+      mode; status+pool sorting now requires multi-dest
+    - Stagger announces and cap concurrent tracker requests
+    - Ubergine theme cosmetic fixes
+
+  * Router:
+    - Fix LeaseSet corruption for external ECIES/EdDSA clients whose
+      LS1 private keys were misparsed, which also caused repeated
+      client disconnects on expired lease sets
+    - Restore remote search for ReceivedAsPublished lease sets before
+      sending, fixing unreachable destinations after netdb churn
+    - Increase flood redundancy from 3 to 10 for wider netdb
+      propagation
+    - Log a per-minute transit pool trend line for decline monitoring
+
+  * Console:
+    - Fix console login failures for passwords stored with PBKDF2
+    - Ban config: fix Clear All Bans and Reset To Defaults buttons;
+      validate caps bans case-sensitively as entered; recognize !
+      exclusions; add next-hop ban toggle and capability exclusion
+      syntax; re-evaluate the existing netdb when caps bans change
+    - Fix Add/Delete user and sidebar config buttons that dispatched
+      on translated button text
+
+  * i2ptunnel:
+    - Log server connect failures at WARN with local port detail
+
 2026-08-21 dr|z3d
   * I2PSnark:
     - Serve piece data to peers from an async prefetch pool, so slow
