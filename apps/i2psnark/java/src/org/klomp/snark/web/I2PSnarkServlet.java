@@ -2863,65 +2863,93 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Handles creating a new torrent from provided base file or directory.
-     *
-     * @param req the HTTP request
+     * Result of validating a base file for torrent creation.
+     * Package-visible for testing.
      */
-    private void handleCreate(HttpServletRequest req) {
-        String baseData = req.getParameter("nofilter_baseFile");
-        if (baseData == null || baseData.trim().isEmpty()) {
-            String msg = _t("Error creating torrent - you must specify a file or directory");
-            _manager.addMessageAndPrint(msg);
-            return;
+    static class BaseFileValidationResult {
+        final File baseFile;
+        final String errorMessage; // null if valid
+
+        BaseFileValidationResult(File baseFile, String errorMessage) {
+            this.baseFile = baseFile;
+            this.errorMessage = errorMessage;
         }
 
+        boolean isValid() {return errorMessage == null;}
+    }
+
+    /**
+     * Validates the base file for torrent creation.
+     * Checks: not empty, exists, not .torrent, not duplicate, not in I2P dirs, not nested.
+     *
+     * @param baseData the raw base file path from request
+     * @param manager the SnarkManager for context (data dir, existing torrents)
+     * @return validation result with resolved File and error message (null if valid)
+     * @since 0.9.71+
+     */
+    static BaseFileValidationResult validateBaseFile(String baseData, SnarkManager manager) {
+        if (baseData == null || baseData.trim().isEmpty()) {
+            return new BaseFileValidationResult(null, "Error creating torrent - you must specify a file or directory");
+        }
         File baseFile = new File(baseData.trim());
         if (!baseFile.isAbsolute()) {
-            baseFile = new File(_manager.getDataDir(), baseData.trim());
+            baseFile = new File(manager.getDataDir(), baseData.trim());
         }
-
         if (!baseFile.exists()) {
-            String msg = _t("Cannot create a torrent for the nonexistent data: {0}", baseFile.getAbsolutePath());
-            _manager.addMessageAndPrint(msg);
-            return;
+            return new BaseFileValidationResult(null,
+                "Cannot create a torrent for the nonexistent data: " + baseFile.getAbsolutePath());
         }
-
-        File dataDir = _manager.getDataDir();
-        if (!dataDir.canWrite()) {
-            String msg = _t("No write permissions for data directory") + ": " + dataDir;
-            _manager.addMessageAndPrint(msg);
-            return;
-        }
-
         String baseName = baseFile.getName();
         if (baseName.toLowerCase(Locale.US).endsWith(".torrent")) {
-            String msg = _t("Cannot add a torrent ending in \".torrent\": {0}", baseFile.getAbsolutePath());
-            _manager.addMessageAndPrint(msg);
-            return;
+            return new BaseFileValidationResult(null,
+                "Cannot add a torrent ending in \".torrent\": " + baseFile.getAbsolutePath());
         }
-
-        if (_manager.getTorrentByBaseName(baseName) != null) {
-            String msg = _t("Torrent with this name is already running: {0}", baseName);
-            _manager.addMessageAndPrint(msg);
-            return;
+        if (manager.getTorrentByBaseName(baseName) != null) {
+            return new BaseFileValidationResult(null,
+                "Torrent with this name is already running: " + baseName);
         }
-
-        if (isParentOf(baseFile, _manager.getDataDir()) ||
-            isParentOf(baseFile, _manager.util().getContext().getBaseDir()) ||
-            isParentOf(baseFile, _manager.util().getContext().getConfigDir())) {
-            String msg = _t("Cannot add a torrent including an I2P directory: {0}", baseFile.getAbsolutePath());
-            _manager.addMessageAndPrint(msg);
-            return;
+        File dataDir = manager.getDataDir();
+        if (!dataDir.canWrite()) {
+            return new BaseFileValidationResult(null,
+                "No write permissions for data directory: " + dataDir);
         }
-
-        // Check nested torrents
-        if (checkNestedTorrent(baseFile, true)) {
-            return;
+        // Check I2P directories
+        if (isParentOf(baseFile, dataDir) ||
+            isParentOf(baseFile, manager.util().getContext().getBaseDir()) ||
+            isParentOf(baseFile, manager.util().getContext().getConfigDir())) {
+            return new BaseFileValidationResult(null,
+                "Cannot add a torrent including an I2P directory: " + baseFile.getAbsolutePath());
         }
+        // Check nested torrents (requires instance method, delegate to servlet)
+        // We return valid here; nested check is done after with instance method
+        return new BaseFileValidationResult(baseFile, null);
+    }
 
+    /**
+     * Parsed announce parameters from the create torrent form.
+     * Package-visible for testing.
+     */
+    static class AnnounceParams {
+        final String primary; // may be null
+        final List<String> backupURLs; // never null
+
+        AnnounceParams(String primary, List<String> backupURLs) {
+            this.primary = primary;
+            this.backupURLs = backupURLs;
+        }
+    }
+
+    /**
+     * Parses announce URL and backup tracker URLs from the request.
+     * Recognized: "announceURL", "backup_*" parameters.
+     *
+     * @param req the HTTP request
+     * @return parsed announce parameters, never null
+     * @since 0.9.71+
+     */
+    static AnnounceParams parseAnnounceParams(HttpServletRequest req) {
         String announceURL = req.getParameter("announceURL");
         if ("none".equals(announceURL)) announceURL = null;
-        _lastAnnounceURL = announceURL;
 
         List<String> backupURLs = new ArrayList<>();
         Enumeration<?> paramNames = req.getParameterNames();
@@ -2936,46 +2964,120 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
         }
+        return new AnnounceParams(announceURL, backupURLs);
+    }
 
-        List<List<String>> announceList = null;
-        if (!backupURLs.isEmpty()) {
-            if (announceURL == null) {
-                String msg = _t("Error - Cannot include alternate trackers without a primary tracker");
-                _manager.addMessageAndPrint(msg);
-                return;
-            }
-            backupURLs.add(0, announceURL);
-            boolean hasPrivate = false;
-            boolean hasPublic = false;
-            for (String url : backupURLs) {
-                if (_manager.getPrivateTrackers().contains(url)) hasPrivate = true;
-                else hasPublic = true;
-            }
-            if (hasPrivate && hasPublic) {
-                String msg = _t("Error - Cannot mix private and public trackers in a torrent");
-                _manager.addMessageAndPrint(msg);
-                return;
-            }
-            announceList = new ArrayList<>(backupURLs.size());
-            for (String url : backupURLs) {
-                announceList.add(Collections.singletonList(url));
-            }
+    /**
+     * Result of building the announce list.
+     * Package-visible for testing.
+     */
+    static class CreateAnnounceListResult {
+        final List<List<String>> announceList; // null if no backups
+        final boolean isPrivate;
+        final String errorMessage; // null if valid
+
+        CreateAnnounceListResult(List<List<String>> announceList, boolean isPrivate, String errorMessage) {
+            this.announceList = announceList;
+            this.isPrivate = isPrivate;
+            this.errorMessage = errorMessage;
         }
 
-        try {
-            boolean isPrivate = _manager.getPrivateTrackers().contains(announceURL);
-            String[] filters = req.getParameterValues("filters");
-            List<TorrentCreateFilter> filterList = new ArrayList<>();
-            Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
-            if (filters == null) filters = new String[0];
-            for (String filterName : filters) {
-                TorrentCreateFilter filter = torrentCreateFilters.get(filterName);
-                if (filter != null) {
-                    filterList.add(filter);
-                }
-            }
+        boolean isValid() {return errorMessage == null;}
+    }
 
-            Storage storage = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, filterList);
+    /**
+     * Builds the tiered announce list from primary and backup URLs.
+     * Validates no mixing of private and public trackers.
+     *
+     * @param params parsed announce parameters
+     * @param privateTrackers the configured private tracker URLs
+     * @return announce list result with tiered list and private flag, or error
+     * @since 0.9.71+
+     */
+    static CreateAnnounceListResult buildAnnounceList(AnnounceParams params, List<String> privateTrackers) {
+        if (params.backupURLs.isEmpty()) {
+            boolean isPrivate = params.primary != null && privateTrackers.contains(params.primary);
+            return new CreateAnnounceListResult(null, isPrivate, null);
+        }
+        if (params.primary == null) {
+            return new CreateAnnounceListResult(null, false,
+                "Error - Cannot include alternate trackers without a primary tracker");
+        }
+        List<String> allURLs = new ArrayList<>(params.backupURLs.size() + 1);
+        allURLs.add(params.primary);
+        allURLs.addAll(params.backupURLs);
+
+        boolean hasPrivate = false;
+        boolean hasPublic = false;
+        for (String url : allURLs) {
+            if (privateTrackers.contains(url)) hasPrivate = true;
+            else hasPublic = true;
+        }
+        if (hasPrivate && hasPublic) {
+            return new CreateAnnounceListResult(null, false,
+                "Error - Cannot mix private and public trackers in a torrent");
+        }
+        List<List<String>> announceList = new ArrayList<>(allURLs.size());
+        for (String url : allURLs) {
+            announceList.add(Collections.singletonList(url));
+        }
+        return new CreateAnnounceListResult(announceList, hasPrivate, null);
+    }
+
+    /**
+     * Parses the selected torrent creation filters from the request.
+     *
+     * @param req the HTTP request
+     * @param filterMap the available filters from manager
+     * @return list of selected filters (never null)
+     * @since 0.9.71+
+     */
+    static List<TorrentCreateFilter> parseCreateFilters(HttpServletRequest req,
+                                                         Map<String, TorrentCreateFilter> filterMap) {
+        String[] filters = req.getParameterValues("filters");
+        if (filters == null) return Collections.emptyList();
+        List<TorrentCreateFilter> filterList = new ArrayList<>(filters.length);
+        for (String filterName : filters) {
+            TorrentCreateFilter filter = filterMap.get(filterName);
+            if (filter != null) {
+                filterList.add(filter);
+            }
+        }
+        return filterList;
+    }
+
+    /**
+     * Handles creating a new torrent from provided base file or directory.
+     *
+     * @param req the HTTP request
+     */
+    private void handleCreate(HttpServletRequest req) {
+        BaseFileValidationResult validation = validateBaseFile(req.getParameter("nofilter_baseFile"), _manager);
+        if (!validation.isValid()) {
+            _manager.addMessageAndPrint(_t(validation.errorMessage));
+            return;
+        }
+        File baseFile = validation.baseFile;
+
+        // Check nested torrents (instance method)
+        if (checkNestedTorrent(baseFile, true)) {
+            return;
+        }
+
+        AnnounceParams announceParams = parseAnnounceParams(req);
+        _lastAnnounceURL = announceParams.primary;
+
+        CreateAnnounceListResult alr = buildAnnounceList(announceParams, _manager.getPrivateTrackers());
+        if (!alr.isValid()) {
+            _manager.addMessageAndPrint(_t(alr.errorMessage));
+            return;
+        }
+
+        List<TorrentCreateFilter> filterList = parseCreateFilters(req, _manager.getTorrentCreateFilterMap());
+
+        try {
+            Storage storage = new Storage(_manager.util(), baseFile, announceParams.primary,
+                                          alr.announceList, null, alr.isPrivate, null, filterList);
             storage.close(); // close files
 
             MetaInfo info = storage.getMetaInfo();
@@ -2998,7 +3100,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
             _manager.addMessage(_t("Torrent created for \"{0}\"", baseFile.getName()) + " ➜  " + torrentFile.getAbsolutePath());
 
-            if (announceURL != null && !_manager.util().getOpenTrackers().contains(announceURL)) {
+            if (announceParams.primary != null && !_manager.util().getOpenTrackers().contains(announceParams.primary)) {
                 _manager.addMessage(_t("Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\"", baseFile.getName()));
             }
         } catch (IOException ioe) {
