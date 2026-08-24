@@ -223,6 +223,12 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     *  Session-bound nonce for outer section (main page, details, config)
+     *  @param session returns static nonce if null
+     *  @return a new nonce for each call
+     *  @since 0.9.69
+     */
+    /**
      *  Validate Origin header for POST requests.
      *  Allows requests with matching Origin (same-origin), or no Origin header.
      *  Rejects cross-origin POST requests to prevent CSRF attacks.
@@ -805,8 +811,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(v).append("\" as=style>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(v).append("\" as=style>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n")
-           .append("<title>")
-           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+           .append("<title>");
+        buf.append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
            .append(" - ")
            .append(isConfigure ? _t("Configuration") : _t("Anonymous BitTorrent Client"))
            .append("</title>\n");
@@ -823,8 +829,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
-               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
+                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
+             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             if (delay > 0) {
@@ -3194,80 +3200,55 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param action the action
      * @param req the request
      */
-    private void processTrackerForm(String action, HttpServletRequest req) {
+private void processTrackerForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save tracker configuration"))) {
-            boolean changed = false;
             Map<String, Tracker> trackers = _manager.getTrackerMap();
-            List<String> removed = new ArrayList<>();
-            List<String> open = new ArrayList<>();
-            List<String> priv = new ArrayList<>();
-            Enumeration<?> e = req.getParameterNames();
-            while (e.hasMoreElements()) {
-                 Object o = e.nextElement();
-                 if (!(o instanceof String)) {continue;}
-                 String k = (String) o;
-                 if (k.startsWith("delete_")) {
-                     k = k.substring(7);
-                     Tracker t;
-                     if ((t = trackers.remove(k)) != null) {
-                        removed.add(t.announceURL);
-                        _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(k));
-                        changed = true;
-                     }
-                } else if (k.startsWith("ttype_")) {
-                     String val = req.getParameter(k);
-                     k = k.substring(6);
-                     if ("1".equals(val)) {open.add(k);}
-                     else if ("2".equals(val)) {priv.add(k);}
+            List<String> openTrackers = _manager.util().getOpenTrackers();
+            List<String> privateTrackers = _manager.getPrivateTrackers();
+
+            TrackerFormParams params = parseTrackerFormDeleteSave(req);
+            TrackerFormResult result = processTrackerFormDeleteSave(params, trackers, openTrackers, privateTrackers);
+
+            if (result.changed) {
+                _manager.saveTrackerMap();
+                if (!result.newOpen.equals(openTrackers)) {
+                    _manager.saveOpenTrackers(result.newOpen);
+                }
+                if (!result.newPrivate.equals(privateTrackers)) {
+                    _manager.savePrivateTrackers(result.newPrivate);
+                }
+                for (String url : result.removedUrls) {
+                    _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(url));
                 }
             }
-            if (changed) {_manager.saveTrackerMap();}
-
-            open.removeAll(removed);
-            List<String> oldOpen = new ArrayList<>(_manager.util().getOpenTrackers());
-            Collections.sort(oldOpen);
-            Collections.sort(open);
-            if (!open.equals(oldOpen)) {_manager.saveOpenTrackers(open);}
-
-            priv.removeAll(removed);
-            // open trumps private
-            priv.removeAll(open);
-            List<String> oldPriv = new ArrayList<>(_manager.getPrivateTrackers());
-            Collections.sort(oldPriv);
-            Collections.sort(priv);
-            if (!priv.equals(oldPriv)) {_manager.savePrivateTrackers(priv);}
-
         } else if (action.equals(_t("Add tracker"))) {
-            String name = req.getParameter("tname");
-            String hurl = req.getParameter("thurl");
-            String aurl = req.getParameter("taurl");
-            if (name != null && hurl != null && aurl != null) {
-                name = DataHelper.stripHTML(name.trim());
-                hurl = DataHelper.stripHTML(hurl.trim());
-                if (!hurl.startsWith("http://") && !hurl.startsWith("udp://")) {hurl = "http://" + hurl;} // Add http:// if not present
-                aurl = DataHelper.stripHTML(aurl.trim()).replace("=", "&#61;");
-                if (!aurl.startsWith("http://") && !aurl.startsWith("udp://")) {aurl = "http://" + aurl;}  // Add http:// if not present
-                if (!name.isEmpty() && hurl.startsWith("http://") && TrackerClient.isValidAnnounce(aurl)) {
-                    Map<String, Tracker> trackers = _manager.getTrackerMap();
-                    trackers.put(name, new Tracker(name, aurl, hurl));
+            AddTrackerParams params = parseAddTrackerParams(req);
+            if (validateAddTrackerParams(params)) {
+                Map<String, Tracker> trackers = _manager.getTrackerMap();
+                List<String> openTrackers = _manager.util().getOpenTrackers();
+                List<String> privateTrackers = _manager.getPrivateTrackers();
+                if (processAddTracker(params, trackers, openTrackers, privateTrackers)) {
                     _manager.saveTrackerMap();
-                    String type = req.getParameter("add_tracker_type");
-                    if ("1".equals(type)) {
+                    if ("1".equals(params.type)) {
                         List<String> newOpen = new ArrayList<>(_manager.util().getOpenTrackers());
-                        newOpen.add(aurl);
+                        newOpen.add(params.announceUrl);
                         _manager.saveOpenTrackers(newOpen);
-                    } else if ("2".equals(type)) {
+                    } else if ("2".equals(params.type)) {
                         List<String> newPriv = new ArrayList<>(_manager.getPrivateTrackers());
-                        newPriv.add(aurl);
+                        newPriv.add(params.announceUrl);
                         _manager.savePrivateTrackers(newPriv);
                     }
-                } else {_manager.addMessage(_t("Enter valid tracker name and URLs"));}
-            } else {_manager.addMessage(_t("Enter valid tracker name and URLs"));}
+                }
+            } else {
+                _manager.addMessage(_t("Enter valid tracker name and URLs"));
+            }
         } else if (action.equals(_t("Restore defaults"))) {
             _manager.setDefaultTrackerMap();
             _manager.saveOpenTrackers(null);
             _manager.addMessage(_t("Restored default trackers"));
-        } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
+        } else {
+            _manager.addMessage("Unknown POST action: \"" + action + '\"');
+        }
     }
 
     /**
@@ -3858,7 +3839,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param noThinsp spacing control flag
      * @return StatusResult containing the status HTML and status keyword
      * @since 0.9.68+
-     */
+    */
     private StatusResult buildStatusString(Snark snark, int curPeers, int knownPeers,
                                            long downBps, long upBps, boolean isRunning,
                                            long remaining, long needed, boolean noThinsp) {
@@ -5735,7 +5716,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showSort) {buf.append("</a>");}
         }
         buf.append("</th></tr></thead>\n<tbody>");
-        if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray))  { // don't show row if top level or no playlist
+        if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
             buf.append("<tr id=dirNav><td colspan=").append(showPriority ? '3' : '2').append(" class=ParentDir>");
             if (!isTopLevel) { // don't show parent dir link if top level
                 buf.append("<a href=\"");
@@ -5757,7 +5738,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
-        }
+}
 
         FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
         FileRowCounters counters = new FileRowCounters();
@@ -6467,13 +6448,136 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.31
      */
     private void displayComments(Snark snark, boolean er, boolean ec, boolean esc, StringBuilder buf) {
-        String authorName = _manager.util().getCommentsName();
-        boolean canRate = esc && !authorName.isEmpty();
-        CommentsContext ctx = new CommentsContext(snark, er, ec, esc, authorName, canRate);
-        CommentsHeaderResult hdr = renderCommentsHeader(buf, ctx);
-        renderCommentsList(buf, ctx, hdr.myRating);
-    }
+        Iterator<Comment> iter = null;
+        int myRating = 0;
+        CommentSet comments = snark.getComments();
+        boolean canRate = esc && !_manager.util().getCommentsName().isEmpty();
 
+        buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
+           .append(_t("Ratings and Comments").replace("and", "&amp;"))
+           .append("&nbsp;&nbsp;&nbsp;");
+        if (esc && !canRate) {
+            buf.append("<span id=nameRequired>")
+               .append(_t("Author name required to rate or comment"))
+               .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
+               .append(_t("Configure"))
+               .append("]</a></span>");
+        } else if (esc) {
+            buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
+               .append(_t("Your author name for published comments and ratings"))
+               .append("\">")
+               .append(DataHelper.escapeHTML(_manager.util().getCommentsName()))
+               .append("</span></span>");
+        }
+        buf.append("</th></tr>\n");
+
+        // new rating / comment form
+        if (canRate) {
+            buf.append("<tr id=newRating>\n");
+            if (er) {
+                buf.append("<td>\n<select name=myRating>\n");
+                for (int i = 5; i >= 0; i--) {
+                    buf.append("<option value=\"").append(i).append("\"");
+                    if (i == myRating) {buf.append(" selected");}
+                    buf.append('>');
+                    if (i != 0) {
+                        for (int j = 0; j < i; j++) {buf.append("★");}
+                        buf.append(' ').append(ngettext("1 star", "{0} stars", i));
+                    } else {buf.append("☆ ").append(_t("No rating"));}
+                    buf.append("</option>\n");
+                }
+                buf.append("</select>\n</td>");
+            } else {buf.append("<td></td>");}
+            if (esc) {buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");}
+            else {buf.append("<td></td>");}
+            buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
+            if (er && esc) {buf.append(_t("Rate and Comment"));}
+            else if (er) {buf.append(_t("Rate Torrent"));}
+            else {buf.append(_t("Add Comment"));}
+            buf.append("\" class=accept></td></tr>\n");
+        }
+        if (comments != null) {
+            synchronized(comments) {
+                // current rating
+                if (er) {
+                    buf.append("<tr id=myRating><td>");
+                    myRating = comments.getMyRating();
+                    if (myRating > 0) {
+                        buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
+                        for (int i = 0; i < myRating; i++) {
+                            StringBuilder iconBuf = new StringBuilder();
+                            appendIcon(iconBuf, "rateme", "★", "", false, true);
+                            buf.append(iconBuf.toString());
+                        }
+                    }
+                    buf.append("</td></tr>");
+                }
+                if (er) {
+                    buf.append("<tr id=showRatings><td>");
+                    int rcnt = comments.getRatingCount();
+                    if (rcnt > 0) {
+                        double avg = comments.getAverageRating();
+                        buf.append(_t("Average Rating"))
+                           .append(":</td><td colspan=2>")
+                           .append((new DecimalFormat("0.0")).format(avg));
+                    } else {
+                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
+                        buf.append(_t("No community ratings currently available"));
+                    }
+                    buf.append("</td></tr>\n");
+                }
+                if (ec) {
+                    int sz = comments.size();
+                    if (sz > 0) {iter = comments.iterator();}
+                }
+            }
+        }
+
+        buf.append("</table>\n");
+        int ccount = 0;
+        if (iter != null) {
+            DateFormat fmt = _DATE_FMT3.get();
+            fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+            buf.append("<table id=userComments>\n");
+            while (iter.hasNext()) {
+                Comment c = iter.next();
+                buf.append("<tr><td class=commentAuthor>");
+                if (c.getName() != null) {
+                    buf.append("<span class=commentAuthorName title=\"").append(DataHelper.escapeHTML(c.getName())).append("\">")
+                       .append(DataHelper.escapeHTML(c.getName())).append("</span>");
+                }
+                buf.append("</td><td class=commentRating>");
+                if (er) {
+                    int rt = c.getRating();
+                    if (rt > 0) {
+                        for (int i = 0; i < rt; i++) {
+                            StringBuilder iconBuf = new StringBuilder();
+                            appendIcon(iconBuf, "rateme", "★", "", false, true);
+                            buf.append(iconBuf.toString());
+                        }
+                    }
+                }
+                buf.append("</td><td class=commentText>");
+                if (esc) {
+                    if (c.getText() != null) {
+                        buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
+                           .append(fmt.format(new Date(c.getTime()))).append("\">")
+                           .append(DataHelper.escapeHTML(c.getText()))
+                           .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
+                           .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
+                        ccount++;
+                    } else {buf.append("</td><td class=commentDelete>");} // insert empty named columns to maintain table layout
+                } else {buf.append("</td><td class=commentDelete>");} // insert empty named columns to maintain table layout
+                buf.append("</td></tr>\n");
+            }
+            if (esc && ccount > 0) {
+                buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction><input type=submit name=deleteComments value=\"")
+                   .append(_t("Delete Selected"))
+                   .append("\" class=delete></td></tr>\n");
+            }
+            buf.append("</table>\n");
+        }
+    }
 
     /**
      * Sort query string for torrent file-list links, where the value is a
@@ -7252,6 +7356,257 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Immutable context for rendering comments and ratings.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsContext {
+        final Snark snark;
+        final boolean er;
+        final boolean ec;
+        final boolean esc;
+        final String authorName;
+        final boolean canRate;
+
+        CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
+                        String authorName, boolean canRate) {
+            this.snark = snark;
+            this.er = er;
+            this.ec = ec;
+            this.esc = esc;
+            this.authorName = authorName;
+            this.canRate = canRate;
+        }
+    }
+
+    /**
+     * Immutable result of rendering the comments header table.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsHeaderResult {
+        final int myRating;
+        CommentsHeaderResult(int myRating) {
+            this.myRating = myRating;
+        }
+    }
+
+    /**
+     * Parsed tracker form parameters for delete/save actions.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class TrackerFormParams {
+        final List<String> deletedKeys;
+        final Map<String, String> typeChanges; // key -> "1" (open) or "2" (private)
+        TrackerFormParams(List<String> deletedKeys, Map<String, String> typeChanges) {
+            this.deletedKeys = deletedKeys;
+            this.typeChanges = typeChanges;
+        }
+    }
+
+    /**
+     * Parsed tracker form parameters for add action.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class AddTrackerParams {
+        final String name;
+        final String httpUrl;
+        final String announceUrl;
+        final String type; // "1" (open), "2" (private), or null
+        AddTrackerParams(String name, String httpUrl, String announceUrl, String type) {
+            this.name = name;
+            this.httpUrl = httpUrl;
+            this.announceUrl = announceUrl;
+            this.type = type;
+        }
+    }
+
+    /**
+     * Result of processing tracker form delete/save action.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class TrackerFormResult {
+        final Map<String, Tracker> updatedTrackers;
+        final List<String> removedUrls;
+        final List<String> newOpen;
+        final List<String> newPrivate;
+        final boolean changed;
+        TrackerFormResult(Map<String, Tracker> updatedTrackers, List<String> removedUrls,
+                          List<String> newOpen, List<String> newPrivate, boolean changed) {
+            this.updatedTrackers = updatedTrackers;
+            this.removedUrls = removedUrls;
+            this.newOpen = newOpen;
+            this.newPrivate = newPrivate;
+            this.changed = changed;
+        }
+    }
+
+    /**
+     * Parses the tracker form delete/save parameters from the request.
+     * Recognized keys: "delete_{key}", "ttype_{key}".
+     *
+     * @param req the HTTP request
+     * @return parsed parameters, never null
+     * @since 0.9.71+
+     */
+    static TrackerFormParams parseTrackerFormDeleteSave(HttpServletRequest req) {
+        List<String> deletedKeys = new ArrayList<>();
+        Map<String, String> typeChanges = new HashMap<>();
+        Enumeration<?> e = req.getParameterNames();
+        while (e.hasMoreElements()) {
+            Object o = e.nextElement();
+            if (!(o instanceof String)) {continue;}
+            String k = (String) o;
+            if (k.startsWith("delete_")) {
+                deletedKeys.add(k.substring(7));
+            } else if (k.startsWith("ttype_")) {
+                String val = req.getParameter(k);
+                String key = k.substring(6);
+                if ("1".equals(val)) {typeChanges.put(key, "1");}
+                else if ("2".equals(val)) {typeChanges.put(key, "2");}
+            }
+        }
+        return new TrackerFormParams(deletedKeys, typeChanges);
+    }
+
+    /**
+     * Processes the delete/save tracker configuration action.
+     *
+     * @param params parsed form parameters
+     * @param trackers current tracker map
+     * @param openTrackers current open trackers
+     * @param privateTrackers current private trackers
+     * @return result with updated trackers and changes
+     * @since 0.9.71+
+     */
+    static TrackerFormResult processTrackerFormDeleteSave(TrackerFormParams params,
+                                                           Map<String, Tracker> trackers,
+                                                           List<String> openTrackers,
+                                                           List<String> privateTrackers) {
+        List<String> removedUrls = new ArrayList<>();
+        boolean changed = false;
+        for (String key : params.deletedKeys) {
+            Tracker t = trackers.remove(key);
+            if (t != null) {
+                removedUrls.add(t.announceURL);
+                changed = true;
+            }
+        }
+        for (Map.Entry<String, String> entry : params.typeChanges.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue();
+            Tracker t = trackers.get(key);
+            if (t != null) {
+                if ("1".equals(val)) {
+                    if (!openTrackers.contains(t.announceURL)) {
+                        changed = true;
+                    }
+                } else if ("2".equals(val)) {
+                    if (!privateTrackers.contains(t.announceURL)) {
+                        changed = true;
+                    }
+                }
+            }
+        }
+        // Compute new open/private lists based on user actions
+        List<String> newOpen = new ArrayList<>(openTrackers);
+        newOpen.removeAll(removedUrls);
+        List<String> newPriv = new ArrayList<>(privateTrackers);
+        newPriv.removeAll(removedUrls);
+        // Add type changes
+        for (Map.Entry<String, String> entry : params.typeChanges.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue();
+            Tracker t = trackers.get(key);
+            if (t != null) {
+                if ("1".equals(val)) {
+                    if (!newOpen.contains(t.announceURL)) {
+                        newOpen.add(t.announceURL);
+                    }
+                    newPriv.remove(t.announceURL);
+                } else if ("2".equals(val)) {
+                    if (!newPriv.contains(t.announceURL)) {
+                        newPriv.add(t.announceURL);
+                    }
+                }
+            }
+        }
+        // open trumps private - cleanup (not a user change)
+        newPriv.removeAll(newOpen);
+        // changed is only true if user actions caused changes
+        // The initial changed flag was set for deletes and type changes
+        return new TrackerFormResult(trackers, removedUrls, newOpen, newPriv, changed);
+    }
+
+    /**
+     * Parses the add tracker form parameters.
+     *
+     * @param req the HTTP request
+     * @return parsed parameters, or null if invalid
+     * @since 0.9.71+
+     */
+    static AddTrackerParams parseAddTrackerParams(HttpServletRequest req) {
+        String name = req.getParameter("tname");
+        String httpUrl = req.getParameter("thurl");
+        String announceUrl = req.getParameter("taurl");
+        if (name == null || httpUrl == null || announceUrl == null) {
+            return null;
+        }
+        name = DataHelper.stripHTML(name.trim());
+        httpUrl = DataHelper.stripHTML(httpUrl.trim());
+        if (!httpUrl.startsWith("http://") && !httpUrl.startsWith("udp://")) {
+            httpUrl = "http://" + httpUrl;
+        }
+        String announceUrlClean = DataHelper.stripHTML(req.getParameter("taurl").trim())
+                .replace("=", "&#61;");
+        if (!announceUrlClean.startsWith("http://") && !announceUrlClean.startsWith("udp://")) {
+            announceUrlClean = "http://" + announceUrlClean;
+        }
+        String type = req.getParameter("add_tracker_type");
+        return new AddTrackerParams(name, httpUrl, announceUrlClean, type);
+    }
+
+    /**
+     * Validates the add tracker parameters.
+     *
+     * @param params parsed parameters
+     * @return true if valid
+     * @since 0.9.71+
+     */
+    static boolean validateAddTrackerParams(AddTrackerParams params) {
+        return params != null
+            && !params.name.isEmpty()
+            && params.httpUrl.startsWith("http://")
+            && TrackerClient.isValidAnnounce(params.announceUrl);
+    }
+
+    /**
+     * Processes the add tracker action.
+     *
+     * @param params parsed and validated parameters
+     * @param trackers current tracker map
+     * @param openTrackers current open trackers
+     * @param privateTrackers current private trackers
+     * @return true if tracker was added
+     * @since 0.9.71+
+     */
+    static boolean processAddTracker(AddTrackerParams params,
+                                     Map<String, Tracker> trackers,
+                                     List<String> openTrackers,
+                                     List<String> privateTrackers) {
+        trackers.put(params.name, new Tracker(params.name, params.announceUrl, params.httpUrl));
+        return true;
+    }
+
+    /**
      * Whether the user agent cannot handle collapsible panels.
      *
      * @param req the request
@@ -7331,189 +7686,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private boolean isStandalone() {
         if (_context.isRouterContext()) {return false;}
         else {return true;}
-    }
-
-    /**
-     * Immutable context for rendering comments and ratings.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class CommentsContext {
-        final Snark snark;
-        final boolean er;
-        final boolean ec;
-        final boolean esc;
-        final String authorName;
-        final boolean canRate;
-        CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
-                        String authorName, boolean canRate) {
-            this.snark = snark;
-            this.er = er;
-            this.ec = ec;
-            this.esc = esc;
-            this.authorName = authorName;
-            this.canRate = canRate;
-        }
-    }
-
-    /**
-     * Immutable result of rendering the comments header table.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class CommentsHeaderResult {
-        final int myRating;
-        CommentsHeaderResult(int myRating) {
-            this.myRating = myRating;
-        }
-    }
-
-    /**
-     * Renders the comments/rating header table.
-     *
-     * @param buf the StringBuilder to append to
-     * @param ctx the rendering context
-     * @return the user's current rating
-     * @since 0.9.71+
-     */
-    CommentsHeaderResult renderCommentsHeader(StringBuilder buf, CommentsContext ctx) {
-        CommentSet comments = ctx.snark.getComments();
-        int myRating = 0;
-        buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
-           .append(_t("Ratings and Comments").replace("and", "&"))
-           .append("&nbsp;&nbsp;&nbsp;");
-        if (ctx.esc && !ctx.canRate) {
-            buf.append("<span id=nameRequired>")
-               .append(_t("Author name required to rate or comment"))
-               .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
-               .append(_t("Configure"))
-               .append("]</a></span>");
-        } else if (ctx.esc) {
-            buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
-               .append(_t("Your author name for published comments and ratings"))
-               .append("\">")
-               .append(DataHelper.escapeHTML(ctx.authorName))
-               .append("</span></span>");
-        }
-        buf.append("</th></tr>\n");
-        if (ctx.canRate) {
-            buf.append("<tr id=newRating>\n");
-            if (ctx.er) {
-                buf.append("<td>\n<select name=myRating>\n");
-                for (int i = 5; i >= 0; i--) {
-                    buf.append("<option value=\"").append(i).append("\"");
-                    if (i == myRating) {buf.append(" selected");}
-                    buf.append('>');
-                    if (i != 0) {
-                        for (int j = 0; j < i; j++) {buf.append("\u2605");}
-                        buf.append(' ').append(ngettext("1 star", "{0} stars", i));
-                    } else {buf.append("\u2606 ").append(_t("No rating"));}
-                    buf.append("</option>\n");
-                }
-                buf.append("</select>\n</td>");
-            } else {buf.append("<td></td>");}
-            if (ctx.esc) {buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");}
-            else {buf.append("<td></td>");}
-            buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
-            if (ctx.er && ctx.esc) {buf.append(_t("Rate and Comment"));}
-            else if (ctx.er) {buf.append(_t("Rate Torrent"));}
-            else {buf.append(_t("Add Comment"));}
-            buf.append("\" class=accept></td></tr>\n");
-        }
-        if (comments != null) {
-            synchronized(comments) {
-                if (ctx.er) {
-                    buf.append("<tr id=myRating><td>");
-                    myRating = comments.getMyRating();
-                    if (myRating > 0) {
-                        buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating");
-                        for (int i = 0; i < myRating; i++) {
-                            StringBuilder iconBuf = new StringBuilder();
-                            appendIcon(iconBuf, "rateme", "\u2605", "", false, true);
-                            buf.append(iconBuf.toString());
-                        }
-                    }
-                    buf.append("</td></tr>");
-                }
-                if (ctx.er) {
-                    buf.append("<tr id=showRatings><td>");
-                    int rcnt = comments.getRatingCount();
-                    if (rcnt > 0) {
-                        double avg = comments.getAverageRating();
-                        buf.append(_t("Average Rating"))
-                           .append(":</td><td colspan=2>")
-                           .append((new DecimalFormat("0.0")).format(avg));
-                    } else {
-                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
-                        buf.append(_t("No community ratings currently available"));
-                    }
-                    buf.append("</td></tr>\n");
-                }
-            }
-        }
-        buf.append("</table>\n");
-        return new CommentsHeaderResult(myRating);
-    }
-
-    /**
-     * Renders the user comments list table.
-     *
-     * @param buf the StringBuilder to append to
-     * @param ctx the rendering context
-     * @param myRating the user's current rating
-     * @since 0.9.71+
-     */
-    private void renderCommentsList(StringBuilder buf, CommentsContext ctx, int myRating) {
-        CommentSet comments = ctx.snark.getComments();
-        if (comments == null || !ctx.ec) {return;}
-        Iterator<Comment> iter;
-        synchronized(comments) {
-            if (comments.size() == 0) {return;}
-            iter = comments.iterator();
-        }
-        DateFormat fmt = _DATE_FMT3.get();
-        fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-        buf.append("<table id=userComments>\n");
-        int ccount = 0;
-        while (iter.hasNext()) {
-            Comment c = iter.next();
-            buf.append("<tr><td class=commentAuthor>");
-            if (c.getName() != null) {
-                buf.append("<span class=commentAuthorName title=\"").append(DataHelper.escapeHTML(c.getName())).append("\">")
-                   .append(DataHelper.escapeHTML(c.getName())).append("</span>");
-            }
-            buf.append("</td><td class=commentRating");
-            if (ctx.er) {
-                int rt = c.getRating();
-                if (rt > 0) {
-                    for (int i = 0; i < rt; i++) {
-                        StringBuilder iconBuf = new StringBuilder();
-                        appendIcon(iconBuf, "rateme", "\u2605", "", false, true);
-                        buf.append(iconBuf.toString());
-                    }
-                }
-            }
-            buf.append("</td><td class=commentText>");
-            if (ctx.esc) {
-                if (c.getText() != null) {
-                    buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
-                       .append(fmt.format(new Date(c.getTime()))).append("\">")
-                       .append(DataHelper.escapeHTML(c.getText()))
-                       .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
-                       .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
-                    ccount++;
-                } else {buf.append("</td><td class=commentDelete>");}
-            } else {buf.append("</td><td class=commentDelete>");}
-            buf.append("</td></tr>\n");
-        }
-        if (ctx.esc && ccount > 0) {
-            buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction><input type=submit name=deleteComments value=\"")
-               .append(_t("Delete Selected"))
-               .append("\" class=delete></td></tr>\n");
-        }
-        buf.append("</table>\n");
     }
 
 }
