@@ -1588,21 +1588,19 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // Tunnel counters, computed from our own sessions so they also work in standalone
         int[] tnl = _manager.util().getTunnelCounts();
-        buf.setLength(0);
-        buf.append("<span id=tnlInCount class=counter title=\"");
-        buf.append(titleInboundTunnels);
-        buf.append("\">");
-        appendIcon(buf, "inbound", "", "", true, true);
-        buf.append("<span class=badge>").append(tnl[0]).append("</span></span>");
-        out.write(buf.toString());
-
-        buf.setLength(0);
-        buf.append("<span id=tnlOutCount class=counter title=\"");
-        buf.append(titleOutboundTunnels);
-        buf.append("\">");
-        appendIcon(buf, "outbound", "", "", true, true);
-        buf.append("<span class=badge>").append(tnl[1]).append("</span></span>");
-        out.write(buf.toString());
+        String[][] counters = {
+            {"tnlInCount", "inbound", titleInboundTunnels, Integer.toString(tnl[0])},
+            {"tnlOutCount", "outbound", titleOutboundTunnels, Integer.toString(tnl[1])}
+        };
+        for (String[] counter : counters) {
+            buf.setLength(0);
+            buf.append("<span id=").append(counter[0]).append(" class=counter title=\"");
+            buf.append(counter[2]);
+            buf.append("\">");
+            appendIcon(buf, counter[1], "", "", true, true);
+            buf.append("<span class=badge>").append(counter[3]).append("</span></span>");
+            out.write(buf.toString());
+        }
 
         out.write("</span></th>");
 
