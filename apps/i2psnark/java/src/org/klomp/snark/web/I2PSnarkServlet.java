@@ -191,7 +191,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Current CSRF nonce, rotating every 5 minutes.
      *
      * @return the nonce
-     * @since 2.x.x
+     * @since 0.9.70+
      */
     private synchronized long getNonce() {
         if (_currentNonce == 0) {
@@ -211,7 +211,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  Validate nonce against current and recent nonces (backward compatibility).
      *  @param nonce the nonce to validate
      *  @return true if valid
-     *  @since 2.x.x
+     *  @since 0.9.70+
      */
     private synchronized boolean isValidNonce(String nonce) {
         if (nonce == null) {return false;}
@@ -222,12 +222,6 @@ public class I2PSnarkServlet extends BasicServlet {
         return false;
     }
 
-    /**
-     *  Session-bound nonce for outer section (main page, details, config)
-     *  @param session returns static nonce if null
-     *  @return a new nonce for each call
-     *  @since 0.9.69
-     */
     /**
      *  Validate Origin header for POST requests.
      *  Allows requests with matching Origin (same-origin), or no Origin header.
@@ -811,8 +805,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(v).append("\" as=style>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(v).append("\" as=style>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n")
-           .append("<title>");
-        buf.append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+           .append("<title>")
+           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
            .append(" - ")
            .append(isConfigure ? _t("Configuration") : _t("Anonymous BitTorrent Client"))
            .append("</title>\n");
@@ -829,8 +823,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-                .append("  window.totalSnarks = totalSnarks;\n</script>\n");
-             buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
+               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             if (delay > 0) {
@@ -3864,7 +3858,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param noThinsp spacing control flag
      * @return StatusResult containing the status HTML and status keyword
      * @since 0.9.68+
-    */
+     */
     private StatusResult buildStatusString(Snark snark, int curPeers, int knownPeers,
                                            long downBps, long upBps, boolean isRunning,
                                            long remaining, long needed, boolean noThinsp) {
@@ -5741,7 +5735,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showSort) {buf.append("</a>");}
         }
         buf.append("</th></tr></thead>\n<tbody>");
-        if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
+        if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray))  { // don't show row if top level or no playlist
             buf.append("<tr id=dirNav><td colspan=").append(showPriority ? '3' : '2').append(" class=ParentDir>");
             if (!isTopLevel) { // don't show parent dir link if top level
                 buf.append("<a href=\"");
@@ -5763,7 +5757,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
-}
+        }
 
         FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
         FileRowCounters counters = new FileRowCounters();
@@ -6473,136 +6467,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.31
      */
     private void displayComments(Snark snark, boolean er, boolean ec, boolean esc, StringBuilder buf) {
-        Iterator<Comment> iter = null;
-        int myRating = 0;
-        CommentSet comments = snark.getComments();
-        boolean canRate = esc && !_manager.util().getCommentsName().isEmpty();
-
-        buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
-           .append(_t("Ratings and Comments").replace("and", "&amp;"))
-           .append("&nbsp;&nbsp;&nbsp;");
-        if (esc && !canRate) {
-            buf.append("<span id=nameRequired>")
-               .append(_t("Author name required to rate or comment"))
-               .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
-               .append(_t("Configure"))
-               .append("]</a></span>");
-        } else if (esc) {
-            buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
-               .append(_t("Your author name for published comments and ratings"))
-               .append("\">")
-               .append(DataHelper.escapeHTML(_manager.util().getCommentsName()))
-               .append("</span></span>");
-        }
-        buf.append("</th></tr>\n");
-
-        // new rating / comment form
-        if (canRate) {
-            buf.append("<tr id=newRating>\n");
-            if (er) {
-                buf.append("<td>\n<select name=myRating>\n");
-                for (int i = 5; i >= 0; i--) {
-                    buf.append("<option value=\"").append(i).append("\"");
-                    if (i == myRating) {buf.append(" selected");}
-                    buf.append('>');
-                    if (i != 0) {
-                        for (int j = 0; j < i; j++) {buf.append("★");}
-                        buf.append(' ').append(ngettext("1 star", "{0} stars", i));
-                    } else {buf.append("☆ ").append(_t("No rating"));}
-                    buf.append("</option>\n");
-                }
-                buf.append("</select>\n</td>");
-            } else {buf.append("<td></td>");}
-            if (esc) {buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");}
-            else {buf.append("<td></td>");}
-            buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
-            if (er && esc) {buf.append(_t("Rate and Comment"));}
-            else if (er) {buf.append(_t("Rate Torrent"));}
-            else {buf.append(_t("Add Comment"));}
-            buf.append("\" class=accept></td></tr>\n");
-        }
-        if (comments != null) {
-            synchronized(comments) {
-                // current rating
-                if (er) {
-                    buf.append("<tr id=myRating><td>");
-                    myRating = comments.getMyRating();
-                    if (myRating > 0) {
-                        buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
-                        for (int i = 0; i < myRating; i++) {
-                            StringBuilder iconBuf = new StringBuilder();
-                            appendIcon(iconBuf, "rateme", "★", "", false, true);
-                            buf.append(iconBuf.toString());
-                        }
-                    }
-                    buf.append("</td></tr>");
-                }
-                if (er) {
-                    buf.append("<tr id=showRatings><td>");
-                    int rcnt = comments.getRatingCount();
-                    if (rcnt > 0) {
-                        double avg = comments.getAverageRating();
-                        buf.append(_t("Average Rating"))
-                           .append(":</td><td colspan=2>")
-                           .append((new DecimalFormat("0.0")).format(avg));
-                    } else {
-                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
-                        buf.append(_t("No community ratings currently available"));
-                    }
-                    buf.append("</td></tr>\n");
-                }
-                if (ec) {
-                    int sz = comments.size();
-                    if (sz > 0) {iter = comments.iterator();}
-                }
-            }
-        }
-
-        buf.append("</table>\n");
-        int ccount = 0;
-        if (iter != null) {
-            DateFormat fmt = _DATE_FMT3.get();
-            fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-            buf.append("<table id=userComments>\n");
-            while (iter.hasNext()) {
-                Comment c = iter.next();
-                buf.append("<tr><td class=commentAuthor>");
-                if (c.getName() != null) {
-                    buf.append("<span class=commentAuthorName title=\"").append(DataHelper.escapeHTML(c.getName())).append("\">")
-                       .append(DataHelper.escapeHTML(c.getName())).append("</span>");
-                }
-                buf.append("</td><td class=commentRating>");
-                if (er) {
-                    int rt = c.getRating();
-                    if (rt > 0) {
-                        for (int i = 0; i < rt; i++) {
-                            StringBuilder iconBuf = new StringBuilder();
-                            appendIcon(iconBuf, "rateme", "★", "", false, true);
-                            buf.append(iconBuf.toString());
-                        }
-                    }
-                }
-                buf.append("</td><td class=commentText>");
-                if (esc) {
-                    if (c.getText() != null) {
-                        buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
-                           .append(fmt.format(new Date(c.getTime()))).append("\">")
-                           .append(DataHelper.escapeHTML(c.getText()))
-                           .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
-                           .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
-                        ccount++;
-                    } else {buf.append("</td><td class=commentDelete>");} // insert empty named columns to maintain table layout
-                } else {buf.append("</td><td class=commentDelete>");} // insert empty named columns to maintain table layout
-                buf.append("</td></tr>\n");
-            }
-            if (esc && ccount > 0) {
-                buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction><input type=submit name=deleteComments value=\"")
-                   .append(_t("Delete Selected"))
-                   .append("\" class=delete></td></tr>\n");
-            }
-            buf.append("</table>\n");
-        }
+        String authorName = _manager.util().getCommentsName();
+        boolean canRate = esc && !authorName.isEmpty();
+        CommentsContext ctx = new CommentsContext(snark, er, ec, esc, authorName, canRate);
+        CommentsHeaderResult hdr = renderCommentsHeader(buf, ctx);
+        renderCommentsList(buf, ctx, hdr.myRating);
     }
+
 
     /**
      * Sort query string for torrent file-list links, where the value is a
@@ -7460,6 +7331,189 @@ public class I2PSnarkServlet extends BasicServlet {
     private boolean isStandalone() {
         if (_context.isRouterContext()) {return false;}
         else {return true;}
+    }
+
+    /**
+     * Immutable context for rendering comments and ratings.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsContext {
+        final Snark snark;
+        final boolean er;
+        final boolean ec;
+        final boolean esc;
+        final String authorName;
+        final boolean canRate;
+        CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
+                        String authorName, boolean canRate) {
+            this.snark = snark;
+            this.er = er;
+            this.ec = ec;
+            this.esc = esc;
+            this.authorName = authorName;
+            this.canRate = canRate;
+        }
+    }
+
+    /**
+     * Immutable result of rendering the comments header table.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsHeaderResult {
+        final int myRating;
+        CommentsHeaderResult(int myRating) {
+            this.myRating = myRating;
+        }
+    }
+
+    /**
+     * Renders the comments/rating header table.
+     *
+     * @param buf the StringBuilder to append to
+     * @param ctx the rendering context
+     * @return the user's current rating
+     * @since 0.9.71+
+     */
+    CommentsHeaderResult renderCommentsHeader(StringBuilder buf, CommentsContext ctx) {
+        CommentSet comments = ctx.snark.getComments();
+        int myRating = 0;
+        buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
+           .append(_t("Ratings and Comments").replace("and", "&"))
+           .append("&nbsp;&nbsp;&nbsp;");
+        if (ctx.esc && !ctx.canRate) {
+            buf.append("<span id=nameRequired>")
+               .append(_t("Author name required to rate or comment"))
+               .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
+               .append(_t("Configure"))
+               .append("]</a></span>");
+        } else if (ctx.esc) {
+            buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
+               .append(_t("Your author name for published comments and ratings"))
+               .append("\">")
+               .append(DataHelper.escapeHTML(ctx.authorName))
+               .append("</span></span>");
+        }
+        buf.append("</th></tr>\n");
+        if (ctx.canRate) {
+            buf.append("<tr id=newRating>\n");
+            if (ctx.er) {
+                buf.append("<td>\n<select name=myRating>\n");
+                for (int i = 5; i >= 0; i--) {
+                    buf.append("<option value=\"").append(i).append("\"");
+                    if (i == myRating) {buf.append(" selected");}
+                    buf.append('>');
+                    if (i != 0) {
+                        for (int j = 0; j < i; j++) {buf.append("\u2605");}
+                        buf.append(' ').append(ngettext("1 star", "{0} stars", i));
+                    } else {buf.append("\u2606 ").append(_t("No rating"));}
+                    buf.append("</option>\n");
+                }
+                buf.append("</select>\n</td>");
+            } else {buf.append("<td></td>");}
+            if (ctx.esc) {buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");}
+            else {buf.append("<td></td>");}
+            buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
+            if (ctx.er && ctx.esc) {buf.append(_t("Rate and Comment"));}
+            else if (ctx.er) {buf.append(_t("Rate Torrent"));}
+            else {buf.append(_t("Add Comment"));}
+            buf.append("\" class=accept></td></tr>\n");
+        }
+        if (comments != null) {
+            synchronized(comments) {
+                if (ctx.er) {
+                    buf.append("<tr id=myRating><td>");
+                    myRating = comments.getMyRating();
+                    if (myRating > 0) {
+                        buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating");
+                        for (int i = 0; i < myRating; i++) {
+                            StringBuilder iconBuf = new StringBuilder();
+                            appendIcon(iconBuf, "rateme", "\u2605", "", false, true);
+                            buf.append(iconBuf.toString());
+                        }
+                    }
+                    buf.append("</td></tr>");
+                }
+                if (ctx.er) {
+                    buf.append("<tr id=showRatings><td>");
+                    int rcnt = comments.getRatingCount();
+                    if (rcnt > 0) {
+                        double avg = comments.getAverageRating();
+                        buf.append(_t("Average Rating"))
+                           .append(":</td><td colspan=2>")
+                           .append((new DecimalFormat("0.0")).format(avg));
+                    } else {
+                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
+                        buf.append(_t("No community ratings currently available"));
+                    }
+                    buf.append("</td></tr>\n");
+                }
+            }
+        }
+        buf.append("</table>\n");
+        return new CommentsHeaderResult(myRating);
+    }
+
+    /**
+     * Renders the user comments list table.
+     *
+     * @param buf the StringBuilder to append to
+     * @param ctx the rendering context
+     * @param myRating the user's current rating
+     * @since 0.9.71+
+     */
+    private void renderCommentsList(StringBuilder buf, CommentsContext ctx, int myRating) {
+        CommentSet comments = ctx.snark.getComments();
+        if (comments == null || !ctx.ec) {return;}
+        Iterator<Comment> iter;
+        synchronized(comments) {
+            if (comments.size() == 0) {return;}
+            iter = comments.iterator();
+        }
+        DateFormat fmt = _DATE_FMT3.get();
+        fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+        buf.append("<table id=userComments>\n");
+        int ccount = 0;
+        while (iter.hasNext()) {
+            Comment c = iter.next();
+            buf.append("<tr><td class=commentAuthor>");
+            if (c.getName() != null) {
+                buf.append("<span class=commentAuthorName title=\"").append(DataHelper.escapeHTML(c.getName())).append("\">")
+                   .append(DataHelper.escapeHTML(c.getName())).append("</span>");
+            }
+            buf.append("</td><td class=commentRating");
+            if (ctx.er) {
+                int rt = c.getRating();
+                if (rt > 0) {
+                    for (int i = 0; i < rt; i++) {
+                        StringBuilder iconBuf = new StringBuilder();
+                        appendIcon(iconBuf, "rateme", "\u2605", "", false, true);
+                        buf.append(iconBuf.toString());
+                    }
+                }
+            }
+            buf.append("</td><td class=commentText>");
+            if (ctx.esc) {
+                if (c.getText() != null) {
+                    buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
+                       .append(fmt.format(new Date(c.getTime()))).append("\">")
+                       .append(DataHelper.escapeHTML(c.getText()))
+                       .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
+                       .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
+                    ccount++;
+                } else {buf.append("</td><td class=commentDelete>");}
+            } else {buf.append("</td><td class=commentDelete>");}
+            buf.append("</td></tr>\n");
+        }
+        if (ctx.esc && ccount > 0) {
+            buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction><input type=submit name=deleteComments value=\"")
+               .append(_t("Delete Selected"))
+               .append("\" class=delete></td></tr>\n");
+        }
+        buf.append("</table>\n");
     }
 
 }
