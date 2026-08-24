@@ -840,8 +840,8 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         // Append CSS assets and user overrides
-        buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
-        buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n");
+        buf.append(cssLink("snark.css", _themePath, "id=snarkTheme")).append("\n");
+        buf.append(cssLink("images/images.css", _themePath)).append("\n");
 
         String slash = String.valueOf(File.separatorChar);
         String themeBase = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
@@ -854,18 +854,18 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("var(--snarkGraph) no-repeat,var(--th);background-size:72px auto,100%,")
                .append("calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
                .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
-        }
+}
         if (!isStandalone() && override.exists()) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n");
+            buf.append(cssLink("override.css", _themePath) + "\n"); // optional override.css for version-persistent user edits
         }
 
         // Larger fonts for CJK languages
         if ("zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang)) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_D).append("\n");
+            buf.append(cssLink("snark_big.css", _themePath)).append("\n");
         }
 
         if (noCollapse || !collapsePanels) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");
+            buf.append(cssLink("nocollapse.css", _themePath)).append("\n");
         }
 
         buf.append("<style id=cssfilter></style>\n<style id=toggleLogCss></style>\n");
@@ -5444,13 +5444,27 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private static final String DOCTYPE = "<!DOCTYPE HTML>\n";
-    private static final String HEADER_A = "<link href=\"";
-    private static final String HEADER_B = "snark.css?" + CoreVersion.VERSION + "\" rel=stylesheet id=snarkTheme>";
-    private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=stylesheet>";
-    private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=stylesheet>";
-    private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=stylesheet>";
-    private static final String HEADER_Z = "override.css\" rel=stylesheet>";
     private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>";
+
+    /**
+     * Generates a CSS link tag for the given filename.
+     * @param filename the CSS filename (e.g., "snark.css")
+     * @param themePath the theme path
+     * @param attributes optional additional attributes (e.g., "id=snarkTheme")
+     * @return complete link tag
+     * @since 0.9.71+
+     */
+    private static String cssLink(String filename, String themePath, String... attributes) {
+        StringBuilder buf = new StringBuilder(128);
+        buf.append("<link href=\"").append(themePath).append(filename)
+           .append("?").append(CoreVersion.VERSION).append("\" rel=stylesheet");
+        for (String attr : attributes) {
+            buf.append(' ').append(attr);
+        }
+        buf.append('>');
+        return buf.toString();
+    }
+
     private static final String FOOTER = "</div>\n<span id=endOfPage data-iframe-height></span>\n" +
         "<script src=/js/iframeResizer/iframeResizer.contentWindow.js id=iframeResizer type=module></script>\n" +
         "<script src=/js/iframeResizer/updatedEvent.js type=module></script>\n" +
@@ -5459,9 +5473,11 @@ public class I2PSnarkServlet extends BasicServlet {
         "<script src=/js/autologout.js></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
         "</body>\n</html>";
+
     private static final String FOOTER_STANDALONE = "</div>\n" +
         "<script src=/i2psnark/.res/js/detectPageZoom.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" + "</body>\n</html>";
+
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
@@ -5534,15 +5550,15 @@ public class I2PSnarkServlet extends BasicServlet {
         final int dirSlash = directory.indexOf('/');
         final boolean isTopLevel = dirSlash <= 0;
         title = _t("I2PSnark") + " - [" + _t("Torrent") + ": " + DataHelper.escapeHTML(title) + "]";
-        buf.append(title).append("</title>\n").append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
+        buf.append(title).append("</title>\n").append(cssLink("snark.css", _themePath, "id=snarkTheme")).append("\n");
 
         boolean collapsePanels = _manager.util().collapsePanels(); // uncollapse panels
-        if (!collapsePanels) {buf.append(HEADER_A + _themePath + HEADER_C).append("\n");}
+        if (!collapsePanels) {buf.append(cssLink("nocollapse.css", _themePath)).append("\n");}
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko")) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_D); // larger fonts for cjk translations
+            buf.append(cssLink("snark_big.css", _themePath)).append("\n"); // larger fonts for cjk translations
         }
-        buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
+        buf.append(cssLink("images/images.css", _themePath)).append("\n"); // images.css
 
         String theme = _manager.getTheme();
         String themeBase = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
@@ -5555,7 +5571,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<link rel=stylesheet href=").append(fontPath).append("OpenSans.css>\n");
         }
         if (!isStandalone() && override.exists()) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
+            buf.append(cssLink("override.css", _themePath) + "\n"); // optional override.css for version-persistent user edits
         }
 
         buf.append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
@@ -7462,379 +7478,73 @@ public class I2PSnarkServlet extends BasicServlet {
         else {return true;}
     }
 
-    // =========================================================================
-    // processTrackerForm static helpers (original)
-    // =========================================================================
-
     /**
-     * Parsed tracker form parameters for delete/save actions.
-     * Package-visible for testing.
+     * Renders the HTML header, head, and navbar.
+     * Extracted from getListHTML for maintainability and testability.
      *
+     * @param buf the StringBuilder to append HTML to
+     * @param base the base URL for links
+     * @param title the page title (decoded base path)
+     * @param contextPath the context path
+     * @param contextName the context name
+     * @param theme the theme name
+     * @param themePath the theme path
+     * @param cspNonce the CSP nonce
+     * @param resourcePath the resource path
+     * @param cpath the context path
+     * @param slash the file separator
+     * @param lang the language code
+     * @param collapsePanels whether to collapse panels
+     * @param isStandalone whether running standalone
+     * @param themeBase the theme base path
+     * @param override the override.css file
+     * @param fontPath the font path
+     * @param useSoraFont whether to use Sora font
      * @since 0.9.71+
      */
-    static class TrackerFormParams {
-        final List<String> deletedKeys;
-        final Map<String, String> typeChanges; // key -> "1" (open) or "2" (private)
-        TrackerFormParams(List<String> deletedKeys, Map<String, String> typeChanges) {
-            this.deletedKeys = deletedKeys;
-            this.typeChanges = typeChanges;
-        }
-    }
+    private void renderHeader(StringBuilder buf, String base, String title,
+                              String contextPath, String contextName,
+                              String theme, String themePath, String cspNonce,
+                              String resourcePath, String cpath, String slash,
+                              String lang, boolean collapsePanels,
+                              boolean isStandalone, String themeBase,
+                              File override, String fontPath,
+                              boolean useSoraFont) {
+        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=standalone" : "").append(">\n")
+           .append("<head>\n<meta charset=utf-8>\n").append("<title>");
+        buf.append(_t("I2PSnark")).append(" - [").append(_t("Torrent")).append(": ").append(DataHelper.escapeHTML("")).append("]");
+        buf.append("</title>\n").append(cssLink("snark.css", _themePath, "id=snarkTheme")).append("\n");
 
-    /**
-     * Parsed tracker form parameters for add action.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class AddTrackerParams {
-        final String name;
-        final String httpUrl;
-        final String announceUrl;
-        final String type; // "1" (open), "2" (private), or null
-        AddTrackerParams(String name, String httpUrl, String announceUrl, String type) {
-            this.name = name;
-            this.httpUrl = httpUrl;
-            this.announceUrl = announceUrl;
-            this.type = type;
-        }
-    }
+        buf.append(cssLink("images/images.css", _themePath)).append("\n"); // images.css
 
-    /**
-     * Result of processing tracker form delete/save action.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class TrackerFormResult {
-        final Map<String, Tracker> updatedTrackers;
-        final List<String> removedUrls;
-        final List<String> newOpen;
-        final List<String> newPrivate;
-        final boolean changed;
-        TrackerFormResult(Map<String, Tracker> updatedTrackers, List<String> removedUrls,
-                          List<String> newOpen, List<String> newPrivate, boolean changed) {
-            this.updatedTrackers = updatedTrackers;
-            this.removedUrls = removedUrls;
-            this.newOpen = newOpen;
-            this.newPrivate = newPrivate;
-            this.changed = changed;
+        if (isStandalone() || useSoraFont()) {
+            buf.append("<link rel=stylesheet href=").append(fontPath).append("Sora.css>\n");
+        } else {
+            buf.append("<link rel=stylesheet href=").append(fontPath).append("OpenSans.css>\n");
         }
-    }
-
-    /**
-     * Parses the tracker form delete/save parameters from the request.
-     * Recognized keys: "delete_{key}", "ttype_{key}".
-     *
-     * @param req the HTTP request
-     * @return parsed parameters, never null
-     * @since 0.9.71+
-     */
-    static TrackerFormParams parseTrackerFormDeleteSave(HttpServletRequest req) {
-        List<String> deletedKeys = new ArrayList<>();
-        Map<String, String> typeChanges = new HashMap<>();
-        Enumeration<?> e = req.getParameterNames();
-        while (e.hasMoreElements()) {
-            Object o = e.nextElement();
-            if (!(o instanceof String)) {continue;}
-            String k = (String) o;
-            if (k.startsWith("delete_")) {
-                deletedKeys.add(k.substring(7));
-            } else if (k.startsWith("ttype_")) {
-                String val = req.getParameter(k);
-                String key = k.substring(6);
-                if ("1".equals(val)) {typeChanges.put(key, "1");}
-                else if ("2".equals(val)) {typeChanges.put(key, "2");}
-            }
+        if (!isStandalone() && override.exists()) {
+            buf.append(cssLink("override.css", _themePath) + "\n"); // optional override.css for version-persistent user edits
         }
-        return new TrackerFormParams(deletedKeys, typeChanges);
-    }
 
-    /**
-     * Processes the delete/save tracker configuration action.
-     *
-     * @param params parsed form parameters
-     * @param trackers current tracker map
-     * @param openTrackers current open trackers
-     * @param privateTrackers current private trackers
-     * @return result with updated trackers and changes
-     * @since 0.9.71+
-     */
-    static TrackerFormResult processTrackerFormDeleteSave(TrackerFormParams params,
-                                                           Map<String, Tracker> trackers,
-                                                           List<String> openTrackers,
-                                                           List<String> privateTrackers) {
-        List<String> removedUrls = new ArrayList<>();
-        boolean changed = false;
-        for (String key : params.deletedKeys) {
-            Tracker t = trackers.remove(key);
-            if (t != null) {
-                removedUrls.add(t.announceURL);
-                changed = true;
-            }
-        }
-        for (Map.Entry<String, String> entry : params.typeChanges.entrySet()) {
-            String key = entry.getKey();
-            String val = entry.getValue();
-            Tracker t = trackers.get(key);
-            if (t != null) {
-                if ("1".equals(val)) {
-                    if (!openTrackers.contains(t.announceURL)) {
-                        changed = true;
-                    }
-                } else if ("2".equals(val)) {
-                    if (!privateTrackers.contains(t.announceURL)) {
-                        changed = true;
-                    }
-                }
-            }
-        }
-        // Compute new open/private lists based on user actions
-        List<String> newOpen = new ArrayList<>(openTrackers);
-        newOpen.removeAll(removedUrls);
-        List<String> newPriv = new ArrayList<>(privateTrackers);
-        newPriv.removeAll(removedUrls);
-        // Add type changes
-        for (Map.Entry<String, String> entry : params.typeChanges.entrySet()) {
-            String key = entry.getKey();
-            String val = entry.getValue();
-            Tracker t = trackers.get(key);
-            if (t != null) {
-                if ("1".equals(val)) {
-                    if (!newOpen.contains(t.announceURL)) {
-                        newOpen.add(t.announceURL);
-                    }
-                    newPriv.remove(t.announceURL);
-                } else if ("2".equals(val)) {
-                    if (!newPriv.contains(t.announceURL)) {
-                        newPriv.add(t.announceURL);
-                    }
-                }
-            }
-        }
-        // open trumps private - cleanup (not a user change)
-        newPriv.removeAll(newOpen);
-        // changed is only true if user actions caused changes
-        // The initial changed flag was set for deletes and type changes
-        return new TrackerFormResult(trackers, removedUrls, newOpen, newPriv, changed);
-    }
-
-    /**
-     * Parses the add tracker form parameters.
-     *
-     * @param req the HTTP request
-     * @return parsed parameters, or null if invalid
-     * @since 0.9.71+
-     */
-    static AddTrackerParams parseAddTrackerParams(HttpServletRequest req) {
-        String name = req.getParameter("tname");
-        String httpUrl = req.getParameter("thurl");
-        String announceUrl = req.getParameter("taurl");
-        if (name == null || httpUrl == null || announceUrl == null) {
-            return null;
-        }
-        name = DataHelper.stripHTML(name.trim());
-        httpUrl = DataHelper.stripHTML(httpUrl.trim());
-        if (!httpUrl.startsWith("http://") && !httpUrl.startsWith("udp://")) {
-            httpUrl = "http://" + httpUrl;
-        }
-        String announceUrlClean = DataHelper.stripHTML(req.getParameter("taurl").trim())
-                .replace("=", "&#61;");
-        if (!announceUrlClean.startsWith("http://") && !announceUrlClean.startsWith("udp://")) {
-            announceUrlClean = "http://" + announceUrlClean;
-        }
-        String type = req.getParameter("add_tracker_type");
-        return new AddTrackerParams(name, httpUrl, announceUrlClean, type);
-    }
-
-    /**
-     * Validates the add tracker parameters.
-     *
-     * @param params parsed parameters
-     * @return true if valid
-     * @since 0.9.71+
-     */
-    static boolean validateAddTrackerParams(AddTrackerParams params) {
-        return params != null
-            && !params.name.isEmpty()
-            && params.httpUrl.startsWith("http://")
-            && TrackerClient.isValidAnnounce(params.announceUrl);
-    }
-
-    /**
-     * Processes the add tracker action.
-     *
-     * @param params parsed and validated parameters
-     * @param trackers current tracker map
-     * @param openTrackers current open trackers
-     * @param privateTrackers current private trackers
-     * @return true if tracker was added
-     * @since 0.9.71+
-     */
-    static boolean processAddTracker(AddTrackerParams params,
-                                     Map<String, Tracker> trackers,
-                                     List<String> openTrackers,
-                                     List<String> privateTrackers) {
-        trackers.put(params.name, new Tracker(params.name, params.announceUrl, params.httpUrl));
-        return true;
-    }
-
-    // =========================================================================
-    // appendTorrentInfo static helpers (new)
-    // =========================================================================
-
-    /**
-     * Immutable context for rendering tracker list.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class TorrentTrackersContext {
-        final List<List<String>> announceList;
-        final byte[] infoHash;
-
-        TorrentTrackersContext(List<List<String>> announceList, byte[] infoHash) {
-            this.announceList = announceList;
-            this.infoHash = infoHash;
-        }
-    }
-
-    /**
-     * Result of preparing tracker display data.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class TrackerDisplayData {
-        final List<List<String>> tiers;
-        final String primaryAnnounce;
-        final boolean hasTrackers;
-
-        TrackerDisplayData(List<List<String>> tiers, String primaryAnnounce, boolean hasTrackers) {
-            this.tiers = tiers;
-            this.primaryAnnounce = primaryAnnounce;
-            this.hasTrackers = hasTrackers;
-        }
-    }
-
-    /**
-     * Prepares tracker display data from the announce list.
-     * Filters to I2P trackers, organizes into tiers, identifies primary.
-     *
-     * @param ctx the rendering context
-     * @return display data with tiers and primary announce
-     * @since 0.9.71+
-     */
-    static TrackerDisplayData prepareTrackerDisplayData(TorrentTrackersContext ctx) {
-        List<List<String>> alist = ctx.announceList;
-        if (alist == null || alist.isEmpty()) {
-            return new TrackerDisplayData(Collections.emptyList(), null, false);
-        }
-        // Filter to I2P trackers and organize
-        List<List<String>> tiers = new ArrayList<>();
-        for (List<String> alist2 : alist) {
-            if (alist2.isEmpty()) continue;
-            List<String> tier = new ArrayList<>();
-            for (String s : alist2) {
-                if (isI2PTracker(s, true)) {
-                    tier.add(s);
-                }
-            }
-            if (!tier.isEmpty()) {
-                tiers.add(tier);
-            }
-        }
-        if (tiers.isEmpty()) {
-            return new TrackerDisplayData(Collections.emptyList(), null, false);
-        }
-        String primaryAnnounce = tiers.get(0).get(0);
-        return new TrackerDisplayData(tiers, primaryAnnounce, true);
-    }
-
-    /**
-     * Immutable context for rendering web seeds.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class WebSeedsContext {
-        final List<String> webSeedUrls;
-
-        WebSeedsContext(List<String> webSeedUrls) {
-            this.webSeedUrls = webSeedUrls;
-        }
-    }
-
-    /**
-     * Result of preparing web seeds display data.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class WebSeedsDisplayData {
-        final List<String> filteredSeeds;
-        final boolean hasWebSeeds;
-
-        WebSeedsDisplayData(List<String> filteredSeeds, boolean hasWebSeeds) {
-            this.filteredSeeds = filteredSeeds;
-            this.hasWebSeeds = hasWebSeeds;
-        }
-    }
-
-    /**
-     * Prepares web seeds display data.
-     * Filters to I2P trackers only.
-     *
-     * @param ctx the rendering context
-     * @return filtered web seeds
-     * @since 0.9.71+
-     */
-    static WebSeedsDisplayData prepareWebSeedsDisplayData(WebSeedsContext ctx) {
-        if (ctx.webSeedUrls == null || ctx.webSeedUrls.isEmpty()) {
-            return new WebSeedsDisplayData(Collections.emptyList(), false);
-        }
-        List<String> wlist = new ArrayList<>();
-        for (String s : ctx.webSeedUrls) {
-            if (isI2PTracker(s, true)) { wlist.add(s); }
-        }
-        return new WebSeedsDisplayData(wlist, !wlist.isEmpty());
-    }
-
-    /**
-     * Immutable context for rendering comments and ratings.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class CommentsContext {
-        final Snark snark;
-        final boolean er;
-        final boolean ec;
-        final boolean esc;
-        final String authorName;
-        final boolean canRate;
-
-        CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
-                        String authorName, boolean canRate) {
-            this.snark = snark;
-            this.er = er;
-            this.ec = ec;
-            this.esc = esc;
-            this.authorName = authorName;
-            this.canRate = canRate;
-        }
-    }
-
-    /**
-     * Immutable result of rendering the comments header table.
-     * Package-visible for testing.
-     *
-     * @since 0.9.71+
-     */
-    static class CommentsHeaderResult {
-        final int myRating;
-        CommentsHeaderResult(int myRating) {
-            this.myRating = myRating;
-        }
+        buf.append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
+           .append("<noscript><style>.script{display:none}</style></noscript>\n") // hide javascript-dependent buttons when js is unavailable
+           .append("<link rel=\"shortcut icon\" href=\"")
+           .append(_contextPath).append(WARBASE)
+           .append("icons/favicon.svg\">\n</head>\n<body style=display:none;pointer-events:none class=\"")
+           .append(theme)
+           .append(" lang_")
+           .append(lang)
+           .append("\">\n<div id=navbar><a href=")
+           .append(_contextPath)
+           .append("/ title=")
+           .append(_t("Torrents"))
+           .append(" id=nav_main class=snarkNav>")
+           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>")
+           .append("<a href=")
+           .append(_contextPath)
+           .append("/configure id=nav_config class=snarkNav>")
+           .append(_t("Configure"))
+           .append("</a></div>\n");
     }
 }
+
