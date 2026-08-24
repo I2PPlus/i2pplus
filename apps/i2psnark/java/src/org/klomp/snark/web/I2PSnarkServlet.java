@@ -1232,7 +1232,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<th class=peerCount>");
         if (isConnected && !noSnarks && hasPeers) {
             boolean showPeers = peerParam != null;
-            String queryString = showPeers ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
+            String queryString = showPeers ? getQueryString(req, "", null, null, null) : getQueryString(req, "1", null, null, null);
             String link = contextPath + '/' + queryString + filterQuery;
             String tx = showPeers ? _t("Hide Peers") : _t("Show Peers");
             String img = showPeers ? "hidepeers" : "showpeers";
@@ -1376,7 +1376,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<span class=descending></span>");
             }
             buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-               .append(getQueryString(req, null, null, nextSort))
+               .append(getQueryString(req, null, null, nextSort, null))
                .append(separator).append(filterQuery).append("\">");
             appendIcon(buf, "head_txspeed", txtTXRate, showSort ? _t("Sort by {0}", _t("Up Rate")) : "", true, false);
             buf.append("</a></span></th>");
@@ -1448,7 +1448,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-           .append(getQueryString(req, null, null, newSort))
+           .append(getQueryString(req, null, null, newSort, null))
            .append(separator).append(filterQuery).append("\">");
 
         appendIcon(buf, iconName, title, _t("Sort by {0}", title), true, false);
@@ -1915,59 +1915,61 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Build HTML-escaped and stripped query string.
-     *  Keeps any existing search param.
-     *
-     *  @param p override or "" for default or null to keep the same as in req
-     *  @param st override or "" for default or null to keep the same as in req
-     *  @param so override or "" for default or null to keep the same as in req
-     *  @return non-null, possibly empty
-     *  @since 0.9.16
-     */
-    private static String getQueryString(HttpServletRequest req, String p, String st, String so) {
-        return getQueryString(req, p, st, so, null);
-    }
-
-    /**
      * Query string with an optional search override.
      *
-     * @param s search param override or "" for default or null to keep the same as in req
-     * @return the query string
+     * Parameters are emitted in fixed p, sort, st, search order. Only values
+     * that are exactly signed integers are emitted, so a free-text search
+     * override never round-trips through these URLs.
+     *
+     * @param p page override, or null to inherit and sanitize from the request
+     * @param st start-index override, or null to inherit and sanitize
+     * @param so sort override, or null to inherit and normalize
+     * @param search search override, or null to inherit and HTML-escape
+     * @return the query string, beginning with '?' or empty
      * @since 0.9.58
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so, String search) {
-        String url = req.getRequestURL().toString();
-        String filter = req.getParameter("filter");
         StringBuilder buf = new StringBuilder(64);
+        appendQueryParam(buf, req, "p", p);
+        appendQueryParam(buf, req, "sort", so);
+        appendQueryParam(buf, req, "st", st);
+        appendQueryParam(buf, req, "search", search);
+        return buf.toString();
+    }
 
-        // Create a map with parameter names and their corresponding variable references
-        Map<String, String> params = new HashMap<>();
-        params.put("p", p);
-        params.put("sort", so);
-        params.put("st", st);
-        params.put("search", search);
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            String paramName = entry.getKey();
-            String value = entry.getValue();
-            if (value == null) {
-                value = req.getParameter(paramName);
-                if (value != null) {
-                    if ("sort".equals(paramName)) {
-                        value = normalizeSortParam(value);
-                    }
-                    if ("p".equals(paramName) || "sort".equals(paramName) || "st".equals(paramName)) {
-                        value = DataHelper.stripHTML(value);
-                    } else if ("search".equals(paramName)) {value = DataHelper.escapeHTML(value);}
+    /**
+     * Append one query pair to buf if it resolves to an emittable value.
+     *
+     * A null override inherits the value from the request, applying the
+     * per-name sanitization the legacy map-based implementation used:
+     * sort is normalized, p/sort/st are HTML-stripped, search is
+     * HTML-escaped. Explicit overrides are trusted as caller-provided
+     * constants. Emission requires an exact signed integer, matching the
+     * validation applied when such links are later parsed.
+     *
+     * @param buf destination buffer, prefix '?' or '&' chosen by its state
+     * @param req the current request, for inherited values
+     * @param name parameter name to emit
+     * @param override caller-supplied value, or null to inherit
+     * @since 0.9.71+
+     */
+    private static void appendQueryParam(StringBuilder buf, HttpServletRequest req,
+                                         String name, String override) {
+        String value = override;
+        if (value == null) {
+            value = req.getParameter(name);
+            if (value != null) {
+                if ("sort".equals(name)) {value = normalizeSortParam(value);}
+                if ("search".equals(name)) {
+                    value = DataHelper.escapeHTML(value);
+                } else {
+                    value = DataHelper.stripHTML(value);
                 }
             }
-            if (RedirectQuery.isValidNumeric(value) && value != null && !value.isEmpty()) {
-                if (buf.length() <= 0) {buf.append("?").append(paramName).append("=");}
-                else {buf.append("&").append(paramName).append("=");}
-                buf.append(value);
-            }
         }
-        return buf.toString();
+        if (RedirectQuery.isValidNumeric(value)) {
+            buf.append(buf.length() > 0 ? '&' : '?').append(name).append('=').append(value);
+        }
     }
 
     /**
@@ -2003,7 +2005,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
             // First
             buf.append("<a href=\"").append(_contextPath)
-               .append(getQueryString(req, null, "", null))
+               .append(getQueryString(req, null, "", null, null))
                .append("\"").append(start > 0 ? "" : " class=disabled")
                .append("><span id=first>");
             appendIcon(buf, "first", _t("First"), _t("First page"), true, true);
@@ -2012,7 +2014,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Back
             int prev = Math.max(0, start - pageSize);
             buf.append("<a href=\"").append(_contextPath)
-               .append(getQueryString(req, null, String.valueOf(prev), null))
+               .append(getQueryString(req, null, String.valueOf(prev), null, null))
                .append("\"").append(prev > 0 ? "" : " class=disabled")
                .append("><span id=previous>");
             appendIcon(buf, "previous", _t("Prev"), _t("Previous page"), true, true);
@@ -2030,7 +2032,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Next
             int next = start + pageSize;
             buf.append("<a href=\"").append(_contextPath)
-               .append(getQueryString(req, null, String.valueOf(next), null))
+               .append(getQueryString(req, null, String.valueOf(next), null, null))
                .append("\"").append(next + pageSize < total ? "" : " class=disabled")
                .append("><span id=next>");
             appendIcon(buf, "next", _t("Next"), _t("Next page"), true, true);
@@ -2039,7 +2041,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Last
             int last = ((total - 1) / pageSize) * pageSize;
             buf.append("<a href=\"").append(_contextPath)
-               .append(getQueryString(req, null, String.valueOf(last), null))
+               .append(getQueryString(req, null, String.valueOf(last), null, null))
                .append("\"").append(start + pageSize < total ? "" : " class=disabled")
                .append("><span id=last>");
             appendIcon(buf, "last", _t("Last"), _t("Last page"), true, true);
@@ -5334,8 +5336,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<div class=mainsection id=snarkFiles>")
            .append("<input hidden class=toggle_input id=toggle_files type=checkbox");
         // don't collapse file view if not in torrent root
-        String up = "";
-        if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null) {buf.append(" checked");}
+        if (!isTopLevel || fileList.size() <= 10 || sortParam != null) {buf.append(" checked");}
         buf.append(">")
            .append("<label id=tab_files class=toggleview for=toggle_files><span class=tab_label>")
            .append(_t("Files"))
@@ -5351,7 +5352,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else if ("-1".equals(sortParam)) {sort = "12"; isTypeSort = true;}
             else if ("12".equals(sortParam)) {sort = "-12"; isTypeSort = true;}
             else {sort = "";}
-            buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
+            buf.append("<a href=\"").append(base).append(sortQueryString(sort)).append("\">");
         }
         appendIcon(buf, "file", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Name"))) : tx + ": " + directory, true, false);
         if (showSort) {buf.append("</a>");}
@@ -5361,7 +5362,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</th><th class=fileSize>");
         if (showSort) {
             sort = ("-5".equals(sortParam)) ? "5" : "-5";
-            buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
+            buf.append("<a href=\"").append(base).append(sortQueryString(sort)).append("\">");
         }
         tx = _t("Size");
         appendIcon(buf, "size", tx, showSort ? _t("Sort by {0}", tx) : tx, true, false);
@@ -5371,7 +5372,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showRemainingSort) {
             sort = ("10".equals(sortParam)) ? "-10" : "10";
             buf.append("<a id=sortRemaining href=\"").append(base)
-               .append(getQueryString(sort)).append("\">");
+               .append(sortQueryString(sort)).append("\">");
         }
         tx = _t("Download Status");
         appendIcon(buf, "status", tx, showRemainingSort ? _t("Sort by {0}", _t("Remaining")) : tx, true, false);
@@ -5380,7 +5381,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</th><th class=\"priority volatile\">");
             if (showSort) {
                 sort = ("13".equals(sortParam)) ? "-13" : "13";
-                buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
+                buf.append("<a href=\"").append(base).append(sortQueryString(sort)).append("\">");
             }
             tx = _t("Download Priority");
             appendIcon(buf, "priority", tx, showSort ? _t("Sort by {0}", tx) : tx, true, false);
@@ -5392,7 +5393,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!isTopLevel) { // don't show parent dir link if top level
                 buf.append("<a href=\"");
                 URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
-                buf.append("/").append(getQueryString(up)).append("\">");
+                buf.append("/").append("\">");
                 appendIcon(buf, _t("up"), "", "", true, true);
                 buf.append(' ').append(_t("Parent directory")).append("</a>");
             }
@@ -6397,13 +6398,16 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Query string for the sort parameter.
+     * Sort query string for torrent file-list links, where the value is a
+     * servlet-generated numeric sort key. Distinct from the request-based
+     * getQueryString() builders: no request context, and the value is
+     * HTML-stripped unconditionally rather than validated numerically.
      *
-     * @param so null ok
-     * @return query string or ""
+     * @param so sort key, may be null or empty for no sorting
+     * @return "?sort=..." or ""
      * @since 0.9.16
      */
-    private static String getQueryString(String so) {
+    private static String sortQueryString(String so) {
         if (so != null && !so.isEmpty()) {return "?sort=" + DataHelper.stripHTML(so);}
         return "";
     }
