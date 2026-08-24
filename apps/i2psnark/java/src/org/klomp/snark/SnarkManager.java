@@ -4244,13 +4244,40 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 getTime()
                                         + "&nbsp; "
                                         + _t(
-                                                "Adding torrents in {0}" + "&hellip;",
+                                                "Starting torrents in {0}" + "&hellip;",
                                                 DataHelper.formatDuration2(delay)));
+                // Make torrents visible in the UI immediately; only their
+                // auto-start waits out the configured delay (tunnels are
+                // pre-built by SnarkPreConnect during this window)
+                List<Snark> earlyAdded;
+                try {
+                    synchronized (_snarks) {
+                        earlyAdded = monitorTorrents(dir);
+                    }
+                } catch (RuntimeException e) {
+                    _log.error("Error in the DirectoryMonitor", e);
+                    earlyAdded = Collections.emptyList();
+                }
                 sleep(delay);
                 _messages.clearThrough(id); // Remove that first message
+                if (!earlyAdded.isEmpty()) {
+                    startBatch(earlyAdded);
+                }
             } else if (_context.isRouterContext()) {
                 // Wait for client manager to be up so we can get bandwidth limits
                 sleep(3000);
+            }
+            // Immediate first add pass for the non-deferred paths; the loop's
+            // first pass below then typically finds nothing new. Deferred mode
+            // already added above so torrents are visible during the wait.
+            if (!(delay > 30000 && autostart)) {
+                try {
+                    synchronized (_snarks) {
+                        monitorTorrents(dir);
+                    }
+                } catch (RuntimeException e) {
+                    _log.error("Error in the DirectoryMonitor", e);
+                }
             }
             // Here because we need to delay until I2CP is up although the user will see the default
             // until then
