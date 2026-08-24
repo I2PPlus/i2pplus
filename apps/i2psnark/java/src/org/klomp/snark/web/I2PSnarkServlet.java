@@ -1205,7 +1205,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // Status header sort parameters and active sort detection,
         // cycling status asc/desc and status+pool asc/desc when pooled dests exist
         String nextSort;
-        boolean poolSort = multiDestSortEnabled();
+        boolean poolSort = multiDestActive();
         if ("-2".equals(currentSort)) {
             nextSort = "2";
         } else if ("2".equals(currentSort)) {
@@ -1450,12 +1450,14 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Whether pool badges and pool-based sorting apply: multi-dest mode
-     * with at least one active destination.
+     * Whether multi-destination mode is active: enabled in the config with
+     * at least one active destination. Gates everything pool-related -
+     * the per-row destination badges, status+pool sorting, and the clamp
+     * that keeps StatusPoolComparator out of single-dest requests.
      *
-     * @return true when pooled destinations are in use
+     * @return true when multi-dest mode is in use
      */
-    boolean multiDestSortEnabled() {
+    boolean multiDestActive() {
         return _manager.util().getMultiDest() && _manager.util().getTorrentDests().size() >= 1;
     }
 
@@ -3262,7 +3264,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Pool-aware sorting exists only in multi-dest mode; ignore stale
             // 13/-13 parameters from old URLs instead of applying
             // StatusPoolComparator outside its domain.
-            if (!multiDestSortEnabled() && (sort == 13 || sort == -13)) {
+            if (!multiDestActive() && (sort == 13 || sort == -13)) {
                 sort = 0;
             }
             String lang;
@@ -3426,7 +3428,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // badge after its status icon when sorted by status+pool (13/-13):
             // the sequential pool number for torrents sharing a pooled
             // destination, or D for one on a dedicated destination.
-            if (isRunning && multiDestSortEnabled() && sortParam != null && sortParam.contains("13")) {
+            if (isRunning && multiDestActive() && sortParam != null && sortParam.contains("13")) {
                 TorrentDest td = snark.getDest();
                 if (td != null && td.getMyDestination() != null) {
                     int poolNum = td.getPoolNum();
