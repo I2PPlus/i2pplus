@@ -5486,11 +5486,29 @@ public class I2PSnarkServlet extends BasicServlet {
      * All the xxxResource constructors are package local so we can't extend them.
      *
      * Get the resource list as a HTML directory listing.
+     *
+     * Section map, in output order:
+     * <ol>
+     *   <li>POST dispatch - torrent actions (priorities, comments, stop/start/
+     *       recheck, edit) via handleDirectoryPost(); P-R-G means no rendering
+     *       after a POST</li>
+     *   <li>renderHeader() - doctype, head, theme/font CSS, navbar</li>
+     *   <li>form open, appendTorrentInfo(), displayTorrentEdit()</li>
+     *   <li>appendResourceError() when the path does not exist on disk</li>
+     *   <li>no-listing branch - appendMediaSection() player, comments section,
+     *       footer, return</li>
+     *   <li>file listing - wrapFileList() + sort, appendFileTableHead(),
+     *       appendParentDirRow(), renderFileRow() loop, per-counter scripts</li>
+     *   <li>renderCommentsSection(), form close, lightbox/refresh scripts,
+     *       footer</li>
+     * </ol>
+     *
      * @param xxxr The Resource unused
      * @param base The encoded base URL
      * @param parent True if the parent directory should be included
      * @param postParams map of POST parameters or null if not a POST
-     * @return String of HTML or null if postParams != null
+     * @param sortParam the file sort key from the request, or null
+     * @return String of HTML, or null if postParams != null (P-R-G)
      * @since 0.7.14
      */
     private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam) throws IOException {
@@ -5498,7 +5516,6 @@ public class I2PSnarkServlet extends BasicServlet {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
-        String slash = String.valueOf(File.separatorChar);
         if (title.startsWith(cpath)) {title = title.substring(cpath.length());}
 
         // Get the snark associated with this directory
@@ -5507,26 +5524,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String pathInTorrent = tNameAndPath[1];
         Snark snark = _manager.getTorrentByBaseName(tName);
 
+        // caller must P-R-G
         if (snark != null && postParams != null) {
-            // caller must P-R-G
-            String[] val = postParams.get("nonce");
-            if (val != null) {
-                String nonce = val[0];
-                if (isValidNonce(nonce)) {
-                    if (postParams.get("savepri") != null) {savePriorities(snark, postParams);}
-                    else if (postParams.get("addComment") != null) {saveComments(snark, postParams);}
-                    else if (postParams.get("deleteComments") != null) {deleteComments(snark, postParams);}
-                    else if (postParams.get("setCommentsEnabled") != null) {saveCommentsSetting(snark, postParams);}
-                    else if (postParams.get("stop") != null) {_manager.stopTorrent(snark, false);}
-                    else if (postParams.get("start") != null) {_manager.startTorrent(snark);}
-                    else if (postParams.get("recheck") != null) {_manager.recheckTorrent(snark);}
-                    else if (postParams.get("editTorrent") != null) {saveTorrentEdit(snark, postParams);}
-                    else if (postParams.get("setInOrderEnabled") != null) {
-                        _manager.saveTorrentStatus(snark);
-                        _manager.addMessage(_t("Sequential piece or file order not saved - feature currently broken."));
-                    } else {_manager.addMessage(_t("Unknown command"));}
-                } else {_manager.addMessage(_t("Please retry form submission (bad nonce)"));}
-            }
+            handleDirectoryPost(snark, postParams);
             return null;
         }
 
@@ -5542,36 +5542,237 @@ public class I2PSnarkServlet extends BasicServlet {
         Storage storage = snark != null ? snark.getStorage() : null;
         boolean showPriority = storage != null && !storage.complete() && r.isDirectory();
 
-        StringBuilder buf=new StringBuilder(6*1024);
-        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=standalone" : "").append(">\n")
-           .append("<head>\n<meta charset=utf-8>\n").append("<title>");
-        if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
-        final String directory = title;
+        final String directory = title.endsWith("/") ? title.substring(0, title.length() - 1) : title;
         final int dirSlash = directory.indexOf('/');
         final boolean isTopLevel = dirSlash <= 0;
-        title = _t("I2PSnark") + " - [" + _t("Torrent") + ": " + DataHelper.escapeHTML(title) + "]";
-        buf.append(title).append("</title>\n").append(cssLink("snark.css", _themePath, "id=snarkTheme")).append("\n");
 
-        boolean collapsePanels = _manager.util().collapsePanels(); // uncollapse panels
-        if (!collapsePanels) {buf.append(cssLink("nocollapse.css", _themePath)).append("\n");}
-        String lang = (Translate.getLanguage(_manager.util().getContext()));
+        StringBuilder buf = new StringBuilder(6*1024);
+        renderHeader(buf, directory);
+
+        if (parent) {buf.append("<div class=page id=dirlist>\n");} // always true
+         // for stop/start/check
+        final boolean er = snark != null && _manager.util().ratingsEnabled();
+        final boolean ec = snark != null && _manager.util().commentsEnabled(); // global setting
+        final boolean esc = ec && _manager.getSavedCommentsEnabled(snark); // per-torrent setting
+        final boolean includeForm = showStopStart || showPriority || er || ec;
+        if (includeForm) {
+            buf.append("<form action=\"").append(base).append("\" method=POST>\n")
+               .append("<input type=hidden name=nonce value=\"").append(getNonce()).append("\">\n");
+            if (sortParam != null) {
+                buf.append("<input type=hidden name=sort value=\"").append(DataHelper.stripHTML(sortParam)).append("\">\n");
+            }
+        }
+
+        appendTorrentInfo(buf, snark, base, tName, showStopStart);
+        displayTorrentEdit(snark, base, buf);
+
+        if (snark != null && !r.exists()) {
+            appendResourceError(buf, r, base, tName);
+            return buf.toString();
+        }
+
+        File[] ls = null;
+        if (r.isDirectory()) {ls = storage != null ? storage.listMerged(pathInTorrent) : r.listFiles();} // if r is not a directory, we are only showing torrent info section
+        if (ls == null) {
+            // We are only showing the torrent info section unless audio or video...
+            if (storage != null && storage.complete()) {
+                String mime = getMimeType(r.getName());
+                boolean isAudio = mime != null && isAudio(mime);
+                boolean isVideo = !isAudio && mime != null && isVideo(mime);
+                if (isAudio || isVideo) {
+                    String imgPath = isStandalone() ? "/i2psnark/.res/icons/" : "/themes/console/images/";
+                    appendMediaSection(buf, base, tName, mime, isAudio, imgPath);
+                }
+            }
+            renderCommentsSection(snark, er, ec, esc, _t("Comments &amp; Ratings"), buf);
+            if (includeForm) {buf.append("</form>\n");}
+            buf.append(isStandalone() ? FOOTER_STANDALONE : FOOTER);
+            return buf.toString();
+        }
+
+        // Precompute remaining for all files for efficiency
+        long[][] arrays = (storage != null) ? storage.remaining2() : null;
+        long[] remainingArray = (arrays != null) ? arrays[0] : null;
+        long[] previewArray = (arrays != null) ? arrays[1] : null;
+        List<Sorters.FileAndIndex> fileList = wrapFileList(ls, storage, remainingArray, previewArray, isTopLevel);
+
+        boolean showSort = fileList.size() > 1;
+        if (showSort) {
+            int sort = sortParam != null ? I2PSnarkUtil.parseInt(sortParam, 0) : 0;
+            DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
+        }
+
+        buf.append("<div class=mainsection id=snarkFiles>")
+           .append("<input hidden class=toggle_input id=toggle_files type=checkbox");
+        // don't collapse file view if not in torrent root
+        if (!isTopLevel || fileList.size() <= 10 || sortParam != null) {buf.append(" checked");}
+        buf.append(">")
+           .append("<label id=tab_files class=toggleview for=toggle_files><span class=tab_label>")
+           .append(_t("Files"))
+           .append("</span></label><hr>\n")
+           .append("<table id=dirInfo>\n<thead>\n<tr>\n<th colspan=2>");
+        appendFileTableHead(buf, base, directory, dirSlash, isTopLevel, showSort, showPriority, sortParam);
+        buf.append("</th></tr></thead>\n<tbody>");
+        // hoisted: one recursive walk per view instead of two
+        boolean hasAudio = hasCompleteAudio(fileList, storage, remainingArray);
+        if (!isTopLevel || hasAudio) { // don't show row if top level or no playlist
+            appendParentDirRow(buf, base, sortParam, decodedBase, isTopLevel, hasAudio, showPriority);
+        }
+
+        FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
+        FileRowCounters counters = new FileRowCounters();
+        boolean rowEven = true;
+        for (Sorters.FileAndIndex fai : fileList) {
+            rowEven = renderFileRow(buf, ctx, fai, rowEven, counters);
+        }
+        if (counters.showSaveButton) {
+            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5><input type=submit class=accept value=\"")
+               .append(_t("Save priorities"))
+               .append("\" name=savepri>\n</th></tr></thead>\n");
+        }
+        buf.append("</table>\n</div>\n");
+        if (counters.imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
+        if (counters.txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
+        buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n");
+
+        renderCommentsSection(snark, er, ec, esc, _t("Comments"), buf);
+
+        // for stop/start/check
+        if (includeForm) {buf.append("</form>\n");}
+        boolean enableLightbox = _manager.util().enableLightbox();
+        if (enableLightbox) {
+            buf.append("<link rel=stylesheet href=").append(_resourcePath).append("lightbox.css>\n")
+               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
+               .append("  import {Lightbox} from \"").append(_resourcePath).append("js/lightbox.js\";\n")
+               .append("  var lightbox = new Lightbox();lightbox.load();\n")
+               .append("</script>\n");
+        }
+        int delay = _manager.getRefreshDelaySeconds();
+        buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+           .append("  window.snarkRefreshDelay = ").append(delay).append(";\n")
+           .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js\";\n")
+           .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
+           .append("</script>\n");
+        if (!isStandalone()) {buf.append(FOOTER);}
+        else {buf.append(FOOTER_STANDALONE);}
+        return buf.toString();
+    }
+
+    /**
+     * Dispatch a POST on the torrent directory page to its action, validating
+     * the anti-CSRF nonce first. Never renders; the caller responds with a
+     * redirect (P-R-G). A missing nonce is ignored silently; an invalid nonce
+     * or an unrecognized command adds a console message instead.
+     * Extracted from getListHTML.
+     *
+     * @param snark non-null target torrent
+     * @param postParams the POST parameter map, non-null
+     * @since 0.9.71+
+     */
+    private void handleDirectoryPost(Snark snark, Map<String, String[]> postParams) {
+        String[] val = postParams.get("nonce");
+        if (val == null) {return;}
+        if (!isValidNonce(val[0])) {
+            _manager.addMessage(_t("Please retry form submission (bad nonce)"));
+            return;
+        }
+        String action = findPostAction(postParams);
+        if (action != null) {
+            executeDirectoryPostAction(snark, postParams, action);
+        } else {
+            _manager.addMessage(_t("Unknown command"));
+        }
+    }
+
+    /** Command keys accepted by {@link #executeDirectoryPostAction}, in precedence order. */
+    private static final String[] DIRECTORY_POST_ACTIONS = {
+        "savepri", "addComment", "deleteComments", "setCommentsEnabled",
+        "stop", "start", "recheck", "editTorrent", "setInOrderEnabled"
+    };
+
+    /**
+     * Returns the first matching command key from a directory-page POST, in
+     * the fixed precedence order of {@link #DIRECTORY_POST_ACTIONS}.
+     * Static and side-effect-free for testability.
+     *
+     * @param postParams the POST parameter map, non-null
+     * @return the matched action key, or null if none is present
+     * @since 0.9.71+
+     */
+    static String findPostAction(Map<String, String[]> postParams) {
+        for (String action : DIRECTORY_POST_ACTIONS) {
+            if (postParams.get(action) != null) {return action;}
+        }
+        return null;
+    }
+
+    /**
+     * Performs the side effects of a validated directory-page POST command.
+     *
+     * @param snark non-null target torrent
+     * @param postParams the full POST parameter map, needed by form handlers
+     * @param action a key returned by {@link #findPostAction}, non-null
+     * @since 0.9.71+
+     */
+    private void executeDirectoryPostAction(Snark snark, Map<String, String[]> postParams, String action) {
+        switch (action) {
+            case "savepri": savePriorities(snark, postParams); break;
+            case "addComment": saveComments(snark, postParams); break;
+            case "deleteComments": deleteComments(snark, postParams); break;
+            case "setCommentsEnabled": saveCommentsSetting(snark, postParams); break;
+            case "stop": _manager.stopTorrent(snark, false); break;
+            case "start": _manager.startTorrent(snark); break;
+            case "recheck": _manager.recheckTorrent(snark); break;
+            case "editTorrent": saveTorrentEdit(snark, postParams); break;
+            case "setInOrderEnabled":
+                _manager.saveTorrentStatus(snark);
+                _manager.addMessage(_t("Sequential piece or file order not saved - feature currently broken."));
+                break;
+            default: break; // unreachable - findPostAction returns listed keys only
+        }
+    }
+
+    /**
+     * Renders the doctype, HTML head (theme and font CSS, CSP'd theme script,
+     * favicon) and the navbar. All inputs come from servlet state so page
+     * assembly stays allocation-light; only the directory display name is
+     * passed in. Extracted from getListHTML.
+     *
+     * @param buf target buffer
+     * @param directory decoded directory display name for the page title,
+     *                  escaped here; may be empty
+     * @since 0.9.71+
+     */
+    private void renderHeader(StringBuilder buf, String directory) {
+        String theme = _manager.getTheme();
+        boolean standalone = isStandalone();
+        buf.append(DOCTYPE).append("<html").append(standalone ? " class=standalone" : "").append(">\n")
+           .append("<head>\n<meta charset=utf-8>\n").append("<title>")
+           .append(_t("I2PSnark")).append(" - [").append(_t("Torrent")).append(": ")
+           .append(DataHelper.escapeHTML(directory)).append("]")
+           .append("</title>\n").append(cssLink("snark.css", _themePath, "id=snarkTheme")).append("\n");
+
+        if (!_manager.util().collapsePanels()) {buf.append(cssLink("nocollapse.css", _themePath)).append("\n");}
+        String lang = Translate.getLanguage(_manager.util().getContext());
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko")) {
             buf.append(cssLink("snark_big.css", _themePath)).append("\n"); // larger fonts for cjk translations
         }
         buf.append(cssLink("images/images.css", _themePath)).append("\n"); // images.css
 
-        String theme = _manager.getTheme();
-        String themeBase = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
-                           "docs" + slash + "themes" + slash + "snark" + slash + theme + slash;
-        File override = new File(themeBase + "override.css");
-        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts/" : "/themes/fonts/";
-        if (isStandalone() || useSoraFont()) {
+        String fontPath = standalone ? "/i2psnark/.res/themes/fonts/" : "/themes/fonts/";
+        if (standalone || useSoraFont()) {
             buf.append("<link rel=stylesheet href=").append(fontPath).append("Sora.css>\n");
         } else {
             buf.append("<link rel=stylesheet href=").append(fontPath).append("OpenSans.css>\n");
         }
-        if (!isStandalone() && override.exists()) {
-            buf.append(cssLink("override.css", _themePath) + "\n"); // optional override.css for version-persistent user edits
+        if (!standalone) {
+            File override = new File(I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
+                                     File.separatorChar + "docs" + File.separatorChar + "themes" +
+                                     File.separatorChar + "snark" + File.separatorChar + theme +
+                                     File.separatorChar + "override.css");
+            if (override.exists()) {
+                buf.append(cssLink("override.css", _themePath)).append('\n'); // version-persistent user edits
+            }
         }
 
         buf.append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
@@ -5593,239 +5794,298 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("/configure id=nav_config class=snarkNav>")
            .append(_t("Configure"))
            .append("</a></div>\n");
+    }
 
-        if (parent) {buf.append("<div class=page id=dirlist>\n");} // always true
-         // for stop/start/check
-        final boolean er = snark != null && _manager.util().ratingsEnabled();
-        final boolean ec = snark != null && _manager.util().commentsEnabled(); // global setting
-        final boolean esc = ec && _manager.getSavedCommentsEnabled(snark); // per-torrent setting
-        final boolean includeForm = showStopStart || showPriority || er || ec;
-        if (includeForm) {
-            buf.append("<form action=\"").append(base).append("\" method=POST>\n")
-               .append("<input type=hidden name=nonce value=\"").append(getNonce()).append("\">\n");
-            if (sortParam != null) {
-                buf.append("<input type=hidden name=sort value=\"").append(DataHelper.stripHTML(sortParam)).append("\">\n");
-            }
+    /**
+     * Renders the error table shown when the requested path within the torrent
+     * does not exist on disk. Extracted from getListHTML.
+     *
+     * @param buf target buffer
+     * @param r the missing resource path
+     * @param base the encoded base URL
+     * @param tName the torrent name, escaped here
+     * @since 0.9.71+
+     */
+    private void appendResourceError(StringBuilder buf, File r, String base, String tName) {
+        // fixup TODO
+        buf.append("<table class=resourceError id=DoesNotExist>\n<tr><th colspan=2>")
+           .append(_t("Resource Does Not Exist"))
+           .append("</th></tr><tr><td><b>").append(_t("Resource")).append(":</b></td><td>").append(r.toString())
+           .append("</td></tr><tr><td><b>").append(_t("Base")).append(":</b></td><td>").append(base)
+           .append("</td></tr><tr><td><b>").append(_t("Torrent")).append(":</b></td><td>").append(DataHelper.escapeHTML(tName))
+           .append("</td></tr>\n</table>");
+    }
+
+    /**
+     * Renders the HTML5 audio/video player section for a complete single-media
+     * torrent. Static: no servlet state required beyond the parameters.
+     * Extracted from getListHTML.
+     *
+     * @param buf target buffer
+     * @param base the encoded base URL with trailing slash
+     * @param tName the torrent name, escaped here
+     * @param mime the non-null media MIME type
+     * @param isAudio true for audio, false for video
+     * @param imgPath web-visible path to the console icons
+     * @since 0.9.71+
+     */
+    private static void appendMediaSection(StringBuilder buf, String base, String tName,
+                                           String mime, boolean isAudio, String imgPath) {
+        String path = base.substring(0, base.length() - 1); // strip trailing slash
+        String newTab = "<img src=" + imgPath + "newtab.svg width=16 height=auto class=newTab>";
+        buf.append("<div class=mainsection id=media>\n<table id=mediaContainer>\n<tr>");
+        // HTML5
+        if (isAudio) {
+            buf.append("<th class=audio>")
+               .append(DataHelper.escapeHTML(tName))
+               .append("<a href=\"")
+               .append(path)
+               .append("\" title=\"Open in new tab\" target=_blank>")
+               .append(newTab)
+               .append("</a></th></tr>\n<tr><td><audio controls>");
+        } else {
+            buf.append("<th id=videoTitle class=video>")
+               .append(DataHelper.escapeHTML(tName))
+               .append("<a href=\"")
+               .append(path)
+               .append("\" title=\"Open in new tab\" target=_blank>")
+               .append(newTab)
+               .append("</a></th></tr>\n<tr><td><video id=embedVideo controls>");
         }
+        buf.append("<source src=\"").append(path).append("\" type=\"").append(mime).append("\">");
+        if (isAudio) {buf.append("</audio>");}
+        else {buf.append("</video>");}
+        buf.append("</td></tr>\n</table>\n</div>\n");
+    }
 
-        appendTorrentInfo(buf, snark, base, tName, showStopStart);
-        displayTorrentEdit(snark, base, buf);
+    /**
+     * Whether a filesystem entry is a legacy padding directory that should be
+     * hidden in top-level listings. Old versions created ".pad"/"_pad"
+     * directories; Storage no longer does, but they may still exist on disk.
+     * Extracted from getListHTML for testability.
+     *
+     * @param f the entry, non-null
+     * @return true if it is a padding directory
+     * @since 0.9.71+
+     */
+    static boolean isPaddingDir(File f) {
+        if (!f.isDirectory()) {return false;}
+        String n = f.getName();
+        return n.equals(".pad") || n.equals("_pad");
+    }
 
-        if (snark != null && !r.exists()) {
-            // fixup TODO
-            buf.append("<table class=resourceError id=DoesNotExist>\n<tr><th colspan=2>")
-               .append(_t("Resource Does Not Exist"))
-               .append("</th></tr><tr><td><b>").append(_t("Resource")).append(":</b></td><td>").append(r.toString())
-               .append("</td></tr><tr><td><b>").append(_t("Base")).append(":</b></td><td>").append(base)
-               .append("</td></tr><tr><td><b>").append(_t("Torrent")).append(":</b></td><td>").append(DataHelper.escapeHTML(tName))
-               .append("</td></tr>\n</table>");
-            return buf.toString();
+    /**
+     * Wraps a raw directory listing in Sorters.FileAndIndex entries carrying
+     * the precomputed per-file remaining/preview arrays, optionally hiding
+     * legacy padding directories. Pure wrapping; sorting is the caller's job.
+     * Extracted from getListHTML for testability.
+     *
+     * @param ls the raw listing, non-null
+     * @param storage may be null (magnet/dummy); arrays must then be null too
+     * @param remainingArray precomputed by Storage.remaining2(), null iff storage is null
+     * @param previewArray may be null
+     * @param skipPaddingDirs true hides ".pad"/"_pad" directories
+     * @return wrapped entries, possibly empty, never null
+     * @since 0.9.71+
+     */
+    static List<Sorters.FileAndIndex> wrapFileList(File[] ls, Storage storage,
+            long[] remainingArray, long[] previewArray, boolean skipPaddingDirs) {
+        List<Sorters.FileAndIndex> rv = new ArrayList<>(ls.length);
+        for (File f : ls) {
+            if (skipPaddingDirs && isPaddingDir(f)) {continue;}
+            rv.add(new Sorters.FileAndIndex(f, storage, remainingArray, previewArray));
         }
+        return rv;
+    }
 
-        File[] ls = null;
-        if (r.isDirectory()) {ls = storage != null ? storage.listMerged(pathInTorrent) : r.listFiles();} // if r is not a directory, we are only showing torrent info section
-        if (ls == null) {
-            // We are only showing the torrent info section unless audio or video...
-            if (storage != null && storage.complete()) {
-                String mime = getMimeType(r.getName());
-                boolean isAudio = mime != null && isAudio(mime);
-                boolean isVideo = !isAudio && mime != null && isVideo(mime);
-                String path = base.substring(0, base.length() - 1);
-                String imgPath = isStandalone() ? "/i2psnark/.res/icons/" : "/themes/console/images/";
-                String newTab = "<img src=" + imgPath + "newtab.svg width=16 height=auto class=newTab>";
-                if (isAudio || isVideo) {
-                    buf.append("<div class=mainsection id=media>\n<table id=mediaContainer>\n<tr>");
-                    // HTML5
-                    if (isAudio) {
-                        buf.append("<th class=audio>")
-                           .append(DataHelper.escapeHTML(tName))
-                           .append("<a href=\"")
-                           .append(path)
-                           .append("\" title=\"Open in new tab\" target=_blank>")
-                           .append(newTab)
-                           .append("</a></th></tr>\n<tr><td><audio controls>");
-                    } else {
-                        buf.append("<th id=videoTitle class=video>")
-                           .append(DataHelper.escapeHTML(tName))
-                           .append("<a href=\"")
-                           .append(path)
-                           .append("\" title=\"Open in new tab\" target=_blank>")
-                           .append(newTab)
-                           .append("</a></th></tr>\n<tr><td><video id=embedVideo controls>");
-                    }
-                    // strip trailing slash
-                    buf.append("<source src=\"").append(path).append("\" type=\"").append(mime).append("\">");
-                    if (isAudio) {buf.append("</audio>");}
-                    else {buf.append("</video>");}
-                    buf.append("</td></tr>\n</table>\n</div>\n");
-                }
-            }
-            if (er || ec) {
-                CommentSet comments = snark.getComments();
-                buf.append("<div class=mainsection id=commentSection>")
-                   .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
-                if (comments != null && !comments.isEmpty()) {buf.append(" checked");}
-                buf.append(">\n<label id=tab_comments class=toggleview for=toggle_comments><span class=tab_label>")
-                   .append(_t("Comments &amp; Ratings"))
-                   .append("</span></label><hr>\n");
-                displayComments(snark, er, ec, esc, buf);
-                buf.append("</div>\n");
-            }
-            if (includeForm) {buf.append("</form>\n");}
-            if (!isStandalone()) {buf.append(FOOTER);}
-            else {buf.append(FOOTER_STANDALONE);}
-            return buf.toString();
-        }
+    /**
+     * Next value of the name/file-type sort cycle used by the Directory
+     * column header: unset/0/1 sorts name descending ("-1"), which offers the
+     * type sort ("12"), whose reverse ("-12") restarts unsorted ("").
+     * Must stay consistent with {@link #isTypeSortNext(String)}.
+     * Extracted from getListHTML for testability.
+     *
+     * @param sortParam current sort key from the request, may be null
+     * @return the next sort key, possibly empty, never null
+     * @since 0.9.71+
+     */
+    static String nextNameTypeSort(String sortParam) {
+        if (sortParam == null || "0".equals(sortParam) || "1".equals(sortParam)) {return "-1";}
+        if ("-1".equals(sortParam)) {return "12";}
+        if ("12".equals(sortParam)) {return "-12";}
+        return "";
+    }
 
-        List<Sorters.FileAndIndex> fileList = new ArrayList<>(ls.length);
-        // Precompute remaining for all files for efficiency
-        long[][] arrays = (storage != null) ? storage.remaining2() : null;
-        long[] remainingArray = (arrays != null) ? arrays[0] : null;
-        long[] previewArray = (arrays != null) ? arrays[1] : null;
-        for (int i = 0; i < ls.length; i++) {
-            File f = ls[i];
-            if (isTopLevel) {
-                // Hide (assumed) padding directory if it's in the filesystem.
-                // Storage now will not create padding files, but may have been created by an old version or other client.
-                String n = f.getName();
-                if ((n.equals(".pad") || n.equals("_pad")) && f.isDirectory()) {continue;}
-            }
-            fileList.add(new Sorters.FileAndIndex(f, storage, remainingArray, previewArray));
-        }
+    /**
+     * Whether the Directory column's next sort target is the file type,
+     * i.e. the current key sits in the name half ("-1"/"12") of the cycle.
+     * Drives only the link tooltip; must stay consistent with
+     * {@link #nextNameTypeSort(String)}.
+     *
+     * @param sortParam current sort key, may be null
+     * @return true if the tooltip should advertise type sorting
+     * @since 0.9.71+
+     */
+    static boolean isTypeSortNext(String sortParam) {
+        return "-1".equals(sortParam) || "12".equals(sortParam);
+    }
 
-        boolean showSort = fileList.size() > 1;
-        if (showSort) {
-            int sort = 0;
-            if (sortParam != null) {
-                sort = I2PSnarkUtil.parseInt(sortParam, 0);
-            }
-            DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
-        }
+    /**
+     * Appends an icon-only column-header link that toggles to nextSort on
+     * click. Shared by all sortable columns of the file table; dedupes four
+     * identical link/icon sequences in getListHTML.
+     *
+     * @param buf target buffer
+     * @param base the encoded base URL
+     * @param icon icon name (without extension)
+     * @param label accessible text for the icon
+     * @param tooltip hover text
+     * @param nextSort precomputed next sort key
+     * @param id anchor id, or null for none
+     * @since 0.9.71+
+     */
+    private void appendSortToggleLink(StringBuilder buf, String base, String icon, String label,
+                                      String tooltip, String nextSort, String id) {
+        buf.append("<a");
+        if (id != null) {buf.append(" id=").append(id);}
+        buf.append(" href=\"").append(base).append(sortQueryString(nextSort)).append("\">");
+        appendIcon(buf, icon, label, tooltip, true, false);
+        buf.append("</a>");
+    }
 
-        buf.append("<div class=mainsection id=snarkFiles>")
-           .append("<input hidden class=toggle_input id=toggle_files type=checkbox");
-        // don't collapse file view if not in torrent root
-        if (!isTopLevel || fileList.size() <= 10 || sortParam != null) {buf.append(" checked");}
-        buf.append(">")
-           .append("<label id=tab_files class=toggleview for=toggle_files><span class=tab_label>")
-           .append(_t("Files"))
-           .append("</span></label><hr>\n")
-           .append("<table id=dirInfo>\n<thead>\n<tr>\n<th colspan=2>");
+    /**
+     * Renders the sortable column headers of the files table: Directory/
+     * Name-type, Size, Download Status (only when priorities are shown) and
+     * Download Priority (same condition). Non-sortable state falls back to
+     * bare icons with descriptive tooltips. Extracted from getListHTML.
+     *
+     * @param buf target buffer, positioned inside the first &lt;th&gt;
+     * @param base the encoded base URL
+     * @param directory decoded directory display name
+     * @param dirSlash index of '/' in directory (-1 at top level)
+     * @param isTopLevel true in the torrent root
+     * @param showSort true when more than one entry is listed
+     * @param showPriority true when priority controls are shown
+     * @param sortParam current sort key, may be null
+     * @since 0.9.71+
+     */
+    private void appendFileTableHead(StringBuilder buf, String base, String directory, int dirSlash,
+                                     boolean isTopLevel, boolean showSort, boolean showPriority,
+                                     String sortParam) {
         String tx = _t("Directory");
         // cycle through sort by name or type
         // TODO: add "(ascending") or "(descending") suffix to tooltip to indicate direction of sort
-        String sort;
-        boolean isTypeSort = false;
         if (showSort) {
-            if (sortParam == null || "0".equals(sortParam) || "1".equals(sortParam)) {sort = "-1";}
-            else if ("-1".equals(sortParam)) {sort = "12"; isTypeSort = true;}
-            else if ("12".equals(sortParam)) {sort = "-12"; isTypeSort = true;}
-            else {sort = "";}
-            buf.append("<a href=\"").append(base).append(sortQueryString(sort)).append("\">");
+            boolean typeNext = isTypeSortNext(sortParam);
+            appendSortToggleLink(buf, base, "file", tx,
+                                 _t("Sort by {0}", typeNext ? _t("File type") : _t("Name")),
+                                 nextNameTypeSort(sortParam), null);
+        } else {
+            appendIcon(buf, "file", tx, tx + ": " + directory, true, false);
         }
-        appendIcon(buf, "file", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Name"))) : tx + ": " + directory, true, false);
-        if (showSort) {buf.append("</a>");}
         if (!isTopLevel) {
             buf.append("&nbsp;").append(DataHelper.escapeHTML(directory.substring(dirSlash + 1)));
         }
         buf.append("</th><th class=fileSize>");
-        if (showSort) {
-            sort = ("-5".equals(sortParam)) ? "5" : "-5";
-            buf.append("<a href=\"").append(base).append(sortQueryString(sort)).append("\">");
-        }
         tx = _t("Size");
-        appendIcon(buf, "size", tx, showSort ? _t("Sort by {0}", tx) : tx, true, false);
-        if (showSort) {buf.append("</a>");}
+        if (showSort) {
+            appendSortToggleLink(buf, base, "size", tx, _t("Sort by {0}", tx),
+                                 "-5".equals(sortParam) ? "5" : "-5", null);
+        } else {
+            appendIcon(buf, "size", tx, tx, true, false);
+        }
         buf.append("</th><th class=fileStatus>");
         boolean showRemainingSort = showSort && showPriority;
-        if (showRemainingSort) {
-            sort = ("10".equals(sortParam)) ? "-10" : "10";
-            buf.append("<a id=sortRemaining href=\"").append(base)
-               .append(sortQueryString(sort)).append("\">");
-        }
         tx = _t("Download Status");
-        appendIcon(buf, "status", tx, showRemainingSort ? _t("Sort by {0}", _t("Remaining")) : tx, true, false);
-        if (showRemainingSort) {buf.append("</a>");}
+        if (showRemainingSort) {
+            appendSortToggleLink(buf, base, "status", tx, _t("Sort by {0}", _t("Remaining")),
+                                 "10".equals(sortParam) ? "-10" : "10", "sortRemaining");
+        } else {
+            appendIcon(buf, "status", tx, tx, true, false);
+        }
         if (showPriority) {
             buf.append("</th><th class=\"priority volatile\">");
-            if (showSort) {
-                sort = ("13".equals(sortParam)) ? "-13" : "13";
-                buf.append("<a href=\"").append(base).append(sortQueryString(sort)).append("\">");
-            }
             tx = _t("Download Priority");
-            appendIcon(buf, "priority", tx, showSort ? _t("Sort by {0}", tx) : tx, true, false);
-            if (showSort) {buf.append("</a>");}
-        }
-        buf.append("</th></tr></thead>\n<tbody>");
-        if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
-            buf.append("<tr id=dirNav><td colspan=").append(showPriority ? '3' : '2').append(" class=ParentDir>");
-            if (!isTopLevel) { // don't show parent dir link if top level
-                buf.append("<a href=\"");
-                URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
-                buf.append("/").append("\">");
-                appendIcon(buf, _t("up"), "", "", true, true);
-                buf.append(' ').append(_t("Parent directory")).append("</a>");
+            if (showSort) {
+                appendSortToggleLink(buf, base, "priority", tx, _t("Sort by {0}", tx),
+                                     "13".equals(sortParam) ? "-13" : "13", null);
+            } else {
+                appendIcon(buf, "priority", tx, tx, true, false);
             }
+        }
+    }
 
-            buf.append("</td><td colspan=2 class=\"ParentDir playlist\">");
-            // playlist button
-            if (hasCompleteAudio(fileList, storage, remainingArray)) {
-                buf.append("<a href=\"").append(base).append("?playlist");
-                if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam)) {
-                    buf.append("&amp;sort=").append(sortParam);
-                }
-                buf.append("\">");
-                appendIcon(buf, "playlist", "", _t("Audio Playlist"), false, true);
-                buf.append(' ').append(_t("Audio Playlist")).append("</a>");
+    /**
+     * Renders the dirNav row below the column headers: the parent-directory
+     * link (subdirectories only) and the audio-playlist button when complete
+     * audio exists at or below this point. The row itself is emitted only when
+     * at least one of the two applies; the gate lives in getListHTML.
+     * hasCompleteAudio is evaluated once per view and passed in, replacing two
+     * recursive walks. Extracted from getListHTML.
+     *
+     * @param buf target buffer
+     * @param base the encoded base URL with trailing slash
+     * @param sortParam current sort key, may be null
+     * @param decodedBase the decoded base URL
+     * @param isTopLevel true in the torrent root (no parent link)
+     * @param hasAudio result of hasCompleteAudio(fileList, ...)
+     * @param showPriority true when the priority column shifts colspans
+     * @since 0.9.71+
+     */
+    private void appendParentDirRow(StringBuilder buf, String base, String sortParam,
+                                    String decodedBase, boolean isTopLevel, boolean hasAudio,
+                                    boolean showPriority) {
+        buf.append("<tr id=dirNav><td colspan=").append(showPriority ? '3' : '2').append(" class=ParentDir>");
+        if (!isTopLevel) { // don't show parent dir link if top level
+            buf.append("<a href=\"");
+            URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
+            buf.append("/").append("\">");
+            appendIcon(buf, _t("up"), "", "", true, true);
+            buf.append(' ').append(_t("Parent directory")).append("</a>");
+        }
+
+        buf.append("</td><td colspan=2 class=\"ParentDir playlist\">");
+        // playlist button
+        if (hasAudio) {
+            buf.append("<a href=\"").append(base).append("?playlist");
+            if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam)) {
+                // sortParam is raw from the request - never reflect it unstripped
+                buf.append("&amp;sort=").append(DataHelper.stripHTML(sortParam));
             }
-            buf.append("</td></tr>\n");
-}
-
-        FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
-        FileRowCounters counters = new FileRowCounters();
-        boolean rowEven = true;
-        for (Sorters.FileAndIndex fai : fileList) {
-            rowEven = renderFileRow(buf, ctx, fai, rowEven, counters);
+            buf.append("\">");
+            appendIcon(buf, "playlist", "", _t("Audio Playlist"), false, true);
+            buf.append(' ').append(_t("Audio Playlist")).append("</a>");
         }
-        if (counters.showSaveButton) {
-            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5><input type=submit class=accept value=\"")
-               .append(_t("Save priorities"))
-               .append("\" name=savepri>\n</th></tr></thead>\n");
-        }
-        buf.append("</table>\n</div>\n");
-        if (counters.imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
-        if (counters.txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
-        buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n");
+        buf.append("</td></tr>\n");
+    }
 
+    /**
+     * Renders the collapsible comments/ratings section (opener div, toggle,
+     * tab label, body, close) when ratings or comments are enabled globally;
+     * renders nothing otherwise. Shared by both return paths of getListHTML.
+     * Previously the main path emitted stray markup outside the section and
+     * forced a comment-file load even with the feature disabled.
+     *
+     * @param snark non-null torrent
+     * @param er ratings enabled globally
+     * @param ec comments enabled globally
+     * @param esc comments enabled for this torrent
+     * @param tabLabel translated label for the section tab
+     * @param buf target buffer
+     * @since 0.9.71+
+     */
+    private void renderCommentsSection(Snark snark, boolean er, boolean ec, boolean esc,
+                                       String tabLabel, StringBuilder buf) {
+        if (!er && !ec) {return;}
         CommentSet comments = snark.getComments();
-        if (er || ec) {
-            buf.append("<div class=mainsection id=commentSection>\n<input hidden class=toggle_input id=toggle_comments type=checkbox");
-            if (comments != null && !comments.isEmpty()) {buf.append(" checked");}
-        }
+        buf.append("<div class=mainsection id=commentSection>\n")
+           .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
+        if (comments != null && !comments.isEmpty()) {buf.append(" checked");}
         buf.append(">\n<label id=tab_comments class=toggleview for=toggle_comments><span class=tab_label>")
-           .append(_t("Comments")).append("</span></label><hr>\n");
+           .append(tabLabel)
+           .append("</span></label><hr>\n");
         displayComments(snark, er, ec, esc, buf);
-
-        // for stop/start/check
         buf.append("</div>\n");
-        if (includeForm) {buf.append("</form>\n");}
-        boolean enableLightbox = _manager.util().enableLightbox();
-        if (enableLightbox) {
-            buf.append("<link rel=stylesheet href=").append(_resourcePath).append("lightbox.css>\n")
-               .append("<script nonce=").append(cspNonce).append(" type=module>\n")
-               .append("  import {Lightbox} from \"").append(_resourcePath).append("js/lightbox.js\";\n")
-               .append("  var lightbox = new Lightbox();lightbox.load();\n")
-               .append("</script>\n");
-        }
-        int delay = _manager.getRefreshDelaySeconds();
-        buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
-           .append("  window.snarkRefreshDelay = ").append(delay).append(";\n")
-           .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js\";\n")
-           .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
-           .append("</script>\n");
-        if (!isStandalone()) {buf.append(FOOTER);}
-        else {buf.append(FOOTER_STANDALONE);}
-        return buf.toString();
     }
 
     /** Known postman tracker base64 announce, both old and new. */
@@ -6481,6 +6741,62 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Immutable parameters for rendering the comments/ratings section.
+     * Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsContext {
+        final Snark snark;
+        final boolean er;
+        final boolean ec;
+        final boolean esc;
+        final String authorName;
+        final boolean canRate;
+
+        CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
+                        String authorName, boolean canRate) {
+            this.snark = snark;
+            this.er = er;
+            this.ec = ec;
+            this.esc = esc;
+            this.authorName = authorName;
+            this.canRate = canRate;
+        }
+    }
+
+    /**
+     * Snapshot read atomically from a torrent's comment set: the user's own
+     * rating, community rating count and average, and an iterator over the
+     * existing comments when any exist. Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class CommentsHeaderResult {
+        final int myRating;
+        final int ratingCount;
+        final double averageRating;
+        final Iterator<Comment> iter;
+
+        /**
+         * Single-value result for the no-comment-set case.
+         *
+         * @param myRating the user's own rating (0 when none)
+         */
+        CommentsHeaderResult(int myRating) {
+            this(myRating, 0, 0d, null);
+        }
+
+        CommentsHeaderResult(int myRating, int ratingCount, double averageRating,
+                             Iterator<Comment> iter) {
+            this.myRating = myRating;
+            this.ratingCount = ratingCount;
+            this.averageRating = averageRating;
+            this.iter = iter;
+        }
+    }
+
+    /**
      * Display the ratings and comments section.
      *
      * @param er ratings enabled globally
@@ -6489,37 +6805,20 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.31
      */
     private void displayComments(Snark snark, boolean er, boolean ec, boolean esc, StringBuilder buf) {
-        Iterator<Comment> iter = null;
-        int myRating = 0;
         CommentSet comments = snark.getComments();
-        boolean canRate = esc && !_manager.util().getCommentsName().isEmpty();
+        String authorName = _manager.util().getCommentsName();
+        CommentsContext ctx = new CommentsContext(snark, er, ec, esc, authorName,
+                                                  esc && !authorName.isEmpty());
+        renderCommentsHeader(ctx, buf);
 
-        buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
-           .append(_t("Ratings and Comments").replace("and", "&amp;"))
-           .append("&nbsp;&nbsp;&nbsp;");
-        if (esc && !canRate) {
-            buf.append("<span id=nameRequired>")
-               .append(_t("Author name required to rate or comment"))
-               .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
-               .append(_t("Configure"))
-               .append("]</a></span>");
-        } else if (esc) {
-            buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
-               .append(_t("Your author name for published comments and ratings"))
-               .append("\">")
-               .append(DataHelper.escapeHTML(_manager.util().getCommentsName()))
-               .append("</span></span>");
-        }
-        buf.append("</th></tr>\n");
-
-        // new rating / comment form
-        if (canRate) {
+        // new rating / comment form; intentionally no preselected rating
+        if (ctx.canRate) {
             buf.append("<tr id=newRating>\n");
             if (er) {
                 buf.append("<td>\n<select name=myRating>\n");
                 for (int i = 5; i >= 0; i--) {
                     buf.append("<option value=\"").append(i).append("\"");
-                    if (i == myRating) {buf.append(" selected");}
+                    if (i == 0) {buf.append(" selected");}
                     buf.append('>');
                     if (i != 0) {
                         for (int j = 0; j < i; j++) {buf.append("★");}
@@ -6537,51 +6836,43 @@ public class I2PSnarkServlet extends BasicServlet {
             else {buf.append(_t("Add Comment"));}
             buf.append("\" class=accept></td></tr>\n");
         }
+        // current rating and community stats, read under one lock above
+        CommentsHeaderResult state = readCommentState(comments, er, ec);
         if (comments != null) {
-            synchronized(comments) {
-                // current rating
-                if (er) {
-                    buf.append("<tr id=myRating><td>");
-                    myRating = comments.getMyRating();
-                    if (myRating > 0) {
-                        buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
-                        for (int i = 0; i < myRating; i++) {
-                            StringBuilder iconBuf = new StringBuilder();
-                            appendIcon(iconBuf, "rateme", "★", "", false, true);
-                            buf.append(iconBuf.toString());
-                        }
+            if (er) {
+                buf.append("<tr id=myRating><td>");
+                if (state.myRating > 0) {
+                    buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
+                    for (int i = 0; i < state.myRating; i++) {
+                        StringBuilder iconBuf = new StringBuilder();
+                        appendIcon(iconBuf, "rateme", "★", "", false, true);
+                        buf.append(iconBuf.toString());
                     }
-                    buf.append("</td></tr>");
                 }
-                if (er) {
-                    buf.append("<tr id=showRatings><td>");
-                    int rcnt = comments.getRatingCount();
-                    if (rcnt > 0) {
-                        double avg = comments.getAverageRating();
-                        buf.append(_t("Average Rating"))
-                           .append(":</td><td colspan=2>")
-                           .append((new DecimalFormat("0.0")).format(avg));
-                    } else {
-                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
-                        buf.append(_t("No community ratings currently available"));
-                    }
-                    buf.append("</td></tr>\n");
+                buf.append("</td></tr>");
+            }
+            if (er) {
+                buf.append("<tr id=showRatings><td>");
+                if (state.ratingCount > 0) {
+                    buf.append(_t("Average Rating"))
+                       .append(":</td><td colspan=2>")
+                       .append((new DecimalFormat("0.0")).format(state.averageRating));
+                } else {
+                    buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
+                    buf.append(_t("No community ratings currently available"));
                 }
-                if (ec) {
-                    int sz = comments.size();
-                    if (sz > 0) {iter = comments.iterator();}
-                }
+                buf.append("</td></tr>\n");
             }
         }
 
         buf.append("</table>\n");
         int ccount = 0;
-        if (iter != null) {
+        if (state.iter != null) {
             DateFormat fmt = _DATE_FMT3.get();
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
             buf.append("<table id=userComments>\n");
-            while (iter.hasNext()) {
-                Comment c = iter.next();
+            while (state.iter.hasNext()) {
+                Comment c = state.iter.next();
                 buf.append("<tr><td class=commentAuthor>");
                 if (c.getName() != null) {
                     buf.append("<span class=commentAuthorName title=\"").append(DataHelper.escapeHTML(c.getName())).append("\">")
@@ -6618,6 +6909,66 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("</table>\n");
         }
+    }
+
+    /**
+     * Renders the commentInfo table header: section title plus the
+     * author-name span (the configured name, or a "configure" hint when
+     * comments are on for the torrent but no author name is set).
+     * Extracted from displayComments.
+     *
+     * @param ctx non-null rendering context
+     * @param buf target buffer
+     * @since 0.9.71+
+     */
+    private void renderCommentsHeader(CommentsContext ctx, StringBuilder buf) {
+        buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
+           .append(_t("Ratings and Comments").replace("and", "&amp;"))
+           .append("&nbsp;&nbsp;&nbsp;");
+        if (ctx.esc && !ctx.canRate) {
+            buf.append("<span id=nameRequired>")
+               .append(_t("Author name required to rate or comment"))
+               .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
+               .append(_t("Configure"))
+               .append("]</a></span>");
+        } else if (ctx.esc) {
+            buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
+               .append(_t("Your author name for published comments and ratings"))
+               .append("\">")
+               .append(DataHelper.escapeHTML(ctx.authorName))
+               .append("</span></span>");
+        }
+        buf.append("</th></tr>\n");
+    }
+
+    /**
+     * Reads the user's rating, community rating statistics, and the comment
+     * iterator from a torrent's comment set within a single lock scope, so
+     * markup rendering happens outside synchronized blocks.
+     * Extracted from displayComments.
+     *
+     * @param comments may be null when none are saved yet
+     * @param er ratings enabled globally
+     * @param ec comments enabled globally
+     * @return state snapshot, never null; iter non-null only when comments exist
+     * @since 0.9.71+
+     */
+    private static CommentsHeaderResult readCommentState(CommentSet comments, boolean er, boolean ec) {
+        int myRating = 0;
+        int rcnt = 0;
+        double avg = 0;
+        Iterator<Comment> iter = null;
+        if (comments != null) {
+            synchronized (comments) {
+                if (er) {
+                    myRating = comments.getMyRating();
+                    rcnt = comments.getRatingCount();
+                    if (rcnt > 0) {avg = comments.getAverageRating();}
+                }
+                if (ec && comments.size() > 0) {iter = comments.iterator();}
+            }
+        }
+        return new CommentsHeaderResult(myRating, rcnt, avg, iter);
     }
 
     /**
@@ -7476,75 +7827,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private boolean isStandalone() {
         if (_context.isRouterContext()) {return false;}
         else {return true;}
-    }
-
-    /**
-     * Renders the HTML header, head, and navbar.
-     * Extracted from getListHTML for maintainability and testability.
-     *
-     * @param buf the StringBuilder to append HTML to
-     * @param base the base URL for links
-     * @param title the page title (decoded base path)
-     * @param contextPath the context path
-     * @param contextName the context name
-     * @param theme the theme name
-     * @param themePath the theme path
-     * @param cspNonce the CSP nonce
-     * @param resourcePath the resource path
-     * @param cpath the context path
-     * @param slash the file separator
-     * @param lang the language code
-     * @param collapsePanels whether to collapse panels
-     * @param isStandalone whether running standalone
-     * @param themeBase the theme base path
-     * @param override the override.css file
-     * @param fontPath the font path
-     * @param useSoraFont whether to use Sora font
-     * @since 0.9.71+
-     */
-    private void renderHeader(StringBuilder buf, String base, String title,
-                              String contextPath, String contextName,
-                              String theme, String themePath, String cspNonce,
-                              String resourcePath, String cpath, String slash,
-                              String lang, boolean collapsePanels,
-                              boolean isStandalone, String themeBase,
-                              File override, String fontPath,
-                              boolean useSoraFont) {
-        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=standalone" : "").append(">\n")
-           .append("<head>\n<meta charset=utf-8>\n").append("<title>");
-        buf.append(_t("I2PSnark")).append(" - [").append(_t("Torrent")).append(": ").append(DataHelper.escapeHTML("")).append("]");
-        buf.append("</title>\n").append(cssLink("snark.css", _themePath, "id=snarkTheme")).append("\n");
-
-        buf.append(cssLink("images/images.css", _themePath)).append("\n"); // images.css
-
-        if (isStandalone() || useSoraFont()) {
-            buf.append("<link rel=stylesheet href=").append(fontPath).append("Sora.css>\n");
-        } else {
-            buf.append("<link rel=stylesheet href=").append(fontPath).append("OpenSans.css>\n");
-        }
-        if (!isStandalone() && override.exists()) {
-            buf.append(cssLink("override.css", _themePath) + "\n"); // optional override.css for version-persistent user edits
-        }
-
-        buf.append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
-           .append("<noscript><style>.script{display:none}</style></noscript>\n") // hide javascript-dependent buttons when js is unavailable
-           .append("<link rel=\"shortcut icon\" href=\"")
-           .append(_contextPath).append(WARBASE)
-           .append("icons/favicon.svg\">\n</head>\n<body style=display:none;pointer-events:none class=\"")
-           .append(theme)
-           .append(" lang_")
-           .append(lang)
-           .append("\">\n<div id=navbar><a href=")
-           .append(_contextPath)
-           .append("/ title=")
-           .append(_t("Torrents"))
-           .append(" id=nav_main class=snarkNav>")
-           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>")
-           .append("<a href=")
-           .append(_contextPath)
-           .append("/configure id=nav_config class=snarkNav>")
-           .append(_t("Configure"))
-           .append("</a></div>\n");
     }
 }
 
