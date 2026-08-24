@@ -46,6 +46,7 @@ import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.ByteArray;
 import net.i2p.data.Hash;
 import net.i2p.servlet.RequestWrapper;
 import net.i2p.servlet.util.ServletUtil;
@@ -1075,12 +1076,13 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showDebug = "2".equals(peerParam);
         int end = Math.min(start + pageSize, snarks.size());
         StringBuilder buf = new StringBuilder(2048);
+        Map<ByteArray, BadgeInfo> badgeCache = new HashMap<>();
 
         for (int i = start; i < end; i++) {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
             buf.setLength(0);
-            displaySnark(out, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt), buf);
+            displaySnark(out, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache), buf);
 
             // additionally accumulate downloads, uploads, ETA, flags
             if (snark.getPeerCount() >= 1) {
@@ -3336,9 +3338,15 @@ public class I2PSnarkServlet extends BasicServlet {
         final String filterParam;
         /** normalized sort parameter, or null */
         final String sortParam;
+        /**
+         * Per-render cache of badge lookups keyed by info hash, shared by
+         * every RowContext of the current response; single-threaded.
+         */
+        final Map<ByteArray, BadgeInfo> badgeCache;
 
         RowContext(Snark snark, int index, boolean showPeers, long[] stats,
-                   boolean noThinsp, boolean canWrite, String filterParam, String sortParam) {
+                   boolean noThinsp, boolean canWrite, String filterParam, String sortParam,
+                   Map<ByteArray, BadgeInfo> badgeCache) {
             this.snark = snark;
             this.index = index;
             this.showPeers = showPeers;
@@ -3347,7 +3355,52 @@ public class I2PSnarkServlet extends BasicServlet {
             this.canWrite = canWrite;
             this.filterParam = filterParam;
             this.sortParam = sortParam;
+            this.badgeCache = badgeCache;
         }
+    }
+
+    /**
+     * Cached per-torrent values used by the status-cell destination badge:
+     * the four-character base64 destination prefix and the client identity
+     * display name, if any.
+     *
+     * @since 0.9.71+
+     */
+    private static class BadgeInfo {
+        final String destPrefix;
+        final String clientName;
+
+        BadgeInfo(String destPrefix, String clientName) {
+            this.destPrefix = destPrefix;
+            this.clientName = clientName;
+        }
+    }
+
+    /**
+     * Look up (or compute) the badge values for a torrent. The base64
+     * destination encoding is by far the most expensive part of building
+     * the badge, and pool-sorted rows repeat the same destinations, so
+     * results are cached per render in the context's cache.
+     *
+     * @param rc row context carrying the shared cache
+     * @param snark the torrent being rendered
+     * @return never-null cached badge info
+     * @since 0.9.71+
+     */
+    private BadgeInfo badgeInfo(RowContext rc, Snark snark) {
+        ByteArray key = new ByteArray(snark.getInfoHash());
+        BadgeInfo bi = rc.badgeCache.get(key);
+        if (bi == null) {
+            TorrentDest td = snark.getDest();
+            String prefix = "";
+            if (td != null && td.getMyDestination() != null) {
+                prefix = td.getMyDestination().toBase64().substring(0, 4);
+            }
+            ClientID.Profile cid = _manager.util().getClientID(snark.getInfoHash());
+            bi = new BadgeInfo(prefix, cid != null ? cid.getName() : null);
+            rc.badgeCache.put(key, bi);
+        }
+        return bi;
     }
 
     /**
@@ -3432,17 +3485,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 TorrentDest td = snark.getDest();
                 if (td != null && td.getMyDestination() != null) {
                     int poolNum = td.getPoolNum();
+                    BadgeInfo bi = badgeInfo(rc, snark);
                     StringBuilder poolBadge = new StringBuilder(64).append("<span class=pool");
-                    Destination dest = td.getMyDestination();
-                    if (dest != null) {
-                        poolBadge.append(" title=\"").append(_t("Destination")).append(": ")
-                                 .append(dest.toBase64().substring(0, 4));
-                        ClientID.Profile cid = _manager.util().getClientID(snark.getInfoHash());
-                        if (cid != null) {
-                            poolBadge.append(" [").append(cid.getName()).append(']');
-                        }
-                        poolBadge.append('"');
+                    poolBadge.append(" title=\"").append(_t("Destination")).append(": ")
+                             .append(bi.destPrefix);
+                    if (bi.clientName != null) {
+                        poolBadge.append(" [").append(bi.clientName).append(']');
                     }
+                    poolBadge.append('"');
                     poolBadge.append('>');
                     if (poolNum >= 1) {
                         // pools are numbered from 1; -1 marks a dedicated destination
