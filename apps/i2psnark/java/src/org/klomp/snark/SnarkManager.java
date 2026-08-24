@@ -4239,16 +4239,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 "SnarkPreConnect",
                                 true))
                         .start();
-                int id =
-                        _messages.addMessageNoEscape(
-                                getTime()
-                                        + "&nbsp; "
-                                        + _t(
-                                                "Starting torrents in {0}" + "&hellip;",
-                                                DataHelper.formatDuration2(delay)));
                 // Make torrents visible in the UI immediately; only their
                 // auto-start waits out the configured delay (tunnels are
-                // pre-built by SnarkPreConnect during this window)
+                // pre-built by SnarkPreConnect during this window). The
+                // countdown is added after this pass so clearing it below
+                // does not wipe the per-torrent "added" notifications.
                 List<Snark> earlyAdded;
                 try {
                     synchronized (_snarks) {
@@ -4258,8 +4253,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _log.error("Error in the DirectoryMonitor", e);
                     earlyAdded = Collections.emptyList();
                 }
+                int id =
+                        _messages.addMessageNoEscape(
+                                getTime()
+                                        + "&nbsp; "
+                                        + _t(
+                                                "Starting torrents in {0}" + "&hellip;",
+                                                DataHelper.formatDuration2(delay)));
                 sleep(delay);
-                _messages.clearThrough(id); // Remove that first message
+                _messages.clearThrough(id); // Remove just the countdown
                 if (!earlyAdded.isEmpty()) {
                     startBatch(earlyAdded);
                 }
@@ -4271,12 +4273,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // first pass below then typically finds nothing new. Deferred mode
             // already added above so torrents are visible during the wait.
             if (!(delay > 30000 && autostart)) {
+                List<Snark> earlyAdded;
                 try {
                     synchronized (_snarks) {
-                        monitorTorrents(dir);
+                        earlyAdded = monitorTorrents(dir);
                     }
                 } catch (RuntimeException e) {
                     _log.error("Error in the DirectoryMonitor", e);
+                    earlyAdded = Collections.emptyList();
+                }
+                if (autostart && !earlyAdded.isEmpty()) {
+                    startBatch(earlyAdded);
                 }
             }
             // Here because we need to delay until I2CP is up although the user will see the default
