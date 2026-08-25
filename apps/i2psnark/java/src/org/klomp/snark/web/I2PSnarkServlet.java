@@ -19,7 +19,6 @@ import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,13 +26,11 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.*;
 import javax.servlet.ServletConfig;
@@ -112,16 +109,16 @@ import org.klomp.snark.dht.DHT;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
-    /** Context path. */
-    private String _contextPath; /* generally "/i2psnark" */
-    /** Context name. */
-    private String _contextName; /* generally "i2psnark" */
+    /** Context path, generally "/i2psnark"; set once in init(). */
+    private String _contextPath;
+    /** Context display name, generally "i2psnark"; set once in init(). */
+    private String _contextName;
     private transient SnarkManager _manager;
     /** Rotating CSRF nonce, rotates every 5 minutes */
     private long _currentNonce;
-    /** Recent nonces. */
+    /** The two nonces before the current one, still accepted for in-flight forms. */
     private final long[] _recentNonces = new long[2];
-    /** Last rotation. */
+    /** When the current nonce was minted, ms since epoch; drives rotation. */
     private long _lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
     /** Version of the bundled I2PSnark Bridge XPI, read lazily from the war; null if unknown. */
@@ -140,14 +137,13 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final Pattern HEX_PATTERN = Pattern.compile("[a-fA-F0-9]+");
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
 
-    /** Theme path. */
+    /** Web path of the active theme's resources; recomputed per request. */
     private String _themePath;
-    /** Resource path. */
     /** Web path of static resources; set once in init(), never mutated per request. */
     private String _resourcePath;
-    /** Image path. */
+    /** Icon image base path derived from {@link #_themePath}. */
     private String _imgPath;
-    /** Last announce URL. */
+    /** Announce URL of the torrent being edited; preselects its tracker radio button. */
     private String _lastAnnounceURL;
 
     private static final String DEFAULT_NAME = "i2psnark";
@@ -193,7 +189,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Current CSRF nonce, rotating every 5 minutes.
      *
      * @return the nonce
-     * @since 2.x.x
+     * @since 0.9.70+
      */
     private synchronized long getNonce() {
         if (_currentNonce == 0) {
@@ -213,7 +209,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  Validate nonce against current and recent nonces (backward compatibility).
      *  @param nonce the nonce to validate
      *  @return true if valid
-     *  @since 2.x.x
+     *  @since 0.9.70+
      */
     private synchronized boolean isValidNonce(String nonce) {
         if (nonce == null) {return false;}
@@ -224,12 +220,6 @@ public class I2PSnarkServlet extends BasicServlet {
         return false;
     }
 
-    /**
-     *  Session-bound nonce for outer section (main page, details, config)
-     *  @param session returns static nonce if null
-     *  @return a new nonce for each call
-     *  @since 0.9.69
-     */
     /**
      *  Validate Origin header for POST requests.
      *  Allows requests with matching Origin (same-origin), or no Origin header.
@@ -316,6 +306,23 @@ public class I2PSnarkServlet extends BasicServlet {
 
         return originHost.equals(requestHost) && originPort == requestPort;
     }
+
+    /** Package-visible collaborators for {@link ConfigForms}. */
+    SnarkManager manager() {return _manager;}
+    String contextPath() {return _contextPath;}
+    String contextName() {return _contextName;}
+    String resourcePath() {return _resourcePath;}
+    String warBase() {return WARBASE;}
+    I2PAppContext context() {return _context;}
+
+    private final ConfigForms configForms = new ConfigForms(this);
+    ConfigForms configForms() {return configForms;}
+
+    private void writeConfigForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeConfigForm(out, req);}
+
+    private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeTorrentCreateFilterForm(out, req);}
+
+    private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeTrackerForm(out, req);}
 
     /**
      * Initialize the servlet.
@@ -452,6 +459,21 @@ public class I2PSnarkServlet extends BasicServlet {
      * Handle what we can here, calling super.doGet() or super.doPost() for the rest.
      *
      * Some parts modified from Jetty
+     *
+     * Section map, in order:
+     * <ol>
+     *   <li>gatekeeping - CSRF origin check, CSP for scripts, static
+     *       WARBASE resources</li>
+     *   <li>handleAjaxRequest() - XHR fragment endpoints</li>
+     *   <li>browser API /_add and bridge magnet page</li>
+     *   <li>bridge extension update notice</li>
+     *   <li>handleUnmanagedPath() - directory listings, playlists, static
+     *       passthrough for everything but the managed pages</li>
+     *   <li>handleFormSubmission() - nonce'd POST actions, P-R-G redirect</li>
+     *   <li>page assembly - head/navbar/search scaffolding, then either
+     *       writeConfigurePanels() or writeTorrentsSection(), then
+     *       writePageTail()</li>
+     * </ol>
      */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get HTTP method and servlet path
@@ -490,28 +512,8 @@ public class I2PSnarkServlet extends BasicServlet {
         PrintWriter out = null;
         boolean isConfigure = path.endsWith("/configure");
 
-        // AJAX for mainsection
-        if ("/.ajax/xhr1.html".equals(path)) {
-            setXHRHeaders(resp, cspNonce, false);
-            // volatile read; disk probe stays out of any shared lock
-            boolean canWrite = _resourceBase.canWrite();
-            out = resp.getWriter();
-            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
-            writeTorrents(out, req, canWrite);
-            out.write("\n</div>\n</body>\n</html>\n");
-            out.flush();
-            return;
-        }
-
-        // AJAX for screenlog
-        if ("/.ajax/xhrscreenlog.html".equals(path)) {
-            setXHRHeaders(resp, cspNonce, false);
-            boolean canWrite = _resourceBase.canWrite();
-            out = resp.getWriter();
-            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhrlogs>\n");
-            writeMessages(out, isConfigure, peerString);
-            out.write("</body>\n</html>\n");
-            out.flush();
+        if (isAjaxPath(path)) {
+            handleAjaxRequest(path, isConfigure, peerString, req, resp);
             return;
         }
 
@@ -543,79 +545,18 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        boolean isIndex = (path.isEmpty() || "/".equals(path) || "index.jsp".equals(path));
+        boolean isIndex = isIndexPath(path);
 
         // Handle non index, configure, or known special paths
-        if (!(isIndex || "/index.html".equals(path) || "/_post".equals(path) || isConfigure)) {
-            if (path.endsWith("/")) {
-                String pathInfo = req.getPathInfo();
-                String pathInContext = addPaths(path, pathInfo);
-                File resource = getResource(pathInContext);
-                if (resource == null) {
-                    resp.sendError(404);
-                    return;
-                }
-                if (req.getParameter("playlist") != null) {
-                    String base = addPaths(req.getRequestURI(), "/");
-                    String listing = getPlaylist(req.getRequestURL().toString(), base, req.getParameter("sort"));
-                    if (listing != null) {
-                        setHTMLHeaders(resp, cspNonce, false);
-                        resp.setContentType("audio/mpegurl; charset=UTF-8; name=\"playlist.m3u\"");
-                        resp.addHeader("Content-Disposition", "attachment; filename=\"playlist.m3u\"");
-                        resp.getWriter().write(listing);
-                        return;
-                    } else {
-                        resp.sendError(404);
-                        return;
-                    }
-                } else {
-                    boolean isPost = "POST".equals(method);
-                    // headers must precede any bytes: large tables stream directly
-                    if (!isPost) {setHTMLHeaders(resp, cspNonce, true);}
-                    String base = addPaths(req.getRequestURI(), "/");
-                    String listing = getListHTML(resource, base, true,
-                        isPost ? req.getParameterMap() : null,
-                        req.getParameter("sort"),
-                        isPost ? null : resp.getWriter());
-                    if (isPost) {
-                        sendRedirect(req, resp, ""); // POST-Redirect-GET
-                    } else if (listing != null && !listing.isEmpty()) {
-                        resp.getWriter().write(listing); // buffered page, or streamed-mode tail
-                    } else if (!resp.isCommitted()) {
-                        resp.sendError(404); // safety net; unreachable on GET today
-                    }
-                    return;
-                }
-            } else {
-                if ("GET".equals(method) || "HEAD".equals(method)) {
-                    super.doGet(req, resp);
-                } else if ("POST".equals(method)) {
-                    super.doPost(req, resp);
-                } else {
-                    resp.sendError(405);
-                }
-                return;
-            }
+        if (isUnmanagedPath(path, isIndex, isConfigure)) {
+            handleUnmanagedPath(req, resp, method, path);
+            return;
         }
 
         setHTMLHeaders(resp, cspNonce, true);
 
-        String nonce = req.getParameter("nonce");
-        if (nonce != null) {
-            if (( "POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
-                isValidNonce(nonce)) {
-                if (processRequest(req, resp)) {return;} // response fully handled (e.g. install redirect)
-            } else if (!(method.equals("POST") || "Clear".equals(req.getParameter("action")))) {
-                // Lynx bug?
-                _manager.addMessage("Bad form method, POST required");
-            } else {
-                // nonce is constant, shouldn't happen
-                _manager.addMessage("Please retry form submission (bad nonce)");
-            }
-            // P-R-G (or G-R-G to hide the params from the address bar)
-            sendRedirect(req, resp, peerString);
-            return;
-        }
+        // Form submissions arrive with a nonce; anything else renders below
+        if (handleFormSubmission(req, resp, method, peerString)) {return;}
 
         // Cache panel and utility flags
         boolean noCollapse = noCollapsePanels(req);
@@ -644,59 +585,10 @@ public class I2PSnarkServlet extends BasicServlet {
         sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
 
         buf.append("<div id=navbar>\n");
-
-        if (isConfigure) {
-            buf.append("<a href=")
-               .append(_contextPath)
-               .append("/ title=\"")
-               .append(_t("Torrents"))
-               .append("\" id=nav_main class=\"snarkNav isConfig\">")
-               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
-               .append("</a>");
-        } else {
-            buf.append("<a href=\"")
-               .append(_contextPath).append('/')
-               .append(peerString)
-               .append("\" title=\"")
-               .append(_t("Refresh page"))
-               .append("\" id=nav_main class=snarkNav>")
-               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
-               .append("</a><a href=")
-               .append(_contextPath)
-               .append("/configure id=nav_config class=snarkNav>")
-               .append(_t("Configure"))
-               .append("</a><a href=http://discuss.i2p/ id=nav_forum class=snarkNav target=_blank title=\"")
-               .append(_t("Torrent &amp; filesharing forum"))
-               .append("\">")
-               .append(_t("Forum"))
-               .append("</a>");
-
-            for (Tracker t : sortedTrackers) {
-                if (t.baseURL == null || !t.baseURL.startsWith("http")) continue;
-                if (_manager.util().isKnownOpenTracker(t.announceURL)) continue;
-                buf.append("<a href=\"")
-                   .append(t.baseURL)
-                   .append("\" class=\"snarkNav nav_tracker\" target=_blank>")
-                   .append(t.name)
-                   .append("</a>");
-            }
-        }
-
+        appendNavbar(buf, isConfigure, peerString, sortedTrackers);
         buf.append("</div>\n");
 
-        // Render search form when multiple torrents exist
-        if (_manager.getTorrents().size() > 1) {
-            String s = req.getParameter("search");
-            boolean searchActive = (s != null && !s.isEmpty());
-            buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
-               .append("<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"")
-               .append(_t("Search torrents")).append("\"");
-            if (searchActive) {
-                buf.append(" value=\"").append(DataHelper.escapeHTML(s.trim())).append("\"");
-            }
-            buf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
-               .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
-        }
+        appendSearchForm(buf, req);
 
         // Notify user about new torrent URLs in GET requests
         String newURL = req.getParameter("newURL");
@@ -716,26 +608,253 @@ public class I2PSnarkServlet extends BasicServlet {
         writeMessages(out, isConfigure, peerString);
 
         if (isConfigure) {
-            out.write("<div class=logshim></div>\n</div>\n");
-            writeConfigForm(out, req);
-            writeTorrentCreateFilterForm(out, req);
-            writeTrackerForm(out, req);
+            writeConfigurePanels(out, req);
         } else {
-            boolean canWrite = _resourceBase.canWrite();
-            boolean pageOne = writeTorrents(out, req, canWrite);
-
-            out.write("</div>\n"); // close mainsection div
-
-            boolean enableAddCreate = _manager.util().enableAddCreate();
-
-            if ((pageOne || enableAddCreate) && canWrite) {
-                out.write("<div id=lowersection>\n");
-                writeAddForm(out, req);
-                writeSeedForm(out, req, sortedTrackers, sortedFilters);
-                out.write("</div>\n");
-            }
+            writeTorrentsSection(out, req, sortedTrackers, sortedFilters);
         }
 
+        writePageTail(out, isConfigure);
+        out.flush();
+    }
+
+    /** The two XHR fragment endpoints polled by the console JS. */
+    static boolean isAjaxPath(String path) {
+        return "/.ajax/xhr1.html".equals(path) || "/.ajax/xhrscreenlog.html".equals(path);
+    }
+
+    /**
+     * Whether path is the torrent list landing page.
+     *
+     * @param path servlet path after the context, may be null
+     */
+    static boolean isIndexPath(String path) {
+        return path != null && (path.isEmpty() || "/".equals(path) || "index.jsp".equals(path));
+    }
+
+    /**
+     * Paths that bypass normal page rendering and are answered by
+     * handleUnmanagedPath: everything outside the index page(s), the POST
+     * target, and the configuration UI.
+     *
+     * @param path servlet path after the context, may be null
+     */
+    static boolean isUnmanagedPath(String path, boolean isIndex, boolean isConfigure) {
+        if (isIndex || "/index.html".equals(path) || "/_post".equals(path) || isConfigure) {return false;}
+        return true;
+    }
+
+    /**
+     * Serves the XHR fragment endpoints; unknown paths are ignored so the
+     * caller's fall-through routing stays in charge.
+     *
+     * @return true if the request was handled here
+     * @since 0.9.71+
+     */
+    private boolean handleAjaxRequest(String path, boolean isConfigure, String peerString,
+                                      HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (!isAjaxPath(path)) {return false;}
+        setXHRHeaders(resp, cspNonce, false);
+        PrintWriter out = resp.getWriter();
+        if ("/.ajax/xhr1.html".equals(path)) {
+            // volatile read; disk probe stays out of any shared lock
+            boolean canWrite = _resourceBase.canWrite();
+            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
+            writeTorrents(out, req, canWrite);
+            out.write("\n</div>\n</body>\n</html>\n");
+        } else {
+            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhrlogs>\n");
+            writeMessages(out, isConfigure, peerString);
+            out.write("</body>\n</html>\n");
+        }
+        out.flush();
+        return true;
+    }
+
+    /**
+     * Answers everything outside the managed pages: torrent directory
+     * listings (with optional playlist export) under trailing-slash paths,
+     * and container delegation for the rest.
+     *
+     * @since 0.9.71+
+     */
+    private void handleUnmanagedPath(HttpServletRequest req, HttpServletResponse resp,
+                                     String method, String path) throws ServletException, IOException {
+        if (!path.endsWith("/")) {
+            if ("GET".equals(method) || "HEAD".equals(method)) {super.doGet(req, resp);}
+            else if ("POST".equals(method)) {super.doPost(req, resp);}
+            else {resp.sendError(405);}
+            return;
+        }
+        String pathInfo = req.getPathInfo();
+        String pathInContext = addPaths(path, pathInfo);
+        File resource = getResource(pathInContext);
+        if (resource == null) {
+            resp.sendError(404);
+            return;
+        }
+        if (req.getParameter("playlist") != null) {
+            String base = addPaths(req.getRequestURI(), "/");
+            String listing = getPlaylist(req.getRequestURL().toString(), base, req.getParameter("sort"));
+            if (listing == null) {
+                resp.sendError(404);
+                return;
+            }
+            setHTMLHeaders(resp, cspNonce, false);
+            resp.setContentType("audio/mpegurl; charset=UTF-8; name=\"playlist.m3u\"");
+            resp.addHeader("Content-Disposition", "attachment; filename=\"playlist.m3u\"");
+            resp.getWriter().write(listing);
+            return;
+        }
+        boolean isPost = "POST".equals(method);
+        // headers must precede any bytes: large tables stream directly
+        if (!isPost) {setHTMLHeaders(resp, cspNonce, true);}
+        String base = addPaths(req.getRequestURI(), "/");
+        String listing = getListHTML(resource, base, true,
+            isPost ? req.getParameterMap() : null,
+            req.getParameter("sort"),
+            isPost ? null : resp.getWriter());
+        if (isPost) {
+            sendRedirect(req, resp, ""); // POST-Redirect-GET
+        } else if (listing != null && !listing.isEmpty()) {
+            resp.getWriter().write(listing); // buffered page, or streamed-mode tail
+        } else if (!resp.isCommitted()) {
+            resp.sendError(404); // safety net; unreachable on GET today
+        }
+    }
+
+    /**
+     * Dispatches a nonce-bearing form submission to its action and finishes
+     * with the P-R-G redirect (or G-R-G to hide params from the address bar).
+     *
+     * @return true if a form was submitted and the response is complete;
+     *         false when there is no nonce and normal rendering should proceed
+     * @since 0.9.71+
+     */
+    private boolean handleFormSubmission(HttpServletRequest req, HttpServletResponse resp,
+                                         String method, String peerString) throws IOException {
+        String nonce = req.getParameter("nonce");
+        if (nonce == null) {return false;}
+        if (( "POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
+            isValidNonce(nonce)) {
+            if (processRequest(req, resp)) {return true;} // response fully handled (e.g. install redirect)
+        } else if (!(method.equals("POST") || "Clear".equals(req.getParameter("action")))) {
+            // Lynx bug?
+            _manager.addMessage("Bad form method, POST required");
+        } else {
+            // nonce is constant, shouldn't happen
+            _manager.addMessage("Please retry form submission (bad nonce)");
+        }
+        sendRedirect(req, resp, peerString);
+        return true;
+    }
+
+    /**
+     * Renders the navbar: configure variant links back to the torrent list;
+     * list variant adds tracker links from the sorted tracker list.
+     *
+     * @since 0.9.71+
+     */
+    private void appendNavbar(StringBuilder buf, boolean isConfigure, String peerString,
+                              List<Tracker> sortedTrackers) {
+        if (isConfigure) {
+            buf.append("<a href=")
+               .append(_contextPath)
+               .append("/ title=\"")
+               .append(_t("Torrents"))
+               .append("\" id=nav_main class=\"snarkNav isConfig\">")
+               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+               .append("</a>");
+            return;
+        }
+        buf.append("<a href=\"")
+           .append(_contextPath).append('/')
+           .append(peerString)
+           .append("\" title=\"")
+           .append(_t("Refresh page"))
+           .append("\" id=nav_main class=snarkNav>")
+           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+           .append("</a><a href=")
+           .append(_contextPath)
+           .append("/configure id=nav_config class=snarkNav>")
+           .append(_t("Configure"))
+           .append("</a><a href=http://discuss.i2p/ id=nav_forum class=snarkNav target=_blank title=\"")
+           .append(_t("Torrent &amp; filesharing forum"))
+           .append("\">")
+           .append(_t("Forum"))
+           .append("</a>");
+
+        for (Tracker t : sortedTrackers) {
+            if (t.baseURL == null || !t.baseURL.startsWith("http")) continue;
+            if (_manager.util().isKnownOpenTracker(t.announceURL)) continue;
+            buf.append("<a href=\"")
+               .append(t.baseURL)
+               .append("\" class=\"snarkNav nav_tracker\" target=_blank>")
+               .append(t.name)
+               .append("</a>");
+        }
+    }
+
+    /**
+     * Renders the search form when multiple torrents exist; hidden until
+     * realtimeSearch.js activates it, functional without JS via GET submit.
+     *
+     * @since 0.9.71+
+     */
+    private void appendSearchForm(StringBuilder buf, HttpServletRequest req) {
+        if (_manager.getTorrents().size() <= 1) {return;}
+        String s = req.getParameter("search");
+        boolean searchActive = (s != null && !s.isEmpty());
+        buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
+           .append("<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"")
+           .append(_t("Search torrents")).append("\"");
+        if (searchActive) {
+            buf.append(" value=\"").append(DataHelper.escapeHTML(s.trim())).append("\"");
+        }
+        buf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
+           .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
+    }
+
+    /**
+     * Configuration page panels below the messages area.
+     *
+     * @since 0.9.71+
+     */
+    private void writeConfigurePanels(PrintWriter out, HttpServletRequest req) throws IOException {
+        out.write("<div class=logshim></div>\n</div>\n");
+        writeConfigForm(out, req);
+        writeTorrentCreateFilterForm(out, req);
+        writeTrackerForm(out, req);
+    }
+
+    /**
+     * Torrent table plus the add/create forms of the lower section.
+     *
+     * @since 0.9.71+
+     */
+    private void writeTorrentsSection(PrintWriter out, HttpServletRequest req,
+                                      List<Tracker> sortedTrackers,
+                                      List<TorrentCreateFilter> sortedFilters) throws IOException {
+        boolean canWrite = _resourceBase.canWrite();
+        boolean pageOne = writeTorrents(out, req, canWrite);
+
+        out.write("</div>\n"); // close mainsection div
+
+        boolean enableAddCreate = _manager.util().enableAddCreate();
+
+        if ((pageOne || enableAddCreate) && canWrite) {
+            out.write("<div id=lowersection>\n");
+            writeAddForm(out, req);
+            writeSeedForm(out, req, sortedTrackers, sortedFilters);
+            out.write("</div>\n");
+        }
+    }
+
+    /**
+     * Page scripts and footer, shared by index and configuration pages.
+     *
+     * @since 0.9.71+
+     */
+    private void writePageTail(PrintWriter out, boolean isConfigure) throws IOException {
         String jsPath = "<script src=" + _resourcePath + "js/";
 
         if (!isConfigure) {
@@ -745,12 +864,8 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(jsPath + "setFilterQuery.js type=module></script>\n");
         out.write(jsPath + "realtimeSearch.js type=module></script>\n");
 
-        if (!isStandalone()) {
-            out.write(FOOTER);
-        } else {
-            out.write(FOOTER_STANDALONE);
-        }
-        out.flush();
+        if (!isStandalone()) {out.write(FOOTER);}
+        else {out.write(FOOTER_STANDALONE);}
     }
 
     /**
@@ -2006,7 +2121,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param action if non-null, add it as the action
      * @since 0.9.16
      */
-    private void writeHiddenInputs(PrintWriter out, HttpServletRequest req, String action) {
+    void writeHiddenInputs(PrintWriter out, HttpServletRequest req, String action) {
         StringBuilder buf = new StringBuilder(256);
         writeHiddenInputs(buf, req, action);
         out.append(buf);
@@ -2020,7 +2135,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param action if non-null, add it as the action
      * @since 0.9.16
      */
-    private void writeHiddenInputs(StringBuilder buf, HttpServletRequest req, String action) {
+    void writeHiddenInputs(StringBuilder buf, HttpServletRequest req, String action) {
         appendHiddenInput(buf, "nonce", String.valueOf(getNonce()), false);
         String p = req.getParameter("p");
         if (p != null) {appendHiddenInput(buf, "p", DataHelper.stripHTML(p), false);}
@@ -2906,51 +3021,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param req the HTTP request with config parameters
      */
     private boolean handleSave(HttpServletRequest req, HttpServletResponse resp) {
-        // Extract parameters and update configuration
-        boolean filesPublic = req.getParameter("filesPublic") != null;
-        boolean autoStart = req.getParameter("autoStart") != null;
-        boolean useOpenTrackers = req.getParameter("useOpenTrackers") != null;
-        boolean useDHT = req.getParameter("useDHT") != null;
-        boolean ratings = req.getParameter("ratings") != null;
-        boolean comments = req.getParameter("comments") != null;
-        boolean collapsePanels = req.getParameter("collapsePanels") != null;
-        boolean showStatusFilter = req.getParameter("showStatusFilter") != null;
-        boolean enableLightbox = req.getParameter("enableLightbox") != null;
-        boolean enableAddCreate = req.getParameter("enableAddCreate") != null;
-        boolean enableVaryInboundHops = req.getParameter("varyInbound") != null;
-        boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
-        boolean multiDest = req.getParameter("multiDest") != null;
-        String multiDestMax = req.getParameter("multiDestMax");
-        boolean randomizeStartup = req.getParameter("randomizeStartup") != null;
-
-        String dataDir = req.getParameter("nofilter_dataDir");
-        String seedPct = req.getParameter("seedPct");
-        String eepHost = req.getParameter("eepHost");
-        String eepPort = req.getParameter("eepPort");
-        String i2cpHost = req.getParameter("i2cpHost");
-        String i2cpPort = req.getParameter("i2cpPort");
-        String i2cpOpts = buildI2CPOpts(req);
-        String upLimit = req.getParameter("upLimit");
-        String upBW = req.getParameter("upBW");
-        String downBW = req.getParameter("downBW");
-        String refreshDel = req.getParameter("refreshDelay");
-        String startupDelMin = req.getParameter("startupDelayMin");
-        String startupDelMax = req.getParameter("startupDelayMax");
-        String pageSize = req.getParameter("pageSize");
-        String theme = req.getParameter("theme");
-        String lang = req.getParameter("lang");
-        String commentsName = req.getParameter("nofilter_commentsName");
-        String apiTarget = req.getParameter("apiTarget");
-        String apiKey = req.getParameter("apiKey");
-        String maxFiles = req.getParameter("maxFiles");
-        String tempDir = req.getParameter("nofilter_tempDir");
-        boolean preallocateFiles = req.getParameter("preallocateFiles") != null;
-
-        _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDelMin, startupDelMax, pageSize, seedPct, eepHost, eepPort,
-                              i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
-                              ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
-                              enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, randomizeStartup, apiTarget, apiKey,
-                              maxFiles, preallocateFiles, tempDir);
+        configForms().applySettings(req);
         try {
             setResourceBase(_manager.getDataDir());
         } catch (ServletException ignored) { /* ignored */ }
@@ -2996,7 +3067,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * The version of the I2PSnark Bridge extension bundled in this war, read
      * once from the XPI's manifest.json; null if it cannot be determined.
      */
-    private String getBridgeVersion() {
+    String getBridgeVersion() {
         String v = _bridgeVersion;
         if (v == null) {
             synchronized (BridgeVersion.class) {
@@ -3525,24 +3596,12 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
     }
 
-    private static final String[] iopts = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };
-
     /**
      * Builds the I2CP options string from individual form parameters.
      *
      * @param req the HTTP request containing tunnel configuration parameters
      * @return the combined I2CP options string
      */
-    private static String buildI2CPOpts(HttpServletRequest req) {
-        StringBuilder buf = new StringBuilder(128);
-        String p = req.getParameter("i2cpOpts");
-        if (p != null) {buf.append(p);}
-        for (int i = 0; i < iopts.length; i++) {
-            p = req.getParameter(iopts[i]);
-            if (p != null) {buf.append(' ').append(iopts[i]).append('=').append(p);}
-        }
-        return buf.toString();
-    }
 
     /**
      * Returns the list of torrents sorted according to the current request's sort parameter.
@@ -3612,7 +3671,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 return true;
         }
     }
-
 
     /**
      * Per-row and per-render inputs for {@link #displaySnark}, replacing an
@@ -4759,507 +4817,6 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.setLength(0);
     }
 
-    private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
-
-    /**
-     * Writes the HTML configuration form with all I2PSnark settings.
-     *
-     * @param out the PrintWriter to write the HTML output
-     * @param req the HTTP request containing query parameters
-     * @throws IOException if an I/O error occurs during writing
-     */
-    private void writeConfigForm(PrintWriter out, HttpServletRequest req) throws IOException {
-        String dataDir = _manager.getDataDir().getAbsolutePath();
-        String lang = (Translate.getLanguage(_manager.util().getContext()));
-        boolean filesPublic = _manager.areFilesPublic();
-        boolean autoStart = _manager.shouldAutoStart();
-        boolean preallocateFiles = _manager.util().getPreallocateFiles();
-        String tempDir = _manager.util().getTempDirProp();
-        boolean useOpenTrackers = _manager.util().shouldUseOpenTrackers();
-        boolean useDHT = _manager.util().shouldUseDHT();
-        boolean useRatings = _manager.util().ratingsEnabled();
-        boolean useComments = _manager.util().commentsEnabled();
-        boolean collapsePanels = _manager.util().collapsePanels();
-        boolean showStatusFilter = _manager.util().showStatusFilter();
-        boolean enableLightbox = _manager.util().enableLightbox();
-        boolean enableAddCreate = _manager.util().enableAddCreate();
-        boolean noCollapse = noCollapsePanels(req);
-        boolean varyInbound = _manager.util().enableVaryInboundHops();
-        boolean varyOutbound = _manager.util().enableVaryOutboundHops();
-        boolean multiDest = _manager.util().getMultiDest();
-        boolean randomizeStartup = _manager.getRandomizeStartupDelay();
-
-/* configuration */
-
-        StringBuilder buf = new StringBuilder(16*1024);
-        buf.append("<form id=mainconfig action=\"").append(_contextPath).append("/configure\" method=POST>\n")
-           .append("<div class=\"configPanel lang_").append(lang).append("\"><div class=snarkConfig>\n");
-        writeHiddenInputs(buf, req, "Save");
-        buf.append("<span class=configTitle>").append(_t("Configuration")).append("</span><hr>\n")
-           .append("<table border=0 id=configs>\n");
-
-/* user interface */
-
-        buf.append("<tr><th class=suboption>").append(_t("User Interface"));
-        if (_context.isRouterContext()) {
-            buf.append("&nbsp;&nbsp;<a href=\"/torrents?configure\" target=_top class=script id=embed>")
-               .append(_t("Switch to Embedded Mode")).append("</a>")
-               .append("<a href=\"").append(_contextPath).append("/configure\" target=_top class=script id=fullscreen>")
-               .append(_t("Switch to Fullscreen Mode")).append("</a>");
-        }
-        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n").append("<span class=configOption><b>")
-           .append(_t("Theme")).append("</b> \n");
-        if (_manager.getUniversalTheming()) {
-            buf.append("<select id=themeSelect name=theme disabled title=\"")
-               .append(_t("To change themes manually, disable universal theming"))
-               .append("\"><option>")
-               .append(_manager.getTheme())
-               .append("</option></select> <span id=bwHoverHelp>");
-            appendIcon(buf, "details", "", "", true, true);
-            buf.append("<span id=bwHelp>")
-               .append(_t("Universal theming is enabled."))
-               .append("</span></span> <a href=\"/configui\" target=_blank>[")
-               .append(_t("Configure"))
-               .append("]</a></span><br>");
-        } else {
-            buf.append("<select id=themeSelect name=theme>");
-            String theme = _manager.getTheme();
-            String[] themes = _manager.getThemes();
-            Arrays.sort(themes);
-            for (int i = 0; i < themes.length; i++) {
-                if (themes[i].equals(theme)) {
-                    buf.append("\n<OPTION value=\"").append(themes[i]).append("\" SELECTED>").append(themes[i]);
-                } else {
-                    buf.append("\n<OPTION value=\"").append(themes[i]).append("\">").append(themes[i]);
-                }
-            }
-            buf.append("</select>\n</span><br>\n");
-        }
-
-        buf.append("<span class=configOption><b>").append(_t("Refresh time"))
-           .append("</b> \n<select name=refreshDelay title=\"")
-           .append(_t("How frequently torrent status is updated on the main page")).append("\">");
-        int delay = _manager.getRefreshDelaySeconds();
-        for (int i = 0; i < times.length; i++) {
-            buf.append("<option value=\"").append(Integer.toString(times[i])).append("\"");
-            if (times[i] == delay) {buf.append(" selected");}
-            buf.append(">");
-            if (times[i] > 0) {buf.append(DataHelper.formatDuration2((long) times[i] * 1000));}
-            else {buf.append(_t("Never"));}
-            buf.append("</option>\n");
-        }
-        buf.append("</select>\n</span><br>\n")
-           .append("<span class=configOption><label><b>")
-           .append(_t("Page size"))
-           .append("</b> <input type=text name=pageSize size=5 maxlength=4 min=10 pattern=\"[0-9]{0,4}\" ")
-           .append("class=\"r numeric\" title=\"")
-           .append(_t("Maximum number of torrents to display per page"))
-           .append("\" value=\"").append(_manager.getPageSize()).append("\"> ")
-           .append(_t("torrents"))
-           .append("</label></span><br>\n");
-
-        if (isStandalone()) {
-            // Reflectively probe the standalone-only ConfigUIHelper; in the
-            // webapp build it is absent and the option is simply not shown.
-            try {
-                Class<?> helper = Class.forName("org.klomp.snark.standalone.ConfigUIHelper");
-                Method getLangSettings = helper.getMethod("getLangSettings", I2PAppContext.class);
-                String langSettings = (String) getLangSettings.invoke(null, _context);
-                buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
-                   .append(langSettings).append("</span><br>\n");
-            } catch (ClassNotFoundException | NoSuchMethodException |
-                     IllegalAccessException | InvocationTargetException e) {
-                // expected in non-standalone builds
-            }
-        } else {
-            buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
-               .append("<span id=snarkLang>").append(lang).append("</span> ")
-               .append("<a href=\"/configui#langheading\" target=_blank>").append("[").append(_t("Configure")).append("]</a>")
-               .append("</span><br>\n");
-        }
-
-        buf.append("<span class=configOption><label for=collapsePanels><b>")
-           .append(_t("Collapsible panels"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=collapsePanels id=collapsePanels ")
-           .append((collapsePanels ? "checked " : ""))
-           .append("title=\"");
-        if (noCollapse) {
-            String ua = req.getHeader("user-agent");
-            buf.append(_t("Your browser does not support this feature.")).append("[").append(ua).append("]").append("\" disabled");
-        } else {
-            buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode")).append("\"");
-        }
-        buf.append("></span><br>\n")
-           .append("<span class=configOption><label for=showStatusFilter><b>")
-           .append(_t("Torrent filter bar"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=showStatusFilter id=showStatusFilter ")
-           .append((showStatusFilter ? "checked " : ""))
-           .append("title=\"")
-           .append(_t("Show filter bar above torrents for selective display based on status"))
-           .append(" (").append(_t("requires javascript")).append(")")
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=enableLightbox><b>")
-           .append(_t("Enable lightbox"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=enableLightbox id=enableLightbox ")
-           .append((enableLightbox ? "checked " : ""))
-           .append("title=\"")
-           .append(_t("Use a lightbox to display images when thumbnails are clicked"))
-           .append(" (").append(_t("requires javascript")).append(")")
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=enableAddCreate><b>")
-           .append(_t("Persist Add/Create"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=enableAddCreate id=enableAddCreate ")
-           .append((enableAddCreate ? "checked " : ""))
-           .append("title=\"")
-           .append(_t("Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"))
-           .append("\"></span><br>\n")
-           .append("</div>\n</td></tr>\n");
-
-/* comments/ratings */
-
-        buf.append("<tr><th class=suboption>")
-           .append(_t("Comments &amp; Ratings"))
-           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><label for=ratings><b>")
-           .append(_t("Enable Ratings"))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings ")
-           .append(useRatings ? "checked " : "")
-           .append("title=\"")
-           .append(_t("Show ratings on torrent pages"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=comments><b>")
-           .append(_t("Enable Comments"))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments ")
-           .append(useComments ? "checked " : "")
-           .append("title=\"")
-           .append(_t("Show comments on torrent pages"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption id=configureAuthor><label><b>")
-           .append(_t("Comment Author"))
-           .append("</b> <input type=text name=nofilter_commentsName spellcheck=false value=\"")
-           .append(DataHelper.escapeHTML(_manager.util().getCommentsName())).append("\" size=15 maxlength=16 title=\"")
-           .append(_t("Set the author name for your comments and ratings"))
-           .append("\"></label></span>\n")
-           .append("</div>\n</td></tr>\n");
-
-/* torrent options */
-
-        buf.append("<tr><th class=suboption>")
-           .append(_t("Torrent Options"))
-           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-           .append("<span id=bwAllocation class=configOption title=\"").append(_t("Half available bandwidth recommended.")).append("\">")
-           .append("<b>").append(_t("Bandwidth limit")).append("</b> ")
-           .append("<span id=bwDown></span><input type=text name=downBW class=\"r numeric\" value=\"")
-           .append(_manager.getBandwidthListener().getDownBWLimit() / 1024).append("\" size=5 maxlength=4 pattern=\"[0-9]{1,4}\"")
-           .append(" title=\"").append(_t("Maximum bandwidth allocated for downloading")).append("\"> KB/s down")
-           .append(" <span id=bwUp></span><input type=text name=upBW class=\"r numeric\" value=\"")
-           .append(_manager.util().getMaxUpBW()).append("\" size=5 maxlength=4 pattern=\"[0-9]{1,4}\"")
-           .append(" title=\"").append(_t("Maximum bandwidth allocated for uploading")).append("\"> KB/s up");
-        if (_context.isRouterContext()) {
-            buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
-               .append(_t("View or change router bandwidth"))
-               .append("\">[")
-               .append(_t("Configure"))
-               .append("]</a>");
-        }
-
-        buf.append("</span><br>\n");
-        buf.append("<span class=configOption><label><b>")
-           .append(_t("Total uploader limit"))
-           .append("</b> <input type=text name=upLimit class=\"r numeric\" value=\"")
-           .append(_manager.util().getMaxUploaders()).append("\" size=5 maxlength=3 pattern=\"[0-9]{1,3}\"")
-           .append(" title=\"")
-           .append(_t("Maximum number of peers to upload to"))
-           .append("\"> ")
-           .append(_t("peers"))
-           .append("</label></span><br>\n")
-           .append("<span class=configOption><label for=useOpenTrackers><b>")
-           .append(_t("Use open trackers also").replace(" also", ""))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers ")
-           .append(useOpenTrackers ? "checked " : "")
-           .append("title=\"")
-           .append(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=useDHT><b>")
-           .append(_t("Enable DHT"))
-           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT ")
-           .append(useDHT ? "checked " : "")
-           .append("title=\"")
-           .append(_t("Use DHT to find additional peers"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=autoStart><b>")
-           .append(_t("Auto start torrents"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart")
-           .append(autoStart ? " checked" : "")
-           .append(" title=\"")
-           .append(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"))
-           .append("\"></span>");
-
-        if (_context.isRouterContext()) {
-            buf.append("<br>\n<span class=configOption id=startupDelay><label><b>")
-               .append(_t("Startup delay")).append(" (").append(_t("minutes")).append(")")
-               .append("</b> <input type=text name=startupDelayMin size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
-               .append(" title=\"")
-               .append(_t("How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"))
-               .append("\" value=\"").append(_manager.util().getStartupDelayMin()).append("\"> ")
-               .append(_t("min"))
-               .append("</label> <label><input type=text name=startupDelayMax size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
-               .append(" title=\"")
-               .append(_t("How long before auto-started torrents are loaded when I2PSnark starts, at the latest"))
-               .append("\" value=\"").append(_manager.util().getStartupDelayMax()).append("\"> ")
-               .append(_t("max"))
-               .append("</label></span>");
-        }
-        buf.append("\n</div>\n</td></tr>\n");
-
-/* data storage */
-
-        boolean isWindows = SystemVersion.isWindows();
-        boolean isARM = SystemVersion.isARM();
-
-        buf.append("<tr><th class=suboption>")
-           .append(_t("Data Storage"))
-           .append("</th></tr><tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><label><b>")
-           .append(_t("Data directory"))
-           .append("</b> <input type=text name=nofilter_dataDir size=60").append(" title=\"")
-           .append(_t("Directory where torrents and downloaded/shared files are stored"))
-           .append("\" value=\"").append(DataHelper.escapeHTML(dataDir)).append("\" spellcheck=false></label></span><br>\n")
-           .append("<span class=configOption><label><b>")
-           .append(_t("Temp directory"))
-           .append("</b> <input type=text name=nofilter_tempDir size=60").append(" title=\"")
-           .append(_t("Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."))
-           .append("\" value=\"").append(tempDir != null ? DataHelper.escapeHTML(tempDir) : "").append("\" spellcheck=false></label></span><br>\n")
-           .append("<span class=configOption><label for=filesPublic><b>")
-           .append(_t("Files readable by all"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic")
-           .append(filesPublic ? " checked " : "").append("title=\"")
-           .append(_t("Set file permissions to allow other local users to access the downloaded files"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=preallocateFiles><b>")
-           .append(_t("Preallocate files"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preallocateFiles id=preallocateFiles ")
-           .append(preallocateFiles ? "checked " : "").append("title=\"")
-           .append(_t("Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=maxFiles><b>")
-           .append(_t("Max files per torrent"))
-           .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
-           .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
-           .append("\" value=\"").append(_manager.getMaxFilesPerTorrent()).append("\" spellcheck=false></label></span>\n")
-           .append("</div></td></tr>\n");
-
-/* i2cp/tunnel configuration */
-        String IPString = _manager.util().getOurIPString();
-        Map<String, String> options = new TreeMap<>(_manager.util().getI2CPOptions());
-
-        buf.append("<tr><th class=suboption>").append(_t("Tunnel Configuration")).append("&nbsp;");
-        if (!IPString.equals("unknown")) {
-            // Only truncate if it's an actual dest
-            buf.append("&nbsp;<span id=ourDest title=\"");
-            if (_manager.util().getMultiDest()) {
-                buf.append(_t("Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"));
-            } else {
-                buf.append(_t("Our destination (identity) for this session"));
-            }
-            buf.append("\">");
-            if (_manager.util().getMultiDest()) {
-                buf.append(_t("Primary Dest."));
-            } else {
-                buf.append(_t("Dest."));
-            }
-            buf.append("<code>").append(IPString.substring(0,4));
-            if (!_manager.util().getMultiDest()) {
-                ClientID.Profile cid = _manager.util().getClientID(null);
-                if (cid != null) {
-                    buf.append(" [").append(cid.getName()).append(']');
-                }
-            }
-            buf.append("</code></span>");
-        }
-        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><b>")
-           .append(_t("Inbound Settings"))
-           .append("</b> \n")
-           .append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("inbound.quantity"), "inbound.quantity", TUNNEL))
-           .append("&nbsp;")
-           .append(renderOptions(0, 6, 3, options.remove("inbound.length"), "inbound.length", HOP))
-           .append("</span><br>\n")
-           .append("<span class=configOption><b>")
-           .append(_t("Outbound Settings"))
-           .append("</b> \n")
-           .append(renderOptions(1, 32, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("outbound.quantity"), "outbound.quantity", TUNNEL))
-           .append("&nbsp;")
-           .append(renderOptions(0, 6, 3, options.remove("outbound.length"), "outbound.length", HOP))
-           .append("</span><br>\n")
-           .append("<span class=configOption id=hopVariance><b>")
-           .append(_t("Vary Tunnel Length"))
-           .append("</b> \n")
-           .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Inbound tunnels")).append("\">")
-           .append("<input type=checkbox class=\"optbox slider\" name=varyInbound id=varyInbound")
-           .append(varyInbound ? " checked" : "").append("> <span>").append(_t("Inbound")).append("</span></label>")
-           .append("<label title=\"").append(_t("Add 0 or 1 additional hops randomly to Outbound tunnels")).append("\">")
-           .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound")
-           .append(varyOutbound ? " checked" : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
-           .append("</span><br>\n")
-           .append("<script src=\"").append(_resourcePath).append("js/toggleVaryTunnelLength.js?").append(CoreVersion.VERSION).append("\" defer></script>\n")
-           .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n")
-           .append("<span class=configOption id=multiDest><b>")
-           .append(_t("Multi-destination"))
-           .append("</b> \n")
-           .append("<label title=\"")
-           .append(_t("Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."))
-           .append("\">")
-           .append("<input type=checkbox class=\"optbox slider\" name=multiDest id=multiDest")
-           .append(multiDest ? " checked" : "").append("></label></span><br>\n")
-           .append("<span class=configOption id=maxDest><b>")
-           .append(_t("Maximum destinations"))
-           .append("</b> \n")
-           .append("<label title=\"")
-           .append(_t("When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."))
-           .append("\">")
-           .append("<input type=text name=multiDestMax id=multiDestMax value=\"")
-           .append(_manager.util().getMaxDest())
-           .append("\" class=numeric size=5 maxlength=4 pattern=\"[0-9]{1,4}\" spellcheck=false>")
-           .append("</label></span><br>\n")
-           .append("<span class=configOption id=randomizeStartup><b>")
-           .append(_t("Random startup delay"))
-           .append("</b> \n")
-           .append("<label title=\"")
-           .append(_t("Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."))
-           .append("\">")
-           .append("<input type=checkbox class=\"optbox slider\" name=randomizeStartup id=randomizeStartup")
-           .append(randomizeStartup ? " checked " : "").append("></label></span><br>\n");
-
-        if (isStandalone()) {
-            buf.append("<span class=configOption><label><b>")
-               .append(_t("I2CP host"))
-               .append("</b> <input type=text name=i2cpHost value=\"")
-               .append(_manager.util().getI2CPHost()).append("\" size=5></label></span><br>\n")
-               .append("<span class=configOption><label><b>")
-               .append(_t("I2CP port"))
-               .append("</b> <input type=text name=i2cpPort value=\"")
-               .append(_manager.util().getI2CPPort()).append("\" class=numeric size=5 maxlength=5 pattern=\"[0-9]{1,5}\"></label></span><br>\n");
-        }
-
-        options.remove(I2PSnarkUtil.PROP_MAX_BW);
-        options.remove(SnarkManager.PROP_OPENTRACKERS); // was accidentally in the I2CP options prior to 0.8.9 so it will be in old config files
-        StringBuilder opts = new StringBuilder(256);
-        for (Map.Entry<String, String> e : options.entrySet()) {
-            String key = e.getKey();
-            String val = e.getValue();
-            opts.append(key).append('=').append(val).append(' ');
-        }
-        String ibkey = "inbound.lengthVariance=1 ";
-        String obkey = "outbound.lengthVariance=1 ";
-        boolean containsIbk = opts.indexOf(ibkey) != -1;
-        boolean containsObk = opts.indexOf(obkey) != -1;
-        if (varyInbound) {
-            if (!containsIbk) {
-                opts.append(ibkey);
-                _manager.util().setVaryInboundHops(true);
-            }
-        } else if (!varyInbound) {
-            if (containsIbk) {
-                opts.delete(opts.indexOf(ibkey), opts.indexOf(ibkey) + ibkey.length());
-                _manager.util().setVaryInboundHops(false);
-            }
-        }
-        if (varyOutbound) {
-            if (!containsObk) {
-                opts.append(obkey);
-                _manager.util().setVaryOutboundHops(true);
-            }
-        } else if (!varyOutbound) {
-            if (containsObk) {
-                opts.delete(opts.indexOf(obkey), opts.indexOf(obkey) + obkey.length());
-                _manager.util().setVaryOutboundHops(false);
-            }
-        }
-        buf.append("<span class=configOption id=i2cpOptions><label><b>")
-           .append(_t("I2CP options"))
-           .append("</b> <input type=text id=i2cpOpts name=i2cpOpts value=\"")
-           .append(opts.toString().trim()).append("\" size=60></label></span>\n")
-           .append("</div>\n</td></tr>\n");
-
-/* browser integration */
-
-        buf.append("<tr><th class=suboption>")
-           .append(_t("Browser Integration"))
-           .append("</th></tr><tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><label for=browserApi><b>")
-           .append(_t("Enable browser API"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=browserApi id=browserApi ")
-           .append((_manager.browserApiEnabled() ? "checked " : ""))
-           .append("title=\"")
-           .append(_t("Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=browserApiHosts><b>")
-           .append(_t("Allowed hosts"))
-           .append("</b> </label><input type=text name=nofilter_browserApiHosts id=browserApiHosts size=40 value=\"")
-           .append(DataHelper.escapeHTML(_manager.getBrowserApiHosts()))
-           .append("\" spellcheck=false title=\"")
-           .append(_t("Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"))
-           .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=browserApiKey><b>")
-           .append(_t("API key"))
-           .append("</b> </label><input type=text name=apiKey id=browserApiKey size=40 value=\"\" autocomplete=off title=\"")
-           .append(_t("Optional password for remote access, bypasses host allow list"))
-           .append("\"></span>\n")
-           .append("<input type=hidden name=apiTarget value=\"")
-           .append(DataHelper.escapeHTML(browserApiTarget()))
-           .append("\">\n")
-           .append("</div></td></tr>\n");
-
-/* save config */
-
-        String spacer = "<tr class=spacer><td></td></tr>\n";
-        buf.append(spacer)
-           .append("<tr><td>");
-        if (isFirefoxFamilyUserAgent(req.getHeader("User-Agent"))) {
-            String installed = req.getHeader(BridgeVersion.HEADER);
-            String bundled = getBridgeVersion();
-            boolean update = BridgeVersion.isUpdateAvailable(installed, bundled);
-            boolean current = installed != null && !update;
-            buf.append("<input type=submit name=installBrowserApi class=accept value=\"")
-               .append(update ? _t("Update browser handler") : _t("Install browser handler"))
-               .append("\" title=\"")
-               .append(update
-                   ? _t("Update the installed I2PSnark Bridge extension to v{0}", bundled)
-                   : _t("Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"))
-               .append("\" style=float:left");
-            if (current) {
-                buf.append(" disabled");
-            }
-            buf.append("> ");
-        } else {
-            String script = isWindowsUserAgent(req.getHeader("User-Agent"))
-                ? "install-i2psnark-browser-handler.ps1"
-                : "install-i2psnark-browser-handler.sh";
-            String title = isWindowsUserAgent(req.getHeader("User-Agent"))
-                ? _t("Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser")
-                : _t("Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser");
-            buf.append("<a class=accept href=\"")
-               .append(_contextPath).append(WARBASE).append("browser/").append(script)
-               .append("\" title=\"").append(title)
-               .append("\" style=float:left>")
-               .append(_t("Download browser handler script"))
-               .append("</a> ");
-        }
-        buf.append("<input type=submit class=accept value=\"")
-           .append(_t("Save configuration"))
-           .append("\" name=foo></td></tr>\n")
-           .append(spacer).append("</table></div></div></form>");
-        out.append(buf);
-        out.flush();
-        buf.setLength(0);
-    }
-
     /**
      * Whether the given User-Agent header indicates a Firefox-family browser
      * (Firefox, LibreWolf, Waterfox, Pale Moon, Tor Browser), which can install
@@ -5286,235 +4843,6 @@ public class I2PSnarkServlet extends BasicServlet {
         return ua != null && ua.contains("Windows");
     }
 
-    /** The API key target for the Browser API panel, defaulting to the context name. */
-    private String browserApiTarget() {
-        String t = _manager.util().getAPITarget();
-        if (t != null && !t.isEmpty()) {return t;}
-        return _contextName;
-    }
-
-    /**
-     * Writes the HTML form for managing torrent creation file filters.
-     *
-     * @param out the PrintWriter to which the HTML output will be written
-     * @param req the HttpServletRequest containing the current request parameters
-     * @throws IOException if an I/O error occurs while writing to the output stream
-     * @since 0.9.62+ Added torrent creation filter management form
-     */
-    private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
-        StringBuilder buf = new StringBuilder(5*1024);
-        buf.append("<form id=createFilterForm action=\"")
-           .append(_contextPath)
-           .append("/configure\" method=POST>\n<div class=configPanel id=fileFilter>\n<div class=snarkConfig>\n");
-        writeHiddenInputs(buf, req, "SaveCreateFilters");
-        buf.append("<span id=filtersTitle class=\"configTitle expanded\">")
-           .append(_t("Torrent Create File Filtering"))
-           .append("</span><hr>\n<table hidden>\n<tr>")
-           .append("<th title=\"")
-           .append(_t("Mark filter for deletion"))
-           .append("\"></th><th>")
-           .append(_t("Name"))
-           .append("</th><th>")
-           .append(_t("Filter Pattern"))
-           .append("</th><th class=radio>")
-           .append(_t("Starts With"))
-           .append("</th><th class=radio>")
-           .append(_t("Contains"))
-           .append("</th><th class=radio>")
-           .append(_t("Ends With"))
-           .append("</th><th>")
-           .append(_t("Enabled by Default"))
-           .append("</th></tr>\n");
-        for (TorrentCreateFilter f : _manager.getSortedTorrentCreateFilterStrings()) {
-            boolean isDefault = f.isDefault;
-            String filterType = f.filterType;
-            String nameUnderscore = f.name.replace(" ", "_");
-            buf.append("<tr class=createFilterString><td><input type=checkbox class=optbox name=\"delete_")
-               .append(f.name)
-               .append("\"></td><td>")
-               .append(f.name)
-               .append("</td><td>")
-               .append(f.filterPattern)
-               .append("</td><td>")
-               .append("<label class=filterStartsWith><input type=radio class=optbox value=starts_with name=\"filterType_")
-               .append(nameUnderscore)
-               .append("\"")
-               .append(filterType.equals("starts_with") ? " checked" : "")
-               .append("></label></td><td><label class=filterContains><input type=radio class=optbox value=contains name=\"filterType_")
-               .append(nameUnderscore)
-               .append("\"")
-               .append(filterType.equals("contains") ? " checked" : "")
-               .append("></label></td><td><label class=filterEndsWith><input type=radio class=optbox value=ends_with name=\"filterType_")
-               .append(nameUnderscore)
-               .append("\"")
-               .append(filterType.equals("ends_with") ? " checked" : "")
-               .append("></label></td><td><input type=checkbox class=optbox name=\"defaultEnabled_")
-               .append(f.name)
-               .append("\"");
-            if (f.isDefault) {buf.append(" checked");}
-            buf.append("></td></tr>\n");
-        }
-        String spacer = "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n";
-        String filterFormElements =
-            "<td><input type=text class=torrentCreateFilterName name=fname spellcheck=false></td>" +
-            "<td><input type=text class=torrentCreateFilterPattern name=filterPattern spellcheck=false></td>" +
-            "<td><label class=filterStartsWith><input type=radio class=optbox name=filterType value=starts_with></label></td>" +
-            "<td><label class=filterContains><input type=radio class=optbox name=filterType value=contains checked></label></td>" +
-            "<td><label class=filterEndsWith><input type=radio class=optbox name=filterType value=ends_with></label></td>" +
-            "<td><input type=checkbox class=optbox name=filterIsDefault></td>";
-        String buttons = String.format(
-            "<tr><td colspan=7>\n" +
-            "<input type=submit name=raction class=delete value=\"%s\">\n" +
-            "<input type=submit name=raction class=accept value=\"%s\">\n" +
-            "<input type=submit name=raction class=reload value=\"%s\">\n" +
-            "<input type=submit name=raction class=add value=\"%s\">\n" +
-            "</td></tr>\n",
-            _t("Delete selected"),
-            _t("Save Filter Configuration"),
-            _t("Restore defaults"),
-            _t("Add File Filter")
-        );
-        buf.append(spacer)
-           .append("<tr id=addFileFilter>")
-           .append("<td><b>").append(_t("Add")).append(":</b></td>").append(filterFormElements).append("</tr>")
-           .append(spacer).append(buttons).append(spacer).append("</table>\n</div>\n</div>\n</form>\n");
-        out.append(buf);
-        out.flush();
-        buf.setLength(0);
-    }
-
-    /**
-     * Writes the HTML form for managing trackers with optimized string building.
-     * Minimizes append() calls by batching HTML fragments, and caches collections for efficient lookups.
-     *
-     * @param out the PrintWriter to which the HTML output will be written
-     * @param req the HttpServletRequest containing the current request parameters
-     * @throws IOException if an I/O error occurs while writing to the output stream
-     * @since 0.9 Added tracker management form, optimized in 2025 for rendering performance
-     */
-    private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
-        StringBuilder buf = new StringBuilder(5 * 1024);
-
-        buf.append("<form id=trackerConfigForm action=\"")
-           .append(_contextPath)
-           .append("/configure\" method=POST>\n<div class=configPanel id=trackers><div class=snarkConfig>\n");
-        writeHiddenInputs(buf, req, "SaveTrackers");
-        buf.append("<span id=trackersTitle class=\"configTitle expanded\">")
-           .append(_t("Trackers"))
-           .append("</span><hr>\n<table id=trackerconfig hidden>\n<tr><th title=\"")
-           .append(_t("Select trackers for removal from I2PSnark's known list"))
-           .append("\"></th><th>")
-           .append(_t("Name"))
-           .append("</th><th>")
-           .append(_t("Website URL"))
-           .append("</th><th class=radio>")
-           .append(_t("Standard"))
-           .append("</th><th class=radio>")
-           .append(_t("Open"))
-           .append("</th><th class=radio>")
-           .append(_t("Private"))
-           .append("</th><th>")
-           .append(_t("Announce URL"))
-           .append("</th></tr>\n");
-
-        I2PSnarkUtil util = _manager.util();
-        Set<String> openSet = new HashSet<>(util.getOpenTrackers());
-        Set<String> privateSet = new HashSet<>(_manager.getPrivateTrackers());
-
-        // Batch all rows to reduce append calls
-        StringBuilder rowsBatch = new StringBuilder(8192);
-        for (Tracker t : _manager.getSortedTrackers()) {
-            String name = t.name;
-            String homeURL = t.baseURL.endsWith(".i2p/") ? t.baseURL.substring(0, t.baseURL.length() - 1) : t.baseURL;
-            String announceURL = t.announceURL;
-
-            boolean isPrivate = privateSet.contains(announceURL);
-            boolean isKnownOpen = util.isKnownOpenTracker(announceURL);
-            boolean isOpen = isKnownOpen || openSet.contains(announceURL);
-
-            rowsBatch.append("<tr class=knownTracker><td><input type=checkbox class=optbox id=\"")
-                     .append(name)
-                     .append("\" name=\"delete_")
-                     .append(name)
-                     .append("\" title=\"")
-                     .append(_t("Mark tracker for deletion"))
-                     .append("\"></td><td><label for=\"")
-                     .append(name)
-                     .append("\">")
-                     .append(name)
-                     .append("</label></td><td>")
-                     .append(urlify(homeURL, 64))
-                     .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
-                     .append(announceURL).append("\"");
-            if (!(isOpen || isPrivate)) {rowsBatch.append(" checked");}
-            else if (isKnownOpen) {rowsBatch.append(" disabled");}
-            rowsBatch.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
-                     .append(announceURL)
-                     .append("\"");
-            if (isOpen) {rowsBatch.append(" checked");}
-            else if ("http://diftracker.i2p/announce.php".equals(announceURL) ||
-                     "http://tracker2.postman.i2p/announce.php".equals(announceURL) ||
-                     "http://torrfreedom.i2p/announce.php".equals(announceURL)) {
-                rowsBatch.append(" disabled");
-            }
-            rowsBatch.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
-                     .append(announceURL)
-                     .append("\"");
-            if (isPrivate) {rowsBatch.append(" checked");}
-            else if (isKnownOpen || "http://diftracker.i2p/announce.php".equals(announceURL) ||
-                     "http://tracker2.postman.i2p/announce.php".equals(announceURL) ||
-                     "http://torrfreedom.i2p/announce.php".equals(announceURL)) {
-                rowsBatch.append(" disabled");
-            }
-            rowsBatch.append("></td><td>")
-                     .append(urlify(announceURL, 64))
-                     .append("</td></tr>\n");
-        }
-
-        buf.append(rowsBatch);
-
-        String spacer = "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n";
-        String trackerFormElements =
-            "<td><input type=text class=trackername name=tname spellcheck=false></td>" +
-            "<td><input type=text class=trackerhome name=thurl spellcheck=false></td>" +
-            "<td><input type=radio class=optbox value=0 name=add_tracker_type checked></td>" +
-            "<td><input type=radio class=optbox value=1 name=add_tracker_type></td>" +
-            "<td><input type=radio class=optbox value=2 name=add_tracker_type></td>" +
-            "<td><input type=text class=trackerannounce name=taurl spellcheck=false></td>";
-
-        String noscript =
-            "<noscript><style>" +
-            ".configPanel .configTitle{pointer-events:none!important}" +
-            "#fileFilter table,#trackers table{display:table!important}" +
-            "#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}" +
-            "</style></noscript>\n";
-
-        buf.append(spacer);
-        buf.append("<tr id=addtracker><td><b>")
-           .append(_t("Add"))
-           .append(":</b></td>")
-           .append(trackerFormElements)
-           .append("</tr>\n")
-           .append(spacer);
-
-        String buttons =
-            "<tr><td colspan=7>\n" +
-            "<input type=submit name=taction class=default value=\"" + _t("Add tracker") + "\">\n" +
-            "<input type=submit name=taction class=delete value=\"" + _t("Delete selected") + "\">\n" +
-            "<input type=submit name=taction class=accept value=\"" + _t("Save tracker configuration") + "\">\n" +
-            "<input type=submit name=taction class=add value=\"" + _t("Add tracker") + "\">\n" +
-            "<input type=submit name=taction class=reload value=\"" + _t("Restore defaults") + "\">\n" +
-            "</td></tr>" + spacer +
-            "</table>\n</div>\n</div></form>\n" +
-            noscript +
-            "<script src=\"" + _resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n";
-
-        buf.append(buttons);
-        out.append(buf);
-        out.flush();
-        buf.setLength(0);
-    }
-
     /**
      * Add a torrent from a magnet URL.
      *
@@ -5538,59 +4866,17 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
-    /** Copied from ConfigTunnelsHelper. */
-    private static final String HOP = "hop";
-    private static final String TUNNEL = "tunnel";
-    /** Dummies for translation; prevents the ngettext line below from getting tagged. */
-    private static final String DUMMY0 = "{0} ";
-    private static final String DUMMY1 = "1 ";
-
-   /**
-    * Generates HTML for a dropdown selection menu.
-    *
-    * @param min the minimum value for the dropdown options
-    * @param max the maximum value for the dropdown options
-    * @param dflt the default value for the dropdown
-    * @param strNow the string representation of the current selected option
-    * @param selName the name attribute for the select element
-    * @param name the base name of the option to be displayed in the dropdown
-    * @return a string representing the HTML for the dropdown selection menu
-    * @since 0.7.14 Modified from ConfigTunnelsHelper
-    */
-    private String renderOptions(int min, int max, int dflt, String strNow, String selName, String name) {
-       int now = I2PSnarkUtil.parseInt(strNow, dflt);
-       StringBuilder buf = new StringBuilder(128);
-       buf.append("<select name=\"").append(selName);
-       if (selName.contains("quantity")) {
-           buf.append("\" title=\"")
-              .append(_t("This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"));
-       }
-       if (selName.contains("length")) {
-           buf.append("\" title=\"")
-              .append(_t("Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"));
-       }
-       buf.append("\">\n");
-       for (int i = min; i <= max; i++) {
-           buf.append("<option value=\"").append(i).append("\"");
-           if (i == now) {buf.append(" selected");}
-           // constants to prevent tagging
-           buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i)).append("</option>\n");
-       }
-       buf.append("</select>\n");
-       return buf.toString();
-    }
-
     /** Translate a string. */
-    private String _t(String s) {return _manager.util().getString(s);}
+    String _t(String s) {return _manager.util().getString(s);}
 
     /** Translate a string with one argument. */
-    private String _t(String s, Object o) {return _manager.util().getString(s, o);}
+    String _t(String s, Object o) {return _manager.util().getString(s, o);}
 
     /** Translate a string with two arguments. */
-    private String _t(String s, Object o, Object o2) {return _manager.util().getString(s, o, o2);}
+    String _t(String s, Object o, Object o2) {return _manager.util().getString(s, o, o2);}
 
     /** Translate a pluralized string. @since 0.7.14 */
-    private String ngettext(String s, String p, int n) {return _manager.util().getString(n, s, p);}
+    String ngettext(String s, String p, int n) {return _manager.util().getString(n, s, p);}
 
     /** Format the file size. */
     private static String formatSize(long bytes) {return DataHelper.formatSize2(bytes) + 'B';}
@@ -5605,7 +4891,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * This is for a full URL. For a path only, use encodePath().
      * @since 0.9
      */
-    private static String urlify(String s, int max) {
+    static String urlify(String s, int max) {
         // browsers seem to work without doing this but let's be strict
         String link = urlEncode(s);
         String display;
@@ -7418,7 +6704,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param isSvg if true, uses .svg extension; otherwise uses .png
      * @since 0.9.68+
      */
-    private void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg, boolean addDimensions) {
+    void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg, boolean addDimensions) {
         buf.append("<img").append(addDimensions ? " width=16 height=16" : "").append(" alt=\"").append(alt).append("\" src=\"");
         if (fromTheme) {buf.append(_imgPath).append(name);}
         else {buf.append(_contextPath).append(WARBASE).append("icons/").append(name);}
@@ -7431,7 +6717,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Overloaded method that defaults addDimensions to false.
      * @since 0.9.68+
      */
-    private void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg) {
+    void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg) {
         appendIcon(buf, name, alt, title, fromTheme, isSvg, false);
     }
 
@@ -8038,7 +7324,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param req the request
      * @return true if panels should not be collapsed
      */
-    private static boolean noCollapsePanels(HttpServletRequest req) {
+    static boolean noCollapsePanels(HttpServletRequest req) {
         // check for user agents that can't toggle the collapsible panels...
         // TODO: QupZilla supports panel collapse as of circa v2.1.2, so disable conditionally
         // TODO: Konqueror supports panel collapse as of circa v5 (5.34), so disable conditionally
@@ -8109,7 +7395,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return whether standalone
      * @since 0.9.54+
      */
-    private boolean isStandalone() {
+    boolean isStandalone() {
         if (_context.isRouterContext()) {return false;}
         else {return true;}
     }
