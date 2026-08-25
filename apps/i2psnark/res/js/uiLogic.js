@@ -52,3 +52,35 @@ export function resolveFilterId(params) {
 export function formatTooltipText(text) {
   return text.replace(/^(.*)\s•\s(.*)$/, '• $1\n• $2');
 }
+
+/**
+ * Per-element memory of the last HTML this helper wrote, so change detection never
+ * has to re-serialize a live subtree via the innerHTML getter. WeakMap keys keep
+ * detached elements collectable.
+ */
+const lastAppliedHTML = new WeakMap();
+
+/**
+ * Writes {@code html} into {@code element} only when it differs from what was last
+ * applied here, returning whether the DOM was actually touched. Callers feed this
+ * from refresh payloads to keep volatile cells in sync without paying an
+ * innerHTML-serialization cost on every no-op tick.
+ *
+ * Contract: once an element is managed by this helper, its content should only
+ * change through it (or by wholesale replacement of the element); divergent external
+ * edits are deliberately not detected, because detecting them is exactly the
+ * serialization cost this exists to avoid.
+ *
+ * @param {Element} element - target element; null/undefined is a safe no-op
+ * @param {string} html - desired inner HTML
+ * @returns {boolean} whether an innerHTML assignment was performed
+ * @since 0.9.71+
+ */
+export function applyIfChanged(element, html) {
+  if (!element) {return false;}
+  if (lastAppliedHTML.get(element) === html) {return false;}
+  const changed = element.innerHTML !== html;
+  if (changed) {element.innerHTML = html;}
+  lastAppliedHTML.set(element, html);
+  return changed;
+}

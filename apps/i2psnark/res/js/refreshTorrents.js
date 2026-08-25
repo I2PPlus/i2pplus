@@ -17,7 +17,7 @@ import {snarkSort} from "./snarkSort.js";
 import {toggleDebug} from "./toggleDebug.js";
 import {MESSAGE_TYPES} from "./messageTypes.js";
 import {extractRefreshPayload} from "./refreshPayload.js";
-import {loadingSpanDecision} from "./uiLogic.js";
+import {applyIfChanged, loadingSpanDecision} from "./uiLogic.js";
 import morphdom from "./morphdom.js";
 
 /**
@@ -344,6 +344,34 @@ const workerRequests = new Map();
 const workerTimeout = 30000;
 
 /**
+ * @type {number}
+ * @description Cool-down after a worker failure before attempting another Worker
+ * construction, so a genuinely broken environment does not churn a new Worker on
+ * every tick. Successful readiness resets this.
+ */
+const WORKER_RETRY_MS = 60000;
+
+/**
+ * @type {number}
+ * @description Grace period for a freshly constructed Worker to signal readiness
+ * before it is torn down as silently broken.
+ */
+const WORKER_READY_TIMEOUT_MS = 10000;
+
+/**
+ * @type {number}
+ * @description Earliest wall-clock time (Date.now()) at which another Worker
+ * construction attempt is allowed.
+ */
+let workerRetryAt = 0;
+
+/**
+ * @type {?number}
+ * @description Timeout handle for the pending readiness check of the live Worker.
+ */
+let workerReadyTimer = null;
+
+/**
  * @function initWorker
  * @description Constructs the snarkWork worker once. Falls back to direct fetching
  * when Web Workers are unavailable or the worker script cannot be loaded.
@@ -351,11 +379,17 @@ const workerTimeout = 30000;
  */
 function initWorker() {
     if (worker || typeof Worker === "undefined") {return;}
+    if (Date.now() < workerRetryAt) {return;}
     try {
         worker = new Worker("/i2psnark/.res/js/snarkWork.js", {type: "module"});
         worker.addEventListener("message", (event) => {
             const {type, requestId, payload, message} = event.data || {};
-            if (type === MESSAGE_TYPES.READY) {workerReady = true; return;}
+            if (type === MESSAGE_TYPES.READY) {
+                clearTimeout(workerReadyTimer);
+                workerReady = true;
+                workerRetryAt = 0;
+                return;
+            }
             const pending = workerRequests.get(requestId);
             if (!pending) {return;}
             workerRequests.delete(requestId);
@@ -364,18 +398,29 @@ function initWorker() {
             else if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_ERROR) {pending.reject(new Error(message || "Worker fetch failed"));}
         });
         worker.addEventListener("error", () => {workerFailed();});
+        // A constructed-but-silent Worker would otherwise hold the slot forever while
+        // every fetch quietly falls back to the main thread; tear it down and back off.
+        workerReadyTimer = setTimeout(() => {
+            if (!workerReady) {workerFailed();}
+        }, WORKER_READY_TIMEOUT_MS);
     } catch {workerFailed();}
 }
 
 /**
  * @function workerFailed
  * @description Marks the worker as unusable and rejects all pending requests so
- * callers fall back to direct fetching.
+ * callers fall back to direct fetching. Starts the retry cool-down; a later
+ * initWorker call reconstructs the Worker once it elapses.
  * @returns {void}
  */
 function workerFailed() {
     worker = null;
     workerReady = false;
+    if (workerReadyTimer) {
+        clearTimeout(workerReadyTimer);
+        workerReadyTimer = null;
+    }
+    workerRetryAt = Date.now() + WORKER_RETRY_MS;
     workerRequests.forEach((pending) => {pending.reject(new Error("Worker unavailable"));});
     workerRequests.clear();
 }
@@ -501,17 +546,17 @@ function cleanupCache() {
  * @function doRefresh
  * @description Main refresh entry point. Fetches the AJAX HTML document for the given URL,
  * refreshes the torrent display, reinitializes handlers, and updates the filter badge.
- * Accepts either an options object or a plain URL string.
- * @param {Object|string} [options={}] - Refresh options, or a URL string to fetch.
+ * All callers pass an options object.
+ * @param {Object} [options={}] - Refresh options.
  * @param {string} [options.url] - The URL to fetch; defaults to the current AJAX URL.
  * @param {boolean} [options.forceFetch=false] - Whether to bypass the cache.
  * @param {?AbortSignal} [options.signal=null] - Aborts the in-flight fetch.
  * @returns {Promise<void>}
  */
 async function doRefresh(options = {}) {
-  const url = typeof options === "string" ? options : options.url;
-  const forceFetch = typeof options === "string" ? false : Boolean(options.forceFetch);
-  const signal = typeof options === "string" ? null : options.signal || null;
+  const url = options.url;
+  const forceFetch = Boolean(options.forceFetch);
+  const signal = options.signal || null;
   const defaultUrl = await getURL();
   const payload = await fetchRefreshPayload(url || defaultUrl, forceFetch, signal);
   // Handler re-init and badge sync only run when the refresh actually touched the
@@ -602,6 +647,16 @@ async function refreshTorrents(payload) {
       let mutated = false;
       const newTbody = document.createElement("tbody");
       newTbody.innerHTML = newTbodyHTML;
+      // Mirror the transient loading markers into the incoming tree: server HTML
+      // never contains them, so without this, morph would strip each span and the
+      // sweep re-add it — a guaranteed mutation pair on every tick while any span
+      // is outstanding. With both sides carrying spans, equal rows compare equal.
+      newTbody.querySelectorAll("tr").forEach((row) => {
+        const cell = row.querySelector(".tAction");
+        if (cell && !cell.querySelector("input[type=submit]") && !cell.querySelector(".loading")) {
+          cell.insertAdjacentHTML("beforeend", "<span class=loading></span>");
+        }
+      });
       morphdom(torrentsBody, newTbody, {
         getKey: (el) => el.getAttribute("data-name") || el.id || null,
         childrenOnly: true,
@@ -720,14 +775,11 @@ async function refreshTorrents(payload) {
           const elements = document.querySelectorAll(selectors[selectorIndex]);
           const values = responseValues[selectorIndex];
           if (values.length !== elements.length) {continue;}
-          const trimmedValues = values.map(value => value.trim());
-          for (let index = 0; index < elements.length; index++) {
-            const element = elements[index];
-            if (element.innerHTML.trim() !== trimmedValues[index]) {
-              element.innerHTML = values[index];
-              changed = true;
-            }
-          }
+          // Values arrive pre-trimmed from the payload; applyIfChanged skips writes
+          // without serializing either side on no-op ticks.
+          values.forEach((html, index) => {
+            if (applyIfChanged(elements[index], html)) {changed = true;}
+          });
         }
       } catch (error) { if (debugging) console.error(error); }
       return changed;
@@ -747,21 +799,15 @@ async function refreshTorrents(payload) {
 
         if (snarkFooter) {
           const thElements = snarkFooter.querySelectorAll("th");
-
           if (thElements.length === payload.footerTH.length) {
-            thElements.forEach((th, index) => {
-              if (th.innerHTML !== payload.footerTH[index]) {th.innerHTML = payload.footerTH[index];}
-            });
+            payload.footerTH.forEach((html, index) => applyIfChanged(thElements[index], html));
           }
         }
 
         if (snarkHeader) {
           const thElements = snarkHeader.querySelectorAll("th");
-
           if (thElements.length === payload.headerTH.length) {
-            thElements.forEach((th, index) => {
-              if (th.innerHTML !== payload.headerTH[index]) {th.innerHTML = payload.headerTH[index];}
-            });
+            payload.headerTH.forEach((html, index) => applyIfChanged(thElements[index], html));
           }
           const noload = torrents?.querySelector("#noTorrents");
           if ((torrentsBody && torrentsBody.children.length === 0) || noload) {
@@ -1080,7 +1126,6 @@ async function checkIfUp(minDelay = 14000) {
     wasDown = true;
     if (isIframed) {parentDoc.documentElement.classList.add("isDown");}
     setTimeout(isDown, 3000);
-    await refreshTorrents();
   }
 }
 

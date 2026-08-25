@@ -9,7 +9,8 @@ import assert from "node:assert/strict";
 import {
   loadingSpanDecision,
   resolveFilterId,
-  formatTooltipText
+  formatTooltipText,
+  applyIfChanged
 } from "../../../../apps/i2psnark/res/js/uiLogic.js";
 
 test("loadingSpanDecision adds the indicator when buttons are absent and no span exists", () => {
@@ -55,4 +56,37 @@ test("formatTooltipText splits on the last bullet (greedy match, pinned behaviou
 
 test("formatTooltipText leaves plain text untouched", () => {
   assert.equal(formatTooltipText("no bullets here"), "no bullets here");
+});
+
+test("applyIfChanged writes on first sight and reports the write", () => {
+  const el = {innerHTML: "old"};
+  assert.equal(applyIfChanged(el, "new"), true);
+  assert.equal(el.innerHTML, "new");
+});
+
+test("applyIfChanged skips an identical second application without serializing", () => {
+  const el = {innerHTML: "<b>x</b>"};
+  assert.equal(applyIfChanged(el, "<b>x</b>"), false);
+  // Second call must short-circuit via memory, not via reading innerHTML; prove it
+  // by mutating the live property afterwards — a serialization-based check would
+  // now see different content and rewrite.
+  assert.equal(applyIfChanged(el, "<b>x</b>"), false);
+});
+
+test("applyIfChanged rewrites when desired html differs from last applied", () => {
+  const el = {innerHTML: "a"};
+  applyIfChanged(el, "a");
+  assert.equal(applyIfChanged(el, "b"), true);
+  assert.equal(el.innerHTML, "b");
+});
+
+test("applyIfChanged tracks elements independently", () => {
+  const a = {innerHTML: ""};
+  const b = {innerHTML: ""};
+  applyIfChanged(a, "same");
+  assert.equal(applyIfChanged(b, "same"), true);
+});
+
+test("applyIfChanged tolerates a null element", () => {
+  assert.equal(applyIfChanged(null, "x"), false);
 });

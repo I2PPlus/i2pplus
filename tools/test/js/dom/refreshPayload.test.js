@@ -82,6 +82,12 @@ test("extractRefreshPayload returns a null screen log stamp when absent", () => 
   assert.equal(payload.screenLogStamp, null);
 });
 
+test("extractRefreshPayload trims file cell values at build time", () => {
+  const payload = extractRefreshPayload(fixture());
+  assert.deepEqual(payload.fileTds, ["42%", "17 of 99"]);
+  assert.deepEqual(payload.fileStats, ["1.2 GB", "3 peers"]);
+});
+
 test("extractRefreshPayload tolerates a response with no filter bar", () => {
   const { document } = parseHTML(
     '<!DOCTYPE HTML><html><body id=snarkxhr><div id=mainsection><table><thead id=snarkHead><tr><th>A</th></tr></thead><tbody id=snarkTbody></tbody></table></div></body></html>'

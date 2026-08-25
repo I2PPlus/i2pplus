@@ -32,8 +32,8 @@
  *   or null when the response carries no form.
  * @returns {string[]} returns.headerTH - Inner HTML of each #snarkHead th cell.
  * @returns {string[]} returns.footerTH - Inner HTML of each #snarkFoot th cell.
- * @returns {string[]} returns.fileTds - Inner HTML of each incomplete-file cell.
- * @returns {string[]} returns.fileStats - Inner HTML of each #torrentInfoStats .nowrap cell.
+ * @returns {string[]} returns.fileTds - Trimmed inner HTML of each incomplete-file cell.
+ * @returns {string[]} returns.fileStats - Trimmed inner HTML of each #torrentInfoStats .nowrap cell.
  */
 function extractRefreshPayload(doc) {
     const tbody = doc.querySelector("#snarkTbody");
@@ -59,8 +59,8 @@ function extractRefreshPayload(doc) {
         nonce: nonceInput ? nonceInput.value : null,
         headerTH: header ? [...header.querySelectorAll("th")].map(th => th.innerHTML) : [],
         footerTH: footer ? [...footer.querySelectorAll("th")].map(th => th.innerHTML) : [],
-        fileTds: [...doc.querySelectorAll("#dirInfo tbody tr.incomplete td")].map(td => td.innerHTML),
-        fileStats: [...doc.querySelectorAll("#torrentInfoStats .nowrap")].map(el => el.innerHTML)
+        fileTds: [...doc.querySelectorAll("#dirInfo tbody tr.incomplete td")].map(td => td.innerHTML.trim()),
+        fileStats: [...doc.querySelectorAll("#torrentInfoStats .nowrap")].map(el => el.innerHTML.trim())
     };
 }
 
