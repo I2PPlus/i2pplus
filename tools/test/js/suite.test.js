@@ -11,5 +11,6 @@
 import "./pure/uiLogic.test.js";
 import "./pure/payloadNonce.test.js";
 import "./dom/refreshPayload.test.js";
+import "./dom/esmScriptTags.test.js";
 
 await import("./dom/importAll.test.js");

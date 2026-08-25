@@ -1274,7 +1274,7 @@ public class I2PSnarkServlet extends BasicServlet {
         target.write("</table>\n");
 
         if (isForm) target.write("</form>\n");
-        if (total > 0) target.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
+        if (total > 0) target.write("<script src=/i2psnark/.res/js/convertTooltips.js type=module></script>\n");
 
         // buffered mode: the staged table reaches the client as one write;
         // streamed mode: rows are already on the wire
