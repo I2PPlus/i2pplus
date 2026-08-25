@@ -14,7 +14,8 @@
  * @description Extracts the containers the refresh pipeline updates: torrent table
  * rows, filter badge, pagination, torrent form, screen log, header/footer cells, and
  * file-listing cells. All values are strings or arrays of strings so the payload can
- * cross the worker postMessage boundary.
+ * cross the worker postMessage boundary. Extraction happens wherever this module runs
+ * (worker or main thread), so downstream code never parses response HTML again.
  * @param {Document} doc - The parsed AJAX response document.
  * @returns {Object} The refresh payload.
  * @returns {?string} returns.snarkTbody - Inner HTML of the #snarkTbody table body.
@@ -27,6 +28,8 @@
  * @returns {?string} returns.messages - Inner HTML of the #messages screen log.
  * @returns {?string} returns.screenLogStamp - Server-side change stamp for the screen
  *   log ("lastMessageId:messageCount"), or null when the response carries none.
+ * @returns {?string} returns.nonce - Value of the form's hidden CSRF nonce input,
+ *   or null when the response carries no form.
  * @returns {string[]} returns.headerTH - Inner HTML of each #snarkHead th cell.
  * @returns {string[]} returns.footerTH - Inner HTML of each #snarkFoot th cell.
  * @returns {string[]} returns.fileTds - Inner HTML of each incomplete-file cell.
@@ -40,6 +43,7 @@ function extractRefreshPayload(doc) {
     const mainsection = doc.querySelector("#mainsection");
     const messages = doc.getElementById("messages");
     const screenLogStampEl = doc.getElementById("screenlogStamp");
+    const nonceInput = doc.querySelector("#torrentlist input[name=nonce]");
     const header = doc.querySelector("#snarkHead");
     const footer = doc.querySelector("#snarkFoot");
     return {
@@ -52,6 +56,7 @@ function extractRefreshPayload(doc) {
         mainsection: mainsection ? mainsection.innerHTML : null,
         messages: messages ? messages.innerHTML : null,
         screenLogStamp: screenLogStampEl ? screenLogStampEl.getAttribute("data-v") : null,
+        nonce: nonceInput ? nonceInput.value : null,
         headerTH: header ? [...header.querySelectorAll("th")].map(th => th.innerHTML) : [],
         footerTH: footer ? [...footer.querySelectorAll("th")].map(th => th.innerHTML) : [],
         fileTds: [...doc.querySelectorAll("#dirInfo tbody tr.incomplete td")].map(td => td.innerHTML),
@@ -59,20 +64,4 @@ function extractRefreshPayload(doc) {
     };
 }
 
-/**
- * @function extractNonce
- * @description Extracts the anti-CSRF nonce value from rendered #torrentlist form HTML.
- * The refresh pipeline uses it to keep the live form's hidden nonce in sync without
- * re-rendering the form. Accepts both raw server markup (name=nonce) and
- * DOM-serialized HTML (name="nonce") — browsers always re-serialize with quotes.
- *
- * @param {?string} formHtml - Inner HTML of the response #torrentlist form, or null.
- * @returns {?string} The nonce value (possibly empty), or null when no nonce is present.
- */
-function extractNonce(formHtml) {
-    if (!formHtml) {return null;}
-    const match = formHtml.match(/name="?nonce"?\s+value="([^"]*)"/);
-    return match ? match[1] : null;
-}
-
-export {extractRefreshPayload, extractNonce};
+export {extractRefreshPayload};

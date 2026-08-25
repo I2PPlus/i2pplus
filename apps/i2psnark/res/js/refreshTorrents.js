@@ -16,7 +16,7 @@ import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
 import {toggleDebug} from "./toggleDebug.js";
 import {MESSAGE_TYPES} from "./messageTypes.js";
-import {extractNonce, extractRefreshPayload} from "./refreshPayload.js";
+import {extractRefreshPayload} from "./refreshPayload.js";
 import {loadingSpanDecision} from "./uiLogic.js";
 import morphdom from "./morphdom.js";
 
@@ -53,6 +53,14 @@ let lastScreenLogStamp = null;
  * whole form is re-rendered so a fresh table is never mistaken for applied state.
  */
 let lastAppliedTbodyHTML = null;
+
+/**
+ * @type {boolean}
+ * @description Whether an interval-driven refresh is currently in flight. Guards the
+ * periodic tick against overlapping itself; explicit caller-triggered refreshes are
+ * deliberately not gated by it.
+ */
+let tickInProgress = false;
 
 /**
  * @type {?HTMLElement}
@@ -652,7 +660,7 @@ async function refreshTorrents(payload) {
       try {
         if (noTorrents) {noTorrents.remove();}
 
-        const nonce = extractNonce(payload.torrentlist);
+        const nonce = payload.nonce;
         if (nonce !== null && torrentForm) {
           const hidden = torrentForm.querySelector('input[name=nonce]');
           if (hidden && hidden.value !== nonce) {hidden.value = nonce; changed = true;}
@@ -957,22 +965,33 @@ function refreshOnSubmit() {
       };
     }
   });
-
-  document.addEventListener("click", (event) => {
-    const clickTarget = event.target;
-    const dirlist = document.getElementById("dirlist");
-    if (clickTarget.matches("#nav_main:not(.isConfig)") && !dirlist) {
-      const navMain = document.querySelector("#nav_main:not(.isConfig)");
-      navMain.classList.add("isRefreshing");
-      event.preventDefault();
-      refreshScreenLog(refreshTorrents, true);
-      setTimeout(() => {
-        navMain.classList.remove("isRefreshing");
-        clickTarget.blur();
-      }, 200);
-    }
-  });
 }
+
+/**
+ * @description Delegated handler for the navigation refresh link, registered exactly
+ * once at module scope. The previous per-init registration (plus a cleanup attempt
+ * via the never-populated document._events) leaked one listener per tab switch.
+ * Statelessness makes single registration safe: every lookup happens per event.
+ *
+ * @param {MouseEvent} event - The captured document click.
+ * @returns {void}
+ */
+function onNavRefreshClick(event) {
+  const clickTarget = event.target;
+  const dirlist = document.getElementById("dirlist");
+  if (clickTarget.matches("#nav_main:not(.isConfig)") && !dirlist) {
+    const navMain = document.querySelector("#nav_main:not(.isConfig)");
+    navMain.classList.add("isRefreshing");
+    event.preventDefault();
+    refreshScreenLog(refreshTorrents, true);
+    setTimeout(() => {
+      navMain.classList.remove("isRefreshing");
+      clickTarget.blur();
+    }, 200);
+  }
+}
+
+document.addEventListener("click", onNavRefreshClick);
 
 /**
  * @async
@@ -994,18 +1013,21 @@ async function initSnarkRefresh() {
     // Persist once per (re)init rather than on every tick; getRefreshInterval is read-only.
     const refreshMs = await getRefreshInterval();
     localStorage.setItem("snarkRefresh", String(refreshMs));
-    snarkRefreshIntervalId = setInterval(async () => {
+    // Overlap guard: a tick slower than the interval (stalled network, worker
+    // timeout) must not stack concurrent default refreshes. Explicit refreshes —
+    // search keystrokes, filter/sort navigation, form submissions — bypass this
+    // guard and keep their own abort semantics.
+    snarkRefreshIntervalId = setInterval(async () => {      if (!isDocumentVisible || tickInProgress) {return;}
+      tickInProgress = true;
       try {
-        if (isDocumentVisible) {
-          await doRefresh();
-        }
+        await doRefresh();
       } catch (error) {
         if (debugging) console.error(error);
+      } finally {
+        tickInProgress = false;
       }
     }, await getRefreshInterval());
 
-    const events = document._events?.click || [];
-    events.forEach(event => document.removeEventListener("click", event));
     refreshOnSubmit();
   } catch (error) {
     if (debugging) console.error(error);

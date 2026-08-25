@@ -14,7 +14,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseHTML } from "linkedom";
-import { extractNonce, extractRefreshPayload } from "../../../../apps/i2psnark/res/js/refreshPayload.js";
+import { extractRefreshPayload } from "../../../../apps/i2psnark/res/js/refreshPayload.js";
 
 const fixture = () =>
   parseHTML(
@@ -45,11 +45,17 @@ test("extractRefreshPayload captures pagination markup", () => {
   assert.ok(payload.mainsection.includes('id="torrentlist"') || payload.mainsection.includes("id=torrentlist"));
 });
 
-test("extractRefreshPayload carries the form HTML so extractNonce can find the CSRF value", () => {
+test("extractRefreshPayload carries the CSRF nonce from the form", () => {
   const payload = extractRefreshPayload(fixture());
-  // DOM serialization quotes attributes; the parser must accept that form.
-  assert.ok(payload.torrentlist.includes('name="nonce"'), payload.torrentlist.slice(0, 120));
-  assert.equal(extractNonce(payload.torrentlist), "1712345678");
+  assert.equal(payload.nonce, "1712345678");
+});
+
+test("extractRefreshPayload returns a null nonce when no form is present", () => {
+  const { document } = parseHTML(
+    '<!DOCTYPE HTML><html><body id=snarkxhr><div id=mainsection></div></body></html>'
+  );
+  const payload = extractRefreshPayload(document);
+  assert.equal(payload.nonce, null);
 });
 
 test("extractRefreshPayload lists dht debug row outerHTML", () => {
