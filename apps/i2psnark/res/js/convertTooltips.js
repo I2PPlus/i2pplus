@@ -9,31 +9,42 @@
  * @license AGPL3 or later
  */
 
-/**
- * @description Self-executing IIFE that initializes the tooltip conversion system.
- * Converts title attributes to data-tooltip, injects tooltip CSS styles, and sets
- * up a MutationObserver on the torrents tbody to handle dynamically added rows.
- */
+import {formatTooltipText} from "./uiLogic.js";
+
+/** Elements whose native title is restyled as a data-tooltip */
+const TOOLTIP_SELECTOR = ".tx[title], .barComplete[title]";
+
 (() => {
 
   /**
-   * @function convertTooltip
-   * @description Finds all elements matching the selector that have a title attribute,
-   * converts the title to a data-tooltip attribute (reformatting bullet-separated content),
-   * removes the native title, and adds the "barTooltip" class for CSS styling.
-   * @param {string} selector - CSS selector to find elements with title attributes.
+   * @function convertOne
+   * @description Converts a single matching element: title to a reformatted
+   * data-tooltip attribute, removes the native title, adds the barTooltip class.
+   *
+   * @param {HTMLElement} element - element carrying a title attribute
    * @returns {void}
    */
-  function convertTooltip(selector) {
-    const elements = document.querySelectorAll(selector);
-    if (!elements.length) {return;}
-    elements.forEach((element) => {
-      let tooltipContent = element.getAttribute("title");
-      tooltipContent = tooltipContent.replace(/^(.*)\s•\s(.*)$/, '• $1\n• $2');
-      element.setAttribute("data-tooltip", tooltipContent);
-      element.removeAttribute("title");
-      element.classList.add("barTooltip");
-    });
+  function convertOne(element) {
+    const title = element.getAttribute("title");
+    if (title === null) {return;}
+    element.setAttribute("data-tooltip", formatTooltipText(title));
+    element.removeAttribute("title");
+    element.classList.add("barTooltip");
+  }
+
+  /**
+   * @function convertTree
+   * @description Converts the given node if it matches the selector, plus any
+   * matching descendants. Scoped to mutation records instead of rescanning the
+   * whole table, so cost scales with what actually changed rather than row count.
+   *
+   * @param {Node} node - added element or the target of an attribute mutation
+   * @returns {void}
+   */
+  function convertTree(node) {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) {return;}
+    if (node.matches(TOOLTIP_SELECTOR)) {convertOne(node);}
+    node.querySelectorAll(TOOLTIP_SELECTOR).forEach(convertOne);
   }
 
   const styleElement = document.createElement("style");
@@ -48,30 +59,51 @@
     '.barTooltip:hover::before,.barTooltip:hover::after,.txd:hover .barTooltip::before,.txd:hover .barTooltip::after{opacity:1}';
   document.head.appendChild(styleElement);
 
-  convertTooltip(".tx[title], .barComplete[title]");
+  convertAll();
 
   let convertPending = false;
 
   /**
+   * Set of candidate nodes accumulated between animation frames. Coalesces the
+   * observer's per-record callbacks into one conversion pass per frame.
+   */
+  const pendingNodes = new Set();
+
+  /**
    * @function queueConvert
-   * @description Schedules a single tooltip conversion per animation frame, coalescing
-   * the observer's per-record callbacks so a morphdom row update triggers one table
-   * scan instead of one per mutation.
+   * @description Collects nodes from mutation records and schedules a single
+   * conversion pass per animation frame.
+   *
+   * @param {MutationRecord[]} records - mutation batch from the observer
    * @returns {void}
    */
-  function queueConvert() {
+  function queueConvert(records) {
+    for (const record of records) {
+      if (record.type === "attributes") {
+        pendingNodes.add(record.target);
+      } else if (record.type === "childList") {
+        record.addedNodes.forEach(node => pendingNodes.add(node));
+      }
+    }
     if (convertPending) {return;}
     convertPending = true;
     requestAnimationFrame(() => {
       convertPending = false;
-      convertTooltip(".tx[title], .barComplete[title]");
+      pendingNodes.forEach(convertTree);
+      pendingNodes.clear();
     });
   }
 
-  const observer = new MutationObserver(() => {queueConvert();});
+  function convertAll() {
+    document.querySelectorAll(TOOLTIP_SELECTOR).forEach(convertOne);
+  }
+
+  const observer = new MutationObserver(queueConvert);
 
   const targetNode = document.querySelector('#torrents tbody');
   if (targetNode) {
-    observer.observe(targetNode, { childList: true, subtree: true });
+    // attributes/title matters: morphdom updates a bar's title in place when its
+    // progress changes, without any childList activity for that element.
+    observer.observe(targetNode, { childList: true, subtree: true, attributes: true, attributeFilter: ["title"] });
   }
 })();

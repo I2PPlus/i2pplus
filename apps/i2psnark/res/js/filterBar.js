@@ -9,6 +9,7 @@
  */
 
 import {doRefresh} from "./refreshTorrents.js"; // NOSONAR S1128
+import {resolveFilterId} from "./uiLogic.js";
 
 /**
  * @type {?HTMLElement}
@@ -92,10 +93,7 @@ async function showBadge() {
   const filterbar = document.getElementById("filterBar");
   if (!filterbar) {return;}
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const filterQuery = urlParams.get("filter");
-  const searchQuery = urlParams.get("search");
-  const filterId = searchQuery !== null ? "search" : (filterQuery || "all");
+  const filterId = resolveFilterId(new URLSearchParams(window.location.search));
 
   const allFilters = filterbar.querySelectorAll(".filter");
 
@@ -105,14 +103,15 @@ async function showBadge() {
   activeFilterId = activeFilter.id;
   const activeBadge = activeFilter.querySelector(".badge");
   if (!activeBadge) {return;}
-  activeBadge.id = "filtercount";
-  if (activeFilter.id === "all") {
-    activeBadge.hidden = false;
-  } else {activeBadge.hidden = true;}
+  // Idempotent writes only: skip attribute/class mutations when nothing changed so a
+  // no-op refresh tick never dirties style or layout.
+  if (activeBadge.id !== "filtercount") {activeBadge.id = "filtercount";}
+  const activeHidden = activeFilter.id === "all" ? false : true;
+  if (activeBadge.hidden !== activeHidden) {activeBadge.hidden = activeHidden;}
 
   allFilters.forEach(filter => {
     if (filter !== activeFilter) {
-      filter.classList.remove("enabled");
+      if (filter.classList.contains("enabled")) {filter.classList.remove("enabled");}
       if (filterChanged) {
         filter.style.pointerEvents = "none";
         filter.style.opacity = ".5";
@@ -121,8 +120,15 @@ async function showBadge() {
       const badges = filter.querySelectorAll(".badge");
       badges.forEach(badge => {
         const filterAll = badge.closest(".filter#all");
-        if (filterAll) { badge.hidden = true; badge.id = ""; }
-        else if (filter && filter.id !== "all") { badge.hidden = true; badge.textContent = ""; badge.id = ""; }
+        if (filterAll) {
+          if (!badge.hidden) {badge.hidden = true;}
+          if (badge.id !== "") {badge.id = "";}
+        }
+        else if (filter && filter.id !== "all") {
+          if (!badge.hidden) {badge.hidden = true;}
+          if (badge.textContent !== "") {badge.textContent = "";}
+          if (badge.id !== "") {badge.id = "";}
+        }
       });
     } else {
       ensureObserver();
@@ -156,14 +162,18 @@ function countSnarks() {
 
 /**
  * @function updateURLs
- * @description Sets up click handlers on sort icon elements to save the current query string
- * to localStorage when a sort is applied.
+ * @description Persists the current query string to localStorage when a sort is
+ * applied. One capture-phase delegated listener on the document replaces the old
+ * per-anchor binding: sort anchors are re-created whenever the header is refreshed,
+ * which silently dropped per-element listeners, and N anchors need only one handler.
+ * Capture phase guarantees the query string is read before snarkSort's bubble-phase
+ * handler rewrites the URL via history.replaceState.
  * @returns {void}
  */
 function updateURLs() {
-  const sortIcon = document.querySelectorAll(".sorter");
-
-  sortIcon.forEach((item) => { item.addEventListener("click", () => { setQuery(); }); });
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".sorter")) {setQuery();}
+  }, {capture: true});
 
   /**
    * @function setQuery

@@ -15,9 +15,9 @@ import {pageNav} from "./pageNav.js";
 import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
 import {toggleDebug} from "./toggleDebug.js";
-import {Lightbox} from "./lightbox.js";
 import {MESSAGE_TYPES} from "./messageTypes.js";
-import {extractRefreshPayload} from "./refreshPayload.js";
+import {extractNonce, extractRefreshPayload} from "./refreshPayload.js";
+import {loadingSpanDecision} from "./uiLogic.js";
 import morphdom from "./morphdom.js";
 
 /**
@@ -37,12 +37,6 @@ const cacheDuration = 5000;
  * @description The #debugMode element, used to check if debug mode is active.
  */
 const debugMode = document.getElementById("debugMode");
-
-/**
- * @type {?HTMLElement}
- * @description The #dirInfo element for file directory listings.
- */
-const files = document.getElementById("dirInfo");
 
 /**
  * @type {?HTMLElement}
@@ -507,9 +501,13 @@ async function doRefresh(options = {}) {
   const signal = typeof options === "string" ? null : options.signal || null;
   const defaultUrl = await getURL();
   const payload = await fetchRefreshPayload(url || defaultUrl, forceFetch, signal);
-  await requestAnimationFramePromise(async () => await refreshTorrents(payload));
-  await initHandlers();
-  await showBadge();
+  // Handler re-init and badge sync only run when the refresh actually touched the
+  // DOM; on a no-op tick (identical tbody, badge, pagination) they are pure overhead.
+  const changed = await requestAnimationFramePromise(async () => await refreshTorrents(payload));
+  if (changed !== false) {
+    await initHandlers();
+    await showBadge();
+  }
 }
 
 /**
@@ -519,9 +517,10 @@ async function doRefresh(options = {}) {
  * (torrent list, file directory, or offline state) and delegates to the appropriate update
  * function. Handles iframe detection, initialization delays, and volatile row updates.
  * @param {Object} [payload] - Refresh payload; when absent or incomplete it is fetched.
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>} Whether any DOM mutation was applied this pass.
  */
 async function refreshTorrents(payload) {
+  let changed = false;
   try {
     if (!payload || typeof payload !== "object" || !("snarkTbody" in payload)) {
       payload = await fetchRefreshPayload(await getURL());
@@ -542,9 +541,9 @@ async function refreshTorrents(payload) {
     }
 
     await setLinks(query);
-    if (torrents) { await requestAnimationFramePromise(async () => await updateVolatile()); }
-    else if (dirlist) {await requestAnimationFramePromise(async () => await updateFiles()); }
-    else if (down) { await requestAnimationFramePromise(async () => await refreshAll()); }
+    if (torrents) { changed = await requestAnimationFramePromise(async () => await updateVolatile()) || changed; }
+    else if (dirlist) {changed = await requestAnimationFramePromise(async () => await updateFiles()) || changed;}
+    else if (down) { changed = await requestAnimationFramePromise(async () => await refreshAll()) || changed; }
 
     markStartingRows();
 
@@ -552,21 +551,35 @@ async function refreshTorrents(payload) {
      * @function morphTorrentsBody
      * @description Morphs the live torrent tbody to match the response rows, diffing by
      * row key so matching torrents update in place and filters show the correct subset.
+     * Equal subtrees are skipped via isEqualNode, which both avoids the deep diff and
+     * lets the caller detect no-op ticks.
      * @param {?string} newTbodyHTML - Inner HTML of the response #snarkTbody.
-     * @returns {void}
+     * @returns {boolean} Whether any node was added, removed, or updated.
      */
     function morphTorrentsBody(newTbodyHTML) {
-      if (!torrentsBody || newTbodyHTML === null) {return;}
+      if (!torrentsBody || newTbodyHTML === null) {return false;}
       if (newTbodyHTML === "") {
-        if (torrentsBody.children.length > 0) {torrentsBody.innerHTML = "";}
-        return;
+        if (torrentsBody.children.length > 0) {
+          torrentsBody.innerHTML = "";
+          return true;
+        }
+        return false;
       }
+      let mutated = false;
       const newTbody = document.createElement("tbody");
       newTbody.innerHTML = newTbodyHTML;
       morphdom(torrentsBody, newTbody, {
         getKey: (el) => el.getAttribute("data-name") || el.id || null,
-        childrenOnly: true
+        childrenOnly: true,
+        onBeforeElUpdated: (fromEl, toEl) => {
+          if (fromEl.isEqualNode(toEl)) {return false;}
+          mutated = true;
+          return true;
+        },
+        onNodeAdded: () => {mutated = true;},
+        onNodeDiscarded: () => {mutated = true;}
       });
+      return mutated;
     }
 
     /**
@@ -574,13 +587,14 @@ async function refreshTorrents(payload) {
      * @function refreshAll
      * @description Performs a full refresh of the torrent table from the payload,
      * morphing the tbody and refreshing the header/footer and screen log.
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>} Whether any DOM mutation was applied.
      */
     async function refreshAll() {
+      let changed = false;
       try {
         if (payload.snarkTbody !== null) {
           await requestAnimationFramePromise(async () => {
-            morphTorrentsBody(payload.snarkTbody);
+            changed = morphTorrentsBody(payload.snarkTbody);
             refreshHeaderAndFooter();
             refreshScreenLog(undefined);
             if (noTorrents) {noTorrents.remove();}
@@ -588,10 +602,12 @@ async function refreshTorrents(payload) {
           });
         } else if (payload.mainsection !== null && mainsection) {
           mainsection.innerHTML = payload.mainsection;
+          changed = true;
         }
       } catch (error) {
         if (debugging) console.error(error);
       }
+      return changed;
     }
 
     /**
@@ -601,46 +617,49 @@ async function refreshTorrents(payload) {
      * Morphs the tbody so only changed rows and cells are written, refreshes the
      * filter badge, pagination, and DHT debug rows, and syncs the form's hidden nonce
      * from the payload so it never goes stale between page loads.
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>} Whether any DOM mutation was applied.
      */
     async function updateVolatile() {
+      let changed = false;
       try {
         if (noTorrents) {noTorrents.remove();}
 
-        const nonceMatch = payload.torrentlist && payload.torrentlist.match(/name=nonce value="([^"]*)/);
-        if (nonceMatch && torrentForm) {
+        const nonce = extractNonce(payload.torrentlist);
+        if (nonce !== null && torrentForm) {
           const hidden = torrentForm.querySelector('input[name=nonce]');
-          if (hidden && hidden.value !== nonceMatch[1]) {hidden.value = nonceMatch[1];}
+          if (hidden && hidden.value !== nonce) {hidden.value = nonce; changed = true;}
         }
 
         if (filterbar) {
           if (payload.badgeText !== null) {
             const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge");
-            if (activeBadge && activeBadge.textContent !== payload.badgeText) {activeBadge.textContent = payload.badgeText;}
+            if (activeBadge && activeBadge.textContent !== payload.badgeText) {activeBadge.textContent = payload.badgeText; changed = true;}
           }
 
           const pagenavtop = document.getElementById("pagenavtop");
 
           if (!payload.filterBarPresent || (!pagenavtop && payload.pagenavtop !== null)) {
-            if (payload.torrentlist !== null && torrentForm) {torrentForm.innerHTML = payload.torrentlist;}
+            if (payload.torrentlist !== null && torrentForm) {torrentForm.innerHTML = payload.torrentlist; changed = true;}
             await initHandlers();
           } else if (pagenavtop && payload.pagenavtop && pagenavtop.outerHTML !== payload.pagenavtop) {
             pagenavtop.outerHTML = payload.pagenavtop;
+            changed = true;
             await initHandlers();
           }
         }
-        morphTorrentsBody(payload.snarkTbody);
+        changed = morphTorrentsBody(payload.snarkTbody) || changed;
         await refreshHeaderAndFooter();
 
         const dhtRows = document.querySelectorAll("#dhtDebug .dht");
         if (dhtRows.length && payload.dhtDebug.length === dhtRows.length) {
           dhtRows.forEach((row, index) => {
-            if (row.outerHTML !== payload.dhtDebug[index]) {row.outerHTML = payload.dhtDebug[index];}
+            if (row.outerHTML !== payload.dhtDebug[index]) {row.outerHTML = payload.dhtDebug[index]; changed = true;}
           });
         }
       } catch (error) {
         if (debugging) console.error(error);
       }
+      return changed;
     }
 
     /**
@@ -648,9 +667,10 @@ async function refreshTorrents(payload) {
      * @function updateFiles
      * @description Updates file listing information by comparing and refreshing
      * incomplete file cells and torrent info stats from the payload.
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>} Whether any DOM mutation was applied.
      */
     async function updateFiles() {
+      let changed = false;
       try {
         if (!payload.fileTds || !payload.fileStats) {payload = await fetchRefreshPayload(window.location.href);}
         const selectors = ["#dirInfo tbody tr.incomplete td", "#torrentInfoStats .nowrap"];
@@ -664,10 +684,12 @@ async function refreshTorrents(payload) {
             const element = elements[index];
             if (element.innerHTML.trim() !== trimmedValues[index]) {
               element.innerHTML = values[index];
+              changed = true;
             }
           }
         }
       } catch (error) { if (debugging) console.error(error); }
+      return changed;
     }
 
     /**
@@ -715,7 +737,10 @@ async function refreshTorrents(payload) {
       } catch (error) {}
     }
 
-  } catch (error) {}
+    return changed;
+  } catch (error) {
+    return false;
+  }
 }
 
 /**
@@ -823,23 +848,50 @@ function invalidateCache() {
 }
 
 /**
+ * Pending injected loading spans. When zero and no scan was requested, idle ticks
+ * skip the row sweep entirely: the sweep only exists to add the transient indicator
+ * after a start action and to retire it once action buttons reappear.
+ */
+let pendingLoadingSpans = 0;
+
+/** Armed by the form-submit path so the next refresh performs one sweep regardless of pending spans. */
+let startScanRequested = false;
+
+/**
  * @function markStartingRows
  * @description Adds a <span class=loading> indicator to the action cell of rows that
  * currently have no action buttons (the transient state while a torrent is starting),
  * and removes it again once the next refresh restores the buttons.
+ *
+ * Gated: runs a full-row sweep only while spans are outstanding or immediately after
+ * a form submission; otherwise it is an O(1) early-out so idle ticks pay nothing.
+ *
  * @returns {void}
  */
 function markStartingRows() {
-  if (!torrentsBody) {return;}
+  if (!torrentsBody || !(startScanRequested || pendingLoadingSpans > 0)) {return;}
+  startScanRequested = false;
+  let spans = 0;
   torrentsBody.querySelectorAll("tr").forEach((row) => {
     const cell = row.querySelector(".tAction");
     if (!cell) {return;}
-    if (cell.querySelector("input[type=submit]")) {
-      cell.querySelector(".loading")?.remove();
-    } else if (!cell.querySelector(".loading")) {
-      cell.insertAdjacentHTML("beforeend", "<span class=loading></span>");
+    switch (loadingSpanDecision(
+      cell.querySelector("input[type=submit]") !== null,
+      cell.querySelector(".loading") !== null
+    )) {
+      case "add":
+        cell.insertAdjacentHTML("beforeend", "<span class=loading></span>");
+        spans++;
+        break;
+      case "keep":
+        spans++;
+        break;
+      case "remove":
+        cell.querySelector(".loading").remove();
+        break;
     }
   });
+  pendingLoadingSpans = spans;
 }
 
 /**
@@ -859,6 +911,7 @@ function refreshOnSubmit() {
         const submitter = event.submitter;
         if (!(submitter instanceof HTMLInputElement && submitter.classList) && submitter !== null) {return;}
         invalidateCache();
+        startScanRequested = true;
         try {
           await waitForIframeLoad(iframe);
           await doRefresh({forceFetch: true});
@@ -913,15 +966,6 @@ async function initSnarkRefresh() {
         if (debugging) console.error(error);
       }
     }, await getRefreshInterval());
-
-    if (files && document.getElementById("lightbox")) {
-      try {
-        const lightbox = new Lightbox();
-        lightbox.load();
-      } catch (error) {
-        if (debugging) console.error(error);
-      }
-    }
 
     const events = document._events?.click || [];
     events.forEach(event => document.removeEventListener("click", event));

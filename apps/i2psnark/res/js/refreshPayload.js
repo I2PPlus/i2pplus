@@ -55,4 +55,20 @@ function extractRefreshPayload(doc) {
     };
 }
 
-export {extractRefreshPayload};
+/**
+ * @function extractNonce
+ * @description Extracts the anti-CSRF nonce value from rendered #torrentlist form HTML.
+ * The refresh pipeline uses it to keep the live form's hidden nonce in sync without
+ * re-rendering the form. Accepts both raw server markup (name=nonce) and
+ * DOM-serialized HTML (name="nonce") — browsers always re-serialize with quotes.
+ *
+ * @param {?string} formHtml - Inner HTML of the response #torrentlist form, or null.
+ * @returns {?string} The nonce value (possibly empty), or null when no nonce is present.
+ */
+function extractNonce(formHtml) {
+    if (!formHtml) {return null;}
+    const match = formHtml.match(/name="?nonce"?\s+value="([^"]*)"/);
+    return match ? match[1] : null;
+}
+
+export {extractRefreshPayload, extractNonce};
