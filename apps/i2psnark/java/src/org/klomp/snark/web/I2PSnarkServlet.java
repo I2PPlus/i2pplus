@@ -1251,7 +1251,7 @@ public class I2PSnarkServlet extends BasicServlet {
             target.write("</i></td></tr></tbody>");
         }
 
-        appendSnarkFooter(target, buf, stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), peerParam);
+        appendSnarkFooter(target, buf, new FooterContext(stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), peerParam));
         target.write("</table>\n");
 
         if (isForm) target.write("</form>\n");
@@ -1743,6 +1743,32 @@ public class I2PSnarkServlet extends BasicServlet {
         return _manager.util().getMultiDest() && _manager.util().getTorrentDests().size() >= 1;
     }
 
+
+    /**
+     * Aggregated footer state, replacing a twelve-parameter signature.
+     * Package-visible for testing.
+     * @since 0.9.72+
+     */
+    static class FooterContext {
+        final long[] stats;
+        final long totalETA;
+        final int total;
+        final boolean isConnected;
+        final boolean noSnarks;
+        final boolean hasPeers;
+        final boolean isUploading;
+        final DHT dht;
+        final boolean standalone;
+        final String peerParam;
+        FooterContext(long[] stats, long totalETA, int total, boolean isConnected,
+                      boolean noSnarks, boolean hasPeers, boolean isUploading,
+                      DHT dht, boolean standalone, String peerParam) {
+            this.stats=stats;this.totalETA=totalETA;this.total=total;this.isConnected=isConnected;
+            this.noSnarks=noSnarks;this.hasPeers=hasPeers;this.isUploading=isUploading;
+            this.dht=dht;this.standalone=standalone;this.peerParam=peerParam;
+        }
+    }
+
     /**
      * Appends the footer section for the torrent list table, displaying overall statistics,
      * counters, and status indicators with associated icons.
@@ -1765,15 +1791,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param peerParam    the peer parameter from the request query, affects debug mode toggle links
      * @throws IOException if writing to the output stream fails
      */
-    private void appendSnarkFooter(PrintWriter out, StringBuilder buf, long[] stats, long totalETA, int total, boolean isConnected,
-                                   boolean noSnarks, boolean hasPeers, boolean isUploading, DHT dht,
-                                   boolean isStandalone, String peerParam) throws IOException {
+    private void appendSnarkFooter(PrintWriter out, StringBuilder buf, FooterContext fc) throws IOException {
 
         final boolean connecting = _manager.util().isConnecting();
 
         // Cache constant localized strings that are reused
         final String titleTotalSize = _t("Total size of loaded torrents");
-        final String titleConnectedPeers = ngettext("1 connected peer", "{0} peer connections", (int) stats[STAT_PEERS]);
+        final String titleConnectedPeers = ngettext("1 connected peer", "{0} peer connections", (int) fc.stats[STAT_PEERS]);
         final String titleActiveDownloads = _t("Active downloads");
         final String titleActiveUploads = _t("Active uploads");
         final String titleInboundTunnels = _t("Active Inbound tunnels");
@@ -1795,11 +1819,11 @@ public class I2PSnarkServlet extends BasicServlet {
         // Torrent count span
         buf.setLength(0);
         buf.append("<span id=torrentCount class=counter title=\"");
-        buf.append(ngettext("1 torrent", "{0} torrents", total));
+        buf.append(ngettext("1 torrent", "{0} torrents", fc.total));
         buf.append("\">");
         appendIcon(buf, "torrent", "", "", true, false);
         buf.append("<span class=badge>");
-        buf.append(total);
+        buf.append(fc.total);
         buf.append("</span></span>");
         out.write(buf.toString());
 
@@ -1810,7 +1834,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\">");
         appendIcon(buf, "size", "", "", true, false);
         buf.append("<span class=badge>");
-        buf.append(DataHelper.formatSize2(stats[STAT_TOTAL_SIZE]).replace("i", ""));
+        buf.append(DataHelper.formatSize2(fc.stats[STAT_TOTAL_SIZE]).replace("i", ""));
         buf.append("</span></span>");
         out.write(buf.toString());
 
@@ -1821,7 +1845,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\">");
         appendIcon(buf, "showpeers", "", "", true, false);
         buf.append("<span class=badge>");
-        buf.append((int) stats[STAT_PEERS]);
+        buf.append((int) fc.stats[STAT_PEERS]);
         buf.append("</span></span>");
         out.write(buf.toString());
 
@@ -1863,7 +1887,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</span></span>");
         out.write(buf.toString());
 
-        // Tunnel counters, computed from our own sessions so they also work in standalone
+        // Tunnel counters, computed from our own sessions so they also work in fc.standalone
         int[] tnl = _manager.util().getTunnelCounts();
         String[][] counters = {
             {"tnlInCount", "inbound", titleInboundTunnels, Integer.toString(tnl[0])},
@@ -1881,36 +1905,36 @@ public class I2PSnarkServlet extends BasicServlet {
 
         out.write("</span></th>");
 
-        if (isConnected && total > 0) {
+        if (fc.isConnected && fc.total > 0) {
             out.write("<th class=ETA>");
-            if (!noSnarks && hasPeers && totalETA > 0) {
+            if (!fc.noSnarks && fc.hasPeers && fc.totalETA > 0) {
                 out.write("<span title=\"");
                 out.write(titleEstimatedDownload);
                 out.write("\">");
-                out.write(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000));
+                out.write(DataHelper.formatDuration2(Math.max(fc.totalETA, 10) * 1000));
                 out.write("</span>");
             }
             out.write("</th><th class=rxd title=\"");
             out.write(titleDataDownloaded);
             out.write("\">");
-            if (stats[STAT_DOWNLOADED] > 0) out.write(formatSize(stats[STAT_DOWNLOADED]).replace("iB", ""));
+            if (fc.stats[STAT_DOWNLOADED] > 0) out.write(formatSize(fc.stats[STAT_DOWNLOADED]).replace("iB", ""));
             out.write("</th><th class=rateDown title=\"");
             out.write(titleTotalDownloadSpeed);
             out.write("\">");
-            if (stats[STAT_DOWNLOAD_RATE] > 0) out.write(formatSize(stats[STAT_DOWNLOAD_RATE]).replace("iB", "") + "/s");
+            if (fc.stats[STAT_DOWNLOAD_RATE] > 0) out.write(formatSize(fc.stats[STAT_DOWNLOAD_RATE]).replace("iB", "") + "/s");
             out.write("</th><th class=txd title=\"");
             out.write(titleTotalUploaded);
             out.write("\">");
-            if (stats[STAT_UPLOADED] > 0) out.write(formatSize(stats[STAT_UPLOADED]).replace("iB", ""));
+            if (fc.stats[STAT_UPLOADED] > 0) out.write(formatSize(fc.stats[STAT_UPLOADED]).replace("iB", ""));
             out.write("</th><th class=rateUp title=\"");
             out.write(titleTotalUploadSpeed);
             out.write("\">");
-            if (stats[STAT_UPLOAD_RATE] > 0 && isUploading) out.write(formatSize(stats[STAT_UPLOAD_RATE]).replace("iB", "") + "/s");
+            if (fc.stats[STAT_UPLOAD_RATE] > 0 && fc.isUploading) out.write(formatSize(fc.stats[STAT_UPLOAD_RATE]).replace("iB", "") + "/s");
             out.write("</th><th class=tAction>");
 
-            if (dht != null && !"2".equals(peerParam)) {
+            if (fc.dht != null && !"2".equals(fc.peerParam)) {
                 out.write("<a id=debugMode href=\"?p=2\" title=\"" + toggleDebug + "\">" + debugModeText + "</a>");
-            } else if (dht != null) {
+            } else if (fc.dht != null) {
                 out.write("<a id=debugMode href=\"?p\" title=\"" + toggleDebug + "\">" + normalModeText + "</a>");
             }
 
@@ -1919,7 +1943,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<th colspan=6></th>");
         }
         out.write("</tr>");
-        appendDebugRow(out, dht, peerParam);
+        appendDebugRow(out, fc.dht, fc.peerParam);
         out.write("</tfoot>");
     }
 
