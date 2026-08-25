@@ -180,7 +180,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /** Search results */
     private int searchResults;
-    private static boolean debug = false;
     /** Csp nonce */
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {super();}
@@ -337,7 +336,7 @@ public class I2PSnarkServlet extends BasicServlet {
         _contextName = cpath.isEmpty() ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
         // set once here - render methods previously re-assigned this per
         // request, an unsynchronized shared-field write
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        _resourcePath = _contextPath + WARBASE;
         getNonce(); // Initialize the nonce
         // Limited protection against overwriting other config files or directories
         // in case you named your war "router.war"
@@ -891,7 +890,7 @@ public class I2PSnarkServlet extends BasicServlet {
             pageBackground = "#cab39b";
         }
 
-        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+        String resourcePath = _contextPath + WARBASE;
 
         buf.append(DOCTYPE)
            .append("<html")
@@ -1242,7 +1241,7 @@ public class I2PSnarkServlet extends BasicServlet {
             target.write("</i></td></tr></tbody>");
         }
 
-        appendSnarkFooter(target, buf, stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
+        appendSnarkFooter(target, buf, stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), peerParam);
         target.write("</table>\n");
 
         if (isForm) target.write("</form>\n");
@@ -1753,13 +1752,12 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param isUploading  true if there is active uploading
      * @param dht          the DHT instance providing additional peer info (may be null)
      * @param isStandalone true if running in standalone mode (tunnel info omitted if standalone)
-     * @param debug        true if in debug mode (affects resource path and display)
      * @param peerParam    the peer parameter from the request query, affects debug mode toggle links
      * @throws IOException if writing to the output stream fails
      */
     private void appendSnarkFooter(PrintWriter out, StringBuilder buf, long[] stats, long totalETA, int total, boolean isConnected,
                                    boolean noSnarks, boolean hasPeers, boolean isUploading, DHT dht,
-                                   boolean isStandalone, boolean debug, String peerParam) throws IOException {
+                                   boolean isStandalone, String peerParam) throws IOException {
 
         final boolean connecting = _manager.util().isConnecting();
 
@@ -1778,8 +1776,6 @@ public class I2PSnarkServlet extends BasicServlet {
         final String toggleDebug = _t("Toggle Debug Panel");
         final String debugModeText = _t("Debug Mode");
         final String normalModeText = _t("Normal Mode");
-
-        final String resourcePath = !isStandalone ? (debug ? "/themes/" : _contextPath + WARBASE) : null;
 
         out.write("<tfoot id=snarkFoot");
         if (connecting) {out.write(" class=initializing");}
