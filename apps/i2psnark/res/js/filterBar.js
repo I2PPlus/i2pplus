@@ -62,6 +62,9 @@ function scheduleBadgeUpdate() {
     const filterElement = document.getElementById(activeFilterId);
     const badge = filterElement ? filterElement.querySelector(".badge") : null;
     if (!filterElement || !badge) {return;}
+    // Sole owner of the active badge's visibility and count: keeps it shown and
+    // accurate however rows change, immune to interleaved refresh writers.
+    if (!filterElement.classList.contains("enabled")) {filterElement.classList.add("enabled");}
     if (activeFilterId !== "all") {badge.textContent = countSnarks();}
     badge.hidden = false;
   });
@@ -104,10 +107,10 @@ async function showBadge() {
   const activeBadge = activeFilter.querySelector(".badge");
   if (!activeBadge) {return;}
   // Idempotent writes only: skip attribute/class mutations when nothing changed so a
-  // no-op refresh tick never dirties style or layout.
+  // no-op refresh tick never dirties style or layout. The active badge's hidden flag
+  // and count belong to the scheduleBadgeUpdate writer alone — forcing them here too
+  // made the badge flicker on ticks whose row edits were text-only.
   if (activeBadge.id !== "filtercount") {activeBadge.id = "filtercount";}
-  const activeHidden = activeFilter.id === "all" ? false : true;
-  if (activeBadge.hidden !== activeHidden) {activeBadge.hidden = activeHidden;}
 
   allFilters.forEach(filter => {
     if (filter !== activeFilter) {
