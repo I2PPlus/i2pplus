@@ -940,7 +940,35 @@
     </junit>
   </target>
 
-  <target name="test" depends="scalatest.test, junit.test"/>
+  <!-- JS harness (tools/test/js) covers the console js/ corpus among all webapps.
+       Requires node; self-skips when unavailable. -Dno.js.tests=true bypasses. -->
+  <target name="checkNode">
+    <exec executable="node" failonerror="false" resultproperty="js.node.rc"
+          outputproperty="js.node.version" errorproperty="js.node.err">
+      <arg value="--version"/>
+    </exec>
+    <condition property="js.have.node">
+      <equals arg1="${js.node.rc}" arg2="0"/>
+    </condition>
+  </target>
+
+  <target name="test-js-skip" depends="checkNode" unless="js.have.node">
+    <echo message="node not found; skipping i2p+ JS test harness"/>
+  </target>
+
+  <target name="test-js" depends="checkNode" if="js.have.node" unless="no.js.tests">
+    <echo message="i2p+ JS test harness (node ${js.node.version})"/>
+    <!-- setup.mjs installs/refreshes node_modules when missing or stale; on npm
+         failure it degrades gracefully so offline runs stay green. -->
+    <exec executable="node" failonerror="true" dir="../../../tools/test/js">
+      <arg value="./helpers/setup.mjs"/>
+    </exec>
+    <exec executable="node" failonerror="true" dir="../../../tools/test/js">
+      <arg value="./helpers/run.mjs"/>
+    </exec>
+  </target>
+
+  <target name="test" depends="scalatest.test, junit.test, test-js, test-js-skip"/>
 
   <!-- Test reports -->
   <target name="scalatest.report">

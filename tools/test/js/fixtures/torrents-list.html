@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<body id=snarkxhr>
+<div id=mainsection>
+<form id=torrentlist action=_post method=POST target=processForm>
+<input type=hidden name=nonce value="1712345678">
+<div id=filterBar><a class="filter enabled" id=all href="/i2psnark/">All<span class="badge">7</span></a><a class=filter id=seeding href="/i2psnark/?filter=seeding">Seeding<span class="badge"></span></a><a class=filter id=search href="/i2psnark/?search=x">Search</a></div>
+<table id=torrents width=100% border=0>
+<thead id=snarkHead>
+<tr><th>Name</th><th>Status</th><th>Progress</th></tr>
+</thead>
+<tbody id=snarkTbody>
+<tr data-name="ubuntu-24.04.iso"><td class=tName>ubuntu-24.04.iso</td><td class=tStatus>Seeding</td><td class=tAction><input type=submit value=Start></td></tr>
+<tr data-name="debian-12.iso"><td class=tName>debian-12.iso</td><td class=tStatus>Downloading</td><td class=tAction><div class=percentBarComplete title="Downloading • 42%"></div></td></tr>
+</tbody>
+<tfoot id=snarkFoot>
+<tr><th>Totals</th><th>2 torrents</th><th></th></tr>
+<tr id=dhtDebug hidden><th colspan=12><div class=volatile><span class=dbug>DHT</span><b class=dht>peers: 5</b></div></th></tr>
+</tfoot>
+</table>
+</form>
+<div id=pagenavtop class=pagenav>Page <b>1</b> of 3</div>
+</div>
+</body>
+</html>

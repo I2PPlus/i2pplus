@@ -1,0 +1,9 @@
+{
+  "name": "i2pplus-js-tests",
+  "private": true,
+  "type": "module",
+  "description": "Browser-free JS test harness for all i2p+ webapp scripts (run via ant test-js).",
+  "devDependencies": {
+    "linkedom": "^0.18.12"
+  }
+}

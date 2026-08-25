@@ -3690,6 +3690,19 @@
     </exec>
   </target>
 
+  <!-- JS harness: pure + DOM contract + whole-corpus smoke gate over every webapp's
+       scripts (tools/test/js). Requires node; fails the build on test failure.
+       setup.mjs installs/refreshes node_modules when missing or stale.
+       Set -Dno.js.tests=true to bypass. -->
+  <target name="test-js" description="Run the i2p+ JS test harness (node)" unless="no.js.tests">
+    <exec executable="node" failonerror="true" dir="tools/test/js">
+      <arg value="./helpers/setup.mjs"/>
+    </exec>
+    <exec executable="node" failonerror="true" dir="tools/test/js">
+      <arg value="./helpers/run.mjs"/>
+    </exec>
+  </target>
+
 
 
   <target name="scalatest.report" depends="buildProperties">

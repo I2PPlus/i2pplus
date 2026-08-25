@@ -141,8 +141,11 @@ core/c/jbigi/gmp-*/
 core/c/jbigi/*.tar.bz2
 
 # Static analysis tools (downloaded at runtime)
-tools/
+tools/*
 !apps/**/tools/
+!tools/test/js/
+# JS harness dependencies: downloaded by tools/test/js/helpers/setup.mjs at build time
+tools/test/js/node_modules/
 !tools/sonarqube/*.sh
 !tools/sonarqube/*.py
 !tools/sonarqube/*.properties

@@ -1,0 +1,6 @@
+{
+  "name": "i2pplus",
+  "private": true,
+  "type": "module",
+  "description": "Module-type marker so Node resolves all repo .js as ESM; not an npm package."
+}
