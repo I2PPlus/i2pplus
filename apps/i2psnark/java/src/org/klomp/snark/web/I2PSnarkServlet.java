@@ -7115,6 +7115,31 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return the next rowEven value (toggled)
      * @since 0.9.71+
      */
+    /** Warn icon for missing/unrecognized files. */
+    private String warnIcon(String alt, String tooltip) {
+        StringBuilder ico = new StringBuilder();
+        appendIcon(ico, "warn", alt, tooltip, false, true, true);
+        return ico.toString();
+    }
+
+    /** Tick icon for complete files. */
+    private String tickIcon() {
+        StringBuilder ico = new StringBuilder();
+        appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true, true);
+        return ico.toString();
+    }
+
+    /** Priority indicator icon (block/skip, clock/normal, red clock/high). */
+    private String priorityIcon(int priority) {
+        StringBuilder ico = new StringBuilder(64);
+        ico.append("<div class=priorityIndicator>");
+        if (priority < 0) {appendIcon(ico, "block", "", "", false, false, true);}
+        else if (priority == 0) {appendIcon(ico, "clock", "", "", false, false, true);}
+        else {appendIcon(ico, "clock_red", "", "", false, false, true);}
+        ico.append("</div>");
+        return ico.toString();
+    }
+
     private boolean renderFileRow(StringBuilder buf, FileRowContext ctx, Sorters.FileAndIndex fai,
                                    boolean rowEven, FileRowCounters counters) {
         File item = fai.file;
@@ -7128,35 +7153,18 @@ public class I2PSnarkServlet extends BasicServlet {
             complete = true;
         } else if (ctx.storage == null) {
             complete = true;
-            StringBuilder ico = new StringBuilder();
-            appendIcon(ico, "warn", _t("Not found"), _t("Torrent not found"), false, true, true);
-            status = ico.toString();
+            status = warnIcon(_t("Not found"), _t("Torrent not found"));
         } else {
             long remaining = fai.remaining;
             if (remaining < 0) {
                 complete = true;
-                StringBuilder ico = new StringBuilder();
-                appendIcon(ico, "warn", _t("Unrecognized"), _t("File not found in torrent"), false, true, true);
-                status = ico.toString();
+                status = warnIcon(_t("Unrecognized"), _t("File not found in torrent"));
             } else if (remaining == 0 || length <= 0) {
                 complete = true;
-                StringBuilder ico = new StringBuilder();
-                appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true, true);
-                status = ico.toString();
+                status = tickIcon();
             } else {
                 priority = fai.priority;
-                StringBuilder ico = new StringBuilder();
-                ico.append("<div class=priorityIndicator>");
-                if (priority < 0) {
-                    appendIcon(ico, "block", "", "", false, false, true);
-                } else if (priority == 0) {
-                    appendIcon(ico, "clock", "", "", false, false, true);
-                } else {
-                    appendIcon(ico, "clock_red", "", "", false, false, true);
-                }
-                ico.append("</div>");
-                long percent = 100 * (length - remaining) / length;
-                status = ico.toString() + buildProgressBar(length, remaining, true, false, false, true);
+                status = priorityIcon(priority) + buildProgressBar(length, remaining, true, false, false, true);
             }
         }
 
