@@ -221,13 +221,28 @@ public class GetListHTMLHelpersTest {
     // ---- threshold-gated streaming ----
 
     @Test
-    public void testShouldStreamBoundaries() {
-        assertFalse(I2PSnarkServlet.shouldStream(0));
-        assertFalse(I2PSnarkServlet.shouldStream(1));
-        assertFalse(I2PSnarkServlet.shouldStream(63));
-        assertTrue(I2PSnarkServlet.shouldStream(64));
-        assertTrue(I2PSnarkServlet.shouldStream(65));
-        assertTrue(I2PSnarkServlet.shouldStream(Integer.MAX_VALUE));
+    public void testShouldStreamTorrentRowBoundaries() {
+        assertFalse(I2PSnarkServlet.shouldStreamTorrentRows(0));
+        assertFalse(I2PSnarkServlet.shouldStreamTorrentRows(1));
+        assertFalse(I2PSnarkServlet.shouldStreamTorrentRows(31));
+        assertTrue(I2PSnarkServlet.shouldStreamTorrentRows(32));
+        assertTrue(I2PSnarkServlet.shouldStreamTorrentRows(33));
+        assertTrue(I2PSnarkServlet.shouldStreamTorrentRows(Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void testShouldStreamFileRowBoundaries() {
+        assertFalse(I2PSnarkServlet.shouldStreamFileRows(0));
+        assertFalse(I2PSnarkServlet.shouldStreamFileRows(63));
+        assertTrue(I2PSnarkServlet.shouldStreamFileRows(64));
+        assertTrue(I2PSnarkServlet.shouldStreamFileRows(Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void testTorrentGateLowerThanFileGate() {
+        // heavier rows must stream at least as early as lighter ones
+        assertTrue(I2PSnarkServlet.shouldStreamTorrentRows(32)
+                   && !I2PSnarkServlet.shouldStreamFileRows(32));
     }
 
     @Test

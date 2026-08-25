@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -1008,6 +1009,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * headers, sorting options, pagination controls, and the torrent list itself.
      * It also updates the statistics array with aggregated torrent data.
      *
+     * Output is gated by row count: pages with fewer than
+     * STREAM_MIN_TORRENT_ROWS visible rows stage the whole table into one
+     * buffer written in a single call, larger pages stream rows to the writer
+     * as today. Markup order is identical in both modes. Note the page scaffold
+     * upstream of this method is flushed before the gate is evaluated, so
+     * buffered mode does not restore Content-Length here.
+     *
      * @param out the PrintWriter to which the HTML output will be written
      * @param req the HttpServletRequest containing the request parameters
      * @param canWrite a boolean indicating whether the data directory is writable
@@ -1054,6 +1062,13 @@ public class I2PSnarkServlet extends BasicServlet {
             pageSize = Math.min(Math.max(I2PSnarkUtil.parseInt(ps, pageSize), 10), 9999);
         }
 
+        // rows actually rendered on this page; the gate decision must precede
+        // any writes so both modes emit identical markup in identical order
+        final int end = Math.min(start + pageSize, snarks.size());
+        final boolean streamed = shouldStreamTorrentRows(Math.max(0, end - start));
+        StringWriter sink = streamed ? null : new StringWriter();
+        PrintWriter target = streamed ? out : new PrintWriter(sink);
+
         boolean isDegraded = false;
         boolean noThinsp = false;
         String ua = req.getHeader("User-Agent");
@@ -1063,19 +1078,18 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         if (isForm) {
-            if (showStatusFilter) renderFilterBar(out, req);
-            else out.write("<form id=torrentlist action=_post method=POST target=processForm>\n");
-            writeHiddenInputs(out, req, null);
-            out.flush();
+            if (showStatusFilter) renderFilterBar(target, req);
+            else target.write("<form id=torrentlist action=_post method=POST target=processForm>\n");
+            writeHiddenInputs(target, req, null);
+            target.flush();
         }
 
-        out.write(TABLE_HEADER);
-        paginator(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
-        out.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
-        out.flush();
+        target.write(TABLE_HEADER);
+        paginator(target, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
+        target.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
+        target.flush();
 
         boolean showDebug = "2".equals(peerParam);
-        int end = Math.min(start + pageSize, snarks.size());
         StringBuilder buf = new StringBuilder(2048);
         Map<ByteArray, BadgeInfo> badgeCache = new HashMap<>();
 
@@ -1083,7 +1097,7 @@ public class I2PSnarkServlet extends BasicServlet {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
             buf.setLength(0);
-            displaySnark(out, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache), buf);
+            displaySnark(target, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache), buf);
 
             // additionally accumulate downloads, uploads, ETA, flags
             if (snark.getPeerCount() >= 1) {
@@ -1097,26 +1111,29 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         if (total == 0) {
-            out.write("<tbody id=noTorrents><tr id=noload class=noneLoaded><td colspan=12><i>");
+            target.write("<tbody id=noTorrents><tr id=noload class=noneLoaded><td colspan=12><i>");
             {
                 File dd = _resourceBase;
-                if (!dd.exists() && !dd.mkdirs()) out.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
-                else if (!dd.isDirectory()) out.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
-                else if (!dd.canRead()) out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
-                else if (!canWrite) out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
-                else if (searchActive) out.write(_t("No torrents found."));
-                else out.write(_t("No torrents loaded."));
+                if (!dd.exists() && !dd.mkdirs()) target.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!dd.isDirectory()) target.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!dd.canRead()) target.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!canWrite) target.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (searchActive) target.write(_t("No torrents found."));
+                else target.write(_t("No torrents loaded."));
             }
-            out.write("</i></td></tr></tbody>");
+            target.write("</i></td></tr></tbody>");
         }
 
-        appendSnarkFooter(out, buf, stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
-        out.write("</table>\n");
+        appendSnarkFooter(target, buf, stats, totalETA, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
+        target.write("</table>\n");
 
-        if (isForm) out.write("</form>\n");
-        if (total > 0) out.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
+        if (isForm) target.write("</form>\n");
+        if (total > 0) target.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
 
-        out.flush();
+        // buffered mode: the staged table reaches the client as one write;
+        // streamed mode: rows are already on the wire
+        if (sink != null) {out.write(sink.toString());}
+        else {out.flush();}
         return start == 0;
     }
 
@@ -5482,23 +5499,43 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
-     * Minimum visible table rows before a page renders in streamed mode.
-     * Below the gate a single buffered write is cheaper and keeps
-     * Content-Length; at or above it, scaffold-first flushing pays off.
+     * Minimum visible rows before a torrent-list page renders in streamed
+     * mode. Torrent rows are heavy (badges, progress bars, ~1-2 KB each), so
+     * this gate sits lower than the file-table gate.
      */
-    private static final int STREAM_MIN_ROWS = 64;
+    private static final int STREAM_MIN_TORRENT_ROWS = 32;
+
+    /**
+     * Minimum visible rows before a directory file table renders in streamed
+     * mode. File rows are lighter than torrent rows, so buffering stays
+     * worthwhile up to a higher count; below the gate a single buffered write
+     * keeps Content-Length on the directory page.
+     */
+    private static final int STREAM_MIN_FILE_ROWS = 64;
 
     /** Rows rendered per chunk in streamed mode; bounds the staging buffer near tens of KB. */
     private static final int STREAM_DRAIN_EVERY = 16;
 
     /**
-     * Whether a table rendering visibleRows entries uses streamed output.
+     * Whether a torrent list rendering visibleRows entries uses streamed
+     * output.
+     *
+     * @param visibleRows entries on the rendered page after filtering, non-negative
+     * @return true once {@link #STREAM_MIN_TORRENT_ROWS} is reached
+     */
+    static boolean shouldStreamTorrentRows(int visibleRows) {
+        return visibleRows >= STREAM_MIN_TORRENT_ROWS;
+    }
+
+    /**
+     * Whether a directory file table rendering visibleRows entries uses
+     * streamed output.
      *
      * @param visibleRows entries actually rendered after filtering, non-negative
-     * @return true once {@link #STREAM_MIN_ROWS} is reached
+     * @return true once {@link #STREAM_MIN_FILE_ROWS} is reached
      */
-    static boolean shouldStream(int visibleRows) {
-        return visibleRows >= STREAM_MIN_ROWS;
+    static boolean shouldStreamFileRows(int visibleRows) {
+        return visibleRows >= STREAM_MIN_FILE_ROWS;
     }
 
     /**
@@ -5534,7 +5571,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *       footer, return</li>
      *   <li>file listing - wrapFileList() + sort, appendFileTableHead(),
      *       appendParentDirRow(), renderFileRow() loop, per-counter scripts;
-     *       streamed when out != null and the table reaches STREAM_MIN_ROWS</li>
+     *       streamed when out != null and the table reaches
+     *       STREAM_MIN_FILE_ROWS</li>
      *   <li>renderCommentsSection(), form close, lightbox/refresh scripts,
      *       footer</li>
      * </ol>
@@ -5662,7 +5700,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // Threshold-gated streaming: scaffold through dirNav goes out at once,
         // then rows drain every STREAM_DRAIN_EVERY so peak memory stays near
         // one chunk instead of the whole page.
-        final boolean streamed = out != null && shouldStream(fileList.size());
+        final boolean streamed = out != null && shouldStreamFileRows(fileList.size());
         int untilDrain = STREAM_DRAIN_EVERY;
         if (streamed) {drainTo(out, buf);}
 
