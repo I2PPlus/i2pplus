@@ -972,7 +972,7 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(.6)}
 .choked .left,.choked .right{display:none!important}
-.inactivity{margin-left:14px;max-width:400px;min-width:5px;height:5px;display:inline-block;vertical-align:middle;border-radius:3px;box-shadow:0 0 0 1px #200,0 0 0 1px #fff3 inset;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,#0000 16px),linear-gradient(180deg,#fff3 50%,#0003 50%),linear-gradient(90deg,#770 50px,#900)}
+.inactivity{margin-left:14px;max-width:400px;min-width:5px;height:5px;display:inline-block;vertical-align:middle;border-radius:3px;box-shadow:0 0 0 1px #200,0 0 0 1px #fff3 inset;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,#0000 16px),linear-gradient(180deg,#fff3 50%,#0003 50%),linear-gradient(90deg,#770 50px,#900);transition:width ease .15s}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .rateDown span,.rateUp span{vertical-align:middle;text-shadow:1px 1px 1px #000}
 .peerinfo .rateDown .left,.peerinfo .rateDown .right,.peerinfo .rateUp .left,.peerinfo .rateUp .right{opacity:.5}
