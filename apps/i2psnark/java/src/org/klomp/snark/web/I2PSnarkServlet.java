@@ -143,6 +143,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /** Theme path. */
     private String _themePath;
     /** Resource path. */
+    /** Web path of static resources; set once in init(), never mutated per request. */
     private String _resourcePath;
     /** Image path. */
     private String _imgPath;
@@ -327,6 +328,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String cpath = getServletContext().getContextPath();
         _contextPath = cpath.isEmpty() ? "/" : cpath;
         _contextName = cpath.isEmpty() ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
+        // set once here - render methods previously re-assigned this per
+        // request, an unsynchronized shared-field write
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         getNonce(); // Initialize the nonce
         // Limited protection against overwriting other config files or directories
         // in case you named your war "router.war"
@@ -947,7 +951,6 @@ public class I2PSnarkServlet extends BasicServlet {
      * @throws IOException if an I/O error occurs while writing to the output stream
      */
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         List<UIMessages.Message> msgs = _manager.getMessages();
         int entries = msgs.size();
         StringBuilder buf = new StringBuilder(entries*256);
@@ -4526,7 +4529,6 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         buf.append("<div class=sectionPanel id=createSection>\n<div>\n<form id=createForm action=_post method=POST target=processForm>\n");
         writeHiddenInputs(buf, req, "Create");
         buf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>")
@@ -4886,7 +4888,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</div></td></tr>\n");
 
 /* i2cp/tunnel configuration */
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String IPString = _manager.util().getOurIPString();
         Map<String, String> options = new TreeMap<>(_manager.util().getI2CPOptions());
 
@@ -5306,8 +5307,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         buf.append(rowsBatch);
 
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-
         String spacer = "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n";
         String trackerFormElements =
             "<td><input type=text class=trackername name=tname spellcheck=false></td>" +
@@ -5544,12 +5543,16 @@ public class I2PSnarkServlet extends BasicServlet {
      * Called only in streamed mode; buffered mode never drains.
      *
      * @param out non-null response writer
-     * @param buf staging buffer, emptied
+     * @param buf staging buffer, emptied regardless of outcome
+     * @return false if the client disconnected (writer error); callers should
+     *         skip further drains, rendering continues only to keep counters
+     *         and closing markup consistent
      */
-    static void drainTo(PrintWriter out, StringBuilder buf) {
+    static boolean drainTo(PrintWriter out, StringBuilder buf) {
         out.append(buf);
         out.flush();
         buf.setLength(0);
+        return !out.checkError();
     }
 
     /**
@@ -5590,7 +5593,6 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.7.14
      */
     private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam, PrintWriter out) throws IOException {
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
@@ -5702,7 +5704,10 @@ public class I2PSnarkServlet extends BasicServlet {
         // one chunk instead of the whole page.
         final boolean streamed = out != null && shouldStreamFileRows(fileList.size());
         int untilDrain = STREAM_DRAIN_EVERY;
-        if (streamed) {drainTo(out, buf);}
+        // false once the client disconnects; further drains are skipped while
+        // rendering continues so counters and closing markup stay consistent
+        boolean drainOk = streamed;
+        if (streamed) {drainOk = drainTo(out, buf);}
 
         FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
         FileRowCounters counters = new FileRowCounters();
@@ -5710,8 +5715,8 @@ public class I2PSnarkServlet extends BasicServlet {
         try {
             for (Sorters.FileAndIndex fai : fileList) {
                 rowEven = renderFileRow(buf, ctx, fai, rowEven, counters);
-                if (streamed && --untilDrain == 0) {
-                    drainTo(out, buf);
+                if (drainOk && --untilDrain == 0) {
+                    drainOk = drainTo(out, buf);
                     untilDrain = STREAM_DRAIN_EVERY;
                 }
             }
@@ -5724,7 +5729,9 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_log.shouldWarn()) {_log.warn("File list render aborted after error", e);}
         }
         if (counters.showSaveButton) {
-            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5><input type=submit class=accept value=\"")
+            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=")
+               .append(showPriority ? '5' : '4')
+               .append("><input type=submit class=accept value=\"")
                .append(_t("Save priorities"))
                .append("\" name=savepri>\n</th></tr></thead>\n");
         }

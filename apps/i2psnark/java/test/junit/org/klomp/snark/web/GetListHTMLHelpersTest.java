@@ -252,14 +252,14 @@ public class GetListHTMLHelpersTest {
         StringBuilder buf = new StringBuilder();
 
         buf.append("chunk-one");
-        I2PSnarkServlet.drainTo(out, buf);
+        assertTrue(I2PSnarkServlet.drainTo(out, buf));
         assertEquals("chunk-one", sink.toString());
         assertEquals(0, buf.length());
-        assertTrue(out.checkError() == false);
+        assertFalse(out.checkError());
 
         // second drain appends in order; buffer stays empty
         buf.append("two");
-        I2PSnarkServlet.drainTo(out, buf);
+        assertTrue(I2PSnarkServlet.drainTo(out, buf));
         assertEquals("chunk-onetwo", sink.toString());
         assertEquals(0, buf.length());
     }
@@ -268,7 +268,24 @@ public class GetListHTMLHelpersTest {
     public void testDrainToEmptyBufferIsNoop() {
         StringWriter sink = new StringWriter();
         PrintWriter out = new PrintWriter(sink);
-        I2PSnarkServlet.drainTo(out, new StringBuilder());
+        assertTrue(I2PSnarkServlet.drainTo(out, new StringBuilder()));
         assertEquals("", sink.toString());
+    }
+
+    /** Writer that fails on every write/flush, standing in for a gone client. */
+    private static class FailingWriter extends java.io.Writer {
+        @Override public void write(char[] cbuf, int off, int len) throws java.io.IOException {throw new java.io.IOException("client gone");}
+        @Override public void flush() throws java.io.IOException {throw new java.io.IOException("client gone");}
+        @Override public void close() {}
+    }
+
+    @Test
+    public void testDrainToDetectsDisconnectedClient() {
+        PrintWriter out = new PrintWriter(new FailingWriter());
+        StringBuilder buf = new StringBuilder("payload");
+        // false signals the disconnect; buffer is still cleared so no
+        // stale chunk leaks into a later drain attempt
+        assertFalse(I2PSnarkServlet.drainTo(out, buf));
+        assertEquals(0, buf.length());
     }
 }
