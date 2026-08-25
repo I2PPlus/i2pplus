@@ -810,6 +810,21 @@ public class Storage implements Closeable {
      *     use indexOf() to get index for a file
      * @since 0.9.45
      */
+    /**
+     * Snapshot of the torrent-relative paths of every non-padding file,
+     * index-aligned with the arrays returned by {@link #remaining2()}.
+     *
+     * @return a new list, never null
+     * @since 0.9.71+
+     */
+    public List<String> getFileNames() {
+        List<String> rv = new ArrayList<>(_torrentFiles.size());
+        for (TorrentFile tf : _torrentFiles) {
+            if (!tf.isPadding) {rv.add(tf.name);}
+        }
+        return rv;
+    }
+
     public long[][] remaining2() {
         long[] rv = new long[_torrentFiles.size()];
         long[] pv = new long[_torrentFiles.size()];

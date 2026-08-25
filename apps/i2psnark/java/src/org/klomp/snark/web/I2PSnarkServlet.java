@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -1207,12 +1208,21 @@ public class I2PSnarkServlet extends BasicServlet {
         target.flush();
 
         boolean showDebug = "2".equals(peerParam);
+        // Decode a targeted infohash once instead of Base64-encoding every
+        // torrent's hash per row just for the comparison.
+        final boolean showAllPeers = "1".equals(peerParam);
+        byte[] peerHash = null;
+        if (!showDebug && !showAllPeers && peerParam != null) {
+            byte[] h = Base64.decode(peerParam);
+            if (h != null && h.length == 20) {peerHash = h;}
+        }
         StringBuilder buf = new StringBuilder(2048);
         Map<ByteArray, BadgeInfo> badgeCache = new HashMap<>();
 
         for (int i = start; i < end; i++) {
             Snark snark = snarks.get(i);
-            boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
+            boolean showPeers = showDebug || showAllPeers
+                                || (peerHash != null && DataHelper.eq(snark.getInfoHash(), peerHash));
             buf.setLength(0);
             displaySnark(target, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache), buf);
 
@@ -2515,7 +2525,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param req the HTTP request
      * @param resp the HTTP response
      * @throws IOException on write failure
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private void handleMagnetPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (!"GET".equals(req.getMethod()) && !"HEAD".equals(req.getMethod())) {
@@ -2545,7 +2555,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param baseUrl the webapp base URL, e.g. http://127.0.0.1:8002/i2psnark
      * @return a single HTML meta line, or empty string when no URL is available
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static String buildBridgeMetaTag(String baseUrl) {
         if (baseUrl == null || baseUrl.isEmpty()) {return "";}
@@ -4821,7 +4831,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param ua the User-Agent header, may be null
      * @return true if the UA names Firefox
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static boolean isFirefoxFamilyUserAgent(String ua) {
         return ua != null && ua.contains("Firefox");
@@ -4833,7 +4843,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param ua the User-Agent header, may be null
      * @return true if the UA names Windows
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static boolean isWindowsUserAgent(String ua) {
         return ua != null && ua.contains("Windows");
@@ -5141,8 +5151,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<table id=dirInfo>\n<thead>\n<tr>\n<th colspan=2>");
         appendFileTableHead(buf, base, directory, dirSlash, isTopLevel, showSort, showPriority, sortParam);
         buf.append("</th></tr></thead>\n<tbody>");
-        // hoisted: one recursive walk per view instead of two
-        boolean hasAudio = hasCompleteAudio(fileList, storage, remainingArray);
+        // playlist check reads Storage metadata; no filesystem walk
+        boolean hasAudio = hasCompleteAudio(storage, remainingArray, pathInTorrent);
         if (!isTopLevel || hasAudio) { // don't show row if top level or no playlist
             appendParentDirRow(buf, base, sortParam, decodedBase, isTopLevel, hasAudio, showPriority);
         }
@@ -5187,6 +5197,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (counters.imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
         if (counters.txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
         buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n");
+        buf.append("<script src=").append(_resourcePath).append("js/togglePanels.js type=module></script>\n");
 
         renderCommentsSection(snark, er, ec, esc, _t("Comments"), buf);
 
@@ -6217,20 +6228,37 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return whether complete audio is present
      * @since 0.9.44
      */
-    private boolean hasCompleteAudio(List<Sorters.FileAndIndex> fileList, Storage storage, long[] remainingArray) {
-        for (Sorters.FileAndIndex fai : fileList) {
-            if (fai.isDirectory) {
-                // recurse
-                List<Sorters.FileAndIndex> fl2 = listFileAndIndex(fai.file, storage, remainingArray);
-                if (fl2 != null && hasCompleteAudio(fl2, storage, remainingArray)) {return true;}
-                continue;
-            }
-            if (fai.remaining != 0) {continue;}
-            String name = fai.file.getName();
-            String mime = getMimeType(name);
-            if (mime != null && isAudio(mime)) {return true;}
+    /**
+     * First entry of names at or under prefix whose remaining byte count is
+     * zero and whose name satisfies match, or null. names must be
+     * index-aligned with remaining (Storage.getFileNames() paired with
+     * Storage.remaining2()); prefix is '' at the torrent root or a directory
+     * path ending with '/' - matching is a plain startsWith across all
+     * descendant depths.
+     *
+     * @param match caller-supplied name filter, e.g. the audio MIME check
+     * @return the first matching name, or null when none qualifies
+     * @since 0.9.71+
+     */
+    static String findCompleteFile(List<String> names, long[] remaining, String prefix, Predicate<String> match) {
+        for (int i = 0; i < names.size(); i++) {
+            String n = names.get(i);
+            if (!n.startsWith(prefix) || remaining[i] != 0) {continue;}
+            if (match.test(n)) {return n;}
         }
-        return false;
+        return null;
+    }
+
+    /**
+     * Whether any complete audio file exists at or below the browsed
+     * directory. Answered from Storage metadata instead of recursively
+     * listing directories on every page view.
+     */
+    private boolean hasCompleteAudio(Storage storage, long[] remainingArray, String prefix) {
+        if (storage == null || remainingArray == null) {return false;}
+        String found = findCompleteFile(storage.getFileNames(), remainingArray, prefix,
+                                        n -> {String m = getMimeType(n); return m != null && isAudio(m);});
+        return found != null;
     }
 
     /**
@@ -6750,8 +6778,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (fileIndex < 0) {continue;}
                 String[] values = entry.getValue(); // jetty arrays
                 if (values.length == 0) {continue;}
-                int pri = I2PSnarkUtil.parseInt(values[0], -1);
-                if (pri < 0) {continue;}
+                int pri = I2PSnarkUtil.parseInt(values[0], Integer.MIN_VALUE);
+                // Only reject unparsable input - PRIORITY_SKIP (-9) is valid
+                // and must reach Storage.setPriority.
+                if (pri == Integer.MIN_VALUE) {continue;}
                 storage.setPriority(fileIndex, pri);
                 _manager.addMessage(_t("File downloading priorities updated for torrent ") + storage.getBaseName());
             }
