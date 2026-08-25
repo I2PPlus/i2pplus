@@ -25,6 +25,8 @@
  * @returns {?string} returns.torrentlist - Inner HTML of the #torrentlist form.
  * @returns {?string} returns.mainsection - Inner HTML of the #mainsection element.
  * @returns {?string} returns.messages - Inner HTML of the #messages screen log.
+ * @returns {?string} returns.screenLogStamp - Server-side change stamp for the screen
+ *   log ("lastMessageId:messageCount"), or null when the response carries none.
  * @returns {string[]} returns.headerTH - Inner HTML of each #snarkHead th cell.
  * @returns {string[]} returns.footerTH - Inner HTML of each #snarkFoot th cell.
  * @returns {string[]} returns.fileTds - Inner HTML of each incomplete-file cell.
@@ -37,6 +39,7 @@ function extractRefreshPayload(doc) {
     const torrentlist = doc.querySelector("#torrentlist");
     const mainsection = doc.querySelector("#mainsection");
     const messages = doc.getElementById("messages");
+    const screenLogStampEl = doc.getElementById("screenlogStamp");
     const header = doc.querySelector("#snarkHead");
     const footer = doc.querySelector("#snarkFoot");
     return {
@@ -48,6 +51,7 @@ function extractRefreshPayload(doc) {
         torrentlist: torrentlist ? torrentlist.innerHTML : null,
         mainsection: mainsection ? mainsection.innerHTML : null,
         messages: messages ? messages.innerHTML : null,
+        screenLogStamp: screenLogStampEl ? screenLogStampEl.getAttribute("data-v") : null,
         headerTH: header ? [...header.querySelectorAll("th")].map(th => th.innerHTML) : [],
         footerTH: footer ? [...footer.querySelectorAll("th")].map(th => th.innerHTML) : [],
         fileTds: [...doc.querySelectorAll("#dirInfo tbody tr.incomplete td")].map(td => td.innerHTML),

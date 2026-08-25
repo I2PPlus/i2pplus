@@ -39,6 +39,22 @@ const cacheDuration = 5000;
 const debugMode = document.getElementById("debugMode");
 
 /**
+ * @type {?string}
+ * @description Last screen log stamp seen from a refresh payload ("lastId:count").
+ * A different stamp means the server log changed and must be fetched immediately;
+ * an equal one means the log request can be skipped entirely.
+ */
+let lastScreenLogStamp = null;
+
+/**
+ * @type {?string}
+ * @description Last tbody HTML applied by morphTorrentsBody. Identical response rows
+ * short-circuit before the main-thread parse and morphdom walk; reset whenever the
+ * whole form is re-rendered so a fresh table is never mistaken for applied state.
+ */
+let lastAppliedTbodyHTML = null;
+
+/**
  * @type {?HTMLElement}
  * @description The #filterBar element for torrent status filtering.
  */
@@ -98,11 +114,22 @@ const screenlog = document.getElementById("screenlog");
  */
 const snarkHead = document.getElementById("snarkHead");
 
+/** Endpoint serving the screen log fragment for the refresh pipeline. */
+const SCREENLOG_URL = "/i2psnark/.ajax/xhrscreenlog.html";
+
 /**
- * @type {?string}
- * @description The stored refresh interval from localStorage.
+ * Offline-overlay chimp image source. The browser HTTP cache routinely evicts this
+ * asset, so when the server later goes down the overlay's background fetch fails and
+ * the chimp never renders. Instead the image is fetched once per session and kept as
+ * a data URL in sessionStorage (the webp is ~9 KB), making the overlay fully
+ * self-contained; every accessor falls back to the plain URL if storage is empty or
+ * unavailable.
  */
-const storageRefresh = localStorage.getItem("snarkRefresh");
+const CHIMP_SRC = isStandalone
+  ? "/i2psnark/.res/themes/snark/midnight/images/chimp.webp"
+  : "/themes/snark/midnight/images/chimp.webp";
+
+const CHIMP_STORAGE_KEY = "snarkChimpData";
 
 /**
  * @type {?HTMLElement}
@@ -131,12 +158,6 @@ let activeSearch = "";
 
 /**
  * @type {boolean}
- * @description Whether the chimp image has been preloaded and cached.
- */
-let chimpIsCached = false;
-
-/**
- * @type {boolean}
  * @description Whether the server was previously unreachable; triggers a forced
  * refresh on the first successful connectivity check so nonces re-sync promptly.
  */
@@ -153,12 +174,6 @@ let snarkRefreshIntervalId;
  * @description Interval ID for the server connectivity check timer.
  */
 let serverOKIntervalId;
-
-/**
- * @type {?number}
- * @description Interval ID for the screen log refresh timer.
- */
-let screenLogIntervalId;
 
 /**
  * @type {boolean}
@@ -194,7 +209,6 @@ let lastCheckTime = 0;
  * await requestAnimationFramePromise(() => { element.textContent = "updated"; });
  */
 const requestAnimationFramePromise = (callback) => {
-  let requestId;
   let resolvePromise;
   const promise = new Promise((resolve) => { resolvePromise = resolve; });
   const execCallback = () => {
@@ -203,12 +217,11 @@ const requestAnimationFramePromise = (callback) => {
     } catch (error) {
       if (debugging) console.error(error);
     } finally {
-      cancelAnimationFrame(requestId);
       resolvePromise();
     }
   };
 
-  requestId = requestAnimationFrame(execCallback);
+  const requestId = requestAnimationFrame(execCallback);
   return promise;
 };
 
@@ -216,13 +229,12 @@ const requestAnimationFramePromise = (callback) => {
  * @async
  * @function getRefreshInterval
  * @description Reads the refresh interval from the global snarkRefreshDelay variable,
- * localStorage, or defaults to 5 seconds. Persists the value to localStorage and
- * returns it in milliseconds.
+ * localStorage, or defaults to 5 seconds. Returns the value in milliseconds; callers
+ * decide when (and whether) to persist it.
  * @returns {Promise<number>} The refresh interval in milliseconds.
  */
 async function getRefreshInterval() {
   const refreshInterval = snarkRefreshDelay || parseInt(localStorage.getItem("snarkRefreshDelay")) || 5;
-  localStorage.setItem("snarkRefresh", refreshInterval);
   return refreshInterval * 1000;
 }
 
@@ -310,8 +322,9 @@ let workerReady = false;
 let workerRequestId = 0;
 
 /**
- * @type {Map<number, {resolve: Function, reject: Function}>}
- * @description Pending worker requests keyed by requestId.
+ * @type {Map<number, {resolve: Function, reject: Function, timer: number}>}
+ * @description Pending worker requests keyed by requestId, each carrying its timeout
+ * handle so a completed request's timer can be retired immediately.
  */
 const workerRequests = new Map();
 
@@ -337,6 +350,7 @@ function initWorker() {
             const pending = workerRequests.get(requestId);
             if (!pending) {return;}
             workerRequests.delete(requestId);
+            clearTimeout(pending.timer);
             if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_RESPONSE) {pending.resolve(payload);}
             else if (type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT_ERROR) {pending.reject(new Error(message || "Worker fetch failed"));}
         });
@@ -373,7 +387,6 @@ function fetchViaWorker(url, signal, type = MESSAGE_TYPES.FETCH_HTML_DOCUMENT, t
     if (!worker || !workerReady) {return Promise.reject(new Error("Worker unavailable"));}
     const requestId = ++workerRequestId;
     return new Promise((resolve, reject) => {
-        workerRequests.set(requestId, {resolve, reject});
         const onAbort = () => {
             clearTimeout(timer);
             workerRequests.delete(requestId);
@@ -385,6 +398,7 @@ function fetchViaWorker(url, signal, type = MESSAGE_TYPES.FETCH_HTML_DOCUMENT, t
             worker.postMessage({type: MESSAGE_TYPES.ABORT, requestId});
             reject(new Error("Worker timeout"));
         }, timeout);
+        workerRequests.set(requestId, {resolve, reject, timer});
         signal.addEventListener("abort", onAbort, {once: true});
         worker.postMessage({type, requestId, url});
     });
@@ -455,32 +469,17 @@ async function fetchDirect(url, signal) {
 }
 
 /**
- * @type {Set<string>}
- * @description Set of cache keys that have expired and need removal.
- */
-const staleCacheKeys = new Set();
-
-/**
  * @function cleanupCache
- * @description Identifies and removes expired cache entries older than cacheDuration.
+ * @description Removes expired cache entries older than cacheDuration. The cache holds
+ * only a handful of URLs, so delete-during-iteration is simpler and cheaper than the
+ * deferred stale-key set it replaces.
  * @returns {void}
  */
 function cleanupCache() {
   const now = Date.now();
   for (const [key, value] of cache.entries()) {
-    if (now - value.timestamp >= cacheDuration) {staleCacheKeys.add(key);}
+    if (now - value.timestamp >= cacheDuration) {cache.delete(key);}
   }
-  removeStaleCacheKeys();
-}
-
-/**
- * @function removeStaleCacheKeys
- * @description Removes all keys tracked in staleCacheKeys from the main cache, then clears the set.
- * @returns {void}
- */
-function removeStaleCacheKeys() {
-  for (const key of staleCacheKeys) {cache.delete(key);}
-  staleCacheKeys.clear();
 }
 
 /**
@@ -508,6 +507,28 @@ async function doRefresh(options = {}) {
     await initHandlers();
     await showBadge();
   }
+  // The payload carries the server's screen log stamp; fetch the log only when it
+  // moved, so an unchanged log costs no request and a changed one updates instantly.
+  await maybeRefreshScreenLog(payload);
+}
+
+/**
+ * @async
+ * @function maybeRefreshScreenLog
+ * @description Compares the screen log stamp carried by the refresh payload against the
+ * last one seen. Fetches the log immediately when the stamp is new — new messages,
+ * clears, and trims all move the stamp — and does nothing otherwise, so steady-state
+ * ticks issue no screen log request at all.
+ *
+ * @param {?Object} payload - Refresh payload; ignored when it carries no stamp.
+ * @returns {Promise<void>}
+ */
+async function maybeRefreshScreenLog(payload) {
+  const stamp = payload ? payload.screenLogStamp : null;
+  if (stamp === null || stamp === undefined) {return;}
+  if (stamp === lastScreenLogStamp) {return;}
+  lastScreenLogStamp = stamp;
+  await refreshScreenLog(undefined, true);
 }
 
 /**
@@ -536,10 +557,6 @@ async function refreshTorrents(payload) {
       }
     }
 
-    if (!storageRefresh) {
-      localStorage.setItem("snarkRefresh", await getRefreshInterval());
-    }
-
     await setLinks(query);
     if (torrents) { changed = await requestAnimationFramePromise(async () => await updateVolatile()) || changed; }
     else if (dirlist) {changed = await requestAnimationFramePromise(async () => await updateFiles()) || changed;}
@@ -552,7 +569,8 @@ async function refreshTorrents(payload) {
      * @description Morphs the live torrent tbody to match the response rows, diffing by
      * row key so matching torrents update in place and filters show the correct subset.
      * Equal subtrees are skipped via isEqualNode, which both avoids the deep diff and
-     * lets the caller detect no-op ticks.
+     * lets the caller detect no-op ticks. A response identical to the last applied one
+     * short-circuits before any parsing, so idle ticks cost a single string compare.
      * @param {?string} newTbodyHTML - Inner HTML of the response #snarkTbody.
      * @returns {boolean} Whether any node was added, removed, or updated.
      */
@@ -561,10 +579,12 @@ async function refreshTorrents(payload) {
       if (newTbodyHTML === "") {
         if (torrentsBody.children.length > 0) {
           torrentsBody.innerHTML = "";
+          lastAppliedTbodyHTML = "";
           return true;
         }
         return false;
       }
+      if (newTbodyHTML === lastAppliedTbodyHTML && torrentsBody.children.length > 0) {return false;}
       let mutated = false;
       const newTbody = document.createElement("tbody");
       newTbody.innerHTML = newTbodyHTML;
@@ -579,6 +599,8 @@ async function refreshTorrents(payload) {
         onNodeAdded: () => {mutated = true;},
         onNodeDiscarded: () => {mutated = true;}
       });
+      // Whether or not hooks reported changes, the live tbody now matches the response.
+      lastAppliedTbodyHTML = newTbodyHTML;
       return mutated;
     }
 
@@ -586,7 +608,8 @@ async function refreshTorrents(payload) {
      * @async
      * @function refreshAll
      * @description Performs a full refresh of the torrent table from the payload,
-     * morphing the tbody and refreshing the header/footer and screen log.
+     * morphing the tbody and refreshing the header/footer cells. Screen log updates
+     * are owned by the stamp gate in doRefresh, not this path.
      * @returns {Promise<boolean>} Whether any DOM mutation was applied.
      */
     async function refreshAll() {
@@ -596,7 +619,6 @@ async function refreshTorrents(payload) {
           await requestAnimationFramePromise(async () => {
             changed = morphTorrentsBody(payload.snarkTbody);
             refreshHeaderAndFooter();
-            refreshScreenLog(undefined);
             if (noTorrents) {noTorrents.remove();}
             if (debugging) {console.log("refreshAll()");}
           });
@@ -639,7 +661,12 @@ async function refreshTorrents(payload) {
           const pagenavtop = document.getElementById("pagenavtop");
 
           if (!payload.filterBarPresent || (!pagenavtop && payload.pagenavtop !== null)) {
-            if (payload.torrentlist !== null && torrentForm) {torrentForm.innerHTML = payload.torrentlist; changed = true;}
+            if (payload.torrentlist !== null && torrentForm) {
+              torrentForm.innerHTML = payload.torrentlist;
+              // The swap replaced the table wholesale; cached row state no longer applies.
+              lastAppliedTbodyHTML = null;
+              changed = true;
+            }
             await initHandlers();
           } else if (pagenavtop && payload.pagenavtop && pagenavtop.outerHTML !== payload.pagenavtop) {
             pagenavtop.outerHTML = payload.pagenavtop;
@@ -746,12 +773,14 @@ async function refreshTorrents(payload) {
 /**
  * @async
  * @function refreshScreenLog
- * @description Fetches and updates the screen log (#messages) element. Uses a cache with
- * triple the normal duration, keyed on the messages HTML only. Converts URL-encoded
- * spaces only when newly rendered messages contain them. Optionally executes a callback
- * after the update and supports forced fetches to bypass the cache.
+ * @description Fetches and updates the screen log (#messages) element. Callers gate on
+ * the server's log stamp (see maybeRefreshScreenLog), so this always performs a live
+ * fetch — no time-based caching, which would delay new messages by up to three ticks.
+ * Converts URL-encoded spaces only when newly rendered messages contain them.
+ * Optionally executes a callback after the update; forced fetches are unchanged.
+ *
  * @param {Function} [callback] - Optional callback to execute after the screen log is updated.
- * @param {boolean} [forceFetch=false] - Whether to bypass the cache and fetch fresh data.
+ * @param {boolean} [forceFetch=false] - Present for call-site compatibility; fetching is unconditional.
  * @returns {Promise<void>}
  */
 async function refreshScreenLog(callback, forceFetch = false) {
@@ -761,18 +790,9 @@ async function refreshScreenLog(callback, forceFetch = false) {
       return;
     }
     screenlog.removeAttribute("hidden");
-    let messages;
-    if (!callback && !forceFetch && cache.has("screenlog")) {
-      const [cachedMessages, expiry] = cache.get("screenlog");
-      if (expiry > Date.now()) {messages = cachedMessages;}
-      else {cache.delete("screenlog");}
-    }
-    if (messages === undefined || forceFetch) {
-      const payload = await fetchRefreshPayload("/i2psnark/.ajax/xhrscreenlog.html", forceFetch);
-      if (!payload) {return;}
-      cache.set("screenlog", [payload.messages, Date.now() + cacheDuration * 3]);
-      messages = payload.messages;
-    }
+    const payload = await fetchRefreshPayload(SCREENLOG_URL, forceFetch);
+    if (!payload) {return;}
+    const messages = payload.messages;
     if (messages === null) {return;}
     if (screenlog.innerHTML !== messages) {
       screenlog.innerHTML = messages;
@@ -844,7 +864,6 @@ function waitForIframeLoad(iframe) {
  */
 function invalidateCache() {
   cache.clear();
-  staleCacheKeys.clear();
 }
 
 /**
@@ -949,18 +968,20 @@ function refreshOnSubmit() {
  */
 async function initSnarkRefresh() {
   clearInterval(serverOKIntervalId);
-  serverOKIntervalId = setInterval(checkIfUp, 5000);
+  serverOKIntervalId = setInterval(checkIfUp, 14000);
   clearInterval(snarkRefreshIntervalId);
   document.documentElement.removeAttribute("style");
   const loaded = torrentsBody?.querySelector(".rowEven");
   const noload = torrents?.querySelector("#noTorrents");
   if (loaded && noload) {noload.remove();}
   try {
+    // Persist once per (re)init rather than on every tick; getRefreshInterval is read-only.
+    const refreshMs = await getRefreshInterval();
+    localStorage.setItem("snarkRefresh", String(refreshMs));
     snarkRefreshIntervalId = setInterval(async () => {
       try {
         if (isDocumentVisible) {
           await doRefresh();
-          await refreshScreenLog();
         }
       } catch (error) {
         if (debugging) console.error(error);
@@ -974,11 +995,7 @@ async function initSnarkRefresh() {
     if (debugging) console.error(error);
   }
 
-  if (!chimpIsCached) {
-    if (isStandalone) {preloadImage("/i2psnark/.res/themes/snark/midnight/images/chimp.webp");}
-    else {preloadImage("/themes/snark/midnight/images/chimp.webp");}
-    chimpIsCached = true;
-  }
+  cacheChimp();
 }
 
 /**
@@ -1030,16 +1047,45 @@ async function checkIfUp(minDelay = 14000) {
 }
 
 /**
- * @function preloadImage
- * @description Preloads an image into the browser HTTP cache by creating an Image object
- * and periodically refreshing it to prevent cache expiration.
- * @param {string} src - The image source URL to preload and cache.
+ * @function cacheChimp
+ * @description Warms the session cache for the offline-overlay chimp image. Fetches the
+ * webp once and stores it as a data URL in sessionStorage so the isDown overlay renders
+ * even when the server that would serve the image is unreachable. Silently no-ops when
+ * already cached, on quota/privacy errors, or when the fetch fails — in those cases the
+ * overlay falls back to the plain URL, exactly as before.
  * @returns {void}
  */
-function preloadImage(src) {
-  const load = () => {new Image().src = src;};
-  load();
-  setInterval(load, 10 * 60 * 1000);
+function cacheChimp() {
+  try {
+    if (sessionStorage.getItem(CHIMP_STORAGE_KEY)) {return;}
+    fetch(CHIMP_SRC).then((response) => {
+      if (!response.ok) {throw new Error(`chimp preload failed: ${response.status}`);}
+      return response.blob();
+    }).then((blob) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {resolve(reader.result);};
+      reader.onerror = () => {reject(reader.error || new Error("chimp read failed"));};
+      reader.readAsDataURL(blob);
+    })).then((dataUrl) => {
+      try {sessionStorage.setItem(CHIMP_STORAGE_KEY, String(dataUrl));} catch (error) {}
+    }).catch((error) => {
+      if (debugging) console.error(error);
+    });
+  } catch (error) {}
+}
+
+/**
+ * @function chimpSrc
+ * @description Returns the image source for the offline overlay: the cached data URL
+ * when available so no network access is needed while down, otherwise the plain URL.
+ * @returns {string} Image source usable in a CSS url() reference.
+ */
+function chimpSrc() {
+  try {
+    const cached = sessionStorage.getItem(CHIMP_STORAGE_KEY);
+    if (cached) {return cached;}
+  } catch (error) {}
+  return CHIMP_SRC;
 }
 
 /**
@@ -1050,10 +1096,7 @@ function preloadImage(src) {
  * @returns {void}
  */
 function isDown() {
-  let chimpSrc;
-  if (isStandalone) {chimpSrc = "/i2psnark/.res/themes/snark/midnight/images/chimp.webp";}
-  else {chimpSrc = "/themes/snark/midnight/images/chimp.webp";}
-  const offlineStyles = `:root{--chimp:url(${chimpSrc});--spinner:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cg%3E%3Cpath d='M78.75 16.18V1.56a64.1 64.1 0 0 1 47.7 47.7H111.8a49.98 49.98 0 0 0-33.07-33.08zM16.43 49.25H1.8a64.1 64.1 0 0 1 47.7-47.7V16.2a49.98 49.98 0 0 0-33.07 33.07zm33.07 62.32v14.62A64.1 64.1 0 0 1 1.8 78.5h14.63a49.98 49.98 0 0 0 33.07 33.07zm62.32-33.07h14.62a64.1 64.1 0 0 1-47.7 47.7v-14.63a49.98 49.98 0 0 0 33.08-33.07z' fill='%23dd5500bb'/%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 64 64' to='-90 64 64' dur='1200ms' repeatCount='indefinite'/%3E%3C/g%3E%3C/svg%3E")}*{user-select:none}body,html,#circle,#offline{margin:0;padding:0;height:100vh;min-height:100%;position:relative;overflow:hidden}#circle,#offline{position:absolute;top:0;left:0;bottom:0;right:0}#offline{z-index:99999999;background:#000d;backdrop-filter:blur(2px)}#circle::before{content:"";width:230px;height:230px;border-radius:50%;border:28px solid #303;box-shadow:0 0 0 8px #000,0 0 0 8px #000 inset;display:block;position:absolute;top:calc(50% - 132px);left:calc(50% - 135px);background:radial-gradient(circle at center,rgba(0,0,0,0),70%,#313 75%),var(--spinner) no-repeat center center/240px,var(--chimp) no-repeat calc(50% + 5px) calc(50% + 10px)/250px,#000;transform:scale(.8);will-change:transform}`;
+  const offlineStyles = `:root{--chimp:url(${chimpSrc()});--spinner:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cg%3E%3Cpath d='M78.75 16.18V1.56a64.1 64.1 0 0 1 47.7 47.7H111.8a49.98 49.98 0 0 0-33.07-33.08zM16.43 49.25H1.8a64.1 64.1 0 0 1 47.7-47.7V16.2a49.98 49.98 0 0 0-33.07 33.07zm33.07 62.32v14.62A64.1 64.1 0 0 1 1.8 78.5h14.63a49.98 49.98 0 0 0 33.07 33.07zm62.32-33.07h14.62a64.1 64.1 0 0 1-47.7 47.7v-14.63a49.98 49.98 0 0 0 33.08-33.07z' fill='%23dd5500bb'/%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 64 64' to='-90 64 64' dur='1200ms' repeatCount='indefinite'/%3E%3C/g%3E%3C/svg%3E")}*{user-select:none}body,html,#circle,#offline{margin:0;padding:0;height:100vh;min-height:100%;position:relative;overflow:hidden}#circle,#offline{position:absolute;top:0;left:0;bottom:0;right:0}#offline{z-index:99999999;background:#000d;backdrop-filter:blur(2px)}#circle::before{content:"";width:230px;height:230px;border-radius:50%;border:28px solid #303;box-shadow:0 0 0 8px #000,0 0 0 8px #000 inset;display:block;position:absolute;top:calc(50% - 132px);left:calc(50% - 135px);background:radial-gradient(circle at center,rgba(0,0,0,0),70%,#313 75%),var(--spinner) no-repeat center center/240px,var(--chimp) no-repeat calc(50% + 5px) calc(50% + 10px)/250px,#000;transform:scale(.8);will-change:transform}`;
   const offlineCss = document.createElement("style");
   offlineCss.id = "offlineCss";
   offlineCss.textContent = offlineStyles;
@@ -1100,4 +1143,4 @@ if (refreshChannel) {
   });
 }
 
-export { doRefresh, getURL, initSnarkRefresh, markStartingRows, refreshScreenLog, refreshTorrents, setActiveSearch, snarkRefreshIntervalId, isDocumentVisible };
+export { doRefresh, initSnarkRefresh, refreshScreenLog, setActiveSearch };

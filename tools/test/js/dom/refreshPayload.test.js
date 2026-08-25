@@ -63,6 +63,19 @@ test("extractRefreshPayload returns null messages when none are rendered", () =>
   assert.equal(payload.messages, null);
 });
 
+test("extractRefreshPayload carries the screen log stamp for change gating", () => {
+  const payload = extractRefreshPayload(fixture());
+  assert.equal(payload.screenLogStamp, "4213:7");
+});
+
+test("extractRefreshPayload returns a null screen log stamp when absent", () => {
+  const { document } = parseHTML(
+    '<!DOCTYPE HTML><html><body id=snarkxhr><div id=mainsection></div></body></html>'
+  );
+  const payload = extractRefreshPayload(document);
+  assert.equal(payload.screenLogStamp, null);
+});
+
 test("extractRefreshPayload tolerates a response with no filter bar", () => {
   const { document } = parseHTML(
     '<!DOCTYPE HTML><html><body id=snarkxhr><div id=mainsection><table><thead id=snarkHead><tr><th>A</th></tr></thead><tbody id=snarkTbody></tbody></table></div></body></html>'

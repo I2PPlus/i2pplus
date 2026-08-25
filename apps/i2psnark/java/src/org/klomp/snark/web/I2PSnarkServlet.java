@@ -658,7 +658,9 @@ public class I2PSnarkServlet extends BasicServlet {
         if ("/.ajax/xhr1.html".equals(path)) {
             // volatile read; disk probe stays out of any shared lock
             boolean canWrite = _resourceBase.canWrite();
-            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
+            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=screenlogStamp data-v=\"");
+            out.write(screenLogStamp());
+            out.write("\" hidden></div>\n<div id=mainsection>\n");
             writeTorrents(out, req, canWrite);
             out.write("\n</div>\n</body>\n</html>\n");
         } else {
@@ -1055,6 +1057,23 @@ public class I2PSnarkServlet extends BasicServlet {
         int maxAge = Math.min(I2PSnarkUtil.parseInt(refresh, 60), 60);
         resp.setHeader("Cache-Control", "private, no-cache, max-age=" + maxAge);
         resp.setHeader("Content-Security-Policy", "default-src 'none'; child-src 'self'");
+    }
+
+    /**
+     * Cheap change-detection stamp for the screen log, emitted with every xhr1
+     * refresh payload so the client can skip the xhrscreenlog.html round trip
+     * entirely while the log is unchanged. Combines the last message id (which
+     * advances on every add) with the list size (which moves on clears and
+     * cap-driven trims), so both growth and shrinkage are detected without
+     * rendering anything.
+     *
+     * @return "lastMessageId:messageCount", or "0:0" when the log is empty
+     * @since 0.9.71+
+     */
+    private String screenLogStamp() {
+        List<UIMessages.Message> msgs = _manager.getMessages();
+        if (msgs.isEmpty()) {return "0:0";}
+        return msgs.get(msgs.size() - 1).id + ":" + msgs.size();
     }
 
     /**
@@ -1747,7 +1766,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Aggregated footer state, replacing a twelve-parameter signature.
      * Package-visible for testing.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static class FooterContext {
         final long[] stats;
@@ -4034,7 +4053,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param snark the torrent whose destination to display
      * @param rc row context carrying the shared badge cache; must not be null
      * @return the status HTML with the pool badge injected
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private String injectPoolBadge(String statusHtml, Snark snark, RowContext rc) {
         TorrentDest td = snark.getDest();
