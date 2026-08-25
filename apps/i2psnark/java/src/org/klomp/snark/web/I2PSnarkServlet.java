@@ -564,21 +564,22 @@ public class I2PSnarkServlet extends BasicServlet {
                         return;
                     }
                 } else {
+                    boolean isPost = "POST".equals(method);
+                    // headers must precede any bytes: large tables stream directly
+                    if (!isPost) {setHTMLHeaders(resp, cspNonce, true);}
                     String base = addPaths(req.getRequestURI(), "/");
                     String listing = getListHTML(resource, base, true,
-                        "POST".equals(method) ? req.getParameterMap() : null,
-                        req.getParameter("sort"));
-                    if ("POST".equals(method)) {
+                        isPost ? req.getParameterMap() : null,
+                        req.getParameter("sort"),
+                        isPost ? null : resp.getWriter());
+                    if (isPost) {
                         sendRedirect(req, resp, ""); // POST-Redirect-GET
-                        return;
-                    } else if (listing != null) {
-                        setHTMLHeaders(resp, cspNonce, true);
-                        resp.getWriter().write(listing);
-                        return;
-                    } else {
-                        resp.sendError(404);
-                        return;
+                    } else if (listing != null && !listing.isEmpty()) {
+                        resp.getWriter().write(listing); // buffered page, or streamed-mode tail
+                    } else if (!resp.isCommitted()) {
+                        resp.sendError(404); // safety net; unreachable on GET today
                     }
+                    return;
                 }
             } else {
                 if ("GET".equals(method) || "HEAD".equals(method)) {
@@ -5481,6 +5482,40 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
+     * Minimum visible table rows before a page renders in streamed mode.
+     * Below the gate a single buffered write is cheaper and keeps
+     * Content-Length; at or above it, scaffold-first flushing pays off.
+     */
+    private static final int STREAM_MIN_ROWS = 64;
+
+    /** Rows rendered per chunk in streamed mode; bounds the staging buffer near tens of KB. */
+    private static final int STREAM_DRAIN_EVERY = 16;
+
+    /**
+     * Whether a table rendering visibleRows entries uses streamed output.
+     *
+     * @param visibleRows entries actually rendered after filtering, non-negative
+     * @return true once {@link #STREAM_MIN_ROWS} is reached
+     */
+    static boolean shouldStream(int visibleRows) {
+        return visibleRows >= STREAM_MIN_ROWS;
+    }
+
+    /**
+     * Pushes staged markup to the response writer and empties the buffer,
+     * forcing bytes toward the client so large pages render progressively.
+     * Called only in streamed mode; buffered mode never drains.
+     *
+     * @param out non-null response writer
+     * @param buf staging buffer, emptied
+     */
+    static void drainTo(PrintWriter out, StringBuilder buf) {
+        out.append(buf);
+        out.flush();
+        buf.setLength(0);
+    }
+
+    /**
      * Modded heavily from the Jetty version in Resource.java,
      * pass Resource as 1st param
      * All the xxxResource constructors are package local so we can't extend them.
@@ -5498,7 +5533,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *   <li>no-listing branch - appendMediaSection() player, comments section,
      *       footer, return</li>
      *   <li>file listing - wrapFileList() + sort, appendFileTableHead(),
-     *       appendParentDirRow(), renderFileRow() loop, per-counter scripts</li>
+     *       appendParentDirRow(), renderFileRow() loop, per-counter scripts;
+     *       streamed when out != null and the table reaches STREAM_MIN_ROWS</li>
      *   <li>renderCommentsSection(), form close, lightbox/refresh scripts,
      *       footer</li>
      * </ol>
@@ -5508,10 +5544,14 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param parent True if the parent directory should be included
      * @param postParams map of POST parameters or null if not a POST
      * @param sortParam the file sort key from the request, or null
-     * @return String of HTML, or null if postParams != null (P-R-G)
+     * @param out the response writer for streamed mode, or null to buffer
+     *            everything into the returned string
+     * @return buffered mode: the full page; streamed mode: the tail remaining
+     *         after the last drained chunk (possibly empty); null only when
+     *         postParams != null (P-R-G)
      * @since 0.7.14
      */
-    private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam) throws IOException {
+    private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam, PrintWriter out) throws IOException {
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String decodedBase = decodePath(base);
         String title = decodedBase;
@@ -5619,11 +5659,31 @@ public class I2PSnarkServlet extends BasicServlet {
             appendParentDirRow(buf, base, sortParam, decodedBase, isTopLevel, hasAudio, showPriority);
         }
 
+        // Threshold-gated streaming: scaffold through dirNav goes out at once,
+        // then rows drain every STREAM_DRAIN_EVERY so peak memory stays near
+        // one chunk instead of the whole page.
+        final boolean streamed = out != null && shouldStream(fileList.size());
+        int untilDrain = STREAM_DRAIN_EVERY;
+        if (streamed) {drainTo(out, buf);}
+
         FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
         FileRowCounters counters = new FileRowCounters();
         boolean rowEven = true;
-        for (Sorters.FileAndIndex fai : fileList) {
-            rowEven = renderFileRow(buf, ctx, fai, rowEven, counters);
+        try {
+            for (Sorters.FileAndIndex fai : fileList) {
+                rowEven = renderFileRow(buf, ctx, fai, rowEven, counters);
+                if (streamed && --untilDrain == 0) {
+                    drainTo(out, buf);
+                    untilDrain = STREAM_DRAIN_EVERY;
+                }
+            }
+        } catch (RuntimeException e) {
+            // buffered mode keeps pre-streaming semantics: nothing is committed,
+            // so propagate and let the container render its error page
+            if (!streamed) {throw e;}
+            // otherwise committed - skip remaining rows rather than lose the
+            // page; closing markup below always renders
+            if (_log.shouldWarn()) {_log.warn("File list render aborted after error", e);}
         }
         if (counters.showSaveButton) {
             buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5><input type=submit class=accept value=\"")

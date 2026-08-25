@@ -3,6 +3,8 @@ package org.klomp.snark.web;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -214,5 +216,44 @@ public class GetListHTMLHelpersTest {
             assertTrue(I2PSnarkServlet.isTypeSortNext(e.getKey()));
             assertEquals(e.getValue(), I2PSnarkServlet.nextNameTypeSort(e.getKey()));
         }
+    }
+
+    // ---- threshold-gated streaming ----
+
+    @Test
+    public void testShouldStreamBoundaries() {
+        assertFalse(I2PSnarkServlet.shouldStream(0));
+        assertFalse(I2PSnarkServlet.shouldStream(1));
+        assertFalse(I2PSnarkServlet.shouldStream(63));
+        assertTrue(I2PSnarkServlet.shouldStream(64));
+        assertTrue(I2PSnarkServlet.shouldStream(65));
+        assertTrue(I2PSnarkServlet.shouldStream(Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void testDrainToWritesFlushesAndClears() {
+        StringWriter sink = new StringWriter();
+        PrintWriter out = new PrintWriter(sink);
+        StringBuilder buf = new StringBuilder();
+
+        buf.append("chunk-one");
+        I2PSnarkServlet.drainTo(out, buf);
+        assertEquals("chunk-one", sink.toString());
+        assertEquals(0, buf.length());
+        assertTrue(out.checkError() == false);
+
+        // second drain appends in order; buffer stays empty
+        buf.append("two");
+        I2PSnarkServlet.drainTo(out, buf);
+        assertEquals("chunk-onetwo", sink.toString());
+        assertEquals(0, buf.length());
+    }
+
+    @Test
+    public void testDrainToEmptyBufferIsNoop() {
+        StringWriter sink = new StringWriter();
+        PrintWriter out = new PrintWriter(sink);
+        I2PSnarkServlet.drainTo(out, new StringBuilder());
+        assertEquals("", sink.toString());
     }
 }
