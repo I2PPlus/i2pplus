@@ -1144,13 +1144,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * Builds the HTML table header row for the torrent list display, including sortable column
      * headers, peer toggling links, and activity indicators.
      *
-     * <p>This method constructs the header HTML fragment for the torrents table,
-     * dynamically inserting sorting links, peer visibility toggles, and icons that
-     * reflect the current torrent list state and request parameters.</p>
-     *
-     * <p>Key enhancements include caching localized strings for reuse, extracting common
-     * patterns into helper methods, and simplifying query string construction to improve
-     * both server-side rendering performance and code maintainability.</p>
+     * <p>Dispatcher only: prepares request-derived inputs into a
+     * SortHeaderContext plus an activity scan, then delegates each column to
+     * its own builder so per-column markup stays independently reviewable.</p>
      *
      * @param req the HttpServletRequest containing the current request parameters
      * @param snarks the list of torrent objects currently shown or filtered
@@ -1174,8 +1170,6 @@ public class I2PSnarkServlet extends BasicServlet {
         // Cache common localized strings
         final String txtStatus = _t("Status");
         final String txtTorrent = _t("Torrent");
-        final String txtType = _t("File type");
-        final String txtName = _t("Torrent name");
         final String txtETA = _t("ETA");
         final String txtRX = _t("RX");
         final String txtRXRate = _t("RX Rate");
@@ -1187,70 +1181,209 @@ public class I2PSnarkServlet extends BasicServlet {
         final String txtStartAllTitle = _t("Start all torrents and the I2P tunnel");
         final String txtStartStoppedTitle = _t("Start all stopped torrents");
 
-        // Determine URL separator based on presence of query params
-        boolean hasQueryParams = req.getQueryString() != null && !req.getQueryString().isEmpty();
-        String separator = hasQueryParams ? "&" : "?";
-
-        // Construct filterQuery string reliably
+        // Construct filterQuery string reliably; pairs inside it always join
+        // with '&' - buildLink() owns any leading '?'
         String currentSearch = req.getParameter("search");
         StringBuilder fq = new StringBuilder("filter=");
         fq.append(filterParam == null || filterParam.isEmpty() ? "all" : filterParam);
         if (currentSearch != null && !currentSearch.isEmpty()) {
-            fq.append(separator).append("search=").append(currentSearch);
+            fq.append("&search=").append(currentSearch);
         }
         String filterQuery = fq.toString();
 
-        // Cache torrent activity flags and counts, break early if all true to save time
+        TorrentActivityScan scan = scanTorrentActivity(snarks, start, pageSize, total);
+        SortHeaderContext hc = new SortHeaderContext(req, contextPath, currentSort,
+                                                     filterParam, filterQuery, showSort);
+
+        // Start building header row
+        buf.append("<tr>");
+        // Status header sort parameters and active sort detection,
+        // cycling status asc/desc and status+pool asc/desc when pooled dests exist
+        appendStatusHeader(buf, hc, multiDestActive(), txtStatus);
+        // Peer toggle link cell
+        appendPeerToggleHeader(buf, hc, peerParam, isConnected, noSnarks, scan);
+        // Torrent name/type sorting header (colspan=2 includes hidden checkbox)
+        buf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden></th>");
+        appendNameTypeHeader(buf, hc, txtTorrent);
+        buf.append("<th class=tName></th>");
+        appendEtaHeader(buf, hc, txtETA, isConnected, noSnarks, scan);
+        appendRxHeader(buf, hc, txtRX, noSnarks);
+        appendRateDownHeader(buf, hc, txtRXRate, txtRX, peerParam, isConnected, noSnarks, scan);
+        appendTxHeader(buf, hc, txtTX);
+        appendRateUpHeader(buf, hc, txtTXRate, isConnected, noSnarks, scan);
+        // Action buttons header (Start/Stop all)
+        appendActionsHeader(buf, snarks, isConnected, noSnarks,
+                            txtStartAll, txtStopAll, txtStopAllTitle, txtStartAllTitle, txtStartStoppedTitle);
+        buf.append("</tr>\n</thead>\n<tbody id=snarkTbody>");
+
+        return buf.toString();
+    }
+
+    /**
+     * Request-derived inputs shared by every sortable torrent-list header
+     * cell; replaces a thirteen-parameter signature. Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class SortHeaderContext {
+        final HttpServletRequest req;
+        /** Link path prefix: contextPath with trailing '/'. */
+        final String pathPrefix;
+        final String currentSort;
+        final String filterParam;
+        final String filterQuery;
+        final boolean showSort;
+
+        SortHeaderContext(HttpServletRequest req, String contextPath, String currentSort,
+                          String filterParam, String filterQuery, boolean showSort) {
+            this.req = req;
+            this.pathPrefix = contextPath + '/';
+            this.currentSort = currentSort;
+            this.filterParam = filterParam;
+            this.filterQuery = filterQuery;
+            this.showSort = showSort;
+        }
+    }
+
+    /**
+     * Peer/rate activity flags scanned across one rendered page slice; drives
+     * which optional header cells render. Package-visible for testing.
+     *
+     * @since 0.9.71+
+     */
+    static class TorrentActivityScan {
+        final boolean hasPeers;
+        final boolean isDownloading;
+        final boolean isUploading;
+
+        TorrentActivityScan(boolean hasPeers, boolean isDownloading, boolean isUploading) {
+            this.hasPeers = hasPeers;
+            this.isDownloading = isDownloading;
+            this.isUploading = isUploading;
+        }
+    }
+
+    /**
+     * Scans the page slice for peer/rate activity, exiting early once every
+     * flag is set. Extracted from appendSnarkHeader; write-only counters that
+     * were computed here previously are gone.
+     *
+     * @param snarks full sorted list
+     * @param start first row of the rendered slice
+     * @param pageSize rows per page
+     * @param total list size bounding the slice
+     * @return flags for the slice, never null
+     * @since 0.9.71+
+     */
+    private TorrentActivityScan scanTorrentActivity(List<Snark> snarks, int start, int pageSize, int total) {
         boolean hasPeers = false;
         boolean isDownloading = false;
         boolean isUploading = false;
-        int activeDownloadsCount = 0;
-        int activeUploadsCount = 0;
         int end = Math.min(start + pageSize, total);
         for (int i = start; i < end && !(hasPeers && isDownloading && isUploading); i++) {
             Snark s = snarks.get(i);
             if (s.getPeerCount() > 0) {
                 hasPeers = true;
-                if (s.getDownloadRate() > 0) {
-                    isDownloading = true;
-                    activeDownloadsCount++;
-                }
-                if (s.getUploadRate() > 0) {
-                    isUploading = true;
-                    activeUploadsCount++;
-                }
+                if (s.getDownloadRate() > 0) {isDownloading = true;}
+                if (s.getUploadRate() > 0) {isUploading = true;}
             }
         }
+        return new TorrentActivityScan(hasPeers, isDownloading, isUploading);
+    }
 
-        // Start building header row
-        buf.append("<tr>");
+    /**
+     * Next value of the Status column sort cycle: toggles status asc/desc,
+     * and in multi-destination mode continues into status+pool asc/desc
+     * before returning to status desc. Unknown keys restart at desc.
+     *
+     * @param currentSort current sort key, may be null
+     * @param poolSort true when multi-destination mode is active
+     * @return the next sort key, never null
+     * @since 0.9.71+
+     */
+    static String nextStatusSort(String currentSort, boolean poolSort) {
+        if ("-2".equals(currentSort)) {return "2";}
+        if ("2".equals(currentSort)) {return poolSort ? "13" : "-2";}
+        if (poolSort && "13".equals(currentSort)) {return "-13";}
+        return "-2";
+    }
 
-        // Status header sort parameters and active sort detection,
-        // cycling status asc/desc and status+pool asc/desc when pooled dests exist
-        String nextSort;
-        boolean poolSort = multiDestActive();
-        if ("-2".equals(currentSort)) {
-            nextSort = "2";
-        } else if ("2".equals(currentSort)) {
-            nextSort = poolSort ? "13" : "-2";
-        } else if (poolSort && "13".equals(currentSort)) {
-            nextSort = "-13";
-        } else {
-            // status desc, or pool desc (-13) back to status desc
-            nextSort = "-2";
-        }
-        boolean isStatusSort = "2".equals(currentSort) || "-2".equals(currentSort)
-                               || (poolSort && ("13".equals(currentSort) || "-13".equals(currentSort)));
-        boolean isStatusDesc = "-2".equals(currentSort) || (poolSort && "-13".equals(currentSort));
-        appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
-                         "status", "status", txtStatus, showSort, isStatusSort, isStatusDesc);
+    /**
+     * Name/type ladder for the torrent column. Unlike the directory-page
+     * cycle ({@link #nextNameTypeSort(String)}) the fallback after foreign
+     * keys restarts at name ascending ("1"), not unsorted - both behaviors
+     * are pinned by tests.
+     *
+     * @param currentSort current sort key, may be null
+     * @return the next sort key, never null
+     * @since 0.9.71+
+     */
+    static String nextTorrentNameTypeSort(String currentSort) {
+        if (currentSort == null || "0".equals(currentSort) || "1".equals(currentSort)) {return "-1";}
+        if ("-1".equals(currentSort)) {return "12";}
+        if ("12".equals(currentSort)) {return "-12";}
+        return "1";
+    }
 
-        // Peer toggle link cell
+    /**
+     * Next value of the RX column cycle: download total and rate alternate
+     * asc/desc across four states; unknown keys restart at "-5".
+     *
+     * @param currentSort current sort key, may be null
+     * @return the next sort key, never null
+     * @since 0.9.71+
+     */
+    static String nextRXSort(String currentSort) {
+        if ("-5".equals(currentSort)) {return "5";}
+        if ("5".equals(currentSort)) {return "-6";}
+        if ("-6".equals(currentSort)) {return "6";}
+        if ("6".equals(currentSort)) {return "-5";}
+        return "-5";
+    }
+
+    /**
+     * Next value of the TX column cycle: upload total and share ratio
+     * alternate asc/desc across four states; unknown keys restart at "-7".
+     *
+     * @param currentSort current sort key, may be null
+     * @return the next sort key, never null
+     * @since 0.9.71+
+     */
+    static String nextTXSort(String currentSort) {
+        if ("-7".equals(currentSort)) {return "7";}
+        if ("7".equals(currentSort)) {return "-11";}
+        if ("-11".equals(currentSort)) {return "11";}
+        if ("11".equals(currentSort)) {return "-7";}
+        return "-7";
+    }
+
+    /**
+     * Status column: sortable always; pool-aware via {@link #nextStatusSort}.
+     *
+     * @since 0.9.71+
+     */
+    private void appendStatusHeader(StringBuilder buf, SortHeaderContext hc, boolean poolSort, String txtStatus) {
+        String nextSort = nextStatusSort(hc.currentSort, poolSort);
+        boolean isStatusSort = "2".equals(hc.currentSort) || "-2".equals(hc.currentSort)
+                               || (poolSort && ("13".equals(hc.currentSort) || "-13".equals(hc.currentSort)));
+        boolean isStatusDesc = "-2".equals(hc.currentSort) || (poolSort && "-13".equals(hc.currentSort));
+        appendSortHeader(buf, hc, nextSort, "status", "status", txtStatus, hc.showSort, isStatusSort, isStatusDesc);
+    }
+
+    /**
+     * Peer-count column: renders the show/hide peers toggle when connected
+     * with peers present; empty cell otherwise.
+     *
+     * @since 0.9.71+
+     */
+    private void appendPeerToggleHeader(StringBuilder buf, SortHeaderContext hc, String peerParam,
+                                        boolean isConnected, boolean noSnarks, TorrentActivityScan scan) {
         buf.append("<th class=peerCount>");
-        if (isConnected && !noSnarks && hasPeers) {
+        if (isConnected && !noSnarks && scan.hasPeers) {
             boolean showPeers = peerParam != null;
-            String queryString = showPeers ? getQueryString(req, "", null, null, null) : getQueryString(req, "1", null, null, null);
-            String link = contextPath + '/' + queryString + filterQuery;
+            String qs = showPeers ? getQueryString(hc.req, "", null, null, null)
+                                  : getQueryString(hc.req, "1", null, null, null);
+            String link = buildLink(hc.pathPrefix, qs, hc.filterQuery);
             String tx = showPeers ? _t("Hide Peers") : _t("Show Peers");
             String img = showPeers ? "hidepeers" : "showpeers";
             String filterPrefix = showPeers ? "?filter=" : "&filter=";
@@ -1267,141 +1400,150 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</a>\n");
         }
         buf.append("</th>");
+    }
 
-        // Torrent name/type sorting header (colspan=2 includes hidden checkbox)
-        buf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden></th>");
-
-        // Torrent header with sort icon (toggle between name and type)
-        boolean isTypeSort = false;
-        nextSort = null;
-        if (showSort) {
-            if (currentSort == null || "0".equals(currentSort) || "1".equals(currentSort)) {
-                nextSort = "-1";
-            } else if ("-1".equals(currentSort)) {
-                nextSort = "12";
-                isTypeSort = true;
-            } else if ("12".equals(currentSort)) {
-                nextSort = "-12";
-                isTypeSort = true;
-            } else {
-                nextSort = "1";
-            }
+    /**
+     * Torrent name/type column: cycles via {@link #nextTorrentNameTypeSort};
+     * active-state detection mirrors the five name/type keys.
+     *
+     * @since 0.9.71+
+     */
+    private void appendNameTypeHeader(StringBuilder buf, SortHeaderContext hc, String txtTorrent) {
+        String nextSort = null;
+        if (hc.showSort) {
+            nextSort = nextTorrentNameTypeSort(hc.currentSort);
         }
-        boolean isTorrentSortActive = "1".equals(currentSort) || "0".equals(currentSort) || "-1".equals(currentSort)
-                                     || "12".equals(currentSort) || "-12".equals(currentSort);
-        boolean isTorrentSortDesc = currentSort != null && currentSort.startsWith("-");
-        appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
-                         "torrentSort", "torrent", txtTorrent,
-                         showSort, isTorrentSortActive, isTorrentSortDesc);
+        boolean isTorrentSortActive = "1".equals(hc.currentSort) || "0".equals(hc.currentSort) || "-1".equals(hc.currentSort)
+                                      || "12".equals(hc.currentSort) || "-12".equals(hc.currentSort);
+        boolean isTorrentSortDesc = hc.currentSort != null && hc.currentSort.startsWith("-");
+        appendSortHeader(buf, hc, nextSort, "torrentSort", "torrent", txtTorrent,
+                         hc.showSort, isTorrentSortActive, isTorrentSortDesc);
+    }
 
-        // Empty cell class=tName
-        buf.append("<th class=tName></th>");
-
-        // ETA header (sortable if downloading)
-        if (isConnected && !noSnarks && isDownloading) {
-            nextSort = null;
-            if (showSort) {
-                if (currentSort == null || "-4".equals(currentSort)) {
-                    nextSort = "4";
-                } else if ("4".equals(currentSort)) {
-                    nextSort = "-4";
-                }
-            }
-            boolean isETAActive = "4".equals(currentSort) || "-4".equals(currentSort);
-            boolean isETADesc = "-4".equals(currentSort);
-            appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
-                             "ETA", "eta", txtETA, showSort, isETAActive, isETADesc);
-        } else {
+    /**
+     * ETA column: sortable only while something on the page is downloading.
+     *
+     * @since 0.9.71+
+     */
+    private void appendEtaHeader(StringBuilder buf, SortHeaderContext hc, String txtETA,
+                                 boolean isConnected, boolean noSnarks, TorrentActivityScan scan) {
+        if (!(isConnected && !noSnarks && scan.isDownloading)) {
             buf.append("<th class=ETA></th>");
+            return;
         }
-
-        // RX header with multi-state sorting
-        boolean isDlSort = false;
-        if (!noSnarks && showSort) {
-            String sortRX = currentSort;
-            if ("-5".equals(sortRX)) {
-                nextSort = "5";
-            } else if ("5".equals(sortRX)) {
-                nextSort = "-6"; isDlSort = true;
-            } else if ("-6".equals(sortRX)) {
-                nextSort = "6"; isDlSort = true;
-            } else if ("6".equals(sortRX)) {
-                nextSort = "-5"; isDlSort = true;
-            } else {
-                nextSort = "-5";
+        String nextSort = null;
+        if (hc.showSort) {
+            if (hc.currentSort == null || "-4".equals(hc.currentSort)) {
+                nextSort = "4";
+            } else if ("4".equals(hc.currentSort)) {
+                nextSort = "-4";
             }
-            boolean isRXActive = "-5".equals(currentSort) || "5".equals(currentSort) || "-6".equals(currentSort) || "6".equals(currentSort);
-            boolean isRXDesc = "-5".equals(currentSort) || "-6".equals(currentSort);
-            appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
-                             "rxd", "head_rx", txtRX, showSort, isRXActive, isRXDesc);
-        } else {
+        }
+        boolean isETAActive = "4".equals(hc.currentSort) || "-4".equals(hc.currentSort);
+        boolean isETADesc = "-4".equals(hc.currentSort);
+        appendSortHeader(buf, hc, nextSort, "ETA", "eta", txtETA, hc.showSort, isETAActive, isETADesc);
+    }
+
+    /**
+     * RX column: four-state cycle via {@link #nextRXSort} whenever the list
+     * is sortable; empty cell otherwise.
+     *
+     * @since 0.9.71+
+     */
+    private void appendRxHeader(StringBuilder buf, SortHeaderContext hc, String txtRX, boolean noSnarks) {
+        if (noSnarks || !hc.showSort) {
             buf.append("<th class=rxd></th>");
+            return;
         }
+        String nextSort = nextRXSort(hc.currentSort);
+        boolean isRXActive = "-5".equals(hc.currentSort) || "5".equals(hc.currentSort) || "-6".equals(hc.currentSort) || "6".equals(hc.currentSort);
+        boolean isRXDesc = "-5".equals(hc.currentSort) || "-6".equals(hc.currentSort);
+        appendSortHeader(buf, hc, nextSort, "rxd", "head_rx", txtRX, hc.showSort, isRXActive, isRXDesc);
+    }
 
-        // RateDown header (show if downloading)
-        if (isConnected && !noSnarks && isDownloading) {
-            nextSort = "-8".equals(currentSort) ? "8" : "-8";
-            boolean desc8 = "8".equals(currentSort);
-            // Determine peerFlag for getQueryString
-            String peerFlag = (peerParam != null) ? "1" : "0";
-            buf.append("<th class=rateDown><span class=sortIcon>");
-            if (desc8) {
-                buf.append("<span class=descending></span>");
-            } else {
-                buf.append("<span class=ascending></span>");
-            }
-            buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-               .append(getQueryString(req, peerFlag, nextSort, filterParam, null))
-               .append(separator).append(filterQuery).append("\">");
-            appendIcon(buf, "head_rx", txtRXRate, showSort ? _t("Sort by {0}", txtRX) : "", true, false);
-            buf.append("</a></span></th>");
-        } else {
+    /**
+     * Download-rate column: sortable only while downloading; direction icon
+     * reflects the current key.
+     *
+     * @since 0.9.71+
+     */
+    private void appendRateDownHeader(StringBuilder buf, SortHeaderContext hc, String txtRXRate, String txtRX,
+                                      String peerParam, boolean isConnected, boolean noSnarks,
+                                      TorrentActivityScan scan) {
+        if (!(isConnected && !noSnarks && scan.isDownloading)) {
             buf.append("<th class=rateDown></th>");
+            return;
         }
-
-        // TX header with ratio sorting
-        boolean isRatSort = false;
-        boolean nextRatSort = false;
-        if (showSort) {
-            if ("-7".equals(currentSort)) {
-                nextSort = "7";
-            } else if ("7".equals(currentSort)) {
-                nextSort = "-11"; nextRatSort = true;
-            } else if ("-11".equals(currentSort)) {
-                nextSort = "11"; nextRatSort = true; isRatSort = true;
-            } else if ("11".equals(currentSort)) {
-                nextSort = "-7"; isRatSort = true;
-            } else {
-                nextSort = "-7";
-            }
-            boolean isTXActive = "-7".equals(currentSort) || "7".equals(currentSort) || "-11".equals(currentSort) || "11".equals(currentSort);
-            boolean isTXDesc = "-7".equals(currentSort) || "-11".equals(currentSort);
-            appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
-                             "txd", "head_tx", txtTX, showSort, isTXActive, isTXDesc);
+        String nextSort = "-8".equals(hc.currentSort) ? "8" : "-8";
+        boolean desc8 = "8".equals(hc.currentSort);
+        // Determine peerFlag for getQueryString
+        String peerFlag = (peerParam != null) ? "1" : "0";
+        buf.append("<th class=rateDown><span class=sortIcon>");
+        if (desc8) {
+            buf.append("<span class=descending></span>");
         } else {
+            buf.append("<span class=ascending></span>");
+        }
+        buf.append("<a class=sorter href=\"")
+           .append(buildLink(hc.pathPrefix, getQueryString(hc.req, peerFlag, nextSort, hc.filterParam, null), hc.filterQuery))
+           .append("\">");
+        appendIcon(buf, "head_rx", txtRXRate, hc.showSort ? _t("Sort by {0}", txtRX) : "", true, false);
+        buf.append("</a></span></th>");
+    }
+
+    /**
+     * TX column: four-state cycle via {@link #nextTXSort} whenever the list
+     * is sortable; empty cell otherwise.
+     *
+     * @since 0.9.71+
+     */
+    private void appendTxHeader(StringBuilder buf, SortHeaderContext hc, String txtTX) {
+        if (!hc.showSort) {
             buf.append("<th class=txd></th>");
+            return;
         }
+        String nextSort = nextTXSort(hc.currentSort);
+        boolean isTXActive = "-7".equals(hc.currentSort) || "7".equals(hc.currentSort) || "-11".equals(hc.currentSort) || "11".equals(hc.currentSort);
+        boolean isTXDesc = "-7".equals(hc.currentSort) || "-11".equals(hc.currentSort);
+        appendSortHeader(buf, hc, nextSort, "txd", "head_tx", txtTX, hc.showSort, isTXActive, isTXDesc);
+    }
 
-        // RateUp header (show if uploading)
-        if (isConnected && !noSnarks && isUploading) {
-            nextSort = "-9".equals(currentSort) ? "9" : "-9";
-            boolean ascendingRateUp = "9".equals(currentSort);
-            buf.append("<th class=rateUp><span class=sortIcon>");
-            if (ascendingRateUp) {
-                buf.append("<span class=ascending></span>");
-            } else {
-                buf.append("<span class=descending></span>");
-            }
-            buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-               .append(getQueryString(req, null, null, nextSort, null))
-               .append(separator).append(filterQuery).append("\">");
-            appendIcon(buf, "head_txspeed", txtTXRate, showSort ? _t("Sort by {0}", _t("Up Rate")) : "", true, false);
-            buf.append("</a></span></th>");
-        } else {
+    /**
+     * Upload-rate column: sortable only while uploading; ascending icon when
+     * currently on "9" (note the inverted default versus rateDown).
+     *
+     * @since 0.9.71+
+     */
+    private void appendRateUpHeader(StringBuilder buf, SortHeaderContext hc, String txtTXRate,
+                                    boolean isConnected, boolean noSnarks, TorrentActivityScan scan) {
+        if (!(isConnected && !noSnarks && scan.isUploading)) {
             buf.append("<th class=rateUp></th>");
+            return;
         }
+        String nextSort = "-9".equals(hc.currentSort) ? "9" : "-9";
+        boolean ascendingRateUp = "9".equals(hc.currentSort);
+        buf.append("<th class=rateUp><span class=sortIcon>");
+        if (ascendingRateUp) {
+            buf.append("<span class=ascending></span>");
+        } else {
+            buf.append("<span class=descending></span>");
+        }
+        buf.append("<a class=sorter href=\"")
+           .append(buildLink(hc.pathPrefix, getQueryString(hc.req, null, null, nextSort, null), hc.filterQuery))
+           .append("\">");
+        appendIcon(buf, "head_txspeed", txtTXRate, hc.showSort ? _t("Sort by {0}", _t("Up Rate")) : "", true, false);
+        buf.append("</a></span></th>");
+    }
 
-        // Action buttons header (Start/Stop all)
+    /**
+     * Action column: Stop All always when connected; Start All variants
+     * depending on whether any listed torrent is stopped.
+     *
+     * @since 0.9.71+
+     */
+    private void appendActionsHeader(StringBuilder buf, List<Snark> snarks, boolean isConnected, boolean noSnarks,
+                                     String txtStartAll, String txtStopAll, String txtStopAllTitle,
+                                     String txtStartAllTitle, String txtStartStoppedTitle) {
         buf.append("<th class=tAction>");
         if (isConnected && !noSnarks) {
             buf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"").append(txtStopAll)
@@ -1419,9 +1561,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(txtStartAll).append("\" title=\"").append(txtStartAllTitle).append("\"")
                .append(disableStartAll ? " disabled" : "").append(">");
         }
-        buf.append("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
-
-        return buf.toString();
+        buf.append("</th>");
     }
 
     /**
@@ -1429,12 +1569,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * Shows ascending or descending icon only if this header matches current sorting.
      *
      * @param buf the StringBuilder used to append HTML content
-     * @param contextPath the context path prefix used in URLs
-     * @param req current HttpServletRequest to build query strings
-     * @param currentSort the current sort parameter value
+     * @param hc shared request-derived inputs (request, path, sort state, query parts)
      * @param newSort the sort parameter value to link to for toggling sorting
-     * @param separator '&' or '?' depending on query string presence
-     * @param filterQuery filtered search parameters to append to URL
      * @param cssClass CSS class to apply to the <th> element
      * @param iconName icon identifier for rendering
      * @param title localized title text for the header cell
@@ -1442,10 +1578,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param currentSortMatches true if this header corresponds to the current sort parameter (active sorted column)
      * @param isDescending true if the current sorting direction for this header is descending
      */
-    private void appendSortHeader(StringBuilder buf, String contextPath, HttpServletRequest req,
-                                  String currentSort, String newSort, String separator, String filterQuery,
-                                  String cssClass, String iconName, String title, boolean showSort,
-                                  boolean currentSortMatches, boolean isDescending) {
+    private void appendSortHeader(StringBuilder buf, SortHeaderContext hc,
+                                  String newSort, String cssClass, String iconName, String title,
+                                  boolean showSort, boolean currentSortMatches, boolean isDescending) {
         if (!showSort) {
             buf.append("<th class=").append(cssClass).append(">");
             appendIcon(buf, iconName, title, "", true, false);
@@ -1464,9 +1599,9 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-           .append(getQueryString(req, null, null, newSort, null))
-           .append(separator).append(filterQuery).append("\">");
+        buf.append("<a class=sorter href=\"")
+           .append(buildLink(hc.pathPrefix, getQueryString(hc.req, null, null, newSort, null), hc.filterQuery))
+           .append("\">");
 
         appendIcon(buf, iconName, title, _t("Sort by {0}", title), true, false);
         buf.append("</a></span></th>");
@@ -1683,6 +1818,37 @@ public class I2PSnarkServlet extends BasicServlet {
         if (dht != null) {out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());}
         else {out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");}
         out.write("</div></th></tr>");
+    }
+
+    /**
+     * Composes a link URL from a path, a servlet-generated query string, and
+     * extra query text, choosing the '?'/'&amp;' separators by inspection
+     * rather than by caller-supplied guesses about the raw request.
+     *
+     * Robust against every historical producer form: qs may begin with '?'
+     * (getQueryString contract), be bare ("k=v"), or be empty; extra may be
+     * empty or carry multiple "&amp;"-joined pairs without a leading mark.
+     * Replaces six hand-rolled joins whose separator logic silently broke
+     * sort/filter persistence on parameterless page loads.
+     *
+     * @param path leading URL path including trailing '/'
+     * @param qs query portion from getQueryString(): '', 'k=v' or '?k=v...'
+     * @param extra additional pairs joined by '&amp;', no leading mark, may be empty
+     * @return composed URL, never null
+     * @since 0.9.71+
+     */
+    static String buildLink(String path, String qs, String extra) {
+        StringBuilder buf = new StringBuilder(path.length() + qs.length() + extra.length() + 2);
+        buf.append(path);
+        if (!qs.isEmpty()) {
+            if (qs.charAt(0) != '?') {buf.append('?');}
+            buf.append(qs);
+            if (!extra.isEmpty()) {buf.append('&');}
+        } else {
+            buf.append('?');
+        }
+        buf.append(extra);
+        return buf.toString();
     }
 
     /**
