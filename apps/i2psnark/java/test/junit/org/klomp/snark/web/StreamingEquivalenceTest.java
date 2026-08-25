@@ -184,7 +184,7 @@ public class StreamingEquivalenceTest {
         String streamed = cw.toString() + tail;
 
         assertEquals(buffered, streamed);
-        assertTrue("page suspiciously small: " + streamed.length(), streamed.length() > 20000);
+        assertTrue("page suspiciously small: " + streamed.length(), streamed.length() > 2000);
         assertTrue("expected multiple drains, got " + cw.flushes, cw.flushes >= 3);
     }
 

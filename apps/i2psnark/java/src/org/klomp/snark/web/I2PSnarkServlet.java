@@ -3841,31 +3841,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // the sequential pool number for torrents sharing a pooled
             // destination, or D for one on a dedicated destination.
             if (isRunning && multiDestActive() && sortParam != null && sortParam.contains("13")) {
-                TorrentDest td = snark.getDest();
-                if (td != null && td.getMyDestination() != null) {
-                    int poolNum = td.getPoolNum();
-                    BadgeInfo bi = badgeInfo(rc, snark);
-                    StringBuilder poolBadge = new StringBuilder(64).append("<span class=pool");
-                    poolBadge.append(" title=\"").append(_t("Destination")).append(": ")
-                             .append(bi.destPrefix);
-                    if (bi.clientName != null) {
-                        poolBadge.append(" [").append(bi.clientName).append(']');
-                    }
-                    poolBadge.append('"');
-                    poolBadge.append('>');
-                    if (poolNum >= 1) {
-                        // pools are numbered from 1; -1 marks a dedicated destination
-                        poolBadge.append(poolNum);
-                    } else {
-                        poolBadge.append('D');
-                    }
-                    poolBadge.append("</span>");
-                    int tdEnd = statusString.indexOf("</td>");
-                    if (tdEnd >= 0) {
-                        statusString = statusString.substring(0, tdEnd) + poolBadge
-                                        + statusString.substring(tdEnd);
-                    }
-                }
+                statusString = injectPoolBadge(statusString, snark);
             }
 
             buf.append("<tr class=\"").append(rowStatus).append(" volatile\"><td class=status>")
@@ -4023,6 +3999,33 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             out.append(buf);
         }
+    }
+
+    /**
+     * Injects the multi-dest pool badge into the status cell HTML. The badge
+     * carries the sequential pool number (or D for dedicated) and the
+     * destination prefix as tooltip, inserted before the closing &lt;/td&gt;.
+     *
+     * @param statusHtml the status cell inner HTML, modified by this call
+     * @param snark the torrent whose destination to display
+     * @return the status HTML with the pool badge injected
+     * @since 0.9.72+
+     */
+    private String injectPoolBadge(String statusHtml, Snark snark) {
+        TorrentDest td = snark.getDest();
+        if (td == null || td.getMyDestination() == null) {return statusHtml;}
+        int poolNum = td.getPoolNum();
+        BadgeInfo bi = badgeInfo(null, snark);
+        StringBuilder badge = new StringBuilder(64).append("<span class=pool");
+        badge.append(" title=\"").append(_t("Destination")).append(": ")
+             .append(bi.destPrefix);
+        if (bi.clientName != null) {badge.append(" [").append(bi.clientName).append(']');}
+        badge.append('"').append('>');
+        badge.append(poolNum >= 1 ? String.valueOf(poolNum) : "D");
+        badge.append("</span>");
+        int tdEnd = statusHtml.indexOf("</td>");
+        if (tdEnd < 0) {return statusHtml;}
+        return statusHtml.substring(0, tdEnd) + badge + statusHtml.substring(tdEnd);
     }
 
     /**
