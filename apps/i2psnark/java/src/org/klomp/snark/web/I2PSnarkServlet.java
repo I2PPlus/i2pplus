@@ -5050,7 +5050,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *         postParams != null (P-R-G)
      * @since 0.7.14
      */
-    private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam, PrintWriter out) throws IOException {
+    String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam, PrintWriter out) throws IOException {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
