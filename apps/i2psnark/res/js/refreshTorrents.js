@@ -241,13 +241,14 @@ async function getRefreshInterval() {
 /**
  * @async
  * @function getURL
- * @description Constructs the AJAX refresh URL by replacing the "/i2psnark/" path
- * segment with "/i2psnark/.ajax/xhr1.html" in the current page URL.
+ * @description Constructs the AJAX refresh URL by rewriting the final path segment of
+ * the current page URL to the xhr1 endpoint, keeping any query string and preserving
+ * nested paths (e.g. /i2psnark/configure) instead of mangling them.
  * @returns {Promise<string>} The AJAX-compatible refresh URL.
  */
 async function getURL() {
   const url = new URL(window.location.href);
-  url.pathname = url.pathname.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
+  url.pathname = url.pathname.replace(/\/i2psnark\/[^/]*$/, "/i2psnark/.ajax/xhr1.html");
   if (activeSearch) {url.searchParams.set("search", activeSearch);}
   return url.href;
 }
@@ -447,9 +448,14 @@ async function fetchRefreshPayload(url, forceFetch = false, signal = null) {
             ongoingRequests.delete(url);
         }
     } catch (error) {
+        if (error.name === "AbortError" && activeSignal === abortController.signal) {
+            // Retire an aborted shared controller so later fetches don't inherit a
+            // dead signal. Explicit caller signals (e.g. search typing) are unaffected.
+            abortController = new AbortController();
+        }
         if (debugging && error.name !== "AbortError") {console.error(error);}
         throw error;
-    } finally {abortController = new AbortController();}
+    }
 }
 
 /**
@@ -837,19 +843,28 @@ let pendingIframeLoad = null;
 /**
  * @function waitForIframeLoad
  * @description Returns a promise that resolves when the processForm iframe next fires
- * load, which is the signal that the submission response has been swallowed by the hidden
- * iframe and the server finished processing. Re-arms on each submission so only the most
- * recent submit triggers a refresh; earlier waiters are discarded.
+ * load, which is the signal that the submission response has been swallowed by the
+ * hidden iframe and the server finished processing. Re-arms on each submission so only
+ * the most recent submit triggers a refresh; earlier waiters are discarded. Resolves
+ * anyway after a timeout so a wedged iframe cannot stall the post-submit refresh
+ * chain indefinitely — the forced refresh is safe to run either way.
+ *
  * @param {HTMLIFrameElement} iframe - The processForm iframe element.
- * @returns {Promise<void>} Resolves when the iframe fires load.
+ * @param {number} [timeout=15000] - Maximum time to wait for the load event.
+ * @returns {Promise<void>} Resolves on iframe load, or when the timeout elapses.
  */
-function waitForIframeLoad(iframe) {
+function waitForIframeLoad(iframe, timeout = 15000) {
   if (pendingIframeLoad) {iframe.removeEventListener("load", pendingIframeLoad.handler);}
   return new Promise((resolve) => {
     const handler = () => {
+      clearTimeout(timer);
       iframe.removeEventListener("load", handler);
       resolve();
     };
+    const timer = setTimeout(() => {
+      iframe.removeEventListener("load", handler);
+      resolve();
+    }, timeout);
     pendingIframeLoad = {handler};
     iframe.addEventListener("load", handler);
   });
@@ -933,8 +948,9 @@ function refreshOnSubmit() {
         startScanRequested = true;
         try {
           await waitForIframeLoad(iframe);
+          // The forced refresh's stamp gate fetches the log immediately when the
+          // processed action added one; a separate call here would just duplicate it.
           await doRefresh({forceFetch: true});
-          await refreshScreenLog(undefined, true);
         } catch (error) {
           if (debugging) {console.error(error);}
         }
@@ -1137,8 +1153,9 @@ if (refreshChannel) {
   refreshChannel.addEventListener("message", () => {
     if (!isDocumentVisible) {return;}
     invalidateCache();
+    // The stamp gate inside doRefresh pulls the log in the same pass when the
+    // completed add changed it.
     doRefresh({forceFetch: true})
-      .then(() => refreshScreenLog(undefined, true))
       .catch((error) => { if (debugging) {console.error(error);} });
   });
 }
