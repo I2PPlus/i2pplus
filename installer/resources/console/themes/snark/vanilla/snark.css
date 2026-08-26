@@ -832,25 +832,25 @@ form[action^="/i2psnark/configure"]{display:block}
 .tAction input[type=submit]{margin:0 2px;padding:12px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:1px solid #4d453e;border-radius:1px;box-shadow:var(--highlight);background-position:center center;opacity:.85;cursor:pointer;transition:ease box-shadow .03s;will-change:transform}
 .tAction input:hover,.tAction input:focus{border-color:#80003c;box-shadow:var(--highlight);background-blend-mode:normal;opacity:1;transition:ease box-shadow .01s,ease border .01s}
 .tAction input:active,.tAction input.depress{box-shadow:var(--highlight),inset 3px 3px 3px #0009;background-blend-mode:luminosity;filter:none}
-.actionDelete{background:var(--delete) no-repeat center center/14px,var(--btnAction),var(--delete_hover) no-repeat center center/14px}
-.actionDelete:hover,.actionDelete:focus{background:var(--delete_hover) no-repeat center center/14px,var(--btnAction_hover)}
-.actionDelete:active{background:var(--delete) no-repeat center center/12px,var(--btnAction_active)}
-.actionRemove{background:var(--remove) no-repeat center center/14px,var(--btnAction),var(--remove_hover) no-repeat center center/14px}
-.actionRemove:hover,.actionRemove:focus{background:var(--remove_hover) no-repeat center center/14px,var(--btnAction_hover)}
-.actionRemove:active{background:var(--remove) no-repeat center center/12px,var(--btnAction_active)}
-.actionStart{background:var(--start) no-repeat center center/14px,var(--btnAction),var(--start_hover) no-repeat center center/14px}
-.actionStart:hover,.actionStart:focus{background:var(--start_hover) no-repeat center center/14px,var(--btnAction_hover)}
-.actionStart:active{background:var(--start) no-repeat center center/12px,var(--btnAction_active)}
-.actionStop{background:var(--stop) no-repeat center center/14px,var(--btnAction),var(--stop_hover) no-repeat center center/14px}
-.actionStop:hover,.actionStop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btnAction_hover)}
-.actionStop:active{background:var(--stop) no-repeat center center/12px,var(--btnAction_active)}
-#actionStopAll,#actionStartAll{padding:11px 19.5px}
-#actionStartAll{background:var(--startall) no-repeat center center/auto 14px,var(--btnAction),var(--startall_hover) no-repeat center center/auto 14px}
-#actionStartAll:hover,#actionStartAll:focus{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
-#actionStartAll:active{background:var(--startall) no-repeat center center/auto 12px,var(--btnAction_active)}
-#actionStopAll{background:var(--stopall) no-repeat center center/auto 14px,var(--btnAction),var(--stopall_hover) no-repeat center center/auto 14px}
-#actionStopAll:hover,#actionStopAll:focus{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
-#actionStopAll:active{background:var(--stopall) no-repeat center center/auto 12px,var(--btnAction_active)}
+.doDelete{background:var(--delete) no-repeat center center/14px,var(--btnAction),var(--delete_hover) no-repeat center center/14px}
+.doDelete:hover,.doDelete:focus{background:var(--delete_hover) no-repeat center center/14px,var(--btnAction_hover)}
+.doDelete:active{background:var(--delete) no-repeat center center/12px,var(--btnAction_active)}
+.doRemove{background:var(--remove) no-repeat center center/14px,var(--btnAction),var(--remove_hover) no-repeat center center/14px}
+.doRemove:hover,.doRemove:focus{background:var(--remove_hover) no-repeat center center/14px,var(--btnAction_hover)}
+.doRemove:active{background:var(--remove) no-repeat center center/12px,var(--btnAction_active)}
+.doStart{background:var(--start) no-repeat center center/14px,var(--btnAction),var(--start_hover) no-repeat center center/14px}
+.doStart:hover,.doStart:focus{background:var(--start_hover) no-repeat center center/14px,var(--btnAction_hover)}
+.doStart:active{background:var(--start) no-repeat center center/12px,var(--btnAction_active)}
+.doStop{background:var(--stop) no-repeat center center/14px,var(--btnAction),var(--stop_hover) no-repeat center center/14px}
+.doStop:hover,.doStop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btnAction_hover)}
+.doStop:active{background:var(--stop) no-repeat center center/12px,var(--btnAction_active)}
+#doStopAll,#doStartAll{padding:11px 19.5px}
+#doStartAll{background:var(--startall) no-repeat center center/auto 14px,var(--btnAction),var(--startall_hover) no-repeat center center/auto 14px}
+#doStartAll:hover,#doStartAll:focus{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
+#doStartAll:active{background:var(--startall) no-repeat center center/auto 12px,var(--btnAction_active)}
+#doStopAll{background:var(--stopall) no-repeat center center/auto 14px,var(--btnAction),var(--stopall_hover) no-repeat center center/auto 14px}
+#doStopAll:hover,#doStopAll:focus{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
+#doStopAll:active{background:var(--stopall) no-repeat center center/auto 12px,var(--btnAction_active)}
 
 /* torrent edit */
 .iframed #editSection+#snarkFiles{margin-top:-11px}
@@ -942,7 +942,7 @@ body.textview{height:100vh}
 .tAction input[type=submit]{padding:11px;background-size:13px,100%,13px}
 .tAction input[type=submit]:active{background-size:11px,100%}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:3px}
-#actionStopAll,#actionStartAll{padding:11px 18px}
+#doStopAll,#doStartAll{padding:11px 18px}
 #configs th{line-height:1.4}
 #screenlog li .date::after{margin-top:0}
 #totals code{line-height:1.5}
@@ -964,7 +964,7 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 .tName a{max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .trackerLink{padding:0;width:0;max-width:0;min-width:0;font-size:0}
 .trackerLink img{display:none}
-#actionStopAll,#actionStartAll{padding:9px 17px}
+#doStopAll,#doStartAll{padding:9px 17px}
 #commentInfo td,#userComments td{padding:5px}
 #navbar{width:calc(100% - 22px);transition:ease width .5s .5s}
 #torrents tfoot tr:first-child th{padding-top:2px;padding-bottom:2px;line-height:1.2}

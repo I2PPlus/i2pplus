@@ -86,13 +86,13 @@ document.addEventListener("DOMContentLoaded", () => {
    * @returns {Promise<void>}
    */
   async function handleInputClick(clickTarget, event) {
-    const clickable = ".toggleview, .tab_label, .snarkNav, .filter, input[class^='action'], input[id^='action'], input.add, input.create";
+    const clickable = ".toggleview, .tab_label, .snarkNav, .filter, input[class^='do'], input[id^='do'], input.add, input.create";
     if (!clickTarget.closest(clickable)) {return;}
 
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
     if (!targetElement) {return;}
 
-    const isAction = targetElement.matches("input[class^='action'], input[id^='action']");
+    const isAction = targetElement.matches("input[class^='do'], input[id^='do']");
     const isFormButton = targetElement.matches("input[type=submit]");
 
     let currentForm;
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!iframe || !currentForm) {return;}
       const formTarget = targetElement.form.target;
       if (formTarget === "processForm") {delay = 4000;}
-      const nonClickedActionButtons = currentForm.querySelectorAll("input[type=submit][class^='action']:not(.depress), input[type=submit][id^='action']:not(.depress)");
+      const nonClickedActionButtons = currentForm.querySelectorAll("input[type=submit][class^='do']:not(.depress), input[type=submit][id^='do']:not(.depress)");
       nonClickedActionButtons.forEach((el) => el.classList.add("tempDisabled"));
       setTimeout(() => {
         nonClickedActionButtons.forEach((input) => input.classList.remove("tempDisabled"));
@@ -133,11 +133,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const clickTarget = event.target;
     const form = document.getElementById("torrentlist");
 
-    if (clickTarget.classList.contains("actionDelete") || clickTarget.classList.contains("actionRemove")) {
+    if (clickTarget.classList.contains("doDelete") || clickTarget.classList.contains("doRemove")) {
       event.preventDefault();
       let torrent = clickTarget.getAttribute("data-name");
       if (torrent.length > 50) {torrent = torrent.substring(0, 48) + "&hellip;";}
-      const msg = clickTarget.classList.contains("actionRemove") ? `<p id=msg>${removeMsg}<span class=hr></span>${removeMsg2}</p>` : `<p id=msg>${deleteMsg}</p>`;
+      const msg = clickTarget.classList.contains("doRemove") ? `<p id=msg>${removeMsg}<span class=hr></span>${removeMsg2}</p>` : `<p id=msg>${deleteMsg}</p>`;
       const name = clickTarget.name;
       const value = clickTarget.value;
       const action = clickTarget.dataset.action;

@@ -1267,12 +1267,20 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(2048);
         Map<ByteArray, BadgeInfo> badgeCache = new HashMap<>();
 
+        // Mint short action tokens for every loaded torrent (not just this page's
+        // slice) so POST resolution always finds exactly one match.
+        List<String> b64Names = new ArrayList<>(snarks.size());
+        for (int i = 0; i < snarks.size(); i++) {
+            b64Names.add(Base64.encode(snarks.get(i).getInfoHash()));
+        }
+        Map<String, String> actionTokens = ActionTokens.mint(b64Names);
+
         for (int i = start; i < end; i++) {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || showAllPeers
                                 || (peerHash != null && DataHelper.eq(snark.getInfoHash(), peerHash));
             buf.setLength(0);
-            displaySnark(target, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache), buf);
+            displaySnark(target, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache, actionTokens), buf);
 
             // additionally accumulate downloads, uploads, ETA, flags
             if (snark.getPeerCount() >= 1) {
@@ -1303,7 +1311,7 @@ public class I2PSnarkServlet extends BasicServlet {
         target.write("</table>\n");
 
         if (isForm) target.write("</form>\n");
-        if (total > 0) target.write("<script src=/i2psnark/.res/js/convertTooltips.js type=module></script>\n");
+        if (total > 0) target.write("<script src=/i2psnark/.res/js/convertTooltips.js type=module></script>");
 
         // buffered mode: the staged table reaches the client as one write;
         // streamed mode: rows are already on the wire
@@ -1718,18 +1726,18 @@ public class I2PSnarkServlet extends BasicServlet {
                                      String txtStartAllTitle, String txtStartStoppedTitle) {
         buf.append("<th class=tAction>");
         if (isConnected && !noSnarks) {
-            buf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"").append(txtStopAll)
+            buf.append("<input type=submit id=doStopAll name=do_StopAll value=\"").append(txtStopAll)
                .append("\" title=\"").append(txtStopAllTitle).append("\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
-                    buf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"")
+                    buf.append("<input type=submit id=doStartAll name=do_StartAll value=\"")
                        .append(txtStartAll).append("\" title=\"").append(txtStartStoppedTitle).append("\">");
                     break;
                 }
             }
         } else if (!noSnarks) {
             boolean disableStartAll = _manager.util().isConnecting();
-            buf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"")
+            buf.append("<input type=submit id=doStartAll name=do_StartAll value=\"")
                .append(txtStartAll).append("\" title=\"").append(txtStartAllTitle).append("\"")
                .append(disableStartAll ? " disabled" : "").append(">");
         }
@@ -2480,7 +2488,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Extracts the action parameter from the request.
-     * Checks "action" parameter and fallback to keys starting with "action_".
+     * Checks "action" parameter and fallback to keys starting with "do_".
      *
      * @param req the HTTP request
      * @return the extracted action or null if none found
@@ -2492,8 +2500,8 @@ public class I2PSnarkServlet extends BasicServlet {
             Map<String, String[]> params = req.getParameterMap();
             for (Object o : params.keySet()) {
                 String key = (String) o;
-                if (key.startsWith("action_")) {
-                    action = key.substring(7);
+                if (key.startsWith("do_")) {
+                    action = key.substring(3);
                     break;
                 }
             }
@@ -2936,64 +2944,71 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Handles the "Stop_" action to stop a torrent by encoded info hash.
+     * Resolves a short action token to its torrent by unique-prefix match over
+     * the loaded torrents' base64 info-hash names. Ambiguous or unknown tokens
+     * return null, making stale submissions a safe no-op.
+     *
+     * @param token the token extracted from a submitted control name
+     * @return the matching Snark, or null when none or several match
+     * @since 0.9.71+
+     */
+    private Snark resolveTorrentByToken(String token) {
+        if (token == null || token.isEmpty()) {return null;}
+        List<String> names = new ArrayList<>(_manager.getTorrents().size());
+        for (Snark s : _manager.getTorrents()) {names.add(Base64.encode(s.getInfoHash()));}
+        String name = ActionTokens.resolveUnique(token, names);
+        if (name == null) {return null;}
+        byte[] infoHash = Base64.decode(name);
+        return infoHash != null && infoHash.length == 20
+            ? _manager.getTorrentByInfoHash(infoHash) : null;
+    }
+
+    /**
+     * Handles the "Stop_" action to stop a torrent by action token.
      *
      * @param action the action string starting with "Stop_"
      */
     private void handleStop(String action) {
-        String torrent = action.substring(5).replace("%3D", "=");
-        if (torrent == null) return;
-
-        byte[] infoHash = Base64.decode(torrent);
-        if (infoHash == null || infoHash.length != 20) return;
-
-        Snark snark = _manager.getTorrentByInfoHash(infoHash);
-        if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash())) {
-            _manager.stopTorrent(snark);
-        }
+        String token = action.substring(5);
+        Snark snark = resolveTorrentByToken(token);
+        if (snark != null) {_manager.stopTorrent(snark);}
     }
 
     /**
-     * Handles the "Start_" action to start a torrent by encoded info hash.
+     * Handles the "Start_" action to start a torrent by action token.
      *
      * @param action the action string starting with "Start_"
      */
     private void handleStart(String action) {
-        String torrent = action.substring(6).replace("%3D", "=");
-        if (torrent == null) return;
-
-        byte[] infoHash = Base64.decode(torrent);
-        if (infoHash != null && infoHash.length == 20) {
-            _manager.startTorrent(infoHash);
-        }
+        Snark snark = resolveTorrentByToken(action.substring(6));
+        if (snark != null && !snark.isStopped()) {return;}
+        if (snark != null) {_manager.startTorrent(snark.getInfoHash());}
     }
 
     /**
-     * Handles the "Remove_" action to remove a torrent by encoded info hash.
+     * Handles the "Remove_" action to remove a torrent by action token.
      *
      * @param action the action string starting with "Remove_"
      */
     private void handleRemove(String action) {
-        String torrent = action.substring(7);
-        if (torrent == null) return;
-
-        byte[] infoHash = Base64.decode(torrent);
-        if (infoHash == null || infoHash.length != 20) return;
+        Snark snark = resolveTorrentByToken(action.substring(7));
+        if (snark == null) {return;}
+        byte[] infoHash = snark.getInfoHash();
 
         for (String name : _manager.listTorrentFiles()) {
-            Snark snark = _manager.getTorrent(name);
-            if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash())) {
-                MetaInfo meta = snark.getMetaInfo();
+            Snark snarkByFile = _manager.getTorrent(name);
+            if (snarkByFile != null && DataHelper.eq(infoHash, snarkByFile.getInfoHash())) {
+                MetaInfo meta = snarkByFile.getMetaInfo();
                 if (meta == null) {
                     // magnet - remove and delete are the same thing
-                    _manager.deleteMagnet(snark);
+                    _manager.deleteMagnet(snarkByFile);
                     _manager.addMessage(_t("Magnet deleted: {0}", name.replace("Magnet ", "")));
                     return;
                 }
                 File torrentFile = new File(name);
                 File dataDir = _manager.getDataDir();
                 boolean canDelete = dataDir.canWrite() || !torrentFile.exists();
-                _manager.stopTorrent(snark, canDelete);
+                _manager.stopTorrent(snarkByFile, canDelete);
                 if (torrentFile.delete()) {
                     _manager.addMessage(_t("Torrent file deleted: {0}", torrentFile.getAbsolutePath()));
                 } else if (torrentFile.exists()) {
@@ -3008,30 +3023,28 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Handles the "Delete_" action to delete a torrent and its data by encoded info hash.
+     * Handles the "Delete_" action to delete a torrent and its data by action token.
      *
      * @param action the action string starting with "Delete_"
      */
     private void handleDelete(String action) {
-        String torrent = action.substring(7);
-        if (torrent == null) return;
-
-        byte[] infoHash = Base64.decode(torrent);
-        if (infoHash == null || infoHash.length != 20) return;
+        Snark snark = resolveTorrentByToken(action.substring(7));
+        if (snark == null) {return;}
+        byte[] infoHash = snark.getInfoHash();
 
         for (String name : _manager.listTorrentFiles()) {
-            Snark snark = _manager.getTorrent(name);
-            if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash())) {
-                MetaInfo meta = snark.getMetaInfo();
+            Snark snarkByFile = _manager.getTorrent(name);
+            if (snarkByFile != null && DataHelper.eq(infoHash, snarkByFile.getInfoHash())) {
+                MetaInfo meta = snarkByFile.getMetaInfo();
                 if (meta == null) {
-                    _manager.deleteMagnet(snark);
+                    _manager.deleteMagnet(snarkByFile);
                     _manager.addMessage(_t("Magnet deleted: {0}", name.replace("Magnet ", "")));
                     return;
                 }
                 File torrentFile = new File(name);
                 File dataDir = _manager.getDataDir();
                 boolean canDelete = dataDir.canWrite() || !torrentFile.exists();
-                _manager.stopTorrent(snark, canDelete);
+                _manager.stopTorrent(snarkByFile, canDelete);
 
                 if (torrentFile.delete()) {
                     _manager.addMessage(_t("Torrent file deleted: {0}", torrentFile.getAbsolutePath()));
@@ -3774,10 +3787,15 @@ public class I2PSnarkServlet extends BasicServlet {
          * every RowContext of the current response; single-threaded.
          */
         final Map<ByteArray, BadgeInfo> badgeCache;
+        /**
+         * Render-scope map of b64 info-hash name to short action token
+         * (see {@link ActionTokens#mint}); shared by every RowContext.
+         */
+        final Map<String, String> actionTokens;
 
         RowContext(Snark snark, int index, boolean showPeers, long[] stats,
                    boolean noThinsp, boolean canWrite, String filterParam, String sortParam,
-                   Map<ByteArray, BadgeInfo> badgeCache) {
+                   Map<ByteArray, BadgeInfo> badgeCache, Map<String, String> actionTokens) {
             this.snark = snark;
             this.index = index;
             this.showPeers = showPeers;
@@ -3787,6 +3805,7 @@ public class I2PSnarkServlet extends BasicServlet {
             this.filterParam = filterParam;
             this.sortParam = sortParam;
             this.badgeCache = badgeCache;
+            this.actionTokens = actionTokens;
         }
     }
 
@@ -3857,6 +3876,11 @@ public class I2PSnarkServlet extends BasicServlet {
         String filterParam = rc.filterParam;
         String sortParam = rc.sortParam;
         boolean filterEnabled = !filterParam.isEmpty() && !"all".equals(filterParam);
+        String b64 = Base64.encode(snark.getInfoHash());
+        // Short unique action token minted for this render (falls back to the
+        // full b64 name if the token map is unavailable).
+        String token = rc.actionTokens != null
+            ? rc.actionTokens.getOrDefault(b64, b64) : b64;
 
         // Update stats first (minimal processing)
         long uploaded = snark.getUploaded();
@@ -3889,7 +3913,6 @@ public class I2PSnarkServlet extends BasicServlet {
         long remainingSeconds = (downBps > 0 && needed > 0) ? needed / downBps : -1;
 
         MetaInfo meta = snark.getMetaInfo();
-        String b64 = Base64.encode(snark.getInfoHash());
         boolean isValid = meta != null;
         boolean isMultiFile = isValid && meta.getFiles() != null;
 
@@ -4044,18 +4067,18 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td><td class=tAction>");
             boolean shouldDisable = snark.isChecking();
             if (isRunning) {
-                buf.append("<input type=submit class=actionStop name=\"action_Stop_").append(b64).append("\" value=\"").append(_t("Stop"))
+                buf.append("<input type=submit class=doStop name=\"do_Stop_").append(token).append("\" value=\"").append(_t("Stop"))
                    .append("\" title=\"").append(_t("Stop torrent")).append("\"").append(shouldDisable ? " disabled" : "").append(">");
             } else if (!snark.isStarting()) {
-                buf.append("<input type=submit class=actionStart name=\"action_Start_").append(b64).append("\" value=\"").append(_t("Start"))
+                buf.append("<input type=submit class=doStart name=\"do_Start_").append(token).append("\" value=\"").append(_t("Start"))
                    .append("\" title=\"").append(_t("Start torrent")).append("\"").append(shouldDisable ? " disabled" : "").append(">");
 
                 if (isValid && canWrite) {
-                    appendTorrentActionButton(buf, "Remove", b64, snark,
+                    appendTorrentActionButton(buf, "Remove", token, snark,
                             _t("Remove and delete torrent, retaining downloaded files"));
                 }
                 if (!isValid || canWrite) {
-                    appendTorrentActionButton(buf, "Delete", b64, snark,
+                    appendTorrentActionButton(buf, "Delete", token, snark,
                             _t("Delete .torrent file and associated data files"));
                 }
             }
@@ -4113,9 +4136,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     private void appendTorrentActionButton(StringBuilder buf, String action,
-                                           String b64, Snark snark, String title) {
-        buf.append("<input type=submit class=action").append(action)
-           .append(" name=\"action_").append(action).append('_').append(b64).append("\" value=\"")
+                                           String token, Snark snark, String title) {
+        buf.append("<input type=submit class=do").append(action)
+           .append(" name=\"do_").append(action).append('_').append(token).append("\" value=\"")
            .append(_t(action)).append("\" title=\"").append(title).append("\" client=\"")
            .append(escapeJSString(snark.getName())).append("\" data-name=\"")
            .append(escapeJSString(snark.getBaseName())).append(".torrent\">");

@@ -335,15 +335,15 @@ tr:not(.peerinfo) .loading{display:inline-block;width:24px;height:24px;vertical-
 #torrents .tAction{padding-right:4px;text-align:center}
 #torrents .tAction input{margin:0 2px;padding:11px;min-width:0;display:inline-block;float:none;vertical-align:middle;font-size:0;border-radius:2px;box-shadow:var(--highlight);background-blend-mode:luminosity}
 #torrents th.tAction input{margin-top:1px}
-#torrents #actionStopAll,#torrents #actionStartAll{padding:11px 18px}
-#torrents .actionStart{background:var(--start) no-repeat center center/14px,var(--btn)}
-#torrents .actionStop{background:var(--stop) no-repeat center center/14px,var(--btn)}
-#torrents .actionRemove{background:var(--remove) no-repeat center center/14px,var(--btn)}
-#torrents .actionDelete{background:var(--delete) no-repeat center center/14px,var(--btn)}
-#torrents #actionStartAll{background:var(--startall) no-repeat center center/auto 14px,var(--btn)}
-#torrents #actionStopAll{background:var(--stopall) no-repeat center center/auto 14px,var(--btn)}
+#torrents #doStopAll,#torrents #doStartAll{padding:11px 18px}
+#torrents .doStart{background:var(--start) no-repeat center center/14px,var(--btn)}
+#torrents .doStop{background:var(--stop) no-repeat center center/14px,var(--btn)}
+#torrents .doRemove{background:var(--remove) no-repeat center center/14px,var(--btn)}
+#torrents .doDelete{background:var(--delete) no-repeat center center/14px,var(--btn)}
+#torrents #doStartAll{background:var(--startall) no-repeat center center/auto 14px,var(--btn)}
+#torrents #doStopAll{background:var(--stopall) no-repeat center center/auto 14px,var(--btn)}
 #torrents .tAction input:hover{background-blend-mode:normal}
-#torrents .tAction input:active,#torrents .tAction input.depress,#actionStartAll:active,#actionStartAll.depress,#actionStopAll:active,#actionStopAll.depress{box-shadow:var(--btn_shadow_active);background-size:auto 12px}
+#torrents .tAction input:active,#torrents .tAction input.depress,#doStartAll:active,#doStartAll.depress,#doStopAll:active,#doStopAll.depress{box-shadow:var(--btn_shadow_active);background-size:auto 12px}
 
 /* status bars */
 .barComplete{padding:0 0 2px;width:84px;text-align:center;font-weight:700;color:#fff;text-shadow:1px 1px 1px #333;border:var(--border_hard);box-shadow:inset 0 0 0 1px #ddd}
@@ -827,7 +827,7 @@ td.trackerLink a{background-size:18px}
 #torrentInfo img,#torrentInfo th:first-child img,#torrentinfostats img,#trackers img{margin:0 6px;max-height:18px}
 #torrentInfo img{max-height:18px}
 #torrentInfo th a img{margin:0 0 0 4px}
-#actionStopAll,#actionStartAll{padding:11px 18px}
+#doStopAll,#doStartAll{padding:11px 18px}
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrents td:not(.rateDown):not(.trackerLink):empty,#torrents th:empty{padding:5px}
 #torrents tfoot th.rateUp:not(:empty){padding-right:15px!important}

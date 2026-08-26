@@ -385,25 +385,25 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .tAction input[type=submit]{margin:3px 2px;padding:12px;min-width:0;min-height:0;vertical-align:middle;font-size:0;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background-position:center center;opacity:.9;will-change:transform}
 .tAction input:hover,.tAction input:focus{border:1px solid var(--hover);opacity:1}
 .tAction input:active{box-shadow:var(--btn_shadow_active)}
-#actionStopAll,#actionStartAll{padding:11px 19px}
-#actionStartAll{background:var(--startall) no-repeat center center/auto 14px,var(--btn),var(--startall_hover) no-repeat center center/auto 14px}
-#actionStopAll{background:var(--stopall) no-repeat center center/auto 14px,var(--btn),var(--stopall_hover) no-repeat center center/auto 14px}
-#actionStartAll:hover,#actionStartAll:focus{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btn_hover2)}
-#actionStopAll:hover,#actionStopAll:focus{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btn_hover2)}
-#actionStartAll:active,#actionStartAll.depress{background:var(--startall_active) no-repeat center center/auto 14px,var(--btn_active)}
-#actionStopAll:active,#actionStopAll.depress{background:var(--stopall_active) no-repeat center center/auto 14px,var(--btn_active)}
-#torrents .actionStart{background:var(--start) no-repeat center center/14px,var(--btn),var(--start_hover) no-repeat center center/14px}
-#torrents .actionStop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover) no-repeat center center/14px}
-#torrents .actionRemove{background:var(--remove) no-repeat center center/14px,var(--btn),var(--remove_hover) no-repeat center center/14px}
-#torrents .actionDelete{background:var(--delete) no-repeat center center/14px,var(--btn),var(--delete_hover) no-repeat center center/14px}
-#torrents .actionStart:hover,#torrents .actionStart:focus{background:var(--start_hover) no-repeat center center/14px,var(--btn_hover2)}
-#torrents .actionStop:hover,#torrents .actionStop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover2)}
-#torrents .actionRemove:hover,#torrents .actionRemove:focus{background:var(--remove_hover) no-repeat center center/14px,var(--btn_hover2)}
-#torrents .actionDelete:hover,#torrents .actionDelete:focus{background:var(--delete_hover) no-repeat center center/14px,var(--btn_hover2)}
-#torrents .actionStart:active,#torrents .actionStart.depress{background:var(--start_active) no-repeat center center/14px,var(--btn_active)}
-#torrents .actionStop:active,#torrents .actionStop.depress{background:var(--stop_active) no-repeat center center/14px,var(--btn_active)}
-#torrents .actionRemove:active,#torrents .actionRemove.depress{background:var(--remove_active) no-repeat center center/14px,var(--btn_active)}
-#torrents .actionDelete:active,#torrents .actionDelete.depress{background:var(--delete_active) no-repeat center center/14px,var(--btn_active)}
+#doStopAll,#doStartAll{padding:11px 19px}
+#doStartAll{background:var(--startall) no-repeat center center/auto 14px,var(--btn),var(--startall_hover) no-repeat center center/auto 14px}
+#doStopAll{background:var(--stopall) no-repeat center center/auto 14px,var(--btn),var(--stopall_hover) no-repeat center center/auto 14px}
+#doStartAll:hover,#doStartAll:focus{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btn_hover2)}
+#doStopAll:hover,#doStopAll:focus{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btn_hover2)}
+#doStartAll:active,#doStartAll.depress{background:var(--startall_active) no-repeat center center/auto 14px,var(--btn_active)}
+#doStopAll:active,#doStopAll.depress{background:var(--stopall_active) no-repeat center center/auto 14px,var(--btn_active)}
+#torrents .doStart{background:var(--start) no-repeat center center/14px,var(--btn),var(--start_hover) no-repeat center center/14px}
+#torrents .doStop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover) no-repeat center center/14px}
+#torrents .doRemove{background:var(--remove) no-repeat center center/14px,var(--btn),var(--remove_hover) no-repeat center center/14px}
+#torrents .doDelete{background:var(--delete) no-repeat center center/14px,var(--btn),var(--delete_hover) no-repeat center center/14px}
+#torrents .doStart:hover,#torrents .doStart:focus{background:var(--start_hover) no-repeat center center/14px,var(--btn_hover2)}
+#torrents .doStop:hover,#torrents .doStop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover2)}
+#torrents .doRemove:hover,#torrents .doRemove:focus{background:var(--remove_hover) no-repeat center center/14px,var(--btn_hover2)}
+#torrents .doDelete:hover,#torrents .doDelete:focus{background:var(--delete_hover) no-repeat center center/14px,var(--btn_hover2)}
+#torrents .doStart:active,#torrents .doStart.depress{background:var(--start_active) no-repeat center center/14px,var(--btn_active)}
+#torrents .doStop:active,#torrents .doStop.depress{background:var(--stop_active) no-repeat center center/14px,var(--btn_active)}
+#torrents .doRemove:active,#torrents .doRemove.depress{background:var(--remove_active) no-repeat center center/14px,var(--btn_active)}
+#torrents .doDelete:active,#torrents .doDelete.depress{background:var(--delete_active) no-repeat center center/14px,var(--btn_active)}
 
 /* download bars */
 .barText:hover,.barText:focus{transition:ease opacity .01s}
@@ -821,7 +821,7 @@ form[action^="/i2psnark/configure"]{display:block}
 .tAction input[type=submit]{margin-top:-2px;margin-bottom:-2px;padding:10px;background-size:12px}
 .status img{width:auto;height:20px}
 .trackerLink img{height:16px;width:16px}
-#actionStopAll,#actionStartAll{padding:10px 17px}
+#doStopAll,#doStartAll{padding:10px 17px}
 #torrents .infohash{max-width:56px}
 }
 
@@ -839,7 +839,7 @@ form[action^="/i2psnark/configure"]{display:block}
 .barText{line-height:16px}
 .tAction input[type=submit]{padding:10px;background-size:12px}
 #trackerconfig th{padding-top:5px;padding-bottom:5px}
-#actionStopAll,#actionStartAll{padding:10px 17px}
+#doStopAll,#doStartAll{padding:10px 17px}
 #commentSection{margin-bottom:0}
 #configs td:first-child::before{min-height:30px;content:""}
 #snarkInfo{margin-bottom:-9px}
@@ -964,7 +964,7 @@ label b,.configOption b,#trackerconfig th{font-size:9pt}
 #dirInfo td:first-child img:not(.thumb){margin:-2px 2px;width:22px;height:22px;max-width:22px;max-height:22px}
 .iframed #snarkFiles{margin-top:5px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
-#actionStopAll,#actionStartAll{margin-top:4px}
+#doStopAll,#doStartAll{margin-top:4px}
 #configs td:first-child{min-width:220px}
 #editSection + #snarkFiles{margin-top:0}
 #screenlog{height:60px;min-height:60px}

@@ -756,20 +756,20 @@ tr:not(.peerinfo) .loading{display:inline-block;width:24px;height:24px;vertical-
 td.tAction input[type=submit]{margin-top:1px}
 #torrents .tAction input[type=submit]{margin:0 2px;padding:11px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:var(--border_input);border-radius:2px;box-shadow:var(--highlight),var(--btn_shadow);background-position:center center;opacity:.9;cursor:pointer;transition:ease 1.s all;will-change:transform}
 #torrents .tAction input:hover,#torrents .tAction input:focus{border:1px solid var(--hover);opacity:1;transition:ease 1.s all}
-#torrents .actionStart:hover,.actionStart:focus{background:var(--start_hover) no-repeat center center/14px,var(--btnAction_hover)}
-#torrents .actionStop:hover,.actionStop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btnAction_hover)}
-#torrents .actionRemove:hover,.actionRemove:focus{background:var(--remove_hover) no-repeat center center/14px,var(--btnAction_hover)}
-#torrents .actionDelete:hover,.actionDelete:focus{background:var(--delete_hover) no-repeat center center/14px,var(--btnAction_hover)}
-#torrents .actionStart,.actionStart:active{background:var(--start) no-repeat center center/14px,var(--btnAction),var(--start_hover) no-repeat center center/14px}
-#torrents .actionStop,.actionStop:active{background:var(--stop) no-repeat center center/14px,var(--btnAction),var(--stop_hover) no-repeat center center/14px}
-#torrents .actionRemove,.actionRemove:active{background:var(--remove) no-repeat center center/14px,var(--btnAction),var(--remove_hover) no-repeat center center/14px}
-#torrents .actionDelete,.actionDelete:active{background:var(--delete) no-repeat center center/14px,var(--btnAction),var(--delete_hover) no-repeat center center/14px}
-#actionStartAll:hover,#actionStartAll:focus{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
-#actionStopAll:hover,#actionStopAll:focus{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
-#actionStartAll,#actionStartAll:active{background:var(--startall) no-repeat center center/auto 14px,var(--btnAction),var(--startall_hover) no-repeat center center/auto 14px}
-#actionStopAll,#actionStopAll:active{background:var(--stopall) no-repeat center center/auto 14px,var(--btnAction),var(--stopall_hover) no-repeat center center/auto 14px}
-#torrents #actionStopAll,#torrents #actionStartAll{padding:11px 19px}
-#torrents .tAction input:active,#actionStartAll:active,#actionStopAll:active,#torrents .tAction input.depress,#actionStartAll.depress,#actionStopAll.depress{box-shadow:var(--highlight),inset 2px 2px 3px #557;background-size:auto 12px,100%}
+#torrents .doStart:hover,.doStart:focus{background:var(--start_hover) no-repeat center center/14px,var(--btnAction_hover)}
+#torrents .doStop:hover,.doStop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btnAction_hover)}
+#torrents .doRemove:hover,.doRemove:focus{background:var(--remove_hover) no-repeat center center/14px,var(--btnAction_hover)}
+#torrents .doDelete:hover,.doDelete:focus{background:var(--delete_hover) no-repeat center center/14px,var(--btnAction_hover)}
+#torrents .doStart,.doStart:active{background:var(--start) no-repeat center center/14px,var(--btnAction),var(--start_hover) no-repeat center center/14px}
+#torrents .doStop,.doStop:active{background:var(--stop) no-repeat center center/14px,var(--btnAction),var(--stop_hover) no-repeat center center/14px}
+#torrents .doRemove,.doRemove:active{background:var(--remove) no-repeat center center/14px,var(--btnAction),var(--remove_hover) no-repeat center center/14px}
+#torrents .doDelete,.doDelete:active{background:var(--delete) no-repeat center center/14px,var(--btnAction),var(--delete_hover) no-repeat center center/14px}
+#doStartAll:hover,#doStartAll:focus{background:var(--startall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
+#doStopAll:hover,#doStopAll:focus{background:var(--stopall_hover) no-repeat center center/auto 14px,var(--btnAction_hover)}
+#doStartAll,#doStartAll:active{background:var(--startall) no-repeat center center/auto 14px,var(--btnAction),var(--startall_hover) no-repeat center center/auto 14px}
+#doStopAll,#doStopAll:active{background:var(--stopall) no-repeat center center/auto 14px,var(--btnAction),var(--stopall_hover) no-repeat center center/auto 14px}
+#torrents #doStopAll,#torrents #doStartAll{padding:11px 19px}
+#torrents .tAction input:active,#doStartAll:active,#doStopAll:active,#torrents .tAction input.depress,#doStartAll.depress,#doStopAll.depress{box-shadow:var(--highlight),inset 2px 2px 3px #557;background-size:auto 12px,100%}
 
 /* create torrent file filtering */
 form[action^="/i2psnark/configure"]{display:block}
@@ -861,7 +861,7 @@ tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 .tAction input[type=submit]{padding:11px;background-size:13px,100%}
 .tAction input:active{background-size:auto 11px,100%}
 .trackerLink img{margin-right:-10px;height:14px}
-#actionStopAll,#actionStartAll{padding:11px 18px}
+#doStopAll,#doStartAll{padding:11px 18px}
 #configs a[href="/config.jsp"]{margin-top:2px}
 #filterBar{top:40px}
 }
@@ -877,7 +877,7 @@ tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 .trackerLink{padding-right:8px}
 #screenlog li{opacity:1}
 #torrents .tAction input[type=submit]{padding:10px;background-size:auto 12px,100%}
-#torrents #actionStopAll,#torrents #actionStartAll{padding:10px 17px}
+#torrents #doStopAll,#torrents #doStartAll{padding:10px 17px}
 #torrents .tAction input:active{background-size:auto 10px,100%}
 }
 

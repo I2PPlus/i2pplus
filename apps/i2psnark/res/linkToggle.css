@@ -6,7 +6,7 @@
 #snarkTbody .trackerLink>*{display:inline-block}
 #snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}
 #torrents #linkswitch.optbox{display:inline-block;background:none;box-shadow:none;border:0}
-#torrents .magnetlink,#torrents .magnetlink a,#torrents .magnetlink img,#torrents .trackerlink{margin:0;padding:0;white-space:normal;border:0;box-shadow:none;background:none}
+#torrents .magnetlink,#torrents .magnetlink a,#torrents .magnetlink img,#torrents .trackerLink{margin:0;padding:0;white-space:normal;border:0;box-shadow:none;background:none}
 #torrents td.trackerLink img{margin:0;width:18px;height:18px}
 .magnetlink,.torrentink a,.torrentink img,.trackerLink a,.trackerLink img,#linkswitch{text-align:center;border:0;box-shadow:none;background:none}
 .magnets #torrents #linkswitch::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px}
