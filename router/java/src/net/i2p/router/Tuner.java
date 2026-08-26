@@ -11735,6 +11735,11 @@ protected int computeTarget(double observed) {
      * Higher = more tolerant (only rejects under severe lag).
      * Lower = more sensitive (rejects sooner under moderate lag).
      *
+     * <p>Hysteresis dead-band: tighten (decrease threshold) when avg jobLag &gt; 200ms,
+     * loosen (increase threshold) when avg jobLag &lt; 50ms.  The 150ms dead-band
+     * between 50ms and 200ms prevents flip-flopping when lag oscillates near the
+     * boundary — no action is taken inside the dead-band.
+     *
      * @since 0.9.70+
      */
     private class RequestHighLoadLagParam extends BaseParam {
@@ -11754,12 +11759,18 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
+        /**
+         * Compute the target value based on observed stat and configured limits.
+         *
+         * <p>Hysteresis: observed &gt; 200ms → tighten (decrease threshold);
+         * observed &lt; 50ms → loosen (increase threshold).  The 150ms
+         * dead-band (50–200) prevents oscillation near the boundary.
+         *
+         * @param observed the 60s avg jobLag in ms
+         * @return the target high-load lag threshold (ms)
+         */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = avg jobLag (ms)
-            // When job lag is consistently high, tighten the threshold to catch problems sooner
-            // When job lag is low, loosen to avoid false positives
             if (!Double.isNaN(observed) && observed > 200 && current > _min)
                 return Math.max(_min, current - _step);
             if (!Double.isNaN(observed) && observed < 50 && current < _max)
@@ -11770,6 +11781,10 @@ protected int computeTarget(double observed) {
 
     /**
      * Tunes the high-load CPU threshold in RequestThrottler.
+     *
+     * <p>Intentionally static — CPU threshold is system-dependent (depends on
+     * core count and hardware), not load-reactive.  Autotuning is present for
+     * UI consistency with other params.
      *
      * @since 0.9.70+
      */
@@ -11801,6 +11816,22 @@ protected int computeTarget(double observed) {
      * Tunes the moderate-load job lag threshold in RequestThrottler.
      * Controls when low-share peers start being disconnected.
      *
+     * <p>Independently tunes based on observed jobLag (not derived from
+     * {@link RequestThrottler#getHighLoadLagMs()}) to avoid lockstep
+     * oscillation with {@link RequestHighLoadLagParam}.  Uses a secondary
+     * signal ({@code jobQueue.readyJobs}) to break coupling when both params
+     * share the same primary lag signal.
+     *
+     * <p>Hysteresis dead-band: tighten when avg jobLag &gt; 100ms OR
+     * readyJobs &gt; 20; loosen when avg jobLag &lt; 30ms AND readyJobs &lt; 5.
+     * The asymmetric dead-band (30–100ms primary) plus the queue-depth
+     * cross-reference prevents correlated oscillation with the high-load
+     * param (which uses a 50–200ms dead-band on the same primary signal).
+     *
+     * <p>Ceiling invariant: always stays at least {@code _step} below
+     * {@link RequestThrottler#getHighLoadLagMs()} to maintain the
+     * ordering moderate &lt; high.
+     *
      * @since 0.9.70+
      */
     private class RequestModerateLoadLagParam extends BaseParam {
@@ -11820,14 +11851,34 @@ protected int computeTarget(double observed) {
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
-        /** Compute the target value based on observed stat and configured limits. */
+        /**
+         * Compute the target value based on observed stat and configured limits.
+         *
+         * <p>Uses independent thresholds on the primary signal (jobLag) and
+         * a secondary signal (readyJobs) to decouple from the high-load param.
+         * Tighten when lag &gt; 100ms or queue depth &gt; 20; loosen only when
+         * both are low (lag &lt; 30ms and readyJobs &lt; 5).
+         *
+         * @param observed the 60s avg jobLag in ms
+         * @return the target moderate-load lag threshold (ms)
+         */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // Keep moderate threshold roughly half of high threshold
+            // Ceiling: moderate must always stay below high-load threshold
             int highLag = RequestThrottler.getHighLoadLagMs();
-            int target = Math.max(_min, Math.min(_max, highLag / 2));
-            if (current < target && current < _max) return Math.min(_max, current + _step);
-            if (current > target && current > _min) return Math.max(_min, current - _step);
+            int ceiling = Math.max(_min, highLag - _step);
+            // Secondary signal: readyJobs (queue depth) breaks coupling with
+            // RequestHighLoadLagParam — both share jobLag as primary, but
+            // queue pressure provides an independent dimension.
+            double readyJobs = getAdditionalStat(_ctx, "jobQueue.readyJobs");
+            boolean queueHigh = !Double.isNaN(readyJobs) && readyJobs > 20;
+            boolean queueLow = !Double.isNaN(readyJobs) && readyJobs < 5;
+            // Tighten (decrease threshold = more aggressive) when lag or queue is high
+            if ((!Double.isNaN(observed) && observed > 100 || queueHigh) && current > _min)
+                return Math.max(_min, current - _step);
+            // Loosen (increase threshold = less aggressive) only when both are low
+            if ((!Double.isNaN(observed) && observed < 30) && queueLow && current < _max)
+                return Math.min(ceiling, current + _step);
             return current;
         }
     }

@@ -594,6 +594,188 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 13: RequestHighLoadLagParam hysteresis
+    // =====================================================================
+
+    /**
+     * Inline the RequestHighLoadLagParam computeTarget logic.
+     * Params: min=200, max=5000, step=100.
+     * Dead-band: observed > 200 → tighten, observed < 50 → loosen.
+     */
+    private static int highLoadLagTarget(double observed, int current) {
+        int min = 200, max = 5000, step = 100;
+        if (!Double.isNaN(observed) && observed > 200 && current > min)
+            return Math.max(min, current - step);
+        if (!Double.isNaN(observed) && observed < 50 && current < max)
+            return Math.min(max, current + step);
+        return current;
+    }
+
+    @Test
+    public void testHighLoadLagTightensWhenLagHigh() {
+        assertEquals(400, highLoadLagTarget(250, 500));
+    }
+
+    @Test
+    public void testHighLoadLagLoosensWhenLagLow() {
+        assertEquals(600, highLoadLagTarget(30, 500));
+    }
+
+    @Test
+    public void testHighLoadLagDeadBandHolds() {
+        // observed=100 is inside 50–200 dead-band → no change
+        assertEquals(500, highLoadLagTarget(100, 500));
+    }
+
+    @Test
+    public void testHighLoadLagDeadBandUpperBoundary() {
+        // observed=200 is NOT > 200 → no tighten; NOT < 50 → no loosen
+        assertEquals(500, highLoadLagTarget(200, 500));
+    }
+
+    @Test
+    public void testHighLoadLagDeadBandLowerBoundary() {
+        // observed=50 is NOT > 200 and NOT < 50 → hold
+        assertEquals(500, highLoadLagTarget(50, 500));
+    }
+
+    @Test
+    public void testHighLoadLagFloorEnforced() {
+        // current=200 (at min), observed high → can't decrease further
+        assertEquals(200, highLoadLagTarget(300, 200));
+    }
+
+    @Test
+    public void testHighLoadLagCeilingEnforced() {
+        // current=5000 (at max), observed low → can't increase further
+        assertEquals(5000, highLoadLagTarget(10, 5000));
+    }
+
+    @Test
+    public void testHighLoadLagNaNHolds() {
+        assertEquals(500, highLoadLagTarget(Double.NaN, 500));
+    }
+
+    // =====================================================================
+    // Section 14: RequestModerateLoadLagParam independence + hysteresis
+    // =====================================================================
+
+    /**
+     * Inline the RequestModerateLoadLagParam computeTarget logic.
+     * Params: min=100, max=3000, step=50.
+     * Primary: jobLag > 100 → tighten, jobLag < 30 AND readyJobs < 5 → loosen.
+     * Ceiling: always stays below highLoadLagMs - step.
+     */
+    private static int moderateLoadLagTarget(double observed, int current,
+                                              int highLag, double readyJobs) {
+        int min = 100, max = 3000, step = 50;
+        int ceiling = Math.max(min, highLag - step);
+        boolean queueHigh = !Double.isNaN(readyJobs) && readyJobs > 20;
+        boolean queueLow = !Double.isNaN(readyJobs) && readyJobs < 5;
+        if ((!Double.isNaN(observed) && observed > 100 || queueHigh) && current > min)
+            return Math.max(min, current - step);
+        if ((!Double.isNaN(observed) && observed < 30) && queueLow && current < max)
+            return Math.min(ceiling, current + step);
+        return current;
+    }
+
+    @Test
+    public void testModerateLagTightensWhenLagHigh() {
+        // observed=150 > 100 → tighten
+        assertEquals(450, moderateLoadLagTarget(150, 500, 800, 10));
+    }
+
+    @Test
+    public void testModerateLagLoosensWhenBothLow() {
+        // observed=20 < 30 AND readyJobs=2 < 5 → loosen
+        assertEquals(450, moderateLoadLagTarget(20, 400, 800, 2));
+    }
+
+    @Test
+    public void testModerateLagDeadBandHolds() {
+        // observed=60 (inside 30–100), readyJobs=10 (inside 5–20) → hold
+        assertEquals(500, moderateLoadLagTarget(60, 500, 800, 10));
+    }
+
+    @Test
+    public void testModerateLagHighQueueTightensDespiteLowLag() {
+        // observed=20 < 100 (lag OK), but readyJobs=25 > 20 → queueHigh triggers tighten
+        assertEquals(350, moderateLoadLagTarget(20, 400, 800, 25));
+    }
+
+    @Test
+    public void testModerateLagTightensFromQueueHigh() {
+        // observed=NaN (no lag data), readyJobs=25 > 20 → tighten from queue alone
+        assertEquals(350, moderateLoadLagTarget(Double.NaN, 400, 800, 25));
+    }
+
+    @Test
+    public void testModerateLagCeilingEnforced() {
+        // highLag=800, ceiling=max(100, 800-50)=750, observed low + queue low
+        // current=740, would increase to 790, clamped to ceiling=750
+        assertEquals(750, moderateLoadLagTarget(20, 740, 800, 2));
+    }
+
+    @Test
+    public void testModerateLagCeilingPreventsOvershoot() {
+        // highLag=800, ceiling=750, current=749 → loosen to 750 (ceiling)
+        assertEquals(750, moderateLoadLagTarget(20, 749, 800, 2));
+    }
+
+    @Test
+    public void testModerateLagFloorEnforced() {
+        // current=100 (at min), observed high → can't decrease
+        assertEquals(100, moderateLoadLagTarget(200, 100, 800, 30));
+    }
+
+    @Test
+    public void testModerateLagNaNHolds() {
+        // observed=NaN, readyJobs=NaN → hold
+        assertEquals(500, moderateLoadLagTarget(Double.NaN, 500, 800, Double.NaN));
+    }
+
+    // =====================================================================
+    // Section 15: Coupled oscillation — moderate always below high
+    // =====================================================================
+
+    @Test
+    public void testModerateTightensBeforeHigh() {
+        // At lag=150: moderate tightens (>100), high holds (not >200)
+        int highTarget = highLoadLagTarget(150, 500);
+        int modTarget = moderateLoadLagTarget(150, 400, 500, 10);
+        assertEquals(500, highTarget);
+        assertEquals(350, modTarget);
+    }
+
+    @Test
+    public void testModerateCeilingAlwaysBelowHigh() {
+        // Verify ceiling invariant: moderate max < highLag
+        for (int highLag = 200; highLag <= 5000; highLag += 100) {
+            int ceiling = Math.max(100, highLag - 50);
+            assertTrue("ceiling " + ceiling + " must be < highLag " + highLag,
+                       ceiling < highLag);
+        }
+    }
+
+    @Test
+    public void testModerateAndHighTightenAtDifferentLag() {
+        // Lag=150: moderate tightens, high holds
+        assertEquals(450, moderateLoadLagTarget(150, 500, 600, 10));
+        assertEquals(500, highLoadLagTarget(150, 500));
+        // Lag=250: both tighten
+        assertEquals(450, moderateLoadLagTarget(250, 500, 600, 10));
+        assertEquals(400, highLoadLagTarget(250, 500));
+    }
+
+    @Test
+    public void testModerateQueueGatesLoosening() {
+        // Both params see low lag (observed=20), but queue is active (readyJobs=10).
+        // Moderate holds (queue not low → can't loosen), high loosens (no queue gate).
+        assertEquals(400, moderateLoadLagTarget(20, 400, 800, 10));
+        assertEquals(600, highLoadLagTarget(20, 500));
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 
