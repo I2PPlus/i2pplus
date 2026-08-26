@@ -95,7 +95,12 @@ public class JobQueue {
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
-    private static final long MIN_LAG_TO_DROP = 5;
+    /** Minimum lag (ms) before the drop policy activates.
+     *  Must be high enough to avoid drops during normal processing jitter;
+     *  low enough to shed load before queue saturation causes cascading failure.
+     *  500ms means the drop gate is meaningful: with 48+ queued jobs AND
+     *  a half-second of observed lag, the scaler has failed to keep up. */
+    private static final long MIN_LAG_TO_DROP = 500;
 
     /**
      *  @since 0.9.52+

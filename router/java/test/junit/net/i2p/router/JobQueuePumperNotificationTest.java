@@ -181,14 +181,14 @@ public class JobQueuePumperNotificationTest {
         // Seed _timedJobsReady with dummy jobs via reflection so we
         // don't depend on pumper timing. We need enough to exceed the
         // drop threshold (DEFAULT_MAX_WAITING_JOBS = 48) and also
-        // satisfy the lag requirement (>= MIN_LAG_TO_DROP = 5ms).
+        // satisfy the lag requirement (>= MIN_LAG_TO_DROP = 500ms).
         Field timedReadyField = JobQueue.class.getDeclaredField("_timedJobsReady");
         timedReadyField.setAccessible(true);
         LinkedBlockingQueue<Job> timedReady =
                 (LinkedBlockingQueue<Job>) timedReadyField.get(queue);
 
         int seedCount = 60;
-        long pastStart = _ctx.clock().now() - 100; // 100ms in the past → lag = 100ms
+        long pastStart = _ctx.clock().now() - 1000; // 1000ms in the past → lag = 1000ms
         for (int i = 0; i < seedCount; i++) {
             TimedRecordJob sj = new TimedRecordJob(_ctx, new CountDownLatch(1));
             sj.getTiming().setStartAfter(pastStart);
