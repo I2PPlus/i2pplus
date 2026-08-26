@@ -153,6 +153,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
      *  Snapshot counters, compute deltas, and append one ring entry.
      */
     private void sample() {
+        SnarkManager mgr = _manager;
+        if (mgr == null) {return;}
         long now = System.currentTimeMillis();
         long elapsedMs = now - _lastSampleTime;
         _lastSampleTime = now;
@@ -170,7 +172,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
         // Peer-wire rates are Bps; scale to this interval's bytes so all sources
         // share one unit.
         long peerDown = 0, peerUp = 0;
-        for (Snark snark : _manager.getTorrents()) {
+        for (Snark snark : mgr.getTorrents()) {
             if (!snark.isStopped()) {
                 peerDown += snark.getDownloadRate();
                 peerUp += snark.getUploadRate();
