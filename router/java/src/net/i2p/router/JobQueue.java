@@ -161,6 +161,7 @@ public class JobQueue {
         int numReady;
         boolean alreadyExists = false;
         boolean dropped = false;
+        boolean readyNow = false;
         long now = _context.clock().now();
         long start = job.getTiming().getStartAfter();
         if (start > now + 3*24*60*60*1000L && _log.shouldWarn()) {
@@ -191,6 +192,7 @@ public class JobQueue {
                             job.getTiming().setStartAfter(now);
                             if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
                             _readyJobs.offer(job);
+                            readyNow = true;
                         } else {
                             _timedJobs.add(job);
                             if (_log.shouldDebug()) {
@@ -203,6 +205,14 @@ public class JobQueue {
                         }
                     }
                 }
+            }
+        }
+
+        // Wake runners waiting in getNext() — outside _jobLock to avoid
+        // contention with runners checking the queues.
+        if (readyNow) {
+            synchronized (_runnerLock) {
+                _runnerLock.notifyAll();
             }
         }
 
@@ -584,12 +594,18 @@ public class JobQueue {
                     return j;
                 }
 
-                // Check normal priority jobs
-                j = _readyJobs.poll(50, TimeUnit.MILLISECONDS);
+                // Check normal priority jobs (non-blocking — we wait below)
+                j = _readyJobs.poll();
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
                     _jobsInFlight.add(j);
                     return j;
+                }
+
+                // All queues empty — wait for notification from addJob() or the pumper.
+                // 50ms timeout serves as a safety net for shutdown/poison checks.
+                synchronized (_runnerLock) {
+                    _runnerLock.wait(50);
                 }
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
