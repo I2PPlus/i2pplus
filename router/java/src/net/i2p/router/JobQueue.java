@@ -827,6 +827,13 @@ public class JobQueue {
                             _nextPumperRun = _context.clock().now() + timeToWait;
                             _jobLock.wait(timeToWait);
                         }
+                        // Wake runners blocked in getNext() so they can
+                        // pick up jobs we just moved to _timedJobsReady.
+                        if (movedJobs > 0) {
+                            synchronized (_runnerLock) {
+                                _runnerLock.notifyAll();
+                            }
+                        }
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                     }
