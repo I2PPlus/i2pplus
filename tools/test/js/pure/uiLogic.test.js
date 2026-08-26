@@ -10,7 +10,9 @@ import {
   loadingSpanDecision,
   resolveFilterId,
   formatTooltipText,
-  applyIfChanged
+  applyIfChanged,
+  parseGraphSamples,
+  catmullRomSegments
 } from "../../../../apps/i2psnark/res/js/uiLogic.js";
 
 test("loadingSpanDecision adds the indicator when buttons are absent and no span exists", () => {
@@ -89,4 +91,41 @@ test("applyIfChanged tracks elements independently", () => {
 
 test("applyIfChanged tolerates a null element", () => {
   assert.equal(applyIfChanged(null, "x"), false);
+});
+
+test("parseGraphSamples parses well-formed sample lists oldest-first", () => {
+  const samples = parseGraphSamples("100,10,20;101,12,22");
+  assert.deepEqual(samples, [
+    {t: 100, rx: 10, tx: 20},
+    {t: 101, rx: 12, tx: 22}
+  ]);
+});
+
+test("parseGraphSamples returns an empty array for null or empty input", () => {
+  assert.deepEqual(parseGraphSamples(null), []);
+  assert.deepEqual(parseGraphSamples(""), []);
+});
+
+test("parseGraphSamples drops malformed and non-finite entries", () => {
+  const samples = parseGraphSamples("1,2,3;;bogus;4,5,notanumber;6,7");
+  assert.deepEqual(samples, [{t: 1, rx: 2, tx: 3}]);
+});
+
+test("catmullRomSegments returns one C command per segment", () => {
+  const pts = [{x: 0, y: 0}, {x: 10, y: 10}, {x: 20, y: 0}];
+  const d = catmullRomSegments(pts);
+  assert.equal(d.match(/C /g).length, 2);
+  assert.ok(d.trim().endsWith("20.0,0.0"));
+});
+
+test("catmullRomSegments passes through both endpoints", () => {
+  const pts = [{x: 5, y: 5}, {x: 15, y: 25}, {x: 30, y: 10}, {x: 45, y: 40}];
+  const d = catmullRomSegments(pts);
+  assert.ok(d.startsWith("C "), "segments omit the leading M");
+  assert.ok(d.includes("15.0,25.0") && d.includes("45.0,40.0"));
+});
+
+test("catmullRomSegments is empty for fewer than two points", () => {
+  assert.equal(catmullRomSegments([]), "");
+  assert.equal(catmullRomSegments([{x: 1, y: 1}]), "");
 });

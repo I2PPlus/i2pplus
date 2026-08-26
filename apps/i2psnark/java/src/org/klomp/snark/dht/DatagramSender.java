@@ -5,6 +5,8 @@ import net.i2p.client.I2PSessionException;
 import net.i2p.client.SendMessageOptions;
 import net.i2p.data.Destination;
 
+import org.klomp.snark.BandwidthGraph;
+
 /**
  * Shared low-level datagram send path for the DHT and UDP tracker clients.
  * Wraps the session send call with the common protocol selection (repliable
@@ -39,7 +41,7 @@ public final class DatagramSender {
             int toPort,
             boolean repliable)
             throws I2PSessionException {
-        return session.sendMessage(
+        boolean success = session.sendMessage(
                 dest,
                 payload,
                 0,
@@ -48,5 +50,7 @@ public final class DatagramSender {
                 fromPort,
                 toPort,
                 opts);
+        if (success) {BandwidthGraph.datagramSent(payload.length);}
+        return success;
     }
 }

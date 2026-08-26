@@ -39,6 +39,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import org.klomp.snark.BandwidthGraph;
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.TrackerClient;
@@ -1295,6 +1296,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param from dest or null if it didn't come in on signed port
      */
     private void receiveMessage(Destination from, int fromPort, byte[] payload) {
+        BandwidthGraph.datagramReceived(payload.length);
         try {
             InputStream is = new ByteArrayInputStream(payload);
             BDecoder dec = new BDecoder(is);

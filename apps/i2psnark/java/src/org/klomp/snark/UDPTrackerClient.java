@@ -643,6 +643,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * @param from dest or null if it didn't come in on signed port
      */
     private void receiveMessage(Destination from, int fromPort, byte[] payload) {
+        BandwidthGraph.datagramReceived(payload.length);
         if (payload.length < 8) {
             if (_log.shouldInfo()) {
                 _log.info("Got short message: " + payload.length + " bytes");

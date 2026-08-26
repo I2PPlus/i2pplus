@@ -55,6 +55,7 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
+import org.klomp.snark.BandwidthGraph;
 import org.klomp.snark.ClientID;
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.MagnetURI;
@@ -352,6 +353,8 @@ public class I2PSnarkServlet extends BasicServlet {
         loadMimeMap("org/klomp/snark/web/mime");
         setResourceBase(_manager.getDataDir());
         setWarBase(WARBASE);
+        // Started last: the sampler needs a live SnarkManager on its first tick.
+        BandwidthGraph.start(_manager);
     }
 
     /**
@@ -359,6 +362,8 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     @Override
     public void destroy() {
+        // Flush and cancel sampling before torrents tear down.
+        BandwidthGraph.stop();
         if (_manager != null) {_manager.stop();}
         super.destroy();
     }
@@ -660,7 +665,9 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean canWrite = _resourceBase.canWrite();
             out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=screenlogStamp data-v=\"");
             out.write(screenLogStamp());
-            out.write("\" hidden></div>\n<div id=mainsection>\n");
+            out.write("\" hidden></div>\n");
+            emitGraphData(req, out);
+            out.write("<div id=mainsection>\n");
             writeTorrents(out, req, canWrite);
             out.write("\n</div>\n</body>\n</html>\n");
         } else {
@@ -993,13 +1000,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         buf.append("<style id=cssfilter></style>\n<style id=toggleLogCss></style>\n");
 
-        if (!isStandalone()) {
-            long now = _context.clock().now();
-            buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false")
-               .append("&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true")
-               .append("&hideGrid=true&t=").append(now).append("')}\"</style>\n");
-        }
-
         buf.append("</head>\n");
         return buf.toString();
     }
@@ -1077,6 +1077,33 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Emits the bandwidth graph element for xhr1 payloads. The client passes its last
+     * seen sample version as the "gv" parameter; the full sample CSV travels only when
+     * the client is behind (including first-load, where no gv is sent), so
+     * steady-state ticks cost a few bytes while new samples and fresh page loads get
+     * data immediately.
+     *
+     * @param req the refresh request, may carry a "gv" parameter
+     * @param out the PrintWriter to write the element to
+     * @since 0.9.71+
+     */
+    private void emitGraphData(HttpServletRequest req, PrintWriter out) {
+        long version = BandwidthGraph.getVersion();
+        long clientVersion = -1;
+        String gv = req.getParameter("gv");
+        if (gv != null) {
+            try {clientVersion = Long.parseLong(gv.trim());} catch (NumberFormatException nfe) {}
+        }
+        out.write("<div id=snarkGraphData data-v=\"" + version + "\"");
+        if (clientVersion < version) {
+            out.write(" data-samples=\"");
+            out.write(BandwidthGraph.getSamples());
+            out.write("\"");
+        }
+        out.write(" hidden></div>\n");
+    }
+
+    /**
      * Writes the logging messages to the HTML screenlog.
      *
      * @param out the PrintWriter to which the HTML output will be written
@@ -1126,15 +1153,17 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("</ul>");
         } else {buf.append("<div id=screenlog hidden><ul id=messages></ul>");}
+        // Seed the bandwidth graph into the page so a fresh load renders it
+        // immediately, before the first refresh poll.
+        long graphVersion = BandwidthGraph.getVersion();
+        buf.append("<div id=snarkGraphData data-v=\"").append(graphVersion).append("\"");
+        if (graphVersion >= 0) {
+            buf.append(" data-samples=\"").append(BandwidthGraph.getSamples()).append("\"");
+        }
+        buf.append(" hidden></div>\n");
         buf.append("</div>\n<script src=")
            .append(_resourcePath)
            .append("js/toggleLog.js type=module></script>\n");
-        int delay = 0;
-        delay = _manager.getRefreshDelaySeconds();
-        if (delay > 0 && _context.isRouterContext()) {
-            buf.append("<script src=\"").append(_resourcePath).append("js/graphRefresh.js?")
-               .append(CoreVersion.VERSION).append("\" defer></script>\n");
-        }
         out.write(buf.toString());
         out.flush();
         buf.setLength(0);

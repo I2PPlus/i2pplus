@@ -89,7 +89,7 @@ test("esm client scripts are always loaded with type=module", () => {
 test("classic scripts stay classic: no false positives among non-esm files", () => {
   // Inverse sanity check: well-known classic (no-import) scripts must exist and be
   // classified as such, pinning that isEsm() is not flagging everything.
-  const classic = ["graphRefresh.js", "togglePriorities.js", "textView.js"];
+  const classic = ["togglePriorities.js", "textView.js"];
   for (const name of classic) {
     const source = readFileSync(join(JS_DIR, name), "utf8");
     assert.equal(isEsm(source), false, `${name} unexpectedly classified as ESM`);

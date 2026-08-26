@@ -18,6 +18,7 @@ import {toggleDebug} from "./toggleDebug.js";
 import {MESSAGE_TYPES} from "./messageTypes.js";
 import {extractRefreshPayload} from "./refreshPayload.js";
 import {applyIfChanged, loadingSpanDecision} from "./uiLogic.js";
+import {update as updateGraph, repaint as repaintGraph, version as graphVersion} from "./snarkGraph.js";
 import morphdom from "./morphdom.js";
 
 /**
@@ -251,13 +252,19 @@ async function getRefreshInterval() {
  * @function getURL
  * @description Constructs the AJAX refresh URL by rewriting the final path segment of
  * the current page URL to the xhr1 endpoint, keeping any query string and preserving
- * nested paths (e.g. /i2psnark/configure) instead of mangling them.
+ * nested paths (e.g. /i2psnark/configure) instead of mangling them. Appends the active
+ * realtime search term and the client's graph sample version ("gv") so the server can
+ * omit graph samples the page already has.
  * @returns {Promise<string>} The AJAX-compatible refresh URL.
  */
 async function getURL() {
   const url = new URL(window.location.href);
   url.pathname = url.pathname.replace(/\/i2psnark\/[^/]*$/, "/i2psnark/.ajax/xhr1.html");
   if (activeSearch) {url.searchParams.set("search", activeSearch);}
+  // Tell the server which graph samples we already have; it omits the CSV when
+  // we're current, keeping steady-state ticks tiny.
+  const gv = graphVersion();
+  if (gv !== null && gv !== undefined) {url.searchParams.set("gv", gv);}
   return url.href;
 }
 
@@ -569,6 +576,7 @@ async function doRefresh(options = {}) {
   // The payload carries the server's screen log stamp; fetch the log only when it
   // moved, so an unchanged log costs no request and a changed one updates instantly.
   await maybeRefreshScreenLog(payload);
+  updateGraph(payload);
 }
 
 /**
@@ -1052,6 +1060,8 @@ async function initSnarkRefresh() {
   serverOKIntervalId = setInterval(checkIfUp, 14000);
   clearInterval(snarkRefreshIntervalId);
   document.documentElement.removeAttribute("style");
+  // The wipe above also clears the inline --snarkGraph custom property.
+  repaintGraph();
   const loaded = torrentsBody?.querySelector(".rowEven");
   const noload = torrents?.querySelector("#noTorrents");
   if (loaded && noload) {noload.remove();}

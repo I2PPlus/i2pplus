@@ -30,6 +30,10 @@
  *   log ("lastMessageId:messageCount"), or null when the response carries none.
  * @returns {?string} returns.nonce - Value of the form's hidden CSRF nonce input,
  *   or null when the response carries no form.
+ * @returns {?string} returns.graphVer - Bandwidth graph sample version, or null when
+ *   the response carries none.
+ * @returns {?string} returns.graphSamples - Sample CSV ("ts,rx,tx;...") when new
+ *   samples are included, else null.
  * @returns {string[]} returns.headerTH - Inner HTML of each #snarkHead th cell.
  * @returns {string[]} returns.footerTH - Inner HTML of each #snarkFoot th cell.
  * @returns {string[]} returns.fileTds - Trimmed inner HTML of each incomplete-file cell.
@@ -43,6 +47,7 @@ function extractRefreshPayload(doc) {
     const mainsection = doc.querySelector("#mainsection");
     const messages = doc.getElementById("messages");
     const screenLogStampEl = doc.getElementById("screenlogStamp");
+    const graphDataEl = doc.getElementById("snarkGraphData");
     const nonceInput = doc.querySelector("#torrentlist input[name=nonce]");
     const header = doc.querySelector("#snarkHead");
     const footer = doc.querySelector("#snarkFoot");
@@ -57,6 +62,8 @@ function extractRefreshPayload(doc) {
         messages: messages ? messages.innerHTML : null,
         screenLogStamp: screenLogStampEl ? screenLogStampEl.getAttribute("data-v") : null,
         nonce: nonceInput ? nonceInput.value : null,
+        graphVer: graphDataEl ? graphDataEl.getAttribute("data-v") : null,
+        graphSamples: graphDataEl ? graphDataEl.getAttribute("data-samples") : null,
         headerTH: header ? [...header.querySelectorAll("th")].map(th => th.innerHTML) : [],
         footerTH: footer ? [...footer.querySelectorAll("th")].map(th => th.innerHTML) : [],
         fileTds: [...doc.querySelectorAll("#dirInfo tbody tr.incomplete td")].map(td => td.innerHTML.trim()),

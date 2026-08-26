@@ -1728,7 +1728,9 @@ public class I2PSnarkUtil implements DisconnectListener {
                 new I2PSocketEepGet(_context, _manager, retries, -1, maxSize, null, out, fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         if (fetchAndLog(get, url, timeout, out.size())) {
-            return out.toByteArray();
+            byte[] rv = out.toByteArray();
+            BandwidthGraph.httpTransferred(url.length(), rv.length);
+            return rv;
         } else {
             return null;
         }
@@ -1773,7 +1775,9 @@ public class I2PSnarkUtil implements DisconnectListener {
                 new I2PSocketEepGet(_context, mgr, retries, -1, maxSize, null, out, fetchURL);
         get.addHeader("User-Agent", getUserAgent(ih));
         if (fetchAndLog(get, url, timeout, out.size())) {
-            return out.toByteArray();
+            byte[] rv = out.toByteArray();
+            BandwidthGraph.httpTransferred(url.length(), rv.length);
+            return rv;
         } else {
             return null;
         }

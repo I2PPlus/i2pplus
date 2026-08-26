@@ -19,6 +19,11 @@
 --tr_snark:linear-gradient(90deg,#373 2px,#0000 2px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
 --tr_snark_odd:linear-gradient(90deg,#5a5 2px,#0000 2px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
 --tr_snark_hover:linear-gradient(90deg,var(--hover) 2px,#0000 2px),#030;
+--graphDownFill: #040;
+--graphDownStroke: #020;
+--graphUpFill: #090;
+--graphUpStroke: #080;
+--graphStrokeWidth: 1;
 }
 
 html,body{background:#000}
