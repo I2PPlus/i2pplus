@@ -20,12 +20,23 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
- * A session that does nothing, but implements interfaces for raw, datagram, and streaming
- * for convenience.
+ * The primary (mux) session for a SAMv3 client, sharing a single I2P
+ * destination across multiple protocol subsessions (STREAM, DATAGRAM, RAW).
  *
- * We extend SAMv3StreamSession as we must have it set up the I2PSession, in case
- * user adds a STREAM session (and he probably will).
- * This session receives all data from I2P, but you can't send any data on it.
+ * Extends {@link SAMv3StreamSession} to inherit the I2PSession setup;
+ * the streaming acceptor thread ({@link StreamAcceptor}) accepts I2P
+ * connections and dispatches them to the correct subsession by protocol
+ * and port, via {@link SAMv3StreamSession#queueSocket(I2PSocket)}.
+ *
+ * <p>The master session itself is not directly usable for data transfer —
+ * all streaming, datagram, and raw operations are delegated to registered
+ * subsessions. Calling {@link #connectAsync}, {@link #accept}, or
+ * {@link #startForwardingIncoming} on this instance throws unconditionally.
+ *
+ * <p>Under heavy tracker traffic, the accept loop may see thousands of
+ * connections per minute. Overflow logging is rate-limited to avoid
+ * flooding the router log when subsession queues fill faster than
+ * clients can consume.
  *
  * @since 0.9.25
  */
@@ -37,6 +48,10 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     private final StreamAcceptor streamAcceptor;
     private static final String[] INVALID_OPTS = { "PORT", "HOST", "FROM_PORT", "TO_PORT",
                                                    "PROTOCOL", "LISTEN_PORT", "LISTEN_PROTOCOL" };
+    /** Log overflow warnings at most once per 5 seconds to avoid flooding */
+    private static final long OVERFLOW_LOG_INTERVAL_MS = 5000;
+    private volatile long _lastOverflowLog;
+    private volatile int _overflowCount;
 
     /**
      * Build a Session according to information
@@ -67,7 +82,9 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     }
 
     /**
-     *  Overridden to start the acceptor.
+     * Start the stream acceptor thread. Must be called after construction.
+     *
+     * @since 0.9.25
      */
     @Override
     public void start() {
@@ -76,8 +93,19 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     }
 
     /**
-     *  Add a session
-     *  @return null for success, or error message
+     * Add a protocol subsession (STREAM, DATAGRAM, or RAW) to this
+     * master session. The subsession gets its own protocol/port binding
+     * and is registered in the global sessions database so incoming
+     * connections can be dispatched to it.
+     *
+     * <p>Sessions are mutually exclusive on (protocol, port) — two
+     * subsessions may not listen on the same protocol and port.
+     *
+     * @param nick unique nickname for this subsession
+     * @param style protocol style: "STREAM", "DATAGRAM", or "RAW"
+     * @param props session properties (PORT required for DATAGRAM/RAW;
+     *              LISTEN_PORT, LISTEN_PROTOCOL optional)
+     * @return null on success, or a descriptive error message
      */
     public synchronized String add(String nick, String style, Properties props) {
         if (props.containsKey("DESTINATION"))
@@ -179,9 +207,13 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     }
 
     /**
-     *  Remove a session
-     *  @param props session configuration properties, may be null
-     *  @return null for success, or error message
+     * Remove a protocol subsession by nickname. The session is closed,
+     * removed from the global sessions database, and its port binding
+     * is released.
+     *
+     * @param nick nickname of the subsession to remove
+     * @param props session properties (unused, may be null)
+     * @return null on success, or a descriptive error message
      */
     public synchronized String remove(String nick, Properties props) {
         boolean ok;
@@ -202,7 +234,10 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     }
 
     /**
-     *  @throws IOException always
+     * Throws {@link IOException} — the master session does not handle
+     * datagram data directly; use a DATAGRAM subsession instead.
+     *
+     * @throws IOException always
      */
     public void receiveDatagramBytes(Destination sender, byte[] data, int proto,
                                      int fromPort, int toPort) throws IOException {
@@ -215,7 +250,10 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     public void stopDatagramReceiving() { /* no-op */ }
 
     /**
-     *  @throws IOException always
+     * Throws {@link IOException} — the master session does not handle
+     * raw data directly; use a RAW subsession instead.
+     *
+     * @throws IOException always
      */
     public void receiveRawBytes(byte[] data, int proto, int fromPort, int toPort) throws IOException {
         throw new IOException("master session");
@@ -265,8 +303,10 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     }
 
     /**
-     * Close the primary/master session and all subsessions.
-     * Overridden to stop the acceptor and the subsessions.
+     * Close the master session and all registered subsessions.
+     * Stops the stream acceptor thread, removes all subsessions from
+     * the global sessions database, and destroys the underlying
+     * I2PSocketManager.
      */
     @Override
     public synchronized void close() {
@@ -367,6 +407,20 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 " protocol: " + proto + " from port: " + fromPort + " to port: " + toPort);
     }
 
+    /**
+     * Acceptor thread that waits for incoming I2P streaming connections
+     * and dispatches them to the appropriate subsession by matching the
+     * local port to the subsession's listen port. If no exact match is
+     * found, falls back to a subsession listening on port 0 (any port).
+     *
+     * <p>Each accepted socket is offered to the subsession's queue via
+     * {@link SAMv3StreamSession#queueSocket(I2PSocket)}. If the queue
+     * is full (the PHP client is not keeping up), the socket is reset
+     * and an overflow is logged (rate-limited to avoid flooding).
+     *
+     * <p>Runs for the lifetime of the master session; stopped by
+     * {@link MasterSession#close()}.
+     */
     private class StreamAcceptor implements Runnable {
 
         private volatile boolean stop;
@@ -435,7 +489,13 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                     SAMv3StreamSession ssess = (SAMv3StreamSession) foundSess;
                     boolean ok = ssess.queueSocket(i2ps);
                     if (!ok) {
-                        _log.logAlways(Log.WARN, "Accept queue overflow for " + ssess);
+                        _overflowCount++;
+                        long now = System.currentTimeMillis();
+                        if (now - _lastOverflowLog > OVERFLOW_LOG_INTERVAL_MS) {
+                            _lastOverflowLog = now;
+                            _log.logAlways(Log.WARN, "Accept queue overflow for " + ssess
+                                + " (total: " + _overflowCount + ")");
+                        }
                         try { i2ps.reset(); } catch (IOException ioe) { /* ignored */ }
                     }
                 } else {

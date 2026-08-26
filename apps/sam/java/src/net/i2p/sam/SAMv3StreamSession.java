@@ -1,4 +1,3 @@
-package net.i2p.sam;
 /**
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
@@ -7,6 +6,8 @@ package net.i2p.sam;
  * your children, but it might.  Use at your own risk.
  *
  */
+
+package net.i2p.sam;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -22,6 +23,7 @@ import java.nio.channels.WritableByteChannel;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.net.ssl.SSLSocket;
 import net.i2p.I2PAppContext;
@@ -40,12 +42,25 @@ import net.i2p.util.Log;
 /**
  * SAMv3 STREAM session class.
  *
+ * Manages I2P streaming connections via the SAM v3 bridge. Supports
+ * three modes: outgoing CONNECT, incoming ACCEPT (via a queue fed by
+ * {@link MasterSession}), and FORWARD (proxy to a local host:port).
+ *
+ * For subsessions created under a {@link MasterSession}, incoming
+ * I2P sockets are placed on {@link #_acceptQueue} by the master's
+ * acceptor thread and consumed by dedicated per-subsession accept
+ * threads. This decouples the I2P accept loop from the per-client
+ * SAM handler and allows multiple concurrent ACCEPT commands.
+ *
  * @author mkvore
+ * @since 0.9.25
  */
 class SAMv3StreamSession extends SAMStreamSession implements Session {
 
-    private static final int BUFFER_SIZE = 1024;
-    private static final int MAX_ACCEPT_QUEUE = 64;
+    private static final int BUFFER_SIZE = 4096;
+    private static final int MAX_ACCEPT_QUEUE = 8192;
+    /** Seconds to wait for a queued socket before returning null */
+    private static final int ACCEPT_POLL_TIMEOUT_SECS = 30;
 
     private final Object socketServerLock = new Object();
     /** this is ONLY set for FORWARD, not for ACCEPT */
@@ -94,18 +109,25 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * @since 0.9.25
      */
     public SAMv3StreamSession(
-            String login, Properties props, SAMv3Handler handler, I2PSocketManager mgr, int listenPort)
- {
+            String login, Properties props, SAMv3Handler handler, I2PSocketManager mgr, int listenPort) {
         super(mgr, props, handler, listenPort);
         this.nick = login;
         _acceptQueue = new LinkedBlockingQueue<>(MAX_ACCEPT_QUEUE);
     }
 
     /**
-     * Put a socket on the accept queue.
-     * Only for subsession, throws IllegalStateException otherwise.
+     * Put a socket on the accept queue. Called by
+     * {@link MasterSession.StreamAcceptor} when an I2P connection arrives
+     * and matches this subsession's listen protocol and port.
      *
-     * @return success, false if full
+     * Only for subsessions created with the 5-arg constructor;
+     * the 1-arg constructor sets {@link #_acceptQueue} to null and
+     * this method throws {@link IllegalStateException}.
+     *
+     * @param sock the accepted I2P socket
+     * @return true if queued; false if the queue is full (caller must
+     *         reset the socket)
+     * @throws IllegalStateException if called on a non-subsession
      * @since 0.9.25
      */
     public boolean queueSocket(I2PSocket sock) {
@@ -114,16 +136,21 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     * Take a socket from the accept queue.
-     * Only for subsession, throws IllegalStateException otherwise.
+     * Take a socket from the accept queue, with a timeout to avoid
+     * indefinite blocking on stale connections. Under heavy tracker
+     * traffic, sockets may accumulate faster than the client can
+     * consume them; a timeout ensures the acceptor thread can check
+     * for shutdown and avoid leaking threads on idle sessions.
      *
+     * @return the next queued socket, or null if the queue is empty
+     *         after the timeout (caller must handle null)
+     * @throws ConnectException if the thread is interrupted
      * @since 0.9.25
      */
     private I2PSocket acceptSocket() throws ConnectException {
         if (_acceptQueue == null) throw new IllegalStateException();
         try {
-            // TODO there's no CoDel or expiration in this queue
-            return _acceptQueue.take();
+            return _acceptQueue.poll(ACCEPT_POLL_TIMEOUT_SECS, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             ConnectException ce = new ConnectException("interrupted");
@@ -133,7 +160,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     * @return the d b
+     * Get the global sessions database shared by all SAM handlers.
+     *
+     * @return the sessions database
      */
     public static SessionsDB getDB() {
         return SAMv3Handler.sSessionsHash;
@@ -312,8 +341,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         synchronized (socketServerLock) {
             if (socketServer != null) {
                 if (_log.shouldWarn())
-                    _log.warn("a forwarding server is already defined for this destination");
-                throw new SAMException("a forwarding server is already defined for this destination");
+                    _log.warn("A forwarding server is already defined for this destination");
+                throw new SAMException("A forwarding server is already defined for this destination");
             }
         }
 
@@ -399,16 +428,18 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
 
         if (rec == null) throw new InterruptedIOException();
 
+        String msg = "";
         String portStr = props.getProperty("PORT");
         if (portStr == null) {
-            if (_log.shouldDebug()) _log.debug("Receiver port not specified");
-            throw new SAMException("receiver port not specified");
+        	   msg = "Receiver port not specified";
+            if (_log.shouldDebug()) _log.debug(msg);
+            throw new SAMException(msg);
         }
         int port;
         try {
             port = Integer.parseInt(portStr);
         } catch (NumberFormatException nfe) {
-            throw new SAMException("receiver port invalid: " + portStr);
+            throw new SAMException("Receiver port invalid: " + portStr);
         }
 
         String host = props.getProperty("HOST");
@@ -419,13 +450,15 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
         boolean isSSL = Boolean.parseBoolean(props.getProperty("SSL"));
         if (_acceptors.get() > 0) {
-            if (_log.shouldWarn()) _log.warn("An accepting server is already defined for this destination");
-            throw new SAMException("an accepting server is already defined for this destination");
+            msg = "An accepting server is already defined for this destination";
+            if (_log.shouldWarn()) _log.warn(msg);
+            throw new SAMException(msg);
         }
         synchronized (this.socketServerLock) {
             if (this.socketServer != null) {
-                if (_log.shouldWarn()) _log.warn("a forwarding server is already defined for this destination");
-                throw new SAMException("a forwarding server is already defined for this destination");
+                msg = "A forwarding server is already defined for this destination";
+                if (_log.shouldWarn()) _log.warn(msg);
+                throw new SAMException(msg);
             }
             this.socketServer = this.socketMgr.getServerSocket();
         }
@@ -435,7 +468,15 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     *  Forward sockets from I2P to the host/port provided
+     * Forwards incoming I2P connections to a local TCP host:port.
+     * Runs in its own thread, accepting from the I2P server socket
+     * and connecting to the local forwarding target. Each accepted
+     * I2P socket is bridged to the local socket via {@link Pipe}.
+     *
+     * <p>Created by the FORWARD command handler. Only one forwarder
+     * may be active per session at a time.
+     *
+     * @since 0.9.60
      */
     private class SocketForwarder implements Runnable {
         private final String host;
@@ -550,6 +591,25 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
     }
 
+    /**
+     * Bidirectional byte copier between a local socket and an I2P socket.
+     * Created by CONNECT and FORWARDDIRECT handlers to shuttle data
+     * between the SAM client's TCP connection and the I2P network.
+     *
+     * Instances are registered as handlers in {@link SessionsDB} so
+     * that the client's worker thread can return immediately and
+     * data transfer continues on the NIO thread pool. The handler's
+     * {@link Handler#handle(Selector)} method copies available data
+     * on each NIO select tick.
+     *
+     * <p>When either side reaches end-of-stream, {@link Handler#close()}
+     * is called to tear down both channels and remove this handler
+     * from the sessions database. Idle timeout is checked periodically
+     * in {@code handle()} and forces a close if no data flows for
+     * {@link SAMBridge#IDLE_TIMEOUT_SECS} seconds.
+     *
+     * @since 0.9.60
+     */
     private static class Pipe implements Runnable, Handler {
         private final ReadableByteChannel in;
         private final WritableByteChannel out;
@@ -559,15 +619,26 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         private long lastTouch;
 
         /**
-         *  @param bridge may be null
+         * Create a pipe without session tracking.
+         * Used for short-lived forwarding (e.g., host-anonymous).
+         *
+         * @param in source channel (local socket input)
+         * @param out destination channel (I2P socket output)
+         * @param bridge the SAM bridge for idle timeout; may be null
          */
         public Pipe(ReadableByteChannel in, WritableByteChannel out, SAMBridge bridge) {
             this(in, out, bridge, null);
         }
 
         /**
-         *  @param bridge may be null
-         *  @param nick session nickname, may be null; if set, touches SessionsDB periodically
+         * Create a pipe with session tracking. Touches the sessions
+         * database periodically so the idle scanner does not reclaim
+         * this session while data is flowing.
+         *
+         * @param in source channel (local socket input)
+         * @param out destination channel (I2P socket output)
+         * @param bridge the SAM bridge for idle timeout; may be null
+         * @param nick session nickname for database touch; may be null
          */
         public Pipe(ReadableByteChannel in, WritableByteChannel out, SAMBridge bridge, String nick) {
             this.in = in;
