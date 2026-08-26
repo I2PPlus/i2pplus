@@ -165,7 +165,7 @@ class SAMv3Handler extends SAMv1Handler
      *  @since 0.9.25
      */
     void setSession(SAMv3StreamSession sess) {
-        streamSession = sess; session = sess;
+        streamSession = sess; session = sess; sessionReady = true;
     }
 
     /**
