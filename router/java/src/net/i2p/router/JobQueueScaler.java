@@ -637,7 +637,10 @@ class JobQueueScaler implements Runnable {
             return;
         }
 
-        // Don't scale up if circuit breaker is open
+        // Don't scale up if circuit breaker is open — but jobs being dropped
+        // is an emergency that overrides the breaker. Without this bypass, the
+        // breaker permanently freezes the runner count while droppedJob pressure
+        // continues to climb.
         if (_scalingUpDisabled) {
             if (timeSinceLastScale > getCooldownPeriod()) {
                 _scalingUpDisabled = false;
@@ -646,9 +649,11 @@ class JobQueueScaler implements Runnable {
                 if (_log.shouldInfo()) {
                     _log.info("CIRCUIT BREAKER RESET: Cooldown expired, allowing scale-up attempts");
                 }
-            } else {
+            } else if (!jobsBeingDropped) {
                 checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
                 return;
+            } else if (_log.shouldInfo()) {
+                _log.info("CIRCUIT BREAKER BYPASS: Jobs being dropped, allowing emergency scale-up");
             }
         }
 
