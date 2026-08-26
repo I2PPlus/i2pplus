@@ -11,9 +11,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -135,7 +136,7 @@ public class JobQueue {
 
         _readyJobs = new LinkedBlockingQueue<>();
         _highPriorityJobs = new LinkedBlockingQueue<>();
-        _timedJobs = new TreeSet<>(new JobComparator());
+        _timedJobs = new ConcurrentSkipListSet<>(new JobComparator());
         _timedJobsReady = new LinkedBlockingQueue<>();
         _jobsInFlight = Collections.synchronizedSet(new HashSet<>());
         _jobLock = new Object();
@@ -167,39 +168,43 @@ public class JobQueue {
         if (start > now + 3*24*60*60*1000L && _log.shouldWarn()) {
             _log.warn(job + " scheduled far in the future: " + (new Date(start)));
         }
-        synchronized (_jobLock) {
-            alreadyExists = _readyJobs.contains(job) || _highPriorityJobs.contains(job) ||
-                           _timedJobsReady.contains(job);
-            // Note: Don't check _jobsInFlight here - a job MUST be allowed to requeue itself
-            // Include _timedJobsReady — jobs promoted by the pumper are as ready as
-            // those in _readyJobs; ignoring them understates pressure and delays drops.
-            numReady = getReadyCount();
+        // Check existence — all three queues are thread-safe (LinkedBlockingQueue
+        // and ConcurrentSkipListSet), so this read-only check does not need _jobLock.
+        alreadyExists = _readyJobs.contains(job) || _highPriorityJobs.contains(job) ||
+                       _timedJobsReady.contains(job);
+        // Include _timedJobsReady — jobs promoted by the pumper are as ready as
+        // those in _readyJobs; ignoring them understates pressure and delays drops.
+        numReady = getReadyCount();
 
-            if (!alreadyExists) {
-                boolean removed = _timedJobs.remove(job);
-                if (removed && _log.shouldWarn()) {_log.warn(job + " removed from queue and rescheduled -> Duplicate instance");}
+        if (!alreadyExists) {
+            // _timedJobs is ConcurrentSkipListSet — safe to modify outside the lock.
+            boolean removed = _timedJobs.remove(job);
+            if (removed && _log.shouldWarn()) {_log.warn(job + " removed from queue and rescheduled -> Duplicate instance");}
 
-                // Don't re-add if it was already in _timedJobs (duplicate from requeue while still scheduled)
-                if (!removed) {
-                    if (shouldDrop(job, numReady)) {
-                        if (_log.shouldWarn() && job.getName().contains("Remove Slow")) {
-                            _log.warn("Dropping RemoveSlowTunnelsJob: numReady=" + numReady + ", maxLag=" + getMaxLag());
-                        }
-                        job.dropped();
-                        dropped = true;
+            // Don't re-add if it was already in _timedJobs (duplicate from requeue while still scheduled)
+            if (!removed) {
+                if (shouldDrop(job, numReady)) {
+                    if (_log.shouldWarn() && job.getName().contains("Remove Slow")) {
+                        _log.warn("Dropping RemoveSlowTunnelsJob: numReady=" + numReady + ", maxLag=" + getMaxLag());
+                    }
+                    job.dropped();
+                    dropped = true;
+                } else {
+                    if (start <= now) {
+                        job.getTiming().setStartAfter(now);
+                        if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
+                        _readyJobs.offer(job);
+                        readyNow = true;
                     } else {
-                        if (start <= now) {
-                            job.getTiming().setStartAfter(now);
-                            if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
-                            _readyJobs.offer(job);
-                            readyNow = true;
-                        } else {
-                            _timedJobs.add(job);
-                            if (_log.shouldDebug()) {
-                                long diff = _nextPumperRun - start;
-                                _log.debug("Waking pumper: job " + job.getName() + " early by " + diff + "ms");
-                            }
-                            if (start < _nextPumperRun) {
+                        _timedJobs.add(job);
+                        if (_log.shouldDebug()) {
+                            long diff = _nextPumperRun - start;
+                            _log.debug("Waking pumper: job " + job.getName() + " early by " + diff + "ms");
+                        }
+                        // Wake pumper if this job is due before its next scheduled run.
+                        // Must be inside _jobLock to pair with the pumper's wait() call.
+                        if (start < _nextPumperRun) {
+                            synchronized (_jobLock) {
                                 _jobLock.notifyAll();
                             }
                         }
@@ -586,7 +591,7 @@ public class JobQueue {
                     return j;
                 }
 
-                // Check timed jobs ready queue first (O(1) instead of iterating TreeSet)
+                // Check timed jobs ready queue first (O(1) instead of iterating skip list)
                 j = _timedJobsReady.poll();
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
@@ -780,6 +785,11 @@ public class JobQueue {
 
         /**
          *  Pump jobs from the scheduling queue to the runner queue.
+         *
+         *  The iteration and removal of _timedJobs happens outside the lock
+         *  because ConcurrentSkipListSet supports safe concurrent iteration.
+         *  Only the wait/notify signaling needs _jobLock, reducing contention
+         *  with addJob() which must also acquire _jobLock.
          */
         @Override
         public void run() {
@@ -789,60 +799,62 @@ public class JobQueue {
                     long timeToWait = -1;
                     int movedJobs = 0;
                     try {
-                        synchronized (_jobLock) {
-                            // Take a snapshot of timed jobs to avoid concurrent modification issues
-                            // Only process jobs that are ready (timeLeft <= 0)
-                            List<Job> toMove = new ArrayList<>();
-                            long minWaitTime = -1;
-                            for (Job j : _timedJobs) {
-                                long timeLeft = j.getTiming().getStartAfter() - now;
-                                if (timeLeft <= 0) {
-                                    toMove.add(j);
-                                } else {
-                                    // Track minimum wait time among not-ready jobs
-                                    if (minWaitTime < 0 || timeLeft < minWaitTime) {
-                                        minWaitTime = timeLeft;
-                                    }
+                        // Snapshot timed jobs that are ready (timeLeft <= 0).
+                        // ConcurrentSkipListSet supports weakly-consistent iteration
+                        // without holding _jobLock, so addJob() is not blocked.
+                        List<Job> toMove = new ArrayList<>();
+                        long minWaitTime = -1;
+                        for (Job j : _timedJobs) {
+                            long timeLeft = j.getTiming().getStartAfter() - now;
+                            if (timeLeft <= 0) {
+                                toMove.add(j);
+                            } else {
+                                // Track minimum wait time among not-ready jobs
+                                if (minWaitTime < 0 || timeLeft < minWaitTime) {
+                                    minWaitTime = timeLeft;
                                 }
                             }
-                            // Move ready jobs to timed jobs ready queue
-                            for (Job j : toMove) {
-                                _timedJobs.remove(j);
-                                if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
-                                j.getTiming().setStartAfter(now);
-                                _timedJobsReady.offer(j);
-                                movedJobs++;
-                            }
-                            timeToWait = minWaitTime;
-                            // Cap the wait time to prevent long delays for periodic jobs
-                            if (timeToWait > 10000) {
-                                timeToWait = 500;
-                            }
-                            if (movedJobs > 0) {
-                                _log.info("Pumper moved " + movedJobs + " jobs to timed ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
-                            }
-                            // Track TestJob queue count periodically from the pumper (was in addJob)
-                            int testJobCount = getTestJobCount();
-                            if (testJobCount > 0) {
-                                _context.statManager().addRateData("jobQueue.testJobCount", testJobCount);
-                            }
-                            boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
-                            // More aggressive checking - don't wait long when jobs are close to ready
-                            if (timeToWait < 0) {
-                                timeToWait = highLoad ? 50 : 10;
-                            } else if (timeToWait < 10) {
-                                timeToWait = highLoad ? 20 : 5;
-                            } else if (timeToWait < 100) {
-                                timeToWait = highLoad ? 50 : 25;
-                            } else if (timeToWait < 1000) {
-                                timeToWait = highLoad ? 200 : 100;
-                            } else if (timeToWait < 5*1000L) {
-                                timeToWait = highLoad ? 500 : 250;
-                            } else {
-                                // For jobs > 5s away, check more frequently to prevent large queues
-                                timeToWait = highLoad ? 1000 : 500;
-                            }
-                            _nextPumperRun = _context.clock().now() + timeToWait;
+                        }
+                        // Move ready jobs to timed jobs ready queue
+                        for (Job j : toMove) {
+                            _timedJobs.remove(j);
+                            if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
+                            j.getTiming().setStartAfter(now);
+                            _timedJobsReady.offer(j);
+                            movedJobs++;
+                        }
+                        timeToWait = minWaitTime;
+                        // Cap the wait time to prevent long delays for periodic jobs
+                        if (timeToWait > 10000) {
+                            timeToWait = 500;
+                        }
+                        if (movedJobs > 0) {
+                            _log.info("Pumper moved " + movedJobs + " jobs to timed ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
+                        }
+                        // Track TestJob queue count periodically from the pumper (was in addJob)
+                        int testJobCount = getTestJobCount();
+                        if (testJobCount > 0) {
+                            _context.statManager().addRateData("jobQueue.testJobCount", testJobCount);
+                        }
+                        boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
+                        // More aggressive checking - don't wait long when jobs are close to ready
+                        if (timeToWait < 0) {
+                            timeToWait = highLoad ? 50 : 10;
+                        } else if (timeToWait < 10) {
+                            timeToWait = highLoad ? 20 : 5;
+                        } else if (timeToWait < 100) {
+                            timeToWait = highLoad ? 50 : 25;
+                        } else if (timeToWait < 1000) {
+                            timeToWait = highLoad ? 200 : 100;
+                        } else if (timeToWait < 5*1000L) {
+                            timeToWait = highLoad ? 500 : 250;
+                        } else {
+                            // For jobs > 5s away, check more frequently to prevent large queues
+                            timeToWait = highLoad ? 1000 : 500;
+                        }
+                        _nextPumperRun = _context.clock().now() + timeToWait;
+                        // Wait outside the critical section — addJob() is not blocked
+                        synchronized (_jobLock) {
                             _jobLock.wait(timeToWait);
                         }
                         // Wake runners blocked in getNext() so they can
