@@ -323,25 +323,16 @@ public class JobQueue {
     /**
      * Maximum lag time for jobs waiting in the queue.
      * This is the delay between when the earliest job was supposed to start
-     * and the current time.
+     * and the current time.  Uses peek() on each FIFO queue — the head
+     * element is the oldest and therefore has the highest lag.
      *
-     * @return maximum lag in milliseconds, or 0 if queue is empty
+     * @return maximum lag in milliseconds, or 0 if all queues are empty
      */
     public long getMaxLag() {
         long now = _context.clock().now();
         long maxLag = 0;
 
-        // Check timed jobs ready queue
-        for (Job job : _timedJobsReady) {
-            JobTiming jt = job.getTiming();
-            if (jt != null) {
-                long lag = now - jt.getStartAfter();
-                if (lag > maxLag) maxLag = lag;
-            }
-        }
-
-        // Check high priority jobs
-        Job j = _highPriorityJobs.peek();
+        Job j = _timedJobsReady.peek();
         if (j != null) {
             JobTiming jt = j.getTiming();
             if (jt != null) {
@@ -350,7 +341,15 @@ public class JobQueue {
             }
         }
 
-        // Check ready jobs
+        j = _highPriorityJobs.peek();
+        if (j != null) {
+            JobTiming jt = j.getTiming();
+            if (jt != null) {
+                long lag = now - jt.getStartAfter();
+                if (lag > maxLag) maxLag = lag;
+            }
+        }
+
         j = _readyJobs.peek();
         if (j != null) {
             JobTiming jt = j.getTiming();
@@ -394,6 +393,10 @@ public class JobQueue {
      * Average lag time for jobs waiting in the queue.
      * This is the average delay between when jobs were supposed to start
      * and the current time across all ready jobs.
+     *
+     * Uses weakly-consistent iteration on each BlockingQueue — concurrent
+     * additions/removals may be missed or double-counted, but the result
+     * is a sufficient approximation for diagnostics and scoring.
      *
      * @return average lag in milliseconds, or 0 if queue is empty
      * @since 0.9.68+
