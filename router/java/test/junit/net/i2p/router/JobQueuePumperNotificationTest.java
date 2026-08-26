@@ -2,7 +2,9 @@ package net.i2p.router;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -11,15 +13,16 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
+import net.i2p.router.peermanager.PeerTestJob;
+
 /**
- * Tests that the QueuePumper notifies runners via _runnerLock when
- * moving jobs from _timedJobs to _timedJobsReady. Without this
- * notification, runners block for up to 50ms on _readyJobs.poll()
- * and miss jobs that have already become ready in _timedJobsReady.
- *
- * The behavioral assertion is: a job scheduled a short time in the
- * future should be picked up within a small window after its scheduled
- * start time, not delayed by the 50ms polling ceiling.
+ * Tests for job queue backlog fixes:
+ * <ul>
+ *   <li>P0: QueuePumper notifies runners via _runnerLock when moving
+ *       timed jobs to _timedJobsReady</li>
+ *   <li>P0: Drop policy counts _timedJobsReady in numReady so that
+ *       ready jobs in the promoted queue trigger pressure-based drops</li>
+ * </ul>
  *
  * @since 0.9.71+
  */
@@ -95,8 +98,6 @@ public class JobQueuePumperNotificationTest {
 
         long elapsedMs = TimeUnit.NANOSECONDS.toMillis(
                 System.nanoTime() - scheduleNanos);
-        // The job should not have run before its scheduled time,
-        // and should run within a reasonable window after it.
         // The key assertion: elapsed must be < 50ms + margin, proving
         // the runner was woken by notification rather than polling.
         assertTrue("Elapsed " + elapsedMs + "ms should be < 150ms (notification-wake)",
@@ -115,7 +116,6 @@ public class JobQueuePumperNotificationTest {
         int count = 5;
         CountDownLatch latch = new CountDownLatch(count);
         TimedRecordJob[] jobs = new TimedRecordJob[count];
-        long[] scheduledNanos = new long[count];
 
         long baseNow = _ctx.clock().now();
         long baseNano = System.nanoTime();
@@ -123,22 +123,18 @@ public class JobQueuePumperNotificationTest {
             jobs[i] = new TimedRecordJob(_ctx, latch);
             // Stagger: 20ms, 40ms, 60ms, 80ms, 100ms
             jobs[i].getTiming().setStartAfter(baseNow + 20L * (i + 1));
-            scheduledNanos[i] = baseNano + 20L * (i + 1) * 1_000_000;
             _ctx.jobQueue().addJob(jobs[i]);
         }
 
         assertTrue("All jobs should be picked up within 500ms",
                    latch.await(500, TimeUnit.MILLISECONDS));
 
-        // Verify each job ran roughly on time: within 100ms of its
-        // scheduled wall-clock offset. The pumper moves each job
-        // to _timedJobsReady and notifies runners, so lag should be small.
+        // Verify each job ran roughly on time using per-job nano timestamps.
         for (int i = 0; i < count; i++) {
             long actualDelayMs = TimeUnit.NANOSECONDS.toMillis(
                     jobs[i].getPickedUpNanos() - baseNano);
             long expectedDelayMs = 20L * (i + 1);
             long lagMs = actualDelayMs - expectedDelayMs;
-            // First job may wait for a pumper cycle; allow generous margin
             assertTrue("Job " + i + " ran at " + actualDelayMs + "ms, " +
                        "expected ~" + expectedDelayMs + "ms, lag " + lagMs + "ms should be < 150ms",
                        lagMs < 150);
@@ -155,7 +151,6 @@ public class JobQueuePumperNotificationTest {
     public void testImmediateJobPickedUpFast() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         TimedRecordJob job = new TimedRecordJob(_ctx, latch);
-        // startAfter is already in the past (now) — goes to _readyJobs directly
         long beforeNanos = System.nanoTime();
         _ctx.jobQueue().addJob(job);
 
@@ -164,8 +159,54 @@ public class JobQueuePumperNotificationTest {
 
         long elapsedMs = TimeUnit.NANOSECONDS.toMillis(
                 System.nanoTime() - beforeNanos);
-        // Direct-path jobs should be picked up very fast — under 50ms
         assertTrue("Immediate job elapsed " + elapsedMs + "ms should be < 50ms",
                    elapsedMs < 50);
+    }
+
+    /**
+     * Verify that the drop policy counts jobs in _timedJobsReady, not
+     * just _readyJobs. Uses reflection to seed _timedJobsReady with
+     * enough dummy jobs to exceed the drop threshold, then adds a
+     * droppable PeerTestJob and confirms it gets dropped.
+     *
+     * Without the fix (numReady = _readyJobs.size()), the seeded
+     * _timedJobsReady jobs are invisible and no drop fires.
+     * With the fix (numReady = getReadyCount()), the drop triggers.
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDropPolicyCountsTimedJobsReady() throws Exception {
+        JobQueue queue = _ctx.jobQueue();
+
+        // Seed _timedJobsReady with dummy jobs via reflection so we
+        // don't depend on pumper timing. We need enough to exceed the
+        // drop threshold (DEFAULT_MAX_WAITING_JOBS = 48) and also
+        // satisfy the lag requirement (>= MIN_LAG_TO_DROP = 5ms).
+        Field timedReadyField = JobQueue.class.getDeclaredField("_timedJobsReady");
+        timedReadyField.setAccessible(true);
+        LinkedBlockingQueue<Job> timedReady =
+                (LinkedBlockingQueue<Job>) timedReadyField.get(queue);
+
+        int seedCount = 60;
+        long pastStart = _ctx.clock().now() - 100; // 100ms in the past → lag = 100ms
+        for (int i = 0; i < seedCount; i++) {
+            TimedRecordJob sj = new TimedRecordJob(_ctx, new CountDownLatch(1));
+            sj.getTiming().setStartAfter(pastStart);
+            timedReady.offer(sj);
+        }
+
+        // Clear any prior drop count
+        queue.getAndResetDroppedCount();
+
+        // Now add a PeerTestJob (a class that shouldDrop() targets).
+        // With the fix, numReady = getReadyCount() = 60+ > threshold → drop.
+        // Without the fix, numReady = _readyJobs.size() = 0 → no drop.
+        PeerTestJob victim = new PeerTestJob(_ctx);
+        queue.addJob(victim);
+
+        int dropped = queue.getAndResetDroppedCount();
+        assertTrue("Expected drop when _timedJobsReady has " + seedCount +
+                   " jobs, got " + dropped + " dropped",
+                   dropped >= 1);
     }
 }

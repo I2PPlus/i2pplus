@@ -170,7 +170,9 @@ public class JobQueue {
             alreadyExists = _readyJobs.contains(job) || _highPriorityJobs.contains(job) ||
                            _timedJobsReady.contains(job);
             // Note: Don't check _jobsInFlight here - a job MUST be allowed to requeue itself
-            numReady = _readyJobs.size();
+            // Include _timedJobsReady — jobs promoted by the pumper are as ready as
+            // those in _readyJobs; ignoring them understates pressure and delays drops.
+            numReady = getReadyCount();
 
             if (!alreadyExists) {
                 boolean removed = _timedJobs.remove(job);
