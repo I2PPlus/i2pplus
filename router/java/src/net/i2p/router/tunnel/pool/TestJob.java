@@ -250,12 +250,30 @@ public class TestJob extends JobImpl {
      * Hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
+     *
+     * Scales down under job queue pressure to prevent TestJobs from
+     * starving critical router jobs. When the queue is backed up
+     * (lag > 5s or ready count > 2x runners), the limit is halved.
+     * When the queue is severely backlogged (lag > 15s), it is
+     * quartered.
+     *
      * Tunable via i2p.tunnel.testJob.hardLimit (default: 512 fast / 384 slow)
-     * @return the hard limit
+     * @param ctx the router context
+     * @return the pressure-scaled hard limit
      */
     public static int getHardLimit(RouterContext ctx) {
         refreshTestJobConfig(ctx);
-        return _cachedHardLimit;
+        int base = _cachedHardLimit;
+        // Scale down under job queue pressure so TestJobs don't starve
+        // critical jobs like lease set renewal, tunnel building, and
+        // database lookups.
+        long maxLag = ctx.jobQueue().getMaxLag();
+        if (maxLag > 15_000) {
+            return base / 4;
+        } else if (maxLag > 5_000) {
+            return base / 2;
+        }
+        return base;
     }
 
     /**
