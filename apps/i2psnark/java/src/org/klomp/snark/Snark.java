@@ -554,6 +554,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         } else if (_log.shouldDebug()) {
             _log.debug("NOT starting TrackerClient???");
         }
+        // persist running=true so a crash during this session still auto-starts on restart
+        if (completeListener != null) {
+            completeListener.updateStatus(this);
+        }
     }
 
     /**

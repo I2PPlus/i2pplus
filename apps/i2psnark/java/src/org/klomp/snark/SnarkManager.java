@@ -4254,7 +4254,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 sleep(delay);
                 _messages.clearThrough(id); // Remove just the countdown
                 if (!earlyAdded.isEmpty()) {
-                    startBatch(earlyAdded);
+                    startBatch(previouslyRunning(earlyAdded));
                 }
             } else if (_context.isRouterContext()) {
                 // Wait for client manager to be up so we can get bandwidth limits
@@ -4349,8 +4349,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (autostart && !added.isEmpty()) {
                     // Start OUTSIDE the _snarks lock: startBatch staggers pool
                     // startups with multi-second sleeps that must never block
-                    // torrent lookups, or the UI stalls for minutes
-                    startBatch(added);
+                    // torrent lookups, or the UI stalls for minutes.
+                    // Only torrents that were running when last saved are
+                    // restarted; user-stopped ones stay stopped.
+                    startBatch(previouslyRunning(added));
                 }
                 if (doMagnets) {
                     // first run only
@@ -5285,6 +5287,45 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 sleep(250);
             }
         }
+    }
+
+    /**
+     * Filters a candidate start batch down to the torrents that were running
+     * when last saved. A torrent whose per-torrent config has no
+     * {@link #PROP_META_RUNNING} entry counts as previously running (matches
+     * the auto-start default); one explicitly saved as stopped stays stopped.
+     *
+     * Used by the startup auto-start paths, where torrents are first loaded
+     * without starting them (so pool-mates can batch together) and must then
+     * be filtered by their persisted prior status before starting.
+     *
+     * @param batch candidate torrents, non-null
+     * @return the subset that should be auto-started
+     * @since 0.9.71+
+     */
+    private List<Snark> previouslyRunning(List<Snark> batch) {
+        List<Snark> rv = new ArrayList<>(batch.size());
+        for (Snark snark : batch) {
+            Properties config = getConfig(snark);
+            if (wasPreviouslyRunning(config)) {
+                rv.add(snark);
+            }
+        }
+        return rv;
+    }
+
+    /**
+     * Returns true if the torrent's persisted config indicates it was running
+     * when last saved. A missing entry counts as previously running (matches
+     * the auto-start default); an explicitly false entry means it was stopped.
+     *
+     * @param config the torrent's persisted properties
+     * @return true if the torrent should be auto-started
+     * @since 0.9.71+
+     */
+    static boolean wasPreviouslyRunning(Properties config) {
+        String prop = config.getProperty(PROP_META_RUNNING);
+        return prop == null || Boolean.parseBoolean(prop);
     }
 
     /**

@@ -12,7 +12,8 @@ import java.util.Random;
 import org.junit.Test;
 
 /**
- * Test the multi-dest auto-start delay in SnarkManager.
+ * Test the multi-dest auto-start delay and persisted running-state
+ * filter in SnarkManager.
  *
  * @since 0.9.71+
  */
@@ -83,5 +84,31 @@ public class SnarkManagerTest {
         Properties garbage = new Properties();
         garbage.setProperty(SnarkManager.PROP_SHOULD_PAD_FILES, "maybe");
         assertFalse(SnarkManager.parseShouldPadFiles(garbage));
+    }
+
+    /**
+     * wasPreviouslyRunning decodes the persisted PROP_META_RUNNING flag.
+     * null (missing entry) counts as previously running to match the
+     * auto-start default; explicit "false" means the torrent was stopped.
+     * The round-trip contract: locked_saveTorrentStatus writes "true"
+     * on start (stopped=false) and "false" on stop (stopped=true);
+     * wasPreviouslyRunning must agree with both.
+     */
+    @Test
+    public void testWasPreviouslyRunning() {
+        // null / absent property → defaults to running (auto-start)
+        assertTrue(SnarkManager.wasPreviouslyRunning(new Properties()));
+        // explicit "true" → running
+        Properties running = new Properties();
+        running.setProperty(SnarkManager.PROP_META_RUNNING, "true");
+        assertTrue(SnarkManager.wasPreviouslyRunning(running));
+        // explicit "false" → stopped
+        Properties stopped = new Properties();
+        stopped.setProperty(SnarkManager.PROP_META_RUNNING, "false");
+        assertFalse(SnarkManager.wasPreviouslyRunning(stopped));
+        // garbage value → Boolean.parseBoolean returns false → stopped
+        Properties garbage = new Properties();
+        garbage.setProperty(SnarkManager.PROP_META_RUNNING, "maybe");
+        assertFalse(SnarkManager.wasPreviouslyRunning(garbage));
     }
 }
