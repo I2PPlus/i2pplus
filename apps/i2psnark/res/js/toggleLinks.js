@@ -148,9 +148,9 @@ function initLinkToggler() { // NOPMD - ConsistentReturn (nested scrollToTop ret
    * @returns {void}
    */
   function copyMagnetHandler(event) {
-    const magnetLink = event.target.closest(".copyMagnet, a.magnetlink");
+    const magnetLink = event.target.closest(".copyMagnet, a.mLink");
     if (!magnetLink) { return; }
-    const anchorEl = magnetLink.matches("a.magnetlink") ? magnetLink : magnetLink.closest("a.magnetlink");
+    const anchorEl = magnetLink.matches("a.mLink") ? magnetLink : magnetLink.closest("a.mLink");
     if (!anchorEl) { return; }
     d.body.classList.add("copyingToClipboard");
     event.preventDefault();

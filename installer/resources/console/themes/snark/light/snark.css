@@ -23,7 +23,6 @@
 --row:var(--bg) left top/4px,linear-gradient(180deg,#fff,#f0f0ff);
 --tabimg:linear-gradient(180deg,#f8f8ff 50%,#e2e2ff 50%,#bbf);
 --section:linear-gradient(180deg,#fafaff,#efefff);
---snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tooltip:#eef;
 }
 
@@ -293,17 +292,17 @@ audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
 video::-webkit-media-controls-panel{display:none}
 video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-panel{display:flex}
 #dirInfo,#torrentInfo{margin:10px 0 0 0;background:#fff;border-bottom:var(--border_soft)}
-#torrentInfo{margin-top:8px}
+#torrentInfo{margin-top:20px}
 .iframed #torrentInfo{margin-top:-10px}
 #dirInfo thead img{margin:0;padding:0 2px}
 #dirInfo td:first-child{padding-left:2px;width:1%}
 .headerpriority br{display:none}
 .magnetLabel{display:inline-block;vertical-align:middle;position:relative;font-style:italic}
-.magnetlink,.torrentlink{margin:0 2px;padding:3px;vertical-align:middle;border:1px solid #ccf;border-radius:1px;background:linear-gradient(180deg,#fff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)) #e7e7ff}
-.magnetlink:hover,.magnetlink:focus,.torrentlink:hover,.torrentlink:focus{border:1px solid var(--hover);background:linear-gradient(180deg,#fcfaf7 50%,#ffe8bf 50%,#efd9b3)}
-.magnetlink:active,.torrentlink:active{box-shadow:inset 2px 2px 3px #7f3000}
-.magnetlink img,.torrentlink img,.magnetlink img:hover,.torrentlink img:hover{margin:0;padding:0;filter:none}
-.torrentlink{margin-right:-1px}
+.mLink,.tLink{margin:0 2px;padding:3px;vertical-align:middle}
+.mLink:hover,.mLink:focus,.tLink:hover,.tLink:focus{transform:scale(1.1)}
+.mLink:active,.tLink:active{box-shadow:inset 2px 2px 3px #7f3000;transform:scale(0.9)}
+.mLink img,.tLink img,.mLink img:hover,.tLink img:hover{margin:0;padding:0}
+.tLink{margin-right:-1px}
 .thumb,.thumb:hover{margin:2px 2px 2px 4px;padding:0;width:auto;height:auto;border:1px solid #0000;box-shadow:0 0 0 1px #fff;background:#fff}
 .thumb:hover{box-shadow:0 0 0 1px var(--hover),0 0 0 2px #779;opacity:1}
 #dirlist{margin-top:-21px}
@@ -678,7 +677,7 @@ th img{filter:none;opacity:.85}
 
 /* filter bar */
 #filterBar{margin:-1px 0 -2px;position:sticky;top:42px;z-index:2002;border-top:var(--border_soft);border-bottom:var(--border_soft);background:var(--th)}
-.iframed #filterBar{margin:10px 0 0;position:static}
+.iframed #filterBar{margin:-1px 0 0;position:static}
 #filterBar .filter{margin:0;padding:2px 8px;display:inline-block;min-width:92px;background:linear-gradient(180deg,#fff 50%,#eef 50%);border-left:var(--border_soft);box-shadow:var(--highlight);font-weight:700;color:#77b}
 #filterBar .filter:last-child{border-right:var(--border_soft)}
 #filterBar .filter:hover{color:var(--hover);background:#fff linear-gradient(180deg,#fff 50%,rgba(255,232,191,.6) 50%,rgba(239,217,179,.4) 100%)}

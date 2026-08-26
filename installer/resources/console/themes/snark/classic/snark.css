@@ -243,7 +243,7 @@ td.status{padding-left:5px}
 .tName a:hover,.snarkFileName a:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,rgba(180,180,0,0),rgba(200,200,0,.2) 40%)}
 .tName a:active,.snarkFileName a:active{box-shadow:inset 3px 3px 3px 3px rgba(120,120,0,.2)}
 .magnetLabel{padding:2px;display:inline-block;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-style:italic}
-.magnetlink{display:inline-block;vertical-align:middle}
+.mLink{display:inline-block;vertical-align:middle}
 .choked,.choked a:hover{color:#900}
 .unchoked,.unchoked a:hover{color:#050}
 .choked,.idle{font-size:0;width:48px;display:inline-block;vertical-align:middle;text-align:center;line-height:0}
@@ -703,13 +703,13 @@ hr.debug{margin:10px 0 -5px;width:100%;display:none;color:#efefff;border:0;backg
 .inactivity{margin-left:12px;min-width:5px;max-width:400px;height:4px;display:inline-block;border-radius:2px;box-shadow:0 0 0 1px #bbf,var(--highlight);background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(220,220,255,.9) 15px,rgba(220,220,255,.9) 16px,#0000 16px),linear-gradient(90deg,#ee0 100px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 
-.magnetlink img,.torrentlink img,.magnetlink img:hover,.torrentlink img:hover{margin:-2px 0 0;padding:0;display:inline-block;vertical-align:middle;filter:none}
-.magnetlink,.torrentlink{margin:0 1px;padding:0 4px 1px;border-radius:2px}
-.magnetlink,.torrentlink{margin:0 2px;display:inline-block;vertical-align:middle;border:1px solid #ccf;border-radius:1px;background:var(--btn)}
-.magnetlink:active,.torrentlink:active{box-shadow:inset 2px 2px 3px #7f3000;background:var(--btn_active)}
-.magnetlink:hover,.magnetlink:focus,.torrentlink:hover,.torrentlink:focus{border:1px solid var(--hover);background:var(--btn_hover2)}
+.mLink img,.tLink img,.mLink img:hover,.tLink img:hover{margin:-2px 0 0;padding:0;display:inline-block;vertical-align:middle;filter:none}
+.mLink,.tLink{margin:0 1px;padding:0 4px 1px;border-radius:2px}
+.mLink,.tLink{margin:0 2px;display:inline-block;vertical-align:middle;border:1px solid #ccf;border-radius:1px;background:var(--btn)}
+.mLink:active,.tLink:active{box-shadow:inset 2px 2px 3px #7f3000;background:var(--btn_active)}
+.mLink:hover,.mLink:focus,.tLink:hover,.tLink:focus{border:1px solid var(--hover);background:var(--btn_hover2)}
 #torrentInfo a:hover img,#torrentInfo a:focus img{filter:none}
-.torrentlink{margin-right:-1px;margin-left:2px}
+.tLink{margin-right:-1px;margin-left:2px}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:-3px;margin-right:1px;display:inline-block;vertical-align:middle;line-height:0;font-size:80%;font-style:normal}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(.6)}

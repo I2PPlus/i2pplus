@@ -386,7 +386,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .magnet img,.trackerLink img{opacity:.8}
 .magnet a:hover img,.trackerLink a:hover img,#linkswitch:hover{opacity:1;filter:none;transform:scale(1.2)}
 .magnet,th.torrentLink,.trackerLink{width:1%;text-align:right!important}
-.magnetlink,.torrentlink{display:inline-block}
+.mLink,.tLink{display:inline-block}
 .magnetLabel{display:inline-block;vertical-align:middle;font-style:italic;color:#aaa}
 .mainsection .ParentDir{padding:0 3px;border:var(--border_hard);text-align:left;background:linear-gradient(180deg,#101,#170017)}
 .mainsection .ParentDir:hover,.mainsection #dirInfo tbody tr:first-child:hover td{background:linear-gradient(180deg,#58165e,#4a0d56)}
@@ -1439,7 +1439,7 @@ th.radio{width:96px}
 .starting .peerCount b{height:12px}
 .tAction{padding-right:3px}
 .rxd,.txd,.rateDown,.rateUp{min-width:76px}
-.torrentlink,.magnetlink{margin:-2px 3px -2px 4px}
+.tLink,.mLink{margin:-2px 3px -2px 4px}
 .tName a{max-width:unset}
 .txd{padding-left:8px}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}

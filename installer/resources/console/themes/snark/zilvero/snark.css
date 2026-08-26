@@ -406,7 +406,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .fileStatus .barOuter{margin:0 auto}
 .filetype{position:relative;vertical-align:middle}
 .knownTracker input[type=radio]:disabled{opacity:.3}
-.magnetlink img,.torrentlink img{padding:1.5px 4px;vertical-align:middle;box-shadow:var(--highlight),var(--softborder);filter:none}
+.mLink img,.tLink img{padding:1.5px 4px;vertical-align:middle;box-shadow:var(--highlight),var(--softborder);filter:none}
 .ParentDir{border-bottom:var(--border);background:#fafafa}
 .ParentDir img{display:none}
 .priority{padding-right:5px;white-space:nowrap;text-align:right}
@@ -760,7 +760,7 @@ td.status{background-size:24px auto}
 .peerCount .left,.peerCount .right{padding:4px 3px 3px}
 tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 #torrents .infohash{width:60px}
-#torrents .magnetlink img{width:18px;height:18px}
+#torrents .mLink img{width:18px;height:18px}
 #torrents .txd{padding-left:0;padding-right:0}
 #screenlog li::before{margin-top:-1px}
 }

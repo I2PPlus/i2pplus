@@ -153,7 +153,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 .rowEven,.rowOdd,.knownTracker,#trackerselect tr:nth-child(n+2) td{background:var(--row)}
 .rowOdd,.rowOdd td,.rowEven,.rowEven td,.peerinfo td,.knownTracker td{border-top:var(--border_inner)}
 .magnet,.trackerLink{padding:0 4px;width:1%;text-align:center}
-.magnetlink,.torrentlink{margin:0 -2px 0 2px!important}
+.mLink,.tLink{margin:0 -2px 0 2px!important}
 td.details img:not([src$="rateme.svg"]),#dirInfo td:first-child img:not(.thumb){width:20px;height:20px;max-width:20px;max-height:20px}
 .details a:active img[src$="rateme.svg"]{transform:scale(0.9)}
 .rxd{padding:0 5px;white-space:nowrap;font-weight:700}
@@ -338,10 +338,10 @@ tr:hover .barComplete{text-shadow:0 1px 1px #000,0 0 2px #337;box-shadow:var(--h
 #torrentInfo tr:nth-child(odd){color:#7670c2;background:#001}
 #torrentInfo td{border-top:var(--border);border-bottom:var(--border)}
 #torrentInfoStats .nowrap,#trackers img,#trackers b{white-space:nowrap;display:inline-block;vertical-align:middle}
-.magnetlink,.torrentlink{margin:-1px 4px -1px 2px;padding:3px;display:inline-block;line-height:1;border:var(--border_soft);border-radius:1px;box-shadow:inset 0 0 0 1px #101;background:linear-gradient(180deg,rgb(24,24,40) 50%,rgb(0,0,0) 50%)}
-.magnetlink:hover,.torrentlink:hover{border:var(--border_input_hover);background:linear-gradient(180deg,rgb(101,39,135) 50%,RGB(60,23,81) 50%)}
-.magnetlink:active,.torrentlink:active{box-shadow:var(--highlight),inset 4px 4px 3px 1px rgb(31,0,47)}
-th .magnetlink img,th .torrentlink img{margin:0}
+.mLink,.tLink{margin:-1px 4px -1px 2px;padding:3px;display:inline-block;line-height:1;border:var(--border_soft);border-radius:1px;box-shadow:inset 0 0 0 1px #101;background:linear-gradient(180deg,rgb(24,24,40) 50%,rgb(0,0,0) 50%)}
+.mLink:hover,.tLink:hover{border:var(--border_input_hover);background:linear-gradient(180deg,rgb(101,39,135) 50%,RGB(60,23,81) 50%)}
+.mLink:active,.tLink:active{box-shadow:var(--highlight),inset 4px 4px 3px 1px rgb(31,0,47)}
+th .mLink img,th .tLink img{margin:0}
 .infohash,.snarkAddInfo code{font-family:var(--monospaced);color:#cc0;user-select:all}
 #torrents .infohash,#torrentInfo .infohash{display:inline-block;max-width:120px;white-space:nowrap;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;opacity:.8}
 #torrents .infohash{margin-right:4px;padding:1px 6px 1px 18px;color:#000;box-shadow:var(--outline),var(--highlight);background:var(--hash) no-repeat 4px center/12px,linear-gradient(to bottom,#cc0,#990)}

@@ -3959,7 +3959,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (isValid && meta != null) {
                 String announce = meta.getAnnounce();
                 String magnetLink = MagnetURI.MAGNET_FULL + hex;
-                buf.append("<a class=magnetlink href=\"").append(magnetLink);
+                buf.append("<a class=mLink href=\"").append(magnetLink);
                 if (announce != null) buf.append("&amp;tr=").append(announce);
                 if (encodedBaseName != null) buf.append("&amp;dn=").append(encodedBaseName.replace(".torrent", ""));
                 buf.append("\">");
@@ -4715,7 +4715,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String baseURL = urlEncode(t.baseURL);
                 String name = DataHelper.escapeHTML(t.name);
                 StringBuilder buf = new StringBuilder(128);
-                buf.append("<a href=\"").append(baseURL).append("details.php?info_hash=")
+                buf.append("<a class=tLink href=\"").append(baseURL).append("details.php?info_hash=")
                    .append(TrackerClient.urlencode(infohash))
                    .append("\" title=\"").append(_t("Details at {0} tracker", name)).append("\" target=_blank>");
                 return buf.toString();
@@ -5869,7 +5869,7 @@ public class I2PSnarkServlet extends BasicServlet {
             announce = prettyAnnounce(announce);
         }
         if (meta != null && !meta.isPrivate()) {
-            buf.append("<a class=magnetlink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
+            buf.append("<a class=mLink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
             if (announce != null) { buf.append("&amp;tr=").append(announce); }
             if (baseName != null) {
                 buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
@@ -5886,7 +5886,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</a>");
         }
 
-        buf.append("<a class=torrentlink href=\"").append(_contextPath).append('/')
+        buf.append("<a class=tLink href=\"").append(_contextPath).append('/')
            .append(baseName).append("\" title=\"")
            .append(DataHelper.escapeHTML(baseName).replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
            .append("\">");
