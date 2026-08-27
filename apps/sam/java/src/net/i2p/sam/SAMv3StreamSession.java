@@ -57,9 +57,9 @@ import net.i2p.util.Log;
 class SAMv3StreamSession extends SAMStreamSession implements Session {
 
     private static final int BUFFER_SIZE = 4096;
-    private static final int MAX_ACCEPT_QUEUE = 8192;
+    private static final int MAX_ACCEPT_QUEUE = 16384;
     /** Seconds to wait for a queued socket before returning null */
-    private static final int ACCEPT_POLL_TIMEOUT_SECS = 30;
+    private static final int ACCEPT_POLL_TIMEOUT_SECS = 60;
 
     private final Object socketServerLock = new Object();
     /** this is ONLY set for FORWARD, not for ACCEPT */
@@ -377,18 +377,21 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      */
     private void doAccept(SAMv3Handler handler, boolean verbose) {
         I2PSocket i2ps = null;
+        SessionRecord rec = null;
         try {
             handler.getBridge().unregisterHandlerFromPool(handler);
-
-            if (_acceptQueue != null) i2ps = acceptSocket();
-            else i2ps = socketMgr.getServerSocket().accept();
-
-            SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-            if (rec == null || i2ps == null) {
-                handler.stopHandling();
-                return;
+            while (true) {
+                if (_acceptQueue != null) i2ps = acceptSocket();
+                else i2ps = socketMgr.getServerSocket().accept();
+                rec = SAMv3Handler.sSessionsHash.get(nick);
+                if (rec == null) {
+                    handler.stopHandling();
+                    return;
+                }
+                if (i2ps != null) break;
+                if (_log.shouldDebug())
+                    _log.debug("Accept poll timeout for " + nick + " —> Re-polling...");
             }
-
             if (verbose)
                 handler.notifyStreamIncomingConnection(i2ps.getPeerDestination(), i2ps.getPort(), i2ps.getLocalPort());
             handler.stealSocket();
@@ -406,7 +409,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             rec.startThread(new I2PAppThread(
                 new Pipe(fromI2P, toClient, bridge, nick), "SAM-Pipe-I2C"));
         } catch (ConnectException e) {
-            if (_log.shouldWarn()) _log.warn("Accept error", e);
+            if (_log.shouldWarn()) _log.warn("Accept error -> " + e.getMessage());
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ie) {
@@ -414,7 +417,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             }
             handler.stopHandling();
         } catch (I2PException e) {
-            if (_log.shouldWarn()) _log.warn("Accept error", e);
+            if (_log.shouldWarn()) _log.warn("Accept error -> " + e.getMessage());
             handler.stopHandling();
         } catch (IOException e) {
             handler.stopHandling();
@@ -555,7 +558,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     }
                 } catch (IOException ioe) {
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
-                    if (log.shouldWarn()) log.warn("Error forwarding", ioe);
+                    if (log.shouldWarn()) log.warn("Error forwarding -> " + ioe.getMessage());
                     try {
                         i2ps.reset();
                     } catch (IOException ee) { /* ignored */ }
@@ -722,12 +725,13 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         I2PServerSocket server = null;
         synchronized (this.socketServerLock) {
             if (this.socketServer == null) {
-                if (_log.shouldDebug()) _log.debug("No socket server is defined for this destination");
-                throw new SAMException("no socket server is defined for this destination");
+            	 String msg = "No socket server is defined for this destination";
+                if (_log.shouldDebug()) _log.debug(msg);
+                throw new SAMException(msg);
             }
             server = this.socketServer;
             this.socketServer = null;
-            if (_log.shouldDebug()) _log.debug("Nulling socketServer in stopForwardingIncoming. Object " + this);
+            if (_log.shouldDebug()) _log.debug("Nulling socketServer in stopForwardingIncoming -> Object " + this);
         }
         try {
             server.close();

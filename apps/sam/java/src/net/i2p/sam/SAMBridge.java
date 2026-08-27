@@ -669,8 +669,9 @@ public class SAMBridge implements Runnable, ClientApp {
                 @Override
                 public void timeReached() {
                     int removed = SAMv3Handler.sSessionsHash.removeStale((long) 10 * 60 * 1000);
-                    if (removed > 0 && _log.shouldWarn())
-                        _log.warn("Removed " + removed + " stale SAM session(s)");
+                    if (removed > 0 && _log.shouldWarn()) {
+                        _log.warn("Removed " + removed + " stale SAM session" + (removed > 1 ? "s" : ""));
+                    }
                     schedule((long) 5 * 60 * 1000);
                 }
             }, 5 * 60 * 1000);
