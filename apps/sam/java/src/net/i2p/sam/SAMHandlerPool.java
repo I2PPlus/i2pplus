@@ -63,7 +63,7 @@ class SAMHandlerPool {
          * newThread.
          */
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, "SAM-PoolWkr." + _count.incrementAndGet());
+            Thread t = new Thread(r, "SAM-PWkr." + _count.incrementAndGet());
             t.setDaemon(true);
             return t;
         }
