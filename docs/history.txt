@@ -1,18 +1,42 @@
+2026-08-25 dr|z3d
+  * I2PSnark:
+    - Fix torrent list column header links that dropped the active
+      filter and sort on freshly loaded pages
+    - Form show/hide peers toggle and playlist links with well-formed
+      query strings on all navigation paths
+    - Render large torrent tables and directory file listings
+      progressively in chunks; smaller pages load exactly as before
+    - Speed up page builds: tracker name rewriting without regex,
+      playlist check answered from torrent metadata instead of walking
+      the filesystem, and fewer per-row hash encodings
+    - Stop generating streamed torrent and directory listings once the
+      client disconnects
+    - Fix a race in theme resource path resolution that could
+      intermittently serve assets from the wrong location
+    - Trim auto-refresh overhead: identical rows and pagination stay untouched
+    - Stop the filter counter badge flickering between refresh ticks
+    - Draw the messages screen log graph client-side; rrd4j stats not required
+    - Apply screen log updates right after actions instead of waiting a tick
+    - Cache the offline chimp overlay per session so it renders while down
+    - Fix refresh polling 404s on nested paths like the config page
+    - Hide the ratings and comments section entirely when both are
+      disabled, and skip loading comment data in that case
+    - Save priorities button spans the correct number of columns on
+      file tables lacking the priority column
+    - Fix saving per-file "do not download" (skip) priorities from the
+      file table; they were silently discarded
+    - Scroll expanded Files and Comments panels into view on torrent
+      pages, restoring the prior position when collapsed
+
 2026-08-24 dr|z3d
   * I2PSnark:
-    - Eliminate startup and in-page stalls: torrents load immediately,
-      staggered auto-start runs off the request path via background
-      batch starting, and torrent lookups no longer block on directory
-      monitor batching
+    - End startup stalls: immediate loads, background auto-start, fast lookups
     - Escape line breaks in torrent names embedded in page scripts
-    - Show pool/destination badges for all torrents in multi-dest
-      mode; status+pool sorting now requires multi-dest
+    - Show pool/destination badges for all torrents in multi-dest mode
   * Console:
     - Fix console login failures for passwords stored with PBKDF2
-    - Ban config: re-evaluate the existing netdb when bans change,
-      with case-sensitive capability matching
-    - Fix Add/Delete user and sidebar config buttons that dispatched
-      on translated button text or shadowed form actions
+    - Ban config: re-evaluate netdb on change; case-sensitive cap matching
+    - Fix Add/Delete user and sidebar config buttons firing on wrong elements
 
 2026-08-23 dr|z3d
   * Router:
@@ -26,12 +50,7 @@
     - Increase flood redundancy from 3 to 10 for wider netdb dispersal
     - Log a per-minute transit pool trend line for decline monitoring
   * Console:
-    - Ban config: fix Clear All Bans and Reset To Defaults buttons;
-      validate caps bans case-sensitively as entered; recognize !
-      exclusions; add next-hop ban toggle and capability exclusion
-      syntax
-  * I2PTunnel:
-    - Log server connect failures at WARN with local port detail
+    - Ban config: fix Clear All Bans and Reset To Defaults buttons
 
 2026-08-22 dr|z3d
   * Tunnel:
