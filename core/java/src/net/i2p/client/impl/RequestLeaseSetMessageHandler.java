@@ -216,9 +216,16 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     *  Finish creating and signing the new LeaseSet
+     * Finish creating and signing the new LeaseSet and submitting it to the router.
+     * Reuses cached private keys when available, generates new keys otherwise,
+     * and handles offline signatures. Failures during signing are propagated to
+     * the session; transient expiry errors do not destroy the session so the
+     * router can retry with a fresh lease end time.
      *
-     *  @since 0.9.7
+     * @param leaseSet the unsigned LeaseSet with leases already added
+     * @param isLS2 true for LS2, false for LS1
+     * @param session the I2CP session requesting the LeaseSet
+     * @since 0.9.7
      */
     protected synchronized void signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session) {
         // must be before setDestination()
@@ -510,7 +517,16 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
         } catch (DataFormatException dfe) {
             session.propagateError("Error signing the LeaseSet", dfe);
-            session.destroySession();
+            // Transient expiry (e.g., "LeaseSet expired X seconds ago" from LeaseSet2.writeHeader)
+            // can occur if the router's requested end time is stale or clock-skewed.
+            // Don't destroy the session — let the router's failLeaseRequest retry with fresh leases.
+            // Permanent key/config errors will still be retried but will fail again and
+            // eventually trip the router's MAX_LEASE_FAILS disconnect.
+            String msg = dfe.getMessage();
+            boolean isTransient = msg != null && msg.toLowerCase(java.util.Locale.US).contains("expired");
+            if (!isTransient) {
+                session.destroySession();
+            }
         }
     }
 
