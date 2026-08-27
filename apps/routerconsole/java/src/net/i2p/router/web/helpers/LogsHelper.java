@@ -44,9 +44,6 @@ public class LogsHelper extends HelperBase {
     private static final Pattern LOG_DIRMON = Pattern.compile("\\|.*\\[.*DirMon.*\\].*?:");
     private static final Pattern LOG_QUEUE = Pattern.compile("\\|.*\\[.*Queue.*\\].*?:");
 
-    /**
-     * setContext.
-     */
     public void setContext(RouterContext context) {this._context = context;}
     private static final String _jstlVersion = jstlVersion();
     private static final int MAX_WRAPPER_LINES = 320;
@@ -376,8 +373,29 @@ public class LogsHelper extends HelperBase {
             if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;")) {continue;}
             displayed = true;
             msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-            msg = msg.replace("&amp;darr;", "&darr;");  // hack - undo the damage (LogWriter) BUFFER_DISPLAYED_REVERSE = true;
-            msg = msg.replace("&amp;uarr;", "&uarr;");  // hack - undo the damage (LogWriter)
+            // Preserve thread column padding for HTML (raw logs keep spaces)
+            // Convert trailing spaces inside [thread··] to &nbsp; so HTML doesn't collapse them.
+            // e.g., "[SAM-PWkr.2  ]" → "[SAM-PWkr.2&nbsp;&nbsp;]" — only the thread bracket, not the whole line.
+            {
+                int lb = msg.indexOf(" [");
+                int rb = lb >= 0 ? msg.indexOf("] ", lb + 2) : -1;
+                if (lb >= 0 && rb > lb) {
+                    String inside = msg.substring(lb + 2, rb);
+                    int pad = 0;
+                    for (int k = inside.length() - 1; k >= 0 && inside.charAt(k) == ' '; k--) pad++;
+                    if (pad > 0) {
+                        String core = inside.substring(0, inside.length() - pad);
+                        StringBuilder nbsp = new StringBuilder(pad * 6);
+                        for (int k = 0; k < pad; k++) nbsp.append("&nbsp;");
+                        msg = msg.substring(0, lb + 2) + core + nbsp.toString() + msg.substring(rb);
+                    }
+                }
+            }
+            // Strip <a>...</a> to just inner text for console — e.g., "<a href=...>foo</a>" → "foo"
+            msg = msg.replaceAll("&lt;a[^&]*&gt;", "").replaceAll("&lt;/a&gt;", "");
+            msg = msg.replaceAll("<a[^>]*>", "").replaceAll("</a>", "");
+            msg = msg.replace("&amp;darr;", "&darr;");
+            msg = msg.replace("&amp;uarr;", "&uarr;");
             msg = msg.replace("&amp;#10140;", "&#10140;");
             msg = msg.replace("--&gt;", " &#10140; ");
             msg = msg.replace(" -&gt;", " &#10140;");

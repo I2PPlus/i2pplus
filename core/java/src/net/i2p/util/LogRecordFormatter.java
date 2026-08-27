@@ -64,7 +64,11 @@ class LogRecordFormatter {
                 case LogManager.PRIORITY: buf.append(SEPARATOR).append(getPriority(rec, manager.getContext()));
                     break;
                 case LogManager.MESSAGE: String msg = rec.getMessage();
-                    if (msg != null) buf.append(msg);
+                    if (msg != null) {
+                        // Strip <a>...</a> to just inner text for both raw and console logs
+                        msg = msg.replaceAll("<a[^>]*>", "").replaceAll("</a>", "");
+                        buf.append(msg);
+                    }
                     break;
                 default: buf.append(format[i]);
                     break;
