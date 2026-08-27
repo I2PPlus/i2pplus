@@ -135,6 +135,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         return _acceptQueue.offer(sock);
     }
 
+    /** @return current accept queue size, 0 if not a subsession */
+    public int getAcceptQueueSize() {
+        return _acceptQueue != null ? _acceptQueue.size() : 0;
+    }
+
     /**
      * Take a socket from the accept queue, with a timeout to avoid
      * indefinite blocking on stale connections. Under heavy tracker
@@ -509,7 +514,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     continue;
                 } catch (ConnectException ce) {
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
-                    if (log.shouldWarn()) log.warn("Error accepting", ce);
+                    if (log.shouldWarn()) log.warn("Error accepting connection -> " + ce.getMessage());
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException ie) {
@@ -518,7 +523,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     continue;
                 } catch (I2PException ipe) {
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
-                    if (log.shouldWarn()) log.warn("Error accepting", ipe);
+                    if (log.shouldWarn()) log.warn("Error accepting connection -> " + ipe.getMessage());
                     break;
                 }
 

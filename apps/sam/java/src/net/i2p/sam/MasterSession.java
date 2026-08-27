@@ -446,7 +446,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                     continue;
                 } catch (ConnectException ce) {
                     if (_log.shouldWarn())
-                        _log.warn("Error accepting", ce);
+                        _log.warn("Error accepting connection -> " + ce.getMessage());
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException ie) {
@@ -455,7 +455,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                     continue;
                 } catch (I2PException ipe) {
                     if (_log.shouldWarn())
-                        _log.warn("Error accepting", ipe);
+                        _log.warn("Error accepting connection -> " + ipe.getMessage());
                     break;
                 }
                 int port = i2ps.getLocalPort();
@@ -493,8 +493,13 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                         long now = System.currentTimeMillis();
                         if (now - _lastOverflowLog > OVERFLOW_LOG_INTERVAL_MS) {
                             _lastOverflowLog = now;
-                            _log.logAlways(Log.WARN, "Accept queue overflow for " + ssess
-                                + " (total: " + _overflowCount + ")");
+                            String peer = "unknown";
+                            try { peer = i2ps.getPeerDestination().calculateHash().toBase32().substring(0, 8); } catch (Exception e) { /* ignore */ }
+                            if (_log.shouldWarn()) {
+                            _log.warn("Rejected incoming connection from " + peer +
+                                      " —> Accept queue overflow for STREAM session \"" + ssess.getNick() +
+                                      "\" (Queue " + ssess.getAcceptQueueSize() + " full, total rejected: " + _overflowCount + ")");
+                            }
                         }
                         try { i2ps.reset(); } catch (IOException ioe) { /* ignored */ }
                     }
