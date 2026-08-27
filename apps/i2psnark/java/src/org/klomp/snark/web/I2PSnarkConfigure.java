@@ -30,11 +30,11 @@ import net.i2p.util.Translate;
  * back to SnarkManager. Extracted wholesale from I2PSnarkServlet; bodies are
  * verbatim moves qualified for servlet access via {@code srv}.
  */
-class ConfigForms {
+class I2PSnarkConfigure {
 
     private final I2PSnarkServlet srv;
 
-    ConfigForms(I2PSnarkServlet srv) {this.srv = srv;}
+    I2PSnarkConfigure(I2PSnarkServlet srv) {this.srv = srv;}
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 

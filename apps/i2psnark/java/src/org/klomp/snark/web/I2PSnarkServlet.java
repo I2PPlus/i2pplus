@@ -308,7 +308,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return originHost.equals(requestHost) && originPort == requestPort;
     }
 
-    /** Package-visible collaborators for {@link ConfigForms}. */
+    /** Package-visible collaborators for {@link I2PSnarkConfigure}. */
     SnarkManager manager() {return _manager;}
     String contextPath() {return _contextPath;}
     String contextName() {return _contextName;}
@@ -316,8 +316,8 @@ public class I2PSnarkServlet extends BasicServlet {
     String warBase() {return WARBASE;}
     I2PAppContext context() {return _context;}
 
-    private final ConfigForms configForms = new ConfigForms(this);
-    ConfigForms configForms() {return configForms;}
+    private final I2PSnarkConfigure configForms = new I2PSnarkConfigure(this);
+    I2PSnarkConfigure configForms() {return configForms;}
 
     private void writeConfigForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeConfigForm(out, req);}
 
@@ -3925,7 +3925,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // Filter check early exit
         if (!filterEnabled || snarkMatchesFilter(snark, filterParam, snarkStatusLocal)) {
             String statusString = statusResult.statusHtml;
-            String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
+            String rowClass = (row % 2 == 0 ? "even" : "odd");
             String rowStatus = rowClass + ' ' + snarkStatusLocal;
             // queued for autostart: scheduled by the batch starter, tunnels
             // not built yet
@@ -7264,7 +7264,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        String rowClass = (rowEven ? "rowEven" : "rowOdd");
+        String rowClass = (rowEven ? "even" : "odd");
         String completed = (complete ? "completed" : "incomplete");
         buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
 
