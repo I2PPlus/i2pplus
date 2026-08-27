@@ -95,7 +95,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Serialize the ring oldest-first as "timestampSec,rxBytes,txBytes;...".
+     *  Serialize the ring oldest-first as "timestampSec,rxKB,txKB;...".
+     *  Values are KB (bytes/1024 rounded) to keep the wire format compact.
      *
      *  @return compact CSV of every stored sample, empty string when none
      *  @since 0.9.71+
@@ -199,16 +200,18 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  @return CSV "ts,rx,tx;..." oldest-first over the stored window
+     *  @return CSV "ts,rxKB,txKB;..." oldest-first — KB keeps the data URL small
      */
     private synchronized String serialize() {
-        StringBuilder buf = new StringBuilder(64 * _count);
+        StringBuilder buf = new StringBuilder(48 * _count);
         int start = (_head - _count + CAPACITY) % CAPACITY;
         for (int i = 0; i < _count; i++) {
             int idx = (start + i) % CAPACITY;
+            long rxKB = (_rx[idx] + 512) / 1024;
+            long txKB = (_tx[idx] + 512) / 1024;
             buf.append(_times[idx]).append(',')
-               .append(_rx[idx]).append(',')
-               .append(_tx[idx]);
+               .append(rxKB).append(',')
+               .append(txKB);
             if (i < _count - 1) {buf.append(';');}
         }
         return buf.toString();
@@ -239,6 +242,21 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
         if (!file.exists()) {return;}
         try {
             String csv = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+            // Old persisted files store bytes; new ones store KB. Detect and discard old to avoid double-scaling.
+            if (csv.contains(",") && csv.length() > 0) {
+                boolean looksLikeBytes = false;
+                for (String e : csv.split(";")) {
+                    String[] p = e.split(",");
+                    if (p.length == 3) {
+                        try {
+                            long rx = Long.parseLong(p[1].trim());
+                            long tx = Long.parseLong(p[2].trim());
+                            if (rx > 100000 || tx > 100000) { looksLikeBytes = true; break; }
+                        } catch (NumberFormatException nfe) {}
+                    }
+                }
+                if (looksLikeBytes) { Files.deleteIfExists(file.toPath()); return; }
+            }
             long cutoff = (System.currentTimeMillis() - WINDOW_MS) / 1000;
             for (String entry : csv.split(";")) {
                 String[] parts = entry.split(",");
@@ -248,9 +266,10 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
                     long rx = Long.parseLong(parts[1].trim());
                     long tx = Long.parseLong(parts[2].trim());
                     if (ts < cutoff || ts > System.currentTimeMillis() / 1000 + 5) {continue;}
+                    // Persisted values are now KB; convert back to bytes for internal ring
                     _times[_head] = ts;
-                    _rx[_head] = rx;
-                    _tx[_head] = tx;
+                    _rx[_head] = rx * 1024;
+                    _tx[_head] = tx * 1024;
                     _head = (_head + 1) % CAPACITY;
                     if (_count < CAPACITY) {_count++;}
                     _version++;
