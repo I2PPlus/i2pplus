@@ -1388,7 +1388,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             msgpfx = "Error occurred communicating with router: ";
         }
 
-        if (_log.shouldLog(level) && _context.isRouterContext()) {_log.log(level, getPrefix() + msgpfx + msg + " -> " + error.getMessage());}
+        if (_log.shouldLog(level) && _context.isRouterContext()) {_log.log(level, getPrefix() + msgpfx + msg);}
         if (_sessionListener != null) {_sessionListener.errorOccurred(this, msg, null);}
         _errorMessage = msg; // Save for throwing out of connect()
         _errorCause = error;
