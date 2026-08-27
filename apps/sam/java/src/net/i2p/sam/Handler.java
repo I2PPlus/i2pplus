@@ -7,8 +7,6 @@ package net.i2p.sam;
  */
 public interface Handler {
 
-    /**
-     * Stop the handler
-     */
+    /** Stop handling, closing the client socket and unregistering from the bridge. */
     public void stopHandling();
 }

@@ -244,9 +244,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         throw new IOException("master session");
     }
 
-    /**
-     *  Does nothing.
-     */
+    /** No-op — master delegates datagram handling to subsessions. */
     public void stopDatagramReceiving() { /* no-op */ }
 
     /**
@@ -497,7 +495,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                             try { peer = i2ps.getPeerDestination().calculateHash().toBase32().substring(0, 8); } catch (Exception e) { /* ignore */ }
                             if (_log.shouldWarn()) {
                             _log.warn("Rejected incoming connection from " + peer +
-                                      " —> Accept queue overflow for STREAM session \"" + ssess.getNick() +
+                                      "\n* Accept queue overflow for STREAM session \"" + ssess.getNick() +
                                       "\" (Queue " + ssess.getAcceptQueueSize() + " full, total rejected: " + _overflowCount + ")");
                             }
                         }
