@@ -88,6 +88,7 @@ class ClientConnectionRunner {
      */
     private final Map<MessageId, Payload> _messages;
     private int _consecutiveLeaseRequestFails;
+    private long _lastLeaseFailTime;
     /**
      *  Set of messageIds created but not yet ACCEPTED.
      *  Unused for i2cp.messageReliability = "none" (_dontSendMSM = true)
@@ -120,7 +121,14 @@ class ClientConnectionRunner {
     // e.g. on local access
     private static final int MAX_MESSAGE_ID = 0x4000000;
 
-    private static final int MAX_LEASE_FAILS = 5;
+    /**
+     * Disconnect after this many consecutive LeaseSet request failures.
+     * Increased from 5 to 10 to tolerate brief I2CP stalls without mass-disconnect;
+     * see failLeaseRequest() decay handling.
+     */
+    private static final int MAX_LEASE_FAILS = 10;
+    /** Reset consecutive-fail counter if this much time has elapsed since last failure. */
+    private static final long LEASE_FAIL_DECAY_MS = 5*60*1000;
     private static final int BUF_SIZE = 32*1024;
     private static final int MAX_SESSIONS = 4;
 
@@ -540,9 +548,12 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Fail the given lease request.
+     * Fail the given lease request and track consecutive failures.
+     * The counter decays after {@link #LEASE_FAIL_DECAY_MS} of no failures,
+     * so a brief I2CP stall does not permanently prime a disconnect.
+     * Counter resets to zero on successful LeaseSet receipt.
      *
-     *  @param req non-null
+     * @param req the failed request, non-null
      */
     public void failLeaseRequest(LeaseRequestState req) {
         boolean disconnect = false;
@@ -552,6 +563,11 @@ class ClientConnectionRunner {
         synchronized (this) {
             if (sp.leaseRequest == req) {
                 sp.leaseRequest = null;
+                long now = _context.clock().now();
+                if (now - _lastLeaseFailTime > LEASE_FAIL_DECAY_MS) {
+                    _consecutiveLeaseRequestFails = 0;
+                }
+                _lastLeaseFailTime = now;
                 disconnect = ++_consecutiveLeaseRequestFails > MAX_LEASE_FAILS;
             }
         }
