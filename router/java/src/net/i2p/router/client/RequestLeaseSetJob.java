@@ -45,6 +45,8 @@ class RequestLeaseSetJob extends JobImpl {
     // KademliaNetworkDatabaseFacade.MAX_LEASE_FUTURE (15 min) netdb cap.
     private static final long MAX_LEASE_FUTURE = 10L * 60 * 1000;
     private static final long CLOCK_FUDGE_FACTOR = 30L * 1000;
+    /** Jitter added to timeout to spread thundering-herd retries. */
+    private static final long TIMEOUT_JITTER_MS = 2000;
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
         _log = ctx.logManager().getLog(RequestLeaseSetJob.class);
@@ -52,11 +54,10 @@ class RequestLeaseSetJob extends JobImpl {
         _requestState = state;
         // all createRateStat in ClientManager
     }
-    /** Return the name */
-
+    @Override
     public String getName() {return "Request LeaseSet from Client";}
-    /** Execute the job */
 
+    @Override
     public void runJob() {
         if (_runner.isDead()) {
             if (_log.shouldWarn())
@@ -184,23 +185,24 @@ class RequestLeaseSetJob extends JobImpl {
     }
 
     /**
-     * Schedule this job to be run after the request's expiration, so that if
-     * it wasn't yet successful, we clean up the pending state so new requests
-     * can proceed.
+     * Timeout check for the LeaseSet request. Scheduled for the request's
+     * expiration plus a small random jitter so simultaneous requests from
+     * many clients do not all timeout and retry at the same instant.
      */
     private class CheckLeaseRequestStatus extends JobImpl {
         private final long _start;
         public CheckLeaseRequestStatus() {
             super(RequestLeaseSetJob.this.getContext());
             _start = RequestLeaseSetJob.this.getContext().clock().now();
-            getTiming().setStartAfter(_requestState.getExpiration());
+            long jitter = getContext().random().nextInt((int) TIMEOUT_JITTER_MS + 1);
+            getTiming().setStartAfter(_requestState.getExpiration() + jitter);
         }
-        /** Execute the job */
 
+        @Override
         public void runJob() {
             if (_runner.isDead()) {
                 if (_log.shouldDebug())
-                    _log.debug("Already dead, dont try to expire the leaseSet lookup");
+                    _log.debug("Already dead, don't try to expire the leaseSet lookup");
                 return;
             }
             if (_requestState.getIsSuccessful()) {
@@ -216,7 +218,8 @@ class RequestLeaseSetJob extends JobImpl {
                 _runner.failLeaseRequest(_requestState);
             }
         }
-        /** Return the name */
+
+        @Override
         public String getName() { return "Check LeaseRequest Status"; }
     }
 }
