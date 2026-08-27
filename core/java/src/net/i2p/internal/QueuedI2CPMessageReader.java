@@ -99,7 +99,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
         private synchronized void startIfNeeded() {
             if (dispatcherThread == null) {
-                dispatcherThread = new I2PThread(this, "I2CPDispatcher", true);
+                dispatcherThread = new I2PThread(this, "I2CPDisp", true);
                 dispatcherThread.start();
             }
         }

@@ -165,7 +165,7 @@ public class TestSwarm {
                 }
             }
 
-            I2PThread floodListener = new I2PThread(new FloodListener(), "FloodListener" + _connectionId);
+            I2PThread floodListener = new I2PThread(new FloodListener(), "FloodList" + _connectionId);
             floodListener.start();
 
             try {

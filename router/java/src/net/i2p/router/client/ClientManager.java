@@ -148,7 +148,7 @@ class ClientManager {
                 Constructor<? extends ClientListenerRunner> ctor =
                     clazz.getDeclaredConstructor(RouterContext.class, ClientManager.class);
                 listener = ctor.newInstance(_ctx, this);
-                Thread t = new I2PThread(listener, "DomainClientListener", true);
+                Thread t = new I2PThread(listener, "DomClnListen", true);
                 t.start();
                 _listeners.add(listener);
             } catch (ClassNotFoundException e) {
@@ -172,7 +172,7 @@ class ClientManager {
             } else {
                 listener = new ClientListenerRunner(_ctx, this, _port);
             }
-            Thread t = new I2PThread(listener, "ClientListener:" + _port, true);
+            Thread t = new I2PThread(listener, "ClntL:" + _port, true);
             t.start();
             _listeners.add(listener);
             _clientTimestamper.schedule(ClientTimestamper.LOOP_TIME);

@@ -567,7 +567,7 @@ class NetDbRenderer {
         if (!_rdnsWorkerRunning.compareAndSet(false, true)) {
             return; // already running
         }
-        Thread worker = new Thread(this::runRdnsWorker, "Rdns-Staggered");
+        Thread worker = new Thread(this::runRdnsWorker, "RdnsStagger");
         worker.setDaemon(true);
         worker.start();
     }

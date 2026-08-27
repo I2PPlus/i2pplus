@@ -152,7 +152,7 @@ public class PluginStarter implements Runnable {
      *  @since 0.8.13, public since 0.9.33, was package private
      */
     public static void updateAll(RouterContext ctx) {
-        Thread t = new I2PAppThread(new PluginUpdater(ctx), "PluginUpdater", true);
+        Thread t = new I2PAppThread(new PluginUpdater(ctx), "PlugUpdater", true);
         t.start();
     }
 

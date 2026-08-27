@@ -112,7 +112,7 @@ public class EepGetTest extends TestCase {
     private TestServer startServer(Handler handler) throws IOException {
         TestServer server = new TestServer(handler);
         _server = server;
-        new Thread(server, "EepGetTestServer").start();
+        new Thread(server, "EepTestSrv").start();
         return server;
     }
 

@@ -249,7 +249,7 @@ class PeerManager {
      *
      *  @since 0.8.8
      */
-    private void loadProfilesInBackground() {(new I2PThread(new ProfileLoader(), "PeerProfileLoader")).start();}
+    private void loadProfilesInBackground() {(new I2PThread(new ProfileLoader(), "PeerProfLoad")).start();}
 
     /**
      *  Load the profiles and instantiate Reorg, waiting for 60s uptime to allow the routerinfos to load first

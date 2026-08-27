@@ -5156,7 +5156,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                                               // message before throwing
         } else {
             snark.setStarting(); // mark it for the UI
-            (new I2PAppThread(new ThreadedStarter(snark), "TorrentStarter", true)).start();
+            (new I2PAppThread(new ThreadedStarter(snark), "TorrStarter", true)).start();
             sleep(200);
         }
     }
@@ -5175,7 +5175,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             } // mark it for the UI
             _stopping = false;
         }
-        (new I2PAppThread(new ThreadedStarter(null), "TorrentStarterAll", true)).start();
+        (new I2PAppThread(new ThreadedStarter(null), "TorrStAll", true)).start();
         sleep(200);
     }
 
@@ -5203,7 +5203,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // mark it for the UI until the tunnel comes up
             for (Snark snark : stopped) {snark.setStarting();}
         }
-        (new I2PAppThread(() -> startBatch(stopped), "TorrentStarterBatch", true)).start();
+        (new I2PAppThread(() -> startBatch(stopped), "TorrStBatch", true)).start();
     }
 
     /**
@@ -5404,7 +5404,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // Start each pool on its own thread: a pool's session creation
             // blocks until its tunnels build, and one slow pool must not hold
             // up the rest of the batch
-            (new I2PAppThread(new PoolStarter(members), "SnarkStartPool", true)).start();
+            (new I2PAppThread(new PoolStarter(members), "SnarkSPool", true)).start();
         }
         return true;
     }
@@ -5687,7 +5687,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                 }
                 snark.setStarting();
-                (new I2PAppThread(new ThreadedStarter(snark), "TorrentStarter", true)).start();
+                (new I2PAppThread(new ThreadedStarter(snark), "TorrStarter", true)).start();
             }
         }
     }
@@ -5710,7 +5710,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             addMessage((_t("Cannot check {0}", snark.getBaseName()) + " -> " + _t("No storage")));
             return;
         }
-        (new I2PAppThread(new ThreadedRechecker(snark), "TorrentRechecker", true)).start();
+        (new I2PAppThread(new ThreadedRechecker(snark), "TorrRecheck", true)).start();
         sleep(200);
     }
 

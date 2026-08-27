@@ -37,7 +37,7 @@ public class SessionManager {
 
     private SessionManager() {
         _cleanup = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "SessionCleanup");
+            Thread t = new Thread(r, "SessCleanup");
             t.setDaemon(true);
             return t;
         });

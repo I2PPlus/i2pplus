@@ -113,7 +113,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** Transport worker thread name prefixes tracked for CPU saturation. */
     private static final String[] CPU_STAGES = {
         "UDPPktHandler", "UDMMsgRX", "NTCPReader", "NTCPWriter", "NTCPTXFinis",
-        "UDPReceiver", "UDPSender", "UDPEstablisher", "UDPPktPusher", "NTCPPumper"
+        "UDPReceiver", "UDPSender", "UDPEstab", "UDPPktPusher", "NTCPPumper"
     };
 
     /** Per-thread CPU time source; getThreadCpuTime() returns -1 on unsupported JVMs. */

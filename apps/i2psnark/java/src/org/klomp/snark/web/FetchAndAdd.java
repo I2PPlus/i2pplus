@@ -201,7 +201,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _started = _util.getContext().clock().now();
         _isRunning = true;
         _active = false;
-        _thread = new I2PAppThread(this, "TorrentEepGet", true);
+        _thread = new I2PAppThread(this, "TorrEepGet", true);
         _thread.start();
     }
 

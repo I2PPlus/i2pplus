@@ -549,7 +549,7 @@ public class TunnelControllerGroup implements ClientApp {
         cancelDelayedShutdown = false;
         List<TunnelController> stoppedServers = Collections.synchronizedList(new ArrayList<>());
         _delayedShutdownExecutor = Executors.newCachedThreadPool(r -> {
-            Thread t = new Thread(r, "TunnelShutdown");
+            Thread t = new Thread(r, "TunShutdown");
             t.setDaemon(true);
             return t;
         });
@@ -826,7 +826,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private synchronized void startControllers() {
         changeState(STARTING);
-        I2PAppThread startupThread = new I2PAppThread(new StartControllers(), "StartupTunnels");
+        I2PAppThread startupThread = new I2PAppThread(new StartControllers(), "StartTuns");
         startupThread.start();
         changeState(RUNNING);
     }

@@ -265,7 +265,7 @@ public class EstablishmentManager {
     public synchronized void startup() {
         loadTokens();
         _alive = true;
-        I2PThread t = new I2PThread(new Establisher(), "UDPEstablisher", true);
+        I2PThread t = new I2PThread(new Establisher(), "UDPEstab", true);
         t.start();
     }
 

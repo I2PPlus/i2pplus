@@ -119,7 +119,7 @@ public class TrackerClient implements Runnable {
                         private final AtomicInteger _n = new AtomicInteger();
 
                         public Thread newThread(Runnable r) {
-                            Thread t = new Thread(r, "SnarkUnannounce-" + _n.incrementAndGet());
+                            Thread t = new Thread(r, "SnarkUnann" + _n.incrementAndGet());
                             t.setDaemon(true);
                             return t;
                         }

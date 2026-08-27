@@ -210,7 +210,7 @@ class TunnelGatewayPumper implements Runnable {
         _instance = this;
 
         for (int i = 0; i < _pumpers; i++) {
-            Thread t = new I2PThread(this, "TunnGWPumper." + _threadNum.incrementAndGet(), true);
+            Thread t = new I2PThread(this, "TunGWPump." + _threadNum.incrementAndGet(), true);
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();
@@ -243,7 +243,7 @@ class TunnelGatewayPumper implements Runnable {
         if (newCount == current) return;
 
         while (_threads.size() < newCount) {
-            Thread t = new I2PThread(this, "TunnGWPumper." + _threadNum.incrementAndGet(), true);
+            Thread t = new I2PThread(this, "TunGWPump." + _threadNum.incrementAndGet(), true);
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();

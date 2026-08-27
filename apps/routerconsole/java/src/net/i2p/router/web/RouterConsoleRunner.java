@@ -899,7 +899,7 @@ public class RouterConsoleRunner implements RouterApp {
      * starter threads, and register the shutdown and signal handlers.
      */
     private void startBackgroundServices() {
-        Thread t = new I2PAppThread(new GraphGenerator(_context), "GraphGenerator", true);
+        Thread t = new I2PAppThread(new GraphGenerator(_context), "GraphGen", true);
         t.setPriority(Thread.NORM_PRIORITY - 1);
         t.start();
 
@@ -909,7 +909,7 @@ public class RouterConsoleRunner implements RouterApp {
         nm.startup();
 
         if (PluginStarter.pluginsEnabled(_context)) {
-            t = new I2PAppThread(new PluginStarter(_context), "PluginStarter", true);
+            t = new I2PAppThread(new PluginStarter(_context), "PlugStarter", true);
             t.setPriority(Thread.NORM_PRIORITY - 1);
             t.start();
         }

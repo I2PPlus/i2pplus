@@ -147,7 +147,7 @@ class PacketHandler {
             if (_activeHandlers.compareAndSet(current, current + 1)) {
                 Handler h = new Handler();
                 _handlers.add(h);
-                I2PThread t = new I2PThread(h, "UDPPktHandler." + _threadNum.incrementAndGet(), true);
+                I2PThread t = new I2PThread(h, "UDPHdlr." + _threadNum.incrementAndGet(), true);
                 t.start();
                 current = _activeHandlers.get();
             } else {

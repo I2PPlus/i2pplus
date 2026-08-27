@@ -506,7 +506,7 @@ public class JobQueue {
      */
     public void startup() {
         _alive = true;
-        I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
+        I2PThread pumperThread = new I2PThread(_pumper, "JobQPumper", true);
         pumperThread.setPriority(Thread.MAX_PRIORITY);
         pumperThread.start();
         _scaler.startup();

@@ -126,7 +126,7 @@ class SubSession extends I2PSessionMuxedImpl {
             }
             synchronized (_stateLock) {
                 if (_state != State.OPEN) {
-                    Thread notifier = new I2PAppThread(_availabilityNotifier, "ClientNotifier." + getName(), true);
+                    Thread notifier = new I2PAppThread(_availabilityNotifier, "ClntNtfy." + getName(), true);
                     notifier.start();
                     changeState(State.OPEN);
                 }

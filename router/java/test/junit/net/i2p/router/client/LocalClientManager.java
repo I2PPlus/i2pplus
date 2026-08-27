@@ -44,7 +44,7 @@ class LocalClientManager extends ClientManager {
     @Override
     protected void startListeners() {
         ClientListenerRunner listener = new LocalClientListenerRunner(_ctx, this, _port);
-        Thread t = new I2PThread(listener, "ClientListener:" + _port, true);
+        Thread t = new I2PThread(listener, "ClntL:" + _port, true);
         t.start();
         _listeners.add(listener);
         _isStarted = true;

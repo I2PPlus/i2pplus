@@ -210,7 +210,7 @@ public class Main implements RouterApp, NotificationService {
                 } catch (InterruptedException ie) { /* ignored */ }
             }
         };
-        Thread t = new Thread(r, "DesktopGUISpinner");
+        Thread t = new Thread(r, "DeskGUISpin");
         t.setDaemon(false);
         t.start();
     }

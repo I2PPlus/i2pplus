@@ -66,7 +66,7 @@ public class Servlet extends HttpServlet {
             // Store HostChecker in servlet context for JSP access with retry mechanism
             // HostChecker is initialized asynchronously in Daemon.run(), so we need to wait
             java.util.concurrent.ScheduledExecutorService scheduler = java.util.concurrent.Executors.newSingleThreadScheduledExecutor(r -> {
-                Thread thr = new Thread(r, "AddrbookScheduler");
+                Thread thr = new Thread(r, "AddrSched");
                 thr.setDaemon(true);
                 return thr;
             });

@@ -446,7 +446,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 if (exec != null) {
                     exec.execute(toI2P);
                 } else {
-                    Thread t = new Thread(toI2P, "TunnelFwd.toI2P." + _runnerId);
+                    Thread t = new Thread(toI2P, "TunFwdI2P." + _runnerId);
                     t.setDaemon(true);
                     t.start();
                 }

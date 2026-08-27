@@ -84,7 +84,7 @@ public abstract class FormHandler {
 
     /** Clean up old entries periodically */
     static {
-        Thread cleanupThread = new Thread(FormHandler::cleanupRateLimits, "FormHandler-Cleanup");
+        Thread cleanupThread = new Thread(FormHandler::cleanupRateLimits, "FormHdlrCln");
         cleanupThread.setDaemon(true);
         cleanupThread.start();
     }

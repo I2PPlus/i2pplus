@@ -92,7 +92,7 @@ class ConnectionAcceptor implements Runnable {
                             + (thread == null));
         }
         if (thread == null) {
-            thread = new I2PAppThread(this, "SnarkAcceptor");
+            thread = new I2PAppThread(this, "SnarkAccpt");
             thread.setDaemon(true);
             thread.start();
             _cleaner.reschedule(BAD_CLEAN_INTERVAL, false);
@@ -104,7 +104,7 @@ class ConnectionAcceptor implements Runnable {
         this.peeracceptor = peeracceptor;
         _util = util;
         _td = null;
-        thread = new I2PAppThread(this, "SnarkAcceptor");
+        thread = new I2PAppThread(this, "SnarkAccpt");
         thread.setDaemon(true);
         thread.start();
         _cleaner = new Cleaner();
@@ -119,7 +119,7 @@ class ConnectionAcceptor implements Runnable {
         this.peeracceptor = peeracceptor;
         _util = util;
         _td = td;
-        thread = new I2PAppThread(this, "SnarkAcceptor");
+        thread = new I2PAppThread(this, "SnarkAccpt");
         thread.setDaemon(true);
         thread.start();
         _cleaner = new Cleaner();
@@ -480,7 +480,7 @@ class ConnectionAcceptor implements Runnable {
                 return;
             }
             _stop = false;
-            _thread = new I2PAppThread(this, "SnarkAcceptor-" + _td.getKey().substring(0, 6));
+            _thread = new I2PAppThread(this, "SnarkAccpt-" + _td.getKey().substring(0, 4));
             _thread.setDaemon(true);
             _thread.start();
         }

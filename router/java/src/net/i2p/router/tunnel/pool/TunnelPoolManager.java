@@ -867,11 +867,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _isShutdown = false;
         RemoveSlowTunnelsJob._runCount.set(0);
         if (!_executor.isRunning()) {
-            I2PThread t = new I2PThread(_executor, "BuildExecutor", true);
+            I2PThread t = new I2PThread(_executor, "BldExecutor", true);
             t.start();
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
-                I2PThread hThread = new I2PThread(_handler, "BuildHandler." + _handlerThreadId.getAndIncrement(), true);
+                I2PThread hThread = new I2PThread(_handler, "BldHdlr." + _handlerThreadId.getAndIncrement(), true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }
@@ -933,7 +933,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (target > current) {
             for (int i = current; i < target; i++) {
                 I2PThread hThread = new I2PThread(_handler,
-                    "BuildHandler." + _handlerThreadId.getAndIncrement(), true);
+                    "BldHdlr." + _handlerThreadId.getAndIncrement(), true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }

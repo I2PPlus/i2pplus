@@ -460,12 +460,12 @@ public class Router implements RouterClock.ClockShiftListener {
         _shutdownHook = new ShutdownHook(_context);
         GracefulShutdown gs = new GracefulShutdown(_context); // NOSONAR S3252 false positive
         _gracefulShutdownLock = gs.getWakeLock();
-        _gracefulShutdownDetector = new I2PAppThread(gs, "GracefulShutdown", true);
+        _gracefulShutdownDetector = new I2PAppThread(gs, "GraceShutdn", true);
         _gracefulShutdownDetector.setPriority(Thread.NORM_PRIORITY + 1);
         _gracefulShutdownDetector.start();
 
         _watchdog = new RouterWatchdog(_context);
-        _watchdogThread = new I2PAppThread(_watchdog, "RouterWatchdog", true);
+        _watchdogThread = new I2PAppThread(_watchdog, "RtrWatchdog", true);
         _watchdogThread.setPriority(Thread.MAX_PRIORITY);
         _watchdogThread.start();
 
@@ -1948,7 +1948,7 @@ public class Router implements RouterClock.ClockShiftListener {
         // This also prevents netdb from immediately expiring all the RIs
         _started = System.currentTimeMillis(); // NOSONAR S3252 false positive
         synchronized(_configFileLock) {_downtime = 1;}
-        Thread t = new I2PThread(new Restarter(_context), "RouterRestart");
+        Thread t = new I2PThread(new Restarter(_context), "RtrRestart");
         t.setPriority(Thread.NORM_PRIORITY + 1);
         t.start();
     }

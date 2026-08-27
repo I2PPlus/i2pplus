@@ -56,7 +56,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private ScheduledExecutorService _scheduler;
-    private static final String NAME = "GraphGenerator";
+    private static final String NAME = "GraphGen";
 
     /**
      * GraphGenerator.

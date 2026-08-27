@@ -451,10 +451,10 @@ public class InNetMessagePool implements Service {
                     new long[] {RateConstants.ONE_MINUTE});
             _context.statManager().createRateStat("pool.dispatchGatewayTime", "How long a tunnel gateway dispatch takes", "Tunnels",
                     new long[] {RateConstants.ONE_MINUTE});
-            I2PThread dataThread = new I2PThread(new TunnelDataDispatcher(), "TunnelDataDispatcher");
+            I2PThread dataThread = new I2PThread(new TunnelDataDispatcher(), "TunDataDisp");
             dataThread.setDaemon(true);
             dataThread.start();
-            I2PThread gatewayThread = new I2PThread(new TunnelGatewayDispatcher(), "TunnelGatewayDispatcher");
+            I2PThread gatewayThread = new I2PThread(new TunnelGatewayDispatcher(), "TunGWDisp");
             gatewayThread.setDaemon(true);
             gatewayThread.start();
         }
