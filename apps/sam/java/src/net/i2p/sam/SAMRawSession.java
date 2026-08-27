@@ -18,7 +18,6 @@ import net.i2p.data.DataFormatException;
 /**
  * SAM RAW session class.
  *
- * @author human
  */
 class SAMRawSession extends SAMMessageSession {
 

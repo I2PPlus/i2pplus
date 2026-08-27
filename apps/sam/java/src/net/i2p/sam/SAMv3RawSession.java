@@ -13,7 +13,6 @@ import net.i2p.data.DataHelper;
 
 /**
  * SAM v3 raw session implementation.
- * @author MKVore
  */
 class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
 

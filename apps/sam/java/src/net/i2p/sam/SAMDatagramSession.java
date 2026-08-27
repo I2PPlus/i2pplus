@@ -22,7 +22,6 @@ import net.i2p.data.Destination;
 /**
  * SAM DATAGRAM session class.
  *
- * @author human
  */
 class SAMDatagramSession extends SAMMessageSession {
 

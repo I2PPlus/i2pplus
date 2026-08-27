@@ -30,9 +30,8 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.util.Log;
 
 /**
- * Miscellaneous utility methods used by SAM protocol handlers.
- *
- * @author human
+ * Protocol helpers for SAM: destination/key parsing, naming lookups,
+ * SAM parameter parsing, and random destination generation.
  */
 class SAMUtils {
 

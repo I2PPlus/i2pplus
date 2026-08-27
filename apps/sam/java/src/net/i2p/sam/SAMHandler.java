@@ -22,7 +22,6 @@ import net.i2p.util.Log;
  * methods, but is not able to actually parse the protocol itself:
  * this task is delegated to subclasses.
  *
- * @author human
  */
 abstract class SAMHandler implements Runnable, Handler {
 

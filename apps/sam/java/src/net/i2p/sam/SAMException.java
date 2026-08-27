@@ -11,7 +11,6 @@ package net.i2p.sam;
 /**
  * Exception thrown by SAM methods
  *
- * @author human
  */
 public class SAMException extends Exception {
 

@@ -36,7 +36,6 @@ import net.i2p.data.Destination;
 /**
  * Class able to handle a SAM version 1 client connections.
  *
- * @author human
  */
 class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramReceiver, SAMStreamReceiver {
 

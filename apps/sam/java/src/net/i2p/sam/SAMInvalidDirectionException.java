@@ -12,7 +12,6 @@ package net.i2p.sam;
  * Exception thrown by SAM methods when an application tries to create outgoing
  * connections through a receive-only SAM session.
  *
- * @author human
  */
 class SAMInvalidDirectionException extends Exception {
     private static final long serialVersionUID = 1;

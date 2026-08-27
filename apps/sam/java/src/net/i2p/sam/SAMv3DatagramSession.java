@@ -13,7 +13,6 @@ import net.i2p.data.Destination;
 /**
  * SAM v3 datagram session implementation.
  *
- * @author MKVore
  * @since 0.9.25
  */
 class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDatagramReceiver {

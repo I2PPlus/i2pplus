@@ -28,7 +28,6 @@ import net.i2p.util.Log;
 /**
  * Base abstract class for SAM message-based sessions.
  *
- * @author human
  */
 abstract class SAMMessageSession implements SAMMessageSess {
 
@@ -268,7 +267,6 @@ abstract class SAMMessageSession implements SAMMessageSess {
     /**
      * SAM message-based session handler, running in its own thread
      *
-     * @author human
      */
     private class SAMMessageSessionHandler implements Runnable, I2PSessionMuxedListener {
 

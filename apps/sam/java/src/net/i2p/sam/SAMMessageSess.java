@@ -6,11 +6,9 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 
 /**
- * Base interface for SAMMessageSession, which is the base for
- * v1/v3 datagram and raw sessions.
- * Also implemented by SAMStreamSession.
- *
- * @since 0.9.25 pulled from SAMMessageSession
+ * Base for datagram/raw sessions (v1/v3) and also SAMStreamSession.
+ * @see SAMMessageSession
+ * @see SAMStreamSession
  */
 interface SAMMessageSess extends Closeable {
 

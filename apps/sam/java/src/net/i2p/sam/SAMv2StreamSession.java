@@ -34,7 +34,6 @@ import net.i2p.util.Log;
 /**
  * SAMv2 STREAM session class.
  *
- * @author mkvore
  */
 class SAMv2StreamSession extends SAMStreamSession {
     /**
@@ -114,7 +113,6 @@ class SAMv2StreamSession extends SAMStreamSession {
     /**
      * SAM STREAM socket connecter, running in its own thread.
      *
-     * @author mkvore
      */
     private class StreamConnector implements Runnable {
         private final int id;
@@ -380,7 +378,6 @@ class SAMv2StreamSession extends SAMStreamSession {
      * SAM STREAM socket reader, running in its own thread.  It forwards
      * forward data to/from an I2P socket.
      *
-     * @author human
      */
     public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader {
         /**

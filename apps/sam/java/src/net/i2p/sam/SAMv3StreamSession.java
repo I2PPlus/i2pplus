@@ -52,7 +52,6 @@ import net.i2p.util.Log;
  * threads. This decouples the I2P accept loop from the per-client
  * SAM handler and allows multiple concurrent ACCEPT commands.
  *
- * @author mkvore
  * @since 0.9.25
  */
 class SAMv3StreamSession extends SAMStreamSession implements Session {

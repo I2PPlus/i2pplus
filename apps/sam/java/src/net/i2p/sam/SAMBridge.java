@@ -38,10 +38,9 @@ import net.i2p.util.SimpleTimer2;
 import java.io.Writer;
 
 /**
- * SAM bridge implementation.
- * This is the main entry point for SAM.
- *
- * @author human
+ * SAM bridge — listens on TCP, dispatches each client to a {@link SAMHandlerFactory}
+ * handler via {@link SAMHandlerPool}, and tracks sessions in {@link SessionsDB}.
+ * Entry point for all SAM v1/v2/v3 STREAM/DATAGRAM/RAW/MASTER sessions.
  */
 public class SAMBridge implements Runnable, ClientApp {
     private static final Log _logStatic = new Log(SAMBridge.class);

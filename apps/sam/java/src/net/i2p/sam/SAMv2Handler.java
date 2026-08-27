@@ -16,7 +16,6 @@ import net.i2p.data.DataFormatException;
 /*
  * Class able to handle a SAM version 2 client connection.
  *
- * @author mkvore
  */
 
 /** SAM version 2 handler. */

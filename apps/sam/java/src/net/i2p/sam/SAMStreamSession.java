@@ -44,9 +44,9 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
- * SAM STREAM session class.
+ * SAM STREAM session — BOTH/CREATE/RECEIVE modes over an I2PSocketManager.
+ * v1 bridge; v3 extends via "__v3__" direction to share the manager.
  *
- * @author human
  */
 class SAMStreamSession implements SAMMessageSess {
 
@@ -56,12 +56,12 @@ class SAMStreamSession implements SAMMessageSess {
     protected final SAMStreamSessionServer server;
     protected final I2PSocketManager socketMgr;
 
-    /** stream id (Long) to SAMStreamSessionSocketReader */
+    /** stream id → socket reader; Integer key, auto-negative ids for inbound. */
     private final HashMap<Integer,SAMStreamSessionSocketReader> handlersMap = new HashMap<>();
-    /** stream id (Long) to StreamSender */
+    /** stream id → sender for outbound data. */
     private final HashMap<Integer,StreamSender> sendersMap = new HashMap<>();
 
-    /** Atomic integer. */
+    /** Counter for auto-generated negative stream ids. */
     private final AtomicInteger lastNegativeId = new AtomicInteger();
 
     // Can we create outgoing connections?
@@ -251,13 +251,9 @@ class SAMStreamSession implements SAMMessageSess {
         return listenPort;
     }
 
-    /**
-     * DisconnectListener.
-     */
+    /** Closes SAM session when the underlying I2P manager disconnects. */
     protected class DisconnectListener implements I2PSocketManager.DisconnectListener {
-        /**
-         * sessionDisconnected.
-         */
+        /** I2P manager disconnected — close all handlers and session. */
         public void sessionDisconnected() {
             close();
         }
@@ -540,7 +536,6 @@ class SAMStreamSession implements SAMMessageSess {
      * SAM STREAM session server, running in its own thread.  It will
      * wait for incoming connections from the I2P network.
      *
-     * @author human
      */
     public class SAMStreamSessionServer implements Runnable {
 
@@ -659,7 +654,6 @@ class SAMStreamSession implements SAMMessageSess {
      * Declared static: this base reader holds no reference to the enclosing
      * SAMStreamSession instance, so it does not need an implicit outer handle.
      *
-     * @author human
      */
     public static class SAMStreamSessionSocketReader implements Runnable {
 
@@ -670,14 +664,10 @@ class SAMStreamSession implements SAMMessageSess {
          */
         protected final Object runningLock = new Object();
 
-        /**
-         * stillRunning.
-         */
+        /** Guarded by runningLock; cleared on stop. */
         protected volatile boolean stillRunning = true;
 
-        /**
-         * id.
-         */
+        /** Stream id for this reader. */
         protected final int id;
 
         /**

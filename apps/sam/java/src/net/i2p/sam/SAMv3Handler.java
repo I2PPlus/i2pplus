@@ -28,7 +28,6 @@ import net.i2p.util.PasswordManager;
 /**
  * Class able to handle a SAM version 3 client connection.
  *
- * @author mkvore
  */
 
 class SAMv3Handler extends SAMv1Handler
