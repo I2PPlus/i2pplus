@@ -193,7 +193,7 @@ body.magnets #snarkHead .trackerLink,body.magnets #snarkTbody .trackerLink{paddi
 .peerCount .left{padding-left:2px;text-align:left}
 .peerCount .left,.peerCount .right{min-width:12px;display:inline-block}
 .peerCount .right{padding-right:2px;text-align:right}
-.rowOdd:not(.peerinfo) .rxd .barText::after,.rowEven:not(.peerinfo) .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#ffe #0000 #0000 #0000;content:""}
+.odd:not(.peerinfo) .rxd .barText::after,.even:not(.peerinfo) .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#ffe #0000 #0000 #0000;content:""}
 td.peerCount{padding-left:2px;padding-right:6px;width:1%;min-width:48px;white-space:nowrap;text-align:center;font-weight:700}
 th.peerCount img{margin-left:6px}
 .peerCount b,.ETA,.rateDown,.rxd{color:#5c4e3d}
@@ -203,9 +203,9 @@ th.peerCount img{margin-left:6px}
 .rateUp,.rateDown,.rxd,.txd{padding:0 5px;font-weight:700}
 .rateDown{color:#395}
 .rateUp,.peerinfo .rateUp .unchoked{color:#cb4dcb}
-.rowOdd:last-child td,.rowEven:last-child td{border-bottom:0}
+.odd:last-child td,.even:last-child td{border-bottom:0}
 .commentDetails,.details,.trackerLink{padding-left:0;padding-right:0;width:1%;text-align:center;font-weight:700}
-.rowOdd,.createFilterString:nth-child(even),.knownTracker:nth-child(even),#torrentEdit tr:nth-last-child(even){background:#efe6e0}
+.odd,.createFilterString:nth-child(even),.knownTracker:nth-child(even),#torrentEdit tr:nth-last-child(even){background:#efe6e0}
 .snarkFileName{padding:4px 0;text-align:left;font-size:8pt;font-weight:700}
 .snarkFileSize{padding:4px 2px;width:1%;white-space:nowrap;font-weight:700;color:#727}
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
@@ -933,7 +933,7 @@ body.textview{height:100vh}
 @supports not (-moz-appearance:none){.peerinfo .rxd .barText{line-height:normal}}
 @-moz-document url-prefix(){select option{color:#5f1227;box-shadow:inset 0 0 20px 20px #fffcdf;background:#fffcdf}select option:hover,select option:checked{box-shadow:inset 0 0 20px 20px #5f1227;background:#f60}}
 @supports not (-moz-appearance:none){#torrents tbody tr:hover,#dirInfo tbody tr:hover{background:#f9efcf}}
-@supports not (-moz-appearance:none){.rowEven+.rowEven:nth-child(even),.rowOdd+.rowOdd:nth-child(even){background:#e8dfda}.rowEven+.rowEven:nth-child(odd),.rowOdd+.rowOdd:nth-child(odd){background:#e0d9d5}}
+@supports not (-moz-appearance:none){.even+.even:nth-child(even),.odd+.odd:nth-child(even){background:#e8dfda}.even+.even:nth-child(odd),.odd+.odd:nth-child(odd){background:#e0d9d5}}
 
 /* responsive layout */
 @media (max-width:1500px){
@@ -986,7 +986,7 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 .barComplete,.barOuter,.barText{max-width:76px;min-width:76px;line-height:1.3}
 .barInner,.barOuter{height:14px}
 .barText{padding:4px 3px 2px;min-width:130px;top:-16px;left:-26px;line-height:15px}
-.rowOdd td,.rowEven td{padding-top:2px;padding-bottom:2px}
+.odd td,.even td{padding-top:2px;padding-bottom:2px}
 .snarkNav{padding:4px 8px 4px 24px;background-size:15px,100%,100%;background-position:8px center,center center,center center}
 td.status img{width:auto;height:19px}
 .rxd .barInner{background:linear-gradient(90deg,rgba(255,64,0,.3) 15px,rgba(255,255,0,.3) 30px,rgba(0,255,0,.3)),linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1)),rgba(255,255,255,.5)}
@@ -1042,7 +1042,7 @@ body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit
 .nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active,#nav_forum,#nav_forum:hover,#nav_forum:focus,#nav_forum:active{padding-left:23px;background-position:5px center,center center,center center}
 .peerclient code{display:inline-block;margin:0 3px 0 1px}
 .peerinfo .rxd .barText{line-height:14px}
-.rowOdd td,.rowEven td{padding-top:3px;padding-bottom:3px}
+.odd td,.even td{padding-top:3px;padding-bottom:3px}
 .snarkNav{font-size:11pt;padding:4px 8px 4px 26px;background-position:8px center,center center,center center}
 .tAction{padding-left:4px;padding-right:3px}
 .rxd{padding-left:9px;padding-right:9px}
@@ -1079,7 +1079,7 @@ thead a img,thead img{max-height:21px}
 .peerCount b .right{margin-left:0}
 .percentDownloaded{pointer-events:none}
 .peerSeed img{width:18px;height:18px}
-.rowOdd td,.rowEven td{padding-top:4px;padding-bottom:4px}
+.odd td,.even td{padding-top:4px;padding-bottom:4px}
 .snarkNav{padding:4px 8px 4px 26px;background-size:16px,100%,100%;background-position:8px center,center center,center center}
 .status::after{min-height:20px;vertical-align:middle}
 .stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{color:#eee;background:#900}

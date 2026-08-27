@@ -150,8 +150,8 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 .peerinfo td:nth-child(4){font-weight:700}
 .peerinfo .rxd{text-align:center}
 .rateUp,.rateDown,.rxd,.txd{padding:0 3px;line-height:.9}
-.rowEven,.rowOdd,.knownTracker,#trackerselect tr:nth-child(n+2) td{background:var(--row)}
-.rowOdd,.rowOdd td,.rowEven,.rowEven td,.peerinfo td,.knownTracker td{border-top:var(--border_inner)}
+.even,.odd,.knownTracker,#trackerselect tr:nth-child(n+2) td{background:var(--row)}
+.odd,.odd td,.even,.even td,.peerinfo td,.knownTracker td{border-top:var(--border_inner)}
 .magnet,.trackerLink{padding:0 4px;width:1%;text-align:center}
 .mLink,.tLink{margin:0 -2px 0 2px!important}
 td.details img:not([src$="rateme.svg"]),#dirInfo td:first-child img:not(.thumb){width:20px;height:20px;max-width:20px;max-height:20px}
@@ -172,7 +172,7 @@ th.status img,td.status img{margin:2px;width:auto;height:22px}
 .rxd .barInner,.rxd .barOuter{max-height:16px;max-width:84px}
 .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#000 #0000 #0000 #0000;content:""}
 #linkswitch:not(:checked)::before{opacity:1}
-#torrents .rowEven:first-of-type td{border-top:0}
+#torrents .even:first-of-type td{border-top:0}
 #torrents td{border-top:var(--border_soft);border-bottom:var(--border_soft)}
 #torrents a{width:100%;display:inline-block;vertical-align:middle}
 #torrents .status{padding:2px;width:1%;white-space:nowrap;text-align:center}
@@ -940,7 +940,7 @@ tr:not(.peerinfo) .loading{width:20px;height:20px;background-size:20px}
 }
 
 @media (max-width:1000px){
-.rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{min-width:120px;top:-22px;left:-22px}
+.odd:not(.peerinfo) .rxd .barText,.even:not(.peerinfo) .rxd .barText{min-width:120px;top:-22px;left:-22px}
 .trackerLink img{display:none}
 #mediaContainer th .newTab{margin:0 4px}
 #filterBar .filter{flex-grow:1}

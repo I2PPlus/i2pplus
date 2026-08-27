@@ -183,8 +183,8 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 #down::after{margin-top:6px;width:40px;height:40px;display:inline-block;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";animation:linear spin 5s reverse infinite}
 #down{margin:20px 10px 10px;padding:15px;font-size:0;color:#001;border:1px solid #bbc;border-radius:3px;box-shadow:var(--highlight),inset 5px 5px 3px #88a;background:repeating-linear-gradient(45deg,#fff,#eef 20px,#eef 20px,#fff 40px) right top,repeating-linear-gradient(135deg,#ddf,#eef 20px,#fff 20px,#eef 40px) left top;background-size:200%,200%;animation:linear down 60s forwards infinite reverse;background-blend-mode:multiply,normal}
 .iframed #down{margin:11px 11px 12px}
-.rowEven+.rowEven td:nth-child(2),.rowOdd td+.rowOdd td:nth-child(2){padding:4px 0;text-align:left}
-.rowOdd,.rowEven,#commentInfo tr,#userComments tr{border-top:var(--border_softer);background:var(--row)}
+.even+.even td:nth-child(2),.odd td+.odd td:nth-child(2){padding:4px 0;text-align:left}
+.odd,.even,#commentInfo tr,#userComments tr{border-top:var(--border_softer);background:var(--row)}
 .seeding.active:hover td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,#0000 3px)}
 .seeding.active td:last-child{background:linear-gradient(to left,#f64384,#f64384 3px,#0000 3px)}
 .snarkFileName{padding:4px 0;text-align:left}
@@ -250,7 +250,7 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 .barOuter.filecheck{max-width:none}
 .barText{display:block;line-height:15px;white-space:nowrap;text-align:center;font-weight:700;color:#00528f;text-shadow:var(--txt_shadow);opacity:0;transition:ease opacity .1s}
 .barText,.barOuter{height:14px;vertical-align:middle;text-align:center}
-.rowEven.active .barOuter,.rowOdd.active .barOuter{background:repeating-linear-gradient(135deg,rgba(248,248,255,.7) 1px,rgba(238,238,255,.7) 5px,rgba(192,220,240,.9) 6px,rgba(192,220,240,.9) 11px)}
+.even.active .barOuter,.odd.active .barOuter{background:repeating-linear-gradient(135deg,rgba(248,248,255,.7) 1px,rgba(238,238,255,.7) 5px,rgba(192,220,240,.9) 6px,rgba(192,220,240,.9) 11px)}
 .peerinfo .barOuter,.peerinfo .barInner{height:10px}
 .peerinfo .barInner{background:linear-gradient(180deg,rgba(255,255,255,.6) 0%,rgba(238,238,255,.6) 50%,rgba(200,200,255,.7) 50%,rgba(160,160,255,.7) 100%)}
 .peerSeed img{font-size:0;opacity:.7;transform:scale(1)}
@@ -264,8 +264,8 @@ tr:hover .barComplete{color:var(--ink_light);border:1px solid #bbc;box-shadow:in
 #dirInfo .barText,#dirInfo .barOuter,.peerinfo .barText,.peerinfo .barOuter{width:84px}
 
 /* alternative download bar popup bar text just for our downloads in #torrents*/
-.rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:3px;position:relative;top:-18px;left:-32px;min-width:140px;background:#fff;border-radius:2px;filter:drop-shadow(0 0 1px #77f)}
-.rowOdd:not(.peerinfo) .rxd .barText::after,.rowEven:not(.peerinfo) .rxd .barText::after{content:"";position:absolute;top:90%;left:50%;margin-left:-7px;border-width:7px;border-style:solid;border-color:#fff #0000 #0000 #0000}
+.odd:not(.peerinfo) .rxd .barText,.even:not(.peerinfo) .rxd .barText{padding:3px;position:relative;top:-18px;left:-32px;min-width:140px;background:#fff;border-radius:2px;filter:drop-shadow(0 0 1px #77f)}
+.odd:not(.peerinfo) .rxd .barText::after,.even:not(.peerinfo) .rxd .barText::after{content:"";position:absolute;top:90%;left:50%;margin-left:-7px;border-width:7px;border-style:solid;border-color:#fff #0000 #0000 #0000}
 
 /* txd */
 .tx{padding:1px 2px;min-width:68px;display:inline-block;position:relative;border-left-width:5px;background:linear-gradient(0deg,rgba(255,255,255,.3),rgba(192,192,192,.3)),repeating-linear-gradient(90deg,#f8f8ff,#f8f8ff 5%,#d2d2ff 5%,#e2e2ff 10%);background-size:200%}
@@ -501,7 +501,7 @@ html:not(.iframed) #createSection{border-bottom:0}
 input.toggle_input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
 input:not(checked) + label + hr + table,input:not(checked) + label + hr + table + table{display:none}
 input:checked + label + hr + table,input:checked + label + hr + table + table{display:table}
-.peerinfo + .rowOdd td,.peerinfo + .rowEven td{border-top:var(--border_softer)}
+.peerinfo + .odd td,.peerinfo + .even td{border-top:var(--border_softer)}
 .peerinfo td:first-child{padding-right:10px;background:var(--peer) no-repeat scroll center center/18px}
 .peerinfo td,.debuginfo td{padding:5px 4px;word-spacing:0}
 .peerinfo td[colspan="4"]{padding-left:0}
@@ -888,7 +888,7 @@ body,td,#screenlog li,#screenlog a,button,input,select,.snarkAddInfo,code,th,a,a
 .magnetLabel{max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .newTab{margin:1px 4px 0}
 .barOuter,.barText{height:12px;line-height:12px}
-.rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:4px 3px 2px;min-width:130px;top:-16px;left:-26px}
+.odd:not(.peerinfo) .rxd .barText,.even:not(.peerinfo) .rxd .barText{padding:4px 3px 2px;min-width:130px;top:-16px;left:-26px}
 .snarkNav::before{display:none}
 .snarkNav:link,.snarkNav:visited{font-size:9pt}
 td.commentAuthor .commentAuthorName{width:100px}

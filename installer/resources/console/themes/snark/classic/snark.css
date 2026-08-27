@@ -258,8 +258,8 @@ td.status{padding-left:5px}
 td.peerCount,.nopeers td.peerCount{text-align:center;white-space:nowrap}
 td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-weight:700}
 th.peerCount{text-align:center}
-.rowOdd:not(.peerinfo) .rxd .barText::after,.rowEven:not(.peerinfo) .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:var(--bg) #0000 #0000 #0000;content:""}
-.rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:3px;min-width:140px;position:relative;top:-18px;left:-32px;border-radius:2px;background:var(--bg)}
+.odd:not(.peerinfo) .rxd .barText::after,.even:not(.peerinfo) .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:var(--bg) #0000 #0000 #0000;content:""}
+.odd:not(.peerinfo) .rxd .barText,.even:not(.peerinfo) .rxd .barText{padding:3px;min-width:140px;position:relative;top:-18px;left:-32px;border-radius:2px;background:var(--bg)}
 .status img{width:auto;height:22px}
 .rateUp,.txd{font-style:italic}
 .trackerLink{padding-left:6px}
@@ -867,7 +867,7 @@ body{margin:3px}
 @media (max-width:1000px){
 .newTab{margin:1px 4px 0}
 td.commentAuthor .commentAuthorName{width:90px}
-.rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:4px 3px 2px;min-width:130px;top:-16px;left:-26px}
+.odd:not(.peerinfo) .rxd .barText,.even:not(.peerinfo) .rxd .barText{padding:4px 3px 2px;min-width:130px;top:-16px;left:-26px}
 }
 
 @media (max-width:950px){
