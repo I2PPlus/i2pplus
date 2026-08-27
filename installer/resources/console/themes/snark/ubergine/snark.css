@@ -46,9 +46,9 @@
 --tooltip:#101;
 --txtInputBevel:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;
 --txt_shadow:1px 1px 1px #000c;
---graphDownFill: #404;
---graphDownStroke: #202;
---graphUpFill: #900;
+--graphDownFill: #a00c;
+--graphDownStroke: #900;
+--graphUpFill: #900c;
 --graphUpStroke: #800;
 --graphStrokeWidth: 1;
 }
@@ -86,7 +86,7 @@ th img:hover{opacity:1}
 td{padding:2px 4px;font-size:8pt;color:var(--ink)}
 td:first-child{text-align:right}
 tfoot td:first-child{padding-left:0;text-align:left}
-.active .barOuter,#dirInfo,.peerinfo,.even,.odd,.volatile .barOuter,#snarkFoot,#torrents,#videoTitle{position:relative}
+.active .barOuter,#dirInfo,.peerinfo,.rowEven,.rowOdd,.volatile .barOuter,#snarkFoot,#torrents,#videoTitle{position:relative}
 .active:not(.TX) .barOuter::before,#dirInfo::before,.peerinfo.TX .barOuter::after,#dirlist .volatile .barOuter::before,#screenLog::before,#torrents::before,#videoTitle::before{width:0;height:1px;display:block;position:absolute;top:-2px;left:0;z-index:1000;background:#930;content:"";animation:bar .3s steps(2) reverse;will-change:transform}
 .configPanel,.configPanel td,.snarkNewTorrent,.snarkNewTorrent td,select,input,input.r,input[name="nofilter_dataDir"],a.control{font:9pt var(--bodyfont)}
 .hidden{display:none!important}
@@ -104,9 +104,9 @@ tr:not(.peerinfo) .loading{width:24px;height:24px;background-size:24px}
 .notify td{text-shadow:1px 1px 1px #0008;background:linear-gradient(to bottom,rgba(72,0,72,.2),rgba(24,0,24,.3))}
 .routerdown{padding:15px 10px;vertical-align:middle;color:#ee9;font-size:10pt;border:var(--border_soft);border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:var(--isDown)}
 .routerdown span{display:none}
-.odd{background:var(--row_odd)}
-.even{background:var(--row)}
-.even td,.odd td{border-top:0;border-bottom:0}
+.rowOdd{background:var(--row_odd)}
+.rowEven{background:var(--row)}
+.rowEven td,.rowOdd td{border-top:0;border-bottom:0}
 .script{display:inline-block;vertical-align:top}
 .toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#paginate{user-select:none}
 #dirInfo,#torrents{background:none}
@@ -372,8 +372,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #dirInfo th.fileSize{text-align:center}
 #dirInfo .fileStatus img{margin:0 3px}
 #dirInfo .fileStatus .iconStatus[src$="warn.svg"]{width:20px;height:20px}
-#dirInfo .even{background:#270027}
-#dirInfo .odd{background:#351933}
+#dirInfo .rowEven{background:#270027}
+#dirInfo .rowOdd{background:#351933}
 #dirInfo .thumb,audio,video{padding:1px;border:var(--border_hard);box-shadow:inset 0 0 0 1px #414;background:#000;box-sizing:border-box}
 #dirInfo .thumb{padding:2px;height:64px;width:64px;object-fit:cover;display:inline-block;box-shadow:inset 0 0 0 1px #414;image-rendering:auto}
 #dirInfo .thumb:hover,#dirInfo .thumb:focus,#dirInfo a:hover .thumb,#dirInfo a:focus .thumb,audio:hover,video:hover,audio:focus,video:focus{box-shadow:inset 0 0 0 1px var(--hover)}
@@ -1151,7 +1151,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 select{padding:5px 18px 5px 7px}
 .barComplete{padding:3px 0 1px}
 .configPanel .configTitle{padding:5px 1px 4px;color:rgba(255,240,255,.75);text-transform:uppercase;font-variant:normal}
-.even+.even:nth-child(even),.odd+.odd:nth-child(even){background:#313}.even+.even:nth-child(odd),.odd+.odd:nth-child(odd){background:#414}
+.rowEven+.rowEven:nth-child(even),.rowOdd+.rowOdd:nth-child(even){background:#313}.rowEven+.rowEven:nth-child(odd),.rowOdd+.rowOdd:nth-child(odd){background:#414}
 .section,.mainsection{padding-top:9px}
 }
 
@@ -1279,7 +1279,7 @@ td.status img{margin-left:4px}
 input.trackerannounce{width:220px}
 input.trackerhome{width:200px}
 #page{min-width:850px}
-.odd:not(.peerinfo) .rxd .barText,.even:not(.peerinfo) .rxd .barText{padding:4px 3px 2px;min-width:130px;top:-16px;left:-26px}
+.rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:4px 3px 2px;min-width:130px;top:-16px;left:-26px}
 #torrents a:not(#debugMode),.ETA,#torrents td,#torrents tfoot th,.peerinfo td,#torrentInfo td,#dirInfo td{font-size:8.5pt}
 }
 
