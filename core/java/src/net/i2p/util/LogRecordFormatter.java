@@ -25,8 +25,8 @@ class LogRecordFormatter {
     static final String NL = System.getProperty("line.separator");
     /** Max length for the source class name column. */
     private static final int MAX_WHERE_LENGTH = 16;
-    /** Max length for the thread name column. */
-    private static final int MAX_THREAD_LENGTH = 11;
+    /** Max length for the thread name column — 12 fits SAM-PoolWkr.9 with 1-digit suffix. */
+    private static final int MAX_THREAD_LENGTH = 12;
     /** Max length for the priority label column. */
     private static final int MAX_PRIORITY_LENGTH = 5;
     private static final String SEPARATOR = "| ";
@@ -81,9 +81,7 @@ class LogRecordFormatter {
         return buf.toString();
     }
 
-    /**
-     * Format the thread name, padded or truncated to MAX_THREAD_LENGTH.
-     */
+    /** Format thread name to exactly MAX_THREAD_LENGTH chars, padded or truncated. */
     private static String getThread(LogRecord logRecord) {
         return toString(logRecord.getThreadName(), MAX_THREAD_LENGTH);
     }
@@ -134,13 +132,14 @@ class LogRecordFormatter {
     }
 
     /**
-     * Truncate or pad to the specified size, adding an ellipsis prefix if truncated.
+     * Truncate or pad to exactly {@code size} chars; if truncated,
+     * keeps the suffix and prefixes with "..." so column width stays constant.
      */
     private static String toString(String str, int size) {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(size);
         if (str == null) str = "";
         if (str.length() > size) {
-            str = str.substring(str.length() - size);
+            str = str.substring(str.length() - size + ELLIPSIS.length());
             buf.append(ELLIPSIS);
         }
         buf.append(str);
