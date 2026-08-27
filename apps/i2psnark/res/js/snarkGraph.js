@@ -233,9 +233,9 @@ function draw() {
   const svg =
     `<svg xmlns='http://www.w3.org/2000/svg' width='${view.w}' height='${view.h}' viewBox='0 0 ${view.w} ${view.h}'>` +
     (samples.length > 1
-      ? `<path d='M ${firstDown} ${catmullRomSegments(downPts, 1, {minY: centerY, maxY: view.h})} L ${lastDown.x.toFixed(1)},${centerY} Z' fill='${downFill}'/>` +
+      ? `<path d='M ${downPts[0].x.toFixed(1)},${centerY} L ${firstDown} ${catmullRomSegments(downPts, 1, {minY: centerY, maxY: view.h})} L ${lastDown.x.toFixed(1)},${centerY} Z' fill='${downFill}'/>` +
         `<path d='M ${firstDown}${catmullRomSegments(downPts, 1, {minY: centerY, maxY: view.h})}' fill='none' stroke='${downStroke}' stroke-width='${strokeWidth}' stroke-linecap='round' stroke-linejoin='round'/>` +
-        `<path d='M ${firstUp} ${catmullRomSegments(upPts, 1, {minY: 0, maxY: centerY})} L ${lastUp.x.toFixed(1)},${centerY} Z' fill='${upFill}'/>` +
+        `<path d='M ${upPts[0].x.toFixed(1)},${centerY} L ${firstUp} ${catmullRomSegments(upPts, 1, {minY: 0, maxY: centerY})} L ${lastUp.x.toFixed(1)},${centerY} Z' fill='${upFill}'/>` +
         `<path d='M ${firstUp}${catmullRomSegments(upPts, 1, {minY: 0, maxY: centerY})}' fill='none' stroke='${upStroke}' stroke-width='${strokeWidth}' stroke-linecap='round' stroke-linejoin='round'/>`
       : "") +
     `</svg>`;
