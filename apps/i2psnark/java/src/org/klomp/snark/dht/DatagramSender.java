@@ -50,7 +50,9 @@ public final class DatagramSender {
                 fromPort,
                 toPort,
                 opts);
-        if (success) {BandwidthGraph.datagramSent(payload.length);}
+        if (success) {
+            BandwidthGraph.datagramSent(payload.length);
+        }
         return success;
     }
 }

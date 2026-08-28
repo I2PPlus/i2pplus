@@ -8,12 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
-
-import java.nio.charset.StandardCharsets;
 /**
  * Retrieve / Store the local DHT in a file.
  *

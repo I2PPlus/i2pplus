@@ -26,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 class Torrents extends ConcurrentHashMap<InfoHash, Peers> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates a new torrent collection with default initial capacity.
      *

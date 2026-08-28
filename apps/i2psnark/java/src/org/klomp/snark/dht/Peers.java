@@ -25,6 +25,8 @@ import net.i2p.data.Hash;
  */
 class Peers extends ConcurrentHashMap<Hash, Peer> {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates a new peer collection with initial capacity for 8 peers.
      *

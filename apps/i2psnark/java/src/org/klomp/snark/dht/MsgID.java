@@ -14,6 +14,8 @@ import net.i2p.data.ByteArray;
  */
 class MsgID extends ByteArray {
 
+    private static final long serialVersionUID = 1L;
+
     /** BEP 5: 2 bytes, incremented */
     private static final int MY_TOK_LEN = 8;
 

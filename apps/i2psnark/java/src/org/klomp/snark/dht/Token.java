@@ -30,6 +30,8 @@ import net.i2p.data.ByteArray;
  */
 class Token extends ByteArray {
 
+    private static final long serialVersionUID = 1L;
+
     /** Default token length for outgoing tokens (8 bytes) */
     private static final int MY_TOK_LEN = 8;
 
