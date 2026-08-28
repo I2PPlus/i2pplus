@@ -140,6 +140,8 @@ class Sorters {
      */
     private static class TorrentNameComparator implements Comparator<Snark>, Serializable {
 
+        private static final long serialVersionUID = 1L;
+
         private final Pattern _p;
         private final Collator _c;
 
@@ -195,13 +197,15 @@ class Sorters {
      * @return the collator
      */
     private static Collator getCollator(String lang) {
-        Collator c = lang != null ? Collator.getInstance(new Locale(lang)) : Collator.getInstance();
+        Collator c = lang != null ? Collator.getInstance(Locale.forLanguageTag(lang)) : Collator.getInstance();
         c.setStrength(Collator.SECONDARY);
         return c;
     }
 
     /** Forward or reverse sort, but the fallback is always forward */
     private abstract static class Sort implements Comparator<Snark>, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         private final boolean _rev;
         private final Pattern _p;
@@ -252,6 +256,8 @@ class Sorters {
     private static final int STATUS_STOPPED_OFFSET = 150;
 
     private static class StatusComparator extends Sort {
+
+        private static final long serialVersionUID = 1L;
 
         private StatusComparator(boolean rev, String lang) {
             super(rev, lang);
@@ -342,6 +348,8 @@ class Sorters {
      */
     private static class StatusPoolComparator extends Sort {
 
+        private static final long serialVersionUID = 1L;
+
         private StatusPoolComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -373,6 +381,8 @@ class Sorters {
 
     private static class PeersComparator extends Sort {
 
+        private static final long serialVersionUID = 1L;
+
         public PeersComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -384,6 +394,8 @@ class Sorters {
 
     private static class RemainingComparator extends Sort {
 
+        private static final long serialVersionUID = 1L;
+
         public RemainingComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -394,6 +406,8 @@ class Sorters {
     }
 
     private static class ETAComparator extends Sort {
+
+        private static final long serialVersionUID = 1L;
 
         public ETAComparator(boolean rev, String lang) {
             super(rev, lang);
@@ -458,6 +472,8 @@ class Sorters {
 
     private static class SizeComparator extends Sort {
 
+        private static final long serialVersionUID = 1L;
+
         public SizeComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -468,6 +484,8 @@ class Sorters {
     }
 
     private static class DownloadedComparator extends Sort {
+
+        private static final long serialVersionUID = 1L;
 
         public DownloadedComparator(boolean rev, String lang) {
             super(rev, lang);
@@ -482,6 +500,8 @@ class Sorters {
 
     private static class UploadedComparator extends Sort {
 
+        private static final long serialVersionUID = 1L;
+
         public UploadedComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -492,6 +512,8 @@ class Sorters {
     }
 
     private static class DownRateComparator extends Sort {
+
+        private static final long serialVersionUID = 1L;
 
         public DownRateComparator(boolean rev, String lang) {
             super(rev, lang);
@@ -504,6 +526,8 @@ class Sorters {
 
     private static class UpRateComparator extends Sort {
 
+        private static final long serialVersionUID = 1L;
+
         public UpRateComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -514,6 +538,8 @@ class Sorters {
     }
 
     private static class RatioComparator extends Sort {
+
+        private static final long serialVersionUID = 1L;
 
         public RatioComparator(boolean rev, String lang) {
             super(rev, lang);
@@ -535,6 +561,8 @@ class Sorters {
     }
 
     private static class FileTypeComparator extends Sort {
+
+        private static final long serialVersionUID = 1L;
 
         private final I2PSnarkServlet servlet;
 
@@ -665,6 +693,8 @@ class Sorters {
      */
     private static class FileNameComparator implements Comparator<FileAndIndex>, Serializable {
 
+        private static final long serialVersionUID = 1L;
+
         /** Cached, case-insensitive at secondary strength */
         private static final Collator _c = Collator.getInstance();
 
@@ -691,6 +721,8 @@ class Sorters {
 
     /** Forward or reverse sort, but the fallback is always forward */
     private abstract static class FAISort implements Comparator<FileAndIndex>, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         private final boolean _rev;
 
@@ -724,6 +756,8 @@ class Sorters {
 
     private static class FAIRemainingComparator extends FAISort {
 
+        private static final long serialVersionUID = 1L;
+
         public FAIRemainingComparator(boolean rev) {
             super(rev);
         }
@@ -735,6 +769,8 @@ class Sorters {
 
     private static class FAISizeComparator extends FAISort {
 
+        private static final long serialVersionUID = 1L;
+
         public FAISizeComparator(boolean rev) {
             super(rev);
         }
@@ -745,6 +781,8 @@ class Sorters {
     }
 
     private static class FAITypeComparator extends FAISort {
+
+        private static final long serialVersionUID = 1L;
 
         private final I2PSnarkServlet servlet;
 
@@ -767,6 +805,8 @@ class Sorters {
     }
 
     private static class FAIPriorityComparator extends FAISort {
+
+        private static final long serialVersionUID = 1L;
 
         public FAIPriorityComparator(boolean rev) {
             super(rev);
