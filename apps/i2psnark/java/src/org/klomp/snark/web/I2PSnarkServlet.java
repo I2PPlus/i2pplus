@@ -10,8 +10,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
@@ -25,7 +23,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -38,13 +35,11 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
 import net.i2p.data.ByteArray;
 import net.i2p.data.Hash;
 import net.i2p.servlet.RequestWrapper;
@@ -512,7 +507,6 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isConnected = _manager.util().connected();
         String pOverride = isConnected ? null : "";
         String peerString = getQueryString(req, pOverride, null, null, "");
-        String jsPfx = _context.isRouterContext() ? "" : ".res";
 
         PrintWriter out = null;
         boolean isConfigure = path.endsWith("/configure");
@@ -1199,8 +1193,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         List<Snark> snarks = getSortedSnarks(req);
         int total = snarks.size();
-        int downloads = 0;
-        int uploads = 0;
         long totalETA = 0;
         boolean isConnected = _manager.util().connected();
         boolean noSnarks = snarks.isEmpty();
@@ -1282,10 +1274,9 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.setLength(0);
             displaySnark(target, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache, actionTokens), buf);
 
-            // additionally accumulate downloads, uploads, ETA, flags
+            // additionally accumulate uploads, ETA, flags
             if (snark.getPeerCount() >= 1) {
-                if (snark.getDownloadRate() > 0) downloads++;
-                if (snark.getUploadRate() > 0) { uploads++; isUploading = true; }
+                if (snark.getUploadRate() > 0) { isUploading = true; }
                 hasPeers = true;
                 long needed = snark.getNeededLength();
                 if (needed > total) needed = total;
@@ -2140,7 +2131,6 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param badgeText optional badge content to display inside the link
      * @return          the constructed HTML string of the filter link
      */
-    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     private String buildFilterLink(String baseUrl, String filterId, boolean visible, String title, String badgeText) {
         StringBuilder sb = new StringBuilder();
         sb.append("<a class=filter id=").append(filterId).append(" href=\"").append(baseUrl).append(filterId).append("\"");
@@ -2496,10 +2486,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private String extractAction(HttpServletRequest req) {
         String action = req.getParameter("action");
         if (action == null) {
-            @SuppressWarnings("unchecked") // Safe cast since keys are Strings
-            Map<String, String[]> params = req.getParameterMap();
-            for (Object o : params.keySet()) {
-                String key = (String) o;
+            // javax.servlet types getParameterMap() as Map<String, String[]>; no cast needed
+            for (String key : req.getParameterMap().keySet()) {
                 if (key.startsWith("do_")) {
                     action = key.substring(3);
                     break;
@@ -2546,7 +2534,6 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     private void handleBrowserApiAdd(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String msg;
         if (!"POST".equals(req.getMethod())) {
             resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
             resp.setContentType("text/plain; charset=UTF-8");
@@ -2756,7 +2743,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // Validate torrent and add
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(tmp))) {
             byte[] infoHash = new byte[20];
-            String name = MetaInfo.getNameAndInfoHash(in, infoHash);
+            // infoHash is filled by the call; the returned display name is not needed here
+            MetaInfo.getNameAndInfoHash(in, infoHash);
 
             Snark snark = _manager.getTorrentByInfoHash(infoHash);
             if (snark != null) {
@@ -3633,7 +3621,6 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save Filter Configuration"))) {
-            boolean changed = false;
             Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
             Enumeration<?> e = req.getParameterNames();
             ArrayList<String> newDefaults = new ArrayList<>();
@@ -3661,7 +3648,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 if (filterType == null) {filterType = oldFilterType;}
 
-                TorrentCreateFilter oldFilter = torrentCreateFilters.remove(filterName);
+                torrentCreateFilters.remove(filterName);
                 TorrentCreateFilter newFilter = new TorrentCreateFilter(filterName, filterPattern, filterType, newDefault);
                 replaceFilters.add(newFilter);
             }
@@ -4224,12 +4211,8 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean hasTrackerProblems = snark.getTrackerProblems() != null && isRunning && curPeers == 0
             && System.currentTimeMillis() - snark.getLastTrackerResponse() > 60 * 60 * 1000L;
         boolean isComplete = remaining == 0 || needed == 0;
-        boolean isSeeding = isComplete && isRunning;
-        boolean hasConnectedPeers = curPeers > 0;
-        boolean hasPeers = knownPeers > 0;
         boolean isUploading = upBps > 0;
         boolean isDownloading = downBps > 0;
-        boolean isActivelySeeding = isSeeding && hasPeers && isUploading;
 
         // Cache repeated peer count HTML once
         final String peerCountHtml = "</td><td class=peerCount><b><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
@@ -4681,6 +4664,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.8.1
      */
     private static class PeerComparator implements Comparator<Peer>, Serializable {
+        private static final long serialVersionUID = 1L;
 
         public int compare(Peer l, Peer r) {
             int diff = r.completed() - l.completed(); // reverse
@@ -5936,7 +5920,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(" @ ").append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
 
         if (dates[0] > 0) {
-            String date = DataHelper.formatTime(dates[0]);
             long sz = snark.getTotalLength();
             long time;
             if (storage != null && storage.complete()) {
@@ -5993,7 +5976,6 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</span>");
 
         if (meta != null) {
-            String cby = meta.getCreatedBy();
             long needed = snark.getNeededLength();
             if (needed < 0) { needed = snark.getRemainingLength(); }
             if (needed > 0) {
