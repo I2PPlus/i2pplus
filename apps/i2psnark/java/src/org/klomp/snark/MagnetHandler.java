@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -71,8 +72,7 @@ public final class MagnetHandler {
     private static boolean send(String base, String uri) {
         HttpURLConnection conn = null;
         try {
-            if (base.endsWith("/")) {base = base.substring(0, base.length() - 1);}
-            URL url = new URL(base + "/_add");
+            URL url = buildApiUri(base, "/_add").toURL();
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(CONNECT_TIMEOUT_MS);
@@ -104,5 +104,26 @@ public final class MagnetHandler {
                 conn.disconnect();
             }
         }
+    }
+
+    /**
+     * Build the absolute API URI for a POST from a console base URL.
+     *
+     * <p>A trailing slash on the base is stripped before appending the path so
+     * the result never contains a double slash, regardless of how the operator
+     * supplied the base URL.
+     *
+     * @param base console base URL, with or without a trailing slash
+     * @param path the API path to append, e.g. "/_add"
+     * @return the absolute API URI
+     * @throws IllegalArgumentException if the resulting URI is not a
+     *         valid absolute URI
+     * @since 0.9.71+
+     */
+    static URI buildApiUri(String base, String path) {
+        if (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return URI.create(base + path);
     }
 }

@@ -762,7 +762,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             }
             TrackerResponse resp = new TrackerResponse(interval, seeds, leeches, hashes);
             waiter.gotResponse(resp);
-            tr.setInterval(interval);
         } else {
             waiter.gotReply(false);
             tr.gotError();
@@ -1041,10 +1040,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         // we store as a Long because all values are valid, so null is unset
         private Long cid;
         private long expires;
-        private long lastHeardFrom;
-        private long lastFailed;
         private int consecFails;
-        private int interval = DEFAULT_INTERVAL;
         private ConnState state = ConnState.INVALID;
 
         public Tracker(String host, int port) {
@@ -1109,7 +1105,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /** Does not change state. */
         public synchronized void replyTimeout() {
             consecFails++;
-            lastFailed = _context.clock().now();
         }
 
         /**
@@ -1120,7 +1115,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         public synchronized void setConnection(long cid, long lifetime) {
             this.cid = Long.valueOf(cid);
             long now = _context.clock().now();
-            lastHeardFrom = now;
             expires = now + lifetime;
             consecFails = 0;
             state = ConnState.VALID;
@@ -1139,28 +1133,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return null;
         }
 
-        /**
-         * The interval.
-         *
-         * @return the interval
-         */
-        public synchronized int getInterval() {
-            return interval;
-        }
-
-        /** Update the interval and heardFrom, notifying waiters. */
-        public synchronized void setInterval(int interval) {
-            long now = _context.clock().now();
-            lastHeardFrom = now;
-            consecFails = 0;
-            this.interval = interval;
-            this.notifyAll();
-        }
-
-        /** Mark an error, update heardFrom, and notify waiters. */
+        /** Mark an error and notify waiters. */
         public synchronized void gotError() {
-            long now = _context.clock().now();
-            lastHeardFrom = now;
             consecFails++;
             state = ConnState.INVALID;
             cid = null;

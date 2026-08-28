@@ -61,7 +61,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private volatile int _scrapeLeechers;
     private volatile int _scrapePartials;
     private volatile boolean _autoStoppable;
-    private volatile String activity = "Not started";
     private long savedUploaded;
     private long _startedTime;
     private CommentSet _comments;
@@ -155,7 +154,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         this.torrent = torrent;
         this.rootDataDir = new File(rootDir);
         stopped = true;
-        activity = "Network setup";
         // Figure out what the torrent argument represents.
         File f = null;
         byte[] x_infoHash = null;
@@ -204,7 +202,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         // it already exists.
         if (storage == null) {
             try {
-                activity = "Checking storage";
                 boolean shouldPreserve =
                         completeListener != null
                                 && completeListener.getSavedPreserveNamesSetting(this);
@@ -492,7 +489,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             }
             if (_log.shouldInfo())
                 _log.info("Starting PeerCoordinator, ConnectionAcceptor, and TrackerClient");
-            activity = "Collecting pieces";
             coordinator =
                     new PeerCoordinator(
                             _util,
@@ -1358,6 +1354,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.46
      */
     static class RouterException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
         /**
          * With message only.
          *

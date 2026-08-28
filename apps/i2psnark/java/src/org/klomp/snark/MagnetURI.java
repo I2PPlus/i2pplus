@@ -1,14 +1,12 @@
 package org.klomp.snark;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import net.i2p.data.Base32;
-
-import java.nio.charset.StandardCharsets;
 /**
  * Magnet URI parser and handler for BitTorrent magnet links.
  *

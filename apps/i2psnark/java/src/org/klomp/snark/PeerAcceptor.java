@@ -201,6 +201,7 @@ class PeerAcceptor {
      * @since 0.9.1
      */
     public static class ProtocolException extends IOException {
+        private static final long serialVersionUID = 1L;
         /**
      * Create an acceptor exception.
      *

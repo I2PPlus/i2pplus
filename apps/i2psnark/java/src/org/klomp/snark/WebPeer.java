@@ -128,7 +128,6 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             MagnetState mState,
             boolean uploadOnly) {
         if (uploadOnly) return;
-        int fails = 0;
         int successes = 0;
         long dl = 0;
         boolean notify = true;

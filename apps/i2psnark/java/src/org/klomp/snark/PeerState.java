@@ -21,7 +21,6 @@ import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 import org.klomp.snark.bencode.BEValue;

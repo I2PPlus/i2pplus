@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 public class TorrentCreateFilter implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public final String name;
     public final String filterPattern;
     public final String filterType;

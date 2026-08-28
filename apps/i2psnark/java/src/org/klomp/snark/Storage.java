@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
@@ -997,6 +996,7 @@ public class Storage implements Closeable {
      */
     private static class FileNameComparator implements Comparator<TorrentFile>, Serializable {
 
+        private static final long serialVersionUID = 1L;
         private final Collator c = Collator.getInstance();
 
         public int compare(TorrentFile l, TorrentFile r) {

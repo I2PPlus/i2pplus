@@ -169,7 +169,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_TEMP_DIR = "i2psnark.tempDir";
 
     private static final String PROP_META_PREFIX = "i2psnark.zmeta.";
-    private static final String PROP_META_RUNNING = "running";
+    static final String PROP_META_RUNNING = "running";
     private static final String PROP_META_STAMP = "stamp";
     private static final String PROP_META_BASE = "base";
     private static final String PROP_META_BITFIELD = "bitfield";
@@ -3917,7 +3917,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void cleanupTorrentStatus() {
         Set<SHA1Hash> torrents = new HashSet<>(32);
-        int found = 0;
         int totalDeleted = 0;
         synchronized (_snarks) {
             for (Snark snark : _snarks.values()) {
@@ -3937,7 +3936,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         if (ih == null) {
                             continue;
                         }
-                        found++;
                         if (torrents.contains(ih)) {
                             if (_log.shouldInfo()) {
                                 _log.info("Torrent for " + config + " exists");
@@ -4116,7 +4114,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             + ioe.getLocalizedMessage());
             return null;
         }
-        int remaining = 0;
         Snark torrent = null;
         synchronized (_snarks) {
             if (shouldRemove) {
@@ -4124,7 +4121,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             } else {
                 torrent = _snarks.get(filename);
             }
-            remaining = _snarks.size();
         }
         if (torrent != null) {
             boolean wasStopped = torrent.isStopped();
@@ -4788,7 +4784,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         // Add every new torrent without starting it: nothing may start until
         // the whole batch is known, so pool-mates can be started together
         List<Snark> added = new ArrayList<>(0);
-        int count = 0;
         for (String name : foundNames) {
             if (existingNames.contains(name)) { /* ignored */ } // already known. noop
             else {
@@ -5008,7 +5003,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     new FileInputStream(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
              BufferedInputStream buf = new BufferedInputStream(file);
              ObjectInputStream in = new ObjectInputStream(buf)) {
-            Map<String, TorrentCreateFilter> filterMap = (Map) in.readObject();
+            @SuppressWarnings("unchecked")
+            Map<String, TorrentCreateFilter> filterMap =
+                    (Map<String, TorrentCreateFilter>) in.readObject();
             for (Map.Entry<String, TorrentCreateFilter> entry : filterMap.entrySet()) {
                 _torrentCreateFilterMap.put(entry.getKey(), entry.getValue());
             }
@@ -5423,7 +5420,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
         public void run() {
-            int count = 0;
             for (Snark snark : _members) {
                 if (!_util.connected()) {
                     String msg = _t("Connecting to I2P") + "...";
@@ -5785,6 +5781,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9
      */
     private static class IgnoreCaseComparator implements Comparator<Tracker>, Serializable {
+        private static final long serialVersionUID = 1L;
         private final Collator coll = Collator.getInstance();
 
         public int compare(Tracker l, Tracker r) {
@@ -5799,6 +5796,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private static class IgnoreCaseComparatorF
             implements Comparator<TorrentCreateFilter>, Serializable {
+        private static final long serialVersionUID = 1L;
         private final Collator coll = Collator.getInstance();
 
         public int compare(TorrentCreateFilter l, TorrentCreateFilter r) {
@@ -5848,7 +5846,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
 
             double usagePercent = ((totalSpace - freeSpace) / (double) totalSpace) * 100;
-            String usageAsPercentage = String.format("%d%%", (int) usagePercent);
 
             String freeSpaceStr;
             if (freeSpace >= (1024 * 1024 * 1024)) {
