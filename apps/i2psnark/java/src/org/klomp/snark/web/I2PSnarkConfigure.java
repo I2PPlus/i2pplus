@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -78,7 +77,7 @@ class I2PSnarkConfigure {
         boolean showStatusFilter = srv.manager().util().showStatusFilter();
         boolean enableLightbox = srv.manager().util().enableLightbox();
         boolean enableAddCreate = srv.manager().util().enableAddCreate();
-        boolean noCollapse = srv.noCollapsePanels(req);
+        boolean noCollapse = I2PSnarkServlet.noCollapsePanels(req);
         String lang = Translate.getLanguage(srv.manager().util().getContext());
 
         buf.append("<tr><th class=suboption>").append(srv._t("User Interface"));
@@ -525,7 +524,7 @@ class I2PSnarkConfigure {
         String spacer = "<tr class=spacer><td></td></tr>\n";
         buf.append(spacer)
            .append("<tr><td>");
-        if (srv.isFirefoxFamilyUserAgent(req.getHeader("User-Agent"))) {
+        if (I2PSnarkServlet.isFirefoxFamilyUserAgent(req.getHeader("User-Agent"))) {
             String installed = req.getHeader(BridgeVersion.HEADER);
             String bundled = srv.getBridgeVersion();
             boolean update = BridgeVersion.isUpdateAvailable(installed, bundled);
@@ -542,10 +541,10 @@ class I2PSnarkConfigure {
             }
             buf.append("> ");
         } else {
-            String script = srv.isWindowsUserAgent(req.getHeader("User-Agent"))
+            String script = I2PSnarkServlet.isWindowsUserAgent(req.getHeader("User-Agent"))
                 ? "install-i2psnark-browser-handler.ps1"
                 : "install-i2psnark-browser-handler.sh";
-            String title = srv.isWindowsUserAgent(req.getHeader("User-Agent"))
+            String title = I2PSnarkServlet.isWindowsUserAgent(req.getHeader("User-Agent"))
                 ? srv._t("Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser")
                 : srv._t("Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser");
             buf.append("<a class=accept href=\"")
@@ -601,7 +600,6 @@ class I2PSnarkConfigure {
            .append(srv._t("Enabled by Default"))
            .append("</th></tr>\n");
         for (TorrentCreateFilter f : srv.manager().getSortedTorrentCreateFilterStrings()) {
-            boolean isDefault = f.isDefault;
             String filterType = f.filterType;
             String nameUnderscore = f.name.replace(" ", "_");
             buf.append("<tr class=createFilterString><td><input type=checkbox class=optbox name=\"delete_")
@@ -718,7 +716,7 @@ class I2PSnarkConfigure {
                      .append("\">")
                      .append(name)
                      .append("</label></td><td>")
-                     .append(srv.urlify(homeURL, 64))
+                     .append(I2PSnarkServlet.urlify(homeURL, 64))
                      .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
                      .append(announceURL).append("\"");
             if (!(isOpen || isPrivate)) {rowsBatch.append(" checked");}
@@ -742,7 +740,7 @@ class I2PSnarkConfigure {
                 rowsBatch.append(" disabled");
             }
             rowsBatch.append("></td><td>")
-                     .append(srv.urlify(announceURL, 64))
+                     .append(I2PSnarkServlet.urlify(announceURL, 64))
                      .append("</td></tr>\n");
         }
 
