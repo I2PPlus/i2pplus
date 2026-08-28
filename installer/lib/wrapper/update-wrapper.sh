@@ -45,9 +45,8 @@ check_up_to_date() {
     [ -f "${WRAPPER_DIR}/linux64/libwrapper.so" ] || return 1
     [ -f "${WRAPPER_DIR}/linux64/i2psvc" ] || return 1
     [ -f "${WRAPPER_DIR}/win64/wrapper.dll" ] || return 1
-    [ -f "${WRAPPER_DIR}/win32/I2Psvc.exe" ] || return 1
+    [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] || return 1
     [ -f "${WRAPPER_DIR}/macosx/libwrapper-macosx-universal-64.jnilib" ] || return 1
-    [ -f "${WRAPPER_DIR}/win32/wrapper.dll" ] || return 1
 
     local jar_ver=$(unzip -p "${WRAPPER_DIR}/all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
     [ "${jar_ver}" = "${VERSION}" ] || return 1
@@ -142,14 +141,6 @@ if [ -f "${BIN}/wrapper-macosx-arm-64" ]; then
     cp "${BIN}/wrapper-macosx-arm-64" "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64"
     chmod +x "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64"
     strip "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64" 2>/dev/null || true
-fi
-
-echo "Updating Windows 32-bit binaries..."
-if [ -f "${BIN}/wrapper-windows-x86-32.exe" ]; then
-    cp "${BIN}/wrapper-windows-x86-32.exe" "${WRAPPER_DIR}/win32/I2Psvc.exe"
-fi
-if [ -f "${LIB}/wrapper-windows-x86-32.dll" ]; then
-    cp "${LIB}/wrapper-windows-x86-32.dll" "${WRAPPER_DIR}/win32/wrapper.dll"
 fi
 
 echo "Removing platforms not in deltapack..."
