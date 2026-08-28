@@ -94,8 +94,7 @@ class LeaseRequestState {
     @Override
     public String toString() {
         return "LeaseSet request " + _requestedLeaseSet
-               + " succeeding? " + _successful
-               + " expiring on " + _expiration;
+               + (_successful ? " succeeded" : " failed");
     }
 
 }
