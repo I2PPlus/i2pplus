@@ -850,8 +850,33 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
         I2PTunnelRunner runner = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
         runner.setExecutor(_clientExecutor);
-        _clientExecutor.execute(runner);
+        try {
+            _clientExecutor.execute(runner);
+        } catch (RejectedExecutionException ree) {
+            // All client runner threads busy - kill the connection rather than wedge
+            if (_log.shouldWarn())
+                _log.warn("443 handler pool saturated -> closing connection");
+            // also close the raw TCP socket opened above - the runner never ran, so its
+            // cleanup never runs
+            try {s.close();}
+            catch (IOException ioe) { /* ignored */ }
+            socket.close();
+        }
         return true;
+    }
+
+    /**
+     *  Refuse an inbound connection when the gate cap is exceeded: send a 503
+     *  (SSL port 443 resets instead) and close. The base implementation then logs
+     *  the rate-limited warning.
+     *
+     *  @param socket the accepted but undelivered I2PSocket to reject
+     *  @since 0.9.71+
+     */
+    @Override
+    protected void rejectConnection(I2PSocket socket) {
+        sendErrorAndClose(socket);
+        super.rejectConnection(socket);
     }
 
     /**
@@ -1289,8 +1314,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                             SERVER_READ_TIMEOUT_POST);     // long
                     _keepalive = false;
                     sender = new Sender(serverout, browserin, "from Client -> Server", _log);
-                    // run in the unlimited client pool
-                    _tpe.execute(sender);
+                    // run in the limited client pool
+                    try {
+                        _tpe.execute(sender);
+                    } catch (RejectedExecutionException ree) {
+                        // pool saturated - reuse the IOException path so the client gets a 503
+                        throw new IOException("Client pool saturated");
+                    }
                 }
                 int timeout = (isGet || isHead) ?
                               SERVER_READ_TIMEOUT_GET :   // short
