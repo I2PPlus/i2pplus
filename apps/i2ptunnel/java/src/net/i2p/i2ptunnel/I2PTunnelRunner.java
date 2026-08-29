@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.net.ssl.SSLException;
 import net.i2p.I2PAppContext;
@@ -444,7 +445,18 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 toI2P = new StreamForwarder(in, i2pout, true, null);
                 Executor exec = _runnerExecutor;
                 if (exec != null) {
-                    exec.execute(toI2P);
+                    try {
+                        exec.execute(toI2P);
+                    } catch (RejectedExecutionException ree) {
+                        // All runner threads busy - drop this connection cleanly instead of
+                        // proceeding half-forwarded (the old code let the REE escape and the
+                        // generic catch in run() logged "Internal error").
+                        if (_log.shouldWarn())
+                            _log.warn(direction + " Connection dropped: client pool saturated");
+                        try {i2ps.close();} catch (IOException ioe) {}
+                        try {s.close();} catch (IOException ioe) {}
+                        return;
+                    }
                 } else {
                     Thread t = new Thread(toI2P, "TunFwdI2P." + _runnerId);
                     t.setDaemon(true);

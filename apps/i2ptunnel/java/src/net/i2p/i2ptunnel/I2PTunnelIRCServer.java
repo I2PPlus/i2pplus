@@ -10,6 +10,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.RejectedExecutionException;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.data.Base32;
@@ -154,9 +155,19 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
             I2PTunnelRunner runner = new I2PTunnelRunner(s, socket, slock, null, DataHelper.getUTF8(modifiedRegistration),
                                            null, (I2PTunnelRunner.FailCallback) null);
-            // run in the unlimited client pool
+            // run in the client pool
             runner.setExecutor(_clientExecutor);
-            _clientExecutor.execute(runner);
+            try {
+                _clientExecutor.execute(runner);
+            } catch (RejectedExecutionException ree) {
+                // pool saturated - close so the IRC client can retry rather than hang
+                if (_log.shouldWarn())
+                    _log.warn("IRC client pool saturated -> closing connection");
+                // also close the raw TCP socket opened above - the runner never ran
+                try {s.close();} catch (IOException ioe) { /* ignored */ }
+                try {socket.close();} catch (IOException ioe) { /* ignored */ }
+                return;
+            }
         } catch (RegistrationException ex) {
             try {
                 // Send a response so the user doesn't just see a disconnect
