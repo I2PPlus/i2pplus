@@ -25,6 +25,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
@@ -106,11 +108,27 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
     /** @since 0.9.30 */
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
+    /** Config key to cap concurrent inbound connections; 0 (default) = unlimited.
+     *  When the cap is reached, new connections are rejected promptly (HTTP: 503) instead of
+     *  being queued behind a saturated pool. This is the last-resort governor under duress;
+     *  normal operation should not reach it. Key: tunnel.N.option.i2ptunnel.server.maxConnections
+     *  @since 0.9.71+ */
+    public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.server.maxConnections";
+    /** Config key to override the socket read timeout in ms; 0 (default) = shut down silent
+     *  connections promptly (HTTP server falls back to SERVER_READ_TIMEOUT_GET).
+     *  Key: tunnel.N.option.i2ptunnel.server.readTimeout
+     *  @since 0.9.71+ */
+    public static final String PROP_READ_TIMEOUT = "i2ptunnel.server.readTimeout";
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
     private static final long RECONNECT_DELAY_10S = 10 * 1000L;
     protected volatile ThreadPoolExecutor _clientExecutor;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
     private volatile StatefulConnectionFilter _filter;
+    /** Concurrent inbound connection cap, 0 = unlimited. Read from PROP_MAX_CONNECTIONS.
+     *  @since 0.9.71+ */
+    private volatile int _maxConnections;
+    /** Active connection count used by the gate above. @since 0.9.71+ */
+    private final AtomicInteger _activeConnections = new AtomicInteger();
 
     /**
      * HTTP bidirectional server task, null for standard tunnel server.
@@ -437,6 +455,92 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void setReadTimeout(long ms) {readTimeout = ms;}
 
     /**
+     *  Try to reserve a slot in the concurrent-connection gate.
+     *  Call right after accept(), before dispatching the handler. When this returns
+     *  false the connection must be rejected (rejectConnection) and never dispatched.
+     *  The reserved slot is released by releaseConnection(), which runs in the handler's
+     *  finally block so it also fires on early returns and exceptions.
+     *
+     *  @return true if under the cap (or unlimited), false if the cap is exceeded
+     *  @since 0.9.71+
+     */
+    protected boolean tryAcquireConnection() {
+        return acquireConnectionSlot(_maxConnections, _activeConnections);
+    }
+
+    /**
+     *  Release a reservation taken by tryAcquireConnection(). Idempotent-safe only when
+     *  paired with the acquire; must run exactly once per accepted connection.
+     *  @since 0.9.71+
+     */
+    protected void releaseConnection() {
+        releaseConnectionSlot(_activeConnections);
+    }
+
+    /**
+     *  Decide whether a concurrent-connection slot is available and, if so, reserve it.
+     *  Pure decision, no router context: called by the accept loop right after accept(),
+     *  before a handler thread is consumed. Cap 0 = unlimited = always available and no
+     *  reservation is recorded. The caller MUST pair a successful reservation with
+     *  releaseConnectionSlot() (normally from the handler's finally block).
+     *
+     *  @param maxConnections the configured cap; &lt;= 0 means unlimited
+     *  @param active the live reservation counter shared by all connections of the tunnel
+     *  @return true if a slot was reserved (or the cap is unlimited); false if over the cap
+     *  @since 0.9.71+
+     */
+    static boolean acquireConnectionSlot(int maxConnections, AtomicInteger active) {
+        if (maxConnections <= 0) {return true;}
+        if (active.incrementAndGet() > maxConnections) {
+            active.decrementAndGet();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *  Release a slot reserved by acquireConnectionSlot(). Clamped at zero so a config
+     *  change mid-flight (cap turned on while unlimited connections are live) can never
+     *  push the counter negative and permanently disable the gate.
+     *
+     *  @param active the reservation counter shared by all connections of the tunnel
+     *  @since 0.9.71+
+     */
+    static void releaseConnectionSlot(AtomicInteger active) {
+        int prev;
+        do {
+            prev = active.get();
+            if (prev == 0) {return;}
+        } while (!active.compareAndSet(prev, prev - 1));
+    }
+
+    /**
+     *  Refuse an inbound connection when the gate cap is exceeded. Base implementation
+     *  closes the socket; I2PTunnelHTTPServer overrides to send a 503 first. Warnings are
+     *  rate-limited so a flood of rejections cannot spam the log.
+     *
+     *  @param socket the accepted but undelivered I2PSocket to reject
+     *  @since 0.9.71+
+     */
+    protected void rejectConnection(I2PSocket socket) {
+        closeSilently(socket);
+        long now = System.currentTimeMillis();
+        long last = _lastRejectWarn.get();
+        if (now - last < REJECT_WARN_MS) {return;}
+        if (_lastRejectWarn.compareAndSet(last, now)) {
+            int max = _maxConnections;
+            _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
+                      " (maxConnections=" + max + ", active=" + _activeConnections.get() +
+                      ") -> rejecting new connection");
+        }
+    }
+
+    /** Minimum interval between gate-rejection warnings. @since 0.9.71+ */
+    private static final long REJECT_WARN_MS = 30 * 1000L;
+    /** Last gate-rejection warning timestamp for rate limiting. @since 0.9.71+ */
+    private final AtomicLong _lastRejectWarn = new AtomicLong();
+
+    /**
      * Get the read idle timeout for newly-created connections (in milliseconds).
      *
      * Less than or equal to 0 means forever.
@@ -519,6 +623,22 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (getTunnel() != tunnel || sockMgr == null) {return;}
         Properties props = tunnel.getClientOptions();
         sockMgr.setDefaultOptions(sockMgr.buildOptions(props));
+        String mc = props.getProperty(PROP_MAX_CONNECTIONS, "0");
+        try {
+            int max = Integer.parseInt(mc);
+            _maxConnections = Math.max(0, max);
+        } catch (NumberFormatException nfe) {
+            _maxConnections = 0;
+            l.log("✖ Bad " + PROP_MAX_CONNECTIONS + ": " + mc);
+        }
+        String rt = props.getProperty(PROP_READ_TIMEOUT, "0");
+        try {
+            long t = Long.parseLong(rt);
+            readTimeout = t > 0 ? t : DEFAULT_READ_TIMEOUT;
+        } catch (NumberFormatException nfe) {
+            readTimeout = DEFAULT_READ_TIMEOUT;
+            l.log("✖ Bad " + PROP_READ_TIMEOUT + ": " + rt);
+        }
         // see TunnelController.setSessionOptions()
         String h = props.getProperty(TunnelController.PROP_TARGET_HOST);
         if (h != null) {
@@ -594,6 +714,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
                 final I2PSocket socketToHandle = i2ps;
 
+                // Connection admission gate: reserve a slot before dispatch so the rejection
+                // happens here (prompt, and before a handler thread is consumed), not inside
+                // the pool after saturation. Release runs in the handler wrapper's finally.
+                if (!tryAcquireConnection()) {
+                    rejectConnection(socketToHandle);
+                    continue;
+                }
+
                 try {
                     if (serverExec != null) {
                         CompletableFuture.runAsync(() -> {
@@ -602,20 +730,30 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                             } catch (Exception e) {
                                 _log.warn("Exception in async handler for " + remoteHost + ':' + remotePort, e);
                                 closeSilently(socketToHandle);
+                            } finally {
+                                releaseConnection();
                             }
                         }, serverExec);
                     } else {
-                        new Handler(socketToHandle).run();
+                        try {
+                            new Handler(socketToHandle).run();
+                        } finally {
+                            releaseConnection();
+                        }
                     }
                     // Record pool stats for Tuner feedback
                     if (serverExec != null) {
                         getTunnel().getContext().statManager().addRateData("i2ptunnel.serverHandler.queueDepth", serverExec.getQueue().size());
                         getTunnel().getContext().statManager().addRateData("i2ptunnel.serverHandler.active", serverExec.getActiveCount());
+                        if (_clientExecutor != null) {
+                            getTunnel().getContext().statManager().addRateData("i2ptunnel.clientRunner.activeThreads", _clientExecutor.getActiveCount());
+                        }
                     }
                 } catch (RejectedExecutionException ree) {
                     _log.warn("Server handler pool saturated on " +
                                remoteHost + ':' + remotePort + " -> closing connection");
                     closeSilently(socketToHandle);
+                    releaseConnection();
                 }
 
             } catch (RouterRestartException rre) {
