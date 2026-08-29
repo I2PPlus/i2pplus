@@ -119,15 +119,25 @@ public class CSSHelper extends HelperBase {
         }
         // add a prefix to distinguish from other nonces for debugging
         String rv = "CN" + RandomSource.getInstance().nextLong();
-        synchronized(session) {
-            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
-            if (nonces == null) {
-                nonces = new LinkedList<>();
-                session.setAttribute(SESSION_CONSOLE_NONCE, nonces);
+        try {
+            synchronized(session) {
+                LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
+                if (nonces == null) {
+                    nonces = new LinkedList<>();
+                    session.setAttribute(SESSION_CONSOLE_NONCE, nonces);
+                }
+                nonces.offer(rv);
+                if (nonces.size() > NONCE_QUEUE_SIZE)
+                    nonces.poll();
             }
-            nonces.offer(rv);
-            if (nonces.size() > NONCE_QUEUE_SIZE)
-                nonces.poll();
+        } catch (IllegalStateException ise) {
+            // Session was invalidated/expired mid-render; Jetty throws ISE from
+            // getAttribute/setAttribute. Degrade to the static nonce so the page
+            // still renders and FormHandler's static fallback validates on submit.
+            if (_log.shouldWarn()) {
+                _log.warn("CSSHelper.getNonce(): session invalid, using static nonce", ise);
+            }
+            return getNonce();
         }
         String logMsg = "CSSHelper.getNonce(): added " + rv +
                         " session=" + System.identityHashCode(session) +
@@ -166,32 +176,41 @@ public class CSSHelper extends HelperBase {
             return false;
         }
         boolean rv;
-        synchronized(session) {
-            LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
-            if (nonces != null) {
-                if (_log.shouldDebug()) {
-                    _log.debug("CSSHelper.validateNonce(): queue=" + nonces.size() +
-                               " session=" + System.identityHashCode(session) +
-                               " id=" + session.getId());
-                }
-                if (preserve) {
-                    rv = nonces.lastIndexOf(nonce) >= 0;
+        try {
+            synchronized(session) {
+                LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
+                if (nonces != null) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("CSSHelper.validateNonce(): queue=" + nonces.size() +
+                                   " session=" + System.identityHashCode(session) +
+                                   " id=" + session.getId());
+                    }
+                    if (preserve) {
+                        rv = nonces.lastIndexOf(nonce) >= 0;
+                    } else {
+                        rv = nonces.removeLastOccurrence(nonce);
+                    }
+                    if (_log.shouldDebug()) {
+                        _log.debug("CSSHelper.validateNonce(): MISS nonce=" + nonce +
+                                   " queue=" + nonces +
+                                   " session=" + System.identityHashCode(session) +
+                                   " id=" + session.getId());
+                    }
                 } else {
-                    rv = nonces.removeLastOccurrence(nonce);
-                }
-                if (_log.shouldDebug()) {
-                    _log.debug("CSSHelper.validateNonce(): MISS nonce=" + nonce +
-                               " queue=" + nonces +
-                               " session=" + System.identityHashCode(session) +
-                               " id=" + session.getId());
-                }
-            } else {
-                rv = false;
-                if (_log.shouldDebug()) {
-                    _log.debug("CSSHelper.validateNonce(): NO QUEUE session=" +
-                                System.identityHashCode(session) + " id=" + session.getId());
+                    rv = false;
+                    if (_log.shouldDebug()) {
+                        _log.debug("CSSHelper.validateNonce(): NO QUEUE session=" +
+                                   System.identityHashCode(session) + " id=" + session.getId());
+                    }
                 }
             }
+        } catch (IllegalStateException ise) {
+            // Session invalidated/expired mid-request; Jetty throws ISE from getAttribute.
+            // Fail closed to the static fallback in FormHandler.validate().
+            if (_log.shouldWarn()) {
+                _log.warn("CSSHelper.validateNonce(): session invalid, failing to static fallback", ise);
+            }
+            return false;
         }
         return rv;
     }
