@@ -48,11 +48,22 @@ class DHTTracker {
     /** Stagger with other cleaners. */
     private static final long CLEAN_TIME = (long) 199 * 1000;
 
-    /** No guidance in BEP 5; Vuze is 8h. */
-    private static final long MIN_EXPIRE_TIME = 5 * (long) 60 * 1000;
+    /** No guidance in BEP 5; Vuze is 8h. Under sustained pressure the cleaner descends here. */
+    private static final long MIN_EXPIRE_TIME = 15 * (long) 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 3 * (long) 60 * 1000;
-    private static final int MAX_PEERS = 400;
-    private static final int MAX_PEERS_PER_TORRENT = 60;
+
+    /**
+     * Base allowance for the global peer store. The effective ceiling is
+     * this floor scaled up by {@link #MAX_PEERS_PER_TORRENT} per torrent
+     * being tracked, see {@link #getMaxPeers(int)}. Because each torrent is
+     * already LRU trimmed to MAX_PEERS_PER_TORRENT every sweep and admission
+     * is capped at ABSOLUTE_MAX_PER_TORRENT, this global bound is a backstop,
+     * not the primary limiter.
+     */
+    static final int MAX_PEERS = 400;
+
+    /** How many recent peers to retain per torrent; admission allows up to twice this between sweeps. */
+    static final int MAX_PEERS_PER_TORRENT = 250;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
     private static final int MAX_TORRENTS = 2000;
 
@@ -62,20 +73,38 @@ class DHTTracker {
     /**
      * The maximum expiration period, scaled by how many peers are known:
      * the fewer peers we know, the longer we keep them around.
+     * Tiers are aligned with the per-torrent retention cap {@link #MAX_PEERS_PER_TORRENT};
+     * a single torrent approaching its cap keeps a 2-hour window, so a few
+     * healthy swarms do not churn peers that are merely quiet.
      *
      * @param peerCount the number of peers currently known
      * @return the maximum expiration period in milliseconds
      */
-    private static long getMaxExpireTime(int peerCount) {
-        if (peerCount < 100) {
-            return 4 * 60 * 60 * 1000L;         // 4 hours
-        } else if (peerCount < 200) {
-            return 2 * 60 * 60 * 1000L;         // 2 hours
-        } else if (peerCount < 300) {
-            return 60 * 60 * 1000L;             // 1 hour
+    static long getMaxExpireTime(int peerCount) {
+        if (peerCount <= MAX_PEERS_PER_TORRENT) {
+            return 4 * 60 * 60 * 1000L;             // 4 hours; fewer than one torrent's worth
+        } else if (peerCount < 2 * MAX_PEERS_PER_TORRENT) {
+            return 2 * 60 * 60 * 1000L;             // 2 hours; up to two torrents' worth
+        } else if (peerCount < 4 * MAX_PEERS_PER_TORRENT) {
+            return 60 * 60 * 1000L;                 // 1 hour; a few torrents' worth
         } else {
-            return 30 * 60 * 1000L;             // 30 minutes
+            return 30 * 60 * 1000L;                 // 30 minutes; many torrents, keep them fresh
         }
+    }
+
+    /**
+     * The dynamic ceiling for the global peer store: a fixed base allowance
+     * plus a per-torrent budget, so torrents loaded at runtime get their share
+     * rather than contending for one fixed cap. The per-torrent LRU trim and
+     * the ABSOLUTE_MAX_PER_TORRENT admission cap are the real limiters; this
+     * is a backstop for many simultaneously large swarms.
+     *
+     * @param torrentCount how many torrents have stored peers
+     * @return the peer-count threshold above which expiration is tightened
+     * @since 0.9.71
+     */
+    static int getMaxPeers(int torrentCount) {
+        return MAX_PEERS + torrentCount * MAX_PEERS_PER_TORRENT;
     }
 
     /**
@@ -324,7 +353,6 @@ class DHTTracker {
                         peerCount--;
                     }
                     torrentCount++;
-                    tooMany = true;
                 } else if (recent <= 0) {
                     iter.remove();
                 } else {
@@ -332,7 +360,10 @@ class DHTTracker {
                 }
             }
 
-            if (peerCount > MAX_PEERS) tooMany = true;
+            // Global pressure only: one torrent at its own cap is normal bookkeeping
+            // (the LRU trim already bounded it), not a reason to tighten expiry
+            // for every torrent and sweep 3x more often.
+            if (peerCount > getMaxPeers(torrentCount)) tooMany = true;
             if (tooMany) _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
             else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, getMaxExpireTime(peerCount));
 

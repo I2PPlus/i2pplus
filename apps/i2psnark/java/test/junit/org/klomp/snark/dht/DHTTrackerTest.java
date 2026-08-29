@@ -60,4 +60,28 @@ public class DHTTrackerTest {
         tracker.unannounce(otherHash(), new Hash(peer));
         assertNull(tracker.getBloomFilters(otherHash()));
     }
+
+    /** Global cap is a base allowance plus a per-torrent budget. */
+    @Test
+    public void testGetMaxPeers() {
+        assertEquals(DHTTracker.MAX_PEERS, DHTTracker.getMaxPeers(0));
+        assertEquals(DHTTracker.MAX_PEERS + DHTTracker.MAX_PEERS_PER_TORRENT, DHTTracker.getMaxPeers(1));
+        assertEquals(
+                DHTTracker.MAX_PEERS + 10 * DHTTracker.MAX_PEERS_PER_TORRENT,
+                DHTTracker.getMaxPeers(10));
+        assertTrue(DHTTracker.getMaxPeers(200) > DHTTracker.MAX_PEERS);
+    }
+
+    /** Expiry longens the sparser the store: more headroom, less churn. */
+    @Test
+    public void testGetMaxExpireTimeTiers() {
+        long minute = 60 * 1000L;
+        long hour = 60 * minute;
+        assertEquals(4 * hour, DHTTracker.getMaxExpireTime(DHTTracker.MAX_PEERS_PER_TORRENT));
+        assertEquals(2 * hour, DHTTracker.getMaxExpireTime(2 * DHTTracker.MAX_PEERS_PER_TORRENT - 1));
+        assertEquals(1 * hour, DHTTracker.getMaxExpireTime(4 * DHTTracker.MAX_PEERS_PER_TORRENT - 1));
+        assertEquals(30 * minute, DHTTracker.getMaxExpireTime(4 * DHTTracker.MAX_PEERS_PER_TORRENT));
+        // Never below the MIN_EXPIRE_TIME floor once tightening kicks in
+        assertEquals(4 * hour, DHTTracker.getMaxExpireTime(0));
+    }
 }
