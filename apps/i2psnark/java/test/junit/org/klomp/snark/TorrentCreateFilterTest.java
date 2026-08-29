@@ -45,6 +45,20 @@ public class TorrentCreateFilterTest {
         assertEquals(true, copy.isDefault);
     }
 
+    /**
+     * The explicit SUID must equal the JVM-computed value of the original
+     * (pre-SUID) class so already-written {@code filters.conf} files remain
+     * deserializable. Changing it to any other value (e.g. {@code 1L}) makes
+     * {@code SnarkManager.initTorrentCreateFilterMap()} log
+     * "local class incompatible" and drop every saved filter.
+     */
+    @Test
+    public void testSerialVersionUidIsCompatibleWithLegacyData() {
+        long suid =
+                java.io.ObjectStreamClass.lookup(TorrentCreateFilter.class).getSerialVersionUID();
+        assertEquals(-4345254904315868015L, suid);
+    }
+
     /** Empty pattern/value fields must survive a round trip unchanged. */
     @Test
     public void testSerializationOfEmptyFields() throws Exception {
