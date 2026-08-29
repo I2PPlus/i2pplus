@@ -110,7 +110,7 @@ public class TunnelControllerGroup implements ClientApp {
     /** Tuned by Tuner */
     private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
     /** Tuned by Tuner */
-    private static volatile int clientRunnerMax = 8192;
+    private static volatile int clientRunnerMax = 1024;
 
     /**
      *  The number of threads handling connections to server tunnels.
@@ -130,11 +130,12 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static int getClientRunnerMax() { return clientRunnerMax; }
     /**
-     *  Clamp and set the maximum concurrent client connections, 4 to 8192.
+     *  Clamp and set the maximum concurrent client connections, 4 to 1024.
+     *  The Tuner I2PTunnelClientRunnerMaxParam stays within this same range.
      *  @param val the desired maximum
      */
     public static void setClientRunnerMax(int val) {
-        clientRunnerMax = Math.max(4, Math.min(8192, val));
+        clientRunnerMax = Math.max(4, Math.min(1024, val));
     }
 
     /** Socket connect timeout in ms, tuned by Tuner */
@@ -1408,10 +1409,17 @@ public class TunnelControllerGroup implements ClientApp {
                 _executor = new CustomThreadPoolExecutor();
                 I2PAppContext ctx = _context;
                 if (ctx != null) {
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.poolSize", "Client runner pool size", "I2PTunnel", RATES);
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.activeThreads", "Client runner active threads", "I2PTunnel", RATES);
                 }
             } else if (_executor.getMaximumPoolSize() != clientRunnerMax) {
                 resizeClientExecutor(clientRunnerMax);
+            }
+            // Sample the real load for Tuner feedback. This is the *observed* active-thread
+            // count, not the configured cap - the old poolSize stat was written by the very
+            // resize it fed back into, producing a self-fulfilling ramp to the ceiling.
+            I2PAppContext ctx = _context;
+            if (ctx != null) {
+                ctx.statManager().addRateData("i2ptunnel.clientRunner.activeThreads", _executor.getActiveCount());
             }
         }
         return _executor;
@@ -1525,7 +1533,7 @@ public class TunnelControllerGroup implements ClientApp {
                 _executor.setMaximumPoolSize(newMax);
                 I2PAppContext ctx = _context;
                 if (ctx != null)
-                    ctx.statManager().addRateData("i2ptunnel.clientRunner.poolSize", newMax);
+                    ctx.statManager().addRateData("i2ptunnel.clientRunner.activeThreads", _executor.getActiveCount());
             }
         }
     }

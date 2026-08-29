@@ -10421,7 +10421,7 @@ protected int computeTarget(double observed) {
         I2PTunnelClientRunnerMaxParam() {
             super("i2ptunnel.clientRunner.max", "I2PTunnel client threads",
                   SUB_TUNNEL,
-                   4, 8192, 4, "i2ptunnel.clientRunner.poolSize", _context);
+                   4, 1024, 4, "i2ptunnel.clientRunner.activeThreads", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -10446,7 +10446,9 @@ protected int computeTarget(double observed) {
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = i2ptunnel.clientRunner.poolSize (60s rolling avg)
+            // observed = i2ptunnel.clientRunner.activeThreads (60s rolling avg of true pool load).
+            // Uses real active thread count, never the cap itself; this is not self-referential
+            // and cannot ramp the ceiling under zero load (fixed: was i2ptunnel.clientRunner.poolSize).
             // If active threads are near the max ceiling, raise it
             if (observed > current * 0.75 && current < _max)
                 return Math.min(_max, current + Math.max(current / 4, 16));
