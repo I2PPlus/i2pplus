@@ -173,6 +173,13 @@ public class TrackerClient implements Runnable {
     private static final int DHT_ANNOUNCE_PEERS = 8;
 
     /**
+     * A DHT with fewer than this many known nodes is still bootstrapping and
+     * unreliable, so a seeding trackerless torrent falls back to its backup
+     * trackers to find peers.
+     */
+    private static final int DHT_BOOTSTRAP_NODES = 16;
+
+    /**
      * Default BitTorrent tracker port.
      */
     public static final int PORT = 6881;
@@ -619,11 +626,15 @@ public class TrackerClient implements Runnable {
                     // fast update for UI at startup
                     if (maxSeenPeers > oldSeenPeers) snark.setTrackerSeenPeers(maxSeenPeers);
                 }
-                // backup if DHT needs bootstrapping
-                if (trackers.isEmpty()
-                        && !backupTrackers.isEmpty()
-                        && dht != null
-                        && dht.size() < 16) {
+                // backup: while downloading a trackerless torrent, always
+                // consult the configured trackers regardless of DHT size;
+                // for seeds, only fall back when the DHT still needs bootstrapping
+                if (needBackupTrackers(
+                        !trackers.isEmpty(),
+                        !backupTrackers.isEmpty(),
+                        dht != null,
+                        dht != null ? dht.size() : 0,
+                        coordinator.needOutboundPeers())) {
                     p = getPeersFromTrackers(backupTrackers);
                     if (p > maxSeenPeers) maxSeenPeers = p;
                 }
@@ -672,6 +683,42 @@ public class TrackerClient implements Runnable {
         catch (Throwable t) {
             _log.error("TrackerClient: " + t, t);
         }
+    }
+
+    /**
+     * Whether the configured backup trackers should be consulted for a
+     * trackerless torrent on this announce cycle.
+     *
+     * <p>Backup trackers are only populated when the torrent has no announce
+     * URL at all (magnet-links and torrents missing an announce), and are the
+     * only HTTP tracker peer source for such torrents. While actively
+     * downloading, the backup trackers must be consulted regardless of the DHT
+     * size: a healthy DHT may know many nodes yet hold no peers for this
+     * infohash, and with DHT disabled they are the only peer source left. For a
+     * seeding torrent no inbound peers are needed, so they are only used as a
+     * bootstrapping fallback while the DHT is still too small to be useful.
+     *
+     * @param havePrimary whether the torrent has its own primary trackers
+     * @param haveBackup whether backup trackers are configured
+     * @param dhtEnabled whether a DHT is available for this torrent
+     * @param dhtSize number of known DHT nodes, only meaningful if dhtEnabled
+     * @param downloading whether the torrent is actively seeking outbound peers
+     * @return true to query the backup trackers
+     * @since 0.9.71+
+     */
+    static boolean needBackupTrackers(
+            boolean havePrimary,
+            boolean haveBackup,
+            boolean dhtEnabled,
+            int dhtSize,
+            boolean downloading) {
+        if (havePrimary || !haveBackup) {
+            return false;
+        }
+        if (downloading) {
+            return true;
+        }
+        return dhtEnabled && dhtSize < DHT_BOOTSTRAP_NODES;
     }
 
     /**
