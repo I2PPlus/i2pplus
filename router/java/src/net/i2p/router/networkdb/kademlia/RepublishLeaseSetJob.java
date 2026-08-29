@@ -57,6 +57,19 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final long EXPIRY_WINDOW = 4L * 60 * 1000;
     /** Minimum reschedule interval — prevents sub-minute flood treadmills. */
     private static final long MIN_RESCHEDULE = 60L * 1000;
+    /**
+     *  Emergency re-mint window: when the stored copy is within this much of
+     *  expiring, re-mint whatever the pool holds down to a single viable lease,
+     *  skipping the normal required-count gate.  A thin-but-alive public
+     *  LeaseSet beats letting the copy lapse while the deferral waits for
+     *  capacity, and every lease the pool hands back is newer than the dying
+     *  copy's (the 10-minute lease cap guarantees a later earliest-lease-date),
+     *  so the floodfill accepts and re-floods the rescue copy.  Matches the
+     *  pool's own lease-eligibility floor (LEASE_MIN_REMAINING_MS = 2 min): a
+     *  lease the pool refuses to publish cannot outlive floodfill propagation,
+     *  so once we are inside that floor there is no further capacity to wait
+     *  for. */
+    private static final long EMERGENCY_REMINT_WINDOW = 2L * MIN_RESCHEDULE;
     /** Retry interval after a missing local LeaseSet — long enough for the
      *  pool to build and test a replacement tunnel before we ask again. */
     private static final long MISSING_LEASESET_RETRY = 30L * 1000;
@@ -477,6 +490,42 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     /**
+     *  Whether a re-mint may proceed now using the pool's current LeaseSet.
+     *  <p>
+     *  Two independent gates, either of which is enough:
+     *  <ul>
+     *    <li><b>Emergency backstop</b>: the stored copy is inside
+     *        {@link #EMERGENCY_REMINT_WINDOW} and the pool holds at least one
+     *        viable lease.  Waiting costs nothing — every viable lease ends
+     *        after the dying copy's, so the rescue copy strictly extends it —
+     *        but deferring risks a fully-lapsed stored copy and the visible
+     *        outage that follows while handleExpiredLeaseSet rebuilds.</li>
+     *    <li><b>Normal gate</b>: outside the emergency window the re-mint
+     *        proceeds only when the pool copy extends the stored copy and
+     *        carries at least {@code required} viable leases, so the re-signed
+     *        LeaseSet is not unnecessarily thin.</li>
+     *  </ul>
+     *  A pool copy with no viable leases (all near-dead) never re-mints —
+     *  re-signing it would not push expiry forward, so it pads nothing but
+     *  latency; the expiry path's pool rebuild is the backstop for a fully
+     *  lapsed copy.
+     *
+     *  @param freshCount number of pool leases with a viability window remaining
+     *  @param required minimum viable leases for a normal (non-emergency) re-mint
+     *  @param extendsExpiry true if the pool copy's latest lease exceeds the stored copy's
+     *  @param timeUntilExpiry ms until the stored copy expires
+     *  @param emergencyRemintWindow the emergency threshold in ms
+     *  @return true if the re-mint should be requested now
+     *  @since 0.9.71+
+     */
+    static boolean shouldRemint(int freshCount, int required, boolean extendsExpiry,
+                                long timeUntilExpiry, long emergencyRemintWindow) {
+        if (freshCount <= 0) { return false; }
+        if (timeUntilExpiry <= emergencyRemintWindow) { return true; }
+        return extendsExpiry && freshCount >= required;
+    }
+
+    /**
      *  Re-mint from the tunnel pool's current tunnels rather than re-signing or
      *  flooding the stored copy, whose leases may be near expiry.  The client
      *  signs whatever leases we send, so sending the stored (dying) copy would
@@ -500,6 +549,12 @@ public class RepublishLeaseSetJob extends JobImpl {
      *  re-floods it, and a thin copy the pool can still serve beats letting
      *  the stored copy die while the deferral waits for capacity.
      *
+     *  Inside the emergency window ({@link #EMERGENCY_REMINT_WINDOW}) the
+     *  required-count gate is skipped entirely: any single viable lease in the
+     *  pool triggers an immediate re-mint rather than a deferral.  This is the
+     *  hard guarantee that a pool stuck below target can never let the public
+     *  LeaseSet lapse — one lives after two.
+     *
      *  @param name the destination name for logging
      *  @param now current time in ms
      *  @param timeUntilExpiry time until the stored copy expires, in ms
@@ -515,11 +570,18 @@ public class RepublishLeaseSetJob extends JobImpl {
         // Gate on the minimum viable set: two for server pools with target
         // > 2, one otherwise.  Re-minting with fewer viable leases would
         // serve an unnecessarily thin copy — the leases would expire before
-        // the successor propagates.
+        // the successor propagates — except inside the emergency window,
+        // where thin still beats lapsed.
         int required = Math.min(2, Math.max(1, target - 1));
         boolean extendsExpiry = freshTimeUntilExpiry > timeUntilExpiry;
-        if (fresh != null && extendsExpiry && freshCount >= required) {
-            if (_log.shouldInfo()) {
+        boolean emergency = timeUntilExpiry <= EMERGENCY_REMINT_WINDOW;
+        if (fresh != null && shouldRemint(freshCount, required, extendsExpiry,
+                                          timeUntilExpiry, EMERGENCY_REMINT_WINDOW)) {
+            if (_log.shouldWarn() && emergency) {
+                _log.warn("Re-minting LeaseSet for " + name + " [" + shortHash() +
+                          "] under emergency window (" + (timeUntilExpiry / 1000) +
+                          "s to expiry, " + freshCount + "/" + target + " viable leases)");
+            } else if (_log.shouldInfo()) {
                 _log.info("Requesting re-mint of LeaseSet for " + name + " [" + shortHash() +
                           "] (extends expiry from " + (timeUntilExpiry / 1000) +
                           "s to " + (freshTimeUntilExpiry / 1000) + "s, " +

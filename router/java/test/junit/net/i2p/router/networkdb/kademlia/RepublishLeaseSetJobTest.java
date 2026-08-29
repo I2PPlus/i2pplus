@@ -200,12 +200,13 @@ public class RepublishLeaseSetJobTest {
         verify(_jobQueue).addJob(any(Job.class));
     }
 
-    /**
-     * An expiring LeaseSet whose pool holds too few fresh tunnels must NOT
-     * re-mint — the re-mint gate only fires when the pool can actually extend
-     * the lease past the fresh window.  Below target minus one, the job
-     * defers, requests fresh tunnel builds, and reschedules; it never floods
-     * the dying copy and never re-signs the same near-expired leases.
+/**
+     *  An expiring LeaseSet whose pool holds too few fresh tunnels must NOT
+     *  re-mint — the re-mint gate only fires when the pool can actually extend
+     *  the lease past the fresh window.  Below target minus one, and still
+     *  outside the emergency re-mint window, the job defers, requests fresh
+     *  tunnel builds, and reschedules; it never floods the dying copy and
+     *  never re-signs the same near-expired leases.
      */
     @Test
     public void testExpiringBelowTargetDefersAndRequestsBuilds() {
@@ -213,8 +214,9 @@ public class RepublishLeaseSetJobTest {
         when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
         when(_cm.isLocal(hash)).thenReturn(true);
 
-        // stored LS expiring soon with only 1 lease against a target of 3
-        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        // stored LS expiring within the 4-minute EXPIRY_WINDOW but still
+        // outside the 2-minute emergency re-mint window
+        LeaseSet ls = localLeaseSet(hash, NOW + 180L * 1000);
         when(ls.getLeaseCount()).thenReturn(1);
         when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
 
@@ -241,12 +243,13 @@ public class RepublishLeaseSetJobTest {
         verify(_jobQueue).addJob(any(Job.class));
     }
 
-    /**
-     * A pool stuck below target must not defer forever: after
-     * MAX_REMINT_DEFERS consecutive deferred cycles it falls back to a thin
-     * re-mint that still extends the stored copy's expiry, then resets the
-     * deferral counter so the next cycle requests fresh builds again instead
-     * of re-minting thin copies indefinitely.
+/**
+     *  A pool stuck below target must not defer forever: after
+     *  MAX_REMINT_DEFERS consecutive deferred cycles (each outside the
+     *  emergency window) it falls back to a thin re-mint that still extends
+     *  the stored copy's expiry, then resets the deferral counter so the next
+     *  cycle requests fresh builds again instead of re-minting thin copies
+     *  indefinitely.
      */
     @Test
     public void testPersistentDeficitFallsBackAfterMaxDefers() {
@@ -254,8 +257,10 @@ public class RepublishLeaseSetJobTest {
         when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
         when(_cm.isLocal(hash)).thenReturn(true);
 
-        // stored LS expiring soon with only 1 lease against a target of 3
-        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        // stored LS expiring within the EXPIRY_WINDOW but outside the
+        // 2-minute emergency window, so the deficit defers instead of
+        // re-minting immediately
+        LeaseSet ls = localLeaseSet(hash, NOW + 180L * 1000);
         when(ls.getLeaseCount()).thenReturn(1);
         when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
 
@@ -291,6 +296,76 @@ public class RepublishLeaseSetJobTest {
         verify(pool, times(4)).requestFreshTunnelBuild();
         verify(_cm, times(1)).requestLeaseSet(eq(hash), any());
         verify(_jobQueue, times(5)).addJob(any(Job.class));
+    }
+
+    /**
+     *  Inside the emergency re-mint window a pool stuck below target must
+     *  re-mint immediately on its single viable lease rather than defer — a
+     *  thin-but-alive public LeaseSet beats letting the copy lapse while the
+     *  deferral waits for capacity.  The required-count gate and the deferral
+     *  counter are both bypassed.
+     */
+    @Test
+    public void testEmergencyDeficitRemintsImmediately() {
+        Hash hash = newHash(9);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        // stored LS critically near lapse with only 1 lease against target 3
+        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        when(ls.getLeaseCount()).thenReturn(1);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        // pool holds a single viable lease — below required but still extending
+        LeaseSet freshPoolLs = freshPoolLeaseSet(NOW + 5L * 60 * 1000, 1);
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(freshPoolLs);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        TunnelPoolSettings targetSettings = settings(3);
+        when(tm.getInboundSettings(any(Hash.class))).thenReturn(targetSettings);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        // re-mint on the first cycle despite being 1/3 — no deferral
+        verify(_cm).requestLeaseSet(eq(hash), eq(freshPoolLs));
+        verify(pool, never()).requestFreshTunnelBuild();
+        verify(_jobQueue).addJob(any(Job.class));
+    }
+
+    /**
+     *  Inside the emergency window a pool holding no viable leases must still
+     *  NOT re-mint — re-signing near-dead leases would not push expiry forward.
+     *  The job keeps deferring and requesting fresh builds so the next cycle
+     *  (or the handleExpiredLeaseSet rebuild) can produce a real copy.
+     */
+    @Test
+    public void testEmergencyNoViableLeasesStillDefers() {
+        Hash hash = newHash(10);
+        when(_cm.shouldPublishLeaseSet(hash)).thenReturn(true);
+        when(_cm.isLocal(hash)).thenReturn(true);
+
+        LeaseSet ls = localLeaseSet(hash, NOW + 60L * 1000);
+        when(_facade.lookupLeaseSetLocally(hash)).thenReturn(ls);
+
+        // pool's single lease dies within the viability window — not countable
+        LeaseSet dyingPoolLs = freshPoolLeaseSet(NOW + 60L * 1000, 1);
+        TunnelPool pool = mock(TunnelPool.class);
+        when(pool.getInboundTunnelsAsLeaseSet()).thenReturn(dyingPoolLs);
+        TunnelManagerFacade tm = mock(TunnelManagerFacade.class);
+        when(tm.getInboundPool(hash)).thenReturn(pool);
+        when(_ctx.tunnelManager()).thenReturn(tm);
+
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_ctx, _facade, hash);
+        assertTrue(job.registerSelf());
+        job.runJob();
+
+        verify(_cm, never()).requestLeaseSet(eq(hash), any());
+        verify(pool).requestFreshTunnelBuild();
+        verify(_jobQueue).addJob(any(Job.class));
     }
 
     /**
