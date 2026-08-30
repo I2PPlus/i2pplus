@@ -152,8 +152,54 @@ public class TrackerClient implements Runnable {
      *  own netdb lookup path) when many TrackerClient threads wake together.
      *  Requests beyond the cap queue on the permit; the fetch timeout clock
      *  only starts once the permit is held.
+     *  Increased from 3 to 10 to allow parallel DHT metadata lookups
+     *  (e.g. zzzot hashlist) while per-tracker throttle below prevents
+     *  hammering any single tracker.
      */
-    private static final Semaphore ANNOUNCE_PERMITS = new Semaphore(3);
+    private static final Semaphore ANNOUNCE_PERMITS = new Semaphore(10);
+
+    /**
+     * Per-tracker throttle: max 20 requests per tracker host per minute.
+     * Shared across all torrents to cap load on popular trackers (e.g.
+     * postman, torrfreedom) even when many torrents use the same tracker.
+     * Guarded by itself.
+     * @since 0.9.71+
+     */
+    private static final int MAX_PER_TRACKER_PER_MINUTE = 20;
+    private static final long TRACKER_THROTTLE_WINDOW_MS = 60_000L;
+    private static final Map<String, java.util.Deque<Long>> _trackerRequestTimes = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /**
+     * Block until this tracker host has capacity under the 20/min throttle.
+     * Must be called before acquiring ANNOUNCE_PERMITS so queued threads
+     * don't hold global permits while waiting for per-tracker quota.
+     * @param host tracker host (from TCTracker.host), nullable
+     */
+    private static void throttleForTracker(String host) {
+        if (host == null)
+            return;
+        while (true) {
+            long now = System.currentTimeMillis();
+            java.util.Deque<Long> q = _trackerRequestTimes.computeIfAbsent(host, k -> new java.util.ArrayDeque<>());
+            long sleepMs = 0;
+            synchronized (q) {
+                while (!q.isEmpty() && now - q.peekFirst() >= TRACKER_THROTTLE_WINDOW_MS)
+                    q.pollFirst();
+                if (q.size() < MAX_PER_TRACKER_PER_MINUTE) {
+                    q.addLast(now);
+                    return;
+                }
+                long oldest = q.peekFirst();
+                sleepMs = (oldest + TRACKER_THROTTLE_WINDOW_MS) - now;
+                if (sleepMs <= 0) {
+                    q.pollFirst();
+                    continue;
+                }
+            }
+            // Sleep outside the lock so other hosts aren't blocked
+            try { Thread.sleep(Math.min(sleepMs, 1000) + 50); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); return; }
+        }
+    }
     private static final int LONG_SLEEP = 10 * 60 * 1000; // sleep a while after lots of fails
     private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * (long) 60 * 1000;
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
@@ -779,10 +825,16 @@ public class TrackerClient implements Runnable {
                         event = UDPTrackerClient.EVENT_NONE;
                     }
                     TrackerInfo info;
-                    // Global concurrency cap: space announces/scrapes across
+                    // Per-tracker throttle: max 20 req/min per host, plus
+                    // global concurrency cap: space announces/scrapes across
                     // torrents so we never stampede trackers with parallel
                     // requests. The fetch timeout only begins once a permit
-                    // is held.
+                    // is held. Throttle before acquiring global permit so
+                    // we don't hold global slots while waiting for per-host quota.
+                    throttleForTracker(tr.host);
+                    if (stop || tr.stop) {
+                        break;
+                    }
                     ANNOUNCE_PERMITS.acquireUninterruptibly();
                     if (stop || tr.stop) {
                         // stopped while queued: give back the permit unused
