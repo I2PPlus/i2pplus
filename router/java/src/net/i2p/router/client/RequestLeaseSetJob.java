@@ -10,6 +10,7 @@ package net.i2p.router.client;
 
 import java.util.Date;
 import java.util.Properties;
+import net.i2p.data.DataHelper;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.Lease;
@@ -142,6 +143,25 @@ class RequestLeaseSetJob extends JobImpl {
             // new style - leases will have individual expirations
             RequestVariableLeaseSetMessage rmsg = new RequestVariableLeaseSetMessage();
             rmsg.setSessionId(id);
+            if (_log.shouldInfo()) {
+                StringBuilder sb = new StringBuilder("RVLS outbound [");
+                sb.append(requested.getLeaseCount()).append(" leases]");
+                sb.append(" computedEndTime=").append(DataHelper.formatDuration(endTime - now));
+                sb.append(" (raw=").append(endTime).append("ms)");
+                for (int i = 0; i < requested.getLeaseCount(); i++) {
+                    Lease lease = requested.getLease(i);
+                    long rawEnd = lease.getEndTime();
+                    if (rawEnd < endTime) {
+                        sb.append(" | lease[").append(i).append("] CAPPED ");
+                        sb.append(DataHelper.formatDuration(rawEnd - now)).append("->");
+                        sb.append(DataHelper.formatDuration(endTime - now));
+                    } else {
+                        sb.append(" | lease[").append(i).append("] raw=");
+                        sb.append(DataHelper.formatDuration(rawEnd - now));
+                    }
+                }
+                _log.info(sb.toString());
+            }
             for (int i = 0; i < requested.getLeaseCount(); i++) {
                 Lease lease = requested.getLease(i);
                 if (lease.getEndTime() < endTime) {

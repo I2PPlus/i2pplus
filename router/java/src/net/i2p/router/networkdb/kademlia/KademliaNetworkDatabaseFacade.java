@@ -1867,8 +1867,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!isFutureTooFar) {return null;}
         long age = latest - now;
         if (_log.shouldWarn()) {
-            _log.warn("LeaseSet expires too far in the future: [" + idShort + "]" +
-                      "\n* Expires: " + DataHelper.formatDuration(age) + " from now");
+            long earliest = leaseSet.getEarliestLeaseDate();
+            _log.warn("checkFutureExpiration REJECT [" + idShort + "]" +
+                      "\n* type=" + type +
+                      "\n* now=" + now +
+                      "\n* latest=" + latest + " (age=" + DataHelper.formatDuration(age) + ")" +
+                      "\n* earliest=" + earliest + " (age=" + DataHelper.formatDuration(earliest - now) + ")" +
+                      "\n* leaseCount=" + leaseSet.getLeaseCount() +
+                      "\n* futureLimit=" + futureLimit);
         }
         return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
     }
@@ -1925,6 +1931,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, leaseSet);
         if (err != null) {
+            if (_log.shouldWarn()) {
+                long now = _context.clock().now();
+                StringBuilder sb = new StringBuilder("store VALIDATION FAILED [" + key.toBase32().substring(0, 8) + "]");
+                sb.append(" type=").append(leaseSet.getType());
+                sb.append(" leaseCount=").append(leaseSet.getLeaseCount());
+                sb.append(" earliest=").append(leaseSet.getEarliestLeaseDate());
+                sb.append(" latest=").append(leaseSet.getLatestLeaseDate());
+                if (leaseSet instanceof LeaseSet2) {
+                    LeaseSet2 ls2 = (LeaseSet2) leaseSet;
+                    sb.append(" published=").append(ls2.getPublished());
+                    sb.append(" expires=").append(ls2.getExpires());
+                }
+                sb.append(" now=").append(now);
+                _log.warn(sb.toString());
+            }
             throw new IllegalArgumentException("Invalid NetDbStore attempt -> " + err);
         }
 

@@ -667,7 +667,29 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                     return;
                 }
             }
-            if (_log.shouldInfo()) {_log.info("Publishing: " + ls);}
+            if (_log.shouldInfo()) {
+                long now = _context.clock().now();
+                StringBuilder sb = new StringBuilder("CLS inbound [type=");
+                sb.append(type);
+                sb.append("] leaseCount=").append(ls.getLeaseCount());
+                if (ls instanceof LeaseSet2) {
+                    LeaseSet2 ls2 = (LeaseSet2) ls;
+                    sb.append(" published=").append(DataHelper.formatDuration(ls2.getPublished() - now));
+                    sb.append(" expires=").append(DataHelper.formatDuration(ls2.getExpires() - now));
+                    sb.append(" earliest=").append(DataHelper.formatDuration(ls2.getEarliestLeaseDate() - now));
+                    sb.append(" latest=").append(DataHelper.formatDuration(ls2.getLatestLeaseDate() - now));
+                } else {
+                    sb.append(" earliest=").append(DataHelper.formatDuration(ls.getEarliestLeaseDate() - now));
+                    sb.append(" latest=").append(DataHelper.formatDuration(ls.getLatestLeaseDate() - now));
+                }
+                for (int i = 0; i < ls.getLeaseCount(); i++) {
+                    long end = ls.getLease(i).getEndTime();
+                    sb.append(" | l[").append(i).append("]=")
+                      .append(DataHelper.formatDuration(end - now))
+                      .append(" (raw=").append(end).append("ms)");
+                }
+                _log.info(sb.toString());
+            }
             _runner.getFloodfillNetworkDatabaseFacade().publish(ls);
             if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                 // store the decrypted ls also

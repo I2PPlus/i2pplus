@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -562,6 +563,13 @@ public class RepublishLeaseSetJob extends JobImpl {
     private void refloatLeaseSet(String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
         long freshTimeUntilExpiry = fresh != null ? fresh.getLatestLeaseDate() - now : 0;
+        if (_log.shouldInfo()) {
+            _log.info("refloatLeaseSet " + name + " [" + shortHash() + "]" +
+                      " storedExpiry=" + DataHelper.formatDuration(timeUntilExpiry) +
+                      " freshExpiry=" + DataHelper.formatDuration(freshTimeUntilExpiry) +
+                      " extendsExpiry=" + (freshTimeUntilExpiry > timeUntilExpiry) +
+                      " freshLeases=" + (fresh != null ? fresh.getLeaseCount() : 0));
+        }
         TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
         int freshCount = countFreshLeases(fresh, now);
         int target = getTargetLeaseCount();
