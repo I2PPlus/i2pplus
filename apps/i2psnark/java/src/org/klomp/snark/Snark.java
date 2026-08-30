@@ -1388,6 +1388,20 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     @Override
     public void gotMetaInfo(PeerCoordinator coordinator, MetaInfo metainfo) {
+        // Metadata-only lookup (zzzot hashlist): don't create Storage or pre-allocate files.
+        // SnarkManager.lookupTorrentName creates magnets named "lookup-*" in a temp dir
+        // "zzzot-lookup-*". For those, we just capture the MetaInfo name and return;
+        // the lookup's wait loop polls getMetaInfo(), extracts the name, and deletes
+        // the magnet. Creating Storage here would pre-allocate files in temp and,
+        // via SnarkManager.gotMetaInfo(), leak a .torrent into the data dir.
+        if ((torrent != null && (torrent.startsWith("lookup-") || torrent.contains("zzzot-lookup"))) ||
+            (rootDataDir != null && rootDataDir.getPath().contains("zzzot-lookup"))) {
+            meta = metainfo;
+            if (completeListener != null) {
+                try { completeListener.gotMetaInfo(this); } catch (Exception ignore) {}
+            }
+            return;
+        }
         try {
             String base = Storage.filterName(metainfo.getName());
             File baseFile;
