@@ -267,7 +267,7 @@ th.peerCount:empty::after{min-width:100px;display:inline-block;content:""}
 th.peerCount img{margin-left:-4px}
 td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-weight:700}
 td.peerCount:empty{text-align:center}
-.peerCount b,.inactive.seeding .peerCount b{padding:4px 3px;min-width:100px;display:inline-block;position:relative;line-height:1;vertical-align:middle;text-align:center;font-size:95%;text-shadow:var(--txt_shadow);border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000);user-select:none}
+.peerCount b,.inactive.seeding .peerCount b{padding:4px 3px;min-width:98px;display:inline-block;position:relative;line-height:1;vertical-align:middle;text-align:center;font-size:95%;text-shadow:var(--txt_shadow);border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000);user-select:none}
 .peerCount b::before,.inactive.seeding .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}
 .peerCount b a{color:var(--ink)}
 .peerCount b a:hover,.peerCount b a:focus{color:var(--hover)}
