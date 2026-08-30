@@ -119,6 +119,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 1000 : 500;
     /** Delay before publishing RouterInfo at startup. */
     private static final int PUBLISH_JOB_DELAY = 15*1000;
+    /** Rate-limit Client subDb exploratory drop WARN (10s). @since 0.9.71+ */
+    private static volatile long _lastClientSubDbWarn;
+    private static final long CLIENT_SUBDB_WARN_INTERVAL = 10*1000L;
     /**
      * Config property for floodfill participation.
      * @since 0.9.66 moved from FloodfillMonitorJob
@@ -171,6 +174,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // late reply grace period cache
         _context.statManager().createRateStat("netDb.lateReplyCacheSize", "Size of late reply grace period cache", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.lateReplyTimedOut", "Timed out peers added to late reply cache", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.clientSubDbExploratoryDrop", "Dropped Client subDb exploratory searches (missing dest)", "NetworkDatabase", rate);
         // No need to start the FloodfillMonitorJob for client subDb.
         if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null; _contactRefreshJob = null; _introducerLookupJob = null;}
         else {
@@ -839,7 +843,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             if (_log.shouldWarn()) {_log.warn("NULL key search requested -> Dropping...");}
             return null;
         } else if (fromLocalDest == null && isClientDb()) {
-            if (_log.shouldWarn()) {_log.warn("Search from Client subDb using Exploratory tunnels requested -> Dropping...");}
+            _context.statManager().addRateData("netDb.clientSubDbExploratoryDrop", 1);
+            long now = _context.clock().now();
+            long last = _lastClientSubDbWarn;
+            if (now - last > CLIENT_SUBDB_WARN_INTERVAL && _log.shouldWarn()) {
+                _lastClientSubDbWarn = now;
+                _log.warn("Search from Client subDb using Exploratory tunnels requested -> Dropping... (rate-limited, total drops counted in netDb.clientSubDbExploratoryDrop)");
+            } else if (_log.shouldDebug()) {
+                _log.debug("Search from Client subDb using Exploratory tunnels requested -> Dropping... (suppressed)");
+            }
             return null;
         } else if (fromLocalDest != null) {
             // Client-initiated search always starts immediately, even if a

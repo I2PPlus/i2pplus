@@ -319,9 +319,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             if (_log.shouldDebug())
                 _log.debug("Send Outbound client message - LeaseSet for " + _toString + " found locally");
-            if (!_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4)) {
-                // LeaseSet is expired or about to expire. Trigger a remote lookup to get
+            if (!_leaseSet.isCurrent(90*1000)) {
+                // LeaseSet is expired or close to expiry (90s). Trigger a remote lookup to get
                 // fresh tunnels, but also try sending immediately with stale data.
+                // Previous check was CLOCK_FUDGE/4 (7.5s) which is too late for a
+                // network fetch that can take 5-10s. This now refreshes proactively
+                // before expiry so sends don't hit LS=null after 0ms.
                 // The send() method guards against duplicates via _finished flag.
                 boolean shouldFetch = true;
                 if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
