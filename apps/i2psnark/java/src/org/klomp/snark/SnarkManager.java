@@ -4256,7 +4256,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (_log.shouldInfo()) {
                     _log.info("Deleted " + conf + " for " + snark.getName());
                 }
-            } else {
+            } else if (conf.exists()) {
                 if (_log.shouldWarn()) {
                     _log.warn("Failed to delete " + conf + " for " + snark.getName());
                 }
@@ -4307,7 +4307,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     _log.info("Deleted " + config + " for " + ih);
                                 }
                                 deleted++;
-                            } else {
+                            } else if (config.exists()) {
                                 if (_log.shouldWarn()) {
                                     _log.warn("Failed to delete " + config + " for " + ih);
                                 }
