@@ -3348,6 +3348,366 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Result of a DHT metadata lookup — name plus combined size of data files.
+     * Size is {@code MetaInfo.getDataLength()} (excludes BEP47 padding), i.e. the
+     * sum of {@code getLengths()} for non-padding files; for single-file torrents
+     * equal to {@code getTotalLength()}. Zero if metadata unavailable.
+     * @since 0.9.71+
+     */
+    public static class TorrentInfo {
+        /** Torrent display name ({@code MetaInfo.getName()}) */
+        public final String name;
+        /** Combined size of data files in bytes (excludes padding) */
+        public final long size;
+        public TorrentInfo(String name, long size) {
+            this.name = name;
+            this.size = size;
+        }
+        @Override
+        public String toString() { return name + " (" + DataHelper.formatSize2(size) + ")"; }
+    }
+
+    /**
+     * Self-contained DHT lookup for torrent name without persisting torrent data.
+     * Creates a temporary magnet in a temp directory under the I2P temp dir,
+     * waits for metadata via DHT, extracts the torrent name, then deletes the
+     * magnet and temp directory. Does not store the .torrent file in the
+     * snark data directory and does not persist magnet status.
+     * If the infohash is already running as a user torrent, its name is returned
+     * directly without creating a lookup torrent or deleting the existing one.
+     *
+     * <p>This is intended for lightweight trackers (e.g. zzzot) that need only the
+     * torrent name for display (hashlist) and do not want to store metadata or
+     * pre-allocate data files. The lookup torrent is stored in
+     * {@code $I2P_TEMP/zzzot-lookup-<random>} and deleted when resolved or on timeout.
+     *
+     * @param infoHash 20-byte infohash
+     * @param timeoutMs max time to wait for metadata (e.g. 60_000 for 1 min, 3_600_000 for 60 min)
+     * @return torrent name (MetaInfo.getName()) or null if not found/timeout/interrupted
+     * @since 0.9.71+
+     */
+    public String lookupTorrentName(byte[] infoHash, long timeoutMs) {
+        if (infoHash == null || infoHash.length != 20)
+            return null;
+        // If already running as a user torrent, return its name directly (do not delete it)
+        Snark existing = getTorrentByInfoHash(infoHash);
+        if (existing != null) {
+            String existingName = null;
+            try { existingName = existing.getName(); } catch (Exception ignore) {}
+            boolean isOurLookup = existingName != null && (existingName.startsWith("lookup-") || existingName.contains("zzzot-lookup"));
+            // Also check storage base for temp dir
+            try {
+                Storage st = existing.getStorage();
+                if (st != null) {
+                    File base = st.getBase();
+                    if (base != null && base.getPath().contains("zzzot-lookup"))
+                        isOurLookup = true;
+                }
+            } catch (Exception ignore) {}
+            if (!isOurLookup) {
+                try {
+                    MetaInfo meta = existing.getMetaInfo();
+                    if (meta != null) {
+                        String mn = meta.getName();
+                        if (mn != null && !mn.isEmpty())
+                            return mn;
+                    }
+                } catch (Exception ignore) {}
+                if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("lookup-"))
+                    return existingName;
+                // Fall through to wait for existing lookup-* to resolve
+                if (!isOurLookup)
+                    return existingName;
+            }
+            // isOurLookup == true: reuse existing lookup torrent, wait for its metadata below
+        }
+        File tmpBase = _context.getTempDir();
+        File lookupDir = new File(tmpBase, "zzzot-lookup-" + _context.random().nextLong());
+        // Ensure directory exists; SecureDirectory handles perms
+        if (!lookupDir.mkdirs() && !lookupDir.isDirectory()) {
+            _log.warn("lookupTorrentName: could not create tmp dir " + lookupDir);
+            return null;
+        }
+        String hex = I2PSnarkUtil.toHex(infoHash);
+        String magnetName = "lookup-" + hex.substring(0, 8);
+        Snark snark = null;
+        boolean created = false;
+        synchronized (_snarks) {
+            Snark dup = getTorrentByInfoHash(infoHash);
+            if (dup != null) {
+                // Another lookup raced us - reuse it, don't create duplicate
+                snark = dup;
+            } else {
+                try {
+                    // updateStatus=false (don't persist), autoStart=true (bypass startup delay)
+                    snark = addMagnet(magnetName, infoHash, null, false, true, lookupDir, this);
+                    created = (snark != null);
+                } catch (Exception e) {
+                    _log.warn("lookupTorrentName addMagnet failed for " + hex, e);
+                    FileUtil.rmdir(lookupDir, false);
+                    return null;
+                }
+                if (snark == null) {
+                    // addMagnet returned null (duplicate raced), try to get it
+                    snark = getTorrentByInfoHash(infoHash);
+                    if (snark == null) {
+                        FileUtil.rmdir(lookupDir, false);
+                        return null;
+                    }
+                }
+            }
+        }
+        // Wait for metadata
+        long end = System.currentTimeMillis() + timeoutMs;
+        String result = null;
+        try {
+            while (System.currentTimeMillis() < end) {
+                try { Thread.sleep(1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); break; }
+                Snark cur = getTorrentByInfoHash(infoHash);
+                if (cur == null)
+                    break;
+                try {
+                    MetaInfo meta = cur.getMetaInfo();
+                    if (meta != null) {
+                        String n = meta.getName();
+                        if (n != null && !n.isEmpty()) {
+                            result = n;
+                            break;
+                        }
+                    }
+                } catch (Exception ignore) {}
+                // Fallback: after promotion, getName() may be the .torrent path
+                try {
+                    String n = cur.getName();
+                    if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("lookup-")) {
+                        // n may be /path/to/file.torrent - extract basename without .torrent
+                        if (n.endsWith(".torrent")) {
+                            try { result = new File(n).getName().replaceFirst("\\.torrent$", ""); }
+                            catch (Exception ignore) { result = n; }
+                        } else {
+                            result = n;
+                        }
+                        break;
+                    }
+                } catch (Exception ignore) {}
+            }
+        } finally {
+            // Clean up lookup torrent if we created it or it is still a lookup-*
+            Snark toDelete = getTorrentByInfoHash(infoHash);
+            if (toDelete != null) {
+                String toDeleteName = null;
+                File storageBase = null;
+                try { toDeleteName = toDelete.getName(); } catch (Exception ignore) {}
+                try {
+                    Storage st = toDelete.getStorage();
+                    if (st != null) storageBase = st.getBase();
+                } catch (Exception ignore) {}
+                boolean isLookup = false;
+                if (toDeleteName != null && (toDeleteName.startsWith("lookup-") || toDeleteName.contains("zzzot-lookup")))
+                    isLookup = true;
+                if (storageBase != null && storageBase.getPath().contains("zzzot-lookup"))
+                    isLookup = true;
+                // Also check lookupDir path we created
+                if (lookupDir.getPath().contains("zzzot-lookup"))
+                    isLookup = isLookup || created;
+                if (isLookup) {
+                    // Only delete lookup torrents, never user torrents
+                    try {
+                        deleteMagnet(toDelete);
+                    } catch (Exception e) {
+                        _log.warn("lookupTorrentName deleteMagnet failed for " + hex, e);
+                    }
+                    // Delete .torrent file if it was written to lookupDir (now possibly in default dir)
+                    if (toDeleteName != null && toDeleteName.endsWith(".torrent")) {
+                        try {
+                            File tf = new File(toDeleteName);
+                            if (tf.exists() && tf.getParentFile() != null && tf.getParentFile().getPath().contains("zzzot-lookup")) {
+                                tf.delete();
+                            }
+                        } catch (Exception ignore) {}
+                    }
+                }
+            }
+            // Always delete our tmp dir (contains pre-allocated data if any)
+            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) {}
+        }
+        return result;
+    }
+
+    /**
+     * Hex string overload for convenience.
+     *
+     * @param hex 40-char hex infohash (case-insensitive)
+     * @param timeoutMs max wait
+     * @return name or null
+     * @since 0.9.71+
+     */
+    public String lookupTorrentName(String hex, long timeoutMs) {
+        if (hex == null || hex.length() != 40)
+            return null;
+        byte[] ih = new byte[20];
+        try {
+            for (int i = 0; i < 20; i++) {
+                ih[i] = (byte) ((Character.digit(hex.charAt(i * 2), 16) << 4) + Character.digit(hex.charAt(i * 2 + 1), 16));
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return lookupTorrentName(ih, timeoutMs);
+    }
+
+    /**
+     * Self-contained DHT lookup for torrent name and size without persisting torrent data.
+     * Same semantics as {@link #lookupTorrentName(byte[], long)} but also returns
+     * the combined size of data files (excludes BEP47 padding) via
+     * {@code MetaInfo.getDataLength()}. This is the value zzzot hashlist should
+     * display alongside the name.
+     *
+     * @param infoHash 20-byte infohash
+     * @param timeoutMs max wait as for {@code lookupTorrentName}
+     * @return {@code TorrentInfo} with name and size, or null if not found/timeout
+     * @since 0.9.71+
+     */
+    public TorrentInfo lookupTorrentInfo(byte[] infoHash, long timeoutMs) {
+        if (infoHash == null || infoHash.length != 20)
+            return null;
+        Snark existing = getTorrentByInfoHash(infoHash);
+        if (existing != null) {
+            String existingName = null;
+            try { existingName = existing.getName(); } catch (Exception ignore) {}
+            boolean isOurLookup = existingName != null && (existingName.startsWith("lookup-") || existingName.contains("zzzot-lookup"));
+            try {
+                Storage st = existing.getStorage();
+                if (st != null) {
+                    File base = st.getBase();
+                    if (base != null && base.getPath().contains("zzzot-lookup"))
+                        isOurLookup = true;
+                }
+            } catch (Exception ignore) {}
+            if (!isOurLookup) {
+                try {
+                    MetaInfo meta = existing.getMetaInfo();
+                    if (meta != null) {
+                        String mn = meta.getName();
+                        if (mn != null && !mn.isEmpty())
+                            return new TorrentInfo(mn, meta.getDataLength());
+                    }
+                } catch (Exception ignore) {}
+                // If no MetaInfo yet (magnet without metadata), don't return placeholder
+                // — fall through to wait or return null
+                if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("lookup-") && !existingName.startsWith("Magnet")) {
+                    // Best-effort fallback when meta is null but we have a real name
+                    return new TorrentInfo(existingName, 0);
+                }
+            }
+        }
+        // Reuse the name-only lookup then enrich with size from MetaInfo if available.
+        // This keeps metadata-only semantics (Snark.gotMetaInfo skips Storage) and
+        // avoids duplicating the full wait/cleanup logic here.
+        File tmpBase = _context.getTempDir();
+        File lookupDir = new File(tmpBase, "zzzot-lookup-" + _context.random().nextLong());
+        if (!lookupDir.mkdirs() && !lookupDir.isDirectory()) {
+            _log.warn("lookupTorrentInfo: could not create tmp dir " + lookupDir);
+            return null;
+        }
+        String hex = I2PSnarkUtil.toHex(infoHash);
+        String magnetName = "lookup-" + hex.substring(0, 8);
+        boolean created = false;
+        synchronized (_snarks) {
+            Snark dup = getTorrentByInfoHash(infoHash);
+            if (dup == null) {
+                try {
+                    Snark snark = addMagnet(magnetName, infoHash, null, false, true, lookupDir, this);
+                    created = (snark != null);
+                } catch (Exception e) {
+                    _log.warn("lookupTorrentInfo addMagnet failed for " + hex, e);
+                    FileUtil.rmdir(lookupDir, false);
+                    return null;
+                }
+            }
+        }
+        long end = System.currentTimeMillis() + timeoutMs;
+        TorrentInfo result = null;
+        try {
+            while (System.currentTimeMillis() < end) {
+                try { Thread.sleep(1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); break; }
+                Snark cur = getTorrentByInfoHash(infoHash);
+                if (cur == null)
+                    break;
+                try {
+                    MetaInfo meta = cur.getMetaInfo();
+                    if (meta != null) {
+                        String n = meta.getName();
+                        if (n != null && !n.isEmpty()) {
+                            result = new TorrentInfo(n, meta.getDataLength());
+                            break;
+                        }
+                    }
+                } catch (Exception ignore) {}
+                try {
+                    String n = cur.getName();
+                    if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("lookup-")) {
+                        if (n.endsWith(".torrent")) {
+                            try { n = new File(n).getName().replaceFirst("\\.torrent$", ""); }
+                            catch (Exception ignore) {}
+                        }
+                        result = new TorrentInfo(n, 0);
+                        break;
+                    }
+                } catch (Exception ignore) {}
+            }
+        } finally {
+            Snark toDelete = getTorrentByInfoHash(infoHash);
+            if (toDelete != null) {
+                String toDeleteName = null;
+                File storageBase = null;
+                try { toDeleteName = toDelete.getName(); } catch (Exception ignore) {}
+                try {
+                    Storage st = toDelete.getStorage();
+                    if (st != null) storageBase = st.getBase();
+                } catch (Exception ignore) {}
+                boolean isLookup = false;
+                if (toDeleteName != null && (toDeleteName.startsWith("lookup-") || toDeleteName.contains("zzzot-lookup")))
+                    isLookup = true;
+                if (storageBase != null && storageBase.getPath().contains("zzzot-lookup"))
+                    isLookup = true;
+                if (lookupDir.getPath().contains("zzzot-lookup"))
+                    isLookup = isLookup || created;
+                if (isLookup) {
+                    try { deleteMagnet(toDelete); } catch (Exception e) { _log.warn("lookupTorrentInfo deleteMagnet failed for " + hex, e); }
+                    if (toDeleteName != null && toDeleteName.endsWith(".torrent")) {
+                        try {
+                            File tf = new File(toDeleteName);
+                            if (tf.exists() && tf.getParentFile() != null && tf.getParentFile().getPath().contains("zzzot-lookup"))
+                                tf.delete();
+                        } catch (Exception ignore) {}
+                    }
+                }
+            }
+            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) {}
+        }
+        return result;
+    }
+
+    /**
+     * Hex overload for {@link #lookupTorrentInfo(byte[], long)}.
+     * @since 0.9.71+
+     */
+    public TorrentInfo lookupTorrentInfo(String hex, long timeoutMs) {
+        if (hex == null || hex.length() != 40)
+            return null;
+        byte[] ih = new byte[20];
+        try {
+            for (int i = 0; i < 20; i++) {
+                ih[i] = (byte) ((Character.digit(hex.charAt(i * 2), 16) << 4) + Character.digit(hex.charAt(i * 2 + 1), 16));
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return lookupTorrentInfo(ih, timeoutMs);
+    }
+
+    /**
      * Add and start a FetchAndAdd task. Remove it with deleteMagnet().
      *
      * @param torrent must be instanceof FetchAndAdd
@@ -4526,7 +4886,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void updateStatus(Snark snark) {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
-        if (meta != null && storage != null)
+        if (meta != null && storage != null) {
+            // Skip persistence for lookup torrents (zzzot name resolution)
+            String name = snark.getName();
+            if (name != null && (name.startsWith("lookup-") || name.contains("zzzot-lookup")))
+                return;
+            try {
+                File base = storage.getBase();
+                if (base != null && base.getPath().contains("zzzot-lookup"))
+                    return;
+            } catch (Exception ignore) {}
             saveTorrentStatus(
                     meta,
                     storage.getBitField(),
@@ -4537,6 +4906,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     snark.getUploaded(),
                     storage.getActivity(),
                     snark.isStopped());
+        }
     }
 
     /**
@@ -4552,6 +4922,31 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
         if (meta != null && storage != null) {
+            // Skip persistence for lookup torrents (zzzot name resolution).
+            // Lookup torrents are created with name "lookup-*" in a temp dir "zzzot-lookup-*".
+            // We must not write a .torrent file, save config, or re-register under a new name,
+            // as the lookup's finally block will delete the snark. Without this check,
+            // gotMetaInfo() would promote the snark into the main data dir and the cleanup
+            // would fail to recognize it, leaving a persistent downloading torrent.
+            // Return null so Snark.gotMetaInfo() keeps the "lookup-*" name intact — if we
+            // returned the real name, deleteMagnet() would fail to remove the snark from
+            // _snarks (key mismatch) and leave a stale entry.
+            String snarkName = snark.getName();
+            if (snarkName != null && (snarkName.startsWith("lookup-") || snarkName.contains("zzzot-lookup"))) {
+                if (_log.shouldInfo()) {
+                    _log.info("gotMetaInfo skipping persistence for lookup torrent: " + snarkName);
+                }
+                return null;
+            }
+            try {
+                File base = storage.getBase();
+                if (base != null && base.getPath().contains("zzzot-lookup")) {
+                    if (_log.shouldInfo()) {
+                        _log.info("gotMetaInfo skipping persistence for lookup torrent (storage in temp dir): " + snarkName);
+                    }
+                    return null;
+                }
+            } catch (Exception ignore) {}
             String rejectMessage = validateTorrent(meta);
             if (rejectMessage != null) {
                 addMessage(rejectMessage);
