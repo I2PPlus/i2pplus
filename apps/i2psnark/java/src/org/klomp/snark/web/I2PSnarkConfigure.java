@@ -311,6 +311,7 @@ class I2PSnarkConfigure {
     private void appendDataStorageConfig(StringBuilder buf) {
         String dataDir = srv.manager().getDataDir().getAbsolutePath();
         String tempDir = srv.manager().util().getTempDirProp();
+        String torrentDir = srv.manager().getTorrentDir().getAbsolutePath();
         boolean filesPublic = srv.manager().areFilesPublic();
         boolean preallocateFiles = srv.manager().util().getPreallocateFiles();
 
@@ -322,11 +323,16 @@ class I2PSnarkConfigure {
            .append("</b> <input type=text name=nofilter_dataDir size=60").append(" title=\"")
            .append(srv._t("Directory where torrents and downloaded/shared files are stored"))
            .append("\" value=\"").append(DataHelper.escapeHTML(dataDir)).append("\" spellcheck=false></label></span><br>\n")
-           .append("<span class=configOption><label><b>")
+            .append("<span class=configOption><label><b>")
            .append(srv._t("Temp directory"))
            .append("</b> <input type=text name=nofilter_tempDir size=60").append(" title=\"")
            .append(srv._t("Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."))
            .append("\" value=\"").append(tempDir != null ? DataHelper.escapeHTML(tempDir) : "").append("\" spellcheck=false></label></span><br>\n")
+           .append("<span class=configOption><label><b>")
+           .append(srv._t("Torrent directory"))
+           .append("</b> <input type=text name=nofilter_torrentDir size=60").append(" title=\"")
+           .append(srv._t("Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."))
+           .append("\" value=\"").append(DataHelper.escapeHTML(torrentDir)).append("\" spellcheck=false></label></span><br>\n")
            .append("<span class=configOption><label for=filesPublic><b>")
            .append(srv._t("Files readable by all"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic")
@@ -871,13 +877,14 @@ class I2PSnarkConfigure {
         String apiKey = req.getParameter("apiKey");
         String maxFiles = req.getParameter("maxFiles");
         String tempDir = req.getParameter("nofilter_tempDir");
+        String torrentDir = req.getParameter("nofilter_torrentDir");
         boolean preallocateFiles = req.getParameter("preallocateFiles") != null;
 
         srv.manager().updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDelMin, startupDelMax, pageSize,
                 i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
                 ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
                 enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, randomizeStartup, apiTarget, apiKey,
-                maxFiles, preallocateFiles, tempDir);
+                maxFiles, preallocateFiles, tempDir, torrentDir);
     }
 
     private static final String[] iopts = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };

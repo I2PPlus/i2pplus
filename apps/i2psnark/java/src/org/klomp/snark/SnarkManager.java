@@ -168,6 +168,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_TEMP_DIR = "i2psnark.tempDir";
 
+    /**
+     * Configuration key for the directory where .torrent files are stored,
+     * separate from the data directory. Unset or empty falls back to the
+     * data directory.
+     *
+     * @since 0.9.71+
+     */
+    public static final String PROP_TORRENT_DIR = "i2psnark.torrentDir";
+
     private static final String PROP_META_PREFIX = "i2psnark.zmeta.";
     static final String PROP_META_RUNNING = "running";
     private static final String PROP_META_STAMP = "stamp";
@@ -1167,6 +1176,27 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Return the configured torrent file directory, or the data directory
+     * if not set. Torrent metadata (.torrent) files are stored here when
+     * configured separately from downloaded data.
+     *
+     * @return the directory for .torrent files
+     * @since 0.9.71+
+     */
+    public File getTorrentDir() {
+        String dir = _config.getProperty(PROP_TORRENT_DIR);
+        if (dir == null || dir.trim().isEmpty()) {
+            return getDataDir();
+        }
+        dir = dir.trim();
+        File f = new File(dir);
+        if (!f.isAbsolute()) {
+            f = new File(_context.getAppDir(), dir);
+        }
+        return f;
+    }
+
+    /**
      * For RPC
      *
      * @return the config dir
@@ -1909,6 +1939,26 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return cleaned;
     }
 
+    private String validateTorrentDir(String torrentDir) {
+        if (torrentDir == null || torrentDir.trim().isEmpty()) {
+            return null;
+        }
+        String cleaned = torrentDir.trim();
+        File td = new File(cleaned);
+        if (td.isDirectory()) {
+            if (!td.canWrite()) {
+                String msg = _t("No write permissions for torrent directory") + ": " + td;
+                addMessageAndPrint(msg);
+                return null;
+            }
+        } else if (!td.mkdirs()) {
+            String msg = _t("Torrent directory cannot be created") + ": " + td;
+            addMessageAndPrint(msg);
+            return null;
+        }
+        return cleaned;
+    }
+
     private int getInt(String prop, int defaultVal) {
         String p = _config.getProperty(prop);
         if (p != null) {
@@ -1970,7 +2020,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String apiKey,
             String maxFiles,
             boolean preallocateFiles,
-            String tempDir) {
+            String tempDir,
+            String torrentDir) {
         synchronized (_configLock) {
             locked_updateConfig(
                     dataDir,
@@ -2006,7 +2057,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     apiKey,
                     maxFiles,
                     preallocateFiles,
-                    tempDir);
+                    tempDir,
+                    torrentDir);
         }
     }
 
@@ -2044,7 +2096,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String apiKey,
             String maxFiles,
             boolean preallocateFiles,
-            String tempDir) {
+            String tempDir,
+            String torrentDir) {
         boolean changed = false;
         boolean interruptMonitor = false;
 
@@ -2609,6 +2662,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             changed = true;
         }
 
+        String newTorrentDir = validateTorrentDir(torrentDir);
+        String oldTorrentDir = _config.getProperty(PROP_TORRENT_DIR);
+        boolean torrentDirChanged =
+                newTorrentDir != null ? !newTorrentDir.equals(oldTorrentDir) : oldTorrentDir != null;
+        if (torrentDirChanged) {
+            if (newTorrentDir != null) {
+                _config.setProperty(PROP_TORRENT_DIR, newTorrentDir);
+                addMessage(_t("Torrent directory changed to {0}", newTorrentDir));
+            } else {
+                _config.remove(PROP_TORRENT_DIR);
+                addMessage(_t("Torrent directory reset to data directory."));
+            }
+            changed = true;
+            interruptMonitor = true;
+        }
+
         if (changed) {
             saveConfig();
             // Data dir changed. This will stop and remove all old torrents, and add the new ones
@@ -3046,14 +3115,32 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     // from the DirMonitor, which only checks for dup torrent file names.
                     Snark snark = getTorrentByInfoHash(info.getInfoHash());
                     if (snark != null) {
-                        // TODO - if the existing one is a magnet, delete it and add the metainfo
-                        // instead?
-                        msg =
-                                _t(
-                                        "Torrent with this info hash is already running: {0}",
-                                        snark.getBaseName());
-                        addMessageAndPrint(msg);
-                        return false;
+                        // If the existing one is a lookup or magnet, remove it and
+                        // replace with the real torrent (the TODO from 0.8.4).
+                        // This happens when a DHT lookup resolves: gotMetaInfo writes
+                        // the .torrent to the torrent dir, DirMonitor picks it up,
+                        // and we get here because the magnet is still in _snarks.
+                        String existingName = snark.getName();
+                        boolean isLookup = _magnets.contains(existingName)
+                                || (existingName != null && existingName.startsWith("lookup-"));
+                        if (isLookup) {
+                            if (_log.shouldInfo()) {
+                                _log.info("Replacing lookup magnet with real torrent: " + existingName);
+                            }
+                            synchronized (_snarks) {
+                                removeSnark(snark);
+                            }
+                            snark.stopTorrent();
+                            _magnets.remove(existingName);
+                            removeMagnetStatus(snark.getInfoHash());
+                        } else {
+                            msg =
+                                    _t(
+                                            "Torrent with this info hash is already running: {0}",
+                                            snark.getBaseName());
+                            addMessageAndPrint(msg);
+                            return false;
+                        }
                     }
                     String name = info.getName();
                     snark = getTorrentByBaseName(name);
@@ -3421,6 +3508,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             // isOurLookup == true: reuse existing lookup torrent, wait for its metadata below
         }
+        // With zero timeout, don't create a magnet (addMagnet + startTorrent + deleteMagnet is expensive)
+        if (timeoutMs <= 0)
+            return null;
         File tmpBase = _context.getTempDir();
         File lookupDir = new File(tmpBase, "zzzot-lookup-" + _context.random().nextLong());
         // Ensure directory exists; SecureDirectory handles perms
@@ -3601,6 +3691,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         }
+        // With zero timeout, don't create a magnet (addMagnet + startTorrent + deleteMagnet is expensive)
+        if (timeoutMs <= 0)
+            return null;
         // Reuse the name-only lookup then enrich with size from MetaInfo if available.
         // This keeps metadata-only semantics (Snark.gotMetaInfo skips Storage) and
         // avoids duplicating the full wait/cleanup logic here.
@@ -3778,7 +3871,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     return false;
                 }
                 if (filename == null) {
-                    File f = new File(getDataDir(), filtered + ".torrent");
+                    File f = new File(getTorrentDir(), filtered + ".torrent");
+                    File parent = f.getParentFile();
+                    if (parent != null && !parent.exists()) {
+                        parent.mkdirs();
+                    }
                     if (f.exists()) {
                         msg =
                                 _t("Failed to copy torrent file to {0}", f.getAbsolutePath())
@@ -4563,8 +4660,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private class DirMonitor implements Runnable {
         public void run() {
-            File dir = getDataDir();
-            getStorageSpace(dir);
+            File dataDir = getDataDir();
+            File torrentDir = getTorrentDir();
+            getStorageSpace(dataDir);
             long delay =
                     (60L * 1000)
                             * getStartupDelayMinutes(); // Don't bother delaying if auto start is
@@ -4594,7 +4692,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 List<Snark> earlyAdded;
                 try {
                     synchronized (_snarks) {
-                        earlyAdded = monitorTorrents(dir);
+                        earlyAdded = monitorTorrents(torrentDir);
                     }
                 } catch (RuntimeException e) {
                     _log.error("Error in the DirectoryMonitor", e);
@@ -4623,7 +4721,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 List<Snark> earlyAdded;
                 try {
                     synchronized (_snarks) {
-                        earlyAdded = monitorTorrents(dir);
+                        earlyAdded = monitorTorrents(torrentDir);
                     }
                 } catch (RuntimeException e) {
                     _log.error("Error in the DirectoryMonitor", e);
@@ -4645,6 +4743,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             addMessageAndPrint(bwMsg);
 
             while (_running) {
+                torrentDir = getTorrentDir();
                 String i2cpConnectMsg =
                         " • "
                                 + _t(
@@ -4652,8 +4751,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
                 if (_log.shouldDebug()) {
                     _log.debug(
-                            "DirectoryMonitor scanning I2PSnark data dir: "
-                                    + dir.getAbsolutePath());
+                            "DirectoryMonitor scanning I2PSnark torrent dir: "
+                                    + torrentDir.getAbsolutePath());
                 }
                 if (routerOK) {
                     if (_context.isRouterContext() || _util.connected() || _util.isConnecting()) {
@@ -4695,7 +4794,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 try {
                     // Don't let this interfere with .torrent files being added or deleted
                     synchronized (_snarks) {
-                        added = monitorTorrents(dir);
+                        added = monitorTorrents(torrentDir);
                     }
                 } catch (RuntimeException e) {
                     _log.error("Error in the DirectoryMonitor", e);
@@ -4968,8 +5067,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             try {
                 // _snarks must use canonical
                 name =
-                        (new File(getDataDir(), storage.getBaseName() + ".torrent"))
+                        (new File(getTorrentDir(), storage.getBaseName() + ".torrent"))
                                 .getCanonicalPath();
+                File nameFile = new File(name);
+                File parent = nameFile.getParentFile();
+                if (parent != null && !parent.exists()) {
+                    parent.mkdirs();
+                }
                 // put the announce URL in the file
                 String announce = snark.getTrackerURL();
                 if (announce != null) {
@@ -5538,9 +5642,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if ((!connected) && !_util.isConnecting()) {
             addMessage(_t("Opening the I2P tunnel") + "...");
         }
-        addMessageNoEscapeAndPrint(
-                _t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""),
-                _t("Starting torrent: {0}", getSnarkName(snark)).replace("Magnet ", ""));
+        boolean isLookup = _magnets.contains(snark.getName())
+                || snark.getName().startsWith("lookup-");
+        if (isLookup) {
+            addMessageNoEscapeAndPrint(
+                    _t("Resolving torrent lookup: {0}", linkify(snark)).replace("Magnet ", ""),
+                    _t("Resolving torrent lookup: {0}", getSnarkName(snark)).replace("Magnet ", ""));
+        } else {
+            addMessageNoEscapeAndPrint(
+                    _t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""),
+                    _t("Starting torrent: {0}", getSnarkName(snark)).replace("Magnet ", ""));
+        }
         if (connected) {
             try {
                 snark.startTorrent();

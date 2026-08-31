@@ -1140,7 +1140,8 @@ public class I2PSnarkServlet extends BasicServlet {
             for (int i = msgs.size() - 1; i >= 0; i--) {
                 String msg = msgs.get(i).message
                                         .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
-                                        .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>");
+                                        .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>")
+                                        .replace("Resolving torrent lookup: Magnet", "Resolving torrent lookup: <span class=infohash>");
                 if (msg.contains("class=infohash")) {msg = INFOHASH_PAREN.matcher(msg).replaceFirst("</span> (");}
                 if (msg.contains(_t("Warning - No I2P"))) {msg = msg.replace("</span>", "");}
                 buf.append("<li class=msg>").append(msg).append("</li>\n");
@@ -2514,7 +2515,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String newFile = reqw.getFilename("newFile");
 
         if (newFile != null && !newFile.trim().isEmpty()) {
-            handleAddFile(newFile.trim(), dataDir, reqw);
+            handleAddFile(newFile.trim(), _manager.getTorrentDir(), dataDir, reqw);
         } else if (newURL != null && !newURL.trim().isEmpty()) {
             handleAddURL(newURL.trim(), dataDir, reqw);
         } else {
@@ -2698,13 +2699,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param dataDir data directory where torrents are stored
      * @param reqw wrapped request for accessing multipart inputs
      */
-    private void handleAddFile(String newFile, File dataDir, RequestWrapper reqw) {
+    private void handleAddFile(String newFile, File torrentDir, File dataDir, RequestWrapper reqw) {
         if (!newFile.endsWith(".torrent")) {
             newFile += ".torrent";
         }
-        File local = new File(dataDir, newFile);
+        File local = new File(torrentDir, newFile);
         String filteredName = Storage.filterName(newFile);
-        File localFiltered = (!newFile.equals(filteredName)) ? new File(dataDir, filteredName) : null;
+        File localFiltered = (!newFile.equals(filteredName)) ? new File(torrentDir, filteredName) : null;
 
         if (local.exists() || (localFiltered != null && localFiltered.exists())) {
             try {
@@ -2895,7 +2896,8 @@ public class I2PSnarkServlet extends BasicServlet {
             }
 
             String filteredName = Storage.filterName(name);
-            File torrentFile = new File(dataDir, filteredName + ".torrent");
+            File torrentDir = _manager.getTorrentDir();
+            File torrentFile = new File(torrentDir, filteredName + ".torrent");
             String canonical = torrentFile.getCanonicalPath();
 
             if (torrentFile.exists()) {
@@ -3418,7 +3420,7 @@ public class I2PSnarkServlet extends BasicServlet {
             storage.close(); // close files
 
             MetaInfo info = storage.getMetaInfo();
-            File torrentFile = new File(_manager.getDataDir(), storage.getBaseName() + ".torrent");
+            File torrentFile = new File(_manager.getTorrentDir(), storage.getBaseName() + ".torrent");
 
             boolean ok = _manager.addTorrent(info, storage.getBitField(), torrentFile.getAbsolutePath(), baseFile, true);
             if (!ok) return;

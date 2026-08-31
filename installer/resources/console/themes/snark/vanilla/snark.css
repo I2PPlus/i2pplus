@@ -474,7 +474,7 @@ input:checked+.toggleview:active::after,input:checked+.toggleview.depressed::aft
 .configPanel,.mainsection,.section,#addSection,#createSection{margin:0 0 10px;padding:0 10px;text-align:center;word-wrap:break-word;color:#ddd;border:1px solid #1f1400;border-radius:2px;box-shadow:var(--highlight),0 0 1px 0 rgba(77,61,51,.3);background:#dfd7d1}
 .mainsection,.section{padding:10px;background:var(--panel)}
 .configPanel table{margin-bottom:8px}
-.configPanel td,.snarkNewTorrent td,select,select option,input,textarea,input[name="nofilter_dataDir"],.configPanel th{font-family:var(--bodyfont);font-size:9pt}
+.configPanel td,.snarkNewTorrent td,select,select option,input,textarea,input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],input[name="nofilter_torrentDir"],.configPanel th{font-family:var(--bodyfont);font-size:9pt}
 .configPanel tr:last-child td,.snarkConfig tr:nth-last-child(3){display:none}
 .configPanel tr:nth-last-child(2) td:last-child{padding-right:0}
 .configPanel tr:nth-last-child(2) td{text-align:right}
@@ -629,7 +629,7 @@ img{font-size:0;overflow:hidden}
 .info_tracker a[href*="b32.i2p"]{max-width:60px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* configs */
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 172px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],input[name="nofilter_tempDir"],input[name="nofilter_torrentDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 172px)}
 .configOption{margin:5px 0;padding:4px 5px 4px 0;width:calc(100% - 10px);display:inline-block;position:relative;white-space:nowrap;vertical-align:middle;text-align:left;border-radius:2px;box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #fef6f0,0 0 2px #aaa;background:var(--option);transition:ease-in-out box-shadow .1s}
 .configOption:hover{box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #cf0f00,0 0 2px #aaa;transition:ease-in-out .1s all .1s}
 .configOption::after{height:40px;display:inline-block;vertical-align:middle;content:""}

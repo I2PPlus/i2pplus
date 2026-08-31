@@ -620,8 +620,8 @@ th.tLink{text-align:left}
 #completion #metainfo img{margin:0 4px 0 0}
 
 /* configure */
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 181px)}
-.configOption input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],.configOption input[name="i2cpOpts"],#browserApiHosts,#browserApiKey{font-size:80%}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],input[name="nofilter_torrentDir"],#browserApiHosts,#browserApiKey{width:calc(100% - 181px)}
+.configOption input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],.configOption input[name="i2cpOpts"],input[name="nofilter_torrentDir"],#browserApiHosts,#browserApiKey{font-size:80%}
 input[name="nofilter_commentsName"]{max-width:248px}
 input.trackername{width:100px}
 input.trackerhome,input.trackerannounce{width:210px}
@@ -1102,7 +1102,7 @@ th.txd a img{display:inline-block}
 
 @media (min-width:1500px){
 body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],input[type=reset],input[type=text],select,button,a{font-size:10pt}
-.configOption input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],.configOption input[name="i2cpOpts"],#browserApiHosts,#browserApiKey{font-size:80%}
+.configOption input[name="nofilter_dataDir"],input[name="nofilter_tempDir"],.configOption input[name="i2cpOpts"],input[name="nofilter_torrentDir"],#browserApiHosts,#browserApiKey{font-size:80%}
 label b,.configOption b,#trackerconfig th,#fileFilter th{font-size:9pt}
 td.status img{margin-top:-3px;margin-bottom:-3px;height:24px}
 th.peerCount a img{margin-left:-20px}

@@ -182,7 +182,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
 
             String originalName = Storage.filterName(name);
             name = originalName + ".torrent";
-            File torrentFile = new File(_mgr.getDataDir(), name);
+            File torrentFile = new File(_mgr.getTorrentDir(), name);
 
             String canonical = torrentFile.getCanonicalPath();
 
