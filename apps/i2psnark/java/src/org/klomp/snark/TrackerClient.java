@@ -533,13 +533,17 @@ public class TrackerClient implements Runnable {
 
         // announce list
         // We completely ignore the BEP 12 processing rules
-        if (meta != null && !meta.isPrivate()) {
+        // When meta is null (magnet/lookup), skip the announce-list but still
+        // add open trackers so we don't hit "No valid trackers" at startup.
+        if (meta == null || !meta.isPrivate()) {
             List<String> urls = new ArrayList<>(16);
-            List<List<String>> list = meta.getAnnounceList();
-            if (list != null) {
-                for (List<String> llist : list) {
-                    for (String url : llist) {
-                        urls.add(url);
+            if (meta != null) {
+                List<List<String>> list = meta.getAnnounceList();
+                if (list != null) {
+                    for (List<String> llist : list) {
+                        for (String url : llist) {
+                            urls.add(url);
+                        }
                     }
                 }
             }
