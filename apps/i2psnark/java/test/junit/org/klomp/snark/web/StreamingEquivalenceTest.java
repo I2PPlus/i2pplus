@@ -148,6 +148,16 @@ public class StreamingEquivalenceTest {
         Field f = SnarkManager.class.getDeclaredField("_snarks");
         f.setAccessible(true);
         ((Map<String, Snark>) f.get(manager())).put(name, snark);
+
+        // getTorrentByBaseName() reads _filteredBaseNameToSnark, not _snarks
+        Storage snarkStorage = snark.getStorage();
+        if (snarkStorage != null) {
+            Field fb = SnarkManager.class.getDeclaredField("_filteredBaseNameToSnark");
+            fb.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            Map<String, Snark> baseNameMap = (Map<String, Snark>) fb.get(manager());
+            baseNameMap.put(snarkStorage.getBaseName(), snark);
+        }
     }
 
     private static SnarkManager manager() throws Exception {
