@@ -108,26 +108,35 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
     /** @since 0.9.30 */
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
+
     /** Config key to cap concurrent inbound connections; 0 (default) = unlimited.
      *  When the cap is reached, new connections are rejected promptly (HTTP: 503) instead of
      *  being queued behind a saturated pool. This is the last-resort governor under duress;
      *  normal operation should not reach it. Key: tunnel.N.option.i2ptunnel.server.maxConnections
-     *  @since 0.9.71+ */
+     *  @since 0.9.71+
+     */
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.server.maxConnections";
+
     /** Config key to override the socket read timeout in ms; 0 (default) = shut down silent
      *  connections promptly (HTTP server falls back to SERVER_READ_TIMEOUT_GET).
      *  Key: tunnel.N.option.i2ptunnel.server.readTimeout
-     *  @since 0.9.71+ */
+     *  @since 0.9.71+
+     */
     public static final String PROP_READ_TIMEOUT = "i2ptunnel.server.readTimeout";
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
     private static final long RECONNECT_DELAY_10S = 10 * 1000L;
     protected volatile ThreadPoolExecutor _clientExecutor;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
     private volatile StatefulConnectionFilter _filter;
+
     /** Concurrent inbound connection cap, 0 = unlimited. Read from PROP_MAX_CONNECTIONS.
-     *  @since 0.9.71+ */
+     *  @since 0.9.71+
+     */
     private volatile int _maxConnections;
-    /** Active connection count used by the gate above. @since 0.9.71+ */
+
+    /** Active connection count used by the gate above.
+     *  @since 0.9.71+
+     */
     private final AtomicInteger _activeConnections = new AtomicInteger();
 
     /**
