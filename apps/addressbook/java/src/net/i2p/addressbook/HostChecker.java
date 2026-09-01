@@ -943,15 +943,12 @@ public class HostChecker {
             if (shared) {
                 pingSocketManager = _sharedPingSocketManager;
             } else {
-                pingSocketManager = I2PSocketManagerFactory.createManager(
-                    createPingSessionOptions("Ping [" + hostname.replace(".i2p", "") + "]", 1, 1));
-
-                if (pingSocketManager == null) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4]");
-                    }
-                    return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
+                // Shared manager is down — skip per-host sessions to avoid
+                // N threads each blocking 20 minutes on tunnel builds.
+                if (_log.shouldInfo()) {
+                    _log.info("Shared ping socket manager unavailable, skipping ping -> " + displayHostname);
                 }
+                return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
