@@ -3985,7 +3985,6 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td><td class=tName>");
             if (remaining == 0 || isMultiFile) {
                 buf.append("<a href=\"").append(DataHelper.escapeHTML(torrentPath));
-                if (isMultiFile) buf.append('/');
                 buf.append("\" title=\"").append(isMultiFile ? _t("View files") : _t("Open file")).append("\">");
             }
 
@@ -5190,13 +5189,10 @@ public class I2PSnarkServlet extends BasicServlet {
         appendTorrentInfo(buf, snark, base, tName, showStopStart);
         displayTorrentEdit(snark, base, buf);
 
-        if (snark != null && !r.exists()) {
-            appendResourceError(buf, r, base, tName);
-            return buf.toString();
-        }
-
+        // For incomplete downloads, the data directory may not exist yet;
+        // fall through to the info-only path instead of bailing out.
         File[] ls = null;
-        if (r.isDirectory()) {ls = storage != null ? storage.listMerged(pathInTorrent) : r.listFiles();} // if r is not a directory, we are only showing torrent info section
+        if (snark != null && r.exists() && r.isDirectory()) {ls = storage != null ? storage.listMerged(pathInTorrent) : r.listFiles();} // if r is not a directory, we are only showing torrent info section
         if (ls == null) {
             // We are only showing the torrent info section unless audio or video...
             if (storage != null && storage.complete()) {

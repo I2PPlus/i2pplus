@@ -1451,11 +1451,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.72
      */
     private void stripDeprecatedKeys() {
-        _metadata.keySet().removeIf(key -> {
+        List<Object> toRemove = null;
+        for (Object key : _metadata.keySet()) {
             String s = (String) key;
-            return s.endsWith("." + DEPRECATED_PRESERVE_FILE_NAMES)
-                || s.endsWith("." + DEPRECATED_IN_ORDER);
-        });
+            if (s.endsWith("." + DEPRECATED_PRESERVE_FILE_NAMES)
+                || s.endsWith("." + DEPRECATED_IN_ORDER)) {
+                if (toRemove == null) toRemove = new ArrayList<>(4);
+                toRemove.add(key);
+            }
+        }
+        if (toRemove != null) {
+            for (Object key : toRemove) {
+                _metadata.remove(key);
+            }
+        }
     }
 
     /**
