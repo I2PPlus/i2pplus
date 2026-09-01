@@ -314,6 +314,7 @@ class I2PSnarkConfigure {
         String torrentDir = srv.manager().getTorrentDir().getAbsolutePath();
         boolean filesPublic = srv.manager().areFilesPublic();
         boolean preallocateFiles = srv.manager().util().getPreallocateFiles();
+        boolean preserveFileNames = srv.manager().util().getPreserveFileNames();
 
         buf.append("<tr><th class=suboption>")
            .append(srv._t("Data Storage"))
@@ -344,6 +345,12 @@ class I2PSnarkConfigure {
            .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preallocateFiles id=preallocateFiles ")
            .append(preallocateFiles ? "checked " : "").append("title=\"")
            .append(srv._t("Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"))
+           .append("\"></span><br>\n")
+           .append("<span class=configOption><label for=preserveFileNames><b>")
+           .append(srv._t("Preserve file names"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preserveFileNames id=preserveFileNames ")
+           .append(preserveFileNames ? "checked " : "").append("title=\"")
+           .append(srv._t("Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"))
            .append("\"></span><br>\n")
            .append("<span class=configOption><label for=maxFiles><b>")
            .append(srv._t("Max files per torrent"))
@@ -879,12 +886,13 @@ class I2PSnarkConfigure {
         String tempDir = req.getParameter("nofilter_tempDir");
         String torrentDir = req.getParameter("nofilter_torrentDir");
         boolean preallocateFiles = req.getParameter("preallocateFiles") != null;
+        boolean preserveFileNames = req.getParameter("preserveFileNames") != null;
 
         srv.manager().updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDelMin, startupDelMax, pageSize,
                 i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang,
                 ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox,
                 enableAddCreate, enableVaryInboundHops, enableVaryOutboundHops, multiDest, multiDestMax, randomizeStartup, apiTarget, apiKey,
-                maxFiles, preallocateFiles, tempDir, torrentDir);
+                maxFiles, preallocateFiles, tempDir, torrentDir, preserveFileNames);
     }
 
     private static final String[] iopts = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };

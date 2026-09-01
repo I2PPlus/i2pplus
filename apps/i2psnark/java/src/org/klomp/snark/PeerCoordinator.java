@@ -820,7 +820,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                                 &&
                                 // we should also check SnarkManager.getSavedCommentsEnabled() for
                                 // this torrent,
-                                // but that reads in the config file, there's no caching.
+                                // but that reads from metadata, there's no caching.
                                 // TODO
                                 _commentsLastRequested.get()
                                         < _util.getContext().clock().now() - COMMENT_REQ_INTERVAL))

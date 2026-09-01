@@ -15,18 +15,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.DigestException;
 import java.security.MessageDigest;
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -95,7 +92,6 @@ public class Storage implements Closeable {
     private final boolean _preserveFileNames;
     private boolean changed;
     private volatile boolean _isChecking;
-    private boolean _inOrder;
     private final AtomicInteger _allocateCount = new AtomicInteger();
     private final AtomicInteger _checkProgress = new AtomicInteger();
     private final AtomicLong _activity = new AtomicLong();
@@ -941,70 +937,6 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Whether in-order download mode is enabled.
-     *
-     * @return whether in-order download mode is enabled
-     * @since 0.9.36
-     */
-    public boolean getInOrder() {
-        return _inOrder;
-    }
-
-    /**
-     * Enable or disable in-order download mode.
-     * When enabled, pieces within each file are prioritized sequentially.
-     * Must call setFilePriorities() BEFORE this method.
-     *
-     * @param yes true to enable in-order mode, false to disable
-     * @since 0.9.36
-     */
-    public void setInOrder(boolean yes) {
-        if (yes == _inOrder) {
-            return;
-        }
-        _inOrder = yes;
-        if (complete()) {
-            return;
-        }
-        if (yes) {
-            List<TorrentFile> sorted = _torrentFiles;
-            int sz = sorted.size();
-            if (sz > 1) {
-                sorted = new ArrayList<>(sorted);
-                Collections.sort(sorted, new FileNameComparator());
-            }
-            for (int i = 0; i < sz; i++) {
-                TorrentFile tf = sorted.get(i);
-                // higher number is higher priority
-                if (tf.priority >= PRIORITY_NORMAL) {
-                    tf.priority = sz - i;
-                }
-            }
-        } else {
-            for (TorrentFile tf : _torrentFiles) {
-                if (tf.priority > PRIORITY_NORMAL) {
-                    tf.priority = PRIORITY_NORMAL;
-                }
-            }
-        }
-    }
-
-    /**
-     * Sort with locale comparator. (not using TorrentFile.compareTo())
-     *
-     * @since 0.9.36
-     */
-    private static class FileNameComparator implements Comparator<TorrentFile>, Serializable {
-
-        private static final long serialVersionUID = 1L;
-        private final Collator c = Collator.getInstance();
-
-        public int compare(TorrentFile l, TorrentFile r) {
-            return c.compare(l.toString(), r.toString());
-        }
-    }
-
-    /**
      * Call setPriority() for all changed files first, then call this. Set the piece priority to the
      * highest priority of all files spanning the piece. Caller must pass array to the
      * PeerCoordinator.
@@ -1013,7 +945,7 @@ public class Storage implements Closeable {
      * @since 0.8.1
      */
     public int[] getPiecePriorities() {
-        if (complete() || (metainfo.getFiles() == null && !_inOrder)) {
+        if (complete() || metainfo.getFiles() == null) {
             return null;
         }
         int[] rv = new int[metainfo.getPieces()];
@@ -1033,25 +965,6 @@ public class Storage implements Closeable {
                 }
             }
             rv[i] = pri;
-        }
-        if (_inOrder) {
-            // Do a second pass to set the priority of the pieces within each file
-            // this only works because MAX_PIECES * MAX_FILES_PER_TORRENT < Integer.MAX_VALUE
-            // the base file priority
-            int pri = PRIORITY_SKIP;
-            for (int i = 0; i < rv.length; i++) {
-                int val = rv[i];
-                if (val <= PRIORITY_NORMAL) {
-                    continue;
-                }
-                if (val != pri) {
-                    pri = val;
-                    // new file
-                    rv[i] *= MAX_PIECES;
-                } else {
-                    rv[i] = rv[i - 1] - 1;
-                } // same file, decrement priority from previous piece
-            }
         }
         return rv;
     }
@@ -1122,7 +1035,7 @@ public class Storage implements Closeable {
 
     /**
      * Creates (and/or checks) all files from the metainfo file list. Use a saved bitfield and
-     * timestamp from a config file. Only call this once, and only after the constructor with the
+     * timestamp from the metadata file. Only call this once, and only after the constructor with the
      * metainfo. Use recheck() to check again later.
      *
      * @throws IllegalStateException if called more than once
@@ -1593,7 +1506,8 @@ public class Storage implements Closeable {
         File f = null;
         Iterator<String> it = names.iterator();
         while (it.hasNext()) {
-            String name = optFilterName(it.next());
+            String origName = it.next();
+            String name = optFilterName(origName);
             if (it.hasNext()) {
                 // Another dir in the hierarchy.
                 if (areFilesPublic) {
@@ -1612,10 +1526,15 @@ public class Storage implements Closeable {
                 } else {
                     f = new SecureFile(base, name);
                 }
-                // createNewFile() can throw a "Permission denied" IOE even if the file exists???
-                // so do it second
                 if (!f.exists() && !f.createNewFile()) {
                     throw new IOException("Could not create file " + f);
+                }
+                // If preserveFileNames is on and the original name differed from the filtered
+                // name, the file was created with the safe fallback name above. Log a warning.
+                if (_preserveFileNames && !origName.equals(name)) {
+                    String msg = "[I2PSnark] Filename contained illegal characters, using safe fallback: " + origName + " -> " + name;
+                    _log.warn(msg);
+                    listener.addMessage(msg);
                 }
             }
         }

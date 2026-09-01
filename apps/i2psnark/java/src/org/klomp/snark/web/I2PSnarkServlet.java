@@ -2944,8 +2944,9 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private Snark resolveTorrentByToken(String token) {
         if (token == null || token.isEmpty()) {return null;}
-        List<String> names = new ArrayList<>(_manager.getTorrents().size());
-        for (Snark s : _manager.getTorrents()) {names.add(Base64.encode(s.getInfoHash()));}
+        Collection<Snark> torrents = _manager.getTorrents();
+        List<String> names = new ArrayList<>(torrents.size());
+        for (Snark s : torrents) {names.add(Base64.encode(s.getInfoHash()));}
         String name = ActionTokens.resolveUnique(token, names);
         if (name == null) {return null;}
         byte[] infoHash = Base64.decode(name);
@@ -5336,7 +5337,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /** Command keys accepted by {@link #executeDirectoryPostAction}, in precedence order. */
     private static final String[] DIRECTORY_POST_ACTIONS = {
         "savepri", "addComment", "deleteComments", "setCommentsEnabled",
-        "stop", "start", "recheck", "editTorrent", "setInOrderEnabled"
+        "stop", "start", "recheck", "editTorrent"
     };
 
     /**
@@ -5373,10 +5374,6 @@ public class I2PSnarkServlet extends BasicServlet {
             case "start": _manager.startTorrent(snark); break;
             case "recheck": _manager.recheckTorrent(snark); break;
             case "editTorrent": saveTorrentEdit(snark, postParams); break;
-            case "setInOrderEnabled":
-                _manager.saveTorrentStatus(snark);
-                _manager.addMessage(_t("Sequential piece or file order not saved - feature currently broken."));
-                break;
             default: break; // unreachable - findPostAction returns listed keys only
         }
     }

@@ -118,6 +118,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     private String _commentsName;
     private boolean _areFilesPublic;
     private boolean _shouldPreallocateFiles = true;
+    private boolean _preserveFileNames;
     private boolean _shouldPadFiles = false;
     private String _tempDirProp;
     private boolean _varyInboundHops;
@@ -543,6 +544,26 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setPreallocateFiles(boolean yes) {
         _shouldPreallocateFiles = yes;
+    }
+
+    /**
+     * Whether to preserve original torrent file names (true) or remap to
+     * a safe charset (false, default).
+     *
+     * @return true if original file names are preserved
+     * @since 0.9.71+
+     */
+    public boolean getPreserveFileNames() {
+        return _preserveFileNames;
+    }
+
+    /**
+     * Whether to preserve original torrent file names.
+     *
+     * @since 0.9.71+
+     */
+    public void setPreserveFileNames(boolean yes) {
+        _preserveFileNames = yes;
     }
 
     /**
@@ -2318,7 +2339,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * Same as DataHelper.loadProps() but allows '#' in values, so we can have filenames with '#' in
-     * them in torrent config files. '#' must be in column 1 for a comment.
+     * them in property files. '#' must be in column 1 for a comment.
      *
      * @since 0.9.58
      */
@@ -2348,7 +2369,7 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /**
      * Same as DataHelper.loadProps() but allows '#' in values, so we can have filenames with '#' in
-     * them in torrent config files. '#' must be in column 1 for a comment.
+     * them in property files. '#' must be in column 1 for a comment.
      *
      * @since 0.9.58
      */
@@ -2357,7 +2378,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         File tmpFile = new File(file.getPath() + ".tmp");
         try (FileOutputStream fos = new SecureFileOutputStream(tmpFile);
              PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8)))) {
-            out.println("# NOTE: This I2P config file must use UTF-8 encoding");
+            out.println("# NOTE: This property file must use UTF-8 encoding");
             out.println("# Last saved: " + DataHelper.formatTime(System.currentTimeMillis()));
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
                 String name = (String) entry.getKey();

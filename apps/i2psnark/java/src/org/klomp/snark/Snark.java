@@ -202,9 +202,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         // it already exists.
         if (storage == null) {
             try {
-                boolean shouldPreserve =
-                        completeListener != null
-                                && completeListener.getSavedPreserveNamesSetting(this);
+                boolean shouldPreserve = _util.getPreserveFileNames();
                 if (baseFile == null) {
                     String base = meta.getName();
                     if (!shouldPreserve) {

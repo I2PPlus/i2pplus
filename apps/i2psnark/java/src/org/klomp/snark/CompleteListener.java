@@ -70,14 +70,6 @@ public interface CompleteListener {
     public BitField getSavedTorrentBitField(Snark snark);
 
     /**
-     * The saved preserve-names setting.
-     *
-     * @return the saved preserve names setting
-     * @since 0.9.15
-     */
-    public boolean getSavedPreserveNamesSetting(Snark snark);
-
-    /**
      * The saved uploaded bytes.
      *
      * @return the saved uploaded

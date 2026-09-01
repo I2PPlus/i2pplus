@@ -91,7 +91,6 @@ public class GetListHTMLHelpersTest {
     public void testFindPostActionPrecedenceOverLaterKeys() {
         // addComment beats everything except the four keys before it
         Map<String, String[]> pp = new HashMap<>();
-        pp.put("setInOrderEnabled", new String[] {"x"});
         pp.put("editTorrent", new String[] {"x"});
         pp.put("addComment", new String[] {"x"});
         assertEquals("addComment", I2PSnarkServlet.findPostAction(pp));
@@ -100,7 +99,7 @@ public class GetListHTMLHelpersTest {
     @Test
     public void testFindPostActionEachKeyFound() {
         String[] keys = {"savepri", "addComment", "deleteComments", "setCommentsEnabled",
-                         "stop", "start", "recheck", "editTorrent", "setInOrderEnabled"};
+                         "stop", "start", "recheck", "editTorrent"};
         for (String key : keys) {
             Map<String, String[]> pp = new HashMap<>();
             pp.put("nonce", new String[] {"n"});

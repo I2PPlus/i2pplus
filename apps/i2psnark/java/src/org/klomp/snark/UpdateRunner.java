@@ -368,16 +368,6 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     }
 
     /**
-     * The saved preserve-names setting.
-     *
-     * @return the saved preserve names setting
-     */
-    @Override
-    public boolean getSavedPreserveNamesSetting(Snark snark) {
-        return _smgr.getSavedPreserveNamesSetting(snark);
-    }
-
-    /**
      * The saved uploaded bytes.
      *
      * @return the saved uploaded
