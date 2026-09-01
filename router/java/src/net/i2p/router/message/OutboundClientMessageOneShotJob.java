@@ -215,6 +215,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _leaseSet = ctx.clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(toHash);
         if (_leaseSet != null) {
             ctx.clientNetDb(_from.calculateHash()).accessLeaseSet(toHash);
+            // LS is available — clear any prior fail cooldown
+            _cache.lsFailCooldown.remove(toHash);
         }
 
         // use expiration requested by client if available, otherwise session config,
@@ -347,6 +349,24 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             success.runJob();
         } else {
+            // Skip redundant lookups to destinations that recently failed LS lookup.
+            // Multiple concurrent sends to the same dest (e.g. tracker announces from
+            // many torrents) would all fail instantly against the negative cache,
+            // producing a flood of redundant WARN lines.
+            Hash toHash = _to.calculateHash();
+            Long cooldownEnd = _cache.lsFailCooldown.get(toHash);
+            if (cooldownEnd != null && now < cooldownEnd) {
+                if (_log.shouldInfo()) {
+                    _log.info("Skipping send to " + _toString +
+                              " — LS fail cooldown active, " +
+                              DataHelper.formatDuration(cooldownEnd - now) + " remaining");
+                }
+                dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);
+                return;
+            }
+            // Set cooldown optimistically before lookup — concurrent sends to the
+            // same dest will see this and skip. Cleared on success in SendJob/ctor.
+            _cache.lsFailCooldown.put(toHash, now + OutboundCache.LS_FAIL_COOLDOWN_MS);
             _leaseSetLookupBegin = getContext().clock().now();
             if (_log.shouldDebug()) {
                 _log.debug("Send Outbound client message - initiating LeaseSet Lookup job " +
@@ -424,7 +444,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             _wantACK = false;
             int rc = getNextLease();
-            if (rc == 0) {send();}
+            if (rc == 0) {
+                // Clear any LS fail cooldown — destination is reachable again
+                _cache.lsFailCooldown.remove(_to.calculateHash());
+                send();
+            }
             else {
                 // shouldn't happen unless unsupported encryption
                 if (_log.shouldWarn()) {
@@ -594,12 +618,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             int cause;
             if (getContext().clientNetDb(_from.calculateHash()).isNegativeCachedForever(_to.calculateHash())) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[MSG-TRACE] Cannot send to " + _toString + " -> Unsupported Signature type");
+                    _log.warn("Cannot send to " + _toString + " -> Unsupported Signature type");
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;
             } else {
-                if (_log.shouldWarn()) {
-                    _log.warn("[MSG-TRACE] Cannot send to " + _toString + " -> LeaseSet not found after " +
+                if (_log.shouldInfo()) {
+                    _log.info("LeaseSet lookup failed for " + _toString + " after " +
                               DataHelper.formatDuration(getContext().clock().now() - _leaseSetLookupBegin));
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
@@ -632,7 +656,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         if (_leaseSet != null && !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4) && _log.shouldWarn()) {
-            _log.warn("[MSG-TRACE] Sending with STALE LeaseSet for " + _toString + " (expires " +
+            _log.warn("Sending with STALE LeaseSet for " + _toString + " (expires " +
                       DataHelper.formatDuration(now - _leaseSet.getLatestLeaseDate()) + " ago)");
         }
 
@@ -767,7 +791,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                            + _lease.getGateway().toBase64().substring(0,6) + "]");
         }
         if (_log.shouldInfo()) {
-            _log.info("[MSG-TRACE] Dispatching to " + _toString + " via OB tunnel " + _outTunnel.getSendTunnelId(0) +
+            _log.info("Dispatching to " + _toString + " via OB tunnel " + _outTunnel.getSendTunnelId(0) +
                       " -> lease tunnel " + _lease.getTunnelId() + " @ GW [" +
                       _lease.getGateway().toBase32().substring(0, 6) + "]");
         }
@@ -1045,7 +1069,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                  " current=" + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
                 "LS=null";
             if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
-                _log.warn("[MSG-TRACE] Send FAIL to " + _toString + " after " + sendTime + "ms -> " +
+                // LS-not-found is routine (cooldown, negative cache) — demote to info;
+                // LookupLeaseSetFailedJob or the cooldown skip already logged at info.
+                int level = (status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET)
+                    ? Log.INFO : Log.WARN;
+                _log.log(level, "Send FAIL to " + _toString + " after " + sendTime + "ms -> " +
                           statusToString + " (" + lsInfo + ")");
             } else {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
@@ -1306,7 +1334,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             if (old == Result.NONE) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[MSG-TRACE] Send TIMEOUT to " + _toString + " after " +
+                    _log.warn("Send TIMEOUT to " + _toString + " after " +
                               DataHelper.formatDuration(getContext().clock().now() - _start));
                 }
                 dieFatal(MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE);

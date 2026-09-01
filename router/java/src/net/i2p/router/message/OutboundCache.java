@@ -78,6 +78,23 @@ public class OutboundCache {
      */
     public final ConcurrentHashMap<Hash, LeaseSet> multihomedCache = new ConcurrentHashMap<>(128, 0.9f, 16);
 
+    /**
+     * Per-destination cooldown timestamps (epoch ms) after a failed LeaseSet lookup.
+     * Gates rapid-fire sends to destinations whose LS is missing or negatively cached.
+     * Entries are cleaned by {@link OCMOSJCacheCleaner}.
+     *
+     * @since 0.9.72+
+     */
+    final ConcurrentHashMap<Hash, Long> lsFailCooldown = new ConcurrentHashMap<>(128, 0.9f, 16);
+
+    /**
+     * Cooldown period (ms) after a failed LS lookup before another send is attempted
+     * to the same destination. Prevents message floods to unreachable destinations.
+     *
+     * @since 0.9.72+
+     */
+    static final long LS_FAIL_COOLDOWN_MS = 30 * 1000L;
+
     private final RouterContext _context;
 
     private static final int CLEAN_INTERVAL = 2 * 60 * 1000; // 2 minutes cleaning interval
@@ -168,6 +185,7 @@ public class OutboundCache {
         tunnelCache.clear();
         lastReplyRequestCache.clear();
         multihomedCache.clear();
+        lsFailCooldown.clear();
     }
 
     /**
@@ -252,6 +270,18 @@ public class OutboundCache {
     }
 
     /**
+     * Removes expired LS fail cooldown entries.
+     *
+     * @param ctx the router context for current time.
+     * @param cc  the cooldown cache to clean.
+     * @since 0.9.72+
+     */
+    private static void cleanLsFailCooldown(final RouterContext ctx, final Map<Hash, Long> cc) {
+        final long now = ctx.clock().now();
+        cc.entrySet().removeIf(e -> e.getValue() < now);
+    }
+
+    /**
      * Internal timer event that periodically cleans all caches.
      */
     private class OCMOSJCacheCleaner extends SimpleTimer2.TimedEvent {
@@ -272,6 +302,7 @@ public class OutboundCache {
             tunnelStartTime.keySet().removeIf(k -> !tunnelCache.containsKey(k));
             cleanReplyCache(_context, lastReplyRequestCache);
             cleanMultihomedCache(_context, multihomedCache);
+            cleanLsFailCooldown(_context, lsFailCooldown);
             schedule(CLEAN_INTERVAL);
         }
     }
