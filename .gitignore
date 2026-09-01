@@ -287,5 +287,9 @@ peerProfiles/
 # Build temp
 build/messages-news-src-tmp/
 
+# Test artifacts
+test-i2psnark-lookup.config.d/
+apps/i2psnark/java/test-i2psnark-lookup.config.d/
+
 # Backup files
 *.old

@@ -1,3 +1,68 @@
+2026-09-01 dr|z3d
+  * Router:
+    - Add per-destination LS fail cooldown to prevent outbound message
+      floods to unreachable destinations; demote routine LS-not-found
+      logs from WARN to INFO
+    - Raise default I2CP max sessions to 16384
+  * I2PSnark:
+    - Migrate per-torrent config files to single metadata file
+    - Strip deprecated preserveFileNames and inOrder keys from
+      metadata on load and migration
+    - Make preserveFileNames a global config option instead of per-torrent
+    - Remove broken inOrder sequential piece download feature
+    - Add DHT lookup semaphore (8 concurrent) and stale lookup cleanup
+
+2026-08-31 dr|z3d
+  * Router:
+    - Refresh LeaseSets 90s before expiry for smoother connectivity
+  * I2PSnark:
+    - Raise global announce permits to 10, throttle to 20/min per tracker
+    - Make zzzot lookups metadata-only, no Storage preallocation or
+      .torrent persistence; lookup API returns combined file size
+    - Add configurable torrent directory for .torrent file storage
+      separately from data directory
+    - Add open trackers for magnet-mode torrents to prevent
+      'No valid trackers' error at startup
+    - Add TorrentInfo size to lookup API response
+    - Suppress spurious WARN when deleting lookup torrent config
+      that was never written to disk
+
+2026-08-29 dr|z3d
+  * Tunnel:
+    - Add maxConnections admission gate on server tunnels with
+      clean disconnect and 503 response on gate rejection
+  * Router:
+    - Re-mint public LeaseSets inside emergency window even under
+      tunnel deficit
+    - Lower client thread pool max to 1024
+  * I2PSnark:
+    - Consult all configured trackers for trackerless torrents
+      regardless of DHT size
+    - Scale DHT tracker peer store caps (250/torrent, global cap
+      400+torrents*250) and retune expire tiers
+    - Restore TorrentCreateFilter serialVersionUID for legacy
+      filters.conf compatibility
+  * Console:
+    - Guard CSRF nonce against invalidated sessions; fix 413/XSS
+      filter error on config pages
+
+2026-08-27 dr|z3d
+  * Router:
+    - Replace blocking poll in JobQueue with wait/notify and reduce
+      _jobLock contention with ConcurrentSkipListSet
+    - Improve job queue drop policy responsiveness under load
+    - Decay lease fail counter and raise threshold to avoid mass
+      client disconnects on transient LeaseSet expiry
+    - Add jitter to LeaseSet timeout to avoid thundering herd
+    - Decouple tuner moderate-load lag param with independent
+      thresholds and hysteresis
+  * I2PSnark:
+    - Self-contained screenlog bandwidth graph replaces rrd4j viewstat
+    - Persist running status on start and filter on boot
+  * SAM:
+    - Fix STREAM subsession race in execStreamMessage; accept
+      timeout, overflow rate-limiting, queue 16K
+
 2026-08-25 dr|z3d
   * I2PSnark:
     - Fix torrent list column header links that dropped the active
