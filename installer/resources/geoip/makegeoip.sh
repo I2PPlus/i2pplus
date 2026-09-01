@@ -3,8 +3,40 @@
 # Fetch the latest GeoIP and ASN databases from db-ip.com
 # Run this from installer/resources/geoip/
 #
+# Usage: ./makegeoip.sh [--host HOST] [--port PORT]
+#
 # Note: Set HTTP_PROXY if using a proxy, or remove the proxy settings
 # to download directly.
+
+# Parse optional --host and --port arguments that override the default proxy
+host="127.0.0.1"
+port="4444"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --host)
+      if [ $# -lt 2 ]; then
+        echo " > --host requires an argument"
+        exit 1
+      fi
+      host="$2"
+      shift 2
+      ;;
+    --port)
+      if [ $# -lt 2 ]; then
+        echo " > --port requires an argument"
+        exit 1
+      fi
+      port="$2"
+      shift 2
+      ;;
+    *)
+      echo " > Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+HTTP_PROXY=${HTTP_PROXY:-"http://${host}:${port}"}
 
 VER=`date +%Y-%m`
 DL=dbip-country-lite-${VER}.mmdb.gz
@@ -12,7 +44,6 @@ FILE=GeoLite2-Country.mmdb.gz
 ASN_DL=dbip-asn-lite-${VER}.mmdb.gz
 ASN_FILE=db-ip-asn.mmdb.gz
 UPDATE_SCRIPT=makegeoip.sh
-export HTTP_PROXY=http://127.0.0.1:4444
 UA="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 
 # Check for the presence of the update script in the current directory
