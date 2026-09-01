@@ -848,9 +848,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             long last = _lastClientSubDbWarn;
             if (now - last > CLIENT_SUBDB_WARN_INTERVAL && _log.shouldWarn()) {
                 _lastClientSubDbWarn = now;
-                _log.warn("Search from Client subDb using Exploratory tunnels requested -> Dropping... (rate-limited, total drops counted in netDb.clientSubDbExploratoryDrop)");
-            } else if (_log.shouldDebug()) {
-                _log.debug("Search from Client subDb using Exploratory tunnels requested -> Dropping... (suppressed)");
+                _log.warn("Dropping search from Client subDb using Exploratory tunnels -> Rate-limited...");
             }
             return null;
         } else if (fromLocalDest != null) {
