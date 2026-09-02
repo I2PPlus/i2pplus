@@ -36,6 +36,7 @@ import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
+import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.client.streaming.IncomingConnectionFilter;
 import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.client.streaming.StatefulConnectionFilter;
@@ -123,6 +124,22 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  @since 0.9.71+
      */
     public static final String PROP_READ_TIMEOUT = "i2ptunnel.server.readTimeout";
+
+    /** Default write timeout for the outbound I2P stream (ms). Without a bounded value,
+     *  a stalled peer (send window not advancing, e.g. under a SYN flood) holds a server
+     *  handler thread for the full streaming disconnect timeout (default 120s) inside
+     *  MessageOutputStream.flush()/close(). A bounded write timeout fails after no ACK
+     *  progress instead of blocking the handler; it does not cap throughput for a peer
+     *  that is progressing, so it is safe for legitimate slow transfers.
+     */
+    private static final long DEFAULT_WRITE_TIMEOUT = 60 * 1000L;
+
+    /** Config key to override the outbound write timeout in ms (0 = use the streaming
+     *  default, which can be the full 120s disconnect timeout with no ACK progress).
+     *  Key: tunnel.N.option.i2ptunnel.server.writeTimeout
+     *  @since 0.9.71+
+     */
+    public static final String PROP_WRITE_TIMEOUT = "i2ptunnel.server.writeTimeout";
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
     private static final long RECONNECT_DELAY_10S = 10 * 1000L;
     protected volatile ThreadPoolExecutor _clientExecutor;
@@ -631,7 +648,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void optionsUpdated(I2PTunnel tunnel) {
         if (getTunnel() != tunnel || sockMgr == null) {return;}
         Properties props = tunnel.getClientOptions();
-        sockMgr.setDefaultOptions(sockMgr.buildOptions(props));
+        // Bounded write timeout keeps a stalled outbound peer from holding a handler thread
+        // for the full streaming disconnect timeout (default 120s). see effectiveWriteTimeout()
+        long wt = effectiveWriteTimeout(props);
+        I2PSocketOptions opts = sockMgr.buildOptions(props);
+        if (wt > 0) {
+            opts.setWriteTimeout(wt);
+        }
+        sockMgr.setDefaultOptions(opts);
         String mc = props.getProperty(PROP_MAX_CONNECTIONS, "0");
         try {
             int max = Integer.parseInt(mc);
@@ -663,6 +687,34 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             } catch (NumberFormatException nfe) {l.log("✖ Bad port: " + p);}
         }
         buildSocketMap(props);
+    }
+
+    /**
+     * Determine the write timeout to bind the outbound I2P stream to, in ms.
+     * <p>
+     * A stalled peer (send window not advancing, e.g. under a SYN flood) otherwise holds a
+     * server handler thread for the full streaming disconnect timeout (default 120s) inside
+     * MessageOutputStream.flush()/close(). Bounding the write timeout fails on no ACK
+     * progress rather than blocking the handler; it does not cap throughput for a peer that
+     * is progressing, so it is safe for legitimate slow transfers.
+     * <p>
+     * If either the tunnel's own key ({@link #PROP_WRITE_TIMEOUT}) or the streaming
+     * standard key ({@link I2PSocketOptions#PROP_WRITE_TIMEOUT}) is present, honor it:
+     * return a negative value so the caller leaves the socket options' value untouched
+     * (explicit tuning wins, including 0 meaning the unbounded streaming default). Otherwise
+     * return the bounded default so unconfigured tunnels are protected.
+     *
+     * @param props the tunnel's client options; may be null
+     * @return the write timeout in ms to apply, or negative to apply none
+     * @since 0.9.71+
+     */
+    static long effectiveWriteTimeout(Properties props) {
+        if (props != null &&
+            (props.containsKey(PROP_WRITE_TIMEOUT) ||
+             props.containsKey(I2PSocketOptions.PROP_WRITE_TIMEOUT))) {
+            return -1;
+        }
+        return DEFAULT_WRITE_TIMEOUT;
     }
 
     /**
