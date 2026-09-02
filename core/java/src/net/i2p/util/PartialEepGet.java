@@ -16,7 +16,7 @@ import net.i2p.I2PAppContext;
 /**
  * Fetch exactly the first 'size' bytes into a stream
  * Anything less or more will throw an IOException
- * No retries, no min and max size options, no timeout option
+ * Retries may be given; zero for no retries.
  * If the server does not return a Content-Length header of the correct size,
  * the fetch will fail.
  *
@@ -31,6 +31,8 @@ public class PartialEepGet extends EepGet {
 
     /**
      * Instantiate an EepGet that will fetch exactly size bytes when fetch() is called.
+     * Uses {@link EepGet#DEFAULT_NUM_RETRIES} retries so a transient empty or
+     * flaky upstream response does not immediately declare the source dead.
      *
      * @param ctx the I2P app context
      * @param proxyHost use null or &quot;&quot; for no proxy
@@ -41,6 +43,24 @@ public class PartialEepGet extends EepGet {
      */
     public PartialEepGet(
             I2PAppContext ctx, String proxyHost, int proxyPort, OutputStream outputStream, String url, long size) {
+        this(ctx, proxyHost, proxyPort, outputStream, url, size, DEFAULT_NUM_RETRIES);
+    }
+
+    /**
+     * Instantiate an EepGet that will fetch exactly size bytes when fetch() is called.
+     *
+     * @param ctx the I2P app context
+     * @param proxyHost use null or &quot;&quot; for no proxy
+     * @param proxyPort use 0 for no proxy
+     * @param outputStream the stream to write output to
+     * @param url the URL to fetch
+     * @param size fetch exactly this many bytes
+     * @param numRetries number of attempts (beyond the first) before giving up; 0 for no retries
+     * @since 0.9.62
+     */
+    public PartialEepGet(
+            I2PAppContext ctx, String proxyHost, int proxyPort, OutputStream outputStream, String url, long size,
+            int numRetries) {
         // we're using this constructor:
         // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries,
         //               long minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean
@@ -50,7 +70,7 @@ public class PartialEepGet extends EepGet {
                 proxyHost != null && proxyPort > 0,
                 proxyHost,
                 proxyPort,
-                0,
+                numRetries,
                 size,
                 size,
                 null,
