@@ -265,8 +265,12 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
          Long id = Long.valueOf(msgId);
          Connection con = _messageStatusMap.get(id);
          if (con == null) {
-             if (_log.shouldWarn()) {
-                 _log.warn("Received status [" + status + "] for [MsgID " + msgId + "] on UNKNOWN connection");
+             // A status for a message already completed (its map entry was removed on the
+             // prior terminal status) or never tracked locally. Benign under load — the
+             // router may return a second status for a message we already resolved — so
+             // INFO rather than WARN to avoid flooding the log with late duplicates.
+             if (_log.shouldInfo()) {
+                 _log.info("Received status [" + status + "] for [MsgID " + msgId + "] on UNKNOWN connection");
              }
              return;
          }
@@ -278,7 +282,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
             // not really guaranteed
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
-                if (_log.shouldInfo()) {
+                if (_log.shouldWarn()) {
                     _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 }
                 _messageStatusMap.remove(id);
@@ -289,7 +293,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED:
             // overflow in router-side I2CP queue, sent as of 0.9.29, trigger immediate retransmit
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
-                if (_log.shouldInfo()) {
+                if (_log.shouldWarn()) {
                     _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 }
                 _messageStatusMap.remove(id);
@@ -300,8 +304,12 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // Immediate retransmit so the message goes out on a new
                 // tunnel/lease combo once the LS fetch completes, rather
                 // than waiting for the full RTO (which can be 3-15s).
-                if (_log.shouldWarn()) {
-                    _log.warn("LeaseSet lookup: Soft Failure for [MsgID " + msgId + "] \n* " + con);
+                // Routine for a first contact to a destination not yet in the
+                // router netDB; the retransmit succeeds once the LeaseSet is
+                // fetched, so INFO (not WARN) keeps observability without
+                // treating expected network provisioning as an error.
+                if (_log.shouldInfo()) {
+                    _log.info("LeaseSet lookup: soft failure (retransmit after fetch) for [MsgID " + msgId + "] \n* " + con);
                 }
                 _messageStatusMap.remove(id);
                 con.scheduleSoftFailureRetransmit();
