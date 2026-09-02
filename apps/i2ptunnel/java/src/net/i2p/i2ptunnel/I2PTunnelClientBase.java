@@ -105,7 +105,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.maxConnections";
     /** Default cap on concurrently handled client connections.
      *  <p>
-     *  The accept/connect path runs on an unbounded {@link BlockingRunner} pool, so a flood of
+     *  The accept/connect path runs on an unbounded {@link I2PTunnelClientBase.BlockingRunner} pool, so a flood of
      *  inbound peer connections (e.g. tracker announces/scrapes) can spawn unlimited parallel
      *  connect attempts - each with its own retry loop - starving legitimate browsing streams.
      *  A hard concurrent-process cap sheds excess inbound load instead of amplifying it.

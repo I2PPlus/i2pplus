@@ -348,7 +348,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  {@code toI2P} forwarder was never started) that completes with zero
      *  upstream bytes, {@link #run()} will call the callback to obtain a fresh
      *  I2P socket and re-drive the request on it, keeping the local browser
-     *  socket open. Only the {@link onNoDataFailure} path triggers a reconnect;
+     *  socket open. Only the {@link #onNoDataFailure(Exception)} path triggers a reconnect;
      *  a genuine non-empty failure, a reset, or a {@code totalReceived > 0}
      *  completion never does.
      *
