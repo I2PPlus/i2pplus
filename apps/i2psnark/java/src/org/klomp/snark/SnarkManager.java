@@ -511,6 +511,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "BT", "http://opentracker.bt.i2p/a=http://opentracker.bt.i2p/stats",
         "DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/",
         "R4SAS", "http://opentracker.r4sas.i2p/a=http://opentracker.r4sas.i2p/stats",
+        "InsulaOcculta", "http://tracker.insulaocculta.i2p/a=http://insulaocculta.i2p/",
+        "InsulaOcculta [UDP]", "udp://tracker.insulaocculta.i2p:6969/=http://insulaocculta.i2p/",
         "Sigma", "http://sigmatracker.i2p/a=http://sigmatracker.i2p/",
         //"Simp", "http://opentracker.simp.i2p/a=http://opentracker.simp.i2p/tracker",
         //"Simp [UDP]", "udp://opentracker.simp.i2p:6969/=http://opentracker.simp.i2p/tracker/",
@@ -528,7 +530,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "http://opentracker.r4sas.i2p/a," +
         //"http://opentracker.simp.i2p/a," +
         "http://opentracker.skank.i2p/a," +
-        "http://sigmatracker.i2p/a";
+        "http://sigmatracker.i2p/a," +
+        "http://tracker.insulaocculta.i2p/a";
 
     /**
      * Default set of tracker announce URLs to use when no torrent trackers are configured.
@@ -543,6 +546,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         //"opentracker.simp.i2p", "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p",
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
         "sigmatracker.i2p", "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
+        "tracker.insulaocculta.i2p", "4cxcka62bhpnl6raidcx7mgwkybaw3svckgbkprktd4zogc7npca.b32.i2p",
     }));
 
     private static final String[] DEFAULT_TORRENT_CREATE_FILTERS = {

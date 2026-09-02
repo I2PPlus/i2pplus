@@ -2007,6 +2007,12 @@ public class I2PSnarkUtil implements DisconnectListener {
                 result.replace(
                         "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
                         "sigmatracker.i2p");
+
+        result =
+                result.replace(
+                        "4cxcka62bhpnl6raidcx7mgwkybaw3svckgbkprktd4zogc7npca.b32.i2p",
+                        "tracker.insulaocculta.i2p");
+
         return result;
     }
 

@@ -789,6 +789,7 @@ public class I2PSnarkServlet extends BasicServlet {
         for (Tracker t : sortedTrackers) {
             if (t.baseURL == null || !t.baseURL.startsWith("http")) continue;
             if (_manager.util().isKnownOpenTracker(t.announceURL)) continue;
+            if (!t.baseURL.contains("postman")) continue;
             buf.append("<a href=\"")
                .append(t.baseURL)
                .append("\" class=\"snarkNav nav_tracker\" target=_blank>")
