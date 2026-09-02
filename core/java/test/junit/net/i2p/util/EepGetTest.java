@@ -1,6 +1,7 @@
 package net.i2p.util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -342,6 +343,61 @@ public class EepGetTest extends TestCase {
     }
 
     /**
+     * An empty upstream response (server accepts then closes without writing any
+     * body) must be retried when retries are configured, and the retry must
+     * succeed once the server serves data. This is the client-side counterpart of
+     * the "empty response" ("NS_ERROR_NET_EMPTY_RESPONSE") fix: a flaky or
+     * unresponsive source must not be declared dead on the first zero-byte reply.
+     */
+    public void testRetriesAfterEmptyResponse() throws Exception {
+        final byte[] body = pattern(64 * 1024);
+        final int[] calls = {0};
+        TestServer server = startServer(new Handler() {
+            @Override
+            public void handle(TestServer s, String requestLine, Map<String, String> headers, OutputStream out) throws IOException {
+                calls[0]++;
+                if (calls[0] == 1) {
+                    // accept and hang up with no bytes: an empty response
+                    return;
+                }
+                writeResponse(out, 200, body.length, body);
+            }
+        });
+        // retries=2 -> up to 3 attempts; first attempt returns empty, the retry succeeds.
+        EepGet get = newFetch(server.url("/flaky"), 2);
+        assertTrue(get.fetch(FETCH_TIMEOUT, TOTAL_TIMEOUT, FETCH_TIMEOUT));
+        byte[] stored = readFile(_outFile);
+        assertEquals(body.length, stored.length);
+        assertEquals(new String(body, StandardCharsets.ISO_8859_1), new String(stored, StandardCharsets.ISO_8859_1));
+        assertEquals(2, calls[0]);
+    }
+
+    /**
+     * The default PartialEepGet (the version/header check used by the update
+     * machinery) must wire a non-zero retry count, so a transient empty response
+     * does not make the version check fail immediately. Zero is only used when
+     * explicitly requested via the retry-taking constructor.
+     */
+    public void testPartialEepGetDefaultRetries() throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        TestPartialEepGet get = new TestPartialEepGet(_context, null, 0, baos, "http://127.0.0.1/x", 56);
+        assertEquals(EepGet.DEFAULT_NUM_RETRIES, get.getRetries());
+    }
+
+    /**
+     * The retry-taking PartialEepGet constructor must honor an explicit retry
+     * count, including zero (no retries), preserving the previous behavior for
+     * callers that want a single attempt.
+     */
+    public void testPartialEepGetExplicitRetries() throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        TestPartialEepGet none = new TestPartialEepGet(_context, null, 0, baos, "http://127.0.0.1/x", 56, 0);
+        assertEquals(0, none.getRetries());
+        TestPartialEepGet three = new TestPartialEepGet(_context, null, 0, baos, "http://127.0.0.1/x", 56, 3);
+        assertEquals(3, three.getRetries());
+    }
+
+    /**
      * Write a simple response with Content-Length and body.
      */
     private static void writeResponse(OutputStream out, int code, long length, byte[] body) throws IOException {
@@ -458,6 +514,24 @@ public class EepGetTest extends TestCase {
             _alreadyTransferred = alreadyTransferred;
             _isGzippedResponse = gzipped;
             return getRequest();
+        }
+    }
+
+    /**
+     * Whitebox access to the Protected retry count of a PartialEepGet, so the
+     * update version-check retry wiring can be asserted without a live server.
+     */
+    private static class TestPartialEepGet extends PartialEepGet {
+        TestPartialEepGet(I2PAppContext ctx, String proxyHost, int proxyPort, ByteArrayOutputStream out, String url, long size) {
+            super(ctx, proxyHost, proxyPort, out, url, size);
+        }
+
+        TestPartialEepGet(I2PAppContext ctx, String proxyHost, int proxyPort, ByteArrayOutputStream out, String url, long size, int retries) {
+            super(ctx, proxyHost, proxyPort, out, url, size, retries);
+        }
+
+        int getRetries() {
+            return _numRetries;
         }
     }
 }
