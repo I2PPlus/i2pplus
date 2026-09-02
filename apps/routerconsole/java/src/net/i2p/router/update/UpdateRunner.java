@@ -273,7 +273,8 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
                 _isPartial = true;
                 _baos.reset();
                 try {
-                    // no retries
+                    // PartialEepGet retries (default 10) so a transient empty or
+                    // flaky upstream response is not treated as an unresponsive source.
                     _get = new PartialEepGet(_context, proxyHost, proxyPort, _baos, updateURL, TrustedUpdate.HEADER_BYTES);
                     _get.addStatusListener(UpdateRunner.this);
                     _get.fetch(CONNECT_TIMEOUT);
