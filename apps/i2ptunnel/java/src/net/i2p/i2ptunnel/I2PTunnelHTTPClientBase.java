@@ -985,6 +985,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         }
         try {writeErrorMessage(header, out, targetRequest, usingWWWProxy, wwwProxy);}
         catch (IOException ioe) { /* ignored */ }
+        try {out.flush();}
+        catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -1017,6 +1019,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String header = getErrorPage(error, ERR_DESTINATION_UNKNOWN);
         String message = ise != null ? ise.getLocalizedMessage() : "unknown error";
         try {writeErrorMessage(header, message, out, targetRequest, usingWWWProxy, wwwProxy);}
+        catch(IOException ioe) { /* ignored */ }
+        try {out.flush();}
         catch(IOException ioe) { /* ignored */ }
     }
 

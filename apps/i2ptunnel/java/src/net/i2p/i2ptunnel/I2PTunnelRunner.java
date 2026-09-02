@@ -91,6 +91,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private SuccessCallback _onSuccess;
     private volatile long totalSent;
     private volatile long totalReceived;
+    /** Prevent the no-data failure callback from firing more than once across
+     *  the synchronous completion block and the exception/finally paths. */
+    private boolean _noDataHandled;
     /** Keep I2P socket alive after data transfer */
     protected volatile boolean _keepAliveI2P;
     /** Keep local socket alive after data transfer */
@@ -388,6 +391,72 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         }
     }
 
+    /**
+     *  Invoke the no-data failure callback when a transfer completes (or aborts)
+     *  without delivering any bytes from the I2P peer.
+     *
+     *  <p>This is the single choke point behind the "empty response" class of bugs:
+     *  without it, a connection that is established to the proxy but never yields an
+     *  upstream byte (server unresponsive, reset before first data, or the executor
+     *  rejecting the forwarder) would end by closing the local socket with nothing
+     *  written, which the browser reports as {@code NS_ERROR_NET_EMPTY_RESPONSE}.
+     *  The HTTP client runner wires its {@link FailCallback} to a handler that
+     *  writes a well-formed HTTP error page to the browser socket before closing;
+     *  this is what turns a silent empty close into a surfaced 5xx. The base
+     *  implementation simply dispatches to the configured {@link FailCallback} or
+     *  {@link #onTimeout}.
+     *
+     *  <p>Safe to call from any completion or exception path; {@link #_noDataHandled}
+     *  guarantees the callback runs at most once even when several paths race.
+     *  Run even when {@code totalSent > 0} (post body) — the absence of a response
+     *  is still a failure. Never run when any upstream bytes were received.
+     *
+     *  @since 0.9.62
+     */
+    protected void onNoDataFailure() { onNoDataFailure(null); }
+
+    /**
+     *  Invoke the no-data failure callback with an optional cause.
+     *
+     *  @param e the failure cause, or {@code null} for a clean empty transfer
+     *  @since 0.9.62
+     */
+    protected void onNoDataFailure(Exception e) {
+        if (!shouldFireNoDataFailure(totalReceived, _noDataHandled)) {return;}
+        synchronized (this) {
+            if (_noDataHandled) {return;}
+            _noDataHandled = true;
+        }
+        if (_log.shouldLog(Log.DEBUG)) {
+            _log.debug("No data received from peer" + (e != null ? " (" + e + ")" : "") +
+                       " -> invoking failure callback, totalSent=" + totalSent);
+        }
+        if (_onFail != null) {
+            _onFail.onFail(e);
+        } else if (onTimeout != null) {
+            onTimeout.run();
+        }
+    }
+
+    /**
+     *  Whether a transfer with the given upstream byte count and handling state
+     *  should trigger the no-data failure callback.
+     *
+     *  <p>This is the decision behind the "empty response" fix: the failure callback
+     *  must fire iff no upstream bytes were received (an empty transfer is still a
+     *  failure even when a POST body was sent upstream) and the callback has not
+     *  already fired for this transfer. Extracted as a pure static predicate so the
+     *  empty-response contract is unit-testable without a router or live socket.
+     *
+     *  @param totalReceived upstream bytes received from the I2P peer
+     *  @param handled whether the no-data failure has already been signalled
+     *  @return true if the failure callback should fire
+     *  @since 0.9.62
+     */
+    static boolean shouldFireNoDataFailure(long totalReceived, boolean handled) {
+        return totalReceived <= 0 && !handled;
+    }
+
     private static final byte[] POST = { 'P', 'O', 'S', 'T', ' ' };
     private static final byte[] PUT = { 'P', 'U', 'T', ' ' };
 
@@ -453,6 +522,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         // generic catch in run() logged "Internal error").
                         if (_log.shouldWarn())
                             _log.warn(direction + " Connection dropped: client pool saturated");
+                        onNoDataFailure(ree);
                         try {i2ps.close();} catch (IOException ioe) {}
                         try {s.close();} catch (IOException ioe) {}
                         return;
@@ -495,15 +565,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
 
             // This task is useful for the httpclient
             if ((onTimeout != null || _onFail != null) && totalReceived <= 0) {
-                // Run even if totalSent > 0, as that's probably POST data.
-                // This will be run even if initialSocketData != null, it's the timeout job's
-                // responsibility to know that and decide whether or not to write to the socket.
-                // HTTPClient never sets initialSocketData.
-                if (_onFail != null) {
-                    Exception e = fromI2P.getFailure();
-                    if (e == null && toI2P != null) {e = toI2P.getFailure();}
-                    _onFail.onFail(e);
-                } else {onTimeout.run();}
+                Exception e = fromI2P.getFailure();
+                if (e == null && toI2P != null) {e = toI2P.getFailure();}
+                onNoDataFailure(e);
             } else {
                 // Detect a reset on one side, and propagate to the other
                 Exception e1 = fromI2P.getFailure();
@@ -534,18 +598,22 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             _log.error("SSL error", she);
             _keepAliveI2P = false;
             _keepAliveSocket = false;
+            onNoDataFailure(she);
         } catch (IOException ex) {
             if (_log.shouldLog(Log.DEBUG)) {_log.debug("Error forwarding (" + ex.getMessage() + ")");}
             _keepAliveI2P = false;
             _keepAliveSocket = false;
+            onNoDataFailure(ex);
         } catch (IllegalStateException ise) {
             if (_log.shouldWarn()) {_log.warn("gnu?", ise);}
             _keepAliveI2P = false;
             _keepAliveSocket = false;
+            onNoDataFailure(ise);
         } catch (RuntimeException e) {
             if (_log.shouldLog(Log.ERROR)) {_log.error("Internal error", e);}
             _keepAliveI2P = false;
             _keepAliveSocket = false;
+            onNoDataFailure(e);
         } finally {
             removeRef();
             if (i2pReset) {
