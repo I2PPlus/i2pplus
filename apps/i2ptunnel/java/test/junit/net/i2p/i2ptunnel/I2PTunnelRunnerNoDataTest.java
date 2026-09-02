@@ -104,4 +104,30 @@ public class I2PTunnelRunnerNoDataTest {
         assertFalse(I2PTunnelRunner.isRetryableRequest("GE".getBytes()));
         assertFalse(I2PTunnelRunner.isRetryableRequest("G".getBytes()));
     }
+
+    /** Reconnect when a truly empty, retryable, callback-wired transfer completes. */
+    @Test
+    public void testReconnectEmptyResponse() {
+        assertTrue(I2PTunnelRunner.shouldReconnectEmptyResponse(0L, true, true));
+    }
+
+    /** A real upstream response (a received 502 that failed to flush to the browser) must NOT retry. */
+    @Test
+    public void testNoReconnectWhenResponseReceivedEvenIfWriteFailed() {
+        // totalReceived is incremented before the browser write, so a response
+        // whose write threw (Pipe closed) is still a received response: do not
+        // re-drive it against the outproxy.
+        assertFalse(I2PTunnelRunner.shouldReconnectEmptyResponse(93L, true, true));
+    }
+
+    @Test
+    public void testNoReconnectWithoutCallback() {
+        assertFalse(I2PTunnelRunner.shouldReconnectEmptyResponse(0L, false, true));
+    }
+
+    @Test
+    public void testNoReconnectForNonRetryableRequest() {
+        // POST/PUT must never be re-sent even when empty and callback is wired.
+        assertFalse(I2PTunnelRunner.shouldReconnectEmptyResponse(0L, true, false));
+    }
 }

@@ -500,6 +500,32 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         return totalReceived <= 0 && !handled;
     }
 
+    /**
+     *  Whether an empty-upstream transfer should be retried on a fresh I2P connection.
+     *
+     *  <p>The HTTP client proxy re-sends an idempotent (GET/HEAD) request against a fresh
+     *  I2P connection after a transfer that produced no upstream bytes, instead of closing
+     *  the browser socket with nothing (which the browser reports as
+     *  {@code NS_ERROR_NET_EMPTY_RESPONSE}). Reconnecting is only justified when the
+     *  transfer was genuinely empty: once the peer has reported a complete HTTP response
+     *  (even a definitive error such as a 5xx), {@code totalReceived} is positive and a
+     *  reconnect is both pointless and harmful - it re-drives a request the outproxy already
+     *  answered, contributing to the very congestion behind slow/failed streams. Guarding
+     *  on <em>upstream bytes actually received</em> (rather than bytes written to the
+     *  browser) is essential: a response whose browser write threw (e.g. {@code Pipe
+     *  closed}) still counts as received, so it must terminate, not retry.
+     *
+     *  @param totalReceived upstream bytes received from the I2P peer since reconnect reset
+     *  @param hasReconnectCallback whether a reconnect callback is installed
+     *  @param retryableRequest whether the buffered request is an idempotent, body-less GET/HEAD
+     *  @return true if the transfer should be retried on a fresh connection
+     *  @since 0.9.62
+     */
+    static boolean shouldReconnectEmptyResponse(long totalReceived, boolean hasReconnectCallback,
+                                                boolean retryableRequest) {
+        return totalReceived <= 0 && hasReconnectCallback && retryableRequest;
+    }
+
     private static final byte[] GET = { 'G', 'E', 'T', ' ' };
     private static final byte[] HEAD = { 'H', 'E', 'A', 'D', ' ' };
     private static final byte[] POST = { 'P', 'O', 'S', 'T', ' ' };
@@ -662,7 +688,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 // loop as long as the callback offers a new connection, bailing to the
                 // normal failure path once it declines (budget exhausted) or a re-drive
                 // errors.
-                while (totalReceived <= 0 && _reconnectCallback != null && isRetryableRequest(initialI2PData)) {
+                while (shouldReconnectEmptyResponse(totalReceived, _reconnectCallback != null, isRetryableRequest(initialI2PData))) {
                     Exception e = fromI2P.getFailure();
                     if (e == null && toI2P != null) {e = toI2P.getFailure();}
                     I2PSocket fresh = _reconnectCallback.reconnect(e);
@@ -875,12 +901,19 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 int len;
                 while (!done && (len = in.read(buffer)) != -1) {
                     if (len > 0) {
-                        out.write(buffer, 0, len);
                         if (_toI2P) {totalSent += len;}
                         else {
                             if (totalReceived == 0 && _callback != null) {_callback.onSuccess();}
+                            // Count the upstream bytes BEFORE the browser write. If the
+                            // browser socket is already closed (e.g. Pipe closed under a
+                            // congested stream), the write throws and the bytes would
+                            // otherwise be lost from totalReceived. A real upstream
+                            // response (even a 502) is not an "empty transfer" - recording
+                            // it here stops the empty-response reconnect loop from treating
+                            // a definitive answer as a retryable no-data failure.
                             totalReceived += len;
                         }
+                        out.write(buffer, 0, len);
                     }
                     try {
                         if (in.available() == 0) {out.flush();}
