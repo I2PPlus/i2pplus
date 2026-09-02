@@ -1,3 +1,18 @@
+2026-09-02 dr|z3d
+  * Tunnel:
+    - Skip client-pool tunnel pre-qualification when tunnel build
+      success is below the attack threshold
+    - Trim tunnel pool replacement buffer to target+1 under tunnel
+      stress (from target+2)
+  * I2PTunnel:
+    - Back off HTTP tunnel connect retries exponentially (1s, doubling
+      to an 8s cap) instead of retrying every 2s, so a stalled pool can
+      recover instead of being hammered
+  * Streaming:
+    - Clamp the SYN accept timeout for queued connections to 10s while
+      tunnel build success is low, so accept-queue draining keeps pace
+      during a tunnel-pool stall
+
 2026-09-01 dr|z3d
   * Router:
     - Add per-destination LS fail cooldown to prevent outbound message
@@ -11,6 +26,17 @@
     - Make preserveFileNames a global config option instead of per-torrent
     - Remove broken inOrder sequential piece download feature
     - Add DHT lookup semaphore (8 concurrent) and stale lookup cleanup
+    - Fix double-slash in multi-file torrent URLs
+    - Show the torrent info page for incomplete downloads whose data
+      directory hasn't been created yet
+    - Fix a crash while stripping deprecated per-torrent config keys
+    - Fix ubergine theme row shading (odd/even classes)
+  * Addressbook:
+    - Skip host checks (fail fast) when the shared ping manager is
+      unavailable
+  * GeoIP:
+    - Update GeoIP and ASN databases; add --host and --port options to
+      makegeoip.sh
 
 2026-08-31 dr|z3d
   * Router:
