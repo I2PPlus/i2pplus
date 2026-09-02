@@ -2,6 +2,7 @@ package net.i2p.client.streaming.impl;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import net.i2p.I2PAppContext;
@@ -37,20 +38,31 @@ class ConnectionHandler {
      * expected to pull it. If accept() is delayed (busy or slow hosted server),
      * the queued SYN is reset after this window, so it must be long enough to
      * absorb brief stalls without refusing inbound connections. Tunable via
-     * i2p.streaming.acceptTimeout (default: 30000 / 30 seconds).
+     * i2p.streaming.acceptTimeout (default: 60000 / 60 seconds). On a congested
+     * fabric RTT is commonly 3-10s, so 30s was too short once a SYN actually
+     * queued; 60s gives the RTT-aware floor (see {@link #getAdaptiveSynTimeout})
+     * headroom to extend on slow-but-alive tunnels without refusing them.
      *
      * @since 0.9.71+
      */
     synchronized void setAcceptTimeout(int ms) { _acceptTimeout = ms; }
 
     private int getAcceptTimeout() {
-        return _context.getProperty("i2p.streaming.acceptTimeout", 30*1000);
+        return _context.getProperty("i2p.streaming.acceptTimeout", 60*1000);
     }
 
     /** Build success fraction below which the tunnel system is considered stressed. */
     static final double SYN_STRESS_THRESHOLD = 0.40;
-    /** Maximum SYN accept-queue timeout (ms) while the tunnel system is stressed. */
-    static final int SYN_STRESS_MAX_TIMEOUT = 10 * 1000;
+    /** Minimum SYN accept-queue timeout (ms) kept even on a genuinely stressed, fast fabric. */
+    static final int SYN_STRESS_MIN_TIMEOUT = 10 * 1000;
+    /** Default RTT scale factor: the adaptive SYN floor is {@code scale * recentRTT} (capped at the
+     *  configured timeout) whenever a positive stall is detected.  4 keeps a handshake alive through
+     *  roughly four round-trips of server/queue latency, matching live 3-10s-RTT fabrics while still
+     *  failing fast on genuinely dead fast tunnels. Tunable via {@link I2PSocketManagerFull#setRttSynTimeoutScale}. */
+    static final int SYN_RTT_SCALE_DEFAULT = 4;
+    /** Baseline recent-SYN expire rate (percent) that must be exceeded, along with low
+     *  build success, before the clamp is armed. 100 disables the clamp. */
+    static final int SYN_EXPIRE_THRESHOLD_DEFAULT = 60;
     /** Minimum interval between re-sampling tunnel build success (ms). */
     private static final long SYN_STRESS_SAMPLE_INTERVAL = 10 * 1000;
 
@@ -74,35 +86,76 @@ class ConnectionHandler {
      *
      * <p>A queued SYN is reset via {@code TimeoutSyn} after this window, so it
      * bounds how long a client waits for a connection the server never got
-     * around to accepting.  While the tunnel system is stressed (build success
-     * below {@link #SYN_STRESS_THRESHOLD}) the window is clamped to
-     * {@link #SYN_STRESS_MAX_TIMEOUT}: a dead stream fails fast and the client
-     * can retry through its own connect backoff instead of burning the full
-     * configured timeout.  The clamp lifts itself once tunnel health recovers.
+     * around to accepting.  A fixed low clamp (e.g. the historical 10s) fails
+     * fast on genuinely dead tunnels but also expires slow-but-alive handshakes
+     * on a high-latency / congested fabric, which surfaces as empty pages to
+     * every client.  So the clamp is made evidence-gated and RTT-aware:
      *
-     * <p>A NaN build success (no data yet, e.g. stand-alone streaming or early
-     * startup) never triggers the clamp — missing stats are not evidence of
-     * stress — and a non-positive configured timeout is returned unchanged.
-     * A fractional 0.0 is treated as genuine failure, not "no data".
+     * <p><b>Gate (#4).</b> The clamp fires only when there is positive evidence of
+     * a real stall, not mere latency: {@code buildSuccess} below
+     * {@link #SYN_STRESS_THRESHOLD} <b>and</b> the recent SYN expire rate
+     * ({@code recentExpireRatePct}) at or above the Tuner threshold
+     * ({@link I2PSocketManagerFull#getSynExprExpireThresh()}, default 60).  A
+     * server that is draining its SYN queue — even on a slow tunnel — is treated
+     * as healthy and keeps the full configured window.
+     *
+     * <p><b>RTT-aware floor (#2).</b> When the clamp does fire, the window is not
+     * a flat constant: the floor rises with the sampled round-trip time
+     * {@code rttMs}.  On a fast fabric the floor is {@link #SYN_STRESS_MIN_TIMEOUT}
+     * (true fast-fail); on a slow fabric it is {@code scale * rttMs}, so a
+     * slow-but-alive tunnel keeps substantially longer than the historical 10s and
+     * its handshake has room to complete.  The result is always capped at the
+     * configured timeout and never exceeds it.
+     *
+     * <p>No data never triggers the clamp: a NaN build success (stand-alone
+     * streaming or early startup) returns the configured timeout unchanged, an
+     * unknown expire rate ({@code < 0}) is treated as "no evidence" (no clamp), and
+     * a non-positive configured timeout is returned unchanged.  A fractional 0.0
+     * build success is genuine failure, not "no data".
      *
      * @param configuredTimeoutMs the configured accept timeout (i2p.streaming.acceptTimeout)
      * @param buildSuccess tunnel build success as a fraction [0.0, 1.0]; NaN when unavailable
+     * @param recentExpireRatePct percent of recent SYN-queue entries that expired un-accepted,
+     *                            or a negative value when the rate is not known yet
+     * @param rttMs a recent round-trip time sample in milliseconds, or &lt;=0 when unavailable
      * @return the timeout (ms) to arm the TimeoutSyn with
      */
-    static int getAdaptiveSynTimeout(int configuredTimeoutMs, double buildSuccess) {
-        if (configuredTimeoutMs <= 0 || Double.isNaN(buildSuccess)) {
+    static int getAdaptiveSynTimeout(int configuredTimeoutMs, double buildSuccess,
+                                     int recentExpireRatePct, int rttMs) {
+        if (configuredTimeoutMs <= 0 || Double.isNaN(buildSuccess) || recentExpireRatePct < 0) {
             return configuredTimeoutMs;
         }
-        if (buildSuccess < SYN_STRESS_THRESHOLD) {
-            return Math.min(configuredTimeoutMs, SYN_STRESS_MAX_TIMEOUT);
+        int expireThresh = I2PSocketManagerFull.getSynExprExpireThresh();
+        if (expireThresh <= 0) {expireThresh = SYN_EXPIRE_THRESHOLD_DEFAULT;}
+        if (expireThresh >= 100) {return configuredTimeoutMs;}
+        if (buildSuccess >= SYN_STRESS_THRESHOLD || recentExpireRatePct < expireThresh) {
+            return configuredTimeoutMs;
         }
-        return configuredTimeoutMs;
+        int scale = I2PSocketManagerFull.getRttSynTimeoutScale();
+        if (scale <= 0) {scale = SYN_RTT_SCALE_DEFAULT;}
+        long floor = SYN_STRESS_MIN_TIMEOUT;
+        if (scale > 0 && rttMs > 0) {
+            long rttScaled = (long) scale * (long) rttMs;
+            if (rttScaled > floor) {floor = rttScaled;}
+        }
+        long clamped = Math.min(floor, configuredTimeoutMs);
+        return (int) clamped;
     }
 
     /** Router-clock time of the last tunnel-stress sample. */
     private volatile long _lastStressSampleAt;
     /** Cached tunnel build success fraction; NaN when unavailable. */
     private volatile double _tunnelBuildSuccess;
+    /** SYNs added to the acceptance queue within the current sample window. */
+    private volatile int _synQueueProcessed;
+    /** SYNs that expired un-accepted (removed by {@code TimeoutSyn}) in the current window. */
+    private volatile int _synQueueExpired;
+    /** Most recently observed SYN accept-queue residence time (ms), i.e. how long a fresh SYN
+     *  waited in the queue before being accepted. 0 until the first acceptance. */
+    private volatile int _synQueueResidenceMs;
+    /** Enqueue clock-times for packets currently in the accept queue, keyed by packet identity. */
+    private final ConcurrentHashMap<Packet, Long> _synEnqueueTimes =
+            new ConcurrentHashMap<Packet, Long>();
 
     /**
      * Tunnel build success fraction, sampled at most once per
@@ -131,13 +184,88 @@ class ConnectionHandler {
     }
 
     /**
+     * Recent SYN expire rate, sampled on the same interval as build success.
+     *
+     * <p>Counts SYNs added to the accept queue ({@code _synQueueProcessed}) and
+     * SYNs later removed by {@code TimeoutSyn} without being accepted
+     * ({@code _synQueueExpired}).  The window resets whenever a full
+     * {@link #SYN_STRESS_SAMPLE_INTERVAL} elapses, so the rate reflects the
+     * most recent tunnel-health window rather than the ever since startup.
+     *
+     * <p>Until the first window completes there is <em>no evidence</em>, which is
+     * reported as {@code -1} so the adaptive clamp never fires on startup.
+     *
+     * @return percent of queued SYNs that expired un-accepted [0,100], or -1 when
+     *         not enough history has accumulated yet
+     */
+    private int getSynExpireRatePct() {
+        long now = _context.clock().now();
+        if (now - _lastStressSampleAt >= SYN_STRESS_SAMPLE_INTERVAL) {
+            _lastStressSampleAt = now;
+            _synQueueProcessed = 0;
+            _synQueueExpired = 0;
+            return -1;
+        }
+        int processed = _synQueueProcessed;
+        if (processed <= 0) {return -1;}
+        int expired = _synQueueExpired;
+        if (expired <= 0) {return 0;}
+        return (int) (100L * expired / processed);
+    }
+
+    /**
      * The effective SYN accept-queue timeout: the configured timeout, clamped
-     * to {@link #SYN_STRESS_MAX_TIMEOUT} while the tunnel system is stressed.
+     * -- only while the tunnel system shows positive stall evidence -- to an
+     * RTT-aware floor never below {@link #SYN_STRESS_MIN_TIMEOUT} and never
+     * above the configured timeout.
      *
      * @return timeout in ms to arm TimeoutSyn with
      */
     private int getEffectiveAcceptTimeout() {
-        return getAdaptiveSynTimeout(_acceptTimeout, getTunnelBuildSuccess());
+        return getAdaptiveSynTimeout(_acceptTimeout, getTunnelBuildSuccess(),
+                                     getSynExpireRatePct(), getRttMs());
+    }
+
+    /**
+     * A recent round-trip time sample in milliseconds, or 0 when unavailable.
+     *
+     * <p>On a hosted (server) connection there is no handshake RTT to read before
+     * the connection exists, so the adaptive floor uses the SYN accept-queue
+     * <em>residence time</em> as a direct proxy for how long the server takes to
+     * reach a freshly queued SYN: the window that must exceed this residence to
+     * avoid expiring slow handshakes.  An unavailable/zero sample keeps the fixed
+     * {@link #SYN_STRESS_MIN_TIMEOUT} floor and is always safe.
+     *
+     * @return a recent queue-residence RTT in milliseconds, or 0 when not known yet
+     */
+    private int getRttMs() {
+        return _synQueueResidenceMs;
+    }
+
+    /**
+     * Record how long a freshly accepted SYN spent in the accept queue.
+     *
+     * <p>Called from the accept loop immediately before a fresh SYN is handed to
+     * {@code receiveConnection()}.  The enqueue timestamp (stamped in
+     * {@code receiveNewSyn}) is removed and the residence time becomes the
+     * sampled {@link #getRttMs()} input to the adaptive SYN timeout.  The sample
+     * is lightly smoothed toward the previous value so a single slow acceptance
+     * does not swing the floor all the way to configured on its own.
+     *
+     * <p>Retransmitted and poison SYNs never reach this point, so only genuinely
+     * fresh handshakes are measured.
+     *
+     * @param syn the freshly de-queued SYN about to be accepted
+     */
+    private void sampleSynResidence(Packet syn) {
+        if (syn == null) {return;}
+        Long enqueuedAt = _synEnqueueTimes.remove(syn);
+        if (enqueuedAt == null) {return;}
+        int residence = (int) Math.min(Integer.MAX_VALUE,
+                _context.clock().now() - enqueuedAt.longValue());
+        if (residence < 0) {residence = 0;}
+        int prev = _synQueueResidenceMs;
+        _synQueueResidenceMs = (prev + residence) / 2;
     }
 
     /** Creates a new instance of ConnectionHandler */
@@ -180,12 +308,18 @@ class ConnectionHandler {
         if (active && !_active) {
             _restartPending = false;
             _synQueue.clear();
+            _synEnqueueTimes.clear();
+            _synQueueProcessed = 0;
+            _synQueueExpired = 0;
         }
         boolean wasActive = _active;
         _active = active;
         if (wasActive && !active) {
             // stopping, clear any pending sockets
             _synQueue.clear();
+            _synEnqueueTimes.clear();
+            _synQueueProcessed = 0;
+            _synQueueExpired = 0;
             _synQueue.offer(new PoisonPacket());
         }
     }
@@ -227,8 +361,11 @@ class ConnectionHandler {
         // Re-read the max queue size dynamically — Tuner override or config change
         // applies without a restart.
         boolean success = _synQueue.size() < getMaxQueueSize() && _synQueue.offer(packet);
-        if (success) {_timer.addEvent(new TimeoutSyn(packet), timeoutMs);}
-        else {
+        if (success) {
+            _synEnqueueTimes.put(packet, Long.valueOf(_context.clock().now()));
+            _synQueueProcessed++;
+            _timer.addEvent(new TimeoutSyn(packet), timeoutMs);
+        } else {
             // Send RESET so the client can establish a new connection
             // immediately (via its own connect retry logic) rather than
             // waiting for the full RTO (~3s) before the SYN retransmits.
@@ -270,6 +407,7 @@ class ConnectionHandler {
                     if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
                         break;
                     }
+                    _synEnqueueTimes.remove(packet);
                     sendReset(packet);
                 }
                     boolean restartPending;
@@ -349,6 +487,7 @@ class ConnectionHandler {
                             resendSynAck(oldcon, syn);
                             continue;
                     }
+                    sampleSynResidence(syn);
                     Connection con = _manager.receiveConnection(syn);
                     if (con != null) {return con;}
                 } else {reReceivePacket(syn);} // ... and keep looping
@@ -461,6 +600,8 @@ class ConnectionHandler {
         public void timeReached() {
             boolean removed = _synQueue.remove(_synPacket);
             if (removed) {
+                _synEnqueueTimes.remove(_synPacket);
+                _synQueueExpired++;
                 if (_synPacket.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldWarn())
                         _log.warn("Expired on the SYN queue: " + _synPacket);

@@ -940,4 +940,48 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @since 0.9.71+
      */
     public static void setMaxSYNQueueSize(int val) { _maxSYNQueueSize = val; }
+
+    private static volatile int _rttSynTimeoutScale;
+
+    /**
+     * Scale factor applied to a sampled recent round-trip time when computing
+     * the adaptive SYN accept-queue timeout under tunnel stress. A slow-but-alive
+     * fabric (high RTT) must keep a longer window than a fast one so that SYNs
+     * aren't expired before the handshake completes. Dynamically adjustable by
+     * the Tuner.
+     *
+     * <p>0 (the unset default) selects {@code ConnectionHandler.SYN_RTT_SCALE_DEFAULT}
+     * (4), so the RTT-aware floor stays active out of the box.
+     *
+     * @return the RTT scale factor, or 0 for the built-in default
+     * @since 0.9.71+
+     */
+    public static int getRttSynTimeoutScale() { return _rttSynTimeoutScale; }
+
+    /**
+     * Multiplier applied to recent RTT when sizing the adaptive SYN timeout.
+     * @param val the new scale factor; 0 or a negative value selects the built-in default (4)
+     * @since 0.9.71+
+     */
+    public static void setRttSynTimeoutScale(int val) { _rttSynTimeoutScale = val; }
+
+    private static volatile int _synExprExpireThresh;
+
+    /**
+     * Fraction (percent) of recent SYN-queue entries that must expire un-accepted
+     * before the adaptive timeout clamp is armed, in addition to low tunnel build
+     * success. Requiring positive stall evidence keeps a slow-but-alive server from
+     * being punished by its own latency. Dynamically adjustable by the Tuner.
+     *
+     * @return the expire-rate threshold as a percent [0,100], 100 disables the clamp
+     * @since 0.9.71+
+     */
+    public static int getSynExprExpireThresh() { return _synExprExpireThresh; }
+
+    /**
+     * Fraction of recent SYNs that must expire un-accepted to arm the clamp.
+     * @param val the new threshold percent; 100 disables the clamp entirely
+     * @since 0.9.71+
+     */
+    public static void setSynExprExpireThresh(int val) { _synExprExpireThresh = val; }
 }
