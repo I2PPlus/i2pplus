@@ -29,6 +29,7 @@ import net.i2p.router.Tuner;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.peermanager.PeerTestJob;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.Rate;
@@ -1504,6 +1505,34 @@ public class TunnelPool {
     }
 
     /**
+     * How many usable tunnels above the target the pool may hold before a
+     * further build must replace a non-GOOD tunnel instead of being added.
+     *
+     * <p>A healthy pool keeps a 2-tunnel buffer (target + 2) so a tunnel lost
+     * to expiry or test failure still leaves a full target's worth of usable
+     * leases while replacements build.  Under tunnel stress (build success
+     * below {@link ProfileOrganizer#ATTACK_THRESHOLD}) the buffer drops to 1
+     * (target + 1): replacement builds trigger sooner, so the pool regains
+     * coverage instead of hoarding near-dead tunnels, and the buffer restores
+     * itself once build success recovers.
+     *
+     * <p>A NaN rate (no data yet, e.g. early startup) is treated as healthy —
+     * missing stats are not evidence of an attack, and the pool must not shrink
+     * its buffer before it has any statistics to act on.
+     *
+     * @param buildSuccess the global build success rate as a fraction [0.0, 1.0];
+     *                     NaN when the rate is not yet available
+     * @return 2 when healthy, 1 when stressed
+     * @since 0.9.71+
+     */
+    static int getReplacementTunnelBuffer(double buildSuccess) {
+        if (Double.isNaN(buildSuccess) || buildSuccess >= ProfileOrganizer.ATTACK_THRESHOLD) {
+            return 2;
+        }
+        return 1;
+    }
+
+    /**
      *  Track recently-added tunnel IDs to prevent duplicates.
      *  Uses a simple sliding window based on add time.
      *  Window is 60 seconds — long enough to catch duplicate
@@ -1592,7 +1621,7 @@ public class TunnelPool {
             // tunnel ID (shouldn't happen but prevents pool corruption).
             if (isDuplicateInPool(info, gatewayId)) {return;}
             if (isLongEnoughLived(info, now)) {
-                // Hard cap: never more than target + 2 usable tunnels per direction.
+                // Hard cap: never more than target + buffer usable tunnels per direction.
                 // FAILED/FAILING tunnels are dead or dying and don't count — they must
                 // not block replacement builds.
                 int target = getEffectiveTarget();
@@ -1600,8 +1629,10 @@ public class TunnelPool {
                 // Capacity: target + 2 so a pool that lost a tunnel to expiry
                 // or test failure still holds a full target's worth of usable
                 // leases while replacements build.  The extra slot absorbs
-                // churn without starving the LeaseSet.
-                int maxUsable = Math.max(target + 2, 2);
+                // churn without starving the LeaseSet.  Under stress (build
+                // success < ATTACK_THRESHOLD) the buffer tightens to 1 so
+                // replacement builds start sooner.
+                int maxUsable = Math.max(target + getReplacementTunnelBuffer(getBuildSuccessRate()), 2);
                 if (!addOrReplaceTunnel(info, gatewayId, now, usable, maxUsable, target)) {
                     return;
                 }
