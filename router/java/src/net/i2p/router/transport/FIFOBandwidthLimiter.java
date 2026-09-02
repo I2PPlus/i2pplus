@@ -290,6 +290,10 @@ public class FIFOBandwidthLimiter {
      * allocation. If the candidate is the shared no-op request and the
      * shortcut still applies, it is returned as-is.
      *
+     * <p>The reuse check, reset, and re-queue are serialized on the pending
+     * inbound queue so the SimpleRequest is never doubled up by concurrent
+     * allocators or concurrent reuse of the same candidate.
+     *
      * @param candidate the request from a previous allocation for this
      *        consumer, or null for a new request
      * @param bytesIn the number of bytes requested
@@ -301,18 +305,45 @@ public class FIFOBandwidthLimiter {
         if (candidate != null) {
             if (candidate instanceof SimpleRequest) {
                 SimpleRequest sr = (SimpleRequest) candidate;
-                synchronized (sr) {
-                    if (!sr._aborted && sr.getPendingRequested() == 0) {
-                        sr.reset(bytesIn, 0);
-                        requestInbound(sr, bytesIn, purpose);
-                        return sr;
-                    }
+                if (resetIfReusable(sr, bytesIn, 0)) {
+                    requestInbound(sr, bytesIn, purpose);
+                    return sr;
                 }
             } else if (candidate == _noop && shortcutSatisfyInboundRequest(bytesIn)) {
                 return _noop;
             }
         }
         return requestInbound(bytesIn, purpose);
+    }
+
+    /**
+     * Reset a previously allocated SimpleRequest for reuse if it is complete
+     * (fully allocated) and not aborted. The check and the reset are performed
+     * together under the pending inbound queue lock, so the request cannot be
+     * observed by an allocator, reset twice, or re-queued by two threads.
+     *
+     * <p>This deliberately acquires the pending queue lock <i>before</i> the
+     * request lock, matching the ordering used by the satisfy/refill paths.
+     * Acquiring them in the opposite order (request lock then queue lock) can
+     * deadlock against a refill pass, so callers of this method must never hold
+     * a SimpleRequest lock while taking the inbound queue lock.
+     *
+     * @param sr the SimpleRequest to consider for reuse; never the shared no-op
+     * @param bytesIn the number of bytes for the reused request
+     * @param priority 0 for now
+     * @return true if the request was reset and should be re-queued
+     * @since 0.9.71+
+     */
+    private boolean resetIfReusable(SimpleRequest sr, int bytesIn, int priority) {
+        synchronized (_pendingInboundRequests) {
+            synchronized (sr) {
+                if (!sr._aborted && sr.getPendingRequested() == 0) {
+                    sr.reset(bytesIn, priority);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -365,18 +396,45 @@ public class FIFOBandwidthLimiter {
         if (candidate != null) {
             if (candidate instanceof SimpleRequest) {
                 SimpleRequest sr = (SimpleRequest) candidate;
-                synchronized (sr) {
-                    if (!sr._aborted && sr.getPendingRequested() == 0) {
-                        sr.reset(bytesOut, priority);
-                        requestOutbound(sr, bytesOut, purpose);
-                        return sr;
-                    }
+                if (resetIfReusableOutbound(sr, bytesOut, priority)) {
+                    requestOutbound(sr, bytesOut, purpose);
+                    return sr;
                 }
             } else if (candidate == _noop && shortcutSatisfyOutboundRequest(bytesOut)) {
                 return _noop;
             }
         }
         return requestOutbound(bytesOut, priority, purpose);
+    }
+
+    /**
+     * Reset a previously allocated SimpleRequest for reuse if it is complete
+     * (fully allocated) and not aborted. The check and the reset are performed
+     * together under the pending outbound queue lock, so the request cannot be
+     * observed by an allocator, reset twice, or re-queued by two threads.
+     *
+     * <p>This deliberately acquires the pending queue lock <i>before</i> the
+     * request lock, matching the ordering used by the satisfy/refill paths.
+     * Acquiring them in the opposite order (request lock then queue lock) can
+     * deadlock against a refill pass, so callers of this method must never hold
+     * a SimpleRequest lock while taking the outbound queue lock.
+     *
+     * @param sr the SimpleRequest to consider for reuse; never the shared no-op
+     * @param bytesOut the number of bytes for the reused request
+     * @param priority 0 for now
+     * @return true if the request was reset and should be re-queued
+     * @since 0.9.71+
+     */
+    private boolean resetIfReusableOutbound(SimpleRequest sr, int bytesOut, int priority) {
+        synchronized (_pendingOutboundRequests) {
+            synchronized (sr) {
+                if (!sr._aborted && sr.getPendingRequested() == 0) {
+                    sr.reset(bytesOut, priority);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void requestOutbound(SimpleRequest req, int bytesOut, String purpose) {
