@@ -155,7 +155,7 @@ class FloodfillPeerSelector extends PeerSelector {
      *  List is not sorted and not shuffled.
      *  Returns new list, may be modified.
      *
-     *  @param kbuckets now unused
+     *  @param _kbuckets now unused
      *  @param toIgnore can be null
      *  @return all floodfills not banlisted forever and not flagged unreachable.
      */

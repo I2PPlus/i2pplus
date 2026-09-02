@@ -1857,7 +1857,7 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Immutable result of {@link #countExpiryBuckets(List, long, boolean)}.
+     *  Immutable result of {@link BuildExecutor#countExpiryBuckets(List, long)}.
      */
     static class ExpiryBuckets {
         public final int fallbackCount;

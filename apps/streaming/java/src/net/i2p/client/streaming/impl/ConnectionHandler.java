@@ -72,7 +72,7 @@ class ConnectionHandler {
     /**
      * Compute the effective SYN accept-queue timeout for an inbound SYN.
      *
-     * <p>A queued SYN is reset via {@link TimeoutSyn} after this window, so it
+     * <p>A queued SYN is reset via {@code TimeoutSyn} after this window, so it
      * bounds how long a client waits for a connection the server never got
      * around to accepting.  While the tunnel system is stressed (build success
      * below {@link #SYN_STRESS_THRESHOLD}) the window is clamped to

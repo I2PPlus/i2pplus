@@ -81,7 +81,7 @@ public class OutboundCache {
     /**
      * Per-destination cooldown timestamps (epoch ms) after a failed LeaseSet lookup.
      * Gates rapid-fire sends to destinations whose LS is missing or negatively cached.
-     * Entries are cleaned by {@link OCMOSJCacheCleaner}.
+     * Entries are cleaned by {@code OCMOSJCacheCleaner}.
      *
      * @since 0.9.72+
      */

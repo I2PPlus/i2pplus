@@ -24,7 +24,7 @@ import net.i2p.util.Log;
  * destination across multiple protocol subsessions (STREAM, DATAGRAM, RAW).
  *
  * Extends {@link SAMv3StreamSession} to inherit the I2PSession setup;
- * the streaming acceptor thread ({@link StreamAcceptor}) accepts I2P
+ * the streaming acceptor thread ({@code StreamAcceptor}) accepts I2P
  * connections and dispatches them to the correct subsession by protocol
  * and port, via {@link SAMv3StreamSession#queueSocket(I2PSocket)}.
  *

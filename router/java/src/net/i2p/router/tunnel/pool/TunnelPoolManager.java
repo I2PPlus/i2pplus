@@ -1448,7 +1448,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public int getInboundBuildQueueSize() { return _handler.getInboundBuildQueueSize(); }
 
     /**
-     * Required by {@link Service}; status rendering moved to routerconsole.
+     * Required by {@link net.i2p.router.Service}; status rendering moved to routerconsole.
      */
     public void renderStatusHTML(Writer out) throws IOException {
         // Deprecated - moved to routerconsole
