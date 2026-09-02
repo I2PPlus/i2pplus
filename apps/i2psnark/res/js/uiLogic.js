@@ -92,7 +92,7 @@ export function applyIfChanged(element, html) {
  * renderer's scale.
  *
  * @param {?string} csv - raw sample list from a refresh payload
- * @returns {{t: number, rx: number, tx: number}[]} samples oldest-first; empty on null input
+ * @returns {Array.<{t: number, rx: number, tx: number}>} samples oldest-first; empty on null input
  * @since 0.9.71+
  */
 export function parseGraphSamples(csv) {
@@ -121,9 +121,9 @@ export function parseGraphSamples(csv) {
  * control points) is clamped into it, so spline overshoot can never escape the
  * drawing area or cross a baseline.
  *
- * @param {{x: number, y: number}[]} points - polyline vertices, at least two
+ * @param {Array.<{x: number, y: number}>} points - polyline vertices, at least two
  * @param {number} [tension=0.5] - Catmull-Rom tension (0.5 matches miniGraph)
- * @param {{minY?: number, maxY?: number}} [bounds] - optional Y clamp
+ * @param {Object} [bounds] - optional Y clamp
  * @returns {string} SVG path segment commands, empty string when fewer than two points
  * @since 0.9.71+
  */
