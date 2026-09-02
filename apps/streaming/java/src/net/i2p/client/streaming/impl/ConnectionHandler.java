@@ -29,7 +29,7 @@ class ConnectionHandler {
     private final LinkedBlockingDeque<Packet> _synQueue;
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
-    private int _acceptTimeout;
+    private volatile int _acceptTimeout;
     private boolean _restartPending;
 
     /**
@@ -39,7 +39,7 @@ class ConnectionHandler {
      * absorb brief stalls without refusing inbound connections. Tunable via
      * i2p.streaming.acceptTimeout (default: 30000 / 30 seconds).
      *
-     * @since 0.9.70+
+     * @since 0.9.71+
      */
     synchronized void setAcceptTimeout(int ms) { _acceptTimeout = ms; }
 
@@ -47,15 +47,97 @@ class ConnectionHandler {
         return _context.getProperty("i2p.streaming.acceptTimeout", 30*1000);
     }
 
+    /** Build success fraction below which the tunnel system is considered stressed. */
+    static final double SYN_STRESS_THRESHOLD = 0.40;
+    /** Maximum SYN accept-queue timeout (ms) while the tunnel system is stressed. */
+    static final int SYN_STRESS_MAX_TIMEOUT = 10 * 1000;
+    /** Minimum interval between re-sampling tunnel build success (ms). */
+    private static final long SYN_STRESS_SAMPLE_INTERVAL = 10 * 1000;
+
     /**
      * This is both SYNs and subsequent packets, and with an initial window size of 12,
      * this is a backlog of 5 to 64 Syns, which seems like plenty for now
      * Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
+     * Read dynamically from config or Tuner — no restart required.
      * @return the max queue size
      */
     private int getMaxQueueSize() {
+        // Tuner override takes precedence over config
+        int tuner = I2PSocketManagerFull.getMaxSYNQueueSize();
+        if (tuner > 0) return tuner;
         int def = SystemVersion.isSlow() ? 128 : 256;
         return _context.getProperty("i2p.streaming.maxQueueSize", def);
+    }
+
+    /**
+     * Compute the effective SYN accept-queue timeout for an inbound SYN.
+     *
+     * <p>A queued SYN is reset via {@link TimeoutSyn} after this window, so it
+     * bounds how long a client waits for a connection the server never got
+     * around to accepting.  While the tunnel system is stressed (build success
+     * below {@link #SYN_STRESS_THRESHOLD}) the window is clamped to
+     * {@link #SYN_STRESS_MAX_TIMEOUT}: a dead stream fails fast and the client
+     * can retry through its own connect backoff instead of burning the full
+     * configured timeout.  The clamp lifts itself once tunnel health recovers.
+     *
+     * <p>A NaN build success (no data yet, e.g. stand-alone streaming or early
+     * startup) never triggers the clamp — missing stats are not evidence of
+     * stress — and a non-positive configured timeout is returned unchanged.
+     * A fractional 0.0 is treated as genuine failure, not "no data".
+     *
+     * @param configuredTimeoutMs the configured accept timeout (i2p.streaming.acceptTimeout)
+     * @param buildSuccess tunnel build success as a fraction [0.0, 1.0]; NaN when unavailable
+     * @return the timeout (ms) to arm the TimeoutSyn with
+     */
+    static int getAdaptiveSynTimeout(int configuredTimeoutMs, double buildSuccess) {
+        if (configuredTimeoutMs <= 0 || Double.isNaN(buildSuccess)) {
+            return configuredTimeoutMs;
+        }
+        if (buildSuccess < SYN_STRESS_THRESHOLD) {
+            return Math.min(configuredTimeoutMs, SYN_STRESS_MAX_TIMEOUT);
+        }
+        return configuredTimeoutMs;
+    }
+
+    /** Router-clock time of the last tunnel-stress sample. */
+    private volatile long _lastStressSampleAt;
+    /** Cached tunnel build success fraction; NaN when unavailable. */
+    private volatile double _tunnelBuildSuccess;
+
+    /**
+     * Tunnel build success fraction, sampled at most once per
+     * {@link #SYN_STRESS_SAMPLE_INTERVAL} to avoid per-packet StatManager
+     * lookups (each {@code SystemVersion} probe is six RateStat reads).
+     *
+     * <p>Outside a router context (stand-alone streaming) there are no tunnel
+     * statistics at all — report NaN so the configured timeout is kept.
+     * {@code SystemVersion} reports 0% both for "no tunnel events yet" and for
+     * real failure, so 0 is treated as unknown (NaN) rather than stress.
+     *
+     * @return the build success fraction [0.0, 1.0], or NaN when unavailable
+     */
+    private double getTunnelBuildSuccess() {
+        long now = _context.clock().now();
+        if (now - _lastStressSampleAt >= SYN_STRESS_SAMPLE_INTERVAL) {
+            double bs = Double.NaN;
+            if (_context.isRouterContext()) {
+                int pct = SystemVersion.getTunnelBuildSuccess();
+                if (pct > 0) {bs = pct / 100.0;}
+            }
+            _tunnelBuildSuccess = bs;
+            _lastStressSampleAt = now;
+        }
+        return _tunnelBuildSuccess;
+    }
+
+    /**
+     * The effective SYN accept-queue timeout: the configured timeout, clamped
+     * to {@link #SYN_STRESS_MAX_TIMEOUT} while the tunnel system is stressed.
+     *
+     * @return timeout in ms to arm TimeoutSyn with
+     */
+    private int getEffectiveAcceptTimeout() {
+        return getAdaptiveSynTimeout(_acceptTimeout, getTunnelBuildSuccess());
     }
 
     /** Creates a new instance of ConnectionHandler */
@@ -64,7 +146,9 @@ class ConnectionHandler {
         _log = context.logManager().getLog(ConnectionHandler.class);
         _manager = mgr;
         _timer = timer;
-        _synQueue = new LinkedBlockingDeque<>(getMaxQueueSize());
+        // Hard backstop only; the effective cap is the configurable soft max
+        // (getMaxQueueSize) re-read on each SYN so Tuner wins apply live.
+        _synQueue = new LinkedBlockingDeque<>(16384);
         _acceptTimeout = getAcceptTimeout();
     }
 
@@ -135,12 +219,15 @@ class ConnectionHandler {
             if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream: " + packet);}
             return;
         }
+        int timeoutMs = getEffectiveAcceptTimeout();
         if (_log.shouldInfo()) {
-            _log.info("Received new SYN packet with " + (_acceptTimeout / 1000) + "s timeout: " + packet);
+            _log.info("Received new SYN packet with " + (timeoutMs / 1000) + "s timeout: " + packet);
         }
         // also check if expiration of the head is long past for overload detection with peek() ?
-        boolean success = _synQueue.offer(packet); // fail immediately if full
-        if (success) {_timer.addEvent(new TimeoutSyn(packet), _acceptTimeout);}
+        // Re-read the max queue size dynamically — Tuner override or config change
+        // applies without a restart.
+        boolean success = _synQueue.size() < getMaxQueueSize() && _synQueue.offer(packet);
+        if (success) {_timer.addEvent(new TimeoutSyn(packet), timeoutMs);}
         else {
             // Send RESET so the client can establish a new connection
             // immediately (via its own connect retry logic) rather than

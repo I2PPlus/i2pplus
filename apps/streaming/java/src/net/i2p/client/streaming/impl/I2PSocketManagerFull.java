@@ -924,4 +924,20 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @since 0.9.70+
      */
     public static void setMaxInboundBuffer(int val) { ConnectionOptions.setMaxInboundBufferStatic(val); }
+
+    private static volatile int _maxSYNQueueSize;
+
+    /**
+     * Max SYN queue size, dynamically adjustable by the Tuner.
+     * @return the current max SYN queue size
+     * @since 0.9.71+
+     */
+    public static int getMaxSYNQueueSize() { return _maxSYNQueueSize; }
+
+    /**
+     * Max SYN queue size, dynamically adjustable by the Tuner.
+     * @param val the new max SYN queue size
+     * @since 0.9.71+
+     */
+    public static void setMaxSYNQueueSize(int val) { _maxSYNQueueSize = val; }
 }
