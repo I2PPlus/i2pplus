@@ -118,6 +118,51 @@ public class TunnelPeerSelectorBuildSuccessTest {
         assertFalse(TunnelPeerSelector.allowFirewalledUnderAttack("UABC", 0.2));
     }
 
+    // ---------- shouldPreQual ----------
+
+    @Test
+    public void testShouldPreQual_ExploratoryAlwaysSkips() {
+        // exploratory never pre-quals, regardless of success, startup, or NaN
+        assertFalse(TunnelPeerSelector.shouldPreQual(true, false, 0.85));
+        assertFalse(TunnelPeerSelector.shouldPreQual(true, false, 0.2));
+        assertFalse(TunnelPeerSelector.shouldPreQual(true, true, 0.85));
+        assertFalse(TunnelPeerSelector.shouldPreQual(true, false, Double.NaN));
+    }
+
+    @Test
+    public void testShouldPreQual_StartupSkips() {
+        assertFalse(TunnelPeerSelector.shouldPreQual(false, true, 0.85));
+        assertFalse(TunnelPeerSelector.shouldPreQual(false, true, 0.2));
+    }
+
+    @Test
+    public void testShouldPreQual_HealthyPreQuals() {
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, 0.85));
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, 0.5));
+    }
+
+    @Test
+    public void testShouldPreQual_StressSkips() {
+        // below ATTACK_THRESHOLD (<40% build success) pre-qual is skipped
+        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, ATTACK - 0.01));
+        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, 0.2));
+        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, 0.0));
+    }
+
+    @Test
+    public void testShouldPreQual_ThresholdBoundary() {
+        // AT threshold: pre-qual stays active at and above, skips strictly below
+        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, ATTACK - 0.001));
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, ATTACK));
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, ATTACK + 0.001));
+    }
+
+    @Test
+    public void testShouldPreQual_NaNIsConservative() {
+        // missing data is not an attack: keep pre-qual active
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, Double.NaN));
+    }
+
     // ---------- context smoke tests ----------
 
     private static RouterContext getContext() {

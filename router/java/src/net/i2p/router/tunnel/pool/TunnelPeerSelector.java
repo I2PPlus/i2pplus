@@ -822,11 +822,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // Pre-qualification: reject peers with zero connectivity signal.
         // Peers that have never been tested, heard from, or connected to
         // will waste tunnel builds and test cycles.  This is always active
-        // for client pools (skipped for exploratory and during startup).
-        // Use a 30-minute activity window for heard-from/sent-to checks
-        // (wider than the old 10-minute window) to avoid starving peer
-        // selection when the network is sparse or under load.
-        if (!isExploratory && !isInStartupGracePeriod(ctx)) {
+        // for client pools (skipped for exploratory, during startup, and
+        // while under stress — see shouldPreQual).  Use a 30-minute activity
+        // window for heard-from/sent-to checks (wider than the old 10-minute
+        // window) to avoid starving peer selection when the network is
+        // sparse or under load.
+        if (shouldPreQual(isExploratory, isInStartupGracePeriod(ctx), buildSuccess)) {
             boolean established = ctx.commSystem().isEstablished(peerHash);
             // Connected peers always pass; others need profile evidence of
             // connectivity within the activity window (see hasConnectivitySignal).
@@ -838,6 +839,28 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         return null;
+    }
+
+    /**
+     *  Whether strict client-pool pre-qualification should be applied to a
+     *  candidate peer.  Never for exploratory selections, never during the
+     *  startup grace period, and never while the network is under stress
+     *  (build success below {@link #ATTACK_THRESHOLD}) — a pool collapse is
+     *  made worse by rejecting candidates that merely lack recent activity,
+     *  and the exploratory pools already select without pre-qual.  A NaN
+     *  success ratio is treated as "missing data is not an attack", so
+     *  pre-qualification stays active.  Pure decision — no context access,
+     *  safe for unit tests.
+     *
+     *  @param isExploratory true for exploratory selections
+     *  @param inStartupGrace true while the router is in its startup grace period
+     *  @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     *  @return true if strict pre-qualification should run
+     *  @since 0.9.71+
+     */
+    static boolean shouldPreQual(boolean isExploratory, boolean inStartupGrace, double buildSuccess) {
+        return !isExploratory && !inStartupGrace &&
+               (Double.isNaN(buildSuccess) || buildSuccess >= ATTACK_THRESHOLD);
     }
 
     /**
