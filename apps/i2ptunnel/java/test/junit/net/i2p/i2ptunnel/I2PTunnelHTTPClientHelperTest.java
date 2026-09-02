@@ -114,4 +114,37 @@ public class I2PTunnelHTTPClientHelperTest {
         URI result = I2PTunnelHTTPClient.fixupURI("http://example.com");
         assertEquals("http://example.com", result.toASCIIString());
     }
+
+    // ---------- getConnectRetryDelayMs ----------
+
+    @Test
+    public void testConnectRetryDelay_NonPositiveAttemptIsImmediate() {
+        assertEquals(0, I2PTunnelHTTPClient.getConnectRetryDelayMs(0));
+        assertEquals(0, I2PTunnelHTTPClient.getConnectRetryDelayMs(-1));
+    }
+
+    @Test
+    public void testConnectRetryDelay_ExponentialSequence() {
+        // 1s -> 2s -> 4s from the base delay
+        assertEquals(1000, I2PTunnelHTTPClient.getConnectRetryDelayMs(1));
+        assertEquals(2000, I2PTunnelHTTPClient.getConnectRetryDelayMs(2));
+        assertEquals(4000, I2PTunnelHTTPClient.getConnectRetryDelayMs(3));
+    }
+
+    @Test
+    public void testConnectRetryDelay_CappedAt8s() {
+        // capped at 8s so later retries never stall the request indefinitely
+        assertEquals(8000, I2PTunnelHTTPClient.getConnectRetryDelayMs(4));
+        assertEquals(8000, I2PTunnelHTTPClient.getConnectRetryDelayMs(5));
+        assertEquals(8000, I2PTunnelHTTPClient.getConnectRetryDelayMs(6));
+        assertEquals(8000, I2PTunnelHTTPClient.getConnectRetryDelayMs(100));
+    }
+
+    @Test
+    public void testConnectRetryDelay_TracksRetryConstant() {
+        // sanity: the base delay constant drives the sequence
+        long base = I2PTunnelHTTPClient.I2P_CONNECT_RETRY_BASE_DELAY;
+        assertEquals(base, I2PTunnelHTTPClient.getConnectRetryDelayMs(1));
+        assertEquals(base * 8, I2PTunnelHTTPClient.getConnectRetryDelayMs(100));
+    }
 }

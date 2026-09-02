@@ -96,7 +96,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
     private static final boolean DEFAULT_KEEPALIVE_BROWSER = true;
     private static final int I2P_CONNECT_MAX_RETRIES = 6;
-    private static final int I2P_CONNECT_RETRY_DELAY = 2000;
+    /** Backoff floor and per-attempt multiply base for I2P connect retries. */
+    static final long I2P_CONNECT_RETRY_BASE_DELAY = 1000;
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
 
     /**
@@ -1456,7 +1457,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             _log.info(getPrefix(requestId) + "Connection failed (" + ioe.getClass().getSimpleName() +
                                       "), retrying: " + ioe.getMessage());
                         }
-                        try {Thread.sleep(I2P_CONNECT_RETRY_DELAY);} catch (InterruptedException ie) {
+                        try {Thread.sleep(getConnectRetryDelayMs(connectAttempts));} catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                             throw ioe;
                         }
@@ -1571,6 +1572,25 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         buf.append("\r\nConnection: close\r\n\r\n");
         try {out.write(buf.toString().getBytes(StandardCharsets.UTF_8));}
         catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
+     *  Exponential backoff delay (in ms) before the given connect retry.
+     *  The first retry waits {@link #I2P_CONNECT_RETRY_BASE_DELAY} (1s), doubling
+     *  per attempt up to a hard cap of 8s.  During a tunnel-pool stall the capped
+     *  backoff gives the pool time to recover instead of hammering it every 2s,
+     *  and it still fails fast once {@link #poolIsDefinitivelyDown()} trips.
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param attempt the 1-based connect failure count (how many failures so far)
+     *  @return the delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1)
+     *          bounded to 8000
+     *  @since 0.9.71+
+     */
+    static long getConnectRetryDelayMs(int attempt) {
+        if (attempt <= 0) {return 0;}
+        return Math.min(8 * I2P_CONNECT_RETRY_BASE_DELAY,
+                        I2P_CONNECT_RETRY_BASE_DELAY << Math.min(attempt - 1, 3));
     }
 
     /**
