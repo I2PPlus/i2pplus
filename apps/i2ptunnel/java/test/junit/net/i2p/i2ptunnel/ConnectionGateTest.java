@@ -15,6 +15,38 @@ import org.junit.Test;
 public class ConnectionGateTest {
 
     /**
+     * Null/empty config falls back to the built-in default cap.
+     */
+    @Test
+    public void testResolveDefaultWhenUnset() {
+        assertEquals(I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS,
+                     I2PTunnelClientBase.resolveMaxConnections(null));
+    }
+
+    /**
+     * A valid positive integer config is honored verbatim.
+     */
+    @Test
+    public void testResolveHonorsPositiveConfig() {
+        assertEquals(128, I2PTunnelClientBase.resolveMaxConnections("128"));
+        assertEquals(1, I2PTunnelClientBase.resolveMaxConnections("1"));
+    }
+
+    /**
+     * Zero/negative/garbage config is rejected so a typo or an explicit "disable"
+     * cannot turn the flood-shedding cap off (an unbounded cap is the bug we are fixing).
+     */
+    @Test
+    public void testResolveRejectsZeroNegativeAndGarbage() {
+        assertEquals(I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS,
+                     I2PTunnelClientBase.resolveMaxConnections("0"));
+        assertEquals(I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS,
+                     I2PTunnelClientBase.resolveMaxConnections("-5"));
+        assertEquals(I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS,
+                     I2PTunnelClientBase.resolveMaxConnections("abc"));
+    }
+
+    /**
      * Cap of 0 (unlimited) always admits and never touches the counter.
      */
     @Test

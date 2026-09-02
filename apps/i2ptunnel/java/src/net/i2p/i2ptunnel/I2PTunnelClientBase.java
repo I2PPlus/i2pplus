@@ -20,6 +20,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -100,6 +101,21 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected volatile ThreadPoolExecutor _executor;
     /** true if we created _executor ourselves (TCG was null) and must shut it down on close */
     private volatile boolean _ownExecutor;
+    /** Property name: max concurrently active client connections handled by one client tunnel */
+    public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.maxConnections";
+    /** Default cap on concurrently handled client connections.
+     *  <p>
+     *  The accept/connect path runs on an unbounded {@link BlockingRunner} pool, so a flood of
+     *  inbound peer connections (e.g. tracker announces/scrapes) can spawn unlimited parallel
+     *  connect attempts - each with its own retry loop - starving legitimate browsing streams.
+     *  A hard concurrent-process cap sheds excess inbound load instead of amplifying it.
+     *  @since 0.9.71+
+     */
+    public static final int DEFAULT_MAX_CONNECTIONS = 96;
+    /** Resolved concurrent connection cap for this tunnel. Guards #manageConnection. */
+    private volatile int _maxConnections;
+    /** Live reservation counter shared by the connections of this tunnel. */
+    private final AtomicInteger _activeConnections = new AtomicInteger();
     /** this is ONLY for shared clients */
     private static I2PSocketManager socketManager;
 
@@ -140,6 +156,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         _ownDest = true; // == ! shared client
         _context = tunnel.getContext();
         _log = _context.logManager().getLog(getClass());
+        // chained tunnel: no client options yet, use the default cap (shed inbound flood)
+        _maxConnections = DEFAULT_MAX_CONNECTIONS;
     }
 
     /**
@@ -215,6 +233,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         if (tunnel.getClientOptions().getProperty("i2p.streaming.answerPings") == null) {
             tunnel.getClientOptions().setProperty("i2p.streaming.answerPings", "false");
         }
+        String capStr = tunnel.getClientOptions().getProperty(PROP_MAX_CONNECTIONS);
+        _maxConnections = resolveMaxConnections(capStr);
     }
 
     /**
@@ -862,7 +882,27 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * Manage the connection just opened on the specified socket
+     *  Resolve the max-concurrent-connections cap from the tunnel's configured value.
+     *  <p>
+     *  Pure decision - no context access, safe for unit tests. Returns the configured
+     *  value when it is a positive integer, otherwise the built-in default. A configured
+     *  value of 0 or negative is rejected so a typo cannot disable the flood-shedding cap.
+     *
+     *  @param configured the raw integer string from {@link #PROP_MAX_CONNECTIONS}, may be null
+     *  @return the connection cap to use: the parsed value if positive, else {@link #DEFAULT_MAX_CONNECTIONS}
+     *  @since 0.9.71+
+     */
+    static int resolveMaxConnections(String configured) {
+        if (configured == null) {return DEFAULT_MAX_CONNECTIONS;}
+        try {
+            int v = Integer.parseInt(configured.trim());
+            if (v > 0) {return v;}
+        } catch (NumberFormatException nfe) { /* fall through to default */ }
+        return DEFAULT_MAX_CONNECTIONS;
+    }
+
+    /**
+     *  Manage the connection just opened on the specified socket
      *
      * @param s Socket to take care of
      */
@@ -875,9 +915,23 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             catch (IOException ioe) { /* ignored */ }
             return;
         }
+        // Hard cap on concurrently handled connections. During an inbound flood (e.g.
+        // tracker announces/scrapes) every accepted socket would otherwise spawn
+        // unbounded parallel connect+retry work, starving legitimate streams. When the
+        // cap is reached we shed the excess connection immediately instead of amplifying.
+        if (!I2PTunnelServer.acquireConnectionSlot(_maxConnections, _activeConnections)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Connection limit reached; shedding new inbound connection");
+            }
+            try {s.close();}
+            catch (IOException ioe) { /* ignored */ }
+            return;
+        }
         try {tpe.execute(new BlockingRunner(s));}
         catch (RejectedExecutionException ree) {
-            // should never happen, we have an unbounded pool and never stop the executor
+            // should never happen, we have an unbounded pool and never stop the executor, but
+            // if it does, return the slot and close the socket rather than leaking the reservation.
+            I2PTunnelServer.releaseConnectionSlot(_activeConnections);
             try {s.close();}
             catch (IOException ioe) { /* ignored */ }
         }
@@ -900,6 +954,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 _log.error("Uncaught error in I2PTunnel client", t);
                 try {_s.close();}
                 catch (IOException ioe) { /* ignored */ }
+            } finally {
+                // Return the concurrency slot so the next queued inbound connection can proceed.
+                I2PTunnelServer.releaseConnectionSlot(_activeConnections);
             }
         }
     }
