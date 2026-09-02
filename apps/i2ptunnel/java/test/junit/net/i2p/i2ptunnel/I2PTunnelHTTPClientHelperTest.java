@@ -147,4 +147,38 @@ public class I2PTunnelHTTPClientHelperTest {
         assertEquals(base, I2PTunnelHTTPClient.getConnectRetryDelayMs(1));
         assertEquals(base * 8, I2PTunnelHTTPClient.getConnectRetryDelayMs(100));
     }
+
+    // ---------- parseEmptyRetries ----------
+
+    @Test
+    public void testParseEmptyRetries_NullDefaultsZero() {
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries(null));
+    }
+
+    @Test
+    public void testParseEmptyRetries_EmptyDefaultsZero() {
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries(""));
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("  "));
+    }
+
+    @Test
+    public void testParseEmptyRetries_Normal() {
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("0"));
+        assertEquals(2, I2PTunnelHTTPClient.parseEmptyRetries("2"));
+        assertEquals(10, I2PTunnelHTTPClient.parseEmptyRetries("10"));
+        assertEquals(2, I2PTunnelHTTPClient.parseEmptyRetries("  2  "));
+    }
+
+    @Test
+    public void testParseEmptyRetries_NegativeClampedToZero() {
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("-1"));
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("-5"));
+    }
+
+    @Test
+    public void testParseEmptyRetries_GarbageDefaultsZero() {
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("abc"));
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("2.5"));
+        assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("--"));
+    }
 }

@@ -91,6 +91,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String OPT_KEEPALIVE_BROWSER = "keepalive.browser";
     /** Config key to enable I2P-side keepalive. */
     public static final String OPT_KEEPALIVE_I2P = "keepalive.i2p";
+    /** Config key: max reconnects on a zero-byte (empty) upstream response for GET/HEAD. */
+    public static final String OPT_EMPTY_RETRIES = "i2p.emptyResponseRetries";
 
     /** how long to wait for another request on the same socket */
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
@@ -99,6 +101,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /** Backoff floor and per-attempt multiply base for I2P connect retries. */
     static final long I2P_CONNECT_RETRY_BASE_DELAY = 1000;
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
+    /** Default reconnects on an empty upstream response before giving up. */
+    private static final int DEFAULT_EMPTY_RETRIES = 9;
 
     /**
      *  These are backups if the xxx.ht error page is missing.
@@ -1496,6 +1500,41 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 boolean keepaliveI2P = keepalive && getBooleanOption(OPT_KEEPALIVE_I2P, DEFAULT_KEEPALIVE_I2P);
                 hrunner = new I2PTunnelHTTPClientRunner(s, i2ps, sockLock, data, mySockets, onTimeout,
                                                         keepaliveI2P, keepalive, isHead);
+                // Transparent empty-response retry for request-body-free (GET/HEAD)
+                // requests: when the first upstream attempt yields zero bytes (an empty
+                // close the browser would report as NS_ERROR_NET_EMPTY_RESPONSE), reconnect
+                // to the same destination on a fresh I2P socket and re-send the request,
+                // keeping the browser socket open. Wired only for GET/HEAD because we hold
+                // the full request (line + headers) and resending is idempotent; the runner
+                // further guards that this only applies when no request-body forwarder ran.
+                final int emptyBudget = parseEmptyRetries(getTunnel().getClientOptions().getProperty(OPT_EMPTY_RETRIES, "" + DEFAULT_EMPTY_RETRIES));
+                if (("GET".equals(method) || "HEAD".equals(method)) && emptyBudget > 0) {
+                    final Destination reconnectDest = clientDest;
+                    final int reconnectPort = remotePort;
+                    hrunner.setReconnectCallback((cause) -> {
+                        for (int attempt = 1; attempt <= emptyBudget; attempt++) {
+                            try {
+                                I2PSocketOptions opts = getDefaultOptions();
+                                if (reconnectPort > 0) {opts.setPort(reconnectPort);}
+                                I2PSocket fresh = createI2PSocket(reconnectDest, opts);
+                                if (_log.shouldInfo()) {
+                                    _log.info(getPrefix(requestId) + "Empty-response reconnect attempt " + attempt + '/' + emptyBudget +
+                                              " to " + reconnectDest.calculateHash().toBase32());
+                                }
+                                return fresh;
+                            } catch (IOException ioe) {
+                                if (_log.shouldInfo()) {
+                                    _log.info(getPrefix(requestId) + "Empty-response reconnect failed (attempt " + attempt +
+                                              '/' + emptyBudget + "): " + ioe.getMessage());
+                                }
+                                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
+                            } catch (I2PException ie) {
+                                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
+                            }
+                        }
+                        return null;
+                    });
+                }
                 t = hrunner;
             }
             t.setExecutor(_executor);
@@ -1572,6 +1611,44 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         buf.append("\r\nConnection: close\r\n\r\n");
         try {out.write(buf.toString().getBytes(StandardCharsets.UTF_8));}
         catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
+     *  Sleep for the given delay, restoring the interrupt flag if interrupted.
+     *
+     *  @param delayMs the delay in ms
+     *  @return false if the current thread was interrupted during the sleep
+     *  @since 0.9.62
+     */
+    static boolean sleepQuietly(long delayMs) {
+        if (delayMs <= 0) {return true;}
+        try {
+            Thread.sleep(delayMs);
+            return true;
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
+    }
+
+    /**
+     *  Parse the empty-response retry count from a client option value.
+     *
+     *  <p>Clamps to {@code >= 0}; malformed or negative input falls back to 0.
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param value the raw property value, may be null
+     *  @return the retry count: 0 (never retry) on null, empty, or unparseable input
+     *  @since 0.9.62
+     */
+    static int parseEmptyRetries(String value) {
+        if (value == null) {return 0;}
+        try {
+            int n = Integer.parseInt(value.trim());
+            return n >= 0 ? n : 0;
+        } catch (NumberFormatException nfe) {
+            return 0;
+        }
     }
 
     /**

@@ -72,8 +72,11 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
     /** Plain TCP socket (local or remote endpoint). */
     private final Socket s;
-    /** I2P socket (the tunnel connection). */
-    private final I2PSocket i2ps;
+    /** I2P socket (the tunnel connection). Non-final so an "empty response"
+     *  reconnect may replace it with a fresh connection while the local browser
+     *  socket stays open. Only ever reassigned within {@link #run()} when a
+     *  {@link ReconnectCallback} is installed and yields a new connection. */
+    private I2PSocket i2ps;
     /** Synchronization lock for socket access. */
     private final Object slock;
     private final Object finishLock = new Object();
@@ -89,6 +92,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private final Runnable onTimeout;
     private final FailCallback _onFail;
     private SuccessCallback _onSuccess;
+    /** Optional reconnect callback for the empty-response retry; null = never retry. */
+    private ReconnectCallback _reconnectCallback;
     private volatile long totalSent;
     private volatile long totalReceived;
     /** Prevent the no-data failure callback from firing more than once across
@@ -121,6 +126,26 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     public interface SuccessCallback {
         /** Called on successful completion */
         public void onSuccess();
+    }
+
+    /**
+     * Callback for reconnect-a-via-a-second route when the first attempt
+     * completes with zero upstream bytes.
+     *
+     * <p>Used by the HTTP client proxy to transparently retry an idempotent
+     * GET/HEAD against a fresh I2P connection without tearing down the browser
+     * socket (a silent zero-byte close becomes {@code NS_ERROR_NET_EMPTY_RESPONSE}
+     * for the browser). The runner keeps the local socket open across attempts;
+     * the callback supplies each new connection (or null to stop).
+     *
+     * @since 0.9.62
+     */
+    public interface ReconnectCallback {
+        /**
+         * @param cause the cause of the empty completion, or null
+         * @return a freshly connected I2P socket to retry on, or null to give up
+         */
+        public I2PSocket reconnect(Exception cause);
     }
 
     /**
@@ -317,6 +342,24 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
+     *  Set the reconnect callback used for the empty-response retry.
+     *
+     *  <p>When set, and this is a no-request-body transfer (GET/HEAD, i.e. the
+     *  {@code toI2P} forwarder was never started) that completes with zero
+     *  upstream bytes, {@link #run()} will call the callback to obtain a fresh
+     *  I2P socket and re-drive the request on it, keeping the local browser
+     *  socket open. Only the {@link onNoDataFailure} path triggers a reconnect;
+     *  a genuine non-empty failure, a reset, or a {@code totalReceived > 0}
+     *  completion never does.
+     *
+     *  @param rc the callback, or null to disable reconnects
+     *  @since 0.9.62
+     */
+    public void setReconnectCallback(ReconnectCallback rc) {
+        _reconnectCallback = rc;
+    }
+
+    /**
      *  Set the executor for submitting forwarder tasks.
      *  When null (default), forwarders use a fallback thread.
      */
@@ -457,8 +500,51 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         return totalReceived <= 0 && !handled;
     }
 
+    private static final byte[] GET = { 'G', 'E', 'T', ' ' };
+    private static final byte[] HEAD = { 'H', 'E', 'A', 'D', ' ' };
     private static final byte[] POST = { 'P', 'O', 'S', 'T', ' ' };
     private static final byte[] PUT = { 'P', 'U', 'T', ' ' };
+
+    /**
+     *  Whether the buffered initial request is safe to re-send on a fresh connection
+     *  in the "empty response" retry.
+     *
+     *  <p>A request is retryable iff it is idempotent and carries no streamed body, so
+     *  re-sending it cannot duplicate a submission or split a byte stream mid-body. Only
+     *  GET and HEAD qualify: they have no request body by definition and repeating them
+     *  is safe. The leading ASCII method token is compared case-insensitively because
+     *  {@code initialI2PData} holds the raw request bytes as the browser sent them. This
+     *  mirrors the {@link #POST}/{@link #PUT} guard used when deciding whether to flush
+     *  the initial packet before the body arrives, and is deliberately independent of the
+     *  reconnect callback so a future caller cannot enable re-sends for a POST/PUT.
+     *
+     *  @param initialData the buffered request (request-line + headers), may be null
+     *  @return true if the request starts with {@code GET} or {@code HEAD}
+     *  @since 0.9.62
+     */
+    static boolean isRetryableRequest(byte[] initialData) {
+        return startsWithIgnoreCase(initialData, GET) || startsWithIgnoreCase(initialData, HEAD);
+    }
+
+    /**
+     *  Case-insensitive ASCII prefix match of {@code prefix} against {@code data}.
+     *
+     *  @param data the bytes to test, may be null
+     *  @param prefix the byte sequence to match at the start of {@code data}
+     *  @return true if {@code data} is non-null, at least as long as {@code prefix}, and
+     *          equals {@code prefix} ignoring ASCII case
+     *  @since 0.9.62
+     */
+    private static boolean startsWithIgnoreCase(byte[] data, byte[] prefix) {
+        if (data == null || prefix == null || data.length < prefix.length) {return false;}
+        for (int i = 0; i < prefix.length; i++) {
+            byte b = data[i];
+            // Upper-case an ASCII lower-case letter in place comparison (byte is unsigned).
+            if (b >= 'a' && b <= 'z') {b -= 32;}
+            if (b != prefix[i]) {return false;}
+        }
+        return true;
+    }
 
     /**
      * run.
@@ -565,9 +651,64 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
 
             // This task is useful for the httpclient
             if ((onTimeout != null || _onFail != null) && totalReceived <= 0) {
-                Exception e = fromI2P.getFailure();
-                if (e == null && toI2P != null) {e = toI2P.getFailure();}
-                onNoDataFailure(e);
+                // "Empty response" retry: if a reconnect callback is installed and the
+                // buffered request is idempotent (GET/HEAD only, verified by
+                // isRetryableRequest() so a misconfigured callback can never re-send a
+                // POST/PUT body), a transfer that completed with zero upstream bytes is
+                // retried against a fresh I2P connection on the SAME browser socket
+                // instead of surfacing an NS_ERROR_NET_EMPTY_RESPONSE close. This applies
+                // to both keepalive-browser GET/HEAD (no toI2P forwarder) and
+                // non-keepalive GET/HEAD (a toI2P forwarder ran but carried no body). We
+                // loop as long as the callback offers a new connection, bailing to the
+                // normal failure path once it declines (budget exhausted) or a re-drive
+                // errors.
+                while (totalReceived <= 0 && _reconnectCallback != null && isRetryableRequest(initialI2PData)) {
+                    Exception e = fromI2P.getFailure();
+                    if (e == null && toI2P != null) {e = toI2P.getFailure();}
+                    I2PSocket fresh = _reconnectCallback.reconnect(e);
+                    if (fresh == null) {break;}
+                    // The dead connection is done; retire it from the shared socket list
+                    // and swap in the fresh one the callback obtained.
+                    //
+                    // A non-keepalive GET/HEAD may have started a browser->I2P forwarder; it is
+                    // deliberately left untouched. For a body-less GET/HEAD that forwarder is
+                    // blocked on the browser-input read (the request was already consumed into
+                    // initialI2PData), so it is inert and will not write to the closing socket
+                    // or interfere with the re-send. Stopping it would be actively harmful:
+                    // its finally() closes the browser input stream when !_keepAliveSocket,
+                    // which would sever the very browser socket we are trying to keep open.
+                    if (sockList != null) {synchronized (slock) {sockList.remove(i2ps);}}
+                    try {i2ps.close();} catch (IOException ioe) {/* ignored */}
+                    i2ps = fresh;
+                    i2pin = i2ps.getInputStream();
+                    i2pout = i2ps.getOutputStream();
+                    if (initialI2PData != null) {
+                        i2pout.write(initialI2PData);
+                        // isRetryableRequest() guarantees no POST/PUT body, so a flush is safe.
+                        i2pout.flush();
+                    }
+                    if (_log.shouldInfo()) {
+                        _log.info("Empty upstream response, reconnected and re-sending on a fresh I2P socket");
+                    }
+                    // Re-drive the receive forwarder inline; totalReceived is updated by it.
+                    totalReceived = 0;
+                    finished = false;
+                    fromI2P = new StreamForwarder(i2pin, out, false, _onSuccess);
+                    fromI2P.run();
+                    synchronized (finishLock) {
+                        long endTime = System.currentTimeMillis() + 2*60*1000;
+                        while (!finished) {
+                            long remaining = endTime - System.currentTimeMillis();
+                            if (remaining <= 0) {finished = true; finishLock.notifyAll(); break;}
+                            try {finishLock.wait(Math.min(remaining, 5000));}
+                            catch (InterruptedException ie) {Thread.currentThread().interrupt(); finished = true; break;}
+                        }
+                    }
+                }
+                if (totalReceived <= 0) {
+                    Exception e = fromI2P.getFailure();
+                    onNoDataFailure(e);
+                }
             } else {
                 // Detect a reset on one side, and propagate to the other
                 Exception e1 = fromI2P.getFailure();
