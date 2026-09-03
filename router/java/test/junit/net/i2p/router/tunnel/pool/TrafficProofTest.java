@@ -152,4 +152,89 @@ public class TrafficProofTest {
         assertEquals(TunnelTestStatus.GOOD, cfg.getTestStatus());
         assertEquals(0, cfg.getConsecutiveFailures());
     }
+
+    /** An inbound UNTESTED tunnel with verified inbound bytes + fresh traffic is
+     *  promoted to GOOD so LeaseSet building can publish it without waiting on a
+     *  TestJob that may never be scheduled. */
+    @Test
+    public void testInboundUntestedPromotedOnVerifiedTraffic() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(0, true, true, pool);
+        cfg.incrementVerifiedBytesTransferred(1024);
+        assertEquals(TunnelTestStatus.UNTESTED, cfg.getTestStatus());
+        injectTunnel(pool, cfg);
+
+        pool.clearFailingOnTraffic();
+
+        assertEquals(TunnelTestStatus.GOOD, cfg.getTestStatus());
+    }
+
+    /** An inbound UNTESTED tunnel with fresh traffic but no verified bytes is NOT
+     *  promoted — without proof of arrival it must wait for a real test. */
+    @Test
+    public void testInboundUntestedNotPromotedWithoutVerifiedBytes() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(0, true, true, pool);
+        assertEquals(0, cfg.getVerifiedBytesTransferred());
+        assertEquals(TunnelTestStatus.UNTESTED, cfg.getTestStatus());
+        injectTunnel(pool, cfg);
+
+        pool.clearFailingOnTraffic();
+
+        assertEquals(TunnelTestStatus.UNTESTED, cfg.getTestStatus());
+    }
+
+    /** A traffic-proven UNTESTED inbound tunnel is a LeaseSet top-up candidate. */
+    @Test
+    public void testTrafficProvenUntestedIsLeaseCandidate() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(0, true, true, pool);
+        cfg.incrementVerifiedBytesTransferred(1024);
+        long now = System.currentTimeMillis();
+        cfg.setExpiration(now + 600_000L);
+        long expireAfter = now - TestJob.TRAFFIC_PROOF_MS - 1; // far future expiry
+        assertTrue(TunnelPool.isTrafficProvenUntestedLeaseCandidate(cfg, expireAfter, now));
+    }
+
+    /** No verified bytes → not a lease candidate even with recent traffic. */
+    @Test
+    public void testTrafficProvenUntestedNeedsVerifiedBytes() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(0, true, true, pool);
+        long now = System.currentTimeMillis();
+        cfg.setExpiration(now + 600_000L);
+        long expireAfter = now - TestJob.TRAFFIC_PROOF_MS - 1;
+        assertFalse(TunnelPool.isTrafficProvenUntestedLeaseCandidate(cfg, expireAfter, now));
+    }
+
+    /** A GOOD tunnel is not an UNTESTED top-up candidate (already counted separately). */
+    @Test
+    public void testGoodNotUntestedLeaseCandidate() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(0, true, true, pool);
+        cfg.incrementVerifiedBytesTransferred(1024);
+        cfg.testSuccessful(100);
+        long now = System.currentTimeMillis();
+        cfg.setExpiration(now + 600_000L);
+        long expireAfter = now - TestJob.TRAFFIC_PROOF_MS - 1;
+        assertFalse(TunnelPool.isTrafficProvenUntestedLeaseCandidate(cfg, expireAfter, now));
+    }
+
+    /** Expiring within the propagation window is not eligible. */
+    @Test
+    public void testExpiringUntestedNotLeaseCandidate() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(0, true, true, pool);
+        cfg.incrementVerifiedBytesTransferred(1024);
+        long now = System.currentTimeMillis();
+        cfg.setExpiration(now); // tunnel expires now, before the propagation deadline
+        long expireAfter = now;
+        assertFalse(TunnelPool.isTrafficProvenUntestedLeaseCandidate(cfg, expireAfter, now));
+    }
 }

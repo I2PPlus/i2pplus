@@ -2055,6 +2055,22 @@ public class TunnelPool {
         int wantedLeases = wanted - (selection.zeroHop != null ? 1 : 0);
         if (goodTunnels.size() > wantedLeases) {
             goodTunnels = new ArrayList<>(goodTunnels.subList(0, wantedLeases));
+        } else if (goodTunnels.size() < wantedLeases) {
+            // Top up with UNTESTED tunnels that have provably carried real
+            // inbound traffic (verified bytes within the proof window).  Once
+            // any GOOD tunnel exists, collectLeaseTunnels excludes UNTESTED
+            // from the LeaseSet entirely — so a pool with one GOOD tunnel
+            // would otherwise publish a thin LeaseSet while several proven
+            // inbound tunnels stand idle.  Verified arrival is end-to-end
+            // proof the tunnel works, so publishing it is safe; it fills the
+            // LeaseSet to the configured target instead of leaving it short.
+            List<TunnelInfo> provenUntested = collectTrafficProvenUntested(tunnels, expireAfter);
+            int remaining = wantedLeases - goodTunnels.size();
+            if (provenUntested.size() > remaining) {
+                provenUntested = new ArrayList<>(provenUntested.subList(0, remaining));
+            }
+            goodTunnels = new ArrayList<>(goodTunnels);
+            goodTunnels.addAll(provenUntested);
         }
 
         TreeSet<Lease> leases = buildLeases(goodTunnels, selection.zeroHop);
@@ -2148,6 +2164,60 @@ public class TunnelPool {
         if (tunnel.getTestStatus() != TunnelTestStatus.GOOD &&
             (hasGoodTunnel || tunnel.getTestStatus() != TunnelTestStatus.UNTESTED)) return false;
         if (tunnel.getExpiration() <= expireAfter) {return false;}
+        return true;
+    }
+
+    /**
+     *  UNTESTED tunnels that have verified delivering real inbound data
+     *  recently.  Inbound delivery through InboundEndpointProcessor is
+     *  end-to-end proof the tunnel works, so these are safe to publish as
+     *  leases even though they never ran an explicit TestJob.  They top up
+     *  the configured LeaseSet target when GOOD tunnels alone don't fill it,
+     *  keeping a hosted destination reachable instead of exposing a thin
+     *  LeaseSet.  Inbound-only: dispatcing bytes outbound proves only that
+     *  the gateway accepted them, not delivery.
+     *
+     *  @param tunnels candidate tunnels to inspect
+     *  @param expireAfter don't return tunnels that near their expiry so the
+     *         LeaseSet can propagate before the lease lapses
+     *  @return the traffic-proven UNTESTED inbound tunnels, quality-sorted
+     *  @since 0.9.71+
+     */
+    private List<TunnelInfo> collectTrafficProvenUntested(List<TunnelInfo> tunnels, long expireAfter) {
+        List<TunnelInfo> proven = new ArrayList<>();
+        long now = System.currentTimeMillis();
+        for (TunnelInfo tunnel : tunnels) {
+            if (!_settings.isInbound()) {continue;}
+            if (isTrafficProvenUntestedLeaseCandidate(tunnel, expireAfter, now)) {
+                proven.add(tunnel);
+            }
+        }
+        Collections.sort(proven, QUALITY_COMPARATOR);
+        return proven;
+    }
+
+    /**
+     *  Whether an inbound UNTESTED tunnel has verified delivering real data
+     *  recently enough to be published as a lease.  Inbound delivery through
+     *  InboundEndpointProcessor is end-to-end proof the tunnel works, so it
+     *  is safe to publish even though it never ran an explicit TestJob.  The
+     *  traffic must be fresh (within {@link TestJob#TRAFFIC_PROOF_MS}) and
+     *  backed by verified bytes, not merely recent activity.
+     *
+     *  @param tunnel the tunnel to inspect (must be inbound)
+     *  @param expireAfter don't accept tunnels that near expiry so the
+     *         LeaseSet can propagate before the lease lapses
+     *  @param now wall-clock timestamp for the freshness check
+     *  @return true if the tunnel is eligible to publish as a traffic-proven lease
+     *  @since 0.9.71+
+     */
+    static boolean isTrafficProvenUntestedLeaseCandidate(TunnelInfo tunnel, long expireAfter, long now) {
+        if (tunnel.getTunnelFailed()) {return false;}
+        if (tunnel.getTestStatus() != TunnelTestStatus.UNTESTED) {return false;}
+        if (tunnel.getExpiration() <= expireAfter) {return false;}
+        long lastTraffic = tunnel.getLastRealTraffic();
+        if (lastTraffic <= 0 || now - lastTraffic >= TestJob.TRAFFIC_PROOF_MS) {return false;}
+        if (tunnel.getVerifiedBytesTransferred() <= 0) {return false;}
         return true;
     }
 
@@ -3531,6 +3601,17 @@ public class TunnelPool {
      *  failures can only accumulate during quiet periods, so no tunnel
      *  becomes immortal.
      *
+     *  UNTESTED inbound tunnels that have actually delivered verified inbound
+     *  bytes are promoted to GOOD outright as well.  A tunnel that received
+     *  real end-to-end traffic through InboundEndpointProcessor is proven to
+     *  work — waiting for a TestJob that may never be scheduled (the fresh
+     *  tunnel can sit UNTESTED until expiry while the pool keeps rebuilding
+     *  replacements) means the published LeaseSet stays thin even though
+     *  usable tunnels are standing.  Promoting proof-of-traffic UNTESTED
+     *  tunnels lets LeaseSet building see them immediately.  Verified-bytes
+     *  is required (not just recency) because an UNTESTED tunnel has never
+     *  passed an explicit test, so its only proof is actual data arrival.
+     *
      *  Called from the periodic pool maintenance sweep (~15s).
      *  @since 0.9.71+
      */
@@ -3542,16 +3623,19 @@ public class TunnelPool {
                 TunnelInfo info = _tunnels.get(i);
                 if (info instanceof PooledTunnelCreatorConfig &&
                     info.isInbound() &&
-                    info.getTestStatus() == TunnelTestStatus.FAILING &&
                     !info.getTunnelFailed()) {
+                    TunnelTestStatus ts = info.getTestStatus();
+                    if (ts != TunnelTestStatus.FAILING && ts != TunnelTestStatus.UNTESTED) {continue;}
                     PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
                     long lastTraffic = cfg.getLastRealTraffic();
-                    if (lastTraffic > 0 && now - lastTraffic < TestJob.TRAFFIC_PROOF_MS) {
+                    if (lastTraffic > 0 && now - lastTraffic < TestJob.TRAFFIC_PROOF_MS &&
+                        (ts == TunnelTestStatus.FAILING || cfg.getVerifiedBytesTransferred() > 0)) {
                         long age = now - lastTraffic;
                         cfg.clearTestFailures();
                         if (_log.shouldWarn()) {
-                            _log.warn(toString() + " -> Cleared FAILING flag on inbound tunnel... \n* " +
-                                      cfg + " -> Failures reset, marked GOOD (last real traffic " + age + "ms ago)");
+                            _log.warn(toString() + " -> Marked inbound tunnel GOOD on traffic... \n* " +
+                                      cfg + " -> " + ts + " promoted, marked GOOD (verified bytes " +
+                                      cfg.getVerifiedBytesTransferred() + ", last real traffic " + age + "ms ago)");
                         }
                     }
                 }
