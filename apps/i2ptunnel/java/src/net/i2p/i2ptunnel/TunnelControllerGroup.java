@@ -111,6 +111,8 @@ public class TunnelControllerGroup implements ClientApp {
     private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
     /** Tuned by Tuner */
     private static volatile int clientRunnerMax = 1024;
+    /** Tuned by Tuner: how many inbound connections may wait in the server handler queue */
+    private static volatile int serverBacklogQueueCapacity = 1024;
 
     /**
      *  The number of threads handling connections to server tunnels.
@@ -123,6 +125,22 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static void setServerHandlerThreads(int val) {
         serverHandlerThreads = Math.max(2, Math.min(128, val));
+    }
+    /**
+     *  The maximum number of connections that may wait in the server handler
+     *  bounded queue before overflow rejection ({@link ThreadPoolExecutor.AbortPolicy}).
+     *  @return the queue capacity
+     *  @since 0.9.71+
+     */
+    public static int getServerBacklogQueueCapacity() { return serverBacklogQueueCapacity; }
+    /**
+     *  Clamp and set the server handler queue capacity, 16 to 65536.
+     *  The Tuner I2PTunnelServerBacklogParam stays within this same range.
+     *  @param val the desired capacity
+     *  @since 0.9.71+
+     */
+    public static void setServerBacklogQueueCapacity(int val) {
+        serverBacklogQueueCapacity = Math.max(16, Math.min(65536, val));
     }
     /**
      *  The maximum number of concurrent client connections.
@@ -1428,26 +1446,16 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      *  Shared bounded executor for server tunnel connection handlers.
      *  Tasks are short-lived (µs-scale), so core threads handle bursts via a queue.
-     *  CallerRunsPolicy provides backpressure under load.
+     *  Overflow throws {@link java.util.concurrent.RejectedExecutionException}
+     *  (AbortPolicy) rather than running the handler inline on the accept thread,
+     *  so the accept loop can never be pinned by a write-blocked handler.
      *
      *  @return non-null
      */
     ThreadPoolExecutor getServerExecutor() {
         synchronized (_serverExecutorLock) {
             if (_serverExecutor == null) {
-                int threads = serverHandlerThreads;
-                _serverExecutor = new ThreadPoolExecutor(
-                    threads, threads,
-                    SERVER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<>(1024),
-                    r -> {
-                        Thread t = new Thread(r);
-                        t.setName("TunnelServer." + _serverExecutorThreadCount.incrementAndGet());
-                        t.setDaemon(true);
-                        return t;
-                    },
-                    new ThreadPoolExecutor.CallerRunsPolicy()
-                );
+                _serverExecutor = createServerExecutor(serverHandlerThreads, _serverExecutorThreadCount);
                 I2PAppContext ctx = _context;
                 if (ctx != null) {
                     ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.queueDepth", "Server handler tasks waiting", "I2PTunnel", RATES);
@@ -1461,6 +1469,46 @@ public class TunnelControllerGroup implements ClientApp {
             }
         }
         return _serverExecutor;
+    }
+
+    /**
+     *  Create the shared, bounded executor that runs inbound server-tunnel
+     *  connection handlers.
+     *
+     *  <p>Handlers are dispatched off the accept thread so a single slow
+     *  connection cannot stall connection admission. Overflow uses
+     *  {@link ThreadPoolExecutor.AbortPolicy}: when the fixed worker set and its
+     *  bounded queue are saturated, the submission throws
+     *  {@link java.util.concurrent.RejectedExecutionException} instead of
+     *  executing the handler inline on the caller. Inline execution (the former
+     *  {@code CallerRunsPolicy}) would run a write-blocked handler on the
+     *  {@code I2PTunnelServer.run()} accept loop, pinning {@code accept()}, which
+     *  stops draining the streaming SYN queue and makes every fresh connection
+     *  attempt expire and be RESET under load. The rejection is surfaced to
+     *  {@code I2PTunnelServer.run()}, which closes the connection but keeps
+     *  accepting new ones.
+     *
+     *  <p>Exposed package-visible (static) so tests can assert the overflow
+     *  semantics without a live {@link I2PAppContext}.
+     *
+     *  @param threads the fixed core/max worker count
+     *  @param index   an {@link AtomicLong} counter used to name worker threads
+     *  @return a never-null, bounded executor with {@code AbortPolicy}
+     *  @since 0.9.71+
+     */
+    static ThreadPoolExecutor createServerExecutor(int threads, AtomicLong index) {
+        return new ThreadPoolExecutor(
+            threads, threads,
+            SERVER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(serverBacklogQueueCapacity),
+            r -> {
+                Thread t = new Thread(r);
+                t.setName("TunnelServer." + index.incrementAndGet());
+                t.setDaemon(true);
+                return t;
+            },
+            new ThreadPoolExecutor.AbortPolicy()
+        );
     }
 
     /**
