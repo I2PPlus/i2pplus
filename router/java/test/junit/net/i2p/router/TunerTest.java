@@ -776,6 +776,200 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 10: I2PTunnel server handler thread pool decisions
+    // =====================================================================
+
+    private static final int SH_MIN = 2, SH_MAX = 128;
+
+    /**
+     * Saturated pool: active pinned near the ceiling while the queue backs up,
+     * with no CPU pressure and a LOW local connect time (handlers stalled on the
+     * inbound I2P write — the starvation case). Must grow aggressively.
+     */
+    @Test
+    public void testServerHandlerSaturatedPoolGrows() {
+        assertEquals(SH_MIN + 4,
+                     Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
+                                                      70,        // queueDepth backlog
+                                                      2,         // active == current (saturated)
+                                                      180,       // blockingTime low (I2P-write stall)
+                                                      20));      // jobLag, no CPU pressure
+    }
+
+    /**
+     * Saturated pool at the ceiling: aggressive growth is clamped to the max.
+     */
+    @Test
+    public void testServerHandlerSaturatedCeilingEnforced() {
+        assertEquals(SH_MAX,
+                     Tuner.computeServerHandlerThreads(SH_MAX, SH_MIN, SH_MAX,
+                                                      200,       // queueDepth backlog
+                                                      120,       // active == current (max, saturated)
+                                                      100,       // blockingTime moderate
+                                                      20));
+    }
+
+    /**
+     * Not saturated (active well below ceiling) but queue backlog: slower +2 growth.
+     */
+    @Test
+    public void testServerHandlerQueueBacklogGrowsTwo() {
+        assertEquals(SH_MIN + 2,
+                     Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
+                                                      150,      // queueDepth backlog
+                                                      1,        // active low (NOT saturated)
+                                                      180,      // blockingTime fast
+                                                      20));
+    }
+
+    /**
+     * CPU pressure (jobLag > 100) vetoes growth even under saturation: we must not
+     * add handler threads to a box that is already swap/busy.
+     */
+    @Test
+    public void testServerHandlerDoesNotGrowUnderCpuPressure() {
+        assertEquals(SH_MIN,
+                     Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
+                                                      200,       // queueDepth backlog
+                                                      180,       // active == current (saturated signal)
+                                                      2,         // blockingTime fast
+                                                      500));     // jobLag -> cpuPressure
+    }
+
+    /**
+     * Handlers blocking >10s (local connect path) triggers the largest growth,
+     * matching the pre-existing emergency branch.
+     */
+    @Test
+    public void testServerHandlerBlockingEmergencyGrowsFour() {
+        assertEquals(SH_MIN + 4,
+                     Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
+                                                      5,        // low queue
+                                                      Double.NaN, // active unknown
+                                                      12000,     // emergency blocking time (>10s)
+                                                      20));
+    }
+
+    /**
+     * Idle pool (tiny queue, fast handlers) shrinks back toward the floor.
+     */
+    @Test
+    public void testServerHandlerShrinksWhenIdle() {
+        assertEquals(7,
+                     Tuner.computeServerHandlerThreads(8, SH_MIN, SH_MAX,
+                                                      1,         // queueDepth tiny
+                                                      300,       // active unreached (idle)
+                                                      1,         // blockingTime fast
+                                                      10));
+    }
+
+    /**
+     * Missing stats (all NaN) leave the pool unchanged rather than guessing.
+     */
+    @Test
+    public void testServerHandlerNaNSignalsHold() {
+        assertEquals(16,
+                     Tuner.computeServerHandlerThreads(16, SH_MIN, SH_MAX,
+                                                      Double.NaN, Double.NaN,
+                                                      Double.NaN, Double.NaN));
+    }
+
+    // =====================================================================
+    // Section 11: I2PTunnel server handler queue capacity decisions
+    // =====================================================================
+
+    private static final int SQ_MIN = 16, SQ_MAX = 65536;
+
+    /**
+     * Backlog crowding or exceeding the current capacity grows the buffer by half.
+     */
+    @Test
+    public void testQueueCapacityGrowsAtCrowding() {
+        int current = 1024;
+        assertEquals(current + Math.max(current / 2, 128),
+                     Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
+                                                           1024,      // queueDepth == current
+                                                           20));      // no CPU pressure
+    }
+
+    /**
+     * Meaningful backlog (clear of the cap) with no CPU pressure grows by a quarter.
+     */
+    @Test
+    public void testQueueCapacityGrowsOnBacklog() {
+        int current = 1024;
+        assertEquals(current + Math.max(current / 4, 128),
+                     Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
+                                                           100,       // queueDepth > 50
+                                                           20));
+    }
+
+    /**
+     * Growth is clamped to the ceiling even under heavy crowding.
+     */
+    @Test
+    public void testQueueCapacityCeilingEnforced() {
+        assertEquals(SQ_MAX,
+                     Tuner.computeServerBacklogQueueCapacity(SQ_MAX, SQ_MIN, SQ_MAX,
+                                                            SQ_MAX,    // queueDepth >= current
+                                                            20));
+    }
+
+    /**
+     * CPU pressure (jobLag > 100) vetoes the >50 backlog growth, but NOT the
+     * crowding case (queueDepth >= current): at/over capacity we must still widen
+     * the admission buffer to avoid rejecting connections, even on a busy box.
+     */
+    @Test
+    public void testQueueCapacityCpuPressureOnlyVetoesBacklog() {
+        int current = 1024;
+        // >50 backlog under CPU pressure -> hold (no growth)
+        assertEquals(current,
+                     Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
+                                                           100,       // >50 but < current
+                                                           500));     // cpuPressure
+        // crowding (>= current) still grows even under CPU pressure
+        assertEquals(current + Math.max(current / 2, 128),
+                     Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
+                                                            current,   // >= current
+                                                            500));
+    }
+
+    /**
+     * Consistently near-empty backlog shrinks the buffer back toward the floor.
+     */
+    @Test
+    public void testQueueCapacityShrinksWhenIdle() {
+        int current = 1024;
+        assertEquals(Math.max(SQ_MIN, current - Math.max(current / 4, 128)),
+                     Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
+                                                           1,         // queueDepth tiny
+                                                           10));
+    }
+
+    /**
+     * The floor is enforced when shrinking an already-small buffer.
+     */
+    @Test
+    public void testQueueCapacityFloorEnforced() {
+        int current = 16;
+        assertEquals(SQ_MIN,
+                     Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
+                                                           1,
+                                                           10));
+    }
+
+    /**
+     * Missing stats (NaN) leave the queue capacity unchanged rather than guessing.
+     */
+    @Test
+    public void testQueueCapacityNaNSignalsHold() {
+        assertEquals(4096,
+                     Tuner.computeServerBacklogQueueCapacity(4096, SQ_MIN, SQ_MAX,
+                                                           Double.NaN, Double.NaN));
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 

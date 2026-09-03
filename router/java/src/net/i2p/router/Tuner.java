@@ -616,6 +616,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new TestJobMinPeriodParam());
         _params.add(new TunnelGrowthFactorParam());
         _params.add(new I2PTunnelServerHandlerThreadsParam());
+        _params.add(new I2PTunnelServerBacklogParam());
         _params.add(new I2PTunnelClientRunnerMaxParam());
         _params.add(new SocketConnectTimeoutParam());
         _params.add(new BuildHandlerThreadsParam());
@@ -10378,37 +10379,170 @@ protected int computeTarget(double observed) {
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = i2ptunnel.serverHandler.queueDepth (60s rolling avg)
-            // Cross-refs: jobQueue.jobLag (CPU pressure),
-            //             i2ptunnel.serverHandler.blockingHandleTime (handler pool pressure)
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             double blockingTime = getAdditionalStat(_context, "i2ptunnel.serverHandler.blockingHandleTime");
-            boolean handlerSlow = !Double.isNaN(blockingTime) && blockingTime > 2000;
-            boolean handlerBlocking = !Double.isNaN(blockingTime) && blockingTime > 1000;
-
-            // Emergency: blocking >10s = aggressive growth (add 4 threads immediately)
-            if (!cpuPressure && !Double.isNaN(blockingTime) && blockingTime > 10000) {
-                return Math.min(_max, current + 4);
-            }
-            // Queue backlog + no CPU pressure — grow pool
-            if (!cpuPressure && observed > 100)
-                return Math.min(_max, current + 2);
-
-            // Handlers blocking >2s — grow pool to reduce per-handler load
-            if (handlerSlow && !cpuPressure)
-                return Math.min(_max, current + 2);
-
-            // Handlers blocking >1s — grow pool
-            if (handlerBlocking && !cpuPressure)
-                return Math.min(_max, current + 1);
-
-            // Idle pool with minimal queue and handlers not blocking — shrink
-            if (observed < 5 && !handlerBlocking && current > _min)
-                return Math.max(_min, current - 1);
-
-            return current;
+            double active = getAdditionalStat(_context, "i2ptunnel.serverHandler.active");
+            return computeServerHandlerThreads(current, _min, _max, observed, active, blockingTime, jobLag);
         }
+    }
+
+    /**
+     * Pure decision logic for the I2PTunnel server handler pool size.
+     * Extracted (package-visible, static) so unit tests can exercise the policy
+     * without a live {@link RouterContext}.
+     *
+     * <p>Signals:
+     * <ul>
+     *   <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
+     *   <li>{@code active} — number of handler threads currently busy
+     *       ({@code i2ptunnel.serverHandler.active}). When this pins the pool
+     *       ceiling while the queue backs up, handlers are starving connections.
+     *       {@code blockingHandleTime} stays low in that case because it only
+     *       measures the fast local socket connect to the app, not the slow
+     *       inbound I2P write to the peer, so saturation is the reliable signal.</li>
+     *   <li>{@code blockingTime} — local handler connect time (not the I2P write).</li>
+     *   <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
+     *       grow a pool on a swap/busy box.</li>
+     * </ul>
+     *
+     * @param current      current pool size
+     * @param min          floor
+     * @param max          ceiling
+     * @param queueDepth   60s avg of i2ptunnel.serverHandler.queueDepth, or NaN
+     * @param active       60s avg of i2ptunnel.serverHandler.active, or NaN
+     * @param blockingTime 60s avg of i2ptunnel.serverHandler.blockingHandleTime, or NaN
+     * @param jobLag       60s avg of jobQueue.jobLag, or NaN
+     * @return the new pool size
+     * @since 0.9.71+
+     */
+    static int computeServerHandlerThreads(int current, int min, int max,
+                                           double queueDepth, double active,
+                                           double blockingTime, double jobLag) {
+        boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+        boolean blockedSlow = !Double.isNaN(blockingTime) && blockingTime > 2000;
+        boolean blockedAny = !Double.isNaN(blockingTime) && blockingTime > 1000;
+        // Saturation: the fixed pool is fully busy (active pinned near the ceiling)
+        // and connections are backing up in the queue. This is the starvation case —
+        // handlers are stalled (on inbound I2P writes), so blockingHandleTime is low.
+        boolean saturated = !Double.isNaN(active) && !Double.isNaN(queueDepth)
+                            && active >= current * 0.9 && queueDepth > 50;
+
+        // Emergency: handlers blocked >10s on the local connect side -> aggressive growth
+        if (!cpuPressure && !Double.isNaN(blockingTime) && blockingTime > 10000) {
+            return Math.min(max, current + 4);
+        }
+        // Saturated handler pool with a backlog -> aggressive growth so the accept
+        // loop stops starving connections (never shrink a saturated pool).
+        if (!cpuPressure && saturated) {
+            return Math.min(max, current + 4);
+        }
+        // Queue backlog + no CPU pressure -> grow pool
+        if (!cpuPressure && queueDepth > 100)
+            return Math.min(max, current + 2);
+
+        // Handlers blocking >2s -> grow pool to reduce per-handler load
+        if (blockedSlow && !cpuPressure)
+            return Math.min(max, current + 2);
+
+        // Handlers blocking >1s -> grow pool
+        if (blockedAny && !cpuPressure)
+            return Math.min(max, current + 1);
+
+        // Idle pool with minimal queue and handlers not blocking -> shrink
+        if (queueDepth < 5 && !blockedAny && current > min)
+            return Math.max(min, current - 1);
+
+        return current;
+    }
+
+    /**
+     * Tunes the number of inbound connections that may wait in the I2PTunnel
+     * server handler bounded queue before overflow rejection. A larger buffer
+     * absorbs bursts without closing connections, at the cost of holding an
+     * I2PSocket per queued task; too small a buffer rejects connections under
+     * load even though the handler pool is not yet saturated.
+     *
+     * Policy: grow toward the ceiling as the observed backlog (queueDepth, 60s
+     * avg) approaches the current capacity, grow a little when backlog >50 but
+     * still clear of the cap and no CPU pressure, and shrink back toward the
+     * floor when the backlog is consistently near-empty.
+     */
+    private class I2PTunnelServerBacklogParam extends BaseParam {
+
+        I2PTunnelServerBacklogParam() {
+            super("i2ptunnel.serverHandler.queueCapacity", "I2PTunnel server queue capacity",
+                  SUB_TUNNEL,
+                   16, 65536, 128, "i2ptunnel.serverHandler.queueDepth", _context);
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetInt("setServerBacklogQueueCapacity", value);
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return I2PTunnelReflector.invokeGetInt("getServerBacklogQueueCapacity");
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            return computeServerBacklogQueueCapacity(current, _min, _max, observed, jobLag);
+        }
+    }
+
+    /**
+     * Pure decision logic for the I2PTunnel server handler queue capacity.
+     * Extracted (package-visible, static) so unit tests can exercise the policy
+     * without a live {@link RouterContext}.
+     *
+     * <p>The queue is the admission buffer between the accept loop and the
+     * handler pool. {@code queueDepth} (60s avg) is how deeply it is actually
+     * used. Growing it widens the burst window; shrinking it bounds memory
+     * (each queued task holds an {@code I2PSocket}).
+     *
+     * <p>Signals:
+     * <ul>
+     *   <li>{@code queueDepth} — handler tasks waiting for a free pool thread.</li>
+     *   <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
+     *       grow the buffer on a swap/busy box.</li>
+     * </ul>
+     *
+     * @param current    current queue capacity
+     * @param min        floor
+     * @param max        ceiling
+     * @param queueDepth 60s avg of i2ptunnel.serverHandler.queueDepth, or NaN
+     * @param jobLag     60s avg of jobQueue.jobLag, or NaN
+     * @return the new queue capacity
+     * @since 0.9.71+
+     */
+    static int computeServerBacklogQueueCapacity(int current, int min, int max,
+                                                 double queueDepth, double jobLag) {
+        boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+        // Backlog crowding or exceeding the current capacity -> grow the buffer.
+        if (!Double.isNaN(queueDepth) && queueDepth >= current) {
+            return Math.min(max, current + Math.max(current / 2, 128));
+        }
+        // Meaningful backlog but clear of the cap -> modest growth when no CPU pressure.
+        if (!Double.isNaN(queueDepth) && queueDepth > 50 && !cpuPressure) {
+            return Math.min(max, current + Math.max(current / 4, 128));
+        }
+        // Consistently near-empty backlog -> shrink back toward the floor.
+        if (!Double.isNaN(queueDepth) && queueDepth < 5 && current > min) {
+            return Math.max(min, current - Math.max(current / 4, 128));
+        }
+        return current;
     }
 
     /**
