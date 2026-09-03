@@ -398,6 +398,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static int memoryDerivedInitMsgMax() {
         return Math.max(64, Math.min(1024, (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024))));
     }
+    /**
+     * Memory-derived ceiling for the I2PTunnel client worker pool and its admission
+     * gate. A thread-per-connection {@link java.util.concurrent.SynchronousQueue} pool
+     * holds one OS thread (JVM stack + framing) per admitted connection, so the pool
+     * (and the gate that floors it) must never be allowed past a thread count the max
+     * heap can plausibly host. ~1 thread per 2MB of max heap, floored at 256 so even a
+     * constrained router keeps a sane baseline, clamped to the 16384 hard cap. Mirrors
+     * the memory scaling pattern of {@link #memoryDerivedInitMsgMax()}.
+     *
+     * @return the memory-feasible thread ceiling for the client proxy pool
+     * @since 0.9.71+
+     */
+    private static int memoryDerivedClientThreadMax() {
+        return Math.max(256, Math.min(16384, (int) (SystemVersion.getMaxMemory() / (2 * 1024 * 1024))));
+    }
     /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 8 * MLKEM_FACTOR);
@@ -617,7 +632,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new TunnelGrowthFactorParam());
         _params.add(new I2PTunnelServerHandlerThreadsParam());
         _params.add(new I2PTunnelServerBacklogParam());
-        _params.add(new I2PTunnelClientRunnerMaxParam());
+        I2PTunnelClientRunnerMaxParam clientRunnerMax = new I2PTunnelClientRunnerMaxParam();
+        _params.add(clientRunnerMax);
+        _fastParams.add(clientRunnerMax);
+        I2PTunnelClientMaxConnectionsParam clientMaxConnections = new I2PTunnelClientMaxConnectionsParam();
+        _params.add(clientMaxConnections);
+        _fastParams.add(clientMaxConnections);
         _params.add(new SocketConnectTimeoutParam());
         _params.add(new BuildHandlerThreadsParam());
 
@@ -1331,6 +1351,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int _min;
         /** Current maximum value (may differ from default after tuning). */
         protected int _max;
+        /** Effective ceiling = min(_max, memory-derived bound); never exceeds _max. */
+        protected int _effMax;
         /** Current step/increment size (may differ from default). */
         protected int _step;
         /** Router stat name for observed value feedback. */
@@ -1402,6 +1424,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _defaultStep = defaultStep;
             _min = defaultMin;
             _max = defaultMax;
+            _effMax = defaultMax;
             _step = defaultStep;
             _log = ctx.logManager().getLog(Tuner.class);
             _ctx = ctx;
@@ -10456,6 +10479,81 @@ protected int computeTarget(double observed) {
     }
 
     /**
+     *  Pure decision logic for the Tuner-managed default client concurrent-connection
+     *  cap (i2ptunnel.maxConnections default). Extracted (package-visible, static) so
+     *  unit tests can exercise the policy without a live {@link RouterContext}.
+     *
+     *  <p>Signals:
+     *  <ul>
+     *    <li>{@code shedRate} — events/minute of {@code i2ptunnel.clientConnectionShed}.
+     *        A non-zero rate means the accept loop is closing excess inbound
+     *        connections (zero bytes) because the cap is too low; this is the primary
+     *        "raise" signal and the direct observable of the empty-response symptom.</li>
+     *    <li>{@code activeThreads} — {@code i2ptunnel.clientRunner.activeThreads} (60s avg
+     *        of true executor load). When it pins near {@code maxRunner} the executor is
+     *        saturated, so raising the connection cap would only pile onto a busy pool.</li>
+     *    <li>{@code current}/{@code min}/{@code max} — the current default (per-tunnel
+     *        overrides are untouched), floor, and ceiling.</li>
+     *  </ul>
+     *
+     *  <p>Policy: any shed (admission-gate overflow or executor-full rejection) is the
+     *  unambiguous overload signal — grow the gate decisively and fast so excess
+     *  connections are admitted and served instead of dropped as empty responses. The
+     *  worker pool is floored at this gate in {@code TunnelControllerGroup.setClientRunnerMax},
+     *  so a decisive gate rise also pulls the executor ceiling up (no more 256-vs-27 wedge).
+     *  Near-saturated executor grows moderately; healthy load grows gently; idle decays
+     *  slowly so a quiet spell does not throw away burst headroom. Rise is deliberately
+     *  much faster than decay to fully absorb bursts.
+     *
+     *  @param current     current default cap
+     *  @param min         floor for the default cap
+     *  @param max         ceiling for the default cap
+     *  @param shedRate    60s avg of i2ptunnel.clientConnectionShed, or NaN
+     *  @param activeThreads 60s avg of i2ptunnel.clientRunner.activeThreads, or NaN
+     *  @param maxRunner   the client executor max pool size (saturation reference point)
+     *  @return the new default cap
+     *  @since 0.9.71+
+     */
+    static int computeClientMaxConnections(int current, int min, int max,
+                                           double shedRate, double activeThreads, int maxRunner) {
+        boolean shedding = !Double.isNaN(shedRate) && shedRate > 0;
+        boolean busy = !Double.isNaN(activeThreads) && maxRunner > 0 && activeThreads >= maxRunner * 0.75;
+        boolean healthy = !Double.isNaN(activeThreads) && activeThreads > 0 && activeThreads >= current * 0.5;
+        // Idle is an observed (non-NaN) near-zero load, never a missing signal.
+        boolean idle = !Double.isNaN(activeThreads) && activeThreads >= 0 &&
+                       activeThreads < maxRunner * 0.25;
+        // The admission gate tracks the worker pool asymmetrically: it must rise fast
+        // and far enough to fully absorb a burst (each shed is a zero-byte close the
+        // browser reports as an empty response), but it should decay slowly so a quiet
+        // spell does not immediately undo the burst headroom. The worker pool itself is
+        // floored at this gate in TunnelControllerGroup.setClientRunnerMax, so growing
+        // the gate also pulls the executor ceiling up; shrinking only happens via the
+        // separate slow-decay branch so the two cannot re-collapse into a wedge.
+        if (shedding) {
+            // Any shed (admission-gate OR executor-full rejection) — grow decisively so
+            // excess connections get a worker instead of an empty close. Clamp to ceiling.
+            return Math.min(max, current + Math.max(current / 2, 32));
+        }
+        // Executor near-saturated but not rejecting yet: pre-emptively grow admission so
+        // the burst is handed to (ramping) workers rather than shed at the cap.
+        if (busy) {
+            return Math.min(max, current + Math.max(current / 4, 32));
+        }
+        // Healthy load with headroom: grow gently to absorb short bursts without pushing
+        // past the cap. Only when there is real (non-zero) activity.
+        if (healthy) {
+            return Math.min(max, current + Math.max(current / 16, 8));
+        }
+        // Idle (observed zero/near-zero activity): ease back toward the floor slowly so
+        // an idle tunnel stops hoarding FDs without discarding burst headroom too fast.
+        if (idle && current > min) {
+            return Math.max(min, current - Math.max(current / 8, 8));
+        }
+        // Unknown (NaN, router just started) or mid-load: hold steady.
+        return current;
+    }
+
+    /**
      * Tunes the number of inbound connections that may wait in the I2PTunnel
      * server handler bounded queue before overflow rejection. A larger buffer
      * absorbs bursts without closing connections, at the cost of holding an
@@ -10566,14 +10664,23 @@ protected int computeTarget(double observed) {
     /**
      * Tunes I2PTunnel client runner max pool size.
      * Pool is cached-style (core=0, SynchronousQueue), so threads are created on demand
-     * and time out after 2 min idle. This caps the burst ceiling.
+     * and time out after 2 min idle. Grow fast on a shed so every burst connection gets
+     * a thread; decay slowly so a quiet spell does not discard burst headroom. The lower
+     * bound is floored at the Tuner-managed admission gate by the setter.
      */
     private class I2PTunnelClientRunnerMaxParam extends BaseParam {
 
         I2PTunnelClientRunnerMaxParam() {
             super("i2ptunnel.clientRunner.max", "I2PTunnel client threads",
                   SUB_TUNNEL,
-                   4, 1024, 4, "i2ptunnel.clientRunner.activeThreads", _context);
+                   4, 16384, 4, "i2ptunnel.clientRunner.activeThreads", _context);
+            // Engaged on the fast cycle even when primary stats are quiet so the worker
+            // pool can decay slowly (idle) rather than freezing at a burst-inflated size.
+            _cpuDriven = true;
+            // Effective ceiling from available heap — the pool must never exceed a thread
+            // count the max heap can host (see memoryDerivedClientThreadMax). Kept below
+            // the declared 16384 max so a small-heap router cannot OOM on a burst.
+            _effMax = Math.min(_max, memoryDerivedClientThreadMax());
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -10597,17 +10704,84 @@ protected int computeTarget(double observed) {
 
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
+            // Cross-ref the shed stat (admission-gate overflow OR executor-full rejection):
+            // a non-zero rate is the direct empty-response observable. Raise the worker
+            // pool decisively on a shed so the burst gets a thread instead of a zero-byte
+            // close; on idle decay slowly so a quiet spell does not quickly undo headroom.
+            double shed = getAdditionalStat(_context, "i2ptunnel.clientConnectionShed");
             int current = getRuntimeValue();
-            // observed = i2ptunnel.clientRunner.activeThreads (60s rolling avg of true pool load).
-            // Uses real active thread count, never the cap itself; this is not self-referential
-            // and cannot ramp the ceiling under zero load (fixed: was i2ptunnel.clientRunner.poolSize).
-            // If active threads are near the max ceiling, raise it
-            if (observed > current * 0.75 && current < _max)
-                return Math.min(_max, current + Math.max(current / 4, 16));
-            // If active threads are well below max, lower the ceiling
-            if (observed < current * 0.25 && current > _min)
-                return Math.max(_min, current - Math.max(current / 4, 16));
+            boolean shedding = !Double.isNaN(shed) && shed > 0;
+            // Fast, decisive rise on shed — a burst must be absorbed, not shed. The rise
+            // is clamped to _effMax (the memory-derived ceiling) so a small-heap router
+            // cannot spawn unbounded threads on a burst.
+            if (shedding && current < _effMax) {
+                return Math.min(_effMax, current + Math.max(current / 2, 32));
+            }
+            // Active threads near the max ceiling -> the pool is working hard; grow fast.
+            if (observed > current * 0.75 && current < _effMax) {
+                return Math.min(_effMax, current + Math.max(current / 4, 16));
+            }
+            // Well below max -> lower the ceiling, but slowly, so burst headroom survives.
+            if (observed < current * 0.25 && current > _min) {
+                return Math.max(_min, current - Math.max(current / 8, 8));
+            }
             return current;
+        }
+    }
+
+    /**
+     * Tunes the Tuner-managed default client concurrent-connection cap
+     * (i2ptunnel.maxConnections default). Primary signal:
+     * i2ptunnel.clientConnectionShed — a non-zero rate means excess inbounds are
+     * closed empty (an HTTP proxy browser reads that as an empty response), so the
+     * gate rises fast to serve the burst and the worker pool follows (floored here).
+     */
+    private class I2PTunnelClientMaxConnectionsParam extends BaseParam {
+
+        I2PTunnelClientMaxConnectionsParam() {
+            super("i2ptunnel.maxConnections", "I2PTunnel client connection cap (default)",
+                  SUB_TUNNEL,
+                   256, 16384, 32, "i2ptunnel.clientConnectionShed", _context);
+            // Engaged on the fast cycle even when the shed rate is zero (its primary
+            // observed stat goes NaN between bursts) so the gate can both grow fast on a
+            // burst and decay slowly on sustained idle instead of freezing at one value.
+            _cpuDriven = true;
+            // The gate floors the worker pool (setClientRunnerMax), so it must share the
+            // runner's memory-derived ceiling: admitting more than the heap can host would
+            // pull the pool past a feasible thread count and risk OOM.
+            _effMax = Math.min(_max, memoryDerivedClientThreadMax());
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetInt("setClientDefaultMaxConnections", value);
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return I2PTunnelReflector.invokeGetInt("getClientDefaultMaxConnections");
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            double activeThreads = getAdditionalStat(_context, "i2ptunnel.clientRunner.activeThreads");
+            int current = getRuntimeValue();
+            // Cross-ref the executor ceiling so we do not raise the gate to pile work
+            // onto an already-saturated pool. Best-effort; -1 propagates as "unknown"
+            // (treated by the policy as not saturated). The policy clamps to _effMax (the
+            // memory-derived ceiling) so the gate cannot out-admit the runner's feasible
+            // thread count — a higher gate would floor the pool past what the heap can host.
+            int maxRunner = I2PTunnelReflector.invokeGetInt("getClientRunnerMax");
+            return computeClientMaxConnections(current, _min, _effMax, observed, activeThreads, maxRunner);
         }
     }
 
