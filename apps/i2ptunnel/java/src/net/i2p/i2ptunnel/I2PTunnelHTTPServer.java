@@ -855,7 +855,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         } catch (RejectedExecutionException ree) {
             // All client runner threads busy - kill the connection rather than wedge
             if (_log.shouldWarn())
-                _log.warn("443 handler pool saturated -> closing connection");
+                _log.warn("443 handler pool saturated -> Closing connection...");
             // also close the raw TCP socket opened above - the runner never ran, so its
             // cleanup never runs
             try {s.close();}

@@ -812,7 +812,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     }
                 } catch (RejectedExecutionException ree) {
                     _log.warn("Server handler pool saturated on " +
-                               remoteHost + ':' + remotePort + " -> closing connection");
+                               remoteHost + ':' + remotePort + " -> Closing connection...");
                     closeSilently(socketToHandle);
                     releaseConnection();
                 }

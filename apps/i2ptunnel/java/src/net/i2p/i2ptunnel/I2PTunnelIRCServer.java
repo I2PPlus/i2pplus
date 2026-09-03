@@ -162,7 +162,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             } catch (RejectedExecutionException ree) {
                 // pool saturated - close so the IRC client can retry rather than hang
                 if (_log.shouldWarn())
-                    _log.warn("IRC client pool saturated -> closing connection");
+                    _log.warn("IRC client pool saturated -> Closing connection...");
                 // also close the raw TCP socket opened above - the runner never ran
                 try {s.close();} catch (IOException ioe) { /* ignored */ }
                 try {socket.close();} catch (IOException ioe) { /* ignored */ }
