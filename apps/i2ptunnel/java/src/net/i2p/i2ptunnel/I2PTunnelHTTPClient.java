@@ -1527,8 +1527,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     _log.info(getPrefix(requestId) + "Empty-response reconnect failed (attempt " + attempt +
                                               '/' + emptyBudget + "): " + ioe.getMessage());
                                 }
+                                // Fail fast once the client outbound pool is provably dead:
+                                // no further attempt can succeed, so return null to surface a
+                                // swift empty-response error instead of stalling the browser
+                                // across the whole backoff budget.
+                                if (shouldStopEmptyReconnect(poolState())) {return null;}
                                 if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
                             } catch (I2PException ie) {
+                                if (shouldStopEmptyReconnect(poolState())) {return null;}
                                 if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
                             }
                         }
@@ -1668,6 +1674,30 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (attempt <= 0) {return 0;}
         return Math.min(8 * I2P_CONNECT_RETRY_BASE_DELAY,
                         I2P_CONNECT_RETRY_BASE_DELAY << Math.min(attempt - 1, 3));
+    }
+
+    /**
+     *  Whether the empty-response reconnect loop should stop instead of trying again.
+     *  A connect attempt that just failed should not be re-driven when the client
+     *  outbound pool is provably dead ({@code poolState == -1}): no further attempt
+     *  can succeed, so retrying only stalls the browser for the full backoff budget
+     *  (~39s at the default 9 attempts) and adds load to a mesh already failing to
+     *  build replacement tunnels. Budget exhaustion is handled separately by the
+     *  loop's exit condition, so this method only answers the "should we bail early
+     *  on a dead pool" question.
+     *
+     *  <p>A {@code poolState == -2} (unknown: standalone client, or the reflective
+     *  check failed) deliberately does NOT fail fast — there is no live router pool
+     *  to observe, so the budget is the only sane bound. Mirroring the initial-connect
+     *  guard's {@code &lt;= -1} test here would make standalone clients (outproxy, no
+     *  router) abort every empty-response retry because they always read {@code -2}.
+     *
+     *  @param poolState the {@link #poolState()} value from the last failed attempt
+     *  @return true to stop retrying (fail to the normal empty-response error path)
+     *  @since 0.9.71+
+     */
+    static boolean shouldStopEmptyReconnect(int poolState) {
+        return poolState == -1;
     }
 
     /**

@@ -181,4 +181,28 @@ public class I2PTunnelHTTPClientHelperTest {
         assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("2.5"));
         assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("--"));
     }
+
+    // ---------- shouldStopEmptyReconnect ----------
+
+    @Test
+    public void testStopEmptyReconnect_DeadPoolFailsFast() {
+        assertTrue(I2PTunnelHTTPClient.shouldStopEmptyReconnect(-1));
+    }
+
+    @Test
+    public void testStopEmptyReconnect_HealthyPoolContinues() {
+        assertFalse(I2PTunnelHTTPClient.shouldStopEmptyReconnect(1));
+    }
+
+    @Test
+    public void testStopEmptyReconnect_BuildingPoolContinues() {
+        assertFalse(I2PTunnelHTTPClient.shouldStopEmptyReconnect(0));
+    }
+
+    @Test
+    public void testStopEmptyReconnect_UnknownContinues() {
+        // -2 (standalone/no router pool) must NOT fail fast, or outproxy/standalone
+        // clients (which always read -2) would abort every empty-response retry.
+        assertFalse(I2PTunnelHTTPClient.shouldStopEmptyReconnect(-2));
+    }
 }
