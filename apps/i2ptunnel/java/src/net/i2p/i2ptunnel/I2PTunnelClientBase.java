@@ -111,9 +111,17 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  A hard concurrent-process cap sheds excess inbound load instead of amplifying it.
      *  @since 0.9.71+
      */
-    public static final int DEFAULT_MAX_CONNECTIONS = 96;
+    public static final int DEFAULT_MAX_CONNECTIONS = 256;
     /** Resolved concurrent connection cap for this tunnel. Guards #manageConnection. */
     private volatile int _maxConnections;
+    /**
+     *  True when this tunnel's config explicitly set
+     *  {@value #PROP_MAX_CONNECTIONS}. When false the tunnel inherits the
+     *  Tuner-managed default cap (see {@link #getEffectiveMaxConnections()}),
+     *  so the Tuner can raise/lower the floor without a tunnel restart. An
+     *  explicit override always wins over the Tuner default.
+     */
+    private volatile boolean _maxConnectionsCustomized;
     /** Live reservation counter shared by the connections of this tunnel. */
     private final AtomicInteger _activeConnections = new AtomicInteger();
     /** this is ONLY for shared clients */
@@ -156,8 +164,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         _ownDest = true; // == ! shared client
         _context = tunnel.getContext();
         _log = _context.logManager().getLog(getClass());
-        // chained tunnel: no client options yet, use the default cap (shed inbound flood)
+        // chained tunnel: no client options yet, seed the gate with the built-in default cap.
+        // This is only an initial seed; once manageConnection() begins admitting
+        // connections it consults getEffectiveMaxConnections(), which for an
+        // un-customized tunnel reads the Tuner-managed default (starting at
+        // DEFAULT_MAX_CONNECTIONS) so runtime Tuner adjustments apply without a restart.
         _maxConnections = DEFAULT_MAX_CONNECTIONS;
+        _maxConnectionsCustomized = false;
     }
 
     /**
@@ -235,6 +248,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
         String capStr = tunnel.getClientOptions().getProperty(PROP_MAX_CONNECTIONS);
         _maxConnections = resolveMaxConnections(capStr);
+        // Only an explicitly configured positive value counts as a per-tunnel override.
+        // When the property is absent the tunnel inherits the Tuner-managed default cap
+        // (getEffectiveMaxConnections()), allowing the Tuner to adjust it at runtime.
+        _maxConnectionsCustomized = capStr != null;
     }
 
     /**
@@ -879,6 +896,19 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             _executor = new TunnelControllerGroup.CustomThreadPoolExecutor();
             _ownExecutor = true;
         }
+        // Create the shedding/failure observables once (idempotent). These count the
+        // two ways a client connection ends with zero response bytes: exceed the
+        // concurrent-connection gate (manageConnection) and an uncaught runner error
+        // (BlockingRunner). Both surface to a proxy browser as an empty response, so
+        // the Tuner's maxConnections param and post-mortems need them as rate stats.
+        if (_context != null) {
+            _context.statManager().createRequiredRateStat("i2ptunnel.clientConnectionShed",
+                        "Client tunnel connections shed at cap", "I2PTunnel",
+                        TunnelControllerGroup.RATES);
+            _context.statManager().createRequiredRateStat("i2ptunnel.clientConnectionFailed",
+                        "Client tunnel connections lost to uncaught error", "I2PTunnel",
+                        TunnelControllerGroup.RATES);
+        }
     }
 
     /**
@@ -902,6 +932,46 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
+     *  The effective concurrent-connection cap for this tunnel at the moment the
+     *  accept loop admits a connection. Reads the Tuner-managed default dynamically
+     *  so the floor can move without a tunnel restart, unless this tunnel declared an
+     *  explicit {@value #PROP_MAX_CONNECTIONS} override (which always wins).
+     *
+     *  <p>The Tuner raises this gate under sustained load so excess inbound
+     *  connections are handed to executor threads instead of being shed (a shed close
+     *  with zero bytes is what an HTTP proxy browser reports as an empty response),
+     *  and lowers it back toward the floor when idle to bound memory/FD usage.
+     *
+     *  @return the effective cap: &gt;= 1 when gated, 0 meaning unlimited
+     *  @since 0.9.71+
+     */
+    int getEffectiveMaxConnections() {
+        return resolveEffectiveMaxConnections(_maxConnectionsCustomized, _maxConnections,
+                                              TunnelControllerGroup.getClientDefaultMaxConnections());
+    }
+
+    /**
+     *  Pure decision helper for {@link #getEffectiveMaxConnections()}: pick the
+     *  per-tunnel override when one was explicitly configured, otherwise the
+     *  Tuner-managed default cap. Package-visible and context-free so unit tests
+     *  can exercise it without a live tunnel.
+     *
+     *  @param customized whether this tunnel declared an explicit
+     *         {@value #PROP_MAX_CONNECTIONS} override
+     *  @param ownCap      the tunnel's resolved cap ({@link #resolveMaxConnections} result)
+     *  @param globalDefault the Tuner-managed default cap
+     *  @return the effective cap: &gt;= 1 when gated, 0 meaning unlimited
+     *  @since 0.9.71+
+     */
+    static int resolveEffectiveMaxConnections(boolean customized, int ownCap, int globalDefault) {
+        if (customized) {return ownCap;}
+        // No explicit override: fall through to the Tuner-managed default, but never
+        // regress to an uninitialized (<= 0) shared value — keep the resolved ownCap.
+        if (globalDefault <= 0) {return ownCap;}
+        return globalDefault;
+    }
+
+    /**
      *  Manage the connection just opened on the specified socket
      *
      * @param s Socket to take care of
@@ -919,10 +989,16 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         // tracker announces/scrapes) every accepted socket would otherwise spawn
         // unbounded parallel connect+retry work, starving legitimate streams. When the
         // cap is reached we shed the excess connection immediately instead of amplifying.
-        if (!I2PTunnelServer.acquireConnectionSlot(_maxConnections, _activeConnections)) {
+        int effectiveMax = getEffectiveMaxConnections();
+        if (!I2PTunnelServer.acquireConnectionSlot(effectiveMax, _activeConnections)) {
             if (_log.shouldWarn()) {
-                _log.warn("Connection limit reached; shedding new inbound connection");
+                _log.warn("Connection limit reached; shedding new inbound connection (cap=" +
+                          effectiveMax + ", active=" + _activeConnections.get() + ")");
             }
+            // Rate-stat for Tuner feedback and post-mortem: events/min of shedding.
+            // This is the observable the Tuner uses to raise the default cap before
+            // connections are dropped (P3 instrumentation).
+            if (_context != null) {_context.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);}
             try {s.close();}
             catch (IOException ioe) { /* ignored */ }
             return;
@@ -932,6 +1008,16 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             // should never happen, we have an unbounded pool and never stop the executor, but
             // if it does, return the slot and close the socket rather than leaking the reservation.
             I2PTunnelServer.releaseConnectionSlot(_activeConnections);
+            if (_log.shouldWarn()) {
+                _log.warn("Client pool rejected connection (executor full); shedding");
+            }
+            // Mirrors the cap-path shed stat: a rejection here closes the socket with
+            // zero bytes, which a proxy browser reports as an empty response. Counting it
+            // as i2ptunnel.clientConnectionShed makes the executor (not just the admission
+            // gate) a visible overload signal to the Tuner, which needs it to grow the
+            // worker pool instead of holding back. Without this the worker pool collapse
+            // (e.g. 27 threads) sheds bursts invisibly to autotuning.
+            if (_context != null) {_context.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);}
             try {s.close();}
             catch (IOException ioe) { /* ignored */ }
         }
@@ -949,9 +1035,14 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             catch (Throwable t) {
                 /*
                  * Probably an IllegalArgumentException from connecting to the router
-                 * in a delay-open or close-on-idle tunnel (in connectManager() above)
+                 * in a delay-open or close-on-idle tunnel (in connectManager() above),
+                 * or an uncaught streaming failure. Either ends by closing the browser
+                 * socket with no response bytes, which a proxy reports as an empty
+                 * response. Count it as a first-class observable (P3): if these are
+                 * happening, this counter climbs even though the router logs are quiet.
                  */
                 _log.error("Uncaught error in I2PTunnel client", t);
+                if (_context != null) {_context.statManager().addRateData("i2ptunnel.clientConnectionFailed", 1L);}
                 try {_s.close();}
                 catch (IOException ioe) { /* ignored */ }
             } finally {
