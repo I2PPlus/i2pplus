@@ -1,3 +1,21 @@
+2026-09-03 dr|z3d
+  * Streaming:
+    - Fail fast on write timeout when forward-ACK progress stalls, so a
+      dead peer's connection ends promptly instead of lingering
+  * I2PTunnel:
+    - On server handler overflow, reject the connection cleanly and keep
+      accepting rather than running the handler on the accept thread
+      (fixes inbound connections being dropped/RESET under load)
+  * Router:
+    - Refresh and promote traffic-proven UNTESTED inbound tunnels so they
+      are used sooner, improving inbound reliability
+    - Auto-tune the server tunnel handler pool and its admission queue
+      size on saturation; keep a floor-sized burst buffer when idle so a
+      quiet server no longer collapses its connection queue to the minimum
+  * Router console:
+    - Add a tunable for the I2PTunnel server handler queue capacity on the
+      /tuning page
+
 2026-09-02 dr|z3d
   * Tunnel:
     - Skip client-pool tunnel pre-qualification when tunnel build
