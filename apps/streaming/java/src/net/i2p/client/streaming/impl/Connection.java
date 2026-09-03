@@ -245,12 +245,75 @@ class Connection {
      *  Give up resending an unacked SYN after this many sends.
      *  SYN retransmission uses a fixed RTO interval (no backoff — there is no
      *  congestion to manage before the connection is established), so the total
-     *  SYN budget equals maxSynResends * initialRTO and should roughly fill
-     *  the connect() timeout (~60s).  With default initialRTO of 5s and
-     *  maxSynResends of 12, the budget is 60s — matching the connect timeout.
+     *  SYN budget equals maxSynResends * interval.  The interval is the
+     *  evidence-gated RTT-aware value from {@link #computeSynRetransmitInterval(int, int)}
+     *  — the initial RTO (default 5s) before any RTT measurement, or an interval
+     *  derived from the measured path RTT once evidence exists.  With the default 5s
+     *  interval and 12 sends the budget is 60s, matching the historical behavior and
+     *  roughly filling the connect() timeout.
      *  @since 0.9.70+ mutable for adaptive tuning
      */
     private static volatile int maxSynResends = 12;
+
+    /**
+     * Minimum SYN retransmit interval (ms) ever used once positive RTT evidence for
+     * the path exists.  Keeps a fresh SYN from re-firing faster than the fabric can
+     * plausibly round-trip even on a very fast tunnel, avoiding a retransmit storm on
+     * a peer that is merely slow to complete the handshake.
+     */
+    static final int SYN_RTO_MIN = 750;
+
+    /**
+     * Headroom factor applied to a measured path RTT to derive the SYN retransmit
+     * interval.  A single RTT sample is a lower bound on the true round-trip under a
+     * congested tunnel, so scale it up (as a percentage, e.g. 150 = 1.5x) to give the
+     * SYN and its ACK room to complete without a spurious retransmit.
+     */
+    private static final int SYN_RTO_HEADROOM_PCT = 150;
+
+    /**
+     * Compute the inter-SYN retransmit interval for an outbound connection, evidence-gated
+     * and RTT-aware.
+     *
+     * <p>SYN retransmission uses a fixed interval (no backoff — there is no congestion to
+     * manage before the connection is established), so the total SYN budget is {@code
+     * maxSynResends * interval}.  The historical behavior is a fixed {@code initialRtoMs}
+     * (default 5000) for every connection, which overshoots the 30s connect timeout on a
+     * dead path (12 * 5s = 60s) and under-utilizes the window on a healthy path whose
+     * round-trip is far below 5s.
+     *
+     * <p><b>Gate.</b> The measured RTT {@code measuredRttMs} is <em>positive</em> only when
+     * there is genuine path evidence for this peer (a valid analytic ACK, or a dampened RTT
+     * seeded from the TCB cache for a recently-contacted destination — see
+     * {@link TCBShare}).  When it is {@code <= 0} there is no evidence (fresh or
+     * blackholed peer — {@code Received: 0} throughout, so {@code getRTT()} never advances
+     * past its initial default), and this returns the configured {@code initialRtoMs}
+     * unchanged.  A path with no measurement is treated conservatively rather than
+     * fast-failed, because shrinking the interval without evidence would be guessing.
+     *
+     * <p><b>RTT-aware interval.</b> With evidence, the interval becomes {@code headroomPct%
+     * * measuredRttMs}, floored at {@link #SYN_RTO_MIN} (no storm on a fast fabric) and
+     * capped at the configured {@code initialRtoMs} (never worse than the current default,
+     * so a genuinely slow-but-alive path keeps its handshake room).  A measured RTT below
+     * the 5000ms default therefore packs more SYN attempts into the connect window
+     * (better odds of catching a momentarily-congested tunnel) and, if the path is dead,
+     * lets SYN resends exhaust near the 30s connect timeout instead of running the full
+     * 60s overshoot — so the proxy can emit the "Website Unreachable" page sooner.
+     *
+     * @param measuredRttMs a recent round-trip time for this peer in ms, or &lt;=0 when no
+     *                      RTT evidence is available (never measured, no cache entry)
+     * @param initialRtoMs  the configured initial RTO (i2p.streaming.initialRTO) in ms
+     * @return the fixed inter-SYN retransmit interval (ms) to use
+     * @since 0.9.70+ evidence-gated and RTT-aware SYN pacing
+     */
+    static int computeSynRetransmitInterval(int measuredRttMs, int initialRtoMs) {
+        if (initialRtoMs <= 0) {return initialRtoMs;}
+        if (measuredRttMs <= 0) {return initialRtoMs;}
+        long interval = (long) measuredRttMs * SYN_RTO_HEADROOM_PCT / 100;
+        if (interval < SYN_RTO_MIN) {interval = SYN_RTO_MIN;}
+        if (interval > initialRtoMs) {interval = initialRtoMs;}
+        return (int) interval;
+    }
 
     /**
      * Maximum number of packets to retransmit when the timer hits.
@@ -277,6 +340,24 @@ class Connection {
      */
     private int getMaxRtx() {
         return maxRetransmissions;
+    }
+
+    /**
+     * The fixed interval between SYN retransmits for this connection, evidence-gated.
+     *
+     * <p>Delegate for {@link #computeSynRetransmitInterval(int, int)} using this
+     * connection's current path evidence ({@code ConnectionOptions#getRTT()} is a real
+     * measurement only once {@code ConnectionOptions#receivedAck()} is true — either a
+     * valid handshake ACK or a dampened TCB-cache value seeded from a prior connection to
+     * this destination) and the configured initial RTO.  Pure so the give-up math is
+     * testable directly through {@link #computeSynRetransmitInterval(int, int)}.
+     *
+     * @return the fixed inter-SYN retransmit interval (ms) to arm the retransmit timer with
+     */
+    private int getSynRetransmitInterval() {
+        int rtt = _options.getRTT();
+        if (!_options.receivedAck()) {rtt = -1;}
+        return computeSynRetransmitInterval(rtt, ConnectionOptions.getInitialRTO());
     }
 
     /**
@@ -2071,7 +2152,11 @@ class Connection {
             if (_highestAckedThrough.get() >= 0) {
                 pushBackRTO(_options.doubleRTO());
             } else {
-                pushBackRTO(_options.getRTO());
+                // SYN phase: fixed interval, no backoff. Evidence-gated + RTT-aware so the
+                // interval tracks the measured path (packing more attempts into the connect
+                // window on a healthy but slower-than-default fabric) instead of always the
+                // 5000ms default; a path with no RTT evidence keeps the default unchanged.
+                pushBackRTO(getSynRetransmitInterval());
             }
 
             // 2. cut ssthresh to bandwidth estimate, window to 1
