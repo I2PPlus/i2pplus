@@ -999,6 +999,100 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // i2ptunnel.maxConnections decision (computeClientMaxConnections)
+    // =====================================================================
+
+    /** Shedding is the primary raise signal: grow decisively toward the ceiling. */
+    @Test
+    public void testClientMaxConnectionsSheddingGrows() {
+        int next = Tuner.computeClientMaxConnections(96, 32, 1024, 5.0, 10.0, 1024);
+        assertTrue("Shedding should raise above 96, got " + next, next > 96);
+        assertTrue("Shedding raise must not exceed ceiling", next <= 1024);
+    }
+
+    /** Shedding rises fast: at least ~1.5x current (double step) so bursts are absorbed. */
+    @Test
+    public void testClientMaxConnectionsSheddingRisesFast() {
+        int current = 256;
+        int next = Tuner.computeClientMaxConnections(current, 32, 1024, 3.0, 20.0, 1024);
+        assertTrue("Shed should grow decisively (>= cur + cur/2), got " + next,
+                   next >= current + current / 2);
+    }
+
+    /** Idle decays slowly: much smaller step than the shed rise (asymmetric response). */
+    @Test
+    public void testClientMaxConnectionsIdleDecaysSlowly() {
+        int current = 512;
+        int next = Tuner.computeClientMaxConnections(current, 32, 1024, 0.0, 0.0, 1024);
+        int decayed = current - next;
+        assertTrue("Idle decay must be small (<= cur/8), got decay " + decayed,
+                   decayed <= current / 8);
+        int rise = Tuner.computeClientMaxConnections(current, 32, 1024, 3.0, 0.0, 1024) - current;
+        assertTrue("Rise step must exceed decay step (increase fast, decrease slow)",
+                   rise > decayed);
+    }
+
+    /** Shedding with a saturated executor still raises: the worker pool is floored at the
+     *  gate (TunnelControllerGroup.setClientRunnerMax), so growing the gate pulls the
+     *  executor ceiling up and serves the burst instead of the old no-op that left it shedding. */
+    @Test
+    public void testClientMaxConnectionsSheddingButExecutorSaturated() {
+        int next = Tuner.computeClientMaxConnections(96, 32, 1024, 5.0, 900.0, 1024);
+        assertTrue("Shed with a saturated executor must still raise (runner floor pulls it up), got " + next,
+                   next > 96);
+    }
+
+    /** Heavy executor load with headroom but no shed raises more gently. */
+    @Test
+    public void testClientMaxConnectionsExecutorBusyGrows() {
+        int next = Tuner.computeClientMaxConnections(96, 32, 1024, 0.0, 800.0, 1024);
+        assertTrue("Executor at 78% should raise, got " + next, next > 96);
+    }
+
+    /** Healthy load with real activity grows slowly to absorb bursts. */
+    @Test
+    public void testClientMaxConnectionsHealthyActivityGrowsSlowly() {
+        int next = Tuner.computeClientMaxConnections(96, 32, 1024, 0.0, 60.0, 1024);
+        assertTrue("Healthy load should grow, got " + next, next > 96);
+        assertTrue("Healthy growth should be modest", next <= 104);
+    }
+
+    /** Idle: shed and load near zero eases the cap back toward the floor. */
+    @Test
+    public void testClientMaxConnectionsIdleShrinks() {
+        int next = Tuner.computeClientMaxConnections(512, 32, 1024, 0.0, 0.0, 1024);
+        assertTrue("Idle should shrink below 512, got " + next, next < 512);
+        assertTrue("Idle shrink must respect the floor", next >= 32);
+    }
+
+    /** Idle at the floor stays put (no oscillation). */
+    @Test
+    public void testClientMaxConnectionsAtFloorStays() {
+        assertEquals(32, Tuner.computeClientMaxConnections(32, 32, 1024, 0.0, 0.0, 1024));
+    }
+
+    /** Ceiling clamp: shedding at the ceiling cannot overflow. */
+    @Test
+    public void testClientMaxConnectionsSheddingAtCeilingClamps() {
+        assertEquals(1024, Tuner.computeClientMaxConnections(1024, 32, 1024, 5.0, 100.0, 1024));
+    }
+
+    /** NaN observed stat (router just started, no data yet) is neutral: no change. */
+    @Test
+    public void testClientMaxConnectionsNaNStatIsNeutral() {
+        assertEquals(96, Tuner.computeClientMaxConnections(96, 32, 1024,
+                           Double.NaN, Double.NaN, 1024));
+    }
+
+    /** Unknown executor ceiling (maxRunner <= 0) is treated as not saturated. */
+    @Test
+    public void testClientMaxConnectionsUnknownMaxRunner() {
+        // maxRunner = -1 (reflector not resolved) must not send us into a shed-no-op
+        int next = Tuner.computeClientMaxConnections(96, 32, 1024, 5.0, 10.0, -1);
+        assertTrue("Unknown maxRunner should not block shedding, got " + next, next > 96);
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 
