@@ -385,10 +385,30 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      */
     public void waitForCompletion(int maxWaitMs) throws IOException, InterruptedException {
         long expiration = _context.clock().now()+maxWaitMs;
+        // Evidence-gated ACK-starvation detection. Snapshot the connection-wide
+        // forward-ACK progress. If the full wait elapses with neither this packet
+        // nor any other packet acknowledged, the far end has stopped ACKing
+        // entirely — the classic SlowFlush signature. Fail fast with a surfaced
+        // IOException instead of silently dropping the payload, which would leave
+        // the caller (e.g. MessageOutputStream.flush) blocking ~120s and then
+        // reporting success.
+        long ackProgressAtStart = maxWaitMs > 0 ? _connection.getHighestAckedThrough() : -1;
         try {
             while (true) {
                 long timeRemaining = expiration - _context.clock().now();
-                if ( (timeRemaining <= 0) && (maxWaitMs > 0) ) break;
+                if ( (timeRemaining <= 0) && (maxWaitMs > 0) ) {
+                    // Write timeout reached with this packet still unacknowledged.
+                    // Use the pure decision helper so the fail-fast rule is
+                    // unit-testable without a live Connection (isAckStarvation).
+                    if (isAckStarvation(writeSuccessful(), _connection.getHighestAckedThrough(), ackProgressAtStart)) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("No forward ACK progress on connection for " + maxWaitMs
+                                      + "ms; packet never ACKed — treating send as failed: " + this);
+                        }
+                        throw new IOException("disconnected (no forward ACK progress for " + maxWaitMs + "ms)");
+                    }
+                    break;
+                }
                 synchronized (this) {
                     if (_ackOn > 0) break;
                     if (!_connection.getIsConnected()) {
@@ -409,6 +429,44 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             if (!writeSuccessful())
                 releasePayload();
         }
+    }
+
+    /**
+     * Pure decision rule for the write-timeout ACK-starvation fail-fast.
+     *
+     * <p>When a {@code waitForCompletion} reaches its write timeout with this
+     * packet still unacknowledged, the send should be treated as failed (rather
+     * than silently timing out and dropping the payload) <em>only</em> when the
+     * connection made no forward ACK progress at all while we waited. If any
+     * other packet was acknowledged during the window, the connection is slow
+     * but alive, and this packet's ACK is likely merely coalesced or lost — we
+     * must NOT fail it (avoid a false positive that would truncate a legitimate
+     * slow-but-progressing transfer).
+     *
+     * <p>This was extracted as a pure static method so the fail-fast rule is
+     * unit-testable without a live {@link Connection} (mirrors the
+     * {@code getAdaptiveSynTimeout} evidence-gated pattern).
+     *
+     * @param packetAcked whether the specific packet was acknowledged
+     *                    ({@code WriteStatus.writeSuccessful()})
+     * @param highestAckedThrough current connection-wide forward-ACK progress
+     *                            ({@code Connection.getHighestAckedThrough()})
+     * @param ackProgressAtStart  forward-ACK progress captured at wait start
+     * @return {@code true} if this is unambiguously ACK starvation and the send
+     *         should fail fast; {@code false} if the connection made progress
+     *         (or the packet was acked) and the send should be left to the
+     *         normal timeout path
+     * @since 0.9.71+
+     */
+    static boolean isAckStarvation(boolean packetAcked, long highestAckedThrough, long ackProgressAtStart) {
+        // If this packet itself made it, there is nothing to fail.
+        if (packetAcked) {
+            return false;
+        }
+        // Fail fast only when NO forward ACK progress happened anywhere on the
+        // connection since the snapshotted baseline. Strictly greater is the
+        // progress signal; equal-or-before means the far end stopped ACKing.
+        return highestAckedThrough <= ackProgressAtStart;
     }
 
     /**
