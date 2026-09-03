@@ -147,13 +147,65 @@ public class TunnelControllerGroup implements ClientApp {
      *  @return the client runner max
      */
     public static int getClientRunnerMax() { return clientRunnerMax; }
+    /** Ceiling for the concurrent client worker pool. */
+    private static final int CLIENT_RUNNER_MAX_MAX = 16384;
     /**
-     *  Clamp and set the maximum concurrent client connections, 4 to 1024.
+     *  Clamp and set the maximum concurrent client connections, 4 to 16384.
      *  The Tuner I2PTunnelClientRunnerMaxParam stays within this same range.
+     *
+     *  <p>Enforces a one-way invariant against the Tuner-managed admission gate
+     *  ({@link #clientDefaultMaxConnections}): the worker pool may never be shrunk
+     *  below what the gate admits. Connections are served thread-per-connection on a
+     *  {@link java.util.concurrent.SynchronousQueue} (no queuing), so every admitted
+     *  connection needs its own worker; if the runner were allowed to collapse below
+     *  the gate, bursts would overflow the worker pool and be closed with zero bytes
+     *  as empty responses. Flooring the runner at the gate keeps admission and
+     *  serving capacity in the same ballpark; the runner may still grow above the
+     *  gate to absorb bursts.
+     *
      *  @param val the desired maximum
+     *  @since 0.9.71+
      */
     public static void setClientRunnerMax(int val) {
-        clientRunnerMax = Math.max(4, Math.min(1024, val));
+        int floor = clientDefaultMaxConnections;
+        clientRunnerMax = Math.max(floor, Math.min(CLIENT_RUNNER_MAX_MAX, val));
+    }
+
+    /** Low clamp for the Tuner-managed default client cap. */
+    private static final int CLIENT_MAX_CONNECTIONS_MIN = 256;
+    /** High clamp for the Tuner-managed default client cap. */
+    private static final int CLIENT_MAX_CONNECTIONS_MAX = 16384;
+
+    /**
+     *  The Tuner-managed default concurrent-connection cap for client tunnels that
+     *  do not configure an explicit {@value I2PTunnelClientBase#PROP_MAX_CONNECTIONS}
+     *  override. Kept separate from {@link #clientRunnerMax} (the shared HTTP proxy
+     *  executor ceiling) because that cap bounds the worker pool, whereas this cap
+     *  gates the accept loop from over-dispatching before a handler thread exists.
+     *
+     *  <p>An explicit per-tunnel override always wins over this default; the Tuner
+     *  can only move the floor for tunnels that leave the cap at default. Raised
+     *  under sustained load to defer connection shedding (which the browser reports
+     *  as an empty response), lowered under idle to conserve memory/FDs.
+     *
+     *  @since 0.9.71+
+     */
+    private static volatile int clientDefaultMaxConnections = I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS;
+
+    /**
+     *  The Tuner-managed default concurrent-connection cap for unset client tunnels.
+     *  @return the default caps, 256 to 16384
+     *  @since 0.9.71+
+     */
+    public static int getClientDefaultMaxConnections() { return clientDefaultMaxConnections; }
+    /**
+     *  Clamp and set the Tuner-managed default concurrent-connection cap, 256 to 16384.
+     *  The Tuner {@code I2PTunnelClientMaxConnectionsParam} stays within this range.
+     *  @param val the desired default cap
+     *  @since 0.9.71+
+     */
+    public static void setClientDefaultMaxConnections(int val) {
+        clientDefaultMaxConnections = Math.max(CLIENT_MAX_CONNECTIONS_MIN, Math.min(CLIENT_MAX_CONNECTIONS_MAX, val));
     }
 
     /** Socket connect timeout in ms, tuned by Tuner */
