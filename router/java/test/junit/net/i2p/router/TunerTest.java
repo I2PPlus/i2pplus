@@ -935,28 +935,44 @@ public class TunerTest {
                                                             500));
     }
 
-    /**
-     * Consistently near-empty backlog shrinks the buffer back toward the floor.
+/**
+     * Consistently near-empty backlog converges the buffer toward the idle floor,
+     * not the hard min: an oversized buffer shrinks one step down toward
+     * SERVER_BACKLOG_IDLE_FLOOR.
      */
     @Test
     public void testQueueCapacityShrinksWhenIdle() {
         int current = 1024;
-        assertEquals(Math.max(SQ_MIN, current - Math.max(current / 4, 128)),
+        int step = Math.max(current / 4, 128);
+        assertEquals(Math.max(Tuner.SERVER_BACKLOG_IDLE_FLOOR, current - step),
                      Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
-                                                           1,         // queueDepth tiny
-                                                           10));
+                                                            1,         // queueDepth tiny
+                                                            10));
     }
 
     /**
-     * The floor is enforced when shrinking an already-small buffer.
+     * A too-small buffer (even the previously-collapsed 16) grows one step back up
+     * toward the idle floor on a quiet box, healing the floor-collapse rather than
+     * lingering at the hard min. Regression guard for the idle ratchet-to-16 bug:
+     * 16 + max(16/4, 128) = 144, then successive cycles converge to the floor.
      */
     @Test
-    public void testQueueCapacityFloorEnforced() {
-        int current = 16;
-        assertEquals(SQ_MIN,
-                     Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX,
-                                                           1,
-                                                           10));
+    public void testQueueCapacityHealsUpFromCollapsedFloor() {
+        assertEquals(144,
+                     Tuner.computeServerBacklogQueueCapacity(16, SQ_MIN, SQ_MAX,
+                                                            1,         // queueDepth tiny
+                                                            10));
+    }
+
+    /**
+     * The buffer already settled at the idle floor is left untouched when idle.
+     */
+    @Test
+    public void testQueueCapacityStaysAtIdleFloor() {
+        assertEquals(Tuner.SERVER_BACKLOG_IDLE_FLOOR,
+                     Tuner.computeServerBacklogQueueCapacity(Tuner.SERVER_BACKLOG_IDLE_FLOOR, SQ_MIN, SQ_MAX,
+                                                            1,
+                                                            10));
     }
 
     /**
@@ -967,6 +983,19 @@ public class TunerTest {
         assertEquals(4096,
                      Tuner.computeServerBacklogQueueCapacity(4096, SQ_MIN, SQ_MAX,
                                                            Double.NaN, Double.NaN));
+    }
+
+    /**
+     * Repeated idle cycles from a collapsed floor converge to the idle floor and
+     * then stop: the buffer can never be parked at the hard 16 min by autotuning.
+     */
+    @Test
+    public void testQueueCapacityIdleConvergesToFloorAndStops() {
+        int current = 16;
+        for (int cycle = 0; cycle < 100 && current != Tuner.SERVER_BACKLOG_IDLE_FLOOR; cycle++) {
+            current = Tuner.computeServerBacklogQueueCapacity(current, SQ_MIN, SQ_MAX, 1, 10);
+        }
+        assertEquals(Tuner.SERVER_BACKLOG_IDLE_FLOOR, current);
     }
 
     // =====================================================================

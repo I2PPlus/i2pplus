@@ -10503,6 +10503,14 @@ protected int computeTarget(double observed) {
     }
 
     /**
+     * Idle autotune target for the I2PTunnel server handler queue capacity.
+     * A quiet server settles here rather than at the hard {@code min}, so a healthily
+     * sized burst buffer is always retained: the live value can never collapse to the
+     * 16-hard-floor under a merely-quiet (60s-avg {@code queueDepth}) monitoring window.
+     */
+    static final int SERVER_BACKLOG_IDLE_FLOOR = 256;
+
+    /**
      * Pure decision logic for the I2PTunnel server handler queue capacity.
      * Extracted (package-visible, static) so unit tests can exercise the policy
      * without a live {@link RouterContext}.
@@ -10518,6 +10526,11 @@ protected int computeTarget(double observed) {
      *   <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
      *       grow the buffer on a swap/busy box.</li>
      * </ul>
+     *
+     * <p>Idle handling converges the buffer to {@link #SERVER_BACKLOG_IDLE_FLOOR}
+     * rather than to {@code min}: a too-large buffer shrinks, a too-small one grows,
+     * so a quiet server retains a burst buffer and can never be parked at the hard
+     * 16 floor. {@code min} remains only the external setter clamp.
      *
      * @param current    current queue capacity
      * @param min        floor
@@ -10538,9 +10551,14 @@ protected int computeTarget(double observed) {
         if (!Double.isNaN(queueDepth) && queueDepth > 50 && !cpuPressure) {
             return Math.min(max, current + Math.max(current / 4, 128));
         }
-        // Consistently near-empty backlog -> shrink back toward the floor.
-        if (!Double.isNaN(queueDepth) && queueDepth < 5 && current > min) {
-            return Math.max(min, current - Math.max(current / 4, 128));
+        // Consistently near-empty backlog -> converge toward the idle floor: shrink an
+        // oversized buffer but grow a too-small one, so a quiet box always lands on a
+        // healthy burst buffer instead of collapsing to (or lingering at) the hard min.
+        if (!Double.isNaN(queueDepth) && queueDepth < 5 && current != SERVER_BACKLOG_IDLE_FLOOR) {
+            int step = Math.max(current / 4, 128);
+            if (current > SERVER_BACKLOG_IDLE_FLOOR)
+                return Math.max(SERVER_BACKLOG_IDLE_FLOOR, current - step);
+            return Math.min(SERVER_BACKLOG_IDLE_FLOOR, current + step);
         }
         return current;
     }
