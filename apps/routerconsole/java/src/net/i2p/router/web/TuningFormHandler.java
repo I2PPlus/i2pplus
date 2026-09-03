@@ -262,6 +262,8 @@ public class TuningFormHandler extends FormHandler {
         TUNED.add(t);
         t = new Tunable("i2ptunnel.clientRunner.max", "i2ptunnelClientrunnerMax", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
+        t = new Tunable("i2ptunnel.maxConnections", "i2ptunnelMaxconnections", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
 // Transport
         t = new Tunable("ntcp.failsafe.iterationFreq", "ntcpFailsafeIterationfreq", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);

@@ -142,6 +142,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2ptunnel.serverHandler.queueCapacity", _x("Server Handler Queue Capacity"));
         DISPLAY_NAMES.put("router.buildHandlerThreads", _x("Build Handler Threads"));
         DISPLAY_NAMES.put("i2ptunnel.clientRunner.max", _x("Client Runner Max Threads"));
+        DISPLAY_NAMES.put("i2ptunnel.maxConnections", _x("Client Default Max Connections"));
         DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.minLimit", _x("Participating Throttle Min"));
         DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.maxLimit", _x("Participating Throttle Max"));
         DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.percentLimit", _x("Participating Throttle Percent"));
@@ -279,6 +280,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverHandler.queueCapacity", _x("Inbound connections that may wait for a free server handler thread."));
         PARAM_DESCRIPTIONS.put("router.buildHandlerThreads", _x("Thread pool for inbound build request processing."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.clientRunner.max", _x("Ceiling for client proxy thread pool."));
+        PARAM_DESCRIPTIONS.put("i2ptunnel.maxConnections", _x("Default client connection cap."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.minLimit", _x("Min transit tunnels any peer can hold."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.maxLimit", _x("Max transit tunnels a single peer can hold."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.percentLimit", _x("Max share of transit tunnels for a single peer."));
