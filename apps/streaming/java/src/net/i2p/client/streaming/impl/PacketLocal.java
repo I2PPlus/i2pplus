@@ -493,6 +493,30 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      */
     public synchronized boolean writeSuccessful() { return _ackOn > 0 && _cancelledOn <= 0; }
 
+    /**
+     * Whether this packet's payload has been released and it can no longer be
+     * (re)transmitted.
+     *
+     * <p>Both {@link #ackReceived()} and {@link #cancelled()} call
+     * {@code releasePayload()}, which returns this packet's buffer to the shared
+     * outbound payload cache and clears {@code _payload}. Once either has run the
+     * packet must never be enqueued again — a (re)send would read a {@code null}
+     * payload and crash the I2CP write. {@link #isCancelled()} alone is
+     * insufficient: an ACKed-but-not-cancelled packet also has a released
+     * payload.
+     *
+     * <p>This is the discriminator the retransmit timer uses to skip packets that
+     * were acknowledged or cancelled <em>after</em> it snapshotted the outbound
+     * set (a use-after-release TOCTOU between {@code Connection.ackPackets} and
+     * {@code Connection.RetransmitEvent.timeReached}), mirroring the paced-path
+     * guard on {@code getAckTime()}.
+     *
+     * @return {@code true} if the packet was ACKed or cancelled, so its payload
+     *         was released; {@code false} if it may still be transmitted
+     * @since 0.9.71+
+     */
+    public synchronized boolean writeReleased() { return _ackOn > 0 || _cancelledOn > 0; }
+
     ////// end WriteStatus methods
 
     /**

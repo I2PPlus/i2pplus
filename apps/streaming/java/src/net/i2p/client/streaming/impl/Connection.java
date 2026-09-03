@@ -2209,6 +2209,14 @@ class Connection {
             boolean sentAny = false;
             int burstCount = 0;
             for (PacketLocal packet : toResend) {
+                // Skip packets acknowledged or cancelled after the snapshot was
+                // built (line 2203) but before this resend runs. ackPackets() and
+                // cancelled() release the payload back to the buffer pool under a
+                // different lock, so a stale reference here would re-enqueue a
+                // packet whose _payload is now null and crash the I2CP write
+                // (use-after-release TOCTOU; mirrors the paced-path guard below).
+                if (packet.writeReleased())
+                    continue;
                 /** N resends. */
                 final int nResends = packet.getNumSends();
                 if (packet.getNumSends() > _options.getMaxResends()) {
@@ -2344,7 +2352,7 @@ class Connection {
                 }
                 nextDelay = !_pacedQueue.isEmpty() ? calculatePacingDelay(_pacedQueue.peek().getPayloadSize()) : -1;
             }
-            if (!_connected.get() || packet.getAckTime() > 0) {
+            if (!_connected.get() || packet.writeReleased()) {
                 if (nextDelay >= 0) {
                     synchronized (_pacedQueue) {
                         if (!_pacedQueue.isEmpty()) {

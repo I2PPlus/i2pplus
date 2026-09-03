@@ -590,11 +590,12 @@ class Packet {
             }
         }
 
-        if (_payload != null) {
+        ByteArray payload = _payload;
+        if (payload != null) {
             try {
-                System.arraycopy(_payload.getData(), _payload.getOffset(), buffer, cur, _payload.getValid());
+                System.arraycopy(payload.getData(), payload.getOffset(), buffer, cur, payload.getValid());
             } catch (ArrayIndexOutOfBoundsException aioobe) {
-                String error = "payload.length: " + _payload.getValid() + " buffer.length: " + buffer.length + " cur: " + cur;
+                String error = "payload.length: " + payload.getValid() + " buffer.length: " + buffer.length + " cur: " + cur;
                 I2PAppContext context = I2PAppContext.getCurrentContext();
                 if (context != null) {
                     Log l = context.logManager().getLog(Packet.class);
@@ -605,7 +606,7 @@ class Packet {
                 }
                 throw aioobe;
             }
-            cur += _payload.getValid();
+            cur += payload.getValid();
         }
 
         return cur - offset;
