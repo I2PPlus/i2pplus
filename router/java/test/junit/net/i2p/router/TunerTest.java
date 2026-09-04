@@ -779,7 +779,7 @@ public class TunerTest {
     // Section 10: I2PTunnel server handler thread pool decisions
     // =====================================================================
 
-    private static final int SH_MIN = 2, SH_MAX = 128;
+    private static final int SH_MIN = 2, SH_MAX = 512;
 
     /**
      * Saturated pool: active pinned near the ceiling while the queue backs up,
@@ -788,12 +788,13 @@ public class TunerTest {
      */
     @Test
     public void testServerHandlerSaturatedPoolGrows() {
-        assertEquals(SH_MIN + 4,
+        assertEquals(SH_MIN + 8,
                      Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
-                                                      70,        // queueDepth backlog
-                                                      2,         // active == current (saturated)
-                                                      180,       // blockingTime low (I2P-write stall)
-                                                      20));      // jobLag, no CPU pressure
+                                                       70,        // queueDepth backlog
+                                                       2,         // active == current (saturated)
+                                                       180,       // blockingTime low (I2P-write stall)
+                                                       20,        // jobLag, no CPU pressure
+                                                       Double.NaN)); // no SYN-expire evidence
     }
 
     /**
@@ -803,23 +804,25 @@ public class TunerTest {
     public void testServerHandlerSaturatedCeilingEnforced() {
         assertEquals(SH_MAX,
                      Tuner.computeServerHandlerThreads(SH_MAX, SH_MIN, SH_MAX,
-                                                      200,       // queueDepth backlog
-                                                      120,       // active == current (max, saturated)
-                                                      100,       // blockingTime moderate
-                                                      20));
+                                                       200,       // queueDepth backlog
+                                                       510,       // active == current (near max, saturated)
+                                                       100,       // blockingTime moderate
+                                                       20,
+                                                       Double.NaN));
     }
 
     /**
-     * Not saturated (active well below ceiling) but queue backlog: slower +2 growth.
+     * Not saturated (active well below ceiling) but queue backlog: slower growth.
      */
     @Test
-    public void testServerHandlerQueueBacklogGrowsTwo() {
-        assertEquals(SH_MIN + 2,
+    public void testServerHandlerQueueBacklogGrows() {
+        assertEquals(SH_MIN + 4,
                      Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
-                                                      150,      // queueDepth backlog
-                                                      1,        // active low (NOT saturated)
-                                                      180,      // blockingTime fast
-                                                      20));
+                                                       150,      // queueDepth backlog
+                                                       1,        // active low (NOT saturated)
+                                                       180,      // blockingTime fast
+                                                       20,
+                                                       Double.NaN));
     }
 
     /**
@@ -830,10 +833,11 @@ public class TunerTest {
     public void testServerHandlerDoesNotGrowUnderCpuPressure() {
         assertEquals(SH_MIN,
                      Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
-                                                      200,       // queueDepth backlog
-                                                      180,       // active == current (saturated signal)
-                                                      2,         // blockingTime fast
-                                                      500));     // jobLag -> cpuPressure
+                                                       200,       // queueDepth backlog
+                                                       180,       // active == current (saturated signal)
+                                                       2,         // blockingTime fast
+                                                       500,       // jobLag -> cpuPressure
+                                                       Double.NaN));
     }
 
     /**
@@ -841,13 +845,70 @@ public class TunerTest {
      * matching the pre-existing emergency branch.
      */
     @Test
-    public void testServerHandlerBlockingEmergencyGrowsFour() {
-        assertEquals(SH_MIN + 4,
+    public void testServerHandlerBlockingEmergencyGrows() {
+        assertEquals(SH_MIN + 8,
                      Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
-                                                      5,        // low queue
-                                                      Double.NaN, // active unknown
-                                                      12000,     // emergency blocking time (>10s)
-                                                      20));
+                                                       5,        // low queue
+                                                       Double.NaN, // active unknown
+                                                       12000,     // emergency blocking time (>10s)
+                                                       20,
+                                                       Double.NaN));
+    }
+
+    /**
+     * Saturated pool deep into its growth: ramp scales with pool size so the
+     * proportional step climbs toward the ceiling quickly (not a fixed +4).
+     */
+    @Test
+    public void testServerHandlerSaturatedGrowScalesWithPool() {
+        assertEquals(300,
+                     Tuner.computeServerHandlerThreads(200, SH_MIN, SH_MAX,
+                                                       300,  // queueDepth backlog
+                                                       200,  // active == current (saturated)
+                                                       150,  // blockingTime fast
+                                                       20,   // no CPU pressure
+                                                       Double.NaN)); // not latency-bound
+    }
+
+    /**
+     * Saturated under a high SYN-expire rate: the accept queue is losing SYNs to
+     * timeout (transport-latency bound). Additional handler threads would all stall
+     * on the same slow I2P write, so growth is restrained to a modest +2 instead of
+     * the proportional step — avoid overshoot on a bottleneck more threads can't widen.
+     */
+    @Test
+    public void testServerHandlerSaturatedGrowsSlowlyWhenLatencyBound() {
+        assertEquals(202,
+                     Tuner.computeServerHandlerThreads(200, SH_MIN, SH_MAX,
+                                                       300,  // queueDepth backlog
+                                                       200,  // active == current (saturated)
+                                                       150,  // blockingTime fast
+                                                       20,   // no CPU pressure
+                                                       75)); // high SYN-expire rate
+    }
+
+    /**
+     * Queue backlog under a high SYN-expire rate is likewise transport-bound: grow
+     * modestly (+2) rather than the proportional step. A low expire rate falls through
+     * to the normal proportional growth path.
+     */
+    @Test
+    public void testServerHandlerBacklogGrowsSlowlyWhenLatencyBound() {
+        assertEquals(202,
+                     Tuner.computeServerHandlerThreads(200, SH_MIN, SH_MAX,
+                                                       150,  // queueDepth backlog (not saturated)
+                                                       10,   // active low
+                                                       150,  // blockingTime fast
+                                                       20,
+                                                       75)); // high SYN-expire rate
+        // Low expire rate -> normal proportional backlog growth (200 + 200/4 = 250).
+        assertEquals(250,
+                     Tuner.computeServerHandlerThreads(200, SH_MIN, SH_MAX,
+                                                       150,  // queueDepth backlog
+                                                       10,   // active low
+                                                       150,
+                                                       20,
+                                                       10)); // low SYN-expire rate
     }
 
     /**
@@ -857,10 +918,11 @@ public class TunerTest {
     public void testServerHandlerShrinksWhenIdle() {
         assertEquals(7,
                      Tuner.computeServerHandlerThreads(8, SH_MIN, SH_MAX,
-                                                      1,         // queueDepth tiny
-                                                      300,       // active unreached (idle)
-                                                      1,         // blockingTime fast
-                                                      10));
+                                                       1,         // queueDepth tiny
+                                                       300,       // active unreached (idle)
+                                                       1,         // blockingTime fast
+                                                       10,
+                                                       Double.NaN));
     }
 
     /**
@@ -870,8 +932,9 @@ public class TunerTest {
     public void testServerHandlerNaNSignalsHold() {
         assertEquals(16,
                      Tuner.computeServerHandlerThreads(16, SH_MIN, SH_MAX,
-                                                      Double.NaN, Double.NaN,
-                                                      Double.NaN, Double.NaN));
+                                                       Double.NaN, Double.NaN,
+                                                       Double.NaN, Double.NaN,
+                                                       Double.NaN));
     }
 
     // =====================================================================

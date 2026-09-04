@@ -10525,7 +10525,12 @@ protected int computeTarget(double observed) {
 
             super("i2ptunnel.serverHandler.threads", "I2PTunnel server threads",
                   SUB_TUNNEL,
-                  2, 128, 1, "i2ptunnel.serverHandler.queueDepth", _context);
+                  2, 512, 1, "i2ptunnel.serverHandler.queueDepth", _context);
+            // Effective ceiling from available heap — the shared pool must never exceed a
+            // thread count the max heap can host (see memoryDerivedClientThreadMax). A
+            // heap-constrained router cannot host 512 OS threads; clamping here bounds the
+            // reachable ceiling at what the JVM can actually hold without OOM.
+            _effMax = Math.min(_max, memoryDerivedClientThreadMax());
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -10553,7 +10558,9 @@ protected int computeTarget(double observed) {
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double blockingTime = getAdditionalStat(_context, "i2ptunnel.serverHandler.blockingHandleTime");
             double active = getAdditionalStat(_context, "i2ptunnel.serverHandler.active");
-            return computeServerHandlerThreads(current, _min, _max, observed, active, blockingTime, jobLag);
+            double synExpire = getAdditionalStat(_context, "stream.con.synExpireRate");
+            return computeServerHandlerThreads(current, _min, _effMax, observed, active,
+                                              blockingTime, jobLag, synExpire);
         }
     }
 
@@ -10574,6 +10581,13 @@ protected int computeTarget(double observed) {
      *   <li>{@code blockingTime} — local handler connect time (not the I2P write).</li>
      *   <li>{@code jobLag} — {@code jobQueue.jobLag} as a CPU-pressure veto: never
      *       grow a pool on a swap/busy box.</li>
+     *   <li>{@code synExpire} — router-wide SYN accept-queue expire rate percent
+     *       ({@code stream.con.synExpireRate}). A high rate is direct latency
+     *       evidence: SYNs are expiring in the accept queue because the inbound I2P
+     *       write is slow, NOT because the handler pool is under-provisioned. Handlers
+     *       stall on the same slow transport, so adding threads cannot drain faster;
+     *       aggressive growth here would just pile up more blocked sockets. A high
+     *       expire rate therefore moderates growth rather than vetoing it.</li>
      * </ul>
      *
      * @param current      current pool size
@@ -10583,41 +10597,61 @@ protected int computeTarget(double observed) {
      * @param active       60s avg of i2ptunnel.serverHandler.active, or NaN
      * @param blockingTime 60s avg of i2ptunnel.serverHandler.blockingHandleTime, or NaN
      * @param jobLag       60s avg of jobQueue.jobLag, or NaN
+     * @param synExpire    60s avg of stream.con.synExpireRate (percent), or NaN
      * @return the new pool size
      * @since 0.9.71+
      */
     static int computeServerHandlerThreads(int current, int min, int max,
                                            double queueDepth, double active,
-                                           double blockingTime, double jobLag) {
+                                           double blockingTime, double jobLag,
+                                           double synExpire) {
         boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
         boolean blockedSlow = !Double.isNaN(blockingTime) && blockingTime > 2000;
         boolean blockedAny = !Double.isNaN(blockingTime) && blockingTime > 1000;
+        // High SYN expire rate = the accept queue is actively losing SYNs to
+        // timeout. The transport (inbound I2P write) is the bottleneck, not handler
+        // throughput, so restrain aggressive pool growth to a modest step.
+        boolean latencyBound = !Double.isNaN(synExpire) && synExpire >= 50;
         // Saturation: the fixed pool is fully busy (active pinned near the ceiling)
         // and connections are backing up in the queue. This is the starvation case —
         // handlers are stalled (on inbound I2P writes), so blockingHandleTime is low.
         boolean saturated = !Double.isNaN(active) && !Double.isNaN(queueDepth)
                             && active >= current * 0.9 && queueDepth > 50;
 
-        // Emergency: handlers blocked >10s on the local connect side -> aggressive growth
+        // Growth is proportional to the current pool size so the ramp accelerates as
+        // the pool grows, letting a persistently saturated shared server-handler pool
+        // climb to the (high) ceiling in a handful of Tuner cycles. The CPU-pressure
+        // veto still guards the pathological swap/busy box, and a high SYN-expire
+        // (latency-bound) signal restrains the step so we never pile threads onto a
+        // bottleneck that more threads cannot widen. High-volume server tunnels (e.g.
+        // trackers) exhaust a fixed +4-step ramp before the ceiling is reached;
+        // scaling the step keeps the boundary reachable under sustained load.
+
+        // Emergency: handlers blocked >10s on the local connect side -> largest step
         if (!cpuPressure && !Double.isNaN(blockingTime) && blockingTime > 10000) {
-            return Math.min(max, current + 4);
+            return Math.min(max, current + Math.max(current / 2, 8));
         }
         // Saturated handler pool with a backlog -> aggressive growth so the accept
-        // loop stops starving connections (never shrink a saturated pool).
+        // loop stops starving connections (never shrink a saturated pool). Restrained
+        // when latency-bound: a pool stalled on the transport gains nothing from more
+        // threads, so step modestly to avoid overshoot on a box that is draining as
+        // fast as the I2P fabric allows.
         if (!cpuPressure && saturated) {
-            return Math.min(max, current + 4);
+            return latencyBound
+                ? Math.min(max, current + 2)
+                : Math.min(max, current + Math.max(current / 2, 8));
         }
         // Queue backlog + no CPU pressure -> grow pool
         if (!cpuPressure && queueDepth > 100)
-            return Math.min(max, current + 2);
+            return Math.min(max, current + (latencyBound ? 2 : Math.max(current / 4, 4)));
 
         // Handlers blocking >2s -> grow pool to reduce per-handler load
         if (blockedSlow && !cpuPressure)
-            return Math.min(max, current + 2);
+            return Math.min(max, current + Math.max(current / 4, 2));
 
         // Handlers blocking >1s -> grow pool
         if (blockedAny && !cpuPressure)
-            return Math.min(max, current + 1);
+            return Math.min(max, current + Math.max(current / 8, 1));
 
         // Idle pool with minimal queue and handlers not blocking -> shrink
         if (queueDepth < 5 && !blockedAny && current > min)
