@@ -62,9 +62,9 @@
     <echo message="[DEBUG] hamcrest home before override is ${hamcrest.home}"/>
     <echo message="[DEBUG] mockito home before override is ${mockito.home}"/>
 
-    <property name="junit.home" value="${ant.home}/lib"/>
-    <property name="hamcrest.home" value="${ant.home}/lib"/>
-    <property name="mockito.home" value="${ant.home}/lib"/>
+    <property name="junit.home" value="../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="../../../tools/test/mockito"/>
 
     <echo message="[DEBUG] junit home after override is ${junit.home}"/>
     <echo message="[DEBUG] hamcrest home after override is ${hamcrest.home}"/>
@@ -83,7 +83,7 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
-        <pathelement location="${hamcrest.home}/hamcrest.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
         <pathelement location="${mockito.home}/objenesis.jar"/>
@@ -133,9 +133,9 @@
       </fileset>
     </delete>
 
-    <property name="junit.home" value="${ant.home}/lib"/>
-    <property name="hamcrest.home" value="${ant.home}/lib"/>
-    <property name="mockito.home" value="${ant.home}/lib"/>
+    <property name="junit.home" value="../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="../../../tools/test/mockito"/>
 
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>

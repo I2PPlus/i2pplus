@@ -309,9 +309,10 @@
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/obj"/>
     <mkdir dir="${build.dir}/testobj"/>
-    <!-- set hamcrest and junit homes to the old default unless overridden elsewhere -->
-    <property name="hamcrest.home" value="${ant.home}/lib/"/>
-    <property name="junit.home" value="${ant.home}/lib/"/>
+    <!-- set hamcrest, junit and mockito homes to the repo's bundled test libs unless overridden elsewhere -->
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <property name="mockito.home" value="../../tools/test/mockito"/>
     <javac srcdir="./test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
