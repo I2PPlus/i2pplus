@@ -364,7 +364,7 @@ body,input[type=submit],input[type=reset],input[type=file]::file-selector-button
 pre{font-size:9pt}
 input[type=submit],input[type=reset],.fakebutton{padding:8px 12px 8px}
 input[type=text]{padding:8px}
-#booksearch input[name=search],#booksearch input[name=search]:focus{padding:7px 8px;min-width:320px}
+#booksearch input[name=search],#booksearch input[name=search]:focus{padding:7px 8px;min-width:320px;width:35%}
 #host_list td.helper a::after,#host_list td.b32link a::after{width:18px;height:18px;background-size:18px}
 }
 
