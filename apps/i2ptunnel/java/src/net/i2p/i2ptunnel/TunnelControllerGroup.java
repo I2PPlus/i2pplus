@@ -120,11 +120,14 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static int getServerHandlerThreads() { return serverHandlerThreads; }
     /**
-     *  Clamp and set the number of server handler threads, 2 to 128.
+     *  Clamp and set the number of server handler threads, 2 to 512.
+     *  The high ceiling lets the Tuner drain the shared server-handler pool
+     *  under sustained inbound load (e.g. a high-volume server tunnel) where
+     *  workers stall on slow inbound I2P writes rather than finishing quickly.
      *  @param val the desired count
      */
     public static void setServerHandlerThreads(int val) {
-        serverHandlerThreads = Math.max(2, Math.min(128, val));
+        serverHandlerThreads = Math.max(2, Math.min(512, val));
     }
     /**
      *  The maximum number of connections that may wait in the server handler
