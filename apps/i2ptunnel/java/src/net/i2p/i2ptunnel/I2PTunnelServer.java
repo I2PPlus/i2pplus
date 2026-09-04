@@ -812,7 +812,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     }
                 } catch (RejectedExecutionException ree) {
                     _log.warn("Server handler pool saturated on " +
-                               remoteHost + ':' + remotePort + " -> Closing connection...");
+                               remoteHost.toString().replace("/", "") + ':' + remotePort + " -> Closing connection...");
                     closeSilently(socketToHandle);
                     releaseConnection();
                 }
@@ -823,7 +823,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _log.warn("Reconnecting to router after restart");
                 reconnectServerSocket();
             } catch (I2PException ipe) {
-                _log.warn("Error accepting server socket connection, attempting to recover...", ipe);
+                _log.warn("Error accepting server socket connection -> attempting to recover... (" + ipe.getMessage() + ")");
                 closeSilently(i2ps);
                 if (!recoverServerSocket()) {
                     break;
