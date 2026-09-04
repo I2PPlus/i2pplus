@@ -622,6 +622,10 @@ class ConnectionManager {
         // Stats for Connection
         _context.statManager().createRequiredRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("stream.connectionReceived", "Number of stream connections received", "Stream", RATES);
+        // Published by ConnectionHandler on each SYN sample-window rollover; read by the
+        // Tuner (stream.con.synExpireRate) to tell latency-bound accept stalls (high
+        // expire rate) from genuinely parallelizable load.
+        _context.statManager().createRateStat("stream.con.synExpireRate", "Percent of queued SYNs that expired un-accepted during the sample window", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.connectionCreated", "Number of outbound stream connections created", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectFailed", "Elapsed time (ms) of a failed outbound connect attempt", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectTime", "Elapsed time (ms) of a successful outbound connect", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });

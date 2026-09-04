@@ -201,16 +201,48 @@ class ConnectionHandler {
     private int getSynExpireRatePct() {
         long now = _context.clock().now();
         if (now - _lastStressSampleAt >= SYN_STRESS_SAMPLE_INTERVAL) {
+            // A full window has elapsed. Publish the just-closed window's expire
+            // rate (so the Tuner sees the router-wide accept-queue health), then
+            // reset for the next window. Returning the completed rate instead of
+            // -1 avoids discarding the window's data at the rollover instant.
+            int rate = currentSynExpireRatePct();
             _lastStressSampleAt = now;
             _synQueueProcessed = 0;
             _synQueueExpired = 0;
-            return -1;
+            publishSynExpireRate(rate);
+            return rate;
         }
+        return currentSynExpireRatePct();
+    }
+
+    /**
+     * The expire-rate of the current (in-progress) sample window: percent of
+     * queued SYNs that expired un-accepted, or -1 when there is no evidence yet
+     * (no SYNs processed this window). Kept separate from the window rollover so
+     * the publish-on-rollover path can report the completed window.
+     *
+     * @return percent [0,100] of queued SYNs that expired, or -1 when no evidence
+     */
+    private int currentSynExpireRatePct() {
         int processed = _synQueueProcessed;
         if (processed <= 0) {return -1;}
         int expired = _synQueueExpired;
         if (expired <= 0) {return 0;}
         return (int) (100L * expired / processed);
+    }
+
+    /**
+     * Publish the SYN accept-queue expire rate as a router-wide RateStat so the
+     * Tuner can distinguish latency-bound accept stalls (high expire rate: more
+     * handler threads will not help — the transport is the bottleneck) from a
+     * genuinely parallelizable load. Only meaningful in a router context, and
+     * only when a real rate is available.
+     *
+     * @param ratePct the expire rate percent, or -1 when there is no evidence
+     */
+    private void publishSynExpireRate(int ratePct) {
+        if (!_context.isRouterContext() || ratePct < 0) {return;}
+        _context.statManager().addRateData("stream.con.synExpireRate", ratePct);
     }
 
     /**
