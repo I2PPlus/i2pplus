@@ -311,7 +311,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
         int numSends = _numSends.get();
         if (numSends > 1)
-            buf.append(" sent ").append(numSends).append(" times");
+            buf.append("Sent ").append(numSends).append(" times");
 
         if (isFlagSet(FLAG_SYNCHRONIZE |
                       FLAG_CLOSE |
@@ -403,7 +403,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                     if (isAckStarvation(writeSuccessful(), _connection.getHighestAckedThrough(), ackProgressAtStart)) {
                         if (_log.shouldWarn()) {
                             _log.warn("No forward ACK progress on connection for " + maxWaitMs
-                                      + "ms; packet never ACKed — treating send as failed: " + this);
+                                      + "ms -> Packet never ACKed — treating send as failed \n* " + this);
                         }
                         throw new IOException("disconnected (no forward ACK progress for " + maxWaitMs + "ms)");
                     }
