@@ -52,6 +52,12 @@ class Connection {
     private final AtomicLong _resetSentOn = new AtomicLong();
     /** Timestamp when a RESET was received, or 0 if none. */
     private final AtomicLong _resetReceivedOn = new AtomicLong();
+    /** Wall-clock ms of the last SYN-ACK (initial or re-send) we sent for this connection. */
+    private volatile long _lastSynAckSentOn;
+    /** Count of SYN-ACK re-sends triggered by retransmitted SYNs for this connection. */
+    private volatile int _synAckResends;
+    /** Whether the regenerated SYN-ACK WARN has been logged for this connection (rate limit). */
+    private volatile boolean _synAckWarnLogged;
     /** Whether the connection is currently established and usable. */
     private final AtomicBoolean _connected = new AtomicBoolean(true);
     /** Whether the final disconnect sequence has been initiated. */
@@ -313,6 +319,132 @@ class Connection {
         if (interval < SYN_RTO_MIN) {interval = SYN_RTO_MIN;}
         if (interval > initialRtoMs) {interval = initialRtoMs;}
         return (int) interval;
+    }
+
+    /**
+     * Minimum spacing (ms) between SYN-ACK re-sends to an existing connection in
+     * response to retransmitted SYNs.
+     *
+     * <p>{@code ConnectionHandler#resendSynAck} mints a fresh signed SYN-ACK into
+     * the shared outbound packet queue for <em>every</em> retransmitted SYN.  When a
+     * client's SYN retransmit timer (RTO) is shorter than the I2P round trip — the
+     * latency-bound regime observed on the tracker tunnel, where a congested path
+     * delivers one retransmitted SYN every &lt;1s per destination — each retransmit
+     * triggers another full SYN-ACK enqueue, extra egress, and more latency, closing a
+     * self-amplifying loop.  Spacing bounds the SYN-ACK output to one per connection
+     * per interval: the client's own retransmits continue regardless, but the server
+     * answer rate is pinned, so amplification is capped rather than unbounded.
+     *
+     * <p>This is a defensive bound below {@link #SYN_ACK_RESEND_MAX}: it caps the
+     * <em>rate</em> of re-sends, while the count limit caps the total.
+     *
+     * @since 0.9.71+
+     */
+    static final long SYN_ACK_RESEND_MIN_SPACING_MS = 3000;
+
+    /**
+     * Maximum number of SYN-ACK re-sends to an existing connection in response to
+     * retransmitted SYNs, per connection lifetime.
+     *
+     * <p>Complements {@link #SYN_ACK_RESEND_MIN_SPACING_MS}: the spacing caps the
+     * rate of re-sends, this caps the total count so a connection that spins in a
+     * half-open state (client stuck retransmitting at its RTO, handshake never
+     * completes) cannot mint SYN-ACKs indefinitely.  After this many re-sends the
+     * handler drops further retransmitted SYNs without answering.
+     *
+     * <p>3 gives ample room for the legitimate race this code fixes (client
+     * retransmitted SYN before the SYN-ACK arrived — see
+     * {@code ConnectionHandler#resendSynAck}) while still hard-bounding a stuck
+     * connection.
+     *
+     * @since 0.9.71+
+     */
+    static final int SYN_ACK_RESEND_MAX = 3;
+
+    /**
+     * Decide whether to re-send a SYN-ACK for an existing connection in response to
+     * a retransmitted SYN.
+     *
+     * <p>Bound is applied <em>before</em> the SYN-ACK is minted so a throttled
+     * retransmit costs nothing (no packet object, no signature, no enqueue).  The
+     * decision is purely a function of connection send history and wall clock, which
+     * keeps the hot path branch-free and the rule testable without a running router.
+     *
+     * <p><b>Rules.</b> A re-send is allowed when:
+     * <ol>
+     *   <li>fewer than {@code maxResends} re-sends have already been performed
+     *       ({@code resends < maxResends}), and</li>
+     *   <li>either no SYN-ACK has been sent yet in connection history
+     *       ({@code lastSynAckSentOn <= 0} — nothing to space against), or the
+     *       interval since the last SYN-ACK is at least {@code minSpacingMs}.</li>
+     * </ol>
+     * History is authoritative: calls do not mutate state, so a rejected re-send
+     * neither extends nor advances the throttle window (state snapshotting; see
+     * AGENTS.md "State Snapshotting").
+     *
+     * @param lastSynAckSentOn wall-clock ms of the last SYN-ACK sent for the
+     *                         connection (initial or re-send), or &lt;=0 if none yet
+     * @param resends          number of SYN-ACK re-sends already performed for this
+     *                         connection
+     * @param now              current wall-clock ms ({@code I2PAppContext.clock()})
+     * @param minSpacingMs     minimum interval between re-sends in ms
+     * @param maxResends       maximum SYN-ACK re-sends per connection lifetime
+     * @return true if a SYN-ACK should be re-sent now
+     * @since 0.9.71+
+     */
+    static boolean shouldResendSynAck(long lastSynAckSentOn, int resends, long now,
+                                      long minSpacingMs, int maxResends) {
+        if (resends >= maxResends) {return false;}
+        if (lastSynAckSentOn <= 0) {return true;}
+        return now - lastSynAckSentOn >= minSpacingMs;
+    }
+
+    /**
+     * Whether this connection should re-send a SYN-ACK for a retransmitted SYN
+     * right now, given its own send history.  Pure delegate over
+     * {@link #shouldResendSynAck(long, int, long, long, int)} using this
+     * connection's throttle constants, so the heuristic is exercised through the
+     * same code path tests cover.
+     *
+     * @param now current wall-clock ms from {@code I2PAppContext.clock()}
+     * @return true if a SYN-ACK should be re-sent now
+     * @since 0.9.71+
+     */
+    boolean shouldResendSynAck(long now) {
+        return shouldResendSynAck(_lastSynAckSentOn, _synAckResends, now,
+                                  SYN_ACK_RESEND_MIN_SPACING_MS, SYN_ACK_RESEND_MAX);
+    }
+
+    /**
+     * Record that a SYN-ACK was sent for this connection at {@code now} (initial
+     * re-send from {@code ConnectionHandler#resendSynAck} only — the initial
+     * handshake SYN-ACK is a normal outbound packet and is not counted here).  This
+     * snapshot advances the throttle window so subsequent retransmitted SYNs are
+     * spaced {@link #SYN_ACK_RESEND_MIN_SPACING_MS} after the last answer.
+     *
+     * @param now wall-clock ms the SYN-ACK was enqueued
+     * @since 0.9.71+
+     */
+    void recordSynAckResend(long now) {
+        _lastSynAckSentOn = now;
+        _synAckResends++;
+    }
+
+    /**
+     * Whether the "re-sending SYN-ACK" WARN has already been logged for this
+     * connection, and mark it logged on first check.  Prevents a retransmit storm
+     * against a single stuck connection from flooding the log with identical WARN
+     * lines (observed as ~15% of log volume during the tracker-tunnel storm); the
+     * first re-send logs WARN, subsequent ones drop to DEBUG.
+     *
+     * @return true if the WARN was already logged (caller should log at DEBUG),
+     *         false if this is the first re-send (caller should log at WARN)
+     * @since 0.9.71+
+     */
+    boolean synAckWarnAlreadyLogged() {
+        if (_synAckWarnLogged) {return true;}
+        _synAckWarnLogged = true;
+        return false;
     }
 
     /**

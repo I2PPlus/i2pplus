@@ -524,9 +524,25 @@ class ConnectionHandler {
                         if (_manager.checkInboundSynFlood(from.calculateHash(), _context.clock().now())) {
                             continue; // drop it without re-sending a SYN-ACK
                         }
-                        if (_log.shouldWarn() && syn != null) {
+                        // Rate-bind SYN-ACK re-sends: a latency-bound client (RTO < I2P RTT)
+                        // retransmits its SYN faster than its SYN-ACKs arrive, and each
+                        // retransmit would otherwise mint another full signed SYN-ACK into
+                        // the shared FIFO (the amplification loop seen on the tracker
+                        // tunnel).  Snapshot the decision at read time; state changes don't
+                        // advance the throttle window for a rejected retransmit.
+                        if (!oldcon.shouldResendSynAck(_context.clock().now())) {
+                            if (_log.shouldDebug()) {_log.debug("Dropping retransmitted SYN, SYN-ACK throttle active: " + oldcon);}
+                            continue;
+                        }
+                        // Log the first re-send per connection at WARN (one-shot diagnosis),
+                        // subsequent re-sends at DEBUG — the storm log inflation is as much
+                        // a problem as the extra packets.
+                        boolean alreadyWarned = oldcon.synAckWarnAlreadyLogged();
+                        if (_log.shouldWarn() && !alreadyWarned && syn != null) {
                             _log.warn("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " +
                                       oldcon + (syn != null && !syn.toString().isEmpty() ? "\n* SYN: " + syn : ""));
+                        } else if (_log.shouldDebug()) {
+                            _log.debug("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " + oldcon);
                         }
                         resendSynAck(oldcon, syn);
                         continue;
@@ -626,7 +642,11 @@ class ConnectionHandler {
         reply.setFlag(Packet.FLAG_MAX_PACKET_SIZE_INCLUDED);
         reply.setOptionalMaxSize(mtu);
         if (_log.shouldDebug()) {_log.debug("Re-sending SYN-ACK: " + reply + " for existing " + con);}
-        _manager.getPacketQueue().enqueue(reply);
+        if (_manager.getPacketQueue().enqueue(reply)) {
+            // only advance the throttle window if the packet was actually queued;
+            // a failed enqueue (dead queue) must not consume re-send budget
+            con.recordSynAckResend(_context.clock().now());
+        }
     }
 
     /**
