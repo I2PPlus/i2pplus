@@ -234,6 +234,17 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.3 moved from I2PSocketManagerFull */
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
 
+    /**
+     *  Operator-tunable ceiling for the Tuner's {@code maxConcurrentStreamsOverride}.
+     *  The effective cap taken by a manager is the min of its configured value
+     *  ({@link #PROP_MAX_STREAMS}) and the override, so this only bounds the Tuner;
+     *  it can never raise a manager above its own per-tunnel ceiling.
+     *  @since 0.9.71+
+     */
+    public static final String PROP_MAX_MAX_STREAMS = "i2p.streaming.maxMaxConcurrentStreams";
+    /** Default ceiling; operator may raise via PROP_MAX_MAX_STREAMS. @since 0.9.71+ */
+    static volatile int maxMaxConcurrentStreams = 1024;
+
     /** @since 0.9.4 default false */
     public static final String PROP_DISABLE_REJ_LOG = "i2p.streaming.disableRejectLogging";
 
@@ -267,6 +278,39 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static int getInitialWindowSize() { return initialWindowSize; }
     /** Initial window size. */
     static void setInitialWindowSize(int val) { initialWindowSize = Math.max(4, Math.min(256, val)); }
+
+    /**
+     *  Reactive cap on concurrent streams (both per-manager inbound budget and the
+     *  outbound wait queue), written by the router's Tuner under saturation. Applies
+     *  to every ConnectionManager. 0 (the default) means "no override": each manager
+     *  uses its own configured {@code i2p.streaming.maxConcurrentStreams} captured at
+     *  init. When positive, a manager enforces the {@code min(configured, override)}.
+     *  @since 0.9.71+
+     */
+    static volatile int maxConcurrentStreamsOverride = 0;
+
+    /** The Tuner's stream-cap override; 0 = none. @since 0.9.71+ */
+    static int getMaxConcurrentStreamsOverride() { return maxConcurrentStreamsOverride; }
+    /** The Tuner's stream-cap override; clamped to a sane [0, maxMaxConcurrentStreams]. @since 0.9.71+ */
+    static void setMaxConcurrentStreamsOverride(int val) {
+        maxConcurrentStreamsOverride = Math.max(0, Math.min(maxMaxConcurrentStreams, val));
+    }
+
+    /**
+     *  Operator-tunable ceiling for the Tuner's stream-cap override.
+     *  Reads from router.config via {@code i2p.streaming.maxMaxConcurrentStreams},
+     *  falling back to the compiled default.
+     *  @return the current ceiling
+     *  @since 0.9.71+
+     */
+    static int getMaxMaxConcurrentStreams() {
+        return I2PAppContext.getGlobalContext().getProperty(PROP_MAX_MAX_STREAMS, maxMaxConcurrentStreams);
+    }
+    /**
+     *  Operator-tunable ceiling for the Tuner's stream-cap override; clamped to [64, 8192].
+     *  @since 0.9.71+
+     */
+    static void setMaxMaxConcurrentStreams(int val) { maxMaxConcurrentStreams = Math.max(64, Math.min(8192, val)); }
 
     /**
      * Initial RTT estimate before first measurement.

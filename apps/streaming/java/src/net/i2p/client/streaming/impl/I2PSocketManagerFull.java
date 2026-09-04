@@ -925,6 +925,38 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public static void setMaxInboundBuffer(int val) { ConnectionOptions.setMaxInboundBufferStatic(val); }
 
+    /**
+     * The Tuner's reactive cap on concurrent streams; 0 = not armed (each manager
+     * uses its own configured {@code maxConcurrentStreams}).
+     * @return the current override, or 0 if disabled
+     * @since 0.9.71+
+     */
+    public static int getMaxStreamsOverride() { return ConnectionOptions.getMaxConcurrentStreamsOverride(); }
+
+    /**
+     * Arm or clear the Tuner's reactive stream-cap override. Clamped to
+     * {@code [0, maxMaxConcurrentStreams]}; a manager enforces
+     * {@code min(config, override)}.
+     * @param val the new override cap, or 0 to disable
+     * @since 0.9.71+
+     */
+    public static void setMaxStreamsOverride(int val) { ConnectionOptions.setMaxConcurrentStreamsOverride(val); }
+
+    /**
+     * The operator-tunable ceiling for the Tuner's stream-cap override.
+     * Reads from {@code i2p.streaming.maxMaxConcurrentStreams} in router.config.
+     * @return the current ceiling
+     * @since 0.9.71+
+     */
+    public static int getMaxMaxConcurrentStreams() { return ConnectionOptions.getMaxMaxConcurrentStreams(); }
+
+    /**
+     * Set the operator-tunable ceiling for the Tuner's stream-cap override.
+     * @param val the new ceiling, clamped to [64, 8192]
+     * @since 0.9.71+
+     */
+    public static void setMaxMaxConcurrentStreams(int val) { ConnectionOptions.setMaxMaxConcurrentStreams(val); }
+
     private static volatile int _maxSYNQueueSize;
 
     /**

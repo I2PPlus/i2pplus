@@ -52,6 +52,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("PASSIVE_FLUSH_DELAY", _x("Nagle Flush Delay"));
         DISPLAY_NAMES.put("i2p.streaming.maxSlowStartWindow", _x("Slow Start Window Cap"));
         DISPLAY_NAMES.put("i2p.streaming.maxInboundBuffer", _x("Max Inbound Buffer"));
+        DISPLAY_NAMES.put("MAX_STREAMS", _x("Max Concurrent Streams"));
         DISPLAY_NAMES.put("i2p.streaming.maxSynResends", _x("Max SYN Sends"));
         DISPLAY_NAMES.put("i2p.streaming.maxRTO", _x("Max RTO"));
         DISPLAY_NAMES.put("i2p.streaming.maxResendDelay", _x("Max Resend Delay"));
@@ -190,6 +191,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("PASSIVE_FLUSH_DELAY", _x("Nagle flush delay (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxSlowStartWindow", _x("Max congestion window during slow start."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxInboundBuffer", _x("Per-connection inbound buffer cap (bytes)."));
+        PARAM_DESCRIPTIONS.put("MAX_STREAMS", _x("Dynamic cap on concurrent streams per destination."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxSynResends", _x("Total SYN attempts before giving up on a handshake."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRTO", _x("Max retransmission timeout (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxResendDelay", _x("Max time between retransmissions (ms)."));

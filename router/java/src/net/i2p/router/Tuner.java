@@ -689,6 +689,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MaxSynResendsParam());
         _params.add(new ConnectTimeoutMultiplierParam());
         _params.add(new MaxInboundBufferParam());
+        _params.add(new MaxStreamsParam());
 
         // I2CP
         _params.add(new InternalQueueSizeParam());
@@ -6965,6 +6966,153 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
             return current;
         }
+    }
+
+    /**
+     *  Elastic, demand-following cap on concurrent streams shared by the streaming
+     *  subsystem. Normally the streaming jar uses the user-configured
+     *  {@code i2p.streaming.maxConcurrentStreams} (captured at init); this param
+     *  pushes the override UP as legitimate demand or cap-refusals appear (so bursts
+     *  on locally hosted services and the HTTP proxy are not dropped), and only steps
+     *  it DOWN under true router starvation (job-lag + congestion). The
+     *  <em>effective</em> cap in the streaming jar is {@code min(configured, override)},
+     *  so the Tuner can never exceed a user ceiling. Malicious floods are handled at
+     *  the refusal layer (SYN-rate gate + 24h auto-ban), not by crippling this cap.
+     *
+     *  @since 0.9.71+
+     */
+    private class MaxStreamsParam extends BaseParam {
+
+        MaxStreamsParam() {
+            super("MAX_STREAMS", "Concurrent stream cap (streams)",
+                  SUB_STREAMING,
+                  16, _context.getProperty("i2p.streaming.maxMaxConcurrentStreams", 1024), 32,
+                  "stream.receiveActive", _context);
+        }
+
+        /** Apply the tunable value to the streaming override. */
+        protected void applyValue(int value) {
+            StreamingReflector.invokeSetInt("setMaxStreamsOverride", value);
+        }
+
+        /**
+         * Read the current effective override the Tuner believes is in force.
+         *
+         * <p>An override of 0 means the Tuner has never armed (the user's configured
+         * per-host maxConcurrent ceiling governs). The framework derives the persisted
+         * default from this value and force-applies it on the first tick, so reporting
+         * 0 here would clamp the default to {@code _min} (16) and silently cripple a
+         * healthy tracker to 16 concurrent streams. Instead we report the top of the
+         * working range ({@link ConnectionOptions#getMaxMaxConcurrentStreams()}):
+         * first tick then sees initial == runtime == ceiling and the Tuner stays
+         * unarmed until real saturation produces a target below the ceiling.
+         *
+         * @return the effective cap to autotune against (0 stored override maps to ceiling)
+         */
+        protected int getRuntimeValue() {
+            int v = StreamingReflector.invokeGetInt("getMaxStreamsOverride");
+            // 0 = never armed: report the top of the working range so the framework's
+            // first-tick default clamp and auto-revert do not drop us to the 16 floor.
+            // The streaming layer holds min(userCeiling, override); override == ceiling is a
+            // no-op on a healthy tracker, so this only ever bounds a bad Tuner value downward.
+            return v > 0 ? v : getMax();
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStat(_context, _statName);
+        }
+
+        /**
+         * Compute the elastic, demand-following stream ceiling.
+         *
+         * <p>The cap is a headroom knob, not a DoS throttle: abuse is already shed at
+         * the refusal layer by the SYN-rate gate and the 24h auto-ban, so the ceiling's
+         * job is to keep legitimate streams flowing on locally hosted services and the
+         * HTTP proxy while the router stays responsive. Refusals and rising demand
+         * therefore push the ceiling UP toward the user's configured {@code maxConcurrent}
+         * ceiling (the streaming layer {@code min(user, override)} never lets us exceed
+         * it); only genuine latency/distress pulls it DOWN, and only one step at a time.
+         *
+         * <p>Signals consumed (all registered live streaming / system stats):
+         * <ul>
+         *   <li>{@code stream.con.throttledHour}/{@code stream.con.throttledMinute} —
+         *       streams turned away by the "Dropped for conn limit" guard in the last
+         *       window (event counts); firing = raise so bursts stop being refused.</li>
+         *   <li>{@code stream.receiveActive} — active-stream demand; the working cap is
+         *       kept a few steps above it so bursts are absorbed rather than refused.</li>
+         *   <li>{@code jobQueue.jobLag} (ms) — CPU/system starvation; super-high lag is
+         *       the only trigger for lowering the ceiling.</li>
+         *   <li>{@code stream.rtxRatioBytes} — retransmit overhead (per-mille bytes);
+         *       raised with jobLag it confirms network/congestion distress.</li>
+         *   <li>{@code stream.connectFailed} — ms spent failing outbound connects; an
+         *       early-to-middle latency signal that suppresses aggressive raises.</li>
+         * </ul>
+         *
+         * @param observed the {@code stream.receiveActive} stat (active streams)
+         * @return the target ceiling for the streaming override
+         */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            int max = getMax();
+
+            boolean refusing = (!Double.isNaN(getAdditionalEventCount(_context, "stream.con.throttledMinute")) &&
+                                getAdditionalEventCount(_context, "stream.con.throttledMinute") >= 1) ||
+                               (!Double.isNaN(getAdditionalEventCountHourly(_context, "stream.con.throttledHour")) &&
+                                getAdditionalEventCountHourly(_context, "stream.con.throttledHour") >= 3);
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double rtxBytes = getAdditionalStat5Min(_context, "stream.rtxRatioBytes");
+            double connectFailed = getAdditionalStat(_context, "stream.connectFailed");
+            boolean distress = !Double.isNaN(jobLag) && jobLag > 500 &&
+                               ((!Double.isNaN(rtxBytes) && rtxBytes > 50) ||
+                                (!Double.isNaN(connectFailed) && connectFailed > 5000));
+
+            return streamCeilingTarget(observed, current, _min, max, _step, refusing, distress);
+        }
+    }
+
+    /**
+     * Pure decision logic for the stream ceiling.
+     *
+     * <p>Demand-following elasticity: raise the ceiling as legitimate demand or
+     * cap-refusals appear so locally hosted services and the HTTP proxy keep
+     * flowing; only genuine router starvation ({@code distress}) pulls it down, and
+     * one step at a time so bursts survive. Malicious floods are handled by the
+     * refusal-layer SYN gate and 24h auto-ban, not by crippling this cap.
+     *
+     * @param active     active-stream demand on the last arrival (NaN when idle)
+     * @param current    the current ceiling (never 0 here; caller maps unarmed to max)
+     * @param min        the config floor for the ceiling
+     * @param max        the config ceiling (top of working range)
+     * @param step       the Tuner step size
+     * @param refusing   true when the "dropped for conn limit" guards fired recently
+     * @param distress   true only under super-high job-lag WITH congestion/latency
+     * @return the target ceiling for the streaming override
+     * @since 0.9.71+
+     */
+    static int streamCeilingTarget(double active, int current, int min, int max, int step,
+                                   boolean refusing, boolean distress) {
+        boolean haveDemand = !Double.isNaN(active) && active > 0;
+
+        // 1. Refusing clients: raise decisively (two steps) so legitimate bursts get
+        //    let through instead of dropped, unless the box is itself distressed.
+        if (refusing && !distress)
+            return Math.min(max, current + step * 2);
+
+        // 2. Demand climbing toward the ceiling: add headroom so active streams do
+        //    not collide with the cap on the next spike.
+        if (haveDemand && (int) active >= current - step * 2)
+            return Math.min(max, current + step);
+
+        // 3. Only super-high latency/distress pulls the ceiling down, and a single
+        //    step, never below the floor.
+        if (distress)
+            return Math.max(min, current - step);
+
+        // 4. Healthy headroom eases the ceiling back up toward the top of range; the
+        //    streaming min(user, override) holds it at the user's ceiling, so a
+        //    healthy tracker converges to the configured cap and stays responsive.
+        return Math.min(max, current + step);
     }
 
     // =====================================================================

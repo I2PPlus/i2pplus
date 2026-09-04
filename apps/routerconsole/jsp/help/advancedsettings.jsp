@@ -574,6 +574,21 @@
 <tr class=config><th>i2p.streaming.minResendDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]")%></td></tr>
 
+<tr class=config><th>i2p.streaming.tempBanMinutes={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 1440 (24 hours)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.tempBanRefusals={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.tempBanSynBurst={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before an immediate autoban is imposed. This provides a sub-second fast-path ban for connection floods that would otherwise overwhelm the refusal counter. [Default is 10]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.tempBanSynRate={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, an immediate autoban is triggered. [Default is 500 (half a second)]")%></td></tr>
+
+<tr class=config><th>i2p.streaming.maxMaxConcurrentStreams={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]")%></td></tr>
+
 <tr class=section><th>NetDb</th></tr>
 
 <tr class=config><th>i2p.netdb.republishInterval={n} <span class=plus>I2P+</span></th></tr>

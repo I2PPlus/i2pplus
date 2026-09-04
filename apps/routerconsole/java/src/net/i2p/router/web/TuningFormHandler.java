@@ -72,6 +72,8 @@ public class TuningFormHandler extends FormHandler {
         TUNED.add(t);
         t = new Tunable("PASSIVE_FLUSH_DELAY", "passiveFlushDelay", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
+        t = new Tunable("MAX_STREAMS", "maxStreams", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
         // I2CP
         t = new Tunable("CLIENT_WRITER_QUEUE_SIZE", "writerQueueSize", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
@@ -437,6 +439,11 @@ public class TuningFormHandler extends FormHandler {
     public void setMaxInboundBufferMin(String v) { _formValues.put("maxInboundBufferMin", v); }
     public void setMaxInboundBufferOverride(String v) { _formValues.put("maxInboundBufferOverride", v); }
     public void setMaxInboundBufferStep(String v) { _formValues.put("maxInboundBufferStep", v); }
+    public void setMaxStreamsDefault(String v) { _formValues.put("maxStreamsDefault", v); }
+    public void setMaxStreamsMax(String v) { _formValues.put("maxStreamsMax", v); }
+    public void setMaxStreamsMin(String v) { _formValues.put("maxStreamsMin", v); }
+    public void setMaxStreamsOverride(String v) { _formValues.put("maxStreamsOverride", v); }
+    public void setMaxStreamsStep(String v) { _formValues.put("maxStreamsStep", v); }
     public void setMaxParticipatingTunnelsDefault(String v) { _formValues.put("maxParticipatingTunnelsDefault", v); }
     public void setMaxParticipatingTunnelsMax(String v) { _formValues.put("maxParticipatingTunnelsMax", v); }
     public void setMaxParticipatingTunnelsMin(String v) { _formValues.put("maxParticipatingTunnelsMin", v); }

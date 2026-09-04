@@ -1093,6 +1093,80 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 11: MaxStreamsParam.streamCeilingTarget decision tests
+    // =====================================================================
+
+    /**
+     * Refusing clients (cap dropped streams for conn limit) raises the ceiling two
+     * steps so legitimate bursts get let through instead of dropped.
+     */
+    @Test
+    public void testStreamCeilingRefusingRaisesTwoSteps() {
+        // 16/512/32 config; current 256 at the cap, refusing, no distress -> +64
+        assertEquals(320, Tuner.streamCeilingTarget(Double.NaN, 256, 16, 512, 32, true, false));
+    }
+
+    /** Refusing is capped at the ceiling, never above max. */
+    @Test
+    public void testStreamCeilingRefusingCeilingClamped() {
+        // current near max; +2 steps would exceed 512
+        assertEquals(512, Tuner.streamCeilingTarget(Double.NaN, 480, 16, 512, 32, true, false));
+    }
+
+    /** Refusals during distress do NOT raise (box already starved; hold then step down). */
+    @Test
+    public void testStreamCeilingRefusingUnderDistressDoesNotRaise() {
+        // distress is checked as the dominant condition so we never pile on a starved box
+        int cur = 256;
+        int target = Tuner.streamCeilingTarget(Double.NaN, cur, 16, 512, 32, true, true);
+        assertTrue("Must not raise under distress, got " + target, target <= cur);
+    }
+
+    /** Demand climbing to within 2 steps of the ceiling adds one step of headroom. */
+    @Test
+    public void testStreamCeilingDemandClimbingAddsHeadroom() {
+        // current 288, active 256 >= 288 - 64 -> +32 to 320
+        assertEquals(320, Tuner.streamCeilingTarget(256, 288, 16, 512, 32, false, false));
+    }
+
+    /** Demand far under the ceiling falls through to the relax-up path. */
+    @Test
+    public void testStreamCeilingDemandLowRelaxesUp() {
+        assertEquals(320, Tuner.streamCeilingTarget(16, 288, 16, 512, 32, false, false));
+    }
+
+    /** Idle (active = NaN) still eases the ceiling back up toward the user ceiling. */
+    @Test
+    public void testStreamCeilingIdleRelaxesUp() {
+        assertEquals(320, Tuner.streamCeilingTarget(Double.NaN, 288, 16, 512, 32, false, false));
+    }
+
+    /** Distress steps the ceiling down a single step, never below the floor. */
+    @Test
+    public void testStreamCeilingDistressStepsDownOneStep() {
+        assertEquals(256, Tuner.streamCeilingTarget(Double.NaN, 288, 16, 512, 32, false, true));
+    }
+
+    /** Distress is floored at min so we never wedge the local service to zero. */
+    @Test
+    public void testStreamCeilingDistressFloorEnforced() {
+        assertEquals(16, Tuner.streamCeilingTarget(Double.NaN, 32, 16, 512, 32, false, true));
+    }
+
+    /** Healthy state relaxes right to the top of the working range in one step. */
+    @Test
+    public void testStreamCeilingHealthyRelaxesToMax() {
+        assertEquals(512, Tuner.streamCeilingTarget(Double.NaN, 480, 16, 512, 32, false, false));
+    }
+
+    /** Configured step sizes are honored in the refusal branch. */
+    @Test
+    public void testStreamCeilingNonstandardStepRefusing() {
+        // a step of 10 used by other tunables: +20 on refuse
+        assertEquals(130, Tuner.streamCeilingTarget(Double.NaN, 110, 10, 512, 10, true, false));
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 
