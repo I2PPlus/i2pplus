@@ -213,6 +213,25 @@ public class ProfileOrganizer {
      */
     private static final float LOSSY_SELECTION_PENALTY = 4.0f;
 
+    /**
+     * Adaptive absolute-RTT ceiling for fast-tier selection. The fast tier is a
+     * relative ranking (top N% by speed), so on a degraded network its members
+     * can still sit at high absolute latency and intermittently drop build
+     * messages. The existing {@link #demoteIfHighRTT} uses a fixed bar and only
+     * fires on individual peer-test events. These constants define a selection-time
+     * ceiling derived from the measured fast-tier RTT boundary ({@link #_thresholdRTT}):
+     * the ceiling is the boundary times AUTO_RTT_MULTIPLIER, clamped to at least
+     * AUTO_RTT_FLOOR_MS and at most AUTO_RTT_CAP_MS. Peers whose measured tunnel-test
+     * RTT exceeds the ceiling are excluded from fast-tier picks (soft signal, not a
+     * tier eviction — consistent with the lossiness-is-one-signal philosophy).
+     * @since 0.9.71+
+     */
+    private static final double AUTO_RTT_MULTIPLIER = 3.0d;
+    /** Floor: never exclude peers below this RTT, matching the demoteIfHighRTT bar. */
+    private static final long AUTO_RTT_FLOOR_MS = 1500L;
+    /** Absolute cap: the ceiling never rises above this even on a fully slow pool. */
+    private static final long AUTO_RTT_CAP_MS = 3000L;
+
     /** Config property for the maximum number of peer profiles. */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
     /** Runtime-adjustable default max profile count. */
@@ -1376,6 +1395,47 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Compute the adaptive absolute-RTT ceiling for fast-tier selection.
+     * <p>
+     * The ceiling is the measured fast-tier RTT boundary times a multiplier,
+     * clamped to at least {@link #AUTO_RTT_FLOOR_MS} and at most
+     * {@link #AUTO_RTT_CAP_MS}. Flooring keeps the bar at least as tight as the
+     * existing fixed high-RTT demotion; capping prevents a uniformly-slow pool
+     * from raising the ceiling without bound, so clearly-slow outliers are still
+     * excluded. Pure decision — no context access, safe for unit tests.
+     *
+     * @param boundaryRttMs the fast-tier RTT boundary from the last reorganize
+     *                      ({@link #_thresholdRTT}); its own scaling amplifies the
+     *                      typical pool latency so the ceiling tracks the network
+     * @return the selection ceiling in ms; never below {@link #AUTO_RTT_FLOOR_MS}
+     *         and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
+     *         (no measurement yet) returns the floor so nothing is over-trimmed.
+     * @since 0.9.71+
+     */
+    static long computeFastRttCeiling(double boundaryRttMs) {
+        if (boundaryRttMs <= 0) return AUTO_RTT_FLOOR_MS;
+        double scaled = boundaryRttMs * AUTO_RTT_MULTIPLIER;
+        if (scaled <= AUTO_RTT_FLOOR_MS) return AUTO_RTT_FLOOR_MS;
+        return (long) Math.min(scaled, AUTO_RTT_CAP_MS);
+    }
+
+    /**
+     * True if the peer's measured tunnel-test RTT exceeds the adaptive selection
+     * ceiling, indicating it should be excluded from this fast-tier pick while
+     * still remaining in the tier (soft signal — the ceiling applies at selection
+     * time, not tier membership). A zero/unknown RTT never trips the ceiling.
+     *
+     * @param profile the candidate profile
+     * @param rttCeilingMs the adaptive ceiling from {@link #computeFastRttCeiling}
+     * @return whether the peer is above the ceiling
+     * @since 0.9.71+
+     */
+    static boolean aboveRttCeiling(PeerProfile profile, long rttCeilingMs) {
+        float rtt = profile.getTunnelTestTimeAverage();
+        return rtt > 0 && rtt >= rttCeilingMs;
+    }
+
+    /**
      *  Full eligibility gate for filling the fast/high-cap tiers from the
      *  active profile set: not ourselves, passes the tier gates, and active
      *  within the cutoff window.
@@ -1933,6 +1993,7 @@ public class ProfileOrganizer {
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess) {
         // Build candidate list, filtering exclusions and checking selectability
+        long rttCeiling = computeFastRttCeiling(_thresholdRTT);
         List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
         for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
             Hash peer = entry.getKey();
@@ -1944,6 +2005,10 @@ public class ProfileOrganizer {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
             } else {
                 if (toExclude != null) toExclude.add(peer);
+            }
+            if (ok && aboveRttCeiling(entry.getValue(), rttCeiling)) {
+                if (toExclude != null) toExclude.add(peer);
+                ok = false;
             }
             if (ok) candidates.add(entry);
         }
@@ -1963,6 +2028,7 @@ public class ProfileOrganizer {
         long k1 = DataHelper.fromLong8(rk, 8);
 
         // Build candidate list with subTier filtering
+        long rttCeiling = computeFastRttCeiling(_thresholdRTT);
         List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
         for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
             Hash peer = entry.getKey();
@@ -1978,6 +2044,10 @@ public class ProfileOrganizer {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
             } else if (toExclude != null) {
                 toExclude.add(peer);
+            }
+            if (ok && aboveRttCeiling(entry.getValue(), rttCeiling)) {
+                if (toExclude != null) toExclude.add(peer);
+                ok = false;
             }
 
             if (ok) candidates.add(entry);
