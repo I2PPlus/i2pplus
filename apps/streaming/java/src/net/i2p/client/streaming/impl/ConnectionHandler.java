@@ -475,17 +475,29 @@ class ConnectionHandler {
                     if (oldcon != null && from.equals(oldcon.getRemotePeer())) {
                         // His ID not guaranteed to be unique to us, but probably is...
                         // only act on it on a destination match too
-                            // This is a retransmitted SYN - the client hasn't received our
-                            // SYN-ACK yet (or it was lost). Re-send the SYN-ACK for the
-                            // existing connection rather than destroying it and breaking
-                            // any data the client may have already sent using the old
-                            // stream IDs.
-                            if (_log.shouldWarn() && syn != null) {
-                                _log.warn("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " +
-                                          oldcon + (syn != null && !syn.toString().isEmpty() ? "\n* SYN: " + syn : ""));
-                            }
-                            resendSynAck(oldcon, syn);
-                            continue;
+                        // This is a retransmitted SYN - the client hasn't received our
+                        // SYN-ACK yet (or it was lost). Re-send the SYN-ACK for the
+                        // existing connection rather than destroying it and breaking
+                        // any data the client may have already sent using the old
+                        // stream IDs.
+                        //
+                        // Flood gate: a retransmitted SYN uses stream IDs of an
+                        // existing (half-open) connection, so it never flows through
+                        // ConnectionManager.receiveConnection() and its SYN-burst gate.
+                        // An attacker plants a few half-open connections then blasts
+                        // retransmitted SYNs, which would otherwise spawn an unbounded
+                        // SYN-ACK storm. Check the shared per-dest flood window here so
+                        // a dest that exceeds the burst threshold is autobanned and its
+                        // retransmits dropped before any SYN-ACK is minted.
+                        if (_manager.checkInboundSynFlood(from.calculateHash(), _context.clock().now())) {
+                            continue; // drop it without re-sending a SYN-ACK
+                        }
+                        if (_log.shouldWarn() && syn != null) {
+                            _log.warn("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " +
+                                      oldcon + (syn != null && !syn.toString().isEmpty() ? "\n* SYN: " + syn : ""));
+                        }
+                        resendSynAck(oldcon, syn);
+                        continue;
                     }
                     sampleSynResidence(syn);
                     Connection con = _manager.receiveConnection(syn);

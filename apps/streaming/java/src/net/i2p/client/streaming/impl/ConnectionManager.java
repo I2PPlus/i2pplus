@@ -23,6 +23,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
+import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -76,7 +77,7 @@ class ConnectionManager {
     /**
      * Stream connection pool — reuses established streams to the same destination.
      * Key: destination Hash, Value: deque of pooled connections.
-     * @since 0.9.70+
+     * @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, ConcurrentLinkedDeque<PooledConnection>> _streamPools =
         new ConcurrentHashMap<>(32);
@@ -129,10 +130,398 @@ class ConnectionManager {
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
     /**
+     *  Temporary bans keyed by destination hash -> bannedUntil epoch ms.
+     *  Autoban hammering dests for 24h (or i2p.streaming.tempBanMinutes).
+     *  Enforced in shouldRejectConnection() before the port/budget counters so a
+     *  banned dest no longer consumes its per-dest budget or per-peer throttlers.
+     *  Expired entries
+     *  are removed by BanExpiry. @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, Long> _tempBanUntil = new ConcurrentHashMap<>();
+
+    /**
+     *  Trigger reason for an active temp-ban, kept alongside _tempBanUntil so the
+     *  enforcement path can tell a client *why* it was banned (e.g. the per-minute
+     *  limit it tripped). Written on ban, removed on expiry by BanExpiry.
+     *  @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, String> _tempBanReason = new ConcurrentHashMap<>();
+
+    /**
+     *  Rolling refusals per destination, incremented each time the
+     *  MAXIMUM streams gate refuses a SYN from that dest. Empties when a
+     *  dest is banned or when BanExpiry clears the window.
+     *  @since 0.9.71+
+     */
+    private final ObjectCounter<Hash> _refusalCounter = new ObjectCounter<>();
+
+    /**
+     *  Live concurrent-stream count keyed by remote destination. Each remote dest
+     *  gets its own stream budget (captured from the same effective max as the old
+     *  global gate), so a flood from one dest can no longer starve legitimate
+     *  clients sharing the listener. Incremented when a stream registers in
+     *  {@link #_connectionByInboundId} and decremented on removal; reconciled
+     *  against the live table every minute by {@link BanExpiry} so any missed
+     *  teardown self-heals. @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, AtomicInteger> _streamsByDest = new ConcurrentHashMap<>();
+
+    /**
+     *  Per-destination burst state for the sub-second SYN gate: value is a two-element
+     *  array {burstStartMs, count}, updated at most once per validated SYN via
+     *  compare-and-swap (replace). A dest that quiesces naturally falls out of the
+     *  next window; no per-dest entries accumulate beyond one array, so this is bounded
+     *  and cheap on the hot path. Reset per-dest by the SYN-rate sweeper. @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, long[]> _recentSyns = new ConcurrentHashMap<>();
+
+    /**
+     *  Cached sub-second burst config, refreshed by the BanExpiry sweeper rather than
+     *  re-read from the property store on every validated SYN (hot path).
+     *  @since 0.9.71+
+     */
+    private volatile long _synRateMs = DEFAULT_TEMP_BAN_RATE_MS;
+    private volatile int _synBurst = DEFAULT_TEMP_BAN_SYN_BURST;
+
+    /**
+     *  Cached autoban duration (ms) and refusal threshold, refreshed by the
+     *  BanExpiry sweeper so the hot path (isTempBanned / refusal latch) avoids
+     *  per-SYN property-store reads. Snapshot-at-mark-time still holds: a ban uses
+     *  the duration current when it was placed.
+     *  @since 0.9.71+
+     */
+    private volatile long _tempBanMs = DEFAULT_TEMP_BAN_MINUTES * 60L * 1000L;
+    private volatile long _tempBanRefusals = DEFAULT_TEMP_BAN_REFUSALS;
+
+    /**
      *  Blacklist property for streaming.
      *  @since 0.9.3
      */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
+
+    /**
+     *  Autoban property: a dest is temporarily banned until this many minutes after
+     *  it first trips a flood threshold. Default 24 hours.
+     *  Tunable via i2p.streaming.tempBanMinutes. 0 disables autoban. @since 0.9.71+
+     */
+    public static final String PROP_TEMP_BAN_MINUTES = "i2p.streaming.tempBanMinutes";
+    private static final long DEFAULT_TEMP_BAN_MINUTES = 24 * 60;
+
+    /**
+     *  Autoban property: whether the temp-ban map and sweeper are enabled.
+     *  0 disables; nonzero enables. Default on. @since 0.9.71+
+     */
+    public static final String PROP_AUTOBAN = "i2p.streaming.autoban";
+    private static final int DEFAULT_AUTOBAN = -1;
+
+    /**
+     *  Autoban property: refusals from a single dest within a one-minute window
+     *  (as counted by _refusalCounter) at which the dest is auto-banned.
+     *  Tunable via i2p.streaming.tempBanRefusals. @since 0.9.71+
+     */
+    public static final String PROP_TEMP_BAN_REFUSALS = "i2p.streaming.tempBanRefusals";
+    private static final long DEFAULT_TEMP_BAN_REFUSALS = 100;
+
+    /**
+     *  Autoban property: a dest sending more than tempBanSynBurst SYNs within a
+     *  tempBanSynRate-ms rolling window is auto-banned. This is the sub-second
+     *  rate gate: a legit client (e.g. a BitTorrent announce on a timer) never bursts
+     *  tens of SYNs within a few hundred ms, but the observed tracker flood does
+     *  (~25 SYNs in 259ms). Catches the burst before it consumes the stream budget.
+     *  @since 0.9.71+
+     */
+    public static final String PROP_TEMP_BAN_RATE_MS = "i2p.streaming.tempBanSynRate";
+    private static final long DEFAULT_TEMP_BAN_RATE_MS = 500;
+
+    /**
+     *  Autoban property: sub-second burst threshold (SYNs within rate window).
+     *  Default 10 SYNs per 500ms = 20 req/s instantaneous.
+     *  @since 0.9.71+
+     */
+    public static final String PROP_TEMP_BAN_SYN_BURST = "i2p.streaming.tempBanSynBurst";
+    private static final int DEFAULT_TEMP_BAN_SYN_BURST = 10;
+
+    /**
+     *  Ban a dest for the configured duration. Idempotent; an existing longer ban
+     *  is left in place so repeated abuse can't shrink it.
+     *  @param h dest hash to ban
+     *  @param why human-readable trigger, e.g. "exceeded max 50 conns/minute"
+     *  @param now current clock time
+     *  @since 0.9.71+
+     */
+    void banPeer(Hash h, String why, long now) {
+        long ms = _tempBanMs;
+        if (ms <= 0)
+            return;
+        Long until = Long.valueOf(now + ms);
+        Long prev = _tempBanUntil.putIfAbsent(h, until);
+        if (prev != null && banIsLonger(prev, until)) {
+            _tempBanUntil.replace(h, prev, until);
+            _tempBanReason.replace(h, why);
+        } else if (prev == null) {
+            _tempBanReason.put(h, why);
+        }
+        _refusalCounter.clear(h);
+        if (_log.shouldInfo())
+            _log.info("Autobanning " + h.toBase32().substring(0, 6) + " for " + (ms / 60000L) + " minutes - " + why);
+    }
+
+    /**
+     *  Account a newly registered stream against its destination's per-dest budget.
+     *  Must be called exactly once per stream, at registration, keyed by the remote
+     *  destination. Teardown must call {@link #removeStream(Hash)} for the same hash.
+     *  @param h remote dest hash, non-null
+     *  @since 0.9.71+
+     */
+    private void addStream(Hash h) {
+        if (h == null)
+            return;
+        AtomicInteger c = _streamsByDest.get(h);
+        if (c == null) {
+            AtomicInteger n = new AtomicInteger();
+            c = _streamsByDest.putIfAbsent(h, n);
+            if (c == null)
+                c = n;
+        }
+        c.incrementAndGet();
+    }
+
+    /**
+     *  Release one stream from its destination's per-dest budget. Decrement is
+     *  skipped when the remote is unknown (a torn-down connection whose dest was
+     *  never established); the BanExpiry sweeper reconciles such drift.
+     *  @param h remote dest hash, null-safe
+     *  @since 0.9.71+
+     */
+    private void removeStream(Hash h) {
+        if (h == null)
+            return;
+        AtomicInteger c = _streamsByDest.get(h);
+        if (c != null && c.decrementAndGet() <= 0)
+            _streamsByDest.remove(h, c);
+    }
+
+    /**
+     *  Pure decision for the per-destination stream budget: a dest is over budget
+     *  once its live concurrent-stream count reaches the per-dest ceiling.
+     *  A non-positive ceiling disables the gate entirely.
+     *  @param streamCount live streams currently held by the dest
+     *  @param max the per-dest concurrent stream ceiling
+     *  @return true if the dest is at or over its own budget
+     *  @since 0.9.71+
+     */
+    static boolean tooManyStreamsForDest(int streamCount, int max) {
+        return max > 0 && streamCount >= max;
+    }
+
+    /**
+     *  Whether a remote destination currently holds at least its per-dest ceiling
+     *  of concurrent streams. This replaces the old global count: each client gets
+     *  its own budget, so one abuser can no longer exhaust the listener for
+     *  everyone else.
+     *  @param h remote dest hash, non-null
+     *  @param max the per-dest concurrent stream ceiling
+     *  @return true if the dest is over its own budget
+     *  @since 0.9.71+
+     */
+    private boolean tooManyStreamsForDest(Hash h, int max) {
+        if (h == null)
+            return false;
+        AtomicInteger c = _streamsByDest.get(h);
+        return tooManyStreamsForDest(c == null ? 0 : c.get(), max);
+    }
+
+    /**
+     *  The stored trigger description for an active temp-ban, if any.
+     *  @param h dest hash
+     *  @return the recorded reason, or null if none stored
+     *  @since 0.9.71+
+     */
+    private String tempBanReason(Hash h) {
+        return _tempBanReason.get(h);
+    }
+
+    /**
+     *  Whether a new ban end time should replace an existing one: only when it
+     *  is strictly longer. Prevents a late-arriving shorter ban from shrinking
+     *  an active ban under repeated abuse.
+     *  @param existing current bannedUntil (aged), null if none
+     *  @param candidate proposed new bannedUntil
+     *  @return true if candidate exceeds existing
+     *  @since 0.9.71+
+     */
+    static boolean banIsLonger(Long existing, Long candidate) {
+        return existing != null && candidate != null && candidate.longValue() > existing.longValue();
+    }
+
+    /**
+     *  Whether the dest is currently temp-banned.
+     *  @param h dest hash to check
+     *  @param now current clock time
+     *  @return true if temp-banned and not yet expired
+     *  @since 0.9.71+
+     */
+    boolean isTempBanned(Hash h, long now) {
+        if (_tempBanMs <= 0)
+            return false;
+        return banActive(_tempBanUntil.get(h), now);
+    }
+
+    /**
+     *  Whether a bannedUntil time is still in the future.
+     *  @param bannedUntil epoch ms; null treated as not banned
+     *  @param now current clock time
+     *  @return true if bannedUntil is non-null and greater than now
+     *  @since 0.9.71+
+     */
+    static boolean banActive(Long bannedUntil, long now) {
+        return bannedUntil != null && bannedUntil.longValue() > now;
+    }
+
+    /**
+     *  Whether a dest has tripped the autoban refusal threshold.
+     *  @param refusals count of refusals seen for the dest in the current window
+     *  @param threshold configured refusals-to-ban threshold
+     *  @return true when refusals exceed threshold
+     *  @since 0.9.71+
+     */
+    static boolean refusalThresholdMet(long refusals, long threshold) {
+        return threshold > 0 && refusals > threshold;
+    }
+
+    /**
+     *  Pure decision for the sub-second SYN-burst gate: whether a dest has sent
+     *  more than {@code burst} SYNs within the last {@code windowMs} ms.
+     *  @param burstStartMs epoch ms of the first SYN in the current burst window
+     *                     (the ''oldest'' still counted), null if none
+     *  @param count number of SYNs attributed to the open window
+     *  @param now current clock time
+     *  @param windowMs rolling window length
+     *  @param burst SYNs-per-window that constitutes an abusive burst
+     *  @return true if the dest tripped the burst gate
+     *  @since 0.9.71+
+     */
+    static boolean synBurstTripped(Long burstStartMs, int count, long now, long windowMs, int burst) {
+        if (windowMs <= 0 || burst <= 0)
+            return false;
+        if (burstStartMs == null)
+            return false;
+        if (now - burstStartMs.longValue() >= windowMs)
+            return false;
+        return count > burst;
+    }
+
+    /**
+     *  Whether a SYN from a dest tripped the sub-second burst gate. Side effects:
+     *  records the SYN in the per-dest rolling window. Allocation-free on the hot
+     *  path: an existing window is bumped in place rather than replaced, and the
+     *  window/burst limits are read from cached volatile fields refreshed by the
+     *  BanExpiry sweeper. Call only for a validated SYN source.
+     *  @param h dest hash to record against
+     *  @param now current clock time
+     *  @return true if this SYN pushed the dest over its burst threshold
+     *  @since 0.9.71+
+     */
+    private boolean checkSynBurst(Hash h, long now) {
+        long windowMs = _synRateMs;
+        int burst = _synBurst;
+        if (windowMs <= 0 || burst <= 0)
+            return false;
+        long[] cur = _recentSyns.get(h);
+        if (cur == null || now - cur[0] >= windowMs) {
+            // no active window (or it aged out): start a fresh one. One allocation
+            // per new dest is fine; the flood path for an already-banned dest is
+            // short-circuited before this is ever reached.
+            long[] init = {now, 1};
+            long[] prev = _recentSyns.putIfAbsent(h, init);
+            if (prev == null)
+                return false;
+            cur = prev;
+        }
+        // Hot path: bump in place. Non-atomic under concurrency, which can only
+        // under-count a rare race for a DoS gate -- never over-ban.
+        cur[1] = cur[1] + 1;
+        return synBurstTripped(cur[0], (int) cur[1], now, windowMs, burst);
+    }
+
+    /**
+     *  Package-visible flood gate for the retransmit-SYN path in
+     *  {@link ConnectionHandler#receiveNewSyn(Packet)}. A retransmitted SYN carries the
+     *  stream IDs of a connection that already exists in the manager, so it never
+     *  reaches {@link #receiveConnection(Packet)} (and thus never passes the
+     *  {@link #checkSynBurst(Hash, long)} gate at the top of that method). An
+     *  attacker exploits that by planting a handful of half-open connections and
+     *  then blasting retransmitted SYNs against them; without this gate every hit
+     *  makes {@code ConnectionHandler.resendSynAck} mint and enqueue a fresh
+     *  SYN-ACK, consuming CPU and egress, and the connection never establishes.
+     *
+     *  <p>This routes the retransmit through the <em>same</em> per-destination
+     *  sub-second burst window as fresh SYNs, so a dest that exceeds the burst
+     *  threshold across new <em>or</em> retransmitted SYNs is autobanned. Once
+     *  banned, subsequent calls return {@code true} (drop) immediately.
+     *
+     *  @param h remote dest hash of the retransmitted SYN's source, non-null
+     *  @param now current clock time
+     *  @return true if this SYN should be dropped (dest already temp-banned, or
+     *          this SYN tripped the burst gate and just banned it)
+     *  @since 0.9.71+
+     */
+    boolean checkInboundSynFlood(Hash h, long now) {
+        if (h == null)
+            return false;
+        if (isTempBanned(h, now))
+            return true;
+        if (checkSynBurst(h, now)) {
+            banPeer(h, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms on inbound retransmit",
+                    now);
+            return true;
+        }
+        return false;
+    }
+
+    private long getTempBanMinutes() {
+        return _context.getProperty(PROP_TEMP_BAN_MINUTES, (int) DEFAULT_TEMP_BAN_MINUTES);
+    }
+
+    /**
+     *  The concurrent-stream cap to enforce right now. Normally this is the value
+     *  captured into {@link #_defaultOptions} at init (the user-configured
+     *  {@code i2p.streaming.maxConcurrentStreams}); if the router's Tuner has armed an
+     *  override via {@link I2PSocketManagerFull#setMaxStreamsOverride}, the effective
+     *  cap is the <em>lower</em> of the two so a user ceiling is never exceeded a
+     *  Tuner. A volatile read; no config lookup per call.
+     *  @return the cap; &le; 0 means no cap is enforced
+     *  @since 0.9.71+
+     */
+    private int getEffectiveMaxStreams() {
+        int override = ConnectionOptions.getMaxConcurrentStreamsOverride();
+        int user = _defaultOptions.getMaxConns();
+        if (override > 0)
+            return Math.min(user, override);
+        return user;
+    }
+
+    /**
+     *  The cap to <em>report</em> in refusal log messages: the Tuner's current
+     *  override when it has armed one, otherwise the user-configured ceiling.
+     *
+     *  <p>This deliberately differs from {@link #getEffectiveMaxStreams()}, which
+     *  min's the override against the user ceiling and is the real enforcement
+     *  limit at the per-destination {@link #tooManyStreamsForDest(Hash, int)} gate.
+     *  When the Tuner relaxes a healthy
+     *  host back up toward its own max (e.g. 512) that is higher than a user's
+     *  configured ceiling (e.g. 256), the enforcement limit stays 256 while the
+     *  operator reading the log wants to see the Tuner's current target (512).
+     *
+     *  @return the tuner override when armed, else the configured cap
+     *  @since 0.9.71+
+     */
+    private int getLogMaxStreams() {
+        int override = ConnectionOptions.getMaxConcurrentStreamsOverride();
+        if (override > 0)
+            return override;
+        return _defaultOptions.getMaxConns();
+    }
 
     /**
      * Maximum ping timeout. Tunable via i2p.streaming.maxPingTimeout (default: 300000).
@@ -241,6 +630,8 @@ class ConnectionManager {
         // Stats for PacketQueue
         _context.statManager().createRequiredRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", RATES);
+        if (_context.getProperty(PROP_AUTOBAN, DEFAULT_AUTOBAN) != 0)
+            new BanExpiry();
     }
 
     /**
@@ -404,23 +795,56 @@ class ConnectionManager {
 
         boolean reject = false;
         int retryAfter = 0;
+        String client = synPacket.getOptionalFrom() == null ? "unknown" :
+                        synPacket.getOptionalFrom().toBase32().substring(0, 6);
 
-            if (locked_tooManyStreams()) {
-                if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                    _log.warn("Refusing connection -> Maximum " + _defaultOptions.getMaxConns() + " concurrent streams exceeded");
-                reject = true;
-                retryAfter = 120;
-            } else {
-                // this may not be right if more than one is enabled
-                Reason why = shouldRejectConnection(synPacket);
-                if (why != null) {
-                    if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                        _log.warn("Refusing connection -> " + why +
-                           (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
-                    reject = true;
-                    retryAfter = why.getSeconds();
-                }
+        // Sub-second SYN burst gate: a dest that blasts > tempBanSynBurst SYNs
+        // within tempBanSynRate-ms (a legit announce client never does) is
+        // auto-banned immediately, BEFORE the stream budget or refusal counters
+        // are consulted, so the burst cannot first consume budget slots.
+        if (from != null) {
+            Hash bh = from.calculateHash();
+            long now = _context.clock().now();
+            if (!isTempBanned(bh, now) && checkSynBurst(bh, now)) {
+                banPeer(bh, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms",
+                        now);
             }
+        }
+
+        if (tooManyStreamsForDest(from.calculateHash(), getEffectiveMaxStreams())) {
+            // If already temp-banned, drop the SYN silently before any processing,
+            // SYN-ACK, or refusal logging, so a banned dest can't keep hammering.
+            if (from != null && isTempBanned(from.calculateHash(), _context.clock().now())) {
+                if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldDebug())
+                    _log.debug("Dropping SYN from temp-banned " + from.toBase32().substring(0, 6));
+                return null;
+            }
+            if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn()) {
+                // Log the peer so a rejection burst can be attributed to a single source rather than
+                // a faceless count. Matches the client logging in the shouldRejectConnection() branch below.
+                _log.warn("Refusing connection from [" + client + "] -> Maximum " + getLogMaxStreams() +
+                          " concurrent streams exceeded");
+            }
+            // A dest refused this many times in the current window is hammering its
+            // per-dest budget; promote it to an autoban so its SYNs are dropped
+            // before they can keep starving legitimate announces.
+            if (from != null) {
+                Hash h = from.calculateHash();
+                if (refusalThresholdMet(_refusalCounter.increment(h), _tempBanRefusals))
+                    banPeer(h, "exceeded max " + _tempBanRefusals + " refusals/min", _context.clock().now());
+            }
+            reject = true;
+            retryAfter = 120;
+        } else {
+            // this may not be right if more than one is enabled
+            Reason why = shouldRejectConnection(synPacket);
+            if (why != null) {
+                if ((!_defaultOptions.getDisableRejectLogging()) && !why.isSilent() && _log.shouldWarn())
+                    _log.warn("Refusing connection from [" + client + "] -> " + why);
+                reject = true;
+                retryAfter = why.getSeconds();
+            }
+        }
 
         _context.statManager().addRateData("stream.receiveActive", 1);
 
@@ -525,6 +949,7 @@ class ConnectionManager {
                                         _timer.getSharedTimer(), _outboundQueue, _conPacketHandler, opts, true);
         _tcbShare.updateOptsFromShare(con);
         assignReceiveStreamId(con);
+        addStream(from.calculateHash());
 
         // finally, we know enough that we can log the packet with the conn filled in
         if (I2PSocketManagerFull.pcapWriter != null &&
@@ -535,6 +960,7 @@ class ConnectionManager {
             con.getPacketHandler().receivePacket(synPacket, con);
         } catch (I2PException ie) {
             _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
+            removeStream(con.getRemotePeer() == null ? null : con.getRemotePeer().calculateHash());
             return null;
         }
 
@@ -690,6 +1116,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   con.setRemotePeer(peer);
                   // Assign new stream IDs since this is a new logical connection
                   assignReceiveStreamId(con);
+                  addStream(peer.calculateHash());
                   if (_log.shouldDebug()) {
                       _log.debug("Reusing pooled connection to " + peer.calculateHash().toBase64().substring(0,6));
                   }
@@ -699,22 +1126,22 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           }
           long expiration = _context.clock().now();
           long tmout = opts.getConnectTimeout();
-          int max = _defaultOptions.getMaxConns();
+          int max = getEffectiveMaxStreams();
           if (tmout <= 0) {expiration += getDefaultStreamDelayMax();}
           else {expiration += tmout;}
           _numWaiting.incrementAndGet();
           while (true) {
               long remaining = expiration - _context.clock().now();
               if (remaining <= 0) {
-                  _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded");
+                  _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + getLogMaxStreams() + " concurrent streams exceeded");
                   _numWaiting.decrementAndGet();
                   return null;
               }
 
-              if (locked_tooManyStreams()) {
+if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
                   // allow a full buffer of pending/waiting streams
                   if (_numWaiting.get() > max) {
-                      _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded, with " +
+                      _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + getLogMaxStreams() + " concurrent streams exceeded, with " +
                                                _numWaiting + " queued");
                       _numWaiting.decrementAndGet();
                       return null;
@@ -727,6 +1154,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                                         _outboundQueue, _conPacketHandler, opts, false);
                   con.setRemotePeer(peer);
                   assignReceiveStreamId(con);
+                  addStream(peer.calculateHash());
                   break; // stop looping as a psuedo-wait
               }
           }
@@ -824,49 +1252,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
          return con;
     }
 
-    /**
-     *  Doesn't need to be locked any more.
-     *  Cached for 1s to avoid O(n) scan on every SYN burst.
-     *  @return too many
-     */
-    private volatile long _lastTooManyCheck;
-    private volatile boolean _lastTooManyResult;
-
     /** Locked too many streams. */
-    private boolean locked_tooManyStreams() {
-        long now = _context.clock().now();
-        if (now - _lastTooManyCheck < 1000)
-            return _lastTooManyResult;
-        int max = _defaultOptions.getMaxConns();
-        if (max <= 0) return false;
-        int size = _connectionByInboundId.size();
-        if (size < max) return false;
-        // count both so we can break out of the for loop asap
-        int active = 0;
-        int inactive = 0;
-        int maxInactive = size - max;
-        for (Connection con : _connectionByInboundId.values()) {
-            // ticket #1039
-            if (con.getIsConnected() &&
-                !(con.getCloseSentOn() > 0 && con.getCloseReceivedOn() > 0)) {
-                if (++active >= max) {
-                    _lastTooManyCheck = now;
-                    _lastTooManyResult = true;
-                    return true;
-                }
-            } else {
-                if (++inactive > maxInactive) {
-                    _lastTooManyCheck = now;
-                    _lastTooManyResult = false;
-                    return false;
-                }
-            }
-        }
-        _lastTooManyCheck = now;
-        _lastTooManyResult = false;
-        return false;
-    }
-
     /**
      * Encapsulates a connection rejection reason with an optional
      * Retry-After duration in seconds.
@@ -876,12 +1262,29 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     private static class Reason {
         private final String txt;
         private final int seconds;
+        private final boolean silent;
 
         /**
          * Reason.
+         *
+         * @param text description
+         * @param secs seconds for the Retry-After header
          */
         public Reason(String text, int secs) {
-            txt = text; seconds = secs;
+            txt = text; seconds = secs; silent = false;
+        }
+
+        /**
+         * Reason.
+         *
+         * @param text description
+         * @param secs seconds for the Retry-After header
+         * @param silent if true, suppress the per-rejection WARN log. Used for
+         *        repeated rejections of an already-temp-banned dest so a hammering
+         *        peer doesn't spam the log on every SYN.
+         */
+        public Reason(String text, int secs, boolean silentFlags) {
+            txt = text; seconds = secs; silent = silentFlags;
         }
 
         /**
@@ -895,6 +1298,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
          * @return the seconds
          */
         public int getSeconds() { return seconds; }
+
+        /**
+         * Whether per-rejection logging should be suppressed.
+         * @return true to skip the WARN log for this rejection
+         */
+        public boolean isSilent() { return silent; }
     }
 
     private static final int MAX_TIME = 9999999;
@@ -919,6 +1328,17 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         // As of 0.9.9, run the blacklist checks BEFORE the port counters,
         // so blacklisted dests will not increment the counters and
         // possibly trigger total-counter blocks for others.
+
+        // Temp autoban first, so a banned dest dumps all SYNs before they
+        // consume its per-dest budget or the per-peer throttlers below.
+        // Reason is reported once at ban time; per-rejection logging is silent so
+        // a hammering dest doesn't spam WARN on every SYN.
+        if (isTempBanned(h, _context.clock().now())) {
+            String why = tempBanReason(h);
+            String txt = "Temp banned (" + getTempBanMinutes() + " min)" +
+                         (why != null ? " - " + why : "");
+            return new Reason(txt, MAX_TIME, true);
+        }
 
         // if the sig is absent or bad it will be caught later (in CPH)
         String hashes = _context.getProperty(PROP_BLACKLIST, "");
@@ -957,6 +1377,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         if (_dayThrottler != null && _dayThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledDay", 1);
+            banPeer(h, "exceeded max " + _defaultOptions.getMaxConnsPerDay() + " conns/day",
+                    _context.clock().now());
             if (_defaultOptions.getMaxConnsPerDay() <= 0)
                 return new Reason("Total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
                         " connections reached", 86400);
@@ -970,6 +1392,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
         if (_hourThrottler != null && _hourThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledHour", 1);
+            banPeer(h, "exceeded max " + _defaultOptions.getMaxConnsPerHour() + " conns/hour",
+                    _context.clock().now());
             if (_defaultOptions.getMaxConnsPerHour() <= 0)
                 return new Reason("total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
                         " reached", 3600);
@@ -983,6 +1407,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
         if (_minuteThrottler != null && _minuteThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledMinute", 1);
+            banPeer(h, "exceeded max " + _defaultOptions.getMaxConnsPerMinute() + " conns/min",
+                    _context.clock().now());
             if (_defaultOptions.getMaxConnsPerMinute() <= 0)
                 return new Reason("Total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
                         " connections per minute reached", 60);
@@ -1094,7 +1520,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
     /**
      * Wrapper for a pooled connection with metadata.
-     * @since 0.9.70+
+     * @since 0.9.71+
      */
     private static class PooledConnection {
         final Connection connection;
@@ -1238,6 +1664,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
             Object o = _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
+            removeStream(con.getRemotePeer() == null ? null : con.getRemotePeer().calculateHash());
             long sendId = con.getSendStreamId();
             if (sendId > 0)
                 _connectionByOutboundId.remove(sendId);
@@ -1469,6 +1896,67 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                 if (_log.shouldInfo())
                     _log.info("Ping failed");
             }
+        }
+    }
+
+    /**
+     *  Periodically drops temp-bans whose time has elapsed and resets the
+     *  per-dest refusal window, so a ban always expires (24h default) and the
+     *  refusal counter doesn't grow unbounded. Mirrors ConnThrottler.Cleaner.
+     *  @since 0.9.71+
+     */
+    private class BanExpiry extends SimpleTimer2.TimedEvent {
+        private static final long PERIOD = 60 * 1000;
+
+        BanExpiry() {
+            super(_context.simpleTimer2());
+            schedule(PERIOD + (PERIOD / 2));
+        }
+
+        public void timeReached() {
+            long now = _context.clock().now();
+            // Refresh cached autoban config once per sweep so the hot path never
+            // re-reads the property store on every validated SYN.
+            _tempBanMs = _context.getProperty(PROP_TEMP_BAN_MINUTES, (int) DEFAULT_TEMP_BAN_MINUTES)
+                        * 60L * 1000L;
+            _tempBanRefusals = _context.getProperty(PROP_TEMP_BAN_REFUSALS, DEFAULT_TEMP_BAN_REFUSALS);
+            _synRateMs = _context.getProperty(PROP_TEMP_BAN_RATE_MS, DEFAULT_TEMP_BAN_RATE_MS);
+            _synBurst = _context.getProperty(PROP_TEMP_BAN_SYN_BURST, DEFAULT_TEMP_BAN_SYN_BURST);
+            long ms = _tempBanMs;
+            if (ms > 0) {
+                _tempBanUntil.entrySet().removeIf(e -> {
+                    if (e.getValue() <= now) {
+                        _tempBanReason.remove(e.getKey());
+                        return true;
+                    }
+                    return false;
+                });
+                if (_log.shouldDebug() && !_tempBanUntil.isEmpty())
+                    _log.debug("Temp bans: " + _tempBanUntil.size());
+            }
+            // Drop burst-window state for dests whose window aged out, so a dest that
+            // surged (but stayed under threshold) can't keep a stale entry indefinitely.
+            long windowMs = _synRateMs;
+            if (windowMs > 0)
+                _recentSyns.entrySet().removeIf(e -> now - e.getValue()[0] >= windowMs);
+            // Reconcile per-dest stream budgets against the live connection table once
+            // per sweep, so any teardown that missed its removeStream() (e.g. a dest
+            // torn down before the remote peer was established) cannot permanently
+            // inflate a budget. Rebuild covers both drift and stale zero entries.
+            _streamsByDest.clear();
+            for (Connection con : _connectionByInboundId.values()) {
+                Hash peerHash = con.getRemotePeer() == null ? null : con.getRemotePeer().calculateHash();
+                if (peerHash != null)
+                    addStream(peerHash);
+            }
+            // Refusals decay by half each 60s sweep instead of being cleared to
+            // zero. A hard clear lets a sustained-but-spread flood (< burst + under
+            // the full 60s-window threshold) slip through forever, since no single
+            // 60s window ever accumulates >tempBanRefusals. Decay keeps a slow,
+            // persistent abuser accumulating toward the ban while an isolated spike
+            // (e.g. a legit announce rollout) fades to nothing within a few sweeps.
+            _refusalCounter.decay(2);
+            schedule(PERIOD);
         }
     }
 
