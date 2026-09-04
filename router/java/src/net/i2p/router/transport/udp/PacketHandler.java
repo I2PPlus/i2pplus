@@ -376,11 +376,13 @@ class PacketHandler {
                             return true;
                         }
                     }
+                    countBadPacket(from);
                     return false;
                 }
                 type = header.getType();
 
                 if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
+                    countBadPacket(from);
                     return false;
                 }
             } else {
@@ -559,6 +561,26 @@ class PacketHandler {
             _establisher.receiveRetry(state, packet);
         }
         return true;
+    }
+
+    /**
+     * Count a malformed/unrecognized SSU2 packet from a source that has no
+     * established or pending session (e.g. a BAD-Destination-ConnectionID
+     * flood). Feeds the optional {@link Banlist#badPacket(String, String)}
+     * offender tracker, which auto-blocklists an IP once it exceeds
+     * {@code router.banlist.maxOffenses} within the offense window.
+     * <p>
+     * Only direct (IP+port) senders are tracked; a hash-only peer with no
+     * reachable address cannot be blocklisted by IP, so it is skipped.
+     * The policy is self-limiting (startup grace + maxOffenses threshold), so
+     * sporadic malformed packets from a legitimate peer are harmless.
+     *
+     * @param from the source of the bad packet, never null
+     * @since 0.9.71
+     */
+    private void countBadPacket(RemoteHostId from) {
+        if (from == null || from.getIP() == null) {return;}
+        _context.banlist().badPacket(from.toString(), null);
     }
 
 }
