@@ -763,9 +763,9 @@ class I2PSnarkConfigure {
         String trackerFormElements =
             "<td><input type=text class=trackername name=tname spellcheck=false></td>" +
             "<td><input type=text class=trackerhome name=thurl spellcheck=false></td>" +
-            "<td><input type=radio class=optbox value=0 name=add_tracker_type checked></td>" +
-            "<td><input type=radio class=optbox value=1 name=add_tracker_type></td>" +
-            "<td><input type=radio class=optbox value=2 name=add_tracker_type></td>" +
+            "<td><input type=radio class=optbox value=0 name=add_tracker_type></td>" +            // standard
+            "<td><input type=radio class=optbox value=1 name=add_tracker_type checked></td>" +    // open
+            "<td><input type=radio class=optbox value=2 name=add_tracker_type></td>" +            // private
             "<td><input type=text class=trackerannounce name=taurl spellcheck=false></td>";
 
         String noscript =
