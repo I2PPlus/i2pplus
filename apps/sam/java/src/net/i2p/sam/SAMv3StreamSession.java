@@ -116,7 +116,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
 
     /**
      * Put a socket on the accept queue. Called by
-     * {@link MasterSession.StreamAcceptor} when an I2P connection arrives
+     * {@code MasterSession.StreamAcceptor} when an I2P connection arrives
      * and matches this subsession's listen protocol and port.
      *
      * Only for subsessions created with the 5-arg constructor;

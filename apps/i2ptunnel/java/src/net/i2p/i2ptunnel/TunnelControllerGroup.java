@@ -128,7 +128,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
     /**
      *  The maximum number of connections that may wait in the server handler
-     *  bounded queue before overflow rejection ({@link ThreadPoolExecutor.AbortPolicy}).
+     *  bounded queue before overflow rejection ({@link java.util.concurrent.ThreadPoolExecutor.AbortPolicy}).
      *  @return the queue capacity
      *  @since 0.9.71+
      */
@@ -1529,7 +1529,7 @@ public class TunnelControllerGroup implements ClientApp {
      *
      *  <p>Handlers are dispatched off the accept thread so a single slow
      *  connection cannot stall connection admission. Overflow uses
-     *  {@link ThreadPoolExecutor.AbortPolicy}: when the fixed worker set and its
+     *  {@link java.util.concurrent.ThreadPoolExecutor.AbortPolicy}: when the fixed worker set and its
      *  bounded queue are saturated, the submission throws
      *  {@link java.util.concurrent.RejectedExecutionException} instead of
      *  executing the handler inline on the caller. Inline execution (the former

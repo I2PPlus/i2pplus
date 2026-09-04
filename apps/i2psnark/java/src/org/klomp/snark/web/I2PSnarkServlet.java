@@ -6795,7 +6795,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Appends an <img> tag for an icon to the given StringBuilder.
+     * Appends a {@code <img>} tag for an icon to the given StringBuilder.
      *
      * @param buf the StringBuilder to append to (must not be null)
      * @param name the icon name without file extension (e.g., "magnet", "folder")
