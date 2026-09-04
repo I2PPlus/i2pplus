@@ -1375,7 +1375,7 @@ Long tunnelKey = getTunnelKey(cfg);
         if (partner != null && partner.getLength() <= 1) {
             if (_log.shouldWarn()) {
                 _log.warn("Tunnel Test failed -> 0-hop partner " + partner +
-                          " -> deferring test of " + _cfg);
+                          " -> Deferring test of " + _cfg);
             }
             getContext().statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             if (!scheduleRetest(false)) {
@@ -1553,7 +1553,6 @@ Long tunnelKey = getTunnelKey(cfg);
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> Removing " + _cfg +
-                              " after " + currentFailures + " consecutive failures" +
                               (maxFailures > 3 ? " (degraded mode)" : ""));
                 }
                 getContext().statManager().addRateData(
