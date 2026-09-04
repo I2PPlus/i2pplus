@@ -598,6 +598,61 @@ class ConnectionHandler {
     }
 
     /**
+     * Build a diagnostic message for a SYN that expired on the accept queue
+     * without being accepted.  The historical message ("Expired on the SYN
+     * queue: " + packet) printed only stream IDs and flags — no peer hash, no
+     * queue pressure, no timeout — so a flood of these read as identical
+     * trailing-colon lines that could not be attributed or rate-assessed.
+     *
+     * <p>This surfaces the data needed to tell "one flooding dest" apart from
+     * "many legit clients the app never accepted":
+     * <ul>
+     * <li>the <em>source</em> dest hash (short base32 prefix), which is the
+     *     peer that sent the SYN and what the per-dest flood gate keys on;</li>
+     * <li>current queue depth vs max, so a spike is visible as near-full;</li>
+     * <li>the effective accept timeout that expired it (evidence-gated clamp).</li>
+     * </ul>
+     *
+     * <p>Idempotent and side-effect free so it can be unit-tested; the appends
+     * to {@code out} let the same formatting be reused for other SYN expiry
+     * reports (e.g. DEBUG-level summaries) without duplicating the format.
+     *
+     * @since 0.9.71+
+     */
+    static void synExpirySummary(Packet syn, StringBuilder out) {
+        if (syn == null) {out.append("null SYN"); return;}
+        if (syn.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {out.append("SYN ");}
+        else {out.append("Pkt ");}
+        out.append(syn.getSequenceNum());
+        Destination from = syn.getOptionalFrom();
+        if (from != null) {
+            out.append(" from ").append(from.calculateHash().toBase32().substring(0, 6));
+        }
+        out.append(" streamIDs [").append(Packet.toId(syn.getReceiveStreamId()))
+           .append('/').append(Packet.toId(syn.getSendStreamId())).append(']');
+    }
+
+    /**
+     * Full single-line WARN for a timed-out SYN, folding in both the packet
+     * detail and the queue/timeout pressure that caused the expiry, so the whole
+     * picture lands on one log line instead of a bare trailing colon.
+     *
+     * @since 0.9.71+
+     */
+    static String synExpiryMessage(Packet syn, int queueDepth, int maxQueueSize, int timeoutMs) {
+        StringBuilder out = new StringBuilder(96);
+        out.append("Expired on SYN queue (accept timeout ").append(timeoutMs).append("ms, ");
+        if (maxQueueSize > 0) {
+            out.append(queueDepth).append('/').append(maxQueueSize);
+        } else {
+            out.append("depth ").append(queueDepth);
+        }
+        out.append("): ");
+        synExpirySummary(syn, out);
+        return out.toString();
+    }
+
+    /**
      * Timer event that removes a SYN packet from the queue after the
      * accept timeout expires, sending a reset if it was a SYN.
      */
@@ -616,7 +671,8 @@ class ConnectionHandler {
                 _synQueueExpired++;
                 if (_synPacket.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldWarn())
-                        _log.warn("Expired on the SYN queue: " + _synPacket);
+                        _log.warn(synExpiryMessage(_synPacket, _synQueue.size(),
+                                                   getMaxQueueSize(), getEffectiveAcceptTimeout()));
                     sendReset(_synPacket);
                 } else {
                     reReceivePacket(_synPacket);
