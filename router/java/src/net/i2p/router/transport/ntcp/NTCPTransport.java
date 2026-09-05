@@ -523,15 +523,12 @@ public class NTCPTransport extends TransportImpl {
         boolean shouldFlood = false;
 
         if (newVersion != 0) {
-            if (m.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
-                DatabaseStoreMessage dsm = (DatabaseStoreMessage) m;
-                if (dsm.getKey().equals(_context.routerHash())) {
-                    shouldSkipInfo = true;
-                    shouldFlood = dsm.getReplyToken() != 0;
-                }
+            if (isOwnRouterInfoStore(m, _context.routerHash())) {
+                shouldSkipInfo = true;
+                shouldFlood = isRouterInfoStoreFlood(m);
             }
 
-            if (!shouldSkipInfo || shouldFlood || newVersion == 1) {
+            if (shouldSendInfoNow(shouldSkipInfo, shouldFlood, newVersion)) {
                 con.send(msg);
             } else if (_log.shouldInfo()) {
                 _log.info("SKIPPING INFO message: " + con);
@@ -545,22 +542,22 @@ public class NTCPTransport extends TransportImpl {
                 // Only call prepareOutbound() if connection is in initial state
                 // to avoid IllegalStateException when connection is already in progress
                 EstablishState est = con.getEstablishState();
-                if (est instanceof OutboundNTCP2State) {
-                    OutboundNTCP2State state = (OutboundNTCP2State) est;
-                    if (state.isInitialState()) {
+                if (est != null) {
+                    if (isAlreadyInProgress(est)) {
+                        if (_log.shouldDebug())
+                            _log.debug("Skipping prepareOutbound() for connection already in progress: " + con);
+                    } else if (est instanceof OutboundNTCP2State) {
                         est.prepareOutbound();
-                    } else if (_log.shouldDebug()) {
-                        _log.debug("Skipping prepareOutbound() for connection already in progress: " + con);
-                    }
-                } else {
-                    try {
-                        est.prepareOutbound();
-                    } catch (IllegalStateException ise) {
-                        // Connection is already in progress, this is expected in race conditions
-                        if (_log.shouldDebug()) {
-                            _log.debug("Ignoring IllegalStateException for connection already in progress: " + con + " - " + ise.getMessage());
+                    } else {
+                        try {
+                            est.prepareOutbound();
+                        } catch (IllegalStateException ise) {
+                            // Connection is already in progress, this is expected in race conditions
+                            if (_log.shouldDebug()) {
+                                _log.debug("Ignoring IllegalStateException for connection already in progress: " + con + " - " + ise.getMessage());
+                            }
+                            // Don't log as warning since this is expected behavior
                         }
-                        // Don't log as warning since this is expected behavior
                     }
                 }
             }
@@ -576,16 +573,18 @@ public class NTCPTransport extends TransportImpl {
      * @param e The exception that occurred during connection setup.
      */
     private void logConnectionSetupError(Exception e) {
-        if (e instanceof IOException && !shouldSuppressException(e)) {
+        if (shouldSuppressException(e))
+            return;
+        if (e instanceof IOException) {
             if (_log.shouldWarn()) _log.warn("[NTCP] Error opening a channel -> IO Exception" + (e.getMessage() != null ? ":" + e.getMessage() : ""));
             _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
-        } else if (e instanceof IllegalStateException && !shouldSuppressException(e)) {
-            String msg = e.getMessage();
-            if (msg != null && msg.contains("Unexpected prepareOutbound()")) {
+        } else if (e instanceof IllegalStateException) {
+            if (isExpectedRaceCondition(e)) {
                 // This is an expected race condition, log at debug level only
-                if (_log.shouldDebug()) _log.debug("[NTCP] Race condition during channel setup - " + msg);
+                if (_log.shouldDebug()) _log.debug("[NTCP] Race condition during channel setup - " + e.getMessage());
             } else {
                 // Other IllegalStateExceptions are still warnings
+                String msg = e.getMessage();
                 if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception" + (msg != null ? ":" + msg : ""));
             }
         }
@@ -606,7 +605,7 @@ public class NTCPTransport extends TransportImpl {
         if (!isAlive()) {return null;}
         // passed in dataSize assumes 16 byte header, if NTCP2 then
         // we have a 9-byte header so there's 7 to spare
-        if (dataSize > NTCPConnection.NTCP2_MAX_MSG_SIZE + 7) {
+        if (isTooLargeForNTCP2(dataSize)) {
             // Too big for NTCP2
             // Let SSU deal with it
             _context.statManager().addRateData("ntcp.noBidTooLargeI2NP", dataSize);
@@ -628,9 +627,10 @@ public class NTCPTransport extends TransportImpl {
             return _fastBid;
         }
         int nid = toAddress.getNetworkId();
-        if (nid != _networkID) {
+        NetworkIdIssue nidIssue = classifyNetworkId(nid, _networkID);
+        if (nidIssue != NetworkIdIssue.OK) {
             String ipPort = getIPPortFromRouterInfo(toAddress);
-            if (nid == -1) {
+            if (nidIssue == NetworkIdIssue.NO_NETWORK) {
                 _banLogger.logBan(peer, ipPort, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
                 _context.banlist().banlistRouter(peer, "No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
@@ -651,39 +651,207 @@ public class NTCPTransport extends TransportImpl {
 
         // Check for supported sig type
         SigType type = toAddress.getIdentity().getSigType();
-        if (type == null || !type.isAvailable()) {
+        if (!isSigTypeUsable(type)) {
             markUnreachable(peer);
             return null;
         }
 
         // Can we connect to them if we are not DSA?
         RouterInfo us = _context.router().getRouterInfo();
-        if (us != null) {
-            RouterIdentity id = us.getIdentity();
-            if (id.getSigType() != SigType.DSA_SHA1) {
-                String v = toAddress.getVersion();
-                if (VersionComparator.comp(v, MIN_SIGTYPE_VERSION) < 0) {
-                    markUnreachable(peer);
-                    return null;
-                }
-            }
+        if (us != null && !isConnectableVersion(us.getIdentity().getSigType() == SigType.DSA_SHA1,
+                                                toAddress.getVersion())) {
+            markUnreachable(peer);
+            return null;
         }
 
         if (!allowConnection()) {
             return _transientFail;
         }
 
-        if (haveCapacity()) {
-            if (addr.getCost() > DEFAULT_COST)
-                return _slowCostBid;
-            else
-                return _slowBid;
-        } else {
-            if (addr.getCost() > DEFAULT_COST)
-                return _nearCapacityCostBid;
-            else
-                return _nearCapacityBid;
+        return bidFor(chooseBidTier(haveCapacity(), addr.getCost() > DEFAULT_COST));
+    }
+
+    /**
+     *  The bid tier selected by the capacity/cost cascade, in order from most to
+     *  least attractive.  Each tier maps to one of the shared cached bids.
+     */
+    static enum BidTier {
+        /** Have capacity, normal cost. */
+        SLOW,
+        /** Have capacity, high cost. */
+        SLOW_COST,
+        /** At capacity, normal cost. */
+        NEAR_CAPACITY,
+        /** At capacity, high cost. */
+        NEAR_CAPACITY_COST
+    }
+
+    static enum NetworkIdIssue {
+        /** The peer is in our network. */
+        OK,
+        /** The peer did not specify a network. */
+        NO_NETWORK,
+        /** The peer specifies a different network. */
+        WRONG_NETWORK
+    }
+
+    /**
+     *  Whether the message is too large for NTCP2 to carry.
+     *
+     *  <p>The passed-in dataSize assumes a 16-byte header; NTCP2 uses a 9-byte
+     *  header, so there are 7 bytes to spare over the NTCP2 maximum.
+     *
+     *  @param dataSize the message data size, assuming the 16-byte header
+     *  @return true if the message cannot fit on NTCP2
+     *  @since 0.9.71+
+     */
+    static boolean isTooLargeForNTCP2(int dataSize) {
+        return dataSize > NTCPConnection.NTCP2_MAX_MSG_SIZE + 7;
+    }
+
+    /**
+     *  Classify the peer's network id relative to ours, for the ban-on-mismatch
+     *  decision in {@link #bid(RouterInfo, int)}.
+     *
+     *  @param nid the peer's announced network id
+     *  @param ourNetworkID our own network id
+     *  @return OK if equal; NO_NETWORK if the peer sent the no-network sentinel (~0);
+     *          WRONG_NETWORK otherwise
+     *  @since 0.9.71+
+     */
+    static NetworkIdIssue classifyNetworkId(int nid, int ourNetworkID) {
+        if (nid == ourNetworkID)
+            return NetworkIdIssue.OK;
+        return nid == -1 ? NetworkIdIssue.NO_NETWORK : NetworkIdIssue.WRONG_NETWORK;
+    }
+
+    /**
+     *  Whether the peer's signature type is usable: it must exist and be
+     *  available on this build.
+     *
+     *  @param type the peer's signature type
+     *  @return true if we can sign with (or accept) that type
+     *  @since 0.9.71+
+     */
+    static boolean isSigTypeUsable(SigType type) {
+        return type != null && type.isAvailable();
+    }
+
+    /**
+     *  Whether we can connect on signatures: if we ourselves advertise a
+     *  non-DSA signature type, the peer must announce a version at least as new
+     *  as {@link #MIN_SIGTYPE_VERSION}.  A DSA-signing router never has a
+     *  version restriction.
+     *
+     *  @param weAreDSA true if our own signature type is DSA_SHA1
+     *  @param theirVersion the peer's announced version
+     *  @return true if the version satisfies the signature-type floor
+     *  @since 0.9.71+
+     */
+    static boolean isConnectableVersion(boolean weAreDSA, String theirVersion) {
+        return weAreDSA || VersionComparator.comp(theirVersion, MIN_SIGTYPE_VERSION) >= 0;
+    }
+
+    /**
+     *  Select the bid tier from the capacity/cost cascade, in the stable order
+     *  SLOW &gt; SLOW_COST &gt; NEAR_CAPACITY &gt; NEAR_CAPACITY_COST.
+     *
+     *  @param haveCapacity whether the transport has spare connection capacity
+     *  @param highCost whether the peer's address cost exceeds {@link #DEFAULT_COST}
+     *  @return the tier to quote
+     *  @since 0.9.71+
+     */
+    static BidTier chooseBidTier(boolean haveCapacity, boolean highCost) {
+        if (haveCapacity)
+            return highCost ? BidTier.SLOW_COST : BidTier.SLOW;
+        return highCost ? BidTier.NEAR_CAPACITY_COST : BidTier.NEAR_CAPACITY;
+    }
+
+    /**
+     *  Map a bid tier to the cached shared bid, so the compare-and-log hot path
+     *  allocates nothing.
+     *
+     *  @param tier the tier selected by {@link #chooseBidTier}
+     *  @return the cached bid for that tier
+     */
+    private TransportBid bidFor(BidTier tier) {
+        switch (tier) {
+            case SLOW: return _slowBid;
+            case SLOW_COST: return _slowCostBid;
+            case NEAR_CAPACITY: return _nearCapacityBid;
+            default: return _nearCapacityCostBid;
         }
+    }
+
+    /**
+     *  Whether the exception is the expected channel-setup race: the peer
+     *  started building the tunnel before we called prepareOutbound().
+     *
+     *  @param e the exception thrown during connection setup
+     *  @return true if it is the benign preparation race
+     *  @since 0.9.71+
+     */
+    static boolean isExpectedRaceCondition(Exception e) {
+        String msg = e.getMessage();
+        return msg != null && msg.contains("Unexpected prepareOutbound()");
+    }
+
+    /**
+     *  Whether a DatabaseStoreMessage stored our own RouterInfo under our own key.
+     *
+     *  <p>Such a store is looped-back control info: the router already has its own
+     *  RouterInfo, so the message must not be handed to the send pipeline as data;
+     *  only the optional flood spike (see {@link #isRouterInfoStoreFlood}) is relevant.
+     *
+     *  @param m the outbound message
+     *  @param ourHash our own router hash
+     *  @return true if the message is a store of our own RouterInfo
+     *  @since 0.9.71+
+     */
+    static boolean isOwnRouterInfoStore(I2NPMessage m, Hash ourHash) {
+        return m.getType() == DatabaseStoreMessage.MESSAGE_TYPE &&
+               ((DatabaseStoreMessage) m).getKey().equals(ourHash);
+    }
+
+    /**
+     *  Whether a DatabaseStoreMessage of our own RouterInfo carries a flood reply
+     *  token.  Only meaningful when {@link #isOwnRouterInfoStore} already returned
+     *  true for the same message.
+     *
+     *  @param m the outbound message
+     *  @return true if the store requests a flood
+     *  @since 0.9.71+
+     */
+    static boolean isRouterInfoStoreFlood(I2NPMessage m) {
+        return m.getType() == DatabaseStoreMessage.MESSAGE_TYPE &&
+               ((DatabaseStoreMessage) m).getReplyToken() != 0;
+    }
+
+    /**
+     *  Whether the outbound message should be sent on the connection instead of
+     *  skipped.  A store of our own RouterInfo is skipped unless it carries a
+     *  flood request, or until the NTCP2 version 1 behavior is in use.
+     *
+     *  @param shouldSkipInfo whether the message is a store of our own RouterInfo
+     *  @param shouldFlood whether that store requests a flood
+     *  @param version the connection's NTCP version
+     *  @return true if the message should be handed to the send pipeline
+     *  @since 0.9.71+
+     */
+    static boolean shouldSendInfoNow(boolean shouldSkipInfo, boolean shouldFlood, int version) {
+        return !shouldSkipInfo || shouldFlood || version == 1;
+    }
+
+    /**
+     *  Whether the connection's outbound establishment has already left the
+     *  initial state, in which case prepareOutbound() must not be called again.
+     *
+     *  @param est the connection's establishment state, or null
+     *  @return true if establishment is already in progress
+     *  @since 0.9.71+
+     */
+    static boolean isAlreadyInProgress(EstablishState est) {
+        return est instanceof OutboundNTCP2State && !((OutboundNTCP2State) est).isInitialState();
     }
 
     /**
