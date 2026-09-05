@@ -147,7 +147,7 @@ class LogRecordFormatter {
      * @return a string of exactly {@code size} chars: right-padded with spaces
      *         when short, or the last {@code size - 3} chars prefixed with "…"
      *         when longer than {@code size}
-     * @since 0.9.71
+     * @since 0.9.71+
      */
     static String padOrTruncate(String str, int size) {
         StringBuilder buf = new StringBuilder(size);

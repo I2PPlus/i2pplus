@@ -32,7 +32,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.BanLogger;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
@@ -40,6 +39,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
+import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.TryCache;
 
@@ -96,6 +96,16 @@ class EventPumper implements Runnable {
     private static final long RETRY_MAP_CLEAR_INTERVAL = 5 * 60 * 1000L; // 5 minutes
     /** Max entries before clearing retry maps to prevent unbounded growth under DoS */
     private static final int MAX_RETRY_MAP_SIZE = 1024;
+
+    // Cached snapshot of the ntcp.inboundConn one-minute rate, refreshed at most
+    // once per INBOUND_RATE_REFRESH_MS. Reading the four volatile fields below is
+    // lock-free, so the accept path no longer grabs the global Rate monitor and
+    // runs computeAverages() (six bucket reads) per connection during a flood.
+    private static final long INBOUND_RATE_REFRESH_MS = 1000;
+    private volatile long _inboundSnapshotAt;
+    private volatile int _inboundCurrentCount;
+    private volatile int _inboundLastCount;
+    private volatile long _inboundPeriodStart;
 
     /**
      * This probably doesn't need to be bigger than the largest typical
@@ -664,43 +674,149 @@ class EventPumper implements Runnable {
     }
 
     private boolean shouldAllowInboundEstablishment() {
-        RateStat rs = _context.statManager().getRate("ntcp.inboundConn");
-        if (rs == null) return true;
-        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
-        if (r == null) return true;
-        int last;
-        long periodStart;
-        RateAverages ra = RateAverages.getTemp();
-        synchronized (r) {
-            last = (int) r.getLastEventCount();
-            periodStart = r.getLastCoalesceDate();
-            r.computeAverages(ra, true);
+        refreshInboundRateIfStale();
+        InboundFloodDecision verdict = evaluateInboundFlood(_context.clock().now(),
+                                                            _inboundCurrentCount, _inboundLastCount, _inboundPeriodStart,
+                                                            _transport.haveCapacity(95),
+                                                            _transport.getMaxConnections(), _transport.countPeers(),
+                                                            _context.random());
+        if (verdict.isDrop() && _log.shouldWarn()) {
+            _log.warn("Dropping incoming TCP connection (" + (verdict.getPercent() >= 1 ? Math.min(verdict.getPercent(), 100) + "%" : "1%") + " chance)" +
+                      " -> Previous/current connections per minute: " + verdict.getLastConnections() + " / " + verdict.getCurrentConnectionsPerMinute());
         }
-        if (last < 15) last = 15;
-        int total = (int) ra.getTotalEventCount();
-        int current = total - last;
-        if (current <= 0) return true;
-        int lastPeriod = 60 * 1000;
-        int currentTime = (int) (_context.clock().now() - periodStart);
-        if (currentTime <= 5 * 1000) return true;
-        float lastRate = last / (float) lastPeriod;
+        return !verdict.isDrop();
+    }
+
+    /**
+     * Refresh the cached snapshot of the one-minute inbound accept rate.
+     *
+     * The expensive part — aggregating the {@link Rate} buckets — requires the
+     * global Rate monitor and only happens once per refresh interval; every
+     * accepted connection in between reads the four volatile fields lock-free.
+     * A connection flood therefore never contends on the stat lock.
+     */
+    private void refreshInboundRateIfStale() {
+        long now = _context.clock().now();
+        // Snapshot still fresh, serve the cached values without touching the Rate.
+        if (now - _inboundSnapshotAt < INBOUND_RATE_REFRESH_MS) return;
+        RateStat rs = _context.statManager().getRate("ntcp.inboundConn");
+        Rate r = (rs != null) ? rs.getRate(RateConstants.ONE_MINUTE) : null;
+        // Rate not registered yet (router startup): nothing to cache, allow everything.
+        if (r == null) return;
+        synchronized (r) {
+            _inboundCurrentCount = (int) r.getCurrentEventCount();
+            _inboundLastCount = (int) r.getLastEventCount();
+            _inboundPeriodStart = r.getLastCoalesceDate();
+        }
+        _inboundSnapshotAt = now;
+    }
+
+    /** Minimum accepted rate in the previous period; never below this floor. */
+    private static final int MIN_INBOUND_LAST_EVENTS = 15;
+    /** Length of the previous period used to normalize the baseline rate. */
+    private static final long INBOUND_LAST_PERIOD_MS = 60 * 1000L;
+    /** Right after a period rolls over, the accept rate is meaningless; always allow. */
+    private static final long INBOUND_WARMUP_MS = 5 * 1000L;
+    /** Random range for the probabilistic reject decision. */
+    private static final int INBOUND_DROP_RANGE = 128;
+    /** Ratchet constant: max accept when the current rate exceeds baseline by this bias. */
+    private static final int INBOUND_DROP_BIAS = 512;
+    /** Flood threshold is relaxed when the transport still has headroom... */
+    private static final float INBOUND_SPARE_CAPACITY_FACTOR = 1.05f;
+    /** ...and tightened when it reports saturation. */
+    private static final float INBOUND_SATURATED_FACTOR = 0.95f;
+
+    /**
+     * Decide whether an inbound NTCP connection should be probabilistically
+     * rejected because the accept rate is spiking well above the recent baseline
+     * while the router is already heavily loaded with connections.
+     *
+     * This is the pure decision half of {@link #shouldAllowInboundEstablishment()}.
+     * It performs no locking and takes raw counters instead of a {@link Rate}, so
+     * the hot accept path never blocks on the global Rate monitor. The arithmetic
+     * is pinned by {@code InboundFloodDecisionTest} in the router test tree.
+     *
+     * @param now router clock time in milliseconds
+     * @param rawCurrentCount events so far in the current (partial) rate period
+     * @param rawLastCount events in the most recent full rate period
+     * @param periodStart start time of the current rate period, milliseconds
+     * @param hasCapacity true if the transport reports spare bandwidth, which
+     *                    relaxes the flood threshold vs. punishing when saturated
+     * @param maxConnections the transport connection ceiling
+     * @param currentConnections the live peer connection count
+     * @param random source of randomness for the probabilistic decision
+     * @return the decision; never null
+     * @since 0.9.71+
+     */
+    static InboundFloodDecision evaluateInboundFlood(long now, int rawCurrentCount, int rawLastCount,
+                                                     long periodStart, boolean hasCapacity,
+                                                     int maxConnections, int currentConnections,
+                                                     RandomSource random) {
+        int last = Math.max(rawLastCount, MIN_INBOUND_LAST_EVENTS);
+        // The Rate totals current + last period events; the original logic measured
+        // "current" activity by subtracting the (floored) last period from that total.
+        int current = rawCurrentCount + rawLastCount - last;
+        if (current <= 0) return InboundFloodDecision.ALLOW;
+        int currentTime = (int) (now - periodStart);
+        if (currentTime <= INBOUND_WARMUP_MS) return InboundFloodDecision.ALLOW;
+        float lastRate = last / (float) INBOUND_LAST_PERIOD_MS;
         float currentRate = (float) (current / (double) currentTime);
-        float factor = _transport.haveCapacity(95) ? 1.05f : 0.95f;
+        float factor = hasCapacity ? INBOUND_SPARE_CAPACITY_FACTOR : INBOUND_SATURATED_FACTOR;
         float minThresh = factor * lastRate;
-        int maxConnections = _transport.getMaxConnections();
-        int currentConnections = _transport.countPeers();
-        if (currentRate > minThresh * 5 / 3 && (currentConnections > (maxConnections * 2 / 3))) {
-            long probAccept = Math.max(1, ((int) (4 * 128L * currentRate / minThresh)) - 512);
-            int percent = probAccept > 128 ? 100 : (int) ((probAccept / 128) * 100);
-            if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping incoming TCP connection (" + (percent >= 1 ? Math.min(percent, 100) + "%" : "1%") + " chance)" +
-                              " -> Previous/current connections per minute: " + last + " / " + (int) (currentRate * 60 * 1000));
-                }
-                return false;
+        // Only engage when the current rate clearly exceeds the baseline AND the
+        // router is past two-thirds of its connection ceiling.
+        if (currentRate > minThresh * 5 / 3 && currentConnections > (maxConnections * 2 / 3)) {
+            long probAccept = Math.max(1, ((int) (4 * INBOUND_DROP_RANGE * currentRate / minThresh)) - INBOUND_DROP_BIAS);
+            int percent = probAccept > INBOUND_DROP_RANGE ? 100 : (int) ((probAccept / INBOUND_DROP_RANGE) * 100);
+            if (probAccept >= INBOUND_DROP_RANGE || random.nextInt(INBOUND_DROP_RANGE) < probAccept) {
+                return new InboundFloodDecision(true, percent, last,
+                                                (int) (currentRate * 60 * 1000));
             }
         }
-        return true;
+        return InboundFloodDecision.ALLOW;
+    }
+
+    /**
+     * Outcome of {@link EventPumper#evaluateInboundFlood(long, int, int, long, boolean, int, int, RandomSource)}:
+     * whether to reject the incoming connection plus the numbers used in the
+     * warn log, so the caller stays side-effect free.
+     *
+     * @since 0.9.71+
+     */
+    static final class InboundFloodDecision {
+        /** Constant for "accept, nothing to report", reused on every non-drop path. */
+        static final InboundFloodDecision ALLOW = new InboundFloodDecision(false, 0, 0, 0);
+
+        private final boolean _drop;
+        private final int _percent;
+        private final int _lastConnections;
+        private final int _currentConnectionsPerMinute;
+
+        /**
+         * @param drop true to reject the connection
+         * @param percent nominal rejection chance, 0-100 (0 renders as "1%")
+         * @param lastConnections baseline connections in the previous period
+         * @param currentConnectionsPerMinute projected current accept rate
+         */
+        private InboundFloodDecision(boolean drop, int percent, int lastConnections,
+                                     int currentConnectionsPerMinute) {
+            _drop = drop;
+            _percent = percent;
+            _lastConnections = lastConnections;
+            _currentConnectionsPerMinute = currentConnectionsPerMinute;
+        }
+
+        /** @return true if the connection should be rejected */
+        boolean isDrop() { return _drop; }
+
+        /** @return nominal rejection chance percent (0 renders as "1%") */
+        int getPercent() { return _percent; }
+
+        /** @return baseline connections in the previous full rate period */
+        int getLastConnections() { return _lastConnections; }
+
+        /** @return projected current accept rate in connections per minute */
+        int getCurrentConnectionsPerMinute() { return _currentConnectionsPerMinute; }
     }
 
     private void processConnect(SelectionKey key) {
