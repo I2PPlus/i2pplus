@@ -1479,12 +1479,16 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Remove the buffer, which _should_ be the one at the head of _writeBufs.
+     *  Remove the buffer, which must be the current head of _writeBufs.
      *  Called only from the pumper's drain loop (EventPumper.processWrite()).
+     *  Removal is O(1) via poll(): the single-writer drain guarantees the
+     *  buffer is at the head (producers only add, the pumper is the only
+     *  consumer), replacing the previous O(n) equals()-scan.
      *  The completion bookkeeping self-synchronizes on _writeLock; the
      *  _writeBufs queue operations are lock-free.
      *
      *  @param buf the buffer to remove
+     *  @since 0.9.71+ O(1) head removal (was _writeBufs.remove(buf))
      */
     void removeWriteBuf(ByteBuffer buf) {
         // never clear OutNetMessages during establish phase
@@ -1497,7 +1501,9 @@ public class NTCPConnection implements Closeable {
             }
             updateStats();
         }
-        _writeBufs.remove(buf);
+        // O(1) removal of the head. Single-writer drain (#5) guarantees buf IS
+        // the head: producers only offer(), and the pumper is the only consumer.
+        _writeBufs.poll();
         // The completion bookkeeping touches _currentOutbound, which the writer
         // pool also manipulates while building frames; that section stays
         // serialized on _writeLock even though the drain itself no longer needs it.
