@@ -467,4 +467,17 @@ public class NTCP2PayloadTest {
             assertTrue(e.getMessage().contains("Illegal first block in handshake"));
         }
     }
+
+    @Test
+    public void testEmptyHandshakeFrame() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        byte[] payload = new byte[0];
+        try {
+            Recorder rec = new Recorder();
+            NTCP2Payload.processPayload(_ctx, rec, payload, 0, 0, true);
+            fail("no exception thrown");
+        } catch (IOException e) {
+            assertTrue(e.getMessage().contains("No blocks in handshake"));
+        }
+    }
 }

@@ -109,6 +109,13 @@ public class NTCP2FramePackingDecisionTest {
     }
 
     @Test
+    public void testFramePayloadLength() {
+        assertEquals(0, NTCPConnection.framePayloadLength(MAC_SIZE));
+        assertEquals(1, NTCPConnection.framePayloadLength(MAC_SIZE + 1));
+        assertEquals(BUFFER_SIZE - MAC_SIZE, NTCPConnection.framePayloadLength(BUFFER_SIZE));
+    }
+
+    @Test
     public void testCanZeroCopyFrameAtBoundary() {
         assertTrue(NTCPConnection.canZeroCopyFrame(0, 100, 100));
     }
