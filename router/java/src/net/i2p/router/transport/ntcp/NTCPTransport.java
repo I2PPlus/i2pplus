@@ -983,14 +983,7 @@ public class NTCPTransport extends TransportImpl {
         boolean ssuDisabled = !_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
         boolean isFixedOrForceFirewalled = !"false".equalsIgnoreCase(_context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true"));
 
-        int port;
-        if (addr != null) {
-            port = addr.getPort();
-        } else if (ssuDisabled) {
-            port = setupPort();
-        } else {
-            port = _ssuPort;
-        }
+        int port = chooseListenPort(addr, ssuDisabled);
         RouterAddress myAddress = bindAddress(port);
 
         if (myAddress != null) {
@@ -998,42 +991,7 @@ public class NTCPTransport extends TransportImpl {
         } else if (addr != null) {
             replaceAddress(addr);
         } else if (port > 0 && !isFixedOrForceFirewalled) {
-            Collection<InetAddress> addrs = getSavedLocalAddresses();
-            if (!addrs.isEmpty() && !_context.router().isHidden()) {
-                boolean skipv4 = false;
-                boolean skipv6 = false;
-                int count = 0;
-
-                boolean ipv6Firewalled = isIPv6Firewalled();
-                boolean propIPv6Firewalled = _context.getBooleanProperty(PROP_IPV6_FIREWALLED);
-                boolean checkIPv6Skip = ipv6Firewalled || (propIPv6Firewalled && !ssuDisabled);
-                for (InetAddress ia : addrs) {
-                    boolean ipv6 = ia instanceof Inet6Address;
-                    if ((ipv6 && checkIPv6Skip) || (!ipv6 && isIPv4Firewalled())) {
-                        if (ipv6) skipv6 = true;
-                        else skipv4 = true;
-                        if (skipv4 && skipv6) break; // early exit, both skipped
-                        continue;
-                    }
-                    OrderedProperties props = new OrderedProperties();
-                    props.setProperty(RouterAddress.PROP_HOST, ia.getHostAddress());
-                    props.setProperty(RouterAddress.PROP_PORT, Integer.toString(port));
-                    addNTCP2Options(props);
-                    int cost = getDefaultCost(ipv6);
-                    RouterAddress address = new RouterAddress(getPublishStyle(), props, cost);
-                    replaceAddress(address);
-                    count++;
-                }
-                if (count <= 0) {
-                    setOutboundNTCP2Address();
-                } else if (skipv6) {
-                    setOutboundNTCP2Address(true);
-                } else if (skipv4) {
-                    setOutboundNTCP2Address(false);
-                }
-            } else {
-                setOutboundNTCP2Address();
-            }
+            restoreSavedLocalAddresses(port, ssuDisabled);
         } else {
             setOutboundNTCP2Address();
         }
@@ -1042,6 +1000,117 @@ public class NTCPTransport extends TransportImpl {
             long now = _context.clock().now();
             _lastInboundIPv4 = now;
             _lastInboundIPv6 = now;
+        }
+    }
+
+    /**
+     *  Selects the port to listen on.
+     *  Private helper for {@link #startListening()}.
+     *
+     *  <p>An address handed back by SSU configuration wins; otherwise the NTCP
+     *  port is used if SSU (the usual port oracle) is disabled, falling back to
+     *  the SSU-discovered port.
+     *
+     *  @param addr the transport's current configured address, or null
+     *  @param ssuDisabled whether UDP is disabled
+     *  @return the chosen listen port, possibly {@link #_ssuPort}
+     *  @since 0.9.71+
+     */
+    private int chooseListenPort(RouterAddress addr, boolean ssuDisabled) {
+        if (addr != null)
+            return addr.getPort();
+        if (ssuDisabled)
+            return setupPort();
+        return _ssuPort;
+    }
+
+    /**
+     *  Whether a saved local address should be skipped for publishing.
+     *  Pure decision helper for {@link #restoreSavedLocalAddresses(int, boolean)}.
+     *
+     *  <p>Internet-facing saved addresses are skipped when their family is
+     *  firewalled; IPv6 additionally honors the explicit i2p.ipv6.firewalled
+     *  property when UDP is enabled.
+     *
+     *  @param ipv6 the address family
+     *  @param ipv6Firewalled IPv6 firewall detected
+     *  @param propIPv6Firewalled the i2p.ipv6.firewalled property
+     *  @param ssuDisabled whether UDP is disabled
+     *  @param ipv4Firewalled IPv4 firewall detected
+     *  @return true if the address must not be published
+     *  @since 0.9.71+
+     */
+    static boolean shouldSkipSavedAddress(boolean ipv6, boolean ipv6Firewalled,
+            boolean propIPv6Firewalled, boolean ssuDisabled, boolean ipv4Firewalled) {
+        if (ipv6)
+            return ipv6Firewalled || (propIPv6Firewalled && !ssuDisabled);
+        return ipv4Firewalled;
+    }
+
+    /**
+     *  Restores the saved local addresses as the published address set.
+     *  Private helper for {@link #startListening()}.
+     *
+     *  <p>Only reached when no address could be bound or configured. Firewalled
+     *  families are dropped from the set; if no publishable address remains, an
+     *  outbound-only NTCP2 address is published instead.
+     *
+     *  @param port the selected listen port
+     *  @param ssuDisabled whether UDP is disabled
+     *  @since 0.9.71+
+     */
+    private void restoreSavedLocalAddresses(int port, boolean ssuDisabled) {
+        Collection<InetAddress> addrs = getSavedLocalAddresses();
+        if (addrs.isEmpty() || _context.router().isHidden()) {
+            setOutboundNTCP2Address();
+            return;
+        }
+        boolean ipv6Firewalled = isIPv6Firewalled();
+        boolean propIPv6Firewalled = _context.getBooleanProperty(PROP_IPV6_FIREWALLED);
+        boolean skipv4 = false;
+        boolean skipv6 = false;
+        int count = 0;
+        for (InetAddress ia : addrs) {
+            boolean ipv6 = ia instanceof Inet6Address;
+            if (shouldSkipSavedAddress(ipv6, ipv6Firewalled, propIPv6Firewalled, ssuDisabled, isIPv4Firewalled())) {
+                if (ipv6) skipv6 = true;
+                else skipv4 = true;
+                if (skipv4 && skipv6) break; // early exit, both skipped
+                continue;
+            }
+            OrderedProperties props = new OrderedProperties();
+            props.setProperty(RouterAddress.PROP_HOST, ia.getHostAddress());
+            props.setProperty(RouterAddress.PROP_PORT, Integer.toString(port));
+            addNTCP2Options(props);
+            int cost = getDefaultCost(ipv6);
+            RouterAddress address = new RouterAddress(getPublishStyle(), props, cost);
+            replaceAddress(address);
+            count++;
+        }
+        setOutboundForSkipped(count, skipv6, skipv4);
+    }
+
+    /**
+     *  Fills in an outbound-only NTCP2 address when saved addresses were
+     *  partially or fully skipped. Private helper for
+     *  {@link #restoreSavedLocalAddresses(int, boolean)}.
+     *
+     *  <p>With nothing published an outbound NTCP2 address covering both families
+     *  is published; when only one family was skipped, a single-family outbound
+     *  marker is merged in.
+     *
+     *  @param count number of successfully published saved addresses
+     *  @param skipv6 IPv6 addresses were skipped
+     *  @param skipv4 IPv4 addresses were skipped
+     *  @since 0.9.71+
+     */
+    private void setOutboundForSkipped(int count, boolean skipv6, boolean skipv4) {
+        if (count <= 0) {
+            setOutboundNTCP2Address();
+        } else if (skipv6) {
+            setOutboundNTCP2Address(true);
+        } else if (skipv4) {
+            setOutboundNTCP2Address(false);
         }
     }
 
@@ -1161,31 +1230,21 @@ public class NTCPTransport extends TransportImpl {
                 bindTo = getFixedHost();
             }
 
-            if (bindTo != null) {
-                try {bindToAddr = InetAddress.getByName(bindTo);}
-                catch (UnknownHostException uhe) {_log.error("[NTCP] Invalid bind interface specified [" + bindTo + "]", uhe);}
-            }
+            bindToAddr = resolveBindTarget(bindTo);
 
             try {
                 InetSocketAddress addr;
                 if (bindToAddr == null) {addr = new InetSocketAddress(port);}
                 else {
                     addr = new InetSocketAddress(bindToAddr, port);
-                    if (_log.shouldWarn()) {_log.warn("[NTCP] Binding only to " + bindToAddr);}
-                    OrderedProperties props = new OrderedProperties();
-                    props.setProperty(RouterAddress.PROP_HOST, bindTo);
-                    props.setProperty(RouterAddress.PROP_PORT, Integer.toString(port));
-                    addNTCP2Options(props);
-                    int cost = getDefaultCost(false);
-                    myAddress = new RouterAddress(getPublishStyle(), props, cost);
+                    myAddress = buildBoundAddress(bindToAddr, bindTo, port);
                 }
                 if (!_endpoints.isEmpty()) {
                     // If we are already bound to the new address, OR
                     // if the host is specified and we are bound to the wildcard on the same port,
                     // do nothing. Changing config from wildcard to a specified host will
                     // require a restart.
-                    if (_endpoints.contains(addr) ||
-                        (bindToAddr != null && _endpoints.contains(new InetSocketAddress(port)))) {
+                    if (isAlreadyListening(_endpoints, addr, bindToAddr, port)) {
                         if (_log.shouldWarn()) {_log.warn("[NTCP] Already listening on " + addr);}
                         return null;
                     }
@@ -1193,7 +1252,7 @@ public class NTCPTransport extends TransportImpl {
                     // do not rebind internally and restart, just change the address
                     int eport = _context.getProperty(UDPTransport.PROP_EXTERNAL_PORT, 0);
                     int iport = _context.getProperty(UDPTransport.PROP_INTERNAL_PORT, 0);
-                    if (port == eport && iport > 0 && eport != iport) {
+                    if (isExternalOnlyPortChange(port, eport, iport)) {
                         if (_log.shouldWarn()) {
                             _log.warn("[NTCP] External port changed to " + eport + ", keep listening on internal port " + iport);
                         }
@@ -1227,6 +1286,91 @@ public class NTCPTransport extends TransportImpl {
             }
         }
         return myAddress;
+    }
+
+    /**
+     *  Resolves the configured bind target to an IP address.
+     *  Private helper for {@link #bindAddress(int)}.
+     *
+     *  <p>An unresolvable configured interface is reported and treated as a
+     *  wildcard bind (the published address keeps the configured host name).
+     *
+     *  @param bindTo the configured interface or fixed host, or null for wildcard
+     *  @return the resolved address, or null to bind the wildcard
+     *  @since 0.9.71+
+     */
+    private InetAddress resolveBindTarget(String bindTo) {
+        if (bindTo == null)
+            return null;
+        try {
+            return InetAddress.getByName(bindTo);
+        } catch (UnknownHostException uhe) {
+            _log.error("[NTCP] Invalid bind interface specified [" + bindTo + "]", uhe);
+            return null;
+        }
+    }
+
+    /**
+     *  Builds the RouterAddress to publish for a specific-interface bind.
+     *  Private helper for {@link #bindAddress(int)}.
+     *
+     *  <p>The address identifies the bound host and port with the standard NTCP2
+     *  options, so a host-specific bind is announced even though every inbound
+     *  listener shares the transport's cost model.
+     *
+     *  @param bindToAddr the resolved bind address
+     *  @param bindTo the configured host name or interface as published
+     *  @param port the listen port
+     *  @return the published address
+     *  @since 0.9.71+
+     */
+    private RouterAddress buildBoundAddress(InetAddress bindToAddr, String bindTo, int port) {
+        if (_log.shouldWarn()) {_log.warn("[NTCP] Binding only to " + bindToAddr);}
+        OrderedProperties props = new OrderedProperties();
+        props.setProperty(RouterAddress.PROP_HOST, bindTo);
+        props.setProperty(RouterAddress.PROP_PORT, Integer.toString(port));
+        addNTCP2Options(props);
+        int cost = getDefaultCost(false);
+        return new RouterAddress(getPublishStyle(), props, cost);
+    }
+
+    /**
+     *  Whether the transport is already listening on the requested address.
+     *  Pure decision helper for {@link #bindAddress(int)}.
+     *
+     *  <p>An exact match on the bound address short-circuits, as does a hostname
+     *  bind on the same port as an existing wildcard bind - changing from wildcard
+     *  to a specified host would otherwise force a needless restart.
+     *
+     *  @param endpoints the currently bound server-socket addresses
+     *  @param addr the address about to be bound
+     *  @param bindToAddr the configured bind target, or null for wildcard
+     *  @param port the requested listen port
+     *  @return true if nothing needs to change
+     *  @since 0.9.71+
+     */
+    static boolean isAlreadyListening(Set<InetSocketAddress> endpoints, InetSocketAddress addr,
+            InetAddress bindToAddr, int port) {
+        return endpoints.contains(addr) ||
+               (bindToAddr != null && endpoints.contains(new InetSocketAddress(port)));
+    }
+
+    /**
+     *  Whether a UDP port change is external-only and needs no NTCP restart.
+     *  Pure decision helper for {@link #bindAddress(int)}.
+     *
+     *  <p>When UDP's external port changed to the port being bound but the
+     *  internal port stayed, the NAT mapping moved; NTCP keeps listening on the
+     *  internal port and just republishes.
+     *
+     *  @param port the requested NTCP listen port
+     *  @param externalPort the configured UDP external port
+     *  @param internalPort the configured UDP internal port
+     *  @return true when only the published port must change
+     *  @since 0.9.71+
+     */
+    static boolean isExternalOnlyPortChange(int port, int externalPort, int internalPort) {
+        return port == externalPort && internalPort > 0 && externalPort != internalPort;
     }
 
     /**
@@ -1500,7 +1644,7 @@ public class NTCPTransport extends TransportImpl {
     private String getConfiguredIP() {
         // Fixme doesn't check PROP_BIND_INTERFACE
         String name = _context.getProperty(PROP_I2NP_NTCP_HOSTNAME);
-        if ((name == null) || (name.trim().length() <= 0) || ("null".equals(name))) {
+        if (isBlankName(name)) {
             return null;
         }
         String[] hosts = DataHelper.split(name, "[,; \r\n\t]");
@@ -1534,7 +1678,7 @@ public class NTCPTransport extends TransportImpl {
                             }
                             continue;
                         }
-                        if ((v4 && ip.length == 4) || (v6 && ip.length == 16)) {
+                        if (alreadyHaveFamily(v4, v6, ip.length)) {
                             if (_log.shouldWarn()) {
                                 _log.warn("[NTCP] Skipping additional " + Addresses.toString(ip) + " for " + h);
                             }
@@ -1560,15 +1704,56 @@ public class NTCPTransport extends TransportImpl {
 
         // get first IPv4, if none then first IPv6
         // TODO return both
-        String ip = null;
+        return choosePrimaryIP(ipstrings);
+    }
+
+    /**
+     *  Whether an address family has already contributed an address to the
+     *  configured-IP list. Pure decision helper for {@link #getConfiguredIP()}.
+     *
+     *  <p>Hostnames may resolve to several addresses; at most one IPv4 and one
+     *  IPv6 address are published.
+     *
+     *  @param v4 an IPv4 address is already selected
+     *  @param v6 an IPv6 address is already selected
+     *  @param addrLen address length in bytes, 4 for IPv4 or 16 for IPv6
+     *  @return true if that family is already represented
+     *  @since 0.9.71+
+     */
+    static boolean alreadyHaveFamily(boolean v4, boolean v6, int addrLen) {
+        return (v4 && addrLen == 4) || (v6 && addrLen == 16);
+    }
+
+    /**
+     *  Whether the configured hostname is absent or unusable.
+     *  Pure decision helper for {@link #getConfiguredIP()}.
+     *
+     *  <p>Empty, whitespace-only, and the literal "null" (from a cleared config)
+     *  values are all treated as unset.
+     *
+     *  @param name the i2p.ntcp.hostname value, or null
+     *  @return true if no usable configured host exists
+     *  @since 0.9.71+
+     */
+    static boolean isBlankName(String name) {
+        return name == null || name.trim().length() <= 0 || "null".equals(name);
+    }
+
+    /**
+     *  Picks the primary configured IP: the first IPv4, else the first IPv6.
+     *  Pure decision helper for {@link #getConfiguredIP()}.
+     *
+     *  @param ipstrings the collected addresses, in resolution order
+     *  @return the primary address; the list must not be empty
+     *  @since 0.9.71+
+     */
+    static String choosePrimaryIP(List<String> ipstrings) {
         for (String ips : ipstrings) {
             if (ips.contains(".")) {
-                ip = ips;
-                break;
+                return ips;
             }
         }
-        if (ip == null) {ip = ipstrings.get(0);}
-        return ip;
+        return ipstrings.get(0);
     }
 
     private int getDefaultCost(boolean isIPv6) {
@@ -1699,26 +1884,12 @@ public class NTCPTransport extends TransportImpl {
         // auto-port defaults to true, but an explicit setting trumps auto
 
         String oport = newProps.getProperty(RouterAddress.PROP_PORT);
-        String nport = null;
         String cport = _context.getProperty(PROP_I2NP_NTCP_PORT);
-        if (cport != null && !cport.isEmpty()) {
-            nport = cport;
-            if (port > 0 && !nport.equals(Integer.toString(port)))
-                _log.logAlways(Log.WARN, "UDP detected external port is " + port + " but TCP configured port is " + nport);
-        } else if (_context.getBooleanPropertyDefaultTrue(PROP_I2NP_NTCP_AUTO_PORT)) {
-            // 0.9.6 change
-            // This wasn't quite right, as udpAddr is the EXTERNAL port and we really
-            // want NTCP to bind to the INTERNAL port the first time,
-            // because if they are different, the NAT is changing them, and
-            // it probably isn't mapping UDP and TCP the same.
-            if (port > 0)
-                // should always be true
-                nport = Integer.toString(port);
-        }
+        String nport = chooseAutomaticPort(cport, port);
         if (_log.shouldInfo())
             _log.info("Old port: " + oport + " Config: " + cport + " New: " + nport);
 
-        if (oport == null && nport != null && !nport.isEmpty()) {
+        if (oport == null && !isBlank(nport)) {
             newProps.setProperty(RouterAddress.PROP_PORT, nport);
             changed = true;
         }
@@ -1731,7 +1902,7 @@ public class NTCPTransport extends TransportImpl {
         String enabled = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true").toLowerCase(Locale.US);
         String name = getConfiguredIP();
         // hostname config trumps auto config
-        if (name != null && !name.isEmpty())
+        if (!isBlank(name))
             enabled = "false";
 
         // assume SSU is happy if the address is non-null
@@ -1739,8 +1910,7 @@ public class NTCPTransport extends TransportImpl {
         boolean ssuOK = ip != null;
         if (_log.shouldInfo())
             _log.info("Old: " + ohost + " Config: " + name + " Auto: " + enabled + " ssuOK? " + ssuOK);
-        if (enabled.equals("always") ||
-            (Boolean.parseBoolean(enabled) && ssuOK)) {
+        if (wantsAutoHost(enabled, ssuOK)) {
             if (!ssuOK) {
                 if (_log.shouldWarn())
                     _log.warn("Null address with always config", new Exception());
@@ -1750,17 +1920,15 @@ public class NTCPTransport extends TransportImpl {
             String nhost = Addresses.toString(ip);
             if (_log.shouldInfo())
                 _log.info("Old: " + ohost + " Config: " + name + " New: " + nhost);
-            if (nhost == null || nhost.length() <= 0)
+            if (isBlank(nhost))
                 return false;
-            if (ohost == null || ! ohost.equalsIgnoreCase(nhost)) {
+            if (isBlank(ohost) || !ohost.equalsIgnoreCase(nhost)) {
                 newProps.setProperty(RouterAddress.PROP_HOST, nhost);
                 if (cost == NTCP2_OUTBOUND_COST)
                     cost = DEFAULT_COST;
                 changed = true;
             }
-        } else if (enabled.equals("false") &&
-                   name != null && !name.isEmpty() &&
-                   !name.equals(ohost)) {
+        } else if (wantsConfiguredHost(enabled, name, ohost)) {
             // Host name is configured, and we have a port (either auto or configured)
             // but we probably only get here if the port is auto,
             // otherwise createNTCPAddress() would have done it already
@@ -1770,30 +1938,13 @@ public class NTCPTransport extends TransportImpl {
             if (cost == NTCP2_OUTBOUND_COST)
                 cost = DEFAULT_COST;
             changed = true;
-        } else if (ohost == null || ohost.length() <= 0) {
+        } else if (isBlank(ohost)) {
             // SSU2 told us to remove our IPv6 address
             // getCurrentAddress(true) returns null for a "46" address
             // Get v4 address and see if it has a "6" in it,
             // if not, put in a "6" address
-            if (isIPv6 && _haveIPv6Address && oldAddr == null && ip == null && port <= 0) {
-                RouterAddress v4Addr = getCurrentAddress(false);
-                if (v4Addr != null) {
-                    String caps = v4Addr.getOption("caps");
-                    if (caps != null && caps.contains(CAP_IPV6)) {
-                        if (_log.shouldInfo())
-                            _log.info("[NTCP] No old host, no new host, no change to address");
-                        return false;
-                    }
-                }
-                if (_log.shouldInfo())
-                    _log.info("[NTCP] IPv6 now firewalled, adding 6 address");
-                setOutboundNTCP2Address(true);
-                return true;
-            }
-            if (_log.shouldInfo())
-                _log.info("No old host, no new host, no change to NTCP Address");
-            return false;
-        } else if (Boolean.parseBoolean(enabled) && !ssuOK) {
+            return handleIPv6FirewalledTransition(isIPv6, oldAddr, ip, port);
+        } else if (wantsRemoveAutoHost(enabled, ssuOK)) {
             // UDP transitioned to not-OK, turn off NTCP address
             // This will commonly happen at startup if we were initially OK
             // because UPnP was successful, but a subsequent SSU Peer Test determines
@@ -1829,7 +1980,7 @@ public class NTCPTransport extends TransportImpl {
             }
         }
 
-        if (!isIPv6 || newProps.containsKey(RouterAddress.PROP_HOST) || getIPv6Config() == IPV6_ONLY) {
+        if (wantsFullOptions(isIPv6, newProps, getIPv6Config())) {
             addNTCP2Options(newProps);
         } else {
             // IPv6
@@ -1892,6 +2043,283 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
+     *  Decides the reachability status that does not depend on live inbound
+     *  connections. Pure decision helper for {@link #getReachabilityStatus()}.
+     *
+     *  <p>Mirrors the ordering of the original cascades exactly: both families
+     *  firewalled yields rejection before the liveness check, and a router with no
+     *  published address reports firewalled only once it has been up long enough
+     *  for the status to be meaningful.
+     *
+     *  @param fwV4 IPv4 firewall reported
+     *  @param fwV6 IPv6 firewall reported
+     *  @param alive whether the transport is currently listening
+     *  @param hasV4 a published non-firewalled IPv4 address is present
+     *  @param hasV6 a published non-firewalled IPv6 address is present
+     *  @param showFirewalled SSU disabled and the router has been up more than 10 minutes
+     *  @return the final status, or null when a live inbound-connection check is required
+     *  @since 0.9.71+
+     */
+    static Status decideReachabilityHeader(boolean fwV4, boolean fwV6, boolean alive,
+            boolean hasV4, boolean hasV6, boolean showFirewalled) {
+        if (fwV4 && fwV6)
+            return Status.REJECT_UNSOLICITED;
+        if (!alive)
+            return Status.UNKNOWN;
+        if (!hasV4 && !hasV6)
+            return showFirewalled ? Status.REJECT_UNSOLICITED : Status.UNKNOWN;
+        return null;
+    }
+
+    /**
+     *  Decides the reachability status from recent inbound activity of each
+     *  address family. Pure decision helper for {@link #getReachabilityStatus()}.
+     *
+     *  <p>When either family has seen an inbound connection recently, the verdict
+     *  is positive for both families unless the other family is explicitly
+     *  firewalled, disabled, or simply absent.
+     *
+     *  @param v4OK recent IPv4 inbound activity (or later enabled by a live connection)
+     *  @param v6OK recent IPv6 inbound activity (or later enabled by a live connection)
+     *  @param v4Disabled IPv4 address family disabled by configuration
+     *  @param v6Disabled IPv6 address family disabled by configuration
+     *  @param fwV4 IPv4 firewall reported
+     *  @param fwV6 IPv6 firewall reported
+     *  @param hasV4 a published non-firewalled IPv4 address is present
+     *  @param hasV6 a published non-firewalled IPv6 address is present
+     *  @param haveIPv6Address an IPv6 address was ever seen on a local interface or SSU
+     *  @param showFirewalled SSU disabled and the router has been up more than 10 minutes
+     *  @return the final status, or null when the live inbound-connection check is required
+     *  @since 0.9.71+
+     */
+    static Status decideReachabilityFromInboundActivity(boolean v4OK, boolean v6OK,
+            boolean v4Disabled, boolean v6Disabled, boolean fwV4, boolean fwV6,
+            boolean hasV4, boolean hasV6, boolean haveIPv6Address, boolean showFirewalled) {
+        if (v4OK) {
+            if (v6OK)
+                return Status.OK;
+            if (v6Disabled)
+                return Status.OK;
+            if (!haveIPv6Address)
+                return Status.OK;
+            if (fwV6)
+                return Status.IPV4_OK_IPV6_FIREWALLED;
+            if (!hasV6)
+                return Status.IPV4_OK_IPV6_UNKNOWN;
+        }
+        if (v6OK) {
+            if (v4Disabled)
+                return Status.IPV4_DISABLED_IPV6_OK;
+            if (fwV4)
+                return Status.IPV4_FIREWALLED_IPV6_OK;
+            if (!hasV4)
+                return showFirewalled ? Status.IPV4_FIREWALLED_IPV6_OK : Status.IPV4_UNKNOWN_IPV6_OK;
+        }
+        return null;
+    }
+
+    /**
+     *  Decides the reachability status after the live inbound-connection scan.
+     *  Pure decision helper for {@link #getReachabilityStatus()}.
+     *
+     *  <p>Half-OK verdicts fall back to the per-family status of the working
+     *  family; a family that reports OK only because of a live connection and is
+     *  the only working family reports as reachable.
+     *
+     *  @param v4OK whether v4 may be treated as reachable after the scan
+     *  @param v6OK whether v6 may be treated as reachable after the scan
+     *  @param v4Disabled IPv4 address family disabled by configuration
+     *  @param showFirewalled SSU disabled and the router has been up more than 10 minutes
+     *  @param haveIPv6Address an IPv6 address was ever seen on a local interface or SSU
+     *  @return the final status; never null
+     *  @since 0.9.71+
+     */
+    static Status decideReachabilityTail(boolean v4OK, boolean v6OK, boolean v4Disabled,
+            boolean showFirewalled, boolean haveIPv6Address) {
+        if (v4OK) {
+            if (!haveIPv6Address)
+                return Status.OK;
+            return Status.IPV4_OK_IPV6_UNKNOWN;
+        }
+        if (v6OK)
+            return showFirewalled ? Status.IPV4_FIREWALLED_IPV6_OK : Status.IPV4_UNKNOWN_IPV6_OK;
+        if (v4Disabled)
+            return Status.IPV4_DISABLED_IPV6_UNKNOWN;
+        return showFirewalled ? Status.REJECT_UNSOLICITED : Status.UNKNOWN;
+    }
+
+    /**
+     *  Whether an address family is disabled by the IPv6 configuration.
+     *  Pure decision helper for {@link #getReachabilityStatus()}.
+     *
+     *  <p>An IPv6-disabled router publishes no IPv6 addresses and an
+     *  IPv6-only router publishes no IPv4 addresses; anything in between enables
+     *  both families.
+     *
+     *  @param config the router's IPv6 configuration
+     *  @param isIPv6 the address family to query
+     *  @return true if that family is disabled
+     *  @since 0.9.71+
+     */
+    static boolean isFamilyDisabled(TransportUtil.IPv6Config config, boolean isIPv6) {
+        if (config == IPV6_DISABLED)
+            return isIPv6;
+        if (config == IPV6_ONLY)
+            return !isIPv6;
+        return false;
+    }
+
+    /**
+     *  Whether a configured value counts as absent.
+     *
+     *  @param s the value
+     *  @return true if it is null or the empty string
+     *  @since 0.9.71+
+     */
+    static boolean isBlank(String s) {
+        return s == null || s.isEmpty();
+    }
+
+    /**
+     *  Whether the auto-host setting wants to publish an externally detected IP.
+     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     *
+     *  <p>Hostname configuration trumps auto-IP (encoded as "false"), a value of
+     *  "always" ignores reachability, otherwise "true" takes effect only when SSU
+     *  reports the address as usable.
+     *
+     *  @param enabled the normalized i2p.ntcp.autoip preference
+     *  @param ssuOK whether a usable IP was supplied in the notification
+     *  @return true when the auto host should be applied
+     *  @since 0.9.71+
+     */
+    static boolean wantsAutoHost(String enabled, boolean ssuOK) {
+        return enabled.equals("always") || (Boolean.parseBoolean(enabled) && ssuOK);
+    }
+
+    /**
+     *  Whether the configured hostname should be published in place of the current
+     *  host.
+     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     *
+     *  <p>Only when auto-IP is off, a hostname is configured, and it differs from
+     *  the currently published host does the configuration win.
+     *
+     *  @param enabled the normalized i2p.ntcp.autoip preference
+     *  @param name the configured hostname, or null
+     *  @param ohost the currently published host, or null
+     *  @return true when the configured host should be applied
+     *  @since 0.9.71+
+     */
+    static boolean wantsConfiguredHost(String enabled, String name, String ohost) {
+        return enabled.equals("false") && name != null && !name.isEmpty() && !name.equals(ohost);
+    }
+
+    /**
+     *  Whether a previously auto-published address should be dropped.
+     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     *
+     *  <p>Auto-IP hosts are removed when the notify source stops reporting a usable
+     *  address (e.g. a follow-up SSU peer test determined the router is still
+     *  firewalled).
+     *
+     *  @param enabled the normalized i2p.ntcp.autoip preference
+     *  @param ssuOK whether a usable IP was supplied in the notification
+     *  @return true when the auto host should be removed
+     *  @since 0.9.71+
+     */
+    static boolean wantsRemoveAutoHost(String enabled, boolean ssuOK) {
+        return Boolean.parseBoolean(enabled) && !ssuOK;
+    }
+
+    /**
+     *  Whether the address should carry the full NTCP2 option set.
+     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     *
+     *  <p>The full options are added for IPv4 always, and for IPv6 when the
+     *  notification carried a usable host or IPv6 is the only enabled family;
+     *  otherwise the router publishes an outbound-only NTCP2 address instead.
+     *
+     *  @param isIPv6 the address family of the notification
+     *  @param props the newly built address options
+     *  @param config the router's IPv6 configuration
+     *  @return true when the full options should be applied
+     *  @since 0.9.71+
+     */
+    static boolean wantsFullOptions(boolean isIPv6, OrderedProperties props, TransportUtil.IPv6Config config) {
+        return !isIPv6 || props.containsKey(RouterAddress.PROP_HOST) || config == IPV6_ONLY;
+    }
+
+    /**
+     *  Selects the port to publish for the NTCP address.
+     *  Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     *
+     *  <p>An explicit configured port trumps everything, and the notification port
+     *  is only used when auto-port is enabled. A mismatch between the UDP-detected
+     *  external port and the explicitly configured port is logged - the NAT is
+     *  probably mapping UDP and TCP differently, so NTCP binds the config.
+     *
+     *  @param configuredPort the i2p.ntcp.port value, or null
+     *  @param notifiedPort the externally detected port, or 0
+     *  @return the port to publish, or null to keep the current one
+     *  @since 0.9.71+
+     */
+    private String chooseAutomaticPort(String configuredPort, int notifiedPort) {
+        if (configuredPort != null && !configuredPort.isEmpty()) {
+            if (notifiedPort > 0 && !configuredPort.equals(Integer.toString(notifiedPort)))
+                _log.logAlways(Log.WARN, "UDP detected external port is " + notifiedPort +
+                               " but TCP configured port is " + configuredPort);
+            return configuredPort;
+        }
+        // 0.9.6 change
+        // This wasn't quite right, as udpAddr is the EXTERNAL port and we really
+        // want NTCP to bind to the INTERNAL port the first time,
+        // because if they are different, the NAT is changing them, and
+        // it probably isn't mapping UDP and TCP the same.
+        if (_context.getBooleanPropertyDefaultTrue(PROP_I2NP_NTCP_AUTO_PORT) && notifiedPort > 0)
+            // should always be true
+            return Integer.toString(notifiedPort);
+        return null;
+    }
+
+    /**
+     *  Handles a notification that carries no host at all.
+     *  Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     *
+     *  <p>When a configured IPv6 address is removed (SSU2 told us to drop it) and
+     *  the IPv4 address still advertises the IPv6 capability, nothing is published;
+     *  if the IPv4 address lacks the capability, an outbound-only IPv6 marker is
+     *  added so peers stop trying IPv6 inbound.
+     *
+     *  @param isIPv6 the family being notified
+     *  @param oldAddr the current address for that family, may be null for IPv6
+     *  @param ip the notification IP, may be null
+     *  @param port the notification port, may be 0
+     *  @return true if the NTCP address changed
+     *  @since 0.9.71+
+     */
+    private boolean handleIPv6FirewalledTransition(boolean isIPv6, RouterAddress oldAddr, byte[] ip, int port) {
+        if (isIPv6 && _haveIPv6Address && oldAddr == null && ip == null && port <= 0) {
+            RouterAddress v4Addr = getCurrentAddress(false);
+            if (v4Addr != null) {
+                String caps = v4Addr.getOption("caps");
+                if (caps != null && caps.contains(CAP_IPV6)) {
+                    if (_log.shouldInfo())
+                        _log.info("[NTCP] No old host, no new host, no change to address");
+                    return false;
+                }
+            }
+            if (_log.shouldInfo())
+                _log.info("[NTCP] IPv6 now firewalled, adding 6 address");
+            setOutboundNTCP2Address(true);
+            return true;
+        }
+        if (_log.shouldInfo())
+            _log.info("No old host, no new host, no change to NTCP Address");
+        return false;
+    }
+
+    /**
      * Maybe we should trust UPnP here and report OK if it opened the port, but
      * for now we don't. Just go through and if we have one inbound connection,
      * we must be good. As we drop idle connections pretty quickly, this will
@@ -1909,53 +2337,24 @@ public class NTCPTransport extends TransportImpl {
     public Status getReachabilityStatus() {
         boolean fwV4 = isIPv4Firewalled();
         boolean fwV6 = isIPv6Firewalled();
-        if (fwV4 && fwV6)
-            return Status.REJECT_UNSOLICITED;
-        if (!isAlive())
-            return Status.UNKNOWN;
-        TransportUtil.IPv6Config config = getIPv6Config();
-        boolean v4Disabled;
-        boolean v6Disabled;
-        if (config == IPV6_DISABLED) {
-            v4Disabled = false;
-            v6Disabled = true;
-        } else if (config == IPV6_ONLY) {
-            v4Disabled = true;
-            v6Disabled = false;
-        } else {
-            v4Disabled = false;
-            v6Disabled = false;
-        }
-        boolean hasV4 = !fwV4 && getCurrentAddress(false) != null;
-        boolean hasV6 = !fwV6 && getCurrentAddress(true) != null;
         boolean showFirewalled = !_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP) &&
                                  _context.router().getUptime() > 10*60*1000L;
-        if (!hasV4 && !hasV6) {
-            return showFirewalled ? Status.REJECT_UNSOLICITED : Status.UNKNOWN;
-        }
+        TransportUtil.IPv6Config config = getIPv6Config();
+        boolean v4Disabled = isFamilyDisabled(config, false);
+        boolean v6Disabled = isFamilyDisabled(config, true);
+        boolean hasV4 = !fwV4 && getCurrentAddress(false) != null;
+        boolean hasV6 = !fwV6 && getCurrentAddress(true) != null;
+        Status status = decideReachabilityHeader(fwV4, fwV6, isAlive(), hasV4, hasV6, showFirewalled);
+        if (status != null)
+            return status;
         long now = _context.clock().now();
         boolean v4OK = hasV4 && !v4Disabled && now - _lastInboundIPv4 < 10*60*1000L;
         boolean v6OK = hasV6 && !v6Disabled && now - _lastInboundIPv6 < 30*60*1000L;
-        if (v4OK) {
-            if (v6OK)
-                return Status.OK;
-            if (v6Disabled)
-                return Status.OK;
-            if (!_haveIPv6Address)
-                return Status.OK;
-            if (fwV6)
-                return Status.IPV4_OK_IPV6_FIREWALLED;
-            if (!hasV6)
-                return Status.IPV4_OK_IPV6_UNKNOWN;
-        }
-        if (v6OK) {
-            if (v4Disabled)
-                return Status.IPV4_DISABLED_IPV6_OK;
-            if (fwV4)
-                return Status.IPV4_FIREWALLED_IPV6_OK;
-            if (!hasV4)
-                return showFirewalled ? Status.IPV4_FIREWALLED_IPV6_OK : Status.IPV4_UNKNOWN_IPV6_OK;
-        }
+        status = decideReachabilityFromInboundActivity(v4OK, v6OK, v4Disabled, v6Disabled,
+                                                       fwV4, fwV6, hasV4, hasV6,
+                                                       _haveIPv6Address, showFirewalled);
+        if (status != null)
+            return status;
         for (NTCPConnection con : _conByIdent.values()) {
             if (con.isInbound()) {
                 if (con.isIPv6()) {
@@ -1981,16 +2380,7 @@ public class NTCPTransport extends TransportImpl {
                 }
             }
         }
-        if (v4OK) {
-            if (!_haveIPv6Address)
-                return Status.OK;
-            return Status.IPV4_OK_IPV6_UNKNOWN;
-        }
-        if (v6OK)
-            return showFirewalled ? Status.IPV4_FIREWALLED_IPV6_OK : Status.IPV4_UNKNOWN_IPV6_OK;
-        if (v4Disabled)
-            return Status.IPV4_DISABLED_IPV6_UNKNOWN;
-        return showFirewalled ? Status.REJECT_UNSOLICITED : Status.UNKNOWN;
+        return decideReachabilityTail(v4OK, v6OK, v4Disabled, showFirewalled, _haveIPv6Address);
     }
 
     /**
