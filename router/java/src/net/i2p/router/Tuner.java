@@ -10526,7 +10526,7 @@ protected int computeTarget(double observed) {
 
             super("i2ptunnel.serverHandler.threads", "I2PTunnel server threads",
                   SUB_TUNNEL,
-                  2, 4096, 1, "i2ptunnel.serverHandler.queueDepth", _context);
+                  2, 16384, 1, "i2ptunnel.serverHandler.queueDepth", _context);
             // Effective ceiling from available heap — the summed budget for the
             // per-tunnel handler pools must never exceed a thread count the max
             // heap can host (see memoryDerivedClientThreadMax). A heap-constrained
@@ -10755,7 +10755,7 @@ protected int computeTarget(double observed) {
         I2PTunnelServerThreadsParam() {
             super("i2ptunnel.server.threads", "I2PTunnel server threads per tunnel (default)",
                   SUB_TUNNEL,
-                  2, 512, 8, "i2ptunnel.serverHandler.queueDepth", _context);
+                  2, 4096, 8, "i2ptunnel.serverHandler.queueDepth", _context);
             // Bound the reachable ceiling at what the max heap can host as OS threads
             // (see memoryDerivedClientThreadMax), same as the global budget param.
             _effMax = Math.min(_max, memoryDerivedClientThreadMax());
