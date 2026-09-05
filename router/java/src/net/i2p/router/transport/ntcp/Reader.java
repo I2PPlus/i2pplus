@@ -116,7 +116,7 @@ public class Reader {
         }
     }
 
-    /** Registers a connection to be read. */
+    /** Registers a connection to be read. High-frequency per-buffer path. */
     public void wantsRead(NTCPConnection con) {
         boolean already = false;
         synchronized (_pendingConnections) {
@@ -125,7 +125,11 @@ public class Reader {
                 already = true;
             } else {
                 _pendingConnections.add(con);
-                _pendingConnections.notifyAll();
+                // Single wakeup is sufficient: the awakened runner drains the
+                // queue until empty before waiting again, and every runner
+                // re-checks the queue on loop re-entry, so a lost notify cannot
+                // strand a queued connection.
+                _pendingConnections.notify();
             }
         }
         if (_log.shouldDebug())
