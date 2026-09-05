@@ -97,8 +97,8 @@ public class ServerExecutorOverflowTest {
             done.await();
             Thread t = (Thread) holder[0];
             assertTrue("server handler threads must be daemon", t.isDaemon());
-            assertTrue("server handler thread should be named TunnelServer.*: " + t.getName(),
-                       t.getName().startsWith("TunnelServer."));
+            assertTrue("server handler thread should be named TunnelSrv.*: " + t.getName(),
+                       t.getName().startsWith("TunnelSrv."));
         } finally {
             exec.shutdownNow();
         }

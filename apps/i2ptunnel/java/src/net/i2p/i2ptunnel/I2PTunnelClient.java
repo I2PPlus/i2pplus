@@ -78,7 +78,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             throw new IllegalArgumentException("No valid target destinations found");
         }
 
-        setName(getLocalPort() + " -> " + destinations);
+        setName("Client." + getLocalPort());
         notifyEvent("openClientResult", "ok");
     }
 

@@ -76,7 +76,7 @@ public class Reader {
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
-        I2PThread t = new I2PThread(r, "NTCPReader." + _threadNum.incrementAndGet(), true);
+        I2PThread t = new I2PThread(r, "NTCPRead." + _threadNum.incrementAndGet(), true);
         t.start();
     }
 

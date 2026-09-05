@@ -394,7 +394,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             // Use this thread for running the incoming connection.
             // The outgoing connection creates its own Thread.
             out.startup();
-            Thread.currentThread().setName("SnarkReader." + peerID);
+            Thread.currentThread().setName("SnarkRd." + peerID);
             s.in.run();
         } catch (PeerAcceptor.ProtocolException pe) {
             if (_log.shouldWarn())

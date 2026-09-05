@@ -68,7 +68,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         Properties opts = tunnel.getClientOptions();
         opts.setProperty("i2p.streaming.connectDelay", "150");
         opts.remove("i2p.streaming.maxWindowSize");
-        setName("SOCKS Proxy on " + tunnel.listenHost + ':' + localPort);
+        setName("SocksProxy");
         proxies = new HashMap<>(1);
         parseOptions();
         notifyEvent("openSOCKSTunnelResult", "ok");

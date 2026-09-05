@@ -72,7 +72,7 @@ public class Writer {
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
-        I2PThread t = new I2PThread(r, "NTCPWriter." + _threadNum.incrementAndGet(), true);
+        I2PThread t = new I2PThread(r, "NTCPWrite." + _threadNum.incrementAndGet(), true);
         t.start();
     }
 

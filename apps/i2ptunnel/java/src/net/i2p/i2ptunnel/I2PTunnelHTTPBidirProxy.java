@@ -24,7 +24,7 @@ public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runn
     public I2PTunnelHTTPBidirProxy(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
 
-        setName(getLocalPort() + " -> HTTPClient [NO PROXIES]");
+        setName("HTTPBidir");
         notifyEvent("openHTTPClientResult", "ok");
     }
 }

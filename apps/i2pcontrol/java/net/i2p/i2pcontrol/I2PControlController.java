@@ -248,7 +248,7 @@ public class I2PControlController implements RouterApp {
         // all with same name will use the same thread pool
         ssl.setName("I2PControl");
 
-        ssl.setName("SSL Listener-" + ++listeners);
+        ssl.setName("SSLListnr." + ++listeners);
 
         return ssl;
     }

@@ -279,7 +279,7 @@ public class I2Ping extends I2PTunnelClientBase {
             this.timeout = timeout;
             countPing = countPings;
             reportTimes = report;
-            setName("PingHandler for " + dest);
+            setName("PingHdlr");
         }
 
         /**

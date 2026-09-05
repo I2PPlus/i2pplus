@@ -54,7 +54,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
         _remotePort = remotePort;
         _expires = tunnel.getContext().clock().now() + INBOUND_EXPIRE;
 
-        setName("DCC send -> " + dest + ':' + remotePort);
+        setName("DCCSend");
     }
 
     /**

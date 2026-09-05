@@ -225,7 +225,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public I2PTunnelHTTPClient(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
         _pageNonce = Long.toString(_context.random().nextLong());
-        setName("HTTP Proxy on " + getTunnel().listenHost + ':' + localPort);
+        setName("HTTPProxy");
         notifyEvent("openHTTPClientResult", "ok");
     }
 
@@ -249,7 +249,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             }
         }
 
-        setName("HTTP Proxy on " + tunnel.listenHost + ':' + localPort);
+        setName("HTTPProxy");
         notifyEvent("openHTTPClientResult", "ok");
     }
 
@@ -2091,7 +2091,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private Destination lookupWithTimeout(String hostname, long timeoutMs) {
         final Destination[] result = new Destination[1];
         final boolean[] done = new boolean[1];
-        I2PThread lookupThread = new I2PThread("Naming lookup for " + hostname) {
+        I2PThread lookupThread = new I2PThread("NameLookup") {
             @Override
             public void run() {
                 try {

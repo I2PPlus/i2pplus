@@ -427,7 +427,7 @@ public class HostChecker {
             @Override
             public Thread newThread(Runnable r) {
                 Thread thread = new Thread(r);
-                thread.setName("HostChecker." + _count.incrementAndGet());
+                thread.setName("HostCheck." + _count.incrementAndGet());
                 thread.setDaemon(true);
                 return thread;
             }
@@ -466,7 +466,7 @@ public class HostChecker {
         }
 
         // Start category download in a separate thread with delay
-        Thread categoryDownloader = new Thread("CategoryDownloader") {
+        Thread categoryDownloader = new Thread("CatDownload") {
             @Override
             public void run() {
                 downloadCategories();
@@ -476,7 +476,7 @@ public class HostChecker {
         categoryDownloader.start();
 
         // Wait for categories to be downloaded before starting ping cycle
-        Thread categoryWaiter = new Thread("CategoryDownloadWaiter") {
+        Thread categoryWaiter = new Thread("CatDLWaiter") {
             @Override
             public void run() {
                 try {
@@ -1729,7 +1729,7 @@ public class HostChecker {
     private class CategoryRetryTask implements Runnable {
         @Override
         public void run() {
-            Thread.currentThread().setName("CategoryRetry");
+            Thread.currentThread().setName("CatRetry");
 
             if (!_running.get()) {
                 return;

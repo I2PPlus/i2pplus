@@ -45,7 +45,7 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
      */
     public I2PSOCKSIRCTunnel(int localPort, Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel, String pkf) {
         super(localPort, l, ownDest, notifyThis, tunnel, pkf);
-        setName("SOCKS IRC Proxy on " + tunnel.listenHost + ':' + localPort);
+        setName("SocksIRC");
     }
 
     /**

@@ -77,7 +77,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 _proxyList.add(tok.nextToken().trim());
         }
 
-        setName("HTTPS Proxy on " + tunnel.listenHost + ':' + localPort);
+        setName("HTTPSProxy");
     }
 
     /**

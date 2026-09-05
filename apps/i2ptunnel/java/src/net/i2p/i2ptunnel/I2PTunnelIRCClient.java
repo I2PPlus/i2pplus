@@ -83,7 +83,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             throw new IllegalArgumentException("No valid target destinations found");
         }
 
-        setName("IRC Client on " + tunnel.listenHost + ':' + localPort);
+        setName("IRCProxy");
 
         _dccEnabled = Boolean.parseBoolean(tunnel.getClientOptions().getProperty(PROP_DCC));
         // TODO add some prudent tunnel options (or is it too late?)

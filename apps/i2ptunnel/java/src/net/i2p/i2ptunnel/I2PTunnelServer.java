@@ -304,7 +304,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         try {
             I2PSocketManager rv = I2PSocketManagerFactory.createDisconnectedManager(privData, getTunnel().host,
                                                                                     portNum, props, filter);
-            rv.setName("I2PTunnel Server");
+            rv.setName("I2PTunSrv");
             getTunnel().addSession(rv.getSession());
             String alt = props.getProperty(PROP_ALT_PKF);
             if (alt != null) {addSubsession(rv, alt);}
