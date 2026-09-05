@@ -120,6 +120,10 @@ public class NTCPConnection implements Closeable {
     private long _lastSendTime;
     private long _lastReceiveTime;
     private long _lastRateUpdated;
+    /** Last time "ntcp.writeBufs.size" was recorded, to throttle the per-frame
+     *  RateStat call on the write path (sample at most once per second).
+     *  Best-effort throttle only; no _writeLock needed. */
+    private long _lastWriteBufsStat;
     private final long _created;
     // prevent sending meta before established
     private long _nextMetaTime = Long.MAX_VALUE;
@@ -1419,7 +1423,9 @@ public class NTCPConnection implements Closeable {
      * hold _writeLock across the socket drain.
      *
      * @since 0.9.71+ single-writer contract (previously attempted a direct,
-     *                 lock-serialized drain from the calling thread)
+     *                 lock-serialized drain from the calling thread); the
+     *                 "ntcp.writeBufs.size" stat is now sampled at most
+     *                 once per second instead of every frame
      */
     private void write(ByteBuffer buf) {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {
@@ -1429,7 +1435,13 @@ public class NTCPConnection implements Closeable {
             return;
         }
         _writeBufs.offer(buf);
-        _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
+        // Record the backed-up count at most once per second per connection:
+        // a RateStat lookup per frame is measurable on the hot path (see #4 pattern).
+        long now = System.currentTimeMillis();
+        if (now - _lastWriteBufsStat > 1000L) {
+            _lastWriteBufsStat = now;
+            _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
+        }
         _transport.getPumper().wantsWrite(this);
     }
 
