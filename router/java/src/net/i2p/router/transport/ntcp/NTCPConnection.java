@@ -947,6 +947,142 @@ public class NTCPConnection implements Closeable {
         }
     };
 
+    //// Frame packing decisions (package-visible for testing) ////
+
+    /**
+     *  NTCP2 frame-size contribution of one message.
+     *
+     *  <p>The NTCP2 block header (3 bytes, see {@link NTCP2Payload#BLOCK_HEADER_SIZE})
+     *  replaces NTCP1's 16-byte I2NP framing, so a message adds roughly 7 bytes less
+     *  than its serialized size to a frame. The exact figure mirrors the established
+     *  packing arithmetic in {@link #prepareNextWriteNTCP2} so frame sizes are
+     *  unchanged.
+     *
+     *  @param m the message being packed into the frame
+     *  @return the message's estimated contribution in bytes
+     *  @since 0.9.71+
+     */
+    static int getMessageDataSize(I2NPMessage m) {
+        return m.getMessageSize() - 7;
+    }
+
+    /**
+     *  Whether a secondary message fits within the preferred NTCP2 payload cap.
+     *
+     *  <p>The cap keeps frames near the preferred 5 KB working size instead of
+     *  filling the whole 16 KB buffer, so a trailing message is added only while
+     *  the accumulated frame size (MAC plus already-packed blocks) stays under
+     *  {@link #NTCP2_PREFERRED_PAYLOAD_MAX}.
+     *
+     *  @param size current frame size (MAC + packed blocks)
+     *  @param messageDataSize the candidate message's contribution
+     *  @return true if adding the message keeps the frame at or below the cap
+     *  @since 0.9.71+
+     */
+    static boolean canPackMoreMessages(int size, int messageDataSize) {
+        return size + messageDataSize <= NTCP2_PREFERRED_PAYLOAD_MAX;
+    }
+
+    /**
+     *  Whether an unsolicited datetime block may be packed into the frame.
+     *
+     *  <p>Scheduled by {@link #_nextMetaTime}; the block is a 2-byte type, 2-byte
+     *  length and 4-byte datetime, and is only added while the frame still fits in
+     *  the full 16 KB buffer after its 3-byte block header.
+     *
+     *  @param size current frame size (MAC + packed blocks)
+     *  @param nextMetaTime when the next datetime block is due, {@link Long#MAX_VALUE}
+     *                      until the connection is established
+     *  @param now current router time
+     *  @return true if a datetime block is due and fits
+     *  @since 0.9.71+
+     */
+    static boolean canSendDatetimeBlock(int size, long nextMetaTime, long now) {
+        return nextMetaTime <= now && size + NTCP2Payload.BLOCK_HEADER_SIZE + 4 <= BUFFER_SIZE;
+    }
+
+    /**
+     *  Whether an unsolicited RouterInfo block may be attempted.
+     *
+     *  <p>Scheduled by {@link #_nextInfoTime}; the heuristic estimate of 1024 bytes
+     *  is only a first gate - the block is discarded and retried later if its real
+     *  size does not fit (see {@link #canFitRouterInfoBlock}).
+     *
+     *  @param size current frame size (MAC + packed blocks)
+     *  @param nextInfoTime when the next RouterInfo block is due, {@link Long#MAX_VALUE}
+     *                      until the connection is established
+     *  @param now current router time
+     *  @return true if a RouterInfo block is due and plausibly fits
+     *  @since 0.9.71+
+     */
+    static boolean canSendRouterInfoBlock(int size, long nextInfoTime, long now) {
+        return nextInfoTime <= now && size + 1024 <= BUFFER_SIZE;
+    }
+
+    /**
+     *  Whether the seralized RouterInfo block actually fits in the frame.
+     *
+     *  <p>This is the authoritative check after the 1024-byte estimate in
+     *  {@link #canSendRouterInfoBlock}.
+     *
+     *  @param size current frame size (MAC + packed blocks)
+     *  @param infoSize the sized RouterInfo block's total length
+     *  @return true if the block fits within the 16 KB buffer
+     *  @since 0.9.71+
+     */
+    static boolean canFitRouterInfoBlock(int size, int infoSize) {
+        return size + infoSize <= BUFFER_SIZE;
+    }
+
+    /**
+     *  Whether a received NTCP2 frame length is sane.
+     *
+     *  <p>A frame always carries a 16-byte MAC at minimum; anything shorter is
+     *  definitely corrupt and the connection is torn down rather than buffered.
+     *
+     *  @param framelen the length announced in the frame header
+     *  @return true if the frame is long enough to hold its MAC
+     *  @since 0.9.71+
+     */
+    static boolean isValidFrameLength(int framelen) {
+        return framelen >= OutboundNTCP2State.MAC_SIZE;
+    }
+
+    /**
+     *  Whether the whole frame can be decrypted in place, bypassing the scratch
+     *  buffer.
+     *
+     *  <p>Requires being at a frame boundary ({@code received == 0}) with the full
+     *  announced frame already present in the pumper's buffer, so the ciphertext
+     *  can be overwritten in place zero-copy.
+     *
+     *  @param received bytes of the current frame read so far outside the shortcut
+     *  @param remaining bytes left in the pumper buffer
+     *  @param framelen the announced frame length
+     *  @return true when the shortcut applies
+     *  @since 0.9.71+
+     */
+    static boolean canZeroCopyFrame(int received, int remaining, int framelen) {
+        return received == 0 && remaining >= framelen;
+    }
+
+    /**
+     *  Whether the buffered (split-frame) read path needs a fresh destination
+     *  buffer for the announced frame.
+     *
+     *  <p>Only at a frame boundary with no existing buffer large enough does the
+     *  read state allocate; otherwise the partially filled buffer is reused.
+     *
+     *  @param dataBuf the current scratch buffer, or null
+     *  @param received bytes of the current frame read so far outside the shortcut
+     *  @param framelen the announced frame length
+     *  @return true if a new buffer must be allocated
+     *  @since 0.9.71+
+     */
+    static boolean needsFrameBuffer(ByteArray dataBuf, int received, int framelen) {
+        return received == 0 && (dataBuf == null || dataBuf.getData().length < framelen);
+    }
+
     /**
      * Prepare the next I2NP message for transmission.  This should be run from
      * the Writer thread pool.
@@ -993,8 +1129,8 @@ public class NTCPConnection implements Closeable {
                 if (msg == null)
                     break;
                 m = msg.getMessage();
-                int msz = m.getMessageSize() - 7;
-                if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
+                int msz = getMessageDataSize(m);
+                if (!canPackMoreMessages(size, msz))
                     break;
                 OutNetMessage msg2 = _outbound.poll();
                 if (msg2 == null)
@@ -1016,7 +1152,7 @@ public class NTCPConnection implements Closeable {
                 }
             }
         }
-        if (_nextMetaTime <= now && size + (NTCP2Payload.BLOCK_HEADER_SIZE + 4) <= BUFFER_SIZE) {
+        if (canSendDatetimeBlock(size, _nextMetaTime, now)) {
             block = new NTCP2Payload.DateTimeBlock(_context);
             blocks.add(block);
             size += block.getTotalLength();
@@ -1025,11 +1161,11 @@ public class NTCPConnection implements Closeable {
                 _log.debug("Sending NTCP2 datetime block...");
         }
         // 1024 is an estimate, do final check below
-        if (_nextInfoTime <= now && size + 1024 <= BUFFER_SIZE) {
+        if (canSendRouterInfoBlock(size, _nextInfoTime, now)) {
             RouterInfo ri = _context.router().getRouterInfo();
             block = new NTCP2Payload.RIBlock(ri, false);
             int sz = block.getTotalLength();
-            if (size + sz <= BUFFER_SIZE) {
+            if (canFitRouterInfoBlock(size, sz)) {
                 blocks.add(block);
                 size += sz;
                 _nextInfoTime = now + (INFO_FREQUENCY / 2) + _context.random().nextInt(INFO_FREQUENCY);
@@ -1214,6 +1350,13 @@ public class NTCPConnection implements Closeable {
      *  tmp byte array, then encrypts the payload and
      *  passes it to the pumper for writing.
      *
+     *  <p>The frame bytes go into a fixed-size pooled buffer (see
+     *  {@link EventPumper#acquireWriteBuf()}) instead of a per-frame allocation:
+     *  frames are variable-length, so the old {@code new byte[2 + framelen]} rarely
+     *  matched the pool's size class and was reallocated on every send. Only the
+     *  used {@code 2 + framelen} prefix is handed to the writer; the pumper returns
+     *  the buffer to the pool after the frame has fully drained.
+     *
      *  @param tmp to be used for output of NTCP2Payload.writePayload(),
      *         must have room for block output. May be released immediately on return.
      *  @since 0.9.36
@@ -1221,27 +1364,30 @@ public class NTCPConnection implements Closeable {
     private void sendNTCP2(byte[] tmp, List<Block> blocks) {
         int payloadlen = NTCP2Payload.writePayload(tmp, 0, blocks);
         int framelen = payloadlen + OutboundNTCP2State.MAC_SIZE;
-        byte[] enc = new byte[2 + framelen];
 
         synchronized(_writeLock) {
-        if (_sender == null) {
-            if (_log.shouldInfo())
-                _log.info("Sender has disappeared");
-            return;
-        }
-        try {
-            _sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);
-        } catch (GeneralSecurityException gse) {
-            // TODO anything else?
-            _log.error("Data encryption error", gse);
-            return;
-        }
-        // siphash ^ len
-        long sipIV = SipHashInline.hash24(_sendSipk1, _sendSipk2, _sendSipIV);
+            if (_sender == null) {
+                if (_log.shouldInfo())
+                    _log.info("Sender has disappeared");
+                return;
+            }
+            byte[] enc = EventPumper.acquireWriteBuf();
+            try {
+                _sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);
+            } catch (GeneralSecurityException gse) {
+                // TODO anything else?
+                EventPumper.releaseWriteBuf(enc);
+                _log.error("Data encryption error", gse);
+                return;
+            }
+            // siphash ^ len
+            long sipIV = SipHashInline.hash24(_sendSipk1, _sendSipk2, _sendSipIV);
             toLong8LE(_sendSipIV, 0, sipIV);
-        enc[0] = (byte) ((framelen >> 8) ^ (sipIV >> 8));
-        enc[1] = (byte) (framelen ^ sipIV);
-            wantsWrite(enc);
+            enc[0] = (byte) ((framelen >> 8) ^ (sipIV >> 8));
+            enc[1] = (byte) (framelen ^ sipIV);
+            // Only the used prefix is queued; the array itself stays in the
+            // fixed-size pool until the pumper drains the frame.
+            wantsWrite(enc, 0, framelen + 2);
         }
 
         if (_log.shouldDebug()) {
@@ -1902,7 +2048,7 @@ public class NTCPConnection implements Closeable {
                     _recvLen[1] ^= (byte) sipIV;
                     toLong8LE(_sipIV, 0, sipIV);
                     _framelen = (int) DataHelper.fromLong(_recvLen, 0, 2);
-                    if (_framelen < OutboundNTCP2State.MAC_SIZE) {
+                    if (!isValidFrameLength(_framelen)) {
                         if (_log.shouldWarn())
                             _log.warn("Short frame length: " + _framelen + " on " + NTCPConnection.this);
                         destroy();
@@ -1914,7 +2060,7 @@ public class NTCPConnection implements Closeable {
                 int remaining = buf.remaining();
                 if (remaining <= 0)
                     return;
-                if (_received == 0 && remaining >= _framelen) {
+                if (canZeroCopyFrame(_received, remaining, _framelen)) {
                     // shortcut, zero copy, decrypt directly to the ByteBuffer,
                     // overwriting the encrypted data
                     byte[] data = buf.array();
@@ -1931,17 +2077,8 @@ public class NTCPConnection implements Closeable {
 
                 // allocate ByteArray,
                 // unless we have one already and it's big enough
-                if (_received == 0 && (_dataBuf == null || _dataBuf.getData().length < _framelen)) {
-                    if (_dataBuf != null && _dataBuf.getData().length == BUFFER_SIZE)
-                        releaseReadBuf(_dataBuf);
-                    if (_framelen > BUFFER_SIZE) {
-                        if (_log.shouldInfo())
-                            _log.info("Allocating big ByteArray: " + _framelen + " bytes");
-                        byte[] data = new byte[_framelen];
-                        _dataBuf = new ByteArray(data);
-                    } else {
-                        _dataBuf = acquireReadBuf();
-                    }
+                if (needsFrameBuffer(_dataBuf, _received, _framelen)) {
+                    _dataBuf = allocReadBuf(_framelen);
                 }
 
                 // We now have a ByteArray in _dataBuf,
@@ -1969,6 +2106,31 @@ public class NTCPConnection implements Closeable {
                 }
                 // go around again
             }
+        }
+
+        /**
+         *  Allocate the scratch buffer for the announced frame on the buffered
+         *  (split-frame) read path.
+         *
+         *  <p>A pooled 16 KB buffer is used for regular frames; oversized frames get
+         *  a one-off allocation since the pool only holds the fixed 16 KB class and
+         *  a pooled buffer would be too small. A previous pooled buffer that is too
+         *  small is returned to the pool first so the bounded pool is not drained by
+         *  repeated large frames.
+         *
+         *  @param framelen the announced frame length
+         *  @return a fresh buffer for the frame; never null
+         *  @since 0.9.71+
+         */
+        private ByteArray allocReadBuf(int framelen) {
+            if (_dataBuf != null && _dataBuf.getData().length == BUFFER_SIZE)
+                releaseReadBuf(_dataBuf);
+            if (framelen > BUFFER_SIZE) {
+                if (_log.shouldInfo())
+                    _log.info("Allocating big ByteArray: " + framelen + " bytes");
+                return new ByteArray(new byte[framelen]);
+            }
+            return acquireReadBuf();
         }
 
         /**

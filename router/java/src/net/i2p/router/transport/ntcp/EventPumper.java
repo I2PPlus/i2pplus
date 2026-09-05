@@ -182,6 +182,70 @@ class EventPumper implements Runnable {
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
+
+    /**
+     * Fixed size class for NTCP2 data-phase write frames.
+     *
+     * <p>Each frame carries up to {@link NTCPConnection#BUFFER_SIZE} payload bytes
+     * plus the 16-byte MAC (see {@link OutboundNTCP2State#MAC_SIZE}) and a 2-byte
+     * length header. The buffer must be a constant size for pooling: the previous
+     * per-frame {@code new byte[2 + framelen]} allocation was variable-sized, so
+     * every frame smaller than {@link #BUF_SIZE} escaped the cache and was
+     * reallocated on each send.
+     */
+    private static final int WRITE_BUFSIZE = NTCPConnection.BUFFER_SIZE + OutboundNTCP2State.MAC_SIZE + 2;
+
+    private static class WriteBufferFactory implements TryCache.ObjectFactory<byte[]> {
+        /**
+         * Create a new NTCP2 frame buffer.
+         *
+         * @return a buffer of {@link #WRITE_BUFSIZE} bytes
+         */
+        @Override
+        public byte[] newInstance() {
+            return new byte[WRITE_BUFSIZE];
+        }
+    }
+
+    /** NTCP2 write-frame buffers, fixed {@link #WRITE_BUFSIZE} class. */
+    private static final TryCache<byte[]> _writeBufCache = new TryCache<>(new WriteBufferFactory(), MIN_BUFS);
+
+    /**
+     * Acquire a fixed-size NTCP2 frame buffer for the next data-phase frame.
+     * High-frequency path in the writer threads.
+     *
+     * <p>The caller writes the frame into the returned buffer and hands it to the
+     * connection via {@code wantsWrite(data, 0, len)}. The pumper later returns it
+     * to the pool via {@link #releaseWriteBuf(byte[])} once the frame has fully
+     * drained to the socket; error paths in the producer must release it instead.
+     *
+     * @return a byte array of length {@link #WRITE_BUFSIZE}
+     * @since 0.9.71+
+     */
+    public static byte[] acquireWriteBuf() {
+        byte[] data = _writeBufCache.acquire();
+        if (data == null)
+            return new byte[WRITE_BUFSIZE];
+        return data;
+    }
+
+    /**
+     * Return an NTCP2 frame buffer to the pool.
+     *
+     * <p>Only buffers of the exact {@link #WRITE_BUFSIZE} class are accepted, so
+     * handshake and termination buffers that happen to drain through the same write
+     * path never enter this pool. The buffer is discarded, not pooled, when the
+     * cache is full.
+     *
+     * @param data the buffer to return, or null (no-op)
+     * @since 0.9.71+
+     */
+    public static void releaseWriteBuf(byte[] data) {
+        if (data == null || data.length != WRITE_BUFSIZE)
+            return;
+        _writeBufCache.release(data);
+    }
+
     private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
     private static final long[] RATES = { 60*1000L, 10*60*1000L };
 
@@ -1357,6 +1421,12 @@ class EventPumper implements Runnable {
      * caller must keep OP_WRITE interest, unless the queue is empty and fully drained,
      * in which case interest can be dropped.
      *
+     * <p>Buffers are returned to the pool once their frame is fully flushed. Only
+     * the fixed-size NTCP2 frame class re-enters the pool; smaller handshake and
+     * termination buffers are left alone. The release happens on the pumper thread
+     * immediately after {@link NTCPConnection#removeWriteBuf} so a frame array can
+     * never be reused while any producer still references it.
+     *
      * @param con  the connection being drained
      * @param chan  the connection's socket channel
      * @return the {@link WriteState} governing the next step in the drain loop
@@ -1370,6 +1440,7 @@ class EventPumper implements Runnable {
         }
         if (buf.remaining() <= 0) {
             con.removeWriteBuf(buf);
+            releaseDrainedWriteBuf(buf);
             return WriteState.DRAIN;
         }
         int written = chan.write(buf);
@@ -1383,7 +1454,25 @@ class EventPumper implements Runnable {
             return WriteState.BLOCKED;
         }
         con.removeWriteBuf(buf);
+        releaseDrainedWriteBuf(buf);
         return WriteState.DRAIN;
+    }
+
+    /**
+     * Return a fully drained NTCP2 frame buffer to the pool.
+     *
+     * <p>Invoked from {@link #writeOneBuffer} on the pumper thread right after the
+     * buffer leaves the connection's write queue. Only arrays of the pooled
+     * {@link #WRITE_BUFSIZE} class are returned; everything else (handshake,
+     * termination, and legacy buffers) is ignored.
+     *
+     * @param buf the drained buffer, wrapped around a frame array
+     * @since 0.9.71+
+     */
+    static void releaseDrainedWriteBuf(ByteBuffer buf) {
+        if (buf != null && buf.hasArray()) {
+            releaseWriteBuf(buf.array());
+        }
     }
 
     private static final int MAX_BATCH = SystemVersion.isSlow() ? 1024 : 16384;
