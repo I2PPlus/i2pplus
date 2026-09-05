@@ -140,10 +140,6 @@ public class NTCPConnection implements Closeable {
     // _bytesReceived, _bytesSent, _lastBytesReceived, _lastBytesSent, _sendBps, _recvBps
     private final Object _statLock = new Object();
 
-    private static final int BLOCK_SIZE = 16;
-    private static final int META_SIZE = BLOCK_SIZE;
-
-    private volatile boolean _sendingMeta;
     /** How many consecutive sends were failed due to (estimated) send queue time. */
     private long _nextInfoTime;
     private volatile boolean _mayDisconnect;
@@ -737,6 +733,9 @@ public class NTCPConnection implements Closeable {
 
         List<OutNetMessage> pending = new ArrayList<>();
         synchronized(_writeLock) {
+        // NOT pooled: write-frame byte arrays are only returned to the pool from
+        // EventPumper.writeOneBuffer() (releaseDrainedWriteBuf), never here, so a
+        // stranded buffer is just GC'd - never double-released into the pool.
         _writeBufs.clear();
         _outbound.drainTo(pending);
             if (!_currentOutbound.isEmpty())
@@ -809,10 +808,7 @@ public class NTCPConnection implements Closeable {
      */
     public boolean tooBacklogged() {
         // Allow some slack just after connection establishment
-        if (getUptime() < 15*1000L)
-            return false;
-
-        if (!_outbound.isBacklogged())
+        if (!isTooBacklogged(getUptime(), _outbound.isBacklogged()))
             return false;
 
         int size = _outbound.size();
@@ -1046,6 +1042,74 @@ public class NTCPConnection implements Closeable {
      */
     static boolean isValidFrameLength(int framelen) {
         return framelen >= OutboundNTCP2State.MAC_SIZE;
+    }
+
+    /**
+     *  The payload length of a data-phase frame: the announced frame length minus
+     *  the trailing 16-byte AEAD MAC.
+     *
+     *  @param framelen the full frame length, including the MAC
+     *  @return the number of bytes to pass to {@link NTCP2Payload#processPayload}
+     *  @since 0.9.71+
+     */
+    static int framePayloadLength(int framelen) {
+        return framelen - OutboundNTCP2State.MAC_SIZE;
+    }
+
+    /**
+     *  Whether the outbound queue is too backlogged to accept new messages.
+     *
+     *  <p>There is a 15 second grace period right after connection establishment so
+     *  messages queued for a brand-new connection are not refused, then the decision
+     *  is delegated to the bandwidth limiter's backlog flag.
+     *
+     *  @param uptimeMs the connection uptime, in milliseconds
+     *  @param outboundBacklogged the bandwidth limiter's backlog flag for the outbound queue
+     *  @return true if the queue is too backlogged
+     *  @since 0.9.71+
+     */
+    static boolean isTooBacklogged(long uptimeMs, boolean outboundBacklogged) {
+        return uptimeMs >= 15*1000L && outboundBacklogged;
+    }
+
+    /**
+     *  Whether a received RouterInfo's hash identifies the peer we are talking to.
+     *
+     *  @param h the hash of the received RouterInfo
+     *  @param peerHash the hash of the remote peer of this connection
+     *  @return true if the hash matches the remote peer
+     *  @since 0.9.71+
+     */
+    static boolean isSamePeer(Hash h, Hash peerHash) {
+        return peerHash.equals(h);
+    }
+
+    /**
+     *  Whether a received RouterInfo's hash identifies us.
+     *
+     *  @param h the hash of the received RouterInfo
+     *  @param ourHash our own router hash
+     *  @return true if the hash is our own
+     *  @since 0.9.71+
+     */
+    static boolean isOwnRouterInfo(Hash h, Hash ourHash) {
+        return ourHash.equals(h);
+    }
+
+    /**
+     *  Whether a RouterInfo we just stored is strictly newer than whatever was
+     *  stored before (or there was no previous copy, so the store is new).
+     *  copy claims a later publication time.
+     *
+     *  <p>Used on the flood path in {@link NTCP2ReadState#gotRI}.
+
+     *  @param old the previously stored RouterInfo, or null if this is a new store
+     *  @param ri the RouterInfo that was just stored
+     *  @return true if flooding is justified by freshness
+     *  @since 0.9.71+
+     */
+    static boolean isNewerOrNew(RouterInfo old, RouterInfo ri) {
+        return old == null || ri.getPublished() > old.getPublished();
     }
 
     /**
@@ -1669,10 +1733,6 @@ public class NTCPConnection implements Closeable {
         boolean clearMessage = isEstablished();
         synchronized(_statLock) {
             _bytesSent += buf.capacity();
-            if (_sendingMeta && (buf.capacity() == META_SIZE)) {
-                _sendingMeta = false;
-                clearMessage = false;
-            }
             updateStats();
         }
         // O(1) removal of the head. Single-writer drain (#5) guarantees buf IS
@@ -2161,9 +2221,25 @@ public class NTCPConnection implements Closeable {
                 return false;
             }
             // no payload processing errors in the data phase are fatal
+            processFrameBlocks(data, off);
+            _received = -2;
+            _frameCount++;
+            return true;
+        }
+
+        /**
+         *  Process the decrypted payload of the current frame, delivering each
+         *  block to the PayloadCallback.  Payload errors are logged but never
+         *  escalate to a connection close; only AEAD failures (handled by the
+         *  caller before this point) are fatal.
+         *
+         *  @param data the buffer holding the decrypted frame
+         *  @param off the offset of the frame in the buffer
+         */
+        private void processFrameBlocks(byte[] data, int off) {
             try {
                 int blocks = NTCP2Payload.processPayload(_context, this, data, off,
-                                                         _framelen - OutboundNTCP2State.MAC_SIZE, false);
+                                                         framePayloadLength(_framelen), false);
                 if (_log.shouldDebug())
                     _log.debug("Processed " + blocks + " blocks in frame");
             } catch (IOException ioe) {
@@ -2173,15 +2249,10 @@ public class NTCPConnection implements Closeable {
                 if (_log.shouldWarn())
                     _log.warn("Payload delivery failure \n* " + dfe.getMessage());
             } catch (I2NPMessageException ime) {
-                if (_log.shouldDebug())
-                    _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
-                else if (_log.shouldWarn())
+                if (_log.shouldWarn())
                     _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
-            _received = -2;
-            _frameCount++;
-            return true;
         }
 
         @Override
@@ -2207,8 +2278,8 @@ public class NTCPConnection implements Closeable {
             _messagesRead.incrementAndGet();
             Hash h = ri.getHash();
             Hash ph = _remotePeer.calculateHash();
-            if (!h.equals(ph)) {
-                if (h.equals(_context.routerHash()))
+            if (!isSamePeer(h, ph)) {
+                if (isOwnRouterInfo(h, _context.routerHash()))
                     return;
                 // make a fake DBSM message and send it to the InNetMessagePool
                 DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
@@ -2218,13 +2289,16 @@ public class NTCPConnection implements Closeable {
                 return;
             }
             try {
-                if (h.equals(_context.routerHash()))
+                // defensive duplicate of the guard in the foreign-RI branch above;
+                // unreachable under normal operation because a peer connection's
+                // remote hash is never our own, kept to preserve the exact
+                // store-path behavior
+                if (isOwnRouterInfo(h, _context.routerHash()))
                     return;
                 RouterInfo old = _context.netDb().store(h, ri);
                 if (flood && !ri.equals(old)) {
                     FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
-                    if ((old == null || ri.getPublished() > old.getPublished()) &&
-                        fndf.floodConditional(ri)) {
+                    if (isNewerOrNew(old, ri) && fndf.floodConditional(ri)) {
                         if (_log.shouldDebug())
                             _log.debug("Flooded the RouterInfo: " + h);
                     } else {
