@@ -124,6 +124,8 @@ public class TuningFormHandler extends FormHandler {
         TUNED.add(t);
         t = new Tunable("i2ptunnel.serverHandler.queueCapacity", "serverBacklogQueue", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
+        t = new Tunable("i2ptunnel.server.threads", "serverThreads", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
         // Streaming congestion
         t = new Tunable("i2p.streaming.maxRTO", "maxRTO", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
@@ -572,6 +574,11 @@ public class TuningFormHandler extends FormHandler {
     public void setServerBacklogQueueMin(String v) { _formValues.put("serverBacklogQueueMin", v); }
     public void setServerBacklogQueueOverride(String v) { _formValues.put("serverBacklogQueueOverride", v); }
     public void setServerBacklogQueueStep(String v) { _formValues.put("serverBacklogQueueStep", v); }
+    public void setServerThreadsDefault(String v) { _formValues.put("serverThreadsDefault", v); }
+    public void setServerThreadsMax(String v) { _formValues.put("serverThreadsMax", v); }
+    public void setServerThreadsMin(String v) { _formValues.put("serverThreadsMin", v); }
+    public void setServerThreadsOverride(String v) { _formValues.put("serverThreadsOverride", v); }
+    public void setServerThreadsStep(String v) { _formValues.put("serverThreadsStep", v); }
     public void setThrottleRejectExponentDefault(String v) { _formValues.put("throttleRejectExponentDefault", v); }
     public void setThrottleRejectExponentMax(String v) { _formValues.put("throttleRejectExponentMax", v); }
     public void setThrottleRejectExponentMin(String v) { _formValues.put("throttleRejectExponentMin", v); }

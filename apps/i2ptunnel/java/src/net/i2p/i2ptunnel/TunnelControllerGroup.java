@@ -114,9 +114,9 @@ public class TunnelControllerGroup implements ClientApp {
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
 
     /** Global server-handler thread budget ceiling (Tuner param max, heap-clamped in the Tuner). */
-    private static final int SERVER_HANDLER_MAX_THREADS = 4096;
+    private static final int SERVER_HANDLER_MAX_THREADS = 16384;
     /** Per-tunnel server-handler cap ceiling (Tuner per-tunnel param max). */
-    private static final int SERVER_HANDLER_PER_TUNNEL_MAX = 512;
+    private static final int SERVER_HANDLER_PER_TUNNEL_MAX = 4096;
     /** Absolute floor for a live server tunnel's handler pool. */
     private static final int SERVER_HANDLER_FLOOR = 2;
 
@@ -1772,7 +1772,7 @@ public class TunnelControllerGroup implements ClientApp {
             new LinkedBlockingQueue<>(serverBacklogQueueCapacity),
             r -> {
                 Thread t = new Thread(r);
-                t.setName("TunnelServer." + index.incrementAndGet());
+                t.setName("TunnelSrv." + index.incrementAndGet());
                 t.setDaemon(true);
                 return t;
             },
@@ -1882,7 +1882,7 @@ public class TunnelControllerGroup implements ClientApp {
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName("TunnelClientRunner." + _executorThreadCount.incrementAndGet());
+            rv.setName("TunnelCln." + _executorThreadCount.incrementAndGet());
             rv.setDaemon(true);
             return rv;
         }
