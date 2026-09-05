@@ -128,7 +128,9 @@ public class NTCPConnection implements Closeable {
     // _curReadState
     private final Object _readLock = new Object();
     // This lock covers:
-    // _writeBufs, _currentOutbound, _outbound, _sendSipk1, _sendSipk2, _sendSipIV, _sender
+    // _currentOutbound, _outbound, _sendSipk1, _sendSipk2, _sendSipIV, _sender
+    // _writeBufs is drained only by the pumper thread (ConcurrentLinkedQueue),
+    // so it no longer needs this lock
     private final Object _writeLock = new Object();
     // This lock covers:
     // _bytesReceived, _bytesSent, _lastBytesReceived, _lastBytesSent, _sendBps, _recvBps
@@ -1183,7 +1185,9 @@ public class NTCPConnection implements Closeable {
         synchronized(_writeLock) {
             if (_sender != null) {
                 sendNTCP2(dataBuf.getData(), blocks);
-                // sendNTCP2() -> wantsWrite() -> pumper.processWrite() -> fail -> close() -> NPE
+                // sendNTCP2() -> wantsWrite() -> write() -> pumper.wantsWrite() -> EventPumper.processWrite()
+                // While we still hold _writeLock, only the queue + interest registration
+                // happen inline; the socket write is deferred to the pumper thread.
                 if (_sender != null) {
                     _sender.destroy();
                     // this "plugs" the NTCP2 sender, so sendNTCP2()
@@ -1404,18 +1408,18 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Write lock for pumper delayed writes
-     *
-     *  @return the write lock object
-     *  @since 0.9.53
-     */
-    Object getWriteLock() {
-        return _writeLock;
-    }
-
-    /**
      * The contents of the buffer have been encrypted / padded / etc and have
      * been fully allocated for the bandwidth limiter.
+     *
+     * Only enqueues the buffer and registers write interest. The socket write
+     * itself is performed exclusively by the pumper thread in
+     * EventPumper.processWrite(): this single-writer contract guarantees that
+     * at most one thread calls SocketChannel.write() on this connection at a
+     * time, so frame bytes can never interleave. It also removes the need to
+     * hold _writeLock across the socket drain.
+     *
+     * @since 0.9.71+ single-writer contract (previously attempted a direct,
+     *                 lock-serialized drain from the calling thread)
      */
     private void write(ByteBuffer buf) {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {
@@ -1426,20 +1430,7 @@ public class NTCPConnection implements Closeable {
         }
         _writeBufs.offer(buf);
         _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
-        EventPumper pumper = _transport.getPumper();
-        if (_isInbound || isEstablished()) {
-            // Attempt to write directly
-            SelectionKey key = getKey();
-            if (key != null && !pumper.processWrite(this, key)) {
-                if (_log.shouldDebug())
-                    _log.debug("Async write not completed, pending bufs: " + _writeBufs.size() + " on " + this);
-                // queue it up
-                pumper.wantsWrite(this);
-            }
-        } else {
-            // outbound not connected yet
-            pumper.wantsWrite(this);
-        }
+        _transport.getPumper().wantsWrite(this);
     }
 
     /**
@@ -1453,7 +1444,8 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Replaces getWriteBufCount().
-     * Caller should sync on getWriteLock()
+     * Lock-free; backed by ConcurrentLinkedQueue, and only the pumper's drain
+     * loop consumes. No synchronization required.
      *
      * @return true if write buffer is empty
      * @since 0.8.12
@@ -1465,7 +1457,8 @@ public class NTCPConnection implements Closeable {
     /**
      * Returns but does not remove the buffer.
      * Call removeWriteBuf() after write complete.
-     * Caller should sync on getWriteLock()
+     * Lock-free; backed by ConcurrentLinkedQueue, and only the pumper's drain
+     * loop consumes. No synchronization required.
      *
      * @return null if none available
      */
@@ -1475,7 +1468,9 @@ public class NTCPConnection implements Closeable {
 
     /**
      *  Remove the buffer, which _should_ be the one at the head of _writeBufs.
-     *  Caller must sync on _writeLock
+     *  Called only from the pumper's drain loop (EventPumper.processWrite()).
+     *  The completion bookkeeping self-synchronizes on _writeLock; the
+     *  _writeBufs queue operations are lock-free.
      *
      *  @param buf the buffer to remove
      */
@@ -1491,39 +1486,44 @@ public class NTCPConnection implements Closeable {
             updateStats();
         }
         _writeBufs.remove(buf);
-        if (clearMessage) {
-            List<OutNetMessage> msgs = null;
+        // The completion bookkeeping touches _currentOutbound, which the writer
+        // pool also manipulates while building frames; that section stays
+        // serialized on _writeLock even though the drain itself no longer needs it.
+        synchronized(_writeLock) {
+            if (clearMessage) {
+                List<OutNetMessage> msgs = null;
                 if (!_currentOutbound.isEmpty()) {
                     msgs = new ArrayList<>(_currentOutbound);
                     _currentOutbound.clear();
                 }
-            // push through the bw limiter to reach _writeBufs
-            if (!_outbound.isEmpty())
-                _transport.getWriter().wantsWrite(this, "write completed");
-            if (msgs != null) {
-                _lastSendTime = _context.clock().now();
-                // stats once is fine for all of them
-                _context.statManager().addRateData("ntcp.sendTime", msgs.get(0).getSendTime());
-                for (OutNetMessage msg : msgs) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("I2NP message " + _messagesWritten + "/" + msg.getMessageId() + " sent after "
-                                  + msg.getSendTime() + "/"
-                                  + msg.getLifetime()
-                                  + " with " + buf.capacity() + " bytes\n* UniqueID: " + System.identityHashCode(msg) + " on " + toString());
+                // push through the bw limiter to reach _writeBufs
+                if (!_outbound.isEmpty())
+                    _transport.getWriter().wantsWrite(this, "write completed");
+                if (msgs != null) {
+                    _lastSendTime = _context.clock().now();
+                    // stats once is fine for all of them
+                    _context.statManager().addRateData("ntcp.sendTime", msgs.get(0).getSendTime());
+                    for (OutNetMessage msg : msgs) {
+                        if (_log.shouldDebug()) {
+                            _log.debug("I2NP message " + _messagesWritten + "/" + msg.getMessageId() + " sent after "
+                                      + msg.getSendTime() + "/"
+                                      + msg.getLifetime()
+                                      + " with " + buf.capacity() + " bytes\n* UniqueID: " + System.identityHashCode(msg) + " on " + toString());
+                        }
+                        _transport.sendComplete(msg);
                     }
-                    _transport.sendComplete(msg);
+                    _messagesWritten.addAndGet(msgs.size());
                 }
-                _messagesWritten.addAndGet(msgs.size());
+            } else {
+                // push through the bw limiter to reach _writeBufs
+                if (!_outbound.isEmpty())
+                    _transport.getWriter().wantsWrite(this, "write completed");
+                if (_log.shouldDebug())
+                    _log.debug("I2NP meta message sent completely");
+                // need to increment as EventPumper will close conn if not completed
+                _messagesWritten.incrementAndGet();
             }
-        } else {
-            // push through the bw limiter to reach _writeBufs
-            if (!_outbound.isEmpty())
-                _transport.getWriter().wantsWrite(this, "write completed");
-            if (_log.shouldDebug())
-                _log.debug("I2NP meta message sent completely");
-            // need to increment as EventPumper will close conn if not completed
-            _messagesWritten.incrementAndGet();
-        }
+        } // synchronized(_writeLock)
     }
 
     // following fields covered by _statLock

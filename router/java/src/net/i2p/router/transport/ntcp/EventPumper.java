@@ -1045,8 +1045,20 @@ class EventPumper implements Runnable {
 
     /**
      * Try to write the queued buffers for the connection.
+     *
+     * Single-writer contract: this must only be called on the pumper thread
+     * (via processWrite(SelectionKey) for OP_WRITE events). Producer threads
+     * call wantsWrite() to register interest; they never write to the socket
+     * themselves. This keeps SocketChannel.write() strictly single-threaded per
+     * connection and removes the _writeLock serialization that previously
+     * spanned the whole drain loop (which could stall frame pushes from the
+     * writer pool and other connections).
+     *
+     * @since 0.9.71+ single-writer drain without _writeLock; previously the
+     *                 drain ran under the connection's write lock and was also
+     *                 invoked directly from producer threads
      */
-    public boolean processWrite(final NTCPConnection con, final SelectionKey key) {
+    private boolean processWrite(final NTCPConnection con, final SelectionKey key) {
         boolean rv = false;
         final SocketChannel chan = con.getChannel();
         if (chan == null) {
@@ -1060,37 +1072,35 @@ class EventPumper implements Runnable {
             return true;
         }
         try {
-            synchronized (con.getWriteLock()) {
-                while (true) {
-                    ByteBuffer buf = con.getNextWriteBuf();
-                    if (buf != null) {
-                        if (buf.remaining() <= 0) {
-                            con.removeWriteBuf(buf);
-                            continue;
-                        }
-                        int written = chan.write(buf);
-                        if (written == 0) {
-                            if ((buf.remaining() > 0) || (!con.isWriteBufEmpty())) {
-                                // stay interested
-                            } else {
-                                rv = true;
-                            }
-                            break;
-                        } else if (buf.remaining() > 0) {
-                            break;
-                        } else {
-                            con.removeWriteBuf(buf);
-                        }
-                    } else {
-                        if (key.isValid()) rv = true;
-                        break;
+            while (true) {
+                ByteBuffer buf = con.getNextWriteBuf();
+                if (buf != null) {
+                    if (buf.remaining() <= 0) {
+                        con.removeWriteBuf(buf);
+                        continue;
                     }
-                }
-                if (rv) {
-                    clearInterest(key, SelectionKey.OP_WRITE);
+                    int written = chan.write(buf);
+                    if (written == 0) {
+                        if ((buf.remaining() > 0) || (!con.isWriteBufEmpty())) {
+                            // stay interested
+                        } else {
+                            rv = true;
+                        }
+                        break;
+                    } else if (buf.remaining() > 0) {
+                        break;
+                    } else {
+                        con.removeWriteBuf(buf);
+                    }
                 } else {
-                    setInterest(key, SelectionKey.OP_WRITE);
+                    if (key.isValid()) rv = true;
+                    break;
                 }
+            }
+            if (rv) {
+                clearInterest(key, SelectionKey.OP_WRITE);
+            } else {
+                setInterest(key, SelectionKey.OP_WRITE);
             }
         } catch (CancelledKeyException cke) {
             if (_log.shouldInfo()) _log.info("Error writing on: " + con + " -> Socket channel closed or key cancelled");
