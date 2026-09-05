@@ -1189,7 +1189,7 @@ public class EepGet {
                 _log.info("Gzipped response, starting decompressor");
             PipedInputStream pi = new PipedInputStream(64*1024);
             PipedOutputStream po = new PipedOutputStream(pi);
-            pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGetDecompress");
+            pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGunzip");
             _out = po;
             pipeSink = po;
             pusher.start();

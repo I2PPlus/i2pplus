@@ -256,7 +256,7 @@ public class RouterConsoleRunner implements RouterApp {
         // this unregisters us with the ClientAppManager
         changeState(STOPPING);
         if (PluginStarter.pluginsEnabled(_context))
-            (new I2PAppThread(new PluginStopper(_context, _server), "PluginStopper")).start();
+            (new I2PAppThread(new PluginStopper(_context, _server), "PlugStopper")).start();
         stopAllWebApps();
         try {
             _server.stop();

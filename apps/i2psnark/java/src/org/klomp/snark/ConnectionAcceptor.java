@@ -425,7 +425,7 @@ class ConnectionAcceptor implements Runnable {
             return;
         }
         activeHandlers.incrementAndGet();
-        Thread t = new I2PAppThread(new Handler(socket, pa), "SnarkIncoming");
+        Thread t = new I2PAppThread(new Handler(socket, pa), "SnarkInc");
         t.start();
     }
 

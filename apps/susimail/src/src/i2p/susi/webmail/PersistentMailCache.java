@@ -138,7 +138,7 @@ class PersistentMailCache {
         int tcnt = Math.max(1, Math.min(sz / 4, Math.min(SystemVersion.getCores(), 16)));
         List<Thread> threads = new ArrayList<>(tcnt);
         for (int i = 0; i < tcnt; i++) {
-            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts), "EmailLoader." + i);
+            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts), "MailLoad." + i);
             t.start();
             threads.add(t);
         }

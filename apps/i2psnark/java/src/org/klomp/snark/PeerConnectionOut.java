@@ -138,7 +138,7 @@ class PeerConnectionOut implements Runnable {
      * Start the sender thread.
      */
     public void startup() {
-        thread = new I2PAppThread(this, "SnarkSender." + _id + ":" + peer);
+        thread = new I2PAppThread(this, "SnarkSend." + _id);
         thread.start();
     }
 

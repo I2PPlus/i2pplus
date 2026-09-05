@@ -468,7 +468,7 @@ public class TunnelController implements Logging {
                 return;
             changeState(TunnelState.STARTING);
         }
-        new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "TunStart." + getName()).start();
+        new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "TunStart").start();
     }
 
     /**

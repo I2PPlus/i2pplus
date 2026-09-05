@@ -87,7 +87,7 @@ class LogRecordFormatter {
 
     /** Format thread name to exactly MAX_THREAD_LENGTH chars, padded or truncated. */
     private static String getThread(LogRecord logRecord) {
-        return toString(logRecord.getThreadName(), MAX_THREAD_LENGTH);
+        return padOrTruncate(logRecord.getThreadName(), MAX_THREAD_LENGTH);
     }
 
     /**
@@ -123,7 +123,7 @@ class LogRecordFormatter {
         } else {
             len = MAX_PRIORITY_LENGTH;
         }
-        return toString(Translate.getString(Log.toLevelString(rec.getPriority()), ctx, BUNDLE_NAME), len);
+        return padOrTruncate(Translate.getString(Log.toLevelString(rec.getPriority()), ctx, BUNDLE_NAME), len);
     }
 
     /**
@@ -132,14 +132,24 @@ class LogRecordFormatter {
     private static String getWhere(LogRecord rec) {
         String src = (rec.getSource() != null ? rec.getSource().getName() : rec.getSourceName());
         if (src == null) src = "<none>";
-        return toString(src, MAX_WHERE_LENGTH);
+        return padOrTruncate(src, MAX_WHERE_LENGTH);
     }
 
     /**
      * Truncate or pad to exactly {@code size} chars; if truncated,
      * keeps the suffix and prefixes with "..." so column width stays constant.
+     *
+     * Used for the thread, source, and priority columns so every log line has
+     * fixed-width output regardless of the underlying name length.
+     *
+     * @param str the raw name, or null (treated as empty)
+     * @param size the exact output width, must be &gt; 3
+     * @return a string of exactly {@code size} chars: right-padded with spaces
+     *         when short, or the last {@code size - 3} chars prefixed with "…"
+     *         when longer than {@code size}
+     * @since 0.9.71
      */
-    private static String toString(String str, int size) {
+    static String padOrTruncate(String str, int size) {
         StringBuilder buf = new StringBuilder(size);
         if (str == null) str = "";
         if (str.length() > size) {

@@ -1562,8 +1562,7 @@ public class Router implements RouterClock.ClockShiftListener {
         for (Runnable task : _context.getShutdownTasks()) {
             if (_log.shouldWarn()) {_log.warn(sb.append("Running Shutdown Task ").append(task.getClass()).toString()); sb.setLength(0);}
             try {
-                Thread t = new I2PAppThread(task, sb.append("ShutdownTask.").append(task.getClass().getName()).toString());
-                sb.setLength(0);
+                Thread t = new I2PAppThread(task, "ShutTask");
                 t.setDaemon(true);
                 t.start();
                 tasks.add(t);
