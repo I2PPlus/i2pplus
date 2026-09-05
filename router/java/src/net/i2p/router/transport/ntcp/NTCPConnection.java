@@ -720,10 +720,14 @@ public class NTCPConnection implements Closeable {
         _transport.getReader().connectionClosed(this);
         _transport.getWriter().connectionClosed(this);
 
+        // abort() fires the InboundListener synchronously (abort() -> notifyAllocation()).
+        // The ownership hand-off inside complete() then returns the attached read
+        // buffer to the pool exactly once - either here because _closed is already
+        // set, or on the limiter thread that won the hand-off (which delivers it
+        // into _readBufs before this drain, or releases it if _closed was set).
+        // Never release the buffer directly in this loop; see removeIBRequest().
         for (FIFOBandwidthLimiter.Request req :_bwInRequests) {
             req.abort();
-            // we would like to return read ByteBuffers via EventPumper.releaseBuf(),
-            // but we can't risk releasing it twice
         }
         _bwInRequests.clear();
         for (FIFOBandwidthLimiter.Request req :_bwOutRequests) {
@@ -1278,11 +1282,18 @@ public class NTCPConnection implements Closeable {
     /**
      *  The FifoBandwidthLimiter.CompleteListener callback.
      *  Does the delayed read.
+     *
+     *  Fires on the limiter thread when the throttled request completes, and
+     *  synchronously on the closing thread when close() aborts the request.
+     *  The ownership hand-off in removeIBRequest() guarantees the attached
+     *  read buffer is delivered or released exactly once across those racers.
      */
     private class InboundListener implements FIFOBandwidthLimiter.CompleteListener {
         @Override
         public void complete(FIFOBandwidthLimiter.Request req) {
-            removeIBRequest(req);
+            // Lost the hand-off: the other racer owns the attached buffer now.
+            if (!removeIBRequest(req))
+                return;
             ByteBuffer buf = (ByteBuffer)req.attachment();
             if (_closed.get()) {
                 EventPumper.releaseBuf(buf);
@@ -1314,8 +1325,20 @@ public class NTCPConnection implements Closeable {
         }
     }
 
-    private void removeIBRequest(FIFOBandwidthLimiter.Request req) {
-        _bwInRequests.remove(req);
+    /**
+     *  Hands off ownership of an in-flight read bandwidth request back to the
+     *  caller. Exactly one caller - the limiter thread when the request is
+     *  fully allocated, or the closing thread via abort() -&gt; notifyAllocation()
+     *  - receives true and thereby owns the request's attached read buffer;
+     *  false callers must leave the buffer alone. This membership check is what
+     *  makes the read-back pressure release path exactly-once without a lock.
+     *
+     *  @param req the request to hand off
+     *  @return true if this caller won the hand-off and owns the attached buffer
+     *  @since 0.9.71+
+     */
+    private boolean removeIBRequest(FIFOBandwidthLimiter.Request req) {
+        return _bwInRequests.remove(req);
     }
 
     private void addIBRequest(FIFOBandwidthLimiter.Request req) {
@@ -1370,14 +1393,19 @@ public class NTCPConnection implements Closeable {
      * because we're choked by the bandwidth limiter.  Cache the contents of
      * the buffer (not copy) and register ourselves to be notified when the
      * contents have been fully allocated
+     * The request joins the in-flight set before the listener is registered, so
+     * the listener's ownership hand-off always has a member to claim - including
+     * when the request is already satisfied and setCompleteListener() completes
+     * synchronously.
      *
      * @param buf the buffer to queue
      * @param req the bandwidth request
+     * @since 0.9.71+ listener registration ordered after set membership
      */
     void queuedRecv(ByteBuffer buf, FIFOBandwidthLimiter.Request req) {
         req.attach(buf);
-        req.setCompleteListener(_inboundListener);
         addIBRequest(req);
+        req.setCompleteListener(_inboundListener);
     }
 
     /** Ditto for writes. */
