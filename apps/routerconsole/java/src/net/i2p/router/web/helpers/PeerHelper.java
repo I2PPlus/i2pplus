@@ -998,9 +998,9 @@ public class PeerHelper extends HelperBase {
            .append(" / ")
            .append(maxConnections);
         if (!debugmode) {
-            buf.append("&nbsp;<span id=ssuadv><a href=\"/peers?transport=ssudebug\">[")
+            buf.append("&nbsp;<span id=ssuadv><a href=\"/peers?transport=ssudebug\">")
                .append(_t("Advanced View"))
-               .append("]</a></span>");
+               .append("</a></span>");
         }
         buf.append("<span id=topCount hidden></span></h3>\n<div class=widescroll>\n<table id=udpconnections class=\"");
         if (debugmode) {buf.append("advancedview ");}
@@ -1138,9 +1138,9 @@ public class PeerHelper extends HelperBase {
            .append(" / ")
            .append(maxConnections);
         if (!debugmode) {
-            buf.append("<span id=ssuadv><a href=\"/peers?transport=ssudebug\">[")
+            buf.append("<span id=ssuadv><a href=\"/peers?transport=ssudebug\">")
                .append(_t("Advanced View"))
-               .append("]</a></span>");
+               .append("</a></span>");
         }
         buf.append("<span id=topCount hidden></span></h3>\n");
     }

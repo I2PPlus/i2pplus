@@ -868,7 +868,6 @@ td.ipv6{width:1%;max-width:24px}
 #peers .wrap{margin-bottom:16px;box-shadow:var(--border_table)}
 #peers .wrap:last-child{margin-bottom:10px}
 #peerstats{margin-bottom:13px !important}
-#ssuadv{display:inline-block}
 #topCount{display:inline-block;position:absolute;right:3px;top:3px}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;border:0}
 #topCount table,#topCount td{line-height:1}

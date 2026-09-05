@@ -84,7 +84,6 @@ iframe{border:0}
 #sessionBanned .country,#sessionBanned .expiry,#sessionBanned .hash{width:1%;white-space:nowrap}
 #sessionBanned td.expires,#sessionBanned td.hostname,#sessionBanned td.ip,#sessionBanned td.port,#sessionBanned td.reason{font-size:95%}
 #sidebar h3:hover .badge{margin:0;width:0;font-size:0;opacity:0}
-#ssuadv a{display:inline-block;vertical-align:text-top;text-transform:none;letter-spacing:0;font-size:85%}
 #totaljobstats a{float:right}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #jobstats #statCount #init td{padding:24px;display:table-cell;font-size:0;box-shadow:none;background:var(--update) no-repeat center center/20px;transform:rotate(0);animation:linear spin 3s forwards infinite}
@@ -117,6 +116,8 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 #tunnels td.role{font-size:0}
 #peerstats,#tuningstats{margin:12px 0;padding:16px 8px;width:calc(100% - 18px);display:grid;grid-template-columns:repeat(10,1fr);gap:8px;border:var(--border);text-align:center}
 #profiles tr,#tunnels tr,#peers tr{contain:paint}
+#ssuadv{margin:0 0 0 4px;padding:1px 10px;display:inline-block;vertical-align:text-top;line-height:1.4;font-size:85%;border-radius:12px;box-shadow:var(--bevel);background:var(--badge)}
+#ssuadv a{display:inline-block;text-transform:none;letter-spacing:0}
 .streams th:nth-child(1),.streams td:nth-child(1){width:1%}
 .streams th:nth-child(2),.streams td:nth-child(2){text-align:left;width:19%}
 .streams th:nth-child(3),.streams td:nth-child(3){width:65%;text-align:left}
