@@ -6,9 +6,11 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.BufferOverflowException;
+import java.nio.channels.AlreadyConnectedException;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ClosedSelectorException;
+import java.nio.channels.ConnectionPendingException;
 import java.nio.channels.NoConnectionPendingException;
 import java.nio.channels.NotYetConnectedException;
 import java.nio.channels.SelectionKey;
@@ -16,8 +18,10 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.UnresolvedAddressException;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -335,24 +339,8 @@ class EventPumper implements Runnable {
                 } else {
                     _consecutiveFastSelects = 0;
                     idleLoopCountSinceLastRate++;
-                    // Rate-based idle limiter: cap idle busy-spin even when selector
-                    // wakeup() storms defeat the select() timeout. When select()
-                    // found no work we hold the loop to a minimum idle iteration time
-                    // (1e9 / maxIdleLps), so the real work path never sleeps.
-                    int maxIdleLps = _maxIdleLps;
-                    if (maxIdleLps > 0) {
-                        long minNanos = 1_000_000_000L / maxIdleLps;
-                        long elapsed = System.nanoTime() - iterStartNanos;
-                        if (elapsed < minNanos) {
-                            long toSleepNanos = minNanos - elapsed;
-                            _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
-                            try {
-                                Thread.sleep(toSleepNanos / 1_000_000L, (int) (toSleepNanos % 1_000_000L));
-                            } catch (InterruptedException ie) {
-                                Thread.currentThread().interrupt();
-                                break;
-                            }
-                        }
+                    if (throttleIdleLoop(iterStartNanos)) {
+                        break;
                     }
                 }
 
@@ -362,26 +350,7 @@ class EventPumper implements Runnable {
 
                 // Update loop rate stat every 5 seconds
                 if (now - lastLoopRateUpdate >= 5_000) {
-                    long elapsedMs = now - lastLoopRateUpdate;
-                    int elapsedSeconds = (int) (elapsedMs / 1000);
-                    if (elapsedSeconds <= 0) elapsedSeconds = 1;
-                    int loopsPerSecond = loopCountSinceLastRate / elapsedSeconds;
-                    _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopsPerSecond);
-                    // Idle loops (select() returned with no ready keys) — the signal
-                    // that distinguishes useful I/O from busy-spinning. Recorded as a
-                    // count over the window so the Tuner can compute an idle ratio.
-                    _context.statManager().addRateData("ntcp.pumperIdleLoops", idleLoopCountSinceLastRate);
-                    // Scale delay based on loop rate to curb idle busy-spinning.
-                    // Raise the delay proportionally to how far over the spin threshold
-                    // we are, so an extreme rate (e.g. 80K/s) is corrected within a
-                    // window or two rather than creeping up at +5ms/5s. The idle limiter
-                    // above now caps the hard spin; this stays as a responsiveness lever.
-                    if (loopsPerSecond > 1000 && _currentDelay < SELECTOR_MAX_DELAY) {
-                        long step = Math.min(50, (loopsPerSecond - 1000) / 2000 + 5);
-                        _currentDelay = Math.min(_currentDelay + step, SELECTOR_MAX_DELAY);
-                    } else if (loopsPerSecond < 500 && _currentDelay > _selectorLoopDelay) {
-                        _currentDelay = Math.max(_currentDelay - 5, _selectorLoopDelay);
-                    }
+                    updateLoopRateStats(loopCountSinceLastRate, idleLoopCountSinceLastRate, lastLoopRateUpdate, now);
                     loopCountSinceLastRate = 0;
                     idleLoopCountSinceLastRate = 0;
                     lastLoopRateUpdate = now;
@@ -425,11 +394,87 @@ class EventPumper implements Runnable {
         }
 
         // Cleanup
+        cleanupShutdown();
+        _wantsConRegister.clear();
+        _wantsRead.clear();
+        _wantsRegister.clear();
+        _wantsWrite.clear();
+    }
+
+    /**
+     * Throttle a single idle loop iteration when select() spins faster than the
+     * configured maximum (1e9 / _maxIdleLps executes per second). Selector wakeup()
+     * storms can defeat the select() timeout and busy-spin the loop; this holds each
+     * no-work iteration to a minimum duration so the real work path never sleeps.
+     *
+     * @param iterStartNanos System.nanoTime() taken at the start of the iteration
+     * @return {@code true} if throttling was interrupted and the pumper must exit
+     * @since 0.9.71+
+     */
+    private boolean throttleIdleLoop(long iterStartNanos) {
+        int maxIdleLps = _maxIdleLps;
+        if (maxIdleLps <= 0) {
+            return false;
+        }
+        long minNanos = 1_000_000_000L / maxIdleLps;
+        long elapsed = System.nanoTime() - iterStartNanos;
+        if (elapsed >= minNanos) {
+            return false;
+        }
+        long toSleepNanos = minNanos - elapsed;
+        _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
+        try {
+            Thread.sleep(toSleepNanos / 1_000_000L, (int) (toSleepNanos % 1_000_000L));
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Record pumper loop statistics for each 5-second window: total loops per second
+     * and the idle-loop count used by the Tuner to derive an idle ratio. Also scales
+     * _currentDelay to curb busy-spinning: raise it quickly when the loop rate stays
+     * far above the spin threshold, lower it slowly once the rate drops. The hard
+     * idle cap lives in throttleIdleLoop(); this stays as a responsiveness lever.
+     *
+     * @param loopCountSinceLastRate  total iterations in the window
+     * @param idleLoopCountSinceLastRate  no-work iterations in the window
+     * @param lastLoopRateUpdate  timestamp of the previous window start
+     * @param now  current time
+     * @since 0.9.71+
+     */
+    private void updateLoopRateStats(int loopCountSinceLastRate, int idleLoopCountSinceLastRate,
+                                     long lastLoopRateUpdate, long now) {
+        long elapsedMs = now - lastLoopRateUpdate;
+        int elapsedSeconds = (int) (elapsedMs / 1000);
+        if (elapsedSeconds <= 0) elapsedSeconds = 1;
+        int loopsPerSecond = loopCountSinceLastRate / elapsedSeconds;
+        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopsPerSecond);
+        _context.statManager().addRateData("ntcp.pumperIdleLoops", idleLoopCountSinceLastRate);
+        if (loopsPerSecond > 1000 && _currentDelay < SELECTOR_MAX_DELAY) {
+            long step = Math.min(50, (loopsPerSecond - 1000) / 2000 + 5);
+            _currentDelay = Math.min(_currentDelay + step, SELECTOR_MAX_DELAY);
+        } else if (loopsPerSecond < 500 && _currentDelay > _selectorLoopDelay) {
+            _currentDelay = Math.max(_currentDelay - 5, _selectorLoopDelay);
+        }
+    }
+
+    /**
+     * Close every registered channel (NTCP connections and the server socket) and
+     * the selector itself on pumper shutdown. Iterates a snapshot copy of the keys
+     * because closing a connection cancels its key and mutates the selector's live
+     * key set; iterating the set directly would race with that mutation.
+     * @since 0.9.71+
+     */
+    private void cleanupShutdown() {
         try {
             if (_selector.isOpen()) {
-                if (shouldDebug)
+                if (_log.shouldDebug())
                     _log.debug("Closing NTCP EventPumper with " + _selector.keys().size() + " keys");
-                for (SelectionKey key : _selector.keys()) {
+                List<SelectionKey> keys = new ArrayList<>(_selector.keys());
+                for (SelectionKey key : keys) {
                     try {
                         Object att = key.attachment();
                         if (att instanceof ServerSocketChannel)
@@ -446,10 +491,6 @@ class EventPumper implements Runnable {
         } catch (IOException e) {
             _log.error("Error closing selector", e);
         }
-        _wantsConRegister.clear();
-        _wantsRead.clear();
-        _wantsRegister.clear();
-        _wantsWrite.clear();
     }
 
     /**
@@ -466,10 +507,7 @@ class EventPumper implements Runnable {
             int failsafeCloses = 0;
             int failsafeInvalid = 0;
             boolean haveCap = _transport.haveCapacity(33);
-            if (haveCap)
-                _expireIdleWriteTime = Math.min(_expireIdleWriteTime + 1000, MAX_EXPIRE_IDLE_TIME);
-            else
-                _expireIdleWriteTime = Math.max(_expireIdleWriteTime - 3000, MIN_EXPIRE_IDLE_TIME);
+            adjustExpireIdleWriteTime(haveCap);
 
             long now = System.currentTimeMillis();
             for (SelectionKey key : all) {
@@ -490,28 +528,10 @@ class EventPumper implements Runnable {
                         failsafeWrites++;
                     }
 
-                    final long expire;
-                    if ((!haveCap || !con.isInbound()) &&
-                        con.getMayDisconnect() &&
-                        con.getMessagesReceived() <= 2 &&
-                        con.getMessagesSent() <= 1) {
-                        expire = MAY_DISCON_TIMEOUT;
-                    } else {
-                        expire = _expireIdleWriteTime;
-                    }
+                    final long expire = getIdleExpire(con, haveCap, _expireIdleWriteTime);
 
-                    if (con.getLastActiveTime() + expire < now) {
-                        con.sendTerminationAndClose();
+                    if (closeIdleOrSendRouterInfo(con, now, expire, _failsafeIterationFreq)) {
                         failsafeCloses++;
-                    } else {
-                        long estab = con.getEstablishedOn();
-                        if (estab > 0) {
-                            long uptime = now - estab;
-                            long freq = _failsafeIterationFreq;
-                            if (uptime >= RI_STORE_INTERVAL && (uptime % RI_STORE_INTERVAL) < freq) {
-                                con.sendOurRouterInfo(false);
-                            }
-                        }
                     }
                 } catch (CancelledKeyException ignored) { /* ignored */ }
             }
@@ -524,6 +544,72 @@ class EventPumper implements Runnable {
         } catch (ClosedSelectorException ignored) { /* ignored */ }
         long elapsed = (System.nanoTime() - startTime) / 1_000_000;
         _context.statManager().addRateData("ntcp.failsafeIterationTime", elapsed);
+    }
+
+    /**
+     * Adjust the idle-expire window based on connection capacity so the router
+     * keeps fewer idle connections when resources are tight. Raising the window
+     * by 1s per check under capacity and lowering it by 3s under pressure lets the
+     * window drift toward the useful range without hunting.
+     *
+     * @param haveCap  {@code true} when this router has spare connection capacity
+     * @since 0.9.71+
+     */
+    private void adjustExpireIdleWriteTime(boolean haveCap) {
+        if (haveCap)
+            _expireIdleWriteTime = Math.min(_expireIdleWriteTime + 1000, MAX_EXPIRE_IDLE_TIME);
+        else
+            _expireIdleWriteTime = Math.max(_expireIdleWriteTime - 3000, MIN_EXPIRE_IDLE_TIME);
+    }
+
+    /**
+     * Choose the idle timeout for a single connection. A barely-communicative
+     * connection that is disposable (may disconnect, hardly any traffic) gets the
+     * short MAY_DISCON_TIMEOUT so dead handshakes free capacity quickly; everything
+     * else falls back to the capacity-adjusted window.
+     *
+     * @param con  the connection being scanned
+     * @param haveCap  {@code true} when this router has spare connection capacity
+     * @param expireIdleWriteTime  current capacity-adjusted idle window
+     * @return the timeout in milliseconds for this connection
+     * @since 0.9.71+
+     */
+    static long getIdleExpire(NTCPConnection con, boolean haveCap, long expireIdleWriteTime) {
+        if ((!haveCap || !con.isInbound()) &&
+            con.getMayDisconnect() &&
+            con.getMessagesReceived() <= 2 &&
+            con.getMessagesSent() <= 1) {
+            return MAY_DISCON_TIMEOUT;
+        }
+        return expireIdleWriteTime;
+    }
+
+    /**
+     * Close a connection that has exceeded its idle timeout, or send our RouterInfo
+     * when the connection has been established long enough that periodic re-announce
+     * is due (uptime in the RI_STORE_INTERVAL band).
+     *
+     * @param con  the connection being scanned
+     * @param now  current time in milliseconds
+     * @param expire  idle timeout for this connection
+     * @param failsafeIterationFreq  pumper slab interval; keeps the RI re-announce
+     *                               roughly once per interval per connection
+     * @return {@code true} if the connection was idle and has been closed
+     * @since 0.9.71+
+     */
+    static boolean closeIdleOrSendRouterInfo(NTCPConnection con, long now, long expire, long failsafeIterationFreq) {
+        if (con.getLastActiveTime() + expire < now) {
+            con.sendTerminationAndClose();
+            return true;
+        }
+        long estab = con.getEstablishedOn();
+        if (estab > 0) {
+            long uptime = now - estab;
+            if (uptime >= RI_STORE_INTERVAL && (uptime % RI_STORE_INTERVAL) < failsafeIterationFreq) {
+                con.sendOurRouterInfo(false);
+            }
+        }
+        return false;
     }
 
     private void processKeys(Set<SelectionKey> selected) {
@@ -615,47 +701,10 @@ class EventPumper implements Runnable {
             chan.configureBlocking(false);
             byte[] ip = chan.socket().getInetAddress().getAddress();
             String ba = Addresses.toString(ip).replace("/", "");
-            boolean isBanned = _context.blocklist().isBlocklisted(ip);
-            if (isBanned) {
-                if (shouldInfo) {
-                    _log.info("Refusing Session Request from blocklisted IP address " + ba);
-                }
-                try {
-                    chan.close();
-                } catch (IOException ioe) { /* ignored */ }
+            AcceptVerdict verdict = screenAccept(ip, ba);
+            if (verdict != AcceptVerdict.ACCEPT) {
+                refuseAccepted(chan, verdict, ba, shouldWarn, shouldInfo);
                 return;
-            }
-            if (!_context.commSystem().isExemptIncoming(Addresses.toCanonicalString(ba))) {
-                if (!_transport.allowConnection()) {
-                    if (shouldWarn) {
-                        _log.warn("Refusing Session Request from: " + ba + " -> NTCP connection limit reached");
-                    }
-                    try {
-                        chan.close();
-                    } catch (IOException ioe) { /* ignored */ }
-                    return;
-                }
-                int count = _blockedIPs.count(ba);
-                if (count > 0) {
-                    count = _blockedIPs.increment(ba);
-                    if (shouldInfo) {
-                        _log.info("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
-                    }
-                    if (count >= 30 && shouldWarn) {
-                        _log.warn("WARNING! IP Address " + ba +
-                                  " is making excessive inbound NTCP connection attempts (Count: " + count + ")");
-                    }
-                    try {
-                        chan.close();
-                    } catch (IOException ioe) { /* ignored */ }
-                    return;
-                }
-                if (!shouldAllowInboundEstablishment()) {
-                    try {
-                        chan.close();
-                    } catch (IOException ioe) { /* ignored */ }
-                    return;
-                }
             }
             _context.statManager().addRateData("ntcp.inboundConn", 1);
             if (shouldSetKeepAlive(chan)) chan.socket().setKeepAlive(true);
@@ -671,6 +720,93 @@ class EventPumper implements Runnable {
                 _log.error("Error accepting NTCP connection", ioe);
             }
         }
+    }
+
+    /**
+     * Outcome of screening an inbound Session Request against the bans,
+     * connection limits, and flood defenses before the connection is accepted.
+     * @since 0.9.71+
+     */
+    enum AcceptVerdict {
+        /** Accept the connection and register it for the handshake. */
+        ACCEPT,
+        /** Peer IP is visibly blocklisted. */
+        BANNED,
+        /** Global NTCP connection limit reached. */
+        LIMIT,
+        /** Peer already has connections and is exceeding the per-IP cap. */
+        BLOCKED,
+        /** Inbound flood defense dropped the connection. */
+        FLOOD
+    }
+
+    /**
+     * Screen an inbound connection attempt and decide whether to register it.
+     * Blocklisted peers and refused attempts skip the flood/establishment
+     * decision entirely; the cheap hard rejections (bans, global limit) are done
+     * first so the per-IP count and the rate-based flood check run only for
+     * otherwise-eligible peers.
+     *
+     * @param ip  raw address bytes of the peer
+     * @param ba  canonical string form of the peer address
+     * @return the {@link AcceptVerdict} for this attempt, never null
+     * @since 0.9.71+
+     */
+    private AcceptVerdict screenAccept(byte[] ip, String ba) {
+        if (_context.blocklist().isBlocklisted(ip)) {
+            return AcceptVerdict.BANNED;
+        }
+        if (_context.commSystem().isExemptIncoming(Addresses.toCanonicalString(ba))) {
+            return AcceptVerdict.ACCEPT;
+        }
+        if (!_transport.allowConnection()) {
+            return AcceptVerdict.LIMIT;
+        }
+        if (_blockedIPs.count(ba) > 0) {
+            int count = _blockedIPs.increment(ba);
+            if (_log.shouldInfo()) {
+                _log.info("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
+            }
+            if (count >= 30 && _log.shouldWarn()) {
+                _log.warn("WARNING! IP Address " + ba +
+                          " is making excessive inbound NTCP connection attempts (Count: " + count + ")");
+            }
+            return AcceptVerdict.BLOCKED;
+        }
+        return shouldAllowInboundEstablishment() ? AcceptVerdict.ACCEPT : AcceptVerdict.FLOOD;
+    }
+
+    /**
+     * Log and close a refused inbound connection. The BLOCKED and FLOOD verdicts
+     * are already logged by their detectors; only BANNED and LIMIT emit a message
+     * here so repeated refusals from the same source stay informative but quiet.
+     *
+     * @param chan  the rejected socket, closed by this call
+     * @param verdict  why the connection was refused (never ACCEPT)
+     * @param ba  canonical string form of the peer address
+     * @param shouldWarn  pre-fetched log level check for warn
+     * @param shouldInfo  pre-fetched log level check for info
+     * @since 0.9.71+
+     */
+    private void refuseAccepted(SocketChannel chan, AcceptVerdict verdict, String ba,
+                                boolean shouldWarn, boolean shouldInfo) {
+        switch (verdict) {
+            case BANNED:
+                if (shouldInfo) {
+                    _log.info("Refusing Session Request from blocklisted IP address " + ba);
+                }
+                break;
+            case LIMIT:
+                if (shouldWarn) {
+                    _log.warn("Refusing Session Request from: " + ba + " -> NTCP connection limit reached");
+                }
+                break;
+            default:
+                break;
+        }
+        try {
+            chan.close();
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     private boolean shouldAllowInboundEstablishment() {
@@ -853,27 +989,55 @@ class EventPumper implements Runnable {
                 _context.statManager().addRateData("ntcp.connectFailedTimeout", 1);
             }
         } catch (IOException ioe) {
-            if (_log.shouldDebug()) {
-                _log.debug("[NTCP] Failed outbound connection to " + con.getRemotePeer(), ioe);
-            } else if (_log.shouldWarn()) {
-                _log.warn("[NTCP] Failed outbound connection to " + con.getRemotePeer());
-            }
-            con.closeOnTimeout("\n* Connect failed: " + ioe.getMessage(), ioe);
-            RouterIdentity remote = con.getRemotePeer();
-            if (remote != null) {
-                Hash peerHash = remote.calculateHash();
-                if (_failedOutboundAttempts.size() >= MAX_RETRY_MAP_SIZE) {
-                    _failedOutboundAttempts.clear();
-                    _failedOutboundCount.clear();
-                }
-                _failedOutboundAttempts.put(peerHash, System.currentTimeMillis());
-                _failedOutboundCount.merge(peerHash, 1, Integer::sum);
-            }
-            _transport.markUnreachable(con.getRemotePeer().calculateHash());
-            _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
+            handleConnectError(con, ioe);
         } catch (NoConnectionPendingException ncpe) {
             if (_log.shouldWarn()) _log.warn("Error connecting on " + con, ncpe);
         }
+    }
+
+    /**
+     * Handle an outbound connect that failed with an I/O error: log at debug (or a
+     * quiet warn) level, close the connection, record the peer for retry backoff,
+     * and mark it unreachable so the transport stops attempting it until it hears
+     * proof of life.
+     *
+     * @param con  the connection whose connect failed
+     * @param ioe  the failure cause
+     * @since 0.9.71+
+     */
+    private void handleConnectError(NTCPConnection con, IOException ioe) {
+        if (_log.shouldDebug()) {
+            _log.debug("[NTCP] Failed outbound connection to " + con.getRemotePeer(), ioe);
+        } else if (_log.shouldWarn()) {
+            _log.warn("[NTCP] Failed outbound connection to " + con.getRemotePeer());
+        }
+        con.closeOnTimeout("\n* Connect failed: " + ioe.getMessage(), ioe);
+        RouterIdentity remote = con.getRemotePeer();
+        if (remote != null) {
+            if (!con.isInbound()) {
+                recordFailedOutbound(remote);
+            }
+            _transport.markUnreachable(remote.calculateHash());
+        }
+        _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
+    }
+
+    /**
+     * Remember a failed outbound connect attempt for retry backoff, evicting the
+     * whole history when the cap is hit so the maps never grow past MAX_RETRY_MAP_SIZE.
+     *
+     * @param remote  the failed peer's identity; ignored when null
+     * @since 0.9.71+
+     */
+    private void recordFailedOutbound(RouterIdentity remote) {
+        if (remote == null) return;
+        Hash peerHash = remote.calculateHash();
+        if (_failedOutboundAttempts.size() >= MAX_RETRY_MAP_SIZE) {
+            _failedOutboundAttempts.clear();
+            _failedOutboundCount.clear();
+        }
+        _failedOutboundAttempts.put(peerHash, System.currentTimeMillis());
+        _failedOutboundCount.merge(peerHash, 1, Integer::sum);
     }
 
     private boolean shouldSetKeepAlive(SocketChannel chan) {
@@ -914,66 +1078,18 @@ class EventPumper implements Runnable {
                     _log.debug("Read " + totalRead + " bytes " + con);
                 }
                 if (totalRead < 0) {
-                    if (con.isInbound() && con.getMessagesReceived() <= 0) {
-                        InetAddress addr = chan.socket().getInetAddress();
-                        int count;
-                        if (addr != null) {
-                            String ipStr = Addresses.toString(addr.getAddress()).replace("/", "");
-                            count = _blockedIPs.increment(ipStr);
-                            if (shouldInfo) {
-                                _log.info("EOF on Inbound connection before receiving any data, blocking IP: "
-                                          + ipStr + (count > 1 ? " (Count: " + count + ")" : ""));
-                            }
-                            if (!_context.blocklist().isBlocklisted(ipStr)) {
-                                _context.banlist().corruptConnection(ipStr, null);
-                            }
-                        } else {
-                            count = 1;
-                            if (shouldInfo) {
-                                _log.info("EOF on Inbound connection before receiving any data: " + con);
-                            }
-                        }
-                        _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
-                    } else if (shouldDebug) {
-                        _log.debug("EOF on " + con);
-                    }
-                    con.closeOnTimeout("\n* EOF on " + (con.isInbound() ? "Inbound" : "Outbound") + " connection -> No data received", null);
-                    releaseBuf(buf);
+                    handleReadEof(con, chan, buf);
                     break;
                 }
                 if (totalRead == 0) {
                     releaseBuf(buf);
-                    int zeroReadCount = con.gotZeroRead();
-                    long now = System.currentTimeMillis();
-                    // Close connection if multiple zero reads within a short window
-                    if (zeroReadCount >= 3 && now - con.getLastZeroReadTime() <= 1000) {
-                        _context.statManager().addRateData("ntcp.zeroReadDrop", 1);
-                        if (shouldInfo) _log.info("Fail safe zero read close " + con);
-                        con.close();
-                    } else {
-                        _context.statManager().addRateData("ntcp.zeroRead", zeroReadCount);
-                        if (shouldDebug) {
-                            _log.debug("Nothing to read for " + con + " -> Remaining interested (Count: " + zeroReadCount + ")");
-                        }
-                    }
+                    handleReadZero(con, shouldDebug, shouldInfo);
                     break;
                 }
                 con.clearZeroRead();
                 buf.flip();
-                FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(totalRead, "NTCP read");
-                if (req.getPendingRequested() > 0) {
-                    clearInterest(key, SelectionKey.OP_READ);
-                    con.queuedRecv(buf, req);
+                if (!handleReadData(con, key, buf, totalRead, bytesRead < 0)) {
                     break;
-                } else {
-                    con.recv(buf);
-                    if (bytesRead < 0) {
-                        con.close();
-                        break;
-                    }
-                    if (buf.hasRemaining()) {
-                        break;
-                    }
                 }
             }
         } catch (CancelledKeyException cke) {
@@ -983,36 +1099,7 @@ class EventPumper implements Runnable {
             _context.statManager().addRateData("ntcp.readError", 1);
         } catch (IOException ioe) {
             if (buf != null) releaseBuf(buf);
-            if (con.isInbound() && con.getMessagesReceived() <= 0) {
-                byte[] ip = con.getRemoteIP();
-                int count;
-                if (ip != null) {
-                    String ipStr = Addresses.toString(ip).replace("/", "");
-                    count = _blockedIPs.increment(ipStr);
-                    if (shouldInfo) {
-                        _log.info("Blocking IP address " + ipStr + (count > 1 ? " (Count: " + count + ")" : "")
-                                  + " -> IO Error: " + ioe.getMessage());
-                    }
-                } else {
-                    count = 1;
-                    if (shouldInfo) {
-                        _log.info("IO Error on Inbound connection before receiving any data: " + con);
-                    }
-                }
-                _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
-            } else if (shouldInfo) {
-                _log.info("Error reading: " + con + " (" + ioe.getMessage() + ")");
-            }
-            if (con.isEstablished()) {
-                _context.statManager().addRateData("ntcp.readError", 1);
-            } else {
-                _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
-                RouterIdentity rem = con.getRemotePeer();
-                if (rem != null && !con.isInbound()) {
-                    _transport.markUnreachable(rem.calculateHash());
-                }
-            }
-            con.close();
+            handleReadError(con, ioe, shouldInfo);
         } catch (NotYetConnectedException nyce) {
             if (buf != null) releaseBuf(buf);
             clearInterest(key, SelectionKey.OP_READ);
@@ -1028,6 +1115,149 @@ class EventPumper implements Runnable {
             if (_log.shouldWarn())
                 _log.warn("Error reading on " + con, boe);
         }
+    }
+
+    /**
+     * Hand a filled read buffer to the connection, honoring the bandwidth limiter.
+     * When the limiter queues the read, the buffer's ownership transfers to the
+     * connection and read interest is cleared so no more data is drained while the
+     * queue is backed up.
+     *
+     * @param con  the connection the data arrived on
+     * @param key  the connection's selection key (to clear OP_READ when throttled)
+     * @param buf  flipped buffer containing the received bytes
+     * @param totalRead  bytes received in this iteration
+     * @param eof  {@code true} if the socket signaled EOF after these bytes
+     * @return {@code false} to stop the read loop (throttled, queued, or EOF)
+     * @since 0.9.71+
+     */
+    private boolean handleReadData(NTCPConnection con, SelectionKey key, ByteBuffer buf, int totalRead, boolean eof) {
+        FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(totalRead, "NTCP read");
+        if (req.getPendingRequested() > 0) {
+            clearInterest(key, SelectionKey.OP_READ);
+            con.queuedRecv(buf, req);
+            return false;
+        }
+        con.recv(buf);
+        if (eof) {
+            con.close();
+            return false;
+        }
+        return !buf.hasRemaining();
+    }
+
+    /**
+     * Handle end-of-stream on a read. An inbound connection that received nothing
+     * before EOF is treated as a connection-flood probe (or a dead handshake);
+     * its IP is counted and escalated to the banlist unless already blocklisted.
+     *
+     * @param con  the connection that hit EOF
+     * @param chan  the connection's socket channel (for the peer address)
+     * @param buf  the read buffer, released by this call
+     * @since 0.9.71+
+     */
+    private void handleReadEof(NTCPConnection con, SocketChannel chan, ByteBuffer buf) {
+        if (con.isInbound() && con.getMessagesReceived() <= 0) {
+            InetAddress addr = chan.socket().getInetAddress();
+            if (addr != null) {
+                String ipStr = Addresses.toString(addr.getAddress()).replace("/", "");
+                if (!_context.blocklist().isBlocklisted(ipStr)) {
+                    _context.banlist().corruptConnection(ipStr, null);
+                }
+                countInboundNoMessage(ipStr, con, "EOF");
+            } else {
+                countInboundNoMessage(null, con, "EOF");
+            }
+        } else if (_log.shouldDebug()) {
+            _log.debug("EOF on " + con);
+        }
+        con.closeOnTimeout("\n* EOF on " + (con.isInbound() ? "Inbound" : "Outbound") + " connection -> No data received", null);
+        releaseBuf(buf);
+    }
+
+    /**
+     * Handle a select() wakeup with no readable bytes. A burst of these within a
+     * one-second window is treated as a connection defect and closed; otherwise the
+     * connection stays read-interested and the zero-read count is recorded so the
+     * Tuner can judge how much of the loop is spurious wakeups.
+     *
+     * @param con  the connection that returned zero bytes
+     * @param shouldDebug  pre-fetched debug level
+     * @param shouldInfo  pre-fetched info level
+     * @since 0.9.71+
+     */
+    private void handleReadZero(NTCPConnection con, boolean shouldDebug, boolean shouldInfo) {
+        int zeroReadCount = con.gotZeroRead();
+        long now = System.currentTimeMillis();
+        // Close connection if multiple zero reads within a short window
+        if (zeroReadCount >= 3 && now - con.getLastZeroReadTime() <= 1000) {
+            _context.statManager().addRateData("ntcp.zeroReadDrop", 1);
+            if (shouldInfo) _log.info("Fail safe zero read close " + con);
+            con.close();
+        } else {
+            _context.statManager().addRateData("ntcp.zeroRead", zeroReadCount);
+            if (shouldDebug) {
+                _log.debug("Nothing to read for " + con + " -> Remaining interested (Count: " + zeroReadCount + ")");
+            }
+        }
+    }
+
+    /**
+     * Record an inbound connection that closed before delivering any message,
+     * feeding the per-IP attempt counter and the drop statistic. Shared by the EOF
+     * and I/O-error paths so both connection-flood sources funnel into one counter.
+     *
+     * @param ipStr  the peer address string, or null when it cannot be resolved
+     * @param con  the connection that dropped
+     * @param reason  short phrase logged with the event, e.g. "EOF" or "IO Error: ..."
+     * @since 0.9.71+
+     */
+    private void countInboundNoMessage(String ipStr, NTCPConnection con, String reason) {
+        int count;
+        if (ipStr != null) {
+            count = _blockedIPs.increment(ipStr);
+            if (_log.shouldInfo()) {
+                _log.info(reason + " on Inbound connection before receiving any data, blocking IP: "
+                          + ipStr + (count > 1 ? " (Count: " + count + ")" : ""));
+            }
+        } else {
+            count = 1;
+            if (_log.shouldInfo()) {
+                _log.info(reason + " on Inbound connection before receiving any data: " + con);
+            }
+        }
+        _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
+    }
+
+    /**
+     * Handle an I/O error on a read. An inbound connection that errored before its
+     * first message escalates its IP through countInboundNoMessage(); the connection
+     * is recorded as a read error when established or as a failed connect otherwise
+     * (marking the peer unreachable if it was an outbound attempt).
+     *
+     * @param con  the connection that failed
+     * @param ioe  the failure cause
+     * @param shouldInfo  pre-fetched info level
+     * @since 0.9.71+
+     */
+    private void handleReadError(NTCPConnection con, IOException ioe, boolean shouldInfo) {
+        if (con.isInbound() && con.getMessagesReceived() <= 0) {
+            byte[] ip = con.getRemoteIP();
+            countInboundNoMessage(ip != null ? Addresses.toString(ip).replace("/", "") : null,
+                                  con, "IO Error: " + ioe.getMessage());
+        } else if (shouldInfo) {
+            _log.info("Error reading: " + con + " (" + ioe.getMessage() + ")");
+        }
+        if (con.isEstablished()) {
+            _context.statManager().addRateData("ntcp.readError", 1);
+        } else {
+            _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
+            RouterIdentity rem = con.getRemotePeer();
+            if (rem != null && !con.isInbound()) {
+                _transport.markUnreachable(rem.calculateHash());
+            }
+        }
+        con.close();
     }
 
     private void processWrite(SelectionKey key) {
@@ -1072,30 +1302,14 @@ class EventPumper implements Runnable {
             return true;
         }
         try {
-            while (true) {
-                ByteBuffer buf = con.getNextWriteBuf();
-                if (buf != null) {
-                    if (buf.remaining() <= 0) {
-                        con.removeWriteBuf(buf);
-                        continue;
-                    }
-                    int written = chan.write(buf);
-                    if (written == 0) {
-                        if ((buf.remaining() > 0) || (!con.isWriteBufEmpty())) {
-                            // stay interested
-                        } else {
-                            rv = true;
-                        }
-                        break;
-                    } else if (buf.remaining() > 0) {
-                        break;
-                    } else {
-                        con.removeWriteBuf(buf);
-                    }
-                } else {
-                    if (key.isValid()) rv = true;
-                    break;
-                }
+            WriteState state;
+            do {
+                state = writeOneBuffer(con, chan);
+            } while (state == WriteState.DRAIN);
+            if (state == WriteState.DONE) {
+                rv = true;
+            } else if (state == WriteState.EMPTY && key.isValid()) {
+                rv = true;
             }
             if (rv) {
                 clearInterest(key, SelectionKey.OP_WRITE);
@@ -1114,6 +1328,62 @@ class EventPumper implements Runnable {
             rv = true;
         }
         return rv;
+    }
+
+    /**
+     * Progress of a single write-buffer drain step.
+     * @since 0.9.71+
+     */
+    enum WriteState {
+        /** The head buffer was fully flushed; pull the next one. */
+        DRAIN,
+        /** No more queued buffers; the queue is exhausted. */
+        EMPTY,
+        /** Socket would block or a partial write remains; stay write-interested. */
+        BLOCKED,
+        /**
+         * Everything is flushed. Retained for structural parity with the original
+         * drain loop; the zero-write path reports BLOCKED in practice because a write
+         * of zero bytes cannot consume the head buffer, and empty buffers are drained
+         * before any write, so this state is not reachable.
+         * @since 0.9.71+
+         */
+        DONE
+    }
+
+    /**
+     * Write one queued buffer to the socket. Empty head buffers are discarded and
+     * the drain continues; a zero-byte write means the socket buffer is full and the
+     * caller must keep OP_WRITE interest, unless the queue is empty and fully drained,
+     * in which case interest can be dropped.
+     *
+     * @param con  the connection being drained
+     * @param chan  the connection's socket channel
+     * @return the {@link WriteState} governing the next step in the drain loop
+     * @throws IOException if the channel write fails
+     * @since 0.9.71+
+     */
+    static WriteState writeOneBuffer(NTCPConnection con, SocketChannel chan) throws IOException {
+        ByteBuffer buf = con.getNextWriteBuf();
+        if (buf == null) {
+            return WriteState.EMPTY;
+        }
+        if (buf.remaining() <= 0) {
+            con.removeWriteBuf(buf);
+            return WriteState.DRAIN;
+        }
+        int written = chan.write(buf);
+        if (written == 0) {
+            if (buf.remaining() > 0 || !con.isWriteBufEmpty()) {
+                return WriteState.BLOCKED;
+            }
+            return WriteState.DONE;
+        }
+        if (buf.remaining() > 0) {
+            return WriteState.BLOCKED;
+        }
+        con.removeWriteBuf(buf);
+        return WriteState.DRAIN;
     }
 
     private static final int MAX_BATCH = SystemVersion.isSlow() ? 1024 : 16384;
@@ -1218,46 +1488,69 @@ class EventPumper implements Runnable {
                     _log.warn("[NTCP] Failed outbound connection to " + con.getRemotePeer());
                 }
                 con.closeOnTimeout("\n* Connect failed: " + e.getMessage(), e);
-                _transport.markUnreachable(con.getRemotePeer().calculateHash());
-                _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
                 RouterIdentity remote = con.getRemotePeer();
                 if (remote != null) {
-                    Hash peerHash = remote.calculateHash();
-                    if (_failedOutboundAttempts.size() >= MAX_RETRY_MAP_SIZE) {
-                        _failedOutboundAttempts.clear();
-                        _failedOutboundCount.clear();
-                    }
-                    _failedOutboundAttempts.put(peerHash, System.currentTimeMillis());
-                    _failedOutboundCount.merge(peerHash, 1, Integer::sum);
+                    _transport.markUnreachable(remote.calculateHash());
                 }
+                _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
+                recordFailedOutbound(con.getRemotePeer());
             } catch (CancelledKeyException cke) {
                 if (debug) _log.debug("Cancelled key during connect to " + con.getRemotePeer(), cke);
                 con.close();
             } catch (Exception e) {
-                // Determine if this is a networking exception vs unexpected error
-                String exceptionType = e.getClass().getSimpleName();
-                boolean isNetworkingError = exceptionType.contains("Blocking") ||
-                                        exceptionType.contains("Connection") ||
-                                        exceptionType.contains("Selector") ||
-                                        exceptionType.contains("Address") ||
-                                        exceptionType.equals("IllegalArgumentException") ||
-                                        exceptionType.equals("NullPointerException");
-
+                boolean isNetworkingError = classifyConnectException(e) == ConnectErrorKind.NETWORK;
                 if (debug) {
                     _log.debug("[NTCP] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") +
                               " during outbound registration for " + con.getRemotePeer(), e);
                 } else if (warn) {
                     _log.warn("[NTCP] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") +
                               " during outbound registration for " + con.getRemotePeer() +
-                              (isNetworkingError ? ": " + exceptionType : ": " + exceptionType + " - " + e.getMessage()));
+                              ": " + e.getClass().getSimpleName() +
+                              (isNetworkingError ? "" : " - " + e.getMessage()));
                 }
-
                 if (isNetworkingError) {
                     _transport.markUnreachable(con.getRemotePeer().calculateHash());
                 }
                 con.close();
             }
         }
+    }
+
+    /**
+     * How a thrown exception from outbound connect setup should be treated.
+     * @since 0.9.71+
+     */
+    enum ConnectErrorKind {
+        /** Transport-level failure: the peer should be marked unreachable. */
+        NETWORK,
+        /** Unexpected internal error: the connection is closed but the peer stays reachable. */
+        OTHER
+    }
+
+    /**
+     * Classify an exception thrown during outbound connect setup. Genuine
+     * channel-state failures from the socket layer (already-connected, connect
+     * pending, not-yet-connected) mean the peer or the connect attempt is at
+     * fault and the peer should be marked unreachable. Anything else - local
+     * configuration misuse (blocking-mode channel), invalid arguments, or an
+     * internal defect - only tears down the local connection so an internal bug
+     * never blames (and blacks out) a healthy remote peer.
+     *
+     * <p>Classified by exception type rather than class-name substrings: name
+     * matching silently misreads e.g. NotYetConnectedException as OTHER and
+     * blames a peer for a local IllegalBlockingModeException.
+     *
+     * @param e  the exception to classify (never null)
+     * @return the {@link ConnectErrorKind} for this exception
+     * @since 0.9.71+
+     */
+    static ConnectErrorKind classifyConnectException(Exception e) {
+        if (e instanceof AlreadyConnectedException ||
+            e instanceof ConnectionPendingException ||
+            e instanceof NotYetConnectedException) {
+            return ConnectErrorKind.NETWORK;
+        }
+        return ConnectErrorKind.OTHER;
     }
 
     /**
