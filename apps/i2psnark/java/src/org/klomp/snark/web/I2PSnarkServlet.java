@@ -5753,6 +5753,12 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String SIMP_B32 = "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p";
     private static final String THEBLAND_B32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
     private static final String SIGMA_B32 = "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p";
+    private static final String ACTIX_B32 = "cbrjdqygiogbtn4w5ngducnc3l3ipkt7e2muisfnuea4zek4bmhq.b32.i2p";
+    private static final String FATTYDOVE_B32 = "svece3bxv4vqlt2zuut5ww4ztkwunfcnab55pmnjjb6zfei3noha.b32.i2p";
+    private static final String LOCALCACHE_B32 = "trackfmu3by6nhkibnw5exyhibjrvxl6k3e4y54wmjy4bvqgs3ha.b32.i2p";
+    private static final String OBSERVATIONS_B32 = "7o3d4x4jpk3pvmmposhfqhc44zsy2dbtayfapuic3nuhh3r4grqq.b32.i2p";
+    private static final String PUBLIC_B32 = "vej4thpwphy6vit6v6abirqyvhporm7whrbyk74vvjhppfmd3plq.b32.i2p";
+    private static final String YETANOTHER_B32 = "ybi4axxg4bduwsenutmsynz2plfdb4jzr2vhapvprvzcxskx2foa.b32.i2p";
 
     /**
      * Known tracker announce keys (base64 postman blobs and base32 hostnames)
@@ -5777,7 +5783,13 @@ public class I2PSnarkServlet extends BasicServlet {
         {SKANK_B32, "opentracker.skank.i2p"},
         {SIMP_B32, "opentracker.simp.i2p"},
         {THEBLAND_B32, "tracker.thebland.i2p"},
-        {SIGMA_B32, "sigmatracker.i2p"}
+        {SIGMA_B32, "sigmatracker.i2p"},
+        {ACTIX_B32, "opentracker-actix.i2p"},
+        {FATTYDOVE_B32, "opentracker.fattydove.i2p"},
+        {LOCALCACHE_B32, "opentracker.localcache.i2p"},
+        {OBSERVATIONS_B32, "opentracker-observations.i2p"},
+        {PUBLIC_B32, "opentracker-public.i2p"},
+        {YETANOTHER_B32, "yet-another-public-tracker.i2p"}
     };
 
     /**

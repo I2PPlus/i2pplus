@@ -517,7 +517,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         //"Simp", "http://opentracker.simp.i2p/a=http://opentracker.simp.i2p/tracker",
         //"Simp [UDP]", "udp://opentracker.simp.i2p:6969/=http://opentracker.simp.i2p/tracker/",
         "Skank", "http://opentracker.skank.i2p/a=http://opentracker.skank.i2p/tracker",
-        "Skank [UDP]", "udp://opentracker.skank.i2p:6969/=http://opentracker.skank.i2p/tracker/"
+        "Skank [UDP]", "udp://opentracker.skank.i2p:6969/=http://opentracker.skank.i2p/tracker/",
+        "Actix", "http://opentracker-actix.i2p/announce=http://opentracker-actix.i2p/",
+        "FattyDove", "http://opentracker.fattydove.i2p/a=http://opentracker.fattydove.i2p/",
+        "LocalCache", "http://opentracker.localcache.i2p/a=http://opentracker.localcache.i2p/",
+        "Observations", "http://opentracker-observations.i2p/a=http://opentracker-observations.i2p/",
+        "Public", "http://opentracker-public.i2p/announce=http://opentracker-public.i2p/",
+        "YetAnother", "http://yet-another-public-tracker.i2p/announce=http://yet-another-public-tracker.i2p/",
     };
 
     /** URL. This is our equivalent to router.utorrent.com for bootstrap */
@@ -531,7 +537,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         //"http://opentracker.simp.i2p/a," +
         "http://opentracker.skank.i2p/a," +
         "http://sigmatracker.i2p/a," +
-        "http://tracker.insulaocculta.i2p/a";
+        "http://tracker.insulaocculta.i2p/a," +
+        "http://opentracker-actix.i2p/announce," +
+        "http://opentracker.fattydove.i2p/a," +
+        "http://opentracker.localcache.i2p/a," +
+        "http://opentracker-observations.i2p/a," +
+        "http://opentracker-public.i2p/announce," +
+        "http://yet-another-public-tracker.i2p/announce";
 
     /**
      * Default set of tracker announce URLs to use when no torrent trackers are configured.
@@ -547,6 +559,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
         "sigmatracker.i2p", "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
         "tracker.insulaocculta.i2p", "4cxcka62bhpnl6raidcx7mgwkybaw3svckgbkprktd4zogc7npca.b32.i2p",
+        "opentracker-actix.i2p", "cbrjdqygiogbtn4w5ngducnc3l3ipkt7e2muisfnuea4zek4bmhq.b32.i2p",
+        "opentracker.fattydove.i2p", "svece3bxv4vqlt2zuut5ww4ztkwunfcnab55pmnjjb6zfei3noha.b32.i2p",
+        "opentracker.localcache.i2p", "trackfmu3by6nhkibnw5exyhibjrvxl6k3e4y54wmjy4bvqgs3ha.b32.i2p",
+        "opentracker-observations.i2p", "7o3d4x4jpk3pvmmposhfqhc44zsy2dbtayfapuic3nuhh3r4grqq.b32.i2p",
+        "opentracker-public.i2p", "vej4thpwphy6vit6v6abirqyvhporm7whrbyk74vvjhppfmd3plq.b32.i2p",
+        "yet-another-public-tracker.i2p", "ybi4axxg4bduwsenutmsynz2plfdb4jzr2vhapvprvzcxskx2foa.b32.i2p",
     }));
 
     private static final String[] DEFAULT_TORRENT_CREATE_FILTERS = {
