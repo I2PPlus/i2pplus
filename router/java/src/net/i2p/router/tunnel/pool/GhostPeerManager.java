@@ -114,7 +114,7 @@ public class GhostPeerManager {
         long now = _context.clock().now();
         if (_log.shouldWarn() && now - _lastGhostWarnTime >= GHOST_WARN_INTERVAL_MS) {
             _lastGhostWarnTime = now;
-            _log.warn("Tunnel build timeouts are marking peers as ghost; see debug for per-peer detail");
+            _log.warn("Tunnel build timeouts are marking peers as ghost -> Enable debug logging for per-peer detail");
         }
     }
 
