@@ -140,6 +140,15 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  @since 0.9.71+
      */
     public static final String PROP_WRITE_TIMEOUT = "i2ptunnel.server.writeTimeout";
+
+    /** Config key to cap this tunnel's private server handler pool in threads.
+     *  Each server tunnel owns a per-port pool summed under the global
+     *  i2ptunnel.serverHandler.threads budget; unset or &lt; 2 follows the
+     *  Tuner-managed default (i2ptunnel.server.threads).
+     *  Key: tunnel.N.option.i2ptunnel.server.threads
+     *  @since 0.9.71+
+     */
+    public static final String PROP_SERVER_THREADS = "i2ptunnel.server.threads";
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
     private static final long RECONNECT_DELAY_10S = 10 * 1000L;
     protected volatile ThreadPoolExecutor _clientExecutor;
@@ -155,6 +164,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  @since 0.9.71+
      */
     private final AtomicInteger _activeConnections = new AtomicInteger();
+
+    /** Per-tunnel server handler pool cap, -1 = Tuner-managed default.
+     *  Read from PROP_SERVER_THREADS; re-applied live in optionsUpdated().
+     *  @since 0.9.71+
+     */
+    private volatile int _serverThreadOverride = -1;
 
     /**
      * HTTP bidirectional server task, null for standard tunnel server.
@@ -609,6 +624,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 return false;
             }
             open = false;
+            // Deregister this tunnel's private handler pool; its queued tasks drain
+            // and its worker threads exit, freeing the share of the global budget.
+            TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+            if (tcg != null) {tcg.serverStopped(this);}
             try {
                 if (i2pss != null) {
                     i2pss.close();
@@ -664,6 +683,17 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             _maxConnections = 0;
             l.log("✖ Bad " + PROP_MAX_CONNECTIONS + ": " + mc);
         }
+        String st = props.getProperty(PROP_SERVER_THREADS);
+        try {
+            int override = st == null ? -1 : Integer.parseInt(st);
+            _serverThreadOverride = override >= 2 ? override : -1;
+        } catch (NumberFormatException nfe) {
+            _serverThreadOverride = -1;
+            l.log("✖ Bad " + PROP_SERVER_THREADS + ": " + st);
+        }
+        // Resize the private handler pool live if the cap changed on a running tunnel.
+        TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+        if (tcg != null) {tcg.refreshServerThreadOverride(this, _serverThreadOverride);}
         String rt = props.getProperty(PROP_READ_TIMEOUT, "0");
         try {
             long t = Long.parseLong(rt);
@@ -757,7 +787,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
         ThreadPoolExecutor serverExec;
         if (tcg != null) {
-            serverExec = tcg.getServerExecutor();
+            serverExec = tcg.getServerExecutor(this, _serverThreadOverride);
             _clientExecutor = tcg.getClientExecutor();
         } else {
             _clientExecutor = new TunnelControllerGroup.CustomThreadPoolExecutor();

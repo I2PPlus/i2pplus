@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -100,14 +101,26 @@ public class TunnelControllerGroup implements ClientApp {
     /** how long to wait before dropping an idle thread */
     private static final long HANDLER_KEEPALIVE_MS = (long) 30*1000;
 
-    /** Shared bounded executor for server tunnel connection handlers */
-    private ThreadPoolExecutor _serverExecutor;
+    /** Private handler pools for server tunnels, keyed by the server instance.
+     *  Each server tunnel owns its pool so a saturated destination (its threads
+     *  and its queue full) rejects only ITS excess connections; a flood on one
+     *  port can no longer consume threads that other ports need.
+     *  @since 0.9.71+ */
+    private final ConcurrentHashMap<I2PTunnelServer, ServerHandler> _serverHandlers = new ConcurrentHashMap<>(4);
     private static final AtomicLong _serverExecutorThreadCount = new AtomicLong();
     private final Object _serverExecutorLock = new Object();
+    private boolean _serverHandlerStatsRegistered;
     /** Server handler idle keepalive */
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
 
-    /** Tuned by Tuner */
+    /** Global server-handler thread budget ceiling (Tuner param max, heap-clamped in the Tuner). */
+    private static final int SERVER_HANDLER_MAX_THREADS = 4096;
+    /** Per-tunnel server-handler cap ceiling (Tuner per-tunnel param max). */
+    private static final int SERVER_HANDLER_PER_TUNNEL_MAX = 512;
+    /** Absolute floor for a live server tunnel's handler pool. */
+    private static final int SERVER_HANDLER_FLOOR = 2;
+
+    /** Tuned by Tuner: global budget for server handler threads, summed over all server tunnels */
     private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
     /** Tuned by Tuner */
     private static volatile int clientRunnerMax = 1024;
@@ -115,19 +128,28 @@ public class TunnelControllerGroup implements ClientApp {
     private static volatile int serverBacklogQueueCapacity = 1024;
 
     /**
-     *  The number of threads handling connections to server tunnels.
-     *  @return the server handler threads
+     *  The number of server handler threads available in total across all server
+     *  tunnels: the global budget for the per-tunnel handler pools.
+     *  @return the global server handler thread budget
+     *  @since 0.9.71+
      */
     public static int getServerHandlerThreads() { return serverHandlerThreads; }
     /**
-     *  Clamp and set the number of server handler threads, 2 to 512.
-     *  The high ceiling lets the Tuner drain the shared server-handler pool
-     *  under sustained inbound load (e.g. a high-volume server tunnel) where
-     *  workers stall on slow inbound I2P writes rather than finishing quickly.
-     *  @param val the desired count
+     *  Clamp and set the global budget for server handler threads, 2 to
+     *  {@value #SERVER_HANDLER_MAX_THREADS}. The budget is the sum over all
+     *  server tunnels; each tunnel's pool is a share of it, capped by its
+     *  per-tunnel ceiling ({@link #getServerThreadsPerTunnel()}). The high
+     *  ceiling lets the Tuner keep pace with sustained inbound load where
+     *  workers stall on slow inbound I2P writes rather than finishing quickly;
+     *  the memory-derived clamp in the Tuner keeps the reachable ceiling at what
+     *  the max heap can host. Live pools are rebalanced to the new budget.
+     *  @param val the desired budget
+     *  @since 0.9.71+
      */
     public static void setServerHandlerThreads(int val) {
-        serverHandlerThreads = Math.max(2, Math.min(512, val));
+        serverHandlerThreads = Math.max(2, Math.min(SERVER_HANDLER_MAX_THREADS, val));
+        TunnelControllerGroup g = instance;
+        if (g != null) {g.rebalanceAll();}
     }
     /**
      *  The maximum number of connections that may wait in the server handler
@@ -144,6 +166,33 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static void setServerBacklogQueueCapacity(int val) {
         serverBacklogQueueCapacity = Math.max(16, Math.min(65536, val));
+    }
+
+    /** Tuned by Tuner: default per-tunnel ceiling on server handler threads. */
+    private static volatile int serverThreadsPerTunnel =
+        Math.max(32, Math.min(SERVER_HANDLER_PER_TUNNEL_MAX, SystemVersion.getCores() * 8));
+
+    /**
+     *  The default per-tunnel ceiling on server handler threads (the private
+     *  handler-pool size for a server tunnel that does not set an explicit
+     *  {@code i2ptunnel.server.threads} override). The pool for any server
+     *  tunnel is at most this many threads, bounded in total by the global
+     *  budget ({@link #getServerHandlerThreads()}).
+     *  @return the default per-tunnel cap
+     *  @since 0.9.71+
+     */
+    public static int getServerThreadsPerTunnel() { return serverThreadsPerTunnel; }
+    /**
+     *  Clamp and set the default per-tunnel ceiling on server handler threads,
+     *  2 to {@value #SERVER_HANDLER_PER_TUNNEL_MAX}. The Tuner
+     *  {@code I2PTunnelServerThreadsParam} stays within this range.
+     *  @param val the desired default per-tunnel cap
+     *  @since 0.9.71+
+     */
+    public static void setServerThreadsPerTunnel(int val) {
+        serverThreadsPerTunnel = Math.max(2, Math.min(SERVER_HANDLER_PER_TUNNEL_MAX, val));
+        TunnelControllerGroup g = instance;
+        if (g != null) {g.rebalanceAll();}
     }
     /**
      *  The maximum number of concurrent client connections.
@@ -1499,36 +1548,201 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  Shared bounded executor for server tunnel connection handlers.
-     *  Tasks are short-lived (µs-scale), so core threads handle bursts via a queue.
-     *  Overflow throws {@link java.util.concurrent.RejectedExecutionException}
-     *  (AbortPolicy) rather than running the handler inline on the accept thread,
-     *  so the accept loop can never be pinned by a write-blocked handler.
+     *  Get (creating and sizing on first use) the private handler pool for a
+     *  server tunnel. All pools are sized together so their sum never exceeds
+     *  the Tuner-managed global budget while each pool respects its per-tunnel
+     *  ceiling. Registration records the tunnel's explicit {@code
+     *  i2ptunnel.server.threads} cap (or -1 to follow the Tuner-managed
+     *  default), rebalancing every live pool to make room for the newcomer.
      *
-     *  @return non-null
+     *  <p>Tasks are short-lived (µs-scale), so core threads handle bursts via a
+     *  bounded queue. Overflow throws {@link java.util.concurrent.RejectedExecutionException}
+     *  (AbortPolicy) rather than running the handler inline on the accept thread,
+     *  so the accept loop can never be pinned by a write-blocked handler, and the
+     *  rejection is per-port: only the saturated tunnel's own connections are
+     *  dropped.
+     *
+     *  @param server the server tunnel requesting a pool; never null
+     *  @param threadOverride the per-tunnel thread cap (&gt;=2), or -1 for default
+     *  @return non-null, the server's private executor
+     *  @since 0.9.71+
      */
-    ThreadPoolExecutor getServerExecutor() {
+    ThreadPoolExecutor getServerExecutor(I2PTunnelServer server, int threadOverride) {
+        int override = normalizeThreadOverride(threadOverride);
         synchronized (_serverExecutorLock) {
-            if (_serverExecutor == null) {
-                _serverExecutor = createServerExecutor(serverHandlerThreads, _serverExecutorThreadCount);
-                I2PAppContext ctx = _context;
-                if (ctx != null) {
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.queueDepth", "Server handler tasks waiting", "I2PTunnel", RATES);
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.active", "Server handler active threads", "I2PTunnel", RATES);
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.threads", "Server handler thread count", "I2PTunnel", RATES);
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.blockingHandleTime", "Handler socket connect time (ms)", "I2PTunnel", RATES);
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.socketConnectTime", "Socket connect time (ms)", "I2PTunnel", RATES);
-                }
-            } else if (_serverExecutor.getCorePoolSize() != serverHandlerThreads) {
-                resizeServerExecutor(serverHandlerThreads);
+            ServerHandler h = _serverHandlers.get(server);
+            if (h == null) {
+                ensureServerHandlerStats();
+                h = new ServerHandler(override);
+                _serverHandlers.put(server, h);
+            } else {
+                h.override = override;
             }
+            rebalanceServerExecutors();
+            return h.executor;
         }
-        return _serverExecutor;
     }
 
     /**
-     *  Create the shared, bounded executor that runs inbound server-tunnel
-     *  connection handlers.
+     *  Recompute and apply a server tunnel's per-tunnel thread cap after a live
+     *  config change ({@code optionsUpdated}), resizing the private pool when the
+     *  override differs from what was registered.
+     *
+     *  @param server the running server tunnel; ignored if not registered
+     *  @param threadOverride the new per-tunnel thread cap (&gt;=2), or -1 for default
+     *  @since 0.9.71+
+     */
+    void refreshServerThreadOverride(I2PTunnelServer server, int threadOverride) {
+        int override = normalizeThreadOverride(threadOverride);
+        synchronized (_serverExecutorLock) {
+            ServerHandler h = _serverHandlers.get(server);
+            if (h == null || h.override == override) {return;}
+            h.override = override;
+            rebalanceServerExecutors();
+        }
+    }
+
+    /**
+     *  Deregister a stopped server tunnel: shut down its private pool (queued
+     *  tasks drain, then the worker threads exit) and redistribute its share of
+     *  the global budget to the remaining tunnels.
+     *
+     *  @param server the stopped server tunnel
+     *  @since 0.9.71+
+     */
+    void serverStopped(I2PTunnelServer server) {
+        synchronized (_serverExecutorLock) {
+            ServerHandler h = _serverHandlers.remove(server);
+            if (h == null) {return;}
+            ThreadPoolExecutor ex = h.executor;
+            if (ex != null) {ex.shutdown();}
+            rebalanceServerExecutors();
+        }
+    }
+
+    /**
+     *  Rebalance every live server-tunnel pool from the global budget, the
+     *  per-tunnel caps, and the per-tunnel floor. Called on budget/cap changes
+     *  and on server start/stop; must run under {@link #_serverExecutorLock}.
+     *  The global budget is a cap on the sum, so reducing one tunnel's share or
+     *  removing a tunnel frees budget for the rest.
+     *  @since 0.9.71+
+     */
+    private void rebalanceServerExecutors() {
+        int n = _serverHandlers.size();
+        if (n == 0) {return;}
+        int budget = serverHandlerThreads;
+        int[] desired = new int[n];
+        int idx = 0;
+        for (ServerHandler h : _serverHandlers.values()) {
+            int cap = h.override >= SERVER_HANDLER_FLOOR ? h.override : serverThreadsPerTunnel;
+            desired[idx++] = Math.min(cap, budget);
+        }
+        int[] alloc = allocateServerThreads(budget, desired, SERVER_HANDLER_FLOOR);
+        idx = 0;
+        int total = 0;
+        for (ServerHandler h : _serverHandlers.values()) {
+            int want = alloc[idx++];
+            total += want;
+            ThreadPoolExecutor ex = h.executor;
+            if (ex == null) {
+                h.executor = createServerExecutor(want, _serverExecutorThreadCount);
+            } else if (ex.getCorePoolSize() != want) {
+                resizeServerExecutor(ex, want);
+            }
+        }
+        I2PAppContext ctx = _context;
+        if (ctx != null) {
+            ctx.statManager().addRateData("i2ptunnel.serverHandler.threads", total);
+        }
+    }
+
+    /** Trigger a full handler-pool rebalance after a global or per-tunnel cap change. */
+    private void rebalanceAll() {
+        synchronized (_serverExecutorLock) {
+            rebalanceServerExecutors();
+        }
+    }
+
+    /**
+     *  The per-tunnel thread cap as used by {@link #getServerExecutor} and
+     *  {@link #rebalanceServerExecutors}; a value outside the valid cap range
+     *  means "follow the Tuner-managed default".
+     *
+     *  @param v the raw per-tunnel override, or -1 for none
+     *  @return v if it is a valid cap in [2, {@value #SERVER_HANDLER_MAX_THREADS}], else -1
+     *  @since 0.9.71+
+     */
+    static int normalizeThreadOverride(int v) {
+        return v >= SERVER_HANDLER_FLOOR && v <= SERVER_HANDLER_MAX_THREADS ? v : -1;
+    }
+
+    /**
+     *  Allocate a global server-handler thread budget across the live server
+     *  tunnels, preserving each tunnel's ceiling ({@code desired}) and a shared
+     *  floor. Pure decision, no router context: lets the Tuner shrink or grow
+     *  one budget while the per-tunnel pools inherit exactly their share.
+     *
+     *  <p>When the ceilings sum at or below the budget, every tunnel gets its
+     *  ceiling. Above the budget, the excess is cut proportionally (rounded
+     *  down, remainder to the last tunnel) so the grand total equals the budget
+     *  exactly and no tunnel falls below the floor — a genuine per-tunnel cap
+     *  rather than a free-for-all for the aggregate. When the budget cannot
+     *  cover a floor for every tunnel, the budget is split evenly with at least
+     *  1 thread per live tunnel.
+     *
+     *  @param budget the global budget; &lt;= 0 yields all zeros
+     *  @param desired per-tunnel ceilings (any values; clamped internally)
+     *  @param floor the per-tunnel floor; negative treated as 0
+     *  @return per-tunnel allocation, same length as {@code desired};
+     *          each entry &gt;= the shared floor whenever the budget allows;
+     *          the sum equals min({@code budget}, sum of ceilings) except when
+     *          the budget is smaller than one thread per tunnel
+     *  @since 0.9.71+
+     */
+    static int[] allocateServerThreads(int budget, int[] desired, int floor) {
+        int n = desired.length;
+        int[] out = new int[n];
+        if (n == 0 || budget <= 0) {return out;}
+        int f = Math.max(0, floor);
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            int d = Math.max(f, Math.min(desired[i], budget));
+            out[i] = d;
+            sum += d;
+        }
+        if (sum <= budget) {return out;}
+        long overFloor = sum - (long) n * f;
+        long target = budget - (long) n * f;
+        if (target <= 0 || overFloor <= 0) {
+            int each = Math.max(1, budget / n);
+            for (int i = 0; i < n; i++) {out[i] = each;}
+            return out;
+        }
+        long left = target;
+        for (int i = 0; i < n - 1; i++) {
+            int give = (int) ((long) (out[i] - f) * target / overFloor);
+            out[i] = f + give;
+            left -= give;
+        }
+        out[n - 1] = f + (int) left;
+        return out;
+    }
+
+    /**
+     *  Per-tunnel server-handler pool state: the explicit per-tunnel cap
+     *  (or -1 for the Tuner-managed default) and the lazily created executor.
+     *  @since 0.9.71+
+     */
+    static class ServerHandler {
+        volatile int override;
+        volatile ThreadPoolExecutor executor;
+        ServerHandler(int override) {this.override = override;}
+    }
+
+    /**
+     *  Create a bounded executor that runs inbound server-tunnel connection
+     *  handlers.
      *
      *  <p>Handlers are dispatched off the accept thread so a single slow
      *  connection cannot stall connection admission. Overflow uses
@@ -1567,62 +1781,75 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  Resize the shared server executor pool. Called by Tuner.
+     *  Resize a server-tunnel handler pool, preserving a fixed core == max pool.
+     *  Called by {@link #rebalanceServerExecutors()}.
+     *  @param ex the pool; ignored if null or shut down
+     *  @param newThreads the new fixed size
+     *  @since 0.9.71+
      */
-    void resizeServerExecutor(int newThreads) {
-        synchronized (_serverExecutorLock) {
-            if (_serverExecutor != null && !_serverExecutor.isShutdown()) {
-                if (newThreads > _serverExecutor.getMaximumPoolSize()) {
-                    _serverExecutor.setMaximumPoolSize(newThreads);
-                    _serverExecutor.setCorePoolSize(newThreads);
-                } else {
-                    _serverExecutor.setCorePoolSize(newThreads);
-                    _serverExecutor.setMaximumPoolSize(newThreads);
-                }
-                I2PAppContext ctx = _context;
-                if (ctx != null)
-                    ctx.statManager().addRateData("i2ptunnel.serverHandler.threads", newThreads);
-            }
+    private static void resizeServerExecutor(ThreadPoolExecutor ex, int newThreads) {
+        if (ex == null || ex.isShutdown()) {return;}
+        if (newThreads > ex.getMaximumPoolSize()) {
+            ex.setMaximumPoolSize(newThreads);
+            ex.setCorePoolSize(newThreads);
+        } else {
+            ex.setCorePoolSize(newThreads);
+            ex.setMaximumPoolSize(newThreads);
         }
     }
 
     /**
-     *  Shutdown the server executor
+     *  Register the server-handler rate stats exactly once, on first pool use.
+     *  @since 0.9.71+
+     */
+    private void ensureServerHandlerStats() {
+        if (_serverHandlerStatsRegistered) {return;}
+        I2PAppContext ctx = _context;
+        if (ctx != null) {
+            ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.queueDepth", "Server handler tasks waiting", "I2PTunnel", RATES);
+            ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.active", "Server handler active threads", "I2PTunnel", RATES);
+            ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.threads", "Server handler thread count", "I2PTunnel", RATES);
+            ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.blockingHandleTime", "Handler socket connect time (ms)", "I2PTunnel", RATES);
+            ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.socketConnectTime", "Socket connect time (ms)", "I2PTunnel", RATES);
+            _serverHandlerStatsRegistered = true;
+        }
+    }
+
+    /**
+     *  Shutdown the per-tunnel server handler pools. Queued tasks drain and the
+     *  worker threads exit; the registry is cleared so a group restart starts
+     *  fresh pools.
+     *  @since 0.9.71+
      */
     private void killServerExecutor() {
-        killExecutor(_serverExecutorLock, "Server");
+        synchronized (_serverExecutorLock) {
+            if (_serverHandlers.isEmpty()) {return;}
+            for (ServerHandler h : _serverHandlers.values()) {
+                ThreadPoolExecutor ex = h.executor;
+                if (ex != null) {ex.shutdown();}
+            }
+            _serverHandlers.clear();
+        }
     }
 
     /**
-     *  Shutdown the client executor
+     *  Shutdown the client executor, waiting for termination.
      */
     private void killClientExecutor() {
-        killExecutor(_executorLock, "Client");
-    }
-
-    /**
-     *  Shutdown an executor, waiting for termination.
-     *
-     *  @param lock the monitor guarding the executor
-     *  @param name "Server" or "Client" for logging
-     */
-    private void killExecutor(Object lock, String name) {
-        synchronized (lock) {
-            ThreadPoolExecutor executor = name.equals("Server") ? _serverExecutor : _executor;
-            if (executor != null) {
-                executor.shutdown();
+        synchronized (_executorLock) {
+            if (_executor != null) {
+                _executor.shutdown();
                 try {
-                    if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
-                        executor.shutdownNow();
-                        if (!executor.awaitTermination(60, TimeUnit.SECONDS))
-                            _log.error(name + " executor did not terminate");
+                    if (!_executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                        _executor.shutdownNow();
+                        if (!_executor.awaitTermination(60, TimeUnit.SECONDS))
+                            _log.error("Client executor did not terminate");
                     }
                 } catch (InterruptedException ie) {
-                    executor.shutdownNow();
+                    _executor.shutdownNow();
                     Thread.currentThread().interrupt();
                 }
-                if (name.equals("Server")) {_serverExecutor = null;}
-                else {_executor = null;}
+                _executor = null;
             }
         }
     }

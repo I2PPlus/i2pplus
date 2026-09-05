@@ -631,6 +631,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new TestJobMinPeriodParam());
         _params.add(new TunnelGrowthFactorParam());
         _params.add(new I2PTunnelServerHandlerThreadsParam());
+        _params.add(new I2PTunnelServerThreadsParam());
         _params.add(new I2PTunnelServerBacklogParam());
         I2PTunnelClientRunnerMaxParam clientRunnerMax = new I2PTunnelClientRunnerMaxParam();
         _params.add(clientRunnerMax);
@@ -10525,10 +10526,11 @@ protected int computeTarget(double observed) {
 
             super("i2ptunnel.serverHandler.threads", "I2PTunnel server threads",
                   SUB_TUNNEL,
-                  2, 512, 1, "i2ptunnel.serverHandler.queueDepth", _context);
-            // Effective ceiling from available heap — the shared pool must never exceed a
-            // thread count the max heap can host (see memoryDerivedClientThreadMax). A
-            // heap-constrained router cannot host 512 OS threads; clamping here bounds the
+                  2, 4096, 1, "i2ptunnel.serverHandler.queueDepth", _context);
+            // Effective ceiling from available heap — the summed budget for the
+            // per-tunnel handler pools must never exceed a thread count the max
+            // heap can host (see memoryDerivedClientThreadMax). A heap-constrained
+            // router cannot host thousands of OS threads; clamping here bounds the
             // reachable ceiling at what the JVM can actually hold without OOM.
             _effMax = Math.min(_max, memoryDerivedClientThreadMax());
         }
@@ -10733,6 +10735,61 @@ protected int computeTarget(double observed) {
         }
         // Unknown (NaN, router just started) or mid-load: hold steady.
         return current;
+    }
+
+    /**
+     * Tunes the Tuner-managed default per-tunnel cap on server handler threads.
+     * Primary signal: serverHandler.queueDepth (tasks waiting for a handler thread).
+     * Cross-refs: jobQueue.jobLag (CPU pressure), serverHandler.blockingHandleTime.
+     *
+     * <p>Each server tunnel owns a private handler pool sized at most this cap
+     * (unless the tunnel sets an explicit {@code i2ptunnel.server.threads}
+     * override); the pools are summed under the global budget tuned by
+     * {@link I2PTunnelServerHandlerThreadsParam}. The same saturation policy as
+     * the global budget applies here so the default moves with aggregate load
+     * while a single flood stays contained to its own port.
+     *
+     * @since 0.9.71+
+     */
+    private class I2PTunnelServerThreadsParam extends BaseParam {
+        I2PTunnelServerThreadsParam() {
+            super("i2ptunnel.server.threads", "I2PTunnel server threads per tunnel (default)",
+                  SUB_TUNNEL,
+                  2, 512, 8, "i2ptunnel.serverHandler.queueDepth", _context);
+            // Bound the reachable ceiling at what the max heap can host as OS threads
+            // (see memoryDerivedClientThreadMax), same as the global budget param.
+            _effMax = Math.min(_max, memoryDerivedClientThreadMax());
+        }
+
+        /** Apply the tunable value to the router configuration. */
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetInt("setServerThreadsPerTunnel", value);
+        }
+
+        /** Read the current runtime value of this tunable from router config. */
+        protected int getRuntimeValue() {
+            return I2PTunnelReflector.invokeGetInt("getServerThreadsPerTunnel");
+        }
+
+        /** Read the observed stat value for autotuning decisions. */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double blockingTime = getAdditionalStat(_context, "i2ptunnel.serverHandler.blockingHandleTime");
+            double active = getAdditionalStat(_context, "i2ptunnel.serverHandler.active");
+            double synExpire = getAdditionalStat(_context, "stream.con.synExpireRate");
+            return computeServerHandlerThreads(current, _min, _effMax, observed, active,
+                                              blockingTime, jobLag, synExpire);
+        }
     }
 
     /**
