@@ -372,6 +372,7 @@ public class ConfigNetHandler extends FormHandler {
                     if (port != 0) {
                         changes.put(UDPTransport.PROP_INTERNAL_PORT, _udpPort);
                         changes.put(UDPTransport.PROP_EXTERNAL_PORT, _udpPort);
+                        changes.put(UDPTransport.PROP_FIXED_PORT, Boolean.TRUE.toString());
                         addFormNotice(_t("Updating UDP port to {0}", _udpPort));
                         if (port < 1024) {
                             addFormError(_t("Warning - ports less than 1024 are not recommended"), true);

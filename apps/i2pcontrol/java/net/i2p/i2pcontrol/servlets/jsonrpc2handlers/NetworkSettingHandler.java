@@ -175,6 +175,7 @@ public class NetworkSettingHandler implements RequestHandler {
                     Map<String, String> config = new HashMap<>();
                     config.put(UDPTransport.PROP_EXTERNAL_PORT, String.valueOf(newPort));
                     config.put(UDPTransport.PROP_INTERNAL_PORT, String.valueOf(newPort));
+                    config.put(UDPTransport.PROP_FIXED_PORT, Boolean.TRUE.toString());
                     _context.router().saveConfig(config, null);
                     restartNeeded = true;
                 }

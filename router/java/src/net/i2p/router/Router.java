@@ -1367,6 +1367,8 @@ public class Router implements RouterClock.ClockShiftListener {
             _context.removeProperty(UDPTransport.PROP_INTERNAL_PORT);
             _config.remove(UDPTransport.PROP_EXTERNAL_PORT);
             _context.removeProperty(UDPTransport.PROP_EXTERNAL_PORT);
+            _config.remove(UDPTransport.PROP_FIXED_PORT);
+            _context.removeProperty(UDPTransport.PROP_FIXED_PORT);
             _config.remove(UDPTransport.PROP_INTRO_KEY);
             _context.removeProperty(UDPTransport.PROP_INTRO_KEY);
             _config.remove(UDPTransport.PROP_SSU2_SP);

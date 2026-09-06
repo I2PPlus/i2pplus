@@ -195,7 +195,7 @@ public class UDPTransport extends TransportImpl {
     /** Override whether we will change our advertised port no matter what our peers tell us
      *  See getIsPortFixed() for default behaviour.
      */
-    private static final String PROP_FIXED_PORT = "i2np.udp.fixedPort";
+    public static final String PROP_FIXED_PORT = "i2np.udp.fixedPort";
 
     /** Allowed sources of address updates. */
     public static final String PROP_SOURCES = "i2np.udp.addressSources";
