@@ -173,12 +173,24 @@ public class EstablishmentDecisionTest {
     public void testIsUsableUDPAddress() throws Exception {
         InetAddress addr = InetAddress.getByName("10.0.0.1");
         assertTrue(EstablishmentManager.isUsableUDPAddress(addr, 80));
-        assertFalse(EstablishmentManager.isUsableUDPAddress(null, 80));
+        assertFalse(EstablishmentManager.isUsableUDPAddress((InetAddress)null, 80));
         assertFalse(EstablishmentManager.isUsableUDPAddress(addr, 0));
         assertFalse(EstablishmentManager.isUsableUDPAddress(addr, -1));
         assertFalse(EstablishmentManager.isUsableUDPAddress(addr, 65536));
         assertTrue(EstablishmentManager.isUsableUDPAddress(addr, 1));
         assertTrue(EstablishmentManager.isUsableUDPAddress(addr, 65535));
+    }
+
+    @Test
+    public void testIsUsableUDPAddressBytes() {
+        byte[] ip = new byte[] {10, 0, 0, 1};
+        assertTrue(EstablishmentManager.isUsableUDPAddress(ip, 80));
+        assertFalse(EstablishmentManager.isUsableUDPAddress((byte[])null, 80));
+        assertFalse(EstablishmentManager.isUsableUDPAddress(ip, 0));
+        assertFalse(EstablishmentManager.isUsableUDPAddress(ip, -1));
+        assertFalse(EstablishmentManager.isUsableUDPAddress(ip, 65536));
+        assertTrue(EstablishmentManager.isUsableUDPAddress(ip, 1));
+        assertTrue(EstablishmentManager.isUsableUDPAddress(ip, 65535));
     }
 
     @Test
@@ -224,5 +236,66 @@ public class EstablishmentDecisionTest {
         assertTrue(EstablishmentManager.queueAtCapacity(32, 32));
         assertTrue(EstablishmentManager.queueAtCapacity(33, 32));
         assertFalse(EstablishmentManager.queueAtCapacity(0, 32));
+    }
+
+    @Test
+    public void testNextIntroStateForPeerCheckConnectedSupported() {
+        OutboundEstablishState2.IntroState next =
+            EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_INIT, true, true);
+        assertEquals(IntroState.INTRO_STATE_CONNECTED, next);
+
+        next = EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_CONNECTING, true, true);
+        assertEquals(IntroState.INTRO_STATE_CONNECTED, next);
+    }
+
+    @Test
+    public void testNextIntroStateForPeerCheckConnectedUnsupportedVersion() {
+        OutboundEstablishState2.IntroState next =
+            EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_INIT, true, false);
+        assertEquals(IntroState.INTRO_STATE_REJECTED, next);
+
+        next = EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_CONNECTING, true, false);
+        assertEquals(IntroState.INTRO_STATE_REJECTED, next);
+    }
+
+    @Test
+    public void testNextIntroStateForPeerCheckNoPeer() {
+        assertEquals(IntroState.INTRO_STATE_INIT,
+                     EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_INIT, false, false));
+        assertEquals(IntroState.INTRO_STATE_CONNECTING,
+                     EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_CONNECTING, false, true));
+        assertEquals(IntroState.INTRO_STATE_HAS_RI,
+                     EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_HAS_RI, false, true));
+    }
+
+    @Test
+    public void testNextIntroStateForPeerCheckConnectedGone() {
+        assertEquals(IntroState.INTRO_STATE_DISCONNECTED,
+                     EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_CONNECTED, false, false));
+        assertEquals(IntroState.INTRO_STATE_CONNECTED,
+                     EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_CONNECTED, true, false));
+        assertEquals(IntroState.INTRO_STATE_CONNECTED,
+                     EstablishmentManager.nextIntroStateforPeerCheck(IntroState.INTRO_STATE_CONNECTED, true, true));
+    }
+
+    @Test
+    public void testNextIntroStateForLocalLookup() {
+        assertEquals(IntroState.INTRO_STATE_HAS_RI,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_INIT, true));
+        assertEquals(IntroState.INTRO_STATE_HAS_RI,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_LOOKUP_SENT, true));
+        assertEquals(IntroState.INTRO_STATE_HAS_RI,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_HAS_RI, true));
+        assertEquals(IntroState.INTRO_STATE_INIT,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_INIT, false));
+        assertEquals(IntroState.INTRO_STATE_LOOKUP_SENT,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_LOOKUP_SENT, false));
+        assertEquals(IntroState.INTRO_STATE_HAS_RI,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_HAS_RI, false));
+        // states not eligible for local lookup are unchanged regardless
+        assertEquals(IntroState.INTRO_STATE_REJECTED,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_REJECTED, true));
+        assertEquals(IntroState.INTRO_STATE_CONNECTING,
+                     EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_CONNECTING, true));
     }
 }

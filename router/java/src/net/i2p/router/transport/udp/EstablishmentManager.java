@@ -503,6 +503,76 @@ public class EstablishmentManager {
     }
 
     /**
+     *  Advance an introducer's state based on whether we already hold a live
+     *  PeerState for it.  Handles the connected-peer walk in
+     *  {@link #handlePendingIntro}: an INIT/CONNECTING intro that resolves to
+     *  a live peer becomes CONNECTED when the peer speaks a supported version,
+     *  otherwise REJECTED (cross-version relaying is not implemented yet),
+     *  and a CONNECTED intro whose peer has gone away becomes DISCONNECTED.
+     *
+     *  @param istate the current intro state
+     *  @param peerPresent true if a live PeerState was found
+     *  @param peerSupported true if the peer advertises a supported SSU2 version
+     *  @return the advanced intro state (unchanged for states not handled here)
+     *  @since 0.9.71
+     */
+    static OutboundEstablishState2.IntroState nextIntroStateforPeerCheck(OutboundEstablishState2.IntroState istate,
+                                                                         boolean peerPresent, boolean peerSupported) {
+        switch (istate) {
+            case INTRO_STATE_INIT:
+            case INTRO_STATE_CONNECTING:
+                if (peerPresent) {
+                    if (peerSupported) {
+                        return INTRO_STATE_CONNECTED;
+                    }
+                    return INTRO_STATE_REJECTED;
+                }
+                return istate;
+            case INTRO_STATE_CONNECTED:
+                return peerPresent ? istate : INTRO_STATE_DISCONNECTED;
+            default:
+                return istate;
+        }
+    }
+
+    /**
+     *  Advance an introducer's state based on a local RouterInfo lookup.
+     *  Only intros we are allowed to connect to (INIT, LOOKUP_SENT, HAS_RI)
+     *  are advanced, and only to HAS_RI when a local RouterInfo is known;
+     *  every other state is returned unchanged.
+     *
+     *  @param istate the current intro state
+     *  @param riFound true if a RouterInfo was found locally
+     *  @return the advanced intro state (unchanged unless a local RI is found)
+     *  @since 0.9.71
+     */
+    static OutboundEstablishState2.IntroState nextIntroStateforLocalLookup(OutboundEstablishState2.IntroState istate,
+                                                                           boolean riFound) {
+        switch (istate) {
+            case INTRO_STATE_INIT:
+            case INTRO_STATE_LOOKUP_SENT:
+            case INTRO_STATE_HAS_RI:
+                return riFound ? INTRO_STATE_HAS_RI : istate;
+            default:
+                return istate;
+        }
+    }
+
+    /**
+     *  Is a raw IP/port pair usable to try a direct connection to an
+     *  introducer?  Identity with {@link #isUsableUDPAddress(InetAddress, int)}
+     *  except operating on the already-extracted address bytes.
+     *
+     *  @param ip the address bytes, may be null
+     *  @param port the port
+     *  @return true if the address can be used
+     *  @since 0.9.71
+     */
+    static boolean isUsableUDPAddress(byte[] ip, int port) {
+        return ip != null && port > 0 && port <= 65535;
+    }
+
+    /**
      *  Send the message to its specified recipient by establishing a connection
      *  with them and sending it off.  This call does not block, and on failure,
      *  the message is failed.
@@ -1662,132 +1732,105 @@ public class EstablishmentManager {
             if (h != null) {
                 PeerState bob = null;
                 OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                switch (istate) {
-                    case INTRO_STATE_INIT:
-                    case INTRO_STATE_CONNECTING:
-                        bob = _transport.getPeerState(h);
-                        if (bob != null) {
-                            if (SSU2Util.isSupportedVersion(bob.getVersion())) {
-                                istate = INTRO_STATE_CONNECTED;
-                                state2.setIntroState(h, istate);
-                            } else {
-                                // TODO cross-version relaying, maybe
-                                istate = INTRO_STATE_REJECTED;
-                                state2.setIntroState(h, istate);
-                            }
-                        }
-                        break;
-
-                        case INTRO_STATE_CONNECTED:
-                            bob = _transport.getPeerState(h);
-                            if (bob == null) {
-                                istate = INTRO_STATE_DISCONNECTED;
-                                state2.setIntroState(h, istate);
-                            }
-                            break;
-
-                    default:
-                        break;
-                }
-                    if (bob != null && istate == INTRO_STATE_CONNECTED) {
-                        if (_log.shouldDebug())
-                            _log.debug("[SSU] Found connected Introducer " + bob + " for " + state);
-                        long tag = addr.getIntroducerTag(i);
-                        boolean ok = sendRelayRequest(tag, (PeerState2) bob, state);
-                        // this transitions the state
-                        if (ok)
-                            state2.introSent(h);
-                        else
-                            state2.setIntroState(h, INTRO_STATE_DISCONNECTED);
-                        return;
-                    }
-                }
-            }
-            // Otherwise, look for ones we already have RIs for, attempt to connect to each.
-            boolean sent = false;
-            for (int i = 0; i < count; i++) {
-                Hash h = addr.getIntroducerHash(i);
-                if (h != null) {
-                    RouterInfo bob = null;
-                    OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                    OutboundEstablishState2.IntroState oldState = istate;
-                    switch (istate) {
-                        case INTRO_STATE_INIT:
-                        case INTRO_STATE_LOOKUP_SENT:
-                        case INTRO_STATE_HAS_RI:
-                            bob = _context.netDb().lookupRouterInfoLocally(h);
-                            if (bob != null)
-                                istate = INTRO_STATE_HAS_RI;
-                            break;
-                        default:
-                            break;
-                    }
-                    if (bob != null && istate == INTRO_STATE_HAS_RI) {
-                        List<RouterAddress> addrs = _transport.getTargetAddresses(bob);
-                        for (RouterAddress ra : addrs) {
-                            byte[] ip = ra.getIP();
-                            int port = ra.getPort();
-                            if (ip == null || port <= 0)
-                                continue;
-                            RemoteHostId rhid = new RemoteHostId(ip, port);
-                            OutboundEstablishState oes = _outboundStates.get(rhid);
-                            if (oes != null) {
-                                if (_log.shouldDebug())
-                                    _log.debug("[SSU] Awaiting pending connection to Introducer " + oes + " for " + state);
-                                break;
-                            }
-                            int version = _transport.getSSUVersion(ra);
-                if (SSU2Util.isSupportedVersion(version)) {
-                                if (_log.shouldDebug())
-                                    _log.debug("[SSU] Connecting to Introducer " + bob + " for " + state);
-                                // arbitrary message because we have no way to connect for no reason
-                                DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
-                                dlm.setSearchKey(h);
-                                dlm.setSearchType(DatabaseLookupMessage.Type.RI);
-                                long now = _context.clock().now();
-                                dlm.setMessageExpiration(now + 10*1000);
-                                dlm.setFrom(_context.routerHash());
-                                OutNetMessage m = new OutNetMessage(_context, dlm, now + 10*1000, OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, bob);
-                                establish(m);
-                                istate = INTRO_STATE_CONNECTING;
-                                // for now, just wait until this method is called again,
-                                // hopefully somebody has connected
-                                break;
-                            }
-                        }
-                    }
-                    // if we didn't try to connect, it must have had a bad RI
-                    if (istate == INTRO_STATE_HAS_RI)
-                        istate = INTRO_STATE_REJECTED;
-                    if (oldState != istate) {state2.setIntroState(h, istate);}
-                }
-            }
-            if (sent) {
-                // not really
-                state.introSent();
-                return;
-            }
-            // Otherwise, look up the RIs first.
-            for (int i = 0; i < count; i++) {
-                Hash h = addr.getIntroducerHash(i);
-                if (h != null) {
-                    OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                    if (istate == INTRO_STATE_INIT) {
-                        if (_log.shouldDebug())
-                            _log.debug("[SSU] Looking up Introducer " + h + " for " + state);
-                        istate = INTRO_STATE_LOOKUP_SENT;
+                if (istate == INTRO_STATE_INIT || istate == INTRO_STATE_CONNECTING || istate == INTRO_STATE_CONNECTED) {
+                    bob = _transport.getPeerState(h);
+                    istate = nextIntroStateforPeerCheck(istate, bob != null, bob != null &&
+                                                        SSU2Util.isSupportedVersion(bob.getVersion()));
+                    if (state2.getIntroState(h) != istate)
                         state2.setIntroState(h, istate);
-                        // TODO on success job
-                        _context.netDb().lookupRouterInfo(h, null, null, 10*1000L);
-                        sent = true;
-                    }
+                }
+                if (bob != null && istate == INTRO_STATE_CONNECTED) {
+                    if (_log.shouldDebug())
+                        _log.debug("[SSU] Found connected Introducer " + bob + " for " + state);
+                    long tag = addr.getIntroducerTag(i);
+                    boolean ok = sendRelayRequest(tag, (PeerState2) bob, state);
+                    // this transitions the state
+                    if (ok)
+                        state2.introSent(h);
+                    else
+                        state2.setIntroState(h, INTRO_STATE_DISCONNECTED);
+                    return;
                 }
             }
-            if (sent) {state.introSent();} // not really
-            else {
-                if (_log.shouldDebug()) {_log.debug("[SSU] No valid Introducers for " + state);}
-                processExpired(state);
+        }
+        // Otherwise, look for ones we already have RIs for, attempt to connect to each.
+        boolean sent = false;
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            if (h != null) {
+                RouterInfo bob = null;
+                OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
+                OutboundEstablishState2.IntroState oldState = istate;
+                if (istate == INTRO_STATE_INIT || istate == INTRO_STATE_LOOKUP_SENT || istate == INTRO_STATE_HAS_RI) {
+                    bob = _context.netDb().lookupRouterInfoLocally(h);
+                    istate = nextIntroStateforLocalLookup(istate, bob != null);
+                }
+                if (bob != null && istate == INTRO_STATE_HAS_RI) {
+                    List<RouterAddress> addrs = _transport.getTargetAddresses(bob);
+                    for (RouterAddress ra : addrs) {
+                        byte[] ip = ra.getIP();
+                        int port = ra.getPort();
+                        if (!isUsableUDPAddress(ip, port))
+                            continue;
+                        RemoteHostId rhid = new RemoteHostId(ip, port);
+                        OutboundEstablishState oes = _outboundStates.get(rhid);
+                        if (oes != null) {
+                            if (_log.shouldDebug())
+                                _log.debug("[SSU] Awaiting pending connection to Introducer " + oes + " for " + state);
+                            break;
+                        }
+                        int version = _transport.getSSUVersion(ra);
+                        if (SSU2Util.isSupportedVersion(version)) {
+                            if (_log.shouldDebug())
+                                _log.debug("[SSU] Connecting to Introducer " + bob + " for " + state);
+                            // arbitrary message because we have no way to connect for no reason
+                            DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
+                            dlm.setSearchKey(h);
+                            dlm.setSearchType(DatabaseLookupMessage.Type.RI);
+                            long now = _context.clock().now();
+                            dlm.setMessageExpiration(now + 10*1000);
+                            dlm.setFrom(_context.routerHash());
+                            OutNetMessage m = new OutNetMessage(_context, dlm, now + 10*1000, OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, bob);
+                            establish(m);
+                            istate = INTRO_STATE_CONNECTING;
+                            // for now, just wait until this method is called again,
+                            // hopefully somebody has connected
+                            break;
+                        }
+                    }
+                }
+                // if we didn't try to connect, it must have had a bad RI
+                if (istate == INTRO_STATE_HAS_RI)
+                    istate = INTRO_STATE_REJECTED;
+                if (oldState != istate) {state2.setIntroState(h, istate);}
             }
+        }
+        if (sent) {
+            // not really
+            state.introSent();
+            return;
+        }
+        // Otherwise, look up the RIs first.
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            if (h != null) {
+                OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
+                if (istate == INTRO_STATE_INIT) {
+                    if (_log.shouldDebug())
+                        _log.debug("[SSU] Looking up Introducer " + h + " for " + state);
+                    istate = INTRO_STATE_LOOKUP_SENT;
+                    state2.setIntroState(h, istate);
+                    // TODO on success job
+                    _context.netDb().lookupRouterInfo(h, null, null, 10*1000L);
+                    sent = true;
+                }
+            }
+        }
+        if (sent) {state.introSent();} // not really
+        else {
+            if (_log.shouldDebug()) {_log.debug("[SSU] No valid Introducers for " + state);}
+            processExpired(state);
+        }
     }
 
     /**
