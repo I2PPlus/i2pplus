@@ -16,10 +16,13 @@ import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.
 import java.net.InetAddress;
 import java.security.GeneralSecurityException;
 
+import net.i2p.data.Base64;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.router.Banlist;
 import net.i2p.router.Blocklist;
 import net.i2p.router.transport.udp.OutboundEstablishState2.IntroState;
+import net.i2p.util.OrderedProperties;
 import org.junit.Test;
 
 /**
@@ -400,6 +403,36 @@ public class EstablishmentDecisionTest {
     }
 
     @Test
+    public void testHasValidV2Introducer() {
+        // no introducers advertised: none valid
+        assertFalse(EstablishmentManager.hasValidV2Introducer(ssu2Addr(), 1000L));
+        // expiration 0 means never expires
+        UDPAddress unexpired = ssu2Addr("1234", 0L);
+        assertTrue(EstablishmentManager.hasValidV2Introducer(unexpired, 1000L));
+        // future expiration is valid (UDPAddress stores exp as seconds * 1000)
+        UDPAddress future = ssu2Addr("1234", 5000L);
+        assertTrue(EstablishmentManager.hasValidV2Introducer(future, 1000L));
+        // past expiration is not
+        UDPAddress expired = ssu2Addr("1234", 1L);
+        assertFalse(EstablishmentManager.hasValidV2Introducer(expired, 1001L));
+    }
+
+    @Test
+    public void testIsMtuTooSmall() {
+        // unknown MTUs (0) pass
+        assertFalse(EstablishmentManager.isMtuTooSmall(0, 0));
+        // peer MTU below minimum fails; at the boundary it passes
+        assertTrue(EstablishmentManager.isMtuTooSmall(PeerState2.MIN_MTU - 1, 0));
+        assertFalse(EstablishmentManager.isMtuTooSmall(PeerState2.MIN_MTU, 0));
+        // our MTU below minimum fails
+        assertTrue(EstablishmentManager.isMtuTooSmall(0, PeerState2.MIN_MTU - 1));
+        assertFalse(EstablishmentManager.isMtuTooSmall(0, PeerState2.MIN_MTU));
+        // either side failing is enough
+        assertTrue(EstablishmentManager.isMtuTooSmall(PeerState2.MIN_MTU - 1, PeerState2.MIN_MTU));
+        assertTrue(EstablishmentManager.isMtuTooSmall(PeerState2.MIN_MTU, PeerState2.MIN_MTU - 1));
+    }
+
+    @Test
     public void testIsBannedForeverOrHostile() {
         Banlist banlist = mock(Banlist.class);
         Hash h = Hash.create(new byte[Hash.HASH_LENGTH]);
@@ -417,4 +450,24 @@ public class EstablishmentDecisionTest {
         when(banlist.isBanlisted(h)).thenReturn(true);
         assertFalse(EstablishmentManager.isBannedForeverOrHostile(banlist, h));
     }
+
+    /**
+     *  An SSU2 address with no introducers, or with a single hash introducer
+     *  whose tag and (optional) expiration are given.
+     */
+    private static UDPAddress ssu2Addr(String tag, long exp) {
+        OrderedProperties opts = new OrderedProperties();
+        opts.setProperty(RouterAddress.PROP_HOST, "9.9.9.9");
+        opts.setProperty(RouterAddress.PROP_PORT, "12345");
+        if (tag != null) {
+            Hash h = Hash.create(new byte[Hash.HASH_LENGTH]);
+            opts.setProperty(UDPAddress.PROP_INTRO_TAG_PREFIX + "0", tag);
+            opts.setProperty(UDPAddress.PROP_INTRO_HASH_PREFIX + "0", Base64.encode(h.getData()));
+            if (exp > 0)
+                opts.setProperty(UDPAddress.PROP_INTRO_EXP_PREFIX + "0", Long.toString(exp));
+        }
+        return new UDPAddress(new RouterAddress("SSU2", opts, 5));
+    }
+
+    private static UDPAddress ssu2Addr() {return ssu2Addr(null, 0L);}
 }

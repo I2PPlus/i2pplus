@@ -720,6 +720,43 @@ public class EstablishmentManager {
     }
 
     /**
+     *  Does the SSU2 address advertise at least one usable v2 introducer,
+     *  meaning a hash that hasn't expired (expiration 0 means never
+     *  expires)? Used by {@link #createOutboundState} before building a
+     *  state for an indirect peer, since without any current introducer the
+     *  establishment can never succeed.
+     *
+     *  @param addr the peer's address
+     *  @param now the current time
+     *  @return true if any introducer hash is present and unexpired
+     *  @since 0.9.71
+     */
+    static boolean hasValidV2Introducer(UDPAddress addr, long now) {
+        int count = addr.getIntroducerCount();
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            long exp = addr.getIntroducerExpiration(i);
+            if (h != null && (exp > now || exp == 0)) {return true;}
+        }
+        return false;
+    }
+
+    /**
+     *  Is either our MTU or the peer's advertised MTU below the minimum
+     *  usable for SSU2? MTUs of 0 are treated as unknown and pass, matching
+     *  the original inline check.
+     *
+     *  @param mtu the peer's advertised MTU
+     *  @param ourMTU our MTU for the same address family
+     *  @return true if either is positive and below {@link PeerState2#MIN_MTU}
+     *  @since 0.9.71
+     */
+    static boolean isMtuTooSmall(int mtu, int ourMTU) {
+        return (mtu > 0 && mtu < PeerState2.MIN_MTU) ||
+               (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU);
+    }
+
+    /**
      *  Send the message to its specified recipient by establishing a connection
      *  with them and sending it off.  This call does not block, and on failure,
      *  the message is failed.
@@ -955,30 +992,15 @@ public class EstablishmentManager {
         // must have a valid session key
         byte[] keyBytes;
         int version = _transport.getSSUVersion(ra);
-        if (isIndirect && SSU2Util.isSupportedVersion(version) && ra.getTransportStyle().equals("SSU")) {
+        if (isIndirect && SSU2Util.isSupportedVersion(version) && ra.getTransportStyle().equals("SSU") &&
+            !hasValidV2Introducer(addr, now)) {
             // need at least one valid v2 introducer to reach the peer
-            boolean v2intros = false;
-            int count = addr.getIntroducerCount();
-            for (int i = 0; i < count; i++) {
-                Hash h = addr.getIntroducerHash(i);
-                long exp = addr.getIntroducerExpiration(i);
-                if (h != null && (exp > now || exp == 0)) {
-                    v2intros = true;
-                    break;
-                }
-            }
-            if (!v2intros) {
-                _transport.markUnreachable(toHash);
-                _transport.failed(msg, "No v2 Introducers");
-                return null;
-            }
+            _transport.markUnreachable(toHash);
+            _transport.failed(msg, "No v2 Introducers");
+            return null;
         }
         if (SSU2Util.isSupportedVersion(version)) {
-            int mtu = addr.getMTU();
-            boolean isIPv6 = TransportUtil.isIPv6(ra);
-            int ourMTU = _transport.getMTU(isIPv6);
-            if ((mtu > 0 && mtu < PeerState2.MIN_MTU) ||
-                (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
+            if (isMtuTooSmall(addr.getMTU(), _transport.getMTU(TransportUtil.isIPv6(ra)))) {
                 banAndFail(msg, toHash, "MTU too small", "Invalid MTU", "Router has invalid MTU (too small)",
                            ipAddress, maybePort, truncHash, BAN_DURATION_INVALID_ADDRESS_MS, now, isBanned);
                 return null;
