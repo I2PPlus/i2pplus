@@ -56,6 +56,118 @@ import net.i2p.router.OutNetMessage;
  */
 public interface Transport {
 
+    // Transport style and config-key constants.
+    //
+    // Single source of truth: transport styles and cross-package configuration
+    // keys that were historically declared on the concrete NTCP/SSU transports.
+    // The concrete transports re-export them under their legacy names as aliases
+    // (e.g. NTCPTransport.STYLE == Transport.STYLE_NTCP) so existing callers
+    // compile unchanged while every value is defined here, once.
+
+    /**
+     *  Style identifier for the NTCP transport, used in RouterAddress style tags,
+     *  transport map keys, and style comparisons.
+     */
+    public static final String STYLE_NTCP = "NTCP";
+    /**
+     *  Style identifier for the NTCP2 protocol variant of the NTCP transport.
+     */
+    public static final String STYLE_NTCP2 = "NTCP2";
+    /**
+     *  Style identifier for the SSU transport, used in RouterAddress style tags,
+     *  transport map keys, and style comparisons.
+     */
+    public static final String STYLE_SSU = "SSU";
+    /**
+     *  Style identifier for the SSU2 protocol variant of the SSU transport.
+     */
+    public static final String STYLE_SSU2 = "SSU2";
+    /**
+     *  Config key for the port the NTCP transport listens for inbound connections on.
+     */
+    public static final String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
+    /**
+     *  Config key controlling whether NTCP may auto-update its advertised port
+     *  based on peer feedback.
+     */
+    public static final String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
+    /**
+     *  Config key controlling whether NTCP may auto-update its advertised IP
+     *  based on peer feedback.
+     */
+    public static final String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
+    /**
+     *  Config key for an explicitly configured hostname the NTCP transport advertises.
+     *  The SSU equivalent is {@link #PROP_EXTERNAL_HOST}.
+     */
+    public static final String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
+    /**
+     *  Config key for the NTCP2 static private key.
+     */
+    public static final String PROP_NTCP2_SP = "i2np.ntcp2.sp";
+    /**
+     *  Config key for the NTCP2 static IV.
+     */
+    public static final String PROP_NTCP2_IV = "i2np.ntcp2.iv";
+    /**
+     *  Config key for the SSU2 static private key.
+     */
+    public static final String PROP_SSU2_SP = "i2np.ssu2.sp";
+    /**
+     *  Config key for the SSU2 static IV.
+     */
+    public static final String PROP_SSU2_IKEY = "i2np.ssu2.ikey";
+    /**
+     *  Config key for the SSU internal port, the port the SSU transport binds.
+     */
+    public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
+    /**
+     *  Config key to force advertising a fixed external IP address.
+     */
+    public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
+    /**
+     *  Config key to force advertising a fixed external port.
+     */
+    public static final String PROP_EXTERNAL_PORT = "i2np.udp.port";
+    /**
+     *  Config key to keep the SSU advertised port fixed regardless of peer feedback.
+     */
+    public static final String PROP_FIXED_PORT = "i2np.udp.fixedPort";
+    /**
+     *  Config key naming the allowed sources of address updates, e.g. "local,upnp,ssu".
+     */
+    public static final String PROP_SOURCES = "i2np.udp.addressSources";
+    /**
+     *  Default value of {@link #PROP_SOURCES}: the local interface, UPnP, and
+     *  SSU-learned addresses.
+     */
+    public static final String DEFAULT_SOURCES = AddressSource.SOURCE_INTERFACE.toConfigString() + ',' +
+                                                 AddressSource.SOURCE_UPNP.toConfigString() + ',' +
+                                                 AddressSource.SOURCE_SSU.toConfigString();
+    /**
+     *  Config key remembering the last IPv4 address so IP changes can be detected
+     *  across restarts.
+     */
+    public static final String PROP_IP = "i2np.lastIP";
+    /**
+     *  Config key enabling laptop power-saving mode, which reduces connection activity.
+     */
+    public static final String PROP_LAPTOP_MODE = "i2np.laptopMode";
+    /**
+     *  Config key remembering the last IPv6 address.
+     *  @since 0.9.43
+     */
+    public static final String PROP_IPV6 = "i2np.lastIPv6";
+    /**
+     *  Config key to require SSU introducers regardless of our reachability status.
+     */
+    public static final String PROP_FORCE_INTRODUCERS = "i2np.udp.forceIntroducers";
+    /**
+     *  Config key for the SSU introducer key published in hidden-mode RouterInfos.
+     *  @since 0.9.48
+     */
+    public static final String PROP_INTRO_KEY = "i2np.udp.introKey";
+
     /**
      * Request to send a message to the specified router.
      *

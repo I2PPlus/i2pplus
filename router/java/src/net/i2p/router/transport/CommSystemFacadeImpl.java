@@ -27,7 +27,6 @@ import net.i2p.router.CommSystemFacade;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
-import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.AddressType;
 import net.i2p.util.Addresses;
@@ -654,7 +653,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             port = udpAddr.getPort();
         }
         if (port < 0) {
-            Transport udp = _manager.getTransport(UDPTransport.STYLE);
+            Transport udp = _manager.getTransport(Transport.STYLE_SSU);
             if (udp != null) {port = udp.getRequestedPort();}
         }
         if (ip != null || port > 0) {

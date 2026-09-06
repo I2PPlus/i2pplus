@@ -50,7 +50,6 @@ import net.i2p.router.Blocklist;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
-import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
 import net.i2p.util.Addresses;
@@ -247,9 +246,9 @@ public class GeoIP {
                 // add our detected addresses
                 Set<String> addrs = Addresses.getAddresses(false, true);
                 for (String ip : addrs) {add(ip);}
-                String lastIP = _context.getProperty(UDPTransport.PROP_IP);
+                String lastIP = _context.getProperty(Transport.PROP_IP);
                 if (lastIP != null) {add(lastIP);}
-                lastIP = _context.getProperty(UDPTransport.PROP_IPV6);
+                lastIP = _context.getProperty(Transport.PROP_IPV6);
                 if (lastIP != null) {add(lastIP);}
                 // IPv4
                 Long[] search = _pendingSearch.toArray(new Long[_pendingSearch.size()]);
@@ -1676,11 +1675,11 @@ public class GeoIP {
                 if (country != null) {break;}
             }
             if (country == null) {
-                String lastIP = _context.getProperty(UDPTransport.PROP_IP);
+                String lastIP = _context.getProperty(Transport.PROP_IP);
                 if (lastIP != null) {
                     country = get(lastIP);
                     if (country == null) {
-                        lastIP = _context.getProperty(UDPTransport.PROP_IPV6);
+                        lastIP = _context.getProperty(Transport.PROP_IPV6);
                         if (lastIP != null) {country = get(lastIP);}
                     }
                 }

@@ -47,7 +47,6 @@ import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
-import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.router.util.DecayingHashSet;
 import net.i2p.router.util.EventLog;
@@ -137,23 +136,29 @@ public class NTCPTransport extends TransportImpl {
     private long _lastInboundIPv4;
     private long _lastInboundIPv6;
 
-    // note: SSU version is i2np.udp.host, not hostname
     /**
-     * PROP_I2NP_NTCP_HOSTNAME.
+     *  Config key for an explicitly configured hostname the NTCP transport advertises.
+     *  The SSU equivalent is i2np.udp.host, not hostname.
+     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_HOSTNAME}.
      */
-    public static final String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
+    public static final String PROP_I2NP_NTCP_HOSTNAME = Transport.PROP_I2NP_NTCP_HOSTNAME;
     /**
-     * PROP_I2NP_NTCP_PORT.
+     *  Config key for the port the NTCP transport listens for inbound connections on.
+     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_PORT}.
      */
-    public static final String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
+    public static final String PROP_I2NP_NTCP_PORT = Transport.PROP_I2NP_NTCP_PORT;
     /**
-     * PROP_I2NP_NTCP_AUTO_PORT.
+     *  Config key controlling whether NTCP may auto-update its advertised port
+     *  based on peer feedback.
+     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_AUTO_PORT}.
      */
-    public static final String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
+    public static final String PROP_I2NP_NTCP_AUTO_PORT = Transport.PROP_I2NP_NTCP_AUTO_PORT;
     /**
-     * PROP_I2NP_NTCP_AUTO_IP.
+     *  Config key controlling whether NTCP may auto-update its advertised IP
+     *  based on peer feedback.
+     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_AUTO_IP}.
      */
-    public static final String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
+    public static final String PROP_I2NP_NTCP_AUTO_IP = Transport.PROP_I2NP_NTCP_AUTO_IP;
     private static final int DEFAULT_COST = 10;
     private static final int NTCP2_OUTBOUND_COST = 14;
 
@@ -177,13 +182,15 @@ public class NTCPTransport extends TransportImpl {
 
     // NTCP2 stuff
     /**
-     * STYLE.
+     *  Style identifier for the NTCP transport.
+     *  Value sourced from {@link Transport#STYLE_NTCP}.
      */
-    public static final String STYLE = "NTCP";
+    public static final String STYLE = Transport.STYLE_NTCP;
     /**
-     * STYLE2.
+     *  Style identifier for the NTCP2 protocol variant.
+     *  Value sourced from {@link Transport#STYLE_NTCP2}.
      */
-    public static final String STYLE2 = "NTCP2";
+    public static final String STYLE2 = Transport.STYLE_NTCP2;
     /** NTCP2 protocol version. */
     static final int NTCP2_INT_VERSION = 2;
     /** "2" */
@@ -194,10 +201,10 @@ public class NTCPTransport extends TransportImpl {
     static final int PQ_INT_VERSION = 4;
     /** PQ protocol version string. */
     static final String PQ_VERSION = Integer.toString(PQ_INT_VERSION);
-    /** b64 static private key */
-    public static final String PROP_NTCP2_SP = "i2np.ntcp2.sp";
-    /** b64 static IV */
-    public static final String PROP_NTCP2_IV = "i2np.ntcp2.iv";
+    /** b64 static private key. Value sourced from {@link Transport#PROP_NTCP2_SP}. */
+    public static final String PROP_NTCP2_SP = Transport.PROP_NTCP2_SP;
+    /** b64 static IV. Value sourced from {@link Transport#PROP_NTCP2_IV}. */
+    public static final String PROP_NTCP2_IV = Transport.PROP_NTCP2_IV;
     private static final int NTCP2_IV_LEN = OutboundNTCP2State.IV_SIZE;
     private static final int NTCP2_KEY_LEN = OutboundNTCP2State.KEY_SIZE;
     private static final long MIN_DOWNTIME_TO_REKEY = 7*24*60*60*1000L;
@@ -349,9 +356,9 @@ public class NTCPTransport extends TransportImpl {
         }
         if (port <= 0) {
             // If we previously had a UDP port, use it
-            port = _context.getProperty(UDPTransport.PROP_INTERNAL_PORT, -1);
+            port = _context.getProperty(Transport.PROP_INTERNAL_PORT, -1);
             if (port <= 0)
-                port = _context.getProperty(UDPTransport.PROP_EXTERNAL_PORT, -1);
+                port = _context.getProperty(Transport.PROP_EXTERNAL_PORT, -1);
             if (port > 0 && !TransportUtil.isValidPort(port)) {
                 TransportUtil.logInvalidPort(_log, STYLE, port);
                 port = -1;
@@ -1418,8 +1425,8 @@ public class NTCPTransport extends TransportImpl {
                     }
                     // if UDP only changed external port and not internal port,
                     // do not rebind internally and restart, just change the address
-                    int eport = _context.getProperty(UDPTransport.PROP_EXTERNAL_PORT, 0);
-                    int iport = _context.getProperty(UDPTransport.PROP_INTERNAL_PORT, 0);
+                    int eport = _context.getProperty(Transport.PROP_EXTERNAL_PORT, 0);
+                    int iport = _context.getProperty(Transport.PROP_INTERNAL_PORT, 0);
                     if (isExternalOnlyPortChange(port, eport, iport)) {
                         if (_log.shouldWarn()) {
                             _log.warn("[NTCP] External port changed to " + eport + ", keep listening on internal port " + iport);

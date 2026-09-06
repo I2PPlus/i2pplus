@@ -158,8 +158,8 @@ public class UDPTransport extends TransportImpl {
     public Tuner getTuner() { return _tuner; }
 
     // SSU2
-    /** SSU2 transport style identifier. */
-    public static final String STYLE2 = "SSU2";
+    /** Style identifier for the SSU2 protocol variant. Value sourced from {@link Transport#STYLE_SSU2}. */
+    public static final String STYLE2 = Transport.STYLE_SSU2;
     /** SSU2 protocol version. */
     static final int SSU2_INT_VERSION = 2;
     /** "2" */
@@ -173,50 +173,50 @@ public class UDPTransport extends TransportImpl {
     private final byte[] _ssu2StaticIntroKey;
     private final String _ssu2B64StaticPubKey;
     private final String _ssu2B64StaticIntroKey;
-    /** b64 static private key */
-    public static final String PROP_SSU2_SP = "i2np.ssu2.sp";
-    /** b64 static IV */
-    public static final String PROP_SSU2_IKEY = "i2np.ssu2.ikey";
+    /** b64 static private key. Value sourced from {@link Transport#PROP_SSU2_SP}. */
+    public static final String PROP_SSU2_SP = Transport.PROP_SSU2_SP;
+    /** b64 static IV. Value sourced from {@link Transport#PROP_SSU2_IKEY}. */
+    public static final String PROP_SSU2_IKEY = Transport.PROP_SSU2_IKEY;
     private static final long MIN_DOWNTIME_TO_REKEY_HIDDEN = 24*60*60*1000L;
 
     private static final int DROPLIST_PERIOD = 10*60*1000;
-    /** SSU transport style identifier. */
-    public static final String STYLE = "SSU";
-    /** Config key for SSU internal port. */
-    public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
-    /** Define this to explicitly set an external IP address. */
-    public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
-    /** Define this to explicitly set an external port. */
-    public static final String PROP_EXTERNAL_PORT = "i2np.udp.port";
+    /** Style identifier for the SSU transport. Value sourced from {@link Transport#STYLE_SSU}. */
+    public static final String STYLE = Transport.STYLE_SSU;
+    /** Config key for the SSU internal listening port. Value sourced from {@link Transport#PROP_INTERNAL_PORT}. */
+    public static final String PROP_INTERNAL_PORT = Transport.PROP_INTERNAL_PORT;
+    /** Config key to force advertising a fixed external IP address. Value sourced from {@link Transport#PROP_EXTERNAL_HOST}. */
+    public static final String PROP_EXTERNAL_HOST = Transport.PROP_EXTERNAL_HOST;
+    /** Config key to force advertising a fixed external port. Value sourced from {@link Transport#PROP_EXTERNAL_PORT}. */
+    public static final String PROP_EXTERNAL_PORT = Transport.PROP_EXTERNAL_PORT;
     /** Config key to prefer UDP transport. */
     public static final String PROP_PREFER_UDP = "i2np.udp.preferred";
     private static final String DEFAULT_PREFER_UDP = "false";
 
-    /** Override whether we will change our advertised port no matter what our peers tell us
+    /** Override whether we will change our advertised port no matter what our peers tell us.
      *  See getIsPortFixed() for default behaviour.
+     *  Value sourced from {@link Transport#PROP_FIXED_PORT}.
      */
-    public static final String PROP_FIXED_PORT = "i2np.udp.fixedPort";
+    public static final String PROP_FIXED_PORT = Transport.PROP_FIXED_PORT;
 
-    /** Allowed sources of address updates. */
-    public static final String PROP_SOURCES = "i2np.udp.addressSources";
-    /** + */
-    public static final String DEFAULT_SOURCES = SOURCE_INTERFACE.toConfigString() + ',' +
-                                                 SOURCE_UPNP.toConfigString() + ',' +
-                                                 SOURCE_SSU.toConfigString();
-    /** Remember IP changes across restarts. */
-    public static final String PROP_IP= "i2np.lastIP";
-    /** Config key tracking last IP address change. */
+    /** Allowed sources of address updates. Value sourced from {@link Transport#PROP_SOURCES}. */
+    public static final String PROP_SOURCES = Transport.PROP_SOURCES;
+    /** Default address sources. Value sourced from {@link Transport#DEFAULT_SOURCES}. */
+    public static final String DEFAULT_SOURCES = Transport.DEFAULT_SOURCES;
+    /** Remember IP changes across restarts. Value sourced from {@link Transport#PROP_IP}. */
+    public static final String PROP_IP = Transport.PROP_IP;
+    /** Config key tracking when the last IP address change occurred. */
     public static final String PROP_IP_CHANGE = "i2np.lastIPChange";
-    /** Config key for laptop power-saving mode. */
-    public static final String PROP_LAPTOP_MODE = "i2np.laptopMode";
+    /** Config key for laptop power-saving mode. Value sourced from {@link Transport#PROP_LAPTOP_MODE}. */
+    public static final String PROP_LAPTOP_MODE = Transport.PROP_LAPTOP_MODE;
     /**
-     * Last IPv6 config.
-     * @since 0.9.43
+     *  Last IPv6 config.
+     *  Value sourced from {@link Transport#PROP_IPV6}.
+     *  @since 0.9.43
      */
-    public static final String PROP_IPV6 = "i2np.lastIPv6";
+    public static final String PROP_IPV6 = Transport.PROP_IPV6;
 
-    /** Do we require introducers, regardless of our status? */
-    public static final String PROP_FORCE_INTRODUCERS = "i2np.udp.forceIntroducers";
+    /** Do we require introducers, regardless of our status? Value sourced from {@link Transport#PROP_FORCE_INTRODUCERS}. */
+    public static final String PROP_FORCE_INTRODUCERS = Transport.PROP_FORCE_INTRODUCERS;
     /** Do we allow direct SSU connections, sans introducers?  */
     public static final String PROP_ALLOW_DIRECT = "i2np.udp.allowDirect";
     /** This is rarely if ever used, default is to bind to wildcard address */
@@ -224,10 +224,11 @@ public class UDPTransport extends TransportImpl {
     /** Override the "large" (max) MTU, default is PeerState.LARGE_MTU */
     private static final String PROP_DEFAULT_MTU = "i2np.udp.mtu";
     /**
-     * Introducer key property.
-     * @since 0.9.48
+     *  Config key for the SSU introducer key published in hidden-mode RouterInfos.
+     *  Value sourced from {@link Transport#PROP_INTRO_KEY}.
+     *  @since 0.9.48
      */
-    public static final String PROP_INTRO_KEY = "i2np.udp.introKey";
+    public static final String PROP_INTRO_KEY = Transport.PROP_INTRO_KEY;
 
     private static final String CAP_TESTING = Character.toString(UDPAddress.CAPACITY_TESTING);
     private static final String CAP_TESTING_INTRO = CAP_TESTING + UDPAddress.CAPACITY_INTRODUCER;

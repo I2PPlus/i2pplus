@@ -186,7 +186,7 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.sendPool.dropped", "Send pool drops (lower priority)", "Transport", RATES);
 
         _currentAddresses = new ArrayList<>(3);
-        if (getStyle().equals("NTCP")) {_sendPool = new PrioritySendPool(SEND_POOL_CAPACITY);}
+        if (getStyle().equals(Transport.STYLE_NTCP)) {_sendPool = new PrioritySendPool(SEND_POOL_CAPACITY);}
         else {_sendPool = null;}
         _unreachableEntries = new ConcurrentHashMap<>(32);
         _wasUnreachableEntries = new ConcurrentHashMap<>(32);

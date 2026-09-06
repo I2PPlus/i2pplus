@@ -254,7 +254,7 @@ public class TransportManager implements TransportEventListener {
      */
     synchronized void registerAndStart(Transport t) {
         String style = t.getStyle();
-        if (style.equals(NTCPTransport.STYLE) || style.equals(UDPTransport.STYLE))
+        if (style.equals(Transport.STYLE_NTCP) || style.equals(Transport.STYLE_SSU))
             throw new IllegalArgumentException("Builtin transport");
         if (_transports.containsKey(style) || _pluggableTransports.containsKey(style))
             throw new IllegalStateException("Duplicate transport");
@@ -293,7 +293,7 @@ public class TransportManager implements TransportEventListener {
      */
     synchronized void stopAndUnregister(Transport t) {
         String style = t.getStyle();
-        if (style.equals(NTCPTransport.STYLE) || style.equals(UDPTransport.STYLE))
+        if (style.equals(Transport.STYLE_NTCP) || style.equals(Transport.STYLE_SSU))
             throw new IllegalArgumentException("Builtin transport");
         t.setListener(null);
         _pluggableTransports.remove(style);
@@ -398,8 +398,8 @@ public class TransportManager implements TransportEventListener {
             return;
         // non-local (unless test mode), don't include loopback, include IPv6
         Set<String> ipset = Addresses.getAddresses(_context.getBooleanProperty("i2np.allowLocal"), false, true);
-        String lastv4 = _context.getProperty(UDPTransport.PROP_IP);
-        String lastv6 = _context.getProperty(UDPTransport.PROP_IPV6);
+        String lastv4 = _context.getProperty(Transport.PROP_IP);
+        String lastv6 = _context.getProperty(Transport.PROP_IPV6);
         boolean preferTemp = Boolean.parseBoolean(Addresses.useIPv6TempAddresses());
         // Avoid IPv6 temporary addresses if we have a non-temporary one,
         // unless the kernel prefers them
@@ -486,7 +486,7 @@ public class TransportManager implements TransportEventListener {
     void externalAddressReceived(Transport.AddressSource source, byte[] ip, int port) {
         for (Transport t : _transports.values()) {
             // don't loop
-            if (!(source == SOURCE_SSU && t.getStyle().equals(UDPTransport.STYLE)))
+            if (!(source == SOURCE_SSU && t.getStyle().equals(Transport.STYLE_SSU)))
                 t.externalAddressReceived(source, ip, port);
         }
     }
@@ -501,7 +501,7 @@ public class TransportManager implements TransportEventListener {
     void externalAddressRemoved(Transport.AddressSource source, boolean ipv6) {
         for (Transport t : _transports.values()) {
             // don't loop
-            if (!(source == SOURCE_SSU && t.getStyle().equals(UDPTransport.STYLE)))
+            if (!(source == SOURCE_SSU && t.getStyle().equals(Transport.STYLE_SSU)))
                 t.externalAddressRemoved(source, ipv6);
         }
     }
@@ -535,10 +535,10 @@ public class TransportManager implements TransportEventListener {
         // Let's do this in a predictable order to make testing easier
         // Start NTCP first so it can get notified from SSU
         List<Transport> tps = new ArrayList<>();
-        Transport tp = getTransport(NTCPTransport.STYLE);
+        Transport tp = getTransport(Transport.STYLE_NTCP);
         if (tp != null)
             tps.add(tp);
-        tp = getTransport(UDPTransport.STYLE);
+        tp = getTransport(Transport.STYLE_SSU);
         if (tp != null)
             tps.add(tp);
         // now add any others (pluggable)
@@ -627,7 +627,7 @@ public class TransportManager implements TransportEventListener {
      * @since 0.9.70+
      */
     public Tuner getTuner() {
-        Transport udp = _transports.get(UDPTransport.STYLE);
+        Transport udp = _transports.get(Transport.STYLE_SSU);
         if (udp instanceof UDPTransport)
             return ((UDPTransport) udp).getTuner();
         return null;
@@ -765,11 +765,11 @@ public class TransportManager implements TransportEventListener {
      */
     public List<Hash> getEstablished() {
         // for efficiency
-        Transport t = _transports.get("NTCP");
+        Transport t = _transports.get(Transport.STYLE_NTCP);
         List<Hash> rv = null;
         if (t != null)
             rv = t.getEstablished();
-        t = _transports.get("SSU");
+        t = _transports.get(Transport.STYLE_SSU);
         if (t != null) {
             if (rv != null)
                 rv.addAll(t.getEstablished());
@@ -934,9 +934,9 @@ public class TransportManager implements TransportEventListener {
         for (Transport t : _transports.values()) {
             int port = t.getRequestedPort();
             // Use UDP port for NTCP too - see comment in NTCPTransport.getRequestedPort() for why this is here
-            if (t.getStyle().equals(NTCPTransport.STYLE) && port <= 0 &&
-                _context.getBooleanProperty(NTCPTransport.PROP_I2NP_NTCP_AUTO_PORT)) {
-                Transport udp = getTransport(UDPTransport.STYLE);
+            if (t.getStyle().equals(Transport.STYLE_NTCP) && port <= 0 &&
+                _context.getBooleanProperty(Transport.PROP_I2NP_NTCP_AUTO_PORT)) {
+                Transport udp = getTransport(Transport.STYLE_SSU);
                 if (udp != null)
                     port = udp.getRequestedPort();
             }
@@ -952,7 +952,7 @@ public class TransportManager implements TransportEventListener {
                     config != TransportUtil.IPv6Config.IPV6_DISABLED &&
                     !t.isIPv6Firewalled()) {
                     RouterAddress ra = t.getCurrentAddress(true);
-                    if ((ra == null || ra.getHost() == null) && t.getStyle().equals(UDPTransport.STYLE)) {
+                    if ((ra == null || ra.getHost() == null) && t.getStyle().equals(Transport.STYLE_SSU)) {
                         UDPTransport udp = (UDPTransport) t;
                         ra = udp.getCurrentExternalAddress(true);
                     }
@@ -1374,8 +1374,8 @@ public class TransportManager implements TransportEventListener {
                     _log.warn("SSU establish failed for [" + peer.toBase64().substring(0,6) + "]", e);
             }
         }
-        Transport ntcp = _transports.get("NTCP");
-        if (ntcp != null && !ri.getTargetAddresses("NTCP", "NTCP2").isEmpty()) {
+        Transport ntcp = _transports.get(Transport.STYLE_NTCP);
+        if (ntcp != null && !ri.getTargetAddresses(Transport.STYLE_NTCP, Transport.STYLE_NTCP2).isEmpty()) {
             try {
                 ntcp.send(onm);
             } catch (Exception e) {
