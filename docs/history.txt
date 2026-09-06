@@ -1,20 +1,44 @@
-2026-09-03 dr|z3d
-  * Streaming:
-    - Fail fast on write timeout when forward-ACK progress stalls, so a
-      dead peer's connection ends promptly instead of lingering
+2026-09-05 dr|z3d
   * I2PTunnel:
-    - On server handler overflow, reject the connection cleanly and keep
-      accepting rather than running the handler on the accept thread
-      (fixes inbound connections being dropped/RESET under load)
+    - Give each server tunnel its own handler pool so a flood on one port no
+      longer starves the others; the Tuner manages both the per-tunnel and
+      summed global caps on saturation, with the per-tunnel ceiling raised to
+      4096 and the global ceiling to 16384 (heap-clamped)
+    - Add an "I2PTunnel server threads per tunnel" tunable to the
+      /tuning page with names for the per-server-tunnel handler pools
+  * I2PSnark: Add six new public opentrackers (Actix, FattyDove, LocalCache,
+    Observations, Public, YetAnother) to the default tracker sets
+    and their b32 addresses for announce lookup
+
+2026-09-04 dr|z3d
+  * Peermanager: Exclude fast-tier picks above an adaptive absolute-RTT ceiling
+    (measured tier boundary scaled 3x, floored at 1.5s, capped at 3s) so a
+    degraded network no longer selects high-latency peers
+  * Streaming: Add a per-destination SYN-burst temp-ban to contain floods of
+    incoming connection attempts instead of exhausting the pool
+  * Router: Ban unknown-sender BAD-destination-ConnectionID flood sources at
+    the SSU2 layer once offenses pass the router's banlist threshold
+  * Tuner: Autotune the streaming concurrent-stream cap: the effective cap
+    follows legitimate demand up, never past the user's configured
+    ceiling, and steps down only under router starvation
+
+2026-09-04 zzz
+  * I2PSnark: Default the add-tracker form to "Open tracker"
+
+2026-09-03 dr|z3d
+  * Streaming: Fail fast on write timeout when forward-ACK progress stalls, so a
+    dead peer's connection ends promptly instead of lingering
+  * I2PTunnel: On server handler overflow, reject the connection cleanly and keep
+    accepting rather than running the handler on the accept thread
+    (fixes inbound connections being dropped/RESET under load)
   * Router:
     - Refresh and promote traffic-proven UNTESTED inbound tunnels so they
       are used sooner, improving inbound reliability
     - Auto-tune the server tunnel handler pool and its admission queue
       size on saturation; keep a floor-sized burst buffer when idle so a
       quiet server no longer collapses its connection queue to the minimum
-  * Router console:
-    - Add a tunable for the I2PTunnel server handler queue capacity on the
-      /tuning page
+  * Console: Add a tunable for the I2PTunnel server handler queue capacity
+    on the /tuning page
 
 2026-09-02 dr|z3d
   * Tunnel:
@@ -49,16 +73,13 @@
       directory hasn't been created yet
     - Fix a crash while stripping deprecated per-torrent config keys
     - Fix ubergine theme row shading (odd/even classes)
-  * Addressbook:
-    - Skip host checks (fail fast) when the shared ping manager is
-      unavailable
-  * GeoIP:
-    - Update GeoIP and ASN databases; add --host and --port options to
-      makegeoip.sh
+  * Addressbook:  Skip host checks (fail fast) when the shared ping manager
+    is unavailable
+  * GeoIP: Update GeoIP and ASN databases; add --host and --port options
+    to makegeoip.sh
 
 2026-08-31 dr|z3d
-  * Router:
-    - Refresh LeaseSets 90s before expiry for smoother connectivity
+  * Router: Refresh LeaseSets 90s before expiry for smoother connectivity
   * I2PSnark:
     - Raise global announce permits to 10, throttle to 20/min per tracker
     - Make zzzot lookups metadata-only, no Storage preallocation or
@@ -72,9 +93,8 @@
       that was never written to disk
 
 2026-08-29 dr|z3d
-  * Tunnel:
-    - Add maxConnections admission gate on server tunnels with
-      clean disconnect and 503 response on gate rejection
+  * Tunnel: Add maxConnections admission gate on server tunnels with clean
+    disconnect and 503 response on gate rejection
   * Router:
     - Re-mint public LeaseSets inside emergency window even under
       tunnel deficit
@@ -86,9 +106,8 @@
       400+torrents*250) and retune expire tiers
     - Restore TorrentCreateFilter serialVersionUID for legacy
       filters.conf compatibility
-  * Console:
-    - Guard CSRF nonce against invalidated sessions; fix 413/XSS
-      filter error on config pages
+  * Console: Guard CSRF nonce against invalidated sessions; fix 413/XSS
+    filter error on config pages
 
 2026-08-27 dr|z3d
   * Router:
@@ -103,9 +122,8 @@
   * I2PSnark:
     - Self-contained screenlog bandwidth graph replaces rrd4j viewstat
     - Persist running status on start and filter on boot
-  * SAM:
-    - Fix STREAM subsession race in execStreamMessage; accept
-      timeout, overflow rate-limiting, queue 16K
+  * SAM: Fix STREAM subsession race in execStreamMessage; accept timeout,
+    overflow rate-limiting, queue 16K
 
 2026-08-25 dr|z3d
   * I2PSnark:
@@ -158,8 +176,7 @@
       handling for no-version peers instead of immediate bans
     - Increase flood redundancy from 3 to 10 for wider netdb dispersal
     - Log a per-minute transit pool trend line for decline monitoring
-  * Console:
-    - Ban config: fix Clear All Bans and Reset To Defaults buttons
+  * Console: Fix Clear All Bans and Reset To Defaults buttons on /configban
 
 2026-08-22 dr|z3d
   * Tunnel:
