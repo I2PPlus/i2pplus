@@ -29,7 +29,7 @@ public class LogRecordFormatterTest {
     @Test
     public void testEllipsizesPreservingSuffix() {
         // "Server.<remoteHost>.<remotePort>" accept thread (21 chars) -> last 9 chars
-        assertEquals("...0.1.7662", LogRecordFormatter.padOrTruncate("Server.127.0.0.1.7662", WIDTH));
+        assertEquals("....0.1.7662", LogRecordFormatter.padOrTruncate("Server.127.0.0.1.7662", WIDTH));
         // streaming per-connection thread (20 chars) -> last 9 chars
         assertEquals("...er:Dj66.2", LogRecordFormatter.padOrTruncate("SomeApp-Web:Aj:er:Dj66.2", WIDTH));
     }
@@ -55,9 +55,9 @@ public class LogRecordFormatterTest {
 
     @Test
     public void testEllipsisAtBoundary() {
-        // exactly size+1 chars -> last (size-3)+1 kept with prefix
+        // exactly size+1 chars -> last (size-3) kept with prefix, still exactly size wide
         String thirteen = "1234567890123";
-        assertEquals("...234567890123".substring(0, WIDTH), LogRecordFormatter.padOrTruncate(thirteen, WIDTH));
+        assertEquals("...567890123", LogRecordFormatter.padOrTruncate(thirteen, WIDTH));
         // one char short of ellipsizing stays unchanged, padded
         assertEquals("12345678901 ", LogRecordFormatter.padOrTruncate("12345678901", WIDTH));
     }
