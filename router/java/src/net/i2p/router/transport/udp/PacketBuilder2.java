@@ -224,6 +224,133 @@ class PacketBuilder2 {
     }
 
     /**
+     *  Total bytes a single fragment contributes to a data packet body:
+     *  the fragment payload plus the per-block header, plus the extra
+     *  5-byte overhead carried by follow-on fragments (fragment number and
+     *  message ID).
+     *
+     *  @param fragmentSize size of the fragment payload from
+     *                      {@link OutboundMessageState#fragmentSize(int)}
+     *  @param fragment {@code 0} for the first fragment, &gt; 0 for follow-ons
+     *  @return total body bytes for this fragment
+     *  @since 0.9.71+
+     */
+    static int fragmentDataSize(int fragmentSize, int fragment) {
+        return fragmentSize + SSU2Payload.BLOCK_HEADER_SIZE + (fragment > 0 ? 5 : 0);
+    }
+
+    /**
+     *  Size of the IP + UDP headers for a data packet to a peer.
+     *  This excludes the SSU2 short packet header and MAC.
+     *
+     *  @param isIPv6 {@code true} for IPv6 peers
+     *  @return combined IP and UDP header size in bytes
+     *  @since 0.9.71+
+     */
+    static int dataPacketHeaderSize(boolean isIPv6) {
+        if (isIPv6)
+            return IPV6_HEADER_SIZE + UDP_HEADER_SIZE;
+        return IP_HEADER_SIZE + UDP_HEADER_SIZE;
+    }
+
+    /**
+     *  Minimum fixed overhead (IP + UDP + short packet header + MAC) of a
+     *  data packet, used to compute how much room remains for acks and body
+     *  blocks at the peer's MTU.
+     *
+     *  @param isIPv6 {@code true} for IPv6 peers
+     *  @return {@link #MIN_IPV6_DATA_PACKET_OVERHEAD} or {@link #MIN_DATA_PACKET_OVERHEAD}
+     *  @since 0.9.71+
+     */
+    static int dataPacketOverhead(boolean isIPv6) {
+        if (isIPv6)
+            return MIN_IPV6_DATA_PACKET_OVERHEAD;
+        return MIN_DATA_PACKET_OVERHEAD;
+    }
+
+    /**
+     *  Sum of the on-wire lengths of the non-fragment blocks to be appended
+     *  to a data packet, used to budget ack space.
+     *
+     *  @param otherBlocks may be {@code null} or empty
+     *  @return total block lengths, {@code 0} when null/empty
+     *  @since 0.9.71+
+     */
+    static int otherBlocksSize(List<Block> otherBlocks) {
+        if (otherBlocks == null)
+            return 0;
+        int rv = 0;
+        for (Block block : otherBlocks) {
+            rv += block.getTotalLength();
+        }
+        return rv;
+    }
+
+    /**
+     *  Whether enough ack space remains to fit at least one ack range.
+     *  An ack block needs its own block header plus a 5-byte first range.
+     *
+     *  @param availableForAcks bytes free after the payload fragments
+     *  @return {@code true} when an ack block can be emitted
+     *  @since 0.9.71+
+     */
+    static boolean hasRoomForAckBlock(int availableForAcks) {
+        return availableForAcks >= SSU2Payload.BLOCK_HEADER_SIZE + 5;
+    }
+
+    /**
+     *  Maximum number of ack ranges that fit in the free space, capped at
+     *  {@link #ABSOLUTE_MAX_ACK_RANGES}. Each additional range costs 2 bytes.
+     *
+     *  @param availableForAcks bytes free after the payload fragments
+     *  @return range count, &gt;= 0
+     *  @since 0.9.71+
+     */
+    static int maxAckRanges(int availableForAcks) {
+        return Math.min((availableForAcks - (SSU2Payload.BLOCK_HEADER_SIZE + 5)) / 2, ABSOLUTE_MAX_ACK_RANGES);
+    }
+
+    /**
+     *  Whether a message is carried as a single I2NP block: the first
+     *  fragment is also the only fragment.
+     *
+     *  @param fragment fragment number within the message ({@code 0} = first)
+     *  @param count total fragments in the message
+     *  @return {@code true} for a one-fragment message
+     *  @since 0.9.71+
+     */
+    static boolean isSingleFragment(int fragment, int count) {
+        return fragment == 0 && count == 1;
+    }
+
+    /**
+     *  Whether this packet number falls on the boundary where a DateTime
+     *  block should be emitted ({@code packetNumber % DATETIME_SEND_FREQUENCY
+     *  == DATETIME_SEND_FREQUENCY - 1}). Kept cheap via a power-of-two mask.
+     *
+     *  @param packetNumber the packet's sequence number
+     *  @return {@code true} to send a DateTime block
+     *  @since 0.9.71+
+     */
+    static boolean isDateTimeSendPeriod(long packetNumber) {
+        return (packetNumber & (DATETIME_SEND_FREQUENCY - 1)) == DATETIME_SEND_FREQUENCY - 1;
+    }
+
+    /**
+     *  Whether a 7-byte DateTime block still fits in the packet at the
+     *  peer's MTU, counting the short header and MAC that surround the body.
+     *
+     *  @param ipHeaderSize IP + UDP header size for this peer
+     *  @param sizeWritten bytes written to the body so far
+     *  @param mtu the peer's current MTU
+     *  @return {@code true} when the block fits
+     *  @since 0.9.71+
+     */
+    static boolean fitsDateTimeBlock(int ipHeaderSize, int sizeWritten, int mtu) {
+        return ipHeaderSize + SHORT_HEADER_SIZE + sizeWritten + 7 + MAC_LEN <= mtu;
+    }
+
+    /**
      * This builds a data packet (PAYLOAD_TYPE_DATA).
      * See the methods below for the other message types.
      *
@@ -264,31 +391,14 @@ class PacketBuilder2 {
             int pri = state.getPriority();
             if (pri > priority)
                 priority = pri;
-            int fragment = frag.num;
-            int sz = state.fragmentSize(fragment);
-            dataSize += sz;
-            dataSize += SSU2Payload.BLOCK_HEADER_SIZE;
-            if (fragment > 0)
-                dataSize += 5; // frag + msg ID for follow-on blocks
+            dataSize += fragmentDataSize(state.fragmentSize(frag.num), frag.num);
         }
 
         // calculate size available for acks
         int currentMTU = peer.getMTU();
-        int availableForAcks = currentMTU - dataSize;
+        int availableForAcks = currentMTU - dataSize - dataPacketOverhead(peer.isIPv6()) - otherBlocksSize(otherBlocks);
         // includes UDP header
-        int ipHeaderSize;
-        if (peer.isIPv6()) {
-            availableForAcks -= MIN_IPV6_DATA_PACKET_OVERHEAD;
-            ipHeaderSize = IPV6_HEADER_SIZE + UDP_HEADER_SIZE;
-        } else {
-            availableForAcks -= MIN_DATA_PACKET_OVERHEAD;
-            ipHeaderSize = IP_HEADER_SIZE + UDP_HEADER_SIZE;
-        }
-        if (otherBlocks != null) {
-            for (Block block : otherBlocks) {
-                availableForAcks -= block.getTotalLength();
-            }
-        }
+        int ipHeaderSize = dataPacketHeaderSize(peer.isIPv6());
 
         // make the packet
         // IOE thrown from here if peer is dead
@@ -306,8 +416,8 @@ class PacketBuilder2 {
         int sizeWritten = 0;
 
         // add the acks
-        if (availableForAcks >= SSU2Payload.BLOCK_HEADER_SIZE + 5) {
-            int maxRanges = Math.min((availableForAcks - (SSU2Payload.BLOCK_HEADER_SIZE + 5)) / 2, ABSOLUTE_MAX_ACK_RANGES);
+        if (hasRoomForAckBlock(availableForAcks)) {
+            int maxRanges = maxAckRanges(availableForAcks);
             Block block = peer.getReceivedMessages().toAckBlock(maxRanges);
             if (block != null) {
                 blocks.add(block);
@@ -328,14 +438,12 @@ class PacketBuilder2 {
             int fragment = frag.num;
             int count = state.getFragmentCount();
             Block block;
-            if (fragment == 0) {
-                if (count == 1)
-                    block = pool.acquireI2NP(state);
-                else
-                    block = pool.acquireFirstFrag(state);
-            } else {
+            if (isSingleFragment(fragment, count))
+                block = pool.acquireI2NP(state);
+            else if (fragment == 0)
+                block = pool.acquireFirstFrag(state);
+            else
                 block = pool.acquireFollowFrag(state, fragment);
-            }
             blocks.add(block);
             int sz = block.getTotalLength();
             off += sz;
@@ -358,8 +466,8 @@ class PacketBuilder2 {
         // DateTime block every so often, if room
         // not allowed after termination
         if (!hasTermination &&
-            (pktNum & (DATETIME_SEND_FREQUENCY - 1)) == DATETIME_SEND_FREQUENCY - 1 &&
-            ipHeaderSize + SHORT_HEADER_SIZE + sizeWritten + 7 + MAC_LEN <= currentMTU) {
+            isDateTimeSendPeriod(pktNum) &&
+            fitsDateTimeBlock(ipHeaderSize, sizeWritten, currentMTU)) {
             Block block = new SSU2Payload.DateTimeBlock(_context);
             blocks.add(block);
             off += 7;
@@ -1404,9 +1512,7 @@ class PacketBuilder2 {
      */
     public static int getMaxDataSize(PeerState peer) {
         if (peer == null) {return 0;}
-        int mtu = peer.getMTU();
-        if (peer.isIPv6()) {return mtu - MIN_IPV6_DATA_PACKET_OVERHEAD;}
-        return mtu - MIN_DATA_PACKET_OVERHEAD;
+        return peer.getMTU() - dataPacketOverhead(peer.isIPv6());
     }
 
 }
