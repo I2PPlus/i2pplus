@@ -3740,22 +3740,23 @@ public class UDPTransport extends TransportImpl {
         public String toString() { return "UDP bid @ " + getLatencyMs(); }
     }
 
+    // we've seen firewalls change ports after 40 seconds
+    private static final long PING_FIREWALL_TIME = 30*1000L;
+    private static final long PING_FIREWALL_CUTOFF = PING_FIREWALL_TIME / 2;
+    // ping 1/4 of the peers every loop
+    private static final int SLICES = 4;
+    private static final long SHORT_LOOP_TIME = PING_FIREWALL_CUTOFF / (SLICES + 1);
+    private static final long LONG_LOOP_TIME = 25*1000L;
+    private static final long EXPIRE_INCREMENT = 15*1000L;
+    private static final long EXPIRE_DECREMENT = 45*1000L;
+    private static final long MAY_DISCON_TIMEOUT = 15*1000L;
+    private static final long RI_STORE_INTERVAL = 29*60*1000L;
+
     private class ExpirePeerEvent extends SimpleTimer2.TimedEvent {
         private final List<PeerState> _expireBuffer;
         private volatile boolean _alive;
         private int _runCount;
         private boolean _lastLoopShort;
-        // we've seen firewalls change ports after 40 seconds
-        private static final long PING_FIREWALL_TIME = 30*1000L;
-        private static final long PING_FIREWALL_CUTOFF = PING_FIREWALL_TIME / 2;
-        // ping 1/4 of the peers every loop
-        private static final int SLICES = 4;
-        private static final long SHORT_LOOP_TIME = PING_FIREWALL_CUTOFF / (SLICES + 1);
-        private static final long LONG_LOOP_TIME = 25*1000L;
-        private static final long EXPIRE_INCREMENT = 15*1000L;
-        private static final long EXPIRE_DECREMENT = 45*1000L;
-        private static final long MAY_DISCON_TIMEOUT = 15*1000L;
-        private static final long RI_STORE_INTERVAL = 29*60*1000L;
 
         /** Expire peer event. */
         public ExpirePeerEvent() {
@@ -3785,48 +3786,20 @@ public class UDPTransport extends TransportImpl {
                     _context.statManager().addRateData("udp.sentMessagesDepth", sentTotal / sampled);
             }
 
-            boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+            boolean weAreFirewalled = isFirewalled(_context.commSystem().getStatus());
 
             // Increase allowed idle time if we are well under allowed connections, otherwise decrease
             // Much more lenient capacity check for firewalled routers to keep peers longer
             boolean haveCap = haveCapacity(weAreFirewalled ? 15 : 33); // 15% instead of 25% for firewalled
-            if (haveCap) {
-                long inc;
-                // don't adjust too quickly if we are looping fast
-                if (_lastLoopShort)
-                    inc = EXPIRE_INCREMENT * SHORT_LOOP_TIME / LONG_LOOP_TIME;
-                else
-                    inc = EXPIRE_INCREMENT;
-                _expireTimeout = Math.min(_expireTimeout + inc, EXPIRE_TIMEOUT);
-            } else {
-                long dec;
-                if (_lastLoopShort)
-                    dec = EXPIRE_DECREMENT * SHORT_LOOP_TIME / LONG_LOOP_TIME;
-                else
-                    dec = EXPIRE_DECREMENT;
-                _expireTimeout = Math.max(_expireTimeout - dec, MIN_EXPIRE_TIMEOUT);
-            }
+            _expireTimeout = adjustExpireTimeout(_expireTimeout, haveCap, _lastLoopShort);
 
             long now = _context.clock().now();
             boolean overCapacity = totalPeers > maxConn;
             // Hard cap: when over max connections, use aggressive 30s idle cutoff
-            long overCapCutoff = overCapacity ? now - 30*1000L : Long.MIN_VALUE;
-            long shortInactivityCutoff;
-            long longInactivityCutoff;
-
-            if (weAreFirewalled) {
-               // Use much more lenient timeouts for firewalled routers to retain peers
-               shortInactivityCutoff = now - Math.max(_expireTimeout, 25*60*1000L);  // Min 25 minutes
-               longInactivityCutoff = now - Math.max(EXPIRE_TIMEOUT, 45*60*1000L); // Min 45 minutes
-            } else {
-               shortInactivityCutoff = now - _expireTimeout;
-               longInactivityCutoff = now - EXPIRE_TIMEOUT;
-            }
+            long overCapCutoff = idleHardCutoff(now, overCapacity);
+            // Use much more lenient timeouts for firewalled routers to retain peers
+            long shortInactivityCutoff = inactivityCutoff(now, _expireTimeout, weAreFirewalled, 25*60*1000L);  // Min 25 minutes
+            long longInactivityCutoff = inactivityCutoff(now, EXPIRE_TIMEOUT, weAreFirewalled, 45*60*1000L); // Min 45 minutes
 
             // MAY_DISCON_TIMEOUT cutoff for stale peer cleanup
             final long mayDisconCutoff = now - MAY_DISCON_TIMEOUT;
@@ -3844,28 +3817,25 @@ public class UDPTransport extends TransportImpl {
                 for (PeerState peer : _peersByIdent.values()) {
                     // Hard cap enforcement: drop peers idle >30s when over capacity
                     if (overCapacity &&
-                        peer.getLastReceiveTime() < overCapCutoff &&
-                        peer.getLastSendTime() < overCapCutoff) {
+                        idleSince(peer.getLastReceiveTime(), peer.getLastSendTime(), overCapCutoff)) {
                         _expireBuffer.add(peer);
                         continue;
                     }
-                    long inactivityCutoff;
+                    long tierCutoff;
                     // if we offered to introduce them, or we used them as introducer in last 2 hours
-                    if (peer.getWeRelayToThemAs() > 0 || peer.getIntroducerTime() > pingCutoff) {
-                        inactivityCutoff = longInactivityCutoff;
-                    } else if ((!haveCap || !peer.isInbound()) &&
-                               peer.getMayDisconnect() &&
-                               peer.getMessagesReceived() <= 2 && peer.getMessagesSent() <= 2) {
-                        inactivityCutoff = mayDisconCutoff;
+                    if (reliedOnRecently(peer.getWeRelayToThemAs(), peer.getIntroducerTime(), pingCutoff)) {
+                        tierCutoff = longInactivityCutoff;
+                    } else if (mayDisconnectLowTraffic(haveCap, peer.isInbound(), peer.getMayDisconnect(),
+                                                       peer.getMessagesReceived(), peer.getMessagesSent())) {
+                        tierCutoff = mayDisconCutoff;
                     } else {
-                        inactivityCutoff = shortInactivityCutoff;
+                        tierCutoff = shortInactivityCutoff;
                     }
-                    if ( (peer.getLastReceiveTime() < inactivityCutoff) && (peer.getLastSendTime() < inactivityCutoff) ) {
+                    if (idleSince(peer.getLastReceiveTime(), peer.getLastSendTime(), tierCutoff)) {
                         _expireBuffer.add(peer);
-                    } else if (shouldPingFirewall &&
-                               ((_runCount ^ peer.hashCode()) & (SLICES - 1)) == 0 &&
-                               peer.getLastSendOrPingTime() < pingFirewallCutoff &&
-                               peer.getLastReceiveTime() < pingFirewallCutoff) {
+                    } else if (shouldFirewallPing(shouldPingFirewall, firewallPingSliceMatched(_runCount, peer.hashCode()),
+                                                  peer.getLastSendOrPingTime(), peer.getLastReceiveTime(),
+                                                  pingFirewallCutoff)) {
                         // ping if firewall is mapping the port to keep port the same...
                         // if the port changes we are screwed
                         if (_log.shouldDebug())
@@ -3886,12 +3856,9 @@ public class UDPTransport extends TransportImpl {
                     } else {
                         // periodically send our RI
                         long uptime = now - peer.getKeyEstablishedTime();
-                        if (uptime >= RI_STORE_INTERVAL) {
-                            long mod = uptime % RI_STORE_INTERVAL;
-                            if (mod < loopTime) {
-                                DatabaseStoreMessage dsm = _establisher.getOurInfo();
-                                send(dsm, peer);
-                            }
+                        if (shouldStoreRI(uptime, loopTime)) {
+                            DatabaseStoreMessage dsm = _establisher.getOurInfo();
+                            send(dsm, peer);
                         }
                     }
                 }
@@ -3910,8 +3877,7 @@ public class UDPTransport extends TransportImpl {
                 }
                 _expireBuffer.clear();
             }
-
-            if (_alive)
+if (_alive)
                 schedule(loopTime);
         }
 
@@ -3924,6 +3890,192 @@ public class UDPTransport extends TransportImpl {
                 cancel();
             }
         }
+    }
+
+    /**
+     *  Whether a comm-system reachability status means we are firewalled for
+     *  at least one address family.
+     *
+     *  @param status the current comm-system status
+     *  @return true for any of the six firewalled statuses
+     *  @since 0.9.71+
+     */
+    static boolean isFirewalled(net.i2p.router.CommSystemFacade.Status status) {
+        return status == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+               status == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+    }
+
+    /**
+     *  Adjust the idle-timeout towards the target as a function of spare
+     *  connection capacity, ramping slowly when the loop is running short.
+     *
+     *  @param expireTimeout current idle-expire timeout
+     *  @param haveCap true when connection capacity remains
+     *  @param lastLoopShort true if the previous loop was a short (fast) pass
+     *  @return the adjusted timeout, clamped to [MIN_EXPIRE_TIMEOUT, EXPIRE_TIMEOUT]
+     *  @since 0.9.71+
+     */
+    static long adjustExpireTimeout(long expireTimeout, boolean haveCap, boolean lastLoopShort) {
+        if (haveCap) {
+            long inc;
+            // don't adjust too quickly if we are looping fast
+            if (lastLoopShort)
+                inc = EXPIRE_INCREMENT * SHORT_LOOP_TIME / LONG_LOOP_TIME;
+            else
+                inc = EXPIRE_INCREMENT;
+            return Math.min(expireTimeout + inc, EXPIRE_TIMEOUT);
+        }
+        long dec;
+        if (lastLoopShort)
+            dec = EXPIRE_DECREMENT * SHORT_LOOP_TIME / LONG_LOOP_TIME;
+        else
+            dec = EXPIRE_DECREMENT;
+        return Math.max(expireTimeout - dec, MIN_EXPIRE_TIMEOUT);
+    }
+
+    /**
+     *  Hard-cap idle cutoff: peers idle past this are dropped when the
+     *  connection maximum is exceeded, otherwise the cutoff is unbounded.
+     *
+     *  @param now current time ms
+     *  @param overCapacity true when peer count exceeds the connection max
+     *  @return the idle cutoff (30s before now), or Long.MIN_VALUE when not over capacity
+     *  @since 0.9.71+
+     */
+    static long idleHardCutoff(long now, boolean overCapacity) {
+        return overCapacity ? now - 30*1000L : Long.MIN_VALUE;
+    }
+
+    /**
+     *  Idle cutoff for a peer tier. Firewalled routers keep peers much
+     *  longer by flooring the cutoff at {@code firewalledMin}.
+     *
+     *  @param now current time ms
+     *  @param timeout tier timeout
+     *  @param weAreFirewalled true for lenient firewalled behavior
+     *  @param firewalledMin minimum timeout when firewalled
+     *  @return the inactivity cutoff; peers idle before it are expirable
+     *  @since 0.9.71+
+     */
+    static long inactivityCutoff(long now, long timeout, boolean weAreFirewalled, long firewalledMin) {
+        return weAreFirewalled ? now - Math.max(timeout, firewalledMin) : now - timeout;
+    }
+
+    /**
+     *  Whether we have recently relied on this peer as a relay or
+     *  introducer, in which case it gets the long inactivity tier.
+     *
+     *  @param weRelayToThemAs nonzero when we offer this peer as introducer
+     *  @param introducerTime ms since this peer was used as introducer
+     *  @param pingCutoff the 2-hour reference cutoff
+     *  @return true if the peer was relied on recently
+     *  @since 0.9.71+
+     */
+    static boolean reliedOnRecently(long weRelayToThemAs, long introducerTime, long pingCutoff) {
+        return weRelayToThemAs > 0 || introducerTime > pingCutoff;
+    }
+
+    /**
+     *  Whether an inbound (or capacity-starved) peer with may-disconnect
+     *  set and near-zero traffic is a stale candidate for the aggressive
+     *  15-second cutoff.
+     *
+     *  @param haveCap true when connection capacity remains
+     *  @param inbound true if the peer connected inbound
+     *  @param mayDisconnect peer's may-disconnect flag
+     *  @param messagesReceived messages received from the peer
+     *  @param messagesSent messages sent to the peer
+     *  @return true when the peer qualifies for the stale-cutoff tier
+     *  @since 0.9.71+
+     */
+    static boolean mayDisconnectLowTraffic(boolean haveCap, boolean inbound, boolean mayDisconnect,
+                                           int messagesReceived, int messagesSent) {
+        return (!haveCap || !inbound) && mayDisconnect &&
+               messagesReceived <= 2 && messagesSent <= 2;
+    }
+
+    /**
+     *  Select the inactivity tier for a peer.
+     *
+     *  @param reliedOnRecently peer acted as relay/introducer recently
+     *  @param mayDisconnectLowTraffic peer is stale and may disconnect
+     *  @param longInactivityCutoff lenient tier cutoff
+     *  @param mayDisconCutoff aggressive stale-peer cutoff
+     *  @param shortInactivityCutoff default tier cutoff
+     *  @return the cutoff to compare both last-send and last-receive against
+     *  @since 0.9.71+
+     */
+    static long pickInactivityCutoff(boolean reliedOnRecently, boolean mayDisconnectLowTraffic,
+                                     long longInactivityCutoff, long mayDisconCutoff, long shortInactivityCutoff) {
+        if (reliedOnRecently)
+            return longInactivityCutoff;
+        if (mayDisconnectLowTraffic)
+            return mayDisconCutoff;
+        return shortInactivityCutoff;
+    }
+
+    /**
+     *  Whether a peer has been idle (no receive and no send) since the
+     *  given cutoff.
+     *
+     *  @param lastReceive last receive time ms
+     *  @param lastSend last send time ms
+     *  @param cutoff inactivity cutoff ms
+     *  @return true if both activity stamps precede the cutoff
+     *  @since 0.9.71+
+     */
+    static boolean idleSince(long lastReceive, long lastSend, long cutoff) {
+        return lastReceive < cutoff && lastSend < cutoff;
+    }
+
+    /**
+     *  Firewall-keepalive slice gate: roughly one peer in SLICES pings per
+     *  pass, so pings are spread out over the short loop.
+     *
+     *  @param runCount current expire-loop run counter
+     *  @param peerHash peer's hashCode
+     *  @return true if this peer is scheduled for a keepalive ping
+     *  @since 0.9.71+
+     */
+    static boolean firewallPingSliceMatched(int runCount, int peerHash) {
+        return ((runCount ^ peerHash) & (SLICES - 1)) == 0;
+    }
+
+    /**
+     *  Whether a firewall keepalive ping should be sent to this peer:
+     *  ping mode on, peer in this pass's slice, and no send-or-ping or
+     *  receive in the PING_FIREWALL_CUTOFF window.
+     *
+     *  @param shouldPingFirewall ping mode is active
+     *  @param sliceMatched peer selected for this pass
+     *  @param lastSendOrPing last send-or-ping time ms
+     *  @param lastReceive last receive time ms
+     *  @param pingFirewallCutoff ping-due cutoff ms
+     *  @return true when the keepalive ping should be sent
+     *  @since 0.9.71+
+     */
+    static boolean shouldFirewallPing(boolean shouldPingFirewall, boolean sliceMatched,
+                                      long lastSendOrPing, long lastReceive, long pingFirewallCutoff) {
+        return shouldPingFirewall && sliceMatched &&
+               lastSendOrPing < pingFirewallCutoff && lastReceive < pingFirewallCutoff;
+    }
+
+    /**
+     *  Whether the peer session key is old enough to warrant re-publishing
+     *  our RouterInfo. Publishes on the first loop at/after each RI_STORE_INTERVAL
+     *  boundary.
+     *
+     *  @param uptime ms since the peer session key was established
+     *  @param loopTime ms of the current loop interval
+     *  @return true when a periodic RouterInfo store is due
+     *  @since 0.9.71+
+     */
+    static boolean shouldStoreRI(long uptime, long loopTime) {
+        return uptime >= RI_STORE_INTERVAL && (uptime % RI_STORE_INTERVAL) < loopTime;
     }
 
     /**
