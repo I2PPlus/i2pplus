@@ -358,7 +358,7 @@ public class PeerState {
      *
      * Assuming that we can enforce an MTU correctly, this % 16 should be 12,
      * as the IP/UDP header is 28 bytes and data max should be mulitple of 16 for padding efficiency,
-     * and so PacketBuilder.buildPacket() works correctly.
+     * and so PacketBuilder2.buildPacket() works correctly.
      */
     public static final int MIN_MTU = 620;
 
@@ -388,7 +388,7 @@ public class PeerState {
      * To be figured out. Curse the ACKs.
      * Assuming that we can enforce an MTU correctly, this % 16 should be 12,
      * as the IP/UDP header is 28 bytes and data max should be mulitple of 16 for padding efficiency,
-     * and so PacketBuilder.buildPacket() works correctly.
+     * and so PacketBuilder2.buildPacket() works correctly.
      */
     public static final int LARGE_MTU = 1484;
 
@@ -578,6 +578,52 @@ public class PeerState {
      */
     private volatile long _cachedOldestLifetime;
 
+    /** Failsafe push of the retransmit timer when a retransmit pass selected nothing. */
+    private static final long RETRANSMIT_FAILSAFE_MS = 250;
+
+    /**
+     *  Result of classifying one outbound message during a finishAndAllocate()
+     *  scan over _outboundMessages.
+     *  @since 0.9.71+
+     */
+    enum Outcome { COMPLETE, EXPIRED, OVER_SENT, SENDABLE }
+
+    /**
+     *  Per-message outcome in a finishAndAllocate() scan, computed once per
+     *  message so the scan loop stays a thin dispatcher. Precedence:
+     *  COMPLETE &gt; EXPIRED &gt; OVER_SENT &gt; SENDABLE - an expired message is
+     *  reported as EXPIRED even when it also exceeded the volley cap, keeping
+     *  the expire/aggressive stats distinct.
+     *
+     *  @param complete the message finished (all fragments acked)
+     *  @param expired the message's expiry passed
+     *  @param overSent the message exceeded {@link OutboundMessageFragments#MAX_VOLLEYS}
+     *  @return the dominated outcome
+     *  @since 0.9.71+
+     */
+    static Outcome classifyOutcome(boolean complete, boolean expired, boolean overSent) {
+        if (complete) {return Outcome.COMPLETE;}
+        if (expired) {return Outcome.EXPIRED;}
+        if (overSent) {return Outcome.OVER_SENT;}
+        return Outcome.SENDABLE;
+    }
+
+    /**
+     *  Decide the next retransmit-timer fire time after a volley. A new timer is
+     *  armed on first arming or while fast retransmit is active; otherwise the
+     *  existing timer is left alone. Pure so the RTO policy is unit-testable.
+     *
+     *  @param firstArming true if no retransmit timer is currently armed
+     *  @param fastRetransmit whether fast retransmit is active
+     *  @param now current clock
+     *  @param rto the current smoothed retransmit timeout
+     *  @return the fire time to arm, or -1L to leave the timer unchanged
+     *  @since 0.9.71+
+     */
+    static long retransmitFireTime(boolean firstArming, boolean fastRetransmit, long now, long rto) {
+        return (firstArming || fastRetransmit) ? now + rto : -1L;
+    }
+
     /**
      * Replaces the two-pass pattern of finishMessages() + allocateSend() with a single pass
      * through _outboundMessages. Cleans up completed/expired messages and selects messages
@@ -635,31 +681,32 @@ public class PeerState {
                 long startedOn = state.getStartedOn();
                 if (startedOn < oldestStartedOn) oldestStartedOn = startedOn;
 
-                // Remove completed
-                if (state.isComplete()) {
-                    iter.remove();
-                    succeeded.add(state);
-                    continue;
-                }
-
-                // Remove expired / over-sent
-                boolean isExpired = state.isExpired(now);
-                boolean isFailed = isExpired || state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS;
-                if (isFailed) {
-                    iter.remove();
-                    if (isExpired) {
-                        _context.statManager().addRateData("udp.sendExpired", state.getPushCount());
-                    } else {
-                        _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
+                Outcome outcome = classifyOutcome(state.isComplete(), state.isExpired(now), state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS);
+                switch (outcome) {
+                    case COMPLETE:
+                        iter.remove();
+                        succeeded.add(state);
+                        continue;
+                    case EXPIRED:
+                    case OVER_SENT: {
+                        // Remove expired / over-sent
+                        iter.remove();
+                        if (outcome == Outcome.EXPIRED) {
+                            _context.statManager().addRateData("udp.sendExpired", state.getPushCount());
+                        } else {
+                            _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
+                        }
+                        failed.add(state);
+                        failedSize += state.getUnackedSize();
+                        failedCount += state.getUnackedFragments();
+                        OutNetMessage msg = state.getMessage();
+                        if (msg != null && !_isInbound && state.getSeqNum() == 0) {
+                            totalFail = true;
+                        }
+                        continue;
                     }
-                    failed.add(state);
-                    failedSize += state.getUnackedSize();
-                    failedCount += state.getUnackedFragments();
-                    OutNetMessage msg = state.getMessage();
-                    if (msg != null && !_isInbound && state.getSeqNum() == 0) {
-                        totalFail = true;
-                    }
-                    continue;
+                    default:
+                        break;
                 }
 
                 // Not removed — eligible for sending
@@ -725,66 +772,91 @@ public class PeerState {
 
         // Process failed — callbacks outside lock
         if (!failed.isEmpty()) {
-            Hash hash = getRemoteHostId() != null ? getRemoteHostId().getPeerHash() : null;
-            boolean isBanned = hash != null && _context.banlist().isBanlisted(hash);
-            if (isBanned) {
-                shouldLogInfo = false;
-                shouldLogWarn = false;
-            }
-            for (int i = 0; i < failed.size(); i++) {
-                OutboundMessageState state = failed.get(i);
-                OutNetMessage msg = state.getMessage();
-                if (msg != null) {
-                    msg.timestamp("Expired in the active pool");
-                    _transport.failed(state);
-                    if (shouldLogInfo)
-                        _log.info("[SSU] Message expired " + state + " -> " + this);
-                } else if (shouldLogInfo) {
-                    _log.warn("[SSU] Unable to send direct message " + state + " -> " + this);
-                }
-            }
-
-            if (failedSize > 0) {
-                if (totalFail) {
-                    if (shouldLogWarn)
-                        _log.warn("[SSU] First Outbound message failed (Timeout after 60s) -> " + this);
-                    _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
-                    _transport.dropPeer(this, true, "OB First Message Fail");
-                    _cachedOutboundCount = 0;
-                    return null;
-                }
-                synchronized (_sendWindowBytesRemainingLock) {
-                    _sendWindowBytesRemaining += failedSize;
-                    _sendWindowBytesRemaining += failedCount * fragmentOverhead();
-                    if (_sendWindowBytesRemaining > _sendWindowBytes.get())
-                        _sendWindowBytesRemaining = _sendWindowBytes.get();
-                }
-            }
-
-            if (_cachedOutboundCount <= 0) {
-                synchronized (this) {
-                    _retransmitTimer.set(0);
-                    exitFastRetransmit();
-                }
+            if (handleFailed(failed, failedSize, failedCount, totalFail, shouldLogInfo, shouldLogWarn)) {
+                return null;
             }
         }
 
         // Adjust retransmit timer (moved from allocateSend)
         if (rv != null && !rv.isEmpty()) {
             synchronized (this) {
-                if (_retransmitTimer.get() == 0)
-                    _retransmitTimer.set(now + getRTO());
-                else if (_fastRetransmit.get())
-                    _retransmitTimer.set(now + getRTO());
+                long fire = retransmitFireTime(_retransmitTimer.get() == 0, _fastRetransmit.get(), now, getRTO());
+                if (fire >= 0) {_retransmitTimer.set(fire);}
             }
         } else if (canSendOld && _cachedOutboundCount > 0) {
             // failsafe: timer says retransmit but nothing was eligible — push timer
             synchronized (this) {
-                _retransmitTimer.set(now + 250);
+                _retransmitTimer.set(now + RETRANSMIT_FAILSAFE_MS);
             }
         }
 
         return rv;
+    }
+
+    /**
+     *  Process failed outbound messages and their side effects, completely
+     *  outside _outboundLock. Window bytes for unacked fragments are refunded
+     *  under _sendWindowBytesRemainingLock (capped at the full window); a total
+     *  failure of the first outbound message destroys the peer with
+     *  REASON_FRAME_TIMEOUT and drops it.
+     *
+     *  Logging is suppressed for banlisted peers.
+     *
+     *  @param failed the collected failed states, never empty
+     *  @param failedSize total unacked size bytes to refund
+     *  @param failedCount total unacked fragments to refund overhead for
+     *  @param totalFail true if the first (seq 0) outbound message failed
+     *  @param shouldLogInfo whether info logs are enabled
+     *  @param shouldLogWarn whether warn logs are enabled
+     *  @return true if the peer was dropped (the caller must return null)
+     *  @since 0.9.71+
+     */
+    private boolean handleFailed(List<OutboundMessageState> failed, int failedSize, int failedCount, boolean totalFail,
+                                 boolean shouldLogInfo, boolean shouldLogWarn) {
+        boolean logInfo = shouldLogInfo;
+        boolean logWarn = shouldLogWarn;
+        Hash hash = getRemoteHostId() != null ? getRemoteHostId().getPeerHash() : null;
+        if (hash != null && _context.banlist().isBanlisted(hash)) {
+            logInfo = false;
+            logWarn = false;
+        }
+        for (int i = 0; i < failed.size(); i++) {
+            OutboundMessageState state = failed.get(i);
+            OutNetMessage msg = state.getMessage();
+            if (msg != null) {
+                msg.timestamp("Expired in the active pool");
+                _transport.failed(state);
+                if (logInfo)
+                    _log.info("[SSU] Message expired " + state + " -> " + this);
+            } else if (logInfo) {
+                _log.warn("[SSU] Unable to send direct message " + state + " -> " + this);
+            }
+        }
+
+        if (failedSize > 0) {
+            if (totalFail) {
+                if (logWarn)
+                    _log.warn("[SSU] First Outbound message failed (Timeout after 60s) -> " + this);
+                _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
+                _transport.dropPeer(this, true, "OB First Message Fail");
+                _cachedOutboundCount = 0;
+                return true;
+            }
+            synchronized (_sendWindowBytesRemainingLock) {
+                _sendWindowBytesRemaining += failedSize;
+                _sendWindowBytesRemaining += failedCount * fragmentOverhead();
+                if (_sendWindowBytesRemaining > _sendWindowBytes.get())
+                    _sendWindowBytesRemaining = _sendWindowBytes.get();
+            }
+        }
+
+        if (_cachedOutboundCount <= 0) {
+            synchronized (this) {
+                _retransmitTimer.set(0);
+                exitFastRetransmit();
+            }
+        }
+        return false;
     }
 
     /**
@@ -1610,10 +1682,10 @@ public class PeerState {
 
     private static final int MTU_RCV_DISPLAY_THRESHOLD = 20;
     /** IPv4 packet overhead in bytes (IP + UDP + MAC + IV, 60). */
-    private static final int OVERHEAD_SIZE = PacketBuilder.IP_HEADER_SIZE + PacketBuilder.UDP_HEADER_SIZE +
+    private static final int OVERHEAD_SIZE = PacketBuilder2.IP_HEADER_SIZE + PacketBuilder2.UDP_HEADER_SIZE +
                                              UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
     /** IPv6 packet overhead in bytes (IP + UDP + MAC + IV, 80). */
-    private static final int IPV6_OVERHEAD_SIZE = PacketBuilder.IPV6_HEADER_SIZE + PacketBuilder.UDP_HEADER_SIZE +
+    private static final int IPV6_OVERHEAD_SIZE = PacketBuilder2.IPV6_HEADER_SIZE + PacketBuilder2.UDP_HEADER_SIZE +
                                                   UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
 
     /**
@@ -1793,7 +1865,7 @@ public class PeerState {
     int fragmentSize() {
         // 46 + 20 + 8 + 13 = 74 + 13 = 87 (IPv4)
         // 46 + 40 + 8 + 13 = 94 + 13 = 107 (IPv6)
-        return _mtu - (_remoteIP.length == 4 ? PacketBuilder.MIN_DATA_PACKET_OVERHEAD : PacketBuilder.MIN_IPV6_DATA_PACKET_OVERHEAD) - MIN_ACK_SIZE;
+        return _mtu - (_remoteIP.length == 4 ? PacketBuilder2.MIN_DATA_PACKET_OVERHEAD : PacketBuilder2.MIN_IPV6_DATA_PACKET_OVERHEAD) - MIN_ACK_SIZE;
     }
 
     /**
@@ -1804,7 +1876,7 @@ public class PeerState {
     int fragmentOverhead() {
         // 46 + 20 + 8 + 13 = 74 + 13 = 87 (IPv4)
         // 46 + 40 + 8 + 13 = 94 + 13 = 107 (IPv6)
-        return (_remoteIP.length == 4 ? PacketBuilder.MIN_DATA_PACKET_OVERHEAD : PacketBuilder.MIN_IPV6_DATA_PACKET_OVERHEAD) + MIN_ACK_SIZE;
+        return (_remoteIP.length == 4 ? PacketBuilder2.MIN_DATA_PACKET_OVERHEAD : PacketBuilder2.MIN_IPV6_DATA_PACKET_OVERHEAD) + MIN_ACK_SIZE;
     }
 
     /**
@@ -1833,7 +1905,7 @@ public class PeerState {
      *
      *  @return true if this fragment of the message was acked for the first time
      */
-    protected boolean acked(PacketBuilder.Fragment f) {
+    protected boolean acked(PacketBuilder2.Fragment f) {
         if (_dead) {return false;}
 
         final OutboundMessageState state = f.state;
