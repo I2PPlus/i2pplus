@@ -1784,13 +1784,13 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Was the state for this SSU2 receive connection ID recently closed?
+     * Lock-free single ConcurrentHashMap read; hits the per-packet receive path
+     * on a connection-ID miss (attacker-triggerable), so the shared add/drop
+     * lock must not be taken here.
      * @since 0.9.56
      */
     PeerStateDestroyed getRecentlyClosed(long rcvConnID) {
-        Long id = Long.valueOf(rcvConnID);
-        synchronized(_addDropLock) {
-            return _recentlyClosedConnIDs.get(id);
-        }
+        return _recentlyClosedConnIDs.get(Long.valueOf(rcvConnID));
     }
 
     /**
@@ -3151,7 +3151,7 @@ public class UDPTransport extends TransportImpl {
      *
      *  @param isIPv6 true for IPv6, false for IPv4
      *  @return the external address or null
-     *  @since 0.9.18, public for PacketBuilder and TransportManager since 0.9.50
+     *  @since 0.9.18, public for PacketBuilder2 and TransportManager since 0.9.50
      */
     public RouterAddress getCurrentExternalAddress(boolean isIPv6) {
         // deadlock thru here ticket #1699
