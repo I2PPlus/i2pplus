@@ -97,7 +97,7 @@ interface SSU2Sender {
      *  @param length fragment length
      *  @param fragments fragment list
      */
-    void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments);
+    void fragmentsSent(long pktNum, int length, List<PacketBuilder2.Fragment> fragments);
     /**
      *  Flags byte.
      *

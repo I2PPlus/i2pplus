@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.OutNetMessage;
-import net.i2p.router.transport.udp.PacketBuilder.Fragment;
+import net.i2p.router.transport.udp.PacketBuilder2.Fragment;
 import net.i2p.router.util.CDPQEntry;
 import net.i2p.util.Log;
 
@@ -622,7 +622,7 @@ class OutboundMessageState implements CDPQEntry {
      *  @since 0.9.3
      */
     public int getPriority() {
-        return _message != null ? _message.getPriority() : PacketBuilder.PRIORITY_HIGH;
+        return _message != null ? _message.getPriority() : PacketBuilder2.PRIORITY_HIGH;
     }
 
     /**

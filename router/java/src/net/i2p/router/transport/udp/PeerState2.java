@@ -26,7 +26,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
-import net.i2p.router.transport.udp.PacketBuilder.Fragment;
+import net.i2p.router.transport.udp.PacketBuilder2.Fragment;
 import net.i2p.util.Addresses;
 import net.i2p.util.HexDump;
 import net.i2p.util.SimpleTimer2;
@@ -59,7 +59,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  and map of unacked packet (sequence) numbers to the fragments that packet contained.
      */
     private final SSU2Bitfield _ackedMessages;
-    private final ConcurrentHashMap<Long, List<PacketBuilder.Fragment>> _sentMessages;
+    private final ConcurrentHashMap<Long, List<PacketBuilder2.Fragment>> _sentMessages;
     private final ACKTimer _ackTimer;
 
     private long _sentMessagesLastExpired;
@@ -302,9 +302,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 if (shouldLogDebug)
                     _log.debug("[SSU] finishAndAllocate() over " + _sentMessages.size() + " pending ACKs");
                 loop:
-                for (Iterator<List<PacketBuilder.Fragment>> iter = _sentMessages.values().iterator(); iter.hasNext(); ) {
-                    List<PacketBuilder.Fragment> frags = iter.next();
-                    for (PacketBuilder.Fragment f : frags) {
+                for (Iterator<List<PacketBuilder2.Fragment>> iter = _sentMessages.values().iterator(); iter.hasNext(); ) {
+                    List<PacketBuilder2.Fragment> frags = iter.next();
+                    for (PacketBuilder2.Fragment f : frags) {
                         OutboundMessageState state = f.state;
                         if (!state.isComplete() && !state.isExpired(now)) {continue loop;}
                     }
@@ -1202,8 +1202,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  @since public since 0.9.57 for SSU2Sender interface only
      *
      */
-    public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {
-        List<PacketBuilder.Fragment> old = _sentMessages.putIfAbsent(Long.valueOf(pktNum), fragments);
+    public void fragmentsSent(long pktNum, int length, List<PacketBuilder2.Fragment> fragments) {
+        List<PacketBuilder2.Fragment> old = _sentMessages.putIfAbsent(Long.valueOf(pktNum), fragments);
         if (old != null) {
             // shouldn't happen
             if (shouldLogDebug) {_log.debug("[SSU] Duplicate data packet [#" + pktNum + "] sent" + this);}
@@ -1225,7 +1225,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (shouldLogDebug) {_log.debug("[SSU] New ACK of SessionConfirmed " + this);}
             return;
         }
-        List<PacketBuilder.Fragment> fragments = _sentMessages.remove(Long.valueOf(pktNum));
+        List<PacketBuilder2.Fragment> fragments = _sentMessages.remove(Long.valueOf(pktNum));
         if (fragments == null) {
             // TODO
             // peer test, relay, path challenge/response
@@ -1237,7 +1237,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             _log.debug("[SSU] New ACK of packet " + pktNum + " containing " + fragments.size() + " fragments " + this);
         }
         long highest = -1;
-        for (PacketBuilder.Fragment f : fragments) {
+        for (PacketBuilder2.Fragment f : fragments) {
             OutboundMessageState state = f.state;
             boolean wasAcked = acked(f);
             if (shouldLogDebug) {

@@ -21,7 +21,6 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.udp.PacketBuilder.Fragment;
 import net.i2p.router.transport.udp.SSU2Payload.Block;
 import net.i2p.router.transport.udp.SSU2Payload.FirstFragBlock;
 import net.i2p.router.transport.udp.SSU2Payload.FollowFragBlock;
@@ -134,15 +133,15 @@ class PacketBuilder2 {
     static final int TYPE_DESTROY = 74;
 
     /** IPv4 only */
-    public static final int IP_HEADER_SIZE = PacketBuilder.IP_HEADER_SIZE;
+    public static final int IP_HEADER_SIZE = 20;
     /** Same for IPv4 and IPv6 */
-    public static final int UDP_HEADER_SIZE = PacketBuilder.UDP_HEADER_SIZE;
+    public static final int UDP_HEADER_SIZE = 8;
 
     /** Minimum IPv4 data packet overhead with MAC in bytes (60). */
     public static final int MIN_DATA_PACKET_OVERHEAD = IP_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE + MAC_LEN;
 
     /** IPv6 header size in bytes. */
-    public static final int IPV6_HEADER_SIZE = PacketBuilder.IPV6_HEADER_SIZE;
+    public static final int IPV6_HEADER_SIZE = 40;
     /** Minimum IPv6 data packet overhead with MAC in bytes (80). */
     public static final int MIN_IPV6_DATA_PACKET_OVERHEAD = IPV6_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE + MAC_LEN;
 
@@ -157,6 +156,38 @@ class PacketBuilder2 {
 
     // every this many packets
     private static final int DATETIME_SEND_FREQUENCY = 256;
+
+    /**
+     *  Class for passing multiple fragments to buildPacket()
+     *
+     *  @since 0.9.16, moved from the removed SSU1 PacketBuilder
+     */
+    public static class Fragment {
+        /**
+         * The outbound message state.
+         */
+        public final OutboundMessageState state;
+        /**
+         * The fragment number.
+         */
+        public final int num;
+
+        /**
+         * Fragment.
+         */
+        public Fragment(OutboundMessageState state, int num) {
+            this.state = state;
+            this.num = num;
+        }
+
+        /**
+         * String representation of this fragment.
+         */
+        @Override
+        public String toString() {
+            return "Fragment " + num + " (" + state.fragmentSize(num) + " bytes)" + state;
+        }
+    }
 
     /**
      *  No state, all methods are thread-safe.

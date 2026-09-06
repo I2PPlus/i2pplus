@@ -10,7 +10,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.stat.RateConstants;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.udp.PacketBuilder.Fragment;
+import net.i2p.router.transport.udp.PacketBuilder2.Fragment;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 

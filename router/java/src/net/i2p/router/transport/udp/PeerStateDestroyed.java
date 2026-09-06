@@ -227,7 +227,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * Track sent fragments; no-op after destruction.
      */
-    public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {
+    public void fragmentsSent(long pktNum, int length, List<PacketBuilder2.Fragment> fragments) {
         // No-op - intentionally empty
     }
     /**
