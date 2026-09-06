@@ -8,26 +8,16 @@ package net.i2p.router.transport;
  *
  */
 
-import java.io.BufferedReader;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -35,14 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import net.i2p.I2PAppContext;
@@ -111,11 +94,11 @@ import net.i2p.util.Translate;
  * </ul>
  */
 public class CommSystemFacadeImpl extends CommSystemFacade {
-    private static final Log _slog = I2PAppContext.getGlobalContext().logManager().getLog(CommSystemFacadeImpl.class);
     private final Log _log;
     private final RouterContext _context;
     private final TransportManager _manager;
     private final GeoIP _geoIP;
+    private final ReverseDnsLookup _rdns;
     private final Map<String, Object> _exemptIncoming;
     private volatile boolean _netMonitorStatus;
     private boolean _wasStarted;
@@ -145,11 +128,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final Object DUMMY = Integer.valueOf(0);
     private static final Pattern CAPACITY_PATTERN = Pattern.compile("[DEG]");
 
-    private static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
-
-    private static volatile int _rdnsCorePoolSize = 2;
-    private static volatile int _rdnsMaxPoolSize = 8;
-
     /**
      * CommSystemFacadeImpl.
      */
@@ -160,63 +138,59 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _geoIP = new GeoIP(_context);
         _manager = new TransportManager(_context);
         _exemptIncoming = new LHMCache<>(128);
-        _context.statManager().createRequiredRateStat("rdns.executor.queueSize",
-            "rDNS executor pending lookups", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("rdns.executor.threads",
-            "rDNS executor thread count", "Transport", RATES);
-        getReverseDnsExecutor();
+        _rdns = new ReverseDnsLookup(_context, _geoIP);
     }
 
     /**
      * The rDNS executor core pool size.
      * @since 0.9.70+
      */
-    public static int getRdnsCorePoolSize() { return _rdnsCorePoolSize; }
+    public static int getRdnsCorePoolSize() { return ReverseDnsLookup.getCorePoolSize(); }
 
     /**
      * The rDNS executor core pool size, bounded 2-8.
      * @since 0.9.70+
      */
     public static void setRdnsCorePoolSize(int size) {
-        _rdnsCorePoolSize = Math.max(2, Math.min(8, size));
+        ReverseDnsLookup.setCorePoolSize(size);
     }
 
     /**
      * The rDNS executor max pool size.
      * @since 0.9.70+
      */
-    public static int getRdnsMaxPoolSize() { return _rdnsMaxPoolSize; }
+    public static int getRdnsMaxPoolSize() { return ReverseDnsLookup.getMaxPoolSize(); }
 
     /**
      * The rDNS executor max pool size, bounded 2-8.
      * @since 0.9.70+
      */
     public static void setRdnsMaxPoolSize(int size) {
-        _rdnsMaxPoolSize = Math.max(2, Math.min(8, size));
+        ReverseDnsLookup.setMaxPoolSize(size);
     }
 
     /**
-     * Reverse DNS executor, initializing it if necessary.
-     * @return the reverse dns executor
+     * The size of the rDNS cache file, in KB.
      */
-    private ExecutorService getReverseDnsExecutor() {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
-                reverseDnsExecutor = new ThreadPoolExecutor(
-                    _rdnsCorePoolSize, _rdnsMaxPoolSize,
-                    60L, TimeUnit.SECONDS,
-                    new LinkedBlockingQueue<>(500),
-                    r -> {
-                        Thread t = new Thread(r, "RDNS");
-                        t.setDaemon(true);
-                        return t;
-                    },
-                    new ThreadPoolExecutor.CallerRunsPolicy()
-                );
-            }
-            return reverseDnsExecutor;
-        }
-    }
+    public static String rdnsCacheSize() { return ReverseDnsLookup.rdnsCacheSize(); }
+
+    /**
+     * The number of entries in the rDNS cache.
+     */
+    public static int countRdnsCacheEntries() { return ReverseDnsLookup.countRdnsCacheEntries(); }
+
+    /**
+     * Cache statistics for monitoring.
+     * @return formatted string with cache stats
+     */
+    public static String getRdnsCacheStats() { return ReverseDnsLookup.getRdnsCacheStats(); }
+
+    /**
+     * The computed maximum rDNS cache size based on available memory.
+     * @return the computed maximum rDNS cache size based on available memory
+     * @since 0.9.61+
+     */
+    public static int getMaxRdnsCacheSize() { return ReverseDnsLookup.getMaxRdnsCacheSize(); }
 
     /**
      * Adjust the running rDNS executor pool sizes.
@@ -226,21 +200,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.70+
      */
     public void adjustRdnsPool(int coreSize) {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
-                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
-                if (!exec.isShutdown()) {
-                    if (coreSize > exec.getMaximumPoolSize()) {
-                        exec.setMaximumPoolSize(Math.max(coreSize, _rdnsMaxPoolSize));
-                        exec.setCorePoolSize(coreSize);
-                    } else {
-                        exec.setCorePoolSize(coreSize);
-                        exec.setMaximumPoolSize(Math.max(coreSize, _rdnsMaxPoolSize));
-                    }
-                    _context.statManager().addRateData("rdns.executor.threads", coreSize);
-                }
-            }
-        }
+        _rdns.adjustPool(coreSize);
     }
 
     /**
@@ -250,15 +210,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.70+
      */
     public int getRdnsQueueSize() {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
-                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
-                if (!exec.isShutdown()) {
-                    return exec.getQueue().size();
-                }
-            }
-            return 0;
-        }
+        return _rdns.getQueueSize();
     }
 
     /**
@@ -268,15 +220,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.70+
      */
     public int getRdnsActiveCount() {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
-                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
-                if (!exec.isShutdown()) {
-                    return exec.getActiveCount();
-                }
-            }
-            return 0;
-        }
+        return _rdns.getActiveCount();
     }
 
     /**
@@ -286,15 +230,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.70+
      */
     public int getRdnsPoolSize() {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
-                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
-                if (!exec.isShutdown()) {
-                    return exec.getPoolSize();
-                }
-            }
-            return 0;
-        }
+        return _rdns.getPoolSize();
     }
 
     /**
@@ -305,16 +241,52 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.70+
      */
     public double getRdnsUtilization() {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
-                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
-                if (!exec.isShutdown()) {
-                    int size = exec.getPoolSize();
-                    return size > 0 ? (double) exec.getActiveCount() / size : Double.NaN;
-                }
-            }
-            return Double.NaN;
-        }
+        return _rdns.getUtilization();
+    }
+
+    /**
+     * Whether reverse lookups are enabled.
+     * @since 0.9.71+
+     */
+    @Override
+    public boolean enableReverseLookups() {return _rdns.enableReverseLookups();}
+
+    /**
+     * Canonical hostname for the given IP address from cache or DNS.
+     * If RDNS is enabled, performs a reverse DNS lookup first.
+     * Falls back to local ASN database if DNS fails, returning the org name.
+     *
+     * @param ipAddress IP address to resolve, or null/"null" to return null
+     * @return hostname, org name from ASN database, or null for invalid input
+     * @since 0.9.58+
+     */
+    @Override
+    public String getCanonicalHostName(String ipAddress) {
+        return _rdns.getCanonicalHostName(ipAddress);
+    }
+
+    /**
+     * The canonical host name for the given IP address, resolved synchronously.
+     * @return the canonical host name
+     */
+    @Override
+    public String getCanonicalHostNameSync(String ipAddress) {
+        return _rdns.getCanonicalHostNameSync(ipAddress);
+    }
+
+    /**
+     * Fast hostname lookup that never blocks on I/O (MMDB or network).
+     * Returns cached result if available and useful.
+     * On cache miss, queues a background job that does ASN org name lookup
+     * (MMDB file read + regex normalization) and optional RDNS, then
+     * returns null immediately — page rendering is never blocked.
+     *
+     * @return cached hostname/ASN org name, or null if not yet resolved
+     * @since 0.9.70+
+     */
+    @Override
+    public String getLocalHostName(String ipAddress) {
+        return _rdns.getLocalHostName(ipAddress);
     }
 
     /**
@@ -368,41 +340,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public synchronized void shutdown() {
         _manager.shutdown();
         _geoIP.shutdown();
-
-        if (_rdnsTimer != null) {
-            _rdnsTimer.cancel();
-            _rdnsTimer = null;
-        }
-
-        shutdownExecutors();
-        shutdownStatic();
-    }
-
-    /**
-     * Shutdown instance executors.
-     */
-    private void shutdownExecutors() {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor != null && !reverseDnsExecutor.isShutdown()) {
-                reverseDnsExecutor.shutdown();
-                try {
-                    if (!reverseDnsExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
-                        reverseDnsExecutor.shutdownNow();
-                    }
-                } catch (InterruptedException e) {
-                    reverseDnsExecutor.shutdownNow();
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-    }
-
-    /**
-     * Cleanup static resources.
-     * This should be called when the router is shutting down to prevent memory leaks.
-     */
-    private static synchronized void shutdownStatic() {
-        pendingLookups.clear();
+        _rdns.shutdown();
     }
 
     /**
@@ -880,18 +818,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     // Re-queue the entire netDb for GeoIP lookup periodically so peers learned
     // after startup are resolved even if their page is never explicitly viewed.
     private static final int QUEUE_TIME = 10*60*1000;
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    /**
-     * Whether reverse lookups are enabled.
-     * @since 0.9.71+
-     */
-    @Override
-    public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-    private static final Charset ENCODING = StandardCharsets.UTF_8;
 
     private void startGeoIP() {
         new QueueAll().schedule(START_DELAY);
-        if (enableReverseLookups()) {readRDNSCacheFromFile();}
+        if (_rdns.enableReverseLookups()) {ReverseDnsLookup.readRDNSCacheFromFile();}
     }
 
     /**
@@ -982,526 +912,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public void queueLookup(byte[] ip) {_geoIP.add(ip);}
 
     /**
-     * Reverse DNS lookup cache with persistent storage and LRU eviction.
-     *
-     * Maintains a size-limited, thread-safe cache of IP-to-hostname mappings with timestamps for entry expiration.
-     * The cache is backed by a disk file that is safely read and written using a temporary file to prevent corruption.
-     * Entries expire after 24 hours in memory and are evicted from disk if older than 3 days.
-     * Cache size is bounded by system memory-based limits with automatic eviction of least recently used entries.
-     *
-     * Supports migration from older cache file formats missing timestamps.
-     *
-     * @return the global context
-     * @since 0.9.61+
-     */
-    private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
-                                                  File.separator + "rdnscache.txt";
-    private static final int RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
-    private static final boolean HAS_512_MB = SystemVersion.getMaxMemory() >= 512 * 1024 * 1024;
-    private static final boolean HAS_1_GB = SystemVersion.getMaxMemory() >= 1024 * 1024 * 1024;
-    private static final long EXPIRE_TIME = computeExpireTime() * 60L * 60 * 1000; // 1/1.5/2 day expiration
-    private static final long EVICT_THRESHOLD = 3L * 24 * 60 * 60 * 1000; // 3 day for eviction from file cache
-    private static final int MAX_RDNS_CACHE_SIZE = computeMaxRdnsCacheSize();
-
-    private static long computeExpireTime() {
-        if (!HAS_512_MB) {
-            return 24;
-        } else if (HAS_1_GB) {
-            return 48;
-        } else {
-            return 36;
-        }
-    }
-
-    private static int computeMaxRdnsCacheSize() {
-        if (!HAS_512_MB) {
-            return 8000;
-        } else if (HAS_1_GB) {
-            return 24000;
-        } else {
-            return 16000;
-        }
-    }
-
-    /**
-     * Cache entry for IP address and hostname mappings.
-     */
-    public static class CacheEntry {
-        private final String ipAddress;
-        private final String hostname;
-        private final long timestamp; // epoch millis when entry was cached
-
-        /**
-         * CacheEntry.
-         */
-        public CacheEntry(String ipAddress, String hostname) {
-            this(ipAddress, hostname, System.currentTimeMillis());
-        }
-
-        /**
-         * CacheEntry.
-         */
-        public CacheEntry(String ipAddress, String hostname, long timestamp) {
-            this.ipAddress = ipAddress;
-            this.hostname = (hostname != null) ? hostname : "unknown";
-            this.timestamp = timestamp;
-        }
-
-        /**
-         * The cached IP address of the entry.
-         * @return the IP address
-         */
-        public String getIpAddress() {
-            return ipAddress;
-        }
-
-        /**
-         * The cached hostname for the entry.
-         * @return the hostname
-         */
-        public String getHostname() {
-            return hostname;
-        }
-
-        /**
-         * The timestamp when the entry was cached.
-         * @return the timestamp
-         */
-        public long getTimestamp() {
-            return timestamp;
-        }
-
-        /**
-         * The formatted rDNS cache entry.
-         * @return the rDNS entry
-         */
-        public String getRdnsEntry() {
-            return rdnsEntryToString(this);
-        }
-    }
-
-    /**
-     * In-memory reverse DNS cache storing IP-to-hostname mappings.
-     * Backed by ConcurrentHashMap for lock-free reads. Entries are
-     * periodically flushed to disk and expired entries are cleaned up.
-     *
-     * Keys are IP addresses as Strings. Values are CacheEntry objects
-     * containing hostname and timestamp.
-     */
-    private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>(MAX_RDNS_CACHE_SIZE);
-
-    /** Flag set after the first normalize sweep to avoid re-processing every 15 minutes */
-    private static volatile boolean _normalizeSweepDone;
-
-    /**
-     * The size of the rDNS cache file, in KB.
-     */
-    public static String rdnsCacheSize() {
-        File cache = new File(RDNS_CACHE_FILE);
-        return String.valueOf(cache.length() / 1024) + "KB";
-    }
-
-    private static void readRDNSCacheFromFile() {
-        File fCache = new File(RDNS_CACHE_FILE);
-        long now = System.currentTimeMillis();
-        if (!fCache.exists()) {
-            createRdnsCacheFile();
-            return;
-        }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(fCache)), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.isEmpty() || line.charAt(0) == '#') {
-                    continue;
-                }
-                CacheEntry cacheEntry = rdnsEntryFromString(line);
-                if (cacheEntry != null && now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
-                    rdnsCachePut(cacheEntry.getIpAddress(), cacheEntry);
-                }
-            }
-        } catch (IOException ex) {
-            _slog.error("Error reading RDNS cache file. Creating new file...", ex);
-            createRdnsCacheFile();
-        }
-        // Cancel existing timer before creating new one to prevent memory leak
-        if (_rdnsTimer != null) {
-            _rdnsTimer.cancel();
-        }
-        _rdnsTimer = new Timer(true);
-        long delay = RDNS_WRITE_INTERVAL;
-        _rdnsTimer.schedule(new RDNSCacheFileWriter(), delay, delay);
-    }
-
-    // CacheEntry to string includes timestamp for persistence
-    private static String rdnsEntryToString(CacheEntry entry) {
-        return entry.getIpAddress() + "," + entry.getHostname() + "," + entry.getTimestamp();
-    }
-
-    // Parse string to CacheEntry; support migration with current timestamp if old format
-    private static CacheEntry rdnsEntryFromString(String s) {
-        String[] parts = s.split(",", 3);
-        if (parts.length == 3) {
-            try {
-                String ipAddress = parts[0];
-                String hostname = parts[1];
-                long timestamp = Long.parseLong(parts[2]);
-                return new CacheEntry(ipAddress, hostname, timestamp);
-            } catch (NumberFormatException e) {
-                // Fall through to old format migration below
-            }
-        }
-        if (parts.length == 2) {
-            String ipAddress = parts[0];
-            String hostname = parts[1];
-            long timestamp = System.currentTimeMillis();
-            return new CacheEntry(ipAddress, hostname, timestamp);
-        }
-        return null;
-    }
-
-    private static synchronized void createRdnsCacheFile() {
-        File cacheFile = new File(RDNS_CACHE_FILE);
-        if (!cacheFile.exists()) {
-            try {
-                cacheFile.createNewFile();
-            } catch (IOException ex) {
-                System.err.println("[RDNSCache] Error creating cache file: " + ex.getMessage()); // NOSONAR S106 static utility
-            }
-        } else {
-            readRDNSCacheFromFile();
-        }
-    }
-
-    private static class RDNSCacheFileWriter extends TimerTask {
-        /**
-         * RDNSCacheFileWriter.
-         */
-        public RDNSCacheFileWriter() {
-            // Intentionally empty - default constructor
-        }
-
-        /**
-         * Clean up and write the rDNS cache to disk.
-         */
-        @Override
-        public void run() {
-            cleanupRDNSCache();
-            Map<String, CacheEntry> liveCacheSnapshot = new HashMap<>(rdnsCache);
-            File cacheFile = new File(RDNS_CACHE_FILE);
-            try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(cacheFile))) {
-                for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
-                    String line = rdnsEntryToString(cacheEntry) + '\n';
-                    byte[] bytes = line.getBytes(ENCODING);
-                    fos.write(bytes);
-                }
-            } catch (IOException ex) {
-                _slog.error("Error updating reverse DNS cache file", ex);
-            }
-        }
-    }
-
-    private static void cleanupRDNSCache() {
-        long now = System.currentTimeMillis();
-        int removed = 0;
-        int normalized = 0;
-        long unknownExpireTimeMillis = 15 * 60 * 1000L; // 15 minutes
-        // When cache is >50% full, halve the TTL to accelerate eviction
-        long expireTime = EVICT_THRESHOLD;
-        if (rdnsCache.size() > (MAX_RDNS_CACHE_SIZE * 90 / 100)) {
-            expireTime /= 2;
-        }
-        Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, CacheEntry> entry = it.next();
-            CacheEntry ce = entry.getValue();
-            long age = now - ce.getTimestamp();
-            long entryExpireTime = expireTime;
-
-            // "unknown" entries expire quickly — no point keeping dead lookups
-            String cacheEntryStr = rdnsEntryToString(ce);
-            if (cacheEntryStr.contains("unknown")) {
-                entryExpireTime = unknownExpireTimeMillis;
-            }
-            if (age > entryExpireTime) {
-                it.remove();
-                removed++;
-            }
-        }
-        // If still over budget after expired-entry cleanup, evict oldest entries
-        if (rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
-            int excess = rdnsCache.size() - MAX_RDNS_CACHE_SIZE;
-            long oldestTimestamp = Long.MAX_VALUE;
-            String oldestKey = null;
-            // Iterate excess times to find and remove the oldest entries
-            for (int i = 0; i < excess; i++) {
-                oldestTimestamp = Long.MAX_VALUE;
-                oldestKey = null;
-                for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
-                    if (entry.getValue().getTimestamp() < oldestTimestamp) {
-                        oldestTimestamp = entry.getValue().getTimestamp();
-                        oldestKey = entry.getKey();
-                    }
-                }
-                if (oldestKey != null) {
-                    rdnsCache.remove(oldestKey);
-                    removed++;
-                }
-            }
-        }
-        // Sweep: normalize any reversed ASN org names cached from MaxMind
-        // Only needed on first run (entries from disk cache are pre-normalization;
-        // new entries are normalized at insertion time in rdnsCachePut())
-        if (!_normalizeSweepDone) {
-            for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
-                CacheEntry ce = entry.getValue();
-                String hostname = ce.getHostname();
-                String fixed = GeoIP.normalizeOrgName(hostname);
-                if (!fixed.equals(hostname)) {
-                    rdnsCache.put(entry.getKey(), new CacheEntry(ce.getIpAddress(), fixed, ce.getTimestamp()));
-                    normalized++;
-                }
-            }
-            _normalizeSweepDone = true;
-        }
-        if (removed > 0 && _slog.shouldInfo()) {
-            _slog.info("[RDNSCache] Removed " + removed + " stale entries from the cache");
-        }
-        if (normalized > 0 && _slog.shouldInfo()) {
-            _slog.info("[RDNSCache] Normalized " + normalized + " reversed ASN names");
-        }
-    }
-
-    /**
-     * Insert into the rdns cache with budget enforcement.
-     * Evicts expired entries first, then oldest entries if still over budget.
-     */
-    private static void rdnsCachePut(String ipAddress, CacheEntry entry) {
-        String hostname = entry.getHostname();
-        String fixed = GeoIP.normalizeOrgName(hostname);
-        if (!fixed.equals(hostname)) {
-            entry = new CacheEntry(entry.getIpAddress(), fixed, entry.getTimestamp());
-        }
-        if (rdnsCache.size() >= MAX_RDNS_CACHE_SIZE) {
-            cleanupRDNSCache();
-        }
-        rdnsCache.put(ipAddress, entry);
-    }
-
-    /**
-     * The number of entries in the rDNS cache.
-     */
-    public static int countRdnsCacheEntries() {
-        return rdnsCache.size();
-    }
-
-    /**
-     * Cache statistics for monitoring.
-     * @return formatted string with cache stats
-     */
-    public static String getRdnsCacheStats() {
-        int size = rdnsCache.size();
-        int maxSize = MAX_RDNS_CACHE_SIZE;
-        double utilization = (double) size / maxSize * 100;
-        return String.format("RDNS Cache: %d/%d entries (%.1f%% utilized)", size, maxSize, utilization);
-    }
-
-    /**
-     * The computed maximum rDNS cache size based on available memory.
-     * @return the computed maximum rDNS cache size based on available memory
-     * @since 0.9.61+
-     */
-    public static int getMaxRdnsCacheSize() {
-        return MAX_RDNS_CACHE_SIZE;
-    }
-
-    /**
-     * Canonical hostname for the given IP address from cache or DNS.
-     * If RDNS is enabled, performs a reverse DNS lookup first.
-     * Falls back to local ASN database if DNS fails, returning the org name.
-     *
-     * @param ipAddress IP address to resolve, or null/"null" to return null
-     * @return hostname, org name from ASN database, or null for invalid input
-     * @since 0.9.58+
-     */
-    @Override
-    public String getCanonicalHostName(String ipAddress) {
-        if (ipAddress == null || ipAddress.equals("null")) {
-            return _t("unknown");
-        }
-        long now = System.currentTimeMillis();
-
-        CacheEntry existingEntry = rdnsCache.get(ipAddress);
-        if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
-            String cached = existingEntry.getHostname();
-            if (cached != null && !cached.equals(ipAddress) && !_t("unknown").equals(cached)) {
-                return cached;
-            }
-            // Stale "unknown" or raw IP — queue background re-lookup
-        }
-
-        if (pendingLookups.add(ipAddress)) {
-            getReverseDnsExecutor().submit(() -> lookupHostNameAsync(ipAddress));
-            _context.statManager().addRateData("rdns.executor.queueSize", getRdnsQueueSize());
-        }
-
-        return ipAddress;
-    }
-
-    /**
-     *  Background RDNS/ASN resolution task submitted to the reverse-DNS executor.
-     *  Performs a reverse lookup, falling back to the local ASN database when the
-     *  result is the IP itself or unknown. Always clears the in-flight marker.
-     *
-     *  @param ipAddress non-null IP to resolve
-     *  @since 0.9.70+
-     */
-    private void lookupHostNameAsync(String ipAddress) {
-        try {
-            String hostName = ipAddress;
-            if (enableReverseLookups()) {
-                try {
-                    hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                    rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
-                } catch (UnknownHostException e) {
-                    // RDNS failed, will fall through to ASN lookup
-                }
-            }
-            // Fall back to local ASN database if RDNS returned the IP or failed
-            if (hostName.equals(ipAddress) || _t("unknown").equals(hostName)) {
-                String orgName = _geoIP.getOrgName(ipAddress);
-                if (orgName != null && !orgName.isEmpty()) {
-                    rdnsCachePut(ipAddress, new CacheEntry(ipAddress, orgName, System.currentTimeMillis()));
-                }
-            }
-        } finally {
-            pendingLookups.remove(ipAddress);
-        }
-    }
-
-    /**
-     *  Background ASN-first resolution task submitted to the reverse-DNS executor.
-     *  Prefers the local ASN organization database, falling back to reverse DNS.
-     *  Always clears the in-flight marker.
-     *
-     *  @param ipAddress non-null IP to resolve
-     *  @since 0.9.70+
-     */
-    private void lookupOrgNameAsync(String ipAddress) {
-        try {
-            // Try ASN org name first (local MMDB, fast enough for background)
-            String hostName = _geoIP.getOrgName(ipAddress);
-            if (hostName != null && !hostName.isEmpty()) {
-                rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName,
-                        System.currentTimeMillis()));
-                return;
-            }
-            // Fallback to RDNS
-            if (enableReverseLookups()) {
-                try {
-                    String rdnsResult = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                    if (rdnsResult != null && !rdnsResult.equals(ipAddress)
-                            && !_t("unknown").equals(rdnsResult)) {
-                        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, rdnsResult,
-                                System.currentTimeMillis()));
-                    }
-                } catch (UnknownHostException e) { /* unresolvable */ }
-            }
-        } finally {
-            pendingLookups.remove(ipAddress);
-        }
-    }
-
-    /**
-     * The canonical host name for the given IP address, resolved synchronously.
-     * @return the canonical host name
-     */
-    @Override
-    public String getCanonicalHostNameSync(String ipAddress) {
-        if (ipAddress == null || ipAddress.equals("null")) {
-            return _t("unknown");
-        }
-        long now = System.currentTimeMillis();
-
-        CacheEntry existingEntry = rdnsCache.get(ipAddress);
-        if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
-            String cached = existingEntry.getHostname();
-            // Return useful cached results immediately
-            if (cached != null && !cached.equals(ipAddress) && !_t("unknown").equals(cached)) {
-                return cached;
-            }
-            // Stale "unknown" or raw IP — fall through to re-lookup
-        }
-
-        String hostName = ipAddress;
-        if (enableReverseLookups()) {
-            try {
-                hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-            } catch (UnknownHostException e) {
-                // RDNS failed, will fall through to ASN lookup
-            }
-        }
-        if (hostName.equals(ipAddress) || _t("unknown").equals(hostName)) {
-            String orgName = _geoIP.getOrgName(ipAddress);
-            if (orgName != null && !orgName.isEmpty()) {
-                hostName = orgName;
-            }
-        }
-
-        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName, now));
-        return hostName;
-    }
-
-    /**
-     * Fast hostname lookup that never blocks on I/O (MMDB or network).
-     * Returns cached result if available and useful.
-     * On cache miss, queues a background job that does ASN org name lookup
-     * (MMDB file read + regex normalization) and optional RDNS, then
-     * returns null immediately — page rendering is never blocked.
-     *
-     * @return cached hostname/ASN org name, or null if not yet resolved
-     * @since 0.9.70+
-     */
-    @Override
-    public String getLocalHostName(String ipAddress) {
-        if (ipAddress == null || ipAddress.equals("null")) {
-            return null;
-        }
-        long now = System.currentTimeMillis();
-
-        // 1. Check cache — return if useful
-        CacheEntry existingEntry = rdnsCache.get(ipAddress);
-        if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
-            String cached = existingEntry.getHostname();
-            if (cached != null && !cached.equals(ipAddress) && !_t("unknown").equals(cached)) {
-                if (("&t").equals(cached) || ("&amp;t").equals(cached)) {
-                    return "AT&T";
-                } else if (("Vodafone Czech Republic .s").equals(cached)) {
-                    return "Vodafone Czech Republic";
-                } else if (("Vodafone Espana S. .u").equals(cached) || ("Vodafone Ono, S").equals(cached)) {
-                    return "Vodafone Espana";
-                } else if (("Vodafone Italia S.p").equals(cached)) {
-                    return "Vodafone Italia";
-                } else if (("Vodafone Portugal - Communicacoes Pessoais S").equals(cached)) {
-                    return "Vodafone Portugal";
-                } else if (("Vodafone Romania S").equals(cached)) {
-                    return "Vodafone Romania";
-                }
-                return cached;
-            }
-        }
-
-        // 2. Queue background resolution (ASN + RDNS), return null immediately.
-        //    Never blocks page rendering on MMDB file reads or regex normalization.
-        if (pendingLookups.add(ipAddress)) {
-            getReverseDnsExecutor().submit(() -> lookupOrgNameAsync(ipAddress));
-            _context.statManager().addRateData("rdns.executor.queueSize", getRdnsQueueSize());
-        }
-
-        // 3. No synchronous fallback — let page render with placeholder "?"
-        return null;
-    }
-
-    /**
      * Convert IP string to Hash and call existing getCountry method
      * Return two-letter country code or null if unknown
      * @return the country from i p address
@@ -1512,13 +922,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             return _geoIP.get(ipBytes); // Existing geoip lookup by raw IP bytes
         } catch (UnknownHostException e) {return null;}
     }
-
-    private ExecutorService reverseDnsExecutor;
-    private final Object reverseDnsExecutorLock = new Object();
-
-    private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
-
-    private static Timer _rdnsTimer;
 
     /**
      *  Domain name from a reverse DNS hostname.
