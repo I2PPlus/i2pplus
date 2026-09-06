@@ -218,6 +218,44 @@ class Connection {
     }
 
     /**
+     *  Compute the effective connect timeout (ms) an outbound connect will wait, as used
+     *  by both {@link #waitForConnect(int)} and the SYN give-up budget in
+     *  {@link #getMaxSynSends()}.
+     *
+     *  <p>Scales the desired base window ({@code connectDelay + connectTimeout}, or just
+     *  {@code connectTimeout}) by the Tuner connect-timeout multiplier, then applies the
+     *  {@link #CONNECT_TIMEOUT_FLOOR_MS} floor and the absolute {@code maxConnectTimeoutMs}
+     *  cap.  Both consumers must agree on this value: a SYN retransmit budget
+     *  <em>shorter</em> than this window was the cause of the spurious "Connection failed"
+     *  for live-but-slow peers, where the retransmit timer discarded the connection
+     *  error-free before waitForConnect reached its own timeout.
+     *
+     *  @param desiredTimeoutMs   the base window (connectDelay + connectTimeout) in ms;
+     *                            &lt;=0 means no connect timeout is configured
+     *  @param multiplier         the Tuner connect-timeout multiplier percentage (30-200)
+     *  @param maxConnectTimeoutMs the absolute cap (i2p.streaming.maxConnectTimeout) in ms
+     *  @return the effective window in ms, or 0 when no connect timeout is configured
+     *  @since 0.9.71+
+     */
+    static long computeEffectiveConnectTimeout(long desiredTimeoutMs, int multiplier, long maxConnectTimeoutMs) {
+        if (desiredTimeoutMs <= 0) {return 0;}
+        long totalTimeout;
+        if (multiplier > 100) {
+            // Scaling by >100% only grows the window; if the base is already past the
+            // absolute cap the result is pinned there, which also sidesteps overflow.
+            if (desiredTimeoutMs > maxConnectTimeoutMs) {return maxConnectTimeoutMs;}
+            totalTimeout = desiredTimeoutMs * multiplier / 100;
+        } else {
+            // Division-first form so the product can never overflow: for any
+            // multiplier <= 100, (desired/100)*multiplier is bounded by desired itself.
+            totalTimeout = (desiredTimeoutMs / 100) * multiplier + (desiredTimeoutMs % 100) * multiplier / 100;
+        }
+        if (totalTimeout < CONNECT_TIMEOUT_FLOOR_MS) {totalTimeout = CONNECT_TIMEOUT_FLOOR_MS;}
+        if (totalTimeout > maxConnectTimeoutMs) {totalTimeout = maxConnectTimeoutMs;}
+        return totalTimeout;
+    }
+
+    /**
      *  Default window size cap used when no per-connection or global override is set.
      *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
      *  adjusts based on observed RTT, bandwidth, and loss.
@@ -255,11 +293,41 @@ class Connection {
      *  evidence-gated RTT-aware value from {@link #computeSynRetransmitInterval(int, int)}
      *  — the initial RTO (default 5s) before any RTT measurement, or an interval
      *  derived from the measured path RTT once evidence exists.  With the default 5s
-     *  interval and 12 sends the budget is 60s, matching the historical behavior and
-     *  roughly filling the connect() timeout.
+     *  interval and 12 sends the budget is 60s, matching the historical behavior.
+     *
+     *  <p>This is the <em>per-connection floor</em> for the connect path:
+     *  {@link #getMaxSynSends()} raises the effective give-up count as needed so the
+     *  retransmit budget never expires before the connect window
+     *  ({@link #computeEffectiveConnectTimeout(long, int, long)}) does.  Otherwise the
+     *  retransmit timer can tear the connection down error-free while
+     *  {@link #waitForConnect(int)} is still waiting, leaving the caller with a generic
+     *  "Connection failed" instead of an accurate message.
      *  @since 0.9.70+ mutable for adaptive tuning
      */
     private static volatile int maxSynResends = 12;
+
+    /**
+     *  Minimum connect window (ms) after Tuner-multiplier scaling, so a fast network
+     *  never cuts a handshake below a full SYN retransmit cycle.
+     *  @since 0.9.71+
+     */
+    static final long CONNECT_TIMEOUT_FLOOR_MS = 10*1000;
+
+    /** Accurate error set when an outbound SYN is never acknowledged within its retransmit budget.
+     *  @since 0.9.71+ */
+    static final String ERR_SYN_NOT_ACKNOWLEDGED = "Connection timed out: SYN not acknowledged";
+
+    /** Accurate error set when an established data packet exceeds its retransmit limit.
+     *  @since 0.9.71+ */
+    static final String ERR_RETRANSMIT_LIMIT = "Connection failed: Retransmission limit reached";
+
+    /** Accurate error set when the remote closes an outbound connection before it was established.
+     *  @since 0.9.71+ */
+    static final String ERR_CONNECTION_REFUSED = "Connection failed: Closed by remote before establishment";
+
+    /** Accurate error reported by {@link #waitForConnect(int)} on its own timeout.
+     *  @since 0.9.71+ */
+    static final String ERR_CONNECTION_TIMED_OUT = "Connection timed out";
 
     /**
      * Minimum SYN retransmit interval (ms) ever used once positive RTT evidence for
@@ -319,6 +387,34 @@ class Connection {
         if (interval < SYN_RTO_MIN) {interval = SYN_RTO_MIN;}
         if (interval > initialRtoMs) {interval = initialRtoMs;}
         return (int) interval;
+    }
+
+    /**
+     *  Compute the effective number of SYN sends before this connection gives up, used by
+     *  {@link #getMaxSynSends()} on each give-up decision.
+     *
+     *  <p>The total SYN budget is {@code sends * synIntervalMs} (fixed interval, no backoff).
+     *  With RTT evidence the interval can collapse toward {@link #SYN_RTO_MIN} (750ms), so a
+     *  fixed {@code configuredMax} budget can end well before {@link #waitForConnect(int)}'s
+     *  window does — {@code 12 * 750ms = 9s} against a 10000ms floor — leaving waitForConnect
+     *  to mislabel the handshake as "Connection failed".  This returns at least enough sends
+     *  that {@code sends * synIntervalMs &gt;= connectWindowMs}, so the connect-timeout gate
+     *  (which reports an accurate error) fires first on genuinely-dead paths, while a
+     *  live-but-slow peer keeps receiving SYN retransmits for the full window.
+     *
+     *  @param configuredMax   the configured static give-up count ({@link #maxSynResends})
+     *  @param synIntervalMs   the fixed inter-SYN retransmit interval (ms) in use
+     *  @param connectWindowMs the effective connect window from
+     *                         {@link #computeEffectiveConnectTimeout(long, int, long)};
+     *                         0 means no connect timeout is configured
+     *  @return the number of sends before giving up, never less than {@code configuredMax}
+     *  @since 0.9.71+
+     */
+    static int computeSynResendBudget(int configuredMax, int synIntervalMs, long connectWindowMs) {
+        if (configuredMax <= 0 || synIntervalMs <= 0 || connectWindowMs <= 0) {return configuredMax;}
+        long needed = (connectWindowMs + synIntervalMs - 1) / synIntervalMs;
+        if (needed <= configuredMax) {return configuredMax;}
+        return (int) Math.min(needed, Integer.MAX_VALUE);
     }
 
     /**
@@ -490,6 +586,28 @@ class Connection {
         int rtt = _options.getRTT();
         if (!_options.receivedAck()) {rtt = -1;}
         return computeSynRetransmitInterval(rtt, ConnectionOptions.getInitialRTO());
+    }
+
+    /**
+     *  Effective SYN give-up count for this connection: {@link #maxSynResends} scaled up so
+     *  the retransmit budget (count * inter-SYN interval) covers the connect window, so the
+     *  retransmit timer cannot tear this connection down while {@link #waitForConnect(int)}
+     *  is still waiting.
+     *
+     *  <p>The base window mirrors {@link ConnectionManager#connect}: connectDelay is added to
+     *  connectTimeout only on the delayed-SYN path, which is exactly how waitForConnect is
+     *  invoked there ({@code connectDelay + connectTimeout}).
+     *
+     *  @return the number of SYN sends before giving up on an unacknowledged SYN
+     *  @since 0.9.71+
+     */
+    private int getMaxSynSends() {
+        long connectTimeout = _options.getConnectTimeout();
+        long base = (connectTimeout > 0 && _options.getConnectDelay() > 0)
+                    ? (long) _options.getConnectDelay() + connectTimeout
+                    : connectTimeout;
+        long window = computeEffectiveConnectTimeout(base, getConnectTimeoutMultiplier(), getMaxConnectTimeout());
+        return computeSynResendBudget(maxSynResends, getSynRetransmitInterval(), window);
     }
 
     /**
@@ -1136,7 +1254,10 @@ class Connection {
                 // We sent close first, peer acked it
                 disconnect(true);
             } else if (!_isInbound && _receiveStreamId.get() <= 0) {
-                // Outbound connection that never completed - treat as reset/failure
+                // Outbound connection that never completed - treat as reset/failure.
+                // Set an accurate error so any waitForConnect() caller sees why the
+                // remote closed before establishment instead of the generic fallback.
+                if (_connectionError == null) {setConnectionError(ERR_CONNECTION_REFUSED);}
                 disconnect(false);
             } else {
                 // Normal close from peer
@@ -1875,21 +1996,14 @@ class Connection {
      * @param timeoutMs max wait in ms; if &lt;= 0 uses the connection option's connectTimeout
      */
       void waitForConnect(int timeoutMs) {
-          long totalTimeout = timeoutMs > 0 ? timeoutMs : _options.getConnectTimeout();
-          boolean hasTimeout = totalTimeout > 0;
-          long expiry = 0;
-          if (hasTimeout) {
-              // Apply network-condition multiplier from the Tuner so fast networks
-              // fail fast and slow networks have enough time for retransmits.
-              int multiplier = getConnectTimeoutMultiplier();
-              totalTimeout = totalTimeout * multiplier / 100;
-              if (totalTimeout < 10000) { totalTimeout = 10000; }
-              long cap = getMaxConnectTimeout();
-              if (totalTimeout > cap) {
-                  totalTimeout = cap;
-              }
-              expiry = _context.clock().now() + totalTimeout;
-          }
+          long desired = timeoutMs > 0 ? timeoutMs : _options.getConnectTimeout();
+          boolean hasTimeout = desired > 0;
+          // Apply network-condition multiplier from the Tuner so fast networks
+          // fail fast and slow networks have enough time for retransmits, and keep
+          // the same computation available to the SYN give-up budget (getMaxSynSends()).
+          long totalTimeout = hasTimeout ? computeEffectiveConnectTimeout(desired,
+                              getConnectTimeoutMultiplier(), getMaxConnectTimeout()) : 0;
+          long expiry = hasTimeout ? _context.clock().now() + totalTimeout : 0;
           long start = _context.clock().now();
           if (_log.shouldInfo()) {
               _log.info("waitForConnect() starting for " + _remotePeer + " (timeout=" + (hasTimeout ? totalTimeout : 0) + "ms)");
@@ -1914,7 +2028,7 @@ class Connection {
                   long timeLeft = expiry - _context.clock().now();
                   if (timeLeft <= 0) {
                       if (_connectionError == null) {
-                          _connectionError = "Connection timed out";
+                          _connectionError = ERR_CONNECTION_TIMED_OUT;
                           disconnect(false);
                       }
                       if (_log.shouldInfo()) {
@@ -2279,8 +2393,8 @@ class Connection {
             // 1. RTO backoff: for established connections (ACK received), double RTO
             //    per RFC 6298 sec 5.5-5.6. For SYN-phase connections, no congestion
             //    to manage — keep RTO fixed so each retry gets the same window.
-            //    SYN retries are bounded by maxSynResends, whose total budget
-            //    (maxSynResends * initialRTO) fills the connect() timeout.
+            //    SYN retries are bounded by getMaxSynSends(), scaled so the budget
+            //    (sends * interval) covers the connect() window.
             if (_highestAckedThrough.get() >= 0) {
                 pushBackRTO(_options.doubleRTO());
             } else {
@@ -2351,11 +2465,13 @@ class Connection {
                     continue;
                 /** N resends. */
                 final int nResends = packet.getNumSends();
-                if (packet.getNumSends() > _options.getMaxResends()) {
+                if (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
+                    packet.getNumSends() > _options.getMaxResends()) {
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " packet " + packet + " resent too many times, closing...");
                     }
                     packet.cancelled();
+                    if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
                     disconnect(false);
                     return;
                 } else if (packet.getNumSends() >= 3 &&
@@ -2375,16 +2491,21 @@ class Connection {
                         return;
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
-                           packet.getNumSends() >= maxSynResends) {
-                    // If the SYN handshake is never ACKed the connect() caller has
-                    // already given up (default 60s timeout), so stop resending
-                    // instead of running to maxResends (~12 min). SYN retransmits
-                    // use a fixed RTO interval (no backoff), so the total budget is
-                    // maxSynResends * initialRTO.
+                           packet.getNumSends() >= getMaxSynSends()) {
+                    // The SYN was never ACKed and the retransmit budget has now covered
+                    // the entire connect window (getMaxSynSends(), scaled up from
+                    // maxSynResends), so the connect() caller has given up. Stop
+                    // resending instead of running to maxResends (~12 min). SYN
+                    // retransmits use a fixed RTO interval (no backoff), so the total
+                    // budget is getMaxSynSends() * interval.
+                    // Record an accurate error *before* the error-free disconnect, so
+                    // waitForConnect() returns "Connection timed out: SYN not
+                    // acknowledged" instead of the generic "Connection failed".
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " too many SYN resends, closing...");
                     }
                     packet.cancelled();
+                    if (_connectionError == null) {setConnectionError(ERR_SYN_NOT_ACKNOWLEDGED);}
                     disconnect(false);
                     return;
                 } else {
@@ -2683,9 +2804,10 @@ class Connection {
             }
 
             int numSends = _packet.getNumSends() + 1;
-            if (numSends - 1 > _options.getMaxResends()) {
+            if (numSends - 1 > _options.getMaxResends() && !_packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (_log.shouldDebug()) {_log.debug("Disconnecting, too many resends of " + _packet);}
                 _packet.cancelled();
+                if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
                 disconnect(false);
             } else if (numSends >= 3 &&
                        _packet.isFlagSet(Packet.FLAG_CLOSE) &&
