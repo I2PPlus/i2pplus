@@ -173,6 +173,14 @@ public class EstablishmentManager {
     /** Max queued msgs per peer while peer connection is queued */
     private static final int MAX_QUEUED_PER_PEER = 32;
 
+    /**
+     *  Ban duration for a peer that supplied an invalid or spoofed SSU address,
+     *  an unusable MTU, or a bad introduction key.
+     *
+     *  @since 0.9.71
+     */
+    private static final long BAN_DURATION_INVALID_ADDRESS_MS = 4*60*60*1000L;
+
     private static final long MAX_NONCE = 0xFFFFFFFFL;
 
     /**
@@ -382,6 +390,119 @@ public class EstablishmentManager {
     }
 
     /**
+     *  Is the peer's network ID one we will not establish to?
+     *  The router communicates only with peers in its own network.
+     *
+     *  @param id the peer's network ID
+     *  @param ourNetworkId this router's network ID
+     *  @return true if the network IDs differ
+     *  @since 0.9.71
+     */
+    static boolean isWrongNetwork(int id, int ourNetworkId) {
+        return id != ourNetworkId;
+    }
+
+    /**
+     *  Is the peer's network ID unset (i.e. the legacy -1)?
+     *  Used to pick the ban reason and duration when {@link #isWrongNetwork}
+     *  rejects the peer: unset networks get a shorter temporary ban, while
+     *  a present-but-different network ID is banned indefinitely.
+     *
+     *  @param id the peer's network ID
+     *  @return true if the ID is the "no network specified" sentinel
+     *  @since 0.9.71
+     */
+    static boolean isUnspecifiedNetwork(int id) {
+        return id == -1;
+    }
+
+    /**
+     *  Is the claimed address usable for a direct connection?
+     *  A null address or a port outside 1-65535 is useless to us.
+     *
+     *  @param remAddr the claimed host address, may be null
+     *  @param port the claimed port
+     *  @return true if the address can be used directly
+     *  @since 0.9.71
+     */
+    static boolean isUsableUDPAddress(InetAddress remAddr, int port) {
+        return remAddr != null && port > 0 && port <= 65535;
+    }
+
+    /**
+     *  Is the claimed IP address unusable, either because it isn't a
+     *  routable public address or because it is ours without local
+     *  connections allowed?  The caller supplies the per-transport
+     *  validity and "equals external IP" booleans so this stays a pure
+     *  decision.
+     *
+     *  @param isValid the transport's verdict on the address
+     *  @param equalsExternalIP true if the address equals the router's external IP
+     *  @param allowLocal true if local connections are permitted
+     *  @return true if the address must be rejected
+     *  @since 0.9.71
+     */
+    static boolean isInvalidPeerIP(boolean isValid, boolean equalsExternalIP, boolean allowLocal) {
+        return !isValid || (equalsExternalIP && !allowLocal);
+    }
+
+    /**
+     *  Should this establish use the peer's introducers rather than the
+     *  claimed address?  True when the peer offers introducers or when no
+     *  usable direct address was found.
+     *
+     *  @param hasIntroducers true if the address advertises introducers
+     *  @param noDirectAddress true if no claimed address was usable
+     *  @return true to establish indirectly
+     *  @since 0.9.71
+     */
+    static boolean needsIndirect(boolean hasIntroducers, boolean noDirectAddress) {
+        return hasIntroducers || noDirectAddress;
+    }
+
+    /**
+     *  Should the message be put on the deferred queue instead of starting a
+     *  new outbound state?  Only when queueing is requested and the active
+     *  outbound establish count is at or above the configured cap.
+     *
+     *  @param queueIfMaxExceeded true normally, false when called from locked_admit
+     *  @param activeCount the current number of outbound establish states
+     *  @param maxConcurrent the configured cap
+     *  @return true to queue the message
+     *  @since 0.9.71
+     */
+    static boolean shouldQueueOutbound(boolean queueIfMaxExceeded, int activeCount, int maxConcurrent) {
+        return queueIfMaxExceeded && activeCount >= maxConcurrent;
+    }
+
+    /**
+     *  Should the queued message be rejected outright rather than queued?
+     *  True when the global deferred queue is at capacity and this peer does
+     *  not already have a queue we could append to.
+     *
+     *  @param queuedOutboundSize the global deferred queue count
+     *  @param maxQueued the global queue cap
+     *  @param peerAlreadyQueued true if this peer already has a deferred queue
+     *  @return true to reject the message
+     *  @since 0.9.71
+     */
+    static boolean shouldRejectQueue(boolean peerAlreadyQueued, int queuedOutboundSize, int maxQueued) {
+        return queuedOutboundSize >= maxQueued && !peerAlreadyQueued;
+    }
+
+    /**
+     *  Has this peer's deferred queue hit its per-peer cap?
+     *
+     *  @param queueCount the number of messages now queued for the peer
+     *  @param maxPerPeer the per-peer queue cap
+     *  @return true if the queue is at capacity
+     *  @since 0.9.71
+     */
+    static boolean queueAtCapacity(int queueCount, int maxPerPeer) {
+        return queueCount >= maxPerPeer;
+    }
+
+    /**
      *  Send the message to its specified recipient by establishing a connection
      *  with them and sending it off.  This call does not block, and on failure,
      *  the message is failed.
@@ -418,8 +539,8 @@ public class EstablishmentManager {
         if (addr.getHostAddress() != null) {
             ipPort = Addresses.toString(addr.getHostAddress().getAddress()) + ":" + addr.getPort();
         }
-        if (id != _networkID) {
-            if (id == -1) {
+        if (isWrongNetwork(id, _networkID)) {
+            if (isUnspecifiedNetwork(id)) {
                 _banLogger.logBan(toHash, ipPort, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
                 _context.banlist().banlistRouter(toHash, "No network specified", null, null,
                                                  _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
@@ -438,21 +559,24 @@ public class EstablishmentManager {
 
         // check for validity and existing inbound state, using the
         // claimed address (which we won't be using if indirect)
-        if (remAddr != null && port > 0 && port <= 65535) {
+        if (isUsableUDPAddress(remAddr, port)) {
             maybeTo = new RemoteHostId(remAddr.getAddress(), port);
             String ipAddress = Addresses.toString(remAddr.getAddress());
 
-            if ((!_transport.isValid(maybeTo.getIP())) ||
-                (Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()) && !_transport.allowLocal())) {
+            if (isInvalidPeerIP(_transport.isValid(maybeTo.getIP()),
+                                Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()),
+                                _transport.allowLocal())) {
                 _transport.failed(msg, "Peer's IP address isn't valid");
                 _transport.markUnreachable(toHash);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 if (toHash != null) {
                     if (!isBanned) {
-                        _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", 4*60*60*1000L);
-                        _context.banlist().banlistRouter(toHash, "Invalid SSU address", null, null, now + 4*60*60*1000L);
+                        _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", BAN_DURATION_INVALID_ADDRESS_MS);
+                        _context.banlist().banlistRouter(toHash, "Invalid SSU address", null, null,
+                                                         now + BAN_DURATION_INVALID_ADDRESS_MS);
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
+                            _log.warn("[SSU] Banning [" + truncHash + "] for " +
+                                      (BAN_DURATION_INVALID_ADDRESS_MS / (60*60*1000L)) + "h -> Invalid SSU address");
                         }
                     }
                 } else {
@@ -472,7 +596,7 @@ public class EstablishmentManager {
         }
 
         RemoteHostId to;
-        boolean isIndirect = addr.getIntroducerCount() > 0 || maybeTo == null;
+        boolean isIndirect = needsIndirect(addr.getIntroducerCount() > 0, maybeTo == null);
 
         byte[] maybeIP = maybeTo != null ? maybeTo.getIP() : null;
         int maybePort = maybeTo != null ? maybeTo.getPort() : 0;
@@ -487,8 +611,8 @@ public class EstablishmentManager {
 
         state = lookupOutboundState(to, toHash);
         if (state == null) {
-            if (queueIfMaxExceeded && _outboundStates.size() >= getMaxConcurrentEstablish()) {
-                if (_queuedOutbound.size() >= MAX_QUEUED_OUTBOUND && !_queuedOutbound.containsKey(to)) {
+            if (shouldQueueOutbound(queueIfMaxExceeded, _outboundStates.size(), getMaxConcurrentEstablish())) {
+                if (shouldRejectQueue(_queuedOutbound.containsKey(to), _queuedOutbound.size(), MAX_QUEUED_OUTBOUND)) {
                     _context.statManager().addRateData("udp.queuedOutbound.size", _queuedOutbound.size(), MAX_QUEUED_OUTBOUND);
                     rejected = true;
                 } else {
@@ -533,7 +657,7 @@ public class EstablishmentManager {
             _context.statManager().addRateData("udp.establishRejected", deferred);
             return;
         }
-        if (queueCount >= MAX_QUEUED_PER_PEER) {
+        if (queueAtCapacity(queueCount, MAX_QUEUED_PER_PEER)) {
             _transport.failed(msg, "Too many pending messages for the given peer");
             _context.statManager().addRateData("udp.establishOverflow", queueCount, deferred);
             return;
@@ -639,7 +763,7 @@ public class EstablishmentManager {
             if ((mtu > 0 && mtu < PeerState2.MIN_MTU) ||
                 (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
                 banAndFail(msg, toHash, "MTU too small", "Invalid MTU", "Router has invalid MTU (too small)",
-                           ipAddress, maybePort, truncHash, 4*60*60*1000L, now, isBanned);
+                           ipAddress, maybePort, truncHash, BAN_DURATION_INVALID_ADDRESS_MS, now, isBanned);
                 return null;
             }
         }
@@ -661,7 +785,7 @@ public class EstablishmentManager {
         } catch (IllegalArgumentException iae) {
             banAndFail(msg, toHash, "Peer has BAD key, cannot establish connection -> Marking unreachable",
                        "Bad Introduction key", "Received Bad Introduction key from",
-                       ipAddress, maybePort, truncHash, 4*60*60*1000L, now, isBanned);
+                       ipAddress, maybePort, truncHash, BAN_DURATION_INVALID_ADDRESS_MS, now, isBanned);
             return null;
         }
         OutboundEstablishState state;
@@ -704,7 +828,7 @@ public class EstablishmentManager {
      *  @param noHashWarn warning text used when the peer has no hash
      *  @param ipAddress the claimed IP, may be empty for indirect peers
      *  @param port the claimed port
-     *  @param banDuration ban duration in ms, e.g. 4*60*60*1000L
+     *  @param banDuration ban duration in ms, e.g. {@link #BAN_DURATION_INVALID_ADDRESS_MS}
      */
     private void banAndFail(OutNetMessage msg, Hash toHash, String failReason, String banReason,
                             String noHashWarn, String ipAddress, int port, String truncHash,
@@ -2045,7 +2169,7 @@ public class EstablishmentManager {
         int iplen = SSU2Util.getRelayDataAddrLen(data);
         if (!SSU2Util.isValidRelayDataAddrLen(iplen)) {
             if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + state);}
-            banAndFailState(state, "Bad Introduction data", 4*60*60*1000L);
+            banAndFailState(state, "Bad Introduction data", BAN_DURATION_INVALID_ADDRESS_MS);
             return -1;
         }
         int port = SSU2Util.getRelayDataPort(data);
@@ -2057,7 +2181,7 @@ public class EstablishmentManager {
             if (_log.shouldWarn()) {
                 _log.warn("[SSU] BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
             }
-            banAndFailState(state, "Bad Introduction data", 4*60*60*1000L);
+            banAndFailState(state, "Bad Introduction data", BAN_DURATION_INVALID_ADDRESS_MS);
             return -1;
         }
         int fromPort = id.getPort();

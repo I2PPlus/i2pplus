@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.net.InetAddress;
 import java.security.GeneralSecurityException;
 
 import net.i2p.data.Hash;
@@ -151,5 +152,77 @@ public class EstablishmentDecisionTest {
         assertEquals("Unknown error", EstablishmentManager.parseReason(23));
         assertEquals("Unknown error", EstablishmentManager.parseReason(-1));
         assertEquals("Unknown error", EstablishmentManager.parseReason(100));
+    }
+
+    @Test
+    public void testIsWrongNetwork() {
+        assertFalse(EstablishmentManager.isWrongNetwork(7, 7));
+        assertTrue(EstablishmentManager.isWrongNetwork(8, 7));
+        assertTrue(EstablishmentManager.isWrongNetwork(-1, 7));
+    }
+
+    @Test
+    public void testIsUnspecifiedNetwork() {
+        assertTrue(EstablishmentManager.isUnspecifiedNetwork(-1));
+        assertFalse(EstablishmentManager.isUnspecifiedNetwork(0));
+        assertFalse(EstablishmentManager.isUnspecifiedNetwork(7));
+        assertFalse(EstablishmentManager.isUnspecifiedNetwork(1));
+    }
+
+    @Test
+    public void testIsUsableUDPAddress() throws Exception {
+        InetAddress addr = InetAddress.getByName("10.0.0.1");
+        assertTrue(EstablishmentManager.isUsableUDPAddress(addr, 80));
+        assertFalse(EstablishmentManager.isUsableUDPAddress(null, 80));
+        assertFalse(EstablishmentManager.isUsableUDPAddress(addr, 0));
+        assertFalse(EstablishmentManager.isUsableUDPAddress(addr, -1));
+        assertFalse(EstablishmentManager.isUsableUDPAddress(addr, 65536));
+        assertTrue(EstablishmentManager.isUsableUDPAddress(addr, 1));
+        assertTrue(EstablishmentManager.isUsableUDPAddress(addr, 65535));
+    }
+
+    @Test
+    public void testIsInvalidPeerIP() {
+        assertTrue(EstablishmentManager.isInvalidPeerIP(false, false, false));
+        assertTrue(EstablishmentManager.isInvalidPeerIP(false, true, false));
+        assertTrue(EstablishmentManager.isInvalidPeerIP(false, true, true));
+        assertFalse(EstablishmentManager.isInvalidPeerIP(true, false, false));
+        assertFalse(EstablishmentManager.isInvalidPeerIP(true, false, true));
+        // equals our external IP and local not allowed
+        assertTrue(EstablishmentManager.isInvalidPeerIP(true, true, false));
+        // equals our external IP but local allowed
+        assertFalse(EstablishmentManager.isInvalidPeerIP(true, true, true));
+    }
+
+    @Test
+    public void testNeedsIndirect() {
+        assertTrue(EstablishmentManager.needsIndirect(true, false));
+        assertTrue(EstablishmentManager.needsIndirect(false, true));
+        assertTrue(EstablishmentManager.needsIndirect(true, true));
+        assertFalse(EstablishmentManager.needsIndirect(false, false));
+    }
+
+    @Test
+    public void testShouldQueueOutbound() {
+        assertFalse(EstablishmentManager.shouldQueueOutbound(false, 10, 5));
+        assertFalse(EstablishmentManager.shouldQueueOutbound(true, 4, 5));
+        assertTrue(EstablishmentManager.shouldQueueOutbound(true, 5, 5));
+        assertTrue(EstablishmentManager.shouldQueueOutbound(true, 10, 5));
+    }
+
+    @Test
+    public void testShouldRejectQueue() {
+        assertFalse(EstablishmentManager.shouldRejectQueue(true, 100, 128));
+        assertTrue(EstablishmentManager.shouldRejectQueue(false, 128, 128));
+        assertFalse(EstablishmentManager.shouldRejectQueue(false, 127, 128));
+        assertFalse(EstablishmentManager.shouldRejectQueue(true, 200, 128));
+    }
+
+    @Test
+    public void testQueueAtCapacity() {
+        assertFalse(EstablishmentManager.queueAtCapacity(31, 32));
+        assertTrue(EstablishmentManager.queueAtCapacity(32, 32));
+        assertTrue(EstablishmentManager.queueAtCapacity(33, 32));
+        assertFalse(EstablishmentManager.queueAtCapacity(0, 32));
     }
 }
