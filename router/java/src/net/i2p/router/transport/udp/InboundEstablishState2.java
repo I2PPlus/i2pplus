@@ -31,7 +31,6 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.util.Addresses;
-import net.i2p.util.SimpleTimer2;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -108,7 +107,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 break;
             case 3:
                 if (type == SESSION_REQUEST_FLAG_BYTE) {
-                    int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                    int ipOverhead = (isIPv6 ? PacketBuilder2.IPV6_HEADER_SIZE : PacketBuilder2.IP_HEADER_SIZE) + PacketBuilder2.UDP_HEADER_SIZE;
                     _mtu = Math.max(PeerState2.MIN_MTU, len + ipOverhead);
                 }
                 pattern = NoiseInit.PatternID.XKHFS_512_SSU2;
@@ -126,7 +125,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     throw new GeneralSecurityException("Our MTU too small for version 4 (retry sent): " + ourmtu);
                 }
                 if (type == SESSION_REQUEST_FLAG_BYTE) {
-                    int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                    int ipOverhead = (isIPv6 ? PacketBuilder2.IPV6_HEADER_SIZE : PacketBuilder2.IP_HEADER_SIZE) + PacketBuilder2.UDP_HEADER_SIZE;
                     _mtu = Math.max(min, len + ipOverhead);
                 }
                 pattern = NoiseInit.PatternID.XKHFS_768_SSU2;
@@ -295,83 +294,21 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         // try to find the right address, because we need the MTU
         boolean isIPv6 = _aliceIP.length == 16;
-        List<RouterAddress> addrs = _transport.getTargetAddresses(ri);
-        RouterAddress ra = null;
-        String mismatchMessage = null;
-        for (RouterAddress addr : addrs) {
-            // skip SSU 1 address w/o "s"
-            if (addrs.size() > 1 && addr.getTransportStyle().equals("SSU") && addr.getOption("s") == null) {
-                continue;
-            }
-            String host = addr.getHost();
-            if (host == null) {host = "";}
-            String caps = addr.getOption(UDPAddress.PROP_CAPACITY);
-            if (caps == null) {caps = "";}
-            if (isIPv6 && !host.contains(":") && !caps.contains(TransportImpl.CAP_IPV6)) {continue;}
-            else if (!host.contains(".") && !caps.contains(TransportImpl.CAP_IPV4)) {continue;}
-            ra = addr;
-            byte[] infoIP = ra.getIP();
-            if (infoIP != null && infoIP.length == _aliceIP.length) {
-                if (isIPv6) {
-                    if (((infoIP[0]) & 0xfe) == 0x02) {continue;} // ygg
-                    if (DataHelper.eq(_aliceIP, 0, infoIP, 0, 8)) {continue;}
-                } else {
-                    if (DataHelper.eq(_aliceIP, infoIP)) {continue;}
-                }
-                // We will ban and throw below after checking signature
-                mismatchMessage = "IP mismatch actual IP ".concat(Addresses.toString(_aliceIP)).concat(" in RI: ");
-            }
-            break;
-        }
-
+        AddressSelection sel = selectSessionAddress(_transport.getTargetAddresses(ri), isIPv6, _aliceIP);
+        RouterAddress ra = sel.ra;
+        String mismatchMessage = sel.mismatchMessage;
         if (ra == null) {throw new DataFormatException("No SSU2 address, IPv6? " + isIPv6 + ": " + ri);}
-        String siv = ra.getOption("i");
-        if (siv == null) {throw new DataFormatException("No SSU2 IKey");}
-        byte[] ik = Base64.decode(siv);
-        if (ik == null) {throw new DataFormatException("BAD SSU2 IKey");}
-        if (ik.length != 32) {throw new DataFormatException("BAD SSU2 IKey length");}
-        String ss = ra.getOption("s");
-        if (ss == null) {throw new DataFormatException("No SSU2 S");}
-        byte[] s = Base64.decode(ss);
-        if (s == null) {throw new DataFormatException("BAD SSU2 S");}
-        if (s.length != 32) {throw new DataFormatException("BAD SSU2 S length");}
-        byte[] nb = new byte[32];
+        byte[] nb = new byte[KEY_LEN];
         // compare to the _handshakeState
         _handshakeState.getRemotePublicKey().getPublicKey(nb, 0);
-        if (!DataHelper.eqCT(s, 0, nb, 0, KEY_LEN)) {throw new DataFormatException("S mismatch in RouterInfo: " + ri);}
-
-        _sendHeaderEncryptKey1 = ik;
+        _sendHeaderEncryptKey1 = parseSessionKeys(ra, nb);
 
         // only after here can we throw RIExceptions and send a response in-session
         // because we have his ikey and we verified he's the owner of the RI
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
         validateRouterInfo(ri, ra, mismatchMessage);
 
-        String smtu = ra.getOption(UDPAddress.PROP_MTU);
-        int mtu = 0;
-        try {mtu = Integer.parseInt(smtu);}
-        catch (NumberFormatException nfe) { /* ignored */ }
-        if (mtu == 0) {
-            if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {mtu = PeerState2.DEFAULT_MTU;}
-            else {
-                if (isIPv6) {mtu = PeerState2.DEFAULT_SSU_IPV6_MTU;}
-                else {mtu = PeerState2.DEFAULT_SSU_IPV4_MTU;}
-            }
-        } else if (mtu == 1276 && ra.getTransportStyle().equals("SSU")) {mtu = PeerState2.MIN_MTU;} // workaround for bug in 1.9.0
-        else {
-            // if too small, give up now
-            if (mtu < PeerState2.MIN_MTU) {throw new RIException("MTU too small " + mtu, REASON_OPTIONS);}
-            if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {
-                mtu = Math.min(Math.max(mtu, PeerState2.MIN_MTU), PeerState2.MAX_MTU);
-            } else {
-                if (isIPv6) {
-                    mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV6_MTU), PeerState2.MAX_SSU_IPV6_MTU);
-                } else {
-                    mtu = Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV4_MTU), PeerState2.MAX_SSU_IPV4_MTU);
-                }
-            }
-        }
-        _mtu = mtu;
+        _mtu = parseMTU(ra, isIPv6);
 
         try {
             RouterInfo old = _context.netDb().store(h, ri);
@@ -387,41 +324,231 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // generally expired/future RI
             long now = _context.clock().now();
             long published = ri.getPublished();
-            int reason;
-            if (published > now + 2*60*1000L || published < now - 60*60*1000L) {reason = REASON_SKEW;}
-            else {reason = REASON_MSG3;}
-            throw new RIException("RouterInfo store fail: " + ri, reason, iae);
+            throw new RIException("RouterInfo store fail: " + ri, storeFailureReason(now, published), iae);
         }
 
         _receivedConfirmedIdentity = _receivedUnconfirmedIdentity;
         // deferred relay tag request handling, now that we have the RI
         // formerly in EstablishmentManager.receiveSessionOrTokenReques()
         if (_introductionRequested) {
-            if (getSentPort() < 1024 || !_transport.canIntroduce(isIPv6)) {
-                _introductionRequested = false;
-            } else if (VersionComparator.comp(ri.getVersion(), MIN_RELAY_VERSION) < 0) {
-                _introductionRequested = false;
-                String caps = ri.getCapabilities();
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
-                }
-            } else {
-                String caps = ri.getCapabilities();
-                // may be requesting relay for ipv4/6 if reachable on the other
-                // or may be starting up and not know if reachable or not
-                if (caps.indexOf(Router.CAPABILITY_REACHABLE) < 0 || _context.random().nextInt(4) == 0) {
+            String caps = ri.getCapabilities();
+            switch (decideIntroduction(ri.getVersion(), caps, getSentPort() >= 1024,
+                                       _transport.canIntroduce(isIPv6), _context.random().nextInt(4) == 0)) {
+                case INTRO_KEEP:
                     // leave it set to true; createPeerState() will copy to PS2,
                     // who will send the relay tag with ACK 0
-                } else {
+                    break;
+                case INTRO_BLOCKED:
+                    _introductionRequested = false;
+                    break;
+                default:
                     _introductionRequested = false;
                     if (_log.shouldWarn()) {
                         _log.warn("[SSU] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
                     }
-                }
+                    break;
             }
         }
         createPeerState();
         //_sendHeaderEncryptKey2 calculated below
+    }
+
+    /** A yggdrasil IPv6 address starts with 0x02 or 0x03 (first byte 0b0000001x). */
+    private static final int YGGDRASIL_FIRST_BYTE_MASK = 0xfe;
+    private static final int YGGDRASIL_FIRST_BYTE = 0x02;
+
+    /** Bytes of the source IPv6 prefix that identify an address as this router's own. */
+    private static final int IPV6_SELF_PREFIX_BYTES = 8;
+
+    /** SSU 1.0 mtu option value that maps to MIN_MTU; workaround for a bug in 1.9.0. */
+    private static final int SSU_V1_MTU_19_BUG = 1276;
+
+    /** A RouterInfo published more than 2 minutes in the future is clock-skewed. */
+    private static final long RI_SKEW_FUTURE_WINDOW = 2*60*1000L;
+
+    /** A RouterInfo published more than 1 hour in the past is clock-skewed. */
+    private static final long RI_SKEW_PAST_WINDOW = 60*60*1000L;
+
+    /**
+     *  Result of {@link #selectSessionAddress(List, boolean, byte[])}: the chosen
+     *  RouterInfo address and, when the peer advertises a different IP than the
+     *  sender's source address, an explanatory mismatch message.
+     *
+     *  @since 0.9.71+
+     */
+    static final class AddressSelection {
+        /** the selected address, or null when no address qualified */
+        final RouterAddress ra;
+        /** set when the advertised IP differs from the sender's; null otherwise */
+        final String mismatchMessage;
+
+        AddressSelection(RouterAddress ra, String mismatchMessage) {
+            this.ra = ra;
+            this.mismatchMessage = mismatchMessage;
+        }
+    }
+
+    /**
+     *  Choose the RouterInfo address this session negotiates with, given the
+     *  sender's IP family, so the caller can determine the MTU and keys. The
+     *  rules mirror the SSU2 handshake:
+     *  <ul>
+     *  <li>with several addresses, a pure SSU 1 address (no "s" option) is skipped</li>
+     *  <li>an address is skipped when its host is not compatible with the sender's
+     *      IP family, unless the capacity bit marks it usable</li>
+     *  <li>an address is skipped when it advertises the sender's own IP (yggdrasil
+     *      addresses and a matching IPv6 source prefix cannot be ourselves)</li>
+     *  <li>an address that advertises a different IP than the sender's source
+     *      address is selected but flagged, so the caller can ban it after the
+     *      signature is verified</li>
+     *  </ul>
+     *
+     *  @param addrs the addresses from the peer's RouterInfo, in preference order
+     *  @param isIPv6 true if the sender connected over IPv6
+     *  @param aliceIP the sender's source IP bytes (4 for IPv4, 16 for IPv6)
+     *  @return the selection; <code>ra</code> is null when no address qualified
+     *  @since 0.9.71+
+     */
+    static AddressSelection selectSessionAddress(List<RouterAddress> addrs, boolean isIPv6, byte[] aliceIP) {
+        for (RouterAddress addr : addrs) {
+            // skip SSU 1 address w/o "s"
+            if (addrs.size() > 1 && addr.getTransportStyle().equals("SSU") && addr.getOption("s") == null) {
+                continue;
+            }
+            String host = addr.getHost();
+            if (host == null) {host = "";}
+            String caps = addr.getOption(UDPAddress.PROP_CAPACITY);
+            if (caps == null) {caps = "";}
+            if (isIPv6 && !host.contains(":") && !caps.contains(TransportImpl.CAP_IPV6)) {continue;}
+            else if (!host.contains(".") && !caps.contains(TransportImpl.CAP_IPV4)) {continue;}
+            String mismatchMessage = null;
+            byte[] infoIP = addr.getIP();
+            if (infoIP != null && infoIP.length == aliceIP.length) {
+                if (isIPv6) {
+                    if (((infoIP[0]) & YGGDRASIL_FIRST_BYTE_MASK) == YGGDRASIL_FIRST_BYTE) {continue;} // ygg
+                    if (DataHelper.eq(aliceIP, 0, infoIP, 0, IPV6_SELF_PREFIX_BYTES)) {continue;}
+                } else {
+                    if (DataHelper.eq(aliceIP, infoIP)) {continue;}
+                }
+                // We will ban and throw below after checking signature
+                mismatchMessage = "IP mismatch actual IP ".concat(Addresses.toString(aliceIP)).concat(" in RI: ");
+            }
+            return new AddressSelection(addr, mismatchMessage);
+        }
+        return new AddressSelection(null, null);
+    }
+
+    /**
+     *  Resolve the session MTU from the peer's "mtu" option. Pure decision logic:
+     *  a missing or unparsable value falls back to the per-style/family default,
+     *  the 1.9.0 workaround maps 1276 to MIN_MTU for SSU 1, and any other value
+     *  is clamped into the legal range for the negotiated style and IP family. A
+     *  declared MTU below MIN_MTU (other than the workaround) is rejected.
+     *
+     *  @param ra the negotiated SSU2/SSU address
+     *  @param isIPv6 true for an IPv6 session
+     *  @return the effective MTU
+     *  @throws RIException with REASON_OPTIONS if a declared MTU is below MIN_MTU
+     *  @since 0.9.71+
+     */
+    static int parseMTU(RouterAddress ra, boolean isIPv6) throws RIException {
+        String smtu = ra.getOption(UDPAddress.PROP_MTU);
+        int mtu = 0;
+        try {mtu = Integer.parseInt(smtu);}
+        catch (NumberFormatException nfe) { /* ignored */ }
+        if (mtu == 0) {
+            if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {return PeerState2.DEFAULT_MTU;}
+            if (isIPv6) {return PeerState2.DEFAULT_SSU_IPV6_MTU;}
+            return PeerState2.DEFAULT_SSU_IPV4_MTU;
+        }
+        if (mtu == SSU_V1_MTU_19_BUG && ra.getTransportStyle().equals("SSU")) {return PeerState2.MIN_MTU;} // workaround for bug in 1.9.0
+        // if too small, give up now
+        if (mtu < PeerState2.MIN_MTU) {throw new RIException("MTU too small " + mtu, REASON_OPTIONS);}
+        if (ra.getTransportStyle().equals(UDPTransport.STYLE2)) {return Math.min(Math.max(mtu, PeerState2.MIN_MTU), PeerState2.MAX_MTU);}
+        if (isIPv6) {return Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV6_MTU), PeerState2.MAX_SSU_IPV6_MTU);}
+        return Math.min(Math.max(mtu, PeerState2.MIN_SSU_IPV4_MTU), PeerState2.MAX_SSU_IPV4_MTU);
+    }
+
+    /**
+     *  Classify a RouterInfo store failure - generally an expired or
+     *  future-dated RouterInfo that the netDb rejected - into a termination
+     *  reason.
+     *
+     *  @param now current clock time
+     *  @param published the RI's publication date
+     *  @return REASON_SKEW when the publication date is outside the accepted skew
+     *          window, otherwise REASON_MSG3
+     *  @since 0.9.71+
+     */
+    static int storeFailureReason(long now, long published) {
+        if (published > now + RI_SKEW_FUTURE_WINDOW || published < now - RI_SKEW_PAST_WINDOW) {return REASON_SKEW;}
+        return REASON_MSG3;
+    }
+
+    /**
+     *  Decode and verify the SSU2 IKey/S options of the negotiated RouterInfo
+     *  address and verify that the peer's S key matches the X25519 public key
+     *  already derived from the handshake. Throws before any session state is
+     *  modified, so a malformed or dishonest RouterInfo cannot corrupt the
+     *  established keys.
+     *
+     *  @param ra the negotiated address; must carry the "i" and "s" options
+     *  @param publicKey the X25519 public key from {@code _handshakeState}
+     *  @return the verified IKey, to install as the send header key
+     *  @throws DataFormatException with a type-specific message on any bad key or
+     *          an S/public-key mismatch
+     *  @since 0.9.71+
+     */
+    static byte[] parseSessionKeys(RouterAddress ra, byte[] publicKey) throws DataFormatException {
+        String siv = ra.getOption("i");
+        if (siv == null) {throw new DataFormatException("No SSU2 IKey");}
+        byte[] ik = Base64.decode(siv);
+        if (ik == null) {throw new DataFormatException("BAD SSU2 IKey");}
+        if (ik.length != KEY_LEN) {throw new DataFormatException("BAD SSU2 IKey length");}
+        String ss = ra.getOption("s");
+        if (ss == null) {throw new DataFormatException("No SSU2 S");}
+        byte[] s = Base64.decode(ss);
+        if (s == null) {throw new DataFormatException("BAD SSU2 S");}
+        if (s.length != KEY_LEN) {throw new DataFormatException("BAD SSU2 S length");}
+        if (!DataHelper.eqCT(s, 0, publicKey, 0, KEY_LEN)) {throw new DataFormatException("S mismatch in RouterInfo");}
+        return ik;
+    }
+
+    /** Keep the introduction request; createPeerState() sends the relay tag with ACK 0. */
+    static final int INTRO_KEEP = 0;
+    /** Drop it: a temporary sent port or no introduction support on the peer's family. */
+    static final int INTRO_BLOCKED = 1;
+    /** Drop it: the peer's version is too old to relay to. */
+    static final int INTRO_VERSION = 2;
+    /** Drop it: the peer advertises itself reachable; relaying is not required. */
+    static final int INTRO_OPPORTUNISTIC = 3;
+
+    /**
+     *  Decide whether a deferred relay-tag request survives once the peer's
+     *  RouterInfo is known. Pure decision logic so the branch table is testable:
+     *  <ul>
+     *  <li>we cannot relay while our sent port is a temporary one or the transport
+     *      does not support introduction on the peer's IP family</li>
+     *  <li>we do not relay to routers running older than {@link #MIN_RELAY_VERSION}</li>
+     *  <li>when the peer already advertises itself reachable we only relay on a
+     *      1-in-4 draw - the peer is likely starting up and simply unaware of its
+     *      reachability</li>
+     *  </ul>
+     *
+     *  @param version the peer's RouterInfo version string
+     *  @param caps the peer's RouterInfo capabilities, or null
+     *  @param sentPortOk true if our sent port is a real, stable port (at least 1024)
+     *  @param canIntroduce true if the transport can introduce on the peer's IP family
+     *  @param randomKeep the pre-rolled 1-in-4 opportunistic keep draw
+     *  @return {@link #INTRO_KEEP}, {@link #INTRO_BLOCKED}, {@link #INTRO_VERSION}
+     *          or {@link #INTRO_OPPORTUNISTIC}
+     *  @since 0.9.71+
+     */
+    static int decideIntroduction(String version, String caps, boolean sentPortOk, boolean canIntroduce, boolean randomKeep) {
+        if (!sentPortOk || !canIntroduce) {return INTRO_BLOCKED;}
+        if (VersionComparator.comp(version, MIN_RELAY_VERSION) < 0) {return INTRO_VERSION;}
+        if (caps != null && caps.indexOf(Router.CAPABILITY_REACHABLE) >= 0 && !randomKeep) {return INTRO_OPPORTUNISTIC;}
+        return INTRO_KEEP;
     }
 
     /**
@@ -871,7 +998,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 overhead += MAC_LEN + EncType.MLKEM512_X25519_INT.getPubkeyLen();
                 _handshakeState.mixHash(_context.routerHash().getData(), 0, 32);
                 boolean isIPv6 = _aliceIP.length == 16;
-                int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                int ipOverhead = (isIPv6 ? PacketBuilder2.IPV6_HEADER_SIZE : PacketBuilder2.IP_HEADER_SIZE) + PacketBuilder2.UDP_HEADER_SIZE;
                 int mtu = Math.max(PeerState2.MIN_MTU, len + ipOverhead);
                 if (mtu > _mtu)
                     _mtu = mtu;
@@ -881,7 +1008,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 overhead += MAC_LEN + EncType.MLKEM768_X25519_INT.getPubkeyLen();
                 _handshakeState.mixHash(_context.routerHash().getData(), 0, 32);
                 boolean isIPv6 = _aliceIP.length == 16;
-                int ipOverhead = (isIPv6 ? PacketBuilder.IPV6_HEADER_SIZE : PacketBuilder.IP_HEADER_SIZE) + PacketBuilder.UDP_HEADER_SIZE;
+                int ipOverhead = (isIPv6 ? PacketBuilder2.IPV6_HEADER_SIZE : PacketBuilder2.IP_HEADER_SIZE) + PacketBuilder2.UDP_HEADER_SIZE;
                 int min = isIPv6 ? PeerState2.MIN_MLKEM768_IPV6_MTU : PeerState2.MIN_MLKEM768_IPV4_MTU;
                 int mtu = Math.max(min, len + ipOverhead);
                 if (mtu > _mtu)
@@ -1301,7 +1428,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      *  For throwing out of gotRI()
      *  @since 0.9.57
      */
-    private static class RIException extends DataFormatException {
+    static class RIException extends DataFormatException {
         private final int rsn;
         /**
          * Creates the RI exception.
@@ -1328,20 +1455,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
          */
         @Override
         public String getMessage() {return "Code " + rsn + ": " + super.getMessage();}
-    }
-
-    private class Disconnector extends SimpleTimer2.TimedEvent {
-        private final Hash h;
-        /**
-         * Creates the disconnector.
-         */
-        public Disconnector(Hash h) {super(_context.simpleTimer2()); this.h = h;}
-        /**
-         * Disconnect the peer when the timer fires.
-         */
-        public void timeReached() {
-            _context.commSystem().forceDisconnect(h, "Invalid SSU address");
-        }
     }
 
 }
