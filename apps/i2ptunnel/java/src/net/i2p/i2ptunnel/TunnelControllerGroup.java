@@ -114,11 +114,11 @@ public class TunnelControllerGroup implements ClientApp {
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
 
     /** Global server-handler thread budget ceiling (Tuner param max, heap-clamped in the Tuner). */
-    private static final int SERVER_HANDLER_MAX_THREADS = 16384;
+    static final int SERVER_HANDLER_MAX_THREADS = 16384;
     /** Per-tunnel server-handler cap ceiling (Tuner per-tunnel param max). */
-    private static final int SERVER_HANDLER_PER_TUNNEL_MAX = 4096;
+    static final int SERVER_HANDLER_PER_TUNNEL_MAX = 4096;
     /** Absolute floor for a live server tunnel's handler pool. */
-    private static final int SERVER_HANDLER_FLOOR = 2;
+    static final int SERVER_HANDLER_FLOOR = 2;
 
     /** Tuned by Tuner: global budget for server handler threads, summed over all server tunnels */
     private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);

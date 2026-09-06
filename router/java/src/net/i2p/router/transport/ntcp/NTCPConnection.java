@@ -1101,7 +1101,7 @@ public class NTCPConnection implements Closeable {
      *  stored before (or there was no previous copy, so the store is new).
      *  copy claims a later publication time.
      *
-     *  <p>Used on the flood path in {@link NTCP2ReadState#gotRI}.
+     *  <p>Used on the flood path in {@link NTCP2Payload.PayloadCallback#gotRI}.
 
      *  @param old the previously stored RouterInfo, or null if this is a new store
      *  @param ri the RouterInfo that was just stored
