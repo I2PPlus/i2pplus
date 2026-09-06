@@ -3862,29 +3862,7 @@ public class UDPTransport extends TransportImpl {
         if (newStatus == Status.UNKNOWN) {
             // now that addRemotePeerState() doesn't schedule peer tests like crazy,
             // we need to reschedule here
-            boolean runtest = false;
-            switch (old) {
-                case UNKNOWN:
-                    runtest = true;
-                    break;
-
-                case IPV4_UNKNOWN_IPV6_OK:
-                case IPV4_UNKNOWN_IPV6_FIREWALLED:
-                    if (isIPv6)
-                        runtest = true;
-                    break;
-
-                case IPV4_OK_IPV6_UNKNOWN:
-                case IPV4_DISABLED_IPV6_UNKNOWN:
-                case IPV4_FIREWALLED_IPV6_UNKNOWN:
-                case IPV4_SNAT_IPV6_UNKNOWN:
-                    if (isIPv6)
-                        runtest = true;
-                    break;
-
-                default:
-                    break;
-            }
+            boolean runtest = shouldRerunStatusTest(old, isIPv6);
             if (runtest || old != _reachabilityStatusPending) {
                 if (_log.shouldWarn())
                     _log.warn("Old status: " + old + " unchanged after update: UNKNOWN, reschedule test soon, ipv6? " + isIPv6);
@@ -3900,38 +3878,15 @@ public class UDPTransport extends TransportImpl {
         Status status = Status.merge(old, newStatus);
         _testEvent.setLastTested(isIPv6);
         // now modify if we are IPv6 only
-        TransportUtil.IPv6Config config = getIPv6Config();
-        if (config == IPV6_ONLY) {
-            if (status == Status.IPV4_UNKNOWN_IPV6_OK)
-                status = Status.IPV4_DISABLED_IPV6_OK;
-            else if (status == Status.IPV4_UNKNOWN_IPV6_FIREWALLED)
-                status = Status.IPV4_DISABLED_IPV6_FIREWALLED;
-            else if (status == Status.UNKNOWN)
-                status = Status.IPV4_DISABLED_IPV6_UNKNOWN;
-        }
+        status = applyIPv6Only(status, getIPv6Config() == IPV6_ONLY);
         if (status != Status.UNKNOWN) {
             // now modify if we have no IPv6 address
-            if (_currentOurV6Address == null && !_haveIPv6Address) {
-                if (status == Status.IPV4_OK_IPV6_UNKNOWN)
-                    status = Status.OK;
-                else if (status == Status.IPV4_FIREWALLED_IPV6_UNKNOWN)
-                    status = Status.REJECT_UNSOLICITED;
-                else if (status == Status.IPV4_SNAT_IPV6_UNKNOWN)
-                    status = Status.DIFFERENT;
-                // prevent firewalled -> OK -> firewalled+OK
-                else if (status == Status.IPV4_FIREWALLED_IPV6_OK)
-                    status = Status.REJECT_UNSOLICITED;
-                else if (status == Status.IPV4_SNAT_IPV6_OK)
-                    status = Status.DIFFERENT;
-            }
+            status = applyNoIPv6Address(status, _currentOurV6Address != null || _haveIPv6Address);
 
             if (status != old) {
                 // for the following transitions ONLY, require two in a row
                 // to prevent thrashing
-                if ((STATUS_OK.contains(old) && STATUS_FW.contains(status)) ||
-                    (STATUS_OK.contains(status) && STATUS_FW.contains(old)) ||
-                    (STATUS_FW.contains(status) && STATUS_FW.contains(old)) ||
-                    (!isIPv6 && STATUS_IPV4_UNK.contains(old) && !STATUS_IPV4_UNK.contains(status))) {
+                if (requiresConfirmation(old, status, isIPv6)) {
                     if (status != _reachabilityStatusPending) {
                         if (_log.shouldWarn())
                             _log.warn("Old status: " + old + "\n* Status (pending confirmation): " + status +
@@ -3960,23 +3915,26 @@ public class UDPTransport extends TransportImpl {
             // as rebuildExternalAddress() calls replaceAddress() which calls CSFI.notifyReplaceAddress()
             // which will start up NTCP inbound when we transition to OK.
             if (isIPv6) {
-                if (STATUS_IPV6_FW_2.contains(status)) {
-                    rebuildExternalAddress(true);   // we must publish i/s/v
-                } else if (STATUS_IPV6_FW_2.contains(old) &&
-                           STATUS_IPV6_OK.contains(status) &&
-                           !explicitAddressSpecified()){
-                    RouterAddress ra = _currentOurV6Address;
-                    if (ra != null) {
-                        String addr = ra.getHost();
-                        if (addr != null) {
-                            int port = _context.getProperty(PROP_EXTERNAL_PORT, -1);
-                            rebuildExternalAddress(addr, port, true);
+                switch (decideIPv6Rebuild(old, status, explicitAddressSpecified())) {
+                    case REBUILD_PUBLISH:
+                        rebuildExternalAddress(true);   // we must publish i/s/v
+                        break;
+                    case REBUILD_ADDRESS:
+                        RouterAddress ra = _currentOurV6Address;
+                        if (ra != null) {
+                            String addr = ra.getHost();
+                            if (addr != null) {
+                                int port = _context.getProperty(PROP_EXTERNAL_PORT, -1);
+                                rebuildExternalAddress(addr, port, true);
+                            } else if (_log.shouldWarn()) {
+                                _log.warn("Not IPv6 firewalled but no address?");
+                            }
                         } else if (_log.shouldWarn()) {
                             _log.warn("Not IPv6 firewalled but no address?");
                         }
-                    } else if (_log.shouldWarn()) {
-                        _log.warn("Not IPv6 firewalled but no address?");
-                    }
+                        break;
+                    default:
+                        break;
                 }
             } else {
                 rebuildExternalAddress(false);
@@ -3994,6 +3952,141 @@ public class UDPTransport extends TransportImpl {
                           " after update: " + newStatus +
                           " (unchanged " + _reachabilityStatusUnchanged + " consecutive times)");
         }
+    }
+
+    /**
+     *  Whether an UNKNOWN reachability update should reschedule a peer test.
+     *
+     *  UNKNOWN is only a click-flag, never stored; any UNKNOWN result against
+     *  UNKNOWN always repeats the test. States with an unknown IPv6 component
+     *  also repeat on an IPv6 test (independent of the IPv4 component), while the
+     *  remaining statuses are unchanged and just bump the counter.
+     *
+     *  @param old the current reachability status
+     *  @param isIPv6 true if the update concerns IPv6
+     *  @return true if a peer test should be run immediately
+     *  @since 0.9.71+
+     */
+    static boolean shouldRerunStatusTest(Status old, boolean isIPv6) {
+        switch (old) {
+            case UNKNOWN:
+                return true;
+            case IPV4_UNKNOWN_IPV6_OK:
+            case IPV4_UNKNOWN_IPV6_FIREWALLED:
+            case IPV4_OK_IPV6_UNKNOWN:
+            case IPV4_DISABLED_IPV6_UNKNOWN:
+            case IPV4_FIREWALLED_IPV6_UNKNOWN:
+            case IPV4_SNAT_IPV6_UNKNOWN:
+                return isIPv6;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     *  Collapse a merged status when the transport runs in IPv6-only mode.
+     *
+     *  The IPv4 component cannot be tested, so any merged state with an IPv4
+     *  UNKNOWN component becomes the matching DISABLED state.
+     *
+     *  @param status the merged IPv4+IPv6 status
+     *  @param isIPv6Only true if the transport is configured IPv6-only
+     *  @return the status to store
+     *  @since 0.9.71+
+     */
+    static Status applyIPv6Only(Status status, boolean isIPv6Only) {
+        if (!isIPv6Only)
+            return status;
+        if (status == Status.IPV4_UNKNOWN_IPV6_OK)
+            return Status.IPV4_DISABLED_IPV6_OK;
+        if (status == Status.IPV4_UNKNOWN_IPV6_FIREWALLED)
+            return Status.IPV4_DISABLED_IPV6_FIREWALLED;
+        if (status == Status.UNKNOWN)
+            return Status.IPV4_DISABLED_IPV6_UNKNOWN;
+        return status;
+    }
+
+    /**
+     *  Collapse a merged status when the router has no IPv6 address to publish.
+     *
+     *  The IPv6 component of the status is dropped and only the IPv4 result
+     *  matters; in particular a firewalled-or-ok v6 component cannot turn the
+     *  IPv4 result into a paradox (firewalled-&gt;OK-&gt;firewalled+OK thrash),
+     *  so the *_IPV6_OK states map down to the plain IPv4 equivalents.
+     *
+     *  @param status the merged IPv4+IPv6 status
+     *  @param hasIPv6Address true if the router has an IPv6 address to publish
+     *  @return the status to store
+     *  @since 0.9.71+
+     */
+    static Status applyNoIPv6Address(Status status, boolean hasIPv6Address) {
+        if (hasIPv6Address)
+            return status;
+        switch (status) {
+            case IPV4_OK_IPV6_UNKNOWN:
+                return Status.OK;
+            case IPV4_FIREWALLED_IPV6_UNKNOWN:
+            case IPV4_FIREWALLED_IPV6_OK:
+                return Status.REJECT_UNSOLICITED;
+            case IPV4_SNAT_IPV6_UNKNOWN:
+            case IPV4_SNAT_IPV6_OK:
+                return Status.DIFFERENT;
+            default:
+                return status;
+        }
+    }
+
+    /**
+     *  Whether the status transition must be confirmed by a second test before
+     *  it is committed, to prevent thrashing between OK and firewalled.
+     *
+     *  Any jump into, out of, or between the firewalled group is staged as
+     *  pending confirmation; for IPv4, leaving the IPv4-unknown group is also
+     *  staged (an IPv6-unrelated UNKNOWN result must not flip IPv4 flapping).
+     *
+     *  @param old the current reachability status
+     *  @param status the (possibly adjusted) merged new status
+     *  @param isIPv6 true if the update concerns IPv6
+     *  @return true if the new status must be confirmed by a second test
+     *  @since 0.9.71+
+     */
+    static boolean requiresConfirmation(Status old, Status status, boolean isIPv6) {
+        return (STATUS_OK.contains(old) && STATUS_FW.contains(status)) ||
+               (STATUS_OK.contains(status) && STATUS_FW.contains(old)) ||
+               (STATUS_FW.contains(status) && STATUS_FW.contains(old)) ||
+               (!isIPv6 && STATUS_IPV4_UNK.contains(old) && !STATUS_IPV4_UNK.contains(status));
+    }
+
+    /**
+     *  The IPv6 external-address rebuild to perform after a committed status
+     *  change.
+     *
+     *  @param old the previous reachability status
+     *  @param status the new committed reachability status
+     *  @param explicitAddressSpecified true if the operator configured an explicit IPv6 address
+     *  @return the rebuild action to take
+     *  @since 0.9.71+
+     */
+    static IPv6Rebuild decideIPv6Rebuild(Status old, Status status, boolean explicitAddressSpecified) {
+        if (STATUS_IPV6_FW_2.contains(status))
+            return IPv6Rebuild.REBUILD_PUBLISH;
+        if (STATUS_IPV6_FW_2.contains(old) && STATUS_IPV6_OK.contains(status) && !explicitAddressSpecified)
+            return IPv6Rebuild.REBUILD_ADDRESS;
+        return IPv6Rebuild.NONE;
+    }
+
+    /**
+     *  IPv6 external-address rebuild action for a reachability status change.
+     *
+     *  @since 0.9.71+
+     */
+    enum IPv6Rebuild {
+        /** publish i/s/v with the existing address (must include the IPv6 flag) */
+        REBUILD_PUBLISH,
+        /** rebuild explicitly with the currently stored IPv6 address */
+        REBUILD_ADDRESS,
+        /** no IPv6 rebuild needed */
+        NONE
     }
 
     private static final String PROP_REACHABILITY_STATUS_OVERRIDE = "i2np.udp.status";
