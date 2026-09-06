@@ -589,6 +589,12 @@ public class PeerState {
     enum Outcome { COMPLETE, EXPIRED, OVER_SENT, SENDABLE }
 
     /**
+     *  Fast-retransmit recovery stage for a single message, by NACK count.
+     *  @since 0.9.71+
+     */
+    enum FastRtxMode { NONE, START, CONTINUE }
+
+    /**
      *  Per-message outcome in a finishAndAllocate() scan, computed once per
      *  message so the scan loop stays a thin dispatcher. Precedence:
      *  COMPLETE &gt; EXPIRED &gt; OVER_SENT &gt; SENDABLE - an expired message is
@@ -622,6 +628,56 @@ public class PeerState {
      */
     static long retransmitFireTime(boolean firstArming, boolean fastRetransmit, long now, long rto) {
         return (firstArming || fastRetransmit) ? now + rto : -1L;
+    }
+
+    /**
+     *  Whether to skip a message during a retransmit-mode scan. During fast
+     *  retransmit, messages that have not yet accumulated {@link #FAST_RTX_ACKS}
+     *  NACKs are spared — they were not implicated in the loss and resending
+     *  them would merely amplify congestion (RFC 5681 sec. 4.2). Pure so the
+     *  scan loop gate is unit-testable.
+     *
+     *  @param fastRetransmit whether fast retransmit is currently active
+     *  @param nacks the message's current NACK count
+     *  @return true to leave the message alone during this pass
+     *  @since 0.9.71+
+     */
+    static boolean shouldSkipFastRetransmit(boolean fastRetransmit, int nacks) {
+        return fastRetransmit && nacks < FAST_RTX_ACKS;
+    }
+
+    /**
+     *  Whether a retransmit-mode scan has accumulated enough messages to stop.
+     *  Caps each pass at half of the pre-cleanup active set unless fast
+     *  retransmit is active (which deliberately floods the tail to trigger
+     *  duplicate ACKs, RFC 5681 sec. 4.2). Pure so the scan cap is
+     *  unit-testable.
+     *
+     *  @param rvSize how many messages the current pass has selected
+     *  @param sizeBefore the active-message count before this pass
+     *  @param fastRetransmit whether fast retransmit is currently active
+     *  @return true when the pass should stop selecting
+     *  @since 0.9.71+
+     */
+    static boolean reachedRetransmitCap(int rvSize, int sizeBefore, boolean fastRetransmit) {
+        return rvSize >= sizeBefore / 2 && !fastRetransmit;
+    }
+
+    /**
+     *  Whether a failed outbound message counts as a total-first-message
+     *  failure. Only the first outbound message (sequence number 0) of an
+     *  outbound connection can destroy the peer; failures of messages sent to
+     *  an inbound peer are never total. Pure so the destroy decision is
+     *  unit-testable.
+     *
+     *  @param msg the failed message wrapper, may be null
+     *  @param isInbound whether this PeerState is the inbound side
+     *  @param seqNum the message's sequence number
+     *  @return true if this failure should destroy the peer
+     *  @since 0.9.71+
+     */
+    static boolean isTotalFail(OutNetMessage msg, boolean isInbound, long seqNum) {
+        return msg != null && !isInbound && seqNum == 0;
     }
 
     /**
@@ -700,7 +756,7 @@ public class PeerState {
                         failedSize += state.getUnackedSize();
                         failedCount += state.getUnackedFragments();
                         OutNetMessage msg = state.getMessage();
-                        if (msg != null && !_isInbound && state.getSeqNum() == 0) {
+                        if (isTotalFail(msg, _isInbound, state.getSeqNum())) {
                             totalFail = true;
                         }
                         continue;
@@ -712,7 +768,7 @@ public class PeerState {
                 // Not removed — eligible for sending
                 if (canSendOld) {
                     // Retransmit: bypass bandwidth check, send all eligible
-                    if (_fastRetransmit.get() && state.getNACKs() < FAST_RTX_ACKS)
+                    if (shouldSkipFastRetransmit(_fastRetransmit.get(), state.getNACKs()))
                         continue;
                     if (rv == null) {
                         rv = new ArrayList<>(Math.max(4, (1 + sizeBefore) / 2));
@@ -720,7 +776,7 @@ public class PeerState {
                     }
                     rv.add(state);
                     // Cap at half the pre-cleanup size (RFC 6298, RFC 5681)
-                    if (rv.size() >= sizeBefore / 2 && !_fastRetransmit.get()) {
+                    if (reachedRetransmitCap(rv.size(), sizeBefore, _fastRetransmit.get())) {
                         _outboundMessages.releaseCurrentThreadIterator();
                         break;
                     }
@@ -794,6 +850,24 @@ public class PeerState {
     }
 
     /**
+     *  Refund {@code refund} bytes into the send-window remaining budget,
+     *  capped at the window size (never let the remaining budget exceed the
+     *  congestion window, per RFC 5681). Pure so the refund bookkeeping is
+     *  unit-testable.
+     *
+     *  @param remaining the current {@code _sendWindowBytesRemaining}
+     *  @param refund the byte count to add back (failed sends, freed blocks)
+     *  @param windowBytes the current {@code _sendWindowBytes}
+     *  @return the capped new remaining budget
+     *  @since 0.9.71+
+     */
+    static int cappedRefund(int remaining, int refund, int windowBytes) {
+        int after = remaining + refund;
+        if (after > windowBytes) {after = windowBytes;}
+        return after;
+    }
+
+    /**
      *  Process failed outbound messages and their side effects, completely
      *  outside _outboundLock. Window bytes for unacked fragments are refunded
      *  under _sendWindowBytesRemainingLock (capped at the full window); a total
@@ -843,10 +917,8 @@ public class PeerState {
                 return true;
             }
             synchronized (_sendWindowBytesRemainingLock) {
-                _sendWindowBytesRemaining += failedSize;
-                _sendWindowBytesRemaining += failedCount * fragmentOverhead();
-                if (_sendWindowBytesRemaining > _sendWindowBytes.get())
-                    _sendWindowBytesRemaining = _sendWindowBytes.get();
+                _sendWindowBytesRemaining = cappedRefund(_sendWindowBytesRemaining,
+                    failedSize + failedCount * fragmentOverhead(), _sendWindowBytes.get());
             }
         }
 
@@ -1388,67 +1460,113 @@ public class PeerState {
     }
 
     /**
+     *  Compute the next concurrent-messages limit after an ACK, pure so the
+     *  AIMD tuning policy is unit-testable. Latency-based: additive increase
+     *  while RTT is healthy (backlog-aware, ramping faster far from the cap),
+     *  a soft *3/4 multiplicative decrease when RTT is well above target, a
+     *  modest bump when the RTT hysteresis zone still has queued messages, and
+     *  a hold otherwise. Retransmits ({@code numSends >= 2}) get a gentle /8
+     *  decrease to avoid grinding to the floor.
+     *
+     *  @param numSends how many times the message was sent before the ACK
+     *  @param rtt the current smoothed RTT estimate (ms), or &lt;= 0 if unknown
+     *  @param current the current {@code _concurrentMessagesAllowed}
+     *  @param queued how many messages are currently in {@code _outboundQueue}
+     *  @param randomInt a uniform draw in [0, {@link #INIT_CONCURRENT_MSGS}); only
+     *                   consumed when {@code rtt <= 0}, pass 0 otherwise
+     *  @return the new concurrent-message limit
+     *  @since 0.9.71+
+     */
+    static int nextConcurrentLimit(int numSends, int rtt, int current, int queued, int randomInt) {
+        if (numSends >= 2) {
+            // Retransmit — proportional decrease to avoid death spiral
+            // /8 is gentle; avoids grinding from 64 to MIN in just a few retransmits
+            int allow = current - Math.max(1, current / 8);
+            if (allow < MIN_CONCURRENT_MSGS) {allow = MIN_CONCURRENT_MSGS;}
+            return allow;
+        }
+        if (rtt <= 0) {
+            // No RTT estimate yet — use conservative additive increase
+            if (randomInt <= 0 && current < MAX_CONCURRENT_MSGS) {return current + 1;}
+            return current;
+        }
+        if (rtt < TARGET_RTT) {
+            // RTT below target — proportional additive increase
+            // Ramp faster when far from max, slower near max (avoids oscillation)
+            if (current < MAX_CONCURRENT_MSGS) {
+                int headroom = MAX_CONCURRENT_MSGS - current;
+                // Backlog-aware: if messages are queued, increase faster to drain
+                int backlogBoost = Math.min(queued, 8);
+                int increase = Math.max(1, (headroom + backlogBoost) / 16);
+                return Math.min(MAX_CONCURRENT_MSGS, current + increase);
+            }
+            return current;
+        }
+        if (rtt >= TARGET_RTT * RTT_DECREASE_FACTOR) {
+            // RTT well above target — soft multiplicative decrease
+            // *3/4 instead of /2 to avoid death spirals from transient spikes
+            int allow = (current * 3) / 4;
+            if (allow < MIN_CONCURRENT_MSGS) {allow = MIN_CONCURRENT_MSGS;}
+            return allow;
+        }
+        if (queued > 0) {
+            // RTT in hysteresis zone but messages queued — modest increase to drain backlog
+            if (current < MAX_CONCURRENT_MSGS) {
+                return Math.min(MAX_CONCURRENT_MSGS, current + QUEUE_BACKPRESSURE_INCREASE);
+            }
+            return current;
+        }
+        // else: RTT in hysteresis zone, no queue — hold steady
+        return current;
+    }
+
+    /**
+     *  Whether an ACK should grow the send window. Classic slow-start /
+     *  congestion-avoidance split (RFC 5681): grow unconditionally while at or
+     *  below the slow-start threshold, otherwise grow probabilistically with
+     *  probability {@code bytesACKed / (2 * sendWindow)}. Pure so the growth
+     *  gate is unit-testable.
+     *
+     *  @param sendWindow the current {@code _sendWindowBytes}
+     *  @param slowStartThreshold the current {@code _slowStartThreshold}
+     *  @param bytesACKed the byte count newly ACKed
+     *  @param randomFloat a uniform draw in [0, 1)
+     *  @return true if the window should grow by {@code bytesACKed}
+     *  @since 0.9.71+
+     */
+    static boolean shouldGrowSendWindow(int sendWindow, int slowStartThreshold, int bytesACKed, float randomFloat) {
+        if (sendWindow <= slowStartThreshold) {return true;}
+        float prob = ((float) bytesACKed) / ((float) (sendWindow << 1));
+        float v = randomFloat;
+        if (v < 0) {v = 0 - v;}
+        return v <= prob;
+    }
+
+    /**
      *  We sent a message which was ACKed containing the given # of bytes.
      *  Caller should synch on this
      */
     private void locked_messageACKed(int bytesACKed, int maxPktSz, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         _consecutiveFailedSends = 0;
-        if (numSends < 2) {
-            // Latency-based AIMD for concurrent message limit
-            int oldLimit = _concurrentMessagesAllowed;
-            int queued = _outboundQueue.size();
-            if (_rtt <= 0) {
-                // No RTT estimate yet — use conservative additive increase
-                if (_context.random().nextInt(INIT_CONCURRENT_MSGS) <= 0 && _concurrentMessagesAllowed < MAX_CONCURRENT_MSGS) {
-                    _concurrentMessagesAllowed++;
-                }
-            } else if (_rtt < TARGET_RTT) {
-                // RTT below target — proportional additive increase
-                // Ramp faster when far from max, slower near max (avoids oscillation)
-                if (_concurrentMessagesAllowed < MAX_CONCURRENT_MSGS) {
-                    int headroom = MAX_CONCURRENT_MSGS - _concurrentMessagesAllowed;
-                    // Backlog-aware: if messages are queued, increase faster to drain
-                    int backlogBoost = Math.min(queued, 8);
-                    int increase = Math.max(1, (headroom + backlogBoost) / 16);
-                    _concurrentMessagesAllowed = Math.min(MAX_CONCURRENT_MSGS, _concurrentMessagesAllowed + increase);
-                }
-            } else if (_rtt >= TARGET_RTT * RTT_DECREASE_FACTOR) {
-                // RTT well above target — soft multiplicative decrease
-                // *3/4 instead of /2 to avoid death spirals from transient spikes
-                int allow = (_concurrentMessagesAllowed * 3) / 4;
-                if (allow < MIN_CONCURRENT_MSGS) {allow = MIN_CONCURRENT_MSGS;}
-                _concurrentMessagesAllowed = allow;
-            } else if (queued > 0) {
-                // RTT in hysteresis zone but messages queued — modest increase to drain backlog
-                if (_concurrentMessagesAllowed < MAX_CONCURRENT_MSGS) {
-                    _concurrentMessagesAllowed = Math.min(MAX_CONCURRENT_MSGS,
-                        _concurrentMessagesAllowed + QUEUE_BACKPRESSURE_INCREASE);
-                }
-            }
-            // else: RTT in hysteresis zone, no queue — hold steady
-            if (_log.shouldDebug() && _concurrentMessagesAllowed != oldLimit) {
-                _log.debug("Concurrent msg limit [" + _remotePeer.toBase64().substring(0,6) + "] " +
-                           oldLimit + " -> " + _concurrentMessagesAllowed + " (RTT=" + _rtt + "ms queued=" + queued + ")");
-            }
-
-            if (_sendWindowBytes.get() <= _slowStartThreshold) {
-                _sendWindowBytes.addAndGet(bytesACKed);
-                synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
-            } else {
-                    float prob = ((float)bytesACKed) / ((float)(_sendWindowBytes.get()<<1));
-                    float v = _context.random().nextFloat();
-                    if (v < 0) {v = 0-v;}
-                    if (v <= prob) {
-                        _sendWindowBytes.addAndGet(bytesACKed);
-                        synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
-                    }
-            }
-        } else {
-            // Retransmit — proportional decrease to avoid death spiral
-            // /8 is gentle; avoids grinding from 64 to MIN in just a few retransmits
-            int allow = _concurrentMessagesAllowed - Math.max(1, _concurrentMessagesAllowed / 8);
-            if (allow < MIN_CONCURRENT_MSGS) {allow = MIN_CONCURRENT_MSGS;}
-            _concurrentMessagesAllowed = allow;
+        // Latency-based AIMD for concurrent message limit
+        int oldLimit = _concurrentMessagesAllowed;
+        int queued = _outboundQueue.size();
+        int randomInt = 0;
+        if (numSends < 2 && _rtt <= 0) {
+            // No RTT estimate yet — conservative additive increase gated by
+            // a probabilistic draw in the extracted decision
+            randomInt = _context.random().nextInt(INIT_CONCURRENT_MSGS);
+        }
+        _concurrentMessagesAllowed = nextConcurrentLimit(numSends, _rtt, _concurrentMessagesAllowed, queued, randomInt);
+        if (numSends < 2 && _log.shouldDebug() && _concurrentMessagesAllowed != oldLimit) {
+            _log.debug("Concurrent msg limit [" + _remotePeer.toBase64().substring(0,6) + "] " +
+                       oldLimit + " -> " + _concurrentMessagesAllowed + " (RTT=" + _rtt + "ms queued=" + queued + ")");
+        }
+        int sendWindow = _sendWindowBytes.get();
+        boolean grow = numSends < 2 && shouldGrowSendWindow(sendWindow, _slowStartThreshold, bytesACKed, _context.random().nextFloat());
+        if (grow) {
+            _sendWindowBytes.addAndGet(bytesACKed);
+            synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
         }
         _sendWindowBytes.updateAndGet(v -> Math.min(v, MAX_SEND_WINDOW_BYTES));
         long now = _context.clock().now();
@@ -1517,6 +1635,59 @@ public class PeerState {
     }
 
     /**
+     *  Whether a near-lossless transmission history warrants probing a larger MTU.
+     *  Requires a successful send on a link with an observed retransmit ratio under
+     *  10%. Pure so the MTU tuning policy is unit-testable.
+     *
+     *  @param success whether the triggering send completed without retransmit
+     *  @param packetsTransmitted the value of {@code _packetsTransmitted}
+     *  @param packetsRetransmitted the value of {@code _packetsRetransmitted}
+     *  @return true if the MTU should be considered for an increase
+     *  @since 0.9.71+
+     */
+    static boolean wantLargerMTU(boolean success, int packetsTransmitted, int packetsRetransmitted) {
+        // heuristic to allow fairly lossy links to use large MTUs
+        return success && (float) packetsRetransmitted / (float) packetsTransmitted < 0.10f;
+    }
+
+    /**
+     *  Whether a larger MTU is eligible after a clean transmission. Requires the
+     *  probe packet to have credibly hit the current MTU ceiling, and, after any
+     *  prior decrease, a probabilistic gate (increasingly likely to allow the
+     *  probe the longer the link has stayed healthy). Pure so the eligibility
+     *  policy is unit-testable without the router RNG.
+     *
+     *  @param mtu the value of {@code _mtu}
+     *  @param largeMTU the value of {@code _largeMTU}
+     *  @param maxPktSz the size of the ACKed maximum-size packet
+     *  @param mtuDecreases the value of {@code _mtuDecreases}
+     *  @param randomInt the uniform draw in [0, mtuDecreases), consumed only when
+     *                   {@code mtuDecreases > 1}; pass 0 otherwise
+     *  @return true if the MTU may be increased
+     *  @since 0.9.71+
+     */
+    static boolean mtuIncreaseEligible(int mtu, int largeMTU, int maxPktSz, int mtuDecreases, int randomInt) {
+        // we only increase if the size was close to the limit
+        return mtu < largeMTU && maxPktSz > mtu - (MTU_STEP * 2) &&
+               (mtuDecreases <= 1 || randomInt <= 0);
+    }
+
+    /**
+     *  Whether the MTU should be reduced after a lossy transmission. Requires a
+     *  packet that credibly hit the current ceiling. Pure so the eligibility
+     *  policy is unit-testable.
+     *
+     *  @param mtu the value of {@code _mtu}
+     *  @param minMTU the value of {@code _minMTU}
+     *  @param maxPktSz the size of the retransmitted maximum-size packet
+     *  @return true if the MTU may be decreased
+     *  @since 0.9.71+
+     */
+    static boolean mtuDecreaseEligible(int mtu, int minMTU, int maxPktSz) {
+        return mtu > minMTU && maxPktSz > mtu - (MTU_STEP * 4);
+    }
+
+    /**
      *  Adjust upward if a large packet was successfully sent without retransmission.
      *  Adjust downward if a packet was retransmitted.
      *
@@ -1527,13 +1698,12 @@ public class PeerState {
      */
     private void adjustMTU(int maxPktSz, boolean success) {
         if (_packetsTransmitted > 0) {
-            // heuristic to allow fairly lossy links to use large MTUs
-            boolean wantLarge = success &&
-                                (float)_packetsRetransmitted / (float)_packetsTransmitted < 0.10f;
-            // we only increase if the size was close to the limit
-            if (wantLarge) {
-                if (_mtu < _largeMTU && maxPktSz > _mtu - (MTU_STEP * 2) &&
-                    (_mtuDecreases <= 1 || _context.random().nextInt(_mtuDecreases) <= 0)){
+            if (wantLargerMTU(success, _packetsTransmitted, _packetsRetransmitted)) {
+                int randomInt = 0;
+                if (_mtu < _largeMTU && maxPktSz > _mtu - (MTU_STEP * 2) && _mtuDecreases > 1) {
+                    randomInt = _context.random().nextInt(_mtuDecreases);
+                }
+                if (mtuIncreaseEligible(_mtu, _largeMTU, maxPktSz, _mtuDecreases, randomInt)) {
                     _mtu = Math.min(_mtu + MTU_STEP, _largeMTU);
                     _mtuIncreases++;
                     _mtuDecreases = 0;
@@ -1543,7 +1713,7 @@ public class PeerState {
                     }
                 }
             } else {
-                if (_mtu > _minMTU && maxPktSz > _mtu - (MTU_STEP * 4)) {
+                if (mtuDecreaseEligible(_mtu, _minMTU, maxPktSz)) {
                     _mtu = Math.max(_mtu - MTU_STEP, _minMTU);
                     _mtuDecreases++;
                     _mtuIncreases = 0;
@@ -1899,6 +2069,23 @@ public class PeerState {
     }
 
     /**
+     *  Compute the bytes newly confirmed by one incoming ACK for a single
+     *  message: the full previously-unacked size when the message just became
+     *  complete, otherwise only the delta newly covered by this ACK. Pure so
+     *  the partial-ACK byte accounting is unit-testable.
+     *
+     *  @param unackedBefore the message's unacked byte count before this ACK
+     *  @param complete whether this ACK completed the message
+     *  @param unackedAfter the message's unacked byte count after this ACK
+     *  @return the byte count to credit toward the send window
+     *  @since 0.9.71+
+     */
+    static int newlyAckedBytes(int unackedBefore, boolean complete, int unackedAfter) {
+        if (complete) {return unackedBefore;}
+        return unackedBefore - unackedAfter;
+    }
+
+    /**
      *  An ACK of a fragment was received.
      *
      *  SSU 2 only.
@@ -1912,10 +2099,10 @@ public class PeerState {
         boolean isComplete;
         int ackedSize;
         synchronized(state) {
-            ackedSize = state.getUnackedSize();
-            if (ackedSize <= 0) {return false;}
+            int unackedBefore = state.getUnackedSize();
+            if (unackedBefore <= 0) {return false;}
             isComplete = state.acked(f.num);
-            if (!isComplete) {ackedSize -= state.getUnackedSize();}
+            ackedSize = newlyAckedBytes(unackedBefore, isComplete, state.getUnackedSize());
         }
         if (ackedSize <= 0) {return false;}
         boolean anyPending;
@@ -1978,6 +2165,24 @@ public class PeerState {
     }
 
     /**
+     *  Fast-retransmit progression as a function of the NACK count for a single
+     *  message. Threshold {@link #FAST_RTX_ACKS}: the first exactly-threshold
+     *  NACK starts fast retransmit (recovery begins, SST/cwnd set per RFC 5681
+     *  sec. 3.2 #2/#3); subsequent NACKs continue it (cwnd inflate per #4).
+     *  Below threshold there is no action. Pure so the recovery cascade is
+     *  unit-testable without router state.
+     *
+     *  @param nacks the incremented NACK count for the message
+     *  @return NONE, START, or CONTINUE
+     *  @since 0.9.71+
+     */
+    static FastRtxMode fastRtxMode(int nacks) {
+        if (nacks == FAST_RTX_ACKS) {return FastRtxMode.START;}
+        if (nacks > FAST_RTX_ACKS) {return FastRtxMode.CONTINUE;}
+        return FastRtxMode.NONE;
+    }
+
+    /**
      *  Enter or leave fast retransmit mode, and adjust SST and window variables accordingly.
      *  See RFC 5681 sec. 2.4
      *
@@ -2000,12 +2205,17 @@ public class PeerState {
                 if (sn < highest) {
                     // This will also increment NACKs for a state that was just partially acked... ok?
                     int nacks = state.incrementNACKs();
-                    if (nacks == FAST_RTX_ACKS) {
-                        startFast = true;
-                        rv = true;
-                    } else if (nacks > FAST_RTX_ACKS) {
-                        continueFast = true;
-                        rv = true;
+                    switch (fastRtxMode(nacks)) {
+                        case START:
+                            startFast = true;
+                            rv = true;
+                            break;
+                        case CONTINUE:
+                            continueFast = true;
+                            rv = true;
+                            break;
+                        default:
+                            break;
                     }
                     if (_log.shouldDebug()) {_log.debug("Message NACKed: " + state);}
                 }
