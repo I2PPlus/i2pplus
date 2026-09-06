@@ -117,8 +117,11 @@ class UDPPacket implements CDPQEntry {
      * @param ctx RouterContext for logging and timing
      */
     private UDPPacket(RouterContext ctx) {
-        // Moderate buffer sizing - balance memory reduction with functionality
-        _data = new byte[1480]; // Slightly smaller than max (1572) but handles most cases
+        // Buffer sized to MAX_PACKET_SIZE so DatagramSocket.receive() never silently
+        // truncates an over-MTU datagram: UDPReceiver rejects size >= MAX_PACKET_SIZE
+        // loudly, but a smaller buffer would mask that guard (a truncated length is
+        // indistinguishable from a valid short packet).
+        _data = new byte[MAX_PACKET_SIZE];
         _packet = new DatagramPacket(_data, _data.length);
         init(ctx);
     }
