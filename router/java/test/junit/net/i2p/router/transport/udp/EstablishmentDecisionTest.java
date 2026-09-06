@@ -365,6 +365,41 @@ public class EstablishmentDecisionTest {
     }
 
     @Test
+    public void testIsBobRelayReject() {
+        assertFalse(EstablishmentManager.isBobRelayReject(0));
+        assertTrue(EstablishmentManager.isBobRelayReject(1));
+        assertTrue(EstablishmentManager.isBobRelayReject(63));
+        assertFalse(EstablishmentManager.isBobRelayReject(64));
+        assertFalse(EstablishmentManager.isBobRelayReject(127));
+    }
+
+    @Test
+    public void testRelayResponseIntroState() {
+        assertEquals(IntroState.INTRO_STATE_SUCCESS,
+                     EstablishmentManager.relayResponseIntroState(0));
+        assertEquals(IntroState.INTRO_STATE_BOB_REJECT,
+                     EstablishmentManager.relayResponseIntroState(1));
+        assertEquals(IntroState.INTRO_STATE_BOB_REJECT,
+                     EstablishmentManager.relayResponseIntroState(63));
+        assertEquals(IntroState.INTRO_STATE_CHARLIE_REJECT,
+                     EstablishmentManager.relayResponseIntroState(64));
+        assertEquals(IntroState.INTRO_STATE_CHARLIE_REJECT,
+                     EstablishmentManager.relayResponseIntroState(127));
+    }
+
+    @Test
+    public void testIsBadRelayDataAddress() {
+        // all checks pass: address is fine
+        assertFalse(EstablishmentManager.isBadRelayDataAddress(true, true, false, false, false));
+        // each individual failure rejects the address
+        assertTrue(EstablishmentManager.isBadRelayDataAddress(false, true, false, false, false));
+        assertTrue(EstablishmentManager.isBadRelayDataAddress(true, false, false, false, false));
+        assertTrue(EstablishmentManager.isBadRelayDataAddress(true, true, true, false, false));
+        assertTrue(EstablishmentManager.isBadRelayDataAddress(true, true, false, true, false));
+        assertTrue(EstablishmentManager.isBadRelayDataAddress(true, true, false, false, true));
+    }
+
+    @Test
     public void testIsBannedForeverOrHostile() {
         Banlist banlist = mock(Banlist.class);
         Hash h = Hash.create(new byte[Hash.HASH_LENGTH]);

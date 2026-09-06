@@ -670,6 +670,56 @@ public class EstablishmentManager {
     }
 
     /**
+     *  Is this a rejection from the introducer (Bob) rather than from Charlie
+     *  or a success? SSU2 relay response codes 1-63 reject at the introducer
+     *  layer; 0 is success and >=64 reject at the destination (Charlie).
+     *  Both the live-introduction map handling and the signer selection in
+     *  {@link #receiveRelayResponse} branch on this.
+     *
+     *  @param code the relay response code
+     *  @return true if the introducer rejected the request
+     *  @since 0.9.71
+     */
+    static boolean isBobRelayReject(int code) {
+        return code > 0 && code < 64;
+    }
+
+    /**
+     *  The intro state to record for a relay response, by response code:
+     *  0 means Charlie accepted, codes 1-63 mean Bob (the introducer)
+     *  rejected, and codes 64+ mean Charlie rejected.
+     *
+     *  @param code the relay response code
+     *  @return the matching intro state; State selection must mirror
+     *          {@link #isBobRelayReject}
+     *  @since 0.9.71
+     */
+    static OutboundEstablishState2.IntroState relayResponseIntroState(int code) {
+        if (code == 0) {return INTRO_STATE_SUCCESS;}
+        if (isBobRelayReject(code)) {return INTRO_STATE_BOB_REJECT;}
+        return INTRO_STATE_CHARLIE_REJECT;
+    }
+
+    /**
+     *  Is the claimed relay address unacceptable, meaning Charlie asked us to
+     *  connect somewhere invalid, too close, on our own network, or a
+     *  blocklisted address? Finding the introducer's own IP in the claim is
+     *  also rejection-worthy (a relay must not send us back to itself).
+     *
+     *  @param validPort whether the port is in range
+     *  @param validIP whether the transport accepts the address
+     *  @param tooClose whether the address is too close to ours
+     *  @param sameAsIntroducer whether the address is Bob's own IP
+     *  @param blocklisted whether the address is in the blocklist
+     *  @return true if any check fails
+     *  @since 0.9.71
+     */
+    static boolean isBadRelayDataAddress(boolean validPort, boolean validIP, boolean tooClose,
+                                         boolean sameAsIntroducer, boolean blocklisted) {
+        return !validPort || !validIP || tooClose || sameAsIntroducer || blocklisted;
+    }
+
+    /**
      *  Send the message to its specified recipient by establishing a connection
      *  with them and sending it off.  This call does not block, and on failure,
      *  the message is failed.
@@ -1987,7 +2037,7 @@ public class EstablishmentManager {
         // don't remove unless accepted or rejected by charlie
         OutboundEstablishState charlie;
         Long lnonce = Long.valueOf(nonce);
-        if (code > 0 && code < 64) {charlie = _liveIntroductions.get(lnonce);}
+        if (isBobRelayReject(code)) {charlie = _liveIntroductions.get(lnonce);}
         else {charlie = _liveIntroductions.remove(lnonce);}
         if (charlie == null) {
             if (_log.shouldDebug()) {
@@ -2006,15 +2056,9 @@ public class EstablishmentManager {
         Hash charlieHash = charlie.getRemoteIdentity().getHash();
         RouterInfo charlieRI = _context.netDb().lookupRouterInfoLocally(charlieHash);
         Hash signer;
-        OutboundEstablishState2.IntroState istate;
-        if (code > 0 && code < 64) {
-            signer = bobHash;
-            istate = INTRO_STATE_BOB_REJECT;
-        } else {
-            signer = charlieHash;
-            if (code == 0) {istate = INTRO_STATE_SUCCESS;}
-            else {istate = INTRO_STATE_CHARLIE_REJECT;}
-        }
+        if (isBobRelayReject(code)) {signer = bobHash;}
+        else {signer = charlieHash;}
+        OutboundEstablishState2.IntroState istate = relayResponseIntroState(code);
         RouterInfo signerRI = _context.netDb().lookupRouterInfoLocally(signer);
         if (signerRI != null) {
             // validate signed data
@@ -2045,11 +2089,11 @@ public class EstablishmentManager {
             int port = SSU2Util.getRelayDataPort(data);
             byte[] ip = SSU2Util.getRelayDataIP(data, iplen);
             // validate
-            if (!TransportUtil.isValidPort(port) ||
-                !_transport.isValid(ip) ||
-                _transport.isTooClose(ip) ||
-                DataHelper.eq(ip, bob.getRemoteIP()) ||
-                _context.blocklist().isBlocklisted(ip)) {
+            if (isBadRelayDataAddress(TransportUtil.isValidPort(port),
+                                      _transport.isValid(ip),
+                                      _transport.isTooClose(ip),
+                                      DataHelper.eq(ip, bob.getRemoteIP()),
+                                      _context.blocklist().isBlocklisted(ip))) {
                 if (_log.shouldWarn()) {
                     _log.warn("[SSU] BAD RelayResponse from " + charlie + " for " + Addresses.toString(ip, port));
                 }
