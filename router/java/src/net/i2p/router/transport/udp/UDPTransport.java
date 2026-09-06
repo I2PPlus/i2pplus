@@ -1559,19 +1559,16 @@ public class UDPTransport extends TransportImpl {
                           "; New: " + Addresses.toString(ourIP, ourPort));
             }
 
-            if ((fixedPort && externalListenPort > 0) || ourPort <= 0)
+            if (shouldOverrideReportedPort(fixedPort, externalListenPort, ourPort))
                 ourPort = externalListenPort;
 
-                if (ourPort > 0 &&
-                    !eq(externalListenHost, externalListenPort, ourIP, ourPort)) {
+                if (isAddressChange(externalListenHost, externalListenPort, ourIP, ourPort)) {
                     boolean rebuild = true;
                     if (isIPv6) {
                         // For IPv6, we only accept changes if this is one of our local addresses
-                        Set<String> ipset = Addresses.getAddresses(false, true);
-                        String ipstr = Addresses.toString(ourIP);
-                        if (!ipset.contains(ipstr)) {
+                        if (!isLocalAddress(ourIP)) {
                             if (_log.shouldInfo())
-                                _log.info("New IPv6 address received but not one of our local addresses: " + ipstr, new Exception());
+                                _log.info("New IPv6 address received but not one of our local addresses: " + Addresses.toString(ourIP), new Exception());
                             return false;
                         }
                         if (STATUS_IPV6_FW_2.contains(_reachabilityStatus)) {
@@ -1608,9 +1605,8 @@ public class UDPTransport extends TransportImpl {
 
                     // they told us something different and our tests are either old or failing
                     if (rebuild) {
-                            if (externalListenPort > 0 && ourPort > 0 &&
-                                externalListenPort != ourPort &&
-                                _context.getProperty(PROP_EXTERNAL_PORT, 0) != ourPort) {
+                            if (shouldSaveExternalPort(externalListenPort, ourPort,
+                                                       _context.getProperty(PROP_EXTERNAL_PORT, 0))) {
                                 // save the external port setting only
                                 _context.router().saveConfig(PROP_EXTERNAL_PORT, Integer.toString(ourPort));
                                 _context.router().eventLog().addEvent(EventLog.CHANGE_PORT, "IPv" +
@@ -1621,7 +1617,7 @@ public class UDPTransport extends TransportImpl {
                             // flush SSU2 tokens
                             if (ourPort != externalListenPort) {
                                 _establisher.portChanged();
-                            } else if (externalListenHost != null && !Arrays.equals(ourIP, externalListenHost)) {
+                            } else if (isIPChange(externalListenHost, ourIP)) {
                                 _establisher.ipChanged(isIPv6);
                             }
 
@@ -1653,13 +1649,8 @@ public class UDPTransport extends TransportImpl {
             String oldIP = _context.getProperty(PROP_IP);
             String newIP = Addresses.toString(ourIP);
             if (!isIPv6 && !newIP.equals(oldIP)) {
-                long lastChanged = 0;
+                long lastChanged = parseLastAddressChange(_context.getProperty(PROP_IP_CHANGE));
                 long now = _context.clock().now();
-                String lcs = _context.getProperty(PROP_IP_CHANGE);
-                if (lcs != null) {
-                    try {lastChanged = Long.parseLong(lcs);}
-                    catch (NumberFormatException nfe) { /* ignored */ }
-                }
 
                 changes.put(PROP_IP, newIP);
                 changes.put(PROP_IP_CHANGE, Long.toString(now));
@@ -1671,11 +1662,11 @@ public class UDPTransport extends TransportImpl {
 
                 // laptop mode
                 // For now, only do this at startup
-                if (oldIP != null &&
-                    SystemVersion.hasWrapper() &&
-                    _context.getBooleanProperty(PROP_LAPTOP_MODE) &&
-                    now - lastChanged > 10*60*1000 &&
-                    _context.router().getUptime() < 10*60*1000) {
+                if (shouldRestartForLaptopMode(oldIP,
+                                               SystemVersion.hasWrapper(),
+                                               _context.getBooleanProperty(PROP_LAPTOP_MODE),
+                                               lastChanged, now,
+                                               _context.router().getUptime())) {
                     _log.logAlways(Log.WARN, "IP changed; restarting with a new identity and port.");
                     // this removes the UDP port config
                     _context.router().killKeys();
@@ -1703,6 +1694,111 @@ public class UDPTransport extends TransportImpl {
             _testEvent.forceRunImmediately(isIPv6);
         }
         return updated;
+    }
+
+    /**
+     *  Whether the reported (peer-observed) port should be discarded in favour
+     *  of the currently configured external listen port.
+     *
+     *  The port is pinned when the operator fixed it ({@code fixedPort} with a
+     *  known listen port) or when the peer reported no port at all.
+     *
+     *  @param fixedPort true if the transport runs with a fixed port
+     *  @param externalListenPort current external listen port
+     *  @param reportedPort port reported by the peer (may be &lt;= 0)
+     *  @return true if {@code reportedPort} must be discarded
+     *  @since 0.9.71+
+     */
+    static boolean shouldOverrideReportedPort(boolean fixedPort, int externalListenPort, int reportedPort) {
+        return (fixedPort && externalListenPort > 0) || reportedPort <= 0;
+    }
+
+    /**
+     *  Whether the peer-reported address differs from the current external
+     *  address and is worth acting on. A reported port of 0 means "keep the
+     *  current port", so a zero port is never an address change.
+     *
+     *  @param externalListenHost current external host, may be null
+     *  @param externalListenPort current external port
+     *  @param ourIP reported host (IPv4 or IPv6)
+     *  @param ourPort reported port, 0 = keep current
+     *  @return true if the address pair should be updated
+     *  @since 0.9.71+
+     */
+    static boolean isAddressChange(byte[] externalListenHost, int externalListenPort, byte[] ourIP, int ourPort) {
+        return ourPort > 0 && !eq(externalListenHost, externalListenPort, ourIP, ourPort);
+    }
+
+    /**
+     *  Whether the reported host differs from the current external host.
+     *
+     *  @param externalListenHost current external host, may be null
+     *  @param ourIP reported host
+     *  @return true if the host differs
+     *  @since 0.9.71+
+     */
+    static boolean isIPChange(byte[] externalListenHost, byte[] ourIP) {
+        return externalListenHost != null && !DataHelper.eq(ourIP, externalListenHost);
+    }
+
+    /**
+     *  Whether a peer-reported external port change should be persisted to the
+     *  configuration. The configured external port (explicit operator setting)
+     *  takes precedence over any report and is never overwritten.
+     *
+     *  @param externalListenPort current external listen port
+     *  @param ourPort reported port
+     *  @param configuredExternalPort externally configured port, 0 if none
+     *  @return true if the reported port must be persisted
+     *  @since 0.9.71+
+     */
+    static boolean shouldSaveExternalPort(int externalListenPort, int ourPort, int configuredExternalPort) {
+        return externalListenPort > 0 && ourPort > 0 &&
+               externalListenPort != ourPort && configuredExternalPort != ourPort;
+    }
+
+    /**
+     *  Whether the configured IP change rate and startup window require a
+     *  hard restart with a fresh identity (laptop mode).
+     *
+     *  @param oldIP the previously configured IP, null if never set
+     *  @param hasWrapper true if running under the service wrapper
+     *  @param laptopMode true if the i2np.laptopMode property is set
+     *  @param lastChanged ms of the previous IP change, 0 if unknown
+     *  @param now current time ms
+     *  @param uptime router uptime ms
+     *  @return true if the router should restart with a new identity
+     *  @since 0.9.71+
+     */
+    static boolean shouldRestartForLaptopMode(String oldIP, boolean hasWrapper, boolean laptopMode,
+                                              long lastChanged, long now, long uptime) {
+        return oldIP != null && hasWrapper && laptopMode &&
+               now - lastChanged > 10*60*1000L && uptime < 10*60*1000L;
+    }
+
+    /**
+     *  Parse the stored last-IP-change timestamp, tolerating garbage.
+     *
+     *  @param value the property value, may be null or non-numeric
+     *  @return the timestamp in ms, or 0 when unset or unparsable
+     *  @since 0.9.71+
+     */
+    static long parseLastAddressChange(String value) {
+        if (value == null)
+            return 0;
+        try {return Long.parseLong(value);}
+        catch (NumberFormatException nfe) {return 0;}
+    }
+
+    /**
+     *  Whether the given IP is one of this host's local addresses.
+     *
+     *  @param ip absolute IPv4 or IPv6 address bytes, may be null
+     *  @return true if it matches a local interface address
+     *  @since 0.9.71+
+     */
+    static boolean isLocalAddress(byte[] ip) {
+        return Addresses.getAddresses(false, true).contains(Addresses.toString(ip));
     }
 
     /**
