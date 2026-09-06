@@ -523,7 +523,8 @@ public class ReverseDnsLookup {
      *  Load the persistence file into the in-memory cache at startup.
      *
      *  Skips "#" comment lines and entries older than the eviction threshold,
-     *  then schedules the periodic {@link RDNSCacheFileWriter}. A missing file
+     *  then schedules the periodic cache-file writer task ({@code RDNSCacheFileWriter}).
+     *  A missing file
      *  is created so the periodic writer always has a valid target. Invoked
      *  from the facade once reverse lookups are enabled after the netdb settles.
      *

@@ -16,11 +16,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.regex.Pattern;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -91,6 +89,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private final GeoIP _geoIP;
     private final ReverseDnsLookup _rdns;
     private final CountryLookup _countryLookup;
+    private final PeerHTMLRenderer _peerHTML;
     private final Map<String, Object> _exemptIncoming;
     private volatile boolean _netMonitorStatus;
     private boolean _wasStarted;
@@ -107,10 +106,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static final String PROP_DISABLED = "i2np.disable";
 
-    private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
-    private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
     private static final Object DUMMY = Integer.valueOf(0);
-    private static final Pattern CAPACITY_PATTERN = Pattern.compile("[DEG]");
 
     /**
      * CommSystemFacadeImpl.
@@ -124,6 +120,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _exemptIncoming = new LHMCache<>(128);
         _rdns = new ReverseDnsLookup(_context, _geoIP);
         _countryLookup = new CountryLookup(_context, _geoIP);
+        _peerHTML = new PeerHTMLRenderer(_context, _countryLookup, _rdns);
     }
 
     /**
@@ -915,113 +912,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @param peer Peer Hash
      * @param extended Whether to show extended capabilities
      * @return HTML snippet representing peer
+     * @since 0.9.71+
      */
     @Override
-    public String renderPeerHTML(Hash peer, boolean extended) {
-        StringBuilder buf = new StringBuilder(256);
-        RouterInfo ri = getRouterInfoCached(peer);
-        String c = getCountry(peer);
-        String h = peer.toBase64();
-
-        if (ri != null) {
-            String caps = ri.getCapabilities();
-            String v = ri.getVersion();
-            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-
-            buf.append("<table class=rid><tr><td class=rif>");
-            if (c != null) {
-                String countryName = getCountryName(c);
-                if (countryName.length() > 2) {
-                    countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-                }
-
-                buf.append("<a href=\"/netdb?c=").append(c).append("\"><img width=20 height=15 alt=")
-                   .append(c.toUpperCase(Locale.US)).append(" title=\"").append(countryName);
-
-                if (ip != null && !"null".equals(ip)) {
-                    if (enableReverseLookups()) {
-                        // Non-blocking: returns the resolved name from rdnsCache or the raw IP
-                        // immediately while queuing a background lookup on a miss.
-                        String canonicalHost = _context.commSystem().getCanonicalHostName(ip);
-                        if (!canonicalHost.equals(ip) && !_t("unknown").equals(canonicalHost)) {
-                            buf.append(" &bullet; ").append(canonicalHost);
-                        } else {
-                            buf.append(" &bullet; ").append(ip);
-                        }
-                    } else {buf.append(" &bullet; ").append(ip);}
-                }
-                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\" loading=lazy></a>");
-            } else {
-                buf.append("<img width=20 height=15 alt=\"??\" src=\"/flags.jsp?c=xx\" title=\"").append(_t("unknown"));
-                if (ip != null) {buf.append(" &bullet; ").append(ip);}
-                buf.append("\" loading=lazy>");
-            }
-            buf.append("</td><td class=rih>");
-            buf.append("<a title=\"");
-            if (caps.contains("f") && !extended) {buf.append(_t("Floodfill"));}
-            if (v != null) {
-                if (!extended) {buf.append(" &bullet; ");}
-                buf.append(v);
-            }
-            buf.append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">").append(h.substring(0,4)).append("</a>");
-            if (extended) {buf.append("</td>").append(renderPeerCaps(peer, true));}
-        } else {
-            buf.append("<table class=rid><tr><td class=rif>").append(renderPeerFlag(peer))
-               .append("</td><td class=rih>").append(h.substring(0,4));
-            if (extended) {buf.append("</td><td class=rbw>?</td>");}
-        }
-        buf.append("</tr></table>");
-        return buf.toString();
-    }
+    public String renderPeerHTML(Hash peer, boolean extended) {return _peerHTML.renderPeerHTML(peer, extended);}
 
     /**
      * Render the HTML flag image for the given peer.
+     * @since 0.9.71+
      */
-    public String renderPeerFlag(Hash peer) {
-        StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = getRouterInfoCached(peer);
-        String unknownFlag = "<img class=unknownflag width=24 height=18 alt=\"??\" src=\"/flags.jsp?c=xx\" loading=lazy>";
-        String countryCode = getCountry(peer);
-        if (countryCode == null) {countryCode = "xx";}
-        String countryName = getCountryName(countryCode);
-        if (countryName.length() > 2)
-            countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-        buf.append("<span class=cc hidden>").append(countryCode.toUpperCase(Locale.US)).append("</span>");
-        buf.append("<span class=peerFlag title=\"");
-        if (ri != null) {
-            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            if (ip == null || ip.isEmpty() || "null".equals(ip)) {
-                byte[] transportIP = CountryLookup.getIP(ri);
-                if (transportIP != null)
-                    ip = net.i2p.util.Addresses.toString(transportIP);
-            }
-            if (!"xx".equals(countryCode) && countryName.length() > 2) {
-                buf.append(countryName);
-                if (ip != null && ip.length() > 6) {
-                    buf.append(" &bullet; ");
-                    if (enableReverseLookups()) {
-                        // Non-blocking: never wait on DNS. getCanonicalHostName returns the cached
-                        // name or the raw IP and queues a background lookup on a miss.
-                        String canonicalHost = _context.commSystem().getCanonicalHostName(ip);
-                        if (canonicalHost != null && !canonicalHost.equals(ip)
-                                && !_t("unknown").equals(canonicalHost)) {
-                            buf.append(canonicalHost).append(" (").append(ip).append(")");
-                        } else {
-                            buf.append(ip);
-                        }
-                    } else {buf.append(ip);}
-                }
-            } else {buf.append(_t("unknown"));}
-            buf.append("\">");
-            if (!"xx".equals(countryCode)) {
-                buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=")
-                   .append(countryCode.toUpperCase(Locale.US)).append(" src=\"/flags.jsp?c=")
-                   .append(countryCode).append("\" loading=lazy></a>");
-            } else {buf.append(unknownFlag);}
-        } else {buf.append(_t("unknown")).append("\">").append(unknownFlag);}
-        buf.append("</span>");
-        return buf.toString();
-    }
+    @Override
+    public String renderPeerFlag(Hash peer) {return _peerHTML.renderPeerFlag(peer);}
 
     /**
      * Renders the peer's capability HTML block.
@@ -1030,86 +931,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @param peer Peer Hash
      * @param inline If true, render inline without table wrapper
      * @return HTML snippet of peer capabilities
+     * @since 0.9.71+
      */
     @Override
-    public String renderPeerCaps(Hash peer, boolean inline) {
-        StringBuilder buf = new StringBuilder(inline ? 128 : 256);
-        if (!inline) {buf.append("<table class=\"rid ric\"><tr>");}
-
-        RouterInfo ri = getRouterInfoCached(peer);
-        if (ri != null) {
-            String caps = ri.getCapabilities();
-            String capacity = getCapacityCached(peer);
-
-            boolean hasD = caps.indexOf('D') >= 0;
-            boolean hasE = caps.indexOf('E') >= 0;
-            boolean hasG = caps.indexOf('G') >= 0;
-            boolean isFF = caps.indexOf('f') >= 0;
-            boolean isU = caps.indexOf('U') >= 0;
-            boolean isR = caps.indexOf('R') >= 0;
-
-            buf.append("<td class=\"rbw ").append(capacity);
-            if (isFF) buf.append(" isff");
-            if (isU) buf.append(" isU");
-            if (hasD) buf.append(" isD");
-            else if (hasE) buf.append(" isE");
-            else if (hasG) buf.append(" isG");
-            buf.append("\"><a href=\"/netdb?caps=").append(capacity);
-
-            if (isFF) buf.append("f");
-            if (isU) buf.append("U");
-            else if (isR) buf.append("R");
-            if (hasD) buf.append("D");
-            else if (hasE) buf.append("E");
-            else if (hasG) buf.append("G");
-            buf.append("\" title=\"").append(_t("Show all routers with this capability in the NetDb")).append("\">");
-
-            // Remove first occurrence of D, E, or G character from capacity string
-            String visibleCapacity = CAPACITY_PATTERN.matcher(capacity).replaceFirst("");
-            buf.append(visibleCapacity);
-
-            buf.append("</a></td>");
-        } else {buf.append("<td class=rbw>?</td>");}
-        if (!inline) {buf.append("</tr></table>\n");}
-        return buf.toString();
-    }
-
-    // Cache RouterInfo and Capacity to improve repeated lookup efficiency
-    private final Map<Hash, RouterInfo> routerInfoCache = Collections.synchronizedMap(new LHMCache<>(5000));
-    private final Map<Hash, String> capacityCache = Collections.synchronizedMap(new LHMCache<>(5000));
-
-    private RouterInfo getRouterInfoCached(Hash peer) {
-        RouterInfo rv = routerInfoCache.get(peer);
-        if (rv == null) {
-            rv = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-            if (rv != null)
-                routerInfoCache.put(peer, rv);
-        }
-        return rv;
-    }
-
-    private String getCapacityCached(Hash peer) {
-        String rv = capacityCache.get(peer);
-        if (rv == null) {
-            RouterInfo ri = getRouterInfoCached(peer);
-            if (ri == null) {
-                rv = "?";
-            } else {
-                String caps = ri.getCapabilities();
-                for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
-                    char c = RouterInfo.BW_CAPABILITY_CHARS.charAt(i);
-                    if (caps.indexOf(c) >= 0) {
-                        rv = String.valueOf(c);
-                        break;
-                    }
-                }
-                if (rv == null)
-                    rv = "?";
-            }
-            capacityCache.put(peer, rv);
-        }
-        return rv;
-    }
+    public String renderPeerCaps(Hash peer, boolean inline) {return _peerHTML.renderPeerCaps(peer, inline);}
 
     /**
      * Is everything disabled for testing?
@@ -1118,11 +943,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public boolean isDummy() {return _context.getBooleanProperty(PROP_DISABLED);}
-
-    /**
-     *  Translate
-     */
-    private final String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
 
     /*
      * Timestamper stuff
