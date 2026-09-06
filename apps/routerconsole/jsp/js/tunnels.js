@@ -121,40 +121,35 @@ document.addEventListener("DOMContentLoaded", function() {
   persistTunnelIdVisibility();
   bodyTag.classList.add("js");
 
-  let tunnelRefreshPending = false;
-
   document.addEventListener("elementsRefreshed", function(event) {
-    if (tunnelRefreshPending) return;
     if (!event.detail.selectors.some(sel => sel.includes("tunnelsContainer"))) return;
-    tunnelRefreshPending = true;
-    const currentTables = container.querySelectorAll("table").length;
-    const currentRows = container.querySelectorAll("tr").length;
-    fetch("/tunnels")
-      .then(response => response.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const fetchedTables = doc.querySelectorAll("#tunnelsContainer table").length;
-        const fetchedRows = doc.querySelectorAll("#tunnelsContainer tr").length;
 
-        if (fetchedTables !== currentTables || fetchedRows !== currentRows) {
-          const newContainer = doc.querySelector("#tunnelsContainer");
-          if (newContainer) {
-            container.innerHTML = newContainer.innerHTML;
-          }
-        }
-        updateTunnelCounts();
-      })
-      .catch(error => {})
-      .finally(() => { tunnelRefreshPending = false; });
+    const fragment = event.detail.fragment;
+    const fetched = fragment ? fragment.querySelector("#tunnelsContainer") : null;
+    if (fetched) {
+      // Steady-state morphdom only patches the volatile cells above and cannot
+      // recombine tbody/tfoot table sections, so structural changes get a
+      // wholesale container replace. The fetched fragment comes from the same
+      // single contentonly refresh the worker already parsed: no second
+      // full-page fetch or main-thread DOMParser pass is needed.
+      const currentTables = container.querySelectorAll("table").length;
+      const currentRows = container.querySelectorAll("tr").length;
+      const fetchedTables = fetched.querySelectorAll("table").length;
+      const fetchedRows = fetched.querySelectorAll("tr").length;
+      if (fetchedTables !== currentTables || fetchedRows !== currentRows) {
+        container.innerHTML = fetched.innerHTML;
+      }
+    }
+    updateTunnelCounts();
   });
 
   // Steady-state refresh morphs only the volatile cells (test status,
   // expiry, latency, data, footer bandwidth) so morphdom never recombines
   // tbody/tfoot table sections; structural changes trigger the full
-  // #tunnelsContainer replace above.
+  // #tunnelsContainer replace above. includeContainer exposes the realized
+  // contentonly fragment on the refresh detail for that comparison.
   refreshElements(
     "#tunnelsContainer td.status, #tunnelsContainer td.expiry, #tunnelsContainer td.latency, #tunnelsContainer td.datatransfer, #tunnelsContainer tfoot td",
-    "/tunnels", 10000
+    "/tunnels", 10000, false, false, "tunnelsContainer", null, 0, true
   );
 });

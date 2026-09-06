@@ -179,11 +179,12 @@ function realizeVdom(vnode) {
  * @param {string|string[]} [fragmentIds=null] - Element ids the server should render (contentonly fragment mode)
  * @param {string} [diffRows=null] - Id of a tbody whose rows are diffed in a worker; only changed rows are patched
  * @param {number} [minInterval=0] - Minimum period between refreshes in ms. A refresh request (interval tick or visibility regain) is skipped when the last refresh started less than this long ago; zero disables the check
+ * @param {boolean} [includeContainer=false] - Expose the realized fragment container on the elementsRefreshed event detail as "fragment", so a page can run a structural comparison against the same contentonly response instead of a second full-page fetch
  * @returns {Function} The stop function that halts the refresh loop
  * @example refreshElements("#sidebar", "/sidebar", 10000)
  * @example refreshElements(["#peers", "#status"], "/peers", 5000)
  */
-export function refreshElements(targetSelectors, url, delay, immediate = false, silent = false, fragmentIds = null, diffRows = null, minInterval = 0) {
+export function refreshElements(targetSelectors, url, delay, immediate = false, silent = false, fragmentIds = null, diffRows = null, minInterval = 0, includeContainer = false) {
   const selectors = normalizeSelectors(targetSelectors);
   const contentOnlyIds = normalizeFragmentIds(fragmentIds);
   const fetchUrl = contentOnlyIds ? appendContentOnly(url, contentOnlyIds) : url;
@@ -206,11 +207,14 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
   /**
    * Dispatches the refresh events after a patch is applied.
    * @function dispatchDone
+   * @param {Element} [containerElement] - The realized fragment container, passed through to the elementsRefreshed detail as "fragment" when the loop asked for it
    * @returns {void}
    */
-  function dispatchDone() {
+  function dispatchDone(containerElement) {
     document.dispatchEvent(new Event("refreshComplete"));
-    document.dispatchEvent(new CustomEvent("elementsRefreshed", { detail: { selectors } }));
+    const detail = { selectors };
+    if (containerElement) { detail.fragment = containerElement; }
+    document.dispatchEvent(new CustomEvent("elementsRefreshed", { detail }));
   }
 
   /**
@@ -333,7 +337,7 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
       document.dispatchEvent(new CustomEvent("elementsMissing", { detail: { selectors: missing } }));
     }
     if (lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
-    dispatchDone();
+    dispatchDone(includeContainer ? container : null);
   }
 
   fetchWorker.port.onmessage = function(e) {

@@ -40,9 +40,11 @@ function setupSort() {
 function updateTunnels() {
   if (stopRefresh) { stopRefresh(); stopRefresh = null; }
   if (sorter === null) { setupSort(); }
-  let selectors = ["#tunnels"];
-  if (peers) { selectors = ["#transitPeers"]; }
-  stopRefresh = refreshElements(selectors, "/transitsummary", REFRESH_INTERVAL);
+  if (peers) {
+    stopRefresh = refreshElements(["#transitPeers"], "/transitsummary", REFRESH_INTERVAL, false, false, "transitPeers");
+  } else {
+    stopRefresh = refreshElements(["#tunnels"], "/transitsummary", REFRESH_INTERVAL);
+  }
 }
 
 document.addEventListener("refreshComplete", () => {

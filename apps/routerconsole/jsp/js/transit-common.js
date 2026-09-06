@@ -86,7 +86,7 @@ export function initTransit(config) {
     if (stopRefresh) { stopRefresh(); stopRefresh = null; }
     let stop = null;
     if (peers) {
-      stop = refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate);
+      stop = refreshElements("#transitPeers, #statusnotes", FETCH_URL, REFRESH_INTERVAL, immediate, false, "transitPeers,statusnotes");
     } else if (main) {
       // No tunnels yet: poll the whole div until the table appears
       stop = refreshElements("#tunnels", FETCH_URL, RETRY_DELAY, immediate);
