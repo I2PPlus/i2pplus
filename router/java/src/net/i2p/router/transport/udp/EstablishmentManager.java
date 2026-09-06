@@ -198,6 +198,12 @@ public class EstablishmentManager {
      */
     static final AtomicLong MAX_IB_ESTABLISH_TIME = new AtomicLong(5*1000L);
 
+    /**
+     * Inbound retry-sent limit: how long we wait to get a session request
+     * back after a retry, before giving up (5x the retransmit delay).
+     */
+    private static final long IB_RETRY_SENT_MAX_TIME = 5 * InboundEstablishState.RETRANSMIT_DELAY;
+
     /** Max wait before receiving a response to a single message during outbound establishment */
     public static final long OB_MESSAGE_TIMEOUT = 2500L;
 
@@ -335,6 +341,22 @@ public class EstablishmentManager {
     static boolean isBanlisted(Banlist banlist, Hash h) {
         return h != null &&
                (banlist.isBanlisted(h) || banlist.isBanlistedHostile(h) || banlist.isBanlistedForever(h));
+    }
+
+    /**
+     *  Is the peer banned forever or marked hostile? The stricter subset of the
+     *  banlist states (time-based bans are not enough to reject a fully
+     *  established inbound connection). Null-safe. Used by the handleInbound
+     *  confirmed-complete dispatch.
+     *
+     *  @param banlist the router's banlist
+     *  @param h the peer hash, may be null
+     *  @return true if permanently banned or hostile
+     *  @since 0.9.71
+     */
+    static boolean isBannedForeverOrHostile(Banlist banlist, Hash h) {
+        return h != null &&
+               (banlist.isBanlistedForever(h) || banlist.isBanlistedHostile(h));
     }
 
     /**
@@ -627,6 +649,24 @@ public class EstablishmentManager {
      */
     static boolean isSendDue(long nextSendTime, long now) {
         return nextSendTime <= now;
+    }
+
+    /**
+     *  Has the inbound establish state lived long enough to be expired, either
+     *  past the overall establish cap or, when we are waiting for a session
+     *  request after sending a retry, past the retry-sent limit?
+     *
+     *  @param lifetime how long the state has existed
+     *  @param isRetrySent true if the state is waiting in IB_STATE_RETRY_SENT
+     *  @param maxEstablishTime the overall inbound establish cap
+     *  @param retrySentMaxTime the extra cap applied only to retry-sent states
+     *  @return true if the inbound state should be expired
+     *  @since 0.9.71
+     */
+    static boolean hasInboundEstablishExpired(long lifetime, boolean isRetrySent,
+                                              long maxEstablishTime, long retrySentMaxTime) {
+        return lifetime > maxEstablishTime ||
+               (isRetrySent && lifetime >= retrySentMaxTime);
     }
 
     /**
@@ -2428,27 +2468,28 @@ public class EstablishmentManager {
                 iter.remove();
                 inboundState = cur;
                 break;
-            } else if (cur.getLifetime(now) > MAX_IB_ESTABLISH_TIME.get() ||
-                       (istate == IB_STATE_RETRY_SENT && // limit time to get sess. req after retry
-                        cur.getLifetime(now) >= 5 * InboundEstablishState.RETRANSMIT_DELAY)) {
+            } else if (hasInboundEstablishExpired(cur.getLifetime(now),
+                                                  istate == IB_STATE_RETRY_SENT,
+                                                  MAX_IB_ESTABLISH_TIME.get(),
+                                                  IB_RETRY_SENT_MAX_TIME)) {
                 iter.remove(); // took too long
-                    inboundState = cur;
-                    expired = true;
+                inboundState = cur;
+                expired = true;
+                break;
+            } else if (istate == IB_STATE_FAILED || istate == IB_STATE_COMPLETE) {
+                iter.remove();
+            } else {
+                long next = cur.getNextSendTime(); // this will always be > 0
+                if (isSendDue(next, now)) {
+                    inboundState = cur; // our turn...
                     break;
-                } else if (istate == IB_STATE_FAILED || istate == IB_STATE_COMPLETE) {
-                    iter.remove();
                 } else {
-                    long next = cur.getNextSendTime(); // this will always be > 0
-                    if (next <= now) {
-                        inboundState = cur; // our turn...
-                        break;
-                    } else {
-                        // nothin' to do but wait for them to send us stuff,
-                        // so let's move on to the next one being established
-                        if (next < nextSendTime) {nextSendTime = next;}
-                    }
+                    // nothin' to do but wait for them to send us stuff,
+                    // so let's move on to the next one being established
+                    if (next < nextSendTime) {nextSendTime = next;}
                 }
             }
+        }
 
         if (inboundState != null) {
             synchronized (inboundState) {
@@ -2469,18 +2510,18 @@ public class EstablishmentManager {
                   case IB_STATE_CREATED_SENT: // fallthrough
                   case IB_STATE_RETRY_SENT: // SSU2
                     if (expired) {processExpired(inboundState);}
-                    else if (inboundState.getNextSendTime() <= now) {sendCreated(inboundState);} // resend created or retry
+                    else if (isSendDue(inboundState.getNextSendTime(), now)) {sendCreated(inboundState);} // resend created or retry
                     break;
 
                   case IB_STATE_CONFIRMED_COMPLETELY:
                     RouterIdentity remote = inboundState.getConfirmedIdentity();
                     if (remote != null) {
-                        if (_context.banlist().isBanlistedForever(remote.calculateHash()) ||
-                            _context.banlist().isBanlistedHostile(remote.calculateHash())) {
+                        Hash remoteHash = remote.calculateHash();
+                        if (isBannedForeverOrHostile(_context.banlist(), remoteHash)) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping Inbound connection from " +
-                                (_context.banlist().isBanlistedForever(remote.calculateHash()) ? "permanently" : "") +
-                                " banlisted peer: " + remote.calculateHash());
+                                (_context.banlist().isBanlistedForever(remoteHash) ? "permanently" : "") +
+                                " banlisted peer: " + remoteHash);
                             }
                             // So next time we will not accept the con, rather than doing the whole handshake
                             _context.blocklist().add(inboundState.getSentIP());

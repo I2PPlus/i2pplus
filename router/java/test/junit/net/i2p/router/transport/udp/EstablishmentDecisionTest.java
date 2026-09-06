@@ -347,4 +347,39 @@ public class EstablishmentDecisionTest {
         assertTrue(EstablishmentManager.isSendDue(1000L, 1000L));
         assertTrue(EstablishmentManager.isSendDue(1000L, 2000L));
     }
+
+    @Test
+    public void testHasInboundEstablishExpired() {
+        // before the overall cap: not expired, whatever phase
+        assertFalse(EstablishmentManager.hasInboundEstablishExpired(4000L, false, 5000L, 5000L));
+        assertFalse(EstablishmentManager.hasInboundEstablishExpired(4000L, true, 5000L, 5000L));
+        // past the overall cap: always expired
+        assertTrue(EstablishmentManager.hasInboundEstablishExpired(5001L, false, 5000L, 5000L));
+        assertTrue(EstablishmentManager.hasInboundEstablishExpired(9000L, true, 5000L, 5000L));
+        // retry-sent limit only applies to retry-sent states
+        // boundary: exactly at the retry limit expires a retry-sent state
+        assertTrue(EstablishmentManager.hasInboundEstablishExpired(5000L, true, 5000L, 5000L));
+        assertFalse(EstablishmentManager.hasInboundEstablishExpired(4999L, true, 5000L, 5000L));
+        // a non-retry state past the retry-sent cap but under the overall cap survives
+        assertFalse(EstablishmentManager.hasInboundEstablishExpired(4999L, false, 5000L, 5000L));
+    }
+
+    @Test
+    public void testIsBannedForeverOrHostile() {
+        Banlist banlist = mock(Banlist.class);
+        Hash h = Hash.create(new byte[Hash.HASH_LENGTH]);
+        // null hash: never banned
+        assertFalse(EstablishmentManager.isBannedForeverOrHostile(banlist, null));
+        // permanent ban fires
+        when(banlist.isBanlistedForever(h)).thenReturn(true);
+        assertTrue(EstablishmentManager.isBannedForeverOrHostile(banlist, h));
+        // hostile fires
+        when(banlist.isBanlistedForever(h)).thenReturn(false);
+        when(banlist.isBanlistedHostile(h)).thenReturn(true);
+        assertTrue(EstablishmentManager.isBannedForeverOrHostile(banlist, h));
+        // neither fires
+        when(banlist.isBanlistedHostile(h)).thenReturn(false);
+        when(banlist.isBanlisted(h)).thenReturn(true);
+        assertFalse(EstablishmentManager.isBannedForeverOrHostile(banlist, h));
+    }
 }
