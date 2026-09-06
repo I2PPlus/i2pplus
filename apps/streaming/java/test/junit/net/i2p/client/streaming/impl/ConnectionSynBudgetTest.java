@@ -122,6 +122,76 @@ public class ConnectionSynBudgetTest {
         assertEquals(-1, Connection.computeSynResendBudget(-1, 750, 30150));
     }
 
+    // --------------------------------------------------------------------
+    // computeConnectBase (delayed-SYN base assembly)
+    // --------------------------------------------------------------------
+
+    /** No connect delay: the base is just the connect timeout. */
+    @Test
+    public void testConnectBaseNoDelay() {
+        assertEquals(30000, Connection.computeConnectBase(30000, 0));
+        assertEquals(30000, Connection.computeConnectBase(30000, -1));
+    }
+
+    /** Delayed-SYN path: connect delay is added so the handshake is not cut short. */
+    @Test
+    public void testConnectBaseWithDelay() {
+        // IRC forces connectDelay=150, default connectTimeout=30s.
+        assertEquals(30150, Connection.computeConnectBase(30000, 150));
+    }
+
+    /** No configured timeout means no base window regardless of connect delay. */
+    @Test
+    public void testConnectBaseNoTimeout() {
+        assertEquals(0, Connection.computeConnectBase(0, 150));
+        assertEquals(0, Connection.computeConnectBase(-5, 150));
+    }
+
+    /**
+     * The effective connect window that the scheduler, waitForConnect and the SYN
+     * budget share must:
+     *  - grow (never shrink) the base on slow paths (multiplier > 100), which is
+     *    exactly the case that used to let the scheduler tear the SYN down early;
+     *  - never fall below CONNECT_TIMEOUT_FLOOR_MS no matter how aggressive the
+     *    fast-path Tuner multiplier is;
+     *  - stay pinned at the absolute max for oversized bases.
+     */
+    @Test
+    public void testEffectiveWindowContract() {
+        int[] bases = {30000, 30150, 60000, 120000};
+        for (int base : bases) {
+            for (int multiplier : new int[] {30, 100, 150, 200}) {
+                long window = Connection.computeEffectiveConnectTimeout(base, multiplier, 75000);
+                assertTrue("window " + window + " below floor at base " + base + " mul " + multiplier + "%",
+                           window >= Connection.CONNECT_TIMEOUT_FLOOR_MS);
+                assertTrue("window " + window + " above cap at base " + base + " mul " + multiplier + "%",
+                           window <= 75000);
+                if (base <= 75000 && multiplier > 100) {
+                    // slow path: window grows (or is floored only if base already tiny)
+                    assertTrue("slow path shrank window " + window + " below base " + base + " at " + multiplier + "%",
+                               window >= base);
+                }
+                if (base > 75000) {
+                    // oversized base: multiplier < 100 shrinks proportionally (no cap
+                    // applies since the result stays under max), 100% and above pin at
+                    // the absolute cap by design
+                    if (multiplier < 100) {
+                        assertEquals("base " + base + " at " + multiplier + "%",
+                                     (long) base * multiplier / 100, window);
+                    } else {
+                        assertEquals("base " + base + " at " + multiplier + "%", 75000, window);
+                    }
+                }
+            }
+        }
+        // A 30s base under a 30% fast-path multiplier is floored, never cut below 10s.
+        long fastWindow = Connection.computeEffectiveConnectTimeout(30000, 30, 75000);
+        assertTrue(fastWindow >= Connection.CONNECT_TIMEOUT_FLOOR_MS);
+        // And a 10s base at 30% is exactly the floor.
+        assertEquals(Connection.CONNECT_TIMEOUT_FLOOR_MS,
+                     Connection.computeEffectiveConnectTimeout(10000, 30, 75000));
+    }
+
     /** Invariant sweep: for any sane interval/window, budget * interval covers the window. */
     @Test
     public void testBudgetInvariantCoversWindow() {

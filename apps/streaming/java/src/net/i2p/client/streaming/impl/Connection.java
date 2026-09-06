@@ -602,12 +602,57 @@ class Connection {
      *  @since 0.9.71+
      */
     private int getMaxSynSends() {
-        long connectTimeout = _options.getConnectTimeout();
-        long base = (connectTimeout > 0 && _options.getConnectDelay() > 0)
-                    ? (long) _options.getConnectDelay() + connectTimeout
-                    : connectTimeout;
-        long window = computeEffectiveConnectTimeout(base, getConnectTimeoutMultiplier(), getMaxConnectTimeout());
+        long window = getEffectiveConnectWindow();
         return computeSynResendBudget(maxSynResends, getSynRetransmitInterval(), window);
+    }
+
+    /**
+     *  Assemble the un-scaled base connect window (ms) for a connection's options.
+     *
+     *  <p>connectDelay is added to connectTimeout only on the delayed-SYN path (both
+     *  set), so the base matches how {@link ConnectionManager#connect} invokes
+     *  {@code waitForConnect(int)} — there the SYN has not yet been sent and {@code
+     *  connectDelay} is added to the timeout so the handshake is not cut short while
+     *  the SYN is still waiting to be transmitted.
+     *
+     *  @param connectTimeoutMs the option's connect timeout in ms (&lt;=0 means none)
+     *  @param connectDelayMs   the option's connect delay in ms
+     *  @return the base connect window in ms; 0 when no connect timeout is configured
+     *  @since 0.9.71+
+     */
+    static long computeConnectBase(long connectTimeoutMs, long connectDelayMs) {
+        if (connectTimeoutMs <= 0) {return 0;}
+        if (connectDelayMs > 0) {return connectTimeoutMs + connectDelayMs;}
+        return connectTimeoutMs;
+    }
+
+    /**
+     *  The total time (ms) from connection creation during which this connecting
+     *  connection may wait for its SYN to be acknowledged before the connect path
+     *  tears the handshake down.
+     *
+     *  <p>This is the single authoritative connect window shared by
+     *  {@link #waitForConnect(int)}, {@link #getMaxSynSends()}, and
+     *  {@link SchedulerConnecting}, so no path can tear an unacknowledged SYN down
+     *  before the others have given it the full Tuner-scaled budget.  It is the
+     *  (connectDelay + connectTimeout) base — connectDelay counted only on the
+     *  delayed-SYN path, exactly as {@link ConnectionManager#connect} invokes
+     *  waitForConnect — scaled by the Tuner's connect-timeout multiplier, floored at
+     *  {@link #CONNECT_TIMEOUT_FLOOR_MS}, and capped at the absolute max connect
+     *  timeout.
+     *
+     *  <p>Using the raw un-scaled connectTimeout here (as SchedulerConnecting once did)
+     *  lets the scheduler race ahead of waitForConnect on high-RTT paths where the
+     *  Tuner has raised the multiplier above 100%, killing the handshake with a generic
+     *  error instead of the accurate "SYN not acknowledged".
+     *
+     *  @return the effective connect window in milliseconds; 0 when no connect timeout
+     *          is configured (no budget, caller should not give up on timeout)
+     *  @since 0.9.71+
+     */
+    long getEffectiveConnectWindow() {
+        long base = computeConnectBase(_options.getConnectTimeout(), _options.getConnectDelay());
+        return computeEffectiveConnectTimeout(base, getConnectTimeoutMultiplier(), getMaxConnectTimeout());
     }
 
     /**

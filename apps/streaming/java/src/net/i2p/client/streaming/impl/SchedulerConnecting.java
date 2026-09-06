@@ -55,13 +55,29 @@ class SchedulerConnecting extends SchedulerImpl {
      * Handle an event on a connecting connection. Checks for connect
      * timeout and sends available data when the send time arrives.
      *
+     * <p>The timeout gate uses the connection's effective connect window
+     * ({@link Connection#getEffectiveConnectWindow()}) rather than the raw un-scaled
+     * connectTimeout.  That window is the (connectDelay + connectTimeout) base scaled by
+     * the Tuner's connect-timeout multiplier, the same budget {@code waitForConnect(int)}
+     * and the SYN give-up check in {@code Connection#getMaxSynSends()} use, so this
+     * scheduler can never tear an unacknowledged SYN down before those render the
+     * accurate "Connection timed out: SYN not acknowledged" error.  As a last-resort
+     * backstop it defers to an error that already fired and only sets its own generic
+     * message when none is present.  A window of 0 means no connect timeout is
+     * configured, in which case this scheduler does not give up on its own.
+     *
      * @param con the connection that had an event
      */
     public void eventOccurred(Connection con) {
         long waited = _context.clock().now() - con.getCreatedOn();
-        if ( (con.getOptions().getConnectTimeout() > 0) &&
-             (con.getOptions().getConnectTimeout() <= waited) ) {
-            con.setConnectionError("Timeout waiting for ack (waited " + waited + "ms)");
+        long window = con.getEffectiveConnectWindow();
+        if ( (window > 0) && (waited >= window) ) {
+            // Last-resort backstop on the connect window.  The SYN give-up budget
+            // (see Connection.getMaxSynSends()) and waitForConnect() fire accurate
+            // errors just before or at the same wall-clock boundary, so don't clobber
+            // one that already ran.
+            if (con.getConnectionError() == null)
+                con.setConnectionError("Timeout waiting for ack (waited " + waited + "ms)");
             con.disconnect(false);
             reschedule(0, con);
             if (_log.shouldDebug())
@@ -79,9 +95,9 @@ class SchedulerConnecting extends SchedulerImpl {
                 if (_log.shouldDebug())
                     _log.debug("time till send: " + timeTillSend + " on " + con);
                 reschedule(timeTillSend, con);
-            } else if (con.getOptions().getConnectTimeout() > 0) {
+            } else if (window > 0) {
                 // no pending send; re-check the connect timeout when it elapses
-                reschedule(con.getOptions().getConnectTimeout(), con);
+                reschedule(window, con);
             }
             // else: no send pending and no connect timeout configured; the
             // connection is poked on inbound packets (see ConnectionPacketHandler)
