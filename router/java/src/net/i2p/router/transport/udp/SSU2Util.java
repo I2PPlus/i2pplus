@@ -9,6 +9,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
+import java.util.Arrays;
 
 /**
  *  SSU2 Utils and constants
@@ -20,6 +21,34 @@ final class SSU2Util {
      *  SSU2 protocol version number
      */
     public static final int PROTOCOL_VERSION = 2;
+
+    /**
+     *  The oldest SSU2 version accepted when establishing.
+     *  Reject earlier versions as unsupported.
+     *
+     *  @since 0.9.71
+     */
+    public static final int MIN_SUPPORTED_VERSION = 2;
+
+    /**
+     *  The newest SSU2 version accepted when establishing.
+     *
+     *  @since 0.9.71
+     */
+    public static final int MAX_SUPPORTED_VERSION = 4;
+
+    /**
+     *  True if the given version is accepted when establishing.
+     *  The only supported versions are in {@link #MIN_SUPPORTED_VERSION}
+     *  to {@link #MAX_SUPPORTED_VERSION} inclusive.
+     *
+     *  @param version the peer's SSU2 version
+     *  @return true if the version is supported
+     *  @since 0.9.71
+     */
+    public static boolean isSupportedVersion(int version) {
+        return version >= MIN_SUPPORTED_VERSION && version <= MAX_SUPPORTED_VERSION;
+    }
 
     // lengths
     /** 32 bytes, X25519 public key length */
@@ -324,14 +353,14 @@ final class SSU2Util {
                                             SigningPrivateKey spk) {
         int datalen = 12 + (ip != null ? ip.length : 0);
         byte[] data = new byte[datalen + spk.getType().getSigLen()];
-        data[0] = 2;  // version
+        data[0] = PROTOCOL_VERSION;
         DataHelper.toLong(data, 1, 4, nonce);
         DataHelper.toLong(data, 5, 4, ctx.clock().now() / 1000);
         int iplen = (ip != null) ? ip.length : 0;
-        data[9] = (byte) (ip != null ? iplen + 2 : 0);
+        data[RELAY_DATA_ADDR_LEN_OFFSET] = (byte) (ip != null ? iplen + RELAY_DATA_PORT_LEN : 0);
         if (ip != null) {
-            DataHelper.toLong(data, 10, 2, port);
-            System.arraycopy(ip, 0, data, 12, iplen);
+            DataHelper.toLong(data, RELAY_DATA_PORT_OFFSET, RELAY_DATA_PORT_LEN, port);
+            System.arraycopy(ip, 0, data, RELAY_DATA_IP_OFFSET, iplen);
         }
         Signature sig = sign(ctx, PEER_TEST_PROLOGUE, h, h2, data, datalen, spk);
         if (sig == null)
@@ -374,6 +403,152 @@ final class SSU2Util {
     }
 
     /**
+     *  The trailing 8-byte token in a signed relay response with a
+     *  zero code. When present it is appended after the signature.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_RESPONSE_TOKEN_LEN = 8;
+
+    /**
+     *  IPv4 address length in bytes.
+     *
+     *  @since 0.9.71
+     */
+    public static final int IPV4_LEN = 4;
+
+    /**
+     *  IPv6 address length in bytes.
+     *
+     *  @since 0.9.71
+     */
+    public static final int IPV6_LEN = 16;
+
+    /**
+     *  Length of the port field in the relay/peer-test address block.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_DATA_PORT_LEN = 2;
+
+    /**
+     *  Offset of the version byte in relay response / peer test data.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_DATA_VERSION_OFFSET = 8;
+
+    /**
+     *  Offset of the address length byte in relay response / peer test data.
+     *  The byte encodes the IP address length plus the port field length.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_DATA_ADDR_LEN_OFFSET = 9;
+
+    /**
+     *  Offset of the 2-byte port in relay response / peer test data.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_DATA_PORT_OFFSET = 10;
+
+    /**
+     *  Offset of the IP address bytes in relay response / peer test data.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_DATA_IP_OFFSET = 12;
+
+    /**
+     *  The encoded address length value in relay response / peer test data
+     *  for an IPv4 address.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_DATA_ADDR_LEN_IPV4 = IPV4_LEN + RELAY_DATA_PORT_LEN;
+
+    /**
+     *  The encoded address length value in relay response / peer test data
+     *  for an IPv6 address.
+     *
+     *  @since 0.9.71
+     */
+    public static final int RELAY_DATA_ADDR_LEN_IPV6 = IPV6_LEN + RELAY_DATA_PORT_LEN;
+
+    /**
+     *  Parse the encoded address length byte out of relay response / peer test data.
+     *  The byte encodes the IP address length plus the port field length.
+     *
+     *  @param data the data after the signature
+     *  @return the encoded address length
+     *  @since 0.9.71
+     */
+    public static int getRelayDataAddrLen(byte[] data) {
+        return data[RELAY_DATA_ADDR_LEN_OFFSET] & 0xff;
+    }
+
+    /**
+     *  Is the given encoded address length valid (IPv4 or IPv6)?
+     *
+     *  @param addrLen the encoded address length
+     *  @return true if valid
+     *  @since 0.9.71
+     */
+    public static boolean isValidRelayDataAddrLen(int addrLen) {
+        return addrLen == RELAY_DATA_ADDR_LEN_IPV4 || addrLen == RELAY_DATA_ADDR_LEN_IPV6;
+    }
+
+    /**
+     *  Parse the 2-byte port out of relay response / peer test data.
+     *
+     *  @param data the data after the signature
+     *  @return the port
+     *  @since 0.9.71
+     */
+    public static int getRelayDataPort(byte[] data) {
+        return (int) DataHelper.fromLong(data, RELAY_DATA_PORT_OFFSET, RELAY_DATA_PORT_LEN);
+    }
+
+    /**
+     *  Parse the IP address out of relay response / peer test data.
+     *
+     *  @param data the data after the signature
+     *  @param addrLen the encoded address length
+     *  @return the IP address bytes
+     *  @since 0.9.71
+     */
+    public static byte[] getRelayDataIP(byte[] data, int addrLen) {
+        byte[] ip = new byte[addrLen - RELAY_DATA_PORT_LEN];
+        System.arraycopy(data, RELAY_DATA_IP_OFFSET, ip, 0, ip.length);
+        return ip;
+    }
+
+    /**
+     *  Parse the trailing token out of the relay response signed data.
+     *
+     *  @param data the signed data
+     *  @return the token
+     *  @throws ArrayIndexOutOfBoundsException if the token is not present
+     *  @since 0.9.71
+     */
+    public static long getRelayResponseToken(byte[] data) {
+        return DataHelper.fromLong8(data, data.length - RELAY_RESPONSE_TOKEN_LEN);
+    }
+
+    /**
+     *  Trim the trailing token off the relay response signed data,
+     *  returning the portion that was signed.
+     *
+     *  @param data the signed data
+     *  @return the data without the trailing token
+     *  @since 0.9.71
+     */
+    public static byte[] trimRelayResponseToken(byte[] data) {
+        return Arrays.copyOfRange(data, 0, data.length - RELAY_RESPONSE_TOKEN_LEN);
+    }
+
+    /**
      *  Make the data for the relay response block
      *
      *  @param h Bob hash to be included in sig, not included in data
@@ -388,24 +563,24 @@ final class SSU2Util {
                                                  SigningPrivateKey spk, long token) {
         int datalen = 10;
         if (ip != null)
-            datalen += 2 + ip.length;
+            datalen += RELAY_DATA_PORT_LEN + ip.length;
         byte[] data = new byte[datalen];
         DataHelper.toLong(data, 0, 4, nonce);
         DataHelper.toLong(data, 4, 4, ctx.clock().now() / 1000);
-        data[8] = 2;  // version
+        data[RELAY_DATA_VERSION_OFFSET] = PROTOCOL_VERSION;
         if (ip != null) {
-            data[9] = (byte) (ip.length + 2);
-            DataHelper.toLong(data, 10, 2, port);
-            System.arraycopy(ip, 0, data, 12, ip.length);
+            data[RELAY_DATA_ADDR_LEN_OFFSET] = (byte) (ip.length + RELAY_DATA_PORT_LEN);
+            DataHelper.toLong(data, RELAY_DATA_PORT_OFFSET, RELAY_DATA_PORT_LEN, port);
+            System.arraycopy(ip, 0, data, RELAY_DATA_IP_OFFSET, ip.length);
         } else {
-            // data[9] = 0;
+            // data[RELAY_DATA_ADDR_LEN_OFFSET] = 0;
         }
         Signature sig = sign(ctx, RELAY_RESPONSE_PROLOGUE, h, null, data, datalen, spk);
         if (sig == null)
             return null;
         int len = 2 + datalen + spk.getType().getSigLen();
         if (token != 0)
-            len += 8;
+            len += RELAY_RESPONSE_TOKEN_LEN;
         byte[] rv = new byte[len];
         rv[1] = (byte) code;
         System.arraycopy(data, 0, rv, 2, data.length);

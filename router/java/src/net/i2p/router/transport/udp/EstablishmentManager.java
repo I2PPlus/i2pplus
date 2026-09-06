@@ -44,6 +44,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Banlist;
+import net.i2p.router.Blocklist;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Router;
@@ -315,11 +316,77 @@ public class EstablishmentManager {
     }
 
     /**
-     * Send the message to its specified recipient by establishing a connection
-     * with them and sending it off.  This call does not block, and on failure,
-     * the message is failed.
+     *  Is the router with the given hash banned, hostile, or banned forever?
+     *  Null-safe. Shared by the establish and receiveSessionOrTokenRequest paths.
      *
-     * Note - if we go back to multiple PacketHandler threads, this may need more locking.
+     *  @param banlist the router's banlist
+     *  @param h the peer hash, may be null
+     *  @return true if the peer is banned
+     *  @since 0.9.71
+     */
+    static boolean isBanlisted(Banlist banlist, Hash h) {
+        return h != null &&
+               (banlist.isBanlisted(h) || banlist.isBanlistedHostile(h) || banlist.isBanlistedForever(h));
+    }
+
+    /**
+     *  Is the given IP address in the router's blocklist?
+     *  Null-safe. Shared by the session/establish and hole-punch paths.
+     *
+     *  @param blocklist the router's blocklist
+     *  @param ip the IP address, may be null
+     *  @return true if the IP is blocklisted
+     *  @since 0.9.71
+     */
+    static boolean isBlocklisted(Blocklist blocklist, byte[] ip) {
+        return ip != null && blocklist.isBlocklisted(ip);
+    }
+
+    /**
+     *  Does the exception carry a message worth showing to the user?
+     *  Legacy code stores the string "null" in the message.
+     *
+     *  @param t may be null
+     *  @return true if a useful message is present
+     *  @since 0.9.71
+     */
+    static boolean hasUsefulMessage(Throwable t) {
+        String msg = t != null ? t.getMessage() : null;
+        return msg != null && !msg.equals("null");
+    }
+
+    /**
+     *  Can the given introducer have signed the relay response?
+     *  A peer that was never contacted, terminated the session, or explicitly
+     *  rejected the hole punch cannot be the signer.
+     *
+     *  @param istate the intro state
+     *  @return true if the introducer may be the signer
+     *  @since 0.9.71
+     */
+    static boolean canBeSigner(OutboundEstablishState2.IntroState istate) {
+        switch (istate) {
+            case INTRO_STATE_INIT:
+            case INTRO_STATE_EXPIRED:
+            case INTRO_STATE_REJECTED:
+            case INTRO_STATE_CONNECT_FAILED:
+            case INTRO_STATE_BOB_REJECT:
+            case INTRO_STATE_CHARLIE_REJECT:
+            case INTRO_STATE_FAILED:
+            case INTRO_STATE_INVALID:
+            case INTRO_STATE_DISCONNECTED:
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    /**
+     *  Send the message to its specified recipient by establishing a connection
+     *  with them and sending it off.  This call does not block, and on failure,
+     *  the message is failed.
+     *
+     *  Note - if we go back to multiple PacketHandler threads, this may need more locking.
      */
     public void establish(OutNetMessage msg) {establish(msg, true);}
 
@@ -341,10 +408,7 @@ public class EstablishmentManager {
         Hash toHash = toIdentity.calculateHash();
         int id = toRouterInfo.getNetworkId();
 
-        boolean isBanned = toHash != null &&
-            (_context.banlist().isBanlisted(toHash) ||
-             _context.banlist().isBanlistedHostile(toHash) ||
-             _context.banlist().isBanlistedForever(toHash));
+        boolean isBanned = isBanlisted(_context.banlist(), toHash);
         if (isBanned) {return;}
 
         long now = _context.clock().now();
@@ -550,7 +614,7 @@ public class EstablishmentManager {
         // must have a valid session key
         byte[] keyBytes;
         int version = _transport.getSSUVersion(ra);
-        if (isIndirect && version >= 2 && version <= 4 && ra.getTransportStyle().equals("SSU")) {
+        if (isIndirect && SSU2Util.isSupportedVersion(version) && ra.getTransportStyle().equals("SSU")) {
             // need at least one valid v2 introducer to reach the peer
             boolean v2intros = false;
             int count = addr.getIntroducerCount();
@@ -568,7 +632,7 @@ public class EstablishmentManager {
                 return null;
             }
         }
-        if (version >= 2 && version <= 4) {
+        if (SSU2Util.isSupportedVersion(version)) {
             int mtu = addr.getMTU();
             boolean isIPv6 = TransportUtil.isIPv6(ra);
             int ourMTU = _transport.getMTU(isIPv6);
@@ -601,7 +665,7 @@ public class EstablishmentManager {
             return null;
         }
         OutboundEstablishState state;
-        if (version == 2 || version == 3 || version == 4) {
+        if (SSU2Util.isSupportedVersion(version)) {
             boolean requestIntroduction = !isIndirect && _transport.introducersMaybeRequired(TransportUtil.isIPv6(ra));
             try {
                 state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
@@ -752,12 +816,8 @@ public class EstablishmentManager {
         int fromPort = from.getPort();
         RemoteHostId host = new RemoteHostId(fromIP, fromPort);
         Hash fromHash = host.getPeerHash();
-        boolean hasIP = fromIP != null;
-        boolean isBlocklisted = hasIP && _context.blocklist().isBlocklisted(fromIP);
-        boolean isBanned = fromHash != null &&
-            (_context.banlist().isBanlisted(fromHash) ||
-             _context.banlist().isBanlistedHostile(fromHash) ||
-             _context.banlist().isBanlistedForever(fromHash));
+        boolean isBlocklisted = isBlocklisted(_context.blocklist(), fromIP);
+        boolean isBanned = isBanlisted(_context.banlist(), fromHash);
         String truncHash = fromHash != null ? fromHash.toBase64().substring(0,6) : "";
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn()) {
@@ -824,7 +884,7 @@ public class EstablishmentManager {
             try {
                 state = new InboundEstablishState2(_context, _transport, packet);
             } catch (GeneralSecurityException gse) {
-                boolean gseNotNull = gse.getMessage() != null && !gse.getMessage().equals("null");
+                boolean gseNotNull = hasUsefulMessage(gse);
                 if (from != null && !isPeerBanned(from)) {
                     if (_log.shouldDebug())
                         _log.warn("[SSU] Received CORRUPT Session or Token Request from " + from, gse);
@@ -847,7 +907,7 @@ public class EstablishmentManager {
             try {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
-                boolean gseNotNull = gse.getMessage() != null && !gse.getMessage().equals("null");
+                boolean gseNotNull = hasUsefulMessage(gse);
                 if (state != null && !isPeerBanned(state)) {
                     if (_log.shouldDebug())
                         _log.warn("[SSU] Received CORRUPT Session or Token Request after retry \n* Router: " + state, gse);
@@ -1483,7 +1543,7 @@ public class EstablishmentManager {
                     case INTRO_STATE_CONNECTING:
                         bob = _transport.getPeerState(h);
                         if (bob != null) {
-                            if (bob.getVersion() >= 2 && bob.getVersion() <= 4) {
+                            if (SSU2Util.isSupportedVersion(bob.getVersion())) {
                                 istate = INTRO_STATE_CONNECTED;
                                 state2.setIntroState(h, istate);
                             } else {
@@ -1553,7 +1613,7 @@ public class EstablishmentManager {
                                 break;
                             }
                             int version = _transport.getSSUVersion(ra);
-                if (version >= 2 && version <= 4) {
+                if (SSU2Util.isSupportedVersion(version)) {
                                 if (_log.shouldDebug())
                                     _log.debug("[SSU] Connecting to Introducer " + bob + " for " + state);
                                 // arbitrary message because we have no way to connect for no reason
@@ -1671,12 +1731,12 @@ public class EstablishmentManager {
             }
             return; // already established, or we were Bob and got a dup from Charlie
         }
-        if (charlie.getVersion() < 2 || charlie.getVersion() > 4) {return;}
+        if (!SSU2Util.isSupportedVersion(charlie.getVersion())) {return;}
         OutboundEstablishState2 charlie2 = (OutboundEstablishState2) charlie;
         long token;
         if (code == 0) {
-            token = DataHelper.fromLong8(data, data.length - 8);
-            data = Arrays.copyOfRange(data, 0, data.length - 8);
+            token = SSU2Util.getRelayResponseToken(data);
+            data = SSU2Util.trimRelayResponseToken(data);
         } else {token = 0;}
         Hash bobHash = bob.getRemotePeer();
         Hash charlieHash = charlie.getRemoteIdentity().getHash();
@@ -1710,17 +1770,16 @@ public class EstablishmentManager {
             return;
         }
         if (code == 0) {
-            int iplen = data[9] & 0xff;
-            if (iplen != 6 && iplen != 18) {
+            int iplen = SSU2Util.getRelayDataAddrLen(data);
+            if (!SSU2Util.isValidRelayDataAddrLen(iplen)) {
                 if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + charlie);}
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 charlie.fail();
                 return;
             }
-            int port = (int) DataHelper.fromLong(data, 10, 2);
-            byte[] ip = new byte[iplen - 2];
-            System.arraycopy(data, 12, ip, 0, iplen - 2);
+            int port = SSU2Util.getRelayDataPort(data);
+            byte[] ip = SSU2Util.getRelayDataIP(data, iplen);
             // validate
             if (!TransportUtil.isValidPort(port) ||
                 !_transport.isValid(ip) ||
@@ -1837,13 +1896,13 @@ public class EstablishmentManager {
 
         OutboundEstablishState state = findHolePunchState(id, nonce);
         if (state == null) {return;}
-        if (state.getVersion() < 2 || state.getVersion() > 4) {return;}
+        if (!SSU2Util.isSupportedVersion(state.getVersion())) {return;}
         OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
         byte[] signedData = verifyIntroducerSignature(state, state2, cb);
         if (signedData == null) {return;}
         int port = validateHolePunchAddress(state, id, signedData);
         if (port < 0) {return;}
-        long token = DataHelper.fromLong8(cb._respData, cb._respData.length - 8);
+        long token = SSU2Util.getRelayResponseToken(cb._respData);
         updateHolePunchState(state, state2, signedData, port, now, token);
     }
 
@@ -1936,55 +1995,23 @@ public class EstablishmentManager {
         SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
         UDPAddress addr = state.getRemoteAddress();
         int count = addr.getIntroducerCount();
-        byte[] data = Arrays.copyOfRange(cb._respData, 0, cb._respData.length - 8);
-        boolean ok = false;
-        loop:
+        byte[] data = SSU2Util.trimRelayResponseToken(cb._respData);
         for (int i = 0; i < count; i++) {
             Hash h = addr.getIntroducerHash(i);
-            if (h != null) {
-                OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                switch (istate) {
-                    // probably not signed by this introducer
-                    case INTRO_STATE_INIT:
-                    case INTRO_STATE_EXPIRED:
-                    case INTRO_STATE_REJECTED:
-                    case INTRO_STATE_CONNECT_FAILED:
-                    case INTRO_STATE_BOB_REJECT:
-                    case INTRO_STATE_CHARLIE_REJECT:
-                    case INTRO_STATE_FAILED:
-                    case INTRO_STATE_INVALID:
-                    case INTRO_STATE_DISCONNECTED:
-                        continue;
-
-                    // maybe or definitely signed by this introducer
-                    case INTRO_STATE_LOOKUP_SENT:
-                    case INTRO_STATE_HAS_RI:
-                    case INTRO_STATE_CONNECTING:
-                    case INTRO_STATE_CONNECTED:
-                    case INTRO_STATE_RELAY_REQUEST_SENT:
-                    case INTRO_STATE_RELAY_CHARLIE_ACCEPTED:
-                    case INTRO_STATE_LOOKUP_FAILED:
-                    case INTRO_STATE_RELAY_RESPONSE_TIMEOUT:
-                    case INTRO_STATE_SUCCESS:
-                    default:
-                        if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
-                                                 h, null, data, spk)) {
-                            if (_log.shouldInfo()) {
-                                _log.info("[SSU] GOOD signature with HolePunch, credit " + h.toBase64() + " on " + state);
-                            }
-                            state2.setIntroState(h, INTRO_STATE_SUCCESS);
-                            ok = true;
-                            break loop;
-                        }
-                        break;
+            // only introducers that may have signed the response
+            if (h != null && canBeSigner(state2.getIntroState(h))) {
+                if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
+                                         h, null, data, spk)) {
+                    if (_log.shouldInfo()) {
+                        _log.info("[SSU] GOOD signature with HolePunch, credit " + h.toBase64() + " on " + state);
+                    }
+                    state2.setIntroState(h, INTRO_STATE_SUCCESS);
+                    return data;
                 }
             }
         }
-        if (!ok) {
-            if (_log.shouldWarn()) {_log.warn("[SSU] Signature failed HolePunch on " + state);}
-            return null;
-        }
-        return data;
+        if (_log.shouldWarn()) {_log.warn("[SSU] Signature failed HolePunch on " + state);}
+        return null;
     }
 
     /**
@@ -2015,15 +2042,14 @@ public class EstablishmentManager {
      *          if the data is invalid
      */
     private int validateHolePunchAddress(OutboundEstablishState state, RemoteHostId id, byte[] data) {
-        int iplen = data[9] & 0xff;
-        if (iplen != 6 && iplen != 18) {
+        int iplen = SSU2Util.getRelayDataAddrLen(data);
+        if (!SSU2Util.isValidRelayDataAddrLen(iplen)) {
             if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + state);}
             banAndFailState(state, "Bad Introduction data", 4*60*60*1000L);
             return -1;
         }
-        int port = (int) DataHelper.fromLong(data, 10, 2);
-        byte[] ip = new byte[iplen - 2];
-        System.arraycopy(data, 12, ip, 0, iplen - 2);
+        int port = SSU2Util.getRelayDataPort(data);
+        byte[] ip = SSU2Util.getRelayDataIP(data, iplen);
         // validate
         if (!TransportUtil.isValidPort(port) || !_transport.isValid(ip) ||
             _transport.isTooClose(ip) || !DataHelper.eq(ip, id.getIP()) /* IP mismatch */ ||
@@ -2067,9 +2093,8 @@ public class EstablishmentManager {
      *  @param token the token from the end of the full response
      */
     private void updateHolePunchState(OutboundEstablishState state, OutboundEstablishState2 state2, byte[] data, int port, long now, long token) {
-        int iplen = data[9] & 0xff;
-        byte[] ip = new byte[iplen - 2];
-        System.arraycopy(data, 12, ip, 0, iplen - 2);
+        int iplen = SSU2Util.getRelayDataAddrLen(data);
+        byte[] ip = SSU2Util.getRelayDataIP(data, iplen);
         synchronized (state) {
             RemoteHostId oldId = state.getRemoteHostId();
             if (oldId.getIP() == null) {
@@ -3104,7 +3129,7 @@ public class EstablishmentManager {
      * @return true if the exception should be suppressed, false otherwise
      * @since 0.9.68+
      */
-    private boolean shouldSuppressException(Throwable t) {
+    static boolean shouldSuppressException(Throwable t) {
         Set<String> suppressionPatterns = new HashSet<>(Arrays.asList(
             "Old and slow",
             "RouterInfo store fail"
@@ -3129,29 +3154,29 @@ public class EstablishmentManager {
      */
     public static String parseReason(int reasonCode) {
         switch (reasonCode) {
-            case 0: return "Unspecified";
-            case 1: return "Termination";
-            case 2: return "Timeout";
-            case 3: return "Shutdown";
-            case 4: return "AEAD error";
-            case 5: return "Options error";
-            case 6: return "Signature type error";
-            case 7: return "Excessive clock skew";
-            case 8: return "Padding error";
-            case 9: return "Framing error";
-            case 10: return "Payload error";
-            case 11: return "Message #1 error";
-            case 12: return "Message #2 error";
-            case 13: return "Message #3 error";
-            case 14: return "Frame Timeout";
-            case 15: return "Signature error";
-            case 16: return "S Mismatch";
-            case 17: return "Router is banned";
-            case 18: return "Token error";
-            case 19: return "Limit reached";
-            case 20: return "Incompatible Version";
-            case 21: return "BAD NetId";
-            case 22: return "Replaced connection";
+            case SSU2Util.REASON_UNSPEC: return "Unspecified";
+            case SSU2Util.REASON_TERMINATION: return "Termination";
+            case SSU2Util.REASON_TIMEOUT: return "Timeout";
+            case SSU2Util.REASON_SHUTDOWN: return "Shutdown";
+            case SSU2Util.REASON_AEAD: return "AEAD error";
+            case SSU2Util.REASON_OPTIONS: return "Options error";
+            case SSU2Util.REASON_SIGTYPE: return "Signature type error";
+            case SSU2Util.REASON_SKEW: return "Excessive clock skew";
+            case SSU2Util.REASON_PADDING: return "Padding error";
+            case SSU2Util.REASON_FRAMING: return "Framing error";
+            case SSU2Util.REASON_PAYLOAD: return "Payload error";
+            case SSU2Util.REASON_MSG1: return "Message #1 error";
+            case SSU2Util.REASON_MSG2: return "Message #2 error";
+            case SSU2Util.REASON_MSG3: return "Message #3 error";
+            case SSU2Util.REASON_FRAME_TIMEOUT: return "Frame Timeout";
+            case SSU2Util.REASON_SIGFAIL: return "Signature error";
+            case SSU2Util.REASON_S_MISMATCH: return "S Mismatch";
+            case SSU2Util.REASON_BANNED: return "Router is banned";
+            case SSU2Util.REASON_TOKEN: return "Token error";
+            case SSU2Util.REASON_LIMITS: return "Limit reached";
+            case SSU2Util.REASON_VERSION: return "Incompatible Version";
+            case SSU2Util.REASON_NETID: return "BAD NetId";
+            case SSU2Util.REASON_REPLACED: return "Replaced connection";
             default: return "Unknown error";
         }
     }
