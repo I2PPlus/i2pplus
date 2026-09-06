@@ -77,6 +77,24 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         MIGRATION_STATE_NONE,
         MIGRATION_STATE_PENDING
     }
+
+    /**
+     *  Decision of the connection-migration classifier for MIGRATION_STATE_PENDING.
+     *
+     *  @since 0.9.71+
+     */
+    enum MigrationPendingDecision {
+        /** packet from the current (pre-migration) remote host, cancel the migration */
+        CANCEL,
+        /** migration timed out and must be reset to NONE */
+        EXPIRED,
+        /** from the pending host and the retransmit interval has elapsed */
+        RETRANSMIT,
+        /** from the pending host but within the retransmit interval, keep waiting */
+        STILL_WAITING,
+        /** a third address entirely, do not switch */
+        THIRD_ADDRESS
+    }
     private final Object _migrationLock = new Object();
     private MigrationState _migrationState = MigrationState.MIGRATION_STATE_NONE;
     private long _migrationStarted;
@@ -84,9 +102,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private byte[] _pathChallengeData;
     private long _pathChallengeSendCount;
     private RemoteHostId _pendingRemoteHostId;
-    private static final int MAX_PATH_CHALLENGE_SENDS = 4;
-    private static final long MAX_PATH_CHALLENGE_TIME = 30*1000L;
-    private static final long PATH_CHALLENGE_DELAY = 5*1000L;
+    static final int MAX_PATH_CHALLENGE_SENDS = 4;
+    static final long MAX_PATH_CHALLENGE_TIME = 30*1000L;
+    static final long PATH_CHALLENGE_DELAY = 5*1000L;
 
     // As SSU
     /**
@@ -606,69 +624,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
                 boolean limitSending = false;
                 synchronized(_migrationLock) {
-                    switch(_migrationState) {
-                        case MIGRATION_STATE_NONE:
-                            if (from != null && !from.equals(_remoteHostId)) {
-                                // QUIC: Must be highest set to protect against reordered packets
-                                if (from.getIP().length == _remoteHostId.getIP().length &&
-                                    n == _receivedMessages.getHighestSet() &&
-                                    TransportUtil.isValidPort(from.getPort()) &&
-                                    _transport.isValid(from.getIP())) {
-                                    // send challenge
-                                    if (shouldLogDebug) {
-                                        _log.debug("[SSU] Starting connection migration to " + from + ' ' + this);
-                                    }
-                                    _migrationState = MigrationState.MIGRATION_STATE_PENDING;
-                                    _migrationStarted = _context.clock().now();
-                                    _migrationNextSendTime = _migrationStarted + PATH_CHALLENGE_DELAY;
-                                    _pathChallengeData = new byte[8];
-                                    _context.random().nextBytes(_pathChallengeData);
-                                    _pathChallengeSendCount = 1;
-                                    _pendingRemoteHostId = from;
-                                    sendPathChallenge(dpacket.getAddress(), from.getPort());
-                                    setLastSendTime(_migrationStarted);
-                                } else {
-                                    // don't attempt to switch
-                                    if (shouldLogDebug) {_log.debug("[SSU] Not migrating connection to " + from + ' ' + this);}
-                                }
-                                limitSending = true;
-                            }
-                            break;
-
-                        case MIGRATION_STATE_PENDING:
-                            if (from != null && from.equals(_remoteHostId)) {
-                                // cancel
-                                _migrationState = MigrationState.MIGRATION_STATE_NONE;
-                                if (shouldLogDebug) {_log.debug("[SSU] Cancelling connection migration" + this);}
-                            } else {
-                                // still waiting
-                                long now = _context.clock().now();
-                                if (now > _migrationStarted + MAX_PATH_CHALLENGE_TIME ||
-                                    _pathChallengeSendCount > MAX_PATH_CHALLENGE_SENDS) {
-                                    // time exceeded
-                                    _migrationState = MigrationState.MIGRATION_STATE_NONE;
-                                    if (shouldLog) {_log.warn("[SSU] Connection migration failed..." + this);}
-                                } else if (from != null && from.equals(_pendingRemoteHostId)) {
-                                    if (shouldLogDebug) {
-                                        _log.debug("[SSU] Connection migration pending, received another packet from " + from + ' ' + this);
-                                    }
-                                    if (now > _migrationNextSendTime) {
-                                        // retransmit challenge
-                                        _migrationNextSendTime = now + (PATH_CHALLENGE_DELAY << _pathChallengeSendCount);
-                                        _pathChallengeSendCount++;
-                                        sendPathChallenge(dpacket.getAddress(), from.getPort());
-                                        setLastSendTime(now);
-                                    }
-                                    limitSending = true;
-                                } else {
-                                    // a third ip/port ???
-                                    if (shouldLogDebug) {
-                                        _log.debug("[SSU] Connection migration pending, received packet from 3rd address " + from + ' ' + this);
-                                    }
-                                    limitSending = true;
-                                }
-                            }
-                            break;
+                    if (_migrationState == MigrationState.MIGRATION_STATE_NONE) {
+                        limitSending = handleMigrationNone(from, n, packet, shouldLogDebug);
+                    } else if (_migrationState == MigrationState.MIGRATION_STATE_PENDING) {
+                        limitSending = handleMigrationPending(from, packet, shouldLogDebug);
                     }
                 }
                 if (limitSending) {ECNReceived();}
@@ -686,6 +645,164 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 _log.warn("[SSU] Received BAD encrypted packet" + fromPeer);
             }
         }
+    }
+
+    /**
+     *  Connection migration attempt while in MIGRATION_STATE_NONE.
+     *
+     *  A packet from a host different from the current remote host starts a
+     *  migration only when it passes the pure {@link #shouldInitiateMigration}
+     *  classifier (IP family match, highest-set ordering rule, validated source).
+     *  Path Response processing happens earlier in receivePacket, so a completed
+     *  migration has already reset the state before this runs; any other host is
+     *  kept but sending is limited while the challenge is outstanding.
+     *
+     *  Must be called with {@code _migrationLock} held.
+     *
+     *  @param from source address of the received packet, or null
+     *  @param n packet (sequence) number of the received packet
+     *  @param packet the received packet (source address used for the challenge)
+     *  @param shouldLogDebug if true, debug output is wanted
+     *  @return true if sending must be limited while the connection is migrating
+     *  @since 0.9.71+
+     */
+    private boolean handleMigrationNone(RemoteHostId from, long n, UDPPacket packet, boolean shouldLogDebug) {
+        boolean limitSending = false;
+        if (from != null && !from.equals(_remoteHostId)) {
+            // QUIC: Must be highest set to protect against reordered packets
+            boolean ipFamilyMatch = from.getIP().length == _remoteHostId.getIP().length;
+            boolean isHighestSet = n == _receivedMessages.getHighestSet();
+            boolean validPort = TransportUtil.isValidPort(from.getPort());
+            boolean validIP = _transport.isValid(from.getIP());
+            if (shouldInitiateMigration(ipFamilyMatch, isHighestSet, validPort, validIP)) {
+                // send challenge
+                if (shouldLogDebug) {
+                    _log.debug("[SSU] Starting connection migration to " + from + ' ' + this);
+                }
+                _migrationState = MigrationState.MIGRATION_STATE_PENDING;
+                _migrationStarted = _context.clock().now();
+                _migrationNextSendTime = _migrationStarted + PATH_CHALLENGE_DELAY;
+                _pathChallengeData = new byte[8];
+                _context.random().nextBytes(_pathChallengeData);
+                _pathChallengeSendCount = 1;
+                _pendingRemoteHostId = from;
+                sendPathChallenge(packet.getPacket().getAddress(), from.getPort());
+                setLastSendTime(_migrationStarted);
+            } else {
+                // don't attempt to switch
+                if (shouldLogDebug) {_log.debug("[SSU] Not migrating connection to " + from + ' ' + this);}
+            }
+            limitSending = true;
+        }
+        return limitSending;
+    }
+
+    /**
+     *  Connection migration attempt while in MIGRATION_STATE_PENDING.
+     *
+     *  The packet source is classified by the pure {@link #decidePendingMigration}
+     *  method; this method applies the side effects (cancel/timeout state reset,
+     *  path-challenge retransmission with exponential backoff).
+     *
+     *  Must be called with {@code _migrationLock} held.
+     *
+     *  @param from source address of the received packet, or null
+     *  @param packet the received packet (source address used for retransmission)
+     *  @param shouldLogDebug if true, debug output is wanted
+     *  @return true if sending must be limited while the connection is migrating
+     *  @since 0.9.71+
+     */
+    private boolean handleMigrationPending(RemoteHostId from, UDPPacket packet, boolean shouldLogDebug) {
+        boolean limitSending = false;
+        boolean shouldLog = shouldLogDebug || _log.shouldWarn();
+        long now = _context.clock().now();
+        switch (decidePendingMigration(now,
+                                       from != null && from.equals(_remoteHostId),
+                                       from != null && from.equals(_pendingRemoteHostId),
+                                       _migrationStarted, _pathChallengeSendCount, _migrationNextSendTime)) {
+            case CANCEL:
+                // packet from the current remote host, abort the migration
+                _migrationState = MigrationState.MIGRATION_STATE_NONE;
+                if (shouldLogDebug) {_log.debug("[SSU] Cancelling connection migration" + this);}
+                break;
+            case EXPIRED:
+                // time or retransmission budget exceeded
+                _migrationState = MigrationState.MIGRATION_STATE_NONE;
+                if (shouldLog) {_log.warn("[SSU] Connection migration failed..." + this);}
+                break;
+            case RETRANSMIT:
+                if (shouldLogDebug) {
+                    _log.debug("[SSU] Connection migration pending, received another packet from " + from + ' ' + this);
+                }
+                _migrationNextSendTime = now + (PATH_CHALLENGE_DELAY << _pathChallengeSendCount);
+                _pathChallengeSendCount++;
+                sendPathChallenge(packet.getPacket().getAddress(), from.getPort());
+                setLastSendTime(now);
+                limitSending = true;
+                break;
+            case STILL_WAITING:
+                if (shouldLogDebug) {
+                    _log.debug("[SSU] Connection migration pending, received another packet from " + from + ' ' + this);
+                }
+                limitSending = true;
+                break;
+            case THIRD_ADDRESS:
+                if (shouldLogDebug) {
+                    _log.debug("[SSU] Connection migration pending, received packet from 3rd address " + from + ' ' + this);
+                }
+                limitSending = true;
+                break;
+            default:
+                break;
+        }
+        return limitSending;
+    }
+
+    /**
+     *  Decide whether a packet from a new source address may initiate a
+     *  connection migration while the connection is in MIGRATION_STATE_NONE.
+     *
+     *  The source IP family must match the current remote host, the packet must
+     *  be the highest sequence received so far (QUIC ordering rule, protects
+     *  against reordered packets driving a migration to an attacker-chosen
+     *  address), and the source must pass both port and address validation.
+     *
+     *  @param ipFamilyMatch true if the source IP family matches the current remote host
+     *  @param isHighestSet true if the packet is the highest sequence received so far
+     *  @param validPort true if the source port is valid
+     *  @param validIP true if the source IP passes transport address validation
+     *  @return a boolean indicating whether to start the migration challenge
+     *  @since 0.9.71+
+     */
+    static boolean shouldInitiateMigration(boolean ipFamilyMatch, boolean isHighestSet, boolean validPort, boolean validIP) {
+        return ipFamilyMatch && isHighestSet && validPort && validIP;
+    }
+
+    /**
+     *  Classify what to do with a packet received while the connection is in
+     *  MIGRATION_STATE_PENDING. Pure decision; side effects are applied by the
+     *  caller. Order of precedence: the current remote host wins (cancel), the
+     *  timeout/send-budget check wins over retransmission.
+     *
+     *  @param now current time ms
+     *  @param fromIsRemote true if the source is the current (pre-migration) remote host
+     *  @param fromIsPending true if the source is the pending migration target
+     *  @param migrationStarted ms at which the migration was started
+     *  @param sendCount number of path challenges already sent
+     *  @param nextSendTime ms at which the next retransmission is due
+     *  @return the pending-migration action to take
+     *  @since 0.9.71+
+     */
+    static MigrationPendingDecision decidePendingMigration(long now, boolean fromIsRemote, boolean fromIsPending,
+                                                           long migrationStarted, long sendCount, long nextSendTime) {
+        if (fromIsRemote)
+            return MigrationPendingDecision.CANCEL;
+        if (now > migrationStarted + MAX_PATH_CHALLENGE_TIME ||
+            sendCount > MAX_PATH_CHALLENGE_SENDS)
+            return MigrationPendingDecision.EXPIRED;
+        if (fromIsPending)
+            return now > nextSendTime ? MigrationPendingDecision.RETRANSMIT : MigrationPendingDecision.STILL_WAITING;
+        return MigrationPendingDecision.THIRD_ADDRESS;
     }
 
     /**
