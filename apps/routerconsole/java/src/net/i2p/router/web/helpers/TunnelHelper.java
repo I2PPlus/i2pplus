@@ -48,4 +48,22 @@ public class TunnelHelper extends HelperBase {
     public boolean isAdvanced() {
         return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
     }
+
+    /**
+     *  Render a single named element for the contentonly fragment mode of the
+     *  local tunnels page.
+     *
+     *  @param id the element id
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) {
+        TunnelRenderer renderer = new TunnelRenderer(_context);
+        try {
+            if (_out != null) {
+                renderer.renderTunnelFragment(_out, id);
+            }
+        } catch (IOException ioe) {
+            _log.error("Error rendering tunnel fragment for " + id, ioe);
+        }
+    }
 }

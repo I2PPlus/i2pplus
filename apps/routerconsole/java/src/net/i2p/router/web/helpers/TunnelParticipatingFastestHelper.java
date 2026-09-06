@@ -36,4 +36,22 @@ public class TunnelParticipatingFastestHelper extends HelperBase {
             return "";
         }
     }
+
+    /**
+     *  Render a single named element for the contentonly fragment mode of the
+     *  fastest participating tunnels page.
+     *
+     *  @param id the element id
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) {
+        TunnelRenderer renderer = new TunnelRenderer(_context);
+        try {
+            if (_out != null) {
+                renderer.renderParticipatingFragment(_out, true, id);
+            }
+        } catch (IOException ioe) {
+            _log.error("Error rendering participating fastest tunnels fragment for " + id, ioe);
+        }
+    }
 }

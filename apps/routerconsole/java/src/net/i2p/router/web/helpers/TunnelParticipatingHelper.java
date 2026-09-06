@@ -35,4 +35,22 @@ public class TunnelParticipatingHelper extends HelperBase {
             return "";
         }
     }
+
+    /**
+     *  Render a single named element for the contentonly fragment mode of the
+     *  most-recent participating tunnels page.
+     *
+     *  @param id the element id
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) {
+        TunnelRenderer renderer = new TunnelRenderer(_context);
+        try {
+            if (_out != null) {
+                renderer.renderParticipatingFragment(_out, false, id);
+            }
+        } catch (IOException ioe) {
+            _log.error("Error rendering participating tunnels fragment for " + id, ioe);
+        }
+    }
 }

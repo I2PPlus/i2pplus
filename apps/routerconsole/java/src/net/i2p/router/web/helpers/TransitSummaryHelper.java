@@ -35,4 +35,22 @@ public class TransitSummaryHelper extends HelperBase {
             return "";
         }
     }
+
+    /**
+     *  Render a single named element for the contentonly fragment mode of the
+     *  transit-summary page.
+     *
+     *  @param id the element id
+     *  @since 0.9.70+
+     */
+    public void renderFragment(String id) {
+        TunnelRenderer renderer = new TunnelRenderer(_context);
+        try {
+            if (_out != null) {
+                renderer.renderTransitSummaryFragment(_out, id);
+            }
+        } catch (IOException ioe) {
+            _log.error("Error rendering transit summary fragment for " + id, ioe);
+        }
+    }
 }

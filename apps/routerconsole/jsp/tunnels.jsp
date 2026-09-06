@@ -1,6 +1,17 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
+<% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <!DOCTYPE HTML>
+<% } %>
 <%@include file="head.jsi"%>
+<jsp:useBean class="net.i2p.router.web.helpers.TunnelHelper" id="tunnelHelper" scope="request"/>
+<jsp:setProperty name="tunnelHelper" property="contextId" value="<%=i2pcontextId%>"/>
+<%  tunnelHelper.storeWriter(out);
+    if (net.i2p.router.web.ContentOnly.isContentOnly(request)) {
+        for (String id : net.i2p.router.web.ContentOnly.requestedIds(request)) {
+            tunnelHelper.renderFragment(id);
+        }
+    } else {
+%>
 <%=intl.title("local tunnels")%>
 <script src=/js/tunnels.js type=module></script>
 <link rel=stylesheet href=/themes/console/tunnels.css>
@@ -9,8 +20,6 @@
 <body id=routertunnels>
 <%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Local Tunnels")%></h1>
-<jsp:useBean class="net.i2p.router.web.helpers.TunnelHelper" id="tunnelHelper" scope="request"/>
-<jsp:setProperty name="tunnelHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%  boolean isAdvanced = tunnelHelper.isAdvanced();
     if (isAdvanced) {
 %>
@@ -27,10 +36,10 @@
 <span id=toggleTunnelIds title="<%=intl._t("Toggle Tunnel Ids")%>"></span><span id=toggleTunnels title="<%=intl._t("Toggle Tunnels")%>"></span>
 </div>
 <div id=tunnelsContainer hidden>
-<% tunnelHelper.storeWriter(out);%>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary"/>
 </div>
 </div>
 <noscript><style>#toggleTunnels,#toggleTunnelIds{display:none}#tunnelsContainer{display:block}</style></noscript>
 </body>
 </html>
+<%  } %>

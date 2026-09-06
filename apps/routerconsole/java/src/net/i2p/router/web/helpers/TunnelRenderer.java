@@ -237,46 +237,95 @@ class TunnelRenderer {
 
     /**
      * renderParticipating.
+     *
+     * @param out the writer to render to
+     * @param bySpeed true for the fastest variety, false for most recent
+     * @throws IOException if writing fails
+     * @since 0.9.22
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderParticipating(Writer out, boolean bySpeed) throws IOException {
+        renderParticipatingInternal(out, bySpeed, null);
+    }
+
+    /**
+     * Render only the named fragment of the participating tunnels table for
+     * the contentonly fragment mode of the transit pages: the "transitPeers"
+     * tbody or the "statusnotes" tfoot. Renders nothing for an unknown id, on
+     * hidden-mode errors, or when no transit tunnels currently exist, so a
+     * document fragment that omits the element falls back to a whole-div
+     * full-page refresh on the client.
+     *
+     * @param out the writer to render to
+     * @param bySpeed true for the fastest variety, false for most recent
+     * @param id the element id to render
+     * @throws IOException if writing fails
+     * @since 0.9.70+
+     */
+    public void renderParticipatingFragment(Writer out, boolean bySpeed, String id) throws IOException {
+        if (!"transitPeers".equals(id) && !"statusnotes".equals(id)) {return;}
+        renderParticipatingInternal(out, bySpeed, id);
+    }
+
+    /**
+     * Render the participating tunnels block, or a single named fragment of
+     * it. With a null fragmentId the full block is written exactly as the
+     * public renderParticipating always did. The per-element mode emits only
+     * that element, so the auto-refresh worker can morph just the live tbody
+     * or tfoot from a contentonly response.
+     *
+     * @param out the writer to render to
+     * @param bySpeed true for the fastest variety, false for most recent
+     * @param fragmentId the fragment element id, or null for the full block
+     * @throws IOException if writing fails
+     * @since 0.9.70+
+     */
+    private synchronized void renderParticipatingInternal(Writer out, boolean bySpeed, String fragmentId) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+        final boolean doRows = fragmentId == null || "transitPeers".equals(fragmentId);
+        final boolean doFooter = fragmentId == null || "statusnotes".equals(fragmentId);
+        final boolean doChrome = fragmentId == null;
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         StringBuilder sb = new StringBuilder(Math.max(32*1024, displayed*1024));
         boolean hasTransit = !participating.isEmpty();
         if (hasTransit) {
-            sb.append("<div class=tablewrap>\n<h3 class=tabletitle id=participating>");
-            if (bySpeed) {sb.append(_t("Fastest Active Transit Tunnels"));}
-            else {sb.append(_t("Most Recent Active Transit Tunnels"));}
-            sb.append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/transit>")
-              .append(_t("Refresh")).append("</a></h3>\n");
+            if (doChrome) {
+                sb.append("<div class=tablewrap>\n<h3 class=tabletitle id=participating>");
+                if (bySpeed) {sb.append(_t("Fastest Active Transit Tunnels"));}
+                else {sb.append(_t("Most Recent Active Transit Tunnels"));}
+                sb.append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/transit>")
+                  .append(_t("Refresh")).append("</a></h3>\n");
+            }
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
-                sb.append("<table id=allTransit class=\"tunneldisplay tunnels_participating\">\n<thead><tr data-sort-method=thead><th class=role>")
-                  .append(_t("Role")).append("</th><th class=expiry");
-                if (!bySpeed) {sb.append(" data-sort-default");}
-                sb.append(" data-sort-method=number>")
-                  .append(_t("Expiry"))
-                  .append("</th><th class=data title=\"")
-                  .append(_t("Data transferred"))
-                  .append("\" data-sort-method=number>")
-                  .append(_t("Data"))
-                  .append("</th><th class=speed");
-                if (bySpeed) {sb.append(" data-sort-default");}
-                sb.append(" data-sort-method=number>").append(_t("Speed")).append("</th>");
-                if (isAdvanced) {
-                  //sb.append("<th class=limit data-sort-method=number>").append(_t("Limit")).append("</th>");
-                  sb.append("<th class=rx data-sort-method=number>")
-                    .append(_t("Receive on"))
-                    .append("</th>");
+                if (doChrome) {
+                    sb.append("<table id=allTransit class=\"tunneldisplay tunnels_participating\">\n<thead><tr data-sort-method=thead><th class=role>")
+                      .append(_t("Role")).append("</th><th class=expiry");
+                    if (!bySpeed) {sb.append(" data-sort-default");}
+                    sb.append(" data-sort-method=number>")
+                      .append(_t("Expiry"))
+                      .append("</th><th class=data title=\"")
+                      .append(_t("Data transferred"))
+                      .append("\" data-sort-method=number>")
+                      .append(_t("Data"))
+                      .append("</th><th class=speed");
+                    if (bySpeed) {sb.append(" data-sort-default");}
+                    sb.append(" data-sort-method=number>").append(_t("Speed")).append("</th>");
+                    if (isAdvanced) {
+                      //sb.append("<th class=limit data-sort-method=number>").append(_t("Limit")).append("</th>");
+                      sb.append("<th class=rx data-sort-method=number>")
+                        .append(_t("Receive on"))
+                        .append("</th>");
+                    }
+                    sb.append("<th class=from>")
+                       .append(_t("From"))
+                       .append("</th>");
+                    if (isAdvanced) {sb.append("<th class=tx>").append(_t("Send on")).append("</th>");}
+                    sb.append("<th class=to>")
+                       .append(_t("To"))
+                       .append("</th></tr>\n</thead>\n");
                 }
-                sb.append("<th class=from>")
-                   .append(_t("From"))
-                   .append("</th>");
-                if (isAdvanced) {sb.append("<th class=tx>").append(_t("Send on")).append("</th>");}
-                sb.append("<th class=to>")
-                   .append(_t("To"))
-                   .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
+                if (doRows) {sb.append("<tbody id=transitPeers>\n");}
                 boolean stream = participating.size() > MAX_BEFORE_STREAMING;
                 if (stream) {
                     out.write(sb.toString());
@@ -309,67 +358,69 @@ class TunnelRenderer {
                     // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
                     processed += cfg.getRecentMessagesCount();
                     if (++displayed > DISPLAY_LIMIT) {continue;}
-                    sb.append("<tr>");
-                    if (to == null) {
-                        sb.append("<td class=\"role obep\" title=\"").append(outboundEndpoint).append("\">")
-                          .append(outboundEndpoint).append("</td>");
-                    } else if (from == null) {
-                        sb.append("<td class=\"role ibgw\" title=\"").append(inboundGateway)
-                          .append("\">").append(inboundGateway).append("</td>");
-                    } else {
-                        sb.append("<td class=\"role ptcp\" title=\"").append(participant)
-                          .append("\">").append(participant).append("</td>");
-                    }
-                    long timeLeft = cfg.getExpiration()-now;
-                    sb.append("<td class=expiry data-sort=").append(timeLeft).append(">");
-                    if (timeLeft > 0) {
-                        sb.append(renderExpiryBar(timeLeft));
-                    } else {
-                        sb.append("<i>").append(gracePeriodTip).append("</i>");
-                    }
-                    sb.append("</td>");
-
-                    double sizeInKB = count * 1024.0 / 1000.0;
-                    double sizeInMB = sizeInKB / 1024.0;
-                    sb.append("<td class=data data-sort=")
-                      .append(count).append("><span class=right>")
-                      .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
-                      .append("</span><span class=left>&#8239;")
-                      .append(sizeInKB >= 1024 ? "MB" : "KB")
-                      .append("</span></td>");
-
-                    int lifetime = (int) ((now - cfg.getCreation()) / 1000);
-                    if (lifetime <= 0) {lifetime = 1;}
-                    else if (lifetime > 10*60) {lifetime = 10*60;}
-                    float bps = 1024f * count / lifetime;
-                    float kbps = bps / 1024;
-                    sb.append("<td class=speed data-sort=").append(bps).append("><span class=right>")
-                      .append(fmt(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
-
-                    long recv = cfg.getReceiveTunnelId();
-                    if (isAdvanced) {
-                        //sb.append("<td class=limit data-sort=").append(cfg.getAllocatedBW()).append(">");
-                        //    sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
-                        //sb.append("</td>");
-                        if (recv != 0) {
-                            sb.append("<td class=rx title=\"").append(tunnelIdTip).append("\"><span class=tunnel_id>")
-                              .append(recv).append("</span></td>");
-                        } else {sb.append("<td class=rx><span hidden>&ndash;</span></td>");}
-                    }
-                    if (from != null) {sb.append("<td class=from><div class=tunnel_peer>").append(netDbLink(from)).append("</div></td>");}
-                    else {sb.append("<td class=from><span hidden>&ndash;</span></td>");}
-                    long send = cfg.getSendTunnelId();
-                    if (isAdvanced) {
-                        if (send != 0) {
-                            sb.append("<td class=tx title=\"").append(tunnelIdTip).append("\"><span class=tunnel_id>")
-                              .append(send).append("</span></td>");
+                    if (doRows) {
+                        sb.append("<tr>");
+                        if (to == null) {
+                            sb.append("<td class=\"role obep\" title=\"").append(outboundEndpoint).append("\">")
+                              .append(outboundEndpoint).append("</td>");
+                        } else if (from == null) {
+                            sb.append("<td class=\"role ibgw\" title=\"").append(inboundGateway)
+                              .append("\">").append(inboundGateway).append("</td>");
                         } else {
-                            sb.append("<td class=tx><span hidden>&ndash;</span></td>");
+                            sb.append("<td class=\"role ptcp\" title=\"").append(participant)
+                              .append("\">").append(participant).append("</td>");
                         }
+                        long timeLeft = cfg.getExpiration()-now;
+                        sb.append("<td class=expiry data-sort=").append(timeLeft).append(">");
+                        if (timeLeft > 0) {
+                            sb.append(renderExpiryBar(timeLeft));
+                        } else {
+                            sb.append("<i>").append(gracePeriodTip).append("</i>");
+                        }
+                        sb.append("</td>");
+
+                        double sizeInKB = count * 1024.0 / 1000.0;
+                        double sizeInMB = sizeInKB / 1024.0;
+                        sb.append("<td class=data data-sort=")
+                          .append(count).append("><span class=right>")
+                          .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
+                          .append("</span><span class=left>&#8239;")
+                          .append(sizeInKB >= 1024 ? "MB" : "KB")
+                          .append("</span></td>");
+
+                        int lifetime = (int) ((now - cfg.getCreation()) / 1000);
+                        if (lifetime <= 0) {lifetime = 1;}
+                        else if (lifetime > 10*60) {lifetime = 10*60;}
+                        float bps = 1024f * count / lifetime;
+                        float kbps = bps / 1024;
+                        sb.append("<td class=speed data-sort=").append(bps).append("><span class=right>")
+                          .append(fmt(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
+
+                        long recv = cfg.getReceiveTunnelId();
+                        if (isAdvanced) {
+                            //sb.append("<td class=limit data-sort=").append(cfg.getAllocatedBW()).append(">");
+                            //    sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
+                            //sb.append("</td>");
+                            if (recv != 0) {
+                                sb.append("<td class=rx title=\"").append(tunnelIdTip).append("\"><span class=tunnel_id>")
+                                  .append(recv).append("</span></td>");
+                            } else {sb.append("<td class=rx><span hidden>&ndash;</span></td>");}
+                        }
+                        if (from != null) {sb.append("<td class=from><div class=tunnel_peer>").append(netDbLink(from)).append("</div></td>");}
+                        else {sb.append("<td class=from><span hidden>&ndash;</span></td>");}
+                        long send = cfg.getSendTunnelId();
+                        if (isAdvanced) {
+                            if (send != 0) {
+                                sb.append("<td class=tx title=\"").append(tunnelIdTip).append("\"><span class=tunnel_id>")
+                                  .append(send).append("</span></td>");
+                            } else {
+                                sb.append("<td class=tx><span hidden>&ndash;</span></td>");
+                            }
+                        }
+                        if (to != null) {sb.append("<td class=to><div class=tunnel_peer>").append(netDbLink(to)).append("</div></td>");}
+                        else {sb.append("<td class=to><span hidden>&ndash;</span></td>");}
+                        sb.append("</tr>\n");
                     }
-                    if (to != null) {sb.append("<td class=to><div class=tunnel_peer>").append(netDbLink(to)).append("</div></td>");}
-                    else {sb.append("<td class=to><span hidden>&ndash;</span></td>");}
-                    sb.append("</tr>\n");
                     if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
                         out.write(sb.toString());
                         out.flush();
@@ -377,29 +428,33 @@ class TunnelRenderer {
                         rowsSinceFlush = 0;
                     }
                 }
-                sb.append("</tbody>\n<tfoot id=statusnotes><tr><td colspan=8>");
-                if (displayed >= 2) {
-                    sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
-                    if (inactive > 0) {
-                        sb.append("&nbsp;&bullet;&nbsp;<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive)
-                          .append("&nbsp;&bullet;&nbsp;<b>").append(_t("Total")).append(":</b>&nbsp;").append((inactive + displayed));
+                if (doRows) {sb.append("</tbody>\n");}
+                if (doFooter) {
+                    sb.append("<tfoot id=statusnotes><tr><td colspan=8>");
+                    if (displayed >= 2) {
+                        sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
+                        if (inactive > 0) {
+                            sb.append("&nbsp;&bullet;&nbsp;<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive)
+                              .append("&nbsp;&bullet;&nbsp;<b>").append(_t("Total")).append(":</b>&nbsp;").append((inactive + displayed));
+                        }
+                    } else if (inactive > 0) {
+                        sb.append("<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive);
                     }
-                } else if (inactive > 0) {
-                    sb.append("<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive);
+                    sb.append("</td></tr>\n<tr class=bwUsage><td colspan=8>")
+                      .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
+                      .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B")
+                      .append("</td></tr></tfoot>\n");
                 }
-                sb.append("</td></tr>\n<tr class=bwUsage><td colspan=8>")
-                  .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
-                  .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B")
-                  .append("</td></tr></tfoot>\n</table>\n</div>\n");
-            } else { // bwShare < 12K/s
+                if (doChrome) {sb.append("</table>\n</div>\n");}
+            } else if (doChrome) { // bwShare < 12K/s
                 sb.append("<div class=\"statusnotes noparticipate\"><b>")
                   .append(_t("Not enough shared bandwidth to build transit tunnels.")).append("</b> <a href=\"config\">[")
                   .append(_t("Configure")).append("]</a>\n</div>\n");
             }
-        } else if (_context.router().isHidden()) {
+        } else if (doChrome && _context.router().isHidden()) {
             sb.append("<p class=infohelp>")
               .append(_t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built.")).append("</p>");
-        } else {
+        } else if (doChrome) {
             sb.append("<p class=infohelp>").append(_t("No transit tunnels currently active.")).append("</p>");
         }
 
@@ -410,9 +465,47 @@ class TunnelRenderer {
 
     /**
      * renderTransitSummary.
+     *
+     * @param out the writer to render to
+     * @throws IOException if writing fails
+     * @since 0.9.22
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderTransitSummary(Writer out) throws IOException {
+        renderTransitSummaryInternal(out, null);
+    }
+
+    /**
+     * Render only the "transitPeers" tbody of the transit-summary table for
+     * the contentonly fragment mode of the transitsummary page. Renders
+     * nothing for an unknown id, in hidden mode, or when fewer than two
+     * transit tunnels currently exist, so a fragment that omits the element
+     * falls back to a whole-div full-page refresh on the client.
+     *
+     * @param out the writer to render to
+     * @param id the element id to render
+     * @throws IOException if writing fails
+     * @since 0.9.70+
+     */
+    public void renderTransitSummaryFragment(Writer out, String id) throws IOException {
+        if (!"transitPeers".equals(id)) {return;}
+        renderTransitSummaryInternal(out, id);
+    }
+
+    /**
+     * Render the transit-summary table, or a single named fragment of it.
+     * With a null fragmentId the full table is written exactly as the public
+     * renderTransitSummary always did; the fragment mode emits only the named
+     * tbody so the auto-refresh worker can morph just the live rows from a
+     * contentonly response.
+     *
+     * @param out the writer to render to
+     * @param fragmentId the fragment element id, or null for the full table
+     * @throws IOException if writing fails
+     * @since 0.9.70+
+     */
+    private synchronized void renderTransitSummaryInternal(Writer out, String fragmentId) throws IOException {
+        final boolean doChrome = fragmentId == null;
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty() && participating.size() > 1) {
             // Counters for tunnels and bandwidth by peer
@@ -433,27 +526,30 @@ class TunnelRenderer {
             }
 
             StringBuilder tbuf = new StringBuilder(3 * 512);
-            tbuf.append("<div class=tablewrap>\n<h3 class=tabletitle>")
-                .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT*10))
-                .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\">\n<thead><tr><th id=country data-sort-direction=ascending>")
-                .append(_t("Country"))
-                .append("</th><th id=router data-sort-direction=ascending>")
-                .append(_t("Router"))
-                .append("</th><th id=version>")
-                .append(_t("Version"))
-                .append("</th><th id=tier data-sort=LMNOPX>")
-                .append(_t("Tier"))
-                .append("</th><th id=address>")
-                .append(_t("Address"))
-                .append("</th>")
-                .append("<th id=domain data-sort-method=string data-sort-caseinsensitive>").append(_t("Domain")).append("</th>");
-            tbuf.append("<th class=tcount data-sort-method=number data-sort-default>")
-                .append(_t("Tunnels"))
-                .append("</th><th id=data data-sort-method=number>")
-                .append(_t("Data"))
-                .append("</th><th id=edit data-sort-method=none>")
-                .append(_t("Edit"))
-                .append("</th></tr></thead>\n<tbody id=transitPeers>\n");
+            if (doChrome) {
+                tbuf.append("<div class=tablewrap>\n<h3 class=tabletitle>")
+                    .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT*10))
+                    .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\">\n<thead><tr><th id=country data-sort-direction=ascending>")
+                    .append(_t("Country"))
+                    .append("</th><th id=router data-sort-direction=ascending>")
+                    .append(_t("Router"))
+                    .append("</th><th id=version>")
+                    .append(_t("Version"))
+                    .append("</th><th id=tier data-sort=LMNOPX>")
+                    .append(_t("Tier"))
+                    .append("</th><th id=address>")
+                    .append(_t("Address"))
+                    .append("</th>")
+                    .append("<th id=domain data-sort-method=string data-sort-caseinsensitive>").append(_t("Domain")).append("</th>");
+                tbuf.append("<th class=tcount data-sort-method=number data-sort-default>")
+                    .append(_t("Tunnels"))
+                    .append("</th><th id=data data-sort-method=number>")
+                    .append(_t("Data"))
+                    .append("</th><th id=edit data-sort-method=none>")
+                    .append(_t("Edit"))
+                    .append("</th></tr></thead>\n");
+            }
+            tbuf.append("<tbody id=transitPeers>\n");
             out.write(tbuf.toString());
 
             int displayed = 0;
@@ -538,15 +634,16 @@ class TunnelRenderer {
                 }
             }
 
-            sb.append("</tbody>\n</table>\n</div>\n");
+            sb.append("</tbody>\n");
+            if (doChrome) {sb.append("</table>\n</div>\n");}
             out.write(sb.toString());
             out.flush();
             sb.setLength(0);
-        } else if (_context.router().isHidden()) {
+        } else if (doChrome && _context.router().isHidden()) {
             out.write("<p class=infohelp>");
             out.write(_t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built."));
             out.write("</p>\n");
-        } else {
+        } else if (doChrome) {
             out.write("<p class=infohelp>");
             out.write(_t("No transit tunnels currently active."));
             out.write("</p>\n");
@@ -729,7 +826,7 @@ class TunnelRenderer {
                    .append("%\"><span class=percentBarText>").append(localTunnelCount * 100 / tunnelCount)
                    .append("%</span></span></span>");
         } else {
-            chunkSb.append("<td class=tcount colspan=2 data-sort-column-key=localCount data-sort=0></td>");
+            chunkSb.append("<td class=tcount colspan=2 data-sort-column-key=localCount data-sort=0>");
         }
         chunkSb.append("</td>");
         if (transitTunnelCount > 0) {
@@ -870,6 +967,27 @@ class TunnelRenderer {
         }
 
         return result;
+    }
+
+    /**
+     * Render the "tunnelsContainer" fragment for the contentonly fragment mode
+     * of the local tunnels page: the container div plus the tunnel summaries
+     * and the tunnel-guide section it holds on the full page. The element is
+     * written without the "hidden" attribute that the full page uses for the
+     * no-JS fallback, because the JS-enabled page shows and hides the block
+     * interactively and the browser hides it while the refresh runs anyway.
+     *
+     * @param out the writer to render to
+     * @param id the element id to render
+     * @throws IOException if writing fails
+     * @since 0.9.70+
+     */
+    public void renderTunnelFragment(Writer out, String id) throws IOException {
+        if (!"tunnelsContainer".equals(id)) {return;}
+        out.write("<div id=tunnelsContainer>\n");
+        renderStatusHTML(out);
+        renderGuide(out);
+        out.write("</div>\n");
     }
 
     /**
