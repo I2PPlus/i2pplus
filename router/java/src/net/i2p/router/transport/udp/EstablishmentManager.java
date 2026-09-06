@@ -573,6 +573,63 @@ public class EstablishmentManager {
     }
 
     /**
+     *  Is the outbound establish state in a terminal state that should be
+     *  dropped and processed (completed or failed) rather than retried?
+     *  Guards the scan loop in {@link #handleOutbound}.
+     *
+     *  @param state the outbound state
+     *  @return true for CONFIRMED_COMPLETELY or VALIDATION_FAILED
+     *  @since 0.9.71
+     */
+    static boolean isTerminalOutboundState(OutboundEstablishState.OutboundState state) {
+        return state == OB_STATE_CONFIRMED_COMPLETELY || state == OB_STATE_VALIDATION_FAILED;
+    }
+
+    /**
+     *  Has the outbound state gone unanswered for at least the message timeout?
+     *  A zero/unknown send time never counts as timed out.  Shared by the
+     *  REQUEST_SENT / CONFIRMED_PARTIALLY / PENDING_INTRO dispatch arms in
+     *  {@link #handleOutbound}.
+     *
+     *  @param lastSentTime the time we last sent, 0 if never
+     *  @param timeoutMs the per-message timeout
+     *  @param now current time
+     *  @return true if a message was sent and has been unanswered too long
+     *  @since 0.9.71
+     */
+    static boolean hasObMessageTimedOut(long lastSentTime, long timeoutMs, long now) {
+        return lastSentTime > 0 && lastSentTime + timeoutMs <= now;
+    }
+
+    /**
+     *  Should the outbound establish state be processed as expired, either
+     *  because its lifetime is over or because it has been unanswered for the
+     *  message timeout?
+     *
+     *  @param expired true if the state's lifetime is exhausted
+     *  @param lastSentTime the time we last sent, 0 if never
+     *  @param timeoutMs the per-message timeout
+     *  @param now current time
+     *  @return true to process the state as expired
+     *  @since 0.9.71
+     */
+    static boolean shouldFailObState(boolean expired, long lastSentTime, long timeoutMs, long now) {
+        return expired || hasObMessageTimedOut(lastSentTime, timeoutMs, now);
+    }
+
+    /**
+     *  Is the state due to send now (its next send time has arrived)?
+     *
+     *  @param nextSendTime the scheduled send time
+     *  @param now current time
+     *  @return true if the send is due
+     *  @since 0.9.71
+     */
+    static boolean isSendDue(long nextSendTime, long now) {
+        return nextSendTime <= now;
+    }
+
+    /**
      *  Send the message to its specified recipient by establishing a connection
      *  with them and sending it off.  This call does not block, and on failure,
      *  the message is failed.
@@ -2470,8 +2527,7 @@ public class EstablishmentManager {
         for (Iterator<OutboundEstablishState> iter = _outboundStates.values().iterator(); iter.hasNext();) {
             OutboundEstablishState cur = iter.next();
             OutboundEstablishState.OutboundState state = cur.getState();
-            if (state == OB_STATE_CONFIRMED_COMPLETELY ||
-                state == OB_STATE_VALIDATION_FAILED) {
+            if (isTerminalOutboundState(state)) {
                 iter.remove();
                 outboundState = cur;
                 break;
@@ -2483,7 +2539,7 @@ public class EstablishmentManager {
             } else {
                 // this will be 0 for a new OES that needs sending, > 0 for others
                 long next = cur.getNextSendTime();
-                if (next <= now) {
+                if (isSendDue(next, now)) {
                     // our turn...
                     outboundState = cur;
                     break;
@@ -2512,23 +2568,23 @@ public class EstablishmentManager {
                     case OB_STATE_REQUEST_SENT_NEW_TOKEN: // SSU2 only
                         // no response yet (or it was invalid), let's retry
                         long rtime = outboundState.getRequestSentTime();
-                        if (expired || (rtime > 0 && rtime + OB_MESSAGE_TIMEOUT <= now)) {
+                        if (shouldFailObState(expired, rtime, OB_MESSAGE_TIMEOUT, now)) {
                             processExpired(outboundState);
-                        } else if (outboundState.getNextSendTime() <= now) {
+                        } else if (isSendDue(outboundState.getNextSendTime(), now)) {
                             sendRequest(outboundState);
                         }
                         break;
 
                     case OB_STATE_CREATED_RECEIVED:
                         if (expired) {processExpired(outboundState);}
-                        else if (outboundState.getNextSendTime() <= now) {sendConfirmation(outboundState);}
+                        else if (isSendDue(outboundState.getNextSendTime(), now)) {sendConfirmation(outboundState);}
                         break;
 
                     case OB_STATE_CONFIRMED_PARTIALLY:
                         long ctime = outboundState.getConfirmedSentTime();
-                        if (expired || (ctime > 0 && ctime + OB_MESSAGE_TIMEOUT <= now)) {
+                        if (shouldFailObState(expired, ctime, OB_MESSAGE_TIMEOUT, now)) {
                             processExpired(outboundState);
-                        } else if (outboundState.getNextSendTime() <= now) {
+                        } else if (isSendDue(outboundState.getNextSendTime(), now)) {
                             sendConfirmation(outboundState);
                         }
                         break;
@@ -2540,9 +2596,9 @@ public class EstablishmentManager {
 
                     case OB_STATE_PENDING_INTRO:
                         long itime = outboundState.getIntroSentTime();
-                        if (expired || (itime > 0 && itime + OB_MESSAGE_TIMEOUT <= now)) {
+                        if (shouldFailObState(expired, itime, OB_MESSAGE_TIMEOUT, now)) {
                             processExpired(outboundState);
-                        } else if (outboundState.getNextSendTime() <= now) {handlePendingIntro(outboundState);}
+                        } else if (isSendDue(outboundState.getNextSendTime(), now)) {handlePendingIntro(outboundState);}
                         break;
 
                     case OB_STATE_VALIDATION_FAILED:

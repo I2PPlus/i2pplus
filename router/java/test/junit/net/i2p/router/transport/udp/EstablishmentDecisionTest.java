@@ -5,6 +5,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.OB_STATE_CONFIRMED_COMPLETELY;
+import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.OB_STATE_CONFIRMED_PARTIALLY;
+import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.OB_STATE_INTRODUCED;
+import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.OB_STATE_NEEDS_TOKEN;
+import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.OB_STATE_REQUEST_SENT;
+import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.OB_STATE_UNKNOWN;
+import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.OB_STATE_VALIDATION_FAILED;
 
 import java.net.InetAddress;
 import java.security.GeneralSecurityException;
@@ -297,5 +304,47 @@ public class EstablishmentDecisionTest {
                      EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_REJECTED, true));
         assertEquals(IntroState.INTRO_STATE_CONNECTING,
                      EstablishmentManager.nextIntroStateforLocalLookup(IntroState.INTRO_STATE_CONNECTING, true));
+    }
+
+    @Test
+    public void testIsTerminalOutboundState() {
+        assertTrue(EstablishmentManager.isTerminalOutboundState(OB_STATE_CONFIRMED_COMPLETELY));
+        assertTrue(EstablishmentManager.isTerminalOutboundState(OB_STATE_VALIDATION_FAILED));
+        // every retryable/sending state is non-terminal
+        assertFalse(EstablishmentManager.isTerminalOutboundState(OB_STATE_UNKNOWN));
+        assertFalse(EstablishmentManager.isTerminalOutboundState(OB_STATE_INTRODUCED));
+        assertFalse(EstablishmentManager.isTerminalOutboundState(OB_STATE_NEEDS_TOKEN));
+        assertFalse(EstablishmentManager.isTerminalOutboundState(OB_STATE_REQUEST_SENT));
+        assertFalse(EstablishmentManager.isTerminalOutboundState(OB_STATE_CONFIRMED_PARTIALLY));
+    }
+
+    @Test
+    public void testHasObMessageTimedOut() {
+        // never sent: never flagged regardless of age
+        assertFalse(EstablishmentManager.hasObMessageTimedOut(0, 30000L, 500000L));
+        // before the timeout elapses: not timed out
+        assertFalse(EstablishmentManager.hasObMessageTimedOut(1000L, 30000L, 30000L));
+        // exactly at sent + timeout: timed out (boundary)
+        assertTrue(EstablishmentManager.hasObMessageTimedOut(1000L, 30000L, 31000L));
+        // well past the timeout
+        assertTrue(EstablishmentManager.hasObMessageTimedOut(1000L, 30000L, 40000L));
+    }
+
+    @Test
+    public void testShouldFailObState() {
+        // hard lifetime expiry wins regardless of send times
+        assertTrue(EstablishmentManager.shouldFailObState(true, 1000L, 30000L, 2000L));
+        // not expired and not timed out: keep going
+        assertFalse(EstablishmentManager.shouldFailObState(false, 1000L, 30000L, 2000L));
+        assertFalse(EstablishmentManager.shouldFailObState(false, 0L, 30000L, 500000L));
+        // not expired but a message has gone unanswered past the timeout
+        assertTrue(EstablishmentManager.shouldFailObState(false, 1000L, 30000L, 31000L));
+    }
+
+    @Test
+    public void testIsSendDue() {
+        assertFalse(EstablishmentManager.isSendDue(1000L, 999L));
+        assertTrue(EstablishmentManager.isSendDue(1000L, 1000L));
+        assertTrue(EstablishmentManager.isSendDue(1000L, 2000L));
     }
 }
