@@ -2367,7 +2367,7 @@ public class UDPTransport extends TransportImpl {
      *  @return the bid, or null if we can't (or shouldn't) send via UDP
      */
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
-        if (dataSize > OutboundMessageState.MAX_MSG_SIZE) {
+        if (isTooLarge(dataSize)) {
             // NTCP max is lower, so msg will get dropped
             return null;
         }
@@ -2380,7 +2380,7 @@ public class UDPTransport extends TransportImpl {
                 return _cachedBid[FAST_BID];
         } else {
             int nid = toAddress.getNetworkId();
-            if (nid != _networkID) {
+            if (isDifferentNetwork(nid, _networkID)) {
                 if (nid == -1) {
                     _banLogger.logBan(to, _context, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
                     _context.banlist().banlistRouter(to, "No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
@@ -2414,35 +2414,23 @@ public class UDPTransport extends TransportImpl {
 
             // c++ bug thru 2.36.0/0.9.49, will disconnect inbound session after 5 seconds
             int cost = addr.getCost();
-            if (cost == 10) {
-                if (VersionComparator.comp(toAddress.getVersion(), "0.9.52") <= 0) {
-                    markUnreachable(to);
-                    return null;
-                }
-            } else if (cost == 9 && toAddress.getVersion().equals("0.9.52")) {
-                // c++ bug in 2.40.0/0.9.52, drops SSU messages
+            if (rejectCppBug(cost, toAddress.getVersion())) {
                 markUnreachable(to);
                 return null;
             }
 
             // Check for supported sig type
             SigType type = toAddress.getIdentity().getSigType();
-            if (type == null || !type.isAvailable()) {
+            if (sigTypeUnsupported(type)) {
                 markUnreachable(to);
                 return null;
             }
 
             // Can we connect to them if we are not DSA?
             RouterInfo us = _context.router().getRouterInfo();
-            if (us != null) {
-                RouterIdentity id = us.getIdentity();
-                if (id.getSigType() != SigType.DSA_SHA1) {
-                    String v = toAddress.getVersion();
-                    if (VersionComparator.comp(v, MIN_SIGTYPE_VERSION) < 0) {
-                        markUnreachable(to);
-                        return null;
-                    }
-                }
+            if (us != null && needsMinimumSigTypeVersion(us.getIdentity().getSigType(), toAddress.getVersion())) {
+                markUnreachable(to);
+                return null;
             }
 
             if (!allowConnection())
@@ -2450,6 +2438,69 @@ public class UDPTransport extends TransportImpl {
 
             return selectBid(addr, cost, isFirewalled());
         }
+    }
+
+    /**
+     *  Not-a-note: the message is too large for SSU to carry at all.
+     *
+     *  @param dataSize message size in bytes
+     *  @return true if the message exceeds the maximum SSU message size
+     *  @since 0.9.71+
+     */
+    static boolean isTooLarge(int dataSize) {
+        return dataSize > OutboundMessageState.MAX_MSG_SIZE;
+    }
+
+    /**
+     *  Whether the target router belongs to a different network than ours.
+     *
+     *  @param nid the target router's network id
+     *  @param ourNetworkId this router's network id
+     *  @return true when the network ids differ
+     *  @since 0.9.71+
+     */
+    static boolean isDifferentNetwork(int nid, int ourNetworkId) {
+        return nid != ourNetworkId;
+    }
+
+    /**
+     *  Reject known c++ SSU disconnect bugs (through 0.9.52), which drop
+     *  inbound sessions shortly after establishment.
+     *
+     *  @param cost the target's address cost (10 = SSU1, 9 = SSU2)
+     *  @param version the target's router software version
+     *  @return true when the target may exhibit the disconnect bug
+     *  @since 0.9.71+
+     */
+    static boolean rejectCppBug(int cost, String version) {
+        if (cost == 10)
+            return VersionComparator.comp(version, "0.9.52") <= 0;
+        return cost == 9 && "0.9.52".equals(version);
+    }
+
+    /**
+     *  Whether the target identity uses a signature type we cannot verify.
+     *
+     *  @param type the target identity's signature type
+     *  @return true when the type is missing or unsupported by this build
+     *  @since 0.9.71+
+     */
+    static boolean sigTypeUnsupported(SigType type) {
+        return type == null || !type.isAvailable();
+    }
+
+    /**
+     *  Whether we need a minimum software version on the target because we
+     *  are not DSA-signed: non-DSA routers cannot be reached by pre-0.9.17
+     *  builds that do not understand their signature types.
+     *
+     *  @param ourSigType this router's signature type
+     *  @param theirVersion the target's router software version
+     *  @return true when our non-DSA signature requires a 0.9.17+ target
+     *  @since 0.9.71+
+     */
+    static boolean needsMinimumSigTypeVersion(SigType ourSigType, String theirVersion) {
+        return ourSigType != SigType.DSA_SHA1 && VersionComparator.comp(theirVersion, MIN_SIGTYPE_VERSION) < 0;
     }
 
     /**
@@ -2482,13 +2533,7 @@ public class UDPTransport extends TransportImpl {
      *  @return true if any firewall state is active
      */
     private boolean isFirewalled() {
-        Status s = _context.commSystem().getStatus();
-        return s == Status.REJECT_UNSOLICITED ||
-               s == Status.IPV4_FIREWALLED_IPV6_OK ||
-               s == Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-               s == Status.IPV4_OK_IPV6_FIREWALLED ||
-               s == Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-               s == Status.IPV4_DISABLED_IPV6_FIREWALLED;
+        return isFirewalled(_context.commSystem().getStatus());
     }
 
     /**
