@@ -651,9 +651,13 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      *  Stop server tunnels with shutdown delays independently.
      *  Each server with a delay gets its own timer and stops independently.
+     *  <p>synchronized so concurrent invocations (e.g. a cancel racing a repeated
+     *  graceful-shutdown) cannot both create and tear down the shared
+     *  {@code _delayedShutdownExecutor}; otherwise one thread's cleanup can null
+     *  the field while another is still dereferencing it.
      *  @since 0.9.68+
      */
-    private void shutdownDelayedServers() {
+    private synchronized void shutdownDelayedServers() {
         List<TunnelController> delayedServers = getDelayedServers();
         if (delayedServers.isEmpty()) {
             return;
@@ -771,7 +775,11 @@ public class TunnelControllerGroup implements ClientApp {
      * @param stoppedServers the servers stopped by the shutdown tasks
      */
     private void cleanupShutdown(List<TunnelController> stoppedServers) {
-        _delayedShutdownExecutor.shutdownNow();
+        ExecutorService ex = _delayedShutdownExecutor;
+        _delayedShutdownExecutor = null;
+        if (ex != null) {
+            ex.shutdownNow();
+        }
         if (cancelDelayedShutdown) {
             synchronized(stoppedServers) {
                 for (TunnelController tc : stoppedServers) {
@@ -784,7 +792,6 @@ public class TunnelControllerGroup implements ClientApp {
         delayedShutdownInProgress = false;
         delayedShutdownStartTime = 0;
         cancelDelayedShutdown = false;
-        _delayedShutdownExecutor = null;
     }
 
     /**
