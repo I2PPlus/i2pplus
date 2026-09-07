@@ -558,7 +558,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         //"opentracker.simp.i2p", "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p",
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
         "sigmatracker.i2p", "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
-        "tracker.insulaocculta.i2p", "4cxcka62bhpnl6raidcx7mgwkybaw3svckgbkprktd4zogc7npca.b32.i2p",
+        "tracker.insulaocculta.i2p", "2rv2kch37xsn2fqdz6huyevq76njop4inumscnspklh3ufo7mkwa.b32.i2p",
         "opentracker-actix.i2p", "cbrjdqygiogbtn4w5ngducnc3l3ipkt7e2muisfnuea4zek4bmhq.b32.i2p",
         "opentracker.fattydove.i2p", "svece3bxv4vqlt2zuut5ww4ztkwunfcnab55pmnjjb6zfei3noha.b32.i2p",
         "opentracker.localcache.i2p", "trackfmu3by6nhkibnw5exyhibjrvxl6k3e4y54wmjy4bvqgs3ha.b32.i2p",
@@ -3390,7 +3390,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         // and we get here because the magnet is still in _snarks.
                         String existingName = snark.getName();
                         boolean isLookup = _magnets.contains(existingName)
-                                || (existingName != null && existingName.startsWith("lookup-"));
+                                || (existingName != null && existingName.startsWith("Lookup ["));
                         if (isLookup) {
                             if (_log.shouldInfo()) {
                                 _log.info("Replacing lookup magnet with real torrent: " + existingName);
@@ -3749,7 +3749,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (existing != null) {
             String existingName = null;
             try { existingName = existing.getName(); } catch (Exception ignore) {}
-            boolean isOurLookup = existingName != null && (existingName.startsWith("lookup-") || existingName.contains("zzzot-lookup"));
+            boolean isOurLookup = existingName != null && (existingName.startsWith("Lookup [") || existingName.contains("zzzot-lookup"));
             // Also check storage base for temp dir
             try {
                 Storage st = existing.getStorage();
@@ -3768,7 +3768,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             return mn;
                     }
                 } catch (Exception ignore) {}
-                if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("lookup-"))
+                if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("Lookup ["))
                     return existingName;
                 // Fall through to wait for existing lookup-* to resolve
                 if (!isOurLookup)
@@ -3787,7 +3787,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return null;
         }
         String hex = I2PSnarkUtil.toHex(infoHash);
-        String magnetName = "lookup-" + hex.substring(0, 8);
+        String magnetName = "Lookup [" + hex.substring(0, 8) + "]";
         Snark snark = null;
         boolean created = false;
         synchronized (_snarks) {
@@ -3854,7 +3854,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 // Fallback: after promotion, getName() may be the .torrent path
                 try {
                     String n = cur.getName();
-                    if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("lookup-")) {
+                    if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("Lookup [")) {
                         // n may be /path/to/file.torrent - extract basename without .torrent
                         if (n.endsWith(".torrent")) {
                             try { result = new File(n).getName().replaceFirst("\\.torrent$", ""); }
@@ -3880,7 +3880,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (st != null) storageBase = st.getBase();
                 } catch (Exception ignore) {}
                 boolean isLookup = false;
-                if (toDeleteName != null && (toDeleteName.startsWith("lookup-") || toDeleteName.contains("zzzot-lookup")))
+                if (toDeleteName != null && (toDeleteName.startsWith("Lookup [") || toDeleteName.contains("zzzot-lookup")))
                     isLookup = true;
                 if (storageBase != null && storageBase.getPath().contains("zzzot-lookup"))
                     isLookup = true;
@@ -3952,7 +3952,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (existing != null) {
             String existingName = null;
             try { existingName = existing.getName(); } catch (Exception ignore) {}
-            boolean isOurLookup = existingName != null && (existingName.startsWith("lookup-") || existingName.contains("zzzot-lookup"));
+            boolean isOurLookup = existingName != null && (existingName.startsWith("Lookup [") || existingName.contains("zzzot-lookup"));
             try {
                 Storage st = existing.getStorage();
                 if (st != null) {
@@ -3972,7 +3972,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 } catch (Exception ignore) {}
                 // If no MetaInfo yet (magnet without metadata), don't return placeholder
                 // — fall through to wait or return null
-                if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("lookup-") && !existingName.startsWith("Magnet")) {
+                if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("Lookup [") && !existingName.startsWith("Magnet")) {
                     // Best-effort fallback when meta is null but we have a real name
                     return new TorrentInfo(existingName, 0);
                 }
@@ -3991,7 +3991,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return null;
         }
         String hex = I2PSnarkUtil.toHex(infoHash);
-        String magnetName = "lookup-" + hex.substring(0, 8);
+        String magnetName = "Lookup [" + hex.substring(0, 8) + "]";
         boolean created = false;
         synchronized (_snarks) {
             Snark dup = getTorrentByInfoHash(infoHash);
@@ -4039,7 +4039,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 } catch (Exception ignore) {}
                 try {
                     String n = cur.getName();
-                    if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("lookup-")) {
+                    if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("Lookup [")) {
                         if (n.endsWith(".torrent")) {
                             try { n = new File(n).getName().replaceFirst("\\.torrent$", ""); }
                             catch (Exception ignore) {}
@@ -4062,7 +4062,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (st != null) storageBase = st.getBase();
                 } catch (Exception ignore) {}
                 boolean isLookup = false;
-                if (toDeleteName != null && (toDeleteName.startsWith("lookup-") || toDeleteName.contains("zzzot-lookup")))
+                if (toDeleteName != null && (toDeleteName.startsWith("Lookup [") || toDeleteName.contains("zzzot-lookup")))
                     isLookup = true;
                 if (storageBase != null && storageBase.getPath().contains("zzzot-lookup"))
                     isLookup = true;
@@ -4135,7 +4135,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             for (Snark snark : _snarks.values()) {
                 String name = null;
                 try { name = snark.getName(); } catch (Exception ignore) {}
-                boolean isLookup = (name != null && (name.startsWith("lookup-") || name.contains("zzzot-lookup")));
+                boolean isLookup = (name != null && (name.startsWith("Lookup [") || name.contains("zzzot-lookup")));
                 if (!isLookup) {
                     try {
                         Storage st = snark.getStorage();
@@ -5319,7 +5319,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (meta != null && storage != null) {
             // Skip persistence for lookup torrents (zzzot name resolution)
             String name = snark.getName();
-            if (name != null && (name.startsWith("lookup-") || name.contains("zzzot-lookup")))
+            if (name != null && (name.startsWith("Lookup [") || name.contains("zzzot-lookup")))
                 return;
             try {
                 File base = storage.getBase();
@@ -5352,16 +5352,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         Storage storage = snark.getStorage();
         if (meta != null && storage != null) {
             // Skip persistence for lookup torrents (zzzot name resolution).
-            // Lookup torrents are created with name "lookup-*" in a temp dir "zzzot-lookup-*".
+            // Lookup torrents are created with name "Lookup-*" in a temp dir "zzzot-lookup-*".
             // We must not write a .torrent file, save config, or re-register under a new name,
             // as the lookup's finally block will delete the snark. Without this check,
             // gotMetaInfo() would promote the snark into the main data dir and the cleanup
             // would fail to recognize it, leaving a persistent downloading torrent.
-            // Return null so Snark.gotMetaInfo() keeps the "lookup-*" name intact — if we
+            // Return null so Snark.gotMetaInfo() keeps the "Lookup-*" name intact — if we
             // returned the real name, deleteMagnet() would fail to remove the snark from
             // _snarks (key mismatch) and leave a stale entry.
             String snarkName = snark.getName();
-            if (snarkName != null && (snarkName.startsWith("lookup-") || snarkName.contains("zzzot-lookup"))) {
+            if (snarkName != null && (snarkName.startsWith("Lookup [") || snarkName.contains("zzzot-lookup"))) {
                 if (_log.shouldInfo()) {
                     _log.info("gotMetaInfo skipping persistence for lookup torrent: " + snarkName);
                 }
@@ -5972,7 +5972,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             addMessage(_t("Opening the I2P tunnel") + "...");
         }
         boolean isLookup = _magnets.contains(snark.getName())
-                || snark.getName().startsWith("lookup-");
+                || snark.getName().startsWith("Lookup [");
         if (isLookup) {
             addMessageNoEscapeAndPrint(
                     _t("Resolving torrent lookup: {0}", linkify(snark)).replace("Magnet ", ""),
