@@ -17,6 +17,9 @@ import net.i2p.util.SystemVersion;
 
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.crypto.Cipher;
@@ -39,6 +42,35 @@ public final class CryptixAESEngine extends AESEngine {
     private static final int CACHE_SIZE = 8;
     private static final SecretKeySpec ZERO_KEY = new SecretKeySpec(new byte[32], "AES");
     private static final IvParameterSpec ZERO_IV = new IvParameterSpec(new byte[16], 0, 16);
+
+    /**
+     *  Upper bound on the per-session {@link SecretKeySpec} memo cache. Plenty
+     *  for the handful of concurrent transport and session keys the router
+     *  works with at any moment. Package-visible for the unit tests.
+     *
+     *  @since 0.9.71+
+     */
+    static final int KEY_SPEC_CACHE_SIZE = 64;
+
+    /**
+     *  Memoized {@link SecretKeySpec} per {@link SessionKey} for the system-AES
+     *  path, in access order so hot sessions survive eviction.
+     *  <p>
+     *  Why memoize at all: building the spec clones the key material, but
+     *  {@link SecretKeySpec#getEncoded()} returns the spec's *internal* array,
+     *  so a reused instance passes the same byte[] reference to
+     *  {@link Cipher#init} and skips JCE makeSessionKey re-expansion of the
+     *  256-bit key on every JVM-path encrypt/decrypt.
+     *  <p>
+     *  This cache is deliberately NOT the same as
+     *  {@link SessionKey#preparedKey()}, which is owned by the legacy Cryptix
+     *  path and lives per SessionKey - keep the two fast paths decoupled.
+     *  {@link SessionKey} equality is value-based, so distinct-but-identical
+     *  keys share one spec (their bytes are equal, so sharing is correct).
+     *
+     *  @since 0.9.71+
+     */
+    private final Map<SessionKey, SecretKeySpec> _keySpecs = new LinkedHashMap<>(16, 0.75f, true);
 
     /**
      * Check for AES-NI support in processor and JVM.
@@ -93,7 +125,7 @@ public final class CryptixAESEngine extends AESEngine {
 
         if (USE_SYSTEM_AES && length >= MIN_SYSTEM_AES_LENGTH) {
             try {
-                SecretKeySpec key = new SecretKeySpec(sessionKey.getData(), "AES");
+                SecretKeySpec key = getKeySpec(sessionKey);
                 IvParameterSpec ivps = new IvParameterSpec(iv, ivOffset, 16);
                 Cipher cipher = acquire();
                 cipher.init(Cipher.ENCRYPT_MODE, key, ivps, _context.random());
@@ -139,7 +171,7 @@ public final class CryptixAESEngine extends AESEngine {
 
         if (USE_SYSTEM_AES && length >= MIN_SYSTEM_AES_LENGTH) {
             try {
-                SecretKeySpec key = new SecretKeySpec(sessionKey.getData(), "AES");
+                SecretKeySpec key = getKeySpec(sessionKey);
                 IvParameterSpec ivps = new IvParameterSpec(iv, ivOffset, 16);
                 Cipher cipher = acquire();
                 cipher.init(Cipher.DECRYPT_MODE, key, ivps, _context.random());
@@ -230,6 +262,37 @@ public final class CryptixAESEngine extends AESEngine {
         }
 
         CryptixRijndael_Algorithm.blockDecrypt(payload, rv, inIndex, outIndex, pkey);
+    }
+
+    /**
+     *  Get (or build and remember) the {@link SecretKeySpec} for a session
+     *  key. Package-visible so the unit tests can verify reuse, longevity
+     *  across sessions and the size bound.
+     *  <p>
+     *  Bounded to {@link #KEY_SPEC_CACHE_SIZE} entries: on overflow the least
+     *  recently used spec is evicted. Reached from {@link #encrypt}/
+     *  {@link #decrypt}, which per tunnel is effectively single-threaded, so no
+     *  contention exists; a lock is held anyway to keep reentry safe.
+     *
+     *  @param sessionKey the session key (value-equality, may be a fresh object
+     *                    each call carrying the same bytes as a cached one)
+     *  @return a spec reusing the key's internal byte array; never null
+     *  @since 0.9.71+
+     */
+    SecretKeySpec getKeySpec(SessionKey sessionKey) {
+        synchronized (_keySpecs) {
+            SecretKeySpec rv = _keySpecs.get(sessionKey);
+            if (rv != null)
+                return rv;
+            rv = new SecretKeySpec(sessionKey.getData(), "AES");
+            if (_keySpecs.size() >= KEY_SPEC_CACHE_SIZE) {
+                Iterator<Map.Entry<SessionKey, SecretKeySpec>> it = _keySpecs.entrySet().iterator();
+                it.next();
+                it.remove();
+            }
+            _keySpecs.put(sessionKey, rv);
+            return rv;
+        }
     }
 
     /**
