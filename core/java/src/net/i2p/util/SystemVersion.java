@@ -59,6 +59,22 @@ public abstract class SystemVersion {
     /** Cached CPU core count, computed lazily on first getCores() call. */
     private static volatile int _cores;
 
+    /**
+     *  Minimum interval between two OS queries for the process CPU load.
+     *  Each query is expensive (on JDK 19+ the MXBean reads /proc via
+     *  Files.lines), and the value is only used for coarse throttling/backoff,
+     *  so a 1-second cache is plenty.
+     *
+     *  @since 0.9.71+
+     */
+    static final long CPU_LOAD_CACHE_MS = 1000;
+
+    /** Last wall-clock ms a getCPULoad() OS query ran, or 0 if never. */
+    private static volatile long _cpuLoadQueried;
+
+    /** Cached getCPULoad() result, 0..100. */
+    private static volatile int _cpuLoad;
+
     private static final boolean _oneDotSix;
     private static final boolean _oneDotSeven;
     private static final boolean _oneDotEight;
@@ -780,16 +796,46 @@ public abstract class SystemVersion {
 
     /**
      * Retrieve CPU Load of the JVM.
+     * <p>
+     * The MXBean query is expensive — on JDK 19+ each call reads /proc via
+     * Files.lines — so results are cached for {@link #CPU_LOAD_CACHE_MS}.
+     * Callers such as the JobQueue pumper and the throttlers only need a
+     * coarse periodic sample, so up to 1s of staleness is acceptable.
      *
      * @return the c p u load
      * @since 0.9.57+
      */
     public static int getCPULoad() {
+        long now = System.currentTimeMillis();
+        if (!cpuLoadCacheStale(_cpuLoadQueried, now)) {
+            return _cpuLoad;
+        }
+        // Allow concurrent refreshers; worst case one extra query per second.
         OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         double raw = osmxb.getProcessCpuLoad();
-        if (raw < 0) {return 0;}
-        int cpuLoad = (int) (raw * 100);
-        return Math.min(cpuLoad, 100);
+        int cpuLoad;
+        if (raw < 0) {
+            cpuLoad = 0;
+        } else {
+            cpuLoad = (int) (raw * 100);
+        }
+        _cpuLoad = Math.min(cpuLoad, 100);
+        _cpuLoadQueried = now;
+        return _cpuLoad;
+    }
+
+    /**
+     *  Whether the cached CPU load sample is old enough to refresh.
+     *  Never-queried (lastQueried == 0) counts as stale so the first call
+     *  always queries the MXBean instead of returning the 0 initializer.
+     *
+     *  @param lastQueried the wall-clock ms of the previous query, or 0
+     *  @param now the current wall-clock ms
+     *  @return true if the cache should be refreshed
+     *  @since 0.9.71+
+     */
+    static boolean cpuLoadCacheStale(long lastQueried, long now) {
+        return lastQueried == 0 || now - lastQueried >= CPU_LOAD_CACHE_MS;
     }
 
     /**
