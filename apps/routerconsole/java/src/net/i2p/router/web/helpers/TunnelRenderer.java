@@ -1284,8 +1284,8 @@ class TunnelRenderer {
 
         int latency = info.getLastLatency();
         buf.append("<td class=latency data-sort=").append(latency).append(">");
-        if (latency >= 0) {
-            buf.append("<span>").append(latency).append("</span><span class=left>&#8239;ms</span>");
+        if (latency > 0) {
+            buf.append(latency).append("&#8239;").append(_t("ms"));
         }
         buf.append("</td>");
 

@@ -116,6 +116,36 @@ function updateTunnelCounts() {
   });
 }
 
+/**
+ * Whether the live container and the freshly realized fragment expose the
+ * same per-pool row structure (same number of tunnel tables, same tbody row
+ * count and tfoot shape in each). The cell morph in patchResponse pairs the
+ * volatile cells (status/expiry/latency/data/footer) by global index across
+ * every pool, so it is only safe to keep those patched cells when each pool
+ * table has identical structure in both documents. Any drift means the initial
+ * morph mis-aligned indices at the pool boundary and already rewrote cells
+ * with neighbor-pool data, so the caller must wholesale-replace the container.
+ * @function poolsAligned
+ * @param {Element} live - the live #tunnelsContainer element
+ * @param {Element} fetched - the #tunnelsContainer realized from the fresh fragment
+ * @returns {boolean} true when every pool table matches structurally
+ */
+function poolsAligned(live, fetched) {
+  const liveTables = live.querySelectorAll("table.tunnels_client");
+  const fetchedTables = fetched.querySelectorAll("table.tunnels_client");
+  if (liveTables.length !== fetchedTables.length) { return false; }
+  for (let i = 0; i < liveTables.length; i++) {
+    const liveBody = liveTables[i].tBodies[0];
+    const fetchedBody = fetchedTables[i].tBodies[0];
+    if (!liveBody || !fetchedBody) { return false; }
+    if (liveBody.rows.length !== fetchedBody.rows.length) { return false; }
+    const liveFootCells = liveTables[i].tFoot && liveTables[i].tFoot.rows[0] ? liveTables[i].tFoot.rows[0].cells.length : 0;
+    const fetchedFootCells = fetchedTables[i].tFoot && fetchedTables[i].tFoot.rows[0] ? fetchedTables[i].tFoot.rows[0].cells.length : 0;
+    if (liveFootCells !== fetchedFootCells) { return false; }
+  }
+  return true;
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   persistTunnelTableVisibility();
   persistTunnelIdVisibility();
@@ -126,19 +156,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const fragment = event.detail.fragment;
     const fetched = fragment ? fragment.querySelector("#tunnelsContainer") : null;
-    if (fetched) {
-      // Steady-state morphdom only patches the volatile cells above and cannot
-      // recombine tbody/tfoot table sections, so structural changes get a
-      // wholesale container replace. The fetched fragment comes from the same
-      // single contentonly refresh the worker already parsed: no second
-      // full-page fetch or main-thread DOMParser pass is needed.
-      const currentTables = container.querySelectorAll("table").length;
-      const currentRows = container.querySelectorAll("tr").length;
-      const fetchedTables = fetched.querySelectorAll("table").length;
-      const fetchedRows = fetched.querySelectorAll("tr").length;
-      if (fetchedTables !== currentTables || fetchedRows !== currentRows) {
-        container.innerHTML = fetched.innerHTML;
-      }
+    if (fetched && !poolsAligned(container, fetched)) {
+      // The steady-state morph in patchResponse pairs the volatile cells by
+      // global index across every pool and ran before this handler, so once
+      // any pool's row structure drifted it has already mis-paired cells and
+      // cleared or overwritten them with neighbor-pool data. Rewriting the
+      // container from the already-fetched fragment (no second fetch or
+      // main-thread DOMParser pass) repairs that damage and applies the
+      // structural changes wholesale.
+      container.innerHTML = fetched.innerHTML;
     }
     updateTunnelCounts();
   });
@@ -149,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // #tunnelsContainer replace above. includeContainer exposes the realized
   // contentonly fragment on the refresh detail for that comparison.
   refreshElements(
-    "#tunnelsContainer td.status, #tunnelsContainer td.expiry, #tunnelsContainer td.latency, #tunnelsContainer td.datatransfer, #tunnelsContainer tfoot td",
+    "#tunnelsContainer td.status, #tunnelsContainer td.expiry, #tunnelsContainer td.latency, #tunnelsContainer td.data, #tunnelsContainer tfoot td",
     "/tunnels", 10000, false, false, "tunnelsContainer", null, 0, true
   );
 });
