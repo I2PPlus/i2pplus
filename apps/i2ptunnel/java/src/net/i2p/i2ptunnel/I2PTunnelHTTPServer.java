@@ -546,8 +546,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         String peerB32 = socket.getPeerDestination().toBase32();
         String tunnelId = getTunnelLogId(socket.getThisDestination());
         if (_log.shouldDebug()) {
-            _log.debug("[HTTPServer] " + tunnelId + " Incoming connection to " + toString().replace("/", "") + " (Port " + socket.getLocalPort() + ")" +
-                      "\n* From: " + peerB32 + " on port " + socket.getPort());
+            _log.debug("[HTTPServer] Incoming connection to " + toString().replace("/", "") + ":" + socket.getLocalPort() +
+                       " " + tunnelId + "\n* From: " + peerB32 + " on port " + socket.getPort());
         }
         // local is fast, so synchronously. Does not need that many threads.
         try {
@@ -559,7 +559,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             boolean keepalive = getBooleanOption(OPT_KEEPALIVE, DEFAULT_KEEPALIVE);
 
             do {
-                if (requestCount > 0 && _log.shouldDebug()) {_log.debug("[HTTPServer] " + tunnelId + " KeepAlive, awaiting request [#" + requestCount + "]");}
+                if (requestCount > 0 && _log.shouldDebug()) {
+                    _log.debug("[HTTPServer] KeepAlive " + tunnelId + " -> Awaiting request #" + requestCount);
+                }
 
                 // The headers _should_ be in the first packet, but may not be, depending on the client-side options
 
@@ -666,7 +668,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) {}
                         try { socket.close(); } catch (IOException ioe) {}
                         if (_log.shouldWarn())
-                            _log.warn("[HTTPServer] " + tunnelId + " Executor pool saturated, rejecting request \n* Client: " + peerB32);
+                            _log.warn("[HTTPServer] Executor pool saturated, rejecting request " + tunnelId + "\n* Client: " + peerB32);
                         return;
                     }
                 }
@@ -686,25 +688,28 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             sendErrorAndClose(socket);
             // Don't complain too early, Jetty may not be ready.
             int level = getTunnel().getContext().clock().now() - _startedOn > START_INTERVAL ? Log.ERROR : Log.WARN;
-            if (_log.shouldLog(level))
-                _log.log(level, "[HTTPServer] " + tunnelId + " Error connecting to HTTP server " + getSocketString(port));
+            if (_log.shouldLog(level)) {
+                _log.log(level, "[HTTPServer] Error connecting to HTTP server " + getSocketString(port) + " " + tunnelId);
+            }
         } catch (IOException ex) {
             try {
                 socket.close();
             } catch (IOException ioe) { /* ignored */ }
             if (_log.shouldWarn())
                 if (ex.getMessage().indexOf("Name or service not known") >= 0) {
-                    _log.warn("[HTTPServer] " + tunnelId + " Request error: DNS error (blocked?) for: " +
-                              ex.getMessage().replace(": Name or service not known", "") + " \n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] Request error: DNS error (blocked?) for: " +
+                              ex.getMessage().replace(": Name or service not known", "") +
+                              " "  + tunnelId + "\n* Client: " + peerB32);
                 } else {
-                    _log.warn("[HTTPServer] " + tunnelId + " Request error: " + ex.getMessage() + " \n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] Request error: " + ex.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
                 }
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
             // java.lang.OutOfMemoryError: unable to create new native thread
             sendErrorAndClose(socket);
-            if (_log.shouldError())
-                _log.error("[HTTPServer] Out of Memory error (" + oom.getMessage() + ")");
+            if (_log.shouldError()) {
+                _log.error("[HTTPServer] Out of Memory error " + tunnelId + " -> " + oom.getMessage());
+            }
         }
     }
 
@@ -735,12 +740,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         } catch (SocketTimeoutException ste) {
             if (requestCount > 0) {
                 if (log.shouldDebug())
-                     log.debug("[HTTPServer] " + tunnelId + " Timeout reached awaiting request [#" + requestCount + "]");
+                     log.debug("[HTTPServer] Timeout reached awaiting request #" + requestCount + " " + tunnelId);
             } else {
                 try {sendError(socket, ERR_REQUEST_TIMEOUT);}
                 catch (IOException ioe) { /* ignored */ }
                 if (log.shouldWarn() && ste.getMessage() != null) {
-                    log.warn("[HTTPServer] " + tunnelId + " Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
+                    log.warn("[HTTPServer] Request error: " + ste.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
                 }
             }
             try {socket.close();}
@@ -749,12 +754,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         } catch (EOFException eofe) {
             if (requestCount > 0) {
                 if (log.shouldDebug())
-                     log.debug("[HTTPServer] " + tunnelId + " Client closed awaiting request [#" + requestCount + "]");
+                     log.debug("[HTTPServer] Client closed awaiting request #" + requestCount + " " + tunnelId);
             } else {
                 try {sendError(socket, ERR_BAD_REQUEST);}
                 catch (IOException ioe) { /* ignored */ }
                 if (log.shouldWarn() && eofe.getMessage() != null) {
-                    log.warn("[HTTPServer] " + tunnelId + " Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
+                    log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
                 }
             }
             try {socket.close();}
@@ -768,7 +773,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldWarn()) {
-                log.warn("[HTTPServer] " + tunnelId + " Request error: Headers too large \n* Client: " + peerB32);
+                log.warn("[HTTPServer] Request error: Headers too large " + tunnelId + "\n* Client: " + peerB32);
             }
             return null;
         } catch (RequestTooLongException rtle) {
@@ -779,7 +784,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldWarn()) {
-                log.warn("[HTTPServer] " + tunnelId + " Request error: URI too long \n* Client: " + peerB32);
+                log.warn("[HTTPServer] Request error: URI too long " + tunnelId + "\n* Client: " + peerB32);
             }
             return null;
         } catch (BadRequestException bre) {
@@ -790,7 +795,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
             }
             if (log.shouldDebug() && bre.getMessage() != null) {
-                log.warn("[HTTPServer] " + tunnelId + " Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
+                log.warn("[HTTPServer] Request error: " + bre.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
             }
             return null;
         }
@@ -927,8 +932,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         List<String> host = headers.get("Host");
 
         if (peerB32.length() != 60) {
-            _log.warn("[HTTPServer] " + tunnelId + " Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
-            "\n* Client: " + peerB32);
+            _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") " + tunnelId +
+                      " -> Denying request to [" + hostname + "] \n* Client: " + peerB32);
             try {socket.close();}
             catch (IOException ioe) { /* ignored */ }
             return;
@@ -939,7 +944,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             int port = hostname.indexOf(":");
             if (port != -1) {hostname = hostname.substring(0, port);}
         }
-        if (_log.shouldDebug()) {_log.debug("[HTTPServer] " + tunnelId + " Incoming request for: " + hostname + "\n* Client: " + peerB32);}
+        if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + " " + tunnelId + "\n* Client: " + peerB32);}
         if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
             InetAddress address;
             try {
@@ -948,8 +953,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 address = future.get(DNS_TIMEOUT_MS, TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] " + tunnelId + " DNS lookup timed out (" + DNS_TIMEOUT_MS + "ms) for " + hostname +
-                              " \n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] DNS lookup timed out (" + DNS_TIMEOUT_MS + "ms) for " + hostname +
+                              " " + tunnelId + "\n* Client: " + peerB32);
                 }
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
@@ -961,7 +966,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 return;
             } catch (ExecutionException e) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] " + tunnelId + " DNS lookup failed for " + hostname + " \n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] DNS lookup failed for " + hostname + " " + tunnelId + "\n* Client: " + peerB32);
                 }
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
@@ -971,7 +976,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] " + tunnelId + " WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
+                    _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "] " + tunnelId +
                               " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
                 }
                 _blocklistManager.logBlockedDestination(peerB32);
@@ -980,7 +985,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
                 if (!hostname.equals("::") && !hostname.equals("0.0.0.0")) {
                     if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] " + tunnelId + " DNS server appears to be blocking requests to " + hostname +
+                        _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname + " " + tunnelId +
                                   " -> Sending Error 403 \n* Client: " + peerB32);
                     }
                     try {sendError(socket, ERR_FORBIDDEN);}
@@ -995,16 +1000,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
             } else {
                 if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
-                    _log.info("[HTTPServer] " + tunnelId + " Hostname " + hostname + " validated" +
-                              " -> Resolves to: " + address.getHostAddress());
+                    _log.info("[HTTPServer] Hostname " + hostname + " validated" +
+                              " " + tunnelId + " -> Resolves to: " + address.getHostAddress());
                 }
                 isPossibleExploit = false;
             }
             if (isPossibleExploit) {
                 _blocklistManager.logBlockedDestination(peerB32);
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] " + tunnelId + " Client attempted to access private or wildcard address " + hostname +
-                              " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname +
+                              " " + tunnelId + " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
                 }
             }
             if (!isValidRequest) {
