@@ -50,6 +50,17 @@ class OutboundMessageFragments {
     private int _statEmitCounter;
 
     /**
+     *  Reusable consumed-fragment marker for {@link #preparePackets}. Reused
+     *  across volleys (cleared per call) instead of allocating a fresh BitSet
+     *  every volley; {@link BitSet#set} grows it as needed, so growth is
+     *  amortized to the largest volley ever seen.
+     *  <p>
+     *  Only reachable from {@link #getNextVolley()} on the single
+     *  PacketPusher thread, so no synchronization is needed.
+     */
+    private BitSet _consumed = new BitSet();
+
+    /**
      * OutboundMessageFragments.
      */
     public OutboundMessageFragments(RouterContext ctx, UDPTransport transport) {
@@ -309,7 +320,9 @@ class OutboundMessageFragments {
         }
 
         // build the list of fragments to send
-        List<Fragment> toSend = new ArrayList<>(8);
+        // A state usually contributes 1-2 fragments on a retransmit volley;
+        // size 8 covered one, but a chain wide in states serialized the growth.
+        List<Fragment> toSend = new ArrayList<>(Math.max(8, states.size() * 2));
         for (int i = 0; i < states.size(); i++) {
             OutboundMessageState state = states.get(i);
             int queued = state.push(toSend);
@@ -339,16 +352,18 @@ class OutboundMessageFragments {
         List<UDPPacket> rv = new ArrayList<>(toSend.size());
 
         // Greedy fragment grouping logic — index-based to avoid List copy + shift per removal
-        BitSet consumed = new BitSet(toSend.size());
+        _consumed.clear();
         int remaining = toSend.size();
         int maxPacketSize = PacketBuilder2.getMaxDataSize(peer);
 
         while (remaining > 0) {
-            List<Fragment> sendNext = new ArrayList<>();
+            // Most data packets carry only a few fragments; pre-size to the
+            // greedy picker's typical high-water mark rather than growing from 0.
+            List<Fragment> sendNext = new ArrayList<>(Math.min(remaining, 4));
             int curTotalDataSize = 0;
 
             for (int i = 0; i < toSend.size(); i++) {
-                if (consumed.get(i)) continue;
+                if (_consumed.get(i)) continue;
                 Fragment next = toSend.get(i);
                 OutboundMessageState state = next.state;
                 int nextDataSize = state.fragmentSize(next.num);
@@ -363,7 +378,7 @@ class OutboundMessageFragments {
                 if (curTotalDataSize + nextDataSize <= maxPacketSize || sendNext.isEmpty()) {
                     sendNext.add(next);
                     curTotalDataSize += nextDataSize;
-                    consumed.set(i);
+                    _consumed.set(i);
                     remaining--;
                 }
             }
