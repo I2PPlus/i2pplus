@@ -77,6 +77,13 @@ class AccessFilter implements StatefulConnectionFilter {
     private final AtomicBoolean timersRunning = new AtomicBoolean();
 
     /**
+     * Per-recorder file read cache; keyed by the persisted breach file and
+     * only touched on the single DISK_WRITER thread inside {@link #record()},
+     * so no locking is required.
+     */
+    private final Map<File, RecorderFileState> recorderFiles = new HashMap<>();
+
+    /**
      * Trackers for known destinations defined in access lists
      */
     private final Map<Hash, DestTracker> knownDests = new HashMap<>();
@@ -192,18 +199,20 @@ class AccessFilter implements StatefulConnectionFilter {
         for (Recorder recorder : definition.getRecorders()) {
             Threshold threshold = recorder.getThreshold();
             File file = recorder.getFile();
-            Set<String> breached = new LinkedHashSet<>();
-
-            // if the file already exists, add previously breached b32s
-            if (file.exists() && file.isFile()) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
-                    String b32;
-                    while((b32 = reader.readLine()) != null) {
-                        breached.add(b32);
-                    }
-                }
+            RecorderFileState cached = recorderFiles.get(file);
+            Set<String> breached;
+            if (recorderFileUnchanged(cached, file)) {
+                // File is unchanged since we last read it — reuse the cached
+                // breached set instead of re-opening the file every 5s.
+                breached = cached.breached;
+            } else {
+                RecorderFileState fresh = readRecorderFile(file);
+                recorderFiles.put(file, fresh);
+                breached = fresh.breached;
             }
 
+            // If the file already exists, the cached set already holds
+            // previously breached b32s (from disk or an earlier cycle).
             boolean newBreaches = false;
             synchronized(unknownDests) {
                 for (DestTracker tracker : unknownDests.values()) {
@@ -224,6 +233,88 @@ class AccessFilter implements StatefulConnectionFilter {
                     writer.newLine();
                 }
             }
+            // The file now reflects the merged set; update the cache signature
+            // so the next cycle does not re-read what we just wrote.
+            recorderFiles.put(file, new RecorderFileState(true, file.lastModified(), file.length(), breached));
+        }
+    }
+
+    /**
+     *  Read the persisted breached-b32 set for a recorder file, capturing its
+     *  {@code (lastModified, length)} signature at read time.
+     *  <p>
+     *  The set is the plain set of lines in the file (raw b32 strings); no
+     *  parsing is done, matching the historic reader. A missing or non-file
+     *  yields an empty set with {@code valid == false} so a later appearance
+     *  of the file is detected as a change.
+     *
+     *  @param file the breach recorder file
+     *  @return the read set plus its signature
+     *  @throws IOException on an error reading the file
+     *  @since 0.9.71+
+     */
+    static RecorderFileState readRecorderFile(File file) throws IOException {
+        if (!(file.exists() && file.isFile()))
+            return new RecorderFileState(false, 0, 0, new LinkedHashSet<>());
+        Set<String> breached = new LinkedHashSet<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            String b32;
+            while((b32 = reader.readLine()) != null) {
+                breached.add(b32);
+            }
+        }
+        return new RecorderFileState(true, file.lastModified(), file.length(), breached);
+    }
+
+    /**
+     *  Whether a recorder file's on-disk signature still matches the one
+     *  captured when {@code cached} was read, i.e. whether the cached breached
+     *  set can be reused without opening the file again.
+     *  <p>
+     *  The recorder file is almost always written only by this filter, so on
+     *  the 5-second sync cycle the file is unchanged and the set is reused.
+     *  External edits (recreating the file) change the signature and force a
+     *  re-read, so user changes are still picked up. Misses on a missing file
+     *  are reported as unchanged so an absent file does not re-read either.
+     *
+     *  @param cached the previous {@link RecorderFileState}, or null on first use
+     *  @param file the breach recorder file
+     *  @return true if {@code cached.breached} is still current
+     *  @since 0.9.71+
+     */
+    static boolean recorderFileUnchanged(RecorderFileState cached, File file) {
+        if (file.exists() && file.isFile()) {
+            return cached != null && cached.valid &&
+                   cached.modified == file.lastModified() &&
+                   cached.length == file.length();
+        }
+        return cached != null && !cached.valid;
+    }
+
+    /**
+     *  Parsed recorder file plus the {@code (lastModified, length)} signature
+     *  it was read under.
+     *
+     *  @since 0.9.71+
+     */
+    static final class RecorderFileState {
+        final boolean valid;
+        final long modified;
+        final long length;
+        final Set<String> breached;
+
+        /**
+         *  @param valid true if the file was a real file when read
+         *  @param modified the file's lastModified() value
+         *  @param length the file's length() value
+         *  @param breached the parsed b32 set
+         *  @since 0.9.71+
+         */
+        RecorderFileState(boolean valid, long modified, long length, Set<String> breached) {
+            this.valid = valid;
+            this.modified = modified;
+            this.length = length;
+            this.breached = breached;
         }
     }
 
