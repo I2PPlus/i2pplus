@@ -29,7 +29,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Router;
 import net.i2p.router.peermanager.PeerProfile;
-import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
@@ -261,7 +260,14 @@ class FloodfillPeerSelector extends PeerSelector {
         boolean enforceHeard = installed > 0 && (now - installed) > INSTALL_AGE;
         double maxFailRate = computeMaxFailRate(uptime);
 
-        MaskedIPSet maskedIPs = new MaskedIPSet(Math.min(sorted.size(), 128) * 3);
+        // Accumulate compact same-subnet fingerprints, not per-candidate
+        // MaskedIPSet string sets: peers sharing a /16, port, or family sort
+        // to the same "bad" tier as before, but no heap String/Set is built
+        // per candidate on the floodfill hot path.
+        final int cap = Math.min(sorted.size(), 128) * 3;
+        Set<Long> maskedIPs = new HashSet<>(cap);
+        Set<Integer> ports = new HashSet<>(cap);
+        Set<String> families = new HashSet<>(Math.max(4, cap / 8));
         // split sorted list into 3 unsorted lists
         List<Hash> rv = new ArrayList<>(howMany);
         List<Hash> okff = new ArrayList<>(howMany);
@@ -275,13 +281,8 @@ class FloodfillPeerSelector extends PeerSelector {
                 continue;
             }
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
-            MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2); // put anybody in the same /16 at the end
-            boolean sameIP = false;
-            if (info != null) {
-                for (String ip : entryIPs) {
-                    if (!maskedIPs.add(ip)) {sameIP = true;}
-                }
-            }
+            // put anybody in the same /16, port, or family at the end
+            boolean sameIP = info != null && !addSameIPFingerprint(maskedIPs, ports, families, _context, entry, info, SAME_IP_MASK);
             PeerClass cls = classifyFloodfillPeer(entry, info, sameIP, now, enforceHeard, maxFailRate);
             switch (cls) {
                 case GOOD:  rv.add(entry); found++; break;
@@ -322,6 +323,96 @@ class FloodfillPeerSelector extends PeerSelector {
      *  Classification result for floodfill peer selection.
      */
     private enum PeerClass { GOOD, OK, BAD }
+
+    /**
+     *  Byte count matched when fingerprinting a peer for same-subnet
+     *  exclusion: /16 for IPv4, /32 for IPv6, mirroring the historic
+     *  {@code MaskedIPSet(_context, entry, info, 2)} call.
+     */
+    private static final int SAME_IP_MASK = 2;
+
+    /**
+     *  Compact long fingerprint of a masked IP, replacing the per-candidate
+     *  String construction (one StringBuilder plus up to 2*mask heap chars)
+     *  that the historic {@code MaskedIPSet.maskedIP()} did per address on the
+     *  selection hot path. Semantics match MaskedIPSet: the first
+     *  {@code mask} bytes are matched, and an IPv6 address doubles the match
+     *  width (8 bytes for mask=2, i.e. /64).
+     *  <p>
+     *  Bit layout: bit 63 is an IPv6 marker (the analog of MaskedIPSet's ':'
+     *  vs '.' delimiter, so the two families can never collide); the masked
+     *  bytes' nibbles then occupy bits 59 downward. The largest supported
+     *  packed key is 15 nibbles (60 bits) below the marker, i.e. IPv4 mask 4
+     *  or IPv6 mask 3.
+     *
+     *  @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
+     *  @param mask 1-4, the number of leading bytes to match
+     *  @return the packed fingerprint; equal keys mean "same masked subnet"
+     *  @throws IllegalArgumentException if the packed key would exceed 60 bits
+     *          (IPv6 with mask 4), which no caller uses
+     *  @since 0.9.71+
+     */
+    static long maskedIPKey(byte[] ip, int mask) {
+        final int totalNibbles = ip.length == 16 ? mask * 4 : mask * 2;
+        if (totalNibbles > 15)
+            throw new IllegalArgumentException("mask too long for compact key: " + mask);
+        long rv = ip.length == 16 ? (1L << 63) : 0L;
+        int shift = 59;
+        for (int i = 0; i < mask; i++) {
+            int b = ip[i] & 0xff;
+            rv |= ((long) (b >> 4)) << shift;
+            shift -= 4;
+            rv |= ((long) (b & 0x0f)) << shift;
+            shift -= 4;
+        }
+        return rv;
+    }
+
+    /**
+     *  Fingerprint a candidate peer into the exclusion accumulators, adding
+     *  compact masked-IP keys, ports, and the claimed family option. One call
+     *  replaces the per-candidate {@code MaskedIPSet} construction (and its
+     *  per-address toString churn) of the historic selection loop.
+     *  <p>
+     *  Returns whether any added key collided with a previously seen peer;
+     *  this is the definition of "same IP" used to push a peer to the BAD
+     *  tier. The three spaces (masked IP, port, family) are kept separate so,
+     *  just like MaskedIPSet's '.' / 'p' / 'x' prefixes, a cross-space
+     *  collision can never occur.
+     *
+     *  @param maskedIPs accumulator of packed masked-IP keys, mutated on add
+     *  @param ports accumulator of router ports, mutated on add
+     *  @param families accumulator of family option values, mutated on add
+     *  @param ctx used to resolve the peer's communicate-address
+     *  @param peer the candidate's hash
+     *  @param pinfo the candidate RouterInfo (validated, never null here)
+     *  @param mask byte count for {@link #maskedIPKey}
+     *  @return true if at least one key was already present
+     *  @since 0.9.71+
+     */
+    static boolean addSameIPFingerprint(Set<Long> maskedIPs, Set<Integer> ports, Set<String> families,
+                                        RouterContext ctx, Hash peer, RouterInfo pinfo, int mask) {
+        if (pinfo == null)
+            return false;
+        boolean sameIP = false;
+        byte[] commIP = ctx.commSystem().getIP(peer);
+        if (commIP != null)
+            sameIP |= !maskedIPs.add(maskedIPKey(commIP, mask));
+        for (RouterAddress pa : pinfo.getAddresses()) {
+            byte[] ip = pa.getIP();
+            if (ip == null) continue;
+            sameIP |= !maskedIPs.add(maskedIPKey(ip, mask));
+            // Routers with a common port may be run
+            // by a single entity with a common configuration
+            int port = pa.getPort();
+            if (port > 0)
+                sameIP |= !ports.add(port);
+        }
+        String family = pinfo.getOption("family");
+        if (family != null)
+            sameIP |= !families.add(family);
+        return sameIP;
+    }
 
     /**
      *  Compute the maximum acceptable failure rate for a floodfill peer,
