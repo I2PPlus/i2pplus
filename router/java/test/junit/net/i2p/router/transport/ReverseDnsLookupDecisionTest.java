@@ -176,4 +176,51 @@ public class ReverseDnsLookupDecisionTest {
         ReverseDnsLookup.CacheEntry entry = new ReverseDnsLookup.CacheEntry("192.0.2.15", "serial.example.net", ts);
         assertEquals(ReverseDnsLookup.rdnsEntryToString(entry), entry.getRdnsEntry());
     }
+
+    // ----- needRdnscacheSweep (amortized cleanup) -----
+
+    @Test
+    public void sweepNeverBelowCap() {
+        int max = 8000;
+        for (int c = 0; c < 4096; c++) {
+            assertFalse("below cap must not sweep, counter=" + c,
+                        ReverseDnsLookup.needRdnscacheSweep(max - 1, max, c));
+        }
+    }
+
+    @Test
+    public void sweepSkipsRunningOverCapUntilCounterWraps() {
+        int max = 8000;
+        // At/over the cap, sweep only when the per-put counter hits the
+        // CLEANUP_MASK low bits, so consecutive puts mostly skip the sweep.
+        assertTrue(ReverseDnsLookup.needRdnscacheSweep(max, max, 0));
+        assertFalse(ReverseDnsLookup.needRdnscacheSweep(max, max, 1));
+        assertFalse(ReverseDnsLookup.needRdnscacheSweep(max, max, 1023));
+        assertTrue(ReverseDnsLookup.needRdnscacheSweep(max, max, 1024));
+        assertFalse(ReverseDnsLookup.needRdnscacheSweep(max - 1, max, 0));
+    }
+
+    @Test
+    public void sweepForcesWhenOverSlack() {
+        int max = 8000;
+        int slack = ReverseDnsLookup.MAX_SLACK;
+        assertFalse("no force at exactly the slack boundary",
+                    ReverseDnsLookup.needRdnscacheSweep(max + slack - 1, max, 42));
+        assertTrue("force once past the slack boundary",
+                   ReverseDnsLookup.needRdnscacheSweep(max + slack, max, 42));
+        assertTrue("force regardless of counter",
+                   ReverseDnsLookup.needRdnscacheSweep(max + slack + 1, max, 0));
+    }
+
+    @Test
+    public void sweepExactCapStillGatedByCounter() {
+        // At exactly the cap the decision is purely counter-driven; the very
+        // first put after reaching the cap always sweeps, after that every
+        // CLEANUP_BITS puts.
+        int max = 100;
+        assertTrue(ReverseDnsLookup.needRdnscacheSweep(max, max, 0));
+        assertFalse(ReverseDnsLookup.needRdnscacheSweep(max, max, 5));
+        int mask = (1 << ReverseDnsLookup.CLEANUP_BITS) - 1;
+        assertTrue(ReverseDnsLookup.needRdnscacheSweep(max, max, mask + 1));
+    }
 }

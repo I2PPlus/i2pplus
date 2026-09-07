@@ -88,6 +88,27 @@ public class ReverseDnsLookup {
 
     private static final int MAX_RDNS_CACHE_SIZE = maxCacheSize(HAS_512_MB, HAS_1_GB);
 
+    /**
+     *  How many cache entries the map may exceed its cap by before a sweep
+     *  runs immediately. Trades a few hundred surplus entries (CHM node wins
+     *  are negligible) for avoiding a synchronous full-map sweep on every put.
+     *
+     *  @since 0.9.71+
+     */
+    static final int MAX_SLACK = 512;
+
+    /**
+     *  Cleanup frequency once the cache is at or over its cap: a full sweep
+     *  runs on every 1&lt;&lt;CLEANUP_BITS puts that happen while over/at the cap,
+     *  instead of on every put.
+     *
+     *  @since 0.9.71+
+     */
+    static final int CLEANUP_BITS = 10;
+
+    private static final int CLEANUP_MASK = (1 << CLEANUP_BITS) - 1;
+    private static int _rdnsCleanupCounter;
+
     private final RouterContext _context;
     private final GeoIP _geoIP;
 
@@ -716,8 +737,43 @@ public class ReverseDnsLookup {
     }
 
     /**
+     *  Decide whether {@link #rdnsCachePut(int, int)} must run a full-cache
+     *  cleanup sweep before inserting.
+     *
+     *  Sweeping on every put when the cache sits at its cap is O(n) per insert
+     *  and shows up as CHM iterator churn on the rDNS hot path. Instead the
+     *  sweep is amortized: once the map is at/over its cap it runs at most
+     *  once every {@link #CLEANUP_BITS} inserts (it usually stays pegged at the
+     *  cap in steady state), while exceeding the cap by more than
+     *  {@link #MAX_SLACK} entries still sweeps immediately so the memory bound
+     *  stays hard.
+     *
+     *  A benign race on the shared {@code _rdnsCleanupCounter} only changes
+     *  which insert triggers the sweep; it never under-sweeps below the slack
+     *  guard (the size check is made against the live map by the caller).
+     *
+     *  @param size current cache size; use {@code rdnsCache.size()}
+     *  @param maxSize the cache cap, e.g. {@link #MAX_RDNS_CACHE_SIZE}
+     *  @param counter a per-put counter, e.g. an incrementing static int
+     *  @return true if a cleanup sweep must run before the insert
+     *  @since 0.9.71+
+     */
+    static boolean needRdnscacheSweep(int size, int maxSize, int counter) {
+        if (size >= maxSize + MAX_SLACK) {
+            return true;
+        }
+        if (size >= maxSize) {
+            return (counter & CLEANUP_MASK) == 0;
+        }
+        return false;
+    }
+
+    /**
      * Insert into the rdns cache with budget enforcement.
      * Evicts expired entries first, then oldest entries if still over budget.
+     * The cleanup sweep is amortized to at most one full map pass per
+     * {@link #CLEANUP_BITS} inserts while at the cap; see
+     * {@link #needRdnscacheSweep(int, int, int)} for the rationale.
      */
     private static void rdnsCachePut(String ipAddress, CacheEntry entry) {
         String hostname = entry.getHostname();
@@ -725,7 +781,7 @@ public class ReverseDnsLookup {
         if (!fixed.equals(hostname)) {
             entry = new CacheEntry(entry.getIpAddress(), fixed, entry.getTimestamp());
         }
-        if (rdnsCache.size() >= MAX_RDNS_CACHE_SIZE) {
+        if (needRdnscacheSweep(rdnsCache.size(), MAX_RDNS_CACHE_SIZE, ++_rdnsCleanupCounter)) {
             cleanupRDNSCache();
         }
         rdnsCache.put(ipAddress, entry);
