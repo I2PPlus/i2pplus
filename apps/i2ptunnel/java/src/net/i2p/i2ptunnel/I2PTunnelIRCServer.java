@@ -58,7 +58,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     public static final String PROP_WEBIRC_SPOOF_IP_DEFAULT="127.0.0.1";
     public static final String PROP_HOSTNAME="ircserver.fakeHostname";
     public static final String PROP_HOSTNAME_DEFAULT="%f.b32.i2p";
-    private static final long HEADER_TIMEOUT = (long) 15*1000;
+    private static final long HEADER_TIMEOUT = (long) 30*1000;
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
     private static final int MAX_LINE_LENGTH = 1024;
     // application should ping timeout before this

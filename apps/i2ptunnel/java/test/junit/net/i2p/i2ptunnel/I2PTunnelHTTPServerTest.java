@@ -70,7 +70,7 @@ public class I2PTunnelHTTPServerTest {
     public void testReadRequestHeadersSuccess() throws IOException {
         FakeSocket sock = new FakeSocket("GET / HTTP/1.1\r\nHost: example.com\r\nConnection: keep-alive\r\n\r\n".getBytes());
         StringBuilder command = new StringBuilder();
-        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, command, 0, "peer.b32.i2p", CTX, LOG);
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, command, 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
         assertNotNull(headers);
         assertEquals("GET / HTTP/1.1\r", command.toString());
         assertEquals("example.com", headers.get("Host").get(0));
@@ -82,7 +82,7 @@ public class I2PTunnelHTTPServerTest {
     @Test
     public void testReadRequestHeadersSocketTimeoutFirstRequest() throws IOException {
         FakeSocket sock = new FakeSocket(new SocketTimeoutException("fake timeout"));
-        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG);
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
         assertNull(headers);
         assertTrue(sock._out.toString().contains("408 Request timeout"));
         assertEquals(1, sock.closeCount);
@@ -91,7 +91,7 @@ public class I2PTunnelHTTPServerTest {
     @Test
     public void testReadRequestHeadersSocketTimeoutKeepAlive() throws IOException {
         FakeSocket sock = new FakeSocket(new SocketTimeoutException("fake timeout"));
-        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 1, "peer.b32.i2p", CTX, LOG);
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 1, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
         assertNull(headers);
         assertEquals(0, sock._out.size());
         assertEquals(1, sock.closeCount);
@@ -100,7 +100,7 @@ public class I2PTunnelHTTPServerTest {
     @Test
     public void testReadRequestHeadersEOF() throws IOException {
         FakeSocket sock = new FakeSocket(new byte[0]);
-        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG);
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
         assertNull(headers);
         assertTrue(sock._out.toString().contains("400 Bad Request"));
         assertEquals(1, sock.closeCount);
@@ -109,7 +109,7 @@ public class I2PTunnelHTTPServerTest {
     @Test
     public void testReadRequestHeadersBadRequest() throws IOException {
         FakeSocket sock = new FakeSocket("GET / HTTP/1.1\r\nNoColonHere\r\n\r\n".getBytes());
-        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG);
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
         assertNull(headers);
         assertTrue(sock._out.toString().contains("400 Bad Request"));
         assertEquals(1, sock.closeCount);
@@ -121,7 +121,7 @@ public class I2PTunnelHTTPServerTest {
         for (int i = 0; i < 9000; i++) {req.append('a');}
         req.append(" HTTP/1.1\r\n\r\n");
         FakeSocket sock = new FakeSocket(req.toString().getBytes());
-        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG);
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
         assertNull(headers);
         assertTrue(sock._out.toString().contains("414 Request URI too long"));
         assertEquals(1, sock.closeCount);
@@ -135,7 +135,7 @@ public class I2PTunnelHTTPServerTest {
         }
         req.append("\r\n");
         FakeSocket sock = new FakeSocket(req.toString().getBytes());
-        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG);
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
         assertNull(headers);
         assertTrue(sock._out.toString().contains("431 Request header fields too large"));
         assertEquals(1, sock.closeCount);
