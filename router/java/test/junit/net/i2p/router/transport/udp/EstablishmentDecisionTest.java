@@ -48,19 +48,14 @@ public class EstablishmentDecisionTest {
     }
 
     @Test
-    public void testIsBanlistedAnyTier() {
+    public void testIsBanlistedAnyActiveBan() {
         Hash h = Hash.create(new byte[Hash.HASH_LENGTH]);
-        Banlist plain = mock(Banlist.class);
-        when(plain.isBanlisted(h)).thenReturn(Boolean.TRUE);
-        assertTrue(EstablishmentManager.isBanlisted(plain, h));
-
-        Banlist hostile = mock(Banlist.class);
-        when(hostile.isBanlistedHostile(h)).thenReturn(Boolean.TRUE);
-        assertTrue(EstablishmentManager.isBanlisted(hostile, h));
-
-        Banlist forever = mock(Banlist.class);
-        when(forever.isBanlistedForever(h)).thenReturn(Boolean.TRUE);
-        assertTrue(EstablishmentManager.isBanlisted(forever, h));
+        Banlist banlist = mock(Banlist.class);
+        // no active ban: not banned
+        assertFalse(EstablishmentManager.isBanlisted(banlist, h));
+        // any active ban fires, regardless of tier
+        when(banlist.isBanlisted(h)).thenReturn(Boolean.TRUE);
+        assertTrue(EstablishmentManager.isBanlisted(banlist, h));
     }
 
     @Test
@@ -430,25 +425,6 @@ public class EstablishmentDecisionTest {
         // either side failing is enough
         assertTrue(EstablishmentManager.isMtuTooSmall(PeerState2.MIN_MTU - 1, PeerState2.MIN_MTU));
         assertTrue(EstablishmentManager.isMtuTooSmall(PeerState2.MIN_MTU, PeerState2.MIN_MTU - 1));
-    }
-
-    @Test
-    public void testIsBannedForeverOrHostile() {
-        Banlist banlist = mock(Banlist.class);
-        Hash h = Hash.create(new byte[Hash.HASH_LENGTH]);
-        // null hash: never banned
-        assertFalse(EstablishmentManager.isBannedForeverOrHostile(banlist, null));
-        // permanent ban fires
-        when(banlist.isBanlistedForever(h)).thenReturn(true);
-        assertTrue(EstablishmentManager.isBannedForeverOrHostile(banlist, h));
-        // hostile fires
-        when(banlist.isBanlistedForever(h)).thenReturn(false);
-        when(banlist.isBanlistedHostile(h)).thenReturn(true);
-        assertTrue(EstablishmentManager.isBannedForeverOrHostile(banlist, h));
-        // neither fires
-        when(banlist.isBanlistedHostile(h)).thenReturn(false);
-        when(banlist.isBanlisted(h)).thenReturn(true);
-        assertFalse(EstablishmentManager.isBannedForeverOrHostile(banlist, h));
     }
 
     /**

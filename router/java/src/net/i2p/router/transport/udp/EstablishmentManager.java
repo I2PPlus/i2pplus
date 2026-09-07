@@ -330,33 +330,22 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is the router with the given hash banned, hostile, or banned forever?
-     *  Null-safe. Shared by the establish and receiveSessionOrTokenRequest paths.
+     *  Is the router with the given hash banlisted under any active ban?
+     *  Null-safe. Shared by the establish, receiveSessionOrTokenRequest, and
+     *  handleInbound confirmed-complete paths.
+     *  Any active ban - temporary, hostile, or permanent - blocks inbound
+     *  SSU2 connections: a banlisted peer is one the local router does not
+     *  talk to at all (inbound or outbound) until the ban expires.
+     *  {@link Banlist#isBanlisted(Hash)} returns true for every non-expired
+     *  entry, so it covers all tiers.
      *
      *  @param banlist the router's banlist
      *  @param h the peer hash, may be null
-     *  @return true if the peer is banned
+     *  @return true if the peer has an active ban of any tier
      *  @since 0.9.71
      */
     static boolean isBanlisted(Banlist banlist, Hash h) {
-        return h != null &&
-               (banlist.isBanlisted(h) || banlist.isBanlistedHostile(h) || banlist.isBanlistedForever(h));
-    }
-
-    /**
-     *  Is the peer banned forever or marked hostile? The stricter subset of the
-     *  banlist states (time-based bans are not enough to reject a fully
-     *  established inbound connection). Null-safe. Used by the handleInbound
-     *  confirmed-complete dispatch.
-     *
-     *  @param banlist the router's banlist
-     *  @param h the peer hash, may be null
-     *  @return true if permanently banned or hostile
-     *  @since 0.9.71
-     */
-    static boolean isBannedForeverOrHostile(Banlist banlist, Hash h) {
-        return h != null &&
-               (banlist.isBanlistedForever(h) || banlist.isBanlistedHostile(h));
+        return h != null && banlist.isBanlisted(h);
     }
 
     /**
@@ -2583,11 +2572,9 @@ public class EstablishmentManager {
                     RouterIdentity remote = inboundState.getConfirmedIdentity();
                     if (remote != null) {
                         Hash remoteHash = remote.calculateHash();
-                        if (isBannedForeverOrHostile(_context.banlist(), remoteHash)) {
+                        if (isBanlisted(_context.banlist(), remoteHash)) {
                             if (_log.shouldWarn()) {
-                                _log.warn("Dropping Inbound connection from " +
-                                (_context.banlist().isBanlistedForever(remoteHash) ? "permanently" : "") +
-                                " banlisted peer: " + remoteHash);
+                                _log.warn("Dropping Inbound connection from banlisted peer: " + remoteHash);
                             }
                             // So next time we will not accept the con, rather than doing the whole handshake
                             _context.blocklist().add(inboundState.getSentIP());
