@@ -1,20 +1,24 @@
 package net.i2p.router.transport;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
 
 /**
  * Maintains list of countries with strict application restrictions.
  * Maintain a list of countries that may have tight restrictions on applications like ours.
+ *
+ * <p>The country set is stored as a sorted array of case-normalized 2-letter
+ * integer keys so {@link #contains(String)} performs no per-call String
+ * allocation (callers such as {@code Router.isHidden} check this on the hot
+ * path with GeoIP codes that are already lowercase).
+ *
  * @since 0.8.13
  */
 public abstract class StrictCountries {
 
     private StrictCountries() { /* no-op */ }
 
-    private static final Set<String> _countries;
+    /** Sorted ascending for binary search; each key = ((c0 & 0xDF) << 8) | (c1 & 0xDF) */
+    private static final int[] _countries;
 
     /**
      * List updated using the Freedom in the World Index 2020 - https://freedomhouse.org/
@@ -66,15 +70,33 @@ public abstract class StrictCountries {
             "VN", // Vietnam
             "YE"  // Yemen
         };
-        _countries = new HashSet<>(Arrays.asList(c));
+        _countries = new int[c.length];
+        for (int i = 0; i < c.length; i++) {
+            // 0xDF maps any ASCII letter to its uppercase form (A-Z in bits 0-4)
+            int key = ((c[i].charAt(0) & 0xDF) << 8) | (c[i].charAt(1) & 0xDF);
+            _countries[i] = key;
+        }
+        Arrays.sort(_countries);
     }
 
     /**
      *  Whether the country is in the restricted set.
      *
-     *  @param country non-null, two-letter code, case-independent
+     *  @param country two-letter code, case-independent; null or any other
+     *                 length is not restricted
+     *  @return true if the code is in the restricted set
      */
     public static boolean contains(String country) {
-        return _countries.contains(country.toUpperCase(Locale.US));
+        if (country == null || country.length() != 2)
+            return false;
+        char c0 = country.charAt(0);
+        char c1 = country.charAt(1);
+        // 0xDF folds case by clearing bit 5 but preserves bit 7, so a char
+        // >= 128 can never fold onto an ASCII key; the original Set lookup
+        // also never matched them, so exclude them outright.
+        if (c0 > 127 || c1 > 127)
+            return false;
+        int key = ((c0 & 0xDF) << 8) | (c1 & 0xDF);
+        return Arrays.binarySearch(_countries, key) >= 0;
     }
 }

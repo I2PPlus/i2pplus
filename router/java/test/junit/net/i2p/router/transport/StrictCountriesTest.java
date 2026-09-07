@@ -1,52 +1,56 @@
 package net.i2p.router.transport;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 /**
- *  Tests for StrictCountries.
- *  Static utility - no I2P context needed.
+ * Tests for {@link StrictCountries} case-independent membership lookup.
+ * Covers every known code, both cases, non-codes, and degenerate inputs.
  */
 public class StrictCountriesTest {
 
-    @Test
-    public void testKnownStrictCountries() {
-        assertTrue(StrictCountries.contains("CN"));
-        assertTrue(StrictCountries.contains("IR"));
-        assertTrue(StrictCountries.contains("KP"));
-        assertTrue(StrictCountries.contains("SA"));
-        assertTrue(StrictCountries.contains("SY"));
-        assertTrue(StrictCountries.contains("TR"));
-        assertTrue(StrictCountries.contains("VE"));
-        assertTrue(StrictCountries.contains("BY"));
-    }
+    private static final String[] KNOWN = {
+        "AE", "AF", "AZ", "BH", "BI", "BN", "BY", "CD", "CF", "CM", "CN",
+        "CU", "EG", "EH", "ER", "ET", "GQ", "IQ", "IR", "KP", "KZ", "LA",
+        "LY", "MM", "PK", "PS", "RW", "SA", "SD", "SO", "SS", "SY", "SZ",
+        "TD", "TH", "TJ", "TM", "TR", "UZ", "VE", "VN", "YE"
+    };
 
     @Test
-    public void testCaseInsensitive() {
-        assertTrue(StrictCountries.contains("cn"));
-        assertTrue(StrictCountries.contains("ir"));
-        assertTrue(StrictCountries.contains("Cn"));
-    }
-
-    @Test
-    public void testFreeCountries() {
-        assertFalse(StrictCountries.contains("US"));
-        assertFalse(StrictCountries.contains("GB"));
-        assertFalse(StrictCountries.contains("DE"));
-        assertFalse(StrictCountries.contains("FR"));
-        assertFalse(StrictCountries.contains("JP"));
-        assertFalse(StrictCountries.contains("AU"));
-        assertFalse(StrictCountries.contains("CA"));
-        assertFalse(StrictCountries.contains("NL"));
-    }
-
-    @Test
-    public void testContainsKnownCount() {
-        // Verify some specific strict countries
-        String[] strict = {"AE", "AF", "AZ", "BH", "BY", "CN", "CU", "EG", "ER", "IR", "KP", "KZ", "LA", "MM", "PK", "SA", "SY", "TD", "TM", "TR", "UZ", "VE", "VN", "YE"};
-        for (String c : strict) {
-            assertTrue(c + " should be strict", StrictCountries.contains(c));
+    public void everyKnownCodeMatchesInAllCases() {
+        for (String code : KNOWN) {
+            assertTrue("uppercase " + code, StrictCountries.contains(code));
+            assertTrue("lowercase " + code, StrictCountries.contains(code.toLowerCase()));
+            assertTrue("mixed " + code, StrictCountries.contains(code.charAt(0) + code.substring(1, 2).toLowerCase()));
         }
+    }
+
+    @Test
+    public void unknownCodesAreNotRestricted() {
+        assertFalse(StrictCountries.contains("US"));
+        assertFalse(StrictCountries.contains("DE"));
+        assertFalse(StrictCountries.contains("GB"));
+        assertFalse(StrictCountries.contains("XX"));
+        assertFalse(StrictCountries.contains("RU"));
+    }
+
+    @Test
+    public void nullIsNotRestricted() {
+        assertFalse(StrictCountries.contains(null));
+    }
+
+    @Test
+    public void wrongLengthIsNotRestricted() {
+        assertFalse(StrictCountries.contains("C"));
+        assertFalse(StrictCountries.contains("CHN"));
+        assertFalse(StrictCountries.contains(""));
+    }
+
+    @Test
+    public void nonAsciiIsNotRestricted() {
+        assertFalse(StrictCountries.contains("\u01c9X"));
+        assertFalse(StrictCountries.contains("\u00c7N"));
     }
 }
