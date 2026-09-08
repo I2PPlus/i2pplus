@@ -196,7 +196,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /** timeout for first request line */
-    private static final long HEADER_TIMEOUT = (long) 15*1000;
+    private static final long HEADER_TIMEOUT = (long) 30*1000;
     /** timeout for the rest of the request headers */
     private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
     /** min time before socket error is escalated to ERROR level */
@@ -217,7 +217,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     // Set a relatively short timeout for GET/HEAD,
     // and a long failsafe timeout for POST/CONNECT, since the user
     // could be POSTing a massive file
-    private static final int SERVER_READ_TIMEOUT_GET = 90*1000;
+    private static final int SERVER_READ_TIMEOUT_GET = 60*1000;
     private static final int SERVER_READ_TIMEOUT_MEDIUM = 3*60*1000;
     private static final int SERVER_READ_TIMEOUT_POST = 5*60*1000;
 
