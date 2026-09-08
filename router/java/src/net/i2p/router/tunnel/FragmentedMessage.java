@@ -217,6 +217,8 @@ class FragmentedMessage {
         }
         for (int i = 0; i <= _highFragmentNum; i++) {
             ByteArray ba = _fragments[i];
+            if (ba == null)
+                throw new IllegalStateException("null fragment i=" + i + " of " + _highFragmentNum);
             System.arraycopy(ba.getData(), ba.getOffset(), target, offset, ba.getValid());
             offset += ba.getValid();
         }

@@ -102,9 +102,6 @@ class FragmentHandler {
     private final AtomicInteger _failed = new AtomicInteger();
     private final boolean _isInbound;
 
-    /** Reusable I2NP message handler — avoids per-message allocation */
-    private final I2NPMessageHandler _inboundHandler;
-
     /** Don't wait more than this long to completely receive a fragmented message. */
     static long MAX_DEFRAGMENT_TIME = 45*1000L;
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
@@ -129,7 +126,6 @@ class FragmentHandler {
         _fragmentedMessages = new ConcurrentHashMap<>(16);
         _receiver = receiver;
         _isInbound = isInbound;
-        _inboundHandler = isInbound ? new I2NPMessageHandler(context) : null;
         // all createRateStat in TunnelDispatcher
     }
 
@@ -199,17 +195,6 @@ class FragmentHandler {
             if (_log.shouldWarn())
                 _log.warn("Corrupt fragment received [Offset: " + offset + "]", e);
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
-            // java.lang.IllegalStateException: don't get the completed size when we're not complete - null fragment i=0 of 1
-            // at net.i2p.router.tunnel.FragmentedMessage.getCompleteSize(FragmentedMessage.java:194)
-            // at net.i2p.router.tunnel.FragmentedMessage.toByteArray(FragmentedMessage.java:223)
-            // at net.i2p.router.tunnel.FragmentHandler.receiveComplete(FragmentHandler.java:380)
-            // at net.i2p.router.tunnel.FragmentHandler.receiveSubsequentFragment(FragmentHandler.java:353)
-            // at net.i2p.router.tunnel.FragmentHandler.receiveFragment(FragmentHandler.java:208)
-            // at net.i2p.router.tunnel.FragmentHandler.receiveTunnelMessage(FragmentHandler.java:92)
-            // ...
-            // still trying to find root cause
-            // let's limit the damage here and skip the:
-            // .transport.udp.MessageReceiver: Error processing UDP message
             return false;
         } finally {
             // each of the FragmentedMessages populated make a copy out of the
@@ -465,8 +450,7 @@ class FragmentHandler {
                                        + size + "; offset: " + offset + "; fragment:" + fragmentNum);
 
         final long fMessageId = messageId;
-        FragmentedMessage msg = null;
-        msg = _fragmentedMessages.computeIfAbsent((int) messageId,
+        FragmentedMessage msg = _fragmentedMessages.computeIfAbsent((int) messageId,
             k -> new FragmentedMessage(_context, fMessageId));
 
         // synchronized is required, fragments may be arriving in different threads
@@ -503,24 +487,29 @@ class FragmentHandler {
         try {
             // toByteArray destroys the contents of the message completely
             data = msg.toByteArray();
-            if (data == null)
-                throw new I2NPMessageException("null data");   // fragments already released???
+            if (data == null) {
+                if (_log.shouldWarn())
+                    _log.warn("Error receiving fragmented message -> Corrupt?\n* " + msg + " (null data)");
+                return;
+            }
             if (_log.shouldDebug())
                 _log.debug("Message received (" + data.length + " bytes): ");
 
-            // Read in as unknown message for outbound tunnels,
-            // since this will just be packaged in a TunnelGatewayMessage.
-            // Not a big savings since most everything is a GarlicMessage
-            // and so the readMessage() call is fast.
-            // The unencrypted messages at the OBEP are (V)TBMs
-            // and perhaps an occasional DatabaseLookupMessage
             I2NPMessage m;
             if (_isInbound) {
-                m = _inboundHandler.readMessage(data);
+                // Create a new handler per message — I2NPMessageHandler is NOT
+                // threadsafe and multiple UDPHandle threads may call this
+                // concurrently on the same FragmentHandler instance.
+                m = new I2NPMessageHandler(_context).readMessage(data);
             } else {
                 int utype = data[0] & 0xff;
                 m = new UnknownI2NPMessage(_context, utype);
                 m.readBytes(data, utype, 1);
+            }
+            if (m == null) {
+                if (_log.shouldWarn())
+                    _log.warn("Error receiving fragmented message -> Corrupt?\n* " + msg + " (null message)");
+                return;
             }
             _receiver.receiveComplete(m, msg.getTargetRouter(), msg.getTargetTunnel());
         } catch (I2NPMessageException ime) {
@@ -533,10 +522,16 @@ class FragmentHandler {
     }
 
     /**
-     *  Zero-copy reception of an unfragmented message
-     *  @since 0.9
+     *  Zero-copy reception of an unfragmented message.
      */
     private void receiveComplete(byte[] data, int offset, int len, Hash router, TunnelId tunnelId) {
+        if (data == null || offset < 0 || len <= 0 || offset + len > data.length) {
+            if (_log.shouldWarn())
+                _log.warn("Error receiving unfragmented message" + (router != null ? " from [" +
+                          router.toBase64().substring(0,6) + "]" : "") +  " -> Corrupt? (bad data bounds)");
+            _context.statManager().addRateData("tunnel.corruptMessage", 1);
+            return;
+        }
         _completed.incrementAndGet();
         try {
             if (_log.shouldDebug()) {
@@ -544,20 +539,25 @@ class FragmentHandler {
                            (router != null ? "from [" + router.toBase64().substring(0,6) + "]" : ""));
             }
 
-            // Read in as unknown message for outbound tunnels,
-            // since this will just be packaged in a TunnelGatewayMessage.
-            // Not a big savings since most everything is a GarlicMessage
-            // and so the readMessage() call is fast.
-            // The unencrypted messages at the OBEP are (V)TBMs
-            // and perhaps an occasional DatabaseLookupMessage
             I2NPMessage m;
             if (_isInbound) {
-                _inboundHandler.readMessage(data, offset, len);
-                m = _inboundHandler.lastRead();
+                // Create a new handler per message — I2NPMessageHandler is NOT
+                // threadsafe and multiple UDPHandle threads may call this
+                // concurrently on the same FragmentHandler instance.
+                I2NPMessageHandler h = new I2NPMessageHandler(_context);
+                h.readMessage(data, offset, len);
+                m = h.lastRead();
             } else {
                 int utype = data[offset++] & 0xff;
                 m = new UnknownI2NPMessage(_context, utype);
                 m.readBytes(data, utype, offset, len - 1);
+            }
+            if (m == null) {
+                if (_log.shouldWarn())
+                    _log.warn("Error receiving unfragmented message" + (router != null ? " from [" +
+                              router.toBase64().substring(0,6) + "]" : "") +  " -> Corrupt? (null message)");
+                _context.statManager().addRateData("tunnel.corruptMessage", 1);
+                return;
             }
             _receiver.receiveComplete(m, router, tunnelId);
         } catch (I2NPMessageException ime) {
