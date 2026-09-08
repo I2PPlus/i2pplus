@@ -421,22 +421,17 @@ class Connection {
      * Minimum spacing (ms) between SYN-ACK re-sends to an existing connection in
      * response to retransmitted SYNs.
      *
-     * <p>{@code ConnectionHandler#resendSynAck} mints a fresh signed SYN-ACK into
-     * the shared outbound packet queue for <em>every</em> retransmitted SYN.  When a
-     * client's SYN retransmit timer (RTO) is shorter than the I2P round trip — the
-     * latency-bound regime observed on the tracker tunnel, where a congested path
-     * delivers one retransmitted SYN every &lt;1s per destination — each retransmit
-     * triggers another full SYN-ACK enqueue, extra egress, and more latency, closing a
-     * self-amplifying loop.  Spacing bounds the SYN-ACK output to one per connection
-     * per interval: the client's own retransmits continue regardless, but the server
-     * answer rate is pinned, so amplification is capped rather than unbounded.
+     * <p>Matched to the client's default initial RTO ({@link ConnectionOptions#INITIAL_RTO_DEFAULT}
+     * = 2000ms) so every client retransmit can receive a SYN-ACK response.  At 3s the
+     * server skipped every other retransmit, starving lossy I2P paths where the initial
+     * SYN-ACK was lost and each re-send must traverse a degraded tunnel.
      *
-     * <p>This is a defensive bound below {@link #SYN_ACK_RESEND_MAX}: it caps the
-     * <em>rate</em> of re-sends, while the count limit caps the total.
+     * <p>The amplification bound is preserved by {@link #SYN_ACK_RESEND_MAX}: spacing
+     * ensures one answer per RTO, the count cap hard-bounds the total.
      *
      * @since 0.9.71+
      */
-    static final long SYN_ACK_RESEND_MIN_SPACING_MS = 3000;
+    static final long SYN_ACK_RESEND_MIN_SPACING_MS = 2000;
 
     /**
      * Maximum number of SYN-ACK re-sends to an existing connection in response to
@@ -448,14 +443,14 @@ class Connection {
      * completes) cannot mint SYN-ACKs indefinitely.  After this many re-sends the
      * handler drops further retransmitted SYNs without answering.
      *
-     * <p>3 gives ample room for the legitimate race this code fixes (client
-     * retransmitted SYN before the SYN-ACK arrived — see
-     * {@code ConnectionHandler#resendSynAck}) while still hard-bounding a stuck
-     * connection.
+     * <p>5 gives ample room for lossy I2P paths: with 2s spacing this covers 10s
+     * of the client's 30s connect window, ensuring at least 5 SYN-ACK chances
+     * after the initial.  A half-open connection is hard-bounded at 6 total
+     * SYN-ACKs (1 initial + 5 re-sends).
      *
      * @since 0.9.71+
      */
-    static final int SYN_ACK_RESEND_MAX = 3;
+    static final int SYN_ACK_RESEND_MAX = 5;
 
     /**
      * Decide whether to re-send a SYN-ACK for an existing connection in response to

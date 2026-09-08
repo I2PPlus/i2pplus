@@ -634,8 +634,8 @@ class ConnectionHandler {
         reply.setFlag(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_SIGNATURE_INCLUDED);
         reply.setSequenceNum(0);
         reply.setAckThrough(syn.getSequenceNum());
-        reply.setSendStreamId(con.getReceiveStreamId());
-        reply.setReceiveStreamId(con.getSendStreamId());
+        reply.setSendStreamId(con.getSendStreamId());
+        reply.setReceiveStreamId(con.getReceiveStreamId());
         reply.setLocalPort(syn.getLocalPort());
         reply.setRemotePort(syn.getRemotePort());
         int mtu = con.getOptions().getMaxMessageSize();
