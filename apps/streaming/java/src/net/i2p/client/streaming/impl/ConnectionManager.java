@@ -201,11 +201,15 @@ class ConnectionManager {
 
     /**
      *  Autoban property: a dest is temporarily banned until this many minutes after
-     *  it first trips a flood threshold. Default 24 hours.
+     *  it first trips a flood threshold. Default 5 minutes — short enough that
+     *  a legitimate client's retry window (30s connect timeout) overlaps with
+     *  the ban expiry, so retries succeed on the next attempt.  The previous
+     *  24-hour default was far too aggressive: a burst of page-load SYNs from
+     *  a browser (local or remote) could ban a peer for an entire day.
      *  Tunable via i2p.streaming.tempBanMinutes. 0 disables autoban. @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_MINUTES = "i2p.streaming.tempBanMinutes";
-    private static final long DEFAULT_TEMP_BAN_MINUTES = 24 * 60;
+    private static final long DEFAULT_TEMP_BAN_MINUTES = 5;
 
     /**
      *  Autoban property: whether the temp-ban map and sweeper are enabled.
@@ -231,15 +235,19 @@ class ConnectionManager {
      *  @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_RATE_MS = "i2p.streaming.tempBanSynRate";
-    private static final long DEFAULT_TEMP_BAN_RATE_MS = 500;
+    private static final long DEFAULT_TEMP_BAN_RATE_MS = 1000;
 
     /**
      *  Autoban property: sub-second burst threshold (SYNs within rate window).
-     *  Default 10 SYNs per 500ms = 20 req/s instantaneous.
+     *  Default 20 SYNs per 1s = 20 req/s instantaneous.
+     *  A browser page load to a local service can easily fire 15-20 parallel
+     *  connections, each with SYN retransmits — the threshold must accommodate
+     *  legitimate parallel connection bursts, especially when
+     *  {@code i2cp.disableLoopback} routes local traffic over the network.
      *  @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_SYN_BURST = "i2p.streaming.tempBanSynBurst";
-    private static final int DEFAULT_TEMP_BAN_SYN_BURST = 10;
+    private static final int DEFAULT_TEMP_BAN_SYN_BURST = 20;
 
     /**
      *  Ban a dest for the configured duration. Idempotent; an existing longer ban
