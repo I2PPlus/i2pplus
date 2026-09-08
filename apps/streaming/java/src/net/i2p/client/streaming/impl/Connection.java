@@ -443,14 +443,15 @@ class Connection {
      * completes) cannot mint SYN-ACKs indefinitely.  After this many re-sends the
      * handler drops further retransmitted SYNs without answering.
      *
-     * <p>5 gives ample room for lossy I2P paths: with 2s spacing this covers 10s
-     * of the client's 30s connect window, ensuring at least 5 SYN-ACK chances
-     * after the initial.  A half-open connection is hard-bounded at 6 total
-     * SYN-ACKs (1 initial + 5 re-sends).
+     * <p>Set to effectively unlimited: the client's own connect timeout
+     * ({@link Connection#DEFAULT_CONNECT_TIMEOUT}) provides the natural bound.
+     * On lossy I2P paths, SYN-ACKs are frequently lost, and a hard re-send cap
+     * starves the handshake.  The rate limiter ({@link #SYN_ACK_RESEND_MIN_SPACING_MS})
+     * prevents amplification storms while allowing every retransmit an answer.
      *
      * @since 0.9.71+
      */
-    static final int SYN_ACK_RESEND_MAX = 5;
+    static final int SYN_ACK_RESEND_MAX = Integer.MAX_VALUE;
 
     /**
      * Decide whether to re-send a SYN-ACK for an existing connection in response to
