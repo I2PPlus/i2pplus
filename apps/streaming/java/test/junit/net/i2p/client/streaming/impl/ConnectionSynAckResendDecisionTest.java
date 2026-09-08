@@ -68,8 +68,11 @@ public class ConnectionSynAckResendDecisionTest {
     public void testCountCapRejected() {
         long sent = 100000;
         long farFuture = sent + MIN_SPACING * 1000;
-        assertFalse(Connection.shouldResendSynAck(sent, MAX_RESENDS, farFuture, MIN_SPACING, MAX_RESENDS));
-        assertFalse(Connection.shouldResendSynAck(sent, MAX_RESENDS + 5, farFuture, MIN_SPACING, MAX_RESENDS));
+        // With MAX_RESENDS = Integer.MAX_VALUE, a zero or negative cap blocks everything
+        assertFalse(Connection.shouldResendSynAck(sent, 0, farFuture, MIN_SPACING, 0));
+        assertFalse(Connection.shouldResendSynAck(sent, 0, farFuture, MIN_SPACING, -1));
+        // Practical unlimited cap: Integer.MAX_VALUE never blocks
+        assertTrue(Connection.shouldResendSynAck(sent, Integer.MAX_VALUE - 1, farFuture, MIN_SPACING, Integer.MAX_VALUE));
     }
 
     /** Rate vs count semantics: spacing filters a burst even when count remains free. */
