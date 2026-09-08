@@ -105,6 +105,70 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static final int DEFAULT_EMPTY_RETRIES = 9;
 
     /**
+     *  Per-destination concurrent outbound connection limit.
+     *  Caps the number of simultaneous I2P sockets the HTTP proxy opens to the
+     *  same destination.  Without this, a browser page-load fires many parallel
+     *  requests that each independently call {@code createI2PSocket()}, creating
+     *  a SYN storm to the remote server (20+ simultaneous SYNs observed).
+     *  The server's inbound SYN-burst gate ({@code ConnectionManager.checkSynBurst})
+     *  can auto-ban the source for 24 hours once the burst exceeds
+     *  {@code tempBanSynBurst} in {@code tempBanSynRate} ms.
+     *
+     *  <p>A permit is acquired before {@code createI2PSocket()} and released when
+     *  the I2P socket is closed (after the tunnel-runner completes).  With I2P
+     *  keepalive the socket is reopened per request, so the permit lifecycle
+     *  matches the actual connection lifetime.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int MAX_CONNS_PER_DEST = 4;
+
+    /**
+     *  Active outbound I2P socket count per destination hash.
+     *  {@link java.util.concurrent.atomic.AtomicInteger} values; incremented
+     *  before {@code createI2PSocket()}, decremented when the socket closes.
+     *
+     *  @since 0.9.71+
+     */
+    private static final ConcurrentHashMap<Hash, java.util.concurrent.atomic.AtomicInteger> _activeConns =
+        new ConcurrentHashMap<>(8);
+
+    /**
+     *  Try to acquire a concurrent-connection permit for {@code dest}.
+     *  Atomic CAS ensures the count never exceeds {@link #MAX_CONNS_PER_DEST}
+     *  even under heavy parallel load.
+     *
+     *  @return true if the permit was acquired, false if the destination is at
+     *          its connection limit
+     *  @since 0.9.71+
+     */
+    private static boolean tryAcquireConnPermit(Hash dest) {
+        if (dest == null) {return true;}
+        java.util.concurrent.atomic.AtomicInteger count =
+            _activeConns.computeIfAbsent(dest, k -> new java.util.concurrent.atomic.AtomicInteger());
+        int newVal = count.updateAndGet(v -> v < MAX_CONNS_PER_DEST ? v + 1 : -1);
+        return newVal > 0;
+    }
+
+    /**
+     *  Release a concurrent-connection permit for {@code dest}.
+     *  Safe to call with null or when the count is already zero.
+     *
+     *  @since 0.9.71+
+     */
+    private static void releaseConnPermit(Hash dest) {
+        if (dest == null) {return;}
+        java.util.concurrent.atomic.AtomicInteger count = _activeConns.get(dest);
+        if (count != null) {
+            int val = count.decrementAndGet();
+            if (val < 0) {
+                // Underflow guard (should never happen with correct acquire/release pairing)
+                count.compareAndSet(val, 0);
+            }
+        }
+    }
+
+    /**
      *  These are backups if the xxx.ht error page is missing.
      */
     private final static String ERR_REQUEST_DENIED =
@@ -437,6 +501,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 !(s instanceof InternalSocket);
 
           do {   // while (keepalive)
+
+            // Track whether we hold a per-dest connection permit for this
+            // iteration's I2P socket.  Released when the socket closes (after
+            // the tunnel-runner completes) or on connection-failure cleanup.
+            Hash heldPermitDest = null;
 
             if (requestCount > 0) {
                 try {
@@ -1433,11 +1502,30 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
             if (needNewSocket) {
 
+                // Per-destination concurrent connection limit: prevent SYN storms
+                // when the browser fires many parallel requests to the same I2P
+                // destination (20+ simultaneous SYNs observed without this gate).
+                Hash destHash = clientDest.calculateHash();
+                if (!tryAcquireConnPermit(destHash)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(getPrefix(requestId) + "Connection limit reached for " +
+                                  destHash.toBase32().substring(0, 6) +
+                                  " (" + MAX_CONNS_PER_DEST + " concurrent)");
+                    }
+                    throw new IOException("Too many concurrent connections to " +
+                                          destHash.toBase32().substring(0, 6));
+                }
+                heldPermitDest = destHash;
+
                 Properties opts = new Properties();
                 I2PSocketOptions sktOpts;
                 try {sktOpts = getDefaultOptions(opts);}
                 catch (RuntimeException re) {
                     // tunnel build failure
+                    if (heldPermitDest != null) {
+                        releaseConnPermit(heldPermitDest);
+                        heldPermitDest = null;
+                    }
                     writeServiceUnavailable(out, re.getMessage());
                     return;
                 }
@@ -1455,6 +1543,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     } catch (IOException ioe) {
                         connectAttempts++;
                         if (connectAttempts >= I2P_CONNECT_MAX_RETRIES || poolIsDefinitivelyDown()) {
+                            if (heldPermitDest != null) {
+                                releaseConnPermit(heldPermitDest);
+                                heldPermitDest = null;
+                            }
                             throw ioe;
                         }
                         if (_log.shouldInfo()) {
@@ -1553,6 +1645,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // I2PTunnelHTTPClientRunner spins off the browser-to-i2p thread and keeps
             // the i2p-to-socket copier in-line. So we won't get here until the i2p socket is closed.
             Thread.currentThread().setName(name);
+
+            // Release the per-dest connection permit now that the I2P socket is closed.
+            if (heldPermitDest != null) {
+                releaseConnPermit(heldPermitDest);
+                heldPermitDest = null;
+            }
 
             // check if whatever was in the response does not allow keepalive
             if (keepalive && hrunner != null && !hrunner.getKeepAliveSocket()) {
