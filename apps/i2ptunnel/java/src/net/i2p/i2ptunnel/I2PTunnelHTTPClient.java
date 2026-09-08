@@ -1458,8 +1458,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             throw ioe;
                         }
                         if (_log.shouldInfo()) {
-                            _log.info(getPrefix(requestId) + "Connection failed (" + ioe.getClass().getSimpleName() +
-                                      "), retrying: " + ioe.getMessage());
+                            _log.info(getPrefix(requestId) + "Retrying after connection failure -> " + ioe.getMessage());
                         }
                         try {Thread.sleep(getConnectRetryDelayMs(connectAttempts));} catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
