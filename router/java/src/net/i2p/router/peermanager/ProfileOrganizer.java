@@ -70,9 +70,13 @@ public class ProfileOrganizer {
     private final List<Hash> _notFailingPeersList;
     /** Peers demoted via demoteIfUnreachable — excluded from promotion for TUNNEL_DEMOTION_COOLDOWN_MS */
     private final ConcurrentHashMap<Hash, Long> _demotedPeers = new ConcurrentHashMap<>(64);
-    /** Strike count per peer for demoteIfUnreachable — only demote after DEMOTE_STRIKE_THRESHOLD strikes */
+    /** Strike count per peer for demoteIfUnreachable — only demote after DEMOTE_STRIKE_THRESHOLD strikes within the decay window */
     private final ConcurrentHashMap<Hash, Integer> _demoteStrikes = new ConcurrentHashMap<>(64);
-    private static final int DEMOTE_STRIKE_THRESHOLD = 5;
+    /** Last strike time per peer, so strikes expire after DEMOTE_STRIKE_DECAY_MS */
+    private final ConcurrentHashMap<Hash, Long> _demoteStrikeTimes = new ConcurrentHashMap<>(64);
+    public static final int DEMOTE_STRIKE_THRESHOLD = 3;
+    /** A strike older than this no longer counts, so a peer that recovered is not demoted by one later failure */
+    public static final long DEMOTE_STRIKE_DECAY_MS = 10 * 60 * 1000L;
     private static final int MAX_DEMOTED_PEERS = 1024;
 
     private Hash _us;
@@ -2518,38 +2522,51 @@ public class ProfileOrganizer {
 
     /**
      * Immediately demote a peer from fast/high-cap tiers when our transport
-     * connection to it failed during tunnel build (first hop unreachable).
-     * Uses a 3-strike threshold to avoid premature demotion — transient
-     * failures (e.g. pre-connect race) should not remove peers from tiers.
-     * Increments the tunnel failure count so the profile's long-term rating
-     * also reflects the issue.
+     * connection to it failed as a tunnel first hop (unreachable).
+     * Uses a 3-strike threshold within the decay window to avoid premature
+     * demotion — a transient failure (e.g. pre-connect race) should not remove
+     * a peer from tiers, and strikes older than the window expire so a peer
+     * that recovered is not demoted by one later failure.
+     * Does not touch the tunnel failure counter; the caller records the
+     * failure blame (e.g. profileManager().tunnelFailed()).
      */
     public void demoteIfUnreachable(Hash peer) {
         if (!getWriteLock()) return;
+        long now = _context.clock().now();
         try {
-            PeerProfile profile = locked_getProfile(peer);
-            if (profile != null) {
-                profile.getTunnelHistory().incrementFailed(100);
-            }
             // Evict stale demotion cooldowns (entries >10 min old)
-            long cooldownCutoff = _context.clock().now() - TUNNEL_DEMOTION_COOLDOWN_MS;
+            long cooldownCutoff = now - TUNNEL_DEMOTION_COOLDOWN_MS;
             _demotedPeers.entrySet().removeIf(e -> e.getValue() < cooldownCutoff);
             // Cap size to prevent unbounded growth under pathological conditions
             if (_demotedPeers.size() > MAX_DEMOTED_PEERS) {
                 _demotedPeers.clear();
             }
-            // Prune stale strikes for peers that never reached the threshold
-            if (_demoteStrikes.size() > 128) {
-                _demoteStrikes.clear();
+            // Prune expired strikes; drop strikes whose timestamp is gone after
+            // a decay-window sweep so the two maps stay consistent. Only sweep
+            // when large to keep this off the common path.
+            if (_demoteStrikes.size() > 32) {
+                long strikeCutoff = now - DEMOTE_STRIKE_DECAY_MS;
+                _demoteStrikeTimes.entrySet().removeIf(e -> e.getValue() < strikeCutoff);
+                _demoteStrikes.keySet().removeIf(k -> !_demoteStrikeTimes.containsKey(k));
             }
-            // Strike tracking: only demote after threshold consecutive failures
-            _demoteStrikes.merge(peer, 1, Integer::sum);
-            int strikes = _demoteStrikes.get(peer);
+            // Cap size to prevent unbounded growth under pathological conditions
+            if (_demoteStrikes.size() > 128 || _demoteStrikeTimes.size() > 128) {
+                _demoteStrikes.clear();
+                _demoteStrikeTimes.clear();
+            }
+            // Strike tracking: only demote after threshold failures within the decay window
+            Long lastStrikeTime = _demoteStrikeTimes.get(peer);
+            int strikes = nextStrikeCount(_demoteStrikes.getOrDefault(peer, Integer.valueOf(0)),
+                                          lastStrikeTime != null ? lastStrikeTime.longValue() : 0L,
+                                          now);
+            _demoteStrikes.put(peer, Integer.valueOf(strikes));
+            _demoteStrikeTimes.put(peer, Long.valueOf(now));
             if (strikes < DEMOTE_STRIKE_THRESHOLD) {
                 return;
             }
             // Reset strikes and proceed with demotion
             _demoteStrikes.remove(peer);
+            _demoteStrikeTimes.remove(peer);
             boolean inFast = _fastPeers.containsKey(peer);
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
@@ -2558,15 +2575,34 @@ public class ProfileOrganizer {
                               "] from fast/high-cap tiers after " + DEMOTE_STRIKE_THRESHOLD +
                               " unreachable first-hop failures");
                 }
-                _demotedPeers.put(peer, _context.clock().now());
+                _demotedPeers.put(peer, now);
                 if (inFast) _fastPeers.remove(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
+                PeerProfile profile = locked_getProfile(peer);
                 if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
             }
         } finally {
             releaseWriteLock();
         }
+    }
+
+    /**
+     * Compute the next strike count after a failure, applying time-window
+     * decay. A previous strike older than DEMOTE_STRIKE_DECAY_MS no longer
+     * counts, so a peer that recovered is not demoted by one later failure.
+     *
+     * @param previousStrikes strike count before this failure (0 if none)
+     * @param lastStrikeTime time of the previous strike (0 if none)
+     * @param now current time
+     * @return the new strike count, at least 1
+     * @since 0.9.71+
+     */
+    static int nextStrikeCount(int previousStrikes, long lastStrikeTime, long now) {
+        if (previousStrikes <= 0 || lastStrikeTime <= 0 || now - lastStrikeTime >= DEMOTE_STRIKE_DECAY_MS) {
+            return 1;
+        }
+        return previousStrikes + 1;
     }
 
     /**
