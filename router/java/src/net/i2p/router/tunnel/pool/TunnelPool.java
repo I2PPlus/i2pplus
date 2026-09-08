@@ -2399,6 +2399,9 @@ public class TunnelPool {
     /**
      *  Remove the tunnel and blame only one peer.
      *  This may be called multiple times.
+     *  Data-phase first-hop send failures also feed the selection cooldown
+     *  and the tier-demotion strike tracker so a persistently failing first
+     *  hop is not re-selected on the next tunnel generation.
      *
      *  @param cfg the tunnel that failed
      *  @param blamePeer the peer to blame
@@ -2406,8 +2409,13 @@ public class TunnelPool {
      */
     void tunnelFailed(TunnelInfo cfg, Hash blamePeer) {
         fail(cfg);
-        _context.profileManager().tunnelFailed(blamePeer, 100);
+        // Blame all peers proportionally — we can't guarantee the first hop
+        // is the sole cause (intermediate hops may also be flaky).
         tellProfileFailed(cfg);
+        // Additional first-hop-specific actions: selection cooldown and
+        // tier demotion so this peer isn't immediately re-selected.
+        TunnelPeerSelector.recordFirstHopFail(_context, blamePeer);
+        _context.profileOrganizer().demoteIfUnreachable(blamePeer);
     }
 
     /**

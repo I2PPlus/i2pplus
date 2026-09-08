@@ -280,16 +280,21 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      *  Record that a peer failed as first hop (first hop unreachable).
+     *  Prevents re-selection as first hop for the cooldown, and bulk-prunes
+     *  the shared static maps when they exceed their size caps.
      *
      *  @param ctx the router context
      *  @param peer the peer
+     *  @since 0.9.70+
      */
     protected static void recordFirstHopFail(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
-        // Periodically prune expired entries to prevent unbounded growth
-        if (_firstHopFails.size() > 64) {
-            long cutoff = ctx.clock().now() - FIRST_HOP_FAIL_COOLDOWN_MS;
-            _firstHopFails.entrySet().removeIf(e -> e.getValue() < cutoff);
+        // Bulk hygiene for all shared maps when any exceeds its size cap;
+        // read-time filtering in the selectors handles the common case.
+        if (_peerCooldowns.size() > FAILURE_MAP_MAX_SIZE ||
+            _firstHopFails.size() > FAILURE_MAP_MAX_SIZE ||
+            _lastKeepAlive.size() > KEEPALIVE_MAP_MAX_SIZE) {
+            prunePeerMaps(ctx);
         }
     }
 
@@ -501,22 +506,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (ti.getLength() > 1) {return true;}
         }
         return false;
-    }
-
-    /**
-     * Record that a peer failed during peer selection (first-hop or adjacent).
-     * Used by ClientPeerSelector and ExploratoryPeerSelector to mark peers
-     * that failed selection criteria, preventing re-selection for the cooldown.
-     *
-     * @param ctx the router context
-     * @param peer the peer
-     */
-    protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
-        _firstHopFails.put(peer, ctx.clock().now());
-        // Periodically prune all static peer maps
-        if (_peerCooldowns.size() > FAILURE_MAP_MAX_SIZE || _lastKeepAlive.size() > KEEPALIVE_MAP_MAX_SIZE) {
-            prunePeerMaps(ctx);
-        }
     }
 
     /**
