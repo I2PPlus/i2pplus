@@ -3159,6 +3159,10 @@ public class ProfileOrganizer {
      *  means neutral, not "under attack"; a missing-stat 0.0 put the router
      *  into permanent attack mode before stats existed.
      *
+     *  <p>The cache covers the no-data path too: on fallback the cached 1.0 is
+     *  (re)stamped so a missing StatManager early in boot cannot turn every
+     *  per-candidate call into a fresh 6-lookup scan.
+     *
      *  @return the tunnel build success in [0.0, 1.0], 1.0 when no data
      *  @since 0.9.71+
      */
@@ -3167,6 +3171,7 @@ public class ProfileOrganizer {
         if (now - _cachedBuildSuccessTime < BUILD_SUCCESS_CACHE_MS) {
             return _cachedBuildSuccess;
         }
+        double result = 1.0;
         try {
             RateStat eExpl = _context.statManager().getRate("tunnel.buildExploratoryExpire");
             RateStat rExpl = _context.statManager().getRate("tunnel.buildExploratoryReject");
@@ -3176,18 +3181,17 @@ public class ProfileOrganizer {
             RateStat sClient = _context.statManager().getRate("tunnel.buildClientSuccess");
             if (eExpl != null && rExpl != null && sExpl != null &&
                 eClient != null && rClient != null && sClient != null) {
-                double result = buildSuccessRatio(eExpl.getRate(RateConstants.TEN_MINUTES),
+                result = buildSuccessRatio(eExpl.getRate(RateConstants.TEN_MINUTES),
                                          rExpl.getRate(RateConstants.TEN_MINUTES),
                                          sExpl.getRate(RateConstants.TEN_MINUTES),
                                          eClient.getRate(RateConstants.TEN_MINUTES),
                                          rClient.getRate(RateConstants.TEN_MINUTES),
                                          sClient.getRate(RateConstants.TEN_MINUTES));
-                _cachedBuildSuccess = result;
-                _cachedBuildSuccessTime = now;
-                return result;
             }
         } catch (Exception e) { /* ignored */ }
-        return 1.0;
+        _cachedBuildSuccess = result;
+        _cachedBuildSuccessTime = now;
+        return result;
     }
 
     /**
