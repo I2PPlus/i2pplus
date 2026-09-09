@@ -1,3 +1,60 @@
+2026-09-09 dr|z3d
+  * Tunnel:
+    - Fix build executor clock source and backoff race, raise build cap,
+      unblock fast-fail
+    - Trigger rebuild on failure, shorten emergency cooldown to 15s,
+      fix reserve logic
+    - Add NTCP keepalive fallback for peers unreachable via SSU,
+      reduce floodfill exclusion window
+    - Cache build success ratio for 15s to avoid repeated stat scans
+  * Streaming:
+    - Bound SYN-ACK resend cap to client connect window
+    - Throttle SYN-ACK re-sends before the flood gate to avoid false bans
+    - Synchronize burst counter to prevent lost updates under concurrency
+    - Re-arm TLP on stuck head and anchor RTO push-back to fix
+      mid-download freezes
+  * I2PTunnel:
+    - Fix per-destination HTTP proxy connection limit race with atomic
+      compute; raise cap from 4 to 32 to prevent silent asset-load
+      failures on eepsites
+  * Router:
+    - Cache build success fallback to avoid repeated stat scans
+    - Extract pool state snapshot and emergency cooldown as testable
+      methods
+  * Console: Recover empty data cells after morphdom updates and tighten
+    per-row pool alignment check
+
+2026-09-08 dr|z3d
+  * Streaming:
+    - Always answer retransmitted SYN-ACKs (remove resend count cap)
+    - Reduce SYN-burst temp-ban from 24h to 5m and raise burst threshold
+      to 20 SYNs/s
+  * I2PTunnel:
+    - Raise HTTP server read timeout to 60s and header timeout to 30s
+      for I2P latency
+    - Add per-destination connection limit to HTTP client proxy to
+      prevent SYN storms
+
+2026-09-07 dr|z3d
+  * SSU2: Reject inbound connections from peers under any active ban
+  * Console: Fix per-pool tunnels refresh alignment with corrected morph
+    selector
+  * I2PSnark: Update insulaocculta tracker b32 and tweak lookup magnets name
+
+2026-09-06 dr|z3d
+  * Streaming:
+    - Scale SYN give-up budget to cover the connect window and set
+      accurate connect-timeout errors
+    - Honor effective connect window so SYN teardown matches
+      Tuner-scaled budget
+  * I2PTunnel: Fix NPE from unsynchronized delayed-shutdown executor
+    cleanup
+  * Console: Add contentonly fragment rendering to tunnels and transit
+    pages; refresh tunnel pages without second full-page fetch
+  * UDP transport: Set PROP_FIXED_PORT when operator configures port,
+    preventing peer-reported drift
+  * Router: Drop SSU1 PacketBuilder, fold Fragment into PacketBuilder2
+
 2026-09-05 dr|z3d
   * I2PTunnel:
     - Give each server tunnel its own handler pool so a flood on one port no
