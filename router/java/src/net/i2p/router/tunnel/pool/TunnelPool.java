@@ -3871,22 +3871,65 @@ public class TunnelPool {
     }
 
     /**
+     *  Snapshot of pool build state taken under a consistent lock order
+     *  (_tunnelsLock, then the _inProgress monitor).  No other path nests the
+     *  two locks, so taking them in this order cannot deadlock.
+     *
+     *  @return long[] {usableTunnelCount, inProgressCount} as of the snapshot
+     *  @since 0.9.72
+     */
+    private long[] snapshotPoolState() {
+        long now = _context.clock().now();
+        long[] state = new long[2];
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo t : _tunnels) {
+                if (t.getExpiration() <= now) continue;
+                if (t.getTunnelFailed() ||
+                    t.getTestStatus() == TunnelTestStatus.FAILING) continue;
+                state[0]++;
+            }
+            synchronized (_inProgress) {
+                state[1] = _inProgress.size();
+            }
+        } finally {_tunnelsLock.unlock();}
+        return state;
+    }
+
+    /**
+     *  Whether the emergency-cooldown window has elapsed.  Uses a shorter
+     *  cooldown during total collapse: when a pool has zero usable tunnels and
+     *  nothing being built, the standard cooldown lefts it stranded (the first
+     *  EMERGENCY build takes ~20s to timeout, so with the standard 30s cooldown
+     *  the next attempt is 50s later, during which all connections fail).
+     *
+     *  @param elapsedMs time since the last emergency build started, in ms
+     *  @param usableCount usable tunnel count at snapshot time
+     *  @param inProgressCount in-progress build count at snapshot time
+     *  @return true if the cooldown has NOT yet elapsed, so the next emergency
+     *          build must wait
+     *  @since 0.9.72
+     */
+    static boolean isEmergencyCooldownActive(long elapsedMs, long usableCount, long inProgressCount) {
+        long cooldown = (usableCount == 0 && inProgressCount == 0) ?
+            EMERGENCY_COLLAPSE_COOLDOWN_MS : EMERGENCY_COOLDOWN_MS;
+        return elapsedMs < cooldown;
+    }
+
+    /**
      *  Whether an emergency build ran within the cooldown window.  When the
      *  cooldown has elapsed, records the new emergency build time.
      */
     private boolean isEmergencyCooldownActive() {
         long nowMs = _context.clock().now();
         long elapsed = nowMs - _lastEmergencyBuildTime;
-        // Use shorter cooldown during total collapse — when a pool has zero usable
-        // tunnels and nothing being built, a 30s cooldown leaves it stranded.
-        // The first EMERGENCY build takes ~20s to timeout; with 30s cooldown the
-        // next attempt is 50s later, during which all connections fail.
-        long cooldown = (getUsableTunnelCount() == 0 && getInProgressCount() == 0) ?
-            EMERGENCY_COLLAPSE_COOLDOWN_MS : EMERGENCY_COOLDOWN_MS;
-        if (elapsed < cooldown) {
+        // Snapshot both counts under one lock order so a mid-transition build
+        // complete can't flip the decision between the two reads.
+        long[] state = snapshotPoolState();
+        if (isEmergencyCooldownActive(elapsed, state[0], state[1])) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping EMERGENCY: cooldown (" +
-                          elapsed + "ms < " + cooldown + "ms)");
+                          elapsed + "ms)");
             }
             return true;
         }
