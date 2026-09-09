@@ -421,12 +421,16 @@ class Connection {
      * Minimum spacing (ms) between SYN-ACK re-sends to an existing connection in
      * response to retransmitted SYNs.
      *
-     * <p>Matched to the client's default initial RTO ({@link ConnectionOptions#INITIAL_RTO_DEFAULT}
-     * = 2000ms) so every client retransmit can receive a SYN-ACK response.  At 3s the
-     * server skipped every other retransmit, starving lossy I2P paths where the initial
+     * <p>This is the <em>floor</em>: the live spacing used by
+     * {@link #shouldResendSynAck(long)} is the connection's own
+     * {@link #getSynRetransmitInterval()} — the same RTT-aware interval the client
+     * uses for its SYN retransmit timer — so every client retransmit can receive a
+     * SYN-ACK response even as the Tuner adapts the initial RTO.  At 3s the server
+     * skipped every other retransmit, starving lossy I2P paths where the initial
      * SYN-ACK was lost and each re-send must traverse a degraded tunnel.
      *
-     * <p>The amplification bound is preserved by {@link #SYN_ACK_RESEND_MAX}: spacing
+     * <p>The amplification bound is preserved by the resend cap
+     * ({@link #computeSynAckResendCap(long, long)}): spacing
      * ensures one answer per RTO, the count cap hard-bounds the total.
      *
      * @since 0.9.71+
@@ -437,21 +441,38 @@ class Connection {
      * Maximum number of SYN-ACK re-sends to an existing connection in response to
      * retransmitted SYNs, per connection lifetime.
      *
-     * <p>Complements {@link #SYN_ACK_RESEND_MIN_SPACING_MS}: the spacing caps the
-     * rate of re-sends, this caps the total count so a connection that spins in a
-     * half-open state (client stuck retransmitting at its RTO, handshake never
-     * completes) cannot mint SYN-ACKs indefinitely.  After this many re-sends the
-     * handler drops further retransmitted SYNs without answering.
-     *
-     * <p>Set to effectively unlimited: the client's own connect timeout
-     * ({@link Connection#DEFAULT_CONNECT_TIMEOUT}) provides the natural bound.
-     * On lossy I2P paths, SYN-ACKs are frequently lost, and a hard re-send cap
-     * starves the handshake.  The rate limiter ({@link #SYN_ACK_RESEND_MIN_SPACING_MS})
-     * prevents amplification storms while allowing every retransmit an answer.
+     * <p>Used when no connection window is configured (connect timeout absent).
+     * The live cap is {@link #computeSynAckResendCap(long, long)}, derived from the
+     * client's effective connect window so a connection that spins in a half-open
+     * state (client stuck retransmitting at its RTO, handshake never completes)
+     * cannot mint SYN-ACKs past the point the client itself has given up.
      *
      * @since 0.9.71+
      */
     static final int SYN_ACK_RESEND_MAX = Integer.MAX_VALUE;
+
+    /**
+     * Compute the per-connection SYN-ACK re-send cap: the number of retransmitted
+     * SYNs the client can fit within its effective connect window, given the
+     * inter-SYN interval in use.  Answering past this point is wasted work — by
+     * then the client has given up on the handshake — so the cap hard-bounds
+     * SYN-ACK minting without ever starving a live-but-slow peer.
+     *
+     * @param connectWindowMs the client's effective connect window
+     *                        ({@link #getEffectiveConnectWindow()}); &lt;=0 means no
+     *                        window is configured and no cap is applied
+     * @param spacingMs       the inter-SYN-AACK spacing in use; &lt;=0 means no spacing
+     *                        is derived and no cap is applied
+     * @return the cap; never less than 1, or {@link #SYN_ACK_RESEND_MAX} when no
+     *         window is configured
+     * @since 0.9.71+
+     */
+    static int computeSynAckResendCap(long connectWindowMs, long spacingMs) {
+        if (connectWindowMs <= 0 || spacingMs <= 0) {return SYN_ACK_RESEND_MAX;}
+        long cap = (connectWindowMs + spacingMs - 1) / spacingMs;
+        if (cap < 1) {cap = 1;}
+        return (int) Math.min(cap, Integer.MAX_VALUE);
+    }
 
     /**
      * Decide whether to re-send a SYN-ACK for an existing connection in response to
@@ -494,17 +515,18 @@ class Connection {
     /**
      * Whether this connection should re-send a SYN-ACK for a retransmitted SYN
      * right now, given its own send history.  Pure delegate over
-     * {@link #shouldResendSynAck(long, int, long, long, int)} using this
-     * connection's throttle constants, so the heuristic is exercised through the
-     * same code path tests cover.
+     * {@link #shouldResendSynAck(long, int, long, long, int)} using the
+     * RTT-aware spacing this connection actually arms, so the heuristic is
+     * exercised through the same code path tests cover.
      *
      * @param now current wall-clock ms from {@code I2PAppContext.clock()}
      * @return true if a SYN-ACK should be re-sent now
      * @since 0.9.71+
      */
     boolean shouldResendSynAck(long now) {
-        return shouldResendSynAck(_lastSynAckSentOn, _synAckResends, now,
-                                  SYN_ACK_RESEND_MIN_SPACING_MS, SYN_ACK_RESEND_MAX);
+        int spacing = getSynRetransmitInterval();
+        return shouldResendSynAck(_lastSynAckSentOn, _synAckResends, now, spacing,
+                                  computeSynAckResendCap(getEffectiveConnectWindow(), spacing));
     }
 
     /**
