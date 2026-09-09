@@ -446,10 +446,13 @@ class ConnectionManager {
                 return false;
             cur = prev;
         }
-        // Hot path: bump in place. Non-atomic under concurrency, which can only
-        // under-count a rare race for a DoS gate -- never over-ban.
-        cur[1] = cur[1] + 1;
-        return synBurstTripped(cur[0], (int) cur[1], now, windowMs, burst);
+        // Hot path: bump in place under the per-dest window lock so concurrent
+        // SYNs can only be lost to a (safe) under-count, never a lost update
+        // that over-counts a dest toward a ban.
+        synchronized (cur) {
+            cur[1] = cur[1] + 1;
+            return synBurstTripped(cur[0], (int) cur[1], now, windowMs, burst);
+        }
     }
 
     /**
