@@ -107,12 +107,22 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      *  Per-destination concurrent outbound connection limit.
      *  Caps the number of simultaneous I2P sockets the HTTP proxy opens to the
-     *  same destination.  Without this, a browser page-load fires many parallel
-     *  requests that each independently call {@code createI2PSocket()}, creating
-     *  a SYN storm to the remote server (20+ simultaneous SYNs observed).
-     *  The server's inbound SYN-burst gate ({@code ConnectionManager.checkSynBurst})
-     *  can auto-ban the source for 24 hours once the burst exceeds
-     *  {@code tempBanSynBurst} in {@code tempBanSynRate} ms.
+     *  same destination.  Without any gate, a misbehaving client page-load can
+     *  fire many parallel requests that each independently call
+     *  {@code createI2PSocket()}, creating a SYN storm to the remote server
+     *  (20+ simultaneous SYNs observed).  The server's inbound SYN-burst gate
+     *  ({@code ConnectionManager.checkSynBurst}) can auto-ban the source for
+     *  24 hours once the burst exceeds {@code tempBanSynBurst} in
+     *  {@code tempBanSynRate} ms.
+     *
+     *  <p>The gate is pure insurance: browsers already self-limit parallel
+     *  connections per host (typically 6 over HTTP/1.1, fewer under HTTP/2),
+     *  and keep-alive means steady-state concurrency per destination is low.
+     *  The cap is therefore set high enough that a legitimate page-load burst
+     *  can never hit it -- being tied to the same destination means kicking a
+     *  5th+ parallel request would make a browser asset silently fail -- while
+     *  still bounding an out-of-control client (hundreds of connections) far
+     *  below the network-path burst that trips the remote SYN-burst gate.
      *
      *  <p>A permit is acquired before {@code createI2PSocket()} and released when
      *  the I2P socket is closed (after the tunnel-runner completes).  With I2P
@@ -121,7 +131,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *
      *  @since 0.9.71+
      */
-    private static final int MAX_CONNS_PER_DEST = 4;
+    private static final int MAX_CONNS_PER_DEST = 32;
 
     /**
      *  Active outbound I2P socket count per destination hash.
