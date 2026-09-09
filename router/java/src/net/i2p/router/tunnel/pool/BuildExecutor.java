@@ -756,7 +756,7 @@ public class BuildExecutor implements Runnable {
                             state[0]++;
                         }
                         if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
-                            state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
+                            state[1] = _context.clock().now() + POOL_BACKOFF_MS;
                         }
                     }
                 }
@@ -913,10 +913,11 @@ public class BuildExecutor implements Runnable {
                 // Determine how many tunnels are allowed to build concurrently
                 int allowed = allowed(); // also expires timed out requests
                 allowed = buildZeroHopTunnels(wanted, allowed); // zero-hop tunnels build inline
-                // Cap per-iteration builds to prevent flooding the network
-                // Reduced from 4 to 2: fewer concurrent builds = higher quality
-                // per build, less overwhelm for peers, fewer timeouts.
-                if (allowed > 2) allowed = 2;
+                // Cap per-iteration builds to prevent flooding the network.
+                // 4 allows faster recovery from cascading pool collapse while
+                // the transport backpressure (below) throttles when the send
+                // pipeline is actually congested.
+                if (allowed > 4) allowed = 4;
 
                 // Transport congestion backpressure: when the send pipeline is
                 // backed up (>2s processing time), reduce builds so data messages
@@ -1003,9 +1004,10 @@ public class BuildExecutor implements Runnable {
                                     _log.debug("Configuring new tunnel [" + i + "] for " + pool);
                                 }
                                 buildTunnel(cfg);
-                            } else {
-                                i--;
                             }
+                            // When cfg is null (fastFailTbrTarget pre-connecting),
+                            // don't decrement i — the pool was removed from wanted
+                            // and will be retried on the next 15s cycle.
                         }
 
                         /* Cancel excess in-progress builds to stay within budget.
@@ -1145,8 +1147,11 @@ public class BuildExecutor implements Runnable {
         // (timeout handler increments but success never resets because
         // pool.buildComplete(TIMEOUT) already removed the build config,
         // so BuildExecutor.buildComplete(SUCCESS) is never called).
-        if (backoffUntil > 0) {
-            synchronized (state) {
+        // synchronized(state) ensures the check-and-reset is atomic —
+        // another thread cannot increment state[0] between the outer
+        // backoffUntil > 0 read and the reset.
+        synchronized (state) {
+            if (state[1] > 0) {
                 state[0] = 0;
                 state[1] = 0;
             }
@@ -1275,7 +1280,7 @@ public class BuildExecutor implements Runnable {
                     state[0]++;
                 }
                 if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
-                    state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
+                    state[1] = _context.clock().now() + POOL_BACKOFF_MS;
                     if (_log.shouldDebug()) {
                         _log.debug("Pool backoff engaged after " + (int) state[0] +
                                    " consecutive failures for " + pool);
