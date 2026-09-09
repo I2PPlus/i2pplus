@@ -986,6 +986,53 @@ class Connection {
     }
 
     /**
+     * Pure predicate: has the oldest unacked packet exceeded the worst-case
+     * retransmit budget without a transmission?
+     *
+     * <p>The worst case is one transmission per RTO for the full per-packet
+     * retransmit budget ({@code maxResends * maxRto}). If the oldest packet has
+     * not been transmitted within that budget, recovery is presumed stuck — the
+     * packet was cancelled (on a reset or close) but never removed from the
+     * window map, so no give-up branch can count it and the RTO timer fires into
+     * a no-op forever. An exact-inequality comparison keeps a live path on the
+     * budget boundary from being killed.
+     *
+     * @param maxResends configured per-packet retransmit budget (&gt; 0)
+     * @param maxRto configured maximum single retransmit timeout in ms (&gt; 0)
+     * @param now current time in ms since epoch
+     * @param lastSend last transmission time of the oldest packet in ms since
+     *                 epoch, or &lt;= 0 if never sent
+     * @return true if the packet has been in flight beyond the budget and
+     *         recovery is presumed stuck
+     * @since 0.9.72
+     */
+    static boolean stuckLifetimeExceeded(int maxResends, int maxRto, long now, long lastSend) {
+        if (maxResends <= 0 || maxRto <= 0 || lastSend <= 0)
+            return false;
+        return now - lastSend > (long) maxResends * maxRto;
+    }
+
+    /**
+     * Pure decision: should this packet's retransmit be paced through the paced
+     * queue rather than sent directly?
+     *
+     * <p>The first {@link #IMMEDIATE_RETX_BURST} packets of a timer fire are sent
+     * directly to avoid flooding the I2CP queue with a single-timer-fire burst.
+     * Beyond that, pacing spreads the load. Packets already transmitted
+     * {@link #MAX_PACED_RETX} times or more are recovery-critical and always
+     * sent directly so they cannot starve behind a stale pacing rate in the
+     * paced queue (hard drain deadline).
+     *
+     * @param burstCount number of direct sends already made in this timer fire
+     * @param nResends transmissions this packet has undergone
+     * @return true if the retransmit should go through pacing
+     * @since 0.9.72
+     */
+    static boolean shouldPaceRetx(int burstCount, int nResends) {
+        return burstCount >= IMMEDIATE_RETX_BURST && nResends < MAX_PACED_RETX;
+    }
+
+    /**
      * Notify all threads waiting in packetSendChoke().
      * Also update pacing rate since window size may have changed.
      */
@@ -2554,6 +2601,27 @@ class Connection {
                 return;
             }
 
+            // Hard liveness backstop: if the oldest unacked packet has had no
+            // transmission within the worst-case retransmit budget, recovery is
+            // stuck (e.g. the packet was cancelled on a reset/close but never
+            // removed from the window map, so no give-up branch below can count
+            // it and this timer fires into a no-op forever). Force the
+            // connection closed instead of zombieing.
+            synchronized (_outboundPackets) {
+                Map.Entry<Long, PacketLocal> first = _outboundPackets.firstEntry();
+                if (first != null && stuckLifetimeExceeded(_options.getMaxResends(),
+                                                           ConnectionOptions.getMaxRTOStatic(),
+                                                           _context.clock().now(),
+                                                           first.getValue().getLastSend())) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
+                    }
+                    if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
+                    disconnect(false);
+                    return;
+                }
+            }
+
             if (_log.shouldDebug()) {
                 _log.debug(Connection.this + " rtx timer timeReached()");
             }
@@ -2567,6 +2635,11 @@ class Connection {
             //    (sends * interval) covers the connect() window.
             if (_highestAckedThrough.get() >= 0) {
                 pushBackRTO(_options.doubleRTO());
+                // Dark connection: re-arm the tail loss probe so a re-lost
+                // head-of-line packet is detected at ~2*RTT instead of waiting
+                // on the next, pushed-back RTO. Forward progress in ackPackets()
+                // still cancels/re-arms the probe as before.
+                _tlpEvent.scheduleProbe(getPTO());
             } else {
                 // SYN phase: fixed interval, no backoff. Evidence-gated + RTT-aware so the
                 // interval tracks the measured path (packing more attempts into the connect
@@ -2629,13 +2702,30 @@ class Connection {
             int burstCount = 0;
             for (PacketLocal packet : toResend) {
                 // Skip packets acknowledged or cancelled after the snapshot was
-                // built (line 2203) but before this resend runs. ackPackets() and
+                // built (line 2634) but before this resend runs. ackPackets() and
                 // cancelled() release the payload back to the buffer pool under a
                 // different lock, so a stale reference here would re-enqueue a
                 // packet whose _payload is now null and crash the I2CP write
                 // (use-after-release TOCTOU; mirrors the paced-path guard below).
-                if (packet.writeReleased())
+                if (packet.writeReleased()) {
+                    // A cancelled-but-still-mapped packet can never be
+                    // retransmitted and freezes every give-up branch below
+                    // (getNumSends() never advances), leaving this timer to fire
+                    // into a no-op forever — the "stuck packet forever" zombie.
+                    // Drop it from the window map once (removal is a no-op if
+                    // ackPackets already removed it).
+                    long staleSeq = packet.getSequenceNum();
+                    synchronized (_outboundPackets) {
+                        if (_outboundPackets.remove(Long.valueOf(staleSeq)) != null) {
+                            _outboundPackets.notifyAll();
+                            if (_log.shouldWarn()) {
+                                _log.warn(Connection.this + " removed cancelled/stale packet " + packet +
+                                          " from outbound window");
+                            }
+                        }
+                    }
                     continue;
+                }
                 /** N resends. */
                 final int nResends = packet.getNumSends();
                 if (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
@@ -2689,7 +2779,7 @@ class Connection {
                         }
                         packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
-                    } else if (_unchokesToSend.decrementAndGet() > 0) {
+                    } else if (_unchokesToSend.get() > 0) {
                         if (_log.shouldDebug()) {
                             _log.debug(Connection.this + " packet is unchoking " + packet);
                         }
@@ -2709,9 +2799,9 @@ class Connection {
                     if (packet.getSendStreamId() <= 0) {packet.setSendStreamId(_sendStreamId.get());}
                     packet.setTimeout(_options.getRTO());
 
-                    // First 4 retransmits go directly; remaining go through pacing to
-                    // avoid flooding the I2CP queue with a single-timer-fire burst.
-                    if (burstCount < 4) {
+                    // Direct or paced? The first IMMEDIATE_RETX_BURST go directly; the rest
+                    // are paced unless recovery-critical (see shouldPaceRetx()).
+                    if (!shouldPaceRetx(burstCount, nResends)) {
                         if (_outboundQueue.enqueue(packet)) {
                             burstCount++;
                             if (_log.shouldInfo()) {
@@ -2872,6 +2962,21 @@ class Connection {
     static final int FAST_RETRANSMIT_THRESHOLD = 3;
 
     /**
+     * Number of retransmits sent directly per RTO fire before remaining
+     * retransmits are paced, to avoid flooding the I2CP queue with a
+     * single-timer-fire burst. @since 0.9.72
+     */
+    static final int IMMEDIATE_RETX_BURST = 4;
+
+    /**
+     * Once a packet has been transmitted this many times, always send it
+     * directly instead of pacing it: a repeatedly-resent packet is
+     * recovery-critical and must not starve behind a stale pacing rate in the
+     * paced queue (hard drain deadline). @since 0.9.72
+     */
+    static final int MAX_PACED_RETX = 4;
+
+    /**
      * A new ResendPacketEvent.
      * @since 0.9.46
      */
@@ -2915,6 +3020,15 @@ class Connection {
          *
          * Don't synchronize this, deadlock with ackPackets-&gt;ackReceived-&gt;SimpleTimer2.cancel
          *
+         * <p>Historical note on the lock warning: SimpleTimer2 now invokes
+         * TimedEvent.timeReached()/run() outside any SimpleTimer2 monitor
+         * (only checkAndPrepareRun/updateStateAfterRun are brief synchronized
+         * scopes), so the called-from-across-the-wire locks taken in
+         * ackPackets() and here cannot form a monitor cycle with this thread.
+         * A short synchronized (_outboundPackets) in the reset path below is
+         * therefore deadlock-safe; ackPackets() holds the same lock only for
+         * mapping + ack bookkeeping, never while calling SimpleTimer2.
+         *
          * @return true if the packet was sent, false if it was not
          */
         private boolean retransmit() {
@@ -2922,6 +3036,18 @@ class Connection {
 
             if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 _packet.cancelled();
+                // cancelled() does NOT remove the packet from the window map.
+                // Left mapped, getNumSends() is frozen so no give-up branch in
+                // RetransmitEvent.timeReached() can ever count this packet, and
+                // every later RTO fire no-ops on the writeReleased() skip — the
+                // "stuck packet forever" zombie. Drop it from the window now.
+                synchronized (_outboundPackets) {
+                    _outboundPackets.remove(Long.valueOf(_packet.getSequenceNum()));
+                    _outboundPackets.notifyAll();
+                }
+                if (_log.shouldDebug()) {
+                    _log.debug(Connection.this + " cancelled " + _packet + " on reset, removed from outbound window");
+                }
                 return false;
             }
 
@@ -2929,7 +3055,7 @@ class Connection {
             if (_isChoking) {
                 _packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
                 _packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
-            } else if (_unchokesToSend.decrementAndGet() > 0) {
+            } else if (_unchokesToSend.get() > 0) {
                 // don't worry about wrapping around
                 _packet.setOptionalDelay(0);
                 _packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
