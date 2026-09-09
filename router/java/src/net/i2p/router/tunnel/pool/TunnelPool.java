@@ -135,6 +135,14 @@ public class TunnelPool {
     private static final long PRE_BUILD_THROTTLE_MS = 60_000;
     private volatile long _lastEmergencyBuildTime;
     private static final long EMERGENCY_COOLDOWN_MS = 30_000;
+    /**
+     *  Shorter cooldown during total collapse — when a pool has zero usable AND
+     *  zero untested tunnels, a 30s cooldown leaves the pool stranded for too
+     *  long.  The first EMERGENCY build takes ~20s to timeout; with a 30s
+     *  cooldown the next attempt is 50s later.  During this window all
+     *  connection attempts to the associated destination fail.
+     */
+    private static final long EMERGENCY_COLLAPSE_COOLDOWN_MS = 5_000;
     private volatile boolean _leaseSetRepublishPending;
     private static final int REMOVAL_QUEUE_CAPACITY = 2000;
     private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<>(REMOVAL_QUEUE_CAPACITY);
@@ -3189,10 +3197,11 @@ public class TunnelPool {
         int reserve;
         if (publishesLeaseSet()) {
             reserve = Math.max(target - goodCount, 0);
-            // With zero good tunnels, keeping broken tunnels as fallback is
-            // counterproductive — there's nothing good to fall back to.
+            // With zero good tunnels, keep at least 2 non-GOOD tunnels as LeaseSet
+            // fallback — a single tunnel is insufficient for LS viability and removal
+            // leaves the destination unreachable until the next build completes.
             if (goodCount == 0) {
-                reserve = Math.min(reserve, 1);
+                reserve = Math.max(reserve, 2);
             }
         } else {
             reserve = 0;
@@ -3867,11 +3876,17 @@ public class TunnelPool {
      */
     private boolean isEmergencyCooldownActive() {
         long nowMs = _context.clock().now();
-        if (nowMs - _lastEmergencyBuildTime < EMERGENCY_COOLDOWN_MS) {
+        long elapsed = nowMs - _lastEmergencyBuildTime;
+        // Use shorter cooldown during total collapse — when a pool has zero usable
+        // tunnels and nothing being built, a 30s cooldown leaves it stranded.
+        // The first EMERGENCY build takes ~20s to timeout; with 30s cooldown the
+        // next attempt is 50s later, during which all connections fail.
+        long cooldown = (getUsableTunnelCount() == 0 && getInProgressCount() == 0) ?
+            EMERGENCY_COLLAPSE_COOLDOWN_MS : EMERGENCY_COOLDOWN_MS;
+        if (elapsed < cooldown) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping EMERGENCY: cooldown (" +
-                          (nowMs - _lastEmergencyBuildTime) + "ms < " +
-                          EMERGENCY_COOLDOWN_MS + "ms)");
+                          elapsed + "ms < " + cooldown + "ms)");
             }
             return true;
         }
@@ -4494,11 +4509,13 @@ public class TunnelPool {
             case TIMEOUT:
                 _consecutiveBuildTimeouts.incrementAndGet();
                 updatePairedProfile(cfg, false);
+                ensureSufficientTunnels();
                 break;
 
             case OTHER_FAILURE:
                 // Not a real failure (e.g., fallback skipping) — don't penalize
                 updatePairedProfile(cfg, false);
+                ensureSufficientTunnels();
                 break;
 
             default:
