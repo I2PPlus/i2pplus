@@ -135,8 +135,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /**
      *  Try to acquire a concurrent-connection permit for {@code dest}.
-     *  Atomic CAS ensures the count never exceeds {@link #MAX_CONNS_PER_DEST}
-     *  even under heavy parallel load.
+     *  The acquire is a per-key atomic remap on {@link #_activeConns}: on
+     *  rejection the map value is left untouched at the limit (never a
+     *  sentinel), so the count can never be corrupted by writes of -1/0 and
+     *  over-admission is impossible even under heavy parallel load.
      *
      *  @return true if the permit was acquired, false if the destination is at
      *          its connection limit
@@ -144,28 +146,36 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     private static boolean tryAcquireConnPermit(Hash dest) {
         if (dest == null) {return true;}
-        java.util.concurrent.atomic.AtomicInteger count =
-            _activeConns.computeIfAbsent(dest, k -> new java.util.concurrent.atomic.AtomicInteger());
-        int newVal = count.updateAndGet(v -> v < MAX_CONNS_PER_DEST ? v + 1 : -1);
-        return newVal > 0;
+        java.util.concurrent.atomic.AtomicBoolean acquired = new java.util.concurrent.atomic.AtomicBoolean(false);
+        _activeConns.compute(dest, (key, existing) -> {
+            java.util.concurrent.atomic.AtomicInteger count =
+                (existing != null) ? existing : new java.util.concurrent.atomic.AtomicInteger();
+            if (count.get() >= MAX_CONNS_PER_DEST) {return existing;}
+            count.incrementAndGet();
+            acquired.set(true);
+            return count;
+        });
+        return acquired.get();
     }
 
     /**
      *  Release a concurrent-connection permit for {@code dest}.
-     *  Safe to call with null or when the count is already zero.
+     *  Per-key atomic remap: the entry is removed from {@link #_activeConns}
+     *  exactly when the count reaches zero, so the map cannot grow without
+     *  bound over the lifetime of the process.  Safe to call with null or when
+     *  the count is already zero (underflow-guarded).
      *
      *  @since 0.9.71+
      */
     private static void releaseConnPermit(Hash dest) {
         if (dest == null) {return;}
-        java.util.concurrent.atomic.AtomicInteger count = _activeConns.get(dest);
-        if (count != null) {
-            int val = count.decrementAndGet();
-            if (val < 0) {
-                // Underflow guard (should never happen with correct acquire/release pairing)
-                count.compareAndSet(val, 0);
+        _activeConns.computeIfPresent(dest, (key, count) -> {
+            if (count.decrementAndGet() <= 0) {
+                count.set(0);
+                return null;
             }
-        }
+            return count;
+        });
     }
 
     /**
