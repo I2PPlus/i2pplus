@@ -395,18 +395,22 @@ class ConnectionPacketHandler {
 
                 /** Num sends. */
                 final int numSends = p.getNumSends();
-                /** Ack time. */
-                final int ackTime = p.getAckTime();
+                // Send-based RTT sample: time between the packet's last
+                // transmission and its ACK, excluding queueing delay that would
+                // otherwise poison SRTT on choked/paced connections (RFC 6298
+                // section 3). Resent packets are excluded for RTT but still
+                // counted below. Lifetime since creation is kept for the stat.
+                final int rttTime = p.getRttTime();
 
                 if (numSends > 1 && receivedAck)
                     numResends++;
-                else if (ackTime > highestRTT)
-                    highestRTT = ackTime;
+                else if (rttTime > highestRTT)
+                    highestRTT = rttTime;
 
-                _context.statManager().addRateData("stream.sendsBeforeAck", numSends, ackTime);
+                _context.statManager().addRateData("stream.sendsBeforeAck", numSends, p.getAckTime());
 
                 if (_log.shouldDebug())
-                    _log.debug("Packet ACKed after " + ackTime + "ms: " + p);
+                    _log.debug("Packet ACKed after " + rttTime + "ms of network time: " + p);
             }
             if (highestRTT > 0) {
                 if (_log.shouldInfo()) {

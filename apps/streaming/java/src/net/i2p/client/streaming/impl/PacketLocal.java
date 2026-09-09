@@ -177,6 +177,47 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
+     * RTT sample for an ACKed packet: time between its last transmission and
+     * its ACK.
+     *
+     * <p>Unlike {@link #getAckTime()} (which measures lifetime since creation
+     * and is used for the {@code stream.sendsBeforeAck} stat), this excludes
+     * queueing delay: a packet may sit in the outbound queue (pacing, choke,
+     * slow tunnel) long after creation, and folding that delay into the RTT
+     * sample inflates SRTT and pins RTO at its ceiling exactly when recovery
+     * is needed. Per RFC 6298 section 3, only packets sent once are valid RTT
+     * samples; callers gate on {@link #getNumSends()} &lt;= 1 before trusting
+     * the value.
+     *
+     * @return the RTT sample in ms, or -1 if the packet was never sent or
+     *         never ACKed
+     * @since 0.9.72
+     */
+    public synchronized int getRttTime() {
+        if (_ackOn <= 0)
+            return -1;
+        return (int) rttSample(_ackOn, _lastSend);
+    }
+
+    /**
+     * Pure RTT sample computation: ACK time minus last transmission time.
+     *
+     * <p>The sample is only meaningful when the packet was transmitted exactly
+     * once (RFC 6298 section 3); resend bookkeeping is left to the caller so
+     * this helper stays testable without router context.
+     *
+     * @param ackOn time the packet was ACKed in ms since epoch
+     * @param lastSend time of the last transmission in ms since epoch
+     * @return the RTT sample in ms, or -1 if either time is unknown (&lt;= 0)
+     * @since 0.9.72
+     */
+    static long rttSample(long ackOn, long lastSend) {
+        if (ackOn <= 0 || lastSend <= 0)
+            return -1;
+        return ackOn - lastSend;
+    }
+
+    /**
      * Number of times sent.
      * @return the number of times this packet has been sent
      */
