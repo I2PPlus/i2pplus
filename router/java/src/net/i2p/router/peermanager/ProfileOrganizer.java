@@ -3139,6 +3139,17 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Short-lived cache for {@link #getTunnelBuildSuccess()}.  The 6 RateStat
+     *  lookups are expensive when called per-candidate in peer selection (up to
+     *  400 peers × 6 lookups).  The ratio is a 10-minute rolling average, so
+     *  a 15s cache (<2.5% staleness) eliminates ~40x redundant lookups with
+     *  negligible impact on decision accuracy.
+     */
+    private volatile double _cachedBuildSuccess = 1.0;
+    private volatile long _cachedBuildSuccessTime;
+    private static final long BUILD_SUCCESS_CACHE_MS = 15_000;
+
+    /**
      *  Recent tunnel build success ratio, from router statistics.
      *  <p>
      *  TEN_MINUTES window: a short window reacts quickly to network health
@@ -3152,6 +3163,10 @@ public class ProfileOrganizer {
      *  @since 0.9.71+
      */
     public double getTunnelBuildSuccess() {
+        long now = _context.clock().now();
+        if (now - _cachedBuildSuccessTime < BUILD_SUCCESS_CACHE_MS) {
+            return _cachedBuildSuccess;
+        }
         try {
             RateStat eExpl = _context.statManager().getRate("tunnel.buildExploratoryExpire");
             RateStat rExpl = _context.statManager().getRate("tunnel.buildExploratoryReject");
@@ -3161,15 +3176,17 @@ public class ProfileOrganizer {
             RateStat sClient = _context.statManager().getRate("tunnel.buildClientSuccess");
             if (eExpl != null && rExpl != null && sExpl != null &&
                 eClient != null && rClient != null && sClient != null) {
-                return buildSuccessRatio(eExpl.getRate(RateConstants.TEN_MINUTES),
+                double result = buildSuccessRatio(eExpl.getRate(RateConstants.TEN_MINUTES),
                                          rExpl.getRate(RateConstants.TEN_MINUTES),
                                          sExpl.getRate(RateConstants.TEN_MINUTES),
                                          eClient.getRate(RateConstants.TEN_MINUTES),
                                          rClient.getRate(RateConstants.TEN_MINUTES),
                                          sClient.getRate(RateConstants.TEN_MINUTES));
+                _cachedBuildSuccess = result;
+                _cachedBuildSuccessTime = now;
+                return result;
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { /* ignored */ }
         return 1.0;
     }
 
