@@ -123,6 +123,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Rtt kappa. */
     private static final float RTT_KAPPA = 4;
 
+    /**
+     * Minimum gap enforced between RTO doublings. Floors the once-per-RTT
+     * guard in {@link #doubleRTO()} so a degenerately small smoothed RTT
+     * cannot make the guard a no-op.
+     * @since 0.9.72
+     */
+    static final long MIN_RTO_DOUBLE_GAP_MS = 1000;
+
     /** Prop initial rto. */
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
     /** Prop max rto. */
@@ -763,15 +771,41 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public synchronized int getMinRTT() {return _minRtt;}
 
     /**
-     * Smoothed RTT, clamped to maxRtt. Not public, use updateRTT().
+     * Smoothed RTT. Not public, use updateRTT().
+     *
+     * <p>The value is NOT clamped to maxRtt here: clamping the smoothed value
+     * lets a stale outlier pin steady-state RTT at the ceiling, which in turn
+     * pins RTO at its max and locks the recovery cadence. Single samples are
+     * already clamped at ingestion (see {@link #updateRTT(int)}), and RTO is
+     * independently bounded by computeRTO(), so the smoothed value tracks the
+     * path honestly.
      *
      * @param ms new RTT value in ms
      */
     private void setRTT(int ms) {
         synchronized(this) {
             _smoothedRtt = ms;
-            if (_smoothedRtt > getMaxRtt()) {_smoothedRtt = getMaxRtt();}
         }
+    }
+
+    /**
+     * Pure clamp for a raw RTT sample before it enters the smoother.
+     *
+     * <p>A clearly pathological single sample (e.g. tens of seconds from a
+     * stale reference after a long idle) must not inject a step into the
+     * smoothed RTT / RTO; the sample is reined to the per-connection ceiling
+     * instead. Zero and negative samples pass through unchanged so the
+     * caller's sentinel handling is preserved.
+     *
+     * @param sample raw measured RTT in ms (may be negative or zero)
+     * @param maxRtt per-connection sample ceiling in ms; &lt;= 0 disables clamping
+     * @return sample clamped to [0, maxRtt]
+     * @since 0.9.72
+     */
+    static int clampRttSample(int sample, int maxRtt) {
+        if (maxRtt <= 0)
+            return sample;
+        return Math.max(0, Math.min(sample, maxRtt));
     }
 
     /**
@@ -832,14 +866,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Double RTO after congestion per RFC 6298 sec. 5 item 5.5.
      * Guards against rapid double-fires from RetransmitEvent + ResendPacketEvent
-     * by limiting to once per RTT.
+     * by limiting to once per RTT, floored at {@link #MIN_RTO_DOUBLE_GAP_MS}
+     * so a degenerate smoothed RTT cannot turn the guard into a no-op.
      *
      * @return the new RTO value in ms
      */
     synchronized int doubleRTO() {
         long now = System.nanoTime();
+        long minGapMs = Math.max(_smoothedRtt, MIN_RTO_DOUBLE_GAP_MS);
         if (_lastRtoDoubleTime != 0 &&
-            now - _lastRtoDoubleTime < _smoothedRtt * 1_000_000L) {
+            now - _lastRtoDoubleTime < minGapMs * 1_000_000L) {
             return _retransmitTimeout;
         }
         _lastRtoDoubleTime = now;
@@ -851,9 +887,15 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Update the smoothed RTT with a new measurement.
+     *
+     * <p>The raw sample is clamped at ingestion ({@link #clampRttSample}) so a
+     * single pathological reading can never pin the smoothed RTT (and thus the
+     * RTO recovery cadence) at the ceiling.
+     *
      * @param measuredValue must be positive
      */
     public synchronized void updateRTT(int measuredValue) {
+        measuredValue = clampRttSample(measuredValue, getMaxRtt());
         _minRtt = Math.min(_minRtt, measuredValue);
         switch(_rttState) {
         case INIT:
