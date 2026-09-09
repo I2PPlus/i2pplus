@@ -118,6 +118,10 @@ class Connection {
     private final ActivityTimer _activityTimer;
     /** Last congestion highest unacked. */
     private volatile long _lastCongestionHighestUnacked;
+    /** Consecutive loss events since the last recovery (graduated backoff).
+     *  Reset in ackPackets() once the lost window is fully recovered.
+     *  Accessed only under the _outboundPackets lock. */
+    private int _lossStrikes;
 
     // Pacing fields for smooth transmission
     /** Pacing rate in bytes per second. */
@@ -948,6 +952,40 @@ class Connection {
     }
 
     /**
+     *  Graduated congestion response: the window is cut by an amount that
+     *  scales with the number of CONSECUTIVE loss events since the last
+     *  recovery, so a single failed packet does not collapse the connection
+     *  while persistent loss still backs off.
+     *
+     *  @param strikes consecutive loss events (&gt;= 1) since the last recovery
+     *  @param wsize current window size
+     *  @return new window size, floored at 4 (never below a usable minimum)
+     */
+    static int graduatedLossWindow(int strikes, int wsize) {
+        if (strikes <= 1) {
+            return Math.max(4, wsize * 3 / 4);
+        } else if (strikes == 2) {
+            return Math.max(4, wsize / 2);
+        } else {
+            return Math.max(4, wsize / 4);
+        }
+    }
+
+    /**
+     *  Slow-start threshold for a graduated loss response: never below the
+     *  graduated window (so the connection can regrow to at least its post-cut
+     *  capacity) and never below the bandwidth-derived estimate.
+     *
+     *  @param strikes consecutive loss events since the last recovery
+     *  @param wsize current window size
+     *  @param bwBasedSsthresh the bandwidth-estimate-derived threshold (&gt;= 1)
+     *  @return slow-start threshold, floored at 1
+     */
+    static int graduatedLossSsthresh(int strikes, int wsize, int bwBasedSsthresh) {
+        return Math.max(graduatedLossWindow(strikes, wsize), Math.max(bwBasedSsthresh, 1));
+    }
+
+    /**
      * Notify all threads waiting in packetSendChoke().
      * Also update pacing rate since window size may have changed.
      */
@@ -1153,10 +1191,13 @@ class Connection {
         boolean anyLeft = false;
         boolean doPushBack = false;
         boolean doCancel = false;
+        boolean doReArmTLP = false;
         boolean doCancelTLP = false;
-        int pushBackRTO = 0;
+        int pushBackDelay = 0;
         synchronized (_outboundPackets) {
+            long prevHead = -1;
             if (!_outboundPackets.isEmpty()) {  // short circuit iterator
+                prevHead = _outboundPackets.firstKey();
                 for (Iterator<Map.Entry<Long, PacketLocal>> iter = _outboundPackets.entrySet().iterator(); iter.hasNext(); ) {
                     Map.Entry<Long, PacketLocal> e = iter.next();
                     long id = e.getKey().longValue();
@@ -1198,7 +1239,15 @@ class Connection {
                         // value can't spuriously match and trigger fast retransmit on
                         // the first (rather than the third) duplicate ACK.
                         _lastDupAck = -1;
-                        doCancelTLP = true;
+                        if (prevHead > 0 && !_outboundPackets.isEmpty() && prevHead == _outboundPackets.firstKey()) {
+                            // The head of the window did not move while later packets
+                            // were ACKed: the head packet is stuck and a hole has opened.
+                            // Re-arm the TLP probe instead of cancelling it so the head
+                            // gets retransmitted at ~2*RTT; without this, the RTO (which
+                            // RFC 6298 section 5.3 keeps deferring on these trickle ACKs)
+                            // may never fire — the mid-download freeze.
+                            doReArmTLP = true;
+                        }
                     } else {
                         if (ackThrough == _lastDupAck) {
                             _dupAckCount++;
@@ -1242,14 +1291,29 @@ class Connection {
             anyLeft = !_outboundPackets.isEmpty();
             _outboundPackets.notifyAll();
 
+            if (_lastCongestionHighestUnacked >= 0 && ackThrough > _lastCongestionHighestUnacked) {
+                // The lost window has been fully recovered: consecutive-loss
+                // strikes reset so the next loss starts from the gentle tier.
+                _lossStrikes = 0;
+            }
+
             if (!_ackedList.isEmpty()) {
                 if (anyLeft) {
-                    // RFC 6298 section 5.3
-                    pushBackRTO = _options.getRTO();
+                    // RFC 6298 section 5.3, but anchored to the OLDEST unacked
+                    // packet's deadline instead of 'now'. A trickle of partial
+                    // ACKs would otherwise keep deferring the RTO forever (the
+                    // freeze bug). Anchor: fire no later than oldestLastSend + RTO.
+                    Map.Entry<Long, PacketLocal> first = _outboundPackets.firstEntry();
+                    long oldestLastSend = (first != null) ? first.getValue().getLastSend() : -1;
+                    long now = _context.clock().now();
+                    int rto = _options.getRTO();
+                    long deadline = (oldestLastSend > 0) ? Math.max(now, oldestLastSend + rto) : now + rto;
+                    pushBackDelay = (int) Math.max(0, deadline - now);
                     doPushBack = true;
                 } else {
-                    // RFC 6298 section 5.2
+                    // RFC 6298 section 5.2 — nothing left to retransmit
                     doCancel = true;
+                    doCancelTLP = true;
                 }
             }
         }
@@ -1259,15 +1323,27 @@ class Connection {
         if (!_ackedList.isEmpty()) {
             _bwEstimator.addSample(_ackedList.size());
         }
+        if (doReArmTLP) {
+            // Forward progress but the head of the window is still stuck: re-arm
+            // the TLP probe so the head packet is retransmitted at ~2*RTT instead
+            // of waiting on an RTO that section 5.3 push-back keeps deferring.
+            _tlpEvent.scheduleProbe(getPTO());
+        }
         if (doCancelTLP) {
             _tlpEvent.cancel();
         }
         // Call RetransmitEvent outside _outboundPackets lock
         // to prevent deadlock with RetransmitEvent.timeReached()
         if (doPushBack) {
-            _retransmitEvent.pushBackRTO(pushBackRTO);
+            if (pushBackDelay == 0) {
+                // Already past the oldest packet's deadline: fire the RTO now
+                // rather than deferring again.
+                _retransmitEvent.forceRescheduleNow();
+            } else {
+                _retransmitEvent.pushBackRTOBounded(pushBackDelay);
+            }
             if (_log.shouldDebug()) {
-                _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + pushBackRTO);
+                _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + pushBackDelay);
             }
         } else if (doCancel) {
             _retransmitEvent.cancel();
@@ -2314,8 +2390,10 @@ class Connection {
      *  the probe fills the gap and the peer's ACK triggers fast recovery.
      *  If the original was delivered, the duplicate triggers ackImmediately().
      *
-     *  Only one TLP per flight — subsequent loss falls back to RTO.
-     *  Does NOT trigger congestion control (probe may not actually be lost).
+     *  Re-armed in ackPackets() whenever the head of the window is stuck while
+     *  later packets are ACKed, so a single lost head-of-line packet is probed
+     *  at ~2*RTT instead of waiting on an RTO that partial-ACK push-back keeps
+     *  deferring. Does NOT trigger congestion control (probe may not be lost).
      */
     private class TLProbeEvent extends SimpleTimer2.TimedEvent {
         /** Whether a probe is already scheduled. */
@@ -2355,12 +2433,18 @@ class Connection {
      *  No congestion control — TLP is a probe, not a confirmed loss.
      */
     private void sendTLProbe() {
-        PacketLocal oldest;
+        PacketLocal oldest = null;
         synchronized (_outboundPackets) {
-            Map.Entry<Long, PacketLocal> e = _outboundPackets.firstEntry();
-            if (e == null) return;
-            if (e.getValue().getAckTime() > 0) return;
-            oldest = e.getValue();
+            for (Map.Entry<Long, PacketLocal> e : _outboundPackets.entrySet()) {
+                PacketLocal p = e.getValue();
+                // Skip packets already acked or cancelled (payload released back
+                // to the pool): resending a released packet is use-after-release.
+                if (p.getAckTime() > 0 || p.writeReleased())
+                    continue;
+                oldest = p;
+                break;
+            }
+            if (oldest == null) return;
         }
         if (_outboundQueue.enqueue(oldest)) {
             _unackedPacketsReceived.set(0);
@@ -2434,6 +2518,29 @@ class Connection {
         }
 
         /**
+         *  Push back the retransmission timer to the given DELAY FROM NOW, but
+         *  allow the fire time to move EARLIER if the new deadline is earlier
+         *  than the currently scheduled one. RFC 6298 section 5.3 restarts the
+         *  timer at the full RTO on every new ACK; with trickle ACKs that keeps
+         *  deferring an overdue head-of-line retransmission indefinitely (the
+         *  mid-download freeze). Callers anchor the delay to the oldest unacked
+         *  packet's send time + RTO so the timer is guaranteed to fire.
+         *
+         *  @param delayMs delay from now (the anchored deadline minus now); a
+         *                 value &lt;= 0 forces an immediate fire
+         */
+        public synchronized void pushBackRTOBounded(int delayMs) {
+            if (delayMs <= 0) {
+                forceRescheduleNow();
+            } else if (!_scheduled) {
+                _scheduled = true;
+                schedule(delayMs);
+            } else {
+                reschedule(delayMs, true);
+            }
+        }
+
+        /**
          * Retransmit packets and adjust congestion state when the timer fires.
          */
         @Override
@@ -2488,18 +2595,21 @@ class Connection {
                         _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
                     }
                     int wsize = _options.getWindowSize();
-                    _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
-                    _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
-                    // Ensure ssthresh is at least the halved window so the connection
-                    // can slow-start back to at least half its pre-loss capacity.
-                    // Without this floor, a low bandwidth estimate (from the current
-                    // slow window) caps ssthresh at ~4, collapsing CWND from 256 to 4.
-                    _ssthresh = Math.max(_ssthresh, Math.max(1, wsize / 2));
+                    _lossStrikes++;
+                    int strikes = _lossStrikes;
+                    int bwSsthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
+                    bwSsthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), bwSsthresh);
+                    // Graduated cut: a single failed packet shrinks the window only
+                    // mildly (3/4), escalated strikes back off harder (1/2, then 1/4).
+                    // ssthresh is kept at least the new window so slow-start can
+                    // regrow quickly after recovery instead of crawling at ~4.
+                    int maxSS = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
+                    _ssthresh = Math.min(maxSS, graduatedLossSsthresh(strikes, wsize, bwSsthresh));
                     // Floor at 4 so repeated RTO events don't collapse the window
                     // below a usable minimum — prevents degenerative behavior
                     // where each retransmit halves the window to 1, making every
                     // subsequent send a single-packet-at-a-time ordeal.
-                    _options.setWindowSize(Math.max(4, Math.min(_ssthresh, Math.max(1, wsize / 2))));
+                    _options.setWindowSize(Math.min(maxSS, graduatedLossWindow(strikes, wsize)));
                     updatePacingRate();
                 } else if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
@@ -2848,11 +2958,18 @@ class Connection {
                      */
                     _options.doubleRTO();
 
+                    _lossStrikes++;
                     if (_packet.getNumSends() == 1) {
-                        _ssthresh = Math.max(Math.round(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT() * SSTHR_BW_FACTOR),
-                                             MIN_SSTHR_FAST_RETX);
-                        _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
+                        int strikes = _lossStrikes;
+                        int bwSsthresh = Math.max(Math.round(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT() * SSTHR_BW_FACTOR),
+                                                  MIN_SSTHR_FAST_RETX);
+                        bwSsthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), bwSsthresh);
                         int wsize = _options.getWindowSize();
+                        // Floor ssthresh at the graduated window so the connection
+                        // can regrow quickly after recovery, but keep the classic
+                        // fast-retransmit window choice (min(ssthresh, wsize)).
+                        int maxSS = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
+                        _ssthresh = Math.min(maxSS, Math.max(graduatedLossWindow(strikes, wsize), bwSsthresh));
                         _options.setWindowSize(Math.min(_ssthresh, wsize));
                         updatePacingRate(); // Update pacing when window changes
                     }
