@@ -963,8 +963,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
         String capabilities = routerInfo.getCapabilities();
         boolean isFloodfill = capabilities.contains(Character.toString(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL));
-        // Randomly exclude most exploratory floodfill peers to reduce load (approximate 15/16 exclusion)
-        return isFloodfill && ctx.random().nextInt(16) != 0;
+        // Randomly exclude most exploratory floodfill peers to reduce load (approximate 3/4 exclusion).
+        // Reduced from 15/16 (93.75%) — on sparse networks the old exclusion left too few floodfills
+        // for exploratory builds, causing NetDB lookup failures and pool starvation.
+        return isFloodfill && ctx.random().nextInt(4) != 0;
     }
 
     /**
@@ -2007,9 +2009,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 OutNetMessage onm = new OutNetMessage(rctx, dlm, lifetime,
                     OutNetMessage.PRIORITY_MY_BUILD_REQUEST, ri);
                 Transport udp = rctx.commSystem().getTransports().get("SSU");
+                Transport ntcp = rctx.commSystem().getTransports().get("NTCP");
+                boolean sent = false;
                 if (udp != null) {
-                    try { udp.send(onm); keepalived++; _lastKeepAlive.put(peer, now); } catch (Exception e) { /* ignored */ }
+                    try { udp.send(onm); sent = true; } catch (Exception e) { /* ignored */ }
                 }
+                if (!sent && ntcp != null) {
+                    try { ntcp.send(onm); sent = true; } catch (Exception e) { /* ignored */ }
+                }
+                if (sent) { keepalived++; _lastKeepAlive.put(peer, now); }
             } else if (aggressive) {
                 // Peer not connected and pools are depleted — proactively start
                 // establishment so it's ready when the next build runs.
