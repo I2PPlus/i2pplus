@@ -513,6 +513,18 @@ class ConnectionHandler {
                         // any data the client may have already sent using the old
                         // stream IDs.
                         //
+                        // Rate-bind SYN-ACK re-sends: a latency-bound client (RTO < I2P RTT)
+                        // retransmits its SYN faster than its SYN-ACKs arrive, and each
+                        // retransmit would otherwise mint another full signed SYN-ACK into
+                        // the shared FIFO (the amplification loop seen on the tracker
+                        // tunnel).  Snapshot the decision at read time; state changes don't
+                        // advance the throttle window for a rejected retransmit.  Throttle
+                        // first: a throttle-dropped retransmit mints no SYN-ACK, so it must
+                        // not be counted against the dest's flood window either.
+                        if (!oldcon.shouldResendSynAck(_context.clock().now())) {
+                            if (_log.shouldDebug()) {_log.debug("Dropping retransmitted SYN, SYN-ACK throttle active: " + oldcon);}
+                            continue;
+                        }
                         // Flood gate: a retransmitted SYN uses stream IDs of an
                         // existing (half-open) connection, so it never flows through
                         // ConnectionManager.receiveConnection() and its SYN-burst gate.
@@ -520,19 +532,10 @@ class ConnectionHandler {
                         // retransmitted SYNs, which would otherwise spawn an unbounded
                         // SYN-ACK storm. Check the shared per-dest flood window here so
                         // a dest that exceeds the burst threshold is autobanned and its
-                        // retransmits dropped before any SYN-ACK is minted.
+                        // retransmits dropped before any SYN-ACK is minted.  Runs after
+                        // the throttle so only SYN-ACK-minting retransmits are counted.
                         if (_manager.checkInboundSynFlood(from.calculateHash(), _context.clock().now())) {
                             continue; // drop it without re-sending a SYN-ACK
-                        }
-                        // Rate-bind SYN-ACK re-sends: a latency-bound client (RTO < I2P RTT)
-                        // retransmits its SYN faster than its SYN-ACKs arrive, and each
-                        // retransmit would otherwise mint another full signed SYN-ACK into
-                        // the shared FIFO (the amplification loop seen on the tracker
-                        // tunnel).  Snapshot the decision at read time; state changes don't
-                        // advance the throttle window for a rejected retransmit.
-                        if (!oldcon.shouldResendSynAck(_context.clock().now())) {
-                            if (_log.shouldDebug()) {_log.debug("Dropping retransmitted SYN, SYN-ACK throttle active: " + oldcon);}
-                            continue;
                         }
                         // Log the first re-send per connection at WARN (one-shot diagnosis),
                         // subsequent re-sends at DEBUG — the storm log inflation is as much
