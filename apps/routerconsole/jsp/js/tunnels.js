@@ -139,6 +139,9 @@ function poolsAligned(live, fetched) {
     const fetchedBody = fetchedTables[i].tBodies[0];
     if (!liveBody || !fetchedBody) { return false; }
     if (liveBody.rows.length !== fetchedBody.rows.length) { return false; }
+    for (let j = 0; j < liveBody.rows.length; j++) {
+      if (liveBody.rows[j].cells.length !== fetchedBody.rows[j].cells.length) { return false; }
+    }
     const liveFootCells = liveTables[i].tFoot && liveTables[i].tFoot.rows[0] ? liveTables[i].tFoot.rows[0].cells.length : 0;
     const fetchedFootCells = fetchedTables[i].tFoot && fetchedTables[i].tFoot.rows[0] ? fetchedTables[i].tFoot.rows[0].cells.length : 0;
     if (liveFootCells !== fetchedFootCells) { return false; }
@@ -166,6 +169,21 @@ document.addEventListener("DOMContentLoaded", function() {
       // structural changes wholesale.
       container.innerHTML = fetched.innerHTML;
     }
+    // After morphdom, a td.data cell may have a correct data-sort attribute
+    // but an empty span.right due to index mis-pairing or whitespace node
+    // interference. Replicate the server-side B→KB→MB conversion inline.
+    container.querySelectorAll("td.data").forEach(function(td) {
+      var right = td.querySelector("span.right");
+      if (right && !right.textContent) {
+        var sortVal = parseInt(td.getAttribute("data-sort"), 10);
+        if (sortVal > 0) {
+          var sizeInKB = sortVal * 1024.0 / 1000.0;
+          right.textContent = sizeInKB >= 1024
+            ? (sizeInKB / 1024.0).toFixed(2)
+            : Math.round(sizeInKB);
+        }
+      }
+    });
     updateTunnelCounts();
   });
 
