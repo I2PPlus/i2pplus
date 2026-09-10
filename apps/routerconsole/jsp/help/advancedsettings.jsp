@@ -518,7 +518,7 @@
 <tr class=section><th>Streaming</th></tr>
 
 <tr class=config><th>i2p.streaming.acceptTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]")%></td></tr>
+<tr><td><%=intl._t("Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.answerPings={true|false}</th></tr>
 <tr><td><%=intl._t("This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager.")%></td></tr>
@@ -527,22 +527,22 @@
 <tr><td><%=intl._t("Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.destinationCooldownMs={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]")%></td></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.disconnectTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]")%></td></tr>
+<tr><td><%=intl._t("The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.dropOverLimit={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.enablePongDelay={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]")%></td></tr>
+<tr><td><%=intl._t("This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required.")%></td></tr>
 
 <tr class=config><th>i2p.streaming.initialWindowSize={n}</th></tr>
-<tr><td><%=intl._t("Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]")%></td></tr>
+<tr><td><%=intl._t("Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxConnectTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]")%></td></tr>
+<tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 75000 (75 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxPingTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]")%></td></tr>
@@ -551,40 +551,40 @@
 <tr><td><%=intl._t("This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used.")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxQueueSize={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]")%></td></tr>
+<tr><td><%=intl._t("Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxResendDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxRetransmissions={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]")%></td></tr>
+<tr><td><%=intl._t("Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxRTO={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxRtt={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]")%></td></tr>
+<tr><td><%=intl._t("Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxSlowStartWindow={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]")%></td></tr>
+<tr><td><%=intl._t("Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxWindowSize={n}</th></tr>
-<tr><td><%=intl._t("Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]")%></td></tr>
+<tr><td><%=intl._t("Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.minResendDelay={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.tempBanMinutes={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 1440 (24 hours)]")%></td></tr>
+<tr><td><%=intl._t("Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.tempBanRefusals={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.tempBanSynBurst={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before an immediate autoban is imposed. This provides a sub-second fast-path ban for connection floods that would otherwise overwhelm the refusal counter. [Default is 10]")%></td></tr>
+<tr><td><%=intl._t("Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before an immediate autoban is imposed. This provides a sub-second fast-path ban for connection floods that would otherwise overwhelm the refusal counter. [Default is 20]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.tempBanSynRate={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, an immediate autoban is triggered. [Default is 500 (half a second)]")%></td></tr>
+<tr><td><%=intl._t("Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, an immediate autoban is triggered. [Default is 1000 (1 second)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxMaxConcurrentStreams={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]")%></td></tr>
