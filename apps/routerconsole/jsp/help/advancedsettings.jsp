@@ -630,6 +630,9 @@
 <tr class=config><th>eepget.maxCompleteFails={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]")%></td></tr>
 
+<tr class=config><th>eepget.retryDelayMs={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]")%></td></tr>
+
 <tr class=config><th>eepget.useDNSOverHTTPS={true|false}</th></tr>
 <tr><td><%=intl._t("When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]")%></td></tr>
 

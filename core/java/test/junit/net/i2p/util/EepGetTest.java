@@ -364,12 +364,22 @@ public class EepGetTest extends TestCase {
             }
         });
         // retries=2 -> up to 3 attempts; first attempt returns empty, the retry succeeds.
-        EepGet get = newFetch(server.url("/flaky"), 2);
-        assertTrue(get.fetch(FETCH_TIMEOUT, TOTAL_TIMEOUT, FETCH_TIMEOUT));
-        byte[] stored = readFile(_outFile);
-        assertEquals(body.length, stored.length);
-        assertEquals(new String(body, StandardCharsets.ISO_8859_1), new String(stored, StandardCharsets.ISO_8859_1));
-        assertEquals(2, calls[0]);
+        // Pin the retry backoff to ~0 so the test doesn't pay the production jitter delay.
+        String priorDelay = System.getProperty(EepGet.PROP_RETRY_DELAY);
+        System.setProperty(EepGet.PROP_RETRY_DELAY, "0");
+        try {
+            EepGet get = newFetch(server.url("/flaky"), 2);
+            assertTrue(get.fetch(FETCH_TIMEOUT, TOTAL_TIMEOUT, FETCH_TIMEOUT));
+            byte[] stored = readFile(_outFile);
+            assertEquals(body.length, stored.length);
+            assertEquals(new String(body, StandardCharsets.ISO_8859_1), new String(stored, StandardCharsets.ISO_8859_1));
+            assertEquals(2, calls[0]);
+        } finally {
+            if (priorDelay != null)
+                System.setProperty(EepGet.PROP_RETRY_DELAY, priorDelay);
+            else
+                System.clearProperty(EepGet.PROP_RETRY_DELAY);
+        }
     }
 
     /**

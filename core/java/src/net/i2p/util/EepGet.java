@@ -47,6 +47,8 @@ public class EepGet {
     protected final I2PAppContext _context;
     /** Logger for this instance */
     protected final Log _log;
+    /** Fixed retry delay in ms, -1 selects the jittered default @since 0.9.71+ */
+    protected final long _retryDelayMs;
     /** Whether to route requests through an HTTP proxy */
     protected final boolean _shouldProxy;
     /** Proxy hostname or IP address */
@@ -196,6 +198,13 @@ public class EepGet {
     static final String PROP_MAX_COMPLETE_FAILS = "eepget.maxCompleteFails";
     /** Property name for default retries configuration */
     static final String PROP_DEFAULT_RETRIES = "eepget.defaultRetries";
+    /**
+     * Property name for the fixed retry delay in milliseconds.
+     * A value of -1 (the default) selects the jittered delay; 0 retries immediately
+     * (test suites) and any positive value sets an exact delay.
+     * @since 0.9.71+
+     */
+    static final String PROP_RETRY_DELAY = "eepget.retryDelayMs";
     /** Default connect timeout in milliseconds (90 seconds) */
     protected static final int DEFAULT_CONNECT_TIMEOUT = 90*1000;
     /** Default inactivity timeout in milliseconds (5 minutes) */
@@ -204,6 +213,10 @@ public class EepGet {
     protected static final int DEFAULT_MAX_COMPLETE_FAILS = 20;
     /** Default number of retry attempts */
     protected static final int DEFAULT_NUM_RETRIES = 10;
+    /** Base retry delay in milliseconds when the jittered default is used @since 0.9.71+ */
+    protected static final int DEFAULT_RETRY_DELAY = 5*1000;
+    /** Maximum additional jitter in milliseconds added to the base retry delay @since 0.9.71+ */
+    protected static final int DEFAULT_RETRY_JITTER = 10*1000;
     /** @deprecated use DEFAULT_CONNECT_TIMEOUT */
     protected static final int CONNECT_TIMEOUT = DEFAULT_CONNECT_TIMEOUT;
     /** @deprecated use DEFAULT_INACTIVITY_TIMEOUT */
@@ -380,6 +393,7 @@ public class EepGet {
                   String etag, String lastModified, String postData) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
+        _retryDelayMs = ctx.getProperty(PROP_RETRY_DELAY, -1L);
         _shouldProxy = (proxyHost != null) && (!proxyHost.isEmpty()) && (proxyPort > 0) && shouldProxy;
         _proxyHost = proxyHost;
         _proxyPort = proxyPort;
@@ -1107,9 +1121,11 @@ public class EepGet {
                 !_keepFetching)
                 break;
             _redirects.set(0);
+            long delay = _retryDelayMs;
+            if (delay < 0)
+                delay = DEFAULT_RETRY_DELAY + _context.random().nextInt(DEFAULT_RETRY_JITTER);
             try {
-                long delay = _context.random().nextInt(60*1000);
-                Thread.sleep(5*1000+delay);
+                Thread.sleep(delay);
             } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
         }
 
