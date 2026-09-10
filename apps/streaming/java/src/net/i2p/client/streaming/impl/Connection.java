@@ -156,6 +156,15 @@ class Connection {
     private final Object _nextSendLock;
     /** How many messages have been resent and not yet ACKed. */
     private final AtomicInteger _activeResends = new AtomicInteger();
+    /**
+     *  Set when a soft failure triggers an immediate retransmit pass, so the
+     *  resend loop can tag those resends as soft (not consuming the hard
+     *  retransmit budget).  Written on the router callback thread in
+     *  {@link #scheduleSoftFailureRetransmit()}, read and cleared on the timer
+     *  thread in {@link RetransmitEvent#timeReached()}.  Cleared on cancel so a
+     *  cancelled soft pass cannot leak into a later RTO-driven pass.
+     */
+    private volatile boolean _softFailureResendPending;
     /** Connection event. */
     private final ConEvent _connectionEvent;
     /** Retransmit event. */
@@ -1049,6 +1058,32 @@ class Connection {
     }
 
     /**
+     * Pure decision: has the number of HARD send attempts (sends that took the
+     * router's reply as something to retry after, i.e. not router soft failures)
+     * exceeded the retransmit budget?
+     *
+     * <p>A router soft failure (NO_TUNNELS / EXPIRED / LOCAL) means the message
+     * was never put on the tunnel fabric, so the attempt is not evidence of
+     * on-wire loss. Counting soft-failure-triggered resends against
+     * {@code maxResends} makes a long stream abort during a tunnel handover:
+     * each soft failure immediately re-fires the retransmit timer, so ~30
+     * router-side failures exhaust the budget and kill the connection even
+     * though the packet never left. Only genuine loss should consume the
+     * budget. The subtraction is clamped at zero so an early-tagged paced
+     * resend cannot undercount below the true hard count.
+     *
+     * @param totalSends total send attempts incl. resends (PacketLocal.getNumSends())
+     * @param softResends of those, resends tagged as soft-failure-triggered
+     *                    (PacketLocal.getNumSoftResends())
+     * @param maxResends configured per-packet retransmit budget (&gt; 0)
+     * @return true if the non-soft send attempts exceed the budget
+     * @since 0.9.72
+     */
+    static boolean hardResendBudgetExceeded(int totalSends, int softResends, int maxResends) {
+        return Math.max(0, totalSends - softResends) > maxResends;
+    }
+
+    /**
      * Pure decision: should this packet's retransmit be paced through the paced
      * queue rather than sent directly?
      *
@@ -1147,6 +1182,9 @@ class Connection {
         // Force immediate reschedule, cancelling any pending timer
         // pushBackRTO(0) cannot shorten a running timer (reschedule uses false for useEarliestTime),
         // so we must cancel and re-schedule instead.
+        // Mark the resulting pass as soft so the resend loop doesn't count it
+        // against the hard retransmit budget (tunnel outage != on-wire loss).
+        _softFailureResendPending = true;
         _retransmitEvent.forceRescheduleNow();
         if (_log.shouldInfo()) {
             _log.info("[" + this + "] Scheduled immediate retransmit after soft failure");
@@ -2606,6 +2644,7 @@ class Connection {
         @Override
         public synchronized boolean cancel() {
             _scheduled = false;
+            _softFailureResendPending = false;
             return super.cancel();
         }
 
@@ -2676,6 +2715,11 @@ class Connection {
         @Override
         public void timeReached() {
             _scheduled = false;
+            // Is this pass soft-failure-triggered?  If so, resends of unacked
+            // packets are tagged as soft and don't consume the hard retransmit
+            // budget (see hardResendBudgetExceeded()).
+            final boolean softPass = _softFailureResendPending;
+            _softFailureResendPending = false;
 
            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 if (_log.shouldDebug()) {
@@ -2815,7 +2859,9 @@ class Connection {
                 /** N resends. */
                 final int nResends = packet.getNumSends();
                 if (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
-                    packet.getNumSends() > _options.getMaxResends()) {
+                    hardResendBudgetExceeded(packet.getNumSends(),
+                                             packet.getNumSoftResends(),
+                                             _options.getMaxResends())) {
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " packet " + packet + " resent too many times, closing...");
                     }
@@ -2890,6 +2936,7 @@ class Connection {
                     if (!shouldPaceRetx(burstCount, nResends)) {
                         if (_outboundQueue.enqueue(packet)) {
                             burstCount++;
+                            if (softPass) {packet.incrementSoftResends();}
                             if (_log.shouldInfo()) {
                                 _log.info(Connection.this + " resent packet " + packet);
                             }
@@ -2904,12 +2951,14 @@ class Connection {
                             synchronized (_pacedQueueLock) {
                                 LinkedList<PacketLocal> pq = pacedQueue();
                                 pq.add(packet);
+                                if (softPass) {packet.incrementSoftResends();}
                                 if (pq.size() == 1) {
                                     _pacedEvent.forceReschedule(pacingDelay);
                                 }
                             }
                         } else {
                             if (_outboundQueue.enqueue(packet)) {
+                                if (softPass) {packet.incrementSoftResends();}
                                 if (_log.shouldInfo()) {
                                     _log.info(Connection.this + " resent packet " + packet);
                                 }

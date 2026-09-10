@@ -25,6 +25,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     private final Destination _to;
     private final long _createdOn;
     private final AtomicInteger _numSends = new AtomicInteger();
+    /** Resend attempts triggered by a router soft failure (NO_TUNNELS / EXPIRED / LOCAL). */
+    private final AtomicInteger _numSoftResends = new AtomicInteger();
     private volatile long _lastSend;
     private long _acceptedOn;
     /** LOCKING: this */
@@ -222,6 +224,26 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @return the number of times this packet has been sent
      */
     public int getNumSends() { return _numSends.get(); }
+
+    /**
+     *  Record a resend that was triggered by a router soft failure.  Soft
+     *  failures (NO_TUNNELS / EXPIRED / LOCAL) mean the packet was never put
+     *  on the tunnel fabric, so the attempt should not consume the hard
+     *  retransmit budget (see Connection.hardResendBudgetExceeded()).
+     *
+     *  @since 0.9.72
+     */
+    public void incrementSoftResends() {
+        _numSoftResends.incrementAndGet();
+    }
+
+    /**
+     *  Number of send attempts that were router soft failures.
+     *
+     *  @return the number of soft-failure-triggered resends
+     *  @since 0.9.72
+     */
+    public int getNumSoftResends() { return _numSoftResends.get(); }
 
     /**
      * Time of the last send.
