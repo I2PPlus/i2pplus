@@ -572,6 +572,13 @@
     <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <!-- Scratch I2P base: I2PAppContext defaults i2p.dir.base to user.dir (the
+         module dir), so SnarkManager/I2PSnarkUtil in tests would write *.config.d/,
+         dht.dat, torrent dirs etc. into the workspace. Redirect to a temp dir that
+         is cleaned up after the run, like the gradle test task. -->
+    <property name="i2psnark.test.base" value="${java.io.tmpdir}/build-i2p/i2psnark-junit-base"/>
+    <delete dir="${i2psnark.test.base}"/>
+    <mkdir dir="${i2psnark.test.base}"/>
     <mkdir dir="${junit.reports.dir}/i2psnark/junit"/>
     <delete>
       <fileset dir="${junit.reports.dir}/i2psnark/junit">
@@ -579,6 +586,7 @@
       </fileset>
     </delete>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <sysproperty key="i2p.dir.base" value="${i2psnark.test.base}"/>
       <classpath>
         <pathelement location="${build.dir}/obj_test"/>
         <pathelement location="${build.dir}/obj"/>
@@ -597,6 +605,7 @@
       </batchtest>
       <formatter type="xml"/>
     </junit>
+    <delete dir="${i2psnark.test.base}"/>
     <echo message="I2PSnark JUnit tests completed"/>
   </target>
 
