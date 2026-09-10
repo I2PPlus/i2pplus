@@ -381,7 +381,7 @@ a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
 blockquote{border-left:4px solid var(--hl);margin:8px 0;padding:2px 14px;color:#aab4c0}
 body{margin:0;font:15px/1.6 Open Sans,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
-code{background:var(--code);border:1px solid #343d4a;border-radius:3px;padding:1px 4px;font-size:13px}
+code{background:var(--code);border:1px solid #343d4a;border-radius:3px;padding:1px 4px;font-size:13px;font-weight:500}
 color:var(--fg);background:var(--bg)}
 footer{margin-top:18px;font-size:12px;color:#7a8490}
 html{scrollbar-color:#6cb4e8 #0000}
@@ -390,7 +390,7 @@ h2,.section{border-bottom:1px solid var(--hl);padding-bottom:4px;margin-top:1.6e
 hr{margin:30px 0 20px;border:0;border-bottom:1px solid #343d4a}
 img{max-width:100%}
 mark{background:#e4c981;color:#161b22;border-radius:2px;padding:0 2px}
-pre code{background:none;border:none;padding:0}
+pre code{color:#3b3;background:none;border:none;padding:0}
 pre{background:var(--code);border:1px solid var(--hl);border-radius:6px;padding:10px 12px;overflow-x:auto;font-family:Fira Sans,ui-monospace,Menlo,Consolas,monospace;font-size:13px}
 table{border-collapse:collapse;margin:12px 0;width:100%}
 tbody tr:nth-child(even){background:#0002}
