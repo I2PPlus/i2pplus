@@ -573,7 +573,16 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                             // Re-check under the monitor: a stop that completed while this
                             // event was pending leaves stopped true and bumps the count
                             if (stopped && stopCount == _stopCount) {
-                                startTorrent();
+                                try {
+                                    startTorrent();
+                                } catch (RouterException re) {
+                                    // Intended give-up after RETRY_TOTAL_MS: fatalRouter already
+                                    // logged, stopped, and notified the fatal listener, so do not
+                                    // let it escape as a "crashed" timer task (SimpleTimer2 CRIT).
+                                    if (_log.shouldDebug())
+                                        _log.debug("Suppressed RouterException from retry of "
+                                                   + getBaseName(), re);
+                                }
                             }
                         }
                     }
