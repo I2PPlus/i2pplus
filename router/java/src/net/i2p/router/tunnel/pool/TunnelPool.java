@@ -3758,9 +3758,10 @@ public class TunnelPool {
         if (deficit > 0) {
             // Cap per-cycle builds at base target — scale up gradually
             int needed = Math.min(deficit, target);
-            // Respect pool backoff, unless the pool is truly collapsed
-            // (zero safe + tunnels expiring) — recovery must proceed.
-            boolean collapsed = stats.safeActive == 0 && stats.nearExpiry > 0;
+            // Respect pool backoff, unless the pool is collapsed or nearly so
+            // (≤ 1 safe tunnel) — recovery must proceed before the last
+            // tunnel dies and leaves the pool empty.
+            boolean collapsed = stats.safeActive <= 1;
             if (shouldSkipDueToBackoff(needed, collapsed)) {
                 return;
             }
