@@ -134,6 +134,18 @@ subprojects {
         reports.junitXml.outputLocation.set(junitDir)
         doFirst { junitDir.deleteDir() }
         outputs.dir junitDir
+
+        // I2PAppContext defaults i2p.dir.base to user.dir (the test worker CWD,
+        // which is the module source dir), so SnarkManager/I2PSnarkUtil and other
+        // context-driven code would write *.config, *.config.d/, dht.dat, torrent
+        // dirs, etc. into the workspace. Point it at a scratch dir under the
+        // system temp path (same base as junitDir), created for the run and
+        // removed again once the task completes. Config/router/log/app/pid dirs
+        // all inherit base.
+        def ctxBase = file("${System.getProperty('java.io.tmpdir')}/test-i2p/${project.name}/base")
+        systemProperty 'i2p.dir.base', ctxBase
+        doFirst { ctxBase.deleteDir(); ctxBase.mkdirs() }
+        doLast { project.delete(ctxBase) }
     }
 }
 
