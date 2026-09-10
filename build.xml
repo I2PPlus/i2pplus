@@ -183,7 +183,6 @@
     <echo message="  javadoc-zip                                  Create javadocs zip for project &#10140; ./dist/javadoc.zip"/>
     <echo message="  devdocs                                      Build consolidated developer documentation (READMEs + package.html) &#10140; ./dist/devdocs/"/>
     <echo message="  devdocs-zip                                  Package dev docs as zip &#10140; ./dist/devdocs.zip"/>
-
     <echo message="  jsdoc                                        Create jsdoc with docdash template (requires npm) &#10140; ./dist/jsdoc"/>
     <echo message="  jsdoc-minami                                 Create jsdoc with minami template (requires npm) &#10140; ./dist/jsdoc"/>
     <echo message="  jsdoc-minami-zip                             Create jsdoc zip with minami template &#10140; ./dist/jsdoc-minami.zip"/>

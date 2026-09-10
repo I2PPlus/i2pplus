@@ -207,7 +207,11 @@ def collect_pages(root):
             m = re.match(r"README-(.+)\.md$", path.name)
             lang = _LANGS.get(m.group(1), m.group(1))
             page["label"] += " (%s)" % lang
+            page["translated"] = True
             page["root_rel"] = True  # links written root-relative
+        else:
+            m = re.match(r"(.+)-([a-z]{2})\.md$", path.name)
+            page["translated"] = bool(m and m.group(2) in _LANGS)
         pages.append(page)
     return pages
 
@@ -338,10 +342,19 @@ def render_tree(tree, current, up=""):
         out.append('<li><details%s><summary>%s</summary><ul>' % (
             " open" if (not current or name == top) else "", htmlmod.escape(name)))
         for s in heads:
+            ps = sorted(sections[s], key=lambda x: (x["outrel"], x["title"].lower()))
+            native = [p for p in ps if not p.get("translated")]
+            translated = [p for p in ps if p.get("translated")]
             out.append('<li><h3>%s</h3><ul class="sub">' % htmlmod.escape(s))
-            for p in sorted(sections[s], key=lambda x: (x["outrel"], x["title"].lower())):
+            for p in native:
                 out.append(page_link(p))
-            out.append("</ul></li>")
+            out.append("</ul>")
+            if translated:
+                out.append('<details><summary>Translations (%d)</summary><ul class="sub">' % len(translated))
+                for p in translated:
+                    out.append(page_link(p))
+                out.append("</ul></details>")
+            out.append("</li>")
         out.append("</ul></details></li>")
     for p in sorted(tree["pages"], key=lambda x: x["title"].lower()):
         out.append(page_link(p))
@@ -352,7 +365,8 @@ def render_tree(tree, current, up=""):
 def related_html(p, pages, up=""):
     d = "/".join(p["outrel"].split("/")[:-1])
     sibs = [q for q in pages
-            if "/".join(q["outrel"].split("/")[:-1]) == d and q["outrel"] != p["outrel"]]
+            if "/".join(q["outrel"].split("/")[:-1]) == d and q["outrel"] != p["outrel"]
+            and not q.get("translated")]
     if not sibs:
         return ""
     rows = "".join('<li><a href="%s%s">%s</a></li>' % (up, q["outrel"], htmlmod.escape(q["label"]))
@@ -379,6 +393,9 @@ mark{background:#e4c981;color:#161b22;border-radius:2px;padding:0 2px}
 pre code{background:none;border:none;padding:0}
 pre{background:var(--code);border:1px solid var(--hl);border-radius:6px;padding:10px 12px;overflow-x:auto;font-family:Fira Sans,ui-monospace,Menlo,Consolas,monospace;font-size:13px}
 table{border-collapse:collapse;margin:12px 0;width:100%}
+tbody tr:nth-child(even){background:#0002}
+tbody tr:nth-child(odd){background:#0004}
+td:first-child code{background:none;border:0}
 th,td{border:1px solid var(--hl);padding:6px 10px;text-align:left}
 th{background:#2a3340}
 .badge{display:inline-block;background:#3d3314;color:#e4c981;border:1px solid #8a6d3b;border-radius:9px;font-size:11px;padding:1px 8px;vertical-align:middle}
