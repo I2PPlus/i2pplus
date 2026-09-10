@@ -75,6 +75,32 @@ class ConnectionManager {
     private final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>(4);
 
     /**
+     * When we last logged the "Delaying connect" cooldown WARN per destination.
+     * Complements {@link #_destFailures}: a dest that keeps failing re-enters
+     * cooldown (and thus arms the WARN) on every attempt, so without this the
+     * message would fire once per connect() against an unreachable peer. The
+     * key is pruned together with {@link #_destFailures} using the same cutoff.
+     * @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, Long> _cooldownWarned = new ConcurrentHashMap<>(4);
+
+    /**
+     * Whether to log another cooldown-delay WARN for a destination.
+     * Rate-limits to one warning per cooldown window per destination so a peer
+     * that keeps failing to connect cannot turn every retry into a log line.
+     * A value of 0 (never warned, or pruned) always logs.
+     *
+     * @param lastWarnTime last timestamp the WARN was emitted for this dest, 0 if never
+     * @param now          current time
+     * @param cooldownMs   length of the cooldown window that arms the WARN
+     * @return true if the WARN should be emitted
+     * @since 0.9.71+
+     */
+    static boolean shouldLogCooldownWarn(long lastWarnTime, long now, long cooldownMs) {
+        return lastWarnTime <= 0 || now - lastWarnTime >= cooldownMs;
+    }
+
+    /**
      * Stream connection pool — reuses established streams to the same destination.
      * Key: destination Hash, Value: deque of pooled connections.
      * @since 0.9.71+
@@ -1196,9 +1222,15 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
                   long elapsed = _context.clock().now() - lastFailure;
                   if (elapsed < getDestCooldownMs() && elapsed >= 0) {
                       long delay = getDestCooldownMs() - elapsed;
-                      if (_log.shouldWarn())
-                            _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
-                                      "] for " + delay + "ms (cooldown from previous failure)");
+                      long now = _context.clock().now();
+                      Long lw = _cooldownWarned.get(destHash);
+                      long lastWarn = lw == null ? 0 : lw.longValue();
+                      if (shouldLogCooldownWarn(lastWarn, now, getDestCooldownMs())) {
+                          _cooldownWarned.put(destHash, Long.valueOf(now));
+                          if (_log.shouldWarn())
+                              _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
+                                        "] for " + delay + "ms (cooldown from previous failure)");
+                      }
                       synchronized (_cooldownLock) {
                           try {
                                _cooldownLock.wait(delay);
@@ -1248,6 +1280,12 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
                   for (Map.Entry<Hash, Long> e : _destFailures.entrySet()) {
                       if (e.getValue() < cutoff)
                           _destFailures.remove(e.getKey(), e.getValue());
+                  }
+                  // Same lifespan as _destFailures: a dest re-arming a WARN must have
+                  // just re-entered cooldown, so any warn older than one window is dead.
+                  for (Map.Entry<Hash, Long> e : _cooldownWarned.entrySet()) {
+                      if (e.getValue() < cutoff)
+                          _cooldownWarned.remove(e.getKey(), e.getValue());
                   }
               }
           } else {
@@ -1531,6 +1569,7 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
         _timer.stop();
         _outboundQueue.close();
         _connectionHandler.setActive(false);
+        _packetHandler.shutdownDispatcher();
     }
 
     /**

@@ -86,7 +86,7 @@ class Connection {
     private long _congestionWindowEnd;
     /** Atomic long. */
     private final AtomicLong _highestAckedThrough = new AtomicLong(-1);
-    /** Duplicate ACK tracking for fast retransmit (accessed inside _outboundPackets lock) */
+    /** Duplicate ACK tracking for fast retransmit (accessed inside _outboundPacketsLock) */
     private int _dupAckCount;
     /** Last dup ack. */
     private long _lastDupAck;
@@ -96,8 +96,14 @@ class Connection {
     private final boolean _isInbound;
     /** Whether share options have been updated. */
     private boolean _updatedShareOpts;
-    /** Packet ID (Long) to PacketLocal for sent but unacked packets */
-    private final TreeMap<Long, PacketLocal> _outboundPackets;
+    /** Packet ID (Long) to PacketLocal for sent but unacked packets.
+     *  Lazily allocated on the first send so inbound-only connections allocate
+     *  no window at all. All access (including reads) happens under
+     *  {@link #_outboundPacketsLock}; null until first write. */
+    private TreeMap<Long, PacketLocal> _outboundPackets;
+    /** Monitor for {@link #_outboundPackets} and the sender window. Exposed via
+     *  {@link #getWindowLock()} so ConnectionPacketHandler serializes with us. */
+    private final Object _outboundPacketsLock = new Object();
     /** Outbound queue. */
     private final PacketQueue _outboundQueue;
     /** Packet handler for this connection. */
@@ -120,7 +126,7 @@ class Connection {
     private volatile long _lastCongestionHighestUnacked;
     /** Consecutive loss events since the last recovery (graduated backoff).
      *  Reset in ackPackets() once the lost window is fully recovered.
-     *  Accessed only under the _outboundPackets lock. */
+     *  Accessed only under the _outboundPacketsLock. */
     private int _lossStrikes;
 
     // Pacing fields for smooth transmission
@@ -137,6 +143,9 @@ class Connection {
     private volatile boolean _isChoking;
     /** When we last sent a choke ACK, for persist-timer rate-limiting of re-asserts. */
     private volatile long _lastChokeAckTime;
+    /** When we last logged the persist-timer auto-unchoke WARN, to rate-limit it
+     *  against a persistently choked peer. 0 = never (resets on unchoke). */
+    private volatile long _lastPersistWarnTime;
     /** Unchoke messages pending. */
     private final AtomicInteger _unchokesToSend = new AtomicInteger();
     /** Ack since congestion. */
@@ -153,8 +162,12 @@ class Connection {
     private final RetransmitEvent _retransmitEvent;
     /** Paced event. */
     private final PacedPacketEvent _pacedEvent;
-    /** Paced queue. */
-    private final LinkedList<PacketLocal> _pacedQueue;
+    /** Paced-send queue, lazy like {@link #_outboundPackets}: null until the
+     *  first paced packet, so connections that never pace allocate nothing.
+     *  All access happens under {@link #_pacedQueueLock}. */
+    private LinkedList<PacketLocal> _pacedQueue;
+    /** Monitor for {@link #_pacedQueue}. */
+    private final Object _pacedQueueLock = new Object();
     /** Tlp event. */
     private final TLProbeEvent _tlpEvent;
     /** Ack dup event. */
@@ -703,7 +716,8 @@ class Connection {
                                                 _options.getMaxMessageSize(), _options.getMaxInitialMessageSize(),
                                                 _options.getPassiveFlushDelay());
         _timer = timer;
-        _outboundPackets = new TreeMap<>();
+        // _outboundPackets and _pacedQueue are lazily allocated on first use
+        // (see the fields) so inbound-only connections are allocation-free.
         if (opts != null) {
             _localPort = opts.getLocalPort();
             _remotePort = opts.getPort();
@@ -733,7 +747,6 @@ class Connection {
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
         _pacedEvent = new PacedPacketEvent();
-        _pacedQueue = new LinkedList<PacketLocal>();
         _tlpEvent = new TLProbeEvent();
         _ackDupEvent = new AckDupEvent();
         _ackedList = new ArrayList<>(8);
@@ -843,19 +856,19 @@ class Connection {
         while (true) {
             long timeLeft = writeExpire - now;
             // Sample the bandwidth estimator outside the lock; it has its own
-            // lock, and the timer/estimator thread takes _outboundPackets in
-            // the opposite order (see ackPackets / RetransmitEvent comments).
+            // lock, and the timer/estimator thread takes _outboundPacketsLock
+            // in the opposite order (see ackPackets / RetransmitEvent comments).
             int inFlightCap = getBDPBasedInFlightCap();
             boolean send = false;
             int chokeSize = 0;
-            synchronized (_outboundPackets) {
-                if (!started) {_context.statManager().addRateData("stream.chokeSizeBegin", _outboundPackets.size());}
+            synchronized (_outboundPacketsLock) {
+                if (!started) {_context.statManager().addRateData("stream.chokeSizeBegin", outboundSizeLocked());}
                 if (start + 5*60*1000 < now) {return false;}
 
                 if (!isConnectedOrError()) {return false;}
                 started = true;
 
-                int unacked = _outboundPackets.size();
+                int unacked = outboundSizeLocked();
                 int wsz = _options.getWindowSize();
                 if (shouldWait(unacked, wsz, inFlightCap)) {
                     if (_isChoked) {
@@ -864,8 +877,13 @@ class Connection {
                             persistDelay = Math.min(persistDelay << persistBackoff, 60000L);
                         }
                         if (now - start >= persistDelay) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("Persist timer expired, auto-unchoking on " + this);
+                            // Consume the rate-limit token regardless of level so a
+                            // stream spamming writes cannot keep the WARN hot.
+                            if (shouldLogPersistWarn(_lastPersistWarnTime, now, persistDelay)) {
+                                _lastPersistWarnTime = now;
+                                if (_log.shouldWarn()) {
+                                    _log.warn("Persist timer expired, auto-unchoking on " + this);
+                                }
                             }
                             persistBackoff = Math.min(persistBackoff + 1, 5);
                             setChoked(false);
@@ -882,13 +900,13 @@ class Connection {
                             }
                             return false;
                         }
-                        _outboundPackets.wait(Math.min(timeLeft, 50));
+                        _outboundPacketsLock.wait(Math.min(timeLeft, 50));
                     } else {
-                        _outboundPackets.wait(50);
+                        _outboundPacketsLock.wait(50);
                     }
                     now = _context.clock().now();
                 } else {
-                    chokeSize = _outboundPackets.size();
+                    chokeSize = outboundSizeLocked();
                     send = true;
                 }
             }
@@ -949,6 +967,24 @@ class Connection {
     private boolean shouldWait(int unacked, int wsz, int inFlightCap) {
         return _isChoked || unacked >= wsz ||
                _lastSendId.get() - _highestAckedThrough.get() >= inFlightCap;
+    }
+
+    /**
+     * Whether to log another persist-timer auto-unchoke WARN.
+     * Guard: emit at most one WARN per persist interval per connection. The
+     * persist branch in {@link #packetSendChoke(long)} is re-armed on every
+     * block and its backoff is a per-call local, so an application that keeps
+     * writing into a persistently choked window would otherwise log on every
+     * write attempt.
+     *
+     * @param lastWarnTime last timestamp the WARN was emitted, 0 if never
+     * @param now          current time
+     * @param minIntervalMs minimum ms between WARNs (the persist delay itself)
+     * @return true if the WARN should be emitted
+     * @since 0.9.71+
+     */
+    static boolean shouldLogPersistWarn(long lastWarnTime, long now, long minIntervalMs) {
+        return lastWarnTime <= 0 || now - lastWarnTime >= minIntervalMs;
     }
 
     /**
@@ -1037,7 +1073,7 @@ class Connection {
      * Also update pacing rate since window size may have changed.
      */
     void windowAdjusted() {
-        synchronized (_outboundPackets) {_outboundPackets.notifyAll();}
+        synchronized (_outboundPacketsLock) {_outboundPacketsLock.notifyAll();}
         updatePacingRate();
     }
 
@@ -1100,8 +1136,8 @@ class Connection {
      *  @since 0.9.70+
      */
     void scheduleSoftFailureRetransmit() {
-        synchronized (_outboundPackets) {
-            if (_outboundPackets.isEmpty()) {
+        synchronized (_outboundPacketsLock) {
+            if (_outboundPackets == null || _outboundPackets.isEmpty()) {
                 if (_log.shouldDebug()) {
                     _log.debug("[" + this + "] Soft failure but no unacked packets, skipping retransmit");
                 }
@@ -1155,11 +1191,12 @@ class Connection {
             int windowSize;
             int remaining;
             int timeout;
-            synchronized (_outboundPackets) {
-                _outboundPackets.put(Long.valueOf(packet.getSequenceNum()), packet);
+            synchronized (_outboundPacketsLock) {
+                TreeMap<Long, PacketLocal> ob = outboundPackets();
+                ob.put(Long.valueOf(packet.getSequenceNum()), packet);
                 windowSize = _options.getWindowSize();
-                remaining = windowSize - _outboundPackets.size();
-                _outboundPackets.notifyAll();
+                remaining = windowSize - ob.size();
+                _outboundPacketsLock.notifyAll();
 
                 if (_isChoking) {
                     packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
@@ -1182,9 +1219,10 @@ class Connection {
             // Pace or send immediately
             long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
             if (pacingDelay > 0) {
-                synchronized (_pacedQueue) {
-                    boolean first = _pacedQueue.isEmpty();
-                    _pacedQueue.add(packet);
+                synchronized (_pacedQueueLock) {
+                    LinkedList<PacketLocal> pq = pacedQueue();
+                    boolean first = pq.isEmpty();
+                    pq.add(packet);
                     if (first) {
                         _pacedEvent.forceReschedule(pacingDelay);
                     }
@@ -1199,7 +1237,7 @@ class Connection {
                 }
                 resetActivityTimer();
             }
-            // Schedule retransmit timer outside _outboundPackets lock
+            // Schedule retransmit timer outside _outboundPacketsLock
             // to prevent deadlock with RetransmitEvent.timeReached()
             // TLP scheduled at ~2*RTT to detect loss before RTO.
             if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
@@ -1241,11 +1279,12 @@ class Connection {
         boolean doReArmTLP = false;
         boolean doCancelTLP = false;
         int pushBackDelay = 0;
-        synchronized (_outboundPackets) {
+        synchronized (_outboundPacketsLock) {
+            TreeMap<Long, PacketLocal> ob = _outboundPackets;
             long prevHead = -1;
-            if (!_outboundPackets.isEmpty()) {  // short circuit iterator
-                prevHead = _outboundPackets.firstKey();
-                for (Iterator<Map.Entry<Long, PacketLocal>> iter = _outboundPackets.entrySet().iterator(); iter.hasNext(); ) {
+            if (ob != null && !ob.isEmpty()) {  // short circuit iterator
+                prevHead = ob.firstKey();
+                for (Iterator<Map.Entry<Long, PacketLocal>> iter = ob.entrySet().iterator(); iter.hasNext(); ) {
                     Map.Entry<Long, PacketLocal> e = iter.next();
                     long id = e.getKey().longValue();
                     if (id <= ackThrough) {
@@ -1271,14 +1310,14 @@ class Connection {
                     } else {
                         // Packets > ackThrough are implicitly NACKed; see below for
                         // dup-ACK-based fast retransmit of the first missing packet
-                        break; // _outboundPackets is ordered
+                        break; // the window map is ordered
                     }
                 } // for
             } // !isEmpty()
             // Dup-ACK fast retransmit (implicit NACK of packets beyond ackThrough).
             // Count consecutive duplicate ACKs; at threshold, retransmit the oldest
             // unacked packet. Only fires when peer sends data (ACKs piggybacked).
-            if (!_outboundPackets.isEmpty()) {
+            if (ob != null && !ob.isEmpty()) {
                 if (nacks == null || nacks.length == 0) {
                     if (ackThrough > oldHighest) {
                         _dupAckCount = 0;
@@ -1286,7 +1325,7 @@ class Connection {
                         // value can't spuriously match and trigger fast retransmit on
                         // the first (rather than the third) duplicate ACK.
                         _lastDupAck = -1;
-                        if (prevHead > 0 && !_outboundPackets.isEmpty() && prevHead == _outboundPackets.firstKey()) {
+                        if (prevHead > 0 && !ob.isEmpty() && prevHead == ob.firstKey()) {
                             // The head of the window did not move while later packets
                             // were ACKed: the head packet is stuck and a hole has opened.
                             // Re-arm the TLP probe instead of cancelling it so the head
@@ -1299,7 +1338,7 @@ class Connection {
                         if (ackThrough == _lastDupAck) {
                             _dupAckCount++;
                             if (_dupAckCount >= FAST_RETRANSMIT_THRESHOLD) {
-                                Map.Entry<Long, PacketLocal> first = _outboundPackets.firstEntry();
+                                Map.Entry<Long, PacketLocal> first = ob.firstEntry();
                                 if (first != null && first.getValue().getNumSends() > 0) {
                                     first.getValue().incrementNACKs();
                                 }
@@ -1318,7 +1357,7 @@ class Connection {
                 _ackedPackets.addAndGet(_ackedList.size());
                 for (int i = 0; i < _ackedList.size(); i++) {
                     PacketLocal p = _ackedList.get(i);
-                    // removed from _outboundPackets above in iterator
+                    // removed from the window map above in the iterator
                     if (p.getNumSends() > 1) {
                         _activeResends.decrementAndGet();
                         if (_log.shouldDebug()) {
@@ -1328,15 +1367,15 @@ class Connection {
                 }
                 _ackSinceCongestion.set(true);
             }
-            if ((_outboundPackets.isEmpty()) && (_activeResends.get() != 0)) {
+            if ((ob == null || ob.isEmpty()) && (_activeResends.get() != 0)) {
                 if (_log.shouldInfo()) {
                     _log.info("All outbound packets ACKed, clearing " + _activeResends);
                 }
                 _activeResends.set(0);
             }
 
-            anyLeft = !_outboundPackets.isEmpty();
-            _outboundPackets.notifyAll();
+            anyLeft = ob != null && !ob.isEmpty();
+            _outboundPacketsLock.notifyAll();
 
             if (_lastCongestionHighestUnacked >= 0 && ackThrough > _lastCongestionHighestUnacked) {
                 // The lost window has been fully recovered: consecutive-loss
@@ -1350,7 +1389,7 @@ class Connection {
                     // packet's deadline instead of 'now'. A trickle of partial
                     // ACKs would otherwise keep deferring the RTO forever (the
                     // freeze bug). Anchor: fire no later than oldestLastSend + RTO.
-                    Map.Entry<Long, PacketLocal> first = _outboundPackets.firstEntry();
+                    Map.Entry<Long, PacketLocal> first = ob == null ? null : ob.firstEntry();
                     long oldestLastSend = (first != null) ? first.getValue().getLastSend() : -1;
                     long now = _context.clock().now();
                     int rto = _options.getRTO();
@@ -1365,7 +1404,7 @@ class Connection {
             }
         }
         // Outside the lock: the bandwidth estimator (which has its own lock)
-        // and the TLP timer. The timer thread takes _outboundPackets in the
+        // and the TLP timer. The timer thread takes _outboundPacketsLock in the
         // opposite order, so these must not run inside the critical section.
         if (!_ackedList.isEmpty()) {
             _bwEstimator.addSample(_ackedList.size());
@@ -1379,7 +1418,7 @@ class Connection {
         if (doCancelTLP) {
             _tlpEvent.cancel();
         }
-        // Call RetransmitEvent outside _outboundPackets lock
+        // Call RetransmitEvent outside _outboundPacketsLock
         // to prevent deadlock with RetransmitEvent.timeReached()
         if (doPushBack) {
             if (pushBackDelay == 0) {
@@ -1657,11 +1696,12 @@ class Connection {
      *  Cancel and remove all packets awaiting ack
      */
     private void killOutstandingPackets() {
-        synchronized (_outboundPackets) {
-            if (_outboundPackets.isEmpty()) {return;} // short circuit iterator
-            for (PacketLocal pl : _outboundPackets.values()) {pl.cancelled();}
-            _outboundPackets.clear();
-            _outboundPackets.notifyAll();
+        synchronized (_outboundPacketsLock) {
+            TreeMap<Long, PacketLocal> ob = outboundPackets();
+            if (ob.isEmpty()) {return;} // short circuit iterator
+            for (PacketLocal pl : ob.values()) {pl.cancelled();}
+            ob.clear();
+            _outboundPacketsLock.notifyAll();
         }
     }
 
@@ -2029,6 +2069,9 @@ class Connection {
            _isChoked = on;
            if (_log.shouldWarn()) {_log.warn("Choked changed to " + on + " on " + this);}
            if (!on) {
+               // Episode boundary for the persist WARN gate: once the remote
+               // unchokes us, a fresh persist episode in a later window may log.
+               _lastPersistWarnTime = 0;
                windowAdjusted();
            }
         }
@@ -2109,7 +2152,7 @@ class Connection {
      * @return Count of packets in-flight.
      */
     public int getUnackedPacketsSent() {
-        synchronized (_outboundPackets) {return _outboundPackets.size();}
+        synchronized (_outboundPacketsLock) {return outboundSizeLocked();}
     }
 
     /**
@@ -2117,7 +2160,44 @@ class Connection {
      *
      * @since 0.9.71
      */
-    public Object getWindowLock() {return _outboundPackets;}
+    public Object getWindowLock() {return _outboundPacketsLock;}
+
+    /**
+     * Lazily allocate the sender-side unacked-window map.
+     * Caller must hold {@link #_outboundPacketsLock}.
+     *
+     * @return the non-null window map
+     * @since 0.9.71+
+     */
+    private TreeMap<Long, PacketLocal> outboundPackets() {
+        if (_outboundPackets == null)
+            _outboundPackets = new TreeMap<>();
+        return _outboundPackets;
+    }
+
+    /**
+     * Null-safe window size.
+     * Caller must hold {@link #_outboundPacketsLock}.
+     *
+     * @return 0 when the window was never allocated
+     * @since 0.9.71+
+     */
+    private int outboundSizeLocked() {
+        return _outboundPackets == null ? 0 : _outboundPackets.size();
+    }
+
+    /**
+     * Lazily allocate the paced-send queue.
+     * Caller must hold {@link #_pacedQueueLock}.
+     *
+     * @return the non-null paced queue
+     * @since 0.9.71+
+     */
+    private LinkedList<PacketLocal> pacedQueue() {
+        if (_pacedQueue == null)
+            _pacedQueue = new LinkedList<>();
+        return _pacedQueue;
+    }
 
     /**
      * Congestion window end sequence number.
@@ -2400,7 +2480,7 @@ class Connection {
             buf.append("; RTT: ").append(_options.getRTT());
             buf.append("; RTO: ").append(_options.getRTO());
             // not synchronized to avoid some kooky races
-            buf.append("; UnACKed out: ").append(_outboundPackets.size()).append("; ");
+            buf.append("; UnACKed out: ").append(_outboundPackets == null ? 0 : _outboundPackets.size()).append("; ");
             buf.append("UnACKed in: ").append(getUnackedPacketsReceived());
             int missing = 0;
             long[] nacks = _inputStream.getNacks();
@@ -2481,15 +2561,18 @@ class Connection {
      */
     private void sendTLProbe() {
         PacketLocal oldest = null;
-        synchronized (_outboundPackets) {
-            for (Map.Entry<Long, PacketLocal> e : _outboundPackets.entrySet()) {
-                PacketLocal p = e.getValue();
-                // Skip packets already acked or cancelled (payload released back
-                // to the pool): resending a released packet is use-after-release.
-                if (p.getAckTime() > 0 || p.writeReleased())
-                    continue;
-                oldest = p;
-                break;
+        synchronized (_outboundPacketsLock) {
+            TreeMap<Long, PacketLocal> ob = _outboundPackets;
+            if (ob != null) {
+                for (Map.Entry<Long, PacketLocal> e : ob.entrySet()) {
+                    PacketLocal p = e.getValue();
+                    // Skip packets already acked or cancelled (payload released back
+                    // to the pool): resending a released packet is use-after-release.
+                    if (p.getAckTime() > 0 || p.writeReleased())
+                        continue;
+                    oldest = p;
+                    break;
+                }
             }
             if (oldest == null) return;
         }
@@ -2607,8 +2690,9 @@ class Connection {
             // removed from the window map, so no give-up branch below can count
             // it and this timer fires into a no-op forever). Force the
             // connection closed instead of zombieing.
-            synchronized (_outboundPackets) {
-                Map.Entry<Long, PacketLocal> first = _outboundPackets.firstEntry();
+            synchronized (_outboundPacketsLock) {
+                TreeMap<Long, PacketLocal> ob = _outboundPackets;
+                Map.Entry<Long, PacketLocal> first = ob == null ? null : ob.firstEntry();
                 if (first != null && stuckLifetimeExceeded(_options.getMaxResends(),
                                                            ConnectionOptions.getMaxRTOStatic(),
                                                            _context.clock().now(),
@@ -2650,8 +2734,9 @@ class Connection {
 
             // 2. cut ssthresh to bandwidth estimate, window to 1
             List<PacketLocal> toResend = null;
-            synchronized(_outboundPackets) {
-                Map.Entry<Long, PacketLocal> e = _outboundPackets.firstEntry();
+            synchronized(_outboundPacketsLock) {
+                TreeMap<Long, PacketLocal> ob = _outboundPackets;
+                Map.Entry<Long, PacketLocal> e = ob == null ? null : ob.firstEntry();
                 if (e == null) {
                     if (_log.shouldWarn()) {
                         _log.warn(Connection.this + " Retransmission timer hit but nothing transmitted??");
@@ -2688,11 +2773,11 @@ class Connection {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
                 }
 
-                // _outboundPackets is a TreeMap, so values() already returns
+                // The window map is a TreeMap, so values() already returns
                 // packets in ascending sequence number order (lower = higher priority).
                 // Round down (RFC 5681 section 4.3 "MUST be no more than half")
                 // https://datatracker.ietf.org/doc/html/rfc5681#section-4.3
-                toResend = new ArrayList<>(_outboundPackets.values());
+                toResend = new ArrayList<>(ob.values());
                 toResend = toResend.subList(0, Math.max(1, Math.min(getMaxRtx(), toResend.size() / 2)));
             }
 
@@ -2715,9 +2800,10 @@ class Connection {
                     // Drop it from the window map once (removal is a no-op if
                     // ackPackets already removed it).
                     long staleSeq = packet.getSequenceNum();
-                    synchronized (_outboundPackets) {
-                        if (_outboundPackets.remove(Long.valueOf(staleSeq)) != null) {
-                            _outboundPackets.notifyAll();
+                    synchronized (_outboundPacketsLock) {
+                        TreeMap<Long, PacketLocal> ob = outboundPackets();
+                        if (ob.remove(Long.valueOf(staleSeq)) != null) {
+                            _outboundPacketsLock.notifyAll();
                             if (_log.shouldWarn()) {
                                 _log.warn(Connection.this + " removed cancelled/stale packet " + packet +
                                           " from outbound window");
@@ -2815,9 +2901,10 @@ class Connection {
                     } else {
                         long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
                         if (pacingDelay > 0) {
-                            synchronized (_pacedQueue) {
-                                _pacedQueue.add(packet);
-                                if (_pacedQueue.size() == 1) {
+                            synchronized (_pacedQueueLock) {
+                                LinkedList<PacketLocal> pq = pacedQueue();
+                                pq.add(packet);
+                                if (pq.size() == 1) {
                                     _pacedEvent.forceReschedule(pacingDelay);
                                 }
                             }
@@ -2861,8 +2948,8 @@ class Connection {
         public void timeReached() {
             PacketLocal packet;
             long nextDelay;
-            synchronized (_pacedQueue) {
-                packet = _pacedQueue.poll();
+            synchronized (_pacedQueueLock) {
+                packet = _pacedQueue == null ? null : _pacedQueue.poll();
                 if (packet == null) {
                     return;
                 }
@@ -2870,8 +2957,8 @@ class Connection {
             }
             if (!_connected.get() || packet.writeReleased()) {
                 if (nextDelay >= 0) {
-                    synchronized (_pacedQueue) {
-                        if (!_pacedQueue.isEmpty()) {
+                    synchronized (_pacedQueueLock) {
+                        if (_pacedQueue != null && !_pacedQueue.isEmpty()) {
                             forceReschedule(calculatePacingDelay(_pacedQueue.peek().getPayloadSize()));
                         }
                     }
@@ -3025,7 +3112,7 @@ class Connection {
          * (only checkAndPrepareRun/updateStateAfterRun are brief synchronized
          * scopes), so the called-from-across-the-wire locks taken in
          * ackPackets() and here cannot form a monitor cycle with this thread.
-         * A short synchronized (_outboundPackets) in the reset path below is
+         * A short synchronized (_outboundPacketsLock) in the reset path below is
          * therefore deadlock-safe; ackPackets() holds the same lock only for
          * mapping + ack bookkeeping, never while calling SimpleTimer2.
          *
@@ -3041,9 +3128,10 @@ class Connection {
                 // RetransmitEvent.timeReached() can ever count this packet, and
                 // every later RTO fire no-ops on the writeReleased() skip — the
                 // "stuck packet forever" zombie. Drop it from the window now.
-                synchronized (_outboundPackets) {
-                    _outboundPackets.remove(Long.valueOf(_packet.getSequenceNum()));
-                    _outboundPackets.notifyAll();
+                synchronized (_outboundPacketsLock) {
+                    TreeMap<Long, PacketLocal> ob = outboundPackets();
+                    ob.remove(Long.valueOf(_packet.getSequenceNum()));
+                    _outboundPacketsLock.notifyAll();
                 }
                 if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " cancelled " + _packet + " on reset, removed from outbound window");
@@ -3067,7 +3155,7 @@ class Connection {
             if (_packet.getReceiveStreamId() <= 0) {_packet.setReceiveStreamId(_receiveStreamId.get());}
             if (_packet.getSendStreamId() <= 0) {_packet.setSendStreamId(_sendStreamId.get());}
 
-            synchronized(_outboundPackets) {
+            synchronized(_outboundPacketsLock) {
                 int newWindowSize = _options.getWindowSize();
                 if (_isChoked) {
                     congestionOccurred();
@@ -3118,7 +3206,7 @@ class Connection {
             } else if (numSends >= 3 &&
                        _packet.isFlagSet(Packet.FLAG_CLOSE) &&
                        _packet.getPayloadSize() <= 0 &&
-                       _outboundPackets.size() <= 1 &&
+                       (_outboundPackets == null ? 0 : _outboundPackets.size()) <= 1 &&
                        getCloseReceivedOn() > 0) {
                 /*
                  * Bug workaround to prevent 5 minutes of retransmission
@@ -3163,8 +3251,8 @@ class Connection {
             // ACKed during resending (... or somethin') ????????????
             if ((_packet.getAckTime() > 0) && (_packet.getNumSends() > 1)) {
                 _activeResends.decrementAndGet();
-                synchronized (_outboundPackets) {
-                    _outboundPackets.notifyAll();
+                synchronized (_outboundPacketsLock) {
+                    _outboundPacketsLock.notifyAll();
                 }
             }
             return true;
