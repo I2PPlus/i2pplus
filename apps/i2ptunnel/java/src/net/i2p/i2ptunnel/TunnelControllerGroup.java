@@ -94,8 +94,12 @@ public class TunnelControllerGroup implements ClientApp {
     /** Session ownership map for preventing premature session close */
     private final Map<I2PSession, Set<TunnelController>> _sessions;
 
-    /** Pool of socket handlers for all clients */
-    private ThreadPoolExecutor _executor;
+    /** Pool of socket handlers for all clients; volatile so the per-tunnel and
+     *  per-request read path ({@link #getClientExecutor()}) never takes
+     *  {@link #_executorLock} in steady state. Mutation (create/resize/kill)
+     *  stays under the lock.
+     *  @since 0.9.72+ */
+    private volatile ThreadPoolExecutor _executor;
     private static final AtomicLong _executorThreadCount = new AtomicLong();
     private final Object _executorLock = new Object();
     /** how long to wait before dropping an idle thread */
@@ -1529,29 +1533,50 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  The executor pool for client tunnel tasks.
+     *
+     *  <p>Read path is lock-free in steady state ({@link #_executor} is
+     *  volatile): the common case is a null-and-no-change return with no
+     *  synchronized acquisition, so per-request callers
+     *  ({@code I2PTunnelHTTPClientRunner}) are not serialized on the global
+     *  {@link #_executorLock} and the Tuner load sample is not written inside a
+     *  monitor. Create/resize races resolve under the lock with a double-check.
+     *
      *  @return non-null
      *  @since 0.9.8 Moved from I2PTunnelClientBase in 0.9.18
      */
     ThreadPoolExecutor getClientExecutor() {
-        synchronized (_executorLock) {
-            if (_executor == null) {
-                _executor = new CustomThreadPoolExecutor();
-                I2PAppContext ctx = _context;
-                if (ctx != null) {
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.activeThreads", "Client runner active threads", "I2PTunnel", RATES);
+        ThreadPoolExecutor ex = _executor;
+        if (ex == null) {
+            synchronized (_executorLock) {
+                ex = _executor;
+                if (ex == null) {
+                    ex = new CustomThreadPoolExecutor();
+                    _executor = ex;
+                    I2PAppContext ctx = _context;
+                    if (ctx != null) {
+                        ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.activeThreads", "Client runner active threads", "I2PTunnel", RATES);
+                    }
                 }
-            } else if (_executor.getMaximumPoolSize() != clientRunnerMax) {
-                resizeClientExecutor(clientRunnerMax);
             }
-            // Sample the real load for Tuner feedback. This is the *observed* active-thread
-            // count, not the configured cap - the old poolSize stat was written by the very
-            // resize it fed back into, producing a self-fulfilling ramp to the ceiling.
-            I2PAppContext ctx = _context;
-            if (ctx != null) {
-                ctx.statManager().addRateData("i2ptunnel.clientRunner.activeThreads", _executor.getActiveCount());
+        } else if (ex.getMaximumPoolSize() != clientRunnerMax) {
+            // Tuner changed the ceiling; resize under the lock (kill/other resizes
+            // take the same lock) so the max pool size is updated exactly once.
+            synchronized (_executorLock) {
+                if (ex.getMaximumPoolSize() != clientRunnerMax && !ex.isShutdown()) {
+                    ex.setMaximumPoolSize(clientRunnerMax);
+                }
             }
         }
-        return _executor;
+        // Sample the real load for Tuner feedback. This is the *observed* active-thread
+        // count, not the configured cap - the old poolSize stat was written by the very
+        // resize it fed back into, producing a self-fulfilling ramp to the ceiling.
+        // Sampled outside any monitor so the per-request hot path never writes a
+        // RateStat under the global lock.
+        I2PAppContext ctx = _context;
+        if (ctx != null) {
+            ctx.statManager().addRateData("i2ptunnel.clientRunner.activeThreads", ex.getActiveCount());
+        }
+        return ex;
     }
 
     /**
