@@ -675,6 +675,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new InitialResendDelayParam());
         _params.add(new InitialRTOParam());
         _params.add(new InitialWindowSizeParam());
+        _params.add(new StreamingReceiveWorkersParam());
         _params.add(new MaxRetransmissionsParam());
         _params.add(new MaxResendDelayParam());
         _params.add(new MaxRTOParam());
@@ -3803,6 +3804,75 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return current;
 
             return clamp(current, target, _step);
+        }
+    }
+
+    /**
+     * Tunes inbound packet receive worker shards ({@code i2p.streaming.receiveWorkerThreads}).
+     * Grows the per-destination dispatch pool while producers are blocked on a full
+     * receive shard queue (throughput: a slow connection no longer stalls the session
+     * notifier, more connections are processed in parallel), and reclaims threads when
+     * the shard queue stays near-empty (latency: only as many threads as the traffic
+     * needs). Refuses to shrink while the path is lossy so retransmission traffic keeps
+     * its dispatch capacity (reliability). Live dispatchers are resized immediately via
+     * {@code I2PSocketManagerFull.resizeReceiveWorkers}.
+     * Primary signal: stream.receiveBacklogged. Cross-refs: stream.receiveQueueDepth,
+     * stream.rtxRatio, jobQueue.jobLag.
+     */
+    private class StreamingReceiveWorkersParam extends BaseParam {
+
+        StreamingReceiveWorkersParam() {
+            super("i2p.streaming.receiveWorkerThreads", "Receive worker threads",
+                  SUB_STREAMING,
+
+                  2, 8, 1, "stream.receiveBacklogged", _context);
+        }
+
+        /** Apply the tunable value to the worker default and every live dispatcher. */
+        protected void applyValue(int value) {
+            StreamingReflector.invokeSetInt("resizeReceiveWorkers", value);
+        }
+
+        /** Current live worker default; falls back to the core-derived count. */
+        protected int getRuntimeValue() {
+            int v = StreamingReflector.invokeGetInt("getReceiveWorkerThreads");
+            return v > 0 ? v : Math.max(2, Math.min(8, Runtime.getRuntime().availableProcessors()));
+        }
+
+        /**
+         * Read the observed stat (receiveBacklogged avg per period). Returns NaN only
+         * when there is no inbound packet traffic at all, so a healthy router with
+         * light traffic still reaches the reclaim decision: with no backlog events but
+         * live queue-depth observations, the cycle runs with observed == 0, letting
+         * {@code computeTarget} shrink a pool that has stopped blocking.
+         */
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate != null && rate.getLastEventCount() > 0) return rate.getAverageValue();
+            // No backlog events this period — idle or healthy. Require real packet
+            // traffic (queue-depth observations) before driving the reclaim branch.
+            RateStat qd = _context.statManager().getRate("stream.receiveQueueDepth");
+            if (qd == null) return Double.NaN;
+            Rate qr = qd.getRate(STAT_PERIOD);
+            if (qr == null || qr.getLastEventCount() == 0) return Double.NaN;
+            return 0.0;
+        }
+
+        /** Compute the target value based on observed stat and configured limits. */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double queueDepth = getAdditionalStat(_context, "stream.receiveQueueDepth");
+            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStat(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            return computeReceiveWorkers(current, _min, _max, observed, queueDepth, rtxRatio, jobLag);
         }
     }
 
@@ -10657,6 +10727,70 @@ protected int computeTarget(double observed) {
 
         // Idle pool with minimal queue and handlers not blocking -> shrink
         if (queueDepth < 5 && !blockedAny && current > min)
+            return Math.max(min, current - 1);
+
+        return current;
+    }
+
+    /**
+     *  Pure decision logic for the Tuner-managed inbound receive-worker default
+     *  ({@code i2p.streaming.receiveWorkerThreads}). Extracted (package-visible,
+     *  static) so unit tests can exercise the policy without a live
+     *  {@link RouterContext}.
+     *
+     *  <p>Signals:
+     *  <ul>
+     *    <li>{@code backlogged} — 60s avg of {@code stream.receiveBacklogged}
+     *        (producer-blind events on a full receive shard queue), NaN when none.
+     *    <li>{@code queueDepth} — 60s avg of {@code stream.receiveQueueDepth}.
+     *    <li>{@code rtxRatio} — resends per 1000 sends (loss signal), NaN when
+     *        unknown. Threshold 50 = 5% resends, matching InitialWindowSizeParam.
+     *    <li>{@code jobLag} — 60s avg of {@code jobQueue.jobLag} (CPU pressure),
+     *        NaN when unknown.
+     *  </ul>
+     *
+     *  <p>Policy (throughput / latency / reliability):
+     *  <ul>
+     *    <li>Grow by one shard when producers were blind on a full queue this
+     *        period and the CPU is not pegged — the dispatcher is the bottleneck,
+     *        so parallelize the inflow (throughput).
+     *    <li>Never shrink while the path is lossy ({@code rtxRatio > 50}): the
+     *        retransmission burst still needs its dispatch capacity, and shrinking
+     *        under loss risks re-backlogging a just-relieved queue (reliability).
+     *    <li>Slowly reclaim a shard when the queue holds near-empty ({@code queueDepth
+     *        <= 0.25}) with no growth veto active — a leaner pool keeps the same
+     *        latency (latency). The probe requires real (non-NaN) observations, so a
+     *        genuinely idle manager is left alone rather than churned.
+     *  </ul>
+     *
+     *  @param current     current live worker count
+     *  @param min         lower bound (2)
+     *  @param max         upper bound (8)
+     *  @param backlogged  60s avg of stream.receiveBacklogged, or NaN
+     *  @param queueDepth  60s avg of stream.receiveQueueDepth, or NaN
+     *  @param rtxRatio    resends per 1000 sends, or NaN
+     *  @param jobLag      60s avg of jobQueue.jobLag (CPU pressure), or NaN
+     *  @return the new worker count, clamped to [min, max]
+     *  @since 0.9.71+
+     */
+    static int computeReceiveWorkers(int current, int min, int max,
+                                     double backlogged, double queueDepth,
+                                     double rtxRatio, double jobLag) {
+        boolean backlog = !Double.isNaN(backlogged) && backlogged > 0;
+        boolean lossy = !Double.isNaN(rtxRatio) && rtxRatio > 50;
+        boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+        boolean queueQuiet = !Double.isNaN(queueDepth) && queueDepth <= 0.25;
+
+        // Dispatcher is the bottleneck: producers were blind on a full shard queue.
+        // Parallelize the inflow, unless the CPU is already pegged (more threads
+        // would only lengthen the queues). Backlog outranks the quiet probe below,
+        // so a pin at the ceiling is never preceded by a spurious reclaim.
+        if (backlog && !cpuPressure && current < max)
+            return Math.min(max, current + 1);
+
+        // Load subsided (no backlog this period) and the loss signal is clean:
+        // reclaim one shard.
+        if (!backlog && queueQuiet && !lossy && !cpuPressure && current > min)
             return Math.max(min, current - 1);
 
         return current;

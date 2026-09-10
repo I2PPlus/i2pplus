@@ -57,6 +57,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.streaming.maxRTO", _x("Max RTO"));
         DISPLAY_NAMES.put("i2p.streaming.maxResendDelay", _x("Max Resend Delay"));
         DISPLAY_NAMES.put("i2p.streaming.maxRetransmissions", _x("Max Retransmissions"));
+        DISPLAY_NAMES.put("i2p.streaming.receiveWorkerThreads", _x("Receive Worker Threads"));
         DISPLAY_NAMES.put("CLIENT_WRITER_QUEUE_SIZE", _x("Writer Queue Size"));
         DISPLAY_NAMES.put("CODEL_TARGET", _x("CoDel Target Delay"));
         DISPLAY_NAMES.put("CODEL_INTERVAL", _x("CoDel Interval"));
@@ -197,6 +198,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRTO", _x("Max retransmission timeout (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxResendDelay", _x("Max time between retransmissions (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRetransmissions", _x("Retransmissions before dropping the stream."));
+        PARAM_DESCRIPTIONS.put("i2p.streaming.receiveWorkerThreads", _x("Inbound packet processing threads per streaming session."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.inactivityTimeout", _x("Max idle time before dropping a stream (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxWindowSize", _x("Max unacknowledged packets per stream connection."));
         PARAM_DESCRIPTIONS.put("CLIENT_WRITER_QUEUE_SIZE", _x("I2CP write queue depth."));

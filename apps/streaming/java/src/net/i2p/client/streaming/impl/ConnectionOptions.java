@@ -305,6 +305,23 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     }
 
     /**
+     *  Tuner-managed default for inbound packet receive workers, read when a
+     *  {@code PacketDispatcher} is created. 0 (the default) means "no override":
+     *  each manager uses its configured {@code i2p.streaming.receiveWorkerThreads}
+     *  or the platform core count. When positive, new dispatchers start with this
+     *  many shards; the Tuner also resizes live dispatchers via
+     *  {@code PacketDispatcher.resizeAll}. Bounded by the per-manager cap used by
+     *  PacketHandler.
+     *  @since 0.9.71+
+     */
+    static volatile int receiveWorkerThreads = 0;
+
+    /** The Tuner's receive-worker default; 0 = none. @since 0.9.71+ */
+    static int getReceiveWorkerThreads() { return receiveWorkerThreads; }
+    /** The Tuner's receive-worker default; clamped to a sane [0, PacketHandler.MAX_RECEIVE_WORKERS]. @since 0.9.71+ */
+    static void setReceiveWorkerThreads(int val) { receiveWorkerThreads = Math.max(0, Math.min(PacketHandler.MAX_RECEIVE_WORKERS, val)); }
+
+    /**
      *  Operator-tunable ceiling for the Tuner's stream-cap override.
      *  Reads from router.config via {@code i2p.streaming.maxMaxConcurrentStreams},
      *  falling back to the compiled default.

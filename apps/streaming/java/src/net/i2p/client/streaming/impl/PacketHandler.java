@@ -24,6 +24,34 @@ class PacketHandler {
     private final Log log;
     private final ByteCache cache = ByteCache.getInstance(128, 32 * 1024);
 
+    /**
+     *  Property limiting the number of inbound packet receive workers per
+     *  connection manager.  Unset or invalid values fall back to the platform
+     *  core count.
+     *  @since 0.9.71
+     */
+    static final String PROP_RECEIVE_WORKERS = "i2p.streaming.receiveWorkerThreads";
+
+    /**
+     *  Upper bound on inbound receive workers per manager.
+     *  @since 0.9.71
+     */
+    static final int MAX_RECEIVE_WORKERS = 8;
+
+    /**
+     *  Per-shard inbound queue capacity.  A full queue back-pressures the
+     *  session notifier thread rather than dropping or reordering packets.
+     *  @since 0.9.71
+     */
+    static final int RECEIVE_QUEUE_CAPACITY = 64;
+
+    /**
+     *  Sharded dispatcher for known-connection packets, created lazily on the
+     *  first inbound packet and shut down with the manager.  Guarded by the
+     *  volatile field + double-checked locking in {@link #getDispatcher()}.
+     */
+    private volatile PacketDispatcher _dispatcher;
+
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT = ThreadLocal.withInitial(
         () -> new SimpleDateFormat("HH:mm:ss.SSS", Locale.US));
 
@@ -58,12 +86,103 @@ class PacketHandler {
         if (con != null) {
             if (log.shouldDebug())
                 displayPacket(packet, "RECV", "WSIZE " + con.getOptions().getWindowSize() + "; RTO " + con.getOptions().getRTO());
-            receiveKnownConnection(con, packet);
+            dispatchKnownConnection(con, packet, sendId);
         } else {
             if (log.shouldDebug())
                 displayPacket(packet, "UNKN", null);
             receiveUnknownConnection(packet, sendId, queueIfNoConn);
         }
+    }
+
+    /**
+     *  Offload (con, packet) to the shard owning the connection.  Per-connection
+     *  FIFO ordering is preserved (a connection always maps to one worker) while
+     *  packets for different connections run in parallel, so a slow connection or
+     *  signature work no longer stalls the session notifier thread for all other
+     *  connections on the same destination.  If the shard's queue is full the
+     *  notifier waits for space (the same blocking behaviour as processing the
+     *  packet synchronously), so packets are never dropped and never reordered.
+     *
+     *  @param con the connection, indexed by sendId
+     *  @param packet the packet; ownership passes to the receiving shard
+     *  @param sendId the connection's inbound stream id (shard key)
+     */
+    private void dispatchKnownConnection(Connection con, Packet packet, long sendId) {
+        try {
+            getDispatcher().dispatch(sendId, con, packet);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            packet.releasePayload();
+        }
+    }
+
+    /**
+     *  Lazily create the sharded dispatcher.  Worker count comes from the
+     *  Tuner's global default ({@link ConnectionOptions#getReceiveWorkerThreads})
+     *  when armed, else {@link #PROP_RECEIVE_WORKERS} when set, else the
+     *  platform core count, all clamped to {@link #MAX_RECEIVE_WORKERS}.
+     *
+     *  @return the shared dispatcher, never null
+     *  @since 0.9.71
+     */
+    private PacketDispatcher getDispatcher() {
+        PacketDispatcher d = _dispatcher;
+        if (d == null) {
+            synchronized (this) {
+                d = _dispatcher;
+                if (d == null) {
+                    d = new PacketDispatcher(
+                            workerCountFor(Runtime.getRuntime().availableProcessors(),
+                                           context.getProperty(PROP_RECEIVE_WORKERS),
+                                           ConnectionOptions.getReceiveWorkerThreads()),
+                            RECEIVE_QUEUE_CAPACITY,
+                            (con, packet) -> receiveKnownConnection(con, packet),
+                            context);
+                    _dispatcher = d;
+                }
+            }
+        }
+        return d;
+    }
+
+    /**
+     *  Shut down the receive workers, if any were created, releasing queued
+     *  packets.  Called from ConnectionManager.shutdown(); idempotent.
+     *
+     *  @since 0.9.71
+     */
+    void shutdownDispatcher() {
+        PacketDispatcher d = _dispatcher;
+        if (d != null)
+            d.shutdown();
+    }
+
+    /**
+     *  Clamped inbound receive worker count for a manager.
+     *  <p>
+     *  The Tuner's live default wins when positive, so runtime tuning applies
+     *  to managers created after the adjustment; otherwise a positive configured
+     *  property value wins (capped at {@link #MAX_RECEIVE_WORKERS}); otherwise
+     *  the platform core count is used, floored at 2 for low-core hosts.
+     *  Package-visible for unit tests.
+     *
+     *  @param cores available processors at startup
+     *  @param configured raw property value, may be null
+     *  @param override Tuner global default, 0 = not armed
+     *  @return the worker count, in 1..MAX_RECEIVE_WORKERS
+     *  @since 0.9.71
+     */
+    static int workerCountFor(int cores, String configured, int override) {
+        if (override > 0)
+            return Math.min(override, MAX_RECEIVE_WORKERS);
+        if (configured != null) {
+            try {
+                int n = Integer.parseInt(configured.trim());
+                if (n > 0)
+                    return Math.min(n, MAX_RECEIVE_WORKERS);
+            } catch (NumberFormatException nfe) {}
+        }
+        return Math.min(Math.max(2, cores), MAX_RECEIVE_WORKERS);
     }
 
     /**

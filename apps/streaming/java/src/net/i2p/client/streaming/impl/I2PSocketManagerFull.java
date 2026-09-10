@@ -943,6 +943,37 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public static void setMaxStreamsOverride(int val) { ConnectionOptions.setMaxConcurrentStreamsOverride(val); }
 
     /**
+     * The Tuner-managed default for inbound packet receive workers; 0 = no
+     * override (each manager uses its configured value or the core count).
+     * @return the current default worker count, or 0 if disabled
+     * @since 0.9.71+
+     */
+    public static int getReceiveWorkerThreads() { return ConnectionOptions.getReceiveWorkerThreads(); }
+
+    /**
+     * Set the Tuner-managed default for inbound packet receive workers.
+     * Clamped to {@code [0, 8]}; 0 disables the override.
+     * @param val the new default worker count, or 0 to disable
+     * @since 0.9.71+
+     */
+    public static void setReceiveWorkerThreads(int val) { ConnectionOptions.setReceiveWorkerThreads(val); }
+
+    /**
+     * Apply a new receive-worker default and resize every live dispatcher to
+     * match, so existing managers (not just ones created afterwards) follow the
+     * Tuner. The resize drains each dispatcher's shard queues before rebuilding,
+     * so per-connection ordering and the never-drop guarantee are preserved.
+     * @param val the new worker count, clamped to {@code [1, 8]}; 0 only updates
+     *            the default for future managers
+     * @since 0.9.71+
+     */
+    public static void resizeReceiveWorkers(int val) {
+        ConnectionOptions.setReceiveWorkerThreads(val);
+        if (val > 0)
+            PacketDispatcher.resizeAll(val);
+    }
+
+    /**
      * The operator-tunable ceiling for the Tuner's stream-cap override.
      * Reads from {@code i2p.streaming.maxMaxConcurrentStreams} in router.config.
      * @return the current ceiling

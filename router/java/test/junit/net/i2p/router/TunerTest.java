@@ -1156,6 +1156,80 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 11b: computeReceiveWorkers decision tests
+    // =====================================================================
+
+    private static final int RX_MIN = 2;
+    private static final int RX_MAX = 8;
+
+    /** Producer backlog on a full shard queue ramps one shard (throughput). */
+    @Test
+    public void testReceiveWorkersGrowOnBacklog() {
+        assertEquals(5, Tuner.computeReceiveWorkers(4, RX_MIN, RX_MAX, 1.0, 0.0, Double.NaN, Double.NaN));
+    }
+
+    /** Backlog with CPU pressure holds: more threads would only lengthen queues. */
+    @Test
+    public void testReceiveWorkersCpuPressureHoldsGrow() {
+        assertEquals(4, Tuner.computeReceiveWorkers(4, RX_MIN, RX_MAX, 1.0, 0.0, Double.NaN, 250.0));
+    }
+
+    /** Lossy path does not veto growth — the backlog is the bottleneck signal. */
+    @Test
+    public void testReceiveWorkersGrowDespiteLoss() {
+        assertEquals(4, Tuner.computeReceiveWorkers(3, RX_MIN, RX_MAX, 1.0, 0.0, 75.0, Double.NaN));
+    }
+
+    /** Growth is clamped to the ceiling. */
+    @Test
+    public void testReceiveWorkersGrowClampedAtMax() {
+        assertEquals(RX_MAX, Tuner.computeReceiveWorkers(RX_MAX, RX_MIN, RX_MAX, 1.0, 0.0, Double.NaN, Double.NaN));
+    }
+
+    /** Near-empty shard queue reclaims precisely one shard (latency). */
+    @Test
+    public void testReceiveWorkersDecayWhenQuiet() {
+        assertEquals(4, Tuner.computeReceiveWorkers(5, RX_MIN, RX_MAX, Double.NaN, 0.0, Double.NaN, Double.NaN));
+        assertEquals(4, Tuner.computeReceiveWorkers(5, RX_MIN, RX_MAX, Double.NaN, 0.25, Double.NaN, Double.NaN));
+    }
+
+    /** Decay never goes below the floor. */
+    @Test
+    public void testReceiveWorkersDecayClampedAtMin() {
+        assertEquals(RX_MIN, Tuner.computeReceiveWorkers(RX_MIN, RX_MIN, RX_MAX, Double.NaN, 0.0, Double.NaN, Double.NaN));
+    }
+
+    /** A lossy path (rtxRatio > 50 = >5% resends) holds the pool: retransmit work still needs capacity (reliability). */
+    @Test
+    public void testReceiveWorkersLossyHoldsDecay() {
+        assertEquals(5, Tuner.computeReceiveWorkers(5, RX_MIN, RX_MAX, Double.NaN, 0.0, 75.0, Double.NaN));
+    }
+
+    /** CPU pressure also holds decay — a swap/pegged box keeps its current sizing. */
+    @Test
+    public void testReceiveWorkersCpuPressureHoldsDecay() {
+        assertEquals(5, Tuner.computeReceiveWorkers(5, RX_MIN, RX_MAX, Double.NaN, 0.0, Double.NaN, 120.0));
+    }
+
+    /** A non-quiet queue (real load but no backlog) holds, no oscillation. */
+    @Test
+    public void testReceiveWorkersActiveHolds() {
+        assertEquals(4, Tuner.computeReceiveWorkers(4, RX_MIN, RX_MAX, Double.NaN, 5.0, Double.NaN, Double.NaN));
+    }
+
+    /** Unknowns (no events recorded yet) hold current — never churn an idle manager. */
+    @Test
+    public void testReceiveWorkersNoDataHolds() {
+        assertEquals(4, Tuner.computeReceiveWorkers(4, RX_MIN, RX_MAX, Double.NaN, Double.NaN, Double.NaN, Double.NaN));
+    }
+
+    /** Contradictory signals resolve to growth (safety: backlog outranks quiet). */
+    @Test
+    public void testReceiveWorkersBacklogOutranksQuiet() {
+        assertEquals(5, Tuner.computeReceiveWorkers(4, RX_MIN, RX_MAX, 1.0, 0.0, Double.NaN, Double.NaN));
+    }
+
+    // =====================================================================
     // Section 11: MaxStreamsParam.streamCeilingTarget decision tests
     // =====================================================================
 
