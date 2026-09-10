@@ -30,7 +30,9 @@ class ConnectionHandler {
     private final LinkedBlockingDeque<Packet> _synQueue;
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
-    private volatile int _acceptTimeout;
+    /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout()}.
+     *  @since 0.9.71+ */
+    private volatile int _acceptTimeout = -1;
     private boolean _restartPending;
 
     /**
@@ -42,11 +44,15 @@ class ConnectionHandler {
      * fabric RTT is commonly 3-10s, so 30s was too short once a SYN actually
      * queued; 60s gives the RTT-aware floor (see {@link #getAdaptiveSynTimeout})
      * headroom to extend on slow-but-alive tunnels without refusing them.
+     * The configured value is re-read on every SYN, so changes apply without
+     * a restart unless this override is set.
      *
+     * @param ms an explicit override, or &lt; 0 to return to the live configured value
      * @since 0.9.71+
      */
     synchronized void setAcceptTimeout(int ms) { _acceptTimeout = ms; }
 
+    /** Live configured accept timeout; re-read each SYN so config changes apply without a restart. */
     private int getAcceptTimeout() {
         return _context.getProperty("i2p.streaming.acceptTimeout", 60*1000);
     }
@@ -250,12 +256,36 @@ class ConnectionHandler {
      * -- only while the tunnel system shows positive stall evidence -- to an
      * RTT-aware floor never below {@link #SYN_STRESS_MIN_TIMEOUT} and never
      * above the configured timeout.
+     * The configured value is re-read on every call, so a router.config change
+     * or Tuner override applies without a restart.
      *
      * @return timeout in ms to arm TimeoutSyn with
      */
     private int getEffectiveAcceptTimeout() {
-        return getAdaptiveSynTimeout(_acceptTimeout, getTunnelBuildSuccess(),
+        int timeoutMs = resolveAcceptTimeout(_acceptTimeout, getAcceptTimeout());
+        return getAdaptiveSynTimeout(timeoutMs, getTunnelBuildSuccess(),
                                      getSynExpireRatePct(), getRttMs());
+    }
+
+    /**
+     * Resolve the effective SYN accept-queue timeout from an explicit override
+     * and the live configured value.  A non-negative override (set via
+     * {@link #setAcceptTimeout(int)}, e.g. by
+     * {@link I2PSocketManagerFull#setAcceptTimeout(long)}) wins; otherwise the
+     * configured value — re-read on each call so a router.config change or
+     * Tuner override applies without a restart — is used.  A negative override
+     * clears any earlier explicit value and falls back to the configuration.
+     *
+     * <p>Pure decision helper, extracted so the override-vs-config precedence
+     * is unit-testable without a router context.
+     *
+     * @param overrideMs the explicit override, or &lt; 0 for "not set"
+     * @param configDefaultMs the live configured accept timeout
+     * @return the timeout in ms to arm TimeoutSyn with
+     * @since 0.9.71+
+     */
+    static int resolveAcceptTimeout(int overrideMs, int configDefaultMs) {
+        return overrideMs >= 0 ? overrideMs : configDefaultMs;
     }
 
     /**
@@ -309,7 +339,6 @@ class ConnectionHandler {
         // Hard backstop only; the effective cap is the configurable soft max
         // (getMaxQueueSize) re-read on each SYN so Tuner wins apply live.
         _synQueue = new LinkedBlockingDeque<>(16384);
-        _acceptTimeout = getAcceptTimeout();
     }
 
     /**

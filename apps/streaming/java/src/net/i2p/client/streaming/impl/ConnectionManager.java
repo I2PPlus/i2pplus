@@ -116,7 +116,7 @@ class ConnectionManager {
 
     /**
      * Cooldown between connection attempts to the same failed destination.
-     * Tunable via i2p.streaming.destinationCooldownMs (default: 60000).
+     * Tunable via i2p.streaming.destinationCooldownMs (default: 5000).
      * @return the dest cooldown ms
      */
     private long getDestCooldownMs() {
