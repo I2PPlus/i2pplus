@@ -104,7 +104,7 @@ class ProfilePersistenceHelper {
         try (OutputStream fos = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(f)))) {
             writeProfile(profile, fos, false);
         } catch (IOException ioe) {
-            _log.error("Error writing profile to " + f);
+            _log.error("Error writing profile to " + f, ioe);
             return false;
         }
         return true;
