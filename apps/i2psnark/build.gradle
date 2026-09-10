@@ -7,8 +7,19 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
+            exclude 'org/klomp/snark/standalone/**'
             srcDir "$buildDir/messages-src"
         }
+    }
+    // standalone launcher classes (ant: compiled only for the standalone fat jar,
+    // see build.xml i2psnark). Kept out of the module compile so systray is not a
+    // module dependency; only the standalone source set sees it.
+    standalone {
+        java {
+            srcDir 'java/src/org/klomp/snark/standalone'
+        }
+        compileClasspath += main.output
+        compileClasspath += configurations.runtimeClasspath
     }
     test {
         java {
@@ -23,13 +34,12 @@ test {
 
 dependencies {
     api project(':core')
-    api project(':apps:systray')
     api 'gnu.getopt:java-getopt:1.0.13'
     api project(':apps:ministreaming')
     api project(':apps:jetty')
-    // this is not needed except for standalone,
-    // but we build the standalone classes even for non-standalone
-    api project(':apps:desktopgui')
+    // systray is used only by the standalone launcher (RunStandalone.java),
+    // so it lives on the standalone source set, not the module api.
+    standaloneImplementation project(':apps:systray')
 }
 
 task i2psnarkJar(type: Jar) {
@@ -103,7 +113,7 @@ task standaloneJar(type: Jar) {
     archiveFileName = 'i2psnark-standalone.jar'
     destinationDirectory = buildDir
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from(sourceSets.main.output) {
+    from(sourceSets.standalone.output) {
         include 'org/klomp/snark/standalone/**'
     }
     from { zipTree(i2psnarkJar.archiveFile) }
