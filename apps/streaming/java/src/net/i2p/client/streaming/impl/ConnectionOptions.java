@@ -150,21 +150,29 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setInitialRTO(int val) { defaultInitialRTO = Math.max(500, Math.min(30000, val)); }
 
     /**
-     * Default 30000 accommodates RTT up to ~15s with standard TCP deviation.
-     * Tuner may raise this for very high-latency networks.
+     * Default 12000 accommodates RTT up to ~6s with standard TCP deviation.
+     * Shorter than the historical 30000 so a stalled path costs less: a lost
+     * packet blocks the stream head-of-line until its RTO backoff expires, and
+     * the Tuner only tightens this on paths that keep confirming sends. On a
+     * dead path (no confirmTime events) the Tuner sees no signal, so the code
+     * default IS the retransmit pace and the zombie-window backstop
+     * (maxResends * maxRTO) for that path. 12000 keeps each loss stall modest
+     * and the default 30-resend backstop (~6 min) inside a range a recovered
+     * path can still resume from, instead of the 15-min hang the 30s default
+     * gave. Tuner may raise this for very high-latency networks.
      */
-    private static volatile int maxRTO = 30000;
+    private static volatile int maxRTO = 12000;
 
     /** @since 0.9.70+ */
     public static int getMaxRTOStatic() { return maxRTO; }
     /** @since 0.9.70+ */
     public static void setMaxRTO(int val) { maxRTO = Math.max(1000, Math.min(60000, val)); }
 
-    /** RTO multiplier as percentage (e.g. 150 = 1.5x), clamped to [100, 500] */
+    /** RTO multiplier as percentage (e.g. 120 = 1.2x), clamped to [100, 500] */
     static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int rtoMultiplier = 150;
+    private static volatile int rtoMultiplier = 120;
 
     /** @since 0.9.70+ */
     static int getRTOMultiplier() { return rtoMultiplier; }
