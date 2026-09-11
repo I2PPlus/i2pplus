@@ -4196,12 +4196,52 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
     }
 
+    /** Matches ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE (1730), which is what the
+     *  streaming layer actually applies: i2ptunnel builds socket manager options
+     *  without maxMessageSize, so connections fall back to this default.  Hardcoded
+     *  here because the router module cannot reference the streaming app constant.
+     *  @since 0.9.71+ */
+    private static final int STREAM_MSG_SIZE_DEFAULT = 1730;
+
+    /**
+     * Compute the streaming congestion-window target from the bandwidth-delay product.
+     *
+     * <p>How big the pipe can be depends on the real streaming message size: the
+     * congestion window counts messages, and each message carries up to
+     * {@code messageSize} payload bytes (default 1730, two tunnel messages).  Using
+     * the historical 4096 there under-sized the target by ~2.4x and capped sustained
+     * throughput below what the network could carry.
+     *
+     * <p>Returned value is clamped into {@code [min, max]}.  Returns {@code -1} when
+     * there is no usable signal (no bandwidth, or an RTT too short to measure), so the
+     * caller can fall back to holding its current value.
+     *
+     * @param bwSendBps measured average send bandwidth in bytes per second
+     * @param rttMs observed streaming RTT in milliseconds
+     * @param messageSize streaming payload bytes per window slot, already clamped to a sane range
+     * @param min lower bound for the window (inclusive)
+     * @param max upper bound for the window (inclusive)
+     * @return the BDP window target in {@code [min, max]}, or -1 if there is no usable signal;
+     *         never returns a value outside {@code [min, max]}
+     * @since 0.9.71+
+     */
+    static int computeStreamingBdpTarget(double bwSendBps, double rttMs, int messageSize, int min, int max) {
+        if (!(bwSendBps > 0) || !(rttMs > 100.0) || messageSize <= 0)
+            return -1;
+        int target = (int)(bwSendBps * (rttMs / 1000.0) / messageSize);
+        return Math.max(min, Math.min(max, target));
+    }
+
     /**
      * Tunes the global max window size ceiling for all streaming connections.
      * Higher = more in-flight data, higher peak throughput, but more memory
      * and worse loss recovery when congestion hits.  Adjusted based on RTT,
      * bandwidth, loss rate, and memory pressure so the cap tracks the BDP
      * without over-committing memory on constrained routers.
+     * The ceiling spans the full streaming range up to the absolute cap (4096)
+     * so that on low-RTT, high-bandwidth paths the window can reach ~8 MB/s
+     * (4096 messages &times; 1730 bytes / 0.89 s RTT); the BDP logic still
+     * shrinks it under drops, congestion, or memory pressure.
      */
     private class MaxWindowSizeParam extends BaseParam {
 
@@ -4209,7 +4249,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxWindowSize", "Streaming max window size",
                   SUB_STREAMING,
 
-                  128, 2048, 128, "stream.con.initialRTT.out", _context);
+                  128, 4096, 128, "stream.con.initialRTT.out", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4249,13 +4289,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (dropping || congested || memPressure > 60.0)
                 return Math.max(recoveryFloor, current - _step);
 
-            // BDP-based target: how many packets can the pipe hold
-            double rttSec = observed / 1000.0;
+            // BDP-based target: how many window slots (streaming messages) the pipe can hold.
+            // The divisor is the real streaming message size (1730), not 4096 —
+            // the old hardcoded 4096 was from pre-0.6.5 when messages were larger and
+            // under-sized the window by ~2.4x (4096/1730), capping throughput below BDP.
+            // Use STREAM_MSG_SIZE_DEFAULT directly: connections created by i2ptunnel never
+            // receive maxMessageSize from router config, so 1730 is what actually runs.
             int bdpTarget = current;
             if (!Double.isNaN(bwSend) && bwSend > 0 && observed > 100) {
-                int packetSize = 4096;
-                bdpTarget = (int)(bwSend * rttSec / packetSize);
-                bdpTarget = Math.max(_min, Math.min(_max, bdpTarget));
+                int t = computeStreamingBdpTarget(bwSend, observed, STREAM_MSG_SIZE_DEFAULT, _min, _max);
+                if (t >= 0)
+                    bdpTarget = t;
             }
 
             // Hold at current unless BDP diverges significantly

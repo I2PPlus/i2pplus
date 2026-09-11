@@ -1304,6 +1304,55 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 10: Streaming BDP window target tests
+    // =====================================================================
+
+    /** BDP uses the real streaming message size (1730), not the legacy 4096:
+     *  1 MB/s at 1 s RTT fits the pipe in 578 window slots, not 244. */
+    @Test
+    public void testBdpTargetUsesRealMessageSize() {
+        assertEquals(578, Tuner.computeStreamingBdpTarget(1_000_000.0, 1000.0, 1730, 128, 4096));
+    }
+
+    /** 8 MB/s at 0.5 s RTT is reachable: 2312 window slots saturate the pipe. */
+    @Test
+    public void testBdpTargetReachesEightMbsAtHalfSecondRtt() {
+        assertEquals(2312, Tuner.computeStreamingBdpTarget(8_000_000.0, 500.0, 1730, 128, 4096));
+    }
+
+    /** High bandwidth is clamped to the absolute streaming window cap (4096). */
+    @Test
+    public void testBdpTargetClampedToCeiling() {
+        assertEquals(4096, Tuner.computeStreamingBdpTarget(12_000_000.0, 1000.0, 1730, 128, 4096));
+    }
+
+    /** A target below the floor is clamped up to the floor (never zero). */
+    @Test
+    public void testBdpTargetClampedToFloor() {
+        assertEquals(128, Tuner.computeStreamingBdpTarget(1000.0, 1000.0, 1730, 128, 4096));
+    }
+
+    /** The runtime clamps the configured message size to >= 512 before calling us;
+     *  1 MB/s at 1 s RTT then yields 1953 slots and stays within range. */
+    @Test
+    public void testBdpTargetSaneWithFloorMessageSize() {
+        assertEquals(1953, Tuner.computeStreamingBdpTarget(1_000_000.0, 1000.0, 512, 128, 4096));
+    }
+
+    /** No bandwidth signal → no usable target. */
+    @Test
+    public void testBdpTargetNoBandwidthReturnsNoSignal() {
+        assertEquals(-1, Tuner.computeStreamingBdpTarget(Double.NaN, 1000.0, 1730, 128, 4096));
+        assertEquals(-1, Tuner.computeStreamingBdpTarget(0.0, 1000.0, 1730, 128, 4096));
+    }
+
+    /** RTT too short to measure (<= 100 ms) → no usable target. */
+    @Test
+    public void testBdpTargetShortRttReturnsNoSignal() {
+        assertEquals(-1, Tuner.computeStreamingBdpTarget(1_000_000.0, 100.0, 1730, 128, 4096));
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 
