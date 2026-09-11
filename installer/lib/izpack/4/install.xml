@@ -133,9 +133,18 @@
         </args>
       </executable>
 
-      <!-- create the Start Menu and desktop shortcuts (PowerShell shim) -->
-      <executable targetfile="$INSTALL_PATH/create_shortcuts.bat" type="bin" stage="postinstall" keep="true" failure="warn">
+      <!-- create the Start Menu and desktop shortcuts -->
+      <executable targetfile="powershell.exe" stage="postinstall" keep="true" failure="warn">
         <os family="windows"/>
+        <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="Shortcuts"/>
+        </args>
       </executable>
 
        <!-- Workaround for bad default path for wrapper.log in Windows. -->
@@ -179,9 +188,16 @@
       </executable>
 
       <!-- change owner to %username% so updates will work -->
-      <executable targetfile="$INSTALL_PATH/fixperms.bat" type="bin" stage="postinstall" keep="true" failure="warn">
+      <executable targetfile="powershell.exe" stage="postinstall" keep="true" failure="warn">
         <os family="windows"/>
         <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="FixPerms"/>
           <arg value="$INSTALL_PATH"/>
         </args>
       </executable>
@@ -205,18 +221,43 @@
           Removal of the I2P service in Windows should be done in the base pack so that even if
           a user installed the service manually it will still be removed when uninstalling.
         -->
-      <executable targetfile="$INSTALL_PATH/uninstall_i2p_service_winnt.bat" stage="uninstall" failure="warn" os="windows"/>
+      <executable targetfile="powershell.exe" stage="uninstall" failure="warn" os="windows">
+        <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="Uninstall"/>
+        </args>
+      </executable>
     </pack>
 
     <!-- To make the windows service optional, change to required="no" preselected="no" -->
     <pack name="Windows Service" required="yes" preselected="yes">
       <description>Install Windows service and automatically start I2P+ when system starts</description>
       <os family="windows"/>
-      <executable targetfile="$INSTALL_PATH/install_i2p_service_winnt.bat" stage="postinstall" failure="warn" keep="true"/>
-      <executable targetfile="$INSTALL_PATH/I2Psvc.exe" stage="postinstall" failure="warn" keep="true">
+      <executable targetfile="powershell.exe" stage="postinstall" failure="warn" keep="true">
         <args>
-          <arg value="-t"/>
-          <arg value="$INSTALL_PATH\wrapper.config"/>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="Install"/>
+        </args>
+      </executable>
+      <executable targetfile="powershell.exe" stage="postinstall" failure="warn" keep="true">
+        <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="Start"/>
         </args>
       </executable>
     </pack>

@@ -18,7 +18,6 @@ Periodic maintenance tasks, background jobs, and system upkeep that keep the rou
 | `OOMListener`        | Handles out-of-memory conditions                        |
 | `ThreadDump`         | Generates thread dumps for diagnostics                  |
 | `ShutdownHook`       | JVM shutdown cleanup                                    |
-| `BasePerms`          | Fixes permissions (Windows)                             |
 
 ## Docs
 

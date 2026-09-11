@@ -208,18 +208,6 @@
       <parsable targetfile="$INSTALL_PATH/Start I2P Router.app/Contents/MacOS/i2prouter" type="shell">
         <os family="mac"/>
       </parsable>
-      <parsable targetfile="$INSTALL_PATH/StartI2P+Service.bat" type="shell">
-        <os family="windows"/>
-      </parsable>
-      <parsable targetfile="$INSTALL_PATH/StopI2P+Service.bat" type="shell">
-        <os family="windows"/>
-      </parsable>
-      <parsable targetfile="$INSTALL_PATH/EnableI2P+Service.bat" type="shell">
-        <os family="windows"/>
-      </parsable>
-      <parsable targetfile="$INSTALL_PATH/DisableI2P+Service.bat" type="shell">
-        <os family="windows"/>
-      </parsable>
       <!-- postinstall stuff for windows (64-bit only) -->
       <!--
         Copy the wrapper to the install root. I2Psvc.exe is our
@@ -295,9 +283,16 @@
       </executable>
 
       <!-- change owner to %username% so updates will work -->
-      <executable targetfile="$INSTALL_PATH/fixperms.bat" type="bin" stage="postinstall" keep="true" failure="warn">
+      <executable targetfile="powershell.exe" stage="postinstall" keep="true" failure="warn">
         <os family="windows"/>
         <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="FixPerms"/>
           <arg value="$INSTALL_PATH"/>
         </args>
       </executable>
@@ -327,23 +322,43 @@
          Removal of the I2P service in Windows should be done in the base pack so that even if a user installed
          the service manually it will still be removed when uninstalling.
       -->
-      <executable targetfile="$INSTALL_PATH/uninstall_i2p_service_winnt.bat" stage="uninstall" failure="warn">
+      <executable targetfile="powershell.exe" stage="uninstall" failure="warn">
         <os family="windows"/>
+        <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="Uninstall"/>
+        </args>
       </executable>
     </pack>
     <!-- to disable by default, add preselected="no" -->
     <pack name="Windows Service" required="yes" preselected="yes">
       <description>Install I2P+ as a service and run automatically at startup</description>
       <os family="windows"/>
-      <executable targetfile="$INSTALL_PATH/install_i2p_service_winnt.bat" stage="postinstall" failure="warn" keep="true"/>
-      <executable targetfile="$INSTALL_PATH/StartI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
-      <executable targetfile="$INSTALL_PATH/StopI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
-      <executable targetfile="$INSTALL_PATH/EnableI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
-      <executable targetfile="$INSTALL_PATH/DisableI2P+Service.bat" stage="postinstall" failure="warn" keep="true"/>
-      <executable targetfile="$INSTALL_PATH/I2Psvc.exe" stage="postinstall" failure="warn" keep="true">
+      <executable targetfile="powershell.exe" stage="postinstall" failure="warn" keep="true">
         <args>
-          <arg value="-t"/>
-          <arg value="$INSTALL_PATH\wrapper.config"/>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="Install"/>
+        </args>
+      </executable>
+      <executable targetfile="powershell.exe" stage="postinstall" failure="warn" keep="true">
+        <args>
+          <arg value="-NoProfile"/>
+          <arg value="-ExecutionPolicy"/>
+          <arg value="Bypass"/>
+          <arg value="-File"/>
+          <arg value="$INSTALL_PATH\service.ps1"/>
+          <arg value="-Action"/>
+          <arg value="Start"/>
         </args>
       </executable>
     </pack>

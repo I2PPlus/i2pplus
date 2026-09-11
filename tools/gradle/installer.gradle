@@ -305,10 +305,7 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
             }
         }
         if (variant == 'all' || variant == 'windows') {
-            ['eepget.bat', 'eephead.bat', 'i2prouter.bat', 'fixperms.bat',
-             'install_i2p_service_winnt.bat', 'set_config_dir_for_nt_service.bat',
-             'uninstall_i2p_service_winnt.bat', 'StartI2P+Service.bat', 'StopI2P+Service.bat',
-             'EnableI2P+Service.bat', 'DisableI2P+Service.bat'].each { b ->
+            ['eepget.bat', 'eephead.bat', 'i2prouter.bat', 'service.ps1'].each { b ->
                 from "installer/resources/platform-specific/windows/${b}"
             }
             ['win32', 'win64'].each { d ->

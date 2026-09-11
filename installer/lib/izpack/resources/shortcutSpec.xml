@@ -45,8 +45,8 @@
            startup="no"/>
 
  <shortcut name="Start I2P+ Service"
-           target="$INSTALL_PATH\StartI2P+Service.bat"
-           commandLine=""
+           target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
+           commandLine="-NoProfile -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\service.ps1&quot; -Action Start"
            workingDirectory="$INSTALL_PATH"
            iconFile="$INSTALL_PATH\docs\start.ico"
            initialState="normal"
@@ -56,8 +56,8 @@
            startup="no"/>
 
  <shortcut name="Stop I2P+ Service"
-           target="$INSTALL_PATH\StopI2P+Service.bat"
-           commandLine=""
+           target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
+           commandLine="-NoProfile -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\service.ps1&quot; -Action Stop"
            workingDirectory="$INSTALL_PATH"
            iconFile="$INSTALL_PATH\docs\stop.ico"
            initialState="normal"

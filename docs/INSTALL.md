@@ -88,8 +88,8 @@ sudo systemctl disable i2p
 
 | Action                 | Command                              |
 | ---------------------- | ------------------------------------ |
-| Install as service     | `install_i2p_service_winnt.bat`      |
-| Uninstall service      | `uninstall_i2p-service_winnt.bat`    |
+| Install as service     | `service.ps1 -Action Install`        |
+| Uninstall service      | `service.ps1 -Action Uninstall`      |
 
 ## Uninstalling
 

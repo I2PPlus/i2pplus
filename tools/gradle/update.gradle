@@ -127,9 +127,6 @@ task prepUpdate(type: Copy) {
     from 'installer/resources/platform-specific/unix/graceful_update'
     from 'installer/resources/platform-specific/unix/hostping'
     from 'installer/resources/platform-specific/unix/i2ping'
-    into('scripts') {
-        from 'installer/resources/platform-specific/windows/fixperms2.bat'
-    }
     into('docs/readme') {
         from('installer/resources/console/readme') {
             include 'readme*.html'

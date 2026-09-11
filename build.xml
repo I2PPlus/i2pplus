@@ -2229,17 +2229,7 @@
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/eepget.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/eephead.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/i2prouter.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/fixperms.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/create_shortcuts.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/install_i2p_service_winnt.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/uninstall_i2p_service_winnt.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/install_service.ps1" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/uninstall_service.ps1" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/create_shortcuts.ps1" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/StartI2P+Service.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/StopI2P+Service.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/EnableI2P+Service.bat" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/DisableI2P+Service.bat" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/service.ps1" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="${build.root}build/utility.jar" todir="${pkg.temp.dir}"/>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/win64/">
         <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md"/>
@@ -3118,7 +3108,6 @@
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/eepget" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/eephead" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/graceful_update" todir="${pkg.temp.dir}/"/>
-      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/fixperms2.bat" todir="${pkg.temp.dir}/scripts/"/>
     </parallel>
   </target>
 
@@ -3524,7 +3513,7 @@
     <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installerexe"/>
     <delete file="${basedir}/install.jar"/>
-    <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
+    <move file="${basedir}/dist/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
   </target>
 
   <!-- IzPack 5 -->
@@ -3533,7 +3522,7 @@
     <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer5exe"/>
     <delete file="${basedir}/install.jar"/>
-    <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/2pinstall_${full.version}_windows.exe"/>
+    <move file="${basedir}/dist/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
   </target>
 
   <!-- this is broken as installer-xxx targets may delete (or not delete) things in pkg-temp -->

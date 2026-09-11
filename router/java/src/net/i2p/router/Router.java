@@ -468,8 +468,6 @@ public class Router implements RouterClock.ClockShiftListener {
         _watchdogThread = new I2PAppThread(_watchdog, "RtrWatchdog", true);
         _watchdogThread.setPriority(Thread.MAX_PRIORITY);
         _watchdogThread.start();
-
-        if (SystemVersion.isWindows()) {BasePerms.fix(_context);}
     }
 
     /**

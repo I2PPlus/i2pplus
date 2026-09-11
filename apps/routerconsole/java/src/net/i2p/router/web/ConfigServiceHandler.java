@@ -331,7 +331,7 @@ public class ConfigServiceHandler extends FormHandler {
 
     private void enableService() {
         try {
-            Runtime.getRuntime().exec("EnableI2P+Service.bat");
+            execServiceAction("Enable");
             addFormNotice(_t("Enabled I2P+ service autostart at system startup"));
         } catch (IOException ioe) {
             addFormError(_t("Warning: could not set the I2P+ service to autostart") + " - " + ioe.getLocalizedMessage());
@@ -340,10 +340,30 @@ public class ConfigServiceHandler extends FormHandler {
 
     private void disableService() {
         try {
-            Runtime.getRuntime().exec("DisableI2P+Service.bat");
+            execServiceAction("Disable");
             addFormNotice(_t("Disabled I2P+ Service autostart at system startup"));
         } catch (IOException ioe) {
             addFormError(_t("Warning: could not set the I2P+ service to manual start") + " - " + ioe.getLocalizedMessage());
+        }
+    }
+
+    /**
+     *  Run the consolidated service management script (service.ps1).
+     *  The legacy EnableI2P+Service.bat / DisableI2P+Service.bat shims were
+     *  removed; the Enable/Disable actions now live in service.ps1.
+     *
+     *  @since 0.9.74
+     */
+    private void execServiceAction(String action) throws IOException {
+        String baseDir = _context.getProperty("i2p.dir.base");
+        if (baseDir != null) {
+            ProcessBuilder pb = new ProcessBuilder("powershell.exe",
+                                                   "-NoProfile", "-ExecutionPolicy", "Bypass",
+                                                   "-File", baseDir + File.separator + "service.ps1",
+                                                   "-Action", action);
+            pb.start();
+        } else {
+            addFormError(_t("Warning: could not locate the I2P+ install directory"));
         }
     }
 
