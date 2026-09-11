@@ -4233,15 +4233,74 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Compute the streaming max-window ceiling target for one tuning cycle.
+     *
+     * <p>The ceiling bounds in-flight messages per connection. It is an upper
+     * bound, not a reservation — in-flight data still tracks the ACK-driven
+     * congestion window — so a high ceiling never loads a slow path; it only
+     * removes a throttle from a fast one. The former logic additionally shrunk
+     * the ceiling whenever the bandwidth-delay product fell below current, but
+     * that bandwidth is measured <i>through</i> the current ceiling: on a capped
+     * connection a low average is an artifact of the cap, not evidence the cap
+     * should drop, and ratcheting the cap down on that artifact produced a
+     * down-only spiral (a sub-ceiling bandwidth read-out justifies shrinking
+     * the cap, which lowers the read-out further, ...). The ceiling therefore
+     * shrinks ONLY on hard negative signals (duplicate retransmits, gateway
+     * congestion, memory pressure) and climbs on a clean path, bounded upward
+     * so gains are paced one step per cycle rather than yanked.
+     *
+     * <p>Below the recovery floor ({@code max(min, defaultValue / 2)}) and
+     * otherwise healthy, the ceiling climbs toward the factory default; under
+     * hard signals it shrinks one step but never below the recovery floor, so
+     * a depression cannot be torn back down to the floor trim.
+     *
+     * @param current current ceiling value (Connection#getGlobalMaxWindowSize)
+     * @param min lower bound for the ceiling (inclusive)
+     * @param max upper bound for the ceiling (inclusive)
+     * @param step one tuning step, used for each climb or shrink
+     * @param defaultValue factory default ceiling; the recovery floor is max(min, defaultValue / 2)
+     * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN if absent
+     * @param dupSize stat {@code stream.con.sendDuplicateSize} in bytes, or NaN if absent
+     * @param memPct stat {@code jobQueue.memoryUsedPercent}, or NaN if absent
+     * @return the new ceiling target within {@code [min, max]}
+     * @since 0.9.71+
+     */
+    static int computeStreamingMaxWindowTarget(int current, int min, int max, int step, int defaultValue,
+                                               double failLifetime, double dupSize, double memPct) {
+        boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+        boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+        double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
+
+        // Recovery floor: never shrink below half the default; below it and
+        // healthy, climb back toward the factory default.
+        int recoveryFloor = Math.max(min, defaultValue / 2);
+        if (current < recoveryFloor && !congested && !dropping)
+            return Math.min(defaultValue, current + step);
+
+        // Hard negative signals: drops, congestion, or memory > 60% — shrink one
+        // step, floored at recovery.
+        if (dropping || congested || memPressure > 60.0)
+            return Math.max(recoveryFloor, current - step);
+
+        // Clean path: climb one step toward the absolute cap. The former
+        // BDP-based shrink is gone because low measured bandwidth on a capped
+        // connection is an artifact of the cap (see class javadoc) and was
+        // never legitimate evidence to reduce it.
+        if (current >= max)
+            return max;
+        return Math.min(max, current + step);
+    }
+
+    /**
      * Tunes the global max window size ceiling for all streaming connections.
      * Higher = more in-flight data, higher peak throughput, but more memory
-     * and worse loss recovery when congestion hits.  Adjusted based on RTT,
-     * bandwidth, loss rate, and memory pressure so the cap tracks the BDP
-     * without over-committing memory on constrained routers.
+     * and worse loss recovery when congestion hits.  Adjusted based on loss,
+     * congestion, and memory pressure so the cap lifts off clean paths (letting
+     * a fast pipe actually reach it) and only comes back down under hard
+     * negative signals, without over-committing memory on constrained routers.
      * The ceiling spans the full streaming range up to the absolute cap (4096)
      * so that on low-RTT, high-bandwidth paths the window can reach ~8 MB/s
-     * (4096 messages &times; 1730 bytes / 0.89 s RTT); the BDP logic still
-     * shrinks it under drops, congestion, or memory pressure.
+     * (4096 messages &times; 1730 bytes / 0.89 s RTT).
      */
     private class MaxWindowSizeParam extends BaseParam {
 
@@ -4273,44 +4332,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
-            double bwSend = getAdditionalStat(_context, "bw.sendBps");
             double memPct = getAdditionalStat(_context, "jobQueue.memoryUsedPercent");
-
-            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
-            double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
-
-            // Recovery floor: always climb back toward default unless severe drops/congestion
-            int recoveryFloor = Math.max(_min, _defaultValue / 2);
-            if (current < recoveryFloor && !congested && !dropping)
-                return Math.min(_defaultValue, current + _step);
-
-            // Severe drops, congestion, or memory > 60% — shrink ceiling
-            if (dropping || congested || memPressure > 60.0)
-                return Math.max(recoveryFloor, current - _step);
-
-            // BDP-based target: how many window slots (streaming messages) the pipe can hold.
-            // The divisor is the real streaming message size (1730), not 4096 —
-            // the old hardcoded 4096 was from pre-0.6.5 when messages were larger and
-            // under-sized the window by ~2.4x (4096/1730), capping throughput below BDP.
-            // Use STREAM_MSG_SIZE_DEFAULT directly: connections created by i2ptunnel never
-            // receive maxMessageSize from router config, so 1730 is what actually runs.
-            int bdpTarget = current;
-            if (!Double.isNaN(bwSend) && bwSend > 0 && observed > 100) {
-                int t = computeStreamingBdpTarget(bwSend, observed, STREAM_MSG_SIZE_DEFAULT, _min, _max);
-                if (t >= 0)
-                    bdpTarget = t;
-            }
-
-            // Hold at current unless BDP diverges significantly
-            int bdpDiff = Math.abs(bdpTarget - current);
-            if (bdpDiff < _step * 2)
-                return current;
-
-            // Move toward BDP target
-            if (bdpTarget > current)
-                return Math.min(bdpTarget, current + _step);
-            return Math.max(recoveryFloor, current - _step);
+            return computeStreamingMaxWindowTarget(current, _min, _max, _step, _defaultValue,
+                                                   failLifetime, dupSize, memPct);
         }
     }
 

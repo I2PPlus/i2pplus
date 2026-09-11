@@ -1353,6 +1353,90 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 11: Streaming max-window ceiling target tests
+    // =====================================================================
+
+    // params: current, min, max, step, defaultValue, failLifetime, dupSize, memPct
+
+    /** Clean path climbs one step toward the absolute cap — the ramp lever. */
+    @Test
+    public void testMaxWindowCleanClimbsOneStep() {
+        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, Double.NaN));
+    }
+
+    /** At the absolute cap, a clean path holds (no overshoot). */
+    @Test
+    public void testMaxWindowAtCapHolds() {
+        assertEquals(4096, Tuner.computeStreamingMaxWindowTarget(4096, 128, 4096, 128, 512,
+                                                                  Double.NaN, Double.NaN, Double.NaN));
+    }
+
+    /** REGRESSION: the former code shrunk the ceiling when measured bandwidth was
+     *  below current — a low average read THROUGH the cap, so the cap ratcheted
+     *  itself down in a spiral. A clean path at a normal ceiling must climb, not
+     *  shrink, regardless of how low the bandwidth average is. */
+    @Test
+    public void testMaxWindowLowBdpNoLongerShrinks() {
+        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, Double.NaN));
+        assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(896, 128, 4096, 128, 512,
+                                                                 Double.NaN, Double.NaN, Double.NaN));
+    }
+
+    /** Duplicate retransmits (loss pressure) shrink one step. */
+    @Test
+    public void testMaxWindowShrinksOnDuplicates() {
+        assertEquals(896, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
+                                                                Double.NaN, 600.0, Double.NaN));
+    }
+
+    /** Gateway congestion (send-message-failure lifetime) shrinks one step. */
+    @Test
+    public void testMaxWindowShrinksOnCongestion() {
+        assertEquals(896, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
+                                                                9000.0, Double.NaN, Double.NaN));
+        assertEquals(512, Tuner.computeStreamingMaxWindowTarget(640, 128, 4096, 128, 512,
+                                                                9000.0, Double.NaN, Double.NaN));
+    }
+
+    /** Memory pressure above 60% shrinks; at exactly 60% the path is still clean. */
+    @Test
+    public void testMaxWindowMemoryPressureBoundary() {
+        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, 60.0));
+        assertEquals(512, Tuner.computeStreamingMaxWindowTarget(640, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, 60.1));
+    }
+
+    /** Below the recovery floor (max(min, default/2)) and healthy, climb toward
+     *  the factory default. */
+    @Test
+    public void testMaxWindowBelowFloorClimbsToDefault() {
+        assertEquals(256, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, Double.NaN));
+    }
+
+    /** Under drops the ceiling never sinks below the recovery floor. */
+    @Test
+    public void testMaxWindowShrinkFlooredAtRecovery() {
+        assertEquals(256, Tuner.computeStreamingMaxWindowTarget(300, 128, 4096, 128, 512,
+                                                                Double.NaN, 600.0, Double.NaN));
+        assertEquals(256, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
+                                                                Double.NaN, 600.0, Double.NaN));
+    }
+
+    /** Missing signals are treated as clean (never a reason to shrink). */
+    @Test
+    public void testMaxWindowMissingSignalsTreatClean() {
+        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, Double.NaN));
+        double nan = Double.NaN;
+        assertEquals(256, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
+                                                                nan, nan, nan));
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 
