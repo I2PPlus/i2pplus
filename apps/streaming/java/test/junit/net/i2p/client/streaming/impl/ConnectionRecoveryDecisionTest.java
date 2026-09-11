@@ -16,7 +16,7 @@ import org.junit.Test;
  * instead of retrying a dead path forever. {@link Connection#shouldPaceRetx(int,
  * int)} pins the "burst then pace; recovery-critical packets never pace" rule.
  *
- * @since 0.9.72
+ * @since 0.9.71+
  */
 public class ConnectionRecoveryDecisionTest {
 
@@ -81,6 +81,69 @@ public class ConnectionRecoveryDecisionTest {
         assertTrue(Connection.stuckLifetimeExceeded(6, 30000, now, createdOn));
         // Created recently -> not stuck even if last transmission was a while ago.
         assertFalse(Connection.stuckLifetimeExceeded(6, 30000, now, now - 1_000));
+    }
+
+    // ---- remoteSilentTooLong ----
+
+    /** A remote that reached the exact inactivity boundary is not yet silent. */
+    @Test
+    public void testAtInactivityBoundaryNotSilent() {
+        long lastReceivedOn = 100_000;
+        // exactly inactivity timeout ago -> not silent (strict inequality)
+        assertFalse(Connection.remoteSilentTooLong(lastReceivedOn, 60_000, 160_000));
+        assertFalse(Connection.remoteSilentTooLong(lastReceivedOn, 120_000, 220_000));
+    }
+
+    /** A remote silent beyond the full inactivity window is too long. */
+    @Test
+    public void testBeyondInactivityIsSilent() {
+        assertTrue(Connection.remoteSilentTooLong(100_000, 120_000, 220_001));
+        assertTrue(Connection.remoteSilentTooLong(100_000, 120_000, 240_000));
+    }
+
+    /** A remote that sent anything within the window is not silent. */
+    @Test
+    public void testWithinWindowNotSilent() {
+        assertFalse(Connection.remoteSilentTooLong(100_000, 120_000, 220_000));
+        assertFalse(Connection.remoteSilentTooLong(100_000, 120_000, 120_000));
+        assertFalse(Connection.remoteSilentTooLong(100_000, 120_000, 100_000));
+    }
+
+    /** Connect-phase connections (nothing ever received) are never declared
+     *  silent — they are bounded separately by the SYN give-up budget. */
+    @Test
+    public void testNeverReceivedNotSilent() {
+        assertFalse(Connection.remoteSilentTooLong(-1, 120_000, 500_000));
+        assertFalse(Connection.remoteSilentTooLong(0, 120_000, 500_000));
+    }
+
+    /** Degenerate configuration never triggers. */
+    @Test
+    public void testDegenerateConfigNeverSilent() {
+        assertFalse(Connection.remoteSilentTooLong(100_000, 0, 500_000));
+        assertFalse(Connection.remoteSilentTooLong(100_000, -1, 500_000));
+    }
+
+    /** The comparison is exact-inequality so a connection on the boundary survives. */
+    @Test
+    public void testLiveConnectionOnBoundarySurvives() {
+        long lastReceivedOn = 100_000;
+        long window = 120_000;
+        assertFalse(Connection.remoteSilentTooLong(lastReceivedOn, (int) window, lastReceivedOn + window));
+        assertTrue(Connection.remoteSilentTooLong(lastReceivedOn, (int) window, lastReceivedOn + window + 1));
+    }
+
+    /** Receive anchoring: retransmitting (a fresh last SEND) does not extend the
+     *  deadline — the connection is still dead once the remote has been silent
+     *  for the full window. */
+    @Test
+    public void testResendsToSilentRemoteDoNotExtendDeadline() {
+        long lastReceivedOn = 100_000;
+        long now = 250_000;
+        // Sending just now, but remote silent beyond the window -> silent.
+        assertTrue(Connection.remoteSilentTooLong(lastReceivedOn, 120_000, now));
+        // Remote sent something recently -> not silent even if we sent ages ago.
+        assertFalse(Connection.remoteSilentTooLong(lastReceivedOn, 120_000, lastReceivedOn + 1_000));
     }
 
     // ---- budgetExhaustionClosesConnection (resume, don't close) ----

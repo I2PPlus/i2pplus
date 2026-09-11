@@ -1065,12 +1065,55 @@ class Connection {
      *                  (PacketLocal.getCreatedOn()), or &lt;= 0 if unknown
      * @return true if the packet has been in flight beyond the budget and
      *         recovery is presumed dead
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     static boolean stuckLifetimeExceeded(int maxResends, int maxRto, long now, long createdOn) {
         if (maxResends <= 0 || maxRto <= 0 || createdOn <= 0)
             return false;
         return now - createdOn > (long) maxResends * maxRto;
+    }
+
+    /**
+     * Pure predicate: has the remote sent nothing at all for a full inactivity
+     * window, while unacked packets are still in flight?
+     *
+     * <p>An ACK (or a data packet) is emitted by a live remote on receipt within
+     * the ack window, so a connection that has unacked in-flight packets AND has
+     * received zero bytes for the configured inactivity timeout can no longer be
+     * making progress in either direction: either our sends are not arriving
+     * (dead outbound leg) or the remote is gone. Holding such a connection longer
+     * cannot resume it — per the protocol the remote's own inactivity timer
+     * (default 120s, {@code i2p.streaming.inactivityTimeout}) has already closed
+     * it, and its close is lost on the dead path back. This gives an established
+     * connection in resume mode — which otherwise retransmits a budget-exhausted
+     * head-of-line packet every RTO until the creation-anchored backstop
+     * ({@link #stuckLifetimeExceeded(int, int, long, long)}, default 30 sends *
+     * 30s maxRTO = 15 min) fires — a tighter wall-clock deadline so the
+     * application gets EOF within ~one inactivity window instead of hanging on a
+     * zombie stream it can never resume.
+     *
+     * <p>Anchoring at the last RECEIVED packet (not the last send) is deliberate:
+     * resume mode refreshes the last send time on every retransmit, so a
+     * last-send-anchored check would defer forever. A receive-anchored check only
+     * fires when the remote has truly gone silent; a healthy path that
+     * acknowledges our data — even slowly — resets {@code lastReceivedOn} and
+     * never hits this bound. An exact-inequality comparison keeps a connection on
+     * the boundary alive.
+     *
+     * @param lastReceivedOn timestamp of the last packet received from the remote,
+     *                       in ms since epoch (Connection#packetReceived()), or
+     *                       &lt;= 0 if nothing has ever been received (connect phase,
+     *                       which is bounded separately by the SYN give-up budget)
+     * @param inactivityTimeout configured inactivity timeout in ms (&gt; 0)
+     * @param now current time in ms since epoch
+     * @return true if the remote has been silent for the full inactivity window
+     *         while unacked packets are in flight
+     * @since 0.9.71+
+     */
+    static boolean remoteSilentTooLong(long lastReceivedOn, int inactivityTimeout, long now) {
+        if (lastReceivedOn <= 0 || inactivityTimeout <= 0)
+            return false;
+        return now - lastReceivedOn > inactivityTimeout;
     }
 
     /**
@@ -1093,7 +1136,7 @@ class Connection {
      *                    (PacketLocal.getNumSoftResends())
      * @param maxResends configured per-packet retransmit budget (&gt; 0)
      * @return true if the non-soft send attempts exceed the budget
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     static boolean hardResendBudgetExceeded(int totalSends, int softResends, int maxResends) {
         return Math.max(0, totalSends - softResends) > maxResends;
@@ -1124,7 +1167,7 @@ class Connection {
      *                           connection (Connection._highestAckedThrough &gt;= 0)
      * @return true if the connection should close (budget exhausted AND no
      *         forward progress); false if it should resume over closing
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     static boolean budgetExhaustionClosesConnection(boolean budgetExhausted, boolean hasForwardProgress) {
         return !hasForwardProgress && budgetExhausted;
@@ -1167,7 +1210,7 @@ class Connection {
      * @param burstCount number of direct sends already made in this timer fire
      * @param nResends transmissions this packet has undergone
      * @return true if the retransmit should go through pacing
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     static boolean shouldPaceRetx(int burstCount, int nResends) {
         return burstCount >= IMMEDIATE_RETX_BURST && nResends < MAX_PACED_RETX;
@@ -2858,19 +2901,46 @@ class Connection {
             // (A packet cancelled on a reset/close but never removed from the
             // window map — the original zombie this guarded — is handled by the
             // stale-removal guard in the resend loop.)
+            //
+            // A second, tighter bound is the remote silence window: if the remote
+            // has sent NOTHING (data or ACK) for a full inactivity timeout while a
+            // packet sits unacked in the window, holding on longer cannot succeed.
+            // A live remote that received our data ACKs it within the ack window,
+            // so total silence means our sends are not arriving — the path is dead
+            // or the remote has gone (and per the protocol its own inactivity
+            // timer, default 120s, has closed it). Anchoring at the last RECEIVED
+            // packet keeps resume semantics intact for holes shorter than the hold
+            // window and replaces the open-ended creation-anchored wait (30 sends
+            // x 30s maxRTO = 15 min by default) with a bound aligned to the
+            // protocol's inactivity constant: a stalled stream that neither
+            // delivers nor receives gives the application EOF within ~2 min
+            // instead of lingering on a zombie it can never resume.
             synchronized (_outboundPacketsLock) {
                 TreeMap<Long, PacketLocal> ob = _outboundPackets;
                 Map.Entry<Long, PacketLocal> first = ob == null ? null : ob.firstEntry();
-                if (first != null && stuckLifetimeExceeded(_options.getMaxResends(),
-                                                           ConnectionOptions.getMaxRTOStatic(),
-                                                           _context.clock().now(),
-                                                           first.getValue().getCreatedOn())) {
-                    if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
+                if (first != null) {
+                    long now = _context.clock().now();
+                    if (stuckLifetimeExceeded(_options.getMaxResends(),
+                                              ConnectionOptions.getMaxRTOStatic(),
+                                              now,
+                                              first.getValue().getCreatedOn())) {
+                        if (_log.shouldWarn()) {
+                            _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
+                        }
+                        if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
+                        disconnect(false);
+                        return;
                     }
-                    if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
-                    disconnect(false);
-                    return;
+                    if (remoteSilentTooLong(_lastReceivedOn,
+                                            _options.getInactivityTimeout(),
+                                            now)) {
+                        if (_log.shouldWarn()) {
+                            _log.warn(Connection.this + " remote silent for the inactivity window, forcing disconnect");
+                        }
+                        if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
+                        disconnect(false);
+                        return;
+                    }
                 }
             }
 
@@ -3250,7 +3320,7 @@ class Connection {
     /**
      * Number of retransmits sent directly per RTO fire before remaining
      * retransmits are paced, to avoid flooding the I2CP queue with a
-     * single-timer-fire burst. @since 0.9.72
+     * single-timer-fire burst. @since 0.9.71+
      */
     static final int IMMEDIATE_RETX_BURST = 4;
 
@@ -3258,7 +3328,7 @@ class Connection {
      * Once a packet has been transmitted this many times, always send it
      * directly instead of pacing it: a repeatedly-resent packet is
      * recovery-critical and must not starve behind a stale pacing rate in the
-     * paced queue (hard drain deadline). @since 0.9.72
+     * paced queue (hard drain deadline). @since 0.9.71+
      */
     static final int MAX_PACED_RETX = 4;
 
