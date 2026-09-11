@@ -577,7 +577,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new InitRTOParam());
         _params.add(new MinRTOParam());
         _params.add(new UdpMaxRtoParam());
-        _params.add(new MaxSendWindowParam());
         _params.add(new PostRTOWindowParam());
         _params.add(new MaxDispatchAgeParam());
         _params.add(new MaxQueuedOutboundParam());
@@ -9747,97 +9746,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
             // No failures + low RTT = lower to fail faster
             if (!hasFailures && !Double.isNaN(observed) && observed < 1000) {
-                return Math.max(_min, current - _step);
-            }
-            return current;
-        }
-    }
-
-    /**
-     * Max send window (CWIN) — bytes in flight per peer.
-     * Higher = more aggressive sending, lower = less buffering.
-     * Primary signal: udp.avgSendWindow (current usage across peers).
-     * Cross-refs: udp.retransmitEvents (retransmits), udp.congestionOccurred (congestion events),
-     *             jobQueue.jobLag (CPU pressure).
-     *
-     * @since 0.9.70+
-     */
-    private class MaxSendWindowParam extends BaseParam {
-
-        MaxSendWindowParam() {
-            super("udp.peer.maxSendWindow", "Max UDP send window (bytes)",
-                  SUB_TRANSPORT,
-
-                  // Min 64KB, max 8MB scaled to memory (1MB per 512MB heap)
-                  65536,
-                  Math.max(1048576, Math.min(16777216,
-                      (int) (SystemVersion.getMaxMemory() / 512))),
-                  65536, "udp.avgSendWindow", _context);
-        }
-
-        /** Apply the tunable value to the router configuration. */
-        protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.transport.udp.maxSendWindow", Integer.toString(value));
-            PeerState.setMaxSendWindow(value);
-        }
-
-        /** Read the current runtime value of this tunable from router config. */
-        protected int getRuntimeValue() {
-            return PeerState.getMaxSendWindow();
-        }
-
-        /** Read the observed stat value for autotuning decisions. */
-        protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) { return Double.NaN; }
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
-            return rate.getAverageValue();
-        }
-
-        /** Compute the target value based on observed stat and configured limits. */
-        protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double memPressure = getMemoryPressure();
-            boolean cpuFree = jobLag < 10 || Double.isNaN(jobLag);
-            boolean memOk = memPressure < 0.75;
-            boolean highUsage = !Double.isNaN(observed) && observed > current * 0.7;
-            double retransmits = getAdditionalStat(_context, "udp.retransmitEvents");
-            boolean congested = !Double.isNaN(retransmits) && retransmits > 0;
-            double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
-            boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
-            double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
-            boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
-            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
-            boolean deathSpiral = !Double.isNaN(rtxRatio) && rtxRatio > 1000;
-            double failsafeCloses = getAdditionalEventCount(_context, "ntcp.failsafeCloses");
-            boolean failsafeActive = !Double.isNaN(failsafeCloses) && failsafeCloses > 0;
-            double mtuDecrease = getAdditionalEventCount(_context, "udp.mtuDecrease");
-            boolean mtuShrinking = !Double.isNaN(mtuDecrease) && mtuDecrease > 0;
-
-            // Memory critical: shrink fast
-            if (memPressure > 0.85) { return Math.max(_min, current - _step * 4); }
-            // Death spiral: rtxRatio > 1000 = grow window to break logjam
-            if (deathSpiral && cpuFree && memOk) {
-                return Math.min(_max, current + _step * 4);
-            }
-            // Failsafe closes or MTU shrinking = extreme congestion — shrink window
-            if (failsafeActive || mtuShrinking) {
-                return Math.max(_min, current - _step * 2);
-            }
-            // CWIN collapse during congestion: grow aggressively to provide headroom
-            // (the old "low usage" logic incorrectly shrunk during collapse)
-            if ((congested || congestionActive) && cpuFree && memOk) {
-                return Math.min(_max, current + _step * 4);
-            }
-            // High usage + CPU free + memory OK = grow
-            if (highUsage && cpuFree && memOk) { return Math.min(_max, current + _step * 2); }
-            // Low usage + no congestion + healthy = shrink to reduce buffering
-            boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
-            // Don't shrink maxSendWindow when CWIN is collapsed — that's a death spiral!
-            // CWIN collapse means the window is constrained by RTO/congestion, not by the configured max.
-            if (lowUsage && !congested && !congestionActive && !cwinCollapsed && current > _min) {
                 return Math.max(_min, current - _step);
             }
             return current;
