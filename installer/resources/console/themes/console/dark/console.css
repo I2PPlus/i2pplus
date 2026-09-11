@@ -1065,6 +1065,8 @@ form[action="/events"]>.formaction{margin-bottom:-11px;margin-right:-21px;margin
 
 /* tunnels */
 .bar{padding-right:8px;width:5%}
+.data,.latency{width:1%;min-width:72px;white-space:nowrap}
+.latency{min-width:96px}
 .direction .small{margin-left:-2px;width:12px}
 .ff,#capabilities_key a .ff{background:linear-gradient(180deg,#730,#310)}
 h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
