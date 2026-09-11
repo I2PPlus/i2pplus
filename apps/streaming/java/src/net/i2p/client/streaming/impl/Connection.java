@@ -165,6 +165,15 @@ class Connection {
      *  cancelled soft pass cannot leak into a later RTO-driven pass.
      */
     private volatile boolean _softFailureResendPending;
+    /**
+     *  Wall-clock time (ms) of the last permitted immediate retransmit scheduled
+     *  from {@link #scheduleSoftFailureRetransmit()}.  Gates back-to-back soft
+     *  failures (e.g. NO_LEASESET while the LeaseSet fetch is in flight) so they
+     *  defer to the retransmit timer instead of firing a new immediate pass at
+     *  the I2CP round-trip rate, which exhausted the SYN give-up budget within
+     *  ~200ms.  Written on the router callback thread, read on itself.
+     */
+    private volatile long _lastSoftFailRetransmit;
     /** Connection event. */
     private final ConEvent _connectionEvent;
     /** Retransmit event. */
@@ -1084,6 +1093,29 @@ class Connection {
     }
 
     /**
+     *  Pure decision: has the retransmit loop exceeded the SYN give-up budget
+     *  after excluding soft-failure-triggered resends?
+     *
+     *  <p>Mirror of {@link #hardResendBudgetExceeded(int, int, int)} for the
+     *  SYN-phase give-up.  A SYN resent only because the router reported a soft
+     *  failure (e.g. NO_LEASESET while its LeaseSet fetch is in flight) never
+     *  reached the tunnel fabric, so it is not evidence of a dead path; counting
+     *  it against {@code maxSynSends} lets a burst of router-side soft failures
+     *  kill a connect in a few hundred ms with a spurious "SYN not acknowledged".
+     *  Only genuine on-wire retransmits should consume the give-up budget.
+     *
+     * @param totalSends total SYN send attempts incl. resends (PacketLocal.getNumSends())
+     * @param softResends of those, resends tagged as soft-failure-triggered
+     *                    (PacketLocal.getNumSoftResends())
+     * @param maxSynSends per-connection SYN give-up budget (getMaxSynSends())
+     * @return true if the non-soft SYN send attempts exceed the budget
+     * @since 0.9.71+
+     */
+    static boolean synGiveUpBudgetExceeded(int totalSends, int softResends, int maxSynSends) {
+        return Math.max(0, totalSends - softResends) >= maxSynSends;
+    }
+
+    /**
      * Pure decision: should this packet's retransmit be paced through the paced
      * queue rather than sent directly?
      *
@@ -1168,6 +1200,19 @@ class Connection {
      *  (e.g., tunnel expiry, no tunnels). This schedules the retransmit event
      *  with zero delay to retry sending on a new tunnel without waiting for RTO.
      *
+     *  <p>Immediate reschedules are rate-limited: when the router soft-fails
+     *  every message (STATUS_SEND_FAILURE_NO_LEASESET while the LeaseSet fetch for
+     *  a fresh destination is still in flight), each report used to cancel the
+     *  retransmit timer and fire IMMEDIATELY.  Back-to-back reports arrived at
+     *  the I2CP round-trip rate (~10ms) and each immediate pass bumped the
+     *  SYN's send count once, exhausting the SYN give-up budget
+     *  (getMaxSynSends()) in ~200ms and killing the connect with a spurious
+     *  "SYN not acknowledged" before the LeaseSet could be fetched.  During the
+     *  SYN phase the minimum gap is the SYN retransmit interval, so retries are
+     *  interval-spaced exactly as the give-up budget math assumes; for
+     *  established connections a small fixed floor prevents any spin while still
+     *  hopping a replacement tunnel far sooner than the (possibly doubled) RTO.
+     *
      *  @since 0.9.70+
      */
     void scheduleSoftFailureRetransmit() {
@@ -1179,6 +1224,19 @@ class Connection {
                 return;
             }
         }
+        long minSpacing = _highestAckedThrough.get() < 0 ? getSynRetransmitInterval() : SYN_RTO_MIN;
+        long now = _context.clock().now();
+        if (shouldRateLimitSoftRetransmit(now, _lastSoftFailRetransmit, minSpacing)) {
+            // The retransmit timer is already armed at the SYN interval (SYN
+            // phase) or the doubled RTO (established), so the deferred retry
+            // happens automatically without an I2CP send burst.
+            if (_log.shouldDebug()) {
+                _log.debug("[" + this + "] soft failure within " + minSpacing +
+                           "ms of last immediate retransmit, deferring to the retransmit timer");
+            }
+            return;
+        }
+        _lastSoftFailRetransmit = now;
         // Force immediate reschedule, cancelling any pending timer
         // pushBackRTO(0) cannot shorten a running timer (reschedule uses false for useEarliestTime),
         // so we must cancel and re-schedule instead.
@@ -1189,6 +1247,28 @@ class Connection {
         if (_log.shouldInfo()) {
             _log.info("[" + this + "] Scheduled immediate retransmit after soft failure");
         }
+    }
+
+    /**
+     *  Pure decision: is this soft-failure report too close to the last
+     *  permitted immediate retransmit to fire another now?
+     *
+     *  <p>Derived from {@link #scheduleSoftFailureRetransmit()}; extracted for
+     *  testability.  A report at exactly {@code minSpacingMs} after the last is
+     *  allowed, mirroring the strict-inequality pacing of the retransmit timer.
+     *
+     *  @param now wall-clock time of this soft-failure report (ms)
+     *  @param lastSoftFailRetransmit wall-clock time of the last permitted
+     *         immediate retransmit (ms), 0 if none yet this connection
+     *  @param minSpacingMs minimum gap between immediate retransmits (ms)
+     *  @return true if the retransmit should be deferred to the existing timer
+     *  @since 0.9.71+
+     */
+    static boolean shouldRateLimitSoftRetransmit(long now, long lastSoftFailRetransmit, long minSpacingMs) {
+        if (lastSoftFailRetransmit <= 0) {
+            return false;
+        }
+        return now - lastSoftFailRetransmit < minSpacingMs;
     }
 
     /**
@@ -2886,13 +2966,18 @@ class Connection {
                         return;
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
-                           packet.getNumSends() >= getMaxSynSends()) {
+                           synGiveUpBudgetExceeded(packet.getNumSends(),
+                                                   packet.getNumSoftResends(),
+                                                   getMaxSynSends())) {
                     // The SYN was never ACKed and the retransmit budget has now covered
                     // the entire connect window (getMaxSynSends(), scaled up from
                     // maxSynResends), so the connect() caller has given up. Stop
                     // resending instead of running to maxResends (~12 min). SYN
                     // retransmits use a fixed RTO interval (no backoff), so the total
-                    // budget is getMaxSynSends() * interval.
+                    // budget is getMaxSynSends() * interval. Soft-failure-triggered
+                    // resends are excluded (synGiveUpBudgetExceeded()): they never
+                    // reached the tunnel fabric and should not count as evidence of a
+                    // dead path (see scheduleSoftFailureRetransmit()).
                     // Record an accurate error *before* the error-free disconnect, so
                     // waitForConnect() returns "Connection timed out: SYN not
                     // acknowledged" instead of the generic "Connection failed".
