@@ -1,3 +1,24 @@
+2026-09-11 dr|z3d
+  * Streaming:
+    - Resume established connections when a head-of-line packet hits its
+      retransmit budget instead of closing mid-download streams
+    - Exempt soft-failure resends and soft SYNs from budget/give-up caps so
+      tunnel handovers can't falsely abort active streams
+    - Force-close genuinely stuck connections and drop stale window entries
+    - Sample retransmit RTT from last send, not creation, and clamp outliers
+    - Auto-tune receive worker threads per session
+    - Make accept timeout live-reconfigurable from the console
+  * Tuner: Remove global UDP send-window autotune that pinned the transport
+    window to the minimum
+  * Tunnel: Bypass build backoff when a pool is nearly collapsed (<=1 safe
+    tunnel)
+  * I2PTunnel: Lock-free client proxy read path with tuner-safe load sampling
+  * EepGet: Cap retry backoff jitter and add eepget.retryDelayMs knob
+  * Console: Fix streaming setting defaults and restart claims on advanced
+    config page
+  * Installer: Fix 64-bit detection and false 32-bit rejection on 64-bit
+    Windows
+
 2026-09-09 dr|z3d
   * Tunnel:
     - Fix build executor clock source and backoff race, raise build cap,
