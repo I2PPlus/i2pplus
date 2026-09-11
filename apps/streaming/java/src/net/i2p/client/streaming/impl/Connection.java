@@ -1117,6 +1117,34 @@ class Connection {
     }
 
     /**
+     * Floor for the remote-silence bound ({@link #remoteSilentTooLong(long, int, long)})
+     * when no positive inactivity window is configured: the protocol's default
+     * inactivity window (120s). A connection must never be held past this on a
+     * dead path just because an options object carries a non-positive timeout.
+     */
+    static final int REMOTE_SILENT_FALLBACK_MS = 120000;
+
+    /**
+     * Effective inactivity window for the remote-silence bound.
+     *
+     * <p>The predicate requires a positive window and is silently disarmed by a
+     * {@code <= 0} configured timeout, which would leave a dead path hanging
+     * until the creation-anchored backstop
+     * ({@link #stuckLifetimeExceeded(int, int, long, long)}) — by default 30
+     * resends * maxRTO ≈ 6 min. Floor the window at the protocol default (120s)
+     * so a zombie stream still dies within ~one inactivity window; the bound is
+     * deliberately never tightened below that.
+     *
+     * @param configured the connection's configured inactivity timeout in ms
+     * @param fallbackMs the floor to use when the configured window is not positive
+     * @return {@code configured} if {@code configured > 0}, else {@code fallbackMs}
+     * @since 0.9.71+
+     */
+    static int effectiveInactivityTimeout(int configured, int fallbackMs) {
+        return configured > 0 ? configured : fallbackMs;
+    }
+
+    /**
      * Pure decision: has the number of HARD send attempts (sends that took the
      * router's reply as something to retry after, i.e. not router soft failures)
      * exceeded the retransmit budget?
@@ -2931,11 +2959,14 @@ class Connection {
                         disconnect(false);
                         return;
                     }
-                    if (remoteSilentTooLong(_lastReceivedOn,
-                                            _options.getInactivityTimeout(),
-                                            now)) {
+if (remoteSilentTooLong(_lastReceivedOn,
+                                        effectiveInactivityTimeout(_options.getInactivityTimeout(),
+                                                                   REMOTE_SILENT_FALLBACK_MS),
+                                        now)) {
                         if (_log.shouldWarn()) {
-                            _log.warn(Connection.this + " remote silent for the inactivity window, forcing disconnect");
+                            _log.warn(Connection.this + " remote silent for the inactivity window (" +
+                                      (now - _lastReceivedOn) + "ms idle, timeout " +
+                                      _options.getInactivityTimeout() + "ms), forcing disconnect");
                         }
                         if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
                         disconnect(false);

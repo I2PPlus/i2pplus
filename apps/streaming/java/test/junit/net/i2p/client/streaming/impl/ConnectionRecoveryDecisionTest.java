@@ -146,6 +146,43 @@ public class ConnectionRecoveryDecisionTest {
         assertFalse(Connection.remoteSilentTooLong(lastReceivedOn, 120_000, lastReceivedOn + 1_000));
     }
 
+    // ---- effectiveInactivityTimeout (remote-silence fallback floor) ----
+
+    /** A non-positive configured window falls back to the protocol default. */
+    @Test
+    public void testZeroConfiguredWindowFallsBack() {
+        assertEquals(Connection.REMOTE_SILENT_FALLBACK_MS,
+                     Connection.effectiveInactivityTimeout(0, Connection.REMOTE_SILENT_FALLBACK_MS));
+        assertEquals(Connection.REMOTE_SILENT_FALLBACK_MS,
+                     Connection.effectiveInactivityTimeout(-1, Connection.REMOTE_SILENT_FALLBACK_MS));
+    }
+
+    /** A positive configured window is honored as-is (never tightened). */
+    @Test
+    public void testPositiveWindowHonored() {
+        assertEquals(120_000, Connection.effectiveInactivityTimeout(120_000, Connection.REMOTE_SILENT_FALLBACK_MS));
+        assertEquals(300_000, Connection.effectiveInactivityTimeout(300_000, Connection.REMOTE_SILENT_FALLBACK_MS));
+    }
+
+    /** The remote-silence bound still disarms on a truly unknown last-received
+     *  time even with the effective (floored) window. */
+    @Test
+    public void testBoundRequiresKnownLastReceived() {
+        long now = 500_000;
+        assertFalse(Connection.remoteSilentTooLong(0, Connection.REMOTE_SILENT_FALLBACK_MS, now));
+        assertFalse(Connection.remoteSilentTooLong(-1, Connection.REMOTE_SILENT_FALLBACK_MS, now));
+    }
+
+    /** Wiring-level: a zero configured timeout no longer disarms the bound; the
+     *  effective window floor is what gates it. */
+    @Test
+    public void testZeroConfigStillFiresBoundWithFallback() {
+        long lastReceivedOn = 100_000;
+        long now = lastReceivedOn + Connection.REMOTE_SILENT_FALLBACK_MS + 1;
+        int effective = Connection.effectiveInactivityTimeout(0, Connection.REMOTE_SILENT_FALLBACK_MS);
+        assertTrue(Connection.remoteSilentTooLong(lastReceivedOn, effective, now));
+    }
+
     // ---- budgetExhaustionClosesConnection (resume, don't close) ----
 
     /** Established connections resume: budget exhaustion alone does not close. */
