@@ -171,16 +171,23 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     // After morphdom, a td.data cell may have a correct data-sort attribute
     // but an empty span.right due to index mis-pairing or whitespace node
-    // interference. Replicate the server-side B→KB→MB conversion inline.
+    // interference. Replicate the server-side B→KB→MB conversion inline and
+    // restore the MB/KB unit into the span.left sibling (server markup holds
+    // the number in span.right and "&#8239;MB"/"&#8239;KB" in span.left).
     container.querySelectorAll("td.data").forEach(function(td) {
       var right = td.querySelector("span.right");
       if (right && !right.textContent) {
         var sortVal = parseInt(td.getAttribute("data-sort"), 10);
         if (sortVal > 0) {
           var sizeInKB = sortVal * 1024.0 / 1000.0;
-          right.textContent = sizeInKB >= 1024
-            ? (sizeInKB / 1024.0).toFixed(2)
-            : Math.round(sizeInKB);
+          var left = td.querySelector("span.left");
+          if (sizeInKB >= 1024) {
+            right.textContent = (sizeInKB / 1024.0).toFixed(2);
+            if (left) {left.textContent = "\u202FMB";}
+          } else {
+            right.textContent = Math.round(sizeInKB);
+            if (left) {left.textContent = "\u202FKB";}
+          }
         }
       }
     });
