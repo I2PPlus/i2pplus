@@ -128,6 +128,10 @@ class Connection {
      *  Reset in ackPackets() once the lost window is fully recovered.
      *  Accessed only under the _outboundPacketsLock. */
     private int _lossStrikes;
+    /** Whether the established-connection resume WARN was already logged (once per
+     *  connection) when a data packet exceeded its retransmit budget. Reset only
+     *  when the connection object is reused. */
+    private boolean _establishedResumeWarned;
 
     // Pacing fields for smooth transmission
     /** Pacing rate in bytes per second. */
@@ -1040,30 +1044,33 @@ class Connection {
     }
 
     /**
-     * Pure predicate: has the oldest unacked packet exceeded the worst-case
-     * retransmit budget without a transmission?
+     * Pure predicate: has the oldest unacked packet been in flight beyond the
+     * worst-case retransmit budget, measured from CREATION?
      *
      * <p>The worst case is one transmission per RTO for the full per-packet
-     * retransmit budget ({@code maxResends * maxRto}). If the oldest packet has
-     * not been transmitted within that budget, recovery is presumed stuck — the
-     * packet was cancelled (on a reset or close) but never removed from the
-     * window map, so no give-up branch can count it and the RTO timer fires into
-     * a no-op forever. An exact-inequality comparison keeps a live path on the
+     * retransmit budget ({@code maxResends * maxRto}). Anchoring the budget at
+     * the packet's creation (instead of its last transmission) gives a fixed
+     * wall-clock deadline that retransmission activity cannot extend: an
+     * established connection in resume mode keeps retransmitting a
+     * budget-exhausted head-of-line packet every RTO (refreshing its last send
+     * time) precisely so it can surge forward when the path clears, and that
+     * deadline must still hold so a genuinely dead path is closed rather than
+     * retried forever. An exact-inequality comparison keeps a live path on the
      * budget boundary from being killed.
      *
      * @param maxResends configured per-packet retransmit budget (&gt; 0)
      * @param maxRto configured maximum single retransmit timeout in ms (&gt; 0)
      * @param now current time in ms since epoch
-     * @param lastSend last transmission time of the oldest packet in ms since
-     *                 epoch, or &lt;= 0 if never sent
+     * @param createdOn creation time of the oldest packet, in ms since epoch
+     *                  (PacketLocal.getCreatedOn()), or &lt;= 0 if unknown
      * @return true if the packet has been in flight beyond the budget and
-     *         recovery is presumed stuck
+     *         recovery is presumed dead
      * @since 0.9.72
      */
-    static boolean stuckLifetimeExceeded(int maxResends, int maxRto, long now, long lastSend) {
-        if (maxResends <= 0 || maxRto <= 0 || lastSend <= 0)
+    static boolean stuckLifetimeExceeded(int maxResends, int maxRto, long now, long createdOn) {
+        if (maxResends <= 0 || maxRto <= 0 || createdOn <= 0)
             return false;
-        return now - lastSend > (long) maxResends * maxRto;
+        return now - createdOn > (long) maxResends * maxRto;
     }
 
     /**
@@ -1090,6 +1097,37 @@ class Connection {
      */
     static boolean hardResendBudgetExceeded(int totalSends, int softResends, int maxResends) {
         return Math.max(0, totalSends - softResends) > maxResends;
+    }
+
+    /**
+     * Pure decision: should an exhausted per-packet retransmit budget close the
+     * connection?
+     *
+     * <p>Once a connection has made forward progress (any packet acknowledged) it
+     * may carry an in-flight download with app-level state to preserve. A single
+     * head-of-line packet that exhausts its budget is then evidence of a
+     * TEMPORARY path failure (a hole at a congested hop), not a dead path:
+     * tearing the whole stream down forces the application to reconnect and
+     * re-transfer, which is the observed "download fails and restarts" churn.
+     * Such connections keep the packet in the window and keep retransmitting —
+     * they resume — instead of closing. Only a connection that never got a single
+     * packet through (connect phase, nothing to resume) keeps the fatal close.
+     *
+     * <p>The {@code budgetExhausted} input already excludes SYN and CLOSE
+     * packets: connect-phase give-up is decided separately
+     * ({@link #synGiveUpBudgetExceeded(int, int, int)} with a distinct error),
+     * and CLOSE packets are bounded by the dedicated close-resend cap.
+     *
+     * @param budgetExhausted true if a non-SYN, non-CLOSE packet's hard send
+     *                        count has exceeded its retransmit budget
+     * @param hasForwardProgress true if any packet has been acknowledged on the
+     *                           connection (Connection._highestAckedThrough &gt;= 0)
+     * @return true if the connection should close (budget exhausted AND no
+     *         forward progress); false if it should resume over closing
+     * @since 0.9.72
+     */
+    static boolean budgetExhaustionClosesConnection(boolean budgetExhausted, boolean hasForwardProgress) {
+        return !hasForwardProgress && budgetExhausted;
     }
 
     /**
@@ -2808,19 +2846,25 @@ class Connection {
                 return;
             }
 
-            // Hard liveness backstop: if the oldest unacked packet has had no
-            // transmission within the worst-case retransmit budget, recovery is
-            // stuck (e.g. the packet was cancelled on a reset/close but never
-            // removed from the window map, so no give-up branch below can count
-            // it and this timer fires into a no-op forever). Force the
-            // connection closed instead of zombieing.
+            // Hard liveness backstop: if the oldest unacked packet has been in flight
+            // (never acknowledged) beyond the worst-case retransmit budget,
+            // measured from CREATION, recovery is dead. Anchoring at the packet's
+            // creation rather than its last transmission matters for established
+            // connections in resume mode below: they keep retransmitting a
+            // budget-exhausted head-of-line packet every RTO, refreshing its last
+            // send time, so a last-send-anchored test would never fire. The
+            // creation anchor gives those connections a fixed wall-clock deadline
+            // so a genuinely dead path is closed instead of retried forever.
+            // (A packet cancelled on a reset/close but never removed from the
+            // window map — the original zombie this guarded — is handled by the
+            // stale-removal guard in the resend loop.)
             synchronized (_outboundPacketsLock) {
                 TreeMap<Long, PacketLocal> ob = _outboundPackets;
                 Map.Entry<Long, PacketLocal> first = ob == null ? null : ob.firstEntry();
                 if (first != null && stuckLifetimeExceeded(_options.getMaxResends(),
                                                            ConnectionOptions.getMaxRTOStatic(),
                                                            _context.clock().now(),
-                                                           first.getValue().getLastSend())) {
+                                                           first.getValue().getCreatedOn())) {
                     if (_log.shouldWarn()) {
                         _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
                     }
@@ -2938,10 +2982,23 @@ class Connection {
                 }
                 /** N resends. */
                 final int nResends = packet.getNumSends();
-                if (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
-                    hardResendBudgetExceeded(packet.getNumSends(),
-                                             packet.getNumSoftResends(),
-                                             _options.getMaxResends())) {
+                // "Resume, don't close": once forward progress has been made an
+                // established download must not be torn down merely because one
+                // head-of-line DATA packet exhausted its retransmit budget — that
+                // is a temporary path hole, not a dead path, and closing forces
+                // the application to reconnect and re-transfer. Only a
+                // connect-phase connection (no packet ever acknowledged, so
+                // nothing to resume) keeps the fatal close below. Established
+                // connections keep retransmitting; the creation-anchored liveness
+                // backstop above is their terminal bound. CLOSE packets are left
+                // to the dedicated close-resend cap so teardown still terminates.
+                final boolean forwardProgress = _highestAckedThrough.get() >= 0;
+                final boolean budgetExhausted = !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
+                                                !packet.isFlagSet(Packet.FLAG_CLOSE) &&
+                                                hardResendBudgetExceeded(nResends,
+                                                                         packet.getNumSoftResends(),
+                                                                         _options.getMaxResends());
+                if (budgetExhaustionClosesConnection(budgetExhausted, forwardProgress)) {
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " packet " + packet + " resent too many times, closing...");
                     }
@@ -2949,7 +3006,15 @@ class Connection {
                     if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
                     disconnect(false);
                     return;
-                } else if (packet.getNumSends() >= 3 &&
+                }
+                if (budgetExhausted && !_establishedResumeWarned) {
+                    _establishedResumeWarned = true;
+                    if (_log.shouldWarn()) {
+                        _log.warn(Connection.this + " packet " + packet +
+                                  " exceeded resend budget but connection is established; keeping alive and retransmitting");
+                    }
+                }
+                if (packet.getNumSends() >= 3 &&
                            packet.isFlagSet(Packet.FLAG_CLOSE) &&
                            packet.getPayloadSize() <= 0) {
                     // Bug workaround to prevent 5 minutes of CLOSE retransmission.

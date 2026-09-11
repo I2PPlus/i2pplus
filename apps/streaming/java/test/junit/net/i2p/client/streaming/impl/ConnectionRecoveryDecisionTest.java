@@ -7,13 +7,14 @@ import org.junit.Test;
 /**
  * Tests the recovery-liveness backstop and retransmit pacing decisions.
  *
- * <p>The stuck-packet zombie is "an unacked packet that is cancelled (on reset
- * or close) but never removed from the window map". No give-up branch can count
- * it (getNumSends() is frozen), so the RTO timer fires into a no-op forever.
- * {@link Connection#stuckLifetimeExceeded(int, int, long, long)} is the pure
- * predicate behind the hard liveness backstop that force-closes such a
- * connection. {@link Connection#shouldPaceRetx(int, int)} pins the "burst then
- * pace; recovery-critical packets never pace" rule.
+ * <p>{@link Connection#stuckLifetimeExceeded(int, int, long, long)} is the pure
+ * predicate behind the hard liveness backstop that force-closes a dead
+ * connection. The deadline is anchored at the oldest unacked packet's CREATION
+ * (not its last transmission), so an established connection in resume mode —
+ * which keeps retransmitting a budget-exhausted head-of-line packet every RTO,
+ * refreshing its last send time — still gets a fixed wall-clock deadline
+ * instead of retrying a dead path forever. {@link Connection#shouldPaceRetx(int,
+ * int)} pins the "burst then pace; recovery-critical packets never pace" rule.
  *
  * @since 0.9.72
  */
@@ -24,8 +25,9 @@ public class ConnectionRecoveryDecisionTest {
     /** A packet whose lifetime matches the worst-case budget is not yet stuck. */
     @Test
     public void testAtBudgetBoundaryNotStuck() {
-        assertEquals(false, Connection.stuckLifetimeExceeded(6, 30000, 100_000, 100_000 - 6L * 30000));
-        // exactly budget -> not stuck (strict inequality)
+        long createdOn = 100_000;
+        // exactly budget of lifetime -> not stuck (strict inequality)
+        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, createdOn + 6L * 30000, createdOn));
         assertFalse(Connection.stuckLifetimeExceeded(6, 30000, 280_000, 100_000));
     }
 
@@ -62,10 +64,44 @@ public class ConnectionRecoveryDecisionTest {
     /** The comparison is exact-inequality so a live path on the boundary survives. */
     @Test
     public void testLivePathOnBoundarySurvives() {
-        long lastSend = 100_000;
+        long createdOn = 100_000;
         long budget = 6L * 30000;
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, lastSend + budget, lastSend));
-        assertTrue(Connection.stuckLifetimeExceeded(6, 30000, lastSend + budget + 1, lastSend));
+        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, createdOn + budget, createdOn));
+        assertTrue(Connection.stuckLifetimeExceeded(6, 30000, createdOn + budget + 1, createdOn));
+    }
+
+    /** Creation anchoring: frequent retransmissions (fresh lastSend) cannot
+     *  extend the deadline — an old packet being actively resent is still dead
+     *  once its CREATION age exceeds the budget. */
+    @Test
+    public void testRepeatedResendsDoNotExtendDeadline() {
+        long createdOn = 100_000;
+        long now = 600_000;
+        // Actively resent a moment ago, but created beyond the budget -> stuck.
+        assertTrue(Connection.stuckLifetimeExceeded(6, 30000, now, createdOn));
+        // Created recently -> not stuck even if last transmission was a while ago.
+        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, now, now - 1_000));
+    }
+
+    // ---- budgetExhaustionClosesConnection (resume, don't close) ----
+
+    /** Established connections resume: budget exhaustion alone does not close. */
+    @Test
+    public void testEstablishedResumesOverClose() {
+        assertFalse(Connection.budgetExhaustionClosesConnection(true, true));
+    }
+
+    /** Connect-phase connections (no forward progress) still close. */
+    @Test
+    public void testConnectPhaseClosesOnBudget() {
+        assertTrue(Connection.budgetExhaustionClosesConnection(true, false));
+    }
+
+    /** A connection within its budget never closes on this decision. */
+    @Test
+    public void testWithinBudgetNeverCloses() {
+        assertFalse(Connection.budgetExhaustionClosesConnection(false, false));
+        assertFalse(Connection.budgetExhaustionClosesConnection(false, true));
     }
 
     // ---- shouldPaceRetx ----
