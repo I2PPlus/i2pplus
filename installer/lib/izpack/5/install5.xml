@@ -121,12 +121,9 @@
     <!-- desktop shortcuts enabled by default in ShortcutPanel -->
     <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
   </variables>
-  <dynamicvariables>
-    <variable name="datamodel" value="${SYSTEM[sun.arch.data.model]}"/>
-  </dynamicvariables>
   <conditions>
-    <condition type="variable" id="is64bit">
-      <name>datamodel</name>
+    <condition type="contains" id="is64bit">
+      <string>${SYSTEM[sun.arch.data.model]}</string>
       <value>64</value>
     </condition>
   </conditions>

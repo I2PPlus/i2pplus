@@ -56,9 +56,12 @@
     <res id="Installer.image" src="installer/lib/izpack/resources/images/i2plogo.png"/>
   </resources>
 
+  <variables>
+    <variable name="datamodel" value="${SYSTEM_sun_arch_data_model}"/>
+  </variables>
   <conditions>
     <condition type="variable" id="is64bit">
-      <name>SYSTEM_sun_arch_data_model</name>
+      <name>datamodel</name>
       <value>64</value>
     </condition>
   </conditions>
