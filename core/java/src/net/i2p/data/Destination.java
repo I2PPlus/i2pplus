@@ -176,6 +176,9 @@ public class Destination extends KeysAndCert {
 
     /**
      *  Deprecated, used only by Packet.java in streaming.
+     *  Minimal variant of writeBytes(OutputStream) that writes a typed
+     *  (XDH/PQ) destination too; the KEYSIZE_BYTES hardcode broke 32-byte
+     *  key destinations with ArrayIndexOutOfBoundsException.
      *  Broken for sig types P521 and RSA before 0.9.15
      *
      *  @param target the target
@@ -184,8 +187,8 @@ public class Destination extends KeysAndCert {
      */
     public int writeBytes(byte[] target, int offset) {
         int cur = offset;
-        System.arraycopy(_publicKey.getData(), 0, target, cur, PublicKey.KEYSIZE_BYTES);
-        cur += PublicKey.KEYSIZE_BYTES;
+        System.arraycopy(_publicKey.getData(), 0, target, cur, _publicKey.length());
+        cur += _publicKey.length();
         cur = writePaddingBytes(target, cur);
         int spkTrunc = Math.min(SigningPublicKey.KEYSIZE_BYTES, _signingKey.length());
         System.arraycopy(_signingKey.getData(), 0, target, cur, spkTrunc);
@@ -196,10 +199,14 @@ public class Destination extends KeysAndCert {
 
     /**
      * Serialized size of this destination.
+     * Must match writeBytes(); the KEYSIZE_BYTES hardcode broke
+     * 32-byte key destinations. For typed keys the wire layout is
+     * [pk data][pad1][pad2][spk data][cert], so the base is the actual
+     * public key length plus the truncated signing key length.
      * @return the size in bytes
      */
     public int size() {
-        int rv = PublicKey.KEYSIZE_BYTES + _signingKey.length();
+        int rv = _publicKey.length() + Math.min(SigningPublicKey.KEYSIZE_BYTES, _signingKey.length());
         if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
             // cert data included in keys
             rv += 7;
