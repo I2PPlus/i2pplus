@@ -133,8 +133,12 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             _log.info("[IRC Client] New connection - local address is: " + s.getLocalAddress() +
                       " from: " + s.getInetAddress());
         I2PSocket i2ps = null;
-        I2PSocketAddress addr = pickDestination();
         int failures = 0;
+        int destBase;
+        synchronized(_addrs) {
+            destBase = _addrs.isEmpty() ? 0 : _context.random().nextInt(_addrs.size());
+        }
+        I2PSocketAddress addr = pickDestination(destBase, 0);
         try {
             if (addr == null)
                 throw new UnknownHostException("No valid destination configured");
@@ -146,6 +150,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             // recover between attempts with exponential backoff, and fail fast
             // when the client outbound pool provably has no tunnels and none
             // are being built - further retries cannot succeed.
+            // When more than one destination is configured, rotate round-robin
+            // through them (from a random start) so an unreachable target does
+            // not consume every attempt - the other destinations each get a try.
             while (true) {
                 try {
                     // Re-resolve on each attempt so a b32 destination that could
@@ -160,20 +167,28 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                     failures++;
                     if (!shouldRetry(failures, ioe))
                         throw ioe;
+                    if (!retryDelay(failures)) // interrupted by tunnel shutdown
+                        throw ioe;
+                    addr = pickDestination(destBase, failures);
+                    if (addr == null) // targets removed mid-connection
+                        throw ioe;
+                    port = addr.getPort();
                     if (_log.shouldInfo())
                         _log.info("[IRC Client] Connect attempt " + (failures + 1) + '/' + IRC_CONNECT_MAX_ATTEMPTS +
                                   " failed (" + ioe.getMessage() + "), retrying");
-                    if (!retryDelay(failures)) // interrupted by tunnel shutdown
-                        throw ioe;
                 } catch (I2PException ie) {
                     failures++;
                     if (!shouldRetry(failures, ie))
                         throw ie;
+                    if (!retryDelay(failures)) // interrupted by tunnel shutdown
+                        throw ie;
+                    addr = pickDestination(destBase, failures);
+                    if (addr == null) // targets removed mid-connection
+                        throw ie;
+                    port = addr.getPort();
                     if (_log.shouldInfo())
                         _log.info("[IRC Client] Connect attempt " + (failures + 1) + '/' + IRC_CONNECT_MAX_ATTEMPTS +
                                   " failed (" + ie.getMessage() + "), retrying");
-                    if (!retryDelay(failures)) // interrupted by tunnel shutdown
-                        throw ie;
                 }
             }
             i2ps.setReadTimeout(readTimeout);
@@ -331,7 +346,19 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         }
     }
 
-    private final I2PSocketAddress pickDestination() {
+    /**
+     *  Pick the destination to try for attempt {@code attempt}, rotating
+     *  round-robin through all configured targets from a per-connection
+     *  random start ({@code base}).  Reverses the historical behavior of
+     *  retrying the same randomly-chosen target repeatedly, which wasted the
+     *  whole retry budget on one dead destination while the alternate targets
+     *  went untried.
+     *
+     *  @param base per-connection random start index, in [0, size)
+     *  @param attempt 0-based attempt number within this connection
+     *  @return the address to try, or null if no targets are configured
+     */
+    private I2PSocketAddress pickDestination(int base, int attempt) {
         synchronized(_addrs) {
             int size = _addrs.size();
             if (size <= 0) {
@@ -339,11 +366,27 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                     _log.error("[IRC Client] No client targets?!");
                 return null;
             }
-            if (size == 1) // skip the rand in the most common case
-                return _addrs.get(0);
-            int index = _context.random().nextInt(size);
-            return _addrs.get(index);
+            return _addrs.get(destinationIndexForAttempt(attempt, size, base));
         }
+    }
+
+    /**
+     *  Destination-list index for connect attempt {@code attempt} when rotating
+     *  round-robin: {@code base + attempt mod size}.  Attempt 0 uses the
+     *  per-connection random start; each later attempt advances one slot, so
+     *  consecutive attempts always hit different targets (for size &gt; 1).
+     *  Pure decision - no context access, safe for unit tests.
+     *
+     *  @param attempt 0-based attempt number within this connection
+     *  @param size number of configured destinations
+     *  @param base per-connection random start index, in [0, size)
+     *  @return index into the destination list, in [0, size), or 0 for size &lt;= 1
+     *  @since 0.9.71+
+     */
+    static int destinationIndexForAttempt(int attempt, int size, int base) {
+        if (size <= 1)
+            return 0;
+        return (base + attempt) % size;
     }
 
     /**

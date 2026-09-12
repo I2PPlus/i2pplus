@@ -133,4 +133,64 @@ public class I2PTunnelIRCClientRetryTest {
         // the loop must make at least the initial attempt
         assertTrue(I2PTunnelIRCClient.IRC_CONNECT_MAX_ATTEMPTS >= 1);
     }
+
+    // ---------- destinationIndexForAttempt (round-robin rotation) ----------
+
+    @Test
+    public void testDestIndex_SingleTargetAlwaysZero() {
+        assertEquals(0, I2PTunnelIRCClient.destinationIndexForAttempt(0, 1, 0));
+        assertEquals(0, I2PTunnelIRCClient.destinationIndexForAttempt(3, 1, 0));
+        assertEquals(0, I2PTunnelIRCClient.destinationIndexForAttempt(10, 1, 0));
+    }
+
+    @Test
+    public void testDestIndex_FirstAttemptUsesBase() {
+        // attempt 0 lands on the per-connection random start
+        assertEquals(0, I2PTunnelIRCClient.destinationIndexForAttempt(0, 4, 0));
+        assertEquals(2, I2PTunnelIRCClient.destinationIndexForAttempt(0, 4, 2));
+        assertEquals(3, I2PTunnelIRCClient.destinationIndexForAttempt(0, 4, 3));
+    }
+
+    @Test
+    public void testDestIndex_RotatesRoundRobin() {
+        // base=1, size=3: 1, 2, 0, 1, 2, ...
+        assertEquals(1, I2PTunnelIRCClient.destinationIndexForAttempt(0, 3, 1));
+        assertEquals(2, I2PTunnelIRCClient.destinationIndexForAttempt(1, 3, 1));
+        assertEquals(0, I2PTunnelIRCClient.destinationIndexForAttempt(2, 3, 1));
+        assertEquals(1, I2PTunnelIRCClient.destinationIndexForAttempt(3, 3, 1));
+        assertEquals(2, I2PTunnelIRCClient.destinationIndexForAttempt(4, 3, 1));
+    }
+
+    @Test
+    public void testDestIndex_ConsecutiveAttemptsDiffer() {
+        // with multiple targets no two consecutive attempts hit the same one,
+        // so a dead destination is never hammered back-to-back
+        for (int base = 0; base < 5; base++) {
+            for (int attempt = 0; attempt < 6; attempt++) {
+                int a = I2PTunnelIRCClient.destinationIndexForAttempt(attempt, 5, base);
+                int b = I2PTunnelIRCClient.destinationIndexForAttempt(attempt + 1, 5, base);
+                assertNotEquals("base=" + base + " attempt=" + attempt, a, b);
+            }
+        }
+    }
+
+    @Test
+    public void testDestIndex_WrapsCleanly() {
+        // size=2, base=0: alternate 0,1,0,1,... (bounded within [0, size))
+        for (int attempt = 0; attempt < 10; attempt++) {
+            int idx = I2PTunnelIRCClient.destinationIndexForAttempt(attempt, 2, 0);
+            assertTrue("idx=" + idx, idx >= 0 && idx < 2);
+            assertEquals(attempt % 2, idx);
+        }
+    }
+
+    @Test
+    public void testDestIndex_AllTargetsCoveredInCycle() {
+        // every target gets tried exactly once per position of size attempts
+        boolean[] seen = new boolean[4];
+        for (int attempt = 0; attempt < 4; attempt++)
+            seen[I2PTunnelIRCClient.destinationIndexForAttempt(attempt, 4, 1)] = true;
+        for (int i = 0; i < 4; i++)
+            assertTrue("target " + i + " not covered", seen[i]);
+    }
 }
