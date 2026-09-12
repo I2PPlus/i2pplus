@@ -1439,6 +1439,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             String valueKey = name + ".value";
             String existingDefault = _autotune.getProperty(defaultKey);
             boolean changed = false;
+            boolean defaultHealed = false;
             if (existingDefault == null) {
                 // Clamp the factory default into the computed range, same as a
                 // persisted default would be, so the invariant min <= default <= max
@@ -1467,6 +1468,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     _defaultValue = Math.max(_min, Math.min(_max, runtimeDefault));
                     if (_log.shouldWarn())
                         _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue);
+                    defaultHealed = true;
                 }
                 int parsedExisting;
                 try {parsedExisting = Integer.parseInt(existingDefault);}
@@ -1479,7 +1481,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Read persisted tuned value (clamped to current range) — catches stale
             // autotune.config values from before code changes (e.g. max lowered 512→20)
             int raw = _autotune.getInt(valueKey, _defaultValue);
-            _initialValue = Math.max(_min, Math.min(_max, raw));
+            int initial = Math.max(_min, Math.min(_max, raw));
+            // Heal stale persisted value up to the new default when the default itself
+            // was healed. A param removed then re-added (e.g. MaxSendWindow) leaves a
+            // ratcheted-down .value in autotune.config from before the removal; without
+            // this, the first-tick restore in update() would re-freeze CWIN at that stale
+            // floor and nullify the re-add.
+            if (defaultHealed && initial < _defaultValue) {
+                int prev = initial;
+                initial = _defaultValue;
+                if (_log.shouldWarn())
+                    _log.warn(_name + " persisted value " + prev + " healed up to default " + initial);
+                _autotune.setProperty(valueKey, String.valueOf(initial));
+                changed = true;
+            }
+            _initialValue = initial;
             // Persist clamped value so autotune.config reflects reality
             // (prevents stale out-of-range values lingering in the file)
             if (raw != _initialValue) {
@@ -2829,7 +2845,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             maxDispatchAgeMs = value;
-            _context.router().saveConfig("i2p.router.maxDispatchAge", Integer.toString(value));
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -2938,7 +2953,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             handlerThreadPriority = value;
-            _context.router().saveConfig("i2p.router.handlerThreadPriority", Integer.toString(value));
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -4437,8 +4451,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig(
-                Collections.singletonMap("router.codelTarget", String.valueOf(value)), null);
             CoDelBlockingQueue.updateAllTargets(value);
             CoDelPriorityBlockingQueue.updateAllTargets(value);
         }
@@ -4512,8 +4524,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig(
-                Collections.singletonMap("router.codelInterval", String.valueOf(value)), null);
             CoDelBlockingQueue.updateAllIntervals(value);
             CoDelPriorityBlockingQueue.updateAllIntervals(value);
         }
@@ -4953,7 +4963,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("crypto.edh.precalc.min", Integer.toString(value));
             net.i2p.router.crypto.ratchet.Elg2KeyFactory f = net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
             if (f != null) f.setMinSize(value);
         }
@@ -5015,7 +5024,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("crypto.mlkem.precalc.min", Integer.toString(value));
             net.i2p.router.crypto.pqc.MLKEMKeyFactory f = net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
             if (f != null) f.setMinSize(value);
         }
@@ -5982,7 +5990,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             RouterThrottleImpl.setDefaultMaxTunnels(value);
-            _context.router().saveConfig("router.maxParticipatingTunnels", Integer.toString(value));
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -9499,7 +9506,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.transport.udp.initConcurrentMsgs", Integer.toString(value));
             PeerState.setInitConcurrentMsgs(value);
         }
 
@@ -9571,7 +9577,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.transport.udp.minConcurrentMsgs", Integer.toString(value));
             PeerState.setMinConcurrentMsgs(value);
         }
 
@@ -9620,7 +9625,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.transport.udp.initRTO", Integer.toString(value));
             PeerState.setInitRTO(value);
         }
 
@@ -9684,7 +9688,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.transport.udp.minRTO", Integer.toString(value));
             PeerState.setMinRTO(value);
         }
 
@@ -9759,7 +9762,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.transport.udp.maxRTO", Integer.toString(value));
             PeerState.setMaxRTO(value);
         }
 
@@ -9970,7 +9972,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.transport.udp.postRTOWindowMTUs", Integer.toString(value));
             PeerState.setPostRTOWindowMTUs(value);
         }
 
