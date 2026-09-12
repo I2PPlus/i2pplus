@@ -1,6 +1,8 @@
 package net.i2p.i2ptunnel;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -132,14 +134,48 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                       " from: " + s.getInetAddress());
         I2PSocket i2ps = null;
         I2PSocketAddress addr = pickDestination();
+        int failures = 0;
         try {
             if (addr == null)
                 throw new UnknownHostException("No valid destination configured");
-            Destination clientDest = addr.getAddress();
-            if (clientDest == null)
-                throw new UnknownHostException("Could not resolve " + addr.getHostName());
             int port = addr.getPort();
-            i2ps = createI2PSocket(clientDest, port);
+            // Retry on transient connection failures (tunnel build failure,
+            // temporary no-routes). NoRouteToHostException is thrown when the
+            // destination is unreachable or tunnels fail to build, which on a
+            // slow or hidden service is often transient. Give the pool time to
+            // recover between attempts with exponential backoff, and fail fast
+            // when the client outbound pool provably has no tunnels and none
+            // are being built - further retries cannot succeed.
+            while (true) {
+                try {
+                    // Re-resolve on each attempt so a b32 destination that could
+                    // not be resolved earlier is picked up once its LeaseSet
+                    // becomes available.
+                    Destination clientDest = addr.getAddress();
+                    if (clientDest == null)
+                        throw new UnknownHostException("Could not resolve " + addr.getHostName());
+                    i2ps = createI2PSocket(clientDest, port);
+                    break;
+                } catch (IOException ioe) {
+                    failures++;
+                    if (!shouldRetry(failures, ioe))
+                        throw ioe;
+                    if (_log.shouldInfo())
+                        _log.info("[IRC Client] Connect attempt " + (failures + 1) + '/' + IRC_CONNECT_MAX_ATTEMPTS +
+                                  " failed (" + ioe.getMessage() + "), retrying");
+                    if (!retryDelay(failures)) // interrupted by tunnel shutdown
+                        throw ioe;
+                } catch (I2PException ie) {
+                    failures++;
+                    if (!shouldRetry(failures, ie))
+                        throw ie;
+                    if (_log.shouldInfo())
+                        _log.info("[IRC Client] Connect attempt " + (failures + 1) + '/' + IRC_CONNECT_MAX_ATTEMPTS +
+                                  " failed (" + ie.getMessage() + "), retrying");
+                    if (!retryDelay(failures)) // interrupted by tunnel shutdown
+                        throw ie;
+                }
+            }
             i2ps.setReadTimeout(readTimeout);
             StringBuffer expectedPong = new StringBuffer();
             DCCHelper dcc = _dccEnabled ? new DCC(s.getLocalAddress().getAddress()) : null;
@@ -151,7 +187,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         } catch (IOException ex) {
             // generally NoRouteToHostException
             if (_log.shouldWarn())
-                _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
+                _log.warn("[IRC Client] Error connecting: " + ex.getMessage() + " after " + failures + " attempt(s)");
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
@@ -161,7 +197,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             } catch (IOException ioe) { /* ignored */ }
         } catch (I2PException ex) {
             if (_log.shouldWarn())
-                _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
+                _log.warn("[IRC Client] Error connecting: " + ex.getMessage() + " after " + failures + " attempt(s)");
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
@@ -180,6 +216,119 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             }
         }
 
+    }
+
+    /**
+     *  Maximum number of I2P connect attempts per client connection: the initial
+     *  try plus three exponential-backoff retries. Once the budget is exhausted
+     *  the tunnel gives up and sends the 499 error reply.
+     *
+     *  @since 0.9.71+
+     */
+    static final int IRC_CONNECT_MAX_ATTEMPTS = 4;
+
+    /** Backoff floor (ms) for I2P connect retries, doubling per attempt. @since 0.9.71+ */
+    static final long IRC_CONNECT_RETRY_BASE_DELAY = 1000;
+
+    /**
+     *  Exponential backoff delay (ms) to sleep before the given connect retry.
+     *  The first retry waits {@link #IRC_CONNECT_RETRY_BASE_DELAY} (1s), doubling
+     *  per attempt up to a hard cap of 8s. During a tunnel-pool stall the cap
+     *  lets the pool recover instead of hammering it, and the loop still fails
+     *  fast once {@link #poolState()} reports a provably dead pool.
+     *  Pure decision - no context access, safe for unit tests.
+     *
+     *  @param attempt the 1-based connect failure count (how many failures so far)
+     *  @return delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1) bounded to 8000
+     *  @since 0.9.71+
+     */
+    static long getConnectRetryDelayMs(int attempt) {
+        if (attempt <= 0) {return 0;}
+        return Math.min(8 * IRC_CONNECT_RETRY_BASE_DELAY,
+                        IRC_CONNECT_RETRY_BASE_DELAY << Math.min(attempt - 1, 3));
+    }
+
+    /**
+     *  Whether a connect attempt should be retried after {@code failures} failed
+     *  attempts. Three independent conditions must all hold:
+     *  <ul>
+     *  <li>the attempt budget is not exhausted ({@code failures < maxAttempts}),</li>
+     *  <li>the client outbound pool is not provably dead ({@code poolState != -1}; a
+     *      {@code -2} "unknown" result from standalone clients does NOT fail fast,
+     *      matching {@code shouldStopEmptyReconnect()}),</li>
+     *  <li>the failure is retryable per {@link #isRetryableConnectFailure(Throwable)}.</li>
+     *  </ul>
+     *  Pure decision - no context access, safe for unit tests.
+     *
+     *  @param failures the 1-based number of failed attempts so far
+     *  @param maxAttempts the total attempt budget, 1-based
+     *  @param poolState the {@link #poolState()} value from the last failed attempt
+     *  @param last the throwable from the last failed attempt
+     *  @return true if another attempt should be scheduled
+     *  @since 0.9.71+
+     */
+    static boolean shouldRetryConnect(int failures, int maxAttempts, int poolState, Throwable last) {
+        if (failures >= maxAttempts) {return false;}
+        if (poolState == -1) {return false;}
+        return isRetryableConnectFailure(last);
+    }
+
+    /**
+     *  Whether a connect failure is transient enough to warrant another attempt.
+     *  <ul>
+     *  <li>Not retryable: {@code ConnectException} (an explicit refusal is a hard
+     *      answer from the peer that a new attempt cannot change), an
+     *      {@code InterruptedIOException} (local cancellation - the tunnel is
+     *      closing), or {@code null}.</li>
+     *  <li>Retryable: everything else - {@code NoRouteToHostException} connect
+     *      timeouts, {@code UnknownHostException} for a b32 destination whose
+     *      LeaseSet may become available by the next attempt, {@code I2PException}
+     *      tunnel build failures (incl. {@code TooManyStreamsException}), and
+     *      generic I/O errors.</li>
+     *  </ul>
+     *  Pure decision - no context access, safe for unit tests.
+     *
+     *  @param t the throwable from the failed connect
+     *  @return true if a retry is worthwhile
+     *  @since 0.9.71+
+     */
+    static boolean isRetryableConnectFailure(Throwable t) {
+        if (t == null) {return false;}
+        if (t instanceof ConnectException) {return false;}
+        if (t instanceof InterruptedIOException) {return false;}
+        return true;
+    }
+
+    /**
+     *  Instance gate for the clientConnectionRun retry loop: applies the static
+     *  budget, dead-pool and failure-classification rules with the current pool
+     *  state ({@link #poolState()}).
+     *
+     *  @param failures the 1-based number of failed attempts so far
+     *  @param t the throwable from the last failed attempt
+     *  @return true if another connect attempt should be scheduled
+     *  @since 0.9.71+
+     */
+    private boolean shouldRetry(int failures, Throwable t) {
+        return shouldRetryConnect(failures, IRC_CONNECT_MAX_ATTEMPTS, poolState(), t);
+    }
+
+    /**
+     *  Sleep through the exponential backoff preceding a retry, failing fast when
+     *  the tunnel is being shut down mid-delay.
+     *
+     *  @param failures the 1-based number of failed attempts so far
+     *  @return true if the delay elapsed, false if the thread was interrupted
+     *  @since 0.9.71+
+     */
+    private boolean retryDelay(int failures) {
+        try {
+            Thread.sleep(getConnectRetryDelayMs(failures));
+            return true;
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
     }
 
     private final I2PSocketAddress pickDestination() {
