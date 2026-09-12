@@ -137,12 +137,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
 
     /**
-     * Default initial RTO (ms) before any RTT measurement. Set to 5000 — accommodates
-     * typical I2P RTT up to ~3s without premature SYN retransmit. The Tuner adjusts
-     * this adaptively based on network conditions.
+     * Default initial RTO (ms) before any RTT measurement. Set to 9000 — accommodates
+     * typical I2P RTT up to ~6s without premature SYN retransmit, matching i2pd's
+     * INITIAL_RTO. The Tuner adjusts this adaptively based on network conditions.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int defaultInitialRTO = 5000;
+    private static volatile int defaultInitialRTO = 9000;
 
     /** Initial rto. */
     static int getInitialRTO() { return defaultInitialRTO; }

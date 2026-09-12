@@ -75,13 +75,22 @@ public class ConnectionSynBudgetTest {
     // computeSynResendBudget
     // --------------------------------------------------------------------
 
-    /** The classic dead-path budget: 12 * 5s = 60s already fills the window, unchanged. */
+    /** The classic dead-path budget (12 sends) fills the window, unchanged. */
     @Test
     public void testBudgetConfiguredWinsWhenSufficient() {
         // 30150ms window / 5000ms interval = 7 sends needed < 12 configured
         assertEquals(12, Connection.computeSynResendBudget(12, 5000, 30150));
         // exact fit: 12 sends * 5000ms = 60000ms >= 60000ms window
         assertEquals(12, Connection.computeSynResendBudget(12, 5000, 60000));
+    }
+
+    /** At the default 9s initial RTO the fallback budget covers even the 75s cap. */
+    @Test
+    public void testBudgetDefaultIntervalCoversMaxWindow() {
+        // 30150ms window / 9000ms interval = 4 sends needed < 12 configured
+        assertEquals(12, Connection.computeSynResendBudget(12, 9000, 30150));
+        // 75000ms cap / 9000ms interval = 9 sends needed < 12 configured
+        assertEquals(12, Connection.computeSynResendBudget(12, 9000, 75000));
     }
 
     /** RTT-evidence interval at the 750ms floor MUST scale past the configured count. */

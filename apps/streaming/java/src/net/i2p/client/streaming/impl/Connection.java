@@ -330,9 +330,10 @@ class Connection {
      *  congestion to manage before the connection is established), so the total
      *  SYN budget equals maxSynResends * interval.  The interval is the
      *  evidence-gated RTT-aware value from {@link #computeSynRetransmitInterval(int, int)}
-     *  — the initial RTO (default 5s) before any RTT measurement, or an interval
-     *  derived from the measured path RTT once evidence exists.  With the default 5s
-     *  interval and 12 sends the budget is 60s, matching the historical behavior.
+     *  — the initial RTO (default 9s) before any RTT measurement, or an interval
+     *  derived from the measured path RTT once evidence exists.  With the default 9s
+     *  interval and 12 sends the fallback budget is 108s, safely past the 75s
+     *  connect-window cap on a no-evidence dead path.
      *
      *  <p>This is the <em>per-connection floor</em> for the connect path:
      *  {@link #getMaxSynSends()} raises the effective give-up count as needed so the
@@ -391,9 +392,9 @@ class Connection {
      * <p>SYN retransmission uses a fixed interval (no backoff — there is no congestion to
      * manage before the connection is established), so the total SYN budget is {@code
      * maxSynResends * interval}.  The historical behavior is a fixed {@code initialRtoMs}
-     * (default 5000) for every connection, which overshoots the 30s connect timeout on a
-     * dead path (12 * 5s = 60s) and under-utilizes the window on a healthy path whose
-     * round-trip is far below 5s.
+     * (default 9000) for every connection, which overshoots the 30s connect timeout on a
+     * dead path (12 * 9s = 108s) and under-utilizes the window on a healthy path whose
+     * round-trip is far below the default.
      *
      * <p><b>Gate.</b> The measured RTT {@code measuredRttMs} is <em>positive</em> only when
      * there is genuine path evidence for this peer (a valid analytic ACK, or a dampened RTT
@@ -408,10 +409,10 @@ class Connection {
      * * measuredRttMs}, floored at {@link #SYN_RTO_MIN} (no storm on a fast fabric) and
      * capped at the configured {@code initialRtoMs} (never worse than the current default,
      * so a genuinely slow-but-alive path keeps its handshake room).  A measured RTT below
-     * the 5000ms default therefore packs more SYN attempts into the connect window
+     * the 9000ms default therefore packs more SYN attempts into the connect window
      * (better odds of catching a momentarily-congested tunnel) and, if the path is dead,
      * lets SYN resends exhaust near the 30s connect timeout instead of running the full
-     * 60s overshoot — so the proxy can emit the "Website Unreachable" page sooner.
+     * configured budget — so the proxy can emit the "Website Unreachable" page sooner.
      *
      * @param measuredRttMs a recent round-trip time for this peer in ms, or &lt;=0 when no
      *                      RTT evidence is available (never measured, no cache entry)
