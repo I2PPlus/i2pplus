@@ -1026,16 +1026,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      *
      *  <p>Called with {@code _cache.tunnelCache} locked.
      *
-     *  @return the rotated tunnel, or null when there is no cached tunnel, the
-     *          cached tunnel is no longer valid, or no alternative exists -
-     *          the caller then falls through to normal selection logic
+     *  @return the rotated tunnel, or null when there is no cached tunnel or it
+     *          is no longer valid - the caller then falls through to normal
+     *          selection logic.  When rotation is saturated (the pool offered no
+     *          tunnel distinguishable from the previously-used one), the cached
+     *          entry is evicted before returning null, so the fall-through
+     *          re-selects fresh instead of riding the tunnel that stalled the
+     *          previous connection.
      */
     private TunnelInfo selectFreshConnectionTunnel() {
         TunnelInfo cached = _cache.tunnelCache.get(_hashPair);
         if (cached == null)
             return null;
-        if (!getContext().tunnelManager().isValidTunnel(_from.calculateHash(), cached))
+        if (!getContext().tunnelManager().isValidTunnel(_from.calculateHash(), cached)) {
+            _cache.tunnelCache.remove(_hashPair);
             return null;
+        }
         List<TunnelInfo> candidates = new ArrayList<>(MAX_ROTATION_CANDIDATES);
         for (int i = 0; i < MAX_ROTATION_CANDIDATES; i++) {
             TunnelInfo t = selectOutboundTunnel();
@@ -1045,8 +1051,19 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 candidates.add(t);
         }
         TunnelInfo rotated = OutboundCache.pickDistinctTunnel(cached, candidates, getContext().random());
-        if (rotated == null || rotated == cached)
+        if (rotated == null || rotated == cached) {
+            // Rotation saturated: the pool currently offers only the tunnel the
+            // previous connection used.  Do NOT ride it to the same timeout -
+            // evict it so the fall-through normal selection re-draws, and the
+            // next retry after a rebuild picks the freshly built tunnel.
+            _cache.tunnelCache.remove(_hashPair);
+            _cache.tunnelStartTime.remove(_hashPair);
+            if (_log.shouldWarn()) {
+                _log.warn("New connection -> rotation saturated for " + _toString
+                          + ", evicting outbound tunnel [" + cached + "] so the retry re-selects");
+            }
             return null;
+        }
         _cache.tunnelCache.put(_hashPair, rotated);
         _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
         _wantACK = true;
