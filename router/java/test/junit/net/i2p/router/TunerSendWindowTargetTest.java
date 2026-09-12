@@ -10,9 +10,11 @@ import org.junit.Test;
  *
  * <p>Covers priority ordering (memory-critical shrink beats growth; death
  * spiral beats idle shrink; failsafe/MTU shrink donors), the congestion-growth
- * branch that replaced the old collapse-shrink death spiral, and the
- * anti-ratchet idle floor that keeps idle shrink at the stable default rather
- * than the 64KB min.
+ * branch that replaced the old collapse-shrink death spiral, the
+ * stale-ratchet recovery that climbs a parked-below-floor window back up, the
+ * clean-path pre-ramp that climbs a healthy, non-idle window toward the
+ * ceiling, and the anti-ratchet idle floor that keeps idle shrink at the
+ * stable default rather than the 64KB min.
  *
  * @since 0.9.72+
  */
@@ -116,7 +118,7 @@ public class TunerSendWindowTargetTest {
     @Test
     public void highUsageGrowsWindow() {
         double observed = (int) (BASE * 0.8);
-        assertEquals(Math.min(MAX, BASE + STEP * 2),
+        assertEquals(Math.min(MAX, BASE + STEP * 3),
                      Tuner.sendWindowTarget(BASE, MIN, MAX, STEP, IDLE_FLOOR,
                                             observed, 0.0, 0.2,
                                             0.0, 0.0, observed,
@@ -158,10 +160,65 @@ public class TunerSendWindowTargetTest {
                                             0.0, 0.0, 0.0));
     }
 
-    // ----- neutral hold -----
+    // ----- clean-path pre-ramp -----
 
     @Test
-    public void neutralHolds() {
-        assertEquals(BASE, target(BASE, BASE * 0.5));
+    public void cleanPathClimbsOnModerateUsage() {
+        // a healthy, non-idle window climbs at 3x step toward the ceiling so a
+        // fast pipe is never capped by the transport window
+        assertEquals(BASE + STEP * 3, target(BASE, BASE * 0.5));
+    }
+
+    @Test
+    public void noDataPreRamps() {
+        // NaN observed = no usage stats yet; not provably low usage, so the
+        // window pre-ramps at 3x step toward the ceiling while quiet
+        assertEquals(BASE + STEP * 3, target(BASE, Double.NaN));
+    }
+
+    @Test
+    public void cleanPathClimbsClampsAtMax() {
+        assertEquals(MAX, target(MAX - STEP, (MAX - STEP) * 0.5));
+    }
+
+    @Test
+    public void lowUsageShrinksNotClimbs() {
+        // low usage with live stats gates the clean-path pre-ramp; the shrink
+        // branch governs instead (one step down, floored at idleFloor)
+        assertEquals(Math.max(IDLE_FLOOR, BASE - STEP),
+                     target(BASE, BASE * 0.1));
+    }
+
+    // ----- stale-ratchet recovery -----
+
+    @Test
+    public void belowFloorRecoversToIdleFloor() {
+        // the frozen 64KB ratchet (or any persisted value below the floor)
+        // climbs back up even while idle — it is not a legitimate steady state
+        assertEquals(IDLE_FLOOR,
+                     Tuner.sendWindowTarget(MIN, MIN, MAX, STEP, IDLE_FLOOR,
+                                            MIN * 0.2, 0.0, 0.2,
+                                            0.0, 0.0, MIN * 0.2,
+                                            0.0, 0.0, 0.0));
+    }
+
+    @Test
+    public void belowFloorRecoverySuppressedByMemPressure() {
+        // recovery needs CPU and memory headroom; under memory pressure the
+        // window stays put (the memory-critical shrink handles it)
+        assertEquals(MIN,
+                     Tuner.sendWindowTarget(MIN, MIN, MAX, STEP, IDLE_FLOOR,
+                                            MIN * 0.2, 0.0, 0.8,
+                                            0.0, 0.0, MIN * 0.2,
+                                            0.0, 0.0, 0.0));
+    }
+
+    @Test
+    public void belowFloorRecoverySuppressedByCpuPressure() {
+        assertEquals(MIN,
+                     Tuner.sendWindowTarget(MIN, MIN, MAX, STEP, IDLE_FLOOR,
+                                            MIN * 0.2, 15.0, 0.2,
+                                            0.0, 0.0, MIN * 0.2,
+                                            0.0, 0.0, 0.0));
     }
 }

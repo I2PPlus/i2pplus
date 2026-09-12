@@ -4333,7 +4333,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxWindowSize", "Streaming max window size",
                   SUB_STREAMING,
 
-                  128, 4096, 128, "stream.con.initialRTT.out", _context);
+                  // Step 512: on a clean path the 4096-message ceiling
+                  // (~8 MB/s at 0.89 s RTT) is reached in ~8 cycles (~2 min).
+                  128, 4096, 512, "stream.con.initialRTT.out", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -9831,10 +9833,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxSendWindow", "Max UDP send window (bytes)",
                   SUB_TRANSPORT,
 
-                  // Min 64KB, max heap-scaled ceiling (must match PeerState clamp)
+                  // Min 64KB (emergency/memory floor), max heap-scaled ceiling
+                  // (must match PeerState clamp), step 512KB so the window
+                  // pre-ramps on clean paths and grows fast when used.
                   65536,
                   PeerState.getMaxSendWindowCeiling(),
-                  65536, "udp.avgSendWindow", _context);
+                  512 * 1024, "udp.avgSendWindow", _context);
         }
 
         /** Apply the tunable value to the in-memory CWIN. */
@@ -9879,10 +9883,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * without a Tuner context.
      *
      * <p>Priority: memory-critical shrink, death-spiral growth, failsafe/MTU
-     * shrink, congestion-growth, high-usage growth, low-usage shrink. The
-     * shrink branch never drives the window below the anti-ratchet idle floor
-     * (the stable default) — the 64KB floor that previously froze CWIN is only
-     * reachable via memory pressure, and growth always wins under congestion.
+     * shrink, congestion-growth, high-usage growth, stale-ratchet recovery,
+     * clean-path pre-ramp, low-usage shrink. The shrink branch never drives the
+     * window below the anti-ratchet idle floor (the stable default) — the 64KB
+     * floor that previously froze CWIN is only reachable via memory pressure,
+     * and growth always wins under congestion. The stale-ratchet recovery
+     * climbs any value parked below the idle floor back up (a leftover low
+     * ratchet cannot permanently cap the CWIN), and the clean-path pre-ramp
+     * climbs a healthy, non-idle window toward the ceiling so a fast pipe is
+     * never capped by the transport window.
      *
      * @param current    the current runtime CWIN in bytes
      * @param min        hard lower clamp in bytes
@@ -9930,11 +9939,34 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if ((congested || congestionActive) && cpuFree && memOk) {
                 return Math.min(max, current + step * 4);
             }
-            // High usage + CPU free + memory OK = grow
-            if (highUsage && cpuFree && memOk) { return Math.min(max, current + step * 2); }
+            // High usage + CPU free + memory OK = grow fast (3x step so a
+            // saturated window reaches 8 MB in ~80 s, matching the pre-ramp)
+            if (highUsage && cpuFree && memOk) { return Math.min(max, current + step * 3); }
+            boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
+            // Stale-ratchet recovery: a persisted value pinned below the idle
+            // floor (e.g. the 64KB freeze from before the param was re-added, or
+            // a slow-device boot default) is not a legitimate steady state —
+            // climb back toward the floor even while idle, so a leftover low
+            // ratchet cannot permanently cap the CWIN.
+            if (current < idleFloor) {
+                if (cpuFree && memOk) { return Math.min(idleFloor, current + step); }
+                return current;
+            }
+            // Clean-path pre-ramp: no memory/CPU constraint and the window not
+            // idling low → climb toward the ceiling so a fast pipe is never
+            // capped by the transport window. A high ceiling never loads a slow
+            // path — in-flight bytes are actual usage, not a reservation (same
+            // rationale as the streaming max-window ceiling) — so pre-ramping
+            // while quiet lets 8 MB/s links start at full speed. Climb at 3x
+            // step (1.5 MB per 15 s → 8 MB in ~80 s) while the shrink below
+            // walks down at 1x step: fast up, slow down. Gated on !lowUsage so
+            // an idle router with live stats doesn't jitter between the floor
+            // and floor + step (the shrink below pulls it back).
+            if (!lowUsage && cpuFree && memOk && current < max) {
+                return Math.min(max, current + step * 3);
+            }
             // Low usage + no congestion + healthy = shrink to reduce buffering,
             // but never below the stable default (anti-ratchet floor).
-            boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
             // Don't shrink when CWIN is collapsed — that's a death spiral!
             if (lowUsage && !congested && !congestionActive && !cwinCollapsed && current > idleFloor) {
                 return Math.max(idleFloor, current - step);
