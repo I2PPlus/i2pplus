@@ -165,6 +165,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // If they don't have a large payload, most of the rest of the packet
                 // is uncompressible: stream ids, destination and signature
                 options.setGzip(packet.getPayloadSize() > 50);
+                // First transmission of an outbound SYN starts a new connection.
+                // Ask the router to prefer a different outbound tunnel so a retry
+                // does not ride the same (possibly sick) tunnel that stalled the
+                // previous connection. Only the FIRST send carries the marker:
+                // a retransmitted SYN (numSends > 1) reuses the already rotated
+                // tunnel, so the handover settles before any data flows and an
+                // in-flight download is never disturbed.
+                if (con != null && !con.isInbound() && packet.getSequenceNum() == 0 && packet.getNumSends() <= 1)
+                    options.setFreshConnection(true);
             } else {
                 if (con != null) {
                     if (con.isInbound() && con.getLifetime() < 2*60*1000)

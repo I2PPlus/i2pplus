@@ -63,6 +63,9 @@ public class SendMessageOptions extends DateAndFlags {
     /** Reliability mask. */
     private static final int RELIABILITY_MASK = BEST_EFFORT_MASK | GUARANTEED_MASK;
 
+    /** Mask for "first packet of a new connection" (streaming SYN first send). */
+    private static final int FRESH_CONNECTION_MASK = 0x0800;
+
     /** Send the lease set with the message; defaults to true. */
     public void setSendLeaseSet(boolean yes) {
         if (yes) _flags &= ~LS_MASK;
@@ -188,6 +191,37 @@ public class SendMessageOptions extends DateAndFlags {
      */
     public Reliability getReliability() {
         return getReliability(_flags);
+    }
+
+    /**
+     *  Mark this message as the first packet of a brand-new connection
+     *  (the first transmission of a streaming SYN).  Router-side only:
+     *  OutboundClientMessageOneShotJob decodes it and prefers a different
+     *  outbound tunnel, so a retry does not ride whatever tunnel stalled the
+     *  previous connection.  Only meaningful when set by an in-process sender
+     *  (e.g. apps/streaming PacketQueue); see the class javadoc.
+     *
+     *  @since 0.9.72+
+     */
+    public void setFreshConnection(boolean yes) {
+        if (yes) _flags |= FRESH_CONNECTION_MASK;
+        else _flags &= ~FRESH_CONNECTION_MASK;
+    }
+
+    /**
+     * Whether this message is the first packet of a new connection.
+     * @since 0.9.72+
+     */
+    public boolean getFreshConnection() {
+        return getFreshConnection(_flags);
+    }
+
+    /**
+     * Decode the fresh-connection marker from the raw flags field (router side).
+     * @since 0.9.72+
+     */
+    public static boolean getFreshConnection(int flags) {
+        return (flags & FRESH_CONNECTION_MASK) != 0;
     }
 
     /**

@@ -188,6 +188,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private static final long MIN_TUNNEL_USAGE = 5*1000L;
 
+    /**
+     *  How many pool picks to sample when gathering rotation candidates for a
+     *  fresh connection.  With the default client pool of two tunnels a single
+     *  extra pick almost always yields the alternative; a small bound keeps the
+     *  hot path cheap.
+     */
+    private static final int MAX_ROTATION_CANDIDATES = 3;
+
     private static final long[] RATES = new long[] { 60*1000L };
 
     /**
@@ -928,6 +936,19 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         TunnelInfo tunnel;
         synchronized (_cache.tunnelCache) {
             /**
+             * First message of a new connection: prefer a different outbound
+             * tunnel than the one the previous connection used (if an
+             * alternative exists), so a retry does not ride the same - possibly
+             * sick - tunnel that stalled the prior connection.  Best-effort:
+             * when no alternative or no cached tunnel exists, fall through to
+             * the normal logic which reuses the cached tunnel.
+             */
+            if (SendMessageOptions.getFreshConnection(_clientMessage.getFlags())) {
+                TunnelInfo rotated = selectFreshConnectionTunnel();
+                if (rotated != null)
+                    return rotated;
+            }
+            /**
              * If old tunnel is valid and no longer backlogged, use it.
              * This prevents an active anonymity attack, where a peer could tell
              * if you were the originator by backlogging the tunnel, then removing the
@@ -993,6 +1014,46 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // hurts reliability? let's try picking at random again
         //Hash gw = _lease.getGateway();
         return getContext().tunnelManager().selectOutboundTunnel(_from.calculateHash());
+    }
+
+    /**
+     *  Try to pick a different outbound tunnel than the one the previous
+     *  connection to this destination used.  Only called for the first message
+     *  of a new connection (fresh streaming SYN), so nothing is in flight on
+     *  that connection yet and the swap is transparent.  The chosen tunnel is
+     *  recorded as the cached tunnel with a fresh start time, so all subsequent
+     *  messages of the stream stay on it (no per-packet flapping).
+     *
+     *  <p>Called with {@code _cache.tunnelCache} locked.
+     *
+     *  @return the rotated tunnel, or null when there is no cached tunnel, the
+     *          cached tunnel is no longer valid, or no alternative exists -
+     *          the caller then falls through to normal selection logic
+     */
+    private TunnelInfo selectFreshConnectionTunnel() {
+        TunnelInfo cached = _cache.tunnelCache.get(_hashPair);
+        if (cached == null)
+            return null;
+        if (!getContext().tunnelManager().isValidTunnel(_from.calculateHash(), cached))
+            return null;
+        List<TunnelInfo> candidates = new ArrayList<>(MAX_ROTATION_CANDIDATES);
+        for (int i = 0; i < MAX_ROTATION_CANDIDATES; i++) {
+            TunnelInfo t = selectOutboundTunnel();
+            if (t == null)
+                break;
+            if (!candidates.contains(t))
+                candidates.add(t);
+        }
+        TunnelInfo rotated = OutboundCache.pickDistinctTunnel(cached, candidates, getContext().random());
+        if (rotated == null || rotated == cached)
+            return null;
+        _cache.tunnelCache.put(_hashPair, rotated);
+        _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
+        _wantACK = true;
+        if (_log.shouldWarn()) {
+            _log.warn("New connection -> rotating outbound tunnel to [" + rotated + "] for " + _toString);
+        }
+        return rotated;
     }
 
     /**

@@ -1,7 +1,10 @@
 package net.i2p.router.message;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
@@ -279,6 +282,36 @@ public class OutboundCache {
     private static void cleanLsFailCooldown(final RouterContext ctx, final Map<Hash, Long> cc) {
         final long now = ctx.clock().now();
         cc.entrySet().removeIf(e -> e.getValue() < now);
+    }
+
+    /**
+     * Choose the outbound tunnel for a fresh connection, preferring a candidate
+     * different from the one used by the previous connection to the same
+     * destination.  Called by OutboundClientMessageOneShotJob on the first
+     * message of a new stream (streaming SYN carrying the fresh-connection
+     * marker), so an HTTP/protocol retry does not ride the same tunnel that
+     * stalled the prior connection.
+     *
+     * <p>This is pure decision logic - identity comparison only, no router
+     * context - extracted so the rotation behaviour is unit-testable.
+     *
+     * @param old the outbound tunnel used by the previous connection, or null
+     * @param candidates pool picks gathered for this rotation, never null; may
+     *                   be empty when no tunnels are currently available
+     * @param rnd randomness source for choosing among several distinct tunnels
+     * @return a candidate distinct from {@code old} when one exists, otherwise
+     *         {@code old} unchanged, so rotation is best-effort and never
+     *         blocks or drops a connection
+     * @since 0.9.72+
+     */
+    static TunnelInfo pickDistinctTunnel(TunnelInfo old, List<TunnelInfo> candidates, Random rnd) {
+        if (old == null || candidates.isEmpty()) return old;
+        List<TunnelInfo> distinct = new ArrayList<>(candidates.size());
+        for (TunnelInfo t : candidates) {
+            if (t != old) distinct.add(t);
+        }
+        if (distinct.isEmpty()) return old;
+        return distinct.get(rnd.nextInt(distinct.size()));
     }
 
     /**
