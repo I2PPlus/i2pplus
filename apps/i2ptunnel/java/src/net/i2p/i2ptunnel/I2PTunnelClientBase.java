@@ -34,6 +34,7 @@ import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
@@ -754,6 +755,47 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         i2ps = sockMgr.connect(dest, opt);
         synchronized (sockLock) {mySockets.add(i2ps);}
         return i2ps;
+    }
+
+    /**
+     *  @return true if the client outbound tunnel pool provably has no tunnels
+     *          and none are being built, so further connect retries cannot succeed
+     *  @since 0.9.71+
+     */
+    protected boolean poolIsDefinitivelyDown() {
+        return poolState() <= -1;
+    }
+
+    /**
+     *  Router-context only, best-effort check of the client outbound tunnel pool.
+     *  Uses reflection so i2ptunnel compiles against core alone.
+     *  The router creates a per-client pool keyed by session hash;
+     *  getValidTunnelCount() counts non-failed, non-expired tunnels,
+     *  getInProgressCount() counts builds in progress.
+     *
+     *  @return 1 if the pool has valid tunnels, 0 if it exists but is still
+     *          building, -1 if it exists but is dead (no valid, none building),
+     *          -2 if unknown (standalone client, no router pool)
+     *  @since 0.9.71+
+     */
+    protected int poolState() {
+        I2PAppContext ctx = getTunnel().getContext();
+        if (ctx == null || !ctx.isRouterContext()) {return -2;}
+        try {
+            Object tm = ctx.getClass().getMethod("tunnelManager").invoke(ctx);
+            if (tm == null) {return -2;}
+            I2PSession session = sockMgr.getSession();
+            if (session == null || session.getMyDestination() == null) {return -2;}
+            Hash client = session.getMyDestination().calculateHash();
+            Object pool = tm.getClass().getMethod("getOutboundPool", Hash.class).invoke(tm, client);
+            if (pool == null) {return -2;}
+            int valid = ((Number) pool.getClass().getMethod("getValidTunnelCount").invoke(pool)).intValue();
+            int inProgress = ((Number) pool.getClass().getMethod("getInProgressCount").invoke(pool)).intValue();
+            if (valid > 0) {return 1;}
+            return inProgress > 0 ? 0 : -1;
+        } catch (Exception e) {
+            return -2;
+        }
     }
 
     /**
