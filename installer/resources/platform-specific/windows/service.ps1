@@ -1,4 +1,4 @@
-# I2P+ Windows service management.
+﻿# I2P+ Windows service management.
 # Usage: service.ps1 -Action <Install|Uninstall|Start|Stop|Enable|Disable|Shortcuts|FixPerms>
 param(
     [Parameter(Mandatory=$true)]
@@ -12,9 +12,21 @@ $svcName = 'I2P+'
 $dir = $PSScriptRoot
 $svc = Join-Path $dir 'I2Psvc.exe'
 $conf = Join-Path $dir 'wrapper.config'
+$log = Join-Path $dir 'install.log'
+
+function Write-Log {
+    param([string]$msg)
+    $ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+    $line = "[$ts] $msg"
+    Add-Content -LiteralPath $log -Value $line -ErrorAction SilentlyContinue
+}
 
 function Invoke-Wrapper {
-    & $svc @Args 2>&1 | Out-Null
+    # Redirect all streams to $null without creating a pipeline.
+    # The old 2>&1 | Out-Null connected the process handles to a pipe,
+    # which the Tanuki wrapper's SCM calls do not expect, causing
+    # I2Psvc.exe to crash with 0xC0000005 (STATUS_ACCESS_VIOLATION).
+    & $svc @Args *>$null
 }
 
 function New-Shortcut {
@@ -27,22 +39,33 @@ function New-Shortcut {
     $shortcut.Save()
 }
 
+Write-Log "=== service.ps1 -Action $Action ==="
+
 switch ($Action) {
     'Install' {
         # Ensure the config points at %PROGRAMDATA%\i2p for the service
         if (Test-Path -LiteralPath $conf) {
             if (-not (Select-String -LiteralPath $conf -Pattern '^wrapper\.java\.additional\.5=' -Quiet)) {
                 Add-Content -LiteralPath $conf -Value 'wrapper.java.additional.5=-Di2p.dir.config="%PROGRAMDATA%\i2p"'
+                Write-Log "Added wrapper.java.additional.5 to $conf"
             }
+        } else {
+            Write-Log "WARNING: $conf not found"
         }
         # Stop and remove any existing service (upgrade / reinstall)
         # -qs exits nonzero (bit 0 = installed) when a service exists
+        Write-Log "Querying service status ($svc -qs $conf)"
         Invoke-Wrapper "-qs", $conf
+        Write-Log "Exit code: $LASTEXITCODE"
         if ($LASTEXITCODE -ne 0) {
+            Write-Log "Removing existing service ($svc -r $conf)"
             Invoke-Wrapper "-r", $conf
+            Write-Log "Exit code: $LASTEXITCODE"
         }
         # Install
+        Write-Log "Installing service ($svc -i $conf)"
         Invoke-Wrapper "-i", $conf
+        Write-Log "Exit code: $LASTEXITCODE"
         if ($LASTEXITCODE -ne 0) { throw "I2Psvc.exe -i failed with exit code $LASTEXITCODE" }
     }
     'Uninstall' {
