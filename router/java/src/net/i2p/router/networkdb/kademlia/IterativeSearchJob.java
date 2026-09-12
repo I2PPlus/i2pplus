@@ -270,6 +270,46 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.10
      */
+    private static volatile int _tunedSearchLimit = -1;
+    private static volatile int _tunedSingleSearchTime = -1;
+
+    /**
+     * Set the search limit (called by Tuner).
+     * @param limit the total search request limit
+     * @since 0.9.72+
+     */
+    public static void setSearchLimit(int limit) { _tunedSearchLimit = limit; }
+    /**
+     * Set the single search time (called by Tuner).
+     * @param ms the single-search time in milliseconds
+     * @since 0.9.72+
+     */
+    public static void setSingleSearchTime(int ms) { _tunedSingleSearchTime = ms; }
+    /**
+     * The search limit in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @param def fallback when neither tuned nor configured
+     * @return the total search request limit
+     * @since 0.9.72+
+     */
+    public static int getSearchLimit(RouterContext ctx, int def) {
+        int t = _tunedSearchLimit;
+        if (t >= 0) return t;
+        return ctx.getProperty("netdb.searchLimit", def);
+    }
+    /**
+     * The single search time in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @param def fallback when neither tuned nor configured
+     * @return the single-search time in milliseconds
+     * @since 0.9.72+
+     */
+    public static int getSingleSearchTime(RouterContext ctx, int def) {
+        int t = _tunedSingleSearchTime;
+        if (t >= 0) return t;
+        return ctx.getProperty("netdb.singleSearchTime", def);
+    }
+
     public IterativeSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key,
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
@@ -289,9 +329,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<>(new XORComparator<>(_rkey));
-        _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
+        _totalSearchLimit = getSearchLimit(ctx, totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
-        _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
+        _singleSearchTime = getSingleSearchTime(ctx, (int) SINGLE_SEARCH_TIME);
         _unheardFrom = new HashSet<>(CONCURRENT_SEARCHES);
         _failedPeers = new HashSet<>(_totalSearchLimit);
         _skippedPeers = new HashSet<>(4);

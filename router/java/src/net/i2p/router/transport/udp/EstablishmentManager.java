@@ -150,6 +150,25 @@ public class EstablishmentManager {
     /** The default high max concurrent establish, bounded 64-8192 */
     public static void setDefaultHighMaxConcurrentEstablish(int val) { _defaultHighMaxConcurrentEstablish = Math.max(64, Math.min(8192, val)); }
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
+    /** Tuned max concurrent establish, -1 = use config. Set by Tuner. @since 0.9.72+ */
+    private static volatile int _tunedMaxConcurrentEstablish = -1;
+    /**
+     * Set the max concurrent establish (called by Tuner).
+     * @param val the max concurrent outbound sessions
+     * @since 0.9.72+
+     */
+    public static void setMaxConcurrentEstablish(int val) { _tunedMaxConcurrentEstablish = val; }
+    /**
+     * The max concurrent establish in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the max concurrent outbound sessions
+     * @since 0.9.72+
+     */
+    public static int getMaxConcurrentEstablishTuned(RouterContext ctx) {
+        int t = _tunedMaxConcurrentEstablish;
+        if (t >= 0) return t;
+        return ctx.getProperty(PROP_MAX_CONCURRENT_ESTABLISH, _defaultLowMaxConcurrentEstablish);
+    }
 
     /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
     private static volatile int MAX_QUEUED_OUTBOUND = 128;
@@ -326,6 +345,8 @@ public class EstablishmentManager {
      * @return the max concurrent establish
      */
     private int getMaxConcurrentEstablish() {
+        int t = _tunedMaxConcurrentEstablish;
+        if (t >= 0) return t;
         return _context.getProperty(PROP_MAX_CONCURRENT_ESTABLISH, DEFAULT_MAX_CONCURRENT_ESTABLISH);
     }
 

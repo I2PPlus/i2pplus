@@ -425,6 +425,30 @@ public class PeerState {
      * in-flight bytes immediately after loss. Tuned via Tuner.
      */
     private static volatile int POST_RTO_WINDOW_MTUS = 1;
+    /**
+     * Outbound message queue depth per peer, -1 = use router config.
+     * Set by the Tuner when autotuning router.peerOutboundQueueSize.
+     * @since 0.9.72+
+     */
+    private static volatile int OUTBOUND_QUEUE_SIZE = -1;
+    /**
+     * Outbound message queue depth per peer (called by Tuner).
+     * @param size queue depth; the Tuner clamps to 50-1000 before calling
+     * @since 0.9.72+
+     */
+    public static void setOutboundQueueSize(int size) { OUTBOUND_QUEUE_SIZE = size; }
+    /**
+     * Outbound message queue depth per peer.
+     * @param ctx router context for config fallback when untuned
+     * @param def fallback default when neither tuned nor configured
+     * @return the queue depth to use
+     * @since 0.9.72+
+     */
+    public static int getOutboundQueueSize(RouterContext ctx, int def) {
+        int i = OUTBOUND_QUEUE_SIZE;
+        if (i > 0) return i;
+        return ctx.getProperty("router.peerOutboundQueueSize", def);
+    }
     /** How frequently do we want to send ACKs to a peer? (dynamically tuned) */
     private static final AtomicInteger ACK_FREQUENCY = new AtomicInteger(300);
     /**
@@ -992,7 +1016,7 @@ public class PeerState {
 
         long maxMemory = SystemVersion.getMaxMemory();
         int defaultQueueSize = Math.max(16, Math.min(64, (int)(maxMemory / (256 * 1024 * 1024L))));
-        int outboundQueueSize = ctx.getProperty("router.peerOutboundQueueSize", defaultQueueSize);
+        int outboundQueueSize = getOutboundQueueSize(ctx, defaultQueueSize);
 
         _inboundMessages = new ConcurrentHashMap<>(16);
         _outboundMessages = new CachedIteratorCollection<>();

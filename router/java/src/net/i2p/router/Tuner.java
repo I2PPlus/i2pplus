@@ -5543,12 +5543,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("router.peerOutboundQueueSize", Integer.toString(value));
+            PeerState.setOutboundQueueSize(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            int v = _context.getProperty("router.peerOutboundQueueSize", 0);
+            int v = PeerState.getOutboundQueueSize(_context, 0);
             return v > 0 ? v : _min;
         }
 
@@ -5722,13 +5722,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("router.defaultProcessingTimeThrottle", Integer.toString(value));
+            RouterThrottleImpl.setMaxProcessingTime(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("router.defaultProcessingTimeThrottle",
-                                         SystemVersion.isSlow() ? 3000 : 2000);
+            return RouterThrottleImpl.getMaxProcessingTimeTuned(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -6142,7 +6141,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.goodDeficitThrottle", Integer.toString(value));
+            BuildExecutor.setGoodDeficitThrottle(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -7280,12 +7279,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("netdb.searchLimit", Integer.toString(value));
+            IterativeSearchJob.setSearchLimit(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("netdb.searchLimit", 16);
+            return IterativeSearchJob.getSearchLimit(_context, 16);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -7463,12 +7462,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("netdb.singleSearchTime", Integer.toString(value));
+            IterativeSearchJob.setSingleSearchTime(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("netdb.singleSearchTime", 6000);
+            return IterativeSearchJob.getSingleSearchTime(_context, 6000);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -7961,13 +7960,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2np.udp.maxConcurrentEstablish", Integer.toString(value));
+            EstablishmentManager.setMaxConcurrentEstablish(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2np.udp.maxConcurrentEstablish",
-                   EstablishmentManager.getDefaultLowMaxConcurrentEstablish());
+            return EstablishmentManager.getMaxConcurrentEstablishTuned(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -12830,11 +12828,11 @@ protected int computeTarget(double observed) {
         }
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.targetBuffer", Integer.toString(value));
+            BuildExecutor.setTunnelTargetBuffer(value);
         }
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.tunnel.targetBuffer", 0);
+            return BuildExecutor.getTunnelTargetBuffer(_context);
         }
         /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {

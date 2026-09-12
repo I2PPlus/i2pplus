@@ -486,7 +486,30 @@ public class RouterThrottleImpl implements RouterThrottle {
         return _cachedMaxTunnels;
     }
 
+    private static volatile int _tunedMaxProcessingTime = -1;
+
+    /**
+     * Set the max processing time (called by Tuner).
+     * @param ms the max message processing time in milliseconds
+     * @since 0.9.72+
+     */
+    public static void setMaxProcessingTime(int ms) { _tunedMaxProcessingTime = ms; }
+
+    /**
+     * The max processing time in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the max message processing time in milliseconds
+     * @since 0.9.72+
+     */
+    public static int getMaxProcessingTimeTuned(RouterContext ctx) {
+        int tuned = _tunedMaxProcessingTime;
+        if (tuned >= 0) return tuned;
+        return ctx.getProperty(PROP_MAX_PROCESSINGTIME, DEFAULT_MAX_PROCESSINGTIME);
+    }
+
     private int getMaxProcessingTime() {
+        int tuned = _tunedMaxProcessingTime;
+        if (tuned >= 0) return tuned;
         String p = _context.getProperty(PROP_MAX_PROCESSINGTIME);
         if (p != null && p.equals(_cachedMaxProcessingTimeProp)) {
             return _cachedMaxProcessingTime;

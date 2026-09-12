@@ -228,13 +228,41 @@ public class BuildExecutor implements Runnable {
      * The target build buffer from config or default (0).
      * Extra tunnels to maintain beyond the configured quantity.
      * Tunable via i2p.tunnel.targetBuffer (default: 0).
+     * Tuned value overrides config, when set by the Tuner.
+     * @since 0.9.72+
+     */
+    private static volatile int _tunedTargetBuffer = -1;
+
+    /**
+     * The target build buffer from config or default (0).
+     * Extra tunnels to maintain beyond the configured quantity.
+     * Tunable via i2p.tunnel.targetBuffer (default: 0).
      *
      * @param ctx the router context
      * @return the target buffer count
      */
-    static int getTunnelTargetBuffer(RouterContext ctx) {
+    public static int getTunnelTargetBuffer(RouterContext ctx) {
+        int tuned = _tunedTargetBuffer;
+        if (tuned >= 0) return tuned;
         return ctx.getProperty("i2p.tunnel.targetBuffer", 0);
     }
+
+    /**
+     * Set the target build buffer (called by Tuner).
+     *
+     * @param count the target buffer count
+     * @since 0.9.72+
+     */
+    public static void setTunnelTargetBuffer(int count) { _tunedTargetBuffer = count; }
+
+    /**
+     * The GOOD deficit throttle interval from config or default (30s).
+     * Minimum time between GOOD-tunnel deficit rebuilds for non-critical pools.
+     * Tunable via i2p.tunnel.goodDeficitThrottle (default: 30000).
+     * Tuned value overrides config, when set by the Tuner.
+     * @since 0.9.72+
+     */
+    private static volatile long _tunedGoodDeficitThrottle = -1;
 
     /**
      * The GOOD deficit throttle interval from config or default (30s).
@@ -245,8 +273,18 @@ public class BuildExecutor implements Runnable {
      * @return the throttle interval in milliseconds
      */
     public static long getGoodDeficitThrottle(RouterContext ctx) {
+        long tuned = _tunedGoodDeficitThrottle;
+        if (tuned >= 0) return tuned;
         return ctx.getProperty("i2p.tunnel.goodDeficitThrottle", 30000);
     }
+
+    /**
+     * Set the GOOD deficit throttle interval (called by Tuner).
+     *
+     * @param ms the throttle interval in milliseconds
+     * @since 0.9.72+
+     */
+    public static void setGoodDeficitThrottle(long ms) { _tunedGoodDeficitThrottle = ms; }
     /**
      * The maximum number of concurrent tunnel builds allowed.
      * Calculated based on CPU cores and configurable multiplier
