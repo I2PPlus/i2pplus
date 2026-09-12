@@ -245,7 +245,7 @@ public class PeerState {
         // CWIN parameters
         int maxSendWindow = ctx.getProperty("i2p.transport.udp.maxSendWindow",
                                             isSlow ? 32*1024 : 128*1024);
-        MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(1024*1024, maxSendWindow));
+        MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(MAX_SEND_WINDOW_CEILING, maxSendWindow));
 
         // RTO parameters
         MIN_RTO = Math.max(250, Math.min(2000,
@@ -330,6 +330,16 @@ public class PeerState {
 
     /** Max send window bytes — configurable via i2p.transport.udp.maxSendWindow */
     private static volatile int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 32*1024 : 128*1024;
+
+    /**
+     * Heap-scaled CWIN ceiling: 1MB minimum, up to 16MB, roughly 1MB per
+     * 512MB of heap. Replaces the fixed 1MB cap that clamped tuner growth
+     * and kept high-memory routers below 1MB/s throughput.
+     *
+     * @since 0.9.70+
+     */
+    static final int MAX_SEND_WINDOW_CEILING =
+            Math.max(1024 * 1024, Math.min(16 * 1024 * 1024, (int) (SystemVersion.getMaxMemory() / 512)));
 
     /*
      * Was 32 before 0.9.2, but since the streaming lib goes up to 128,
@@ -457,10 +467,11 @@ public class PeerState {
 
     /**
      * Max send window / CWIN (called by Tuner).
-     * @param bytes max send window in bytes, clamped 32KB-1MB
+     *
+     * @param bytes max send window in bytes, clamped 32KB to heap-scaled ceiling
      * @since 0.9.70+
      */
-    public static void setMaxSendWindow(int bytes) { MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(1024*1024, bytes)); }
+    public static void setMaxSendWindow(int bytes) { MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(MAX_SEND_WINDOW_CEILING, bytes)); }
 
     /**
      * Post-RTO-collapse window restart size.
@@ -525,6 +536,15 @@ public class PeerState {
      * @since 0.9.70+
      */
     public static int getMaxSendWindow() { return MAX_SEND_WINDOW_BYTES; }
+
+    /**
+     * The heap-scaled CWIN ceiling, for use by the Tuner's MaxSendWindowParam
+     * (max range must match the clamp applied in {@link #setMaxSendWindow(int)}).
+     *
+     * @return the CWIN ceiling in bytes
+     * @since 0.9.70+
+     */
+    public static int getMaxSendWindowCeiling() { return MAX_SEND_WINDOW_CEILING; }
 
     /**
      * Initial concurrent messages per peer.
