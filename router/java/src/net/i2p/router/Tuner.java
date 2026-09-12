@@ -7345,7 +7345,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             IterativeSearchJob.setMaxSearchTime(value);
-            _context.router().saveConfig(IterativeSearchJob.PROP_MAX_SEARCH_TIME, Integer.toString(value));
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -7775,7 +7774,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             SearchJob.setResendTimeout(value);
-            _context.router().saveConfig("netdb.resendTimeout", Integer.toString(value));
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -7849,7 +7847,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             SearchJob.setLeaseResendCount(value);
-            _context.router().saveConfig("netdb.leaseResendCount", Integer.toString(value));
         }
 
         /** Read the current runtime value of this tunable from router config. */
