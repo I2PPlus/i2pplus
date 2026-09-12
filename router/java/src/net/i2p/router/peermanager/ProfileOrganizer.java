@@ -184,6 +184,36 @@ public class ProfileOrganizer {
     public static final String PROP_LOSSY_THRESHOLD = "profileOrganizer.lossyThreshold";
     /** Default loss ratio threshold (20% of packets retransmitted). */
     private static final float DEFAULT_LOSSY_THRESHOLD = 0.20f;
+
+    /**
+     * Tuned lossy threshold, -1.0 = use router config.
+     * Set by the Tuner when autotuning profileOrganizer.lossyThreshold.
+     * @since 0.9.72+
+     */
+    private static volatile float _tunedLossyThreshold = -1.0f;
+
+    /**
+     * Set the lossy demotion threshold (called by Tuner).
+     * @param ratio the loss ratio threshold
+     * @since 0.9.72+
+     */
+    public static void setLossyThreshold(float ratio) { _tunedLossyThreshold = ratio; }
+
+    /**
+     * The lossy demotion threshold in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the loss ratio threshold
+     * @since 0.9.72+
+     */
+    public static float getLossyThreshold(RouterContext ctx) {
+        float t = _tunedLossyThreshold;
+        if (t >= 0.0f) return t;
+        String p = ctx.getProperty(PROP_LOSSY_THRESHOLD);
+        if (p != null) {
+            try { return Float.parseFloat(p); } catch (NumberFormatException nfe) {}
+        }
+        return DEFAULT_LOSSY_THRESHOLD;
+    }
     /** Config property for how long a reported loss ratio stays fresh. */
     public static final String PROP_LOSSY_WINDOW = "profileOrganizer.lossyWindow";
     /** Default freshness window in ms (10 minutes). */
@@ -2798,7 +2828,7 @@ public class ProfileOrganizer {
     private boolean hasHighLoss(PeerProfile profile, long now) {
         float score = profile.getLossScore(now);
         if (score <= 0.0f) return false;
-        return score >= _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD);
+        return score >= getLossyThreshold(_context);
     }
 
     /**
@@ -2837,7 +2867,7 @@ public class ProfileOrganizer {
         long since = profile.getLossySince();
         if (since <= 0) return true;
         if (now - since < LOSS_READMIT_MIN_AGE) return false;
-        float threshold = _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD);
+        float threshold = getLossyThreshold(_context);
         return now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW) &&
                profile.getLossRatio() < threshold;
     }
@@ -2904,7 +2934,7 @@ public class ProfileOrganizer {
     private boolean isModeratelyLossy(PeerProfile profile, long now) {
         float score = profile.getLossScore(now);
         if (score <= 0.0f) return false;
-        float threshold = _context.getProperty(PROP_LOSSY_THRESHOLD, DEFAULT_LOSSY_THRESHOLD);
+        float threshold = getLossyThreshold(_context);
         return score >= _context.getProperty(PROP_LOSSY_MODERATE_THRESHOLD, DEFAULT_LOSSY_MODERATE_THRESHOLD) &&
                score < threshold;
     }

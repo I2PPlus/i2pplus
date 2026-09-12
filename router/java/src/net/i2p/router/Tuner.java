@@ -5620,13 +5620,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("router.transitThrottleFactor", String.valueOf(value / 100.0f));
+            TunnelDispatcher.setTransitThrottleFactor(value / 100.0f);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            float f = _context.getProperty("router.transitThrottleFactor", 0.95f);
-            return (int)(f * 100);
+            return (int)(TunnelDispatcher.getTransitThrottleFactor(_context, 0.95f) * 100);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -5924,17 +5923,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("router.tunnelGrowthFactor", String.valueOf(value / 10.0d));
+            RouterThrottleImpl.setTunnelGrowthFactor(value / 10.0d);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            double factor = 2.0d;
-            String p = _context.getProperty("router.tunnelGrowthFactor");
-            if (p != null) {
-                try { factor = Double.parseDouble(p); } catch (NumberFormatException nfe) {}
-            }
-            return (int)(factor * 10);
+            return (int)(RouterThrottleImpl.getTunnelGrowthFactorTuned(_context) * 10);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -8190,15 +8184,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            // Skip redundant writes so router.config isn't rewritten every tuning cycle
-            if (value == getRuntimeValue()) return;
-            _context.router().saveConfig(_name, String.valueOf(value / 100.0f));
+            ProfileOrganizer.setLossyThreshold(value / 100.0f);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            float ratio = _context.getProperty(_name, 0.20f);
-            return Math.round(ratio * 100.0f);
+            return Math.round(ProfileOrganizer.getLossyThreshold(_context) * 100.0f);
         }
 
         /** Read the observed stat value for autotuning decisions. */

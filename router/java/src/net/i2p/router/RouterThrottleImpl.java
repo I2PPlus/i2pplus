@@ -457,6 +457,31 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final double DEFAULT_TUNNEL_GROWTH_FACTOR = 2.0d;
     private static final double DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR = 1.5d;
 
+    private static volatile double _tunedGrowthFactor = -1.0d;
+
+    /**
+     * Set the tunnel growth factor (called by Tuner).
+     * @param factor the tunnel growth factor
+     * @since 0.9.72+
+     */
+    public static void setTunnelGrowthFactor(double factor) { _tunedGrowthFactor = factor; }
+
+    /**
+     * The tunnel growth factor in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the tunnel growth factor
+     * @since 0.9.72+
+     */
+    public static double getTunnelGrowthFactorTuned(RouterContext ctx) {
+        double tuned = _tunedGrowthFactor;
+        if (tuned >= 0.0d) return tuned;
+        String p = ctx.getProperty(PROP_TUNNEL_GROWTH_FACTOR);
+        if (p != null) {
+            try { return Double.parseDouble(p); } catch (NumberFormatException nfe) {}
+        }
+        return DEFAULT_TUNNEL_GROWTH_FACTOR;
+    }
+
     private String _cachedGrowthFactorProp;
     private double _cachedGrowthFactor = DEFAULT_TUNNEL_GROWTH_FACTOR;
     private String _cachedTestTimeGrowthFactorProp;
@@ -528,6 +553,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     private double getTunnelGrowthFactor() {
+        double tuned = _tunedGrowthFactor;
+        if (tuned >= 0.0d) return tuned;
         String p = _context.getProperty(PROP_TUNNEL_GROWTH_FACTOR);
         if (p != null && p.equals(_cachedGrowthFactorProp)) {
             return _cachedGrowthFactor;

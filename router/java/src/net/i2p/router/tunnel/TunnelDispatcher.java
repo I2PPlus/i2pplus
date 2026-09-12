@@ -111,6 +111,37 @@ public class TunnelDispatcher implements Service {
     private volatile float _transitThrottleFactor = 0.95f;
     private volatile float _inboundTransitThrottleFactor = 0.0f;
 
+    /**
+     * Tuned transit throttle factor, -1.0 = use router config.
+     * Set by the Tuner when autotuning router.transitThrottleFactor.
+     * @since 0.9.72+
+     */
+    private static volatile float _tunedTransitThrottleFactor = -1.0f;
+
+    /**
+     * Set the transit throttle factor (called by Tuner).
+     * @param f the transit throttle factor
+     * @since 0.9.72+
+     */
+    public static void setTransitThrottleFactor(float f) { _tunedTransitThrottleFactor = f; }
+
+    /**
+     * The transit throttle factor in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @param def fallback when neither tuned nor configured (0.95f outbound, 0.0f inbound)
+     * @return the transit throttle factor
+     * @since 0.9.72+
+     */
+    public static float getTransitThrottleFactor(RouterContext ctx, float def) {
+        float t = _tunedTransitThrottleFactor;
+        if (t >= 0.0f) return t;
+        String p = ctx.getProperty("router.transitThrottleFactor");
+        if (p != null) {
+            try { return Float.parseFloat(p); } catch (NumberFormatException nfe) {}
+        }
+        return def;
+    }
+
     /** Validator used for tunnel IVs */
     private BloomFilterIVValidator _validator;
 
@@ -1027,8 +1058,8 @@ public class TunnelDispatcher implements Service {
      * @since 0.9.70+
      */
     void updateThrottleFactors() {
-        _transitThrottleFactor = _context.getProperty("router.transitThrottleFactor", 0.95f);
-        _inboundTransitThrottleFactor = _context.getProperty("router.transitThrottleFactor", 0.0f);
+        _transitThrottleFactor = getTransitThrottleFactor(_context, 0.95f);
+        _inboundTransitThrottleFactor = getTransitThrottleFactor(_context, 0.0f);
     }
 
     /**

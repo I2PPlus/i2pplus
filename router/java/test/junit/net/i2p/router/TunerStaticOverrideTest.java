@@ -7,8 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.transport.udp.EstablishmentManager;
 import net.i2p.router.transport.udp.PeerState;
+import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.tunnel.pool.BuildExecutor;
 import net.i2p.util.SystemVersion;
 
@@ -42,6 +44,9 @@ public class TunerStaticOverrideTest {
         IterativeSearchJob.setSearchLimit(-1);
         IterativeSearchJob.setSingleSearchTime(-1);
         EstablishmentManager.setMaxConcurrentEstablish(-1);
+        TunnelDispatcher.setTransitThrottleFactor(-1.0f);
+        RouterThrottleImpl.setTunnelGrowthFactor(-1.0d);
+        ProfileOrganizer.setLossyThreshold(-1.0f);
     }
 
     // =====================================================================
@@ -177,5 +182,88 @@ public class TunerStaticOverrideTest {
         int def = SystemVersion.isSlow() ? 128 : 512;
         when(_ctx.getProperty("i2np.udp.maxConcurrentEstablish", def)).thenReturn(96);
         assertEquals(96, EstablishmentManager.getMaxConcurrentEstablishTuned(_ctx));
+    }
+
+    // =====================================================================
+    // TunnelDispatcher.router.transitThrottleFactor (float)
+    // =====================================================================
+
+    @Test
+    public void transitThrottleReturnsTunedOverConfig() {
+        TunnelDispatcher.setTransitThrottleFactor(0.75f);
+        assertEquals(0.75f, TunnelDispatcher.getTransitThrottleFactor(_ctx, 0.95f), 0.0001f);
+    }
+
+    @Test
+    public void transitThrottleUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("router.transitThrottleFactor")).thenReturn("0.80");
+        assertEquals(0.80f, TunnelDispatcher.getTransitThrottleFactor(_ctx, 0.95f), 0.0001f);
+    }
+
+    @Test
+    public void transitThrottleUnsetPassthroughDefault() {
+        when(_ctx.getProperty("router.transitThrottleFactor")).thenReturn("0.95");
+        assertEquals(0.95f, TunnelDispatcher.getTransitThrottleFactor(_ctx, 0.95f), 0.0001f);
+    }
+
+    @Test
+    public void transitThrottleTunedOverridesInboundDefault() {
+        TunnelDispatcher.setTransitThrottleFactor(0.60f);
+        assertEquals(0.60f, TunnelDispatcher.getTransitThrottleFactor(_ctx, 0.0f), 0.0001f);
+    }
+
+    @Test
+    public void transitThrottleInboundUnsetDefaultZero() {
+        when(_ctx.getProperty("router.transitThrottleFactor")).thenReturn("0.0");
+        assertEquals(0.0f, TunnelDispatcher.getTransitThrottleFactor(_ctx, 0.0f), 0.0001f);
+    }
+
+    // =====================================================================
+    // RouterThrottleImpl.router.tunnelGrowthFactor (double)
+    // =====================================================================
+
+    @Test
+    public void tunnelGrowthReturnsTunedOverConfig() {
+        RouterThrottleImpl.setTunnelGrowthFactor(1.5d);
+        assertEquals(1.5d, RouterThrottleImpl.getTunnelGrowthFactorTuned(_ctx), 0.0001d);
+    }
+
+    @Test
+    public void tunnelGrowthUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("router.tunnelGrowthFactor")).thenReturn("3.0");
+        assertEquals(3.0d, RouterThrottleImpl.getTunnelGrowthFactorTuned(_ctx), 0.0001d);
+    }
+
+    @Test
+    public void tunnelGrowthUnsetPassthroughDefault() {
+        assertEquals(2.0d, RouterThrottleImpl.getTunnelGrowthFactorTuned(_ctx), 0.0001d);
+    }
+
+    @Test
+    public void tunnelGrowthConfigGarbageFallsBackToDefault() {
+        when(_ctx.getProperty("router.tunnelGrowthFactor")).thenReturn("banana");
+        assertEquals(2.0d, RouterThrottleImpl.getTunnelGrowthFactorTuned(_ctx), 0.0001d);
+    }
+
+    // =====================================================================
+    // ProfileOrganizer.profileOrganizer.lossyThreshold (float)
+    // =====================================================================
+
+    @Test
+    public void lossyThresholdReturnsTunedOverConfig() {
+        ProfileOrganizer.setLossyThreshold(0.10f);
+        assertEquals(0.10f, ProfileOrganizer.getLossyThreshold(_ctx), 0.0001f);
+    }
+
+    @Test
+    public void lossyThresholdUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("profileOrganizer.lossyThreshold")).thenReturn("0.30");
+        assertEquals(0.30f, ProfileOrganizer.getLossyThreshold(_ctx), 0.0001f);
+    }
+
+    @Test
+    public void lossyThresholdUnsetPassthroughDefault() {
+        when(_ctx.getProperty("profileOrganizer.lossyThreshold")).thenReturn("0.20");
+        assertEquals(0.20f, ProfileOrganizer.getLossyThreshold(_ctx), 0.0001f);
     }
 }
