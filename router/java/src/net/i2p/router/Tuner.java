@@ -301,11 +301,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Minimum INITIAL_RTO target (ms) in the Tuner's computeTarget().
      * Prevents the Tuner from setting RTO too low, which causes
      * spurious retransmits and wasted bandwidth.
-     * Default 3000ms — accommodates typical I2P RTT up to ~1.5s without
-     * premature retransmit; the Tuner raises from there for higher-latency paths.
+     * Default 6000ms — accommodates typical I2P RTT up to ~3s without
+     * premature retransmit (coherent with the 9000ms streaming-side default);
+     * the Tuner raises from there for higher-latency paths.
      * @since 0.9.70+
      */
-    private static volatile int initialRtoFloor = 3000;
+    private static volatile int initialRtoFloor = 6000;
 
     /**
      * The handler thread priority.
@@ -3787,7 +3788,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean connectsFailing = !Double.isNaN(connectFailed) && connectFailed > 2;
 
             // Target: 2x RTT as baseline (standard TCP-like behavior)
-            // Floor of 3000ms prevents premature SYN retransmit on higher-latency links
+            // Floor of 6000ms prevents premature SYN retransmit on higher-latency links
             // (too-low RTO causes spurious retransmits and wasted bandwidth).
             int rtoFloor = initialRtoFloor;
             int target;
