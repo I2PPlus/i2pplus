@@ -7661,7 +7661,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
             IterativeSearchJob.setMaxRouterInfoLookupTime(value);
-            _context.router().saveConfig("i2p.tunnel.build.nextHopLookupTimeout", Integer.toString(value));
+            BuildHandler.setNextHopLookupTimeout(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -8417,7 +8417,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.build.requestTimeout", Integer.toString(value));
+            BuildRequestor.setRequestTimeout(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -8504,7 +8504,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.build.firstHopTimeout", Integer.toString(value));
+            BuildRequestor.setFirstHopTimeout(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
@@ -8813,12 +8813,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.build.maxLookupLimit", Integer.toString(value));
+            BuildHandler.setMaxLookupLimit(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.tunnel.build.maxLookupLimit", 32);
+            return BuildHandler.getMaxLookupLimit(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -8886,13 +8886,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.build.percentLookupLimit", Integer.toString(value));
+            BuildHandler.setPercentLookupLimit(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.tunnel.build.percentLookupLimit",
-                                        SystemVersion.isSlow() ? 15 : 40);
+            return BuildHandler.getPercentLookupLimit(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -10451,12 +10450,12 @@ protected int computeTarget(double observed) {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.testJob.minTestDelay", String.valueOf(value));
+            TestJob.setMinTestDelay(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.tunnel.testJob.minTestDelay", 30000);
+            return TestJob.getMinTestDelay(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -10512,12 +10511,12 @@ protected int computeTarget(double observed) {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.testJob.maxTestDelay", String.valueOf(value));
+            TestJob.setMaxTestDelay(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.tunnel.testJob.maxTestDelay", 90000);
+            return TestJob.getMaxTestDelay(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -10572,12 +10571,12 @@ protected int computeTarget(double observed) {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.testJob.maxTestPeriod", String.valueOf(value));
+            TestJob.setMaxTestPeriod(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.tunnel.testJob.maxTestPeriod", 15000);
+            return TestJob.getMaxTestPeriod(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -10637,12 +10636,12 @@ protected int computeTarget(double observed) {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.testJob.minTestPeriod", String.valueOf(value));
+            TestJob.setMinTestPeriod(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.tunnel.testJob.minTestPeriod", 3000);
+            return TestJob.getMinTestPeriod(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */

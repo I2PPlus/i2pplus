@@ -12,6 +12,10 @@ import net.i2p.router.transport.udp.EstablishmentManager;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.tunnel.pool.BuildExecutor;
+import net.i2p.router.tunnel.pool.BuildHandler;
+import net.i2p.router.tunnel.pool.BuildRequestor;
+import net.i2p.router.tunnel.pool.TestJob;
+import net.i2p.util.Clock;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -35,6 +39,9 @@ public class TunerStaticOverrideTest {
     @Before
     public void setUp() {
         _ctx = mock(RouterContext.class);
+        // The cached-config consumers read ctx.clock().now() on first refresh;
+        // a fresh Clock mock keeps refresh deterministic and off the real clock.
+        when(_ctx.clock()).thenReturn(mock(Clock.class));
         // The -1 sentinel must be restored before each test so a leaked tuned
         // value from an earlier case can't bleed into a fallback assertion.
         PeerState.setOutboundQueueSize(-1);
@@ -47,6 +54,15 @@ public class TunerStaticOverrideTest {
         TunnelDispatcher.setTransitThrottleFactor(-1.0f);
         RouterThrottleImpl.setTunnelGrowthFactor(-1.0d);
         ProfileOrganizer.setLossyThreshold(-1.0f);
+        BuildHandler.setNextHopLookupTimeout(-1);
+        BuildHandler.setMaxLookupLimit(-1);
+        BuildHandler.setPercentLookupLimit(-1);
+        BuildRequestor.setRequestTimeout(-1);
+        BuildRequestor.setFirstHopTimeout(-1);
+        TestJob.setMinTestPeriod(-1);
+        TestJob.setMaxTestPeriod(-1);
+        TestJob.setMinTestDelay(-1);
+        TestJob.setMaxTestDelay(-1);
     }
 
     // =====================================================================
@@ -265,5 +281,167 @@ public class TunerStaticOverrideTest {
     public void lossyThresholdUnsetPassthroughDefault() {
         when(_ctx.getProperty("profileOrganizer.lossyThreshold")).thenReturn("0.20");
         assertEquals(0.20f, ProfileOrganizer.getLossyThreshold(_ctx), 0.0001f);
+    }
+
+    // =====================================================================
+    // BuildHandler.i2p.tunnel.build.nextHopLookupTimeout (cached consumer)
+    // =====================================================================
+
+    @Test
+    public void nextHopLookupTimeoutReturnsTunedOverConfig() {
+        BuildHandler.setNextHopLookupTimeout(5000);
+        assertEquals(5000, BuildHandler.getNextHopLookupTimeout(_ctx));
+    }
+
+    @Test
+    public void nextHopLookupTimeoutUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", 3000)).thenReturn(4000);
+        assertEquals(4000, BuildHandler.getNextHopLookupTimeout(_ctx));
+    }
+
+    @Test
+    public void nextHopLookupTimeoutUnsetPassthroughDefault() {
+        when(_ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", 3000)).thenReturn(3000);
+        assertEquals(3000, BuildHandler.getNextHopLookupTimeout(_ctx));
+    }
+
+    // =====================================================================
+    // BuildHandler.i2p.tunnel.build.maxLookupLimit (cached consumer)
+    // =====================================================================
+
+    @Test
+    public void maxLookupLimitReturnsTunedOverConfig() {
+        BuildHandler.setMaxLookupLimit(40);
+        assertEquals(40, BuildHandler.getMaxLookupLimit(_ctx));
+    }
+
+    @Test
+    public void maxLookupLimitUnsetFallsBackToConfig() {
+        int def = SystemVersion.isSlow() ? 32 : 64;
+        when(_ctx.getProperty("i2p.tunnel.build.maxLookupLimit", def)).thenReturn(48);
+        assertEquals(48, BuildHandler.getMaxLookupLimit(_ctx));
+    }
+
+    @Test
+    public void maxLookupLimitUnsetPassthroughDefault() {
+        int def = SystemVersion.isSlow() ? 32 : 64;
+        when(_ctx.getProperty("i2p.tunnel.build.maxLookupLimit", def)).thenReturn(def);
+        assertEquals(def, BuildHandler.getMaxLookupLimit(_ctx));
+    }
+
+    // =====================================================================
+    // BuildHandler.i2p.tunnel.build.percentLookupLimit (cached consumer)
+    // =====================================================================
+
+    @Test
+    public void percentLookupLimitReturnsTunedOverConfig() {
+        BuildHandler.setPercentLookupLimit(30);
+        assertEquals(30, BuildHandler.getPercentLookupLimit(_ctx));
+    }
+
+    @Test
+    public void percentLookupLimitUnsetFallsBackToConfig() {
+        int def = SystemVersion.isSlow() ? 15 : 40;
+        when(_ctx.getProperty("i2p.tunnel.build.percentLookupLimit", def)).thenReturn(25);
+        assertEquals(25, BuildHandler.getPercentLookupLimit(_ctx));
+    }
+
+    @Test
+    public void percentLookupLimitUnsetPassthroughDefault() {
+        int def = SystemVersion.isSlow() ? 15 : 40;
+        when(_ctx.getProperty("i2p.tunnel.build.percentLookupLimit", def)).thenReturn(def);
+        assertEquals(def, BuildHandler.getPercentLookupLimit(_ctx));
+    }
+
+    // =====================================================================
+    // BuildRequestor.i2p.tunnel.build.requestTimeout / firstHopTimeout
+    // =====================================================================
+
+    @Test
+    public void requestTimeoutReturnsTunedOverConfig() {
+        BuildRequestor.setRequestTimeout(12000);
+        assertEquals(12000, BuildRequestor.getRequestTimeout(_ctx));
+    }
+
+    @Test
+    public void requestTimeoutUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("i2p.tunnel.build.requestTimeout", 15000)).thenReturn(11000);
+        assertEquals(11000, BuildRequestor.getRequestTimeout(_ctx));
+    }
+
+    @Test
+    public void requestTimeoutUnsetPassthroughDefault() {
+        when(_ctx.getProperty("i2p.tunnel.build.requestTimeout", 15000)).thenReturn(15000);
+        assertEquals(15000, BuildRequestor.getRequestTimeout(_ctx));
+    }
+
+    @Test
+    public void firstHopTimeoutReturnsTunedOverConfig() {
+        BuildRequestor.setFirstHopTimeout(8000);
+        assertEquals(8000, BuildRequestor.getFirstHopTimeout(_ctx));
+    }
+
+    @Test
+    public void firstHopTimeoutUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10000)).thenReturn(7000);
+        assertEquals(7000, BuildRequestor.getFirstHopTimeout(_ctx));
+    }
+
+    @Test
+    public void firstHopTimeoutUnsetPassthroughDefault() {
+        when(_ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10000)).thenReturn(10000);
+        assertEquals(10000, BuildRequestor.getFirstHopTimeout(_ctx));
+    }
+
+    // =====================================================================
+    // TestJob.i2p.tunnel.testJob.{min,max}TestPeriod / {min,max}TestDelay
+    // =====================================================================
+
+    @Test
+    public void minTestPeriodReturnsTunedOverConfig() {
+        TestJob.setMinTestPeriod(5000);
+        assertEquals(5000, TestJob.getMinTestPeriod(_ctx));
+    }
+
+    @Test
+    public void minTestPeriodUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("i2p.tunnel.testJob.minTestPeriod", 3000)).thenReturn(4000);
+        assertEquals(4000, TestJob.getMinTestPeriod(_ctx));
+    }
+
+    @Test
+    public void maxTestPeriodReturnsTunedOverConfig() {
+        TestJob.setMaxTestPeriod(12000);
+        assertEquals(12000, TestJob.getMaxTestPeriod(_ctx));
+    }
+
+    @Test
+    public void maxTestPeriodUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("i2p.tunnel.testJob.maxTestPeriod", 15000)).thenReturn(14000);
+        assertEquals(14000, TestJob.getMaxTestPeriod(_ctx));
+    }
+
+    @Test
+    public void minTestDelayReturnsTunedOverConfig() {
+        TestJob.setMinTestDelay(60000);
+        assertEquals(60000, TestJob.getMinTestDelay(_ctx));
+    }
+
+    @Test
+    public void minTestDelayUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("i2p.tunnel.testJob.minTestDelay", 30000)).thenReturn(45000);
+        assertEquals(45000, TestJob.getMinTestDelay(_ctx));
+    }
+
+    @Test
+    public void maxTestDelayReturnsTunedOverConfig() {
+        TestJob.setMaxTestDelay(120000);
+        assertEquals(120000, TestJob.getMaxTestDelay(_ctx));
+    }
+
+    @Test
+    public void maxTestDelayUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("i2p.tunnel.testJob.maxTestDelay", 90000)).thenReturn(100000);
+        assertEquals(100000, TestJob.getMaxTestDelay(_ctx));
     }
 }

@@ -75,6 +75,89 @@ public class TestJob extends JobImpl {
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
+     * Tuned test-job params, -1 = use router config.
+     * Set by the Tuner when autotuning the corresponding testJob params.
+     * @since 0.9.72+
+     */
+    private static volatile int _tunedMinTestPeriod = -1;
+    private static volatile int _tunedMaxTestPeriod = -1;
+    private static volatile int _tunedMinTestDelay = -1;
+    private static volatile int _tunedMaxTestDelay = -1;
+
+    /**
+     * Set the min test period (called by Tuner).
+     * @param ms the min test period in ms
+     * @since 0.9.72+
+     */
+    public static void setMinTestPeriod(int ms) { _tunedMinTestPeriod = ms; }
+    /**
+     * Set the max test period (called by Tuner).
+     * @param ms the max test period in ms
+     * @since 0.9.72+
+     */
+    public static void setMaxTestPeriod(int ms) { _tunedMaxTestPeriod = ms; }
+    /**
+     * Set the min test delay (called by Tuner).
+     * @param ms the min test delay in ms
+     * @since 0.9.72+
+     */
+    public static void setMinTestDelay(int ms) { _tunedMinTestDelay = ms; }
+    /**
+     * Set the max test delay (called by Tuner).
+     * @param ms the max test delay in ms
+     * @since 0.9.72+
+     */
+    public static void setMaxTestDelay(int ms) { _tunedMaxTestDelay = ms; }
+    /**
+     * The min test period in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the min test period in ms
+     * @since 0.9.72+
+     */
+    public static int getMinTestPeriod(RouterContext ctx) {
+        int t = _tunedMinTestPeriod;
+        if (t >= 0) return t;
+        refreshTestJobConfig(ctx);
+        return _cachedMinTestPeriod;
+    }
+    /**
+     * The max test period in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the max test period in ms
+     * @since 0.9.72+
+     */
+    public static int getMaxTestPeriod(RouterContext ctx) {
+        int t = _tunedMaxTestPeriod;
+        if (t >= 0) return t;
+        refreshTestJobConfig(ctx);
+        return _cachedMaxTestPeriod;
+    }
+    /**
+     * The min test delay in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the min test delay in ms
+     * @since 0.9.72+
+     */
+    public static int getMinTestDelay(RouterContext ctx) {
+        int t = _tunedMinTestDelay;
+        if (t >= 0) return t;
+        refreshTestJobConfig(ctx);
+        return _cachedMinTestDelay;
+    }
+    /**
+     * The max test delay in effect, tuned value if set else config.
+     * @param ctx the router context
+     * @return the max test delay in ms
+     * @since 0.9.72+
+     */
+    public static int getMaxTestDelay(RouterContext ctx) {
+        int t = _tunedMaxTestDelay;
+        if (t >= 0) return t;
+        refreshTestJobConfig(ctx);
+        return _cachedMaxTestDelay;
+    }
+
+    /**
      *  Refresh the cached test-job configuration from properties at most once
      *  per CONFIG_REFRESH_MS, or immediately when the context changes.
      *  Benign race: duplicate refreshes are idempotent writes.
@@ -128,8 +211,7 @@ public class TestJob extends JobImpl {
      * @return the min test period
      */
     private int getMinTestPeriod() {
-        refreshTestJobConfig(getContext());
-        return _cachedMinTestPeriod;
+        return getMinTestPeriod(getContext());
     }
 
     /**
@@ -138,19 +220,10 @@ public class TestJob extends JobImpl {
      * @return the max test period
      */
     private int getMaxTestPeriod() {
-        refreshTestJobConfig(getContext());
-        return _cachedMaxTestPeriod;
+        return getMaxTestPeriod(getContext());
     }
 
     // Adaptive testing frequency constants
-    private static int getMinTestDelay(RouterContext ctx) {
-        refreshTestJobConfig(ctx);
-        return _cachedMinTestDelay;
-    }
-    private static int getMaxTestDelay(RouterContext ctx) {
-        refreshTestJobConfig(ctx);
-        return _cachedMaxTestDelay;
-    }
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
     /** Hard ceiling on consecutive test failures for server pool tunnels.

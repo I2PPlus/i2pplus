@@ -70,6 +70,27 @@ public abstract class BuildRequestor {
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
+     * Tuned build timeouts, -1 = use router config.
+     * Set by the Tuner when autotuning the corresponding build params.
+     * @since 0.9.72+
+     */
+    private static volatile int _tunedRequestTimeout = -1;
+    private static volatile int _tunedFirstHopTimeout = -1;
+
+    /**
+     * Set the build request timeout (called by Tuner).
+     * @param ms the build request timeout in ms
+     * @since 0.9.72+
+     */
+    public static void setRequestTimeout(int ms) { _tunedRequestTimeout = ms; }
+    /**
+     * Set the first-hop timeout (called by Tuner).
+     * @param ms the first-hop timeout in ms
+     * @since 0.9.72+
+     */
+    public static void setFirstHopTimeout(int ms) { _tunedFirstHopTimeout = ms; }
+
+    /**
      *  Refresh the cached build configuration from properties at most once
      *  per CONFIG_REFRESH_MS, or immediately when the context changes.
      *  Benign race: duplicate refreshes are idempotent writes.
@@ -122,6 +143,8 @@ public abstract class BuildRequestor {
      * @return request timeout in ms
      */
     public static int getRequestTimeout(RouterContext ctx) {
+        int t = _tunedRequestTimeout;
+        if (t >= 0) return t;
         refreshBuildConfig(ctx);
         return _cachedRequestTimeout;
     }
@@ -135,6 +158,8 @@ public abstract class BuildRequestor {
      * @return first hop timeout in ms
      */
     public static int getFirstHopTimeout(RouterContext ctx) {
+        int t = _tunedFirstHopTimeout;
+        if (t >= 0) return t;
         refreshBuildConfig(ctx);
         return _cachedFirstHopTimeout;
     }
