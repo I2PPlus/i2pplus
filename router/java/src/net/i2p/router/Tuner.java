@@ -264,6 +264,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** I2CP internal queue size — static so ClientManager can read it without circular dep */
     private static volatile int internalQueueSize = SystemVersion.isSlow() ? 256 : 512;
 
+    /**
+     *  Untested tunnel cap multiplier, tuned in-memory only.
+     *  No subsystem consumer reads i2p.tunnel.untestedMultiplier, so the value
+     *  lives in this static (not router.config) purely to track the last
+     *  autotuned setting across applyValue/getRuntimeValue calls.
+     *  -1 = no tuned value yet; use the config-or-default path.
+     *  @since 0.9.72+
+     */
+    private static volatile int untestedMultiplier = -1;
+
     /** Max time (ms) a message may sit in the outbound dispatch queue before being dropped */
     private static volatile int maxDispatchAgeMs = 3000;
 
@@ -5776,12 +5786,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("router.throttleRejectExponent", Integer.toString(value));
+            RouterThrottleImpl.setThrottleRejectExponent(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            return _context.getProperty("router.throttleRejectExponent", 10);
+            return RouterThrottleImpl.getThrottleRejectExponent(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -5845,17 +5855,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("router.tunnel.perTunnelBweDivisor", Integer.toString(value));
+            TunnelDispatcher.setPerTunnelBweDivisor(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
-            int configured = _context.getProperty("router.tunnel.perTunnelBweDivisor", 0);
-            if (configured > 0) return configured;
-            // Default: min(maxTunnels, 100) — the old hardcoded value
-            int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
-                                                  RouterThrottleImpl.defaultMaxTunnels);
-            return Math.min(maxTunnels, 100);
+            return TunnelDispatcher.getPerTunnelBweDivisor(_context);
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -7897,11 +7902,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig(ExploreJob.PROP_EXPLORE_BREDTH, Integer.toString(value));
+            ExploreJob.setExploreBredth(value);
         }
 
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
+            int tuned = ExploreJob.getExploreBredth(_context);
+            if (tuned > 0)
+                return tuned;
             int rv = _context.getProperty(ExploreJob.PROP_EXPLORE_BREDTH, -1);
             if (rv < 1 || rv > _max)
                 rv = ExploreJob.EXPLORE_BREDTH;
@@ -12891,10 +12899,12 @@ protected int computeTarget(double observed) {
         }
         /** Apply the tunable value to the router configuration. */
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.tunnel.untestedMultiplier", Integer.toString(value));
+            untestedMultiplier = value;
         }
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
+            if (untestedMultiplier > 0)
+                return untestedMultiplier;
             return _context.getProperty("i2p.tunnel.untestedMultiplier", 2);
         }
         /** Read the observed stat value for autotuning decisions. */

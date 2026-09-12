@@ -52,6 +52,32 @@ public class ExploreJob extends SearchJob {
     public static final int EXPLORE_BREDTH = SystemVersion.isSlow() ? 1 : 2;
 
     /**
+     *  Tuned exploratory breadth, or -1 when no tuned value has been applied.
+     *  Set via {@link #setExploreBredth(int)} by the Tuner; takes priority over
+     *  the {@code router.exploreBredth} config read in {@link #calculateBredth()}.
+     */
+    private static volatile int _tunedExploreBredth = -1;
+
+    /**
+     * Set the exploratory search breadth (called by Tuner).
+     * @param bredth the concurrent search count
+     * @since 0.9.72+
+     */
+    public static void setExploreBredth(int bredth) { _tunedExploreBredth = bredth; }
+
+    /**
+     * The tuned exploratory breadth, or -1 when no tuned value has been applied.
+     * @param ctx the router context (unused, kept for symmetry with other Tuner bridges)
+     * @return the tuned concurrent search count, or -1 if none
+     * @since 0.9.72+
+     */
+    public static int getExploreBredth(RouterContext ctx) {
+        int tuned = _tunedExploreBredth;
+        if (tuned > 0) return tuned;
+        return -1;
+    }
+
+    /**
      * Maximum number of closest peers to exclude in queries.
      * This is intentionally larger to include floodfill and previously queried peers.
      */
@@ -210,6 +236,13 @@ public class ExploreJob extends SearchJob {
      * @return computed maximum concurrency level for exploration
      */
     private int calculateBredth() {
+        int tuned = getExploreBredth(getContext());
+        if (tuned > 0) {
+            if (_log.shouldInfo()) {
+                _log.info("Initiating Exploratory Search -> Max " + tuned + " concurrent (custom configuration)");
+            }
+            return tuned;
+        }
         String exploreBredth = getContext().getProperty(PROP_EXPLORE_BREDTH);
         if (exploreBredth != null) {
             try {

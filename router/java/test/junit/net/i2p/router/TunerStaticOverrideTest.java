@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import net.i2p.router.networkdb.kademlia.ExploreJob;
 import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.transport.udp.EstablishmentManager;
@@ -63,6 +64,9 @@ public class TunerStaticOverrideTest {
         TestJob.setMaxTestPeriod(-1);
         TestJob.setMinTestDelay(-1);
         TestJob.setMaxTestDelay(-1);
+        TunnelDispatcher.setPerTunnelBweDivisor(-1);
+        RouterThrottleImpl.setThrottleRejectExponent(-1);
+        ExploreJob.setExploreBredth(-1);
     }
 
     // =====================================================================
@@ -443,5 +447,92 @@ public class TunerStaticOverrideTest {
     public void maxTestDelayUnsetFallsBackToConfig() {
         when(_ctx.getProperty("i2p.tunnel.testJob.maxTestDelay", 90000)).thenReturn(100000);
         assertEquals(100000, TestJob.getMaxTestDelay(_ctx));
+    }
+
+    // =====================================================================
+    // RouterThrottleImpl.router.throttleRejectExponent (clamped [3,20])
+    // =====================================================================
+
+    @Test
+    public void throttleRejectExponentReturnsTunedOverConfig() {
+        RouterThrottleImpl.setThrottleRejectExponent(12);
+        assertEquals(12, RouterThrottleImpl.getThrottleRejectExponent(_ctx));
+    }
+
+    @Test
+    public void throttleRejectExponentClampsTunedHigh() {
+        RouterThrottleImpl.setThrottleRejectExponent(30);
+        assertEquals(20, RouterThrottleImpl.getThrottleRejectExponent(_ctx));
+    }
+
+    @Test
+    public void throttleRejectExponentClampsTunedLow() {
+        RouterThrottleImpl.setThrottleRejectExponent(1);
+        assertEquals(3, RouterThrottleImpl.getThrottleRejectExponent(_ctx));
+    }
+
+    @Test
+    public void throttleRejectExponentUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("router.throttleRejectExponent", 10)).thenReturn(15);
+        assertEquals(15, RouterThrottleImpl.getThrottleRejectExponent(_ctx));
+    }
+
+    @Test
+    public void throttleRejectExponentUnsetClampsConfigHigh() {
+        when(_ctx.getProperty("router.throttleRejectExponent", 10)).thenReturn(50);
+        assertEquals(20, RouterThrottleImpl.getThrottleRejectExponent(_ctx));
+    }
+
+    @Test
+    public void throttleRejectExponentUnsetPassthroughDefault() {
+        when(_ctx.getProperty("router.throttleRejectExponent", 10)).thenReturn(10);
+        assertEquals(10, RouterThrottleImpl.getThrottleRejectExponent(_ctx));
+    }
+
+    // =====================================================================
+    // TunnelDispatcher.router.tunnel.perTunnelBweDivisor
+    // =====================================================================
+
+    @Test
+    public void perTunnelBweDivisorReturnsTunedOverConfig() {
+        TunnelDispatcher.setPerTunnelBweDivisor(20);
+        assertEquals(20, TunnelDispatcher.getPerTunnelBweDivisor(_ctx));
+    }
+
+    @Test
+    public void perTunnelBweDivisorUnsetFallsBackToConfig() {
+        when(_ctx.getProperty("router.tunnel.perTunnelBweDivisor", 0)).thenReturn(16);
+        assertEquals(16, TunnelDispatcher.getPerTunnelBweDivisor(_ctx));
+    }
+
+    @Test
+    public void perTunnelBweDivisorUnsetFallsBackToMaxTunnels() {
+        when(_ctx.getProperty("router.tunnel.perTunnelBweDivisor", 0)).thenReturn(0);
+        when(_ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
+                             RouterThrottleImpl.defaultMaxTunnels)).thenReturn(42);
+        assertEquals(42, TunnelDispatcher.getPerTunnelBweDivisor(_ctx));
+    }
+
+    @Test
+    public void perTunnelBweDivisorUnsetMaxTunnelsCappedAt100() {
+        when(_ctx.getProperty("router.tunnel.perTunnelBweDivisor", 0)).thenReturn(0);
+        when(_ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
+                             RouterThrottleImpl.defaultMaxTunnels)).thenReturn(5000);
+        assertEquals(100, TunnelDispatcher.getPerTunnelBweDivisor(_ctx));
+    }
+
+    // =====================================================================
+    // ExploreJob.router.exploreBredth
+    // =====================================================================
+
+    @Test
+    public void exploreBredthReturnsTunedOverConfig() {
+        ExploreJob.setExploreBredth(4);
+        assertEquals(4, ExploreJob.getExploreBredth(_ctx));
+    }
+
+    @Test
+    public void exploreBredthUnsetReturnsMinusOne() {
+        assertEquals(-1, ExploreJob.getExploreBredth(_ctx));
     }
 }

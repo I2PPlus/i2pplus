@@ -142,6 +142,33 @@ public class TunnelDispatcher implements Service {
         return def;
     }
 
+    private static volatile int _tunedPerTunnelBweDivisor = -1;
+
+    /**
+     * Set the per-tunnel bandwidth divisor (called by Tuner).
+     * @param div the per-tunnel bandwidth divisor
+     * @since 0.9.72+
+     */
+    public static void setPerTunnelBweDivisor(int div) { _tunedPerTunnelBweDivisor = div; }
+
+    /**
+     * The per-tunnel bandwidth divisor in effect, tuned value if set else
+     * {@code router.tunnel.perTunnelBweDivisor} config, else the derived
+     * default of min(max tunnels, 100).
+     * @param ctx the router context
+     * @return the per-tunnel bandwidth divisor
+     * @since 0.9.72+
+     */
+    public static int getPerTunnelBweDivisor(RouterContext ctx) {
+        int tuned = _tunedPerTunnelBweDivisor;
+        if (tuned > 0) return tuned;
+        int configured = ctx.getProperty("router.tunnel.perTunnelBweDivisor", 0);
+        if (configured > 0) return configured;
+        int maxTunnels = ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
+                                        RouterThrottleImpl.defaultMaxTunnels);
+        return Math.min(maxTunnels, 100);
+    }
+
     /** Validator used for tunnel IVs */
     private BloomFilterIVValidator _validator;
 
@@ -1152,13 +1179,7 @@ public class TunnelDispatcher implements Service {
         int max = (int)(outKBps * share * 1024L);
             // Dynamic divisor: configurable via router.tunnel.perTunnelBweDivisor
             // Falls back to min(maxTunnels, 100) if not set
-            int divisor = _context.getProperty("router.tunnel.perTunnelBweDivisor", 0);
-            if (divisor <= 0) {
-                int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
-                                                      RouterThrottleImpl.defaultMaxTunnels);
-                divisor = Math.min(maxTunnels, 100);
-            }
-            divisor = Math.max(1, divisor);
+            int divisor = Math.max(1, getPerTunnelBweDivisor(_context));
 
             int calculated = max / divisor;
             if (max > 256 * 1024L) {

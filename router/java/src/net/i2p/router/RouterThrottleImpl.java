@@ -406,7 +406,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                 // Clamped [3,20] — below 3 the curve is nearly linear (too aggressive
                 // at moderate load), above 20 it creates a cliff (near-zero rejection
                 // until saturation, then instant 100%).
-                int exponent = Math.max(3, Math.min(20, _context.getProperty("router.throttleRejectExponent", 10)));
+                int exponent = getThrottleRejectExponent(_context);
                 probReject = Math.pow(pctFull, exponent);
                 double rand = _context.random().nextFloat();
                 reject = rand <= probReject;
@@ -530,6 +530,29 @@ public class RouterThrottleImpl implements RouterThrottle {
         int tuned = _tunedMaxProcessingTime;
         if (tuned >= 0) return tuned;
         return ctx.getProperty(PROP_MAX_PROCESSINGTIME, DEFAULT_MAX_PROCESSINGTIME);
+    }
+
+    private static volatile int _tunedThrottleRejectExponent = -1;
+
+    /**
+     * Set the throttle rejection-curve exponent (called by Tuner).
+     * @param exp the rejection exponent in effect
+     * @since 0.9.72+
+     */
+    public static void setThrottleRejectExponent(int exp) { _tunedThrottleRejectExponent = exp; }
+
+    /**
+     * The throttle rejection-curve exponent, tuned value if set else the
+     * {@code router.throttleRejectExponent} config, clamped to the caller's
+     * [3,20] validity window.
+     * @param ctx the router context
+     * @return the rejection exponent
+     * @since 0.9.72+
+     */
+    public static int getThrottleRejectExponent(RouterContext ctx) {
+        int tuned = _tunedThrottleRejectExponent;
+        if (tuned >= 0) return Math.max(3, Math.min(20, tuned));
+        return Math.max(3, Math.min(20, ctx.getProperty("router.throttleRejectExponent", 10)));
     }
 
     private int getMaxProcessingTime() {
