@@ -3,7 +3,8 @@
 param(
     [Parameter(Mandatory=$true)]
     [ValidateSet('Install','Uninstall','Start','Stop','Enable','Disable','Shortcuts','FixPerms')]
-    [string]$Action
+    [string]$Action,
+    [string]$Target
 )
 
 $ErrorActionPreference = 'Stop'
@@ -79,11 +80,10 @@ switch ($Action) {
         New-Shortcut (Join-Path $desktop 'Stop I2P+ Service.lnk') $psExe "$psArgs `"$svcScript`" -Action Stop" $dir (Join-Path $dir 'docs\stop.ico') 0
     }
     'FixPerms' {
-        $target = $args[0]
-        if (-not $target) { $target = $PSScriptRoot }
-        $logPath = Join-Path $target 'fixperms.log'
+        if (-not $Target) { $Target = $PSScriptRoot }
+        $logPath = Join-Path $Target 'fixperms.log'
         # 'echo Y' answers icacls' "are you sure?" prompt (harmless
         # elsewhere); F=full control /c=continue /q=quiet /t=recursive
-        'Y' | & icacls $target /grant "$($env:USERNAME):F" /c /t /q 2>&1 > $logPath
+        'Y' | & icacls $Target /grant "$($env:USERNAME):F" /c /t /q 2>&1 > $logPath
     }
 }
