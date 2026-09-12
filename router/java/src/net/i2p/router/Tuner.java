@@ -3540,7 +3540,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_IB_MSGS_PER_PUMP", "Inbound gateway batch size",
                   SUB_TUNNEL,
 
-                  8, 512, 8, "tunnel.ibgw.queueSize", _context);
+                  8, 1024, 8, "tunnel.ibgw.queueSize", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -3618,7 +3618,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_WINDOW_SIZE", "Initial congestion window",
                   SUB_STREAMING,
 
-                  8, 256, 4, "stream.con.initialRTT.in", _context);
+                  8, 512, 4, "stream.con.initialRTT.in", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -3629,7 +3629,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getInitialWindowSize");
-            return v >= 0 ? v : 16;
+            return v >= 0 ? v : 128;
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -4174,7 +4174,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxSlowStartWindowStatic");
-            return v > 0 ? v : 256;
+            return v > 0 ? v : 1024;
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -4276,14 +4276,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * so gains are paced one step per cycle rather than yanked.
      *
      * <p>Below the recovery floor ({@code max(min, defaultValue / 2)}) and
-     * otherwise healthy, the ceiling climbs toward the factory default; under
-     * hard signals it shrinks one step but never below the recovery floor, so
-     * a depression cannot be torn back down to the floor trim.
+     * otherwise healthy, the ceiling climbs two steps toward the factory
+     * default; under hard signals it shrinks half a step but never below the
+     * recovery floor, so a depression cannot be torn back down to the floor
+     * trim. Climbing twice as fast as it shrinks implements the "ramp fast,
+     * decline slowly" profile while cutting a clean-path ramp from ~8 cycles
+     * to ~4 (~1 min to reach the 4096-message ceiling).
      *
      * @param current current ceiling value (Connection#getGlobalMaxWindowSize)
      * @param min lower bound for the ceiling (inclusive)
      * @param max upper bound for the ceiling (inclusive)
-     * @param step one tuning step, used for each climb or shrink
+     * @param step one tuning step; clean-path climbs use two steps and
+     *              hard-signal shrinks use half a step
      * @param defaultValue factory default ceiling; the recovery floor is max(min, defaultValue / 2)
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN if absent
      * @param dupSize stat {@code stream.con.sendDuplicateSize} in bytes, or NaN if absent
@@ -4301,20 +4305,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // healthy, climb back toward the factory default.
         int recoveryFloor = Math.max(min, defaultValue / 2);
         if (current < recoveryFloor && !congested && !dropping)
-            return Math.min(defaultValue, current + step);
+            return Math.min(defaultValue, current + step * 2);
 
-        // Hard negative signals: drops, congestion, or memory > 60% — shrink one
-        // step, floored at recovery.
+        // Hard negative signals: drops, congestion, or memory > 60% — shrink
+        // half a step, floored at recovery.
         if (dropping || congested || memPressure > 60.0)
-            return Math.max(recoveryFloor, current - step);
+            return Math.max(recoveryFloor, current - Math.max(1, step / 2));
 
-        // Clean path: climb one step toward the absolute cap. The former
+        // Clean path: climb two steps toward the absolute cap. The former
         // BDP-based shrink is gone because low measured bandwidth on a capped
         // connection is an artifact of the cap (see class javadoc) and was
         // never legitimate evidence to reduce it.
         if (current >= max)
             return max;
-        return Math.min(max, current + step);
+        return Math.min(max, current + step * 2);
     }
 
     /**
@@ -4335,7 +4339,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_STREAMING,
 
                   // Step 512: on a clean path the 4096-message ceiling
-                  // (~8 MB/s at 0.89 s RTT) is reached in ~8 cycles (~2 min).
+                  // (~8 MB/s at 0.89 s RTT) is reached in ~4 cycles (~1 min).
                   128, 4096, 512, "stream.con.initialRTT.out", _context);
         }
 
@@ -4347,7 +4351,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Read the current runtime value of this tunable from router config. */
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionInt("getGlobalMaxWindowSize");
-            return v > 0 ? v : 256;
+            return v > 0 ? v : 1024;
         }
 
         /** Read the observed stat value for autotuning decisions. */
@@ -5551,7 +5555,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("router.peerOutboundQueueSize", "Max router outbound messages (per peer)",
                   SUB_ROUTER,
 
-                  50, 1000, 50, "peer.activeProfileCount", _context);
+                  50, 2000, 50, "peer.activeProfileCount", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -9380,7 +9384,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   // Scale max with memory: 1 concurrent msg per 4MB heap, clamped
                   Math.max(1024, Math.min(32768,
                       (int) (SystemVersion.getMaxMemory() / (4 * 1024 * 1024)))),
-                  32, "udp.allowConcurrentActive", _context);
+                  64, "udp.allowConcurrentActive", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -9940,9 +9944,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if ((congested || congestionActive) && cpuFree && memOk) {
                 return Math.min(max, current + step * 4);
             }
-            // High usage + CPU free + memory OK = grow fast (3x step so a
-            // saturated window reaches 8 MB in ~80 s, matching the pre-ramp)
-            if (highUsage && cpuFree && memOk) { return Math.min(max, current + step * 3); }
+            // High usage + CPU free + memory OK = grow fast (4x step so a
+            // saturated window reaches 8 MB in ~60 s, outpacing the 3x
+            // pre-ramp and the 1x shrink below: fast up, slow down)
+            if (highUsage && cpuFree && memOk) { return Math.min(max, current + step * 4); }
             boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
             // Stale-ratchet recovery: a persisted value pinned below the idle
             // floor (e.g. the 64KB freeze from before the param was re-added, or

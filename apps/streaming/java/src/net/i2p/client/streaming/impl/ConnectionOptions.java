@@ -282,10 +282,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_PASSIVE_FLUSH_DELAY = "i2p.streaming.passiveFlushDelay";
 
     /**
-     * RFC 6928 recommends 10; increased to 16 for I2P's high-latency environment.
+     * RFC 6928 recommends 10; raised to 64 in 0.9.48 for I2P's high-latency
+     * environment and to 128 for the 0.9.72+ fast-ramp profile: each stream
+     * starts with up to 128 messages in flight, so the first RTT on a
+     * high-bandwidth path is not spent proving link capacity.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    static volatile int initialWindowSize = 64;
+    static volatile int initialWindowSize = 128;
 
     /** Default maximum number of times a single message will be retransmitted */
     static final int DEFAULT_MAX_SENDS = 30;
@@ -293,7 +296,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Initial window size. */
     static int getInitialWindowSize() { return initialWindowSize; }
     /** Initial window size. */
-    static void setInitialWindowSize(int val) { initialWindowSize = Math.max(4, Math.min(256, val)); }
+    static void setInitialWindowSize(int val) { initialWindowSize = Math.max(4, Math.min(512, val)); }
 
     /**
      *  Reactive cap on concurrent streams (both per-manager inbound budget and the
@@ -406,7 +409,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    static volatile int maxSlowStartWindow = SystemVersion.isSlow() ? 32 : 256;
+    static volatile int maxSlowStartWindow = SystemVersion.isSlow() ? 128 : 1024;
 
     /** Max slow start window static. */
     static int getMaxSlowStartWindowStatic() { return maxSlowStartWindow; }

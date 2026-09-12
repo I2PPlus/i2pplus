@@ -99,7 +99,7 @@ class PumpedTunnelGateway extends TunnelGateway {
      * The maximum inbound messages per pump.
      * @since 0.9.70+
      */
-    public static void setMaxIbMsgsPerPump(int val) { _maxIbMsgsPerPump = Math.max(8, Math.min(512, val)); }
+    public static void setMaxIbMsgsPerPump(int val) { _maxIbMsgsPerPump = Math.max(8, Math.min(1024, val)); }
 
     /**
      * A gateway for a single tunnel hop.

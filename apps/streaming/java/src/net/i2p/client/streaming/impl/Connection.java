@@ -125,13 +125,30 @@ class Connection {
     /** Last congestion highest unacked. */
     private volatile long _lastCongestionHighestUnacked;
     /** Consecutive loss events since the last recovery (graduated backoff).
-     *  Reset in ackPackets() once the lost window is fully recovered.
+     *  Reset in ackPackets() once the lost window is fully recovered, and
+     *  decayed by one tier in retransmit() when a fresh strike arrives more
+     *  than one smoothed RTT after the previous one (see
+     *  {@link #decayLossStrikes(int, long, long, long)}).
      *  Accessed only under the _outboundPacketsLock. */
     private int _lossStrikes;
+    /** Wall-clock ms of the most recent loss strike, for strike decay.
+     *  Same lock discipline as {@link #_lossStrikes}. */
+    private long _lastLossStrikeTime;
     /** Whether the established-connection resume WARN was already logged (once per
      *  connection) when a data packet exceeded its retransmit budget. Reset only
      *  when the connection object is reused. */
     private boolean _establishedResumeWarned;
+    /**
+     *  Fixed-point congestion-avoidance credit for the deterministic growth
+     *  ratchet in {@code ConnectionPacketHandler.adjustWindow}. Increments are
+     *  derived from accumulated ACK credit instead of a per-ACK random draw,
+     *  giving the same expected growth rate as the probabilistic gate without
+     *  RNG noise. Holds the 16-bit fractional remainder of the accumulator.
+     *  Must only be read/written while holding {@link #_outboundPacketsLock};
+     *  zeroed in retransmit() when the window is cut.
+     *  @since 0.9.72+
+     */
+    long _caWindowAccumulator;
 
     // Pacing fields for smooth transmission
     /** Pacing rate in bytes per second. */
@@ -299,7 +316,7 @@ class Connection {
      *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
      *  adjusts based on observed RTT, bandwidth, and loss.
      */
-    public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 384 : 512;
+    public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 768 : 1024;
 
     /**
      *  Absolute ceiling on in-flight packets regardless of BDP estimate.
@@ -1016,17 +1033,24 @@ class Connection {
      *  recovery, so a single failed packet does not collapse the connection
      *  while persistent loss still backs off.
      *
+     *  <p>The 0.9.72+ profile ("ramp fast, decline slowly") makes every tier
+     *  gentler than the classic halves/quarters — a first strike cuts only
+     *  1/8, a second another 1/4, and persistent loss settles at half — so a
+     *  single loss event on a high-BDP connection does not undo an RTT of
+     *  window growth, while genuinely congested paths still concede capacity.
+     *
      *  @param strikes consecutive loss events (&gt;= 1) since the last recovery
      *  @param wsize current window size
      *  @return new window size, floored at 4 (never below a usable minimum)
+     *  @since 0.9.72+
      */
     static int graduatedLossWindow(int strikes, int wsize) {
         if (strikes <= 1) {
-            return Math.max(4, wsize * 3 / 4);
+            return Math.max(4, wsize * 7 / 8);
         } else if (strikes == 2) {
-            return Math.max(4, wsize / 2);
+            return Math.max(4, wsize * 3 / 4);
         } else {
-            return Math.max(4, wsize / 4);
+            return Math.max(4, wsize / 2);
         }
     }
 
@@ -1042,6 +1066,36 @@ class Connection {
      */
     static int graduatedLossSsthresh(int strikes, int wsize, int bwBasedSsthresh) {
         return Math.max(graduatedLossWindow(strikes, wsize), Math.max(bwBasedSsthresh, 1));
+    }
+
+    /**
+     *  Strike decay: a single loss strike is forgiven once at least one
+     *  smoothed RTT (floored at 500 ms) has passed without another strike,
+     *  rolling the graduated backoff back down toward the gentle tier. One-off
+     *  losses are normal on I2P, and keying the decay to elapsed time rather
+     *  than ACK count means a stale lone strike cannot keep the window
+     *  depressed forever, while true back-to-back loss (strikes inside the RTT
+     *  window) still escalates.
+     *
+     *  <p>Pure and side-effect free for unit testing; call sites apply the
+     *  result and refresh {@code _lastLossStrikeTime} under
+     *  {@code _outboundPacketsLock}.
+     *
+     *  @param strikes current consecutive-loss count (&gt;= 0)
+     *  @param lastLossTime wall-clock ms of the most recent strike (&lt;= 0 if none)
+     *  @param now wall-clock ms
+     *  @param smoothedRtt the connection's smoothed RTT in ms (&gt;= 0)
+     *  @return strikes - 1 when at least max(smoothedRtt, 500) ms have elapsed
+     *          since the last strike, otherwise the current count; never below 0
+     *  @since 0.9.72+
+     */
+    static int decayLossStrikes(int strikes, long lastLossTime, long now, long smoothedRtt) {
+        if (strikes <= 0)
+            return 0;
+        long minDecayInterval = Math.max(smoothedRtt, 500);
+        if (lastLossTime > 0 && now - lastLossTime >= minDecayInterval)
+            return Math.max(0, strikes - 1);
+        return Math.max(0, strikes);
     }
 
     /**
@@ -3023,12 +3077,16 @@ if (remoteSilentTooLong(_lastReceivedOn,
                         _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
                     }
                     int wsize = _options.getWindowSize();
+                    long now = _context.clock().now();
+                    _lossStrikes = decayLossStrikes(_lossStrikes, _lastLossStrikeTime, now, _options.getRTT());
                     _lossStrikes++;
+                    _lastLossStrikeTime = now;
                     int strikes = _lossStrikes;
+                    _caWindowAccumulator = 0;
                     int bwSsthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                     bwSsthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), bwSsthresh);
                     // Graduated cut: a single failed packet shrinks the window only
-                    // mildly (3/4), escalated strikes back off harder (1/2, then 1/4).
+                    // mildly (7/8), escalated strikes back off harder (3/4, then 1/2).
                     // ssthresh is kept at least the new window so slow-start can
                     // regrow quickly after recovery instead of crawling at ~4.
                     int maxSS = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
@@ -3461,6 +3519,7 @@ if (remoteSilentTooLong(_lastReceivedOn,
                 if (_isChoked) {
                     congestionOccurred();
                     _options.setWindowSize(1);
+                    _caWindowAccumulator = 0;
                 } else if (_ackSinceCongestion.get() && _packet.getSequenceNum() > _lastCongestionHighestUnacked) {
                     // only shrink the window once per window
                     congestionOccurred();
@@ -3473,7 +3532,10 @@ if (remoteSilentTooLong(_lastReceivedOn,
                      */
                     _options.doubleRTO();
 
+                    _lossStrikes = decayLossStrikes(_lossStrikes, _lastLossStrikeTime, _context.clock().now(), _options.getRTT());
                     _lossStrikes++;
+                    _lastLossStrikeTime = _context.clock().now();
+                    _caWindowAccumulator = 0;
                     if (_packet.getNumSends() == 1) {
                         int strikes = _lossStrikes;
                         int bwSsthresh = Math.max(Math.round(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT() * SSTHR_BW_FACTOR),

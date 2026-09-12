@@ -188,14 +188,14 @@ public class PeerState {
 
     /**
      * Max concurrent messages per peer (called by Tuner).
-     * Scales with available RAM: ~1/8 of RAM in MB, clamped 256-4096.
+     * Scales with available RAM: ~1/4 of RAM in MB, clamped 256-4096.
      *
      * @param max the max concurrent messages to set
      * @since 0.9.70+
      */
     public static void setMaxConcurrentMessages(int max) {
         int def = SystemVersion.isSlow() ? 64 : 256;
-        int ramScaled = (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024));
+        int ramScaled = (int) (SystemVersion.getMaxMemory() / (4 * 1024 * 1024));
         int hardMax = Math.max(256, Math.min(4096, ramScaled));
         MAX_CONCURRENT_MSGS = Math.max(def / 2, Math.min(hardMax, max));
     }
@@ -333,13 +333,15 @@ public class PeerState {
 
     /**
      * Heap-scaled CWIN ceiling: 1MB minimum, up to 16MB, roughly 1MB per
-     * 512MB of heap. Replaces the fixed 1MB cap that clamped tuner growth
-     * and kept high-memory routers below 1MB/s throughput.
+     * 256MB of heap. Replaces the fixed 1MB cap that clamped tuner growth
+     * and kept high-memory routers below 1MB/s throughput (0.9.70+), and
+     * doubled from heap/512 to heap/256 in 0.9.72+ so a 4GB router can
+     * reach the streaming ceiling (~8 MB/s) instead of topping out at 2MB/s.
      *
      * @since 0.9.70+
      */
     static final int MAX_SEND_WINDOW_CEILING =
-            Math.max(1024 * 1024, Math.min(16 * 1024 * 1024, (int) (SystemVersion.getMaxMemory() / 512)));
+            Math.max(1024 * 1024, Math.min(16 * 1024 * 1024, (int) (SystemVersion.getMaxMemory() / 256)));
 
     /*
      * Was 32 before 0.9.2, but since the streaming lib goes up to 128,

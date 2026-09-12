@@ -118,7 +118,7 @@ public class TunerSendWindowTargetTest {
     @Test
     public void highUsageGrowsWindow() {
         double observed = (int) (BASE * 0.8);
-        assertEquals(Math.min(MAX, BASE + STEP * 3),
+        assertEquals(Math.min(MAX, BASE + STEP * 4),
                      Tuner.sendWindowTarget(BASE, MIN, MAX, STEP, IDLE_FLOOR,
                                             observed, 0.0, 0.2,
                                             0.0, 0.0, observed,

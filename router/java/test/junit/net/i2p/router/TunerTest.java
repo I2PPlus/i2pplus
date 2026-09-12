@@ -1358,10 +1358,10 @@ public class TunerTest {
 
     // params: current, min, max, step, defaultValue, failLifetime, dupSize, memPct
 
-    /** Clean path climbs one step toward the absolute cap — the ramp lever. */
+    /** Clean path climbs two steps toward the absolute cap — the ramp lever. */
     @Test
-    public void testMaxWindowCleanClimbsOneStep() {
-        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+    public void testMaxWindowCleanClimbsTwoSteps() {
+        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, Double.NaN));
     }
 
@@ -1378,42 +1378,42 @@ public class TunerTest {
      *  shrink, regardless of how low the bandwidth average is. */
     @Test
     public void testMaxWindowLowBdpNoLongerShrinks() {
-        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, Double.NaN));
-        assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(896, 128, 4096, 128, 512,
+        assertEquals(1152, Tuner.computeStreamingMaxWindowTarget(896, 128, 4096, 128, 512,
                                                                  Double.NaN, Double.NaN, Double.NaN));
     }
 
-    /** Duplicate retransmits (loss pressure) shrink one step. */
+    /** Duplicate retransmits (loss pressure) shrink half a step. */
     @Test
     public void testMaxWindowShrinksOnDuplicates() {
-        assertEquals(896, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
+        assertEquals(960, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
                                                                 Double.NaN, 600.0, Double.NaN));
     }
 
-    /** Gateway congestion (send-message-failure lifetime) shrinks one step. */
+    /** Gateway congestion (send-message-failure lifetime) shrinks half a step. */
     @Test
     public void testMaxWindowShrinksOnCongestion() {
-        assertEquals(896, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
+        assertEquals(960, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
                                                                 9000.0, Double.NaN, Double.NaN));
-        assertEquals(512, Tuner.computeStreamingMaxWindowTarget(640, 128, 4096, 128, 512,
+        assertEquals(576, Tuner.computeStreamingMaxWindowTarget(640, 128, 4096, 128, 512,
                                                                 9000.0, Double.NaN, Double.NaN));
     }
 
     /** Memory pressure above 60% shrinks; at exactly 60% the path is still clean. */
     @Test
     public void testMaxWindowMemoryPressureBoundary() {
-        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, 60.0));
-        assertEquals(512, Tuner.computeStreamingMaxWindowTarget(640, 128, 4096, 128, 512,
+        assertEquals(576, Tuner.computeStreamingMaxWindowTarget(640, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, 60.1));
     }
 
-    /** Below the recovery floor (max(min, default/2)) and healthy, climb toward
-     *  the factory default. */
+    /** Below the recovery floor (max(min, default/2)) and healthy, climb two steps
+     *  toward the factory default. */
     @Test
     public void testMaxWindowBelowFloorClimbsToDefault() {
-        assertEquals(256, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
+        assertEquals(384, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, Double.NaN));
     }
 
@@ -1429,10 +1429,10 @@ public class TunerTest {
     /** Missing signals are treated as clean (never a reason to shrink). */
     @Test
     public void testMaxWindowMissingSignalsTreatClean() {
-        assertEquals(640, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, Double.NaN));
         double nan = Double.NaN;
-        assertEquals(256, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
+        assertEquals(384, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
                                                                 nan, nan, nan));
     }
 

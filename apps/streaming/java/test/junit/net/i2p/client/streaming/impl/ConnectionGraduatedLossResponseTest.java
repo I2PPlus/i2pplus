@@ -7,9 +7,16 @@ import org.junit.Test;
 /**
  * Tests the graduated loss response in {@link Connection}: the congestion
  * window is cut by an amount that scales with consecutive loss events
- * ({@link Connection#graduatedLossWindow(int, int)}), and the slow-start
+ * ({@link Connection#graduatedLossWindow(int, int)}), the slow-start
  * threshold keeps that graduated window as a floor so the connection can
- * regrow quickly after recovery ({@link Connection#graduatedLossSsthresh(int, int, int)}).
+ * regrow quickly after recovery ({@link Connection#graduatedLossSsthresh(int, int, int)}),
+ * and a stale lone strike decays back toward the gentle tier after one
+ * smoothed RTT has passed ({@link Connection#decayLossStrikes(int, long, long, long)}).
+ *
+ * <p>The 0.9.72+ profile implements "ramp fast, decline slowly": the tiers
+ * are gentler (7/8, 3/4, 1/2 instead of 3/4, 1/2, 1/4) so a single loss on a
+ * high-BDP connection does not undo an RTT of window growth, while genuinely
+ * persistent loss still concedes half the window.
  *
  * <p>These are the pure decision helpers behind the RetransmitEvent RTO cut
  * and the ResendPacketEvent fast-retransmit cut.  A single failed packet
@@ -23,28 +30,28 @@ import org.junit.Test;
  */
 public class ConnectionGraduatedLossResponseTest {
 
-    /** First loss: mild 3/4 cut, so a single failed packet keeps most of the window. */
+    /** First loss: mild 7/8 cut, so a single failed packet keeps most of the window. */
     @Test
     public void testFirstStrikeWindowIsMild() {
-        assertEquals(192, Connection.graduatedLossWindow(1, 256));
-        assertEquals(384, Connection.graduatedLossWindow(1, 512));
-        assertEquals(6, Connection.graduatedLossWindow(1, 8));   // 3/4 rounds down
+        assertEquals(224, Connection.graduatedLossWindow(1, 256));
+        assertEquals(448, Connection.graduatedLossWindow(1, 512));
+        assertEquals(7, Connection.graduatedLossWindow(1, 8));   // 7/8 rounds down
     }
 
-    /** Second consecutive loss: classic RFC-style halving. */
+    /** Second consecutive loss: 3/4 cut — still gentle, not the classic halving. */
     @Test
-    public void testSecondStrikeWindowHalves() {
-        assertEquals(128, Connection.graduatedLossWindow(2, 256));
-        assertEquals(256, Connection.graduatedLossWindow(2, 512));
-        assertEquals(5, Connection.graduatedLossWindow(2, 10));
+    public void testSecondStrikeWindowThreeQuarters() {
+        assertEquals(192, Connection.graduatedLossWindow(2, 256));
+        assertEquals(384, Connection.graduatedLossWindow(2, 512));
+        assertEquals(7, Connection.graduatedLossWindow(2, 10));
     }
 
-    /** Three or more consecutive losses: quarter the window (persistent loss). */
+    /** Three or more consecutive losses: halve the window (persistent loss). */
     @Test
-    public void testThirdStrikeWindowQuarters() {
-        assertEquals(64, Connection.graduatedLossWindow(3, 256));
-        assertEquals(64, Connection.graduatedLossWindow(4, 256));
-        assertEquals(6, Connection.graduatedLossWindow(3, 24));
+    public void testThirdStrikeWindowHalves() {
+        assertEquals(128, Connection.graduatedLossWindow(3, 256));
+        assertEquals(128, Connection.graduatedLossWindow(4, 256));
+        assertEquals(12, Connection.graduatedLossWindow(3, 24));
     }
 
     /** Never collapse below a usable minimum, no matter how many strikes. */
@@ -106,8 +113,50 @@ public class ConnectionGraduatedLossResponseTest {
     @Test
     public void testPersistentLossConverges() {
         int wsize = 256;
-        // repeated strikes converge to wsize/4, never below 4
-        assertEquals(64, Connection.graduatedLossWindow(10, wsize));
-        assertEquals(64, Connection.graduatedLossSsthresh(10, wsize, 1));
+        // repeated strikes converge to wsize/2, never below 4
+        assertEquals(128, Connection.graduatedLossWindow(10, wsize));
+        assertEquals(128, Connection.graduatedLossSsthresh(10, wsize, 1));
+    }
+
+    // =====================================================================
+    // Strike decay
+    // =====================================================================
+
+    /** No strikes: nothing to decay. */
+    @Test
+    public void testDecayNoStrikesIsZero() {
+        assertEquals(0, Connection.decayLossStrikes(0, 1_000L, 1_100L, 500L));
+        assertEquals(0, Connection.decayLossStrikes(-3, 1_000L, 1_600L, 500L));
+    }
+
+    /** A fresh strike (less than one RTT old) never decays — burst escalation intact. */
+    @Test
+    public void testDecayFreshStrikeHolds() {
+        assertEquals(3, Connection.decayLossStrikes(3, 1_000L, 1_400L, 500L));
+        // exactly the RTT boundary is still too fresh (>= required)
+        assertEquals(2, Connection.decayLossStrikes(2, 1_000L, 1_499L, 500L));
+    }
+
+    /** Strikes older than max(smoothedRtt, 500ms) decay by one tier. */
+    @Test
+    public void testDecayStaleStrikeFires() {
+        assertEquals(2, Connection.decayLossStrikes(3, 1_000L, 2_500L, 500L));
+        assertEquals(1, Connection.decayLossStrikes(2, 1_000L, 3_001L, 2000L));
+    }
+
+    /** Never drops below zero. */
+    @Test
+    public void testDecayFlooredAtZero() {
+        assertEquals(0, Connection.decayLossStrikes(1, 1_000L, 2_501L, 500L));
+        assertEquals(0, Connection.decayLossStrikes(1, 1_000L, Long.MAX_VALUE, 500L));
+    }
+
+    /** Unknown RTT uses the 500ms floor; unknown last-loss time never decays. */
+    @Test
+    public void testDecayRttFloorAndUnknownTime() {
+        assertEquals(1, Connection.decayLossStrikes(2, 1_000L, 1_550L, 0));
+        // no recorded loss time: cannot prove the strike is stale
+        assertEquals(2, Connection.decayLossStrikes(2, 0, 100_000L, 500L));
+        assertEquals(2, Connection.decayLossStrikes(2, -1, 100_000L, 500L));
     }
 }

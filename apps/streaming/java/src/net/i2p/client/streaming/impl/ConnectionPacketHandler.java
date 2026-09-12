@@ -522,10 +522,18 @@ class ConnectionPacketHandler {
                             int deficit = maxWin - newWindowSize;
                             int multiplier = 1 + (8 * deficit) / Math.max(1, maxWin);
                             effAcked = Math.max(acked, acked * multiplier);
+                            // Deterministic fixed-point ratchet instead of the old
+                            // per-ACK random draw: accumulate credit proportional to
+                            // effAcked / (caFactor * window) and harvest only the whole
+                            // increments. Same expected growth rate as the probabilistic
+                            // gate, but reproducible and free of RNG noise. At max window
+                            // the accumulator holds its remainder while the window is
+                            // capped, so capacity granted at the plateau is not lost.
+                            long accum = con._caWindowAccumulator;
+                            accum = caGrowthCredit(accum, effAcked, caFactor, newWindowSize);
+                            newWindowSize += caWindowIncrements(accum);
+                            con._caWindowAccumulator = caWindowRemainder(accum);
                         }
-                        int shouldIncrement = _context.random().nextInt(Math.max(1, caFactor * newWindowSize));
-                        if (shouldIncrement < effAcked)
-                            newWindowSize++;
                         if (_log.shouldDebug())
                             _log.debug("Congestion Avoidance ACKs = " + acked + " for " + con);
                     }
@@ -554,6 +562,50 @@ class ConnectionPacketHandler {
             con.windowAdjusted();
             return congested;
         }
+    }
+
+    /**
+     *  Credit increment for the deterministic congestion-avoidance ratchet.
+     *  Accumulated in 16.16 fixed-point; each whole unit corresponds to one
+     *  packet-in-flight increment on the congestion window.
+     *
+     *  <p>The expected value equals {@code effAcked / (caFactor * windowSize)},
+     *  which is the probability that the old random gate would have
+     *  incremented.
+     *
+     *  @param accum current accumulator
+     *  @param effAcked effective number of packets ACKed this round
+     *  @param caFactor congestion-avoidance growth divisor
+     *  @param windowSize current congestion window
+     *  @return updated accumulator
+     *  @since 0.9.72+
+     */
+    static long caGrowthCredit(long accum, int effAcked, int caFactor, int windowSize) {
+        long denom = (long) Math.max(1, caFactor) * Math.max(1, windowSize);
+        return accum + (((long) effAcked) << 16) / Math.max(1, denom);
+    }
+
+    /**
+     *  Whole-packet increments harvested from the fixed-point accumulator.
+     *
+     *  @param accum accumulated credit
+     *  @return number of whole window increments
+     *  @since 0.9.72+
+     */
+    static int caWindowIncrements(long accum) {
+        return (int) Math.min(Integer.MAX_VALUE, accum >> 16);
+    }
+
+    /**
+     *  Fractional remainder after harvesting whole increments; carries
+     *  over into the next ACK event.
+     *
+     *  @param accum accumulated credit
+     *  @return fractional remainder in [0, 65535]
+     *  @since 0.9.72+
+     */
+    static long caWindowRemainder(long accum) {
+        return accum & 0xFFFFL;
     }
 
     /**
