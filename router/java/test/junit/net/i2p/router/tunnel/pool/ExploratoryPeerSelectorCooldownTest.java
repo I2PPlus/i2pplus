@@ -72,6 +72,11 @@ public class ExploratoryPeerSelectorCooldownTest {
         when(clock.now()).thenReturn(NOW);
         when(_ctx.clock()).thenReturn(clock);
 
+        // The exploratory pool has a non-zero length variance by default
+        // (TunnelPoolSettings' DEFAULT_*_EXPL_LENGTH_VARIANCE = 1), so getLength()
+        // draws from random(); stub it to avoid a null RandomSource NPE.
+        when(_ctx.random()).thenReturn(mock(net.i2p.util.RandomSource.class));
+
         when(_ctx.profileManager()).thenReturn(mock(net.i2p.router.ProfileManager.class));
         _po = mock(ProfileOrganizer.class);
         when(_ctx.profileOrganizer()).thenReturn(_po);
