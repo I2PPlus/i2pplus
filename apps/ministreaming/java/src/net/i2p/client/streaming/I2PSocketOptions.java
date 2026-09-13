@@ -9,6 +9,14 @@ public interface I2PSocketOptions {
     public static final String PROP_BUFFER_SIZE = "i2p.streaming.bufferSize";
     /** How long wait for the ACK from a SYN, in milliseconds. */
     public static final String PROP_CONNECT_TIMEOUT = "i2p.streaming.connectTimeout";
+    /**
+     *  Absolute cap on the time an outbound connect will wait for a SYN ACK,
+     *  in milliseconds.  When set per-connection, overrides the router-wide
+     *  {@code i2p.streaming.maxConnectTimeout} default; when absent, the global
+     *  value applies.
+     *  @since 0.9.71+
+     */
+    public static final String PROP_MAX_CONNECT_TIMEOUT = "i2p.streaming.maxConnectTimeout";
     /** How long to block on read. */
     public static final String PROP_READ_TIMEOUT = "i2p.streaming.readTimeout";
     /** How long to block on write/flush */

@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketAddress;
+import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.irc.DCCClientManager;
@@ -66,6 +67,10 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         if (opts.getProperty("i2p.streaming.connectDelay") == null)
             opts.setProperty("i2p.streaming.connectDelay", "150");
         opts.remove("i2p.streaming.maxWindowSize");
+        if (opts.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
+            opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "180000");
+        if (opts.getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT) == null)
+            opts.setProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT, "300000");
         if (opts.getProperty("i2cp.leaseSetEncType") == null)
             opts.setProperty("i2cp.leaseSetEncType", "4,0");
 

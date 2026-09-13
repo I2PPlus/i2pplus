@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketException;
+import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
@@ -251,8 +252,18 @@ class Connection {
     /** Default connect timeout in milliseconds. */
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
     /** @since 0.9.70+ */
-    static long getMaxConnectTimeout() {
-        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxConnectTimeout", 75*1000);
+    static long getGlobalMaxConnectTimeout() {
+        return I2PAppContext.getGlobalContext().getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT, 75*1000);
+    }
+    /**
+     *  Absolute cap on this connection's connect window.
+     *  Uses the per-connection override (ConnectionOptions#getMaxConnectTimeout())
+     *  when set, otherwise the router-wide i2p.streaming.maxConnectTimeout.
+     *  @since 0.9.71+
+     */
+    long getMaxConnectTimeout() {
+        long override = _options.getMaxConnectTimeout();
+        return override > 0 ? override : getGlobalMaxConnectTimeout();
     }
 
     /**

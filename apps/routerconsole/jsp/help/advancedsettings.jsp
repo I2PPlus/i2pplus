@@ -542,7 +542,7 @@
 <tr><td><%=intl._t("Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxConnectTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 75000 (75 seconds)]")%></td></tr>
+<tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxPingTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]")%></td></tr>

@@ -32,6 +32,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private volatile int _windowSize;
     /** Connection traffic profile (only bulk supported). */
     private int _profile;
+    /** Max connect timeout override in ms, 0 = use global i2p.streaming.maxConnectTimeout. */
+    private long _maxConnectTimeout;
     /** Smoothed rtt. */
     private int _smoothedRtt;
     /** Min rtt. */
@@ -206,6 +208,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /** Delay before starting connection setup, in ms */
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
+    /** See {@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT} */
+    public static final String PROP_MAX_CONNECT_TIMEOUT = I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT;
     /** Maximum size of a streaming message, in bytes */
     public static final String PROP_MAX_MESSAGE_SIZE = "i2p.streaming.maxMessageSize";
     /** Maximum number of times a message is resent */
@@ -571,6 +575,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public void updateAll(ConnectionOptions opts) {
         setConnectTimeout(opts.getConnectTimeout());
+        setMaxConnectTimeout(opts.getMaxConnectTimeout());
         setReadTimeout(opts.getReadTimeout());
         setWriteTimeout(opts.getWriteTimeout());
         setMaxBufferSize(opts.getMaxBufferSize());
@@ -587,6 +592,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private void update(ConnectionOptions opts) {
             setMaxWindowSize(opts.getMaxWindowSize());
             setConnectDelay(opts.getConnectDelay());
+            setMaxConnectTimeout(opts.getMaxConnectTimeout());
             setProfile(opts.getProfile());
             setPassiveFlushDelay(opts.getPassiveFlushDelay());
             setRTTDev(opts.getRTTDev());
@@ -658,6 +664,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             if (val > 0) setMaxWindowSize(val);
         }
         applyInt(opts, PROP_CONNECT_DELAY, -1, onlyIfSet, this::setConnectDelay);
+        if (opts.getProperty(PROP_MAX_CONNECT_TIMEOUT) != null) {
+            long val = getInt(opts, PROP_MAX_CONNECT_TIMEOUT, 0);
+            if (val > 0) setMaxConnectTimeout(val);
+        }
         applyInt(opts, PROP_PROFILE, PROFILE_BULK, onlyIfSet, this::setProfile);
         applyInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE, onlyIfSet, this::setMaxMessageSize);
         applyInt(opts, PROP_INITIAL_RESEND_DELAY, defaultRetransmitDelay, onlyIfSet, this::setResendDelay);
@@ -728,6 +738,27 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param delayMs delay before starting connection, in ms
      */
     public void setConnectDelay(int delayMs) {_connectDelay = delayMs;}
+
+    /**
+     * Absolute cap on the time an outbound connect waits for a SYN ACK.
+     * 0 (the default) is not a real cap; the router-wide
+     * {@link #PROP_MAX_CONNECT_TIMEOUT} value is used instead.
+     *
+     * @return cap in ms, or 0 to use the global default
+     * @since 0.9.71+
+     */
+    public long getMaxConnectTimeout() {return _maxConnectTimeout;}
+
+    /**
+     * Set an absolute cap on the time an outbound connect waits for a SYN ACK.
+     * Overrides the router-wide {@link #PROP_MAX_CONNECT_TIMEOUT} value for
+     * this connection.  This is what lets per-tunnel client options (e.g. the
+     * IRC client tunnel) raise the ceiling above the global default.
+     *
+     * @param maxConnectTimeoutMs cap in ms, or &lt;= 0 to use the global default
+     * @since 0.9.71+
+     */
+    public void setMaxConnectTimeout(long maxConnectTimeoutMs) {_maxConnectTimeout = maxConnectTimeoutMs;}
 
     /**
      * Sign all packets or only SYN/FIN? Unused — no property exists, always false.
