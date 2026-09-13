@@ -110,6 +110,18 @@ class NegativeLookupCache {
     }
 
     /**
+     * Clears the transient failure count for the given hash only.
+     * Permanent negative entries ({@link #failPermanently}) are left intact,
+     * so a confirmed-bad destination cannot be re-probed into searching.
+     *
+     * @param h the hash to clear
+     * @since 0.9.72+
+     */
+    public void clear(Hash h) {
+        counter.clear(h);
+    }
+
+    /**
      * Clears the negative cache and bad destinations.
      *
      * @since 0.9.16

@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import net.i2p.data.Certificate;
 import net.i2p.data.Hash;
+import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
+import net.i2p.data.TunnelId;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.data.router.RouterIdentity;
@@ -56,6 +58,17 @@ public class TransientDataStoreTest {
         ri.setIdentity(ident);
         ri.setPublished(_context.clock().now());
         return ri;
+    }
+
+    /** A single-lease LeaseSet whose sole lease ends at endDate. */
+    private LeaseSet createLeaseSet(long endDate) {
+        LeaseSet ls = new LeaseSet();
+        Lease l = new Lease();
+        l.setGateway(new Hash());
+        l.setTunnelId(new TunnelId(1234));
+        l.setEndDate(endDate);
+        ls.addLease(l);
+        return ls;
     }
 
     @Test
@@ -222,6 +235,61 @@ public class TransientDataStoreTest {
         LeaseSet ls = new LeaseSet();
         assertTrue(_store.put(key, ls));
         assertEquals(1, _store.countLeaseSets());
+    }
+
+    @Test
+    public void testReplaceWithNewer() {
+        Hash key = randomHash();
+        long now = _context.clock().now();
+        LeaseSet stored = createLeaseSet(now + 60 * 1000);
+        LeaseSet incoming = createLeaseSet(now + 120 * 1000);
+        assertTrue(_store.put(key, stored));
+        assertTrue("Newer copy must replace a current entry", _store.put(key, incoming));
+        assertSame(incoming, _store.get(key));
+    }
+
+    @Test
+    public void testRejectDuplicateWhileCurrent() {
+        Hash key = randomHash();
+        long end = _context.clock().now() + 300 * 1000;
+        LeaseSet stored = createLeaseSet(end);
+        LeaseSet incoming = createLeaseSet(end);
+        assertTrue(_store.put(key, stored));
+        assertFalse("Same-dated current copy must not clobber", _store.put(key, incoming));
+        assertSame(stored, _store.get(key));
+    }
+
+    @Test
+    public void testRejectOlderWhileCurrent() {
+        Hash key = randomHash();
+        long now = _context.clock().now();
+        LeaseSet stored = createLeaseSet(now + 60 * 1000);
+        LeaseSet incoming = createLeaseSet(now - 120 * 1000);
+        assertTrue(_store.put(key, stored));
+        assertFalse("Older copy must not clobber a current entry", _store.put(key, incoming));
+        assertSame(stored, _store.get(key));
+    }
+
+    @Test
+    public void testReplaceLapsedEqualDatedCopy() {
+        Hash key = randomHash();
+        long end = _context.clock().now() - 60 * 1000;
+        LeaseSet stored = createLeaseSet(end);
+        LeaseSet incoming = createLeaseSet(end);
+        assertTrue(_store.put(key, stored));
+        assertTrue("Same-dated copy must refresh a lapsed entry", _store.put(key, incoming));
+        assertSame(incoming, _store.get(key));
+    }
+
+    @Test
+    public void testReplaceLapsedOlderCopy() {
+        Hash key = randomHash();
+        long now = _context.clock().now();
+        LeaseSet stored = createLeaseSet(now - 60 * 1000);
+        LeaseSet incoming = createLeaseSet(now - 120 * 1000);
+        assertTrue(_store.put(key, stored));
+        assertTrue("Older-dated copy must refresh a lapsed entry", _store.put(key, incoming));
+        assertSame(incoming, _store.get(key));
     }
 
     @Test

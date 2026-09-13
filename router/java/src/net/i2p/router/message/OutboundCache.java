@@ -98,6 +98,44 @@ public class OutboundCache {
      */
     static final long LS_FAIL_COOLDOWN_MS = 30 * 1000L;
 
+    /**
+     * A destination whose LeaseSet was valid within this window is treated as
+     * "transiently unreachable", not confirmed dead, so a missing local copy
+     * must not hard-fail sends for long: lookups keep being re-probed
+     * (see {@link #shouldSkipLeaseSetSend}).
+     *
+     * @since 0.9.72+
+     */
+    static final long TRANSIENT_GAP_GRACE_MS = 10 * 60 * 1000L;
+
+    /**
+     * Minimum gap between real (negative-cache-clearing) LeaseSet lookups for a
+     * destination whose LeaseSet was valid recently. Deduplicates concurrent
+     * sends while still allowing one recovery probe per window.
+     *
+     * @since 0.9.72+
+     */
+    static final long LS_PROBE_INTERVAL_MS = 30 * 1000L;
+
+    /**
+     * Timestamp (epoch ms) when a valid LeaseSet for the destination was last
+     * observed locally (set on local find and on successful send).
+     * Pruned by {@code OCMOSJCacheCleaner}.
+     *
+     * @since 0.9.72+
+     */
+    final ConcurrentHashMap<Hash, Long> lsLastValid = new ConcurrentHashMap<>(128, 0.9f, 16);
+
+    /**
+     * Timestamp (epoch ms) when the most recent real LeaseSet lookup for the
+     * destination started. Used to deduplicate concurrent sends to a
+     * recently-valid destination that is undergoing a transient gap.
+     * Pruned by {@code OCMOSJCacheCleaner}.
+     *
+     * @since 0.9.72+
+     */
+    final ConcurrentHashMap<Hash, Long> lsLastLookup = new ConcurrentHashMap<>(128, 0.9f, 16);
+
     private final RouterContext _context;
 
     private static final int CLEAN_INTERVAL = 2 * 60 * 1000; // 2 minutes cleaning interval
@@ -315,6 +353,60 @@ public class OutboundCache {
     }
 
     /**
+     * Decide whether a send to a destination whose LeaseSet was not found
+     * locally should be skipped without performing a lookup.
+     *
+     * <p>Failure can be confirmed or transient. A destination whose LeaseSet
+     * was valid within {@code transientGraceMs} is a <em>transient gap</em>:
+     * skipping must only deduplicate concurrent sends (one real probe every
+     * {@code probeIntervalMs}), never suppress the recovery search itself.
+     * A destination with no recent validity is treated as confirmed-dead and
+     * the full cooldown fast-fail applies.
+     *
+     * @param cooldownEnd end time of the fail cooldown, or null if none (epoch ms)
+     * @param now current time in ms
+     * @param lastValid last time a valid LeaseSet was observed, or null (epoch ms)
+     * @param lastLookup last time a real lookup started, or null (epoch ms)
+     * @param transientGraceMs treat as transient gap if now - lastValid <= this
+     * @param probeIntervalMs minimum gap between real lookups for a transient gap
+     * @return true if the send should be skipped (dieFatal), false to probe
+     * @since 0.9.72+
+     */
+    static boolean shouldSkipLeaseSetSend(Long cooldownEnd, long now, Long lastValid,
+                                          Long lastLookup, long transientGraceMs, long probeIntervalMs) {
+        if (cooldownEnd == null || now >= cooldownEnd) {return false;}
+        if (lastValid != null && now - lastValid <= transientGraceMs) {
+            return lastLookup != null && now - lastLookup < probeIntervalMs;
+        }
+        return true;
+    }
+
+    /**
+     * Prunes last-valid timestamps older than the transient-gap grace window
+     * plus one cleanup interval (so a two-minute slack is kept).
+     *
+     * @param ctx the router context for current time.
+     * @param mc  the last-valid cache to clean.
+     * @since 0.9.72+
+     */
+    private static void cleanLsLastValid(final RouterContext ctx, final Map<Hash, Long> mc) {
+        final long cutoff = ctx.clock().now() - TRANSIENT_GAP_GRACE_MS - CLEAN_INTERVAL;
+        mc.entrySet().removeIf(e -> e.getValue() < cutoff);
+    }
+
+    /**
+     * Prunes last-lookup timestamps older than two probe intervals.
+     *
+     * @param ctx the router context for current time.
+     * @param mc  the last-lookup cache to clean.
+     * @since 0.9.72+
+     */
+    private static void cleanLsLastLookup(final RouterContext ctx, final Map<Hash, Long> mc) {
+        final long cutoff = ctx.clock().now() - 2 * LS_PROBE_INTERVAL_MS;
+        mc.entrySet().removeIf(e -> e.getValue() < cutoff);
+    }
+
+    /**
      * Internal timer event that periodically cleans all caches.
      */
     private class OCMOSJCacheCleaner extends SimpleTimer2.TimedEvent {
@@ -336,6 +428,8 @@ public class OutboundCache {
             cleanReplyCache(_context, lastReplyRequestCache);
             cleanMultihomedCache(_context, multihomedCache);
             cleanLsFailCooldown(_context, lsFailCooldown);
+            cleanLsLastValid(_context, lsLastValid);
+            cleanLsLastLookup(_context, lsLastLookup);
             schedule(CLEAN_INTERVAL);
         }
     }

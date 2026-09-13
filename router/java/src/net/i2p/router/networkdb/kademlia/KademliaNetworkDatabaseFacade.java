@@ -1904,7 +1904,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         LeaseSet rv;
         try {
             rv = (LeaseSet)_ds.get(key);
-            if (rv != null && !force && !isNewer(leaseSet, rv)) {
+            if (rv != null && !force && !shouldAcceptLeaseSet(rv, leaseSet, _context.clock().now())) {
                 if (_log.shouldDebug()) {
                     _log.debug("Not storing LeaseSet [" + key.toBase32().substring(0,8) + "] -> Local copy is newer");
                 }
@@ -2071,6 +2071,32 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return a.getEarliestLeaseDate() > ((LeaseSet2) b).getPublished();
         }
         return a.getEarliestLeaseDate() > b.getEarliestLeaseDate();
+    }
+
+    /**
+     * Determine whether an incoming LeaseSet may replace the currently stored copy.
+     *
+     * The anti-clobber rule: a strictly-newer incoming copy always replaces the
+     * stored copy; an equal- or older-dated incoming copy is rejected so a late
+     * echo or duplicate cannot clobber fresher data (see {@link #isNewer}).
+     *
+     * Exception: when the stored copy has lapsed - its latest lease ends within
+     * {@link net.i2p.Router#CLOCK_FUDGE_FACTOR} of {@code now} - the stored copy
+     * carries no reachability value, so any incoming copy (still validated by the
+     * caller before {@link #store}) is accepted to restore service.  Without this,
+     * a hidden service that re-publishes the same LeaseSet2 generation (unchanged
+     * publish date) can never refresh a lapsed local copy, leaving the destination
+     * unreachable until the service happens to generate a brand-new LeaseSet2.
+     *
+     * @param stored the currently stored copy, non-null
+     * @param incoming the incoming copy, non-null
+     * @param now the current time in ms
+     * @return true if the incoming copy should replace the stored copy
+     * @since 0.9.71+
+     */
+    static boolean shouldAcceptLeaseSet(LeaseSet stored, LeaseSet incoming, long now) {
+        if (isNewer(incoming, stored)) {return true;}
+        return stored.getLatestLeaseDate() <= now - Router.CLOCK_FUDGE_FACTOR;
     }
 
 
@@ -3053,6 +3079,21 @@ return false;
         boolean rv = _negativeCache.isCached(key);
         if (rv) {_context.statManager().addRateData("netDb.negativeCache", 1);}
         return rv;
+    }
+
+    /**
+     * Clear any transient (non-permanent) negative-cache entry for the given
+     * key so the next {@link #lookupLeaseSet} performs a real search instead of
+     * aborting instantly. Permanent negatives ({@link #failPermanently}) are
+     * left intact. Used by the outbound client message path to re-probe a
+     * destination whose LeaseSet was valid recently but is undergoing a
+     * transient gap.
+     *
+     * @param key the destination hash
+     * @since 0.9.72+
+     */
+    public void clearNegativeCache(Hash key) {
+        _negativeCache.clear(key);
     }
 
     /**

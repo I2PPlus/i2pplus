@@ -225,6 +225,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             ctx.clientNetDb(_from.calculateHash()).accessLeaseSet(toHash);
             // LS is available — clear any prior fail cooldown
             _cache.lsFailCooldown.remove(toHash);
+            _cache.lsLastValid.put(toHash, _start);
         }
 
         // use expiration requested by client if available, otherwise session config,
@@ -360,10 +361,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // Skip redundant lookups to destinations that recently failed LS lookup.
             // Multiple concurrent sends to the same dest (e.g. tracker announces from
             // many torrents) would all fail instantly against the negative cache,
-            // producing a flood of redundant WARN lines.
+            // producing a flood of redundant lines. BUT: for a destination whose
+            // LS was valid recently, a missing local copy is usually a transient
+            // gap (LS lapsed for a second, then re-stored). Treating that like a
+            // confirmed-dead destination produced guaranteed-fail storms: the
+            // negative cache made every lookup abort in ~2ms, and the cooldown
+            // suppressed all re-searches. So the cooldown only fast-fails dests
+            // with no recent validity; a recently-valid dest gets one real
+            // (negative-cache-clearing) probe per probe interval.
             Hash toHash = _to.calculateHash();
             Long cooldownEnd = _cache.lsFailCooldown.get(toHash);
-            if (cooldownEnd != null && now < cooldownEnd) {
+            Long lastValid = _cache.lsLastValid.get(toHash);
+            Long lastLookup = _cache.lsLastLookup.get(toHash);
+            boolean recentlyValid = lastValid != null && now - lastValid <= OutboundCache.TRANSIENT_GAP_GRACE_MS;
+            if (OutboundCache.shouldSkipLeaseSetSend(cooldownEnd, now, lastValid, lastLookup,
+                                                     OutboundCache.TRANSIENT_GAP_GRACE_MS,
+                                                     OutboundCache.LS_PROBE_INTERVAL_MS)) {
                 if (_log.shouldInfo()) {
                     _log.info("Skipping send to " + _toString +
                               " — LS fail cooldown active, " +
@@ -375,6 +388,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // Set cooldown optimistically before lookup — concurrent sends to the
             // same dest will see this and skip. Cleared on success in SendJob/ctor.
             _cache.lsFailCooldown.put(toHash, now + OutboundCache.LS_FAIL_COOLDOWN_MS);
+            _cache.lsLastLookup.put(toHash, now);
+            if (recentlyValid) {
+                // Sweep any transient negative-cache abort so this probe actually
+                // searches the network instead of failing in ~2ms, then log loudly.
+                kndf.clearNegativeCache(toHash);
+                if (_log.shouldInfo()) {
+                    _log.info("LS for " + _toString + " missing but recently valid — re-probing with negative cache cleared");
+                }
+            }
             _leaseSetLookupBegin = getContext().clock().now();
             if (_log.shouldDebug()) {
                 _log.debug("Send Outbound client message - initiating LeaseSet Lookup job " +
@@ -455,6 +477,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (rc == 0) {
                 // Clear any LS fail cooldown — destination is reachable again
                 _cache.lsFailCooldown.remove(_to.calculateHash());
+                _cache.lsLastValid.put(_to.calculateHash(), getContext().clock().now());
                 send();
             }
             else {

@@ -268,24 +268,24 @@ class TransientDataStore implements DataStore {
                     newDate = ls.getEarliestLeaseDate();
                 }
 
-                if (newDate < oldDate) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Almost clobbered a LeaseSet! [" + key.toBase32().substring(0,8) +
-                                   "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
-                                   "\n* New: " + new Date(ls.getEarliestLeaseDate()));
-                    }
-                } else if (newDate == oldDate) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Received duplicate LeaseSet [" + key.toBase32().substring(0,8) + "] -> Not updating");
-                    }
-                } else {
+                if (KademliaNetworkDatabaseFacade.shouldAcceptLeaseSet(ols, ls, _context.clock().now())) {
                     if (_log.shouldInfo()) {
                         _log.info("Received updated LeaseSet [" + key.toBase32().substring(0,8) + "]" + receivedAs +
-                                   "\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
+                                   "\n* Old: " + new Date(oldDate) +
                                    "\n* New: " + new Date(newDate));
                     }
                     _data.put(key, data);
                     rv = true;
+                } else if (newDate < oldDate) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Almost clobbered a LeaseSet! [" + key.toBase32().substring(0,8) +
+                                   "]\n* Old: " + new Date(oldDate) +
+                                   "\n* New: " + new Date(newDate));
+                    }
+                } else {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received duplicate LeaseSet [" + key.toBase32().substring(0,8) + "] -> Not updating");
+                    }
                 }
             } else {
                 if (_log.shouldInfo()) {
