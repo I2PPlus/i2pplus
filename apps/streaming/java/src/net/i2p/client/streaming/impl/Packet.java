@@ -16,7 +16,6 @@ import net.i2p.data.Signature;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
  * This contains solely the data that goes out on the wire,
@@ -200,8 +199,10 @@ class Packet {
      */
     public static final int FLAG_SIGNATURE_OFFLINE = (1 << 11);
 
-    /** DEFAULT_MAX_SIZE. */
-    public static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 32*1024 : 128*1024;
+    /** DEFAULT_MAX_SIZE. 32768 is the largest value the 2-byte max-size wire
+     *  field can carry (toLong(buffer, cur, 2, ...)); 128K would silently
+     *  truncate to 0. Matches mainline's encodable 32768. */
+    public static final int DEFAULT_MAX_SIZE = 32*1024;
     /**
      * MAX_DELAY_REQUEST.
      */
@@ -703,8 +704,7 @@ class Packet {
             cur += 2;
         }
         if (isFlagSet(FLAG_FROM_INCLUDED)) {
-            ByteArrayInputStream bais = new ByteArrayInputStream(buffer, cur, length - cur);
-            try {
+            try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer, cur, length - cur)) {
                 Destination optionFrom = Destination.create(bais);
                 cur += optionFrom.size();
                 _optionFrom = optionFrom;
@@ -820,21 +820,20 @@ class Packet {
                 if (l.shouldWarn()) {l.warn("Offline signature expired " + toString());}
                 return false;
             }
-            ByteArrayStream baos = new ByteArrayStream(6 + _transientSigningPublicKey.length());
-            try {
+            try (ByteArrayStream baos = new ByteArrayStream(6 + _transientSigningPublicKey.length())) {
                 DataHelper.writeLong(baos, 4, _transientExpires / 1000);
                 DataHelper.writeLong(baos, 2, _transientSigningPublicKey.getType().getCode());
                 _transientSigningPublicKey.writeBytes(baos);
+                boolean ok = baos.verifySignature(ctx, _offlineSignature, spk);
+                if (!ok) {
+                    Log l = ctx.logManager().getLog(Packet.class);
+                    if (l.shouldWarn()) {l.warn("Offline signature failed on " + toString());}
+                    return false;
+                }
+                // use transient key to verify
+                spk = _transientSigningPublicKey;
             } catch (IOException ioe) {return false;}
             catch (DataFormatException dfe) {return false;}
-            boolean ok = baos.verifySignature(ctx, _offlineSignature, spk);
-            if (!ok) {
-                Log l = ctx.logManager().getLog(Packet.class);
-                if (l.shouldWarn()) {l.warn("Offline signature failed on " + toString());}
-                return false;
-            }
-            // use transient key to verify
-            spk = _transientSigningPublicKey;
         }
         SigType type = spk.getType();
         if (type == null || !type.isAvailable()) {
@@ -952,6 +951,10 @@ class Packet {
      */
     public void logTCPDump(Connection con) {
         try {I2PSocketManagerFull.pcapWriter.write(this, con);}
-        catch (IOException ioe) { /* ignored */ }
+        catch (IOException ioe) {
+            // Optional pcap debugging aid; never let a write failure halt packet processing.
+            Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
+            if (l.shouldDebug()) {l.debug("pcap write failed on " + toString(), ioe);}
+        }
     }
 }
