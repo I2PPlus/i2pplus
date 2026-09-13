@@ -234,7 +234,7 @@ class MessageInputStream extends InputStream {
                 return true;
             }
 
-            int available = _maxBufferSize - _readyDataSize;
+            int available = _maxBufferSize - (_readyDataSize - _readyDataBlockIndex);
             if (available <= 0) {
                 logBufferFull(messageId, available);
                 return false;

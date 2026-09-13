@@ -75,7 +75,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      public boolean enqueue(PacketLocal packet) {
          if (_dead) {return false;}
 
-         if (packet.getAckTime() > 0) {
+         if (packet.writeReleased()) {
              if (_log.shouldDebug()) {_log.debug("Not resending packet " + packet);}
              return false;
          }
@@ -97,7 +97,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
              else {size = packet.writePacket(buf, 0);}
 
              // last chance to short circuit...
-              if (packet.getAckTime() > 0) {_cache.release(ba); return false;}
+              if (packet.writeReleased()) {_cache.release(ba); return false;}
 
               // this should not block!
              begin = _context.clock().now();
