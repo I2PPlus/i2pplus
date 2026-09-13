@@ -2998,6 +2998,7 @@ class Connection {
             // protocol's inactivity constant: a stalled stream that neither
             // delivers nor receives gives the application EOF within ~2 min
             // instead of lingering on a zombie it can never resume.
+            boolean backstopDisconnect = false;
             synchronized (_outboundPacketsLock) {
                 TreeMap<Long, PacketLocal> ob = _outboundPackets;
                 Map.Entry<Long, PacketLocal> first = ob == null ? null : ob.firstEntry();
@@ -3010,24 +3011,31 @@ class Connection {
                         if (_log.shouldWarn()) {
                             _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
                         }
-                        if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
-                        disconnect(false);
-                        return;
-                    }
-if (remoteSilentTooLong(_lastReceivedOn,
-                                        effectiveInactivityTimeout(_options.getInactivityTimeout(),
-                                                                   REMOTE_SILENT_FALLBACK_MS),
-                                        now)) {
+                        backstopDisconnect = true;
+                    } else if (remoteSilentTooLong(_lastReceivedOn,
+                                              effectiveInactivityTimeout(_options.getInactivityTimeout(),
+                                                                         REMOTE_SILENT_FALLBACK_MS),
+                                              now)) {
                         if (_log.shouldWarn()) {
                             _log.warn(Connection.this + " remote silent for the inactivity window (" +
                                       (now - _lastReceivedOn) + "ms idle, timeout " +
                                       _options.getInactivityTimeout() + "ms), forcing disconnect");
                         }
-                        if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
-                        disconnect(false);
-                        return;
+                        backstopDisconnect = true;
                     }
                 }
+            }
+            // The backstop decision is snapshotted under _outboundPacketsLock, but
+            // disconnect() is run after the lock is released: it calls into the
+            // MessageOutputStream (streamErrorOccurred -> clearData), which takes
+            // _dataLock, and holding _outboundPacketsLock across that call inverts
+            // the lock order with the flush path (flush -> buildPacket ->
+            // getUnackedPacketsSent), deadlocking the connection. disconnect() is
+            // idempotent via the _connected CAS, so acting outside the lock is safe.
+            if (backstopDisconnect) {
+                if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
+                disconnect(false);
+                return;
             }
 
             if (_log.shouldDebug()) {
