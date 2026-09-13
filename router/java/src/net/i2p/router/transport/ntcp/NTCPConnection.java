@@ -1436,6 +1436,17 @@ public class NTCPConnection implements Closeable {
                 return;
             }
             byte[] enc = EventPumper.acquireWriteBuf();
+            // The pooled buffer holds one fixed class: BUFFER_SIZE payload + MAC
+            // + 2 length bytes. A single message (e.g. a streaming fragment or a
+            // large DatabaseStoreMessage) can exceed BUFFER_SIZE - MAC_SIZE, so the
+            // frame's payload would not fit. Send such frames in an exact-size
+            // spill allocation instead; releaseWriteBuf() discards anything that is
+            // not the pooled WRITE_BUFSIZE class, so the spill is released on drain
+            // without corrupting the pool.
+            if (enc.length < 2 + framelen) {
+                EventPumper.releaseWriteBuf(enc);
+                enc = new byte[2 + framelen];
+            }
             try {
                 _sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);
             } catch (GeneralSecurityException gse) {
