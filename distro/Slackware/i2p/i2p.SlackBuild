@@ -100,17 +100,12 @@ gzip -9 man/*.1
 install -m644 man/*.1.gz $PKG/usr/man/man1
 rm -rf ./man
 
-# We install all x86 wrapper binaries.
-# The i2prouter script will try to determine the OS (linux), the bits (32 VS 64) and should be able
+# We install the 64-bit wrapper binary.
+# The i2prouter script will try to determine the OS (linux), the bits (64) and should be able
 # to figure out the correct wrapper binary to use.
 
 # However: In case the i2prouter script's detection fails, "$INST_DIR/i2psvc" will point to
 # what 'we' think the correct binary is.
-#
-# A good reason for installing all binaries: in case the user, for whatever reason, switches from an
-# x64 JRE to an x86 JRE, I2P should continue to work without needing to be reinstalled.
-install -m755 $I2PSRC/installer/lib/wrapper/linux/i2psvc ./i2psvc-linux-x86-32
-install -m644 $I2PSRC/installer/lib/wrapper/linux/libwrapper.so ./lib/libwrapper-linux-x86-32.so
 install -m755 $I2PSRC/installer/lib/wrapper/linux64/i2psvc ./i2psvc-linux-x86-64
 install -m644 $I2PSRC/installer/lib/wrapper/linux64/libwrapper.so ./lib/libwrapper-linux-x86-64.so
 install -m644 $I2PSRC/installer/lib/wrapper/all/wrapper.jar ./lib/wrapper.jar

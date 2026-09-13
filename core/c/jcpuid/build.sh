@@ -27,21 +27,11 @@ if [ -z "$BITS" ]; then
   UNAME="$(uname -m)"
   if test "${UNAME#*x86_64}" != "$UNAME"; then
     BITS=64
-  elif test "${UNAME#*i386}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*i686}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*armv6}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*armv7}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*aarch32}" != "$UNAME"; then
-    BITS=32
   elif test "${UNAME#*aarch64}" != "$UNAME"; then
     BITS=64
   else
 
-    echo "Unable to detect default setting for BITS variable"
+    echo "Unable to detect default setting for BITS variable (only 64-bit hosts are supported)"
     exit 1
   fi
 
@@ -55,45 +45,21 @@ if [ -z "$CC" ]; then
 fi
 
 
-# Debian builds are presumed to be native, we don't need the -mxx flag unless cross-compile,
-# and this breaks the x32 build
+# Debian builds are presumed to be native, we don't need the -mxx flag unless cross-compile
 if [ -z "$DEBIANVERSION" ] ; then
-    if [ $BITS -eq 32 ]; then
-      export ABI=32
-      export CFLAGS="-m32 -mtune=i686 -march=i686"
-      export LDFLAGS="-m32"
-    elif [ $BITS -eq 64 ]; then
-      export ABI=64
-      export CFLAGS="-m64 -mtune=generic"
-      export LDFLAGS="-m64"
-    else
-      printf '..%s..' "BITS value \"$BITS\" not valid, please select 32 or 64\n" >&2
-      exit 1
-    fi
+    export ABI=64
+    export CFLAGS="-m64 -mtune=generic"
+    export LDFLAGS="-m64"
 fi
 
 [ -z "$ARCH" ] && case $(uname -m) in
     x86_64*|amd64)
-        if [ "$BITS" -eq 64 ]; then
-          ARCH="x86_64"
-        else
-          ARCH="x86"
-        fi
-        ;;
-    ia64*)
-        ARCH="ia64";;
-    i?86*)
-        ARCH="x86";;
+        ARCH="x86_64";;
     # Solaris x86
     i86pc)
-        if [ "$BITS" -eq 64 ]; then
-          ARCH="x86_64"
-        else
-          ARCH="x86"
-        fi
-        ;;
+        ARCH="x86_64";;
     *)
-        echo "Unsupported build environment. jcpuid is only used on x86 systems."
+        echo "Unsupported build environment. jcpuid is only built for x86_64 systems."
         exit 0;;
 esac
 
@@ -109,7 +75,7 @@ case "$TARGET" in
         LIBFILE="lib/freenet/support/CPUInformation/jcpuid-${ARCH}-windows.dll";;
     Darwin*)
         JAVA_HOME=$(/usr/libexec/java_home)
-        CFLAGS="${CFLAGS} -fPIC -Wall -arch x86_64 -arch i386"
+        CFLAGS="${CFLAGS} -fPIC -Wall -arch x86_64"
         INCLUDES="-I. -Iinclude -I${JAVA_HOME}/include/ -I${JAVA_HOME}/include/darwin/"
         LDFLAGS="${LDFLAGS} -dynamiclib -framework JavaVM"
         LIBFILE="lib/freenet/support/CPUInformation/libjcpuid-x86_64-osx.jnilib";;

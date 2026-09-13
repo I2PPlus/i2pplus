@@ -98,12 +98,8 @@ cp "${LIB}/wrapper.jar" "${WRAPPER_DIR}/win-all/wrapper.jar"
 echo "Updating platform binaries..."
 
 declare -A MAPPINGS=(
-    ["libwrapper-linux-x86-32.so"]="linux:wrapper-linux-x86-32"
     ["libwrapper-linux-x86-64.so"]="linux64:wrapper-linux-x86-64"
     ["libwrapper-linux-arm-64.so"]="linux64-armv8:wrapper-linux-arm-64"
-    ["libwrapper-linux-armel-32.so"]="linux-armv5:wrapper-linux-armel-32"
-    ["libwrapper-linux-armhf-32.so"]="linux-armv7:wrapper-linux-armhf-32"
-    ["libwrapper-freebsd-x86-32.so"]="freebsd:wrapper-freebsd-x86-32"
     ["libwrapper-freebsd-x86-64.so"]="freebsd64:wrapper-freebsd-x86-64"
     ["libwrapper-freebsd-arm-64.so"]="freebsd-arm64:wrapper-freebsd-arm-64"
 )
@@ -125,17 +121,11 @@ done
 
 echo "Updating macOS binaries..."
 cp "${LIB}/libwrapper-macosx-universal-64.jnilib" "${WRAPPER_DIR}/macosx/" 2>/dev/null || true
-cp "${LIB}/libwrapper-macosx-universal-32.jnilib" "${WRAPPER_DIR}/macosx/" 2>/dev/null || true
 cp "${LIB}/libwrapper-macosx-arm-64.dylib" "${WRAPPER_DIR}/macosx-arm64/" 2>/dev/null || true
 if [ -f "${BIN}/wrapper-macosx-universal-64" ]; then
     cp "${BIN}/wrapper-macosx-universal-64" "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-64"
     chmod +x "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-64"
     strip "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-64" 2>/dev/null || true
-fi
-if [ -f "${BIN}/wrapper-macosx-universal-32" ]; then
-    cp "${BIN}/wrapper-macosx-universal-32" "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-32"
-    chmod +x "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-32"
-    strip "${WRAPPER_DIR}/macosx/i2psvc-macosx-universal-32" 2>/dev/null || true
 fi
 if [ -f "${BIN}/wrapper-macosx-arm-64" ]; then
     cp "${BIN}/wrapper-macosx-arm-64" "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64"
@@ -143,12 +133,17 @@ if [ -f "${BIN}/wrapper-macosx-arm-64" ]; then
     strip "${WRAPPER_DIR}/macosx-arm64/i2psvc-macosx-arm-64" 2>/dev/null || true
 fi
 
-echo "Removing platforms not in deltapack..."
-for dir in linux-ppc solaris; do
+echo "Removing 32-bit and unsupported platforms..."
+for dir in linux linux-armv5 linux-armv7 freebsd linux-ppc solaris; do
     if [ -d "${WRAPPER_DIR}/${dir}" ]; then
-        echo "  Removing ${dir}/ (not in deltapack)"
+        echo "  Removing ${dir}/ (32-bit or not supported)"
         rm -rf "${WRAPPER_DIR}/${dir}"
     fi
+done
+for f in "${WRAPPER_DIR}"/macosx/*-32 "${WRAPPER_DIR}"/macosx/*universal-32*; do
+    [ -f "$f" ] || continue
+    echo "  Removing $(basename "$f") (32-bit)"
+    rm -f "$f"
 done
 
 echo ""

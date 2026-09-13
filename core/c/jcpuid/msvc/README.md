@@ -8,14 +8,13 @@
 ## Building
 
 1. Open `jcpuid.sln` in Visual Studio.
-2. Select platform: **Win32 (x86)** or **x64**.
+2. Select platform: **x64**.
 3. Build > Build Solution.
 
 ## Output
 
 | Platform | Output file                                                       |
 | -------- | ----------------------------------------------------------------- |
-| Win32    | `../lib/freenet/support/CPUInformation/jcpuid-x86-windows.dll`    |
 | x64      | `../lib/freenet/support/CPUInformation/jcpuid-x86_64-windows.dll` |
 
 ## Note

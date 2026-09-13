@@ -1102,6 +1102,7 @@
   <icon>]]>${basedir}/installer/resources/platform-specific/windows/start.ico<![CDATA[</icon>
   <jre>
     <minVersion>1.8.0</minVersion>
+    <requires64Bit>true</requires64Bit>
     <maxHeapSize>512</maxHeapSize>
     <args>-Djava.library.path=.;lib -DloggerFilenameOverride=logs/log-router-@.txt -Dorg.mortbay.http.Version.paranoid=true -Dorg.mortbay.util.FileResource.checkAliases=false</args>
   </jre>
@@ -1196,7 +1197,7 @@
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
-      <fileset dir="installer/lib/jbigi" includes="*linux*.so" excludes="*linux-arm*.so,*linux-ppc*.so"/>
+      <fileset dir="installer/lib/jbigi" includes="*linux*.so" excludes="*linux-arm*.so,*linux-cortex*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -1211,7 +1212,7 @@
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
-      <fileset dir="installer/lib/jbigi" includes="*linux*_64.so libjcpuid-x86_64-linux.so" excludes="*linux-arm*.so,*linux-ppc*.so"/>
+      <fileset dir="installer/lib/jbigi" includes="*linux*_64.so libjcpuid-x86_64-linux.so" excludes="*linux-arm*.so,*linux-cortex*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -1226,7 +1227,7 @@
     <!-- Set if unset -->
     <property name="workspace.changes.jbigi.tr" value=""/>
     <jar destfile="${build.root}build/jbigi.jar" whenmanifestonly="fail">
-      <fileset dir="installer/lib/jbigi" includes="*linux-arm*.so,*linux-ppc*.so"/>
+      <fileset dir="installer/lib/jbigi" includes="*linux-armv8*.so,*linux-cortex*.so"/>
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>
@@ -2132,9 +2133,6 @@
 
   <target name="preppkg-freebsd" depends="preppkg-unix">
     <parallel>
-      <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/freebsd/">
-        <fileset dir="installer/lib/wrapper/freebsd/" excludes="*.txt README.md"/>
-      </copy>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/freebsd64/">
         <fileset dir="installer/lib/wrapper/freebsd64" excludes="*.txt README.md"/>
       </copy>
@@ -2182,9 +2180,6 @@
   <target name="preppkg-linux" depends="preppkg-linux-x86,preppkg-linux-nonx86"/>
 
   <target name="preppkg-linux-x86" depends="preppkg-unix">
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/linux/">
-      <fileset dir="installer/lib/wrapper/linux/" excludes="*.txt README.md"/>
-    </copy>
     <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/linux64/">
       <fileset dir="installer/lib/wrapper/linux64/" excludes="*.txt README.md"/>
     </copy>
@@ -2192,12 +2187,6 @@
 
   <target name="preppkg-linux-nonx86" depends="preppkg-unix">
     <parallel>
-      <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/linux-armv5/">
-        <fileset dir="installer/lib/wrapper/linux-armv5/" excludes="*.txt README.md"/>
-      </copy>
-      <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/linux-armv7/">
-        <fileset dir="installer/lib/wrapper/linux-armv7/" excludes="*.txt README.md"/>
-      </copy>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/linux64-armv8/">
         <fileset dir="installer/lib/wrapper/linux64-armv8/" excludes="*.txt README.md"/>
       </copy>
@@ -2232,7 +2221,7 @@
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/service.ps1" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="${build.root}build/utility.jar" todir="${pkg.temp.dir}"/>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/win64/">
-        <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md"/>
+        <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md *.nmake"/>
       </copy>
       <copy quiet="true" verbose="false" file="installer/lib/wrapper/win-all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
     </parallel>

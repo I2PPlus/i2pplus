@@ -134,19 +134,6 @@ public class CPUID {
     private static final boolean isMac = SystemVersion.isMac();
 
     /**
-     *  This isn't always correct.
-     *  http://stackoverflow.com/questions/807263/how-do-i-detect-which-kind-of-jre-is-installed-32bit-vs-64bit
-     *  http://mark.koli.ch/2009/10/javas-osarch-system-property-is-the-bitness-of-the-jre-not-the-operating-system.html
-     *  http://mark.koli.ch/2009/10/reliably-checking-os-bitness-32-or-64-bit-on-windows-with-a-tiny-c-app.html
-     *  sun.arch.data.model not on all JVMs
-     *  sun.arch.data.model == 64 => 64 bit processor
-     *  sun.arch.data.model == 32 => A 32 bit JVM but could be either 32 or 64 bit processor or libs
-     *  os.arch contains "64" could be 32 or 64 bit libs
-     * @return whether 64 bit
-     */
-    private static final boolean is64 = SystemVersion.is64Bit();
-
-    /**
      * CPUID leaf 1 result cache. CPUID leaf 1 (function 0x01) returns processor
      * version information (family, model, stepping) and feature bits (SSE, AVX, etc.).
      * This is called by nearly every method in this class, so caching eliminates
@@ -631,7 +618,7 @@ public class CPUID {
 
     /**
      * <p>Try loading it from an explicitly built jcpuid.dll / libjcpuid.so</p>
-     * The file name must be (e.g. on linux) either libjcpuid.so or libjcpuid-x86-linux.so.
+     * The file name must be (e.g. on linux) libjcpuid-x86_64-linux.so.
      *
      * @return true if it was loaded successfully, else false
      *
@@ -656,27 +643,13 @@ public class CPUID {
      * so we transparently support read-only base dirs.
      * </p>
      *
-     * This tries the 64 bit version first if we think we may be 64 bit.
-     * Then it tries the 32 bit version.
+     * Only 64-bit jcpuid libraries are shipped.
      *
      * @return true if it was loaded successfully, else false
      *
      */
     private static final boolean loadFromResource() {
-        // Through 0.9.25, we had separate 32-bit and 64-bit osx jnilib files.
-        // As of 0.9.26, we have a single libjcpuid-x86_64-osx.jnilib fat binary with both.
-        // getResourceName64() returns non-null for 64-bit OR for 32-bit Mac.
-
-        // try 64 bit first, if getResourceName64() returns non-null
-        String resourceName = getResourceName64();
-        if (resourceName != null) {
-            boolean success = extractLoadAndCopy(resourceName);
-            if (success) {return true;}
-            if (_doLog) {System.err.println("WARNING: Resource name [" + resourceName + "] not found");}
-        }
-
-        // now try 32 bit
-        resourceName = getResourceName();
+        String resourceName = getResourceName();
         boolean success = extractLoadAndCopy(resourceName);
         if (success) {return true;}
         if (_doLog) {System.err.println("WARNING: Resource name [" + resourceName + "] not found");}
@@ -726,49 +699,20 @@ public class CPUID {
         return getLibraryPrefix() + getLibraryMiddlePart() + getLibrarySuffix();
     }
 
-    /**
-     * @return null if not on a 64 bit platform (except Mac)
-     * @since 0.8.7
-     */
-    private static final String getResourceName64() {
-        // libjcpuid-x86_64-osx.jnilib is a fat binary containing both 64- and 32-bit
-        if (!is64 && !isMac) {return null;}
-        return getLibraryPrefix() + get64LibraryMiddlePart() + getLibrarySuffix();
-    }
-
     private static final String getLibraryPrefix() {
         if (isWindows) {return "";}
         else {return "lib";}
     }
 
+    /** 64-bit only, jcpuid is not built for 32-bit platforms */
     private static final String getLibraryMiddlePart() {
-        if (isWindows) {return "jcpuid-x86-windows";}
-        if (isMac) {
-            if (isX86) {
-                return "jcpuid-x86_64-osx";
-            }
-            return "jcpuid-ppc-osx";
-        }
-        if (isKFreebsd) {return "jcpuid-x86-kfreebsd";}
-        if (isFreebsd) {return "jcpuid-x86-freebsd";}
-        if (isNetbsd) {return "jcpuid-x86-netbsd";}
-        if (isOpenbsd) {return "jcpuid-x86-openbsd";}
-        if (isSunos) {return "jcpuid-x86-solaris";}
-        return "jcpuid-x86-linux";
-    }
-
-    /** @since 0.8.7 */
-    private static final String get64LibraryMiddlePart() {
         if (isWindows) {return "jcpuid-x86_64-windows";}
         if (isKFreebsd) {return "jcpuid-x86_64-kfreebsd";}
         if (isFreebsd) {return "jcpuid-x86_64-freebsd";}
         if (isNetbsd) {return "jcpuid-x86_64-netbsd";}
         if (isOpenbsd) {return "jcpuid-x86_64-openbsd";}
-        if (isMac) {
-            if (isX86){return "jcpuid-x86_64-osx";}
-            return "jcpuid-ppc_64-osx";
-        }
         if (isSunos) {return "jcpuid-x86_64-solaris";}
+        if (isMac) {return "jcpuid-x86_64-osx";}
         return "jcpuid-x86_64-linux";
     }
 

@@ -108,10 +108,14 @@ Libraries are placed in `lib/net/i2p/util/` or `installer/lib/jbigi/`:
 | --------- | ------------------------------------------ |
 | Linux     | `libjbigi-linux-{cpu}_64.so`               |
 | Windows   | `jbigi-windows-{cpu}_64.dll`               |
-| FreeBSD   | `libjbigi-freebsd-{cpu}.so`                |
-| macOS     | `libjbigi-osx-{cpu}.jnilib`                |
+| FreeBSD   | `libjbigi-freebsd-{cpu}_64.so`             |
+| macOS     | `libjbigi-osx-{cpu}_64.jnilib`             |
 
 Binaries are stripped automatically.
+
+The product is 64-bit only: jbigi builds ship with a `_64` suffix and jcpuid
+builds use the `x86_64` component name. No 32-bit (i386, ARM 32-bit, PowerPC)
+libraries are produced or shipped.
 
 ## Supported CPU Targets
 

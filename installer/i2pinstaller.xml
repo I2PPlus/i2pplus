@@ -8,5 +8,6 @@
   <icon>resources/platform-specific/windows/console.ico</icon>
   <jre>
     <minVersion>1.8</minVersion>
+    <requires64Bit>true</requires64Bit>
   </jre>
 </launch4jConfig>

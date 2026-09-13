@@ -39,11 +39,7 @@ ln -sf /usr/bin/eepget $INST_DIR
 ln -sf /usr/bin/i2prouter $INST_DIR
 (cd /usr/doc/$PKGNAME; ln -sf $INST_DIR/history.txt changelog)
 
-if $(uname -m | grep -q '64'); then
-    (cd $INST_DIR; ln -sf i2psvc-linux-x86-64 i2psvc)
-else
-    (cd $INST_DIR; ln -sf i2psvc-linux-x86-32 i2psvc)
-fi
+(cd $INST_DIR; ln -sf i2psvc-linux-x86-64 i2psvc)
 
 config /etc/rc.d/rc.i2p.new
 config $INST_DIR/wrapper.config.new

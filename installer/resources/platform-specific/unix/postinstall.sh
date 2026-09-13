@@ -38,37 +38,17 @@ X86_64=`echo "${OS_ARCH}" | grep x86_64`
 
 case $HOST_OS in
     debian | fedora | gentoo | linux | mandrake | redhat | suse )
-        # Tanuki-built arm wrapper works on armv5 and armv7 but not on Raspberry Pi armv6.
-        # Wrapper we built for Raspberry Pi does not work on Trimslice armv7.
         if [ `echo $OS_ARCH |grep armv8` ]; then
             wrapperpath="./lib/wrapper/linux64-armv8"
         elif [ `echo $OS_ARCH |grep aarch64` ]; then
             wrapperpath="./lib/wrapper/linux64-armv8"
-        elif [ `echo $OS_ARCH |grep armv7` ]; then
-            wrapperpath="./lib/wrapper/linux-armv7"
-        elif [ `echo $OS_ARCH |grep armv6` ]; then
-            wrapperpath="./lib/wrapper/linux-armv6"
-        elif [ `echo $OS_ARCH |grep arm` ]; then
-            wrapperpath="./lib/wrapper/linux-armv5"
-        elif [ `echo $OS_ARCH |grep ppc` ]; then
-            wrapperpath="./lib/wrapper/linux-ppc"
-        elif [ "X$X86_64" = "X" ]; then
-            wrapperpath="./lib/wrapper/linux"
         else
             wrapperpath="./lib/wrapper/linux64"
-            # the 32bit libwrapper.so will be needed if a 32 bit jvm is used
-            cp ./lib/wrapper/linux/libwrapper.so ./lib/libwrapper-linux-x86-32.so
         fi
         cp ${wrapperpath}/libwrapper.so ./lib/
         ;;
     freebsd )
-        if [ ! `echo $OS_ARCH | grep amd64` ]; then
-            wrapperpath="./lib/wrapper/freebsd"
-        else
-            wrapperpath="./lib/wrapper/freebsd64"
-            # the 32bit libwrapper.so will be needed if a 32 bit jvm is used
-            cp ./lib/wrapper/freebsd/libwrapper.so ./lib/libwrapper-freebsd-x86-32.so
-        fi
+        wrapperpath="./lib/wrapper/freebsd64"
         cp ${wrapperpath}/libwrapper.so ./lib/
         ;;
     osx )

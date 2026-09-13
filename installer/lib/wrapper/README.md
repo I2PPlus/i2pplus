@@ -49,14 +49,10 @@ sudo apt install mingw-w64
 
 | Platform          | Directory        | File                                   |
 | ----------------- | ---------------- | -------------------------------------- |
-| FreeBSD x86       | freebsd/         | libwrapper.so                          |
 | FreeBSD x86-64    | freebsd64/       | libwrapper.so                          |
 | FreeBSD ARM64     | freebsd-arm64/   | libwrapper.so                          |
-| Linux x86         | linux/           | libwrapper.so                          |
 | Linux x86-64      | linux64/         | libwrapper.so                          |
 | Linux ARM64       | linux64-armv8/   | libwrapper.so                          |
-| Linux ARM v5      | linux-armv5/     | libwrapper.so                          |
-| Linux ARM v7      | linux-armv7/     | libwrapper.so                          |
 | macOS Universal   | macosx/          | libwrapper-macosx-universal-64.jnilib  |
 | macOS ARM64       | macosx-arm64/    | libwrapper-macosx-arm-64.dylib         |
 | Windows x86-64    | win64/           | wrapper.dll                            |
@@ -69,14 +65,10 @@ sudo apt install mingw-w64
 
 | Platform          | Directory        | File                                   |
 | ----------------- | ---------------- | -------------------------------------- |
-| FreeBSD x86       | freebsd/         | i2psvc                                 |
 | FreeBSD x86-64    | freebsd64/       | i2psvc                                 |
 | FreeBSD ARM64     | freebsd-arm64/   | i2psvc                                 |
-| Linux x86         | linux/           | i2psvc                                 |
 | Linux x86-64      | linux64/         | i2psvc                                 |
 | Linux ARM64       | linux64-armv8/   | i2psvc                                 |
-| Linux ARM v5      | linux-armv5/     | i2psvc                                 |
-| Linux ARM v7      | linux-armv7/     | i2psvc                                 |
 | macOS Universal   | macosx/          | i2psvc-macosx-universal-64             |
 | Windows x86-64    | win64/           | I2Psvc.exe                             |
 
@@ -87,10 +79,7 @@ sudo apt install mingw-w64
 ```bash
 pkg_add -r apache-ant gmake openjdk7
 
-# 32-bit
-ant -Dbits=32 compile-c-unix
-
-# 64-bit
+# 64-bit only
 ant -Dbits=64 compile-c-unix
 
 strip --strip-unneeded bin/wrapper lib/libwrapper.so
@@ -106,8 +95,8 @@ See `linux-armv5/README.txt` for cross-compilation instructions.
 
 ```bash
 # Create universal binary
-lipo -create wrapper-macosx-universal-32 wrapper-macosx-universal-64 -output i2psvc
-lipo -create libwrapper-macosx-universal-32.jnilib libwrapper-macosx-universal-64.jnilib -output libwrapper.jnilib
+lipo -create wrapper-macosx-universal-64 -output i2psvc
+lipo -create libwrapper-macosx-universal-64.jnilib -output libwrapper.jnilib
 
 strip i2psvc
 ```

@@ -8,6 +8,7 @@
   <icon>resources/platform-specific/windows/start.ico</icon>
   <jre>
     <minVersion>1.8.0</minVersion>
+    <requires64Bit>true</requires64Bit>
     <maxHeapSize>512</maxHeapSize>
     <args>-Djava.library.path=.;lib -DloggerFilenameOverride=logs/log-router-@.txt -Dorg.mortbay.http.Version.paranoid=true -Dorg.mortbay.util.FileResource.checkAliases=false</args>
   </jre>

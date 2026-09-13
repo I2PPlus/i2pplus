@@ -30,42 +30,42 @@ The JBIGI version can be queried at runtime via `nativeJbigiVersion()`.
 
 - Added `libjbigi-linux-none_64.so` - Generic 64-bit Linux build (GMP 6.3.0)
 - Added `jbigi-windows-none_64.dll` - Generic 64-bit Windows build (GMP 6.3.0)
-- Removed deprecated PowerPC Linux binary
+- Purged all 32-bit support: Windows, Linux, FreeBSD, ARM 32-bit, and PowerPC
+  binaries removed; only 64-bit (x86_64 / ARM64) builds ship
 - Note: zen4/zen5 support requires GMP 6.4+ or native hardware for building
 
 ---
 
 ## Supported Architectures
 
-### Linux (x86 32-bit)
-```
-none  pentium  pentium2  pentium3  pentium4  pentiumm  pentiummmx
-k6  k62  athlon  geode  viac3  viac32
-```
+The product is **64-bit only**. All binaries carry a `_64` suffix (for jbigi) or
+`x86_64` (for jcpuid).
 
 ### Linux (x86_64 64-bit)
 ```
-none_64  core2  corei  coreisbr  coreihwl  coreibwl
+none  core2  corei  coreisbr  coreihwl  coreibwl
 athlon64  k10  bobcat  jaguar  bulldozer  piledriver  steamroller  excavator
-atom  nano  pentium4  zen  zen2  skylake  silvermont  goldmont
+atom  nano  pentium4  zen  zen2  zen3  skylake  silvermont  goldmont
 ```
 
-### Linux (ARM)
+### Linux (ARM64 / aarch64)
 ```
-armv5  armv6  armv7  armv7a  armcortex8  armcortex9  armcortex15
-armv8  armv8_64  aarch64
-```
-
-### macOS
-```
-core2  corei  coreisbr  coreihwl  coreibwl
+armv8  armv8.2  cortex-a72  cortex-a76
 ```
 
-### Windows
+### macOS (x86_64)
+```
+none  core2  corei  coreisbr  coreihwl  armv8
+```
+
+### Windows (x86_64)
 Same architectures as Linux (compiled via MinGW cross-compilation)
 
-### FreeBSD
-Same architectures as Linux
+### FreeBSD (x86_64)
+```
+none  atom  nano  k10  pentium4  core2  corei  coreisbr  coreihwl
+bobcat  bulldozer  piledriver
+```
 
 ---
 

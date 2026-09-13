@@ -8,21 +8,11 @@ UNAME="$(uname -m)"
 if [ -z $BITS ]; then
   if test "${UNAME#*x86_64}" != "$UNAME"; then
     BITS=64
-  elif test "${UNAME#*i386}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*i686}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*armv6}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*armv7}" != "$UNAME"; then
-    BITS=32
-  elif test "${UNAME#*aarch32}" != "$UNAME"; then
-    BITS=32
   elif test "${UNAME#*aarch64}" != "$UNAME"; then
     BITS=64
   else
- 
-    echo "Unable to detect default setting for BITS variable"
+
+    echo "Unable to detect default setting for BITS variable (only 64-bit hosts are supported)"
     exit 1
   fi
 
@@ -79,11 +69,7 @@ sunos*|openbsd*|netbsd*|*freebsd*|linux*)
         LIBFILE="libjbigi.so";;
 android)
         BUILD_OS="linux"
-        if [ $BITS -eq 32 ]; then
-            COMPILEFLAGS="-O2 -pedantic -fomit-frame-pointer -march=armv7-a -mfloat-abi=softfp -mtune=cortex-a5 -fPIC -DPIC"
-        else
-            COMPILEFLAGS="-O2 -pedantic -march=armv8-a -Wa,--noexecstack -fPIC -DPIC"
-        fi
+        COMPILEFLAGS="-O2 -pedantic -march=armv8-a -Wa,--noexecstack -fPIC -DPIC"
         LINKFLAGS="-shared -Wl,-soname,libjbigi.so"
         INCLUDES="-I. -I../../jbigi/include -I$JAVA_HOME/include -I$JAVA_HOME/include/$BUILD_OS -I/usr/local/include"
         LIBFILE="libjbigi.so";;
@@ -101,10 +87,8 @@ else
         STATICLIBS=".libs/libgmp.a"
 fi
 
-# Debian builds are presumed to be native, we don't need the -mxx flag unless cross-compile,
-# and this breaks the x32 build
+# Debian builds are presumed to be native, we don't need the -mxx flag unless cross-compile
 if [ -z "$DEBIANVERSION" ] ; then
-    [ $BITS -eq 32 -a "${UNAME#*86}" != "$UNAME" ] && COMPILEFLAGS="-m32 $COMPILEFLAGS" && LINKFLAGS="-m32 $LINKFLAGS"
     [ $BITS -eq 64 -a "${UNAME#*86}" != "$UNAME" ] && COMPILEFLAGS="-m64 $COMPILEFLAGS" && LINKFLAGS="-m64 $LINKFLAGS"
 fi
 
