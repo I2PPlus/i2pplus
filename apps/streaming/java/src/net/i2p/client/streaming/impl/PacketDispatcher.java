@@ -132,25 +132,44 @@ class PacketDispatcher {
      *  promptly; wait for space only while that shard's queue is full.  Records
      *  the target shard's queue depth and any producer-blind back-pressure.
      *
+     *  <p>The 1ms back-pressure wait runs OUTSIDE the read lock: a saturated
+     *  shard must not pin the lock, or {@link #shutdown()} / {@link #resize()}
+     *  (which need the write lock to flip {@code _running} / rebuild the shard
+     *  array) would deadlock exactly when a worker is stuck behind a full
+     *  queue. The shard is therefore re-resolved each iteration, so an entry
+     *  offered across a resize lands on the shard's <em>current</em> worker —
+     *  a resize drains each old shard to idle before swapping, so ordering is
+     *  still preserved.
+     *
      *  @param sendStreamId the connection's inbound stream id (shard key)
      *  @param con the resolved connection, passed through to the processor
      *  @param packet the packet to process
      *  @throws InterruptedException if interrupted while waiting for queue space
      */
     void dispatch(long sendStreamId, Connection con, Packet packet) throws InterruptedException {
-        _lock.readLock().lock();
-        try {
-            if (!_running) {
-                packet.releasePayload();
+        Entry e = new Entry(con, packet);
+        while (true) {
+            Worker w;
+            _lock.readLock().lock();
+            try {
+                if (!_running) {
+                    packet.releasePayload();
+                    return;
+                }
+                w = _workers[shardFor(sendStreamId, _workers.length)];
+                if (_context != null) {
+                    _context.statManager().addRateData("stream.receiveQueueDepth", w._queue.size());
+                }
+            } finally {
+                _lock.readLock().unlock();
+            }
+            if (w._queue.offer(e)) {
                 return;
             }
-            Worker w = _workers[shardFor(sendStreamId, _workers.length)];
             if (_context != null) {
-                _context.statManager().addRateData("stream.receiveQueueDepth", w._queue.size());
+                _context.statManager().addRateData("stream.receiveBacklogged", 1);
             }
-            w.waitForQueueSpace(con, packet);
-        } finally {
-            _lock.readLock().unlock();
+            Thread.sleep(1);
         }
     }
 
@@ -257,31 +276,6 @@ class PacketDispatcher {
             _context = context;
         }
 
-        /**
-         *  Wait for a queue slot while the dispatcher is running, then stage
-         *  the entry.  Unlike a plain blocking put, this loop also exits when
-         *  the dispatcher shuts down so a saturated notifier thread can never
-         *  be left blocked on a dead worker.  Each blocked offer is recorded in
-         *  {@code stream.receiveBacklogged}, the Tuner's grow signal.
-         *
-         *  @throws InterruptedException if interrupted while waiting
-         */
-        void waitForQueueSpace(Connection con, Packet packet) throws InterruptedException {
-            Entry e = new Entry(con, packet);
-            while (_running && !_queue.offer(e)) {
-                if (_context != null) {
-                    _context.statManager().addRateData("stream.receiveBacklogged", 1);
-                }
-                Thread.sleep(1);
-            }
-            if (!_running) {e.packet.releasePayload();}
-        }
-
-        /**
-         *  Wait until the queue is empty and no entry is mid-process.  Called
-         *  from resize under the write lock, so no new offers can arrive: once
-         *  idle the worker is retired with no lost or reordered packets.
-         */
         void awaitIdle() throws InterruptedException {
             while (!_queue.isEmpty() || _busy > 0) {
                 Thread.sleep(1);

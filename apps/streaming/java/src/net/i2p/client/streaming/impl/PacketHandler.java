@@ -388,7 +388,17 @@ class PacketHandler {
                 } else if (log.shouldWarn()) {
                     log.warn("Received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());
                 }
-                receiveKnownConnection(con, packet);
+                // Route through the shard worker owning this connection.  The
+                // outbound match finds the connection but the packet carries no
+                // inbound send id, and processing it directly on the notifier
+                // thread would race the dispatcher worker that owns this
+                // connection's headed packets (same Connection processed
+                // concurrently, unsynchronized
+                // ConnectionPacketHandler.receivePacket).  Key on the
+                // connection's local receive id — assigned at creation,
+                // stable, and exactly the key the dispatcher uses for this
+                // connection's headed packets, so ordering is preserved.
+                dispatchKnownConnection(con, packet, con.getReceiveStreamId());
                 return;
             }
         } else if (sendId > 0) {
