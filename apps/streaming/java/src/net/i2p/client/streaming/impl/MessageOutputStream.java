@@ -377,8 +377,12 @@ class MessageOutputStream extends OutputStream {
                 _dataLock.notifyAll();
                 throw new IOException("Output stream closed");
             }
-            // Conditional flush inside lock for writeData
-            if (!waitForAcceptOnly && _valid > 0) {
+            // Always call writeData even when _valid == 0: the close path
+            // must be able to flush a CLOSE packet that was appended to the
+            // buffer by the caller (i.e. flush(false) from close()).  This
+            // matches mainline where writeData is unconditional ("this could
+            // flush a CLOSE packet too").
+            if (!waitForAcceptOnly) {
                 ws = _dataReceiver.writeData(_buf, 0, _valid);
                 _written += _valid;
                 _valid = 0;
@@ -398,12 +402,15 @@ class MessageOutputStream extends OutputStream {
 
         try {
             if (ws == null) {
-                // A null WriteStatus means the receiver never queued the data; this is a
-                // hard error and must be surfaced regardless of the current log level.
-                if (_log.shouldInfo()) {
-                    _log.info("WriteStatus is null during flush");
+                // Defensive only: DataReceiver.writeData never returns null. A
+                // null WriteStatus would mean the data (or CLOSE) was never
+                // queued, so there is nothing to wait on — surface it and move
+                // on rather than throwing, since writeData's contract provides
+                // exactly one status per call.
+                if (_log.shouldWarn()) {
+                    _log.warn("WriteStatus is null during flush");
                 }
-                throw new IOException("DataReceiver returned null WriteStatus");
+                return;
             } else if (_closed.get() && (_writeTimeout > Connection.getDisconnectTimeout() || _writeTimeout <= 0)) {
                 ws.waitForCompletion(Connection.getDisconnectTimeout());
             } else if (_writeTimeout <= 0 || _writeTimeout > Connection.getDisconnectTimeout()) {
@@ -481,7 +488,9 @@ class MessageOutputStream extends OutputStream {
     /**
      * Non-blocking internal close used within the package.
      * Does not wait for flush or acknowledgment.
-     * Marks stream as closed and clears buffer immediately.
+     * Marks the stream as closed and pushes any buffered data out
+     * fire-and-forget, so a connection closed right after a write does not
+     * lose the application's last bytes.
      */
     void closeInternal() {
         if (!_closed.compareAndSet(false, true)) {
@@ -489,18 +498,26 @@ class MessageOutputStream extends OutputStream {
         }
         _flusher.cancel();
         _streamError.compareAndSet(null, new IOException("Output stream closed"));
-        clearData();
+        clearData(true);
     }
 
     /**
-     * Clears any buffered data.
+     * Clears any buffered data, optionally flushing it out first.
+     *
+     * @param shouldFlush if true, send the buffered data (but do not wait for
+     *                    acknowledgment); if false, discard it. The error path
+     *                    discards, the close path flushes.
      */
-    private void clearData() {
+    private void clearData(boolean shouldFlush) {
         ByteArray ba = null;
         if (_log.shouldDebug() && _valid > 0) {
             _log.debug("clearData() clearing " + _valid + " bytes");
         }
         synchronized (_dataLock) {
+            // flush any data, but don't wait for it
+            if (_valid > 0 && shouldFlush) {
+                _dataReceiver.writeData(_buf, 0, _valid);
+            }
             _written += _valid;
             _valid = 0;
 
@@ -546,7 +563,7 @@ class MessageOutputStream extends OutputStream {
      */
     void streamErrorOccurred(IOException ioe) {
         _streamError.compareAndSet(null, ioe);
-        clearData();
+        clearData(false);
     }
 
     /**
