@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,19 +96,39 @@ class ProfilePersistenceHelper {
     public void setUs(Hash routerIdentHash) {_us = routerIdentHash;}
 
     /**
-     * Write the data from the profile to the file
+     * Write the data from the profile to the file.
+     *
+     * <p>A rare, benign failure mode: a concurrent purge
+     * ({@link #purgeExcessProfiles}) or expiry sweep can remove the profile,
+     * or its shard directory ({@code peerProfiles/pX}), between
+     * {@link #pickFile} and the open. When the shard directory vanished it is
+     * re-created and the write retried once so the store stays self-healing;
+     * anything else is a race or a genuine store problem and is worth a WARN
+     * without a stacktrace, not an ERROR.
      *
      * @return success
      */
     public boolean writeProfile(PeerProfile profile) {
         File f = pickFile(profile);
-        try (OutputStream fos = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(f)))) {
-            writeProfile(profile, fos, false);
-        } catch (IOException ioe) {
-            _log.error("Error writing profile to " + f, ioe);
-            return false;
+        File parent = f.getParentFile();
+        for (int attempt = 0; attempt < 2; attempt++) {
+            try (OutputStream fos = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(f)))) {
+                writeProfile(profile, fos, false);
+                return true;
+            } catch (FileNotFoundException fnfe) {
+                // Deleted concurrently (or the shard dir vanished): re-create
+                // the shard dir and retry once before logging.
+                if (attempt == 0 && parent != null && !parent.exists() && parent.mkdirs()) {
+                    continue;
+                }
+                if (_log.shouldWarn()) {_log.warn("Error writing profile to " + f + " (" + fnfe + ")");}
+                return false;
+            } catch (IOException ioe) {
+                if (_log.shouldWarn()) {_log.warn("Error writing profile to " + f + " (" + ioe + ")");}
+                return false;
+            }
         }
-        return true;
+        return false;
     }
 
     /**
