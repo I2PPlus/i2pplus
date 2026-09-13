@@ -691,6 +691,9 @@
 <tr class=config><th>i2p.vmCommSystem={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption.")%></td></tr>
 
+<tr class=config><th>logger.groupReadable={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]")%></td></tr>
+
 <tr class=config id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
 <tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
 

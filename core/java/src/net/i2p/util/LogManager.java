@@ -112,6 +112,16 @@ public class LogManager implements Flushable {
      */
     public static final String PROP_DEFAULTLEVEL = "logger.defaultLevel";
 
+    /**
+     * Property name for group-readable (660) log files. When enabled, the
+     * current log and rotated .gz files are readable/writable by the group
+     * the router runs under, so sysadmins who are members of that group can
+     * inspect the logs. The files are never world-readable.
+     *
+     * @since 0.9.70+
+     */
+    public static final String PROP_GROUP_READABLE = "logger.groupReadable";
+
     /** @since 0.9.2 */
     private static final String PROP_LOG_BUFFER_SIZE = "logger.logBufferSize";
 

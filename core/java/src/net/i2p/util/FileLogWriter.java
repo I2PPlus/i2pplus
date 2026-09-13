@@ -36,6 +36,7 @@ class FileLogWriter extends LogWriter {
     private int _rotationNum = -1;
     private File _currentFile;
     private long _numBytesInCurrentFile;
+    private boolean _groupReadable;
 
     private static final int MAX_DISKFULL_MESSAGES = 8;
     private int _diskFullMessageCount;
@@ -127,7 +128,7 @@ class FileLogWriter extends LogWriter {
             } catch (IOException ioe) { /* ignored */ }
         }
         if (_manager.shouldGzip() && currentFile != null && currentFile.length() >= _manager.getMinGzipSize()) {
-            Gzipper gzipper = new Gzipper(currentFile);
+            Gzipper gzipper = new Gzipper(currentFile, _groupReadable);
             if (threadGzipper) {
                 gzipper.setPriority(Thread.MIN_PRIORITY);
                 gzipper.start(); // rotate asynchronously
@@ -160,12 +161,13 @@ class FileLogWriter extends LogWriter {
                 System.err.println("Cannot put the logs in a subdirectory of a plain file: " + f.getAbsolutePath());
             }
         }
+        _groupReadable = _manager.getContext().getBooleanProperty(LogManager.PROP_GROUP_READABLE);
         closeWriter(old, true);
         if (_manager.shouldGzip()) (new File(f.getPath() + ".gz")).delete();
         try {
             _currentOut = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), StandardCharsets.UTF_8));
-            if (_manager.getContext().getBooleanProperty("logger.groupReadable")) {
-                f.setReadable(true, false);
+            if (_groupReadable) {
+                SecureFileOutputStream.setGroupPerms(f);
             }
         } catch (IOException ioe) {
             if (++_diskFullMessageCount < MAX_DISKFULL_MESSAGES) System.err.println("Error creating log file [" + f.getAbsolutePath() + "]" + ioe);
@@ -264,13 +266,17 @@ class FileLogWriter extends LogWriter {
      */
     private static class Gzipper extends I2PAppThread {
         private final File _f;
+        private final boolean _groupReadable;
 
         /**
          * Gzipper.
+         *
+         * @param groupReadable apply 660 perms to the compressed file
          */
-        public Gzipper(File f) {
+        public Gzipper(File f, boolean groupReadable) {
             super("Log file compressor");
             _f = f;
+            _groupReadable = groupReadable;
         }
 
         /**
@@ -289,6 +295,9 @@ class FileLogWriter extends LogWriter {
             try (InputStream in = new BufferedInputStream(new FileInputStream(_f));
                  OutputStream out = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(to)))) {
                 DataHelper.copy(in, out);
+                if (_groupReadable) {
+                    SecureFileOutputStream.setGroupPerms(to);
+                }
             } catch (IOException ioe) {
                 System.out.println("Error compressing log file " + _f);
             } finally {
