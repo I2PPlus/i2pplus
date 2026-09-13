@@ -462,9 +462,9 @@ class ConnectionManager {
         if (windowMs <= 0 || burst <= 0)
             return false;
         long[] cur = _recentSyns.get(h);
-        if (cur == null || now - cur[0] >= windowMs) {
-            // no active window (or it aged out): start a fresh one. One allocation
-            // per new dest is fine; the flood path for an already-banned dest is
+        if (cur == null) {
+            // no active window: start a fresh one. One allocation per new dest
+            // is fine; the flood path for an already-banned dest is
             // short-circuited before this is ever reached.
             long[] init = {now, 1};
             long[] prev = _recentSyns.putIfAbsent(h, init);
@@ -474,8 +474,16 @@ class ConnectionManager {
         }
         // Hot path: bump in place under the per-dest window lock so concurrent
         // SYNs can only be lost to a (safe) under-count, never a lost update
-        // that over-counts a dest toward a ban.
+        // that over-counts a dest toward a ban. The age check is done inside
+        // the lock too: once the window ages out, putIfAbsent can never replace
+        // the stale entry, so without re-arming in place the burst gate would go
+        // dead until the periodic sweep removes the entry.
         synchronized (cur) {
+            if (now - cur[0] >= windowMs) {
+                cur[0] = now;
+                cur[1] = 1;
+                return false;
+            }
             cur[1] = cur[1] + 1;
             return synBurstTripped(cur[0], (int) cur[1], now, windowMs, burst);
         }
@@ -1189,7 +1197,15 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
                   }
 
                    // no remaining streams, let's wait a bit
-                   try { Thread.sleep(remaining/4); } catch (InterruptedException ie) { /* ignored */ }
+                   try { Thread.sleep(remaining/4); }
+                   catch (InterruptedException ie) {
+                       // Honoring the interrupt: restore the flag and abandon
+                       // the connect rather than burning the whole wait window
+                       // re-throwing on every sleep iteration (see below).
+                       Thread.currentThread().interrupt();
+                       _numWaiting.decrementAndGet();
+                       return null;
+                   }
               } else {
                   con = new Connection(_context, this, session, _schedulerChooser, _timer.getSharedTimer(),
                                         _outboundQueue, _conPacketHandler, opts, false);
@@ -1256,8 +1272,10 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
                 // RTO doubling and retry budget). The connectTimeout from opts
                 // (_connectTimeout, default 30s) is the authoritative limit.
                 // Sets _connectionError on timeout.
-               int boundedTimeout = opts.getConnectDelay() + (int) opts.getConnectTimeout();
-               con.waitForConnect(boundedTimeout);
+               long boundedTimeout = (long) opts.getConnectDelay() + opts.getConnectTimeout();
+               // long math so a huge/saturated connect timeout can't overflow the
+               // int sum; clamp into waitForConnect's int range.
+               con.waitForConnect((int) Math.min(boundedTimeout, Integer.MAX_VALUE));
           }
           long connectElapsed = _context.clock().now() - connectStart;
           if (_log.shouldInfo()) {
@@ -1292,13 +1310,18 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
              _context.statManager().addRateData("stream.connectTime", connectElapsed, connectElapsed);
              _destFailures.remove(destHash);
          }
-         // safe decrement
-         for (;;) {
-             int n = _numWaiting.get();
-             if (n <= 0)
-                 break;
-             if (_numWaiting.compareAndSet(n, n - 1))
-                 break;
+         // safe decrement — only for connections that actually incremented
+         // _numWaiting in connect(); a pool-reused connection never incremented
+         // (the pool hit takes the early return at line 1173), so decrementing
+         // here would steal a genuinely-waiting connect's slot.
+         if (!fromPool) {
+             for (;;) {
+                 int n = _numWaiting.get();
+                 if (n <= 0)
+                     break;
+                 if (_numWaiting.compareAndSet(n, n - 1))
+                     break;
+             }
          }
 
          _context.statManager().addRateData("stream.connectionCreated", 1);
@@ -1709,9 +1732,10 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
      */
     public void removeConnection(Connection con) {
 
-        // Attempt to return to pool before removing
-        returnToPool(con);
-
+        // Unlink the dispatch tables before the pooled-connection handover: a
+        // pooled connection gets fresh stream IDs on reuse, and if it stayed
+        // reachable by the old ones a late packet would route into a foreign
+        // logical connection. returnToPool() runs after the unlink.
         Long rcvID = Long.valueOf(con.getReceiveStreamId());
         synchronized(_recentlyClosed) {
             _recentlyClosed.put(rcvID, DUMMY);
@@ -1722,6 +1746,10 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
             long sendId = con.getSendStreamId();
             if (sendId > 0)
                 _connectionByOutboundId.remove(sendId);
+
+        // Attempt to return to pool after removing from the dispatch tables
+        returnToPool(con);
+
             boolean removed = (o == con);
             if (_log.shouldDebug())
                 _log.debug("Connection removed? " + removed + " Remaining: "
@@ -1731,6 +1759,11 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
 
         if (removed) {
             _context.statManager().addRateData("stream.con.lifetimeMessagesSent", 1+con.getLastSendId(), con.getLifetime());
+            // Static-scan "stream may not be closed": false positive. The
+            // MessageInputStream is owned by Connection and is signalled closed
+            // via streamErrorOccurred() + _receiver.destroy() in
+            // Connection.disconnectComplete(), which always precedes
+            // removeConnection(). Nothing here acquires the stream.
             MessageInputStream stream = con.getInputStream();
                 long rcvd = 1 + stream.getHighestBlockId();
                 long[] nacks = stream.getNacks();

@@ -150,6 +150,11 @@ class ConnectionHandler {
 
     /** Router-clock time of the last tunnel-stress sample. */
     private volatile long _lastStressSampleAt;
+    /** Router-clock time of the last SYN expire-rate sample. Kept separate from
+     *  {@link #_lastStressSampleAt} because each sampler has its own window and
+     *  one must not refresh the other's (that would starve this window's
+     *  rollover: {@link #getSynExpireRatePct} would never publish). */
+    private volatile long _lastSynExpireSampleAt;
     /** Cached tunnel build success fraction; NaN when unavailable. */
     private volatile double _tunnelBuildSuccess;
     /** SYNs added to the acceptance queue within the current sample window. */
@@ -206,13 +211,13 @@ class ConnectionHandler {
      */
     private int getSynExpireRatePct() {
         long now = _context.clock().now();
-        if (now - _lastStressSampleAt >= SYN_STRESS_SAMPLE_INTERVAL) {
+        if (now - _lastSynExpireSampleAt >= SYN_STRESS_SAMPLE_INTERVAL) {
             // A full window has elapsed. Publish the just-closed window's expire
             // rate (so the Tuner sees the router-wide accept-queue health), then
             // reset for the next window. Returning the completed rate instead of
             // -1 avoids discarding the window's data at the rollover instant.
             int rate = currentSynExpireRatePct();
-            _lastStressSampleAt = now;
+            _lastSynExpireSampleAt = now;
             _synQueueProcessed = 0;
             _synQueueExpired = 0;
             publishSynExpireRate(rate);
