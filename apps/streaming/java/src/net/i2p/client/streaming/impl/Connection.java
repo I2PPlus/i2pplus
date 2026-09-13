@@ -119,8 +119,11 @@ class Connection {
     private String _connectionError;
     /** Atomic long. */
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
-    /** Last received on. */
-    private long _lastReceivedOn;
+    /** Last received on. Written on the receive/notification thread
+     *  (packetReceived), read by the inactivity backstop timer
+     *  (remoteSilentTooLong, getLastActivityOn) — volatile for a stable
+     *  reading across threads. */
+    private volatile long _lastReceivedOn;
     /** Activity timer. */
     private final ActivityTimer _activityTimer;
     /** Last congestion highest unacked. */
@@ -998,7 +1001,8 @@ class Connection {
      *  Time after which we send a probe if no ACK has been received for the
      *  oldest unacked packet. Fires at ~2*RTT to detect loss before RTO.
      *
-     *  @return probe timeout in ms, in [200, 2000]
+     *  @return probe timeout in ms — [200, 2000] once the RTT is known,
+     *          otherwise bounded by half the current RTO (up to 3000)
      */
     private int getPTO() {
         int rtt = _options.getRTT();
@@ -1618,7 +1622,7 @@ class Connection {
                         // value can't spuriously match and trigger fast retransmit on
                         // the first (rather than the third) duplicate ACK.
                         _lastDupAck = -1;
-                        if (prevHead > 0 && !ob.isEmpty() && prevHead == ob.firstKey()) {
+                        if (prevHead >= 0 && !ob.isEmpty() && prevHead == ob.firstKey()) {
                             // The head of the window did not move while later packets
                             // were ACKed: the head packet is stuck and a hole has opened.
                             // Re-arm the TLP probe instead of cancelling it so the head
@@ -1652,7 +1656,11 @@ class Connection {
                     PacketLocal p = _ackedList.get(i);
                     // removed from the window map above in the iterator
                     if (p.getNumSends() > 1) {
-                        _activeResends.decrementAndGet();
+                        // floor at 0: a paced resend may be acked before the
+                        // increment that sourced this decrement lands (or the
+                        // ack beats the paced queue flush), and negative
+                        // resends would skew the loss-recovery accounting.
+                        _activeResends.updateAndGet(v -> Math.max(0, v - 1));
                         if (_log.shouldDebug()) {
                             _log.debug("Active resend of " + p + " successful -> " + _activeResends + " resends remaining...");
                         }
@@ -1670,9 +1678,14 @@ class Connection {
             anyLeft = ob != null && !ob.isEmpty();
             _outboundPacketsLock.notifyAll();
 
-            if (_lastCongestionHighestUnacked >= 0 && ackThrough > _lastCongestionHighestUnacked) {
+            if (_lastCongestionHighestUnacked >= 0 && ackThrough > _lastCongestionHighestUnacked && !anyLeft) {
                 // The lost window has been fully recovered: consecutive-loss
                 // strikes reset so the next loss starts from the gentle tier.
+                // Only when the outstanding window is actually empty — on a
+                // NACK, _highestAckedThrough advances to lowest-1 (1565) while
+                // the NACKed packets stay in the map, so a stale ack could
+                // otherwise claim recovery and restart the graduated window
+                // cut prematurely.
                 _lossStrikes = 0;
             }
 
@@ -3281,6 +3294,7 @@ class Connection {
                                 LinkedList<PacketLocal> pq = pacedQueue();
                                 pq.add(packet);
                                 if (softPass) {packet.incrementSoftResends();}
+                                if (nResends == 1) {_activeResends.incrementAndGet();}
                                 if (pq.size() == 1) {
                                     _pacedEvent.forceReschedule(pacingDelay);
                                 }
