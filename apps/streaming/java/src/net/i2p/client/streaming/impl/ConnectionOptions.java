@@ -36,8 +36,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private long _maxConnectTimeout;
     /** Smoothed rtt. */
     private int _smoothedRtt;
-    /** Min rtt. */
-    private int _minRtt = DEFAULT_INITIAL_RTT;
+    /** Min rtt. Unknown until the first sample: seeding the floor with a
+     *  guess (e.g. the initial RTT) would fabricate a minimum on any path whose
+     *  real floor is higher, and _minRtt feeds the bandwidth-derived ssthresh
+     *  floor. Like mainline: Integer.MAX_VALUE until updateRTT() narrows it. */
+    private int _minRtt = Integer.MAX_VALUE;
     /** Rtt deviation. */
     private int _rttDeviation;
     /** Retransmit timeout. */
@@ -354,7 +357,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * Initial RTT estimate before first measurement.
-     * I2P typically has 2-10s RTT, so 5s provides a conservative starting point.
+     * I2P typically has 2-10s RTT, so 2s provides a conservative starting
+     * point without a long initial recovery window.
      */
     public static final int DEFAULT_INITIAL_RTT = 2*1000;
 
@@ -585,12 +589,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     }
 
     /**
-     * Copy all local (streaming-specific) options from opts
+     * Copy all local (streaming-specific) options from opts.
+     * Note: getMaxWindowSize() returns the effective value (clamped by the
+     * Tuner global), so copying that would pin the destination's window down-
+     * only if the global ever decreased. Copy the raw configured value instead
+     * so a later Tuner re-enable propagates to this connection.
      *
      * @param opts source options to copy from, may be null
      */
     private void update(ConnectionOptions opts) {
-            setMaxWindowSize(opts.getMaxWindowSize());
+            setMaxWindowSize(opts._maxWindowSize);
             setConnectDelay(opts.getConnectDelay());
             setMaxConnectTimeout(opts.getMaxConnectTimeout());
             setProfile(opts.getProfile());
@@ -660,8 +668,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         if (opts == null) return;
 
         if (opts.getProperty(PROP_MAX_WINDOW_SIZE) != null) {
+            // Pass through without filtering: setMaxWindowSize() already
+            // normalises ≤ 0 to the Tuner-managed global default (0 means
+            // "no per-connection cap", not "ignore the property").
             int val = getInt(opts, PROP_MAX_WINDOW_SIZE, 0);
-            if (val > 0) setMaxWindowSize(val);
+            setMaxWindowSize(val);
         }
         applyInt(opts, PROP_CONNECT_DELAY, -1, onlyIfSet, this::setConnectDelay);
         if (opts.getProperty(PROP_MAX_CONNECT_TIMEOUT) != null) {
@@ -938,24 +949,31 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             return _retransmitTimeout;
         }
         _lastRtoDoubleTime = now;
-        _retransmitTimeout = _retransmitTimeout * rtoMultiplier / 100;
+        int doubled = _retransmitTimeout * rtoMultiplier / 100;
         int mrto = getMaxRTO();
-        if (_retransmitTimeout > mrto) {_retransmitTimeout = mrto;}
+        // Never let a backoff shrink the timer: getMaxRTO() (12s) is below the
+        // computeRTO() ceiling (getMaxResendDelay(), 30s), so a plain clamp here
+        // would take an already-large RTO (e.g. 13500) down to 12000 exactly
+        // when congestion recovery wants it growing. Monotonic non-shrink.
+        _retransmitTimeout = Math.max(_retransmitTimeout, Math.min(doubled, mrto));
         return _retransmitTimeout;
     }
 
     /**
      * Update the smoothed RTT with a new measurement.
      *
-     * <p>The raw sample is clamped at ingestion ({@link #clampRttSample}) so a
-     * single pathological reading can never pin the smoothed RTT (and thus the
-     * RTO recovery cadence) at the ceiling.
+     * <p>The dropout sample is clamped before entering the smoother
+     * ({@link #clampRttSample}) so a single pathological reading can never pin
+     * the smoothed RTT (and thus the RTO recovery cadence) at the ceiling. The
+     * minimum-RTT floor is updated from the {@code raw} value instead: it feeds
+     * the bandwidth-derived ssthresh, and clamping it first would fabricate a
+     * 10s floor on any path slower than maxRtt.
      *
      * @param measuredValue must be positive
      */
     public synchronized void updateRTT(int measuredValue) {
-        measuredValue = clampRttSample(measuredValue, getMaxRtt());
         _minRtt = Math.min(_minRtt, measuredValue);
+        measuredValue = clampRttSample(measuredValue, getMaxRtt());
         switch(_rttState) {
         case INIT:
             _rttState = RttState.FIRST;

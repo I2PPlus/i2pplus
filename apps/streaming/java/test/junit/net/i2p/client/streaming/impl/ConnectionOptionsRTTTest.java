@@ -18,6 +18,15 @@ public class ConnectionOptionsRTTTest {
     }
 
     @Test
+    public void testInitialMinRTTIsUnset() {
+        ConnectionOptions opts = new ConnectionOptions();
+        // _minRtt feeds the bandwidth-derived ssthresh floor; a 2s seed would
+        // fabricate a floor on any path slower than DEFAULT_INITIAL_RTT.
+        assertEquals("min RTT must start unset (MAX_VALUE), not a fabricated floor",
+                     Integer.MAX_VALUE, opts.getMinRTT());
+    }
+
+    @Test
     public void testInitialRTO() {
         ConnectionOptions opts = new ConnectionOptions();
         assertTrue("Initial RTO should be positive", opts.getRTO() > 0);
