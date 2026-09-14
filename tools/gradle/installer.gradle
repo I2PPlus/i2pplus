@@ -578,7 +578,7 @@ task installerW4Exe(type: Exec) {
         '  <chdir>.</chdir>\n' +
         '  <customProcName>false</customProcName>\n' +
         '  <icon>' + "${workspaceRootAbs}/installer/resources/platform-specific/windows/console.ico" + '</icon>\n' +
-        '  <jre>\n    <minVersion>1.8</minVersion>\n    <requires64Bit>true</requires64Bit>\n  </jre>\n' +
+        '  <jre>\n    <minVersion>1.8</minVersion>\n    <requires64Bit>true</requires64Bit>\n    <args>-Dsun.java2d.d3d=false</args>\n  </jre>\n' +
         '</launch4jConfig>', 'UTF-8')
   }
   doLast {

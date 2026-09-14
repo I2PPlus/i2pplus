@@ -12,7 +12,6 @@ import java.io.OutputStreamWriter;
 /**
  * <p>This class is used by the installer in Windows to process the <code>wrapper.config</code> file. It
  * <ul>
- * <li>rewrites the applicable wrapper config options to point to <code>%LOCALAPPDATA%\I2P</code></li>
  * <li>corrects the paths, rewriting <code>/</code> to <code>\</code></li>
  * </ul>
  * <p>
@@ -48,12 +47,6 @@ public class FixWinPaths{
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(wConfTemp), "UTF-8"));
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("wrapper.logfile="))
-                    line = "wrapper.logfile=%localappdata%\\i2p\\wrapper.log";
-                else if (line.startsWith("#wrapper.java.pidfile="))
-                    line = "#wrapper.java.pidfile=%localappdata%\\i2p\\routerjvm.pid";
-                else if (line.startsWith("#wrapper.pidfile="))
-                    line = "#wrapper.pidfile=%localappdata%\\i2p\\i2p.pid";
                 if (line.contains("\\i2p/"))
                     line = line.replace("\\i2p/", "\\i2p\\");
                 if (line.contains("lib/"))

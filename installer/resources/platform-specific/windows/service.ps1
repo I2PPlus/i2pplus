@@ -46,7 +46,7 @@ switch ($Action) {
         # Ensure the config points at %PROGRAMDATA%\i2p for the service
         if (Test-Path -LiteralPath $conf) {
             if (-not (Select-String -LiteralPath $conf -Pattern '^wrapper\.java\.additional\.5=' -Quiet)) {
-                Add-Content -LiteralPath $conf -Value 'wrapper.java.additional.5=-Di2p.dir.config="%PROGRAMDATA%\i2p"'
+                Add-Content -LiteralPath $conf -Value 'wrapper.java.additional.5=-Di2p.dir.config=%PROGRAMDATA%/i2p'
                 Write-Log "Added wrapper.java.additional.5 to $conf"
             }
         } else {

@@ -47,7 +47,7 @@ SRC_DIR="${WORK_DIR}/wrapper_${VERSION}_src"
 
 echo "Checking wrapper ${VERSION} win64..."
 
-if [ -n "${FORCE:-0}" ] && [ "${FORCE}" -eq 1 ]; then
+if [ "${FORCE:-0}" -eq 1 ]; then
     true
 elif [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win64/wrapper.dll" ] && [ -f "${WRAPPER_DIR}/all/wrapper.jar" ]; then
     jar_ver=$(unzip -p "${WRAPPER_DIR}/all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
@@ -124,14 +124,20 @@ sed -i 's/&((DWORD)queryInfo->exitCode)/(LPDWORD)\&queryInfo->exitCode/g' wrappe
 # Upstream quirk: wrapperjni.h declares JNU_SetByteArrayRegion extern, the
 # .c defines it static; gcc rejects the mismatch (MSVC tolerates it)
 sed -i 's/^static void JNU_SetByteArrayRegion(/void JNU_SetByteArrayRegion(/' wrapperjni_exception.c
-[ ! -f wrapperinfo.c ] && [ -f wrapperinfo.c.in ] && cp wrapperinfo.c.in wrapperinfo.c
+cp wrapperinfo.c.in wrapperinfo.c
 # Substitute the version tokens Tanuki's Ant build would normally fill in
 # (without this, wrapperinfo reports literal "@version@" strings)
-VERSION_BASE=$(echo "${VERSION}" | cut -d. -f1)
-VERSION_ROOT=$(echo "${VERSION}" | cut -d. -f2)
-VERSION_PATCH=$(echo "${VERSION}" | cut -d. -f3)
-[ -n "${VERSION_PATCH}" ] || VERSION_PATCH="0"
-sed -i "s/@version.base@/${VERSION_BASE}/g; s/@version.root@/${VERSION_ROOT}/g; s/@version@/${VERSION}/g; s/@bits@/64/g; s/@dist.arch@/x86_64/g; s/@dist.os@/win32/g; s/@build.date@/$(date +%Y%m%d)/g; s/@build.time@/$(date +%H%M)/g; s/@javac.target.version@/1.8/g" wrapperinfo.c
+# Tanuki default.properties: version.base = version.root = "3.7.3" (full version)
+# NOTE: version.root is compared against wrapper.jar's wrapper.version property;
+# using just the middle field (e.g. "7" from "3.7.3") causes a FATAL mismatch.
+VERSION_SPEC=$(echo "${VERSION}" | cut -d. -f1-2)
+sed -i "s/@version.base@/${VERSION}/g; s/@version.root@/${VERSION}/g; s/@version@/${VERSION}/g; s/@version.spec@/${VERSION_SPEC}/g; s/@bits@/64/g; s/@dist.arch@/x86_64/g; s/@dist.os@/win32/g; s/@build.date@/$(date +%Y%m%d)/g; s/@build.time@/$(date +%H%M)/g; s/@javac.target.version@/1.8/g" wrapperinfo.c
+
+# Comma-separated version fields for the RC FILEVERSION/PRODUCTVERSION
+RC_VERSION_BASE=$(echo "${VERSION}" | cut -d. -f1)
+RC_VERSION_ROOT=$(echo "${VERSION}" | cut -d. -f2)
+RC_VERSION_PATCH=$(echo "${VERSION}" | cut -d. -f3)
+[ -n "${RC_VERSION_PATCH}" ] || RC_VERSION_PATCH="0"
 
 # Keep the MSVC SEH (__try/__except/__finally) intact in wrapper_win.c — it is
 # the abnormal-termination handler for the SCM control paths. mingw gcc cannot
@@ -175,8 +181,8 @@ cat > wrapper-version.rc << RC
 IDI_WRAPPER             ICON                    "wrapper.ico"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION     ${VERSION_BASE},${VERSION_ROOT},${VERSION_PATCH},0
- PRODUCTVERSION  ${VERSION_BASE},${VERSION_ROOT},${VERSION_PATCH},0
+ FILEVERSION     ${RC_VERSION_BASE},${RC_VERSION_ROOT},${RC_VERSION_PATCH},0
+ PRODUCTVERSION  ${RC_VERSION_BASE},${RC_VERSION_ROOT},${RC_VERSION_PATCH},0
  FILEFLAGSMASK   0x3fL
  FILEFLAGS       0x0L
  FILEOS          0x40004L
@@ -280,13 +286,60 @@ if [ -z "${JNI_INC}" ] || [ ! -f "${JNI_INC}/jni.h" ]; then
 fi
 
 # Object list mirrors Makefile-windows-x86-32.nmake (DLL_OBJS) from the 3.7.0 source
+#
+# CRITICAL: The DLL is loaded into javaw.exe (Microsoft OpenJDK 25, which uses
+# ucrtbase.dll).  The default mingw-w64 link uses dllcrt2.o + msvcrt.dll
+# (legacy CRT).  When loaded into a ucrtbase.dll process, two incompatible
+# CRTs coexist — _initterm / _lock/_unlock / __iob_func all resolve to the
+# wrong CRT, causing NULL-function-pointer crashes (0xC0000005 at offset 0x0).
+#
+# Fix: Link entirely against ucrtbase.dll via -lucrt + -lucrtbase.
+# -lucrt provides the CRT runtime symbols (__acrt_iob_func, strlen, malloc,
+# etc.) that back onto ucrtbase.dll through the api-ms-win-crt-* shims.
+# -nostartfiles skips dllcrt2.o (no _initterm, no _DllMainCRTStartup).
+# We provide a minimal DllMainCRTStartup in wrapper-dllmain.c.
+# The atexit() stub satisfies libmingwex.a's dtoa_lock cleanup reference.
+
+cat > wrapper-dllmain.c << 'SHIM'
+#include <windows.h>
+
+/*
+ * Minimal DLL entry point.  Bypasses the mingw-w64 CRT startup (dllcrt2.o)
+ * entirely: no _initterm, no _lock/_unlock, no __iob_func — none of the
+ * msvcrt.dll symbols that crash when javaw.exe (ucrtbase.dll) loads us.
+ *
+ * Standard C functions (malloc, printf, etc.) resolve via -lucrt to
+ * ucrtbase.dll through the API-set shims (api-ms-win-crt-*), matching
+ * javaw.exe's CRT.
+ *
+ * The atexit() stub below satisfies libmingwex.a references (dtoa_lock
+ * cleanup).  In a DLL that never registers C++ static destructors, this
+ * is a safe no-op.
+ */
+
+int atexit(void (*func)(void)) { (void)func; return 0; }
+
+BOOL WINAPI DllMainCRTStartup(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
+    (void)hinstDLL; (void)lpvReserved;
+    if (fdwReason == DLL_PROCESS_DETACH) return TRUE;
+    return TRUE;
+}
+SHIM
+
 cat > Makefile-windows-x64-dll.mingw << 'MAKEFILE'
 CC = x86_64-w64-mingw32-gcc
 DLL_FLAGS = -O2 -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WINDOWS -D_USRDLL -DDECODERJNI_VC8_EXPORTS -D_WINDLL -D_WIN32_WINNT=0x0601
-DLL_LIBS = -lws2_32 -lwsock32 -lshlwapi -ladvapi32 -luser32 -lshell32 -liphlpapi -lcrypt32 -lwintrust -lpsapi -lole32 -loleaut32 -lmpr -lnetapi32 -lbcrypt -lntdll -ldbghelp
+# Link order matters: --start-group/--end-group resolves circular deps between
+# libucrt.a, libucrtbase.a, and libmingwex.a.  libucrt.a provides CRT symbols
+# backed by ucrtbase.dll; libucrtbase.a adds ucrt-specific I/O; libmingwex.a
+# provides POSIX/Win32 glue.  All three are needed, and libmingwex.a has
+# references to libucrt.a symbols (and vice versa) that won't resolve without
+# the group.
+DLL_LIBS = -nostartfiles -Wl,--start-group -lucrt -lucrtbase -lmingw32 -lmingwex -lgcc -lgcc_s -Wl,--end-group -lws2_32 -lwsock32 -lshlwapi -ladvapi32 -luser32 -lshell32 -liphlpapi -lcrypt32 -lwintrust -lpsapi -lole32 -loleaut32 -lmpr -lnetapi32 -lbcrypt -lntdll -ldbghelp
 
 OBJS = wrapper_i18n.o wrapperjni_win.o wrapperjni_debug.o wrapperjni_exception.o \
-       wrapperjni_utils.o wrapperinfo.o wrapperjni.o loggerjni.o wrapper_backend_base.o
+       wrapperjni_utils.o wrapperinfo.o wrapperjni.o loggerjni.o wrapper_backend_base.o \
+       wrapper-dllmain.o
 
 .PHONY: all clean
 
@@ -299,7 +352,7 @@ wrapper.dll: $(OBJS)
 	$(CC) -c $< -o $@ $(DLL_FLAGS) -I"$(JNI_INC)" -I"$(JNI_WIN_INC)"
 
 clean:
-	rm -f $(OBJS) wrapper.dll
+	rm -f $(OBJS) wrapper-dllmain.c wrapper.dll
 MAKEFILE
 
 make -f Makefile-windows-x64-dll.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}"
