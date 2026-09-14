@@ -97,7 +97,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
              else {size = packet.writePacket(buf, 0);}
 
              // last chance to short circuit...
-              if (packet.writeReleased()) {_cache.release(ba); return false;}
+              if (packet.writeReleased()) {return false;}
 
               // this should not block!
              begin = _context.clock().now();
@@ -222,9 +222,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 _log.warn("Unable to send the packet " + packet + " -> " + ise.getMessage());
                 isLogged = true;
             }
+        } finally {
+            _cache.release(ba);
         }
-
-        _cache.release(ba);
 
         long enqueueElapsed = _context.clock().now() - enqueueStart;
         if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) && _log.shouldInfo())

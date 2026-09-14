@@ -504,6 +504,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         boolean isHead = false;
         boolean plus = false;
         I2PSocket i2ps = null;
+        Hash heldPermitDest = null;
         try {
             s.setSoTimeout(INITIAL_SO_TIMEOUT);
             out = s.getOutputStream();
@@ -524,7 +525,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // Track whether we hold a per-dest connection permit for this
             // iteration's I2P socket.  Released when the socket closes (after
             // the tunnel-runner completes) or on connection-failure cleanup.
-            Hash heldPermitDest = null;
 
             if (requestCount > 0) {
                 try {
@@ -1710,6 +1710,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             }
             writeServiceUnavailable(out, ex.getMessage());
         } finally {
+            // Release any held connection permit — the inner loop releases on
+            // normal paths, but an interrupt during a connect-retry sleep can
+            // escape the do-while without reaching those release points.
+            if (heldPermitDest != null) {
+                releaseConnPermit(heldPermitDest);
+                heldPermitDest = null;
+            }
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
