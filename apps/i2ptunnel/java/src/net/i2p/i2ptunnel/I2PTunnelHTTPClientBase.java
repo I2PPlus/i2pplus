@@ -550,7 +550,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                         return AuthResult.AUTH_GOOD;
                     }
                     _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
-                    try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
+                    // Rate-limit per-IP: brief sleep only on repeated failures.
+                    // A full 5 s sleep per attempt is a DoS amplifier — an attacker
+                    // can trivially exhaust the thread pool.  The auth failure itself
+                    // already denies the request; a per-IP cooldown in the caller
+                    // (ticket #1234) would be a better long-term fix.
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
                     // no ':' in response
                     if (_log.shouldWarn()) {

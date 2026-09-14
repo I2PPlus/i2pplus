@@ -880,7 +880,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // and rely on the server to do the actual timeout
         socket.setReadTimeout(SERVER_READ_TIMEOUT_POST);
         Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
-        I2PTunnelRunner runner = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
+        I2PTunnelRunner runner = new I2PTunnelRunner(s, socket, slock, null, null, null,
+            (e) -> {
+                // SSL passthrough: no HTTP error page possible (browser already
+                // sent ClientHello).  Reset the socket so the browser gets a
+                // clean failure instead of a silent hang.
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] 443 connection failed" + (e != null ? ": " + e : ""));
+                }
+                try { socket.reset(); }
+                catch (IOException ioe) { /* ignored */ }
+            });
         runner.setExecutor(_clientExecutor);
         try {
             _clientExecutor.execute(runner);
@@ -972,7 +982,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
                 return;
             } catch (RejectedExecutionException e) {
-                address = InetAddress.getByName(hostname);
+                // Executor saturated — do NOT block on synchronous DNS, which
+                // would stall the request handler thread under load.  Close the
+                // socket so the client gets a clean failure instead of a hang.
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] DNS executor saturated, cannot resolve " + hostname + " " + tunnelId +
+                              "\n* Client: " + peerB32);
+                }
+                try {socket.close();}
+                catch (IOException ioe) { /* ignored */ }
+                return;
             }
             if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                 if (_log.shouldWarn()) {
@@ -1284,7 +1303,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final boolean _shouldCompress;
         private final boolean _upgrade;
         private final ThreadPoolExecutor _tpe;
-        private boolean _keepalive;
+        private volatile boolean _keepalive;
         private final AtomicInteger _waiter;
         private static final int BUF_SIZE = 16*1024;
 
