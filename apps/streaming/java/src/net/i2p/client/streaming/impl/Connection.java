@@ -354,6 +354,10 @@ class Connection {
     private static final int SSTHR_BW_FACTOR = 2;
     /** Minimum slow start threshold after fast retransmit */
     private static final int MIN_SSTHR_FAST_RETX = 16;
+    /** Minimum RTT (ms) used when deriving the bandwidth slow-start threshold anchor.
+     *  A raw sub-second min-RTT would shrink the anchor toward the degenerate 16-packet
+     *  floor after the first loss event, locking a healthy pipe at ~10KB/s. */
+    static final int SS_THRESH_BW_ANCHOR_MIN_RTT = 1000;
 
     /**
      *  Give up resending an unacked SYN after this many sends.
@@ -1084,6 +1088,51 @@ class Connection {
     }
 
     /**
+     *  The bandwidth-derived slow-start threshold anchor: the packets the pipe
+     *  can hold, estimated as measured bandwidth times the effective RTT times
+     *  the growth factor, floored at the given minimum.
+     *
+     *  <p>The effective RTT is floored at {@link #SS_THRESH_BW_ANCHOR_MIN_RTT}
+     *  (1s): a raw sub-second min-RTT would otherwise shrink the anchor below
+     *  the classic fast-retransmit floor (16 packets) on a healthy path, and
+     *  once the window is pinned there the low ACK rate lowers the measured
+     *  bandwidth, confirming the low anchor — a self-reinforcing ~10KB/s lock.
+     *
+     *  @param bwEstPacketsPerMs measured bandwidth in packets/ms (&gt;= 0)
+     *  @param minRttMs the connection's raw min-RTT in ms (&gt;= 0)
+     *  @param factor growth factor applied to the BDP estimate (&gt;= 1)
+     *  @param floor minimum anchor in packets (&gt;= 1)
+     *  @return anchor in packets, never below {@code floor}
+     */
+    static int bandwidthSsthreshAnchor(float bwEstPacketsPerMs, int minRttMs, int factor, int floor) {
+        int effRttMs = Math.max(minRttMs, SS_THRESH_BW_ANCHOR_MIN_RTT);
+        return Math.max(Math.round(bwEstPacketsPerMs * effRttMs * factor), floor);
+    }
+
+    /**
+     *  Whether a congestion episode's lost window has been fully recovered.
+     *
+     *  <p>Recovery is declared once the ACK stream has passed the congestion
+     *  mark <em>and</em> no retransmits remain outstanding. The window itself
+     *  need not be empty: a pipe dribbling data must not stay locked in the
+     *  graduated tiers merely because it never fully drains. Requiring zero
+     *  outstanding retransmits still guards against a stale ACK claiming
+     *  recovery on a NACK path before the paced resends have cleared.
+     *
+     *  @param hadCongestionMark true when a congestion cut has ever occurred
+     *  @param ackThrough highest contiguously-acked sequence number
+     *  @param lastCongestionHighestUnacked highest unacked sequence number at
+     *         the cut, -1 if none
+     *  @param activeResends retransmits still awaiting their ACK
+     *  @return true when the lost window has been recovered
+     *  @since 0.9.73+
+     */
+    static boolean lossEpisodeRecovered(boolean hadCongestionMark, long ackThrough,
+                                        long lastCongestionHighestUnacked, int activeResends) {
+        return hadCongestionMark && ackThrough > lastCongestionHighestUnacked && activeResends == 0;
+    }
+
+    /**
      *  Strike decay: a single loss strike is forgiven once at least one
      *  smoothed RTT (floored at 500 ms) has passed without another strike,
      *  rolling the graduated backoff back down toward the gentle tier. One-off
@@ -1678,14 +1727,12 @@ class Connection {
             anyLeft = ob != null && !ob.isEmpty();
             _outboundPacketsLock.notifyAll();
 
-            if (_lastCongestionHighestUnacked >= 0 && ackThrough > _lastCongestionHighestUnacked && !anyLeft) {
+            if (lossEpisodeRecovered(_lastCongestionHighestUnacked >= 0, ackThrough, _lastCongestionHighestUnacked, _activeResends.get())) {
                 // The lost window has been fully recovered: consecutive-loss
                 // strikes reset so the next loss starts from the gentle tier.
-                // Only when the outstanding window is actually empty — on a
-                // NACK, _highestAckedThrough advances to lowest-1 (1565) while
-                // the NACKed packets stay in the map, so a stale ack could
-                // otherwise claim recovery and restart the graduated window
-                // cut prematurely.
+                // A pipe that keeps flowing (trickle ACKs) must not stay locked
+                // in the graduated tiers merely because the window never fully
+                // drains; see lossEpisodeRecovered() for the guard.
                 _lossStrikes = 0;
             }
 
@@ -3115,8 +3162,8 @@ class Connection {
                     _lastLossStrikeTime = now;
                     int strikes = _lossStrikes;
                     _caWindowAccumulator = 0;
-                    int bwSsthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
-                    bwSsthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), bwSsthresh);
+                    int bwSsthresh = Math.max(bandwidthSsthreshAnchor(_bwEstimator.getBandwidthEstimate(), _options.getMinRTT(), 1, 2),
+                                              graduatedLossWindow(strikes, wsize));
                     // Graduated cut: a single failed packet shrinks the window only
                     // mildly (7/8), escalated strikes back off harder (3/4, then 1/2).
                     // ssthresh is kept at least the new window so slow-start can
@@ -3571,8 +3618,8 @@ class Connection {
                     _caWindowAccumulator = 0;
                     if (_packet.getNumSends() == 1) {
                         int strikes = _lossStrikes;
-                        int bwSsthresh = Math.max(Math.round(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT() * SSTHR_BW_FACTOR),
-                                                  MIN_SSTHR_FAST_RETX);
+                        int bwSsthresh = bandwidthSsthreshAnchor(_bwEstimator.getBandwidthEstimate(), _options.getMinRTT(),
+                                                  SSTHR_BW_FACTOR, MIN_SSTHR_FAST_RETX);
                         bwSsthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), bwSsthresh);
                         int wsize = _options.getWindowSize();
                         // Floor ssthresh at the graduated window so the connection

@@ -250,4 +250,44 @@ public class ConnectionRecoveryDecisionTest {
         assertEquals(Connection.IMMEDIATE_RETX_BURST, 4);
         assertEquals(Connection.MAX_PACED_RETX, 4);
     }
+
+    // ---- lossEpisodeRecovered ----
+
+    /** Without a congestion cut ever having occurred, the episode is never recovered. */
+    @Test
+    public void testNoCongestionMarkNeverRecovered() {
+        assertFalse(Connection.lossEpisodeRecovered(false, 100, -1, 0));
+        assertFalse(Connection.lossEpisodeRecovered(false, 100, 50, 0));
+        assertFalse(Connection.lossEpisodeRecovered(false, 0, 0, 0));
+    }
+
+    /** ACK stream past the mark with no outstanding retransmits: recovered. */
+    @Test
+    public void testPastMarkWithNoResendsRecovered() {
+        assertTrue(Connection.lossEpisodeRecovered(true, 51, 50, 0));
+        assertTrue(Connection.lossEpisodeRecovered(true, 1000, 500, 0));
+    }
+
+    /** A recovered episode needs the ACK to strictly pass the congestion mark. */
+    @Test
+    public void testAtMarkNotYetRecovered() {
+        assertFalse(Connection.lossEpisodeRecovered(true, 50, 50, 0));
+        assertFalse(Connection.lossEpisodeRecovered(true, 49, 50, 0));
+    }
+
+    /** Outstanding retransmits block recovery even when the ACKs have passed: a stale
+     *  ACK on a NACK path must not claim recovery before the paced resends clear. */
+    @Test
+    public void testOutstandingResendsBlockRecovery() {
+        assertFalse(Connection.lossEpisodeRecovered(true, 1000, 500, 1));
+        assertFalse(Connection.lossEpisodeRecovered(true, 1000, 500, 5));
+    }
+
+    /** A trickle-backed pipe recovers without the window being fully drained. */
+    @Test
+    public void testRecoveryNeedsNoDrainedWindow() {
+        // ack passed the mark, retransmits cleared, but packets remain in flight —
+        // still recovered: this is the fix over the old anyLeft (window-empty) gate
+        assertTrue(Connection.lossEpisodeRecovered(true, 1000, 500, 0));
+    }
 }
