@@ -485,6 +485,21 @@ public class PeerProfile {
     }
 
     /**
+     * Whether this peer has non-trivial DB interaction activity.
+     * Used to persist floodfill profiles across restarts so that
+     * lookup/store success rates survive and the peer is not
+     * misclassified as "too new" on the next startup.
+     *
+     * @return true if the peer has any successful or failed lookups or stores
+     * @since 0.9.71+
+     */
+    public boolean hasDBActivity() {
+        DBHistory h = _dbHistory;
+        return h != null && (h.getSuccessfulLookups() > 0 || h.getFailedLookups() > 0 ||
+                             h.getLastStoreSuccessful() > 0 || h.getLastStoreFailed() > 0);
+    }
+
+    /**
      * The tunnel history.
      *
      * @param history the TunnelHistory
