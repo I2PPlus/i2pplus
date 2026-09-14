@@ -2201,6 +2201,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         _log.warn("[HTTPClient] Naming lookup timed out for " + hostname + " after " + timeoutMs + "ms");
                     }
                     lookupThread.interrupt();
+                    // Brief join to let the interrupted lookup terminate cleanly
+                    // and release any naming-service resources it holds.
+                    try { lookupThread.join(2000); } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                     return null;
                 }
             }
