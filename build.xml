@@ -2102,13 +2102,11 @@
     <parallel>
       <copy quiet="true" verbose="false" file="${build.root}build/jbigi.jar" todir="${pkg.temp.dir}/lib"/>
       <!--
-         Force using the new wrapper.jar.
-         The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy the correct
-         version of the wrapper.jar file for windows and rename it so the user can use it to replace the existing
-         wrapper.jar file. We do not generate release files from this target. See preppkg-windows-only target below.
+         installer/lib/wrapper/all/wrapper.jar is the single canonical wrapper jar.
+         We only ship win64 natives (cross-compiled to match), so there is no separate
+         win-all jar and no byte-identical wrapper-windows.jar rename copy.
         -->
-      <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
-      <copy quiet="true" verbose="false" file="installer/lib/wrapper/win-all/wrapper.jar" tofile="${pkg.temp.dir}/lib/wrapper-windows.jar"/>
+      <copy quiet="true" verbose="false" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
     </parallel>
   </target>
 
@@ -2223,20 +2221,13 @@
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/win64/">
         <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md *.nmake"/>
       </copy>
-      <copy quiet="true" verbose="false" file="installer/lib/wrapper/win-all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
+      <copy quiet="true" verbose="false" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
     </parallel>
   </target>
 
   <target name="preppkg-windows-only" depends="preppkg-windows, jbigi-windows-only">
     <copy quiet="true" verbose="false" file="${build.root}build/jbigi.jar" todir="${pkg.temp.dir}/lib"/>
-    <!--
-             Win binaries are down-rev from the others, so use the old jar.
-             This will not overwrite, so preppkg (for all OSes) will get the new jar with
-             the old binaries, which will probably work but will output a warning.
-             The windows-only installer will get the correct jar.
-        <copy quiet="true" verbose="false" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
-        -->
-    <copy overwrite="true" file="installer/lib/wrapper/win-all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
+    <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
   </target>
 
   <!-- see targets below for conditional copying -->
