@@ -320,10 +320,8 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       from { project(':installer').jar.archiveFile }
     }
 
-    // Single source of truth: installer/lib/wrapper/all/wrapper.jar is the
-    // canonical jar for every platform. We only build win64 natives
-    // (cross-compiled to match it), so there is no separate win-all jar
-    // and no byte-identical wrapper-windows.jar rename copy.
+    // installer/lib/wrapper/all/wrapper.jar is the canonical jar for every
+    // platform (win64 cross-compiled, all others from the Tanuki delta pack).
     into('lib') {
       from('installer/lib/wrapper/all/wrapper.jar')
     }

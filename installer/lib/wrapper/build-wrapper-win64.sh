@@ -27,8 +27,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-SRC_DATE="20260716"
+SRC_DATE="20260904"
 case "$VERSION" in
+    3.7.3) SRC_DATE="20260904" ;;
     3.7.0) SRC_DATE="20260716" ;;
     3.6.5) SRC_DATE="20260317" ;;
     3.6.4) SRC_DATE="20251218" ;;
@@ -117,6 +118,9 @@ sed -i 's/"Winternl\.h"/"winternl.h"/g' wrapper.c
 sed -i '48i// Workaround for missing InterlockedOrAcquire in mingw-w64\n#if !defined(InterlockedOrAcquire)\n#define InterlockedOrAcquire InterlockedOr\n#endif\n' wrapper_win.c
 sed -i 's/ChainPara.dwUrlRetrievalTimeout = timeout;/\/\/ ChainPara.dwUrlRetrievalTimeout = timeout;/' wrapper_win.c
 sed -i 's/ChainPara.RequestedIssuancePolicy = CertUsage;/\/\/ ChainPara.RequestedIssuancePolicy = CertUsage;/' wrapper_win.c
+# 3.7.3+: cannot take address of cast rvalue in GetExitCodeProcess call
+# Fix: &((DWORD)x) -> (LPDWORD)&x  (take address of the struct member, not the cast)
+sed -i 's/&((DWORD)queryInfo->exitCode)/(LPDWORD)\&queryInfo->exitCode/g' wrapper_win.c
 # Upstream quirk: wrapperjni.h declares JNU_SetByteArrayRegion extern, the
 # .c defines it static; gcc rejects the mismatch (MSVC tolerates it)
 sed -i 's/^static void JNU_SetByteArrayRegion(/void JNU_SetByteArrayRegion(/' wrapperjni_exception.c

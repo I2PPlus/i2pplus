@@ -2102,10 +2102,9 @@
     <parallel>
       <copy quiet="true" verbose="false" file="${build.root}build/jbigi.jar" todir="${pkg.temp.dir}/lib"/>
       <!--
-         installer/lib/wrapper/all/wrapper.jar is the single canonical wrapper jar.
-         We only ship win64 natives (cross-compiled to match), so there is no separate
-         win-all jar and no byte-identical wrapper-windows.jar rename copy.
-        -->
+         installer/lib/wrapper/all/wrapper.jar is the single canonical wrapper jar
+         for every platform (win64 cross-compiled, all others from the Tanuki delta pack).
+      -->
       <copy quiet="true" verbose="false" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
     </parallel>
   </target>
