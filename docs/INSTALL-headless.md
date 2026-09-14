@@ -18,25 +18,29 @@ https://i2p-irc.stormycloud.org/
 
 I2P+ stores configuration data in the user directory `~/.i2p/` on Linux
 and `%LOCALAPPDATA%\I2P\` on Windows. This directory is created on first run.
+When run as a Windows service, the config directory is moved to
+`%PROGRAMDATA%\i2p` instead (see `service.ps1` in `docs/WINDOWS.md`).
 Additional files are written to the JVM temporary directory.
 
 To relocate these directories (or configure a portable installation), edit
-`i2prouter` (Linux) and `wrapper.config` (Linux/Windows) and look for
-comments labelled `PORTABLE`. Do this before running I2P+ for the first time.
+`i2prouter` (Linux) and `wrapper.config.commented` (Linux/Windows) and look
+for comments labelled `PORTABLE`; the shipped `wrapper.config` itself is a
+minimal copy that refers to the commented version. Do this before running
+I2P+ for the first time.
 
 ## Running I2P+
 
 | Platform            | Command                |
 | ------------------- | ---------------------- |
 | Linux, BSD, Mac     | `sh i2prouter start`   |
-| Windows             | `I2P.exe`              |
+| Windows             | `i2p.exe` or `i2prouter.bat` |
 | Without wrapper     | `sh runplain.sh`       |
 
 ## Stopping I2P+
 
 | Method      | Command                                                       |
 | ----------- | ------------------------------------------------------------- |
-| Graceful    | `sh i2prouter graceful` or http://localhost:7657/summaryframe |
+| Graceful    | `sh i2prouter graceful` or the Router Console service page (`/configservice`) |
 | Immediate   | `sh i2prouter stop`                                           |
 
 ## Uninstalling
