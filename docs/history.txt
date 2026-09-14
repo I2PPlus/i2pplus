@@ -1,3 +1,65 @@
+2026-09-14 dr|z3d
+  * Streaming: Floor ssthresh anchor at 1s RTT, reset strikes on ACK
+    progress to prevent premature degradation
+  * Wrapper:
+    - Update Tanuki wrapper 3.7.0 → 3.7.3
+    - Purge win32/win-all, standardize to win64-only single jar
+    - Rebuild win64 I2Psvc.exe and wrapper.dll
+  * Installer:
+    - Fix Windows service startup: correct version token substitution
+      (@version.root@ uses full version, not middle field), remove
+      i2p.dir.base property (backslash escape FATAL), use forward slash
+      in service.ps1 i2p.dir.config, redirect logfile to $INSTALL_PATH
+    - Fix OpenJDK 25 installer crash: add -Dsun.java2d.d3d=false to
+      launch4j configs (JDK-8365960 displayChanged NULL deref)
+    - Link wrapper.dll against ucrt/ucrtbase instead of msvcrt to
+      avoid CRT mismatch crashes in javaw.exe
+
+2026-09-13 dr|z3d
+  * Streaming:
+    - Per-connection max connect timeout override
+    - Disconnect outside outbound-packets lock in retransmit backstop
+  * Packet: Cap max size to the 2-byte wire field, harden signature
+    verify and pcap log
+  * Connection:
+    - Track raw min-RTT and make RTO backoff monotonic
+    - Fix SYN burst re-arm, connect accounting and pool handover
+    - Fix outbound-window loss-recovery accounting races
+    - Serialize all per-connection receive processing on shard workers
+    - Flush queued data and CLOSE on clean close
+    - Dedupe paced resends on release, count consumed bytes in headroom
+  * NTCP2: Spill to an exact-size buffer for frames over the pooled size
+  * Router: Gate stale lease set stores and throttle sends via cooldown
+    and negative cache
+  * Profiles: WARN on profile write races, re-create missing shard dir
+    and retry
+  * Core: Enforce group-readable log perms via PROP_GROUP_READABLE
+  * All: Purge 32-bit jbigi and wrapper binaries
+
+2026-09-12 dr|z3d
+  * Streaming:
+    - Ramp CWIN fast, decline slowly; deterministic CA growth
+    - Use a fresh outbound tunnel per new connection so retries skip
+      stalled tunnels
+    - Pin SYN give-up floor and initial RTO clamp contracts
+    - Raise initial SYN RTO default to 9000ms
+  * Tuner:
+    - Raise INITIAL_RTO floor to 6000ms
+    - Ramp CWIN and streaming windows aggressively
+    - Re-add per-peer max send window autotuning with heap-scaled
+      CWIN ceiling
+    - Stop writing live-settable params to router.config
+  * I2PTunnel:
+    - Rotate IRC client targets on connect retries with exponential
+      backoff
+    - Promote poolState()/poolIsDefinitivelyDown() to
+      I2PTunnelClientBase
+  * Router: Drop stale per-dest outbound tunnel cache when retry
+    rotation saturates
+  * Installer: Fix I2Psvc.exe ACCESS_VIOLATION by replacing pipeline
+    redirect with *> (prevents pipe handle inheritance by SCM),
+    add BOM+CRLF+logging to service.ps1
+
 2026-09-11 dr|z3d
   * Streaming:
     - Resume established connections when a head-of-line packet hits its
@@ -17,7 +79,9 @@
   * Console: Fix streaming setting defaults and restart claims on advanced
     config page
   * Installer: Fix 64-bit detection and false 32-bit rejection on 64-bit
-    Windows
+    Windows; consolidate Windows installer scripts into service.ps1,
+    add WINDOWS.md
+  * Data: Fix Destination.writeBytes()/size() for 32-byte key destinations
 
 2026-09-09 dr|z3d
   * Tunnel:
