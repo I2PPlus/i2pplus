@@ -162,6 +162,9 @@ class Connection {
     /** Pacing lock. */
     private final Object _pacingLock = new Object();
 
+    /** Window size saved before the remote choked us, restored on unchoke.
+     *  -1 means no saved value (not choked, or choked before field existed). */
+    private volatile int _preChokeWindowSize = -1;
     /** Whether the other side has choked us. */
     private volatile boolean _isChoked;
     /** Whether we are choking the other side. */
@@ -1562,8 +1565,17 @@ class Connection {
                 packet.setTimeout(timeout);
             }
 
-            // Pace or send immediately
-            long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
+            // Pace or send immediately.
+            // Skip pacing during slow-start (small windows) where the window
+            // itself is the bottleneck and the pacing rate is computed from a
+            // stale initial RTT (DEFAULT_INITIAL_RTT = 2s), which would
+            // artificially throttle throughput to ~108 KB/s regardless of the
+            // actual path capacity. Pacing is only useful at larger windows to
+            // prevent bursts; at small windows the window is the throttle.
+            int wsz = _options.getWindowSize();
+            long pacingDelay = (wsz < PACING_SLOWSTART_THRESHOLD)
+                ? 0
+                : calculatePacingDelay(packet.getPayloadSize());
             if (pacingDelay > 0) {
                 synchronized (_pacedQueueLock) {
                     LinkedList<PacketLocal> pq = pacedQueue();
@@ -2431,6 +2443,19 @@ class Connection {
                // Episode boundary for the persist WARN gate: once the remote
                // unchokes us, a fresh persist episode in a later window may log.
                _lastPersistWarnTime = 0;
+               // Restore the congestion window to the larger of the pre-choke
+               // value and the slow-start threshold so the connection doesn't
+               // have to crawl back from 1 through congestion avoidance.
+               int saved = _preChokeWindowSize;
+               _preChokeWindowSize = -1;
+               if (saved > 0) {
+                   int restored = Math.max(saved, _ssthresh);
+                   _options.setWindowSize(restored);
+                   if (_log.shouldInfo()) {
+                       _log.info("Restoring window to " + restored + " (was " + saved +
+                                 ", ssthresh " + _ssthresh + ") on unchoke for " + this);
+                   }
+               }
                windowAdjusted();
            }
         }
@@ -2450,6 +2475,11 @@ class Connection {
              * We don't do any of that, but we set the window size to 1, and let the retransmission
              * of packets do the "attempted recovery".
              */
+            // Only save the window on the first choke; a re-assert while
+            // already choked must not overwrite the pre-choke value with 1.
+            if (_preChokeWindowSize < 0) {
+                _preChokeWindowSize = _options.getWindowSize();
+            }
             _options.setWindowSize(1);
             updatePacingRate(); // Update pacing when window changes
         }
@@ -2721,11 +2751,20 @@ class Connection {
                 schedule(left);
                 return;
             }
-            // these are either going to time out or cause further rescheduling
-            if (getUnackedPacketsSent() > 0) {
+            // Check if the remote has been silent for the full inactivity window.
+            // getTimeLeft() uses getLastActivityOn() (max of send+receive), so
+            // during retransmits _lastSendTime refreshes and the timer stays alive.
+            // This secondary check catches a dead remote even while we are still
+            // sending: if we haven't RECEIVED anything for the full timeout, the
+            // remote is gone regardless of our outbound activity.
+            if (getUnackedPacketsSent() > 0 &&
+                !remoteSilentTooLong(_lastReceivedOn,
+                                     effectiveInactivityTimeout(_options.getInactivityTimeout(),
+                                                                REMOTE_SILENT_FALLBACK_MS),
+                                     _context.clock().now())) {
                 if (_log.shouldDebug()) {
                     _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() +
-                               " but there are unACKed packets!");
+                               " but there are unACKed packets and remote is not yet silent!");
                 }
                 return;
             }
@@ -3507,6 +3546,15 @@ class Connection {
      * paced queue (hard drain deadline). @since 0.9.71+
      */
     static final int MAX_PACED_RETX = 4;
+
+    /**
+     * Window size below which pacing is bypassed to avoid the stale-initial-RTT
+     * throttle.  During slow-start the window itself is the bottleneck and the
+     * pacing rate (computed from {@code DEFAULT_INITIAL_RTO = 2s}) would cap
+     * throughput at ~108 KB/s regardless of actual path capacity.
+     * @since 0.9.73+
+     */
+    static final int PACING_SLOWSTART_THRESHOLD = 8;
 
     /**
      * A new ResendPacketEvent.
