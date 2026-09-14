@@ -116,7 +116,7 @@ class Connection {
     /** I2P socket for this connection. */
     private I2PSocketFull _socket;
     /** Error cause if the connection could not be established. */
-    private String _connectionError;
+    private volatile String _connectionError;
     /** Atomic long. */
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
     /** Last received on. Written on the receive/notification thread
@@ -2006,6 +2006,12 @@ class Connection {
             else {
                 long cro = _closeReceivedOn.get();
                 long cso = _closeSentOn.get();
+                // RACE NOTE: cro and cso are read non-compound — a concurrent
+                // closeReceived() could set cro between the two reads.  All
+                // races here err conservatively: we enter TIME-WAIT when we
+                // could have skipped it (minor resource waste), never the
+                // reverse.  The extra safety is worth the occasional extra
+                // timeout slot.
                 if (cro > 0 && cro < cso && getUnackedPacketsSent() <= 0) {
                     if (_log.shouldInfo()) {
                         _log.info("Rcv close -> send close -> last ACKed, skip TIME-WAIT for " + toString());
