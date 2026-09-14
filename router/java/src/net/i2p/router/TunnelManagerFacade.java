@@ -277,4 +277,18 @@ public interface TunnelManagerFacade extends Service {
      * @since 0.9.68+
      */
     public GhostPeerManager getGhostPeerManager();
+
+    /**
+     * Report a data-phase send failure for a specific tunnel.
+     * Called from the I2CP message dispatch path when a message fails
+     * through a known tunnel (e.g. expired, local overflow, no tunnels
+     * available).  Increments the tunnel's failure counter and triggers
+     * replacement builds when the threshold is reached, so the pool
+     * rotates away from the failing tunnel faster than TestJob alone.
+     *
+     * @param tunnel the outbound tunnel that carried the failed message
+     * @param status the I2CP MessageStatusMessage failure code
+     * @since 0.9.71+
+     */
+    public void reportSendFailure(TunnelInfo tunnel, int status);
 }

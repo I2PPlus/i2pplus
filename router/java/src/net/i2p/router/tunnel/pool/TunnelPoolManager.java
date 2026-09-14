@@ -1418,6 +1418,31 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     void tunnelFailed() { _executor.repoll(); }
 
     /**
+     *  Report a data-phase send failure for a specific outbound tunnel.
+     *  Routes to the correct pool (client or exploratory) based on the
+     *  tunnel's destination, so the pool can increment the failure counter
+     *  and trigger replacement builds immediately.
+     *
+     *  @param tunnel the outbound tunnel that carried the failed message
+     *  @param status the I2CP MessageStatusMessage failure code
+     *  @since 0.9.71+
+     */
+    @Override
+    public void reportSendFailure(TunnelInfo tunnel, int status) {
+        if (tunnel == null) {return;}
+        Hash dest = tunnel.getDestination();
+        TunnelPool pool;
+        if (dest != null) {
+            pool = _clientOutboundPools.get(dest);
+        } else {
+            pool = _outboundExploratory;
+        }
+        if (pool != null) {
+            pool.reportSendFailure(tunnel, status);
+        }
+    }
+
+    /**
      * The build executor.
      * @return the build executor
      */

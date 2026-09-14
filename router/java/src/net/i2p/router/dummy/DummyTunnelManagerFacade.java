@@ -107,4 +107,7 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public GhostPeerManager getGhostPeerManager() {
         return null;
     }
+
+    @Override
+    public void reportSendFailure(TunnelInfo tunnel, int status) { /* no-op */ }
 }

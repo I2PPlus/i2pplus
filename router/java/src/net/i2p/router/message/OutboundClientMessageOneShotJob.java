@@ -1183,12 +1183,44 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         clearCaches();
+        // Report data-phase failures to the tunnel pool so it can
+        // rotate away from failing tunnels faster than TestJob alone.
+        // Only report for tunnel-related statuses — remote-destination
+        // failures (bad LS, bad encryption) are not the tunnel's fault.
+        if (_outTunnel != null && isTunnelRelatedFailure(status)) {
+            getContext().tunnelManager().reportSendFailure(_outTunnel, status);
+        }
         //getContext().messageHistory().sendPayloadMessage(_clientMessageId.getMessageId(), false, sendTime);
         long nonce = _clientMessage.getMessageNonce();
         if (nonce > 0) {
             getContext().clientManager().messageDeliveryStatusUpdate(_from, _clientMessageId, nonce, status);
         }
         getContext().statManager().updateFrequency("client.sendMessageFailFrequency");
+    }
+
+    /**
+     *  Whether the I2CP failure status indicates a tunnel or local
+     *  problem (as opposed to a remote-destination problem).
+     *  Only tunnel-related failures should be reported to the pool
+     *  for failure tracking — remote failures are not the tunnel's fault.
+     *
+     *  @param status the I2CP MessageStatusMessage failure code
+     *  @return true if the failure is likely caused by the outbound tunnel
+     *  @since 0.9.71+
+     */
+    private static boolean isTunnelRelatedFailure(int status) {
+        switch (status) {
+            case MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS:   // 16
+            case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:        // 7
+            case MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED:      // 14
+            case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:  // 3
+            case MessageStatusMessage.STATUS_SEND_FAILURE_ROUTER:       // 8
+            case MessageStatusMessage.STATUS_SEND_FAILURE_NETWORK:      // 9
+            case MessageStatusMessage.STATUS_SEND_FAILURE_OVERFLOW:     // 13
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**

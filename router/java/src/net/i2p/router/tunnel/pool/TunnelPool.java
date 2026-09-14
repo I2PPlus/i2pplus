@@ -2427,6 +2427,49 @@ public class TunnelPool {
     }
 
     /**
+     *  Report a data-phase send failure for a tunnel in this pool.
+     *  Called from the I2CP dispatch path (OutboundClientMessageOneShotJob)
+     *  when a message fails through a known tunnel.  Increments the
+     *  failure counter so the tunnel is deprioritized in selection, and
+     *  triggers replacement builds when the threshold is reached.
+     *  <p>
+     *  Unlike TestJob failures (which test the full round-trip including
+     *  the reply path), data-phase failures indicate the outbound tunnel
+     *  itself may be broken.  A single failure is not conclusive — the
+     *  tunnel gets one retry via {@link TunnelCreatorConfig#incrementTestFailures()}.
+     *  A second failure within the TestJob window triggers full removal
+     *  via {@link TunnelCreatorConfig#tunnelFailed()}.
+     *
+     *  @param cfg the tunnel that carried the failed message
+     *  @param status the I2CP MessageStatusMessage failure code
+     *  @since 0.9.71+
+     */
+    void reportSendFailure(TunnelInfo cfg, int status) {
+        if (cfg.getTunnelFailed()) {return;}
+        // First data-phase failure: track but keep alive for retry.
+        // This matches TestJob behavior — a single failure could be a
+        // transient reply-path issue or congestion, not a dead tunnel.
+        cfg.incrementTestFailures();
+        if (_log.shouldInfo()) {
+            _log.info(toString() + " -> Data-phase failure (status=" + status +
+                      ") for tunnel, failures now " + cfg.getConsecutiveFailures() +
+                      "\n* " + cfg);
+        }
+        // On second+ failure, remove the tunnel and build a replacement.
+        // collapse guard is handled by fail() which checks remaining count.
+        if (cfg.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {
+            if (_log.shouldWarn()) {
+                _log.warn(toString() + " -> Removing tunnel after " +
+                          cfg.getConsecutiveFailures() +
+                          " cumulative failures (data-phase + test)\n* " + cfg);
+            }
+            fail(cfg);
+            tellProfileFailed(cfg);
+        }
+        if (_alive) {ensureSufficientTunnels();}
+    }
+
+    /**
      *  Does this pool publish a LeaseSet to the network?
      *  Structural: inbound + non-exploratory. Additionally, for
      *  I2CP pools, the session's i2cp.dontPublishLeaseSet option

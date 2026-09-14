@@ -169,6 +169,16 @@ public interface TunnelInfo {
     public int getConsecutiveFailures();
 
     /**
+     *  Increment the failure count without triggering pool removal or reuse flag.
+     *  Used when a previously GOOD tunnel fails a retest or a data-phase send —
+     *  we want to track the failure for selection deprioritization but keep the
+     *  tunnel alive for further testing and data delivery.
+     *
+     *  @since 0.9.71+
+     */
+    public void incrementTestFailures();
+
+    /**
      * The latency of the last tunnel test.
      *
      * @return latency in milliseconds, or -1 if not available
