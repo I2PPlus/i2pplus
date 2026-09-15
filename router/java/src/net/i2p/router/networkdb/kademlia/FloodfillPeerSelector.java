@@ -41,7 +41,7 @@ import net.i2p.stat.RateStat;
  * not the original key.
  *
  */
-class FloodfillPeerSelector extends PeerSelector {
+public class FloodfillPeerSelector extends PeerSelector {
 
     private BanLogger _banLogger;
     private final KademliaNetworkDatabaseFacade _facade;
@@ -326,8 +326,9 @@ class FloodfillPeerSelector extends PeerSelector {
 
     /**
      *  Classification result for floodfill peer selection.
+     *  @since 0.9.71+
      */
-    private enum PeerClass { GOOD, OK, BAD }
+    public enum PeerClass { GOOD, OK, BAD }
 
     /**
      *  Byte count matched when fingerprinting a peer for same-subnet
@@ -555,6 +556,55 @@ class FloodfillPeerSelector extends PeerSelector {
         }
         if (_log.shouldDebug())
             _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Poor profile history for this router");
+        return PeerClass.BAD;
+    }
+
+    /**
+     *  Classify a floodfill peer for display purposes. Uses the same logic
+     *  as the internal selection classifier but without same-IP tracking.
+     *
+     *  @param entry the peer hash
+     *  @param info the peer's RouterInfo, may be null
+     *  @param now current time
+     *  @return GOOD, OK, or BAD
+     *  @since 0.9.71+
+     */
+    public PeerClass classifyFloodfillPeerForDisplay(Hash entry, RouterInfo info, long now) {
+        if (info == null) {return PeerClass.BAD;}
+        String caps = DataHelper.stripHTML(info.getCapabilities());
+        if (caps != null && !caps.contains("R")) {return PeerClass.BAD;}
+        if (now - info.getPublished() > MAX_RI_AGE) {return PeerClass.BAD;}
+        if (_context.commSystem().isInStrictCountry(info)) {return PeerClass.BAD;}
+        if (info.getBandwidthTier().equals("L") || info.getBandwidthTier().equals("M")) {return PeerClass.BAD;}
+        PeerProfile prof = _context.profileOrganizer().getOrCreateProfileNonblocking(entry);
+        if (prof == null) {return PeerClass.BAD;}
+        long uptime = _context.router().getUptime();
+        boolean enforceHeard = uptime > STARTUP_GRACE_PERIOD;
+        if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {return PeerClass.BAD;}
+        if (prof.getDBHistory() == null) {return PeerClass.BAD;}
+        double maxFailRate = computeMaxFailRate(uptime);
+        RateStat ttst = getRateStat(_testSuccessTimeStatSlot, "tunnel.testSuccessTime");
+        double maxGoodRespTime = MAX_GOOD_RESP_TIME;
+        if (ttst != null) {
+            Rate tunnelTestTime = ttst.getRate(RateConstants.TEN_MINUTES);
+            if (tunnelTestTime != null && tunnelTestTime.getAverageValue() > 500)
+                maxGoodRespTime = 2 * tunnelTestTime.getAverageValue();
+        }
+        Rate dbRespRate = prof.getDbResponseTime().getRate(RateConstants.ONE_HOUR);
+        Rate goodFailRate = prof.getDBHistory().getFailedLookupRate().getRate(RateConstants.ONE_HOUR);
+        if (dbRespRate != null && goodFailRate != null &&
+            dbRespRate.getAvgOrLifetimeAvg() < maxGoodRespTime
+            && prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
+            && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
+            && goodFailRate.getAverageValue() < maxFailRate) {
+            return PeerClass.GOOD;
+        }
+        if (prof.getDBHistory().getLastStoreFailed() <= prof.getDBHistory().getLastStoreSuccessful() ||
+            prof.getDBHistory().getLastLookupFailed() <= prof.getDBHistory().getLastLookupSuccessful() ||
+            (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK &&
+            prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
+            return PeerClass.OK;
+        }
         return PeerClass.BAD;
     }
 

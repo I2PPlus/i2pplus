@@ -68,7 +68,10 @@ iframe{border:0}
 #ffconf.toggle:not(.expanded)::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #ffconf.toggle:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #ffstatus{float:right;font-size:85%;margin:2px 20px 0 0;letter-spacing:0;text-transform:none;opacity:1;transition:ease .2s opacity}
-#pbody .status span{margin:0;padding:0;width:9px;height:9px;display:inline-block;font-size:0;background-position:center center;background-size:9px}
+#ffProfiles .status span,#pbody .status span{margin:0;padding:0;width:9px;height:9px;display:inline-block;text-align:center;font-size:0;background-position:center center;background-size:9px}
+#ffProfiles .status span.bad{background-image:var(--tunn_reject)}
+#ffProfiles .status span.good{background-image:var(--tunn_active)}
+#ffProfiles .status span.ok{background-image:var(--tunn_starting)}
 #pbody .status span.testing{width:10px;height:10px;background-size:10px;animation:pulse 2s ease 0s both infinite;transform-origin:center center}
 #pluginTotals{margin:-2px 24px -2px 8px;padding:3px 8px;float:right;vertical-align:middle;text-align:center;font-size:90%}
 #pluginTotals span{margin:0 6px;display:inline-block;padding:0 0 0 16px}

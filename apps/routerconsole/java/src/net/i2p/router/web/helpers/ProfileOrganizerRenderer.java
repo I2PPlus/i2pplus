@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -24,6 +25,8 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.FloodfillPeerSelector;
+import net.i2p.router.networkdb.kademlia.FloodfillPeerSelector.PeerClass;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
@@ -944,6 +947,7 @@ class ProfileOrganizerRenderer {
            .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
            .append("<thead class=smallhead><tr>")
            .append("<th data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
+           .append("<th data-sort-direction=ascending>").append(_t("Status")).append("</th>")
            .append("<th data-sort-direction=ascending data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
            .append("<th data-sort-method=number>").append(_t("1h Resp. Time")).append("</th>")
            .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
@@ -983,11 +987,18 @@ class ProfileOrganizerRenderer {
                 long respTime = avgMs(prof, 60*60*1000L, ra);
                 long now = _context.clock().now();
                 long heard = prof.getFirstHeardAbout();
+                FloodfillPeerSelector sel =
+                    (FloodfillPeerSelector) ((FloodfillNetworkDatabaseFacade) _context.netDb()).getPeerSelector();
+                PeerClass cls = sel.classifyFloodfillPeerForDisplay(peer, info, now);
+                String clsLower = cls.name().toLowerCase(Locale.US);
 
                 buf.append("<tr class=lazy");
                 if (_fragmentKeys) {buf.append(" data-key=\"").append(peer.toBase64(), 0, KEY_LEN).append("\"");}
                 buf.append("><td nowrap>")
                    .append(_context.commSystem().renderPeerHTML(peer, true))
+                   .append("</td><td class=status>")
+                   .append("<span class=").append(clsLower).append(">")
+                   .append(cls.name()).append("</span>")
                    .append("</td><td data-sort=")
                    .append(row.hourFailPct)
                    .append("><span class=\"percentBarOuter");
