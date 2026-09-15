@@ -68,7 +68,8 @@ iframe{border:0}
 #ffconf.toggle:not(.expanded)::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #ffconf.toggle:not(.expanded):hover::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #ffstatus{float:right;font-size:85%;margin:2px 20px 0 0;letter-spacing:0;text-transform:none;opacity:1;transition:ease .2s opacity}
-#ffProfiles .status span,#pbody .status span{margin:0;padding:0;width:9px;height:9px;display:inline-block;text-align:center;font-size:0;background-position:center center;background-size:9px}
+#ffProfiles .status{width:1%!important}
+#ffProfiles .status span,#pbody .status span{margin:0;padding:0;width:9px;height:9px;display:inline-block;vertical-align:middle;text-align:center;font-size:0;background-position:center center;background-size:9px}
 #ffProfiles .status span.bad{background-image:var(--tunn_reject)}
 #ffProfiles .status span.good{background-image:var(--tunn_active)}
 #ffProfiles .status span.ok{background-image:var(--tunn_starting)}
@@ -78,6 +79,7 @@ iframe{border:0}
 #pluginTotals #started{background:var(--start) no-repeat left center/10px}
 #pluginTotals #stopped{margin-left:0;background:var(--stop) no-repeat left center/10px}
 #pconfig:hover #pluginTotals{color:var(--ink)}
+#profiles .percentBarOuter{min-width:56px}
 #routerjobqueue #jobs h3 span:not(.dropdown){margin-right:22px;text-transform:none;letter-spacing:0;transform:scale(0.85);transform-origin:right center}#tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}
 #sessionBanned th,#sessionBanned td{padding:4px 6px}
 #sessionBanned thead th{font-size:85%;text-align:left}
