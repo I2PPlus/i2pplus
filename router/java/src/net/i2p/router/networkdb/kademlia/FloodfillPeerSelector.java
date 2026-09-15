@@ -310,11 +310,13 @@ public class FloodfillPeerSelector extends PeerSelector {
             rv.add(badff.get(i));
             found++;
         }
-        // Reserve up to 2 slots for random BAD peers to profile their performance;
-        // this lets us detect and ban unresponsive floodfills that we'd otherwise never query
+        // During the startup grace period, reserve more slots for BAD floodfills
+        // to spread lookups wide and rebuild profile stats. After grace, revert
+        // to the normal 2-slot profiling budget.
+        int profileSlots = enforceHeard ? 2 : Math.min(6, badff.size());
         int profiled = 0;
         for (Hash bad : badff) {
-            if (profiled >= 2 || rv.size() >= howMany) break;
+            if (profiled >= profileSlots || rv.size() >= howMany) break;
             if (!rv.contains(bad)) {
                 rv.add(bad);
                 profiled++;
