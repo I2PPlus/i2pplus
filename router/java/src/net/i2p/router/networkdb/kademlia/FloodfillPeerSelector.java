@@ -210,7 +210,13 @@ class FloodfillPeerSelector extends PeerSelector {
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
     private static final long HEARD_AGE = 45*60*1000L;
-    private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
+    /**
+     *  Grace period after router startup before enforcing HEARD_AGE.
+     *  After a restart, profiles may not be fully loaded yet and floodfills
+     *  we re-discover get temporary firstHeardAbout=now() — locking them
+     *  out for 45 minutes would hurt the most vulnerable moment.
+     */
+    private static final long STARTUP_GRACE_PERIOD = HEARD_AGE;
     /** Floodfills with RouterInfo published longer ago than this are skipped. */
     private static final long MAX_RI_AGE = 3*60*60*1000L;
 
@@ -255,9 +261,8 @@ class FloodfillPeerSelector extends PeerSelector {
 
         int found = 0;
         long now = _context.clock().now();
-        long installed = _context.getProperty("router.firstInstalled", 0L);
         long uptime = _context.router().getUptime();
-        boolean enforceHeard = installed > 0 && (now - installed) > INSTALL_AGE;
+        boolean enforceHeard = uptime > STARTUP_GRACE_PERIOD;
         double maxFailRate = computeMaxFailRate(uptime);
 
         // Accumulate compact same-subnet fingerprints, not per-candidate
