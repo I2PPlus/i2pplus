@@ -947,7 +947,7 @@ class ProfileOrganizerRenderer {
            .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
            .append("<thead class=smallhead><tr>")
            .append("<th data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
-           .append("<th data-sort-direction=ascending>").append(_t("Status")).append("</th>")
+            .append("<th data-sort-direction=descending data-sort-method=number>").append(_t("Status")).append("</th>")
            .append("<th data-sort-direction=ascending data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
            .append("<th data-sort-method=number>").append(_t("1h Resp. Time")).append("</th>")
            .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
@@ -991,13 +991,15 @@ class ProfileOrganizerRenderer {
                     (FloodfillPeerSelector) ((FloodfillNetworkDatabaseFacade) _context.netDb()).getPeerSelector();
                 PeerClass cls = sel.classifyFloodfillPeerForDisplay(peer, info, now);
                 String clsLower = cls.name().toLowerCase(Locale.US);
+                int clsSort = cls == PeerClass.GOOD ? 2 : cls == PeerClass.OK ? 1 : 0;
 
                 buf.append("<tr class=lazy");
                 if (_fragmentKeys) {buf.append(" data-key=\"").append(peer.toBase64(), 0, KEY_LEN).append("\"");}
                 buf.append("><td nowrap>")
                    .append(_context.commSystem().renderPeerHTML(peer, true))
-                   .append("</td><td class=status>")
-                   .append("<span class=").append(clsLower).append(">")
+                   .append("</td><td class=status data-sort=")
+                   .append(clsSort)
+                   .append("><span class=").append(clsLower).append(">")
                    .append(cls.name()).append("</span>")
                    .append("</td><td data-sort=")
                    .append(row.hourFailPct)
