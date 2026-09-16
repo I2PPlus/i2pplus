@@ -212,15 +212,7 @@ class ConnectionPacketHandler {
         if (isNew && packet.getPayloadSize() > 512) {
             // don't clear choking unless it was new, and a big packet
             // this will call ackImmediately() if changed
-            // If the packet was out-of-order (filled a hole but didn't
-            // advance the contiguous receive window), defer unchoking
-            // until enough contiguous data has accumulated.
-            long highestReady = con.getInputStream().getHighestReadyBlockId();
-            boolean isContiguous = (seqNum == highestReady + 1);
-            boolean enoughData = (con.getInputStream().getTotalReadySize() >= 512);
-            if (isContiguous || enoughData) {
-                con.setChoking(false);
-            }
+            con.setChoking(false);
         }
 
         if (_log.shouldDebug()) {
