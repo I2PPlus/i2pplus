@@ -203,7 +203,8 @@ abstract class ExtensionHandler {
             if (uploadOnly != null) {
                 peer.setUploadOnly(uploadOnly.getInt() != 0);
             }
-            Map<String, BEValue> msgmap = map.get("m").getMap();
+            BEValue m = map.get("m");
+            Map<String, BEValue> msgmap = m != null ? m.getMap() : Collections.emptyMap();
 
             if (log.shouldDebug())
                 log.debug("Peer [" + peer + "] supports extensions: " + msgmap.keySet());
