@@ -733,7 +733,7 @@ class Packet {
             _transientSigningPublicKey.setData(buf);
             cur += buf.length;
             if (_optionFrom != null) {type = _optionFrom.getSigningPublicKey().getType();}
-            else {throw new IllegalArgumentException("TODO offline w/o FROM");}
+            else {throw new IllegalArgumentException("Offline packet without FROM option");}
             _offlineSignature = new Signature(type);
             buf = new byte[_offlineSignature.length()];
             System.arraycopy(buffer, cur, buf, 0, buf.length);

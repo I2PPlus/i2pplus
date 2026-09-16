@@ -357,7 +357,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 break;
 
             case MessageStatusMessage.STATUS_SEND_FAILURE_META_LEASESET:
-                // TODO
+                // Meta-leaseset unavailable: treat as transport failure, disconnect
                 _messageStatusMap.remove(id);
                 IOException ioe = new I2PSocketException(status);
                 con.getOutputStream().streamErrorOccurred(ioe);
