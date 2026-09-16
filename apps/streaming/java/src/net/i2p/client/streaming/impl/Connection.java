@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -1637,6 +1638,7 @@ class Connection {
         boolean doReArmTLP = false;
         boolean doCancelTLP = false;
         int pushBackDelay = 0;
+        long oldestLastSend = -1;
         synchronized (_outboundPacketsLock) {
             TreeMap<Long, PacketLocal> ob = _outboundPackets;
             long prevHead = -1;
@@ -1740,29 +1742,15 @@ class Connection {
             _outboundPacketsLock.notifyAll();
 
             if (lossEpisodeRecovered(_lastCongestionHighestUnacked >= 0, ackThrough, _lastCongestionHighestUnacked, _activeResends.get())) {
-                // The lost window has been fully recovered: consecutive-loss
-                // strikes reset so the next loss starts from the gentle tier.
-                // A pipe that keeps flowing (trickle ACKs) must not stay locked
-                // in the graduated tiers merely because the window never fully
-                // drains; see lossEpisodeRecovered() for the guard.
                 _lossStrikes = 0;
             }
 
             if (!_ackedList.isEmpty()) {
                 if (anyLeft) {
-                    // RFC 6298 section 5.3, but anchored to the OLDEST unacked
-                    // packet's deadline instead of 'now'. A trickle of partial
-                    // ACKs would otherwise keep deferring the RTO forever (the
-                    // freeze bug). Anchor: fire no later than oldestLastSend + RTO.
                     Map.Entry<Long, PacketLocal> first = ob == null ? null : ob.firstEntry();
-                    long oldestLastSend = (first != null) ? first.getValue().getLastSend() : -1;
-                    long now = _context.clock().now();
-                    int rto = _options.getRTO();
-                    long deadline = (oldestLastSend > 0) ? Math.max(now, oldestLastSend + rto) : now + rto;
-                    pushBackDelay = (int) Math.max(0, deadline - now);
+                    oldestLastSend = (first != null) ? first.getValue().getLastSend() : -1;
                     doPushBack = true;
                 } else {
-                    // RFC 6298 section 5.2 — nothing left to retransmit
                     doCancel = true;
                     doCancelTLP = true;
                 }
@@ -1775,9 +1763,6 @@ class Connection {
             _bwEstimator.addSample(_ackedList.size());
         }
         if (doReArmTLP) {
-            // Forward progress but the head of the window is still stuck: re-arm
-            // the TLP probe so the head packet is retransmitted at ~2*RTT instead
-            // of waiting on an RTO that section 5.3 push-back keeps deferring.
             _tlpEvent.scheduleProbe(getPTO());
         }
         if (doCancelTLP) {
@@ -1786,9 +1771,11 @@ class Connection {
         // Call RetransmitEvent outside _outboundPacketsLock
         // to prevent deadlock with RetransmitEvent.timeReached()
         if (doPushBack) {
+            long now = _context.clock().now();
+            int rto = _options.getRTO();
+            long deadline = (oldestLastSend > 0) ? Math.max(now, oldestLastSend + rto) : now + rto;
+            pushBackDelay = (int) Math.max(0, deadline - now);
             if (pushBackDelay == 0) {
-                // Already past the oldest packet's deadline: fire the RTO now
-                // rather than deferring again.
                 _retransmitEvent.forceRescheduleNow();
             } else {
                 _retransmitEvent.pushBackRTOBounded(pushBackDelay);
@@ -3570,21 +3557,25 @@ class Connection {
     static final int PACING_SLOWSTART_THRESHOLD = 8;
 
     /**
-     * A new ResendPacketEvent.
+     * A new ResendPacketEvent from the pool or a fresh instance.
      * @since 0.9.46
      */
     ResendPacketEvent newResendPacketEvent(PacketLocal packet) {
-        return new ResendPacketEvent(packet);
+        ResendPacketEvent evt = _resendEventPool.poll();
+        if (evt != null) {
+            evt._packet = packet;
+        } else {
+            evt = new ResendPacketEvent(packet);
+        }
+        return evt;
     }
 
-    /**
-     * This is not normally scheduled. It's now used only for fastRetransmit(),
-     * where it's scheduled with a delay of zero to put it on the timer queue.
-     * Timeout retransmissions are handled by RetransmitEvent above.
-     */
+    /** Pool of reusable ResendPacketEvent instances for fast retransmit. */
+    private final ConcurrentLinkedQueue<ResendPacketEvent> _resendEventPool = new ConcurrentLinkedQueue<>();
+
     class ResendPacketEvent extends SimpleTimer2.TimedEvent {
         /** The packet to retransmit. */
-        private final PacketLocal _packet;
+        private PacketLocal _packet;
 
         /**
          * ResendPacketEvent.
@@ -3595,9 +3586,13 @@ class Connection {
         }
 
         /**
-         * Retransmit the packet when the timer fires.
+         * Retransmit the packet when the timer fires, then return this
+         * event to the pool for reuse.
          */
-        public void timeReached() {retransmit();}
+        public void timeReached() {
+            retransmit();
+            _resendEventPool.offer(this);
+        }
 
         /**
          * @since 0.9.46
