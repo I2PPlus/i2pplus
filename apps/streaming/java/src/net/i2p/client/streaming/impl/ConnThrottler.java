@@ -30,13 +30,9 @@ class ConnThrottler {
         _totalMax = totalMax;
         this.counter = new ObjectCounter<>();
         _currentTotal = new AtomicInteger();
-        if (max > 0 || totalMax > 0) {
-            long delay = (period / 2) + RandomSource.getInstance().nextLong(period / 2);
-            _cleaner = new Cleaner(timer, period);
-            _cleaner.schedule(delay);
-        } else {
-            _cleaner = null;
-        }
+        long delay = (period / 2) + RandomSource.getInstance().nextLong(period / 2);
+        _cleaner = new Cleaner(timer, period);
+        _cleaner.schedule(delay);
     }
 
     /**

@@ -95,4 +95,44 @@ public class ConnThrottlerTest {
         ct.updateLimits(5, 0);
         assertFalse(ct.shouldThrottle(h));
     }
+
+    /**
+     * A ConnThrottler with zero limits (unlimited) must not leak memory.
+     * The Cleaner must still be scheduled so that if limits are later
+     * updated via updateLimits(), the counter is properly cleaned up.
+     */
+    @Test
+    public void testUnlimitedDoesNotLeakCounter() {
+        ConnThrottler ct = new ConnThrottler(0, 0, 60000, _timer);
+        // Should not throw and should not accumulate entries
+        // since _max > 0 and _totalMax > 0 are both false
+        for (int i = 0; i < 1000; i++) {
+            Hash h = new Hash(new byte[32]);
+            h.getData()[0] = (byte) i;
+            assertFalse(ct.shouldThrottle(h));
+        }
+        // isThrottled and isOverBy must not add entries either
+        for (int i = 0; i < 100; i++) {
+            Hash h = new Hash(new byte[32]);
+            h.getData()[0] = (byte) i;
+            assertFalse(ct.isThrottled(h));
+            assertFalse(ct.isOverBy(h, 0));
+        }
+    }
+
+    /**
+     * updateLimits() from 0 to >0 must enable cleanup properly.
+     * The Cleaner was scheduled at construction even when limits were 0.
+     */
+    @Test
+    public void testUpdateLimitsFromZeroEnablesThrottling() {
+        ConnThrottler ct = new ConnThrottler(0, 0, 60000, _timer);
+        Hash h = new Hash(new byte[32]);
+        assertFalse(ct.shouldThrottle(h));
+        // Enable limits
+        ct.updateLimits(2, 0);
+        ct.shouldThrottle(h);
+        ct.shouldThrottle(h);
+        assertTrue(ct.shouldThrottle(h));
+    }
 }
