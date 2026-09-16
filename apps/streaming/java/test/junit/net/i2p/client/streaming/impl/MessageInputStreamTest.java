@@ -346,4 +346,19 @@ public class MessageInputStreamTest {
 
         _log.info("Passed test: staggered");
     }
+
+    @Test
+    public void testEmptyPayloadSingleton() {
+        // Verify EMPTY_PAYLOAD is properly defined in ConnectionDataReceiver
+        // as a static final field reused across instances.
+        try {
+            java.lang.reflect.Field f = ConnectionDataReceiver.class.getDeclaredField("EMPTY_PAYLOAD");
+            f.setAccessible(true);
+            assertTrue(java.lang.reflect.Modifier.isStatic(f.getModifiers()));
+            assertTrue(java.lang.reflect.Modifier.isFinal(f.getModifiers()));
+            assertNotNull(f.get(null));
+        } catch (Exception e) {
+            fail("EMPTY_PAYLOAD should be a static final field: " + e.getMessage());
+        }
+    }
 }
