@@ -509,7 +509,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String[] DEFAULT_TRACKERS = {
         "Postman", "http://tracker2.postman.i2p/announce.php=http://tracker2.postman.i2p/",
         "BT", "http://opentracker.bt.i2p/a=http://opentracker.bt.i2p/stats",
-        "DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/",
+         "DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/",
+         "DgTrack (UDP)", "udp://w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p:6969/=http://opentracker.dg2.i2p/",
         "R4SAS", "http://opentracker.r4sas.i2p/a=http://opentracker.r4sas.i2p/stats",
         "InsulaOcculta", "http://tracker.insulaocculta.i2p/a=http://insulaocculta.i2p/",
         "InsulaOcculta [UDP]", "udp://tracker.insulaocculta.i2p:6969/=http://insulaocculta.i2p/",
@@ -527,7 +528,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     };
 
     /** URL. This is our equivalent to router.utorrent.com for bootstrap */
-    public static final String DEFAULT_BACKUP_TRACKER = "http://opentracker.dg2.i2p/a";
+    public static final String DEFAULT_BACKUP_TRACKER = "udp://opentracker.dg2.i2p:6969/";
 
     /** URLs, comma-separated. Used for "announce to open trackers also" */
     private static final String DEFAULT_OPENTRACKERS =
