@@ -3,7 +3,8 @@ package org.klomp.snark;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import net.i2p.I2PAppContext;
@@ -114,8 +115,8 @@ abstract class ExtensionHandler {
             boolean uploadOnly,
             boolean comment,
             String clientName) {
-        Map<String, Object> handshake = new HashMap<>();
-        Map<String, Integer> m = new HashMap<>();
+        Map<String, Object> handshake = new TreeMap<>();
+        Map<String, Integer> m = new TreeMap<>();
         if (pexAndMetadata) {
             m.put(TYPE_METADATA, Integer.valueOf(ID_METADATA));
             m.put(TYPE_PEX, Integer.valueOf(ID_PEX));
@@ -384,7 +385,7 @@ abstract class ExtensionHandler {
      * @param piece the chunk number
      */
     private static void sendMessage(Peer peer, int type, int piece) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new TreeMap<>();
         map.put("msg_type", Integer.valueOf(type));
         map.put("piece", Integer.valueOf(piece));
         byte[] payload = BEncoder.bencode(map);
@@ -400,7 +401,7 @@ abstract class ExtensionHandler {
      * @param totalSize the total metadata size
      */
     private static void sendPiece(Peer peer, int piece, byte[] data, int totalSize) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new TreeMap<>();
         map.put("msg_type", Integer.valueOf(TYPE_DATA));
         map.put("piece", Integer.valueOf(piece));
         map.put("total_size", Integer.valueOf(totalSize));
@@ -479,7 +480,7 @@ abstract class ExtensionHandler {
      */
     public static void sendPEX(Peer peer, List<Peer> pList) {
         if (pList.isEmpty()) return;
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new TreeMap<>();
         byte[] peers = new byte[HASH_LENGTH * pList.size()];
         int off = 0;
         for (Peer p : pList) {
@@ -499,7 +500,7 @@ abstract class ExtensionHandler {
      * @param rport the response port
      */
     public static void sendDHT(Peer peer, int qport, int rport) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new TreeMap<>();
         map.put("port", Integer.valueOf(qport));
         map.put("rport", Integer.valueOf(rport));
         byte[] payload = BEncoder.bencode(map);
@@ -563,7 +564,7 @@ abstract class ExtensionHandler {
      * @param num the maximum number of comments to request
      */
     public static void sendCommentReq(Peer peer, int num) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new TreeMap<>();
         map.put("msg_type", Integer.valueOf(0));
         map.put("num", Integer.valueOf(num));
         map.put("filter", COMMENTS_FILTER);
@@ -581,14 +582,14 @@ abstract class ExtensionHandler {
     public static void locked_sendComments(Peer peer, int num, CommentSet comments) {
         int toSend = Math.min(num, comments.size());
         if (toSend <= 0) return;
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new TreeMap<>();
         map.put("msg_type", Integer.valueOf(1));
         List<Object> lc = new ArrayList<>(toSend);
         long now = I2PAppContext.getGlobalContext().clock().now();
         int i = 0;
         for (Comment c : comments) {
             if (i++ >= toSend) break;
-            Map<String, Object> mc = new HashMap<>();
+            Map<String, Object> mc = new TreeMap<>();
             String s = c.getName();
             mc.put("owner", s != null ? s : "");
             s = c.getText();
