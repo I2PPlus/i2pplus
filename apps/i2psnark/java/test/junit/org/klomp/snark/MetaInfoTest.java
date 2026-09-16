@@ -164,6 +164,7 @@ public class MetaInfoTest {
             fail("Expected InvalidBEncodingException");
         } catch (java.io.IOException expected) {
         } catch (Throwable t) {
+            fail("Expected InvalidBEncodingException, got " + t);
         }
     }
 
@@ -178,6 +179,7 @@ public class MetaInfoTest {
             fail("Expected InvalidBEncodingException");
         } catch (java.io.IOException expected) {
         } catch (Throwable t) {
+            fail("Expected InvalidBEncodingException, got " + t);
         }
     }
 
