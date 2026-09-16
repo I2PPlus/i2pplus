@@ -1499,13 +1499,12 @@ public class TunnelController implements Logging {
         return false;
     }
 
-    // TODO synch
     /**
      *  Checks if the tunnel is currently running.
      *
      * @return true if the tunnel state is RUNNING
      */
-    public boolean getIsRunning() { return _state == TunnelState.RUNNING; }
+    public synchronized boolean getIsRunning() { return _state == TunnelState.RUNNING; }
 
     /**
      *  Checks if the tunnel is starting or starting on load.

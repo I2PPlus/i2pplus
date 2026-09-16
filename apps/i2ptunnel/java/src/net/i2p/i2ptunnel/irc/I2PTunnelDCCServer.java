@@ -184,6 +184,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
             return -1;
         }
         int limit = i2pPort > 0 ? 10 : 1;
+        expireOutbound();
         LocalAddress client = new LocalAddress(ia, port, getTunnel().getContext().clock().now() + OUTBOUND_EXPIRE);
         for (int i = 0; i < limit; i++) {
             int iport;
@@ -196,7 +197,6 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
             LocalAddress old = _outgoing.putIfAbsent(Integer.valueOf(iport), client);
             if (old != null)
                 continue;
-            // TODO expire in a few minutes
             return iport;
         }
         // couldn't find an unused i2p port

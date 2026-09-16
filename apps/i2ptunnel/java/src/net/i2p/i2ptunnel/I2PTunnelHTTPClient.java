@@ -1374,8 +1374,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     if (_log.shouldInfo()) {
                         _log.info("[HTTPClient] B32 lookup out of session for: " + destination);
                     }
-                    // TODO can't get result code from here
+                    // lookupWithTimeout returns null on failure or timeout;
+                    // fall through to the standard destination unreachable error page
                     clientDest = lookupWithTimeout(destination, (long) 30*1000);
+                    if (clientDest == null) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("[HTTPClient] B32 lookup failed or timed out for: " + destination);
+                        }
+                    }
                 }
             } else {
                 String destName = destination;
@@ -1386,6 +1392,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     _log.info("[HTTPClient] Looking up hostname: " + destName);
                 }
                 clientDest = lookupWithTimeout(destination, (long) 30*1000);
+                if (clientDest == null) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[HTTPClient] Hostname lookup failed or timed out: " + destName);
+                    }
+                }
             }
 
             // Check if the requested destination is blacklisted
@@ -1849,8 +1860,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         out.write("<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
                   "</span></td></tr>\n</table>\n" + "<hr>\n" +
 
-                  // FIXME if there is a query remaining it is lost
-                  "<form method=GET action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
+                   "<form method=GET action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
                   "<h4>" + _t("Continue to {0} without saving", DataHelper.escapeHTML(idn)) + "</h4>\n<p>" +
                   _t("You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router.") +
                   "</p>\n<div class=formaction><button type=submit class=go>" + _t("Continue without saving") + "</button></div>" + "\n</div>\n</form>\n" +

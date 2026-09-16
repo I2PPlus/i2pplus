@@ -104,6 +104,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private volatile boolean _ownExecutor;
     /** Property name: max concurrently active client connections handled by one client tunnel */
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.maxConnections";
+    /** Default socket open timeout in ms, after which close() will proceed even with active sockets */
+    public static final long DEFAULT_SOCKET_OPEN_TIMEOUT = 30000;
     /** Default cap on concurrently handled client connections.
      *  <p>
      *  The accept/connect path runs on an unbounded {@link I2PTunnelClientBase.BlockingRunner} pool, so a flood of
@@ -125,6 +127,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private volatile boolean _maxConnectionsCustomized;
     /** Live reservation counter shared by the connections of this tunnel. */
     private final AtomicInteger _activeConnections = new AtomicInteger();
+    /** Socket open timeout in ms; close() will proceed after this even with active sockets */
+    private final long _socketOpenTimeout = DEFAULT_SOCKET_OPEN_TIMEOUT;
+    /** Time the tunnel was opened, for timeout checks in close() */
+    private long _openStarted;
     /** this is ONLY for shared clients */
     private static I2PSocketManager socketManager;
 
@@ -608,6 +614,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         if (_log.shouldDebug()) {_log.debug("Startup [ClientID " + _clientId + "]");}
         boolean isDaemon = tun.getContext().isRouterContext(); // prevent JVM exit when running outside the router
         open = true;
+        _openStarted = _context.clock().now();
         Thread t = new I2PAppThread(this, "TunClnt." + localPort, isDaemon);
         t.start();
         synchronized (this) {
@@ -1118,19 +1125,21 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             }
         }
         if (!open) return true;
-        // FIXME: here we might have to wait quite a long time if
-        // there is a connection attempt atm. But without waiting we
-        // might risk to create an orphan socket. Would be better
-        // to return with an error in that situation quickly.
         synchronized (sockLock) {
             if (sockMgr != null) {
                 mySockets.retainAll(sockMgr.listSockets());
                 if ((!forced) && (!mySockets.isEmpty())) {
-                    String noCloseMsg = "Not closing " + nickname + " tunnel -> Active connections remain...";
-                    l.log(noCloseMsg);
-                    _log.debug(noCloseMsg);
-                    for (I2PSocket s : mySockets) {l.log(" -> " + s.toString());}
-                    return false;
+                    if (_openStarted > 0 && (System.currentTimeMillis() - _openStarted) > _socketOpenTimeout) {
+                        String timeoutMsg = "Timed out waiting for active connections to close in " + nickname + " tunnel, proceeding with close";
+                        _log.warn(timeoutMsg);
+                        l.log(timeoutMsg);
+                    } else {
+                        String noCloseMsg = "Not closing " + nickname + " tunnel -> Active connections remain...";
+                        l.log(noCloseMsg);
+                        _log.debug(noCloseMsg);
+                        for (I2PSocket s : mySockets) {l.log(" -> " + s.toString());}
+                        return false;
+                    }
                 }
                 if (!chained) {
                     I2PSession session = sockMgr.getSession();
@@ -1157,6 +1166,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
         return true;
     }
+
+    /**
+     * Returns the socket open timeout in ms; close() will proceed after this
+     * even with active sockets.
+     * @since 0.9.71+
+     */
+    public long getSocketOpenTimeout() { return _socketOpenTimeout; }
 
     /**
      *  Note that the tunnel cannot be reopened after this by calling startRunning(),
