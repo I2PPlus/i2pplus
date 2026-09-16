@@ -115,7 +115,7 @@ class ConnectionManager {
      * @return the pool max idle ms
      */
     private long getPoolMaxIdleMs() {
-        return _context.getProperty("i2p.streaming.poolMaxIdleMs", 20 * 1000);
+        return _context.getProperty("i2p.streaming.poolMaxIdleMs", 120 * 1000);
     }
 
     /**
