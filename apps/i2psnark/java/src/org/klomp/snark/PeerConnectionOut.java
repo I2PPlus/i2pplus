@@ -505,6 +505,8 @@ class PeerConnectionOut implements Runnable {
     /**
      * Retransmit requests that haven't been received within REQ_TIMEOUT.
      *
+     * Only call if !supportsFast()
+     *
      * @param requests the list of outstanding requests
      */
     void retransmitRequests(List<Request> requests) {

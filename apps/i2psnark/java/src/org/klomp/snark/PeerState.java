@@ -1695,6 +1695,8 @@ class PeerState implements DataLoader {
 
     /**
      * Retransmit outstanding requests if necessary.
+     *
+     * Only call if !supportsFast()
      */
     synchronized void retransmitRequests() {
         if (interesting && !choked) {
