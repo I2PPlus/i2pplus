@@ -163,7 +163,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 if (!props.containsKey("PORT"))
                     return "DATAGRAM subsession must specify PORT";
                 listenProtocol = I2PSession.PROTO_DATAGRAM;
-                SAMv3DatagramSession ssess = new SAMv3DatagramSession(nick, props, handler, isess, listenPort, dgs);
+                SAMv3DatagramSession ssess = new SAMv3DatagramSession(nick, props, handler, isess, listenProtocol, listenPort, dgs);
                 subhandler.setSession(ssess);
                 sess = ssess;
             } else if (style.equals("STREAM")) {

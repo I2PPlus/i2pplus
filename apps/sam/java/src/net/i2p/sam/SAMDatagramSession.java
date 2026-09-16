@@ -80,10 +80,10 @@ class SAMDatagramSession extends SAMMessageSession {
      * @param props unused for now
      * @since 0.9.25
      */
-    protected SAMDatagramSession(I2PSession sess, Properties props, int listenPort,
+    protected SAMDatagramSession(I2PSession sess, Properties props, int listenProtocol, int listenPort,
                               SAMDatagramReceiver recv) throws
                               I2PSessionException {
-        super(sess, I2PSession.PROTO_DATAGRAM, listenPort);
+        super(sess, listenProtocol, listenPort);
         this.recv = recv;
         dgramMaker = new I2PDatagramMaker(getI2PSession());
     }
