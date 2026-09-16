@@ -2,9 +2,13 @@ package net.i2p.client.streaming.impl;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.data.ByteArray;
@@ -28,6 +32,9 @@ class ConnectionHandler {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
     private final ConnectionManager _manager;
     private final LinkedBlockingDeque<Packet> _synQueue;
+    private final LinkedBlockingQueue<Connection> _resultQueue;
+    private final List<Thread> _acceptWorkers;
+    private final AtomicInteger _activeWorkerCount;
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
     /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout()}.
@@ -72,6 +79,15 @@ class ConnectionHandler {
     /** Minimum interval between re-sampling tunnel build success (ms). */
     private static final long SYN_STRESS_SAMPLE_INTERVAL = 10 * 1000;
 
+    /** Default max SYN queue size — large enough to absorb bursts. */
+    private static final int DEFAULT_MAX_QUEUE_SIZE = 4096;
+    /** Maximum configurable queue size. */
+    private static final int MAX_QUEUE_SIZE_CAP = 16384;
+    /** Default number of accept worker threads. */
+    private static final int DEFAULT_ACCEPT_WORKERS = 1;
+    /** Maximum accept worker threads. */
+    private static final int MAX_ACCEPT_WORKERS = 16;
+
     /**
      * This is both SYNs and subsequent packets, and with an initial window size of 12,
      * this is a backlog of 5 to 64 Syns, which seems like plenty for now
@@ -83,8 +99,18 @@ class ConnectionHandler {
         // Tuner override takes precedence over config
         int tuner = I2PSocketManagerFull.getMaxSYNQueueSize();
         if (tuner > 0) return tuner;
-        int def = SystemVersion.isSlow() ? 128 : 256;
+        int def = SystemVersion.isSlow() ? 256 : DEFAULT_MAX_QUEUE_SIZE;
         return _context.getProperty("i2p.streaming.maxQueueSize", def);
+    }
+
+    /**
+     * Number of accept worker threads. Dynamically adjustable via Tuner.
+     * @return the number of accept worker threads
+     */
+    private int getAcceptWorkerCount() {
+        int tuner = I2PSocketManagerFull.getAcceptWorkerThreads();
+        if (tuner > 0) return tuner;
+        return _context.getProperty("i2p.streaming.acceptWorkerThreads", DEFAULT_ACCEPT_WORKERS);
     }
 
     /**
@@ -344,6 +370,9 @@ class ConnectionHandler {
         // Hard backstop only; the effective cap is the configurable soft max
         // (getMaxQueueSize) re-read on each SYN so Tuner wins apply live.
         _synQueue = new LinkedBlockingDeque<>(16384);
+        _resultQueue = new LinkedBlockingQueue<>(16384);
+        _acceptWorkers = new ArrayList<>();
+        _activeWorkerCount = new AtomicInteger(0);
     }
 
     /**
@@ -365,28 +394,33 @@ class ConnectionHandler {
      * @param active true to accept connections, false to stop
      */
     public synchronized void setActive(boolean active) {
-        // FIXME active=false this only kills for one thread in accept()
-        // if there are more, they won't get a poison packet.
-        if (_log.shouldInfo()) {
-            _log.info("setActive(" + active + ") called, previously " + _active);
-        }
         // if starting, clear any old poison
         if (active && !_active) {
             _restartPending = false;
             _synQueue.clear();
             _synEnqueueTimes.clear();
+            _resultQueue.clear();
             _synQueueProcessed = 0;
             _synQueueExpired = 0;
+            startAcceptWorkers();
         }
         boolean wasActive = _active;
         _active = active;
         if (wasActive && !active) {
-            // stopping, clear any pending sockets
+            // stopping, drain queues and wake all workers
             _synQueue.clear();
             _synEnqueueTimes.clear();
+            _resultQueue.clear();
             _synQueueProcessed = 0;
             _synQueueExpired = 0;
-            _synQueue.offer(new PoisonPacket());
+            // Wake all worker threads with poison packets
+            int count = _activeWorkerCount.get();
+            for (int i = 0; i < count; i++) {
+                _synQueue.offer(new PoisonPacket());
+            }
+            // Wait briefly for workers to exit
+            try { Thread.sleep(50); } catch (InterruptedException e) { /* ignore */ }
+            shutdownAcceptWorkers();
         }
     }
 
@@ -398,13 +432,116 @@ class ConnectionHandler {
     public boolean getActive() {return _active;}
 
     /**
-     * Non-SYN packets with a zero SendStreamID may also be queued here so
-     * that they don't get thrown away while the SYN packet before it is queued.
+     * Start the accept worker threads. Called when setActive(true).
+     */
+    private void startAcceptWorkers() {
+        int count = getAcceptWorkerCount();
+        for (int i = 0; i < count; i++) {
+            Thread t = new Thread(new AcceptWorker(), "StreamingAcceptWorker-" + i);
+            t.setDaemon(true);
+            _acceptWorkers.add(t);
+            t.start();
+            _activeWorkerCount.incrementAndGet();
+        }
+    }
+
+    /**
+     * Stop all accept worker threads. Called when setActive(false).
+     */
+    private void shutdownAcceptWorkers() {
+        for (Thread t : _acceptWorkers) {
+            t.interrupt();
+        }
+        _acceptWorkers.clear();
+        _activeWorkerCount.set(0);
+    }
+
+    /**
+     * Returns the current SYN accept queue depth for Tuner integration.
+     * @return queue size / max queue size
+     */
+    int getQueueDepth() {
+        return _synQueue.size();
+    }
+
+    /**
+     * Returns the max queue size for Tuner integration.
+     * @return the configured max queue size
+     */
+    int getQueueCapacity() {
+        return getMaxQueueSize();
+    }
+
+    /**
+     * Worker that pulls SYNs from the accept queue, processes them,
+     * and puts resulting connections into the result queue.
+     */
+    private class AcceptWorker implements Runnable {
+        @Override
+        public void run() {
+            try {
+                while (_active) {
+                    Packet syn = null;
+                    try {
+                        syn = _synQueue.poll(100, TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                    if (syn == null) continue;
+                    if (syn.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
+                        // Re-queue poison for other workers
+                        _synQueue.offer(syn);
+                        break;
+                    }
+                    if (_manager.wasRecentlyClosed(syn.getSendStreamId())) {
+                        continue;
+                    }
+                    // Check for duplicate/retransmitted SYN
+                    Destination from = syn.getOptionalFrom();
+                    if (from != null) {
+                        Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
+                        if (oldcon != null && from.equals(oldcon.getRemotePeer())) {
+                            if (!oldcon.shouldResendSynAck(_context.clock().now())) {
+                                continue; // SYN-ACK throttle active
+                            }
+                            if (_manager.checkInboundSynFlood(from.calculateHash(), _context.clock().now())) {
+                                continue; // flood gate
+                            }
+                            resendSynAck(oldcon, syn);
+                            continue;
+                        }
+                    }
+                    int timeoutMs = getEffectiveAcceptTimeout();
+                    _synEnqueueTimes.put(syn, Long.valueOf(_context.clock().now()));
+                    _synQueueProcessed++;
+                    _timer.addEvent(new TimeoutSyn(syn), timeoutMs);
+                    try {
+                        sampleSynResidence(syn);
+                        Connection con = _manager.receiveConnection(syn);
+                        if (con != null) {
+                            _resultQueue.put(con);
+                        }
+                    } catch (Exception e) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Accept worker error processing SYN", e);
+                        }
+                    }
+                }
+            } finally {
+                _activeWorkerCount.decrementAndGet();
+            }
+        }
+    }
+
+    /**
+     * Receive new connection attempts
      *
-     * Additional overload protection may be required here...
-     * We don't have a 3-way handshake, so the SYN fully opens a connection.
-     * Does that make us more or less vulnerable to SYN flooding?
+     * Use a bounded queue to limit the damage from SYN floods,
+     * router overload, or a slow client
      *
+     * @author zzz modded to use concurrent and bound queue size
+     * @since 0.9.71+ modified to use worker threads
      */
     public void receiveNewSyn(Packet packet) {
         if (packet == null) return;
@@ -423,7 +560,6 @@ class ConnectionHandler {
         if (_log.shouldInfo()) {
             _log.info("Received new SYN packet with " + (timeoutMs / 1000) + "s timeout: " + packet);
         }
-        // also check if expiration of the head is long past for overload detection with peek() ?
         // Re-read the max queue size dynamically — Tuner override or config change
         // applies without a restart.
         boolean success = _synQueue.size() < getMaxQueueSize() && _synQueue.offer(packet);
@@ -445,9 +581,8 @@ class ConnectionHandler {
     }
 
     /**
-     * Receive an incoming connection (built from a received SYN)
-     * Non-SYN packets with a zero SendStreamID may also be queued here so
-     * that they don't get thrown away while the SYN packet before it is queued.
+     * Receive an incoming connection. Polls the result queue populated
+     * by accept worker threads.
      *
      * @param timeoutMs max amount of time to wait for a connection (if less
      *                  than 1ms, wait indefinitely)
@@ -462,138 +597,68 @@ class ConnectionHandler {
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
         if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called...");}
 
-        long expiration = timeoutMs + _context.clock().now();
+        if (!_active) {
+            // Drain any remaining results
+            Connection con = _resultQueue.poll();
+            if (con != null) return con;
+            while(true) {
+                Packet packet = _synQueue.poll();
+                if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) break;
+                _synEnqueueTimes.remove(packet);
+                sendReset(packet);
+            }
+            boolean restartPending;
+            synchronized(this) { restartPending = _restartPending; }
+            if (restartPending) throw new RouterRestartException();
+            throw new ConnectException("ServerSocket closed");
+        }
+
+        if (_restartPending) throw new RouterRestartException();
+
+        long expiration = timeoutMs > 0 ? timeoutMs + _context.clock().now() : 0;
         while (true) {
-            if ((timeoutMs > 0) && (expiration < _context.clock().now())) {
+            if (timeoutMs > 0 && expiration < _context.clock().now()) {
                 throw new SocketTimeoutException("accept() timed out");
             }
-            if (!_active) { // fail all the ones we had queued up
+            Connection con = null;
+            try {
+                if (timeoutMs <= 0) {
+                    con = _resultQueue.take();
+                } else {
+                    long remaining = expiration - _context.clock().now();
+                    if (remaining < 1) break;
+                    con = _resultQueue.poll(remaining, TimeUnit.MILLISECONDS);
+                }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                ConnectException ce = new ConnectException("Interrupted accept()");
+                ce.initCause(ie);
+                throw ce;
+            }
+            if (con != null) return con;
+            // Timeout or null result — check state and retry
+            if (!_active) {
+                // Drain any remaining results
+                con = _resultQueue.poll();
+                if (con != null) return con;
                 while(true) {
-                    Packet packet = _synQueue.poll(); // fails immediately if empty
-                    if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
-                        break;
-                    }
+                    Packet packet = _synQueue.poll();
+                    if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) break;
                     _synEnqueueTimes.remove(packet);
                     sendReset(packet);
                 }
-                    boolean restartPending;
-                    synchronized(this) {
-                        restartPending = _restartPending;
-                    }
-                    if (restartPending) {throw new RouterRestartException();}
+                boolean restartPending;
+                synchronized(this) { restartPending = _restartPending; }
+                if (restartPending) throw new RouterRestartException();
                 throw new ConnectException("ServerSocket closed");
             }
-
-            Packet syn = null;
-            while ( _active && syn == null) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Accept("+ timeoutMs+"): active=" + _active + " queue: "+ _synQueue.size());
-                }
-                if (timeoutMs <= 0) {
-                    try {syn = _synQueue.take();} // waits forever
-                    catch (InterruptedException ie) {
-                       Thread.currentThread().interrupt();
-                       ConnectException ce = new ConnectException("Interrupted accept()");
-                       ce.initCause(ie);
-                       throw ce;
-                    }
-                } else {
-                    long remaining = expiration - _context.clock().now();
-                    // (Don't think this applies anymore for LinkedBlockingQueue)
-                    // BUGFIX
-                    // The specified amount of real time has elapsed, more or less.
-                    // If timeout is zero, however, then real time is not taken into consideration
-                    // and the thread simply waits until notified.
-                    if (remaining < 1) {break;}
-                    try {syn = _synQueue.poll(remaining, TimeUnit.MILLISECONDS);} // waits the specified time max
-                    catch (InterruptedException ie) {
-                       Thread.currentThread().interrupt();
-                       ConnectException ce = new ConnectException("Interrupted accept()");
-                       ce.initCause(ie);
-                       throw ce;
-                    }
-                    break;
-                }
-            }
-
-            if (syn != null) {
-                if (syn.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
-                boolean restartPending;
-                synchronized(this) {
-                    restartPending = _restartPending;
-                }
-                if (restartPending) {throw new RouterRestartException();}
-                    throw new ConnectException("ServerSocket closed");
-                }
-
-                /* deal with forged / invalid syn packets in _manager.receiveConnection() */
-
-                // Handle both SYN and non-SYN packets in the queue
-                if (syn.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                    // We are single-threaded here, so this is
-                    // a good place to check for dup SYNs and drop them
-                    Destination from = syn.getOptionalFrom();
-                    if (from == null) {
-                        if (_log.shouldWarn() && syn != null) {_log.warn("Dropping SYN packet with no FROM: " + syn);}
-                        continue; // drop it
-                    }
-                    Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
-                    if (oldcon != null && from.equals(oldcon.getRemotePeer())) {
-                        // His ID not guaranteed to be unique to us, but probably is...
-                        // only act on it on a destination match too
-                        // This is a retransmitted SYN - the client hasn't received our
-                        // SYN-ACK yet (or it was lost). Re-send the SYN-ACK for the
-                        // existing connection rather than destroying it and breaking
-                        // any data the client may have already sent using the old
-                        // stream IDs.
-                        //
-                        // Rate-bind SYN-ACK re-sends: a latency-bound client (RTO < I2P RTT)
-                        // retransmits its SYN faster than its SYN-ACKs arrive, and each
-                        // retransmit would otherwise mint another full signed SYN-ACK into
-                        // the shared FIFO (the amplification loop seen on the tracker
-                        // tunnel).  Snapshot the decision at read time; state changes don't
-                        // advance the throttle window for a rejected retransmit.  Throttle
-                        // first: a throttle-dropped retransmit mints no SYN-ACK, so it must
-                        // not be counted against the dest's flood window either.
-                        if (!oldcon.shouldResendSynAck(_context.clock().now())) {
-                            if (_log.shouldDebug()) {_log.debug("Dropping retransmitted SYN, SYN-ACK throttle active: " + oldcon);}
-                            continue;
-                        }
-                        // Flood gate: a retransmitted SYN uses stream IDs of an
-                        // existing (half-open) connection, so it never flows through
-                        // ConnectionManager.receiveConnection() and its SYN-burst gate.
-                        // An attacker plants a few half-open connections then blasts
-                        // retransmitted SYNs, which would otherwise spawn an unbounded
-                        // SYN-ACK storm. Check the shared per-dest flood window here so
-                        // a dest that exceeds the burst threshold is autobanned and its
-                        // retransmits dropped before any SYN-ACK is minted.  Runs after
-                        // the throttle so only SYN-ACK-minting retransmits are counted.
-                        if (_manager.checkInboundSynFlood(from.calculateHash(), _context.clock().now())) {
-                            continue; // drop it without re-sending a SYN-ACK
-                        }
-                        // Log the first re-send per connection at WARN (one-shot diagnosis),
-                        // subsequent re-sends at DEBUG — the storm log inflation is as much
-                        // a problem as the extra packets.
-                        boolean alreadyWarned = oldcon.synAckWarnAlreadyLogged();
-                        if (_log.shouldWarn() && !alreadyWarned && syn != null) {
-                            _log.warn("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " +
-                                      oldcon + (syn != null && !syn.toString().isEmpty() ? "\n* SYN: " + syn : ""));
-                        } else if (_log.shouldDebug()) {
-                            _log.debug("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " + oldcon);
-                        }
-                        resendSynAck(oldcon, syn);
-                        continue;
-                    }
-                    sampleSynResidence(syn);
-                    Connection con = _manager.receiveConnection(syn);
-                    if (con != null) {return con;}
-                } else {reReceivePacket(syn);} // ... and keep looping
-            }
+            if (_restartPending) throw new RouterRestartException();
         }
+        throw new SocketTimeoutException("accept() timed out");
     }
 
     /**
-     *  We found a non-SYN packet that was queued in the syn queue,
+      *  We found a non-SYN packet that was queued in the syn queue,
      *  check to see if it has a home now, else drop it ...
      */
     private void reReceivePacket(Packet packet) {

@@ -339,8 +339,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** The Tuner's receive-worker default; clamped to a sane [0, PacketHandler.MAX_RECEIVE_WORKERS]. @since 0.9.71+ */
     static void setReceiveWorkerThreads(int val) { receiveWorkerThreads = Math.max(0, Math.min(PacketHandler.MAX_RECEIVE_WORKERS, val)); }
 
+    /** Number of accept worker threads, Tuner-managed default. @since 0.9.71+ */
+    static volatile int acceptWorkerThreads = 1;
+
+    /** The Tuner's accept-worker default; 0 = use compiled default (1). @since 0.9.71+ */
+    static int getAcceptWorkerThreads() { return acceptWorkerThreads; }
+    /** The Tuner's accept-worker default; clamped to [0, 16]. @since 0.9.71+ */
+    static void setAcceptWorkerThreads(int val) { acceptWorkerThreads = Math.max(0, Math.min(16, val)); }
+
     /**
-     *  Operator-tunable ceiling for the Tuner's stream-cap override.
+      *  Operator-tunable ceiling for the Tuner's stream-cap override.
      *  Reads from router.config via {@code i2p.streaming.maxMaxConcurrentStreams},
      *  falling back to the compiled default.
      *  @return the current ceiling
