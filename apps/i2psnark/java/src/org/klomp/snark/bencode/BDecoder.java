@@ -89,8 +89,7 @@ public class BDecoder {
      * @param in the InputStream to decode from
      * @return the first BEValue on the stream, or null when the stream has ended
      * @throws IOException when something bad happens with the stream
-   * @throws StackOverflowError
-   * @throws StackOverflowError
+     * @throws StackOverflowError if the stream is nested too deeply to decode
      */
     public static BEValue bdecode(InputStream in) throws IOException, Throwable {
         return new BDecoder(in).bdecode();
@@ -136,6 +135,7 @@ public class BDecoder {
      *
      * @return the next BEValue on the stream, or null if the stream has ended
      * @throws IOException if an I/O error occurs or the stream is not bencoded
+     * @throws StackOverflowError if the stream is nested too deeply to decode
      */
     public BEValue bdecode() throws IOException, Throwable {
         indicator = getNextIndicator();
@@ -156,7 +156,7 @@ public class BDecoder {
      * @throws IOException if an I/O error occurs
      * @throws InvalidBEncodingException if the next value is not a byte array
      */
-    public BEValue bdecodeBytes() throws IOException, Throwable {
+    public BEValue bdecodeBytes() throws IOException {
         int c = getNextIndicator();
         int num = c - '0';
         if (num < 0 || num > 9)
@@ -249,6 +249,7 @@ public class BDecoder {
      * @return the next BEValue as a List
      * @throws IOException if an I/O error occurs
      * @throws InvalidBEncodingException if the next value is not a list
+     * @throws StackOverflowError if the stream is nested too deeply to decode
      */
     public BEValue bdecodeList() throws IOException, Throwable {
         int c = getNextIndicator();
@@ -280,6 +281,7 @@ public class BDecoder {
      * @return the next BEValue as a Map
      * @throws IOException if an I/O error occurs
      * @throws InvalidBEncodingException if the next value is not a map
+     * @throws StackOverflowError if the stream is nested too deeply to decode
      */
     public BEValue bdecodeMap() throws IOException, Throwable {
         int c = getNextIndicator();
