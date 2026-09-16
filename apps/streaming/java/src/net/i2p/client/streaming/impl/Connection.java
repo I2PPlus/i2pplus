@@ -1825,9 +1825,12 @@ class Connection {
      *  Idempotent: only the first call sets the timestamp.
      */
     public void notifyCloseSent() {
-        if (!_closeSentOn.compareAndSet(0, _context.clock().now()) && _log.shouldDebug()) {
-            // TODO ackImmediately() after sending CLOSE causes this. Bad?
-            _log.debug("Sent more than one CLOSE: " + toString());
+        if (!_closeSentOn.compareAndSet(0, _context.clock().now()) && _log.shouldWarn()) {
+            // Idempotent: CAS prevents duplicate timestamp; the output stream is already
+            // closed, so subsequent packets (e.g. from ackImmediately()) are ack-only
+            // and do not carry the CLOSE flag. This log is a safety net for unexpected
+            // code paths that bypass the CLOSE-flag guard in ConnectionDataReceiver.
+            _log.warn("Duplicate CLOSE sent: " + toString());
         }
         // that's it, wait for notifyLastPacketAcked() or closeReceived()
     }
