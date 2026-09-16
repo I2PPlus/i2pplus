@@ -149,7 +149,27 @@ class ConnectionManager {
         return _context.getProperty("i2p.streaming.destinationCooldownMs", 5*1000);
     }
 
-     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
+    /**
+     * Remove expired entries from {@link #_destFailures} and {@link #_cooldownWarned}.
+     * Called on every connect failure to prevent unbounded growth.
+     * Uses the cooldown window as the eviction threshold.
+     * @since 0.9.71+
+     */
+    private void trimDestFailures() {
+        long cutoff = _context.clock().now() - getDestCooldownMs();
+        for (Iterator<Map.Entry<Hash, Long>> it = _destFailures.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Hash, Long> e = it.next();
+            if (e.getValue() < cutoff)
+                it.remove();
+        }
+        for (Iterator<Map.Entry<Hash, Long>> it = _cooldownWarned.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Hash, Long> e = it.next();
+            if (e.getValue() < cutoff)
+                it.remove();
+        }
+    }
+
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /** Cache of the property to detect changes. */
     private static volatile String currentBlacklist = "";
@@ -1293,24 +1313,12 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
               _context.statManager().addRateData("stream.connectFailed", connectElapsed, connectElapsed);
               _destFailures.put(destHash, _context.clock().now());
               // Opportunistic trim: prevent unbounded growth from abandoned destinations
-              if (_destFailures.size() > 256) {
-                  long cutoff = _context.clock().now() - getDestCooldownMs();
-                  for (Map.Entry<Hash, Long> e : _destFailures.entrySet()) {
-                      if (e.getValue() < cutoff)
-                          _destFailures.remove(e.getKey(), e.getValue());
-                  }
-                  // Same lifespan as _destFailures: a dest re-arming a WARN must have
-                  // just re-entered cooldown, so any warn older than one window is dead.
-                  for (Map.Entry<Hash, Long> e : _cooldownWarned.entrySet()) {
-                      if (e.getValue() < cutoff)
-                          _cooldownWarned.remove(e.getKey(), e.getValue());
-                  }
-              }
-          } else {
-             _context.statManager().addRateData("stream.connectTime", connectElapsed, connectElapsed);
-             _destFailures.remove(destHash);
-         }
-         // safe decrement — only for connections that actually incremented
+              trimDestFailures();
+           } else {
+              _context.statManager().addRateData("stream.connectTime", connectElapsed, connectElapsed);
+              _destFailures.remove(destHash);
+           }
+          // safe decrement -- only for connections that actually incremented
          // _numWaiting in connect(); a pool-reused connection never incremented
          // (the pool hit takes the early return at line 1173), so decrementing
          // here would steal a genuinely-waiting connect's slot.

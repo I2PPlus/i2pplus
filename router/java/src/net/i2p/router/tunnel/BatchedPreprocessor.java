@@ -47,8 +47,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
     private static final boolean DEBUG = false;
 
-    /** Minimum delay even under full pressure (ms) — avoids busy-wait retry storms */
-    private static final long MIN_FLUSH_DELAY = 5L;
+    /** Minimum delay even under full pressure (ms) -- avoids busy-wait retry storms */
+    static final long MIN_FLUSH_DELAY = 2L;
 
     /**
      * Create a new preprocessor for batched tunnel messages.
@@ -71,7 +71,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     //private static final boolean DISABLE_BATCHING = false;
 
     /** Not final or private so the test code can adjust. */
-    static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 50;
+    static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 20;
     /**
      *  Wait up to this long before sending (flushing) a small tunnel message
      *  Warning - overridden in BatchedRouterPreprocessor
