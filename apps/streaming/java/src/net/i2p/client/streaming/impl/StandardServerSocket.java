@@ -28,7 +28,6 @@ import net.i2p.client.streaming.I2PSocketAddress;
  */
 class StandardServerSocket extends ServerSocket {
     private final I2PServerSocketFull _socket;
-    private final java.util.concurrent.atomic.AtomicBoolean _closed = new java.util.concurrent.atomic.AtomicBoolean(false);
 
     /**
      *  Doesn't really throw IOE but super() does
@@ -71,7 +70,6 @@ class StandardServerSocket extends ServerSocket {
 
     @Override
     public void close() throws IOException {
-        _closed.set(true);
         _socket.close();
     }
 
@@ -154,7 +152,7 @@ class StandardServerSocket extends ServerSocket {
 
     @Override
     public boolean isClosed() {
-        return _closed.get();
+        return !((I2PSocketManagerFull)_socket.getManager()).getConnectionManager().getAllowIncomingConnections();
     }
 
     /**

@@ -55,7 +55,12 @@ class StandardSocket extends Socket {
      */
     @Override
     public void close() throws IOException {
+        if (_closed)
+            throw new IOException("Already closed");
         _closed = true;
+        _connected = false;
+        _inputShutdown = true;
+        _outputShutdown = true;
         _socket.close();
     }
 
@@ -211,8 +216,8 @@ class StandardSocket extends Socket {
     }
 
     /**
-     * Outbound buffer size.
-     * @return the inbound buffer size, or 64KB if options are unavailable
+     * Buffer size.
+     * @return the buffer size, or 64KB if options are unavailable
      */
     @Override
     public int getSendBufferSize() {
@@ -411,8 +416,7 @@ class StandardSocket extends Socket {
      */
     @Override
     public void shutdownInput() throws IOException {
-        _inputShutdown = true;
-        _socket.close();
+        close();
     }
 
     /**
@@ -420,8 +424,7 @@ class StandardSocket extends Socket {
      */
     @Override
     public void shutdownOutput() throws IOException {
-        _outputShutdown = true;
-        _socket.close();
+        close();
     }
 
     /**
