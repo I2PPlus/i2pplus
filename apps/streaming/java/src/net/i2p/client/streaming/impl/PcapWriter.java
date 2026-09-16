@@ -301,14 +301,11 @@ public class PcapWriter implements Closeable, Flushable {
                 // this isn't really right, the lastsendid can get way ahead
                 window = con.getLastSendId() + con.getOptions().getWindowSize() - acked;
             } else {
-                // Ourbound pkt: our rcv buffer ~= his outbound window
-                // TODO just use a recent high unackedIn count?
-                // following is from ConnectionPacketHandler
-                // this is not interesting, we have lots of buffers
-                long ready = con.getInputStream().getHighestReadyBlockId();
-                int available = con.getOptions().getInboundBufferSize() - con.getInputStream().getTotalReadySize();
-                int allowedBlocks = available/con.getOptions().getMaxMessageSize();
-                window = (ready + allowedBlocks) - pkt.getSequenceNum();
+                // Outbound pkt: our rcv buffer ~= his outbound window
+                // Use recent high unacknowledged-in count as window estimate,
+                // which better represents the peer's receive buffer pressure.
+                int unackedIn = con.getUnackedPacketsReceived();
+                window = Math.max(1, unackedIn);
             }
             if (window <= 1)
                 window = 2; // TCP min
