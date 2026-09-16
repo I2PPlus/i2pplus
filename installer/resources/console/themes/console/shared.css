@@ -6,7 +6,7 @@ iframe{border:0}
 .leaseset .ekey,.leaseset .stype{margin-left:2px!important;float:right}
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
-.jobsCounter {margin:0 0 0 1px;padding:3px 8px;display:inline-block;vertical-align:baseline;line-height:1;font-weight:700;border-radius:3px;box-shadow:var(--bevel);background:var(--badge)}
+.jobsCounter {margin:0 2px;padding:3px 8px;min-width:8px;display:inline-block;vertical-align:baseline;text-align:center;line-height:1;font-weight:700;border-radius:3px;box-shadow:var(--bevel);background:var(--badge)}
 .log_level{font-weight:900!important}
 .tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
 .tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
