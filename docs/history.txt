@@ -1,3 +1,9 @@
+2026-09-15 dr|z3d
+  * Profiles:
+    - Use router uptime for floodfill heard-age grace period
+    - Add floodfill status classification and display column
+    - Spread floodfill lookups wider during startup grace period
+
 2026-09-14 dr|z3d
   * Streaming: Floor ssthresh anchor at 1s RTT, reset strikes on ACK
     progress to prevent premature degradation
@@ -14,6 +20,18 @@
       launch4j configs (JDK-8365960 displayChanged NULL deref)
     - Link wrapper.dll against ucrt/ucrtbase instead of msvcrt to
       avoid CRT mismatch crashes in javaw.exe
+  * Streaming:
+    - Volatile _connectionError and document TIME-WAIT skip race
+    - Fix download stalls from window destruction, dead keepalive, and
+      slow-start pacing
+    - Fix ByteCache leak on error paths
+  * I2PTunnel:
+    - Remove auth failure sleep, fix keepalive visibility, and port 443
+      silent hang
+    - Join lookupWithTimeout daemon thread on timeout to release resources
+    - Fix connection permit leak on error paths
+  * Tunnel pool: Report data-phase send failures for faster tunnel rotation
+  * Profiles: Persist floodfill profiles with DB activity
 
 2026-09-13 dr|z3d
   * Streaming:

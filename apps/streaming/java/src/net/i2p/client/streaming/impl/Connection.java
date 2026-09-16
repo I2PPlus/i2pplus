@@ -147,7 +147,7 @@ class Connection {
      *  ratchet in {@code ConnectionPacketHandler.adjustWindow}. Increments are
      *  derived from accumulated ACK credit instead of a per-ACK random draw,
      *  giving the same expected growth rate as the probabilistic gate without
-     *  RNG noise. Holds the 16-bit fractional remainder of the accumulator.
+     *  RNG noise. Holds the 20-bit fractional remainder of the accumulator.
      *  Must only be read/written while holding {@link #_outboundPacketsLock};
      *  zeroed in retransmit() when the window is cut.
      *  @since 0.9.72+

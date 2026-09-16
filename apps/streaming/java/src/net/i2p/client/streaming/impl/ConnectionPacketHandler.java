@@ -517,18 +517,21 @@ class ConnectionPacketHandler {
                             // so large windows recover quickly after a loss. Tapers to 1/RTT
                             // as the window fills, preventing overshoot at the plateau.
                             // At maxWindow: 1x (TCP Reno, 1/RTT).
-                            // At 50% maxWindow: ~5x.
-                            // At 25% maxWindow: ~7x.
+                            // At 50% maxWindow: ~9x.
+                            // At 25% maxWindow: ~13x.
                             int deficit = maxWin - newWindowSize;
-                            int multiplier = 1 + (8 * deficit) / Math.max(1, maxWin);
+                            int multiplier = 1 + (16 * deficit) / Math.max(1, maxWin);
                             effAcked = Math.max(acked, acked * multiplier);
                             // Deterministic fixed-point ratchet instead of the old
                             // per-ACK random draw: accumulate credit proportional to
                             // effAcked / (caFactor * window) and harvest only the whole
                             // increments. Same expected growth rate as the probabilistic
-                            // gate, but reproducible and free of RNG noise. At max window
-                            // the accumulator holds its remainder while the window is
-                            // capped, so capacity granted at the plateau is not lost.
+                            // gate, but reproducible and free of RNG noise. Uses a 20.16
+                            // fixed-point accumulator for finer granularity at low window
+                            // sizes, so trickle ACKs still produce whole-packet increments.
+                            // At max window the accumulator holds its remainder while the
+                            // window is capped, so capacity granted at the plateau is not
+                            // lost.
                             long accum = con._caWindowAccumulator;
                             accum = caGrowthCredit(accum, effAcked, caFactor, newWindowSize);
                             newWindowSize += caWindowIncrements(accum);
@@ -582,7 +585,7 @@ class ConnectionPacketHandler {
      */
     static long caGrowthCredit(long accum, int effAcked, int caFactor, int windowSize) {
         long denom = (long) Math.max(1, caFactor) * Math.max(1, windowSize);
-        return accum + (((long) effAcked) << 16) / Math.max(1, denom);
+        return accum + (((long) effAcked) << 20) / Math.max(1, denom);
     }
 
     /**
@@ -593,7 +596,7 @@ class ConnectionPacketHandler {
      *  @since 0.9.72+
      */
     static int caWindowIncrements(long accum) {
-        return (int) Math.min(Integer.MAX_VALUE, accum >> 16);
+        return (int) Math.min(Integer.MAX_VALUE, accum >> 20);
     }
 
     /**
@@ -601,11 +604,11 @@ class ConnectionPacketHandler {
      *  over into the next ACK event.
      *
      *  @param accum accumulated credit
-     *  @return fractional remainder in [0, 65535]
+     *  @return fractional remainder in [0, 1048575]
      *  @since 0.9.72+
      */
     static long caWindowRemainder(long accum) {
-        return accum & 0xFFFFL;
+        return accum & 0xFFFFFL;
     }
 
     /**
