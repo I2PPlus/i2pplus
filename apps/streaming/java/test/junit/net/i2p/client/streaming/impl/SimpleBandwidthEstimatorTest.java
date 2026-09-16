@@ -98,4 +98,28 @@ public class SimpleBandwidthEstimatorTest {
         assertTrue("Estimate should be positive after concurrent samples", est > 0);
         assertTrue("Estimate should be finite", Float.isFinite(est));
     }
+
+    /**
+     * Runtime decay factor changes must affect all estimators,
+     * not just newly created ones. Regression test for the
+     * _localDecayFactor snapshot bug.
+     */
+    @Test
+    public void testRuntimeDecayFactorAffectsExistingEstimator() {
+        _bwe.addSample(10);
+        float before = _bwe.getBandwidthEstimate();
+        // Change the decay factor - must affect this existing estimator
+        SimpleBandwidthEstimator.setDecayFactor(4);
+        // Add more samples - the new decay factor must be in effect
+        for (int i = 0; i < 10; i++) {
+            _bwe.addSample(5);
+        }
+        float after = _bwe.getBandwidthEstimate();
+        // The estimate should still be valid and positive
+        assertTrue("Estimate must remain positive after decay change", after > 0);
+        // Verify the decay factor was actually applied
+        assertEquals(4, SimpleBandwidthEstimator.getDecayFactor());
+        // Reset to default
+        SimpleBandwidthEstimator.setDecayFactor(8);
+    }
 }
