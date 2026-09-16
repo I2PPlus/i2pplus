@@ -1374,7 +1374,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Factory default: value before any tuning. Persisted on first run for auto-revert. */
         protected int _defaultValue;
         /** Code-level default captured at construction time. Used by restoreDefaults(). */
-        private final int _factoryDefault;
+        protected final int _factoryDefault;
         /** Last known value (from persistence or runtime default). Used as tuning baseline. */
         protected final int _initialValue;
         /** True until first update() call — applies persisted value from autotune.config. */
@@ -3618,7 +3618,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_WINDOW_SIZE", "Initial congestion window",
                   SUB_STREAMING,
 
-                  8, 512, 4, "stream.con.initialRTT.in", _context);
+                  128, 1024, 64, "stream.con.initialRTT.in", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -3958,7 +3958,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         MaxInboundBufferParam() {
             super("i2p.streaming.maxInboundBuffer", "Max inbound buffer (bytes)",
                   SUB_STREAMING,
-                  262144, 134217728, 262144, "stream.chokeSizeBegin", _context);
+                  8388608, 134217728, 8388608, "stream.chokeSizeBegin", _context);
         }
 
         /** Apply the cap via I2PSocketManagerFull. */
@@ -4019,7 +4019,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_ACK_DELAY", "Piggyback ACK wait (ms)",
                   SUB_STREAMING,
 
-                  10, 500, 5, "stream.sendsBeforeAck", _context);
+                  25, 500, 25, "stream.sendsBeforeAck", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4091,7 +4091,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("PASSIVE_FLUSH_DELAY", "Nagle flush delay (ms)",
                   SUB_STREAMING,
 
-                  10, 200, 10, "stream.con.sendMessageSize", _context);
+                  50, 500, 50, "stream.con.sendMessageSize", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4163,7 +4163,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
                   SUB_STREAMING,
 
-                  8, 2048, 8, "stream.con.initialRTT.out", _context);
+                  1024, 4096, 128, "stream.con.initialRTT.out", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4196,26 +4196,29 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
 
-            // Recovery floor: if below 50% of default, always increase back toward default
-            // unless severe drops or congestion. Prevents params from getting stuck at minimums.
-            int recoveryFloor = Math.max(_min, _defaultValue / 2);
+            // Recovery floor: if below 50% of factory default, always increase
+            // back toward factory default unless severe drops or congestion.
+            // Use factory default to avoid stale persisted values preventing growth.
+            int recoveryFloor = Math.max(_min, _factoryDefault / 2);
             if (current < recoveryFloor && !congested)
-                return Math.min(_defaultValue, current + _step);
+                return Math.min(_factoryDefault, current + _step);
 
             // Severe drops or congestion = shrink window cap (loss minimization)
             if (dropping || congested)
                 return Math.max(recoveryFloor, current - _step);
 
-            // Dead zone: hold within 50% of default unless signal is strong
-            if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested)
+            // Dead zone: hold within 50% of factory default unless signal is strong.
+            // Use factory default to avoid stale persisted values creating a
+            // dead zone that prevents growth from low starting values.
+            if (current >= recoveryFloor && current <= _factoryDefault * 2 && !dropping && !congested)
                 return current;
 
-            // Below default: increase if no drops/congestion
-            if (current < _defaultValue && !dropping && !congested)
+            // Below factory default: increase if no drops/congestion
+            if (current < _factoryDefault && !dropping && !congested)
                 return Math.min(_max, current + _step);
 
-            // Above default: decrease if RTT is high
-            if (current > _defaultValue && observed > 7000)
+            // Above factory default: decrease if RTT is high
+            if (current > _factoryDefault && observed > 7000)
                 return Math.max(recoveryFloor, current - _step);
 
             return current;
@@ -4340,7 +4343,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
                   // Step 512: on a clean path the 4096-message ceiling
                   // (~8 MB/s at 0.89 s RTT) is reached in ~4 cycles (~1 min).
-                  128, 4096, 512, "stream.con.initialRTT.out", _context);
+                  512, 4096, 512, "stream.con.initialRTT.out", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
