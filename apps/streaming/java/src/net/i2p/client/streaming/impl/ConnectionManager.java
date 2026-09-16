@@ -1944,6 +1944,120 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
     }
 
     /**
+     * Ping the destination through a specific subsession, waiting for the pong.
+     *
+     * @param peer the destination
+     * @param session the subsession to use (must not be null)
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @param timeoutMs greater than zero
+     * @return true if pong received
+     * @since 0.9.71+
+     */
+    public boolean ping(Destination peer, I2PSession session, int fromPort, int toPort, long timeoutMs) {
+        return ping(peer, session, fromPort, toPort, timeoutMs, true);
+    }
+
+    /**
+     * Ping the destination through a specific subsession, optionally blocking.
+     *
+     * @param peer the destination
+     * @param session the subsession to use (must not be null)
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @param timeoutMs greater than zero
+     * @param blocking true to block until pong
+     * @return true if blocking and pong received
+     * @since 0.9.71+
+     */
+    public boolean ping(Destination peer, I2PSession session, int fromPort, int toPort, long timeoutMs, boolean blocking) {
+        PingRequest req = new PingRequest(null);
+        long id = assignPingId(req);
+        PacketLocal packet = new PacketLocal(_context, peer, session);
+        packet.setSendStreamId(id);
+        packet.setFlag(Packet.FLAG_ECHO |
+                        Packet.FLAG_NO_ACK |
+                        Packet.FLAG_SIGNATURE_INCLUDED);
+        packet.setOptionalFrom();
+        packet.setLocalPort(fromPort);
+        packet.setRemotePort(toPort);
+        if (timeoutMs > getMaxPingTimeout())
+            timeoutMs = getMaxPingTimeout();
+        if (_log.shouldInfo()) {
+            _log.info(String.format("About to ping %s port %d from port %d timeout=%d blocking=%b via subsession",
+                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs, blocking));
+        }
+
+        _outboundQueue.enqueue(packet);
+        packet.releasePayload();
+
+        if (blocking) {
+            synchronized (req) {
+                if (!req.pongReceived())
+                    try { req.wait(timeoutMs); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
+            }
+            _pendingPings.remove(id);
+        } else {
+            PingFailed pf = new PingFailed(id, null);
+            pf.schedule(timeoutMs);
+        }
+
+        return req.pongReceived();
+    }
+
+    /**
+     * Ping the destination with a payload through a specific subsession.
+     *
+     * @param peer the destination
+     * @param session the subsession to use (must not be null)
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @param timeoutMs greater than zero
+     * @param payload non-null, include in packet, up to 32 bytes may be returned in pong
+     * @return the payload received in the pong, zero-length if none, null on failure or timeout
+     * @since 0.9.71+
+     */
+    public byte[] ping(Destination peer, I2PSession session, int fromPort, int toPort, long timeoutMs, byte[] payload) {
+        PingRequest req = new PingRequest(null);
+        long id = assignPingId(req);
+        PacketLocal packet = new PacketLocal(_context, peer, session);
+        packet.setSendStreamId(id);
+        packet.setFlag(Packet.FLAG_ECHO |
+                        Packet.FLAG_NO_ACK |
+                        Packet.FLAG_SIGNATURE_INCLUDED);
+        packet.setOptionalFrom();
+        packet.setLocalPort(fromPort);
+        packet.setRemotePort(toPort);
+        /** Byte array. */
+        packet.setPayload(new ByteArray(payload));
+        if (timeoutMs > getMaxPingTimeout())
+            timeoutMs = getMaxPingTimeout();
+        if (_log.shouldInfo()) {
+            _log.info(String.format("About to ping %s port %d from port %d timeout=%d payload=%d via subsession",
+                      peer.calculateHash().toString(), toPort, fromPort, timeoutMs, payload.length));
+        }
+
+        _outboundQueue.enqueue(packet);
+        packet.releasePayload();
+
+        synchronized (req) {
+            if (!req.pongReceived())
+                try { req.wait(timeoutMs); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
+        }
+        _pendingPings.remove(id);
+
+        boolean ok = req.pongReceived();
+        if (!ok)
+            return null;
+        ByteArray ba = req.getPayload();
+        if (ba == null)
+            return new byte[0];
+        byte[] rv = new byte[ba.getValid()];
+        System.arraycopy(ba, ba.getOffset(), rv, 0, ba.getValid());
+        return rv;
+    }
+
+    /**
      *  The callback interface for a pong.
      *  Unused? Not part of the public streaming API.
      */
