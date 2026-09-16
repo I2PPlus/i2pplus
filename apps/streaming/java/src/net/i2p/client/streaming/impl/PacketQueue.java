@@ -124,6 +124,12 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                  } else {
                     options.setSendLeaseSet(false);
                 }
+                if (con != null) {
+                    if (con.isInbound() && con.getLifetime() < 2*60*1000)
+                        options.setSendLeaseSet(false);
+                    else if (ENABLE_STATUS_LISTEN)
+                        listenForStatus = true;
+                }
                 int sendTags = FINAL_TAGS_TO_SEND;
                 int tagThresh = FINAL_TAG_THRESHOLD;
                 if (con != null) {
@@ -174,10 +180,12 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // in-flight download is never disturbed.
                 if (con != null && !con.isInbound() && packet.getSequenceNum() == 0 && packet.getNumSends() <= 1)
                     options.setFreshConnection(true);
-            } else {
-                if (con != null) {
+             } else {
+                 if (con != null) {
                     if (con.isInbound() && con.getLifetime() < 2*60*1000)
                         options.setSendLeaseSet(false);
+                    else if (ENABLE_STATUS_LISTEN)
+                        listenForStatus = true;
                     // increase threshold with higher window sizes to prevent stalls
                     // after tag delivery failure
                     ConnectionOptions copts = con.getOptions();
@@ -287,15 +295,22 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
          if (_log.shouldInfo())
              _log.info("MessageStatus [" + status + "] for [MsgID " + msgId + "] " + con);
 
-         switch (status) {
-            case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
-            // not really guaranteed
-            case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
-                if (_log.shouldWarn()) {
-                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
-                }
-                _messageStatusMap.remove(id);
-                break;
+          switch (status) {
+             case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
+                 // Best effort delivery failed — not guaranteed, may be transient
+                 if (_log.shouldWarn()) {
+                     _log.warn("Received Best Effort Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
+                 }
+                 _messageStatusMap.remove(id);
+                 break;
+             case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
+                 // Guaranteed delivery failed — message definitely not sent, trigger retransmit
+                 if (_log.shouldWarn()) {
+                     _log.warn("Received Guaranteed Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
+                 }
+                 _messageStatusMap.remove(id);
+                 con.scheduleSoftFailureRetransmit();
+                 break;
             // no tunnels may fix itself, trigger immediate retransmit
             case MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS:
             // probably took a long time to open the tunnel, trigger immediate retransmit
