@@ -212,9 +212,15 @@ class ConnectionPacketHandler {
         if (isNew && packet.getPayloadSize() > 512) {
             // don't clear choking unless it was new, and a big packet
             // this will call ackImmediately() if changed
-            // TODO if this filled in a hole, we shouldn't unchoke
-            // TODO a bunch of small packets should unchoke also
-            con.setChoking(false);
+            // If the packet was out-of-order (filled a hole but didn't
+            // advance the contiguous receive window), defer unchoking
+            // until enough contiguous data has accumulated.
+            long highestReady = con.getInputStream().getHighestReadyBlockId();
+            boolean isContiguous = (seqNum == highestReady + 1);
+            boolean enoughData = (con.getInputStream().getTotalReadySize() >= 512);
+            if (isContiguous || enoughData) {
+                con.setChoking(false);
+            }
         }
 
         if (_log.shouldDebug()) {
@@ -745,6 +751,25 @@ class ConnectionPacketHandler {
                 throw new I2PException("Received unsigned / forged packet: " + packet);
             }
         }
+    }
+
+    /**
+     * Determine if a packet should keep the connection choked.
+     * Used for testing the unchoking decision logic.
+     *
+     * @param con the connection
+     * @param seqNum the packet sequence number
+     * @param payloadSize the packet payload size
+     * @return true if the connection should remain choked
+     * @since 0.9.72+
+     */
+    static boolean shouldRemainChoked(Connection con, long seqNum, int payloadSize) {
+        if (payloadSize <= 512)
+            return true;
+        long highestReady = con.getInputStream().getHighestReadyBlockId();
+        boolean isContiguous = (seqNum == highestReady + 1);
+        boolean enoughData = (con.getInputStream().getTotalReadySize() >= 512);
+        return !(isContiguous || enoughData);
     }
 
 }
