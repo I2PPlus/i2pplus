@@ -8,11 +8,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
@@ -29,6 +32,7 @@ import net.i2p.crypto.SigAlgo;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Certificate;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;
@@ -54,6 +58,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private final Log _log;
     private final I2PSession _session;
     private final Set<I2PSession> _subsessions;
+    private final Map<I2PSession, ConnectionOptions> _subsessionsOptions;
     private final I2PServerSocketFull _serverSocket;
     private StandardServerSocket _realServerSocket;
     private final ConnectionOptions _defaultOptions;
@@ -188,6 +193,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _context = context;
         _session = session;
         _subsessions = new ConcurrentHashSet<>(4);
+        _subsessionsOptions = new ConcurrentHashMap<>(4);
         _log = _context.logManager().getLog(I2PSocketManagerFull.class);
 
         _name = name + " " + (_managerId.incrementAndGet());
@@ -281,13 +287,13 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             // We don't actually need the same pubkey in the dest, just in the LS.
             // The dest one is unused. But this is how we find the LS keys
             // to reuse in RequestLeaseSetMessageHandler.
+            SigType type = getSigType(opts);
             ByteArrayStream keyStream = new ByteArrayStream(1024);
+            if (type != SigType.DSA_SHA1) {
+                // hassle, have to set up the padding and cert, see I2PClientImpl
+                throw new I2PSessionException("type " + type + " unsupported");
+            }
             try {
-                SigType type = getSigType(opts);
-                if (type != SigType.DSA_SHA1) {
-                    // hassle, have to set up the padding and cert, see I2PClientImpl
-                    throw new I2PSessionException("type " + type + " unsupported");
-                }
                 PublicKey pub = _session.getMyDestination().getPublicKey();
                 PrivateKey priv = _session.getDecryptionKey();
                 SimpleDataStructure[] keys = _context.keyGenerator().generateSigningKeys(type);
@@ -298,7 +304,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                 keys[1].writeBytes(keyStream); // signing priv
             } catch (GeneralSecurityException e) {
                 throw new I2PSessionException("Error creating keys", e);
-            } catch (I2PException e) {
+            } catch (DataFormatException e) {
                 throw new I2PSessionException("Error creating keys", e);
             } catch (IOException e) {
                 throw new I2PSessionException("Error creating keys", e);
@@ -328,7 +334,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  @return the sig type
      *  @since 0.9.21 copied from I2PSocketManagerFactory
      */
-    private SigType getSigType(Properties opts) {
+    private SigType getSigType(Properties opts) throws I2PSessionException {
         if (opts != null) {
             String st = opts.getProperty(I2PClient.PROP_SIGTYPE);
             if (st != null) {
@@ -337,9 +343,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                     return rv;
                 if (rv != null)
                     st = rv.toString();
-                _log.logAlways(Log.WARN, "Tunnel configuration error: Unsupported sig type " + st +
-                                         ", reverting to " + I2PClient.DEFAULT_SIGTYPE);
-                // TODO throw instead?
+                throw new I2PSessionException("Tunnel configuration error: Unsupported sig type " + st);
             }
         }
         return I2PClient.DEFAULT_SIGTYPE;
@@ -353,6 +357,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public void removeSubsession(I2PSession session) {
         _session.removeSubsession(session);
         boolean removed = _subsessions.remove(session);
+        _subsessionsOptions.remove(session);
         if (removed) {
             if (_log.shouldWarn())
                 _log.warn("Removed subsession " + session);
@@ -399,137 +404,193 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         return sock;
     }
 
-    /**
-     * Ping the specified peer, returning true if they replied to the ping within
-     * the timeout specified, false otherwise.  This call blocks.
-     *
-     * Uses the ports from the default options.
-     *
-     * TODO There is no way to ping on a subsession.
-     *
-     * @param peer Destination to ping
-     * @param timeoutMs timeout in ms, greater than zero
-     * @return true on success, false on failure
-     * @throws IllegalArgumentException if timeoutMs is not greater than zero
-     */
-    public boolean ping(Destination peer, long timeoutMs) {
-        if (timeoutMs <= 0)
-            throw new IllegalArgumentException("Bad timeout");
-        return _connectionManager.ping(peer, _defaultOptions.getLocalPort(),
-                                       _defaultOptions.getPort(), timeoutMs);
-    }
+     /**
+      * Ping the specified peer, returning true if they replied to the ping within
+      * the timeout specified, false otherwise.  This call blocks.
+      *
+      * Uses the ports from the default options.
+      *
+      * @param peer Destination to ping
+      * @param timeoutMs timeout in ms, greater than zero
+      * @return true on success, false on failure
+      * @throws IllegalArgumentException if timeoutMs is not greater than zero
+      */
+     public boolean ping(Destination peer, long timeoutMs) {
+         if (timeoutMs <= 0)
+             throw new IllegalArgumentException("Bad timeout");
+         return _connectionManager.ping(peer, _defaultOptions.getLocalPort(),
+                                        _defaultOptions.getPort(), timeoutMs);
+     }
 
-    /**
-     * Ping the specified peer, returning true if they replied to the ping within
-     * the timeout specified, false otherwise.  This call blocks.
-     *
-     * Uses the ports specified.
-     *
-     * TODO There is no way to ping on a subsession.
-     *
-     * @param peer Destination to ping
-     * @param localPort 0 - 65535
-     * @param remotePort 0 - 65535
-     * @param timeoutMs timeout in ms, greater than zero
-     * @return success or failure
-     * @throws IllegalArgumentException if ports or timeout are invalid
-     * @since 0.9.12
-     */
-    public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs) {
-        if (localPort < 0 || localPort > 65535 ||
-            remotePort < 0 || remotePort > 65535)
-            throw new IllegalArgumentException("Bad port");
-        if (timeoutMs <= 0)
-            throw new IllegalArgumentException("Bad timeout");
-        return _connectionManager.ping(peer, localPort, remotePort, timeoutMs);
-    }
+     /**
+      * Ping the specified peer, returning true if they replied to the ping within
+      * the timeout specified, false otherwise.  This call blocks.
+      *
+      * Uses the ports specified.
+      *
+      * @param peer Destination to ping
+      * @param localPort 0 - 65535
+      * @param remotePort 0 - 65535
+      * @param timeoutMs timeout in ms, greater than zero
+      * @return success or failure
+      * @throws IllegalArgumentException if ports or timeout are invalid
+      * @since 0.9.12
+      */
+     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs) {
+         if (localPort < 0 || localPort > 65535 ||
+             remotePort < 0 || remotePort > 65535)
+             throw new IllegalArgumentException("Bad port");
+         if (timeoutMs <= 0)
+             throw new IllegalArgumentException("Bad timeout");
+         return _connectionManager.ping(peer, localPort, remotePort, timeoutMs);
+     }
 
-    /**
-     * Ping the specified peer, returning true if they replied to the ping within
-     * the timeout specified, false otherwise.  This call blocks.
-     *
-     * Uses the ports specified.
-     *
-     * TODO There is no way to ping on a subsession.
-     *
-     * @param peer Destination to ping
-     * @param localPort 0 - 65535
-     * @param remotePort 0 - 65535
-     * @param timeoutMs timeout in ms, greater than zero
-     * @param payload to include in the ping
-     * @return the payload received in the pong, zero-length if none, null on failure or timeout
-     * @throws IllegalArgumentException if ports or timeout are invalid
-     * @since 0.9.18
-     */
-    public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload) {
-        if (localPort < 0 || localPort > 65535 ||
-            remotePort < 0 || remotePort > 65535)
-            throw new IllegalArgumentException("Bad port");
-        if (timeoutMs <= 0)
-            throw new IllegalArgumentException("Bad timeout");
-        return _connectionManager.ping(peer, localPort, remotePort, timeoutMs, payload);
-    }
+     /**
+      * Ping the specified peer through a specific subsession, returning true
+      * if they replied to the ping within the timeout specified, false otherwise.
+      * This call blocks.
+      *
+      * @param peer Destination to ping
+      * @param session the subsession to use
+      * @param localPort 0 - 65535
+      * @param remotePort 0 - 65535
+      * @param timeoutMs timeout in ms, greater than zero
+      * @return success or failure
+      * @throws IllegalArgumentException if ports or timeout are invalid
+      * @since 0.9.71+
+      */
+     public boolean ping(Destination peer, I2PSession session, int localPort, int remotePort, long timeoutMs) {
+         if (localPort < 0 || localPort > 65535 ||
+             remotePort < 0 || remotePort > 65535)
+             throw new IllegalArgumentException("Bad port");
+         if (timeoutMs <= 0)
+             throw new IllegalArgumentException("Bad timeout");
+         return _connectionManager.ping(peer, session, localPort, remotePort, timeoutMs);
+     }
 
-    /**
-     * How long should we wait for the client to .accept() a socket before
-     * sending back a NACK/Close?
-     *
-     * @param ms milliseconds to wait, maximum
-     */
-    public void setAcceptTimeout(long ms) {
-        _acceptTimeout = ms;
-        _connectionManager.getConnectionHandler().setAcceptTimeout((int)ms);
-    }
+     /**
+      * Ping the specified peer, returning true if they replied to the ping within
+      * the timeout specified, false otherwise.  This call blocks.
+      *
+      * Uses the ports specified.
+      *
+      * @param peer Destination to ping
+      * @param localPort 0 - 65535
+      * @param remotePort 0 - 65535
+      * @param timeoutMs timeout in ms, greater than zero
+      * @param payload to include in the ping
+      * @return the payload received in the pong, zero-length if none, null on failure or timeout
+      * @throws IllegalArgumentException if ports or timeout are invalid
+      * @since 0.9.18
+      */
+     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload) {
+         if (localPort < 0 || localPort > 65535 ||
+             remotePort < 0 || remotePort > 65535)
+             throw new IllegalArgumentException("Bad port");
+         if (timeoutMs <= 0)
+             throw new IllegalArgumentException("Bad timeout");
+         return _connectionManager.ping(peer, localPort, remotePort, timeoutMs, payload);
+     }
 
-    /**
-     * Accept timeout in milliseconds.
-     * @return the accept timeout in milliseconds
-     */
-    public long getAcceptTimeout() { return _acceptTimeout; }
+     /**
+      * Ping the specified peer through a specific subsession, returning true
+      * if they replied to the ping within the timeout specified, false otherwise.
+      * This call blocks.
+      *
+      * @param peer Destination to ping
+      * @param session the subsession to use
+      * @param localPort 0 - 65535
+      * @param remotePort 0 - 65535
+      * @param timeoutMs timeout in ms, greater than zero
+      * @param payload to include in the ping
+      * @return the payload received in the pong, zero-length if none, null on failure or timeout
+      * @throws IllegalArgumentException if ports or timeout are invalid
+      * @since 0.9.71+
+      */
+     public byte[] ping(Destination peer, I2PSession session, int localPort, int remotePort, long timeoutMs, byte[] payload) {
+         if (localPort < 0 || localPort > 65535 ||
+             remotePort < 0 || remotePort > 65535)
+             throw new IllegalArgumentException("Bad port");
+         if (timeoutMs <= 0)
+             throw new IllegalArgumentException("Bad timeout");
+         return _connectionManager.ping(peer, session, localPort, remotePort, timeoutMs, payload);
+     }
 
-    /**
-     *  Update the options on a running socket manager.
-     *  Parameters in the I2PSocketOptions interface may be changed directly
-     *  with the setters; no need to use this method for those.
-     *  This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
-     *
-     *  TODO There is no way to update the options on a subsession.
-     *
-     *  @param options as created from a call to buildOptions(properties), non-null
-     */
-    public void setDefaultOptions(I2PSocketOptions options) {
-        if (!(options instanceof ConnectionOptions))
-            throw new IllegalArgumentException();
-        if (_log.shouldWarn())
-            _log.warn("Changing options from:\n " + _defaultOptions + "\nto:\n " + options);
-        _defaultOptions.updateAll((ConnectionOptions) options);
-        _connectionManager.updateOptions();
-    }
+     /**
+      * Accept timeout in milliseconds.
+      * @return the accept timeout in milliseconds
+      */
+     public void setAcceptTimeout(long ms) {
+         _acceptTimeout = ms;
+         _connectionManager.getConnectionHandler().setAcceptTimeout((int)ms);
+     }
 
-    /**
-     * Current options, not a copy, setters may be used to make changes.
-     *
-     * TODO There is no facility to specify the session.
-     * @return the default options
-     */
-    public I2PSocketOptions getDefaultOptions() {
-        return _defaultOptions;
-    }
+     /**
+      * Accept timeout in milliseconds.
+      * @return the accept timeout in milliseconds
+      */
+     public long getAcceptTimeout() { return _acceptTimeout; }
 
-    /**
-     *  Returns non-null socket.
-     *  This method does not throw exceptions, but methods on the returned socket
-     *  may throw exceptions if the socket or socket manager is closed.
-     *
-     *  This only listens on the primary session. There is no way to get
-     *  incoming connections on a subsession.
-     *
-     *  @return non-null
-     */
-    public I2PServerSocket getServerSocket() {
-        _connectionManager.setAllowIncomingConnections(true);
-        return _serverSocket;
-    }
+     /**
+      *  Update the options on a running socket manager.
+      *  Parameters in the I2PSocketOptions interface may be changed directly
+      *  with the setters; no need to use this method for those.
+      *  This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
+      *
+      *  @param options as created from a call to buildOptions(properties), non-null
+      */
+     public void setDefaultOptions(I2PSocketOptions options) {
+         if (!(options instanceof ConnectionOptions))
+             throw new IllegalArgumentException();
+         if (_log.shouldWarn())
+             _log.warn("Changing options from:\n " + _defaultOptions + "\nto:\n " + options);
+         _defaultOptions.updateAll((ConnectionOptions) options);
+         _connectionManager.updateOptions();
+     }
+
+     /**
+      *  Update the options on a running subsession.
+      *  Parameters in the I2PSocketOptions interface may be changed directly
+      *  with the setters; no need to use this method for those.
+      *  This does NOT update the underlying I2CP or tunnel options.
+      *
+      *  @param session the subsession to update
+      *  @param options as created from a call to buildOptions(properties), non-null
+      *  @since 0.9.71+
+      */
+     public void setDefaultOptions(I2PSession session, I2PSocketOptions options) {
+         if (!(options instanceof ConnectionOptions))
+             throw new IllegalArgumentException();
+         if (_log.shouldWarn())
+             _log.warn("Updating options for subsession " + session + " to:\n " + options);
+         _subsessionsOptions.put(session, (ConnectionOptions) options);
+         _connectionManager.updateOptions();
+     }
+
+     /**
+      *  Returns the current default options.
+      *  This does NOT update the underlying I2CP or tunnel options;
+      *  use getSession().updateOptions() for that.
+      *  @return the default options
+      */
+     public I2PSocketOptions getDefaultOptions() {
+         return _defaultOptions;
+     }
+
+     /**
+      *  Returns non-null socket.
+      *  This method does not throw exceptions, but methods on the returned socket
+      *  may throw exceptions if the socket or socket manager is closed.
+      *
+      *  This only listens on the primary session. There is no way to get
+      *  incoming connections on a subsession.
+      *
+      *  @return non-null
+      */
+     public I2PServerSocket getServerSocket() {
+         _connectionManager.setAllowIncomingConnections(true);
+         return _serverSocket;
+     }
 
     /**
      * Like getServerSocket but returns a real ServerSocket for easier porting of apps.
@@ -599,17 +660,25 @@ public class I2PSocketManagerFull implements I2PSocketManager {
              updateUserDsaList();
              Hash h = peer.calculateHash();
              SigAlgo myAlgo = session.getMyDestination().getSigType().getBaseAlgorithm();
-             if ((myAlgo == SigAlgo.EC && _ecUnsupported.contains(h)) ||
-                 (myAlgo == SigAlgo.EdDSA && _edUnsupported.contains(h)) ||
-                 (!_userDsaOnly.isEmpty() && _userDsaOnly.contains(h))) {
-                 // FIXME just taking the first one for now
-                 for (I2PSession sess : _subsessions) {
-                     if (sess.getMyDestination().getSigType() == SigType.DSA_SHA1) {
-                         session = sess;
-                         break;
-                     }
-                 }
-             }
+            if ((myAlgo == SigAlgo.EC && _ecUnsupported.contains(h)) ||
+                (myAlgo == SigAlgo.EdDSA && _edUnsupported.contains(h)) ||
+                (!_userDsaOnly.isEmpty() && _userDsaOnly.contains(h))) {
+                // Peer requires DSA but our local algorithm is EC/EdDSA or the
+                // peer is in the user-specified DSA-only list. Select the first
+                // DSA_SHA1 subsession. If none exists, fall back to the primary
+                // session which may not be compatible — the connect attempt will
+                // likely fail, but this is better than throwing an obscure error.
+                for (I2PSession sess : _subsessions) {
+                    if (sess.getMyDestination().getSigType() == SigType.DSA_SHA1) {
+                        session = sess;
+                        break;
+                    }
+                }
+                if (session == _session) {
+                    _log.warn("No DSA subsession found for peer " + h.toBase64().substring(0,6) +
+                              "; falling back to primary session which may not be compatible");
+                }
+            }
          }
          verifySession(session);
          // the following blocks unless connect delay > 0
