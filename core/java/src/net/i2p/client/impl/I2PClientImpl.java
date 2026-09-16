@@ -43,6 +43,16 @@ public class I2PClientImpl implements I2PClient {
 
     private static final int PADDING_ENTROPY = 32;
 
+    private final I2PAppContext _context;
+
+    public I2PClientImpl() {
+        this(I2PAppContext.getGlobalContext());
+    }
+
+    public I2PClientImpl(I2PAppContext ctx) {
+        _context = ctx;
+    }
+
     /**
      * Create a destination with a DSA 1024/160 signature type and a null certificate.
      * This is not bound to the I2PClient, you must supply the data back again
@@ -165,7 +175,7 @@ public class I2PClientImpl implements I2PClient {
      */
     @Override
     public I2PSession createSession(InputStream destKeyStream, Properties options) throws I2PSessionException {
-        return createSession(I2PAppContext.getGlobalContext(), destKeyStream, options);
+        return createSession(_context, destKeyStream, options);
     }
 
     /**

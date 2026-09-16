@@ -9,6 +9,7 @@ package net.i2p.client;
  *
  */
 
+import net.i2p.I2PAppContext;
 import net.i2p.client.impl.I2PClientImpl;
 
 /**
@@ -17,6 +18,18 @@ import net.i2p.client.impl.I2PClientImpl;
  * @author jrandom
  */
 public class I2PClientFactory {
+    /** Create a new instance of the appropriate I2PClient with a specific context
+     *
+     * @param context the I2PAppContext to use
+     * @return client implementation
+     */
+    public static I2PClient createClient(I2PAppContext context) {
+        if (context == null) {
+            context = I2PAppContext.getGlobalContext();
+        }
+        return new I2PClientImpl(context);
+    }
+
     /** Create a new instance of the appropriate I2PClient
     *
      * @return client implementation
