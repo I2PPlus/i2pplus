@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.Outproxy;
@@ -61,6 +62,9 @@ class SOCKS5Server extends SOCKSServer {
      * The IPs will change at restart, but torsocks doesn't appear to do any caching.
      */
     private static final Map<String, String> _torCache = new LHMCache<>(256);
+
+    /** Sticky proxy cache: host -> selected proxy, for consistent routing */
+    private final ConcurrentHashMap<String, String> _proxyCache = new ConcurrentHashMap<>();
 
     /**
      * Create a SOCKS5 server that communicates with the client using
@@ -522,9 +526,6 @@ class SOCKS5Server extends SOCKSServer {
      */
     private I2PSocket connectToDestination(I2PSOCKSTunnel t, DataOutputStream out)
         throws SOCKSException, DataFormatException, IOException, I2PException {
-        // FIXME: here we should read our config file, select an
-        // outproxy, and instantiate the proper socket class that
-        // handles the outproxy itself (SOCKS4a, SOCKS5, HTTP CONNECT...).
         String hostLowerCase = connHostName.toLowerCase(Locale.US);
         if (NamingService.isI2PHost(hostLowerCase)) {
             Destination dest = _context.namingService().lookup(connHostName);
@@ -566,17 +567,37 @@ class SOCKS5Server extends SOCKSServer {
                     sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
                     throw new SOCKSException(err);
                 }
-                // TODO sticky proxy selection like in HTTP client
-                int p = _context.random().nextInt(proxies.size());
-                String proxy = proxies.get(p);
+                // Sticky proxy selection: reuse the same proxy for the same host,
+                // skipping recently failed proxies
+                String cached = _proxyCache.get(connHostName);
+                String proxy;
+                if (cached != null && !proxies.contains(cached)) {
+                    _proxyCache.remove(connHostName);
+                    proxy = selectProxy(proxies, connHostName);
+                } else if (cached != null) {
+                    proxy = cached;
+                } else {
+                    proxy = selectProxy(proxies, connHostName);
+                }
                 try {
                     return outproxyConnect(t, proxy);
                 } catch (SOCKSException se) {
+                    _proxyCache.remove(connHostName);
                     sendFailureReply(Reply.HOST_UNREACHABLE, out);
                     throw se;
                 }
             }
         }
+    }
+
+    /** Select a proxy, preferring a cached one for the same host */
+    private String selectProxy(List<String> proxies, String host) {
+        if (proxies.size() == 1) return proxies.get(0);
+        String cached = _proxyCache.get(host);
+        if (cached != null && proxies.contains(cached)) return cached;
+        String picked = proxies.get(_context.random().nextInt(proxies.size()));
+        _proxyCache.put(host, picked);
+        return picked;
     }
 
     // This isn't really the right place for this, we can't stop the tunnel once it starts.

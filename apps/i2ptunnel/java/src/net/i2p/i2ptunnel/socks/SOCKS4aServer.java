@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.Outproxy;
@@ -41,6 +42,9 @@ class SOCKS4aServer extends SOCKSServer {
     private static final int MAX_STRING_LEN = 1024;
 
     private boolean setupCompleted;
+
+    /** Sticky proxy cache: host -> selected proxy */
+    private final ConcurrentHashMap<String, String> _proxyCache = new ConcurrentHashMap<>();
 
     /**
      * Create a SOCKS4a server that communicates with the client using
@@ -224,9 +228,6 @@ class SOCKS4aServer extends SOCKSServer {
             throw new SOCKSException("Connection error", e);
         }
 
-        // FIXME: here we should read our config file, select an
-        // outproxy, and instantiate the proper socket class that
-        // handles the outproxy itself (SOCKS4a, SOCKS4a, HTTP CONNECT...).
         I2PSocket destSock;
 
         try {
@@ -275,13 +276,13 @@ class SOCKS4aServer extends SOCKSServer {
                         } catch (IOException ioe) { /* ignored */ }
                         throw new SOCKSException(err);
                     }
-                    int p = _context.random().nextInt(proxies.size());
-                    String proxy = proxies.get(p);
+                    String proxy = selectProxy(proxies, connHostName);
                     if (_log.shouldDebug())
                         _log.debug("Connecting to port " + connPort + " proxy " + proxy + " for " + connHostName + "...");
                     try {
                         destSock = outproxyConnect(t, proxy);
                     } catch (SOCKSException se) {
+                        _proxyCache.remove(connHostName);
                         try {
                             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
                         } catch (IOException ioe) { /* ignored */ }
@@ -309,5 +310,15 @@ class SOCKS4aServer extends SOCKSServer {
         }
 
         return destSock;
+    }
+
+    /** Select a proxy, preferring a cached one for the same host */
+    private String selectProxy(List<String> proxies, String host) {
+        if (proxies.size() == 1) return proxies.get(0);
+        String cached = _proxyCache.get(host);
+        if (cached != null && proxies.contains(cached)) return cached;
+        String picked = proxies.get(_context.random().nextInt(proxies.size()));
+        _proxyCache.put(host, picked);
+        return picked;
     }
 }
