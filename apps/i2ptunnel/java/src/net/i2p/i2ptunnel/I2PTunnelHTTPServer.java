@@ -1387,7 +1387,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _webserver.setSoTimeout(SERVER_READ_TIMEOUT_GET);
 
                 if (_shouldCompress) {
-                    compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
+                    compressedout = new CompressedResponseOutputStream(browserout, _keepalive, _headers);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
                                    urlSuffix(req), _log);
@@ -1616,15 +1616,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private static class CompressedResponseOutputStream extends HTTPResponseOutputStream {
         private GZIPOutputStream _gzipOut;
+        private final String _requestHeaders;
 
         /**
-         *  Create a compressed response output stream.
-         *
-         *  @param o the underlying output stream
-         *  @param keepalive if true, don't close the stream on finish
-         */
-        public CompressedResponseOutputStream(OutputStream o, boolean keepalive) {
+          *  Create a compressed response output stream.
+          *
+          *  @param o the underlying output stream
+          *  @param keepalive if true, don't close the stream on finish
+          *  @param requestHeaders the HTTP request headers for Accept-Encoding check
+          */
+        public CompressedResponseOutputStream(OutputStream o, boolean keepalive, String requestHeaders) {
             super(o, false, keepalive, false, null);
+            _requestHeaders = requestHeaders;
         }
 
         /**
@@ -1658,16 +1661,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *
          *  @return true if the response should be compressed
          */
-        @Override
-        protected boolean shouldCompress() {
-            return (_dataExpected < 0 || _dataExpected >= MIN_TO_COMPRESS) &&
-                   // must be null as we write the header in finishHeaders(), can't have two
-                   (_contentEncoding == null) &&
-                   (_contentType == null ||
-                    (!_contentType.startsWith("audio/") &&
-                     !_contentType.startsWith("video/") &&
-                     !COMPRESSED_TYPES.contains(_contentType)));
-        }
+    @Override
+    protected boolean shouldCompress() {
+        return (_dataExpected < 0 || _dataExpected >= MIN_TO_COMPRESS) &&
+               // must be null as we write the header in finishHeaders(), can't have two
+               (_contentEncoding == null) &&
+               (_contentType == null ||
+                !_contentType.startsWith("audio/") &&
+                !_contentType.startsWith("video/") &&
+                !COMPRESSED_TYPES.contains(_contentType)) &&
+               // browser must accept x-i2p-gzip
+               (_requestHeaders != null && _requestHeaders.indexOf("x-i2p-gzip") >= 0);
+    }
 
         /**
          *  Write the Content-Encoding header if compression is enabled.

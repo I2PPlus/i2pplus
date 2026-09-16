@@ -85,10 +85,9 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     private void init(InputStream privData, Logging l) {
         this.l = l;
 
-        I2PClient client = I2PClientFactory.createClient();
+        I2PClient client = I2PClientFactory.createClient(getTunnel().getContext());
 
         try {
-            // FIXME this may not pick up non-default I2CP host/port settings from tunnel
             _session = client.createSession(privData, getTunnel().getClientOptions());
             connected(_session);
         } catch(I2PSessionException exc) {

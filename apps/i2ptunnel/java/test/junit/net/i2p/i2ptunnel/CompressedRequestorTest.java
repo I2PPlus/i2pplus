@@ -184,7 +184,7 @@ public class CompressedRequestorTest {
         final byte[] body = new byte[2000];
         Arrays.fill(body, (byte) 'a');
         final String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: 2000\r\n\r\n";
-        runScenario(browser, "GET / HTTP/1.1\r\nHost: x.i2p\r\n\r\n", true, false, true, waiter,
+        runScenario(browser, "GET / HTTP/1.1\r\nHost: x.i2p\r\nAccept-Encoding: x-i2p-gzip\r\n\r\n", true, false, true, waiter,
                     new ThrowingConsumer<Socket>() {
             public void accept(Socket s) throws Throwable {
                 readRequest(s.getInputStream());

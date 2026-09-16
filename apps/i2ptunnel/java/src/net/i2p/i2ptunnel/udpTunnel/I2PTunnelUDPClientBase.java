@@ -81,7 +81,7 @@ import net.i2p.util.EventDispatcher;
         tunnel.getClientOptions().setProperty("i2cp.dontPublishLeaseSet", "true");
 
         // Create the I2P client and its destination keypair.
-        I2PClient client = I2PClientFactory.createClient();
+        I2PClient client = I2PClientFactory.createClient(tunnel.getContext());
         byte[] key;
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
@@ -103,7 +103,6 @@ import net.i2p.util.EventDispatcher;
         // Create an I2CP session from the destination keypair.
         try {
             ByteArrayInputStream in = new ByteArrayInputStream(key);
-            // FIXME this may not pick up non-default I2CP host/port settings from tunnel
             _session = client.createSession(in, tunnel.getClientOptions());
             connected(_session);
         } catch(Exception exc) {
