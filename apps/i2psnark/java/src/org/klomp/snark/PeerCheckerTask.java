@@ -89,7 +89,10 @@ class PeerCheckerTask implements Runnable {
                 continue;
             }
 
-            if (peer.getInactiveTime() > peer.getMaxInactiveTime()) {
+            long inactiveTime = peer.getInactiveTime();
+            // note that streaming is configured to disconnect at 4 minutes
+            // so this probably won't happen here.
+            if (inactiveTime > peer.getMaxInactiveTime()) {
                 if (_log.shouldWarn())
                     _log.warn(
                             "Disconnecting peer ["
@@ -240,13 +243,17 @@ class PeerCheckerTask implements Runnable {
                 }
             }
             peer.retransmitRequests();
+            int count = _runCount + i;
             // send PEX, about every 12 minutes
-            if (((_runCount + i) % 17) == 0 && !peer.isCompleted()) coordinator.sendPeers(peer);
+            if ((count % 17) == 0 && !peer.isCompleted()) coordinator.sendPeers(peer);
             // send Comment Request, about every 30 minutes
-            if (fetchComments && ((_runCount + i) % 47) == 0) coordinator.sendCommentReq(peer);
+            if (fetchComments && (count % 47) == 0) coordinator.sendCommentReq(peer);
             // cheap failsafe for seeds connected to seeds, stop pinging and hopefully
             // the inactive checker (above) will eventually disconnect it
-            if (coordinator.getNeededLength() > 0 || !peer.isCompleted()) peer.keepAlive();
+            if ((count & 0x01) == 0 &&
+                inactiveTime > 29*1000 &&
+                (coordinator.getNeededLength() > 0 || !peer.isCompleted()))
+                peer.keepAlive();
             // announce them to local tracker (TrackerClient does this too)
             if (dht != null && (_runCount % 5) == 0) {
                 dht.announce(
