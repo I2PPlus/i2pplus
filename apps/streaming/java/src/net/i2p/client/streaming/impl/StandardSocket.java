@@ -11,6 +11,7 @@ import java.nio.channels.SocketChannel;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.client.streaming.I2PSocketOptions;
+import net.i2p.data.Destination;
 
 /**
  * Bridge to I2PSocket.
@@ -24,12 +25,10 @@ import net.i2p.client.streaming.I2PSocketOptions;
  * You may not create an unbound StandardSocket.
  * Create this through the SocketManager.
  *
- * Todo: Make public and add getPeerDestination() ?
- *
  * @author zzz
  * @since 0.8.4
  */
-class StandardSocket extends Socket {
+public class StandardSocket extends Socket {
     private final I2PSocket _socket;
     private volatile boolean _connected = true;
     private volatile boolean _inputShutdown;
@@ -204,6 +203,15 @@ class StandardSocket extends Socket {
     @Override
     public SocketAddress getRemoteSocketAddress() {
         return new I2PSocketAddress(_socket.getPeerDestination(), _socket.getPort());
+    }
+
+    /**
+     *  Returns the peer destination of the underlying I2PSocket.
+     *  @return the peer destination, non-null
+     *  @since 0.9.71+
+     */
+    public Destination getPeerDestination() {
+        return _socket.getPeerDestination();
     }
 
     /**
