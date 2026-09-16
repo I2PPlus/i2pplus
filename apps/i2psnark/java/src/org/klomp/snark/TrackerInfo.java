@@ -39,13 +39,13 @@ class TrackerInfo {
      */
     public TrackerInfo(
             InputStream in, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
-            throws IOException {
+            throws IOException, Throwable {
         this(new BDecoder(in), my_id, infohash, metainfo, util);
     }
 
     private TrackerInfo(
             BDecoder be, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
-            throws IOException {
+            throws IOException, Throwable {
         this(be.bdecodeMap().getMap(), my_id, infohash, metainfo, util);
     }
 

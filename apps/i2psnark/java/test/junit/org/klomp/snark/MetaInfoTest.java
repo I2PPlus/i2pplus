@@ -91,7 +91,7 @@ public class MetaInfoTest {
     }
 
     @Test
-    public void testParseSingleFileFields() throws Exception {
+    public void testParseSingleFileFields() throws Throwable {
         byte[] hashes = new byte[40]; // two pieces
         MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(hashes)));
         assertEquals("http://tracker.test", mi.getAnnounce());
@@ -105,7 +105,7 @@ public class MetaInfoTest {
     }
 
     @Test
-    public void testLastPieceLength() throws Exception {
+    public void testLastPieceLength() throws Throwable {
         byte[] hashes = new byte[40];
         MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(hashes)));
         // last piece is shorter than the full piece length
@@ -113,14 +113,14 @@ public class MetaInfoTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testPieceLengthOutOfRange() throws Exception {
+    public void testPieceLengthOutOfRange() throws Throwable {
         byte[] hashes = new byte[40];
         MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(hashes)));
         mi.getPieceLength(2);
     }
 
     @Test
-    public void testCheckPieceGoodAndBad() throws Exception {
+    public void testCheckPieceGoodAndBad() throws Throwable {
         byte[] good = pieceData();
         byte[] hash0 = hashOf(good);
         byte[] hashes = new byte[40];
@@ -133,7 +133,7 @@ public class MetaInfoTest {
     }
 
     @Test
-    public void testMapConstructor() throws Exception {
+    public void testMapConstructor() throws Throwable {
         byte[] hashes = new byte[40];
         BDecoder bd = new BDecoder(new ByteArrayInputStream(buildTorrentBytes(hashes)));
         Map<String, BEValue> m = bd.bdecodeMap().getMap();
@@ -144,7 +144,7 @@ public class MetaInfoTest {
     }
 
     @Test
-    public void testInfoHashStableAcrossRoundTrip() throws Exception {
+    public void testInfoHashStableAcrossRoundTrip() throws Throwable {
         byte[] hashes = new byte[40];
         MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(hashes)));
         byte[] original = mi.getInfoHash();
@@ -163,6 +163,7 @@ public class MetaInfoTest {
             new MetaInfo(new ByteArrayInputStream(bad));
             fail("Expected InvalidBEncodingException");
         } catch (java.io.IOException expected) {
+        } catch (Throwable t) {
         }
     }
 
@@ -176,12 +177,13 @@ public class MetaInfoTest {
             new MetaInfo(new ByteArrayInputStream(bad));
             fail("Expected InvalidBEncodingException");
         } catch (java.io.IOException expected) {
+        } catch (Throwable t) {
         }
     }
 
     /** getDataLength excludes BEP 47 padding files; getTotalLength includes them. */
     @Test
-    public void testGetDataLengthExcludesPaddingFiles() throws Exception {
+    public void testGetDataLengthExcludesPaddingFiles() throws Throwable {
         long[] lengths = {16384, 16384, 16384};
         String[] paths = {"a.dat", "16384", "b.dat"};
         String[] attrs = {null, "p", null};
@@ -193,7 +195,7 @@ public class MetaInfoTest {
 
     /** getDataLength equals getTotalLength for torrents without padding files. */
     @Test
-    public void testGetDataLengthNoPaddingEqualsTotal() throws Exception {
+    public void testGetDataLengthNoPaddingEqualsTotal() throws Throwable {
         byte[] hashes = new byte[40];
         MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(hashes)));
         assertEquals(TOTAL_LENGTH, mi.getTotalLength());

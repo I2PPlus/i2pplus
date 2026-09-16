@@ -44,13 +44,13 @@ public class PeerStateTest {
     }
 
     /** Peer with no socket, so getI2PSocket() returns null. */
-    private static Peer peerFor(MetaInfo mi) throws Exception {
+    private static Peer peerFor(MetaInfo mi) throws Throwable {
         PeerID pid = new PeerID(new byte[32], (I2PSnarkUtil) null);
         return new Peer(pid, new byte[20], mi.getInfoHash(), mi);
     }
 
     /** PeerState for a two-piece torrent, unchoked and with the given expected set. */
-    private static PeerState stateFor(Set<Integer> expected) throws Exception {
+    private static PeerState stateFor(Set<Integer> expected) throws Throwable {
         MetaInfo mi = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(new byte[40])));
         PeerState ps = new PeerState(peerFor(mi), null, null, mi, null, null);
         ps.choked = false;
@@ -59,7 +59,7 @@ public class PeerStateTest {
     }
 
     @Test
-    public void testRejectsOutOfRangePieces() throws Exception {
+    public void testRejectsOutOfRangePieces() throws Throwable {
         PeerState ps = stateFor(new HashSet<>(Arrays.asList(0)));
         ps.allowedFastMessage(-1);
         ps.allowedFastMessage(2);
@@ -67,7 +67,7 @@ public class PeerStateTest {
     }
 
     @Test
-    public void testDropsUnexpectedPieces() throws Exception {
+    public void testDropsUnexpectedPieces() throws Throwable {
         PeerState ps = stateFor(new HashSet<>(Arrays.asList(0)));
         ps.allowedFastMessage(1);
         assertTrue(ps._peerAllowedFast.isEmpty());
@@ -76,14 +76,14 @@ public class PeerStateTest {
     }
 
     @Test
-    public void testUnverifiableDestinationAcceptsAll() throws Exception {
+    public void testUnverifiableDestinationAcceptsAll() throws Throwable {
         PeerState ps = stateFor(null);
         ps.allowedFastMessage(1);
         assertEquals(new HashSet<>(Arrays.asList(1)), ps._peerAllowedFast);
     }
 
     @Test
-    public void testGenerateAllowedFastSetInvariants() throws Exception {
+    public void testGenerateAllowedFastSetInvariants() throws Throwable {
         byte[] ih = new byte[20];
         Arrays.fill(ih, (byte) 0x13);
         byte[] h1 = new byte[32];

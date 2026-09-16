@@ -22,7 +22,7 @@ public class PeerConnectionOutPrefetchTest {
     private static final int PART_LEN = 1024;
 
     /** Peer with no socket, mirroring PeerStateTest's construction. */
-    private static Peer peerFor() throws Exception {
+    private static Peer peerFor() throws Throwable {
         MetaInfo mi =
                 new MetaInfo(
                         new java.io.ByteArrayInputStream(
@@ -50,7 +50,7 @@ public class PeerConnectionOutPrefetchTest {
     }
 
     @Test(timeout = 20000)
-    public void testSendPiecePrefetchesOffThread() throws Exception {
+    public void testSendPiecePrefetchesOffThread() throws Throwable {
         Peer peer = peerFor();
         PeerConnectionOut out = outFor(peer);
         CountDownLatch started = new CountDownLatch(1);
@@ -82,7 +82,7 @@ public class PeerConnectionOutPrefetchTest {
     }
 
     @Test(timeout = 20000)
-    public void testDisconnectDiscardsPendingPiece() throws Exception {
+    public void testDisconnectDiscardsPendingPiece() throws Throwable {
         Peer peer = peerFor();
         PeerConnectionOut out = outFor(peer);
         CountDownLatch gate = new CountDownLatch(1);
@@ -111,7 +111,7 @@ public class PeerConnectionOutPrefetchTest {
     }
 
     @Test(timeout = 20000)
-    public void testDepthCapBoundsInflightPrefetches() throws Exception {
+    public void testDepthCapBoundsInflightPrefetches() throws Throwable {
         Peer peer = peerFor();
         PeerConnectionOut out = outFor(peer);
         int cap = PeerConnectionOut.MAX_PREFETCH_INFLIGHT;

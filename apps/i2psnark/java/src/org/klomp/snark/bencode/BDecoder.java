@@ -89,8 +89,10 @@ public class BDecoder {
      * @param in the InputStream to decode from
      * @return the first BEValue on the stream, or null when the stream has ended
      * @throws IOException when something bad happens with the stream
+   * @throws StackOverflowError
+   * @throws StackOverflowError
      */
-    public static BEValue bdecode(InputStream in) throws IOException {
+    public static BEValue bdecode(InputStream in) throws IOException, Throwable {
         return new BDecoder(in).bdecode();
     }
 
@@ -135,7 +137,7 @@ public class BDecoder {
      * @return the next BEValue on the stream, or null if the stream has ended
      * @throws IOException if an I/O error occurs or the stream is not bencoded
      */
-    public BEValue bdecode() throws IOException {
+    public BEValue bdecode() throws IOException, Throwable {
         indicator = getNextIndicator();
         if (indicator == -1) return null;
 
@@ -154,7 +156,7 @@ public class BDecoder {
      * @throws IOException if an I/O error occurs
      * @throws InvalidBEncodingException if the next value is not a byte array
      */
-    public BEValue bdecodeBytes() throws IOException {
+    public BEValue bdecodeBytes() throws IOException, Throwable {
         int c = getNextIndicator();
         int num = c - '0';
         if (num < 0 || num > 9)
@@ -248,7 +250,7 @@ public class BDecoder {
      * @throws IOException if an I/O error occurs
      * @throws InvalidBEncodingException if the next value is not a list
      */
-    public BEValue bdecodeList() throws IOException {
+    public BEValue bdecodeList() throws IOException, Throwable {
         int c = getNextIndicator();
         if (c != 'l') throw new InvalidBEncodingException("Expected 'l', not '" + (char) c + "'");
         indicator = 0;
@@ -279,7 +281,7 @@ public class BDecoder {
      * @throws IOException if an I/O error occurs
      * @throws InvalidBEncodingException if the next value is not a map
      */
-    public BEValue bdecodeMap() throws IOException {
+    public BEValue bdecodeMap() throws IOException, Throwable {
         int c = getNextIndicator();
         if (c == '<')
             throw new InvalidBEncodingException(
@@ -374,8 +376,8 @@ public class BDecoder {
         try {
             BEValue bev = bdecode(new FileInputStream(args[0]));
             System.out.println(bev.toString());
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (Throwable t) {
+            t.printStackTrace();
             System.exit(1);
         }
     }

@@ -66,12 +66,12 @@ public class SaveTorrentEditValidatorTest {
 
     // ---- hasChanges -------------------------------------------------------
 
-    private static MetaInfo makeMeta(String announce, String comment, String createdBy) throws Exception {
+    private static MetaInfo makeMeta(String announce, String comment, String createdBy) throws Throwable {
         return new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(announce, comment, createdBy)));
     }
 
     private static MetaInfo makeMetaWithAnnounceList(String announce, String comment, String createdBy,
-            List<List<String>> announceList) throws Exception {
+            List<List<String>> announceList) throws Throwable {
         MetaInfo base = new MetaInfo(new ByteArrayInputStream(buildTorrentBytes(announce, comment, createdBy)));
         // Use the copy constructor to create a new MetaInfo with the custom announce list
         return new MetaInfo(base, announce, announceList, comment, createdBy, null);
@@ -108,7 +108,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testHasChangesNoChange() throws Exception {
+    public void testHasChangesNoChange() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "old comment", "old by");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(), Collections.emptyList(), null, "old comment", "old by");
@@ -116,7 +116,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testHasChangesCommentDiffers() throws Exception {
+    public void testHasChangesCommentDiffers() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "old", "by");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(), Collections.emptyList(), null, "new", "by");
@@ -124,7 +124,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testHasChangesCreatedByDiffers() throws Exception {
+    public void testHasChangesCreatedByDiffers() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "comment", "old");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(), Collections.emptyList(), null, "comment", "new");
@@ -132,7 +132,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testHasChangesPrimaryDiffers() throws Exception {
+    public void testHasChangesPrimaryDiffers() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "c", "b");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(), Collections.emptyList(), Integer.valueOf(123), "c", "b");
@@ -140,7 +140,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testHasChangesAddTracker() throws Exception {
+    public void testHasChangesAddTracker() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "c", "b");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Arrays.asList(1), Collections.emptyList(), null, "c", "b");
@@ -148,7 +148,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testHasChangesRemoveTracker() throws Exception {
+    public void testHasChangesRemoveTracker() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "c", "b");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(), Arrays.asList(1), null, "c", "b");
@@ -156,7 +156,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testHasChangesNullCommentAndCreatedBy() throws Exception {
+    public void testHasChangesNullCommentAndCreatedBy() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", null, null);
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(), Collections.emptyList(), null, "", "");
@@ -174,7 +174,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testBuildAnnounceListNoChange() throws Exception {
+    public void testBuildAnnounceListNoChange() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "c", "b");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(), Collections.emptyList(), null, "c", "b");
@@ -189,7 +189,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testBuildAnnounceListAddTracker() throws Exception {
+    public void testBuildAnnounceListAddTracker() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "c", "b");
         int t2Hash = "http://t2.i2p/announce".hashCode();
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
@@ -205,7 +205,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testBuildAnnounceListRemoveTracker() throws Exception {
+    public void testBuildAnnounceListRemoveTracker() throws Throwable {
         MetaInfo meta = makeMetaWithAnnounceList(
             "http://t1.i2p/announce",
             "c", "b",
@@ -224,7 +224,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testBuildAnnounceListSelectPrimary() throws Exception {
+    public void testBuildAnnounceListSelectPrimary() throws Throwable {
         MetaInfo meta = makeMetaWithAnnounceList(
             "http://t1.i2p/announce",
             "c", "b",
@@ -240,7 +240,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testBuildAnnounceListPrimaryNotInListFallsBack() throws Exception {
+    public void testBuildAnnounceListPrimaryNotInListFallsBack() throws Throwable {
         MetaInfo meta = makeMetaWithAnnounceList(
             "http://t1.i2p/announce",
             "c", "b",
@@ -256,7 +256,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testBuildAnnounceListEmptyResult() throws Exception {
+    public void testBuildAnnounceListEmptyResult() throws Throwable {
         MetaInfo meta = makeMeta("http://t1.i2p/announce", "c", "b");
         I2PSnarkServlet.EditParams ep = new I2PSnarkServlet.EditParams(
             Collections.emptyList(),
@@ -270,7 +270,7 @@ public class SaveTorrentEditValidatorTest {
     }
 
     @Test
-    public void testBuildAnnounceListStripsNonI2pFromAnnounceListAndPrimary() throws Exception {
+    public void testBuildAnnounceListStripsNonI2pFromAnnounceListAndPrimary() throws Throwable {
         // The announce list is filtered for non-i2p, AND oldPrimary is filtered too
         MetaInfo meta = makeMetaWithAnnounceList(
             "http://tracker.public/announce",

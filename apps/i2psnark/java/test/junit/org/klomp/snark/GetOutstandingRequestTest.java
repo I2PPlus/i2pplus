@@ -28,7 +28,7 @@ public class GetOutstandingRequestTest {
     }
 
     /** PeerState with the private request queue populated via reflection. */
-    private static PeerState stateWith(List<Request> requests) throws Exception {
+    private static PeerState stateWith(List<Request> requests) throws Throwable {
         MetaInfo mi = new MetaInfo(new java.io.ByteArrayInputStream(
                 PeerStateTest.buildTorrentBytes(new byte[40])));
         PeerID pid = new PeerID(new byte[32], (I2PSnarkUtil) null);
@@ -52,7 +52,7 @@ public class GetOutstandingRequestTest {
     }
 
     @Test
-    public void inOrderChunkMatchesHead() throws Exception {
+    public void inOrderChunkMatchesHead() throws Throwable {
         PeerState ps = stateWith(requests(partial(0), 3));
         Request req = ps.getOutstandingRequest(0, 0, CHUNK);
         assertNotNull(req);
@@ -62,7 +62,7 @@ public class GetOutstandingRequestTest {
     }
 
     @Test
-    public void outOfOrderMiddleChunkIsMatchedNotDropped() throws Exception {
+    public void outOfOrderMiddleChunkIsMatchedNotDropped() throws Throwable {
         // peers may deliver chunks out of order; the middle chunk arriving
         // first must be matched and the earlier requests requeued to the
         // tail, not discarded
@@ -75,7 +75,7 @@ public class GetOutstandingRequestTest {
     }
 
     @Test
-    public void skippedRequestsAreRequeuedAtTail() throws Exception {
+    public void skippedRequestsAreRequeuedAtTail() throws Throwable {
         PartialPiece pp = partial(0);
         List<Request> reqs = requests(pp, 3);
         PeerState ps = stateWith(reqs);
@@ -88,7 +88,7 @@ public class GetOutstandingRequestTest {
     }
 
     @Test
-    public void chunkOfDifferentPieceBetweenOthersStillMatched() throws Exception {
+    public void chunkOfDifferentPieceBetweenOthersStillMatched() throws Throwable {
         // regression: the old scan stopped advancing when the piece number
         // changed, dropping a perfectly good matching chunk behind it
         PeerState ps = stateWith(java.util.Arrays.asList(
@@ -100,25 +100,25 @@ public class GetOutstandingRequestTest {
     }
 
     @Test
-    public void unknownPieceReturnsNull() throws Exception {
+    public void unknownPieceReturnsNull() throws Throwable {
         PeerState ps = stateWith(requests(partial(0), 1));
         assertNull(ps.getOutstandingRequest(5, 0, CHUNK));
     }
 
     @Test
-    public void wrongLengthReturnsNull() throws Exception {
+    public void wrongLengthReturnsNull() throws Throwable {
         PeerState ps = stateWith(requests(partial(0), 1));
         assertNull(ps.getOutstandingRequest(0, 0, CHUNK / 2));
     }
 
     // ---- helpers ------------------------------------------------------------
 
-    private static int countRequests(PeerState ps) throws Exception {
+    private static int countRequests(PeerState ps) throws Throwable {
         return requestList(ps).size();
     }
 
     @SuppressWarnings("unchecked")
-    private static List<?> requestList(PeerState ps) throws Exception {
+    private static List<?> requestList(PeerState ps) throws Throwable {
         Field f = PeerState.class.getDeclaredField("outstandingRequests");
         f.setAccessible(true);
         return (List<?>) f.get(ps);

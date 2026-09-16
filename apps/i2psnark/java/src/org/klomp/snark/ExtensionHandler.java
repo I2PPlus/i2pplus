@@ -91,7 +91,7 @@ abstract class ExtensionHandler {
         try {
             int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(type).getInt();
             peer.sendExtension(hisMsgCode, payload);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             // NPE, no capability
         }
     }
@@ -283,7 +283,7 @@ abstract class ExtensionHandler {
                 peer.shouldRequest(state.chunkSize(chk));
                 sendRequest(peer, chk);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (log.shouldWarn()) log.warn("Handshake exception from [" + peer + "]", e);
         }
     }
@@ -358,7 +358,7 @@ abstract class ExtensionHandler {
                     log.warn("Received unknown metadata message from [" + peer + "]");
                 peer.disconnect(false);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (log.shouldInfo())
                 log.info("Received metadata ext. message exception from [" + peer + "]", e);
             // fatal ?
@@ -443,7 +443,7 @@ abstract class ExtensionHandler {
                 peers.add(pID);
             }
             listener.gotPeers(peer, peers);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (log.shouldInfo()) log.info("PEX messsage exception from [" + peer + "]", e);
         }
     }
@@ -466,7 +466,7 @@ abstract class ExtensionHandler {
             int qport = map.get("port").getInt();
             int rport = map.get("rport").getInt();
             listener.gotPort(peer, qport, rport);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (log.shouldInfo()) log.info("DHT messsage exception from [" + peer + "]", e);
         }
     }
@@ -549,7 +549,7 @@ abstract class ExtensionHandler {
                 if (log.shouldInfo())
                     log.info("Unknown comment messsage type " + type + " from [" + peer + "]");
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (log.shouldInfo()) log.info("Comment messsage exception from [" + peer + "]", e);
         }
     }

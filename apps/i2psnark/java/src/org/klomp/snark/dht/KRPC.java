@@ -1243,7 +1243,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                                 + destHash
                                 + "]\n* "
                                 + BDecoder.bdecode(bais).toString());
-            } catch (IOException ioe) { /* ignored */ }
+            } catch (Throwable t) { /* ignored */ }
         }
 
         // Always send query port, peer will increment for unsigned replies
@@ -1340,7 +1340,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 throw new InvalidBEncodingException("Unknown type: " + type);
             }
             // success
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (_log.shouldWarn()) {
                 _log.warn("Received error for message", e);
             }

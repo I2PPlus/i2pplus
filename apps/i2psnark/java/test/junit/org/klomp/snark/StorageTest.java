@@ -51,14 +51,14 @@ public class StorageTest {
     private File _dataDir;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Throwable {
         _baseDir = createTempDir("i2psnark-storage-test");
         _dataDir = new File(_baseDir, "data");
         assertTrue(_dataDir.mkdir());
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() throws Throwable {
         deleteTree(_baseDir);
     }
 
@@ -96,12 +96,12 @@ public class StorageTest {
      * Writes two files "a.dat" (aSize) and "b.dat" (bSize) into dataDir with deterministic
      * content and returns a parsed multi-file MetaInfo whose piece hashes match that content.
      */
-    private MetaInfo buildTwoFileTorrent(long aSize, long bSize) throws Exception {
+    private MetaInfo buildTwoFileTorrent(long aSize, long bSize) throws Throwable {
         return buildTorrent(Arrays.asList("a.dat", "b.dat"), Arrays.asList(Long.valueOf(aSize), Long.valueOf(bSize)));
     }
 
     /** Writes the named files with deterministic content and returns a parsed MetaInfo. */
-    private MetaInfo buildTorrent(List<String> names, List<Long> sizes) throws Exception {
+    private MetaInfo buildTorrent(List<String> names, List<Long> sizes) throws Throwable {
         long total = 0;
         for (Long size : sizes) {
             total += size.longValue();
@@ -124,7 +124,7 @@ public class StorageTest {
      * Writes a single file (true single-file torrent bencode, no "files" key) and returns the
      * parsed MetaInfo. The file must already exist, so check() takes the single-file branch.
      */
-    private MetaInfo buildSingleFileTorrent(File file, long size) throws Exception {
+    private MetaInfo buildSingleFileTorrent(File file, long size) throws Throwable {
         byte[] content = new byte[(int) size];
         for (int i = 0; i < content.length; i++) {
             content[i] = (byte) ((i * 31 + 7) & 0xff);
@@ -137,7 +137,7 @@ public class StorageTest {
      * Same metainfo as {@link #buildSingleFileTorrent(File, long)}, without
      * writing the data file to disk, so check() can take the staging branch.
      */
-    private MetaInfo buildSingleFileTorrentNoData(File file, long size) throws Exception {
+    private MetaInfo buildSingleFileTorrentNoData(File file, long size) throws Throwable {
         byte[] content = new byte[(int) size];
         for (int i = 0; i < content.length; i++) {
             content[i] = (byte) ((i * 31 + 7) & 0xff);
@@ -146,7 +146,7 @@ public class StorageTest {
     }
 
     /** Builds the single-file bencode for the given content and parses it. */
-    private MetaInfo buildSingleFileTorrent(File file, byte[] content) throws Exception {
+    private MetaInfo buildSingleFileTorrent(File file, byte[] content) throws Throwable {
         byte[] hashes = computeHashes(content);
         StringBuilder sb = new StringBuilder(256);
         sb.append('d');
@@ -171,7 +171,7 @@ public class StorageTest {
      * Same metainfo as {@link #buildTorrent(List, List)}, without writing any
      * data files to disk, so check() can take the staging branch.
      */
-    private MetaInfo buildTorrentNoData(List<String> names, List<Long> sizes) throws Exception {
+    private MetaInfo buildTorrentNoData(List<String> names, List<Long> sizes) throws Throwable {
         long total = 0;
         for (Long size : sizes) {
             total += size.longValue();
@@ -298,7 +298,7 @@ public class StorageTest {
 
     /** No saved data: every piece must be hashed and verified. */
     @Test
-    public void testFullCheckWhenNoSavedData() throws Exception {
+    public void testFullCheckWhenNoSavedData() throws Throwable {
         MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH * 2, PIECE_LENGTH * 2);
         RecordingListener l = new RecordingListener();
         Storage s = newStorage(mi, l);
@@ -315,7 +315,7 @@ public class StorageTest {
      * piece is detected across window boundaries.
      */
     @Test
-    public void testFullCheckHashesPieceLargerThanVerifyWindow() throws Exception {
+    public void testFullCheckHashesPieceLargerThanVerifyWindow() throws Throwable {
         int pieceLength = 1024 * 1024; // > VERIFY_BUFSIZE: forces multi-window hashing
         // random, NOT linear: linear content is periodic with period 256KB, which would mask a
         // windowing bug (re-reading the first window in place of each window still hashes equal)
@@ -355,7 +355,7 @@ public class StorageTest {
      * piece must still be checked, corrupted pieces detected, and callbacks delivered in order.
      */
     @Test
-    public void testParallelRecheckVerifiesAllPieces() throws Exception {
+    public void testParallelRecheckVerifiesAllPieces() throws Throwable {
         int pieceLength = PIECE_LENGTH;
         int pieces = 8;
         byte[] content = new byte[pieces * pieceLength];
@@ -416,7 +416,7 @@ public class StorageTest {
 
     /** BEP 47: a pad-only piece is counted complete on a full recheck without hashing. */
     @Test
-    public void testRecheckTrustsPadOnlyPiece() throws Exception {
+    public void testRecheckTrustsPadOnlyPiece() throws Throwable {
         // a.dat [0, 16K) real piece, pad [16K, 32K) pad-only piece
         int pieceLength = PIECE_LENGTH;
         List<String> names = Arrays.asList("a.dat", ".pad/16384");
@@ -447,7 +447,7 @@ public class StorageTest {
 
     /** All files unchanged (mtime <= savedTime, lengths match): no hashing at all, bitfield trusted. */
     @Test
-    public void testTrustPathSkipsHashingWhenFilesUnchanged() throws Exception {
+    public void testTrustPathSkipsHashingWhenFilesUnchanged() throws Throwable {
         MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH * 2, PIECE_LENGTH * 2);
         Storage s1 = newStorage(mi, new RecordingListener());
         s1.check(0, null);
@@ -467,7 +467,7 @@ public class StorageTest {
 
     /** Single-file variant of the trust path. */
     @Test
-    public void testSingleFileTrustPathSkipsHashing() throws Exception {
+    public void testSingleFileTrustPathSkipsHashing() throws Throwable {
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
         File base = new File(_dataDir, "single.dat");
         MetaInfo mi = buildSingleFileTorrent(base, PIECE_LENGTH * 2);
@@ -492,7 +492,7 @@ public class StorageTest {
      * pieces (0, 1) must be trusted without re-hashing.
      */
     @Test
-    public void testOnlyPiecesInChangedFileAreRechecked() throws Exception {
+    public void testOnlyPiecesInChangedFileAreRechecked() throws Throwable {
         MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH * 2, PIECE_LENGTH * 2);
         Storage s1 = newStorage(mi, new RecordingListener());
         s1.check(0, null);
@@ -521,7 +521,7 @@ public class StorageTest {
      * piece-to-file boundary logic.
      */
     @Test
-    public void testSpanningPieceRecheckedWhenAdjacentFileChanged() throws Exception {
+    public void testSpanningPieceRecheckedWhenAdjacentFileChanged() throws Throwable {
         MetaInfo mi = buildTwoFileTorrent(5000, 3000);
         assertEquals(2, mi.getPieces());
         Storage s1 = newStorage(mi, new RecordingListener());
@@ -544,7 +544,7 @@ public class StorageTest {
      * save: only b.dat's pieces may be re-verified; a.dat's verified pieces stay trusted.
      */
     @Test
-    public void testPartialSavedStateRechecksOnlyChangedFilePieces() throws Exception {
+    public void testPartialSavedStateRechecksOnlyChangedFilePieces() throws Throwable {
         MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH * 2, PIECE_LENGTH * 2);
         Storage s1 = newStorage(mi, new RecordingListener());
         s1.check(0, null);
@@ -572,7 +572,7 @@ public class StorageTest {
      * proving the length check is per-file and independent of the mtime check.
      */
     @Test
-    public void testLengthMismatchRechecksOnlyThatFile() throws Exception {
+    public void testLengthMismatchRechecksOnlyThatFile() throws Throwable {
         MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH * 2, PIECE_LENGTH * 2);
         Storage s1 = newStorage(mi, new RecordingListener());
         s1.check(0, null);
@@ -611,7 +611,7 @@ public class StorageTest {
     }
 
     /** Creates a torrent from _dataDir and returns the resulting metainfo. */
-    private MetaInfo createTorrent() throws Exception {
+    private MetaInfo createTorrent() throws Throwable {
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
         util.setShouldPadFiles(true);
         Storage created =
@@ -633,7 +633,7 @@ public class StorageTest {
      * .torrent file round-trips losslessly, and the torrent verifies end to end.
      */
     @Test
-    public void testCreationPadsUnalignedMultiFileTorrent() throws Exception {
+    public void testCreationPadsUnalignedMultiFileTorrent() throws Throwable {
         byte[] c = content(2000);
         writeFile(new File(_dataDir, "a.dat"), c, 0, 1000);
         writeFile(new File(_dataDir, "b.dat"), c, 1000, 1000);
@@ -678,7 +678,7 @@ public class StorageTest {
 
     /** Creation with already-aligned files adds no pads and no attributes. */
     @Test
-    public void testCreationSkipsPadsForAlignedFiles() throws Exception {
+    public void testCreationSkipsPadsForAlignedFiles() throws Throwable {
         byte[] c = content(2 * 65536);
         writeFile(new File(_dataDir, "a.dat"), c, 0, 65536);
         writeFile(new File(_dataDir, "b.dat"), c, 65536, 65536);
@@ -703,7 +703,7 @@ public class StorageTest {
 
     /** Single-file creation is never padded (no file list, no root-level attr support). */
     @Test
-    public void testCreationNeverPadsSingleFile() throws Exception {
+    public void testCreationNeverPadsSingleFile() throws Throwable {
         File f = new File(_dataDir, "single.dat");
         byte[] c = content(5000);
         writeFile(f, c, 0, 5000);
@@ -726,7 +726,7 @@ public class StorageTest {
      * metainfo has no padding attributes.
      */
     @Test
-    public void testCreationNoPadsWhenDisabled() throws Exception {
+    public void testCreationNoPadsWhenDisabled() throws Throwable {
         byte[] c = content(2000);
         writeFile(new File(_dataDir, "a.dat"), c, 0, 1000);
         writeFile(new File(_dataDir, "b.dat"), c, 1000, 1000);
@@ -769,7 +769,7 @@ public class StorageTest {
      * parse-renamed _pad layouts.
      */
     @Test
-    public void testRecreateSkipsExistingPadDir() throws Exception {
+    public void testRecreateSkipsExistingPadDir() throws Throwable {
         byte[] c = content(2000);
         writeFile(new File(_dataDir, "a.dat"), c, 0, 1000);
         writeFile(new File(_dataDir, "b.dat"), c, 1000, 1000);
@@ -790,7 +790,7 @@ public class StorageTest {
 
     /** Creation from a truly empty folder fails with the plain no-data message. */
     @Test
-    public void testCreationEmptyDirThrowsNoData() throws Exception {
+    public void testCreationEmptyDirThrowsNoData() throws Throwable {
         File empty = new File(_dataDir, "empty");
         assertTrue(empty.mkdir());
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
@@ -812,7 +812,7 @@ public class StorageTest {
 
     /** Creation skips unreadable files with a warning; only readable data is torrented. */
     @Test
-    public void testCreationSkipsUnreadableFile() throws Exception {
+    public void testCreationSkipsUnreadableFile() throws Throwable {
         File sub = new File(_dataDir, "mixed");
         assertTrue(sub.mkdir());
         byte[] c = content(2000);
@@ -891,7 +891,7 @@ public class StorageTest {
     }
 
     /** Builds a PartialPiece filled with the deterministic content of the given piece. */
-    private PartialPiece fullPiece(MetaInfo mi, int piece) throws Exception {
+    private PartialPiece fullPiece(MetaInfo mi, int piece) throws Throwable {
         int len = mi.getPieceLength(piece);
         PartialPiece pp = new PartialPiece(new Piece(piece), len, null);
         byte[] data = new byte[len];
@@ -912,7 +912,7 @@ public class StorageTest {
      * the piece lands instead of the torrent stopping.
      */
     @Test
-    public void testPutPieceRetriesAfterReadOnlyHandle() throws Exception {
+    public void testPutPieceRetriesAfterReadOnlyHandle() throws Throwable {
         File f = new File(_dataDir, "single.dat");
         MetaInfo mi = buildSingleFileTorrent(f, PIECE_LENGTH * 3);
         corrupt(f, PIECE_LENGTH); // piece 1 no longer matches its hash, so it stays wanted
@@ -1010,7 +1010,7 @@ public class StorageTest {
 
     /** BEP 47: isRangePadding() maps byte ranges onto padding files. */
     @Test
-    public void testIsRangePadding() throws Exception {
+    public void testIsRangePadding() throws Throwable {
         // a.dat [0,1000), pad [1000,1500), b.dat [1500,2500) — one 4096-byte piece
         List<String> names = Arrays.asList("a.dat", ".pad/500", "b.dat");
         List<Long> sizes =
@@ -1049,7 +1049,7 @@ public class StorageTest {
 
     /** BEP 47: getRequest() never requests padding-only sub-blocks and the piece still completes. */
     @Test
-    public void testPartialPieceSkipsPaddingChunks() throws Exception {
+    public void testPartialPieceSkipsPaddingChunks() throws Throwable {
         int pieceLength = 2 * PeerState.PARTSIZE; // one piece, eight 4K sub-blocks
         // a.dat [0, 128K) real, pad [128K, 256K) padding
         List<String> names = Arrays.asList("a.dat", ".pad/131072");
@@ -1140,7 +1140,7 @@ public class StorageTest {
      * wasted.
      */
     @Test
-    public void testPartialPieceCapsStraddlingPad() throws Exception {
+    public void testPartialPieceCapsStraddlingPad() throws Throwable {
         // a.dat [0, 10K) real, pad [10K, 16K): sub-block 2 straddles, sub-block 3 is all padding
         int pieceLength = PeerState.PARTSIZE;
         List<String> names = Arrays.asList("a.dat", ".pad/6144");
@@ -1179,7 +1179,7 @@ public class StorageTest {
 
     /** BEP 47: a long padding tail leaves a single real sub-block; no padding is requested. */
     @Test
-    public void testPartialPieceSkipsLongPadTail() throws Exception {
+    public void testPartialPieceSkipsLongPadTail() throws Throwable {
         // a.dat [0, 4K) real, pad [4K, 16K)
         int pieceLength = PeerState.PARTSIZE;
         List<String> names = Arrays.asList("a.dat", ".pad/12288");
@@ -1235,7 +1235,7 @@ public class StorageTest {
      * getHash() must still complete: the pad suffix reads back as zeros, not EOF.
      */
     @Test
-    public void testPartialPieceTempFilePadSuffixHash() throws Exception {
+    public void testPartialPieceTempFilePadSuffixHash() throws Throwable {
         int pieceLength = 1024 * 1024 + 8192; // > MAX_IN_MEM: temp-file path
         PartialPiece pp = new PartialPiece(new Piece(0), pieceLength, _dataDir);
         byte[] data = new byte[1024 * 1024];
@@ -1324,7 +1324,7 @@ public class StorageTest {
      * they do not count toward the max files per torrent limit.
      */
     @Test
-    public void testCountNonPad() throws Exception {
+    public void testCountNonPad() throws Throwable {
         File dir = new File(_dataDir, "src");
         assertTrue(dir.mkdir());
         File pad = new File(dir, ".pad");
@@ -1350,7 +1350,7 @@ public class StorageTest {
      * Blocks until the background copy has moved the file to the data dir
      * (finalFile present, workFile gone).
      */
-    private static void waitForMove(File finalFile, File workFile) throws Exception {
+    private static void waitForMove(File finalFile, File workFile) throws Throwable {
         long deadline = System.currentTimeMillis() + 30000;
         while (System.currentTimeMillis() < deadline) {
             if (finalFile.exists() && !workFile.exists()) {
@@ -1387,7 +1387,7 @@ public class StorageTest {
      * staging data.
      */
     @Test
-    public void testStagingFilesCreatedInTempDir() throws Exception {
+    public void testStagingFilesCreatedInTempDir() throws Throwable {
         File tempDir = new File(_baseDir, "temp");
         assertTrue(tempDir.mkdir());
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
@@ -1439,7 +1439,7 @@ public class StorageTest {
      * their pieces complete.
      */
     @Test
-    public void testStagingMovesFileOnCompletion() throws Exception {
+    public void testStagingMovesFileOnCompletion() throws Throwable {
         File tempDir = new File(_baseDir, "temp");
         assertTrue(tempDir.mkdir());
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
@@ -1485,7 +1485,7 @@ public class StorageTest {
      * saved clear bits and complete in place, moving out on completion.
      */
     @Test
-    public void testStagingResumeTrustsSavedState() throws Exception {
+    public void testStagingResumeTrustsSavedState() throws Throwable {
         File tempDir = new File(_baseDir, "temp");
         assertTrue(tempDir.mkdir());
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
@@ -1534,7 +1534,7 @@ public class StorageTest {
      * file appears only once the torrent is complete).
      */
     @Test
-    public void testStagingSingleFileMovesOnCompletion() throws Exception {
+    public void testStagingSingleFileMovesOnCompletion() throws Throwable {
         File tempDir = new File(_baseDir, "temp");
         assertTrue(tempDir.mkdir());
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());

@@ -219,7 +219,7 @@ public class MetaInfo {
      * @param in the stream containing the bencoded torrent data
      * @throws IOException if the stream cannot be read or the bencoded data is malformed
      */
-    public MetaInfo(InputStream in) throws IOException {
+    public MetaInfo(InputStream in) throws IOException, Throwable {
         this(new BDecoder(in));
     }
 
@@ -227,7 +227,7 @@ public class MetaInfo {
      * Creates a new MetaInfo from the given BDecoder. The BDecoder must have a complete dictionary
      * describing the torrent.
      */
-    private MetaInfo(BDecoder be) throws IOException {
+    private MetaInfo(BDecoder be) throws IOException, Throwable {
         // Note that evaluation order matters here...
         this(be.bdecodeMap().getMap());
         byte[] origInfohash = be.get_special_map_digest();
@@ -488,7 +488,14 @@ public class MetaInfo {
      */
     public static String getNameAndInfoHash(InputStream in, byte[] infoHashOut) throws IOException {
         BDecoder bd = new BDecoder(in);
-        Map<String, BEValue> m = bd.bdecodeMap().getMap();
+        Map<String, BEValue> m;
+        try {
+            m = bd.bdecodeMap().getMap();
+        } catch (IOException ioe) {
+            throw ioe;
+        } catch (Throwable t) {
+            throw new IOException(t);
+        }
         BEValue ibev = m.get("info");
         if (ibev == null) {
             throw new InvalidBEncodingException("Missing info map");
@@ -1118,8 +1125,8 @@ public class MetaInfo {
                         System.err.println("Failed backup of " + from + " to " + to);
                     }
                 }
-            } catch (IOException ioe) {
-                System.err.println("Error in file " + args[i] + ": " + ioe);
+            } catch (Throwable t) {
+                System.err.println("Error in file " + args[i] + ": " + t);
             }
         }
     }

@@ -777,7 +777,7 @@ public class TrackerClient implements Runnable {
      * @param trckrs the list of trackers to query
      * @return max peers seen
      */
-    private int getPeersFromTrackers(List<TCTracker> trckrs) {
+    private int getPeersFromTrackers(List<TCTracker> trckrs) throws Throwable {
         long left = coordinator.getLeft(); // -1 in magnet mode
 
         // First time we got a complete download?
@@ -1336,7 +1336,7 @@ public class TrackerClient implements Runnable {
                                     tr, uploaded, downloaded, left, UDPTrackerClient.EVENT_STOPPED);
                         }
                     }
-                } catch (IOException ioe) {
+                } catch (Throwable t) {
                     /* ignored */
                 }
                 tr.reset();
@@ -1356,7 +1356,7 @@ public class TrackerClient implements Runnable {
      */
     private TrackerInfo doRequest(
             TCTracker tr, long uploaded, long downloaded, long left, int event)
-            throws IOException {
+            throws IOException, Throwable {
         if (tr.isUDP) {
             return doRequestUDP(tr, uploaded, downloaded, left, event);
         }
@@ -1422,7 +1422,14 @@ public class TrackerClient implements Runnable {
             throw new IOException(ERROR_GOT_HTML + " from " + tr.host);
         }
         BDecoder bd = new BDecoder(new ByteArrayInputStream(fetched));
-        Map<String, BEValue> files = bd.bdecodeMap().getMap();
+        Map<String, BEValue> files;
+        try {
+            files = bd.bdecodeMap().getMap();
+        } catch (IOException ioe) {
+            throw ioe;
+        } catch (Throwable t) {
+            throw new IOException(t);
+        }
         BEValue fv = files.get("files"); // BEP 48
         if (fv == null) {
             fv = files.get("peers"); // some trackers (opentracker) use this
@@ -1535,7 +1542,7 @@ public class TrackerClient implements Runnable {
             long downloaded,
             long left,
             int event)
-            throws IOException {
+            throws IOException, Throwable {
         StringBuilder buf = new StringBuilder(512);
         buf.append(tr.announce);
         if (tr.announce.contains("?")) {

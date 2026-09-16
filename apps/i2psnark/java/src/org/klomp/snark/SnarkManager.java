@@ -3488,6 +3488,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     + oom.getLocalizedMessage();
                     addMessage(s);
                     throw new Snark.RouterException(s, oom);
+                } catch (Throwable t) {
+                    String s = "ERROR - cannot create torrent from " + sfile.getName() + ": " + t.getLocalizedMessage();
+                    addMessage(s);
+                    throw new Snark.RouterException(s, t);
                 } finally {
                     if (fis != null) {
                         try {

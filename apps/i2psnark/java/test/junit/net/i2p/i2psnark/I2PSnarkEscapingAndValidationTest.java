@@ -127,7 +127,7 @@ public class I2PSnarkEscapingAndValidationTest {
     // ----- bencoded byte-array length handling -----
 
     /** @since 0.9.71+ */
-    private static String decodeBencoded(String bencoded) throws Exception {
+    private static String decodeBencoded(String bencoded) throws Throwable {
         BDecoder decoder =
                 new BDecoder(
                         new ByteArrayInputStream(bencoded.getBytes(StandardCharsets.US_ASCII)));
@@ -137,12 +137,12 @@ public class I2PSnarkEscapingAndValidationTest {
     }
 
     @Test
-    public void testBencodeDecodesSimpleString() throws Exception {
+    public void testBencodeDecodesSimpleString() throws Throwable {
         assertEquals("foobar", decodeBencoded("6:foobar"));
     }
 
     @Test
-    public void testBencodeDecodesEmptyString() throws Exception {
+    public void testBencodeDecodesEmptyString() throws Throwable {
         assertEquals("", decodeBencoded("0:"));
     }
 
@@ -153,6 +153,8 @@ public class I2PSnarkEscapingAndValidationTest {
             fail("expected InvalidBEncodingException for oversized length");
         } catch (InvalidBEncodingException ibe) {
             // expected
+        } catch (Throwable t) {
+            fail("expected InvalidBEncodingException, got " + t);
         }
     }
 
@@ -164,6 +166,8 @@ public class I2PSnarkEscapingAndValidationTest {
             fail("expected InvalidBEncodingException for overflowing length");
         } catch (InvalidBEncodingException ibe) {
             // expected
+        } catch (Throwable t) {
+            fail("expected InvalidBEncodingException, got " + t);
         }
     }
 
@@ -197,17 +201,19 @@ public class I2PSnarkEscapingAndValidationTest {
             fail("expected InvalidBEncodingException for deep nesting");
         } catch (InvalidBEncodingException ibe) {
             // expected
+        } catch (Throwable t) {
+            fail("expected InvalidBEncodingException, got " + t);
         }
     }
 
     @Test
-    public void testBencodeAcceptsReasonableNesting() throws Exception {
+    public void testBencodeAcceptsReasonableNesting() throws Throwable {
         BDecoder.bdecode(
                 new ByteArrayInputStream(nestedLists(10).getBytes(StandardCharsets.US_ASCII)));
     }
 
     @Test
-    public void testBencodeAcceptsNestingAtTheLimit() throws Exception {
+    public void testBencodeAcceptsNestingAtTheLimit() throws Throwable {
         BDecoder.bdecode(
                 new ByteArrayInputStream(nestedLists(64).getBytes(StandardCharsets.US_ASCII)));
     }
@@ -228,6 +234,8 @@ public class I2PSnarkEscapingAndValidationTest {
             fail("expected InvalidBEncodingException for deep map nesting");
         } catch (InvalidBEncodingException ibe) {
             // expected
+        } catch (Throwable t) {
+            fail("expected InvalidBEncodingException, got " + t);
         }
     }
 

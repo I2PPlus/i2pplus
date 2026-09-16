@@ -90,30 +90,30 @@ public class MetaInfoFilenameTest {
         return rv;
     }
 
-    private static MetaInfo parse(byte[] torrent) throws Exception {
+    private static MetaInfo parse(byte[] torrent) throws Throwable {
         return new MetaInfo(new ByteArrayInputStream(torrent));
     }
 
     @Test
-    public void testNameWithSpacesAndUnderscore() throws Exception {
+    public void testNameWithSpacesAndUnderscore() throws Throwable {
         MetaInfo mi = parse(singleFileTorrent("Zephyr 9_ Wandering Stars"));
         assertEquals("Zephyr 9_ Wandering Stars", mi.getName());
     }
 
     @Test
-    public void testNameWithColon() throws Exception {
+    public void testNameWithColon() throws Throwable {
         MetaInfo mi = parse(singleFileTorrent("Zephyr 9: Wandering Stars"));
         assertEquals("Zephyr 9: Wandering Stars", mi.getName());
     }
 
     @Test
-    public void testNameSceneStyle() throws Exception {
+    public void testNameSceneStyle() throws Throwable {
         MetaInfo mi = parse(singleFileTorrent("Nebula_Runner.Odyssey.2024.1080p.WEBRip.x265-GROUP.mkv"));
         assertEquals("Nebula_Runner.Odyssey.2024.1080p.WEBRip.x265-GROUP.mkv", mi.getName());
     }
 
     @Test
-    public void testNameUtf8() throws Exception {
+    public void testNameUtf8() throws Throwable {
         MetaInfo mi = parse(singleFileTorrent("Zephyr 9 \u2013 Wandering Stars"));
         assertEquals("Zephyr 9 \u2013 Wandering Stars", mi.getName());
         MetaInfo cyr = parse(singleFileTorrent("\u0417\u0432\u0451\u0437\u0434\u043d\u044b\u0439 \u043f\u0443\u0442\u044c"));
@@ -121,19 +121,19 @@ public class MetaInfoFilenameTest {
     }
 
     @Test
-    public void testNameLeadingDot() throws Exception {
+    public void testNameLeadingDot() throws Throwable {
         MetaInfo mi = parse(singleFileTorrent(".hidden"));
         assertEquals(".hidden", mi.getName());
     }
 
     @Test
-    public void testNameDotAndSpace() throws Exception {
+    public void testNameDotAndSpace() throws Throwable {
         assertEquals(".", parse(singleFileTorrent(".")).getName());
         assertEquals(" ", parse(singleFileTorrent(" ")).getName());
     }
 
     @Test
-    public void testNameVeryLong() throws Exception {
+    public void testNameVeryLong() throws Throwable {
         StringBuilder sb = new StringBuilder(500);
         for (int i = 0; i < 500; i++) {
             sb.append('a');
@@ -143,7 +143,7 @@ public class MetaInfoFilenameTest {
     }
 
     @Test
-    public void testMultiFilePathsWithSpaces() throws Exception {
+    public void testMultiFilePathsWithSpaces() throws Throwable {
         List<List<String>> paths = new ArrayList<>();
         paths.add(Arrays.asList("Zephyr 9_ Wandering Stars", "episode 1.mkv"));
         paths.add(Arrays.asList("Zephyr 9_ Wandering Stars", "bonus material", "featurette 1.mp4"));
@@ -169,7 +169,7 @@ public class MetaInfoFilenameTest {
      * releases carry one pad per media file, so two or more pads are common.
      */
     @Test
-    public void testMultiplePaddingFiles() throws Exception {
+    public void testMultiplePaddingFiles() throws Throwable {
         List<List<String>> paths = new ArrayList<>();
         paths.add(Arrays.asList("Zephyr 9_ Wandering Stars", "disk1.pad"));
         paths.add(Arrays.asList("Zephyr 9_ Wandering Stars", "Zephyr 9_ Wandering Stars.mkv"));
@@ -192,7 +192,7 @@ public class MetaInfoFilenameTest {
     }
 
     @Test
-    public void testConsecutivePaddingFiles() throws Exception {
+    public void testConsecutivePaddingFiles() throws Throwable {
         List<List<String>> paths = new ArrayList<>();
         paths.add(Arrays.asList("dir", "a.mkv"));
         paths.add(Arrays.asList("dir", "pad1.pad"));
@@ -212,7 +212,7 @@ public class MetaInfoFilenameTest {
     }
 
     @Test
-    public void testSinglePaddingFile() throws Exception {
+    public void testSinglePaddingFile() throws Throwable {
         List<List<String>> paths = new ArrayList<>();
         paths.add(Arrays.asList("dir", "a.mkv"));
         paths.add(Arrays.asList("dir", "pad.pad"));
@@ -228,7 +228,7 @@ public class MetaInfoFilenameTest {
     }
 
     @Test
-    public void testPaddingFileOutOfRange() throws Exception {
+    public void testPaddingFileOutOfRange() throws Throwable {
         List<List<String>> paths = new ArrayList<>();
         paths.add(Arrays.asList("dir", "a.mkv"));
         List<Long> lengths = Arrays.asList(30000L);

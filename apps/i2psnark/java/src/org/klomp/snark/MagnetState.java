@@ -207,8 +207,9 @@ class MagnetState {
      * @throws IllegalArgumentException if not initialized, chunk number is invalid, or length is
      *     incorrect
      * @throws Exception if there's an error building the MetaInfo
+     * @throws StackOverflowError
      */
-    public boolean saveChunk(int chunk, byte[] data, int off, int length) throws Exception {
+    public boolean saveChunk(int chunk, byte[] data, int off, int length) throws Throwable {
         if (!isInitialized) throw new IllegalArgumentException("Not initialized");
         if (chunk < 0 || chunk >= totalChunks)
             throw new IllegalArgumentException("bad chunk number");
@@ -231,8 +232,9 @@ class MagnetState {
      * @return the built MetaInfo
      * @throws IOException if the info hash doesn't match or data is corrupt
      * @throws Exception if there's an error parsing the metadata
+     * @throws StackOverflowError
      */
-    private MetaInfo buildMetaInfo() throws Exception {
+    private MetaInfo buildMetaInfo() throws Throwable {
         // top map has nothing in it but the info map (no announce)
         Map<String, BEValue> map = new HashMap<>();
         InputStream is = new ByteArrayInputStream(metainfoBytes);
