@@ -215,8 +215,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 _log.warn("Slow message delivery -> Took " + (end-begin) + "ms to send: " + packet);
 
             _context.statManager().addRateData("stream.con.sendMessageSize", size, packet.getLifetime());
+            long lifetime = packet.getLifetime();
             if (packet.getNumSends() > 1)
-                _context.statManager().addRateData("stream.con.sendDuplicateSize", size, packet.getLifetime());
+                _context.statManager().addRateData("stream.con.sendDuplicateSize", size, lifetime);
 
             if (con != null) {
                 con.incrementBytesSent(size);

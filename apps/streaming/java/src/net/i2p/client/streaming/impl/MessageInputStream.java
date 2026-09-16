@@ -328,22 +328,32 @@ class MessageInputStream extends InputStream {
      */
     public long[] getNacks() {
         synchronized (_dataLock) {
-            // First pass: count missing blocks.
-            int count = 0;
-            for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
-                if (!_notYetReadyBlocks.containsKey(i))
-                    count++;
-            }
-            if (count == 0)
-                return new long[0];
-            long[] array = new long[count];
-            int idx = 0;
-            for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
-                if (!_notYetReadyBlocks.containsKey(i))
-                    array[idx++] = i;
-            }
-            return array;
+            return getNacksLocked();
         }
+    }
+
+    /**
+     * Returns missing block IDs. Must be called while holding {@link #_dataLock}.
+     *
+     * @return array of missing block IDs, empty if none
+     * @since 0.9.71+
+     */
+    long[] getNacksLocked() {
+        // First pass: count missing blocks.
+        int count = 0;
+        for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
+            if (!_notYetReadyBlocks.containsKey(i))
+                count++;
+        }
+        if (count == 0)
+            return new long[0];
+        long[] array = new long[count];
+        int idx = 0;
+        for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
+            if (!_notYetReadyBlocks.containsKey(i))
+                array[idx++] = i;
+        }
+        return array;
     }
 
     /**
@@ -355,7 +365,7 @@ class MessageInputStream extends InputStream {
         if (packet.getSendStreamId() > 0 || !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             synchronized (_dataLock) {
                 packet.setAckThrough(_highestBlockId);
-                long[] nacks = getNacks();
+                long[] nacks = getNacksLocked();
                 if (nacks.length > 0)
                     packet.setNacks(nacks);
             }

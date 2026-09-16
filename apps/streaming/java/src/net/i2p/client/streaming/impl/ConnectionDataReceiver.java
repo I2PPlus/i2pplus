@@ -32,9 +32,9 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     private static final MessageOutputStream.WriteStatus _dummyStatus = new DummyStatus();
     /** Payload cache. */
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
-    /** Reusable empty payload — avoids per-packet ByteArray allocation for ACK-only packets.
-     *  Serialized per-connection by _dataLock in MessageOutputStream. */
-    private final ByteArray _emptyPayload;
+    /** Reusable empty payload -- avoids per-packet ByteArray allocation for ACK-only packets.
+     *  Shared across all instances via _dataLock in MessageOutputStream. */
+    private static final ByteArray EMPTY_PAYLOAD = new ByteArray(new byte[0]);
 
     /**
      *  Create a data receiver for the given connection.
@@ -44,7 +44,6 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         _context = ctx;
         _log = ctx.logManager().getLog(ConnectionDataReceiver.class);
         _connection = con;
-        _emptyPayload = new ByteArray(new byte[0]);
     }
 
     /**
@@ -228,7 +227,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
             data = _payloadCache.acquire();
             System.arraycopy(buf, off, data.getData(), 0, size);
         } else {
-            data = _emptyPayload;
+            data = EMPTY_PAYLOAD;
         }
         data.setValid(size);
         data.setOffset(0);
