@@ -1850,7 +1850,11 @@ class Connection {
                 if (_connectionError == null) {setConnectionError(ERR_CONNECTION_REFUSED);}
                 disconnect(false);
             } else {
-                // Normal close from peer
+                // Normal close from peer — cancel timers; we'll send
+                // our own CLOSE and then disconnect in notifyLastPacketAcked.
+                _retransmitEvent.cancel();
+                _tlpEvent.cancel();
+                _activityTimer.cancel();
                 synchronized (_connectLock) {_connectLock.notifyAll();}
             }
         }
@@ -1982,6 +1986,12 @@ class Connection {
         if (!_connected.compareAndSet(true, false)) {
             return;
         }
+        // Cancel timers immediately to prevent spurious events during
+        // TIME-WAIT. disconnectComplete() calls cancel() again but that
+        // is idempotent.
+        _retransmitEvent.cancel();
+        _tlpEvent.cancel();
+        _activityTimer.cancel();
         synchronized (_connectLock) {_connectLock.notifyAll();}
 
         if (_closeReceivedOn.get() <= 0) {
@@ -3614,7 +3624,7 @@ class Connection {
         private boolean retransmit() {
             if (_packet.getAckTime() > 0) {return false;}
 
-            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
+            if (_closeReceivedOn.get() > 0 || _resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 _packet.cancelled();
                 // cancelled() does NOT remove the packet from the window map.
                 // Left mapped, getNumSends() is frozen so no give-up branch in
