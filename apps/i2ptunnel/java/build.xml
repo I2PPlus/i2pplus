@@ -8,13 +8,13 @@
   <property name="core.java.build.dir" value="${build.root}core/java/build"/>
   <property name="ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
   <property name="streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
-  <property name="jsp.build.dir" value="${build.root}apps/routerconsole/jsp"/>
+  <property name="jsp.build.dir" value="${build.root}apps/i2ptunnel/jsp"/>
 
   <property name="...build.dir" value="${...build.dir}"/>
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
   <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
-  <property name="jetty.pkg.dir" value="${build.root}apps/jetty/jettylib"/>
+  <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
 
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar, war"/>
@@ -64,7 +64,7 @@
       destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
-      classpath="${core.java.build.dir}/i2p.jar:${core.java.build.dir}/gnu-getopt.jar:${ministreaming.java.build.dir}/mstreaming.jar:${jetty.pkg.dir}/javax.servlet.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${core.java.build.dir}/gnu-getopt.jar:${ministreaming.java.build.dir}/mstreaming.jar:../../jetty/jettylib/javax.servlet.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -81,7 +81,7 @@
       destdir="${build.dir}/obj"
       includeAntRuntime="false"
       encoding="UTF-8"
-      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/i2ptunnel.jar:${jetty.pkg.dir}/jetty-i2p.jar:${jetty.pkg.dir}/jetty-util.jar:${jetty.pkg.dir}/jetty-xml.jar:${jetty.pkg.dir}/javax.servlet.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${build.dir}/i2ptunnel.jar:${jetty.pkg.dir}/jetty-i2p.jar:${jetty.pkg.dir}/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar:../../jetty/jettylib/javax.servlet.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -193,7 +193,7 @@
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--build-dir"/>
@@ -201,7 +201,7 @@
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true"
       failonerror="${require.gettext}">
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--build-dir"/>
@@ -209,7 +209,7 @@
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--build-dir"/>
@@ -239,7 +239,7 @@
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--build-dir"/>
@@ -248,7 +248,7 @@
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--build-dir"/>
@@ -257,7 +257,7 @@
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--build-dir"/>
@@ -274,7 +274,7 @@
     <exec executable="sh" osfamily="unix" failifexecutionfails="true"
       failonerror="${require.gettext}">
       <env key="JAVA_HOME" value="${java.home}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--cfg"/>
@@ -284,7 +284,7 @@
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true"
       failonerror="${require.gettext}">
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--cfg"/>
@@ -294,7 +294,7 @@
     </exec>
     <!-- multi-lang is optional -->
     <exec executable="sh" osfamily="windows" failifexecutionfails="false">
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--cfg"/>
@@ -328,7 +328,7 @@
     <property name="lg2" value=""/>
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--cfg"/>
@@ -339,7 +339,7 @@
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--cfg"/>
@@ -350,7 +350,7 @@
     </exec>
     <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
       <env key="LG2" value="${lg2}"/>
-      <arg value="${basedir}/tools/scripts/bundle-messages.sh"/>
+      <arg value="../../../tools/scripts/bundle-messages.sh"/>
       <arg value="--dir"/>
       <arg value="."/>
       <arg value="--cfg"/>
@@ -476,35 +476,28 @@
       <jvmarg value="-Dbuild.reproducible=${build.reproducible}"/>
       <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}"/>
       <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}"/>
-      <jvmarg value="-Djasper.jar=${jetty.pkg.dir}/jasper-runtime.jar"/>
+      <jvmarg value="-Djasper.jar=../../jetty/jettylib/jasper-runtime.jar"/>
       <classpath>
-        <pathelement location="${jetty.pkg.dir}/jasper-runtime.jar"/>
-        <pathelement location="${jetty.pkg.dir}/javax.servlet.jar"/>
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
 
         <!-- following jars only present for debian builds -->
-        <pathelement location="${jetty.pkg.dir}/commons-logging.jar"/>
-        <pathelement location="${jetty.pkg.dir}/jsp-api.jar"/>
-        <pathelement location="${jetty.pkg.dir}/tomcat-api.jar"/>
-        <pathelement location="${jetty.pkg.dir}/tomcat-util.jar"/>
-        <pathelement location="${jetty.pkg.dir}/tomcat-util-scan.jar"/>
+        <pathelement location="../../jetty/jettylib/commons-logging.jar"/>
+        <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar"/>
 
-        <pathelement location="${jetty.pkg.dir}/jasper-el.jar"/>
-        <pathelement location="${jetty.pkg.dir}/commons-el.jar"/>
-        <pathelement location="${jetty.pkg.dir}/jetty-xml.jar"/>
+        <pathelement location="../../jetty/jettylib/jasper-el.jar"/>
+        <pathelement location="../../jetty/jettylib/commons-el.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${ant.home}/lib/ant.jar"/>
         <pathelement location="${build.dir}/i2ptunnel.jar"/>
         <pathelement location="${build.dir}/temp-beans.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
-        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
-        <!-- built jars land in the build root (not jettylib) under the
-             top-level build, so reference them by their absolute build-root path -->
         <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
-        <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
-        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
-        <!-- jspc.jar is built into the build root (not jettylib) under the
-             top-level build, so reference it by its absolute build-root path -->
         <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
       </classpath>
       <arg value="-d"/>
@@ -527,30 +520,27 @@
       destdir="${jsp.build.dir}/WEB-INF/classes/" srcdir="${jsp.build.dir}/WEB-INF/classes" includes="**/*.java">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
-        <pathelement location="${jetty.pkg.dir}/jasper-runtime.jar"/>
-        <pathelement location="${jetty.pkg.dir}/javax.servlet.jar"/>
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
 
         <!-- following jars only present for debian builds -->
-        <pathelement location="${jetty.pkg.dir}/jsp-api.jar"/>
-        <pathelement location="${jetty.pkg.dir}/tomcat-api.jar"/>
-        <pathelement location="${jetty.pkg.dir}/jasper-el.jar"/>
-        <pathelement location="${jetty.pkg.dir}/tomcat-util.jar"/>
-        <pathelement location="${jetty.pkg.dir}/tomcat-util-scan.jar"/>
+        <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="../../jetty/jettylib/jasper-el.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util.jar"/>
+        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar"/>
 
-        <pathelement location="${jetty.pkg.dir}/commons-el.jar"/>
-        <pathelement location="${jetty.pkg.dir}/jetty-xml.jar"/>
+        <pathelement location="../../jetty/jettylib/commons-el.jar"/>
+        <pathelement location="../../jetty/jettylib/jetty-xml.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${build.dir}/i2ptunnel.jar"/>
         <pathelement location="${build.dir}/temp-beans.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
-        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
-        <!-- built jars land in the build root (not jettylib) under the
-             top-level build, so reference them by their absolute build-root path -->
         <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
       </classpath>
     </javac>
-    <copy file="${build.root}apps/routerconsole/jsp/web.xml" tofile="${jsp.build.dir}/web-out.xml"/>
+    <copy file="../jsp/web.xml" tofile="${jsp.build.dir}/web-out.xml"/>
     <loadfile property="jspc.web.fragment" srcfile="${jsp.build.dir}/web-fragment.xml"/>
     <replace file="${jsp.build.dir}/web-out.xml">
       <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}"/>
@@ -579,7 +569,7 @@
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/javadoc"/>
     <javadoc
-      sourcepath="./src:${build.root}core/java/src:${build.root}apps/ministreaming/java/src"
+      sourcepath="./src:../../../core/java/src:../../../apps/ministreaming/java/src"
       destdir="${build.dir}/javadoc"
       packagenames="*"
       use="true"
@@ -606,7 +596,7 @@
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
         <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
-        <pathelement location="${jetty.pkg.dir}/javax.servlet.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
@@ -662,7 +652,7 @@
 
   <target name="cleandep" depends="clean"/>
   <target name="distclean" depends="clean">
-    <delete dir="${build.root}apps/i2ptunnel/java/bin"/>
+    <delete dir="../bin"/>
   </target>
 
   <target name="compressJavascript">
