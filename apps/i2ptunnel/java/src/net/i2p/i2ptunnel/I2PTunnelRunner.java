@@ -785,6 +785,11 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             removeRef();
             if (i2pReset) {
                 if (_log.shouldInfo()) {_log.warn("Received I2P reset, resetting socket...");}
+                // Flush buffered data before RST to avoid truncated HTTP responses
+                if (out != null) {
+                    try {out.flush();}
+                    catch (IOException ioe) { /* ignored */ }
+                }
                 try {s.setSoLinger(true, 0);}
                 catch (IOException ioe) { /* ignored */ }
                 try {s.close();}
@@ -795,6 +800,11 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 _keepAliveSocket = false;
             } else if (sockReset) {
                 if (_log.shouldInfo()) {_log.warn("Received socket reset, resetting I2P socket...");}
+                // Flush buffered data before closing to avoid truncated HTTP responses
+                if (out != null) {
+                    try {out.flush();}
+                    catch (IOException ioe) { /* ignored */ }
+                }
                 try {i2ps.reset();}
                 catch (IOException ioe) { /* ignored */ }
                 try {s.close();}
