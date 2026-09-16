@@ -65,6 +65,23 @@ public class TunnelCreatorConfigFailureHookTest {
     }
 
     @Test
+    public void testMaxConsecutiveTestFailuresIsThree() {
+        // Verify MAX_CONSECUTIVE_TEST_FAILURES = 3:
+        // tunnelFailed() increments _failures and returns true while <= MAX
+        TCConfig cfg = new TCConfig(_ctx, 2, false);
+        for (int i = 0; i < 3; i++) {
+            assertTrue(cfg.tunnelFailed());
+        }
+        // After 3 failures, getTunnelFailed() is false (3 > 3 is false)
+        assertFalse(cfg.getTunnelFailed());
+        assertEquals(3, cfg.getTunnelFailures());
+        // The 4th call increments past MAX, getTunnelFailed() becomes true
+        assertFalse(cfg.tunnelFailed());
+        assertTrue(cfg.getTunnelFailed());
+        assertEquals(4, cfg.getTunnelFailures());
+    }
+
+    @Test
     public void testInboundFailureIsIgnored() {
         TCConfig cfg = new TCConfig(_ctx, 2, true);
         cfg.tunnelFailedFirstHop();

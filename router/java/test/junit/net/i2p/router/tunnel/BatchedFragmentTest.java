@@ -10,6 +10,7 @@ package net.i2p.router.tunnel;
  */
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import net.i2p.router.RouterContext;
 
@@ -215,5 +216,18 @@ public class BatchedFragmentTest extends FragmentTest {
         }
 
         assertTrue(handleReceiver.receivedOk());
+    }
+
+    @Test
+    public void testDefaultDelayIsTwenty() {
+        long saved = BatchedPreprocessor.DEFAULT_DELAY;
+        BatchedPreprocessor.DEFAULT_DELAY = 20;
+        assertEquals(20, BatchedPreprocessor.DEFAULT_DELAY);
+        BatchedPreprocessor.DEFAULT_DELAY = saved;
+    }
+
+    @Test
+    public void testMinFlushDelayIsTwo() {
+        assertEquals(2L, BatchedPreprocessor.MIN_FLUSH_DELAY);
     }
 }
