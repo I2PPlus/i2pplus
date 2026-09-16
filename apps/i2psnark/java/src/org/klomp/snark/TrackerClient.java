@@ -804,7 +804,7 @@ public class TrackerClient implements Runnable {
                     && (completed || coordinator.needOutboundPeers() || !tr.started)
                     && (newlyCompleted
                             || newlyGotMeta
-                            || System.currentTimeMillis() > tr.lastRequestTime + tr.interval)) {
+                             || System.currentTimeMillis() > tr.lastResponseTime + tr.interval)) {
                 try {
                     long uploaded = coordinator.getUploaded();
                     long downloaded = coordinator.getDownloaded();
@@ -961,10 +961,10 @@ public class TrackerClient implements Runnable {
                 if (_log.shouldInfo()) {
                     _log.info(
                             "Not announcing to "
-                                    + tr.announce
-                                    + "\n* Last announce: "
-                                    + new Date(tr.lastRequestTime)
-                                    + " (interval: "
+                             + tr.announce
+                                     + "\n* Last reply: "
+                                     + DataHelper.formatTime(tr.lastResponseTime)
+                                     + " (interval: "
                                     + DataHelper.formatDuration(tr.interval)
                                     + ")");
                 }
@@ -1608,6 +1608,7 @@ public class TrackerClient implements Runnable {
         if (fetched.length == 0) {
             throw new IOException("No data from " + tr.host);
         }
+        tr.lastResponseTime = System.currentTimeMillis();
         // The HTML check only works if we didn't exceed the maxium fetch size specified in get(),
         // otherwise we already threw an IOE.
         if (fetched[0] == '<') {
@@ -1674,6 +1675,7 @@ public class TrackerClient implements Runnable {
         if (fetched == null) {
             throw new IOException("UDP announce error to: " + tr.host);
         }
+        tr.lastResponseTime = System.currentTimeMillis();
         TrackerInfo info =
                 new TrackerInfo(
                         fetched.getPeers(),
@@ -1874,8 +1876,9 @@ public class TrackerClient implements Runnable {
         final boolean isUDP;
         final int port;
         long interval;
-        long lastRequestTime;
-        long nextScrapeTime;
+         long lastRequestTime;
+         long lastResponseTime;
+         long nextScrapeTime;
         String trackerProblems;
         boolean stop;
         boolean started;
@@ -1905,17 +1908,19 @@ public class TrackerClient implements Runnable {
                 throw new IllegalArgumentException(use);
             } // shouldn't happen, already validated
             isPrimary = p;
-            interval = INITIAL_SLEEP;
-        }
+             interval = INITIAL_SLEEP;
+             lastResponseTime = 0;
+         }
 
-        /**
-         * Call before restarting
+         /**
+          * Call before restarting
          *
          * @since 0.9.1
          */
         public void reset() {
-            lastRequestTime = 0;
-            nextScrapeTime = 0;
+             lastRequestTime = 0;
+             lastResponseTime = 0;
+             nextScrapeTime = 0;
             trackerProblems = null;
             stop = false;
             started = false;

@@ -66,10 +66,7 @@ public class BandwidthManager implements BandwidthListener {
 
         _up = new SyntheticREDQueue(ctx, up);
         _down = new SyntheticREDQueue(ctx, down);
-        // Allow down limit a little higher based on testing
-        // Allow req limit a little higher still because it uses RED
-        // so it actually kicks in sooner.
-        _req = new SyntheticREDQueue(ctx, down * 110 / 100);
+        _req = new SyntheticREDQueue(ctx, down);
     }
 
     /** Current limit in Bps */
@@ -83,7 +80,7 @@ public class BandwidthManager implements BandwidthListener {
         int limit = (int) Math.min(downLimit, Integer.MAX_VALUE);
         if (limit != getDownBWLimit()) {
             _down = new SyntheticREDQueue(_context, limit);
-            _req = new SyntheticREDQueue(_context, limit * 110 / 100);
+            _req = new SyntheticREDQueue(_context, limit);
         }
     }
 

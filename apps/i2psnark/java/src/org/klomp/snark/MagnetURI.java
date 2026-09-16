@@ -54,6 +54,7 @@ public class MagnetURI {
                 throw new IllegalArgumentException();
             }
             ihash = xt.substring("urn:btih:".length());
+            ihash = ihash.toUpperCase(Locale.US);
             trackerURLs = getTrackerParam(url);
             name = util.getString("Magnet") + ' ' + ihash;
             String dn = getParam("dn", url);
@@ -73,6 +74,7 @@ public class MagnetURI {
             if (col >= 0) {
                 ihash = ihash.substring(0, col);
             }
+            ihash = ihash.toUpperCase(Locale.US);
             name = util.getString("Magnet") + ' ' + ihash;
         } else {
             throw new IllegalArgumentException();
