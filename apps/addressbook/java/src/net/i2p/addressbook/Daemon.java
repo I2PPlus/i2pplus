@@ -3,6 +3,7 @@ package net.i2p.addressbook;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -154,10 +155,13 @@ public class Daemon {
                 // may be null for 'remove' entries
                 String key = entry.getKey();
                 boolean isKnown;
+                Destination oldDest;
                 if (knownNames != null) {
                     isKnown = key != null ? knownNames.contains(key) : false;
+                    oldDest = null;
                 } else {
-                    isKnown = key != null ? router.lookup(key) != null : false;
+                    oldDest = key != null ? router.lookup(key) : null;
+                    isKnown = oldDest != null;
                 }
                 try {
                     HostTxtEntry he = entry.getValue();
@@ -432,6 +436,12 @@ public class Daemon {
                                     continue;
                                 } else if (action.equals(HostTxtEntry.ACTION_UPDATE)) {
                                     if (isKnown) {
+                                        if (!oldDest.equals(dest)) {
+                                            // mismatch, disallow
+                                            logMismatch(log, action, key, Collections.singletonList(oldDest), dest.toBase64(), addressbook);
+                                            invalid++;
+                                            continue;
+                                        }
                                         allowExistingKeyInPublished = true;
                                         props.setProperty("m", Long.toString(I2PAppContext.getGlobalContext().clock().now()));
                                     }
