@@ -55,7 +55,6 @@ class SOCKSServerFactory {
      */
     public static SOCKSServer createSOCKSServer(I2PAppContext ctx, Socket s, Properties props) throws SOCKSException {
         SOCKSServer serv;
-
         try {
             DataInputStream in = new DataInputStream(s.getInputStream());
             int socksVer = in.readByte();
@@ -63,9 +62,7 @@ class SOCKSServerFactory {
             switch (socksVer) {
             case 0x04:
                 // SOCKS version 4/4a
-                if (Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH)) &&
-                    props.containsKey(I2PTunnelHTTPClientBase.PROP_USER) &&
-                    props.containsKey(I2PTunnelHTTPClientBase.PROP_PW)) {
+                if (Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH))) {
                     throw new SOCKSException("SOCKS 4/4a not supported when authorization is required");
                 }
                 serv = new SOCKS4aServer(ctx, s, props);
@@ -84,6 +81,8 @@ class SOCKSServerFactory {
             default:
                 throw new SOCKSException("SOCKS protocol version not supported (" + Integer.toHexString(socksVer) + ")");
             }
+        } catch (SOCKSException e) {
+            throw e;
         } catch (IOException e) {
             throw new SOCKSException("Connection error", e);
         }
