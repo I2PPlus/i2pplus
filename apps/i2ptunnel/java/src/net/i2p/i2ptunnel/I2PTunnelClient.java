@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.concurrent.ThreadPoolExecutor;
 import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketAddress;
@@ -154,9 +155,12 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * @param task the Thread task to execute
      */
     private void executeTask(Thread task) {
-        // For now, maintain the original behavior of running inline
-        // TODO: Consider using a thread pool executor for better resource management
-        task.run();
+        ThreadPoolExecutor tpe = _executor;
+        if (tpe != null) {
+            tpe.execute(task);
+        } else {
+            task.run();
+        }
     }
 
     /**

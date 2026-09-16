@@ -1870,8 +1870,10 @@ public class IndexBean {
             if (val.equals("0")) {_certType = 0;}
             else {_certType = 5;}
         }
-        // TODO: Call modifyDestination??
-        // Otherwise this only works on a new tunnel...
+        TunnelController tun = getController(_tunnel);
+        if (tun != null && !tun.getIsRunning() && !tun.getIsStarting()) {
+            modifyDestination();
+        }
     }
 
     /**

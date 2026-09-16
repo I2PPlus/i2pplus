@@ -1384,9 +1384,8 @@ public class TunnelConfig {
         };
 
     /**
-     *  Do NOT add these to noShoOpts, we must leave them in for HTTPClient and ConnectCLient
-     *  so they will get migrated to MD5
-     *  TODO migrate socks to MD5
+     *  Do NOT add these to noShoOpts, we must leave them in for HTTPClient, Connect, and SOCKS
+     *  so they will get migrated to MD5 / SHA256 digest authentication
      */
     private static final String[] _otherProxyOpts = {
         "proxyUsername", "proxyPassword"

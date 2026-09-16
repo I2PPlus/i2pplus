@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import net.i2p.I2PException;
+import net.i2p.client.I2PClient;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.client.streaming.I2PSocketOptions;
@@ -93,7 +94,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         setName("IRCProxy");
 
         _dccEnabled = Boolean.parseBoolean(tunnel.getClientOptions().getProperty(PROP_DCC));
-        // TODO add some prudent tunnel options (or is it too late?)
+        String to = tunnel.getClientOptions().getProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT);
+        if (to == null) tunnel.getClientOptions().setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "20");
 
         notifyEvent("openIRCClientResult", "ok");
     }
@@ -492,7 +494,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                 if (_log.shouldInfo())
                     _log.info("[IRC Client] Starting DCC Server...");
                 _DCCServer = new I2PTunnelDCCServer(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
-                // TODO add some prudent tunnel options (or is it too late?)
+                String to = getTunnel().getClientOptions().getProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT);
+                if (to == null) getTunnel().getClientOptions().setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "20");
                 _DCCServer.startRunning();
             }
             server = _DCCServer;
