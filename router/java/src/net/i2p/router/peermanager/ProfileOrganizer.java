@@ -2668,7 +2668,10 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Check if peer has low tunnel acceptance ratio (< 40%)
+     * Check if peer has low tunnel acceptance ratio (< 40%).
+     * Peers with no tunnel test history (totalRequests == 0) are
+     * considered low — they have no evidence of tunnel-building
+     * reliability and must not be placed in fast/high-cap tiers.
      * Uses persisted accept/reject counts even with low sample sizes at startup.
      * Also checks for recent bandwidth rejections and applies cooldown.
      * <p>
@@ -2678,7 +2681,7 @@ public class ProfileOrganizer {
      *
      * @param profile the peer profile
      * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
-     * @return whether low tunnel acceptance
+     * @return whether low tunnel acceptance (true = exclude from fast/high-cap tiers)
      * @since 0.9.71+
      */
     private boolean isLowTunnelAcceptance(PeerProfile profile, double buildSuccess) {
@@ -2689,8 +2692,12 @@ public class ProfileOrganizer {
         long rejected = th.getLifetimeRejected();
         long totalRequests = agreed + rejected;
 
-        if (totalRequests <= 0) {
-            return false;
+        if (totalRequests == 0) {
+            // No tunnel test history — no evidence of reliability.
+            // Exclude from fast/high-cap tiers to avoid placing
+            // unproven peers into tunnel construction where they
+            // die immediately (0ms actual lifetime).
+            return true;
         }
 
         double ratio = (double) agreed / totalRequests;

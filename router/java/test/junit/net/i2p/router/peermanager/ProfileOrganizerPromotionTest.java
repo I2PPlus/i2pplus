@@ -105,7 +105,57 @@ public class ProfileOrganizerPromotionTest {
     @Test
     public void testCleanPeerNotSkipped() throws Exception {
         PeerProfile profile = seedProfile(1, "fO");
+        // Peers must have tunnel test data to pass isLowTunnelAcceptance
+        TunnelHistory th = profile.getTunnelHistory();
+        for (int i = 0; i < 50; i++) {
+            th.incrementAgreedTo();
+        }
         assertFalse(skips(profile));
+    }
+
+    @Test
+    public void testZeroTunnelHistoryPeerSkipped() throws Exception {
+        // Peers with no tunnel test history must not be in fast/high-cap tiers
+        PeerProfile profile = seedProfile(7, "fO");
+        TunnelHistory th = profile.getTunnelHistory();
+        assertEquals(0, th.getLifetimeAgreedTo() + th.getLifetimeRejected());
+        assertTrue(skips(profile));
+    }
+
+    @Test
+    public void testLowSampleTunnelHistoryPeerSkipped() throws Exception {
+        // Peers with < 50 tunnel requests and low acceptance are excluded
+        PeerProfile profile = seedProfile(8, "fO");
+        TunnelHistory th = profile.getTunnelHistory();
+        for (int i = 0; i < 5; i++) {
+            th.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
+        }
+        assertTrue(skips(profile));
+    }
+
+    @Test
+    public void testHighSamplePeerWithGoodAcceptanceNotSkipped() throws Exception {
+        // Peers with >= 50 tunnel requests and good acceptance pass
+        PeerProfile profile = seedProfile(9, "fO");
+        TunnelHistory th = profile.getTunnelHistory();
+        for (int i = 0; i < 50; i++) {
+            th.incrementAgreedTo();
+        }
+        assertFalse(skips(profile));
+    }
+
+    @Test
+    public void testHighSamplePeerWithPoorAcceptanceSkipped() throws Exception {
+        // Peers with >= 50 tunnel requests and poor acceptance (< 40%) are excluded
+        PeerProfile profile = seedProfile(10, "fO");
+        TunnelHistory th = profile.getTunnelHistory();
+        for (int i = 0; i < 15; i++) {
+            th.incrementAgreedTo();
+        }
+        for (int i = 0; i < 35; i++) {
+            th.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
+        }
+        assertTrue(skips(profile));
     }
 
     @Test
