@@ -1405,8 +1405,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Autotune profile for this tunable parameter. */
         protected final AutotuneConfig _autotune;
 
-        /**
-         * A tunable parameter with the given name, description and subsystem.
+/**
+          * A tunable parameter with the given name, description and subsystem.
          *
          * @param name internal property key (e.g. "i2p.tunnel.socketConnectTimeout")
          * @param description human-readable label shown in Tuner UI (e.g. "Socket connect timeout (ms)")
@@ -1428,6 +1428,35 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                             int defaultMin, int defaultMax,
                             int defaultStep, String statName, RouterContext ctx,
                             AutotuneConfig autotune) {
+            this(name, description, subsystem, defaultMin, defaultMax, defaultStep, statName, ctx, autotune, 0);
+        }
+
+        /**
+         * A tunable parameter with the given name, description and subsystem.
+         *
+         * <p>The {@code defaultValue} is the code-level default for this
+         * parameter. It is captured as {@link #_factoryDefault} and used
+         * as the authoritative source of truth for auto-revert decisions,
+         * so that stale persisted values from previous Tuner versions
+         * cannot corrupt the tuning baseline. If {@code defaultValue} is
+         * zero or negative, falls back to {@link #getRuntimeValue()}.
+         *
+         * @param name internal property key
+         * @param description human-readable label
+         * @param subsystem subsystem identifier
+         * @param defaultMin minimum allowed value
+         * @param defaultMax maximum allowed value
+         * @param defaultStep tuning step size
+         * @param statName router stat name for observed feedback
+         * @param ctx router context
+         * @param autotune autotune config, or null for shared
+         * @param defaultValue the code-level default value, or 0 to use runtime default
+         * @since 0.9.71+
+         */
+        protected BaseParam(String name, String description, String subsystem,
+                            int defaultMin, int defaultMax,
+                            int defaultStep, String statName, RouterContext ctx,
+                            AutotuneConfig autotune, int defaultValue) {
             _name = name;
             _description = description;
             _subsystem = subsystem;
@@ -1443,9 +1472,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _log = ctx.logManager().getLog(Tuner.class);
             _ctx = ctx;
             _autotune = (autotune != null) ? autotune : sharedAutotune;
-            // Capture factory default on first run, persist to autotune.config
-            int runtimeDefault = getRuntimeValue();
-            _factoryDefault = runtimeDefault;
+            // Capture factory default from code-level default parameter,
+            // falling back to runtime value if not provided.
+            // This ensures the factory default reflects the actual code
+            // default, not a stale runtime value modified by a previous
+            // Tuner version.
+            if (defaultValue > 0) {
+                _factoryDefault = defaultValue;
+            } else {
+                _factoryDefault = getRuntimeValue();
+            }
             String defaultKey = name + ".default";
             String valueKey = name + ".value";
             String existingDefault = _autotune.getProperty(defaultKey);
@@ -1455,7 +1491,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 // Clamp the factory default into the computed range, same as a
                 // persisted default would be, so the invariant min <= default <= max
                 // holds even when hardware scales the range above the code default.
-                _defaultValue = Math.max(_min, Math.min(_max, runtimeDefault));
+                _defaultValue = Math.max(_min, Math.min(_max, _factoryDefault));
                 _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
                 _autotune.setProperty(valueKey, String.valueOf(_defaultValue));
                 changed = true;
@@ -1468,15 +1504,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     _defaultValue = Math.max(_min, Math.min(_max, _defaultValue));
                     if (_log.shouldWarn())
                         _log.warn(_name + " default clamped: " + prev + " -> " + _defaultValue +
-                                  " (range " + _min + "-" + _max + ")");
+                                   " (range " + _min + "-" + _max + ")");
                 }
                 // 2. Heal persisted default to code factory default when stale
                 //    Catches in-range corruptions (e.g. 2600 for MinResendDelay)
                 //    and stale values from before code changes (e.g. INITIAL_ACK_DELAY=10
                 //    when the module's getDefaultInitialAckDelay() now returns 500).
-                if (runtimeDefault > 0 && _defaultValue != runtimeDefault) {
+                if (_factoryDefault > 0 && _defaultValue != _factoryDefault) {
                     int prev = _defaultValue;
-                    _defaultValue = Math.max(_min, Math.min(_max, runtimeDefault));
+                    _defaultValue = Math.max(_min, Math.min(_max, _factoryDefault));
                     if (_log.shouldWarn())
                         _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue);
                     defaultHealed = true;
@@ -1662,21 +1698,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /**
-         * Re-read the default value from autotune.config — live update after form save.
+/**
+         * Re-read the default value from autotune.config for live updates.
          *
          * <p>Called once per tuning cycle. When a user saves a new default
          * via the console form, this method picks it up and uses it as the
-         * auto-revert target.
+         * auto-revert target. If the persisted default differs from the
+         * factory default (code-level default), it is treated as stale and
+         * ignored — the factory default is the authoritative source of truth.
          *
          * @since 0.9.70+
          */
         public void refreshDefault(RouterContext ctx) {
-            int newDefault = _autotune.getInt(_name + ".default", _defaultValue);
-            if (newDefault != _defaultValue) {
+            int persistedDefault = _autotune.getInt(_name + ".default", _factoryDefault);
+            // Only accept the persisted default if it matches the factory default.
+            // A mismatch indicates stale persistence from a previous code version,
+            // and overriding _defaultValue would break auto-revert below.
+            if (persistedDefault != _factoryDefault) {
+                if (_log.shouldWarn())
+                    _log.warn(_name + " stale persisted default " + persistedDefault +
+                              " ignored, using factory default " + _factoryDefault);
+                return;
+            }
+            if (persistedDefault != _defaultValue) {
                 if (_log.shouldInfo())
-                    _log.info(_name + " default changed from " + _defaultValue + " to " + newDefault);
-                _defaultValue = newDefault;
+                    _log.info(_name + " default changed from " + _defaultValue + " to " + persistedDefault);
+                _defaultValue = persistedDefault;
             }
         }
 
@@ -2148,14 +2195,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             applyTarget(target);
         }
 
-        /** Auto-revert to the factory default when system health is severely degraded. */
+        /**
+         * Auto-revert to the factory default when system health is severely degraded.
+         *
+         * <p>Uses {@link #_factoryDefault} (the code-level default captured at
+         * construction time) rather than {@link #_defaultValue} which may have
+         * been overwritten by stale persisted values from {@link #refreshDefault}.
+         * The reverted value is persisted to autotune.config so that
+         * {@link #refreshDefault} will not undo it on subsequent cycles.
+         *
+         * @return true if system health is degraded and revert was attempted
+         * @since 0.9.70+
+         */
         private boolean autoRevertToDefault() {
             if (_health != null && _health.getScore() < DEGRADED_THRESHOLD) {
                 int current = getRuntimeValue();
-                if (current != _defaultValue && !_reverted) {
+                if (current != _factoryDefault && !_reverted) {
                     if (_log.shouldInfo())
-                        _log.info(_name + " auto-reverting from " + current + " to default " + _defaultValue + " (health: " + _health.getScore() + ")");
-                    applyValue(_defaultValue);
+                        _log.info(_name + " auto-reverting from " + current + " to factory default " + _factoryDefault + " (health: " + _health.getScore() + ")");
+                    applyValue(_factoryDefault);
+                    persistValue(_ctx, _factoryDefault);
                     _reverted = true;
                 }
                 return true;
@@ -3618,7 +3677,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_WINDOW_SIZE", "Initial congestion window",
                   SUB_STREAMING,
 
-                  128, 1024, 64, "stream.con.initialRTT.in", _context);
+                  128, 1024, 64, "stream.con.initialRTT.in", _context, null, 128);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -3730,9 +3789,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         InitialRTOParam() {
             super("INITIAL_RTO", "First retransmit timeout (ms)",
-                  SUB_STREAMING,
+                    SUB_STREAMING,
 
-                  1000, 30000, 3000, "stream.con.initialRTT.out", _context);
+                    1000, 30000, 3000, "stream.con.initialRTT.out", _context, null, 9000);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -3957,8 +4016,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         MaxInboundBufferParam() {
             super("i2p.streaming.maxInboundBuffer", "Max inbound buffer (bytes)",
-                  SUB_STREAMING,
-                  8388608, 134217728, 8388608, "stream.chokeSizeBegin", _context);
+                    SUB_STREAMING,
+                    8388608, 134217728, 8388608, "stream.chokeSizeBegin", _context, null, 8388608);
         }
 
         /** Apply the cap via I2PSocketManagerFull. */
@@ -4017,9 +4076,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         InitialAckDelayParam() {
             super("INITIAL_ACK_DELAY", "Piggyback ACK wait (ms)",
-                  SUB_STREAMING,
+                    SUB_STREAMING,
 
-                  25, 500, 25, "stream.sendsBeforeAck", _context);
+                    25, 500, 25, "stream.sendsBeforeAck", _context, null, 25);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4089,9 +4148,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         PassiveFlushDelayParam() {
             super("PASSIVE_FLUSH_DELAY", "Nagle flush delay (ms)",
-                  SUB_STREAMING,
+                    SUB_STREAMING,
 
-                  50, 500, 50, "stream.con.sendMessageSize", _context);
+                    50, 500, 50, "stream.con.sendMessageSize", _context, null, 50);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4161,9 +4220,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         MaxSlowStartWindowParam() {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
-                  SUB_STREAMING,
+                    SUB_STREAMING,
 
-                  1024, 4096, 128, "stream.con.initialRTT.out", _context);
+                    1024, 4096, 128, "stream.con.initialRTT.out", _context, null,
+                    SystemVersion.isSlow() ? 128 : 1024);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -4339,11 +4399,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         MaxWindowSizeParam() {
             super("i2p.streaming.maxWindowSize", "Streaming max window size",
-                  SUB_STREAMING,
+                    SUB_STREAMING,
 
-                  // Step 512: on a clean path the 4096-message ceiling
-                  // (~8 MB/s at 0.89 s RTT) is reached in ~4 cycles (~1 min).
-                  512, 4096, 512, "stream.con.initialRTT.out", _context);
+                    // Step 512: on a clean path the 4096-message ceiling
+                    // (~8 MB/s at 0.89 s RTT) is reached in ~4 cycles (~1 min).
+                    512, 4096, 512, "stream.con.initialRTT.out", _context, null,
+                    SystemVersion.isSlow() ? 768 : 1024);
         }
 
         /** Apply the tunable value to the router configuration. */

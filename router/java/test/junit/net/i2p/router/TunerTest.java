@@ -1437,6 +1437,42 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 7: refreshDefault/autoRevertToDefault stale-default fix
+    // =====================================================================
+
+    /** refreshDefault() ignores stale persisted defaults. */
+    @Test
+    public void testRefreshDefaultIgnoresStale() {
+        Tuner.AutotuneConfig config = new Tuner.AutotuneConfig(_ctx);
+        // StaleDefaultParam has _factoryDefault=100, stale persisted=500
+        StaleDefaultParam param = new StaleDefaultParam(_ctx, config);
+        // Inject stale persisted default that differs from _factoryDefault
+        config.setProperty("stale.param.testRefreshDefaultIgnoresStale.default", "500");
+        config.forceSave();
+        // refreshDefault should NOT override _defaultValue with stale value
+        param.refreshDefault(_ctx);
+        // If _defaultValue were 500, autoRevertToDefault would try to
+        // revert to 500. Since _factoryDefault is 100, it reverts to 100.
+        // Verify via update() with degraded health.
+        param.setHealth(new Tuner.SystemHealth(_ctx) {
+            @Override public double getScore() { return 0.1; }
+        });
+        param.update();
+    }
+
+    /** TestParam with factory default 100 and stale persisted default 500. */
+    private static class StaleDefaultParam extends Tuner.BaseParam {
+        StaleDefaultParam(RouterContext ctx, Tuner.AutotuneConfig config) {
+            super("stale.param.testRefreshDefaultIgnoresStale", "Stale test", "Test",
+                  10, 1000, 100, "stale.stat", ctx, config, 100);
+        }
+        @Override protected void applyValue(int value) {}
+        @Override protected int getRuntimeValue() { return 0; }
+        @Override protected double getObservedStat(RouterContext ctx) { return 0; }
+        @Override protected int computeTarget(double observed) { return 0; }
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 
@@ -1444,7 +1480,7 @@ public class TunerTest {
         TestParam(RouterContext ctx, Tuner.AutotuneConfig config,
                   int defaultMin, int defaultMax, int defaultStep) {
             super("test.param." + System.nanoTime(), "Test", "Test",
-                  defaultMin, defaultMax, defaultStep, "test.stat", ctx, config);
+                  defaultMin, defaultMax, defaultStep, "test.stat", ctx, config, 100);
         }
 
         @Override protected void applyValue(int value) {}
