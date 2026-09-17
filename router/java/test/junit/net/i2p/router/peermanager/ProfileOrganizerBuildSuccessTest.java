@@ -15,10 +15,10 @@ public class ProfileOrganizerBuildSuccessTest {
 
     private static final int TEN_MINUTES_MS = 10 * 60 * 1000;
 
-    private Rate rate(long value) {
+    private Rate rate(long count) {
         Rate r = new Rate(TEN_MINUTES_MS);
-        if (value > 0) {
-            r.addData(value);
+        for (long i = 0; i < count; i++) {
+            r.addData(1);
         }
         return r;
     }

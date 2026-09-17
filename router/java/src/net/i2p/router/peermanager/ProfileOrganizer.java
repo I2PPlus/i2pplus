@@ -3248,9 +3248,9 @@ public class ProfileOrganizer {
         if (er == null || rr == null || sr == null || erC == null || rrC == null || srC == null) {
             return 1.0;
         }
-        double expire = er.getCurrentTotalValue() + erC.getCurrentTotalValue();
-        double reject = rr.getCurrentTotalValue() + rrC.getCurrentTotalValue();
-        double success = sr.getCurrentTotalValue() + srC.getCurrentTotalValue();
+        double expire = er.getCurrentEventCount() + erC.getCurrentEventCount();
+        double reject = rr.getCurrentEventCount() + rrC.getCurrentEventCount();
+        double success = sr.getCurrentEventCount() + srC.getCurrentEventCount();
         double total = expire + reject + success;
         if (total > 0) {
             return success / total;

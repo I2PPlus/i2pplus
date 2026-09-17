@@ -4222,7 +4222,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
                     SUB_STREAMING,
 
-                    1024, 4096, 128, "stream.con.initialRTT.out", _context, null,
+                    128, 4096, 128, "stream.con.initialRTT.out", _context, null,
                     SystemVersion.isSlow() ? 128 : 1024);
         }
 
@@ -4245,43 +4245,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = stream.con.initialRTT.out (outbound RTT, ms)
-            // Cross-refs: sendMessageFailureLifetime (congestion),
-            //             sendDuplicateSize (drops!)
-            // NOTE: sendProcessingTime is NOT used — it's a transport metric, not streaming.
-            // Using it creates a feedback loop: high delay → slower streaming → more queuing → higher delay.
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
-
-            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
-
-            // Recovery floor: if below 50% of factory default, always increase
-            // back toward factory default unless severe drops or congestion.
-            // Use factory default to avoid stale persisted values preventing growth.
-            int recoveryFloor = Math.max(_min, _factoryDefault / 2);
-            if (current < recoveryFloor && !congested)
-                return Math.min(_factoryDefault, current + _step);
-
-            // Severe drops or congestion = shrink window cap (loss minimization)
-            if (dropping || congested)
-                return Math.max(recoveryFloor, current - _step);
-
-            // Dead zone: hold within 50% of factory default unless signal is strong.
-            // Use factory default to avoid stale persisted values creating a
-            // dead zone that prevents growth from low starting values.
-            if (current >= recoveryFloor && current <= _factoryDefault * 2 && !dropping && !congested)
-                return current;
-
-            // Below factory default: increase if no drops/congestion
-            if (current < _factoryDefault && !dropping && !congested)
-                return Math.min(_max, current + _step);
-
-            // Above factory default: decrease if RTT is high
-            if (current > _factoryDefault && observed > 7000)
-                return Math.max(recoveryFloor, current - _step);
-
-            return current;
+            return maxSlowStartWindow(current, _min, _max, _step, _factoryDefault, observed, failLifetime, dupSize);
         }
     }
 
@@ -10042,6 +10008,56 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.max(idleFloor, current - step);
             }
             return current;
+    }
+
+    /**
+     * Compute the target value for {@link MaxSlowStartWindowParam}.
+     *
+     * <p>This is extracted to a static method for unit testing,
+     * matching the pattern of {@link #sendWindowTarget}.
+     *
+     * @param current current runtime value of the parameter
+     * @param min minimum allowed value
+     * @param max maximum allowed value
+     * @param step tuning step size
+     * @param factoryDefault factory default value
+     * @param observed outbound RTT in ms (may be NaN)
+     * @param failLifetime sendMessageFailureLifetime stat (may be NaN)
+     * @param dupSize stream.con.sendDuplicateSize stat (may be NaN)
+     * @return target value clamped to [min, max]
+     * @since 0.9.72+
+     */
+    static int maxSlowStartWindow(int current, int min, int max, int step,
+                                     int factoryDefault, double observed,
+                                     double failLifetime, double dupSize) {
+        boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+        boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+
+        int recoveryFloor = factoryDefault / 2;
+
+        // Below recovery floor: increase toward factory default
+        if (current < recoveryFloor && !congested)
+            return Math.min(factoryDefault, current + step);
+
+        // Severe drops or congestion = shrink window cap
+        if (dropping || congested)
+            return Math.max(recoveryFloor, current - step);
+
+        // Dead zone: hold at factory default unless signal is strong.
+        // Only enter the dead zone at or above factory default to allow
+        // growth from recovery floor toward factory default.
+        if (current >= factoryDefault && current <= factoryDefault * 2 && !dropping && !congested)
+            return current;
+
+        // Below factory default: increase if no drops/congestion
+        if (current < factoryDefault && !dropping && !congested)
+            return Math.min(max, current + step);
+
+        // Above factory default: decrease if RTT is high
+        if (current > factoryDefault && observed > 7000)
+            return Math.max(recoveryFloor, current - step);
+
+        return current;
     }
 
     /**
