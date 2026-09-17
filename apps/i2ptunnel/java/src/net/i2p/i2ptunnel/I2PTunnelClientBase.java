@@ -755,13 +755,84 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @throws InterruptedIOException if the connection timeouts
      * @throws I2PException if there is some other I2P-related problem
      */
+    /**
+     * Create a new I2PSocket towards to the specified destination,
+     * adding it to the list of connections actually managed by this
+     * tunnel.
+     *
+     * <p>With multiple inbound or outbound tunnels configured
+     * ({@code inbound.quantity > 1} or {@code outbound.quantity > 1}),
+     * the session's tunnel pool has multiple tunnels. If a connect attempt
+     * fails with {@link NoRouteToHostException}, the method retries,
+     * allowing the session's tunnel pool to select a different tunnel.
+     * This provides robust delivery and automatic tunnel failover.
+     *
+     * @param dest The destination to connect to, non-null
+     * @param opt Option to be used to open when opening the socket
+     * @return a new I2PSocket
+     *
+     * @throws ConnectException if the peer refuses the connection
+     * @throws NoRouteToHostException if the peer is not found or not reachable
+     * @throws InterruptedIOException if the connection times out
+     * @throws I2PException if there is some other I2P-related problem
+     */
     public I2PSocket createI2PSocket(Destination dest, I2PSocketOptions opt) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
         if (dest == null) {throw new NullPointerException();}
-        I2PSocket i2ps;
         verifySocketManager();
-        i2ps = sockMgr.connect(dest, opt);
+        I2PSocket i2ps = createI2PSocketWithFailover(dest, opt);
         synchronized (sockLock) {mySockets.add(i2ps);}
         return i2ps;
+    }
+
+    /**
+     * Create a new I2PSocket with retry/failover across the session's tunnel pool.
+     * <p>
+     * With multiple inbound or outbound tunnels configured, the session's
+     * tunnel pools have multiple tunnels available. If a connection attempt
+     * fails with {@link NoRouteToHostException}, the method retries,
+     * allowing the session's tunnel pool to select a different tunnel.
+     *
+     * @param dest The destination to connect to, non-null
+     * @param opt Socket options
+     * @return a new I2PSocket
+     * @throws I2PException if there is some other I2P-related problem
+     * @throws ConnectException if the peer refuses the connection
+     * @throws NoRouteToHostException if the peer is not found or not reachable after retries
+     * @throws InterruptedIOException if the connection times out
+     * @since 0.9.71+
+     */
+    private I2PSocket createI2PSocketWithFailover(Destination dest, I2PSocketOptions opt)
+            throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
+        // Determine number of tunnels from both inbound and outbound config
+        // for retry count — both pools can have dead tunnels
+        int tunnelCount = 1;
+        I2PTunnel t = getTunnel();
+        if (t != null) {
+            String inQ = t.getClientOptions().getProperty("inbound.quantity");
+            String outQ = t.getClientOptions().getProperty("outbound.quantity");
+            int inCount = 1, outCount = 1;
+            if (inQ != null) { try { inCount = Math.max(1, Integer.parseInt(inQ)); } catch (NumberFormatException nfe) { /* use 1 */ } }
+            if (outQ != null) { try { outCount = Math.max(1, Integer.parseInt(outQ)); } catch (NumberFormatException nfe) { /* use 1 */ } }
+            tunnelCount = Math.max(inCount, outCount);
+        }
+        NoRouteToHostException lastEx = null;
+        for (int i = 0; i < tunnelCount; i++) {
+            try {
+                I2PSocket s = sockMgr.connect(dest, opt);
+                if (_log.shouldInfo() && i > 0) {
+                    _log.info("Connected after retry " + i + " (tunnel failover)");
+                }
+                return s;
+            } catch (NoRouteToHostException e) {
+                lastEx = e;
+                if (_log.shouldWarn()) {
+                    _log.warn("Connect failed (tunnel " + i + "/" + tunnelCount + "): " + e.getMessage() +
+                              ", retrying...");
+                }
+            }
+        }
+        throw (lastEx != null) ? lastEx :
+            new NoRouteToHostException("Failed to connect after " + tunnelCount + " attempts");
     }
 
     /**
