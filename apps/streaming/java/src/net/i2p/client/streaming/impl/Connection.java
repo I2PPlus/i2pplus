@@ -941,7 +941,7 @@ class Connection {
                     if (_isChoked) {
                         long persistDelay = Math.max(_options.getRTO(), 2000L);
                         if (persistBackoff > 0) {
-                            persistDelay = Math.min(persistDelay << persistBackoff, 60000L);
+                            persistDelay = Math.min(persistDelay << persistBackoff, 15000L);
                         }
                         if (now - start >= persistDelay) {
                             // Consume the rate-limit token regardless of level so a

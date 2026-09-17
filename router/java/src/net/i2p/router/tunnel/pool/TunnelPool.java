@@ -1499,11 +1499,11 @@ public class TunnelPool {
      * Returns NaN if no data yet (early startup).
      * @return the build success rate
      */
-    private double getBuildSuccessRate() {
+     private double getBuildSuccessRate() {
         RateStat rs = getRateStat(_buildSuccessRateStatSlot, "tunnel.buildSuccessRate");
         if (rs == null)
             return Double.NaN;
-        Rate rate = rs.getRate(60000L);
+        Rate rate = rs.getRate(RateConstants.TEN_MINUTES);
         if (rate == null)
             return Double.NaN;
         double avg = rate.getAverageValue();
@@ -2512,6 +2512,23 @@ public class TunnelPool {
             }
             removeTunnel(cfg);
         }
+    }
+
+    /**
+     * Force a tunnel to fail immediately and trigger a replacement build.
+     * Used when rotation is saturated and the pool has no viable
+     * alternative tunnels. This bypasses the incremental failure counter
+     * and directly removes the tunnel, ensuring the pool builds a
+     * replacement without waiting for multiple failure reports.
+     *
+     * @param cfg the tunnel to force-fail
+     * @since 0.9.73
+     */
+    public void forceTunnelFailure(TunnelInfo cfg) {
+        if (cfg == null || cfg.getTunnelFailed()) {return;}
+        // Mark as conclusively dead so fail() can remove it
+        ((TunnelCreatorConfig) cfg).tunnelFailedCompletely();
+        fail(cfg);
     }
 
     /**

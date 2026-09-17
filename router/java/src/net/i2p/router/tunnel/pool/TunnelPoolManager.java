@@ -1428,7 +1428,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @since 0.9.71+
      */
     @Override
-    public void reportSendFailure(TunnelInfo tunnel, int status) {
+     public void reportSendFailure(TunnelInfo tunnel, int status) {
         if (tunnel == null) {return;}
         Hash dest = tunnel.getDestination();
         TunnelPool pool;
@@ -1439,6 +1439,28 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
         if (pool != null) {
             pool.reportSendFailure(tunnel, status);
+        }
+    }
+
+    /**
+     * Force a tunnel to fail immediately and trigger a replacement build.
+     * Used when rotation is saturated and the pool has no viable
+     * alternative tunnels.
+     *
+     * @param tunnel the outbound tunnel to force-fail
+     * @since 0.9.73
+     */
+    public void forceTunnelFailure(TunnelInfo tunnel) {
+        if (tunnel == null) {return;}
+        Hash dest = tunnel.getDestination();
+        TunnelPool pool;
+        if (dest != null) {
+            pool = _clientOutboundPools.get(dest);
+        } else {
+            pool = _outboundExploratory;
+        }
+        if (pool != null) {
+            pool.forceTunnelFailure(tunnel);
         }
     }
 

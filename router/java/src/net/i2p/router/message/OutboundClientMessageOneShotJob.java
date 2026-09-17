@@ -1073,17 +1073,18 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (!candidates.contains(t))
                 candidates.add(t);
         }
-        TunnelInfo rotated = OutboundCache.pickDistinctTunnel(cached, candidates, getContext().random());
+         TunnelInfo rotated = OutboundCache.pickDistinctTunnel(cached, candidates, getContext().random());
         if (rotated == null || rotated == cached) {
             // Rotation saturated: the pool currently offers only the tunnel the
             // previous connection used.  Do NOT ride it to the same timeout -
-            // evict it so the fall-through normal selection re-draws, and the
-            // next retry after a rebuild picks the freshly built tunnel.
+            // force-fail it so the pool builds a replacement, then evict
+            // so the fall-through normal selection re-draws.
             _cache.tunnelCache.remove(_hashPair);
             _cache.tunnelStartTime.remove(_hashPair);
+            getContext().tunnelManager().forceTunnelFailure(cached);
             if (_log.shouldWarn()) {
                 _log.warn("New connection -> rotation saturated for " + _toString
-                          + ", evicting outbound tunnel [" + cached + "] so the retry re-selects");
+                          + ", force-failing outbound tunnel [" + cached + "] to trigger rebuild");
             }
             return null;
         }

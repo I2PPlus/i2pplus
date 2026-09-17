@@ -290,5 +290,18 @@ public interface TunnelManagerFacade extends Service {
      * @param status the I2CP MessageStatusMessage failure code
      * @since 0.9.71+
      */
-    public void reportSendFailure(TunnelInfo tunnel, int status);
+     public void reportSendFailure(TunnelInfo tunnel, int status);
+
+    /**
+     * Force a tunnel to fail immediately and trigger a replacement build.
+     * Used when rotation is saturated and the pool has no viable
+     * alternative tunnels (e.g., all tunnels in the pool match the cached tunnel).
+     * This bypasses the incremental failure counter and directly removes
+     * the tunnel, ensuring the pool builds a replacement without waiting
+     * for multiple failure reports.
+     *
+     * @param tunnel the outbound tunnel to force-fail
+     * @since 0.9.73
+     */
+    public void forceTunnelFailure(TunnelInfo tunnel);
 }

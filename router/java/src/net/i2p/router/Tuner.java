@@ -10035,13 +10035,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         int recoveryFloor = factoryDefault / 2;
 
+        // At min: don't shrink below min
+        if (current <= min) {
+            if (dropping || congested || observed > 7000)
+                return min;
+            return Math.min(factoryDefault, current + step);
+        }
+
         // Below recovery floor: increase toward factory default
-        if (current < recoveryFloor && !congested)
+        if (current < recoveryFloor && !congested && observed <= 7000)
             return Math.min(factoryDefault, current + step);
 
         // Severe drops or congestion = shrink window cap
-        if (dropping || congested)
+        if (dropping || congested) {
+            if (current <= factoryDefault)
+                return recoveryFloor;
             return Math.max(recoveryFloor, current - step);
+        }
+
+        // Above factory default: decrease if RTT is high
+        if (current > factoryDefault && observed > 7000)
+            return recoveryFloor;
 
         // Dead zone: hold at factory default unless signal is strong.
         // Only enter the dead zone at or above factory default to allow
@@ -10049,13 +10063,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         if (current >= factoryDefault && current <= factoryDefault * 2 && !dropping && !congested)
             return current;
 
-        // Below factory default: increase if no drops/congestion
+        // Below factory default: increase toward factory default
         if (current < factoryDefault && !dropping && !congested)
-            return Math.min(max, current + step);
+            return Math.min(factoryDefault, current + step);
 
-        // Above factory default: decrease if RTT is high
-        if (current > factoryDefault && observed > 7000)
-            return Math.max(recoveryFloor, current - step);
+        // Above dead zone: increase toward max
+        if (current > factoryDefault * 2 && !dropping && !congested)
+            return Math.min(max, current + step);
 
         return current;
     }
