@@ -1074,20 +1074,19 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 candidates.add(t);
         }
          TunnelInfo rotated = OutboundCache.pickDistinctTunnel(cached, candidates, getContext().random());
-        if (rotated == null || rotated == cached) {
-            // Rotation saturated: the pool currently offers only the tunnel the
-            // previous connection used.  Do NOT ride it to the same timeout -
-            // force-fail it so the pool builds a replacement, then evict
-            // so the fall-through normal selection re-draws.
-            _cache.tunnelCache.remove(_hashPair);
-            _cache.tunnelStartTime.remove(_hashPair);
-            getContext().tunnelManager().forceTunnelFailure(cached);
-            if (_log.shouldWarn()) {
-                _log.warn("New connection -> rotation saturated for " + _toString
-                          + ", force-failing outbound tunnel [" + cached + "] to trigger rebuild");
-            }
-            return null;
-        }
+         if (rotated == null || rotated == cached) {
+             // Rotation saturated: the pool currently offers only the tunnel the
+             // previous connection used.  Do NOT ride it to the same timeout -
+             // evict it so the fall-through normal selection re-draws, and the
+             // next retry after a rebuild picks the freshly built tunnel.
+             _cache.tunnelCache.remove(_hashPair);
+             _cache.tunnelStartTime.remove(_hashPair);
+             if (_log.shouldWarn()) {
+                 _log.warn("New connection -> rotation saturated for " + _toString
+                           + ", evicting outbound tunnel [" + cached + "] so the retry re-selects");
+             }
+             return null;
+         }
         _cache.tunnelCache.put(_hashPair, rotated);
         _cache.tunnelStartTime.put(_hashPair, Long.valueOf(getContext().clock().now()));
         _wantACK = true;
