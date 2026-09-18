@@ -180,7 +180,9 @@ class PacketHandler {
                 int n = Integer.parseInt(configured.trim());
                 if (n > 0)
                     return Math.min(n, MAX_RECEIVE_WORKERS);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+                // fall through to default if configured value is not a valid int
+            }
         }
         return Math.min(Math.max(2, cores), MAX_RECEIVE_WORKERS);
     }

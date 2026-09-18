@@ -103,18 +103,22 @@ public class PcapWriter implements Closeable, Flushable {
     public void close() {
         try {
             _fos.close();
-        } catch (IOException ioe) { /* ignored */ }
+        } catch (IOException ioe) {
+            if (_log.shouldWarn()) _log.warn("Error closing pcap output stream", ioe);
+        }
     }
 
     /**
      * Flushes any buffered data to the underlying output stream.
-     * Errors during flush are silently ignored.
+     * Errors during flush are logged but do not interrupt operation.
      */
     @Override
     public void flush() {
         try {
             _fos.flush();
-        } catch (IOException ioe) { /* ignored */ }
+        } catch (IOException ioe) {
+            if (_log.shouldWarn()) _log.warn("Error flushing pcap output stream", ioe);
+        }
     }
 
     /**

@@ -3164,93 +3164,20 @@ class Connection {
                 return;
             }
 
-            // Hard liveness backstop: if the oldest unacked packet has been in flight
-            // (never acknowledged) beyond the worst-case retransmit budget,
-            // measured from CREATION, recovery is dead. Anchoring at the packet's
-            // creation rather than its last transmission matters for established
-            // connections in resume mode below: they keep retransmitting a
-            // budget-exhausted head-of-line packet every RTO, refreshing its last
-            // send time, so a last-send-anchored test would never fire. The
-            // creation anchor gives those connections a fixed wall-clock deadline
-            // so a genuinely dead path is closed instead of retried forever.
-            // (A packet cancelled on a reset/close but never removed from the
-            // window map — the original zombie this guarded — is handled by the
-            // stale-removal guard in the resend loop.)
-            //
-            // A second, tighter bound is the remote silence window: if the remote
-            // has sent NOTHING (data or ACK) for a full inactivity timeout while a
-            // packet sits unacked in the window, holding on longer cannot succeed.
-            // A live remote that received our data ACKs it within the ack window,
-            // so total silence means our sends are not arriving — the path is dead
-            // or the remote has gone (and per the protocol its own inactivity
-            // timer, default 120s, has closed it). Anchoring at the last RECEIVED
-            // packet keeps resume semantics intact for holes shorter than the hold
-            // window and replaces the open-ended creation-anchored wait (30 sends
-            // x 30s maxRTO = 15 min by default) with a bound aligned to the
-            // protocol's inactivity constant: a stalled stream that neither
-            // delivers nor receives gives the application EOF within ~2 min
-            // instead of lingering on a zombie it can never resume.
-            boolean backstopDisconnect = false;
-            synchronized (_outboundPacketsLock) {
-                TreeMap<Long, PacketLocal> ob = _outboundPackets;
-                Map.Entry<Long, PacketLocal> first = ob == null ? null : ob.firstEntry();
-                if (first != null) {
-                    long now = _context.clock().now();
-                    if (stuckLifetimeExceeded(_options.getMaxResends(),
-                                              ConnectionOptions.getMaxRTOStatic(),
-                                              now,
-                                              first.getValue().getCreatedOn())) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
-                        }
-                        backstopDisconnect = true;
-                    } else if (remoteSilentTooLong(_lastReceivedOn,
-                                              effectiveInactivityTimeout(_options.getInactivityTimeout(),
-                                                                         REMOTE_SILENT_FALLBACK_MS),
-                                              now)) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(Connection.this + " remote silent for the inactivity window (" +
-                                      (now - _lastReceivedOn) + "ms idle, timeout " +
-                                      _options.getInactivityTimeout() + "ms), forcing disconnect");
-                        }
-                        backstopDisconnect = true;
-                    }
-                }
-            }
-            // The backstop decision is snapshotted under _outboundPacketsLock, but
-            // disconnect() is run after the lock is released: it calls into the
-            // MessageOutputStream (streamErrorOccurred -> clearData), which takes
-            // _dataLock, and holding _outboundPacketsLock across that call inverts
-            // the lock order with the flush path (flush -> buildPacket ->
-            // getUnackedPacketsSent), deadlocking the connection. disconnect() is
-            // idempotent via the _connected CAS, so acting outside the lock is safe.
+            // Liveness backstop and retransmit-stall detection
+            boolean stallDetected = checkRetransmitStall();
+            boolean backstopDisconnect = checkLivenessBackstop();
             if (backstopDisconnect) {
                 if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
                 disconnect(false);
                 return;
             }
-
-            // Retransmit-stall detection: if ackPackets() was not called
-            // since the last retransmit fire, increment the count. On a slow or
-            // lossy path, soft-failure rotation (NO_TUNNELS etc.) never
-            // triggers, so the connection can stall indefinitely with
-            // only retransmits on the same sick tunnel. After 2
-            // consecutive retransmits without peer ACKs, rotate the
-            // outbound tunnel so the stalled download gets a fresh path.
-            if (_ackProgress) {
-                _retransmitCount = 0;
-                _ackProgress = false;
-            } else {
-                _retransmitCount++;
-                if (_retransmitCount >= 2) {
-                    _nextSendFreshConnection = true;
-                    if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " retransmit stall detected (" +
-                                   _retransmitCount + " retransmits without ACK progress), rotating tunnel");
-                    }
+            if (stallDetected) {
+                if (_log.shouldWarn()) {
+                    _log.warn(Connection.this + " retransmit stall detected (" +
+                                _retransmitCount + " retransmits without ACK progress), rotating tunnel");
                 }
             }
-
             if (_log.shouldDebug()) {
                 _log.debug(Connection.this + " rtx timer timeReached()");
             }
@@ -3510,6 +3437,68 @@ class Connection {
                 windowAdjusted();
             }
         }
+        /**
+         * Records a retransmit timer firing and detects stalls.
+         * If ackPackets() was called since the last retransmit, resets the
+         * counter. Otherwise increments it; after 2 consecutive firings
+         * without ACK progress, signals a tunnel rotation via
+         * _nextSendFreshConnection.
+         *
+         * @return true if a retransmit stall was detected
+         * @since 0.9.71+
+         */
+        synchronized boolean checkRetransmitStall() {
+            if (_ackProgress) {
+                _retransmitCount = 0;
+                _ackProgress = false;
+                return false;
+            } else {
+                _retransmitCount++;
+                return _retransmitCount >= 2;
+            }
+        }
+
+        /**
+         * Checks liveness backstops: if the oldest unacked packet has been
+         * in flight beyond the worst-case retransmit budget measured from
+         * creation, or the remote has been silent for the full inactivity
+         * window, forces a disconnect.
+         *
+         * @return true if a liveness backstop disconnect should be triggered
+         * @since 0.9.71+
+         */
+        boolean checkLivenessBackstop() {
+            TreeMap<Long, PacketLocal> ob;
+            Map.Entry<Long, PacketLocal> first;
+            synchronized (_outboundPacketsLock) {
+                ob = _outboundPackets;
+                first = ob == null ? null : ob.firstEntry();
+                if (first == null) return false;
+            }
+            long now = _context.clock().now();
+            if (stuckLifetimeExceeded(_options.getMaxResends(),
+                                        ConnectionOptions.getMaxRTOStatic(),
+                                        now,
+                                        first.getValue().getCreatedOn())) {
+                if (_log.shouldWarn()) {
+                    _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
+                }
+                return true;
+            }
+            if (remoteSilentTooLong(_lastReceivedOn,
+                                    effectiveInactivityTimeout(_options.getInactivityTimeout(),
+                                                               REMOTE_SILENT_FALLBACK_MS),
+                                    now)) {
+                if (_log.shouldWarn()) {
+                    _log.warn(Connection.this + " remote silent for the inactivity window (" +
+                              (now - _lastReceivedOn) + "ms idle, timeout " +
+                              _options.getInactivityTimeout() + "ms), forcing disconnect");
+                }
+                return true;
+            }
+            return false;
+        }
+
     }
 
     /**

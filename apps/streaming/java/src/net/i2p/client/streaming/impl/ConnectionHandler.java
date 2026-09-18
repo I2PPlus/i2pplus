@@ -81,12 +81,8 @@ class ConnectionHandler {
 
     /** Default max SYN queue size — large enough to absorb bursts. */
     private static final int DEFAULT_MAX_QUEUE_SIZE = 4096;
-    /** Maximum configurable queue size. */
-    private static final int MAX_QUEUE_SIZE_CAP = 16384;
     /** Default number of accept worker threads. */
     private static final int DEFAULT_ACCEPT_WORKERS = 1;
-    /** Maximum accept worker threads. */
-    private static final int MAX_ACCEPT_WORKERS = 16;
 
     /**
      * This is both SYNs and subsequent packets, and with an initial window size of 12,
@@ -418,8 +414,7 @@ class ConnectionHandler {
             for (int i = 0; i < count; i++) {
                 _synQueue.offer(new PoisonPacket());
             }
-            // Wait briefly for workers to exit
-            try { Thread.sleep(50); } catch (InterruptedException e) { /* ignore */ }
+            try { Thread.sleep(50); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
             shutdownAcceptWorkers();
         }
     }

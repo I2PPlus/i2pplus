@@ -823,8 +823,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             synchronized(_pcapInitLock) {
                 pcap = pcapWriter;
             }
-            if (pcap != null)
+            if (pcap != null) {
                 pcap.flush();
+                pcap.close();
+            }
         }
     }
 

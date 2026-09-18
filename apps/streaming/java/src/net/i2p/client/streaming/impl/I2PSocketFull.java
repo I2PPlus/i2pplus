@@ -59,8 +59,8 @@ class I2PSocketFull implements I2PSocket {
         }
         if (c.getIsConnected()) {
             MessageInputStream in = c.getInputStream();
-            in.close();
             MessageOutputStream out = c.getOutputStream();
+            in.close();
             out.closeInternal();
             // this will cause any thread waiting in Connection.packetSendChoke()
             // to throw an IOE
