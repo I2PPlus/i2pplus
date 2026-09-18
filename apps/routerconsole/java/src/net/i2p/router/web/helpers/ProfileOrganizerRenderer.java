@@ -941,10 +941,9 @@ class ProfileOrganizerRenderer {
     private void renderFloodfill(Writer out, Set<PeerProfile> order) throws IOException {
         StringBuilder buf = new StringBuilder(32*1024);
         buf.append("<div class=widescroll id=ff>\n<div class=wrap><table id=floodfills>\n")
-           .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
-           .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
-           .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
-           .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
+           .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
+           .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
+           .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
            .append("<thead class=smallhead><tr>")
            .append("<th data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
             .append("<th data-sort-direction=descending data-sort-method=number>").append(_t("Status")).append("</th>")
