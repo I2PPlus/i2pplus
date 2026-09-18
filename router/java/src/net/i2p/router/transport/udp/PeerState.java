@@ -426,7 +426,7 @@ public class PeerState {
      * values speed slow-start recovery for bulk peers at the cost of more
      * in-flight bytes immediately after loss. Tuned via Tuner.
      */
-    private static volatile int POST_RTO_WINDOW_MTUS = 1;
+    private static volatile int POST_RTO_WINDOW_MTUS = 3;
     /**
      * Outbound message queue depth per peer, -1 = use router config.
      * Set by the Tuner when autotuning router.peerOutboundQueueSize.
@@ -513,7 +513,7 @@ public class PeerState {
      * @param mtus number of MTUs, clamped 1-4 (1 = RFC 5681 loss window)
      * @since 0.9.70+
      */
-    public static void setPostRTOWindowMTUs(int mtus) { POST_RTO_WINDOW_MTUS = Math.max(1, Math.min(4, mtus)); }
+    public static void setPostRTOWindowMTUs(int mtus) { POST_RTO_WINDOW_MTUS = Math.max(1, Math.min(8, mtus)); }
 
     /**
      * Initial concurrent messages per peer (called by Tuner).
@@ -1862,7 +1862,7 @@ public class PeerState {
      *
      * @return the messages sent count
      */
-     public int getMessagesSent() {
+    public int getMessagesSent() {
        synchronized(_outboundLock) {return _messagesSent.get();}
      }
 

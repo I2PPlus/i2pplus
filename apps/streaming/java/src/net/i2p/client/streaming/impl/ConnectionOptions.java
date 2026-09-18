@@ -155,18 +155,18 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setInitialRTO(int val) { defaultInitialRTO = Math.max(500, Math.min(30000, val)); }
 
     /**
-     * Default 12000 accommodates RTT up to ~6s with standard TCP deviation.
-     * Shorter than the historical 30000 so a stalled path costs less: a lost
-     * packet blocks the stream head-of-line until its RTO backoff expires, and
-     * the Tuner only tightens this on paths that keep confirming sends. On a
-     * dead path (no confirmTime events) the Tuner sees no signal, so the code
-     * default IS the retransmit pace and the zombie-window backstop
-     * (maxResends * maxRTO) for that path. 12000 keeps each loss stall modest
-     * and the default 30-resend backstop (~6 min) inside a range a recovered
-     * path can still resume from, instead of the 15-min hang the 30s default
-     * gave. Tuner may raise this for very high-latency networks.
+      * Default 8000 accommodates RTT up to ~4s with standard TCP deviation.
+      * Shorter than the historical 30000 so a stalled path costs less: a lost
+      * packet blocks the stream head-of-line until its RTO backoff expires, and
+      * the Tuner only tightens this on paths that keep confirming sends. On a
+      * dead path (no confirmTime events) the Tuner sees no signal, so the code
+      * default IS the retransmit pace and the zombie-window backstop
+      * (maxResends * maxRTO) for that path. 8000 keeps each loss stall modest
+      * and the default 30-resend backstop (~4 min) inside a range a recovered
+      * path can still resume from, instead of the 15-min hang the 30s default
+      * gave. Tuner may raise this for very high-latency networks.
      */
-    private static volatile int maxRTO = 12000;
+    private static volatile int maxRTO = 8000;
 
     /** @since 0.9.70+ */
     public static int getMaxRTOStatic() { return maxRTO; }
@@ -185,17 +185,18 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setRTOMultiplier(int val) { rtoMultiplier = Math.max(100, Math.min(500, val)); }
 
     /** Min resend delay. */
-    private static volatile int minResendDelay = 300;
+    private static volatile int minResendDelay = 100;
 
     /** @since 0.9.70+ */
     public static int getMinResendDelayStatic() { return minResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMinResendDelay(int val) { minResendDelay = Math.max(300, Math.min(5000, val)); }
+    public static void setMinResendDelay(int val) { minResendDelay = Math.max(100, Math.min(5000, val)); }
 
     /**
-     * Max resend delay. Raised to 30000 to accommodate high-RTT paths without premature retransmit.
-     */
-    private static volatile int maxResendDelay = 30000;
+      * Max resend delay. Raised to 20000 to accommodate high-RTT paths without premature retransmit
+      * while still providing faster recovery than the 30000 default.
+      */
+    private static volatile int maxResendDelay = 20000;
 
     /** @since 0.9.70+ */
     public static int getMaxResendDelayStatic() { return maxResendDelay; }
@@ -425,7 +426,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
 
     /** @since 0.9.70+ mutable for adaptive tuning */
-    static volatile int maxSlowStartWindow = SystemVersion.isSlow() ? 128 : 1024;
+    static volatile int maxSlowStartWindow = SystemVersion.isSlow() ? 1024 : 2048;
 
     /** Max slow start window static. */
     static int getMaxSlowStartWindowStatic() { return maxSlowStartWindow; }
@@ -433,7 +434,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setMaxSlowStartWindow(int val) { maxSlowStartWindow = Math.max(8, Math.min(Connection.ABSOLUTE_MAX_WINDOW, val)); }
 
     /** Immediate ack delay. */
-    private static volatile int immediateAckDelay = SystemVersion.isSlow() ? 100 : 80;
+    private static volatile int immediateAckDelay = SystemVersion.isSlow() ? 100 : 40;
 
     /** Immediate ack delay static. */
     static int getImmediateAckDelayStatic() { return immediateAckDelay; }
@@ -959,8 +960,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _lastRtoDoubleTime = now;
         int doubled = _retransmitTimeout * rtoMultiplier / 100;
         int mrto = getMaxRTO();
-        // Never let a backoff shrink the timer: getMaxRTO() (12s) is below the
-        // computeRTO() ceiling (getMaxResendDelay(), 30s), so a plain clamp here
+        // Never let a backoff shrink the timer: getMaxRTO() (8s) is below the
+        // computeRTO() ceiling (getMaxResendDelay(), 20s), so a plain clamp here
         // would take an already-large RTO (e.g. 13500) down to 12000 exactly
         // when congestion recovery wants it growing. Monotonic non-shrink.
         _retransmitTimeout = Math.max(_retransmitTimeout, Math.min(doubled, mrto));

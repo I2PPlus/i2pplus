@@ -4222,8 +4222,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
                     SUB_STREAMING,
 
-                    128, 4096, 128, "stream.con.initialRTT.out", _context, null,
-                    SystemVersion.isSlow() ? 128 : 1024);
+                    128, 8192, 128, "stream.con.initialRTT.out", _context, null,
+                    SystemVersion.isSlow() ? 1024 : 2048);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -10057,18 +10057,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         if (current > factoryDefault && observed > 7000)
             return recoveryFloor;
 
-        // Dead zone: hold at factory default unless signal is strong.
-        // Only enter the dead zone at or above factory default to allow
-        // growth from recovery floor toward factory default.
-        if (current >= factoryDefault && current <= factoryDefault * 2 && !dropping && !congested)
-            return current;
-
         // Below factory default: increase toward factory default
         if (current < factoryDefault && !dropping && !congested)
             return Math.min(factoryDefault, current + step);
 
-        // Above dead zone: increase toward max
-        if (current > factoryDefault * 2 && !dropping && !congested)
+        // Above factory default: increase toward max (dead zone removed for faster convergence)
+        if (current >= factoryDefault && !dropping && !congested)
             return Math.min(max, current + step);
 
         return current;
@@ -10092,7 +10086,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.postRTOWindowMTUs", "Post-RTO window restart (MTUs)",
                   SUB_CONGESTION,
 
-                  1, 4, 1, "udp.avgSendWindow", _context);
+                   1, 8, 1, "udp.avgSendWindow", _context);
         }
 
         /** Apply the tunable value to the router configuration. */

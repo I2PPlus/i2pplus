@@ -194,7 +194,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      *  extra pick almost always yields the alternative; a small bound keeps the
      *  hot path cheap.
      */
-    private static final int MAX_ROTATION_CANDIDATES = 3;
+    private static final int MAX_ROTATION_CANDIDATES = 6;
 
     private static final long[] RATES = new long[] { 60*1000L };
 

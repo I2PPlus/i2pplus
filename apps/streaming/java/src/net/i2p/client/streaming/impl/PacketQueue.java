@@ -35,8 +35,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final int FLAGS_INITIAL_TAGS = Packet.FLAG_SYNCHRONIZE;
     private static final int FLAGS_FINAL_TAGS = Packet.FLAG_CLOSE | Packet.FLAG_RESET | Packet.FLAG_ECHO;
     private static final int INITIAL_TAGS_TO_SEND = 32;
-    private static final int MIN_TAG_THRESHOLD = 20;
-    private static final int TAG_WINDOW_FACTOR = 5;
+    private static final int MIN_TAG_THRESHOLD = 10;
+    private static final int TAG_WINDOW_FACTOR = 8;
     private static final int FINAL_TAGS_TO_SEND = 4;
     private static final int FINAL_TAG_THRESHOLD = 2;
     private static final long REMOVE_EXPIRED_TIME = (long) 67*1000;
@@ -72,7 +72,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * @param packet the packet
      * @return true if sent
      */
-     public boolean enqueue(PacketLocal packet) {
+    public boolean enqueue(PacketLocal packet) {
          if (_dead) {return false;}
 
          if (packet.writeReleased()) {
@@ -278,7 +278,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * @param status of the message, as defined in MessageStatusMessage and this class.
      * @since 0.9.14
      */
-     public void messageStatus(I2PSession session, long msgId, int status) {
+    public void messageStatus(I2PSession session, long msgId, int status) {
          if (_dead) {return;}
          Long id = Long.valueOf(msgId);
          Connection con = _messageStatusMap.get(id);

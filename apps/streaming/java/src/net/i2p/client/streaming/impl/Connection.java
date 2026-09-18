@@ -246,7 +246,7 @@ class Connection {
 
     /** @since 0.9.70+ */
     public static int getMaxResendDelay() {
-        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxResendDelay", 30*1000);
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxResendDelay", 20*1000);
     }
     /** @since 0.9.70+ */
     public static int getMinResendDelay() {
@@ -333,15 +333,17 @@ class Connection {
      *  Default window size cap used when no per-connection or global override is set.
      *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
      *  adjusts based on observed RTT, bandwidth, and loss.
+     *  Raised from 1024 to 2048 to better utilize high-BDP paths.
      */
-    public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 768 : 1024;
+    public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 1024 : 2048;
 
     /**
      *  Absolute ceiling on in-flight packets regardless of BDP estimate.
      *  Prevents runaway window growth from estimator noise or bugs.
      *  Set to accommodate high-BDP paths (e.g. 50Mbps @ 1s RTT ~ 6250 packets @ 1KB).
+     *  Raised from 4096 to 8192 for high-throughput bulk transfers.
      */
-    public static final int ABSOLUTE_MAX_WINDOW = 4096;
+    public static final int ABSOLUTE_MAX_WINDOW = 8192;
 
     /** @since 0.9.70+ mutable for adaptive tuning via Tuner */
     private static volatile int maxWindowSize = MAX_WINDOW_SIZE_DEFAULT;
@@ -3304,7 +3306,7 @@ class Connection {
                     // Bug workaround to prevent 5 minutes of CLOSE retransmission.
                     // If the remote has also closed, 3 sends is enough.
                     // If they haven't, cap at 8 sends (~90s with backoff) instead of
-                    // the full maxResends (~12 min).
+                     // the full maxResends (~4 min).
                     int maxClose = getCloseReceivedOn() > 0 ? 3 : 8;
                     if (packet.getNumSends() >= maxClose) {
                         if (_log.shouldDebug()) {
@@ -3321,7 +3323,7 @@ class Connection {
                     // The SYN was never ACKed and the retransmit budget has now covered
                     // the entire connect window (getMaxSynSends(), scaled up from
                     // maxSynResends), so the connect() caller has given up. Stop
-                    // resending instead of running to maxResends (~12 min). SYN
+                     // resending instead of running to maxResends (~4 min). SYN
                     // retransmits use a fixed RTO interval (no backoff), so the total
                     // budget is getMaxSynSends() * interval. Soft-failure-triggered
                     // resends are excluded (synGiveUpBudgetExceeded()): they never
