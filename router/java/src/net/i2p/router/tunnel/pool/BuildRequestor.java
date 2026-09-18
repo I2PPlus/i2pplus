@@ -76,7 +76,7 @@ public abstract class BuildRequestor {
     /**
      * Tuned build timeouts, -1 = use router config.
      * Set by the Tuner when autotuning the corresponding build params.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile int _tunedRequestTimeout = -1;
     private static volatile int _tunedFirstHopTimeout = -1;
@@ -84,13 +84,13 @@ public abstract class BuildRequestor {
     /**
      * Set the build request timeout (called by Tuner).
      * @param ms the build request timeout in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setRequestTimeout(int ms) { _tunedRequestTimeout = ms; }
     /**
      * Set the first-hop timeout (called by Tuner).
      * @param ms the first-hop timeout in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setFirstHopTimeout(int ms) { _tunedFirstHopTimeout = ms; }
 

@@ -22,7 +22,7 @@ import org.mockito.junit.MockitoRule;
  * {@code isInputShutdown()}/{@code isOutputShutdown()} returning
  * false after close, and missing double-close protection.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class StandardSocketContractTest {
 

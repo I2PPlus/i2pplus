@@ -77,7 +77,7 @@ public class TestJob extends JobImpl {
     /**
      * Tuned test-job params, -1 = use router config.
      * Set by the Tuner when autotuning the corresponding testJob params.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile int _tunedMinTestPeriod = -1;
     private static volatile int _tunedMaxTestPeriod = -1;
@@ -87,32 +87,32 @@ public class TestJob extends JobImpl {
     /**
      * Set the min test period (called by Tuner).
      * @param ms the min test period in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setMinTestPeriod(int ms) { _tunedMinTestPeriod = ms; }
     /**
      * Set the max test period (called by Tuner).
      * @param ms the max test period in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setMaxTestPeriod(int ms) { _tunedMaxTestPeriod = ms; }
     /**
      * Set the min test delay (called by Tuner).
      * @param ms the min test delay in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setMinTestDelay(int ms) { _tunedMinTestDelay = ms; }
     /**
      * Set the max test delay (called by Tuner).
      * @param ms the max test delay in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setMaxTestDelay(int ms) { _tunedMaxTestDelay = ms; }
     /**
      * The min test period in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the min test period in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getMinTestPeriod(RouterContext ctx) {
         int t = _tunedMinTestPeriod;
@@ -124,7 +124,7 @@ public class TestJob extends JobImpl {
      * The max test period in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the max test period in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getMaxTestPeriod(RouterContext ctx) {
         int t = _tunedMaxTestPeriod;
@@ -136,7 +136,7 @@ public class TestJob extends JobImpl {
      * The min test delay in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the min test delay in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getMinTestDelay(RouterContext ctx) {
         int t = _tunedMinTestDelay;
@@ -148,7 +148,7 @@ public class TestJob extends JobImpl {
      * The max test delay in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the max test delay in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getMaxTestDelay(RouterContext ctx) {
         int t = _tunedMaxTestDelay;

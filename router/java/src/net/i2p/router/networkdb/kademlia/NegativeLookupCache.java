@@ -115,7 +115,7 @@ class NegativeLookupCache {
      * so a confirmed-bad destination cannot be re-probed into searching.
      *
      * @param h the hash to clear
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public void clear(Hash h) {
         counter.clear(h);

@@ -577,7 +577,7 @@ class ConnectionPacketHandler {
      *  @param caFactor congestion-avoidance growth divisor
      *  @param windowSize current congestion window
      *  @return updated accumulator
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static long caGrowthCredit(long accum, int effAcked, int caFactor, int windowSize) {
         long denom = (long) Math.max(1, caFactor) * Math.max(1, windowSize);
@@ -589,7 +589,7 @@ class ConnectionPacketHandler {
      *
      *  @param accum accumulated credit
      *  @return number of whole window increments
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static int caWindowIncrements(long accum) {
         return (int) Math.min(Integer.MAX_VALUE, accum >> 20);
@@ -601,7 +601,7 @@ class ConnectionPacketHandler {
      *
      *  @param accum accumulated credit
      *  @return fractional remainder in [0, 1048575]
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static long caWindowRemainder(long accum) {
         return accum & 0xFFFFFL;
@@ -751,7 +751,7 @@ class ConnectionPacketHandler {
      * @param seqNum the packet sequence number
      * @param payloadSize the packet payload size
      * @return true if the connection should remain choked
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static boolean shouldRemainChoked(Connection con, long seqNum, int payloadSize) {
         if (payloadSize <= 512)

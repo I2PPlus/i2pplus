@@ -98,7 +98,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  per-request read path ({@link #getClientExecutor()}) never takes
      *  {@link #_executorLock} in steady state. Mutation (create/resize/kill)
      *  stays under the lock.
-     *  @since 0.9.72+ */
+     *  @since 0.9.71+ */
     private volatile ThreadPoolExecutor _executor;
     private static final AtomicLong _executorThreadCount = new AtomicLong();
     private final Object _executorLock = new Object();

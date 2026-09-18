@@ -335,7 +335,7 @@ public class PeerState {
      * Heap-scaled CWIN ceiling: 1MB minimum, up to 16MB, roughly 1MB per
      * 256MB of heap. Replaces the fixed 1MB cap that clamped tuner growth
      * and kept high-memory routers below 1MB/s throughput (0.9.70+), and
-     * doubled from heap/512 to heap/256 in 0.9.72+ so a 4GB router can
+     * doubled from heap/512 to heap/256 in 0.9.71+ so a 4GB router can
      * reach the streaming ceiling (~8 MB/s) instead of topping out at 2MB/s.
      *
      * @since 0.9.70+
@@ -430,13 +430,13 @@ public class PeerState {
     /**
      * Outbound message queue depth per peer, -1 = use router config.
      * Set by the Tuner when autotuning router.peerOutboundQueueSize.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile int OUTBOUND_QUEUE_SIZE = -1;
     /**
      * Outbound message queue depth per peer (called by Tuner).
      * @param size queue depth; the Tuner clamps to 50-1000 before calling
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setOutboundQueueSize(int size) { OUTBOUND_QUEUE_SIZE = size; }
     /**
@@ -444,7 +444,7 @@ public class PeerState {
      * @param ctx router context for config fallback when untuned
      * @param def fallback default when neither tuned nor configured
      * @return the queue depth to use
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getOutboundQueueSize(RouterContext ctx, int def) {
         int i = OUTBOUND_QUEUE_SIZE;

@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * Tests for {@link ConnectionManager} subsession-aware ping overloads.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class ConnectionManagerPingTest {
 

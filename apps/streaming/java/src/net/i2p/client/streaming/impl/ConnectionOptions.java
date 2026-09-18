@@ -291,7 +291,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * RFC 6928 recommends 10; raised to 64 in 0.9.48 for I2P's high-latency
-     * environment and to 128 for the 0.9.72+ fast-ramp profile: each stream
+     * environment and to 128 for the 0.9.71+ fast-ramp profile: each stream
      * starts with up to 128 messages in flight, so the first RTT on a
      * high-bandwidth path is not spent proving link capacity.
      * @since 0.9.70+ mutable for adaptive tuning

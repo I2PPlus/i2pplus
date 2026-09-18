@@ -3090,7 +3090,7 @@ return false;
      * transient gap.
      *
      * @param key the destination hash
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public void clearNegativeCache(Hash key) {
         _negativeCache.clear(key);

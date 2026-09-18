@@ -201,7 +201,7 @@ public class SendMessageOptions extends DateAndFlags {
      *  previous connection.  Only meaningful when set by an in-process sender
      *  (e.g. apps/streaming PacketQueue); see the class javadoc.
      *
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     public void setFreshConnection(boolean yes) {
         if (yes) _flags |= FRESH_CONNECTION_MASK;
@@ -210,7 +210,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      * Whether this message is the first packet of a new connection.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public boolean getFreshConnection() {
         return getFreshConnection(_flags);
@@ -218,7 +218,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      * Decode the fresh-connection marker from the raw flags field (router side).
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static boolean getFreshConnection(int flags) {
         return (flags & FRESH_CONNECTION_MASK) != 0;

@@ -270,7 +270,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *  lives in this static (not router.config) purely to track the last
      *  autotuned setting across applyValue/getRuntimeValue calls.
      *  -1 = no tuned value yet; use the config-or-default path.
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     private static volatile int untestedMultiplier = -1;
 
@@ -9943,7 +9943,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param failsafeCloses  ntcp.failsafeCloses recent count
      * @param mtuDecrease     udp.mtuDecrease recent count
      * @return the new CWIN target, already clamped to [min, max]
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static int sendWindowTarget(int current, int min, int max, int step, int idleFloor,
                                 double observed, double jobLag, double memPressure,
@@ -10025,7 +10025,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param failLifetime sendMessageFailureLifetime stat (may be NaN)
      * @param dupSize stream.con.sendDuplicateSize stat (may be NaN)
      * @return target value clamped to [min, max]
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static int maxSlowStartWindow(int current, int min, int max, int step,
                                      int factoryDefault, double observed,

@@ -22,7 +22,7 @@ import org.mockito.junit.MockitoRule;
  *   <li>Sufficient accumulated small packets must unchoke</li>
  * </ul>
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class ConnectionChokeDecisionTest {
 

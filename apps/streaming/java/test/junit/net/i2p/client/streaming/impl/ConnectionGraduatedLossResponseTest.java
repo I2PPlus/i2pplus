@@ -13,7 +13,7 @@ import org.junit.Test;
  * and a stale lone strike decays back toward the gentle tier after one
  * smoothed RTT has passed ({@link Connection#decayLossStrikes(int, long, long, long)}).
  *
- * <p>The 0.9.72+ profile implements "ramp fast, decline slowly": the tiers
+ * <p>The 0.9.71+ profile implements "ramp fast, decline slowly": the tiers
  * are gentler (7/8, 3/4, 1/2 instead of 3/4, 1/2, 1/4) so a single loss on a
  * high-BDP connection does not undo an RTT of window growth, while genuinely
  * persistent loss still concedes half the window.

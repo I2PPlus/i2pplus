@@ -22,7 +22,7 @@ import org.junit.Test;
  * {@link OutboundCache#pickDistinctTunnel(TunnelInfo, java.util.List, Random)}:
  * best-effort, identity-based rotation that never drops or blocks a connection.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class TunnelRotationDecisionTest {
 

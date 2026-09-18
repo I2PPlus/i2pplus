@@ -31,7 +31,7 @@ import net.i2p.util.SystemVersion;
  * <p>Coverage: tuned-overrides-config, unset-falls-back-to-config, and
  * default passthrough for every Batch 1 consumer.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class TunerStaticOverrideTest {
 

@@ -86,7 +86,7 @@ public class OutboundCache {
      * Gates rapid-fire sends to destinations whose LS is missing or negatively cached.
      * Entries are cleaned by {@code OCMOSJCacheCleaner}.
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     final ConcurrentHashMap<Hash, Long> lsFailCooldown = new ConcurrentHashMap<>(128, 0.9f, 16);
 
@@ -94,7 +94,7 @@ public class OutboundCache {
      * Cooldown period (ms) after a failed LS lookup before another send is attempted
      * to the same destination. Prevents message floods to unreachable destinations.
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static final long LS_FAIL_COOLDOWN_MS = 30 * 1000L;
 
@@ -104,7 +104,7 @@ public class OutboundCache {
      * must not hard-fail sends for long: lookups keep being re-probed
      * (see {@link #shouldSkipLeaseSetSend}).
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static final long TRANSIENT_GAP_GRACE_MS = 10 * 60 * 1000L;
 
@@ -113,7 +113,7 @@ public class OutboundCache {
      * destination whose LeaseSet was valid recently. Deduplicates concurrent
      * sends while still allowing one recovery probe per window.
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static final long LS_PROBE_INTERVAL_MS = 30 * 1000L;
 
@@ -122,7 +122,7 @@ public class OutboundCache {
      * observed locally (set on local find and on successful send).
      * Pruned by {@code OCMOSJCacheCleaner}.
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     final ConcurrentHashMap<Hash, Long> lsLastValid = new ConcurrentHashMap<>(128, 0.9f, 16);
 
@@ -132,7 +132,7 @@ public class OutboundCache {
      * recently-valid destination that is undergoing a transient gap.
      * Pruned by {@code OCMOSJCacheCleaner}.
      *
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     final ConcurrentHashMap<Hash, Long> lsLastLookup = new ConcurrentHashMap<>(128, 0.9f, 16);
 
@@ -315,7 +315,7 @@ public class OutboundCache {
      *
      * @param ctx the router context for current time.
      * @param cc  the cooldown cache to clean.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static void cleanLsFailCooldown(final RouterContext ctx, final Map<Hash, Long> cc) {
         final long now = ctx.clock().now();
@@ -340,7 +340,7 @@ public class OutboundCache {
      * @return a candidate distinct from {@code old} when one exists, otherwise
      *         {@code old} unchanged, so rotation is best-effort and never
      *         blocks or drops a connection
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static TunnelInfo pickDistinctTunnel(TunnelInfo old, List<TunnelInfo> candidates, Random rnd) {
         if (old == null || candidates.isEmpty()) return old;
@@ -370,7 +370,7 @@ public class OutboundCache {
      * @param transientGraceMs treat as transient gap if now - lastValid <= this
      * @param probeIntervalMs minimum gap between real lookups for a transient gap
      * @return true if the send should be skipped (dieFatal), false to probe
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static boolean shouldSkipLeaseSetSend(Long cooldownEnd, long now, Long lastValid,
                                           Long lastLookup, long transientGraceMs, long probeIntervalMs) {
@@ -387,7 +387,7 @@ public class OutboundCache {
      *
      * @param ctx the router context for current time.
      * @param mc  the last-valid cache to clean.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static void cleanLsLastValid(final RouterContext ctx, final Map<Hash, Long> mc) {
         final long cutoff = ctx.clock().now() - TRANSIENT_GAP_GRACE_MS - CLEAN_INTERVAL;
@@ -399,7 +399,7 @@ public class OutboundCache {
      *
      * @param ctx the router context for current time.
      * @param mc  the last-lookup cache to clean.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static void cleanLsLastLookup(final RouterContext ctx, final Map<Hash, Long> mc) {
         final long cutoff = ctx.clock().now() - 2 * LS_PROBE_INTERVAL_MS;

@@ -114,14 +114,14 @@ public class TunnelDispatcher implements Service {
     /**
      * Tuned transit throttle factor, -1.0 = use router config.
      * Set by the Tuner when autotuning router.transitThrottleFactor.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile float _tunedTransitThrottleFactor = -1.0f;
 
     /**
      * Set the transit throttle factor (called by Tuner).
      * @param f the transit throttle factor
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setTransitThrottleFactor(float f) { _tunedTransitThrottleFactor = f; }
 
@@ -130,7 +130,7 @@ public class TunnelDispatcher implements Service {
      * @param ctx the router context
      * @param def fallback when neither tuned nor configured (0.95f outbound, 0.0f inbound)
      * @return the transit throttle factor
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static float getTransitThrottleFactor(RouterContext ctx, float def) {
         float t = _tunedTransitThrottleFactor;
@@ -147,7 +147,7 @@ public class TunnelDispatcher implements Service {
     /**
      * Set the per-tunnel bandwidth divisor (called by Tuner).
      * @param div the per-tunnel bandwidth divisor
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setPerTunnelBweDivisor(int div) { _tunedPerTunnelBweDivisor = div; }
 
@@ -157,7 +157,7 @@ public class TunnelDispatcher implements Service {
      * default of min(max tunnels, 100).
      * @param ctx the router context
      * @return the per-tunnel bandwidth divisor
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getPerTunnelBweDivisor(RouterContext ctx) {
         int tuned = _tunedPerTunnelBweDivisor;

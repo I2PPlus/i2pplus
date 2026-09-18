@@ -21,7 +21,7 @@ import org.junit.Test;
  * remainder provides finer granularity at low window sizes so trickle ACKs
  * still produce whole-packet increments.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class ConnectionCAWindowGrowthTest {
 

@@ -462,7 +462,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      * Set the tunnel growth factor (called by Tuner).
      * @param factor the tunnel growth factor
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setTunnelGrowthFactor(double factor) { _tunedGrowthFactor = factor; }
 
@@ -470,7 +470,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * The tunnel growth factor in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the tunnel growth factor
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static double getTunnelGrowthFactorTuned(RouterContext ctx) {
         double tuned = _tunedGrowthFactor;
@@ -516,7 +516,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      * Set the max processing time (called by Tuner).
      * @param ms the max message processing time in milliseconds
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setMaxProcessingTime(int ms) { _tunedMaxProcessingTime = ms; }
 
@@ -524,7 +524,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * The max processing time in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the max message processing time in milliseconds
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getMaxProcessingTimeTuned(RouterContext ctx) {
         int tuned = _tunedMaxProcessingTime;
@@ -537,7 +537,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /**
      * Set the throttle rejection-curve exponent (called by Tuner).
      * @param exp the rejection exponent in effect
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setThrottleRejectExponent(int exp) { _tunedThrottleRejectExponent = exp; }
 
@@ -547,7 +547,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * [3,20] validity window.
      * @param ctx the router context
      * @return the rejection exponent
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getThrottleRejectExponent(RouterContext ctx) {
         int tuned = _tunedThrottleRejectExponent;

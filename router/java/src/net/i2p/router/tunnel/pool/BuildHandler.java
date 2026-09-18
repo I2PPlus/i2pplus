@@ -133,7 +133,7 @@ public class BuildHandler implements Runnable {
     /**
      * Tuned lookup-limit statics, -1 = use router config.
      * Set by the Tuner when autotuning the corresponding build params.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile int _tunedNextHopLookupTimeout = -1;
     private static volatile int _tunedMaxLookupLimit = -1;
@@ -142,26 +142,26 @@ public class BuildHandler implements Runnable {
     /**
      * Set the next-hop lookup timeout (called by Tuner).
      * @param ms the per-lookup timeout in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setNextHopLookupTimeout(int ms) { _tunedNextHopLookupTimeout = ms; }
     /**
      * Set the max concurrent RI lookup limit (called by Tuner).
      * @param limit the max lookup limit
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setMaxLookupLimit(int limit) { _tunedMaxLookupLimit = limit; }
     /**
      * Set the percent lookup limit (called by Tuner).
      * @param pct the lookup percent
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setPercentLookupLimit(int pct) { _tunedPercentLookupLimit = pct; }
     /**
      * The next-hop lookup timeout in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the per-lookup timeout in ms
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getNextHopLookupTimeout(RouterContext ctx) {
         int t = _tunedNextHopLookupTimeout;
@@ -173,7 +173,7 @@ public class BuildHandler implements Runnable {
      * The max concurrent RI lookup limit in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the max lookup limit
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getMaxLookupLimit(RouterContext ctx) {
         int t = _tunedMaxLookupLimit;
@@ -185,7 +185,7 @@ public class BuildHandler implements Runnable {
      * The percent lookup limit in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the lookup percent
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getPercentLookupLimit(RouterContext ctx) {
         int t = _tunedPercentLookupLimit;

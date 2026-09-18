@@ -188,14 +188,14 @@ public class ProfileOrganizer {
     /**
      * Tuned lossy threshold, -1.0 = use router config.
      * Set by the Tuner when autotuning profileOrganizer.lossyThreshold.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile float _tunedLossyThreshold = -1.0f;
 
     /**
      * Set the lossy demotion threshold (called by Tuner).
      * @param ratio the loss ratio threshold
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setLossyThreshold(float ratio) { _tunedLossyThreshold = ratio; }
 
@@ -203,7 +203,7 @@ public class ProfileOrganizer {
      * The lossy demotion threshold in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the loss ratio threshold
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static float getLossyThreshold(RouterContext ctx) {
         float t = _tunedLossyThreshold;

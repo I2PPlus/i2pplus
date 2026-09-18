@@ -229,7 +229,7 @@ public class BuildExecutor implements Runnable {
      * Extra tunnels to maintain beyond the configured quantity.
      * Tunable via i2p.tunnel.targetBuffer (default: 0).
      * Tuned value overrides config, when set by the Tuner.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile int _tunedTargetBuffer = -1;
 
@@ -251,7 +251,7 @@ public class BuildExecutor implements Runnable {
      * Set the target build buffer (called by Tuner).
      *
      * @param count the target buffer count
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setTunnelTargetBuffer(int count) { _tunedTargetBuffer = count; }
 
@@ -260,7 +260,7 @@ public class BuildExecutor implements Runnable {
      * Minimum time between GOOD-tunnel deficit rebuilds for non-critical pools.
      * Tunable via i2p.tunnel.goodDeficitThrottle (default: 30000).
      * Tuned value overrides config, when set by the Tuner.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     private static volatile long _tunedGoodDeficitThrottle = -1;
 
@@ -282,7 +282,7 @@ public class BuildExecutor implements Runnable {
      * Set the GOOD deficit throttle interval (called by Tuner).
      *
      * @param ms the throttle interval in milliseconds
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setGoodDeficitThrottle(long ms) { _tunedGoodDeficitThrottle = ms; }
     /**

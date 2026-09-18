@@ -9,7 +9,7 @@ import org.junit.Test;
  * SendMessageOptions fresh-connection marker: set/get round trip and the
  * router-side static decode of the packed flags field.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class SendMessageOptionsTest {
 

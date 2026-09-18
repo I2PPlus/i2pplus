@@ -151,7 +151,7 @@ class Connection {
      *  RNG noise. Holds the 20-bit fractional remainder of the accumulator.
      *  Must only be read/written while holding {@link #_outboundPacketsLock};
      *  zeroed in retransmit() when the window is cut.
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     long _caWindowAccumulator;
 
@@ -1125,7 +1125,7 @@ class Connection {
      *  recovery, so a single failed packet does not collapse the connection
      *  while persistent loss still backs off.
      *
-     *  <p>The 0.9.72+ profile ("ramp fast, decline slowly") makes every tier
+     *  <p>The 0.9.71+ profile ("ramp fast, decline slowly") makes every tier
      *  gentler than the classic halves/quarters — a first strike cuts only
      *  1/8, a second another 1/4, and persistent loss settles at half — so a
      *  single loss event on a high-BDP connection does not undo an RTT of
@@ -1134,7 +1134,7 @@ class Connection {
      *  @param strikes consecutive loss events (&gt;= 1) since the last recovery
      *  @param wsize current window size
      *  @return new window size, floored at 4 (never below a usable minimum)
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static int graduatedLossWindow(int strikes, int wsize) {
         if (strikes <= 1) {
@@ -1224,7 +1224,7 @@ class Connection {
      *  @param smoothedRtt the connection's smoothed RTT in ms (&gt;= 0)
      *  @return strikes - 1 when at least max(smoothedRtt, 500) ms have elapsed
      *          since the last strike, otherwise the current count; never below 0
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static int decayLossStrikes(int strikes, long lastLossTime, long now, long smoothedRtt) {
         if (strikes <= 0)

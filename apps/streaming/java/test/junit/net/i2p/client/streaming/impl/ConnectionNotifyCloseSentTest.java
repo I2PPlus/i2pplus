@@ -12,7 +12,7 @@ import org.junit.Test;
  * <p>Regression test for the TODO: "ackImmediately() after sending CLOSE causes this. Bad?"
  * The CAS-based idempotency ensures duplicate CLOSE notifications are safe.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class ConnectionNotifyCloseSentTest {
 

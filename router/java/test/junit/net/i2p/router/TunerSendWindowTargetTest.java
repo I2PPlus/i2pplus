@@ -16,7 +16,7 @@ import org.junit.Test;
  * ceiling, and the anti-ratchet idle floor that keeps idle shrink at the
  * stable default rather than the 64KB min.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class TunerSendWindowTargetTest {
 

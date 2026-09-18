@@ -15,7 +15,7 @@ import org.junit.Test;
  * The dead zone (factoryDefault to factoryDefault * 2) was removed
  * to allow faster convergence to the optimal window.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class TunerMaxSlowStartWindowTest {
 

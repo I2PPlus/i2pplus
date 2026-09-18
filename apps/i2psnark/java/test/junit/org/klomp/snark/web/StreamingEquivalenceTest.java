@@ -40,7 +40,7 @@ import org.klomp.snark.TorrentCreateFilter;
  * dirs, registers real on-disk torrents (12 and 80 files - one below, one
  * above the STREAM_MIN_FILE_ROWS gate), and drives getListHTML directly.
  *
- * @since 0.9.72+
+ * @since 0.9.71+
  */
 public class StreamingEquivalenceTest {
 

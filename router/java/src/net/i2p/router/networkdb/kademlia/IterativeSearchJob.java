@@ -276,13 +276,13 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Set the search limit (called by Tuner).
      * @param limit the total search request limit
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setSearchLimit(int limit) { _tunedSearchLimit = limit; }
     /**
      * Set the single search time (called by Tuner).
      * @param ms the single-search time in milliseconds
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setSingleSearchTime(int ms) { _tunedSingleSearchTime = ms; }
     /**
@@ -290,7 +290,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * @param ctx the router context
      * @param def fallback when neither tuned nor configured
      * @return the total search request limit
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getSearchLimit(RouterContext ctx, int def) {
         int t = _tunedSearchLimit;
@@ -302,7 +302,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * @param ctx the router context
      * @param def fallback when neither tuned nor configured
      * @return the single-search time in milliseconds
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getSingleSearchTime(RouterContext ctx, int def) {
         int t = _tunedSingleSearchTime;

@@ -61,7 +61,7 @@ public class ExploreJob extends SearchJob {
     /**
      * Set the exploratory search breadth (called by Tuner).
      * @param bredth the concurrent search count
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static void setExploreBredth(int bredth) { _tunedExploreBredth = bredth; }
 
@@ -69,7 +69,7 @@ public class ExploreJob extends SearchJob {
      * The tuned exploratory breadth, or -1 when no tuned value has been applied.
      * @param ctx the router context (unused, kept for symmetry with other Tuner bridges)
      * @return the tuned concurrent search count, or -1 if none
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     public static int getExploreBredth(RouterContext ctx) {
         int tuned = _tunedExploreBredth;
