@@ -171,7 +171,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // If they don't have a large payload, most of the rest of the packet
                 // is uncompressible: stream ids, destination and signature
                 options.setGzip(packet.getPayloadSize() > 50);
-                // First transmission of an outbound SYN starts a new connection.
+// First transmission of an outbound SYN starts a new connection.
                 // Ask the router to prefer a different outbound tunnel so a retry
                 // does not ride the same (possibly sick) tunnel that stalled the
                 // previous connection. Only the FIRST send carries the marker:
@@ -180,7 +180,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // in-flight download is never disturbed.
                 if (con != null && !con.isInbound() && packet.getSequenceNum() == 0 && packet.getNumSends() <= 1)
                     options.setFreshConnection(true);
-               } else {
+                options.setGzip(packet.getPayloadSize() > 50);
+            } else {
                    if (con != null) {
                       if (con.isInbound() && con.getLifetime() < 2*60*1000)
                           options.setSendLeaseSet(false);
@@ -196,6 +197,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                         thresh = cTagThresh;
                     options.setTagThreshold(thresh);
                 }
+            }
+            // After a soft failure (NO_TUNNELS, etc.), rotate the tunnel
+            // on the next data send so the stalled download gets a fresh
+            // outbound tunnel instead of retrying the same sick one.
+            // Only the first packet triggers rotation; subsequent packets
+            // reuse the already rotated tunnel (same as SYN semantics).
+            if (con != null && con.isNextSendFreshConnection()) {
+                options.setFreshConnection(true);
+                con.clearNextSendFreshConnection();
             }
             I2PSession session = packet.getSession();
             if (listenForStatus) {

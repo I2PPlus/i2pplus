@@ -195,6 +195,20 @@ class Connection {
      */
     private volatile boolean _softFailureResendPending;
     /**
+     *  Set when a soft failure triggers an immediate retransmit pass,
+     *  so the next send through {@link PacketQueue#enqueue(PacketLocal)}
+     *  uses {@link SendMessageOptions#setFreshConnection(true)} to rotate
+     *  to a different outbound tunnel instead of retrying the same
+     *  (possibly sick) tunnel that caused the stall.  Only the first
+     *  packet in a soft-failure pass carries the marker; subsequent
+     *  packets reuse the already rotated tunnel, so the handover settles
+     *  before any data flows and an in-flight download is never disturbed.
+     *  Written on the router callback thread in
+     *  {@link #scheduleSoftFailureRetransmit()}, cleared on first use
+     *  in {@link PacketQueue#enqueue(PacketLocal)} and on cancel.
+     */
+    private volatile boolean _nextSendFreshConnection;
+    /**
      *  Wall-clock time (ms) of the last permitted immediate retransmit scheduled
      *  from {@link #scheduleSoftFailureRetransmit()}.  Gates back-to-back soft
      *  failures (e.g. NO_LEASESET while the LeaseSet fetch is in flight) so they
@@ -657,6 +671,30 @@ class Connection {
     public static int getMaxSynResendsStatic() { return maxSynResends; }
     /** @since 0.9.70+ */
     public static void setMaxSynResends(int val) { maxSynResends = Math.max(3, Math.min(16, val)); }
+
+    /**
+     * Set the flag so the next send through PacketQueue uses a fresh
+     * connection, rotating to a different outbound tunnel when the
+     * current one has stalled. Cleared on first use.
+     * @since 0.9.71+
+     */
+    synchronized void setNextSendFreshConnection() { _nextSendFreshConnection = true; }
+    /**
+     * Returns true if the next send should use a fresh connection
+     * (tunnel rotation). Cleared on read so only the first send
+     * in a soft-failure pass triggers rotation.
+     * @since 0.9.71+
+     */
+    synchronized boolean isNextSendFreshConnection() { return _nextSendFreshConnection; }
+    /** @since 0.9.71+ */
+    synchronized void clearNextSendFreshConnection() { _nextSendFreshConnection = false; }
+
+    /**
+     *  Returns the number of milliseconds between the last send
+     *  and now, for external stall detection callers.
+     *  @since 0.9.71+
+     */
+    long getTimeSinceLastSend() { return _context.clock().now() - _lastSendTime; }
 
     /**
      * Maximum number of packets to retransmit in a single timer fire.
@@ -1477,6 +1515,7 @@ class Connection {
         // Mark the resulting pass as soft so the resend loop doesn't count it
         // against the hard retransmit budget (tunnel outage != on-wire loss).
         _softFailureResendPending = true;
+        _nextSendFreshConnection = true;
         _retransmitEvent.forceRescheduleNow();
         if (_log.shouldInfo()) {
             _log.info("[" + this + "] Scheduled immediate retransmit after soft failure");
@@ -3007,6 +3046,7 @@ class Connection {
         public synchronized boolean cancel() {
             _scheduled = false;
             _softFailureResendPending = false;
+            _nextSendFreshConnection = false;
             return super.cancel();
         }
 
