@@ -95,11 +95,11 @@ public class ProfileOrganizer {
     /**
      * _defaultMinFastPeers.
      */
-    public static volatile int _defaultMinFastPeers = 400;
+    public static volatile int _defaultMinFastPeers = 1000;
     /** @since 0.9.70+ */
     public static int getDefaultMinFastPeers() { return _defaultMinFastPeers; }
     /** @since 0.9.70+ */
-    public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
+    public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(3000, val)); }
 
     /**
      * PROP_MAX_ROUTERINFO_AGE_HOURS.
@@ -118,11 +118,11 @@ public class ProfileOrganizer {
     /**
      * _defaultMaxFastPeers.
      */
-    public static volatile int _defaultMaxFastPeers = 600;
+    public static volatile int _defaultMaxFastPeers = 2000;
     /** @since 0.9.70+ */
     public static int getDefaultMaxFastPeers() { return _defaultMaxFastPeers; }
     /** @since 0.9.70+ */
-    public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(3000, val)); }
+    public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(5000, val)); }
 
     /**
      * PROP_MINIMUM_HIGH_CAPACITY_PEERS.
@@ -131,7 +131,7 @@ public class ProfileOrganizer {
     /**
      * DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS.
      */
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 500;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 1000;
     /**
      * _defaultMinHighCapPeers.
      */
@@ -139,7 +139,7 @@ public class ProfileOrganizer {
     /** @since 0.9.70+ */
     public static int getMinHighCapacityPeers() { return _defaultMinHighCapPeers; }
     /** @since 0.9.70+ */
-    public static void setMinHighCapacityPeers(int val) { _defaultMinHighCapPeers = Math.max(50, Math.min(2000, val)); }
+    public static void setMinHighCapacityPeers(int val) { _defaultMinHighCapPeers = Math.max(50, Math.min(3000, val)); }
     /**
      * PROP_MAXIMUM_HIGH_CAPACITY_PEERS.
      */
@@ -147,11 +147,11 @@ public class ProfileOrganizer {
     /**
      * _defaultMaxHighCapPeers.
      */
-    public static volatile int _defaultMaxHighCapPeers = 800;
+    public static volatile int _defaultMaxHighCapPeers = 3000;
     /** @since 0.9.70+ */
     public static int getDefaultMaxHighCapPeers() { return _defaultMaxHighCapPeers; }
     /** @since 0.9.70+ */
-    public static void setDefaultMaxHighCapPeers(int val) { _defaultMaxHighCapPeers = Math.max(200, Math.min(4000, val)); }
+    public static void setDefaultMaxHighCapPeers(int val) { _defaultMaxHighCapPeers = Math.max(200, Math.min(6000, val)); }
 
     /** Minimum tunnel acceptance ratio (40%) to remain in high-capacity/fast tiers */
     private static final double MIN_TUNNEL_ACCEPTANCE_RATIO = 0.4;
@@ -172,13 +172,13 @@ public class ProfileOrganizer {
      * threshold — stop bucket-filling with marginal peers.
      * @since 0.9.70+
      */
-    private static final int MIN_HC_TIGHT_COUNT = 300;
+    private static final int MIN_HC_TIGHT_COUNT = 1000;
     /**
      * When fast tier has at least this many peers, require speed threshold
      * — stop admitting via low-latency bypass alone.
      * @since 0.9.70+
      */
-    private static final int MIN_FAST_TIGHT_COUNT = 200;
+    private static final int MIN_FAST_TIGHT_COUNT = 800;
 
     /** Config property for the loss ratio above which a peer is demoted from fast/high-cap tiers. */
     public static final String PROP_LOSSY_THRESHOLD = "profileOrganizer.lossyThreshold";
@@ -677,7 +677,7 @@ public class ProfileOrganizer {
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
-        try {locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess);}
+        try {locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, computeFastRttCeiling(_thresholdRTT));}
         finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
@@ -701,19 +701,15 @@ public class ProfileOrganizer {
      * @param ipSet mutable set tracking already-selected subnets
      */
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, SessionKey randomKey,
-                                Slice subTierMode, int mask, MaskedIPSet ipSet) {
+                                    Slice subTierMode, int mask, MaskedIPSet ipSet) {
         double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
         try {
-            if (subTierMode != Slice.SLICE_ALL) {
-                int sz = _fastPeers.size();
-                if (sz < 6 || (subTierMode.mask >= 3 && sz < 12))
-                    subTierMode = Slice.SLICE_ALL;
-            }
+            long rttCeiling = computeFastRttCeiling(_thresholdRTT);
             if (subTierMode != Slice.SLICE_ALL)
-                locked_selectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode, mask, ipSet, buildSuccess);
+                locked_selectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode, mask, ipSet, buildSuccess, rttCeiling);
             else
-                locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess);
+                locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
         } finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
@@ -784,12 +780,16 @@ public class ProfileOrganizer {
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet mutable set tracking already-selected subnets
      */
-    public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
-        double buildSuccess = getTunnelBuildSuccess();
-        getReadLock();
-        try {
-            locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet, buildSuccess);
-        } finally {releaseReadLock();}
+     public void selectHighCapacityPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
+         double buildSuccess = getTunnelBuildSuccess();
+         getReadLock();
+         try {
+             // More lenient RTT ceiling for high-capacity peers:
+             // they typically have higher latency than fast-tier peers.
+             long cap = computeFastRttCeiling(_thresholdRTT) * 2;
+             long rttCeiling = Math.min(cap, AUTO_RTT_CAP_MS);
+             locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
+         } finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
                 _log.debug("Need " + (howMany > 1 ? "High Capacity peers" : "High Capacity peer") +
@@ -952,7 +952,7 @@ public class ProfileOrganizer {
                     Hash cur = iter.next();
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
-                    if (!isSelectable(cur, buildSuccess)) continue;
+                    if (!passesBasicGates(cur) || hasExcessiveLifetimeFailures(cur)) continue;
                     RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(cur);
                     if (info != null) {
                         String tier = DataHelper.stripHTML(info.getBandwidthTier());
@@ -1444,7 +1444,10 @@ public class ProfileOrganizer {
      *  @since 0.9.71+
      */
     boolean passesTierGates(PeerProfile profile, double buildSuccess, long now) {
-        return isSelectable(profile.getPeer(), buildSuccess) &&
+        // Use basic gates instead of isSelectable to avoid stale RouterInfo
+        // proof-of-life filtering peers that were already vetted at tier entry.
+        return passesBasicGates(profile.getPeer()) &&
+               !hasExcessiveLifetimeFailures(profile.getPeer()) &&
                !isLowTunnelAcceptance(profile, buildSuccess) &&
                !hasRecentTunnelFailures(profile) &&
                !inLossProbation(profile, now);
@@ -1691,7 +1694,9 @@ public class ProfileOrganizer {
     private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
                                          double buildSuccess, long now, boolean highCap) {
         if (tier.containsKey(peer)) return false;
-        if (!isSelectable(peer, buildSuccess)) return false;
+        // Use basic gates instead of isSelectable to avoid stale RouterInfo
+        // proof-of-life filtering peers that were already vetted at tier entry.
+        if (!passesBasicGates(peer) || hasExcessiveLifetimeFailures(peer)) return false;
         if (hasRecentTunnelFailures(profile)) return false;
         if (highCap ? hasHighLoss(profile, now) : inLossProbation(profile, now)) return false;
         return !isLowTunnelAcceptance(profile, buildSuccess);
@@ -1844,8 +1849,8 @@ public class ProfileOrganizer {
 
         // More lenient thresholds for firewalled routers
         boolean isFirewalledRouter = isFirewalled();
-        int fastPeerLimit = isFirewalledRouter ? 1600 : 800;
-        int highCapacityLimit = isFirewalledRouter ? 2400 : 1200;
+        int fastPeerLimit = isFirewalledRouter ? 3200 : 2000;
+        int highCapacityLimit = isFirewalledRouter ? 4800 : 3000;
 
         for (PeerProfile profile : _notFailingPeers.values()) {
             if (isEvictable(profile, _fastPeers, _highCapacityPeers, activeThreshold,
@@ -2064,26 +2069,32 @@ public class ProfileOrganizer {
     }
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
-                                    Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess) {
-        // Build candidate list, filtering exclusions and checking selectability
-        long rttCeiling = computeFastRttCeiling(_thresholdRTT);
+                                    Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess,
+                                    long rttCeiling) {
+        // Peers in the tier map were already vetted by isSelectable at tier-entry time.
+        // Re-checking isSelectable (which calls hasValidRouterInfo with proof-of-life)
+        // at selection time filters out too many peers due to stale RouterInfo.
+        // Only check fast-changing gates: banlist, first-hop cooldown, excessive lifetime failures.
         List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
         for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
             Hash peer = entry.getKey();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
             if (_us != null && _us.equals(peer)) continue;
-            boolean ok = isSelectable(peer, buildSuccess);
-            if (ok) {
-                ok = mask <= 0 || notRestricted(peer, ipSet, mask);
-            } else {
+            if (!passesBasicGates(peer)) {
                 if (toExclude != null) toExclude.add(peer);
+                continue;
             }
-            if (ok && aboveRttCeiling(entry.getValue(), rttCeiling)) {
+            if (hasExcessiveLifetimeFailures(peer)) {
                 if (toExclude != null) toExclude.add(peer);
-                ok = false;
+                continue;
             }
-            if (ok) candidates.add(entry);
+            if (mask > 0 && !notRestricted(peer, ipSet, mask)) continue;
+            if (aboveRttCeiling(entry.getValue(), rttCeiling)) {
+                if (toExclude != null) toExclude.add(peer);
+                continue;
+            }
+            candidates.add(entry);
         }
 
         // Select with random priority proportional to latency:
@@ -2095,13 +2106,13 @@ public class ProfileOrganizer {
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, SessionKey randomKey, Slice subTierMode,
-                                    int mask, MaskedIPSet ipSet, double buildSuccess) {
+                                    int mask, MaskedIPSet ipSet, double buildSuccess,
+                                    long rttCeiling) {
         byte[] rk = randomKey.getData();
         long k0 = DataHelper.fromLong8(rk, 0);
         long k1 = DataHelper.fromLong8(rk, 8);
 
         // Build candidate list with subTier filtering
-        long rttCeiling = computeFastRttCeiling(_thresholdRTT);
         List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
         for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
             Hash peer = entry.getKey();
@@ -2112,18 +2123,21 @@ public class ProfileOrganizer {
             int subTier = getSubTier(peer, k0, k1);
             if ((subTier & subTierMode.mask) != subTierMode.val) continue;
 
-            boolean ok = isSelectable(peer, buildSuccess);
-            if (ok) {
-                ok = mask <= 0 || notRestricted(peer, ipSet, mask);
-            } else if (toExclude != null) {
-                toExclude.add(peer);
-            }
-            if (ok && aboveRttCeiling(entry.getValue(), rttCeiling)) {
+            if (!passesBasicGates(peer)) {
                 if (toExclude != null) toExclude.add(peer);
-                ok = false;
+                continue;
+            }
+            if (hasExcessiveLifetimeFailures(peer)) {
+                if (toExclude != null) toExclude.add(peer);
+                continue;
+            }
+            if (mask > 0 && !notRestricted(peer, ipSet, mask)) continue;
+            if (aboveRttCeiling(entry.getValue(), rttCeiling)) {
+                if (toExclude != null) toExclude.add(peer);
+                continue;
             }
 
-            if (ok) candidates.add(entry);
+            candidates.add(entry);
         }
 
         // Select with random priority proportional to latency. Moderately-lossy peers
@@ -2431,15 +2445,17 @@ public class ProfileOrganizer {
      *  @return whether promotion should be skipped
      *  @since 0.9.71+
      */
-    boolean skipsPromotion(PeerProfile profile, Hash peer, double buildSuccess) {
-        boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
-        boolean isPeerSelectable = isSelectable(peer, buildSuccess);
-        boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess);
-        boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
-        boolean congested = isCongestedPeer(peer);
-        boolean highLoss = inLossProbation(profile, _context.clock().now());
-        return !isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss;
-    }
+     boolean skipsPromotion(PeerProfile profile, Hash peer, double buildSuccess) {
+         boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
+         // Use basic gates instead of isSelectable to avoid stale RouterInfo
+         // proof-of-life filtering peers that were already vetted at tier entry.
+         boolean isPeerSelectable = passesBasicGates(peer) && !hasExcessiveLifetimeFailures(peer);
+         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess);
+         boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
+         boolean congested = isCongestedPeer(peer);
+         boolean highLoss = inLossProbation(profile, _context.clock().now());
+         return !isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss;
+     }
 
     /**
      * After a demotion vacates slots in fast/high-cap tiers, scan the
