@@ -845,10 +845,27 @@ public class ProfileOrganizer {
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet mutable set tracking already-selected subnets
      */
-    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
+     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                      int mask, MaskedIPSet ipSet) {
+         selectNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet, false);
+     }
+
+    /**
+     * Full-parameter select from not-failing peers.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet mutable set tracking already-selected subnets
+     * @param preferUnproven if true, prioritize peers with no tunnel
+     *        test history so they accumulate profiling data
+     */
+     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
+                                     int mask, MaskedIPSet ipSet, boolean preferUnproven) {
         if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, getTunnelBuildSuccess());
+            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, getTunnelBuildSuccess(), preferUnproven);
         }
     }
 
@@ -956,7 +973,7 @@ public class ProfileOrganizer {
             matches.addAll(selected);
         }
         if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, buildSuccess);
+            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, buildSuccess, false);
         }
     }
 
@@ -997,7 +1014,7 @@ public class ProfileOrganizer {
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      */
     public void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
-        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, getTunnelBuildSuccess());
+        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, getTunnelBuildSuccess(), false);
     }
 
     /**
@@ -1009,28 +1026,46 @@ public class ProfileOrganizer {
      * @param matches output set populated with selected peer hashes
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      * @param mask bitmask length for /n diversity restriction (0 to disable, unused here)
+     * @param preferUnproven if true, prioritize peers with no tunnel test history
+     *        so they accumulate profiling data through exploratory builds
      */
-    private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
-                                      int mask, double buildSuccess) {
+     private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
+                                     int mask, double buildSuccess, boolean preferUnproven) {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
             List<Hash> selected = new ArrayList<>(needed);
             long now = _context.clock().now();
             getReadLock();
             try {
-                for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext(); ) {
-                    Hash cur = iter.next();
-                    if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
-                    if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
-                    // Keep peers in loss probation out of even the last-resort pool;
-                    // they only get picked if literally nothing else is usable.
-                    PeerProfile prof = locked_getProfile(cur);
-                    if (prof != null && inLossProbation(prof, now)) continue;
-                    // Peers with no tunnel test history have no evidence
-                    // of reliability; exclude from the not-failing pool
-                    // so they aren't selected as tunnel first-hops.
-                    if (prof != null && isLowTunnelAcceptance(prof, buildSuccess)) continue;
-                    if (isSelectable(cur, buildSuccess)) selected.add(cur);
+                if (preferUnproven) {
+                    // Two-pass: unproven peers first so they get profiled
+                    for (int pass = 0; pass < 2 && selected.size() < needed; pass++) {
+                        boolean inPass = (pass == 0);
+                        for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext(); ) {
+                            Hash cur = iter.next();
+                            if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
+                            if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
+                            PeerProfile prof = locked_getProfile(cur);
+                            if (prof != null && inLossProbation(prof, now)) continue;
+                            // First pass: only unproven peers (totalRequests == 0)
+                            // Second pass: all selectable peers
+                            if (inPass && prof != null && prof.getTunnelHistory() != null &&
+                                   prof.getTunnelHistory().getLifetimeAgreedTo() + prof.getTunnelHistory().getLifetimeRejected() > 0)
+                                continue;
+                            if (isSelectable(cur, buildSuccess)) selected.add(cur);
+                        }
+                    }
+                } else {
+                    for (Iterator<Hash> iter = new RandomIterator<>(_notFailingPeersList); selected.size() < needed && iter.hasNext(); ) {
+                        Hash cur = iter.next();
+                        if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
+                        if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
+                        // Keep peers in loss probation out of even the last-resort pool;
+                        // they only get picked if literally nothing else is usable.
+                        PeerProfile prof = locked_getProfile(cur);
+                        if (prof != null && inLossProbation(prof, now)) continue;
+                        if (isSelectable(cur, buildSuccess)) selected.add(cur);
+                    }
                 }
             } finally {
                 releaseReadLock();

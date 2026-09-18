@@ -179,7 +179,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             } else {
                 if (log.shouldInfo())
                     log.info("EPS SNFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
-                ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
             }
             // D1: Post-selection first-hop quality check for closest hop
             if (!closest.isEmpty() && !isInbound) {
@@ -190,7 +190,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                                  " previously failed as first hop, retrying...");
                     closestExclude.add(peer);
                     closest.clear();
-                    ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                    ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
                     if (closest.isEmpty()) {
                         ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
                     }
@@ -201,7 +201,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                                      " is unreachable, retrying selection...");
                         closestExclude.add(peer);
                         closest.clear();
-                        ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                        ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
                         if (closest.isEmpty()) {
                             ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
                         }
@@ -295,7 +295,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // select will check both matches and exclude, no need to add matches to exclude here
                 if (log.shouldInfo())
                     log.info("EPS SNFP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
-                ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
+                ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet, true);
                 if (matches.isEmpty()) {
                     // Fallback: try fast peers if not-failing is empty
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches, ipRestriction, ipSet);
