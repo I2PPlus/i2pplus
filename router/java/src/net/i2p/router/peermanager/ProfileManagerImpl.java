@@ -226,6 +226,7 @@ public class ProfileManagerImpl implements ProfileManager {
         data.getDbResponseTime().addData(responseTimeMs, responseTimeMs);
         DBHistory hist = data.getDBHistory();
         hist.lookupSuccessful();
+        updateFloodfillReliability(data);
     }
 
     /**
@@ -244,6 +245,7 @@ public class ProfileManagerImpl implements ProfileManager {
             data.expandDBProfile();
         DBHistory hist = data.getDBHistory();
         hist.lookupFailed();
+        updateFloodfillReliability(data);
     }
 
     /**
@@ -266,6 +268,7 @@ public class ProfileManagerImpl implements ProfileManager {
         data.getDbIntroduction().addData(newPeers, responseTimeMs);
         DBHistory hist = data.getDBHistory();
         hist.lookupReply(newPeers, oldPeers, invalid, duplicate);
+        updateFloodfillReliability(data);
     }
 
     /**
@@ -335,6 +338,43 @@ public class ProfileManagerImpl implements ProfileManager {
             data.expandDBProfile();
         DBHistory hist = data.getDBHistory();
         hist.storeSuccessful();
+        updateFloodfillReliability(data);
+    }
+
+    /**
+     * Compute floodfill reliability from DBHistory.
+     * Updates the peer's reliability classification based on
+     * successful/failed lookup and store counts.
+     *
+     * Thresholds:
+     * - UNKNOWN: 0 successful lookups (probing target)
+     * - OK: 1-4 successful lookups with >=50% success rate
+     * - GOOD: >=5 successful lookups with >=80% success rate
+     * - BAD: >=5 total lookups with <50% success rate
+     *
+     * @param data the peer profile, must have expanded DB profile
+     * @since 0.9.71+
+     */
+    void updateFloodfillReliability(PeerProfile data) {
+        if (!data.getIsExpandedDB()) return;
+        DBHistory hist = data.getDBHistory();
+        long success = hist.getSuccessfulLookups();
+        long failed = hist.getFailedLookups();
+        long total = success + failed;
+        if (total == 0) {
+            data.setFloodfillReliability(FloodfillReliability.UNKNOWN);
+            return;
+        }
+        double ratio = (double) success / total;
+        if (total < 5) {
+            data.setFloodfillReliability(ratio >= 0.5 ? FloodfillReliability.OK : FloodfillReliability.BAD);
+        } else if (ratio >= 0.8 && success >= 5) {
+            data.setFloodfillReliability(FloodfillReliability.GOOD);
+        } else if (ratio < 0.5) {
+            data.setFloodfillReliability(FloodfillReliability.BAD);
+        } else {
+            data.setFloodfillReliability(FloodfillReliability.OK);
+        }
     }
 
     /**
@@ -351,8 +391,7 @@ public class ProfileManagerImpl implements ProfileManager {
             data.expandDBProfile();
         DBHistory hist = data.getDBHistory();
         hist.storeFailed();
-        // we could do things like update some sort of "how many successful stores we've
-        // failed to send them"...
+        updateFloodfillReliability(data);
     }
 
     /**

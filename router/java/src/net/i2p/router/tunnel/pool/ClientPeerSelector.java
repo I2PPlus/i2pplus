@@ -17,6 +17,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.peermanager.FloodfillReliability;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.ArraySet;
@@ -1399,12 +1400,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
      *  @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareQuality(Hash p1, Hash p2, Set<Hash> exclude, PeerProfile prof1, PeerProfile prof2,
-                              long now, long thirtyMinutes) {
+                               long now, long thirtyMinutes) {
         int c = compareExcluded(p1, p2, exclude);
         if (c != 0) {return c;}
         long t1 = _provenResponders.getOrDefault(p1, 0L);
         long t2 = _provenResponders.getOrDefault(p2, 0L);
         c = compareProven(t1, t2, now);
+        if (c != 0) {return c;}
+        c = compareReliability(prof1, prof2);
         if (c != 0) {return c;}
         float lat1 = prof1 != null ? prof1.getTunnelTestTimeAverage() : 0;
         float lat2 = prof2 != null ? prof2.getTunnelTestTimeAverage() : 0;
@@ -1415,6 +1418,23 @@ class ClientPeerSelector extends TunnelPeerSelector {
         c = compareActivity(prof1, prof2, now, thirtyMinutes);
         if (c != 0) {return c;}
         return compareLatency(lat1, lat2);
+    }
+
+    /**
+     * Compare floodfill reliability: GOOD > OK > UNKNOWN > BAD.
+     * Unproven floodfills sort lower to reduce load on them until
+     * their reliability is established.
+     *
+     * @param prof1 first peer's profile, or null
+     * @param prof2 second peer's profile, or null
+     * @return negative if p1 is more reliable, positive if p2 is more reliable, 0 if equal
+     */
+    public static int compareReliability(PeerProfile prof1, PeerProfile prof2) {
+        FloodfillReliability r1 = prof1 != null ? prof1.getFloodfillReliability() : FloodfillReliability.UNKNOWN;
+        FloodfillReliability r2 = prof2 != null ? prof2.getFloodfillReliability() : FloodfillReliability.UNKNOWN;
+        // Higher ordinal = more reliable: BAD(0) < UNKNOWN(1) < OK(2) < GOOD(3)
+        // Sort descending so GOOD sorts first
+        return Integer.compare(r2.ordinal(), r1.ordinal());
     }
 
     /**

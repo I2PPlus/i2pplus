@@ -232,4 +232,23 @@ public class PeerProfileTest {
         profile.clearLossy();
         assertFalse(profile.isLossy());
     }
+
+    @Test
+    public void testDefaultFloodfillReliability() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
+        PeerProfile profile = new PeerProfile(_ctx, peer);
+        assertEquals(FloodfillReliability.UNKNOWN, profile.getFloodfillReliability());
+    }
+
+    @Test
+    public void testSetFloodfillReliability() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        Hash peer = Hash.create(new byte[Hash.HASH_LENGTH]);
+        PeerProfile profile = new PeerProfile(_ctx, peer);
+        profile.setFloodfillReliability(FloodfillReliability.GOOD);
+        assertEquals(FloodfillReliability.GOOD, profile.getFloodfillReliability());
+        profile.setFloodfillReliability(FloodfillReliability.BAD);
+        assertEquals(FloodfillReliability.BAD, profile.getFloodfillReliability());
+    }
 }

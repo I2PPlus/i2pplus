@@ -35,6 +35,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.peermanager.FloodfillReliability;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.ArraySet;
@@ -958,15 +959,22 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     private boolean shouldExcludeFloodfillPeer(boolean isExploratory, RouterInfo routerInfo) {
-        if (!isExploratory) {
-            return false;
-        }
         String capabilities = routerInfo.getCapabilities();
         boolean isFloodfill = capabilities.contains(Character.toString(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL));
-        // Randomly exclude most exploratory floodfill peers to reduce load (approximate 3/4 exclusion).
-        // Reduced from 15/16 (93.75%) — on sparse networks the old exclusion left too few floodfills
-        // for exploratory builds, causing NetDB lookup failures and pool starvation.
-        return isFloodfill && ctx.random().nextInt(4) != 0;
+        if (!isFloodfill) {return false;}
+        // Get reliability classification from the peer's profile
+        Hash peerHash = routerInfo.getIdentity().getHash();
+        PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peerHash);
+        FloodfillReliability reliability = profile != null ? profile.getFloodfillReliability() : FloodfillReliability.UNKNOWN;
+        // Always exclude BAD floodfills
+        if (reliability == FloodfillReliability.BAD) {return true;}
+        // For exploratory builds, randomly exclude UNKNOWN floodfills
+        // to reduce load on unproven peers (approximate 3/4 exclusion)
+        if (isExploratory && reliability == FloodfillReliability.UNKNOWN) {
+            return ctx.random().nextInt(4) != 0;
+        }
+        // OK and GOOD floodfills are always allowed
+        return false;
     }
 
     /**

@@ -28,6 +28,7 @@ import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Router;
+import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
@@ -330,7 +331,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      *  Classification result for floodfill peer selection.
      *  @since 0.9.71+
      */
-    public enum PeerClass { GOOD, OK, BAD }
+    public enum PeerClass { GOOD, OK, BAD, UNKNOWN }
 
     /**
      *  Byte count matched when fingerprinting a peer for same-subnet
@@ -583,7 +584,10 @@ public class FloodfillPeerSelector extends PeerSelector {
         long uptime = _context.router().getUptime();
         boolean enforceHeard = uptime > STARTUP_GRACE_PERIOD;
         if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {return PeerClass.BAD;}
-        if (prof.getDBHistory() == null) {return PeerClass.BAD;}
+        DBHistory dbh = prof.getDBHistory();
+        if (dbh == null) {return PeerClass.UNKNOWN;}
+        long total = dbh.getSuccessfulLookups() + dbh.getFailedLookups();
+        if (total == 0) {return PeerClass.UNKNOWN;}
         double maxFailRate = computeMaxFailRate(uptime);
         RateStat ttst = getRateStat(_testSuccessTimeStatSlot, "tunnel.testSuccessTime");
         double maxGoodRespTime = MAX_GOOD_RESP_TIME;
@@ -593,18 +597,18 @@ public class FloodfillPeerSelector extends PeerSelector {
                 maxGoodRespTime = 2 * tunnelTestTime.getAverageValue();
         }
         Rate dbRespRate = prof.getDbResponseTime().getRate(RateConstants.ONE_HOUR);
-        Rate goodFailRate = prof.getDBHistory().getFailedLookupRate().getRate(RateConstants.ONE_HOUR);
+        Rate goodFailRate = dbh.getFailedLookupRate().getRate(RateConstants.ONE_HOUR);
         if (dbRespRate != null && goodFailRate != null &&
             dbRespRate.getAvgOrLifetimeAvg() < maxGoodRespTime
-            && prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
-            && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
+            && dbh.getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
+            && dbh.getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
             && goodFailRate.getAverageValue() < maxFailRate) {
             return PeerClass.GOOD;
         }
-        if (prof.getDBHistory().getLastStoreFailed() <= prof.getDBHistory().getLastStoreSuccessful() ||
-            prof.getDBHistory().getLastLookupFailed() <= prof.getDBHistory().getLastLookupSuccessful() ||
-            (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK &&
-            prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
+        if (dbh.getLastStoreFailed() <= dbh.getLastStoreSuccessful() ||
+            dbh.getLastLookupFailed() <= dbh.getLastLookupSuccessful() ||
+            (dbh.getLastStoreFailed() < now - NO_FAIL_STORE_OK &&
+            dbh.getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
             return PeerClass.OK;
         }
         return PeerClass.BAD;

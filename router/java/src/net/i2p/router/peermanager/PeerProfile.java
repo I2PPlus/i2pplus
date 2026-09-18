@@ -77,6 +77,8 @@ public class PeerProfile {
     // good vs bad behavior
     private TunnelHistory _tunnelHistory;
     private DBHistory _dbHistory;
+    /** Floodfill reliability classification based on proven request-handling history. Persisted. */
+    private FloodfillReliability _floodfillReliability;
     // does this peer profile contain expanded data, or just the basics?
     private boolean _expanded;
     private boolean _expandedDB;
@@ -545,6 +547,27 @@ public class PeerProfile {
      * @param hist the DBHistory
      */
     public synchronized void setDBHistory(DBHistory hist) {_dbHistory = hist;}
+
+    /**
+     * Floodfill reliability classification based on proven request-handling history.
+     * Persisted across restarts.
+     *
+     * @return reliability classification, never null
+     * @since 0.9.71+
+     */
+    public synchronized FloodfillReliability getFloodfillReliability() {
+        return _floodfillReliability != null ? _floodfillReliability : FloodfillReliability.UNKNOWN;
+    }
+
+    /**
+     * Set the floodfill reliability classification.
+     *
+     * @param reliability the classification, must not be null
+     * @since 0.9.71+
+     */
+    public synchronized void setFloodfillReliability(FloodfillReliability reliability) {
+        _floodfillReliability = reliability;
+    }
 
     /**
      * How long it takes to get a DB response from the peer (in milliseconds).

@@ -233,6 +233,13 @@ class ProfilePersistenceHelper {
             profile.getDbIntroduction().store(out, "dbIntroduction", addComments);
             profile.getDbResponseTime().store(out, "dbResponseTime", addComments);
         }
+        if (profile.getFloodfillReliability() != null &&
+            profile.getFloodfillReliability() != FloodfillReliability.UNKNOWN) {
+            if (addComments) {
+                buf.append("# Floodfill reliability classification: ").append(profile.getFloodfillReliability().name()).append(NL);
+            }
+            buf.append("floodfillReliability").append('=').append(profile.getFloodfillReliability().name()).append(NL);
+        }
     }
 
     /** @since 0.8.5 */
@@ -466,6 +473,15 @@ class ProfilePersistenceHelper {
             if (!caps.isEmpty() && !caps.contains("K") && !caps.contains("L") && !caps.contains("M") && !caps.contains("U")) {
                 RateStat rts = profile.getTunnelCreateResponseTime();
                 if (rts != null) {rts.load(props, "tunnelCreateResponseTime", true);}
+            }
+
+            String relStr = props.getProperty("floodfillReliability");
+            if (relStr != null) {
+                try {
+                    profile.setFloodfillReliability(FloodfillReliability.valueOf(relStr));
+                } catch (IllegalArgumentException e) {
+                    if (_log.shouldWarn()) _log.warn("Invalid floodfillReliability: " + relStr);
+                }
             }
 
             if (_log.shouldDebug()) {

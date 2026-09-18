@@ -990,7 +990,7 @@ class ProfileOrganizerRenderer {
                     (FloodfillPeerSelector) ((FloodfillNetworkDatabaseFacade) _context.netDb()).getPeerSelector();
                 PeerClass cls = sel.classifyFloodfillPeerForDisplay(peer, info, now);
                 String clsLower = cls.name().toLowerCase(Locale.US);
-                int clsSort = cls == PeerClass.GOOD ? 2 : cls == PeerClass.OK ? 1 : 0;
+                int clsSort = cls == PeerClass.GOOD ? 3 : cls == PeerClass.OK ? 2 : cls == PeerClass.UNKNOWN ? 1 : 0;
 
                 buf.append("<tr class=lazy");
                 if (_fragmentKeys) {buf.append(" data-key=\"").append(peer.toBase64(), 0, KEY_LEN).append("\"");}
