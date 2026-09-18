@@ -62,6 +62,10 @@ public abstract class BuildRequestor {
     private static final int SHORT_RECORDS = 4;
     /** 5 records (~2600 bytes) fit well within 3 tunnel messages */
     private static final int MEDIUM_RECORDS = 5;
+    /** Property to enable/disable pre-connect fallback on build failure. */
+    static final String PROP_PRECONNECT_ENABLED = "i2p.tunnel.preConnect.enabled";
+    /** Default: true. */
+    private static final boolean PROP_PRECONNECT_ENABLED_DEFAULT = true;
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -724,11 +728,16 @@ public abstract class BuildRequestor {
             } else {
                 // No connection: the peer isn't established and the build
                 // message couldn't be delivered.
+                // Approach 2 (fire-and-forget + retry): attempt to
+                // establish the transport session and retry the build
+                // once before giving up.  This avoids the ~8.5s delay
+                // of preConnectTo() during selectFirstHop() when the
+                // adaptive timeout is sufficient for the handshake.
                 Log log = ctx.logManager().getLog(BuildRequestor.class);
                 if (log.shouldInfo()) {
                     int estCount = ctx.commSystem().getEstablished() != null ?
                         ctx.commSystem().getEstablished().size() : 0;
-StringBuilder sb = new StringBuilder(256);
+                    StringBuilder sb = new StringBuilder(256);
                     sb.append("First hop ").append(backlogged ? "backlogged" : "unreachable")
                       .append(" for ").append(_cfg)
                       .append("\n * Peer [").append(hopPeer.toBase64().substring(0, 8)).append("]")
@@ -743,9 +752,58 @@ StringBuilder sb = new StringBuilder(256);
                       .append(" | hc=").append(ctx.profileOrganizer().isHighCapacity(hopPeer));
                     log.info(sb.toString());
                 }
+                if (preConnectFallback(ctx, hopPeer, _cfg, _exec)) {
+                    // Retry succeeded; buildComplete will be called
+                    // by the retried attempt.
+                    return;
+                }
                 _exec.buildComplete(_cfg, OTHER_FAILURE, backlogged ? "First hop unreachable (backlogged)" : "First hop unreachable (no connection)");
                 ctx.statManager().addRateData("tunnel.buildFailFirstHop", 1);
             }
+        }
+    }
+
+    /**
+     * Approach 2: Fire-and-forget fallback — attempt to establish
+     * the transport session and retry the build once.  Called from
+     * {@link TunnelBuildFirstHopFailJob} when the first hop has no
+     * established or connecting transport session.
+     * <p>
+     * Calls {@link TunnelPeerSelector#preConnectTo} to force the
+     * session handshake, then re-dispatches the tunnel build
+     * message.  Returns true if the retry was initiated.
+     *
+     * @param ctx the router context
+     * @param peer the first-hop peer that failed
+     * @param cfg the tunnel configuration
+     * @param exec the build executor to notify on completion
+     * @return true if the retry was initiated, false if pre-connect
+     *         failed and the build should be abandoned
+     * @since 0.9.71+
+     */
+    static boolean preConnectFallback(RouterContext ctx, Hash peer,
+                                       PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
+        if (!Boolean.parseBoolean(ctx.getProperty(PROP_PRECONNECT_ENABLED, Boolean.toString(PROP_PRECONNECT_ENABLED_DEFAULT)))) return false;
+        TunnelPeerSelector.preConnectTo(ctx, peer);
+        // Re-send the build message now that the session is being
+        // established.  Use the full request timeout so it survives
+        // the handshake.
+        Log log = ctx.logManager().getLog(BuildRequestor.class);
+        if (log.shouldInfo()) {
+            log.info("Pre-connect fallback: retrying build to [" +
+                     peer.toBase64().substring(0, 6) + "] after pre-connect");
+        }
+        if (cfg == null || exec == null) {
+            return true;
+        }
+        try {
+            request(ctx, cfg, exec, getRequestTimeout(ctx));
+            return true;
+        } catch (Exception e) {
+            if (log.shouldWarn()) {
+                log.warn("Pre-connect fallback retry failed for " + peer.toBase64().substring(0, 6), e);
+            }
+            return false;
         }
     }
 }

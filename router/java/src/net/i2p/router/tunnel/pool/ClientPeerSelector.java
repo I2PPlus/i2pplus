@@ -35,6 +35,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final int ESTABLISHED_PREF_ATTEMPTS = 3;
     /** First-hop quality attempts before accepting any tier-passing peer. */
     private static final int CONNECTING_PREF_ATTEMPTS = 5;
+    /** If the build timeout exceeds this value, the message survives the ~8.5s transport handshake,
+     *  so preConnectTo() is unnecessary and adds ~8.5s of avoidable latency. */
+    private static final long PRECONNECT_TIMEOUT_THRESHOLD_MS = 15 * 1000L;
+    /** Pre-connect cooldown: peers connected within this window don't need pre-connect again. */
+    private static final long PRECONNECT_COOLDOWN_MS = 5 * 60 * 1000L;
+    /** Property to enable/disable pre-connect fallback on build failure. */
+    private static final String PROP_PRECONNECT_ENABLED = "i2p.tunnel.preConnect.enabled";
+    /** Property to enable/disable conditional pre-connect in selectFirstHop. */
+    static final String PROP_PRECONNECT_OPTIMIZE = "i2p.tunnel.preConnect.optimize";
+    /** Default: true. */
+    private static final boolean PROP_PRECONNECT_OPTIMIZE_DEFAULT = true;
 
 
     private String getStrategy() {
@@ -661,14 +672,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         }
         // preConnectTo: warm up the transport session so the TBR delivery
-        // has a better chance of reaching the first hop.  The actual
-        // fast-fail check is in configureNewTunnel(), which validates the
-        // TBR target (cfg.getPeer(1)) after the full config is built.
+        // has a better chance of reaching the first hop.  Only call
+        // preConnectTo() when the build timeout is too short to survive
+        // the ~8.5s SSU2 handshake, the peer hasn't been connected
+        // recently, and the pre-connect feature is enabled.
+        // This eliminates ~8.5s of avoidable latency when the
+        // adaptive timeout is sufficient for delivery.
         if (!matches.isEmpty()) {
             Hash candidate = matches.iterator().next();
-            if (!ctx.commSystem().isEstablished(candidate) &&
-                !ctx.commSystem().isConnecting(candidate)) {
+            if (shouldPreConnect(ctx, candidate)) {
                 preConnectTo(ctx, candidate);
+                _lastPreConnect.put(candidate, ctx.clock().now());
             }
         }
         // Shortfall fallback below reuses the (wrapped) exclude
@@ -692,6 +706,68 @@ class ClientPeerSelector extends TunnelPeerSelector {
     static boolean isStartupGracePeriod(RouterContext ctx) {
         return ctx.router() != null && ctx.router().getUptime() < STARTUP_GRACE_MS;
     }
+
+    /**
+     * Determines whether preConnectTo() should be called for a first-hop
+     * candidate.  Returns false (skip pre-connect) when the build timeout
+     * is sufficient to survive the ~8.5s SSU2 handshake, the peer was
+     * recently connected, or the feature is disabled.  Returns true when
+     * pre-connect is needed to ensure reliable tunnel delivery.
+     * <p>
+     * Approach 1: If the request timeout exceeds {@code 15s}, the
+     * message survives the handshake, so skip pre-connect.
+     * Approach 3: Property toggle allows runtime disabling.
+     * Approach 4: Recently connected peers don't need pre-connect again.
+     * <p>
+     * Pure decision — no side effects.
+     *
+     * @param ctx the router context
+     * @param peer the first-hop candidate
+     * @return whether preConnectTo() should be called for this peer
+     * @since 0.9.71+
+     */
+    static boolean shouldPreConnect(RouterContext ctx, Hash peer) {
+        // Approach 3: property toggle
+        if (!Boolean.parseBoolean(ctx.getProperty(PROP_PRECONNECT_OPTIMIZE, Boolean.toString(PROP_PRECONNECT_OPTIMIZE_DEFAULT)))) return false;
+        // Approach 1: if the request timeout is sufficient, the
+        // build message survives the ~8.5s handshake without
+        // needing preConnectTo.  The 15s default requestTimeout
+        // is the minimum needed for handshake + propagation + reply.
+        long requestTimeout = ctx.getProperty("i2p.tunnel.build.requestTimeout", 15 * 1000L);
+        if (requestTimeout >= PRECONNECT_TIMEOUT_THRESHOLD_MS) return false;
+        // Approach 4: recently connected peers don't need pre-connect
+        if (wasRecentlyConnected(ctx, peer)) return false;
+        // Still need pre-connect: timeout is too short and
+        // peer hasn't been connected recently.
+        return true;
+    }
+
+    /**
+     * Check whether the peer was connected within the cooldown window.
+     *
+     * @param ctx the router context
+     * @param peer the peer to check
+     * @return true if the peer was established or connecting recently
+     * @since 0.9.71+
+     */
+    private static boolean wasRecentlyConnected(RouterContext ctx, Hash peer) {
+        Long lastConnected = _lastPreConnect.get(peer);
+        if (lastConnected == null) return false;
+        return ctx.clock().now() - lastConnected < PRECONNECT_COOLDOWN_MS;
+    }
+
+    /** Records that preConnectTo was called for the peer at the given time. */
+    static void recordPreConnect(Hash peer, long time) {
+        _lastPreConnect.put(peer, time);
+    }
+
+    /** Clears the pre-connect history (for testing). */
+    static void clearPreConnectHistory() {
+        _lastPreConnect.clear();
+    }
+
+    /** Tracks the last time preConnectTo was successfully called per peer. */
+    private static final ConcurrentHashMap<Hash, Long> _lastPreConnect = new ConcurrentHashMap<>();
 
     /**
      *  First-hop quality tier for the current attempt: 0 = prefer
