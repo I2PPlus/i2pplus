@@ -73,6 +73,7 @@ iframe{border:0}
 #ffProfiles .status span.bad{background-image:var(--tunn_reject)}
 #ffProfiles .status span.good{background-image:var(--tunn_active)}
 #ffProfiles .status span.ok{background-image:var(--tunn_starting)}
+#ffProfiles .status span.unknown{background-image:var(--tunn_hidden)}
 #pbody .status span.testing{width:10px;height:10px;background-size:10px;animation:pulse 2s ease 0s both infinite;transform-origin:center center}
 #pluginTotals{margin:-2px 24px -2px 8px;padding:3px 8px;float:right;vertical-align:middle;text-align:center;font-size:90%}
 #pluginTotals span{margin:0 6px;display:inline-block;padding:0 0 0 16px}
