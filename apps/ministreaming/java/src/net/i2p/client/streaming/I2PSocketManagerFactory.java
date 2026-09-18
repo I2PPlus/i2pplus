@@ -285,7 +285,7 @@ public class I2PSocketManagerFactory {
         try {
             return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, true, filter);
         } catch (I2PSessionException ise) {
-            getLog().error("Error creating session for socket manager", ise);
+            getLog().error("Error creating session for socket manager -> " + ise.getMessage());
             return null;
         }
     }

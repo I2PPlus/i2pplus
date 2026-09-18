@@ -13,13 +13,13 @@ public class TunnelBuildTimeoutTest {
 
     @Test
     public void testDefaults() {
-        assertEquals(20, I2PSessionImpl.getTunnelBuildTimeout(null, null));
-        assertEquals(20, I2PSessionImpl.getTunnelBuildTimeout(null, ""));
+        assertEquals(60, I2PSessionImpl.getTunnelBuildTimeout(null, null));
+        assertEquals(60, I2PSessionImpl.getTunnelBuildTimeout(null, ""));
     }
 
     @Test
     public void testSessionValueWins() {
-        assertEquals(3, I2PSessionImpl.getTunnelBuildTimeout("3", "20"));
+        assertEquals(3, I2PSessionImpl.getTunnelBuildTimeout("3", "60"));
         assertEquals(5, I2PSessionImpl.getTunnelBuildTimeout(" 5 ", null));
     }
 
@@ -30,10 +30,10 @@ public class TunnelBuildTimeoutTest {
 
     @Test
     public void testInvalidValues() {
-        assertEquals(20, I2PSessionImpl.getTunnelBuildTimeout("0", null));
-        assertEquals(20, I2PSessionImpl.getTunnelBuildTimeout("-1", null));
-        assertEquals(20, I2PSessionImpl.getTunnelBuildTimeout("abc", null));
-        assertEquals(20, I2PSessionImpl.getTunnelBuildTimeout("", "abc"));
+        assertEquals(60, I2PSessionImpl.getTunnelBuildTimeout("0", null));
+        assertEquals(60, I2PSessionImpl.getTunnelBuildTimeout("-1", null));
+        assertEquals(60, I2PSessionImpl.getTunnelBuildTimeout("abc", null));
+        assertEquals(60, I2PSessionImpl.getTunnelBuildTimeout("", "abc"));
     }
 
     @Test

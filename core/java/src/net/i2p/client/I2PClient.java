@@ -85,7 +85,7 @@ public interface I2PClient {
     /**
      * How many minutes to wait for the first lease set (tunnels) during session
      * connect before failing. Integer; 0 or unparsable values fall back to the
-     * default of 20. @since 0.9.71+
+     * default of 60. @since 0.9.71+
      */
     public static final String PROP_TUNNEL_BUILD_TIMEOUT = "i2cp.tunnelBuildTimeoutMinutes";
 

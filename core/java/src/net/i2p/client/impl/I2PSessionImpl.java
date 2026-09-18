@@ -462,7 +462,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Minutes to wait for the first lease set during connect, from the session options if
-     * set there, else from the router options, else the 20 minute default.
+     * set there, else from the router options, else the 1 hour default.
      *
      * @return minutes, at least 1
      * @since 0.9.71+
@@ -474,7 +474,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Parse the tunnel build timeout, shared with the instance method and tests.
-     * Invalid or non-positive values fall back to the 20 minute default.
+     * Invalid or non-positive values fall back to the 1 hour default.
      *
      * @param sessionValue per-session option value, or null
      * @param contextValue router option value, or null
@@ -492,7 +492,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             } catch (NumberFormatException nfe) {
             }
         }
-        return 20;
+        return 60;
     }
 
     /**

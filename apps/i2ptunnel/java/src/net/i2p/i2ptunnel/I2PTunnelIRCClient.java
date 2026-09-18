@@ -95,7 +95,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 
         _dccEnabled = Boolean.parseBoolean(tunnel.getClientOptions().getProperty(PROP_DCC));
         String to = tunnel.getClientOptions().getProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT);
-        if (to == null) tunnel.getClientOptions().setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "20");
+        if (to == null) tunnel.getClientOptions().setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
 
         notifyEvent("openIRCClientResult", "ok");
     }
@@ -495,7 +495,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                     _log.info("[IRC Client] Starting DCC Server...");
                 _DCCServer = new I2PTunnelDCCServer(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
                 String to = getTunnel().getClientOptions().getProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT);
-                if (to == null) getTunnel().getClientOptions().setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "20");
+                if (to == null) getTunnel().getClientOptions().setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
                 _DCCServer.startRunning();
             }
             server = _DCCServer;

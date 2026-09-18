@@ -1120,7 +1120,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 String nickname = getNickname(name);
                 Properties opts = new Properties();
                 opts.putAll(buildOpts(nickname, true));
-                opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "20");
+                opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
                 if (poolIndex >= 0 && name != null) {
                     // Prefixes are required: the router only stores session options
                     // under inbound./outbound. in the pool settings, which the console
