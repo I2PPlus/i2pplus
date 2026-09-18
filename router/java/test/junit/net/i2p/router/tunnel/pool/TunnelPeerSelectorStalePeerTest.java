@@ -18,7 +18,8 @@ import net.i2p.util.Clock;
 /**
  * Tests for TunnelPeerSelector.isStalePeer: unprofiled (never-heard-of) peers
  * must NOT be considered stale — they are potential newcomers during pool
- * recovery — and the startup grace period suppresses stale marking entirely.
+ * recovery. Profiled peers are always checked against the activity window
+ * regardless of uptime; the startup grace no longer exempts stale profiled peers.
  *
  * @since 0.9.71+
  */
@@ -99,11 +100,13 @@ public class TunnelPeerSelectorStalePeerTest {
     }
 
     @Test
-    public void testStartupGraceSuppressesStale() {
+    public void testStartupGraceDoesNotSuppressStaleProfiled() {
         // 10 minutes uptime: inside the 15-minute startup grace
+        // Profiled peers with old timestamps are STILL stale during
+        // startup — the startup grace no longer exempts profiled peers.
         when(_router.getUptime()).thenReturn(10 * 60 * 1000L);
         PeerProfile p = oldProfile();
         when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(p);
-        assertFalse(TunnelPeerSelector.isStalePeer(_ctx, hash(1), 0.5));
+        assertTrue(TunnelPeerSelector.isStalePeer(_ctx, hash(1), 0.5));
     }
 }

@@ -609,30 +609,34 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         }
         // Post-selection first-hop quality check.
-        // Hard-fail gates: first-hop-failing peers, stale peers — always reject.
-        // Established preference: prefer established/connecting peers but fall
-        // back quickly (lower budget than before) to avoid starving the pool
-        // during recovery.  During startup grace (first 15 min), skip the
-        // established/connecting tier entirely — accept whatever passed the
-        // tier filters above (transport address, acceptance ratio, etc.).
+        // Hard-fail gates: first-hop-failing peers, stale peers —
+        // always reject regardless of startup state. Peers that
+        // recently failed as first-hops are unlikely to succeed
+        // again, and stale peers (no contact for hours) are likely
+        // offline. During startup, still prefer established/connecting
+        // peers first to avoid wasting build attempts on peers with
+        // no transport session; only fall back to any selectable peer
+        // when connected candidates are exhausted.
         if (!matches.isEmpty()) {
-            // First-hop quality: aggressively prefer connected/established
-            // peers.  33/min first-hop failures mean we're selecting peers
+            // First-hop quality: prefer connected/established peers.
+            // 33/min first-hop failures mean we're selecting peers
             // that look fast on paper but can't actually receive the build.
             // More attempts = higher chance of finding a connected peer.
             int qualityAttempts = 0;
             boolean inStartup = isStartupGracePeriod(ctx);
-            // When very few candidates remain, skip established preference
-            // to avoid exhausting the pool entirely.
-            int tier = (inStartup || matches.size() < 3) ? 2 : 0;
+            // When very few candidates remain, start at tier 1 (accept
+            // connecting) rather than tier 2 (accept any) to still
+            // prefer peers with an active transport session.
+            int tier = (matches.size() < 3) ? 1 : 0;
             while (qualityAttempts < 8 && !matches.isEmpty()) {
                 qualityAttempts++;
                 tier = firstHopQualityTier(qualityAttempts, inStartup, tier);
                 Hash firstHop = matches.iterator().next();
-                // During startup grace (first 15 min), skip the first-hop
-                // failing check. We have too few peers and too many transient
-                // transport failures to permanently penalize peers.
-                if (!inStartup && isFirstHopFailing(ctx, firstHop)) {
+                // Always exclude peers that recently failed as first hop.
+                // The 5-min cooldown in TunnelPeerSelector already handles
+                // transient failures; this avoids permanently re-selecting
+                // peers with persistent problems.
+                if (isFirstHopFailing(ctx, firstHop)) {
                     if (log.shouldInfo()) {
                         log.info("First hop " + firstHop.toBase64().substring(0,6) +
                                  " previously failed as first hop, retrying...");
@@ -673,9 +677,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
     /**
      *  Whether the router is still in the startup grace period (first
-     *  {@code STARTUP_GRACE_MS} ms of uptime), during which strict first-hop
-     *  quality gates and soft fallbacks are relaxed because few peers are
-     *  available and transient transport failures are common.
+     *  {@code STARTUP_GRACE_MS} ms of uptime). The startup grace
+     *  relaxes the number of quality attempts (fewer candidates
+     *  early on) but does not skip hard-fail gates: first-hop-failing
+     *  peers, stale peers, and the established/connecting preference
+     *  are still enforced to avoid selecting unreliable tunnel targets.
      *  <p>
      *  Pure decision — no side effects.
      *

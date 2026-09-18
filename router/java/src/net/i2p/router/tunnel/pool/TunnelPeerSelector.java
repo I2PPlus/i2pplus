@@ -1838,12 +1838,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  visibility: 500+ active peers use 1 hour, 200+ use 2 hours, 100+ use
      *  4 hours, fewer than 100 use 8 hours (fresh router building up picture).
      *
-     *  Stale peers are skipped during first-hop selection and keepalive to
-     *  avoid wasting resources on peers that are likely offline.  Skipped
-     *  during the first 15 minutes of uptime (startup grace).  Unprofiled
-     *  (never-heard-of) peers are NOT stale: excluding them would starve the
-     *  pool of newcomers during recovery — the activity window below only
-     *  applies once we have profile data to judge.
+     *  Unprofiled peers (never-heard-of) are never stale — excluding them
+     *  would starve the pool of newcomers during recovery — the activity
+     *  window below only applies once we have profile data to judge.
+     *  Profiled peers are always checked against the activity window
+     *  regardless of uptime; the startup grace period previously allowed
+     *  stale profiled peers to be selected, which caused tunnel builds
+     *  to fail on peers with no recent contact.
      *
      *  @param ctx the router context
      *  @param peer hash of the peer to check
@@ -1852,8 +1853,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *          about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer, double buildSuccess) {
-        if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000L)
-            return false;
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
         if (profile == null)
             return false;

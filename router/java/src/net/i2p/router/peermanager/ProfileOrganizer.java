@@ -1026,6 +1026,10 @@ public class ProfileOrganizer {
                     // they only get picked if literally nothing else is usable.
                     PeerProfile prof = locked_getProfile(cur);
                     if (prof != null && inLossProbation(prof, now)) continue;
+                    // Peers with no tunnel test history have no evidence
+                    // of reliability; exclude from the not-failing pool
+                    // so they aren't selected as tunnel first-hops.
+                    if (prof != null && isLowTunnelAcceptance(prof, buildSuccess)) continue;
                     if (isSelectable(cur, buildSuccess)) selected.add(cur);
                 }
             } finally {
@@ -2217,15 +2221,24 @@ public class ProfileOrganizer {
      */
     private boolean hasValidRouterInfo(Hash peer, RouterInfo info, double buildSuccess) {
         if (info.isHidden()) return false;
+        long now = _context.clock().now();
+        long maxAge = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS) * 3600_000L;
+        // RouterInfo is stale — demand proof of life to trust it.
+        // This check applies regardless of startup grace period: peers
+        // with stale RouterInfo and no handled requests are not trusted
+        // as tunnel targets, even during startup. The startup grace only
+        // relaxes the transport-established requirement below.
+        if (info.getPublished() < now - maxAge &&
+            !hasRecentProofOfLife(_context.profileOrganizer().getProfile(peer), now)) {
+            return false;
+        }
+        // During normal operation, require established transport connection.
+        // During startup, allow non-established peers since we're still
+        // building connections, but the proof-of-life check above still
+        // prevents using peers with stale RouterInfo and no history.
         if (_context.router() != null && _context.router().getUptime() > STARTUP_GRACE_PERIOD_MS &&
             !_context.commSystem().isEstablished(peer)) {
-            long now = _context.clock().now();
-            long maxAge = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS) * 3600_000L;
-            // RouterInfo is stale — demand proof of life to trust it
-            if (info.getPublished() < now - maxAge &&
-                !hasRecentProofOfLife(_context.profileOrganizer().getProfile(peer), now)) {
-                return false;
-            }
+            return false;
         }
         // Peers without a reachable NTCP2 or SSU2 address cannot be used
         // for outbound builds.  Filtering just by transport style misses
