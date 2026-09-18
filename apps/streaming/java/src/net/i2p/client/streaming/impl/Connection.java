@@ -143,11 +143,6 @@ class Connection {
       *  connection) when a data packet exceeded its retransmit budget. Reset only
       *  when the connection object is reused. */
     private boolean _establishedResumeWarned;
-    /** Count of consecutive retransmit timer firings without ACK.
-      *  Incremented in RetransmitEvent.timeReached(), reset in ackPackets()
-      *  when at least one packet is ACKed. Used by PacketQueue to force
-      *  tunnel rotation when the path is stalled. */
-    private int _retransmitCount;
     /**
      *  Fixed-point congestion-avoidance credit for the deterministic growth
      *  ratchet in {@code ConnectionPacketHandler.adjustWindow}. Increments are
@@ -941,7 +936,7 @@ class Connection {
                     if (_isChoked) {
                         long persistDelay = Math.max(_options.getRTO(), 2000L);
                         if (persistBackoff > 0) {
-                            persistDelay = Math.min(persistDelay << persistBackoff, 15000L);
+                            persistDelay = Math.min(persistDelay << persistBackoff, 60000L);
                         }
                         if (now - start >= persistDelay) {
                             // Consume the rate-limit token regardless of level so a
@@ -1736,9 +1731,6 @@ class Connection {
                 }
                 _ackSinceCongestion.set(true);
             }
-            if (!_ackedList.isEmpty()) {
-                _retransmitCount = 0;
-            }
             if ((ob == null || ob.isEmpty()) && (_activeResends.get() != 0)) {
                 if (_log.shouldInfo()) {
                     _log.info("All outbound packets ACKed, clearing " + _activeResends);
@@ -1921,14 +1913,6 @@ class Connection {
      * @return the is connected
      */
     public boolean getIsConnected() {return _connected.get();}
-
-    /**
-     * Get the count of consecutive retransmit timer firings without ACK.
-     * Used by PacketQueue to decide when to force tunnel rotation.
-     *
-     * @return number of retransmit events since the last ACK
-     */
-    int getRetransmitCount() { return _retransmitCount; }
 
     /**
      * Check if this connection has been hard-disconnected (via RESET).
@@ -3103,9 +3087,6 @@ class Connection {
                 }
                 return;
             }
-
-            // Count retransmit events for tunnel rotation decisions
-            _retransmitCount++;
 
             // Hard liveness backstop: if the oldest unacked packet has been in flight
             // (never acknowledged) beyond the worst-case retransmit budget,
