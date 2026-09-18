@@ -208,29 +208,31 @@ class Connection {
      *  in {@link PacketQueue#enqueue(PacketLocal)} and on cancel.
      */
     private volatile boolean _nextSendFreshConnection;
-    /**
-     *  Count of consecutive retransmit timer firings without ACK progress
-     *  (highestAckedThrough unchanged).  Used to detect stalled downloads
-     *  on slow/lossy paths where soft-failure rotation does not trigger.
-     *  Reset to 0 on any ACK progress in ackPackets().
-     *  Written and read on the router callback thread.
-     */
+     /**
+      * Count of consecutive retransmit timer firings without ACK progress
+      * (highestAckedThrough unchanged).  Used to detect stalled downloads
+      * on slow/lossy paths where soft-failure rotation does not trigger.
+      * Reset to 0 only when ackPackets() was called since the last
+      * retransmit fire (i.e., when the peer actually delivered ACKs).
+      * Written and read on the router callback thread.
+      */
     private volatile int _retransmitCount;
     /**
-     *  HighestAckedThrough snapshot from the last RetransmitEvent.fire.
-     *  Used to detect ACK progress between retransmit firings.
-     *  Written and read on the router callback thread.
+     * Flag set when ackPackets() recorded forward progress since the
+     * last RetransmitEvent.fire.  Used to decide whether to reset
+     * _retransmitCount in timeReached().
+     * Written and read on the router callback thread.
      */
-    private volatile long _lastAckedOnRetransmit;
+    private volatile boolean _ackProgress;
     /**
-      *  Wall-clock time (ms) of the last permitted immediate retransmit scheduled
-      *  from {@link #scheduleSoftFailureRetransmit()}.  Gates back-to-back soft
-      *  failures (e.g. NO_LEASESET while the LeaseSet fetch is in flight) so they
-      *  defer to the retransmit timer instead of firing a new immediate pass at
-      *  the I2CP round-trip rate, which exhausted the SYN give-up budget within
-      *  ~200ms.  Written on the router callback thread, read on itself.
-      */
-     private volatile long _lastSoftFailRetransmit;
+     *  Wall-clock time (ms) of the last permitted immediate retransmit scheduled
+     *  from {@link #scheduleSoftFailureRetransmit()}.  Gates back-to-back soft
+     *  failures (e.g. NO_LEASESET while the LeaseSet fetch is in flight) so they
+     *  defer to the retransmit timer instead of firing a new immediate pass at
+     *  the I2CP round-trip rate, which exhausted the SYN give-up budget within
+     *  ~200ms.  Written on the router callback thread, read on itself.
+     */
+    private volatile long _lastSoftFailRetransmit;
     /** Connection event. */
     private final ConEvent _connectionEvent;
     /** Retransmit event. */
@@ -721,7 +723,7 @@ class Connection {
      *  and now, for external stall detection callers.
      *  @since 0.9.71+
      */
-     long getTimeSinceLastSend() { return _context.clock().now() - _lastSendTime; }
+    long getTimeSinceLastSend() { return _context.clock().now() - _lastSendTime; }
 
     /**
      * Maximum number of packets to retransmit in a single timer fire.
@@ -863,7 +865,6 @@ class Connection {
         _ssthresh = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
         _lastCongestionHighestUnacked = -1;
         _lastReceivedOn = -1;
-        _lastAckedOnRetransmit = -1;
         _activityTimer = new ActivityTimer();
         _ackSinceCongestion = new AtomicBoolean(true);
         _connectLock = new Object();
@@ -1699,10 +1700,10 @@ class Connection {
             final long newVal = lowest - 1;
             _highestAckedThrough.updateAndGet(cur -> Math.max(cur, newVal));
         }
-        // Reset retransmit count on any forward progress — the path is
-        // not stalled, so clear the stall counter.
+        // Signal that ackPackets() recorded forward progress,
+        // so the stall counter in timeReached() can reset.
         if (_highestAckedThrough.get() > oldHighest) {
-            _retransmitCount = 0;
+            _ackProgress = true;
         }
 
         _ackedList.clear();
@@ -3229,16 +3230,16 @@ class Connection {
                 return;
             }
 
-            // Retransmit-stall detection: if no ACK progress since the
-            // last retransmit fire, increment the count. On a slow or
+            // Retransmit-stall detection: if ackPackets() was not called
+            // since the last retransmit fire, increment the count. On a slow or
             // lossy path, soft-failure rotation (NO_TUNNELS etc.) never
             // triggers, so the connection can stall indefinitely with
             // only retransmits on the same sick tunnel. After 2
-            // consecutive retransmits without progress, rotate the
+            // consecutive retransmits without peer ACKs, rotate the
             // outbound tunnel so the stalled download gets a fresh path.
-            long currentHighest = _highestAckedThrough.get();
-            if (currentHighest > _lastAckedOnRetransmit) {
+            if (_ackProgress) {
                 _retransmitCount = 0;
+                _ackProgress = false;
             } else {
                 _retransmitCount++;
                 if (_retransmitCount >= 2) {
@@ -3249,7 +3250,6 @@ class Connection {
                     }
                 }
             }
-            _lastAckedOnRetransmit = currentHighest;
 
             if (_log.shouldDebug()) {
                 _log.debug(Connection.this + " rtx timer timeReached()");
