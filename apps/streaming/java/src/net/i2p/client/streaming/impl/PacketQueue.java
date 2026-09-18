@@ -174,25 +174,19 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // First transmission of an outbound SYN starts a new connection.
                 // Ask the router to prefer a different outbound tunnel so a retry
                 // does not ride the same (possibly sick) tunnel that stalled the
-                // previous connection. After the first two sends, continue rotating
-                // the tunnel on every retransmit while the connection is stalled
-                // (retransmit count > 0) so a stalled path is abandoned rather
-                // than retried indefinitely on the same dead tunnel.
-                if (con != null && !con.isInbound() && packet.getSequenceNum() == 0 && (packet.getNumSends() <= 1 || con.getRetransmitCount() > 0))
+                // previous connection. Only the FIRST send carries the marker:
+                // a retransmitted SYN (numSends > 1) reuses the already rotated
+                // tunnel, so the handover settles before any data flows and an
+                // in-flight download is never disturbed.
+                if (con != null && !con.isInbound() && packet.getSequenceNum() == 0 && packet.getNumSends() <= 1)
                     options.setFreshConnection(true);
-              } else {
-                  if (con != null) {
-                     if (con.isInbound() && con.getLifetime() < 2*60*1000)
-                         options.setSendLeaseSet(false);
-                     else if (ENABLE_STATUS_LISTEN)
-                         listenForStatus = true;
-                     // Stall recovery: when the retransmit timer has fired
-                     // repeatedly without ACK, rotate the outbound tunnel on
-                     // every data packet so a stalled path is abandoned
-                     // rather than retried indefinitely on the same dead tunnel.
-                     if (!con.isInbound() && con.getRetransmitCount() > 0)
-                         options.setFreshConnection(true);
-                     // increase threshold with higher window sizes to prevent stalls
+               } else {
+                   if (con != null) {
+                      if (con.isInbound() && con.getLifetime() < 2*60*1000)
+                          options.setSendLeaseSet(false);
+                      else if (ENABLE_STATUS_LISTEN)
+                          listenForStatus = true;
+                      // increase threshold with higher window sizes to prevent stalls
                     // after tag delivery failure
                     ConnectionOptions copts = con.getOptions();
                     int wdw = copts.getWindowSize();
