@@ -2741,11 +2741,11 @@ public class ProfileOrganizer {
         long totalRequests = agreed + rejected;
 
         if (totalRequests == 0) {
-            // No tunnel test history — no evidence of reliability.
-            // Exclude from fast/high-cap tiers to avoid placing
-            // unproven peers into tunnel construction where they
-            // die immediately (0ms actual lifetime).
-            return true;
+            // No tunnel test history — allow into tiers so they
+            // can accumulate profiling data through exploratory builds.
+            // isLowAcceptanceLowSample/Mature will filter out peers
+            // that build a poor track record over time.
+            return false;
         }
 
         double ratio = (double) agreed / totalRequests;
