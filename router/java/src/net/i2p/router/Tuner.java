@@ -678,6 +678,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new PoolBackoffMsParam());
         _params.add(new TunnelTargetBufferParam());
         _params.add(new UntestedMultiplierParam());
+        _params.add(new FirstHopFailureCooldownParam());
+        _params.add(new FirstHopFailureThresholdParam());
+        _params.add(new IbCongestionThresholdParam());
+        _params.add(new StaleBuildThresholdParam());
+        _params.add(new ConcurrencyThrottleThresholdParam());
 
         // Streaming
         _params.add(new CongestionAvoidanceGrowthParam());
@@ -13077,6 +13082,198 @@ protected int computeTarget(double observed) {
             if (healthy && !anyDeficit)
                 return Math.max(_min, current - 1);
 
+            return current;
+        }
+    }
+
+    /**
+     * Tunes how long a peer is skipped after accumulating first-hop failures.
+     * Longer cooldown keeps flaky peers out longer; shorter cooldown is more
+     * forgiving of transient issues.
+     */
+    private class FirstHopFailureCooldownParam extends BaseParam {
+        FirstHopFailureCooldownParam() {
+            super("tunnel.build.firstHopCooldown",
+                  "First-hop cooldown",
+                  SUB_TUNNEL, 60_000, 600_000, 30_000,
+                  "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) {
+            BuildExecutor.setFirstHopFailureCooldownMs(value);
+        }
+        protected int getRuntimeValue() {
+            return (int) BuildExecutor.getFirstHopFailureCooldownMs();
+        }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double timeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
+            boolean timeoutsHigh = !Double.isNaN(timeoutRate) && timeoutRate > 25;
+            boolean healthy = !Double.isNaN(observed) && observed > 80;
+            if (timeoutsHigh && !healthy)
+                return Math.min(_max, current + 30_000);
+            if (healthy)
+                return Math.max(_min, current - 30_000);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes how many first-hop failures within the cooldown window are
+     * required before a peer is skipped.  Higher values are more tolerant;
+     * lower values skip peers after fewer failures.
+     */
+    private class FirstHopFailureThresholdParam extends BaseParam {
+        FirstHopFailureThresholdParam() {
+            super("tunnel.build.firstHopThreshold",
+                  "First-hop threshold",
+                  SUB_TUNNEL, 1, 10, 1,
+                  "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) {
+            BuildExecutor.setFirstHopFailureThreshold(value);
+        }
+        protected int getRuntimeValue() {
+            return BuildExecutor.getFirstHopFailureThreshold();
+        }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double pacedOut = getAdditionalEventCount(_context, "tunnel.buildPacedOut");
+            boolean manyPacedOut = !Double.isNaN(pacedOut) && pacedOut > 30;
+            boolean healthy = !Double.isNaN(observed) && observed > 80;
+            if (manyPacedOut && !healthy)
+                return Math.min(_max, current + 1);
+            if (!Double.isNaN(observed) && observed < 50)
+                return Math.max(_min, current - 1);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the inbound exploratory tunnel count below which concurrent
+     * builds are throttled.  Higher values throttle earlier (more
+     * aggressive); lower values only throttle when IB tunnels are very
+     * scarce.
+     */
+    private class IbCongestionThresholdParam extends BaseParam {
+        IbCongestionThresholdParam() {
+            super("tunnel.build.inboundCongestion",
+                  "Inbound congestion threshold",
+                  SUB_TUNNEL, 1, 10, 1,
+                  "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) {
+            BuildExecutor.setIbCongestionThreshold(value);
+        }
+        protected int getRuntimeValue() {
+            return BuildExecutor.getIbCongestionThreshold();
+        }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double ibCongestion = getAdditionalEventCount(_context, "tunnel.buildIBCongestion");
+            boolean congestionActive = !Double.isNaN(ibCongestion) && ibCongestion > 10;
+            boolean healthy = !Double.isNaN(observed) && observed > 80;
+            if (congestionActive && !healthy)
+                return Math.min(_max, current + 1);
+            if (healthy)
+                return Math.max(_min, current - 1);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the stale-build pruning threshold percentage.  Builds whose
+     * queue-wait has consumed this fraction of the adaptive timeout budget
+     * are pruned before dispatch.  Higher values let older builds through
+     * (more tolerant); lower values prune sooner (more aggressive).
+     */
+    private class StaleBuildThresholdParam extends BaseParam {
+        StaleBuildThresholdParam() {
+            super("tunnel.build.staleThreshold",
+                  "Stale build pruning threshold",
+                  SUB_TUNNEL, 30, 80, 5,
+                  "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) {
+            BuildExecutor.setStaleBuildThresholdPct(value);
+        }
+        protected int getRuntimeValue() {
+            return BuildExecutor.getStaleBuildThresholdPct();
+        }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double stalePruned = getAdditionalEventCount(_context, "tunnel.buildStalePruned");
+            boolean manyPruned = !Double.isNaN(stalePruned) && stalePruned > 20;
+            boolean healthy = !Double.isNaN(observed) && observed > 80;
+            if (manyPruned && !healthy)
+                return Math.min(_max, current + 5);
+            if (healthy)
+                return Math.max(_min, current - 5);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the timeout-rate threshold at which concurrent builds are
+     * throttled.  Lower values throttle earlier (more conservative);
+     * higher values allow more timeouts before throttling.
+     */
+    private class ConcurrencyThrottleThresholdParam extends BaseParam {
+        ConcurrencyThrottleThresholdParam() {
+            super("tunnel.build.concurrencyThrottle",
+                  "Concurrency throttle threshold",
+                  SUB_TUNNEL, 15, 50, 5,
+                  "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) {
+            BuildExecutor.setConcurrencyThrottleThresholdPct(value);
+        }
+        protected int getRuntimeValue() {
+            return BuildExecutor.getConcurrencyThrottleThresholdPct();
+        }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double timeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
+            boolean timeoutsHigh = !Double.isNaN(timeoutRate) && timeoutRate > 35;
+            boolean healthy = !Double.isNaN(observed) && observed > 80;
+            if (timeoutsHigh && !healthy)
+                return Math.max(_min, current - 5);
+            if (healthy)
+                return Math.min(_max, current + 5);
             return current;
         }
     }

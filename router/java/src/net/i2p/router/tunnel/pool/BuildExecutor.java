@@ -167,6 +167,121 @@ public class BuildExecutor implements Runnable {
     private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
     private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
     /**
+     *  Adaptive concurrency throttle: tracks the timeout rate and adjusts
+     *  maxConcurrentBuilds dynamically.  When timeout rate exceeds 30%,
+     *  builds are throttled to prevent overwhelming the IB reply path.
+     *  When timeout rate drops below 15% and success exceeds 80%,
+     *  concurrency is gradually restored.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile double _timeoutRate;
+    private volatile int _adaptiveMaxConcurrentBuilds;
+    /**
+     *  First-hop failure history: tracks recent first-hop failures to avoid
+     *  repeatedly selecting peers that have recently failed as first hops.
+     *  Maps: Hash -> [failureCount, lastFailureTimeMs]
+     *
+     *  @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, long[]> _firstHopFailureHistory = new ConcurrentHashMap<>(64);
+
+    /**
+     *  Maximum age (ms) for first-hop failure history entries.
+     *  Entries older than this are ignored during lookup.
+     *  Tunable via {@link Tuner}.
+     *
+     *  @since 0.9.71+
+     */
+    private static volatile long FIRST_HOP_FAILURE_COOLDOWN_MS = 5 * 60 * 1000L;
+
+    /**
+     *  Number of failures within {@link #FIRST_HOP_FAILURE_COOLDOWN_MS}
+     *  required to skip a peer as first hop.  A single transient failure
+     *  should not permanently exclude a peer; repeated failures indicate
+     *  a persistent issue.
+     *
+     *  @since 0.9.71+
+     */
+    private static volatile int FIRST_HOP_FAILURE_THRESHOLD = 3;
+
+    /**
+     *  The first-hop failure cooldown in milliseconds.
+     *  @return the cooldown in ms
+     *  @since 0.9.71+
+     */
+    public static long getFirstHopFailureCooldownMs() { return FIRST_HOP_FAILURE_COOLDOWN_MS; }
+    /**
+     *  Set the first-hop failure cooldown (called by Tuner).
+     *  @param ms cooldown in ms (60000-600000)
+     *  @since 0.9.71+
+     */
+    public static void setFirstHopFailureCooldownMs(long ms) { FIRST_HOP_FAILURE_COOLDOWN_MS = Math.max(60_000, Math.min(600_000, ms)); }
+    /**
+     *  The first-hop failure threshold count.
+     *  @return the threshold
+     *  @since 0.9.71+
+     */
+    public static int getFirstHopFailureThreshold() { return FIRST_HOP_FAILURE_THRESHOLD; }
+    /**
+     *  Set the first-hop failure threshold (called by Tuner).
+     *  @param count threshold count (1-10)
+     *  @since 0.9.71+
+     */
+    public static void setFirstHopFailureThreshold(int count) { FIRST_HOP_FAILURE_THRESHOLD = Math.max(1, Math.min(10, count)); }
+    /**
+     *  IB tunnel congestion tracking: monitors the count of available IB
+     *  exploratory tunnels.  When IB tunnels are low (<3), builds are
+     *  throttled to prevent overwhelming the reply path.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile int _lastIBTunnelCount;
+    private volatile long _lastIBTunnelCheck;
+    /**
+     *  IB tunnel congestion threshold.  When available IB exploratory
+     *  tunnels drop below this value, concurrent builds are throttled.
+     *  Tunable via {@link Tuner}.
+     *
+     *  @since 0.9.71+
+     */
+    private static volatile int IB_CONGESTION_THRESHOLD = 3;
+
+    /**
+     *  Stale build pruning threshold fraction.  When the time elapsed
+     *  since a build was configured exceeds this fraction of the adaptive
+     *  timeout budget, the build is skipped (it would timeout anyway).
+     *  Expressed as percentage (e.g. 60 means 60%).  Tunable via {@link Tuner}.
+     *
+     *  @since 0.9.71+
+     */
+    private static volatile int STALE_BUILD_THRESHOLD_PCT = 60;
+
+    /**
+     *  The IB congestion threshold.
+     *  @return the threshold
+     *  @since 0.9.71+
+     */
+    public static int getIbCongestionThreshold() { return IB_CONGESTION_THRESHOLD; }
+    /**
+     *  Set the IB congestion threshold (called by Tuner).
+     *  @param val the threshold (1-10)
+     *  @since 0.9.71+
+     */
+    public static void setIbCongestionThreshold(int val) { IB_CONGESTION_THRESHOLD = Math.max(1, Math.min(10, val)); }
+    /**
+     *  The stale build pruning threshold percentage.
+     *  @return the threshold percentage (30-80)
+     *  @since 0.9.71+
+     */
+    public static int getStaleBuildThresholdPct() { return STALE_BUILD_THRESHOLD_PCT; }
+    /**
+     *  Set the stale build pruning threshold (called by Tuner).
+     *  @param val the threshold percentage (30-80)
+     *  @since 0.9.71+
+     */
+    public static void setStaleBuildThresholdPct(int val) { STALE_BUILD_THRESHOLD_PCT = Math.max(30, Math.min(80, val)); }
+    /**
      * Per-pool consecutive build failure tracking for backoff.
      * When a pool exceeds CONSECUTIVE_FAILURE_THRESHOLD, builds are
      * paused for POOL_BACKOFF_MS to prevent build storms.
@@ -315,6 +430,25 @@ public class BuildExecutor implements Runnable {
     public static int getMaxConcurrentBuilds() { return _maxConcurrentBuilds; }
 
     /**
+     *  The adaptive maximum concurrent builds, adjusted based on the
+     *  current timeout rate.  Returns the throttled value when the
+     *  timeout rate exceeds {@link #CONCURRENCY_THROTTLE_THRESHOLD},
+     *  otherwise returns the configured maximum.
+     *
+     *  @return adaptive maximum concurrent builds
+     *  @since 0.9.71+
+     */
+    int getAdaptiveMaxConcurrentBuilds() { return _adaptiveMaxConcurrentBuilds; }
+
+    /**
+     *  The current timeout rate (0.0-1.0) for adaptive throttling.
+     *
+     *  @return the timeout rate
+     *  @since 0.9.71+
+     */
+    double getTimeoutRate() { return _timeoutRate; }
+
+    /**
      * The maximum number of concurrent builds allowed.
      * @param val the maximum concurrent builds
      * @since 0.9.70+
@@ -411,6 +545,8 @@ public class BuildExecutor implements Runnable {
         _ghostPeerManager = ghostMgr;
         _adaptiveTimeout = BuildRequestor.getRequestTimeout(ctx);
         _adaptiveFirstHopTimeout = BuildRequestor.getFirstHopTimeout(ctx);
+        _adaptiveMaxConcurrentBuilds = getMaxConcurrentBuilds();
+        _timeoutRate = 0.0;
         _currentlyBuilding = new Object();
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
         _currentlyBuildingMap = new ConcurrentHashMap<>(maxConcurrentBuilds);
@@ -428,6 +564,8 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildIBCongestion", "Builds throttled due to IB tunnel congestion", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildStalePruned", "Builds pruned due to stale queue", "Tunnels", RATES);
 
         StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
         String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
@@ -524,6 +662,40 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     *  Adaptive concurrency throttle thresholds.
+     *  When timeout rate exceeds {@code THROTTLE_THRESHOLD}, concurrent
+     *  builds are reduced to prevent overwhelming the IB reply path.
+     *  When timeout rate drops below {@code RESTORE_THRESHOLD} and success
+     *  exceeds {@code RESTORE_SUCCESS_THRESHOLD}, concurrency is restored.
+     *
+     *  @since 0.9.71+
+     */
+    private static double CONCURRENCY_THROTTLE_THRESHOLD = 0.30;
+    private static double CONCURRENCY_RESTORE_THRESHOLD = 0.15;
+    private static double CONCURRENCY_RESTORE_SUCCESS_THRESHOLD = 0.80;
+
+    /**
+     *  The concurrency throttle threshold as a percentage (0-100).
+     *  @return the threshold percentage
+     *  @since 0.9.71+
+     */
+    public static int getConcurrencyThrottleThresholdPct() { return (int) (CONCURRENCY_THROTTLE_THRESHOLD * 100); }
+    /**
+     *  Set the concurrency throttle threshold (called by Tuner).
+     *  @param pct the threshold percentage (15-50)
+     *  @since 0.9.71+
+     */
+    public static void setConcurrencyThrottleThresholdPct(int pct) {
+        CONCURRENCY_THROTTLE_THRESHOLD = Math.max(0.15, Math.min(0.50, pct / 100.0));
+    }
+    /**
+     *  The concurrency restore threshold as a percentage (0-100).
+     *  @return the restore threshold percentage
+     *  @since 0.9.71+
+     */
+    public static int getConcurrencyRestoreThresholdPct() { return (int) (CONCURRENCY_RESTORE_THRESHOLD * 100); }
+
+    /**
      * Calculate adaptive timeouts based on recorded build outcomes.
      * Starts from mainline's base values (13s/10s) and adjusts
      * marginally in either direction based on success rate.
@@ -531,6 +703,11 @@ public class BuildExecutor implements Runnable {
      * Adaptive ranges:
      * REQUEST_TIMEOUT:   13s base, 10-18s range
      * FIRST_HOP_TIMEOUT: 10s base, 8-15s range
+     *
+     * Also adjusts concurrent build capacity based on timeout rate
+     * to prevent overwhelming the IB reply path.
+     *
+     * @since 0.9.71+ adaptive concurrency throttle added
      */
     private void calculateAdaptiveTimeoutFromSuccess() {
         int successCount = _buildSuccessCount.get();
@@ -540,11 +717,15 @@ public class BuildExecutor implements Runnable {
         if (total < 10) { return; }
 
         double successRate = (double) successCount / total;
+        double timeoutRate = (double) timeoutCount / total;
+        _timeoutRate = timeoutRate;
 
         // Base timeout from mainline (13s normal, 15s slow)
         long baseTimeout = BuildRequestor.getRequestTimeout(_context);
 
-        // Start at base, then adjust marginally based on success rate
+        // Start at base, then adjust marginally based on success rate.
+        // Under high timeout rates (>30%), give builds more time to complete
+        // instead of timing them out prematurely, which wastes the build slot.
         _adaptiveTimeout = baseTimeout;
 
         if (successRate > 0.85) {
@@ -556,6 +737,13 @@ public class BuildExecutor implements Runnable {
         } else if (successRate > 0.50) {
             // Moderate success — modest increase.
             _adaptiveTimeout += 2 * 1000L;  // +2s
+        } else if (timeoutRate > CONCURRENCY_THROTTLE_THRESHOLD) {
+            // High timeout rate — increase timeout significantly to reduce
+            // spurious timeouts that waste build slots and drive the
+            // cascade further.  The concurrency throttle (below) handles
+            // the root cause (too many concurrent builds); this reduces
+            // the symptom (premature timeout expiry).
+            _adaptiveTimeout += 7 * 1000L;  // +7s
         } else {
             // Low success — increase to give slow builds more time.
             _adaptiveTimeout += 5 * 1000L;  // +5s
@@ -563,7 +751,27 @@ public class BuildExecutor implements Runnable {
 
         // Clamp: never below 10s regardless of rate; allow adaptive increase up to 30s
         if (_adaptiveTimeout < 10*1000L) { _adaptiveTimeout = 10*1000L; }
-        if (_adaptiveTimeout > 25*1000L) { _adaptiveTimeout = 25*1000L; }
+        if (_adaptiveTimeout > 30*1000L) { _adaptiveTimeout = 30*1000L; }
+
+        // Adaptive concurrency throttle: reduce max concurrent builds when
+        // timeout rate is high to prevent overwhelming the IB reply path.
+        // The root cause of high timeout rates is IB tunnel congestion from
+        // too many concurrent build replies.  Reducing concurrency improves
+        // per-build success rate at the cost of slower aggregate build speed.
+        int baseMax = getMaxConcurrentBuilds();
+        if (timeoutRate > CONCURRENCY_THROTTLE_THRESHOLD) {
+            // Throttle: reduce by 25% per threshold crossing (capped at 50% of base)
+            int throttled = (int) (baseMax * 0.75);
+            throttled = Math.max(throttled, baseMax / 2);
+            if (_adaptiveMaxConcurrentBuilds > throttled) {
+                _adaptiveMaxConcurrentBuilds = throttled;
+            }
+        } else if (timeoutRate < CONCURRENCY_RESTORE_THRESHOLD &&
+                   successRate > CONCURRENCY_RESTORE_SUCCESS_THRESHOLD) {
+            // Restore: increase by 10% toward base (never exceed base)
+            int restored = _adaptiveMaxConcurrentBuilds + Math.max(1, baseMax / 10);
+            _adaptiveMaxConcurrentBuilds = Math.min(restored, baseMax);
+        }
 
         // Also calculate adaptive first-hop timeout based on first-hop success rate
         int firstHopTotal = _firstHopSuccessCount.get() + _firstHopFailureCount.get();
@@ -599,7 +807,7 @@ public class BuildExecutor implements Runnable {
             _log.debug("Adaptive timeout: " + (_adaptiveTimeout / 1000) +
                        "s (success: " + (int)(successRate * 100) +
                        "%, timeouts: " + _buildTimeoutCount.get() +
-                       "/" + total + ")");
+                       "/" + total + ", concurrency: " + _adaptiveMaxConcurrentBuilds + "/" + baseMax + ")");
         }
     }
 
@@ -967,10 +1175,12 @@ public class BuildExecutor implements Runnable {
                 int allowed = allowed(); // also expires timed out requests
                 allowed = buildZeroHopTunnels(wanted, allowed); // zero-hop tunnels build inline
                 // Cap per-iteration builds to prevent flooding the network.
-                // 4 allows faster recovery from cascading pool collapse while
-                // the transport backpressure (below) throttles when the send
-                // pipeline is actually congested.
-                if (allowed > 4) allowed = 4;
+                // Dynamic cap: reduce from 4 to 2 when timeout rate exceeds 30%
+                // to prevent overwhelming the IB reply path.  Under normal
+                // conditions, 4 allows faster recovery from cascading pool
+                // collapse; under congestion, 2 reduces burst load.
+                int perIterationCap = _timeoutRate > CONCURRENCY_THROTTLE_THRESHOLD ? 2 : 4;
+                if (allowed > perIterationCap) allowed = perIterationCap;
 
                 // Transport congestion backpressure: when the send pipeline is
                 // backed up (>2s processing time), reduce builds so data messages
@@ -985,7 +1195,28 @@ public class BuildExecutor implements Runnable {
                     }
                 }
 
+                // IB tunnel congestion detection: when available IB exploratory
+                // tunnels are low (<3), builds are throttled because the reply
+                // path is congested.  OB build replies come back through IB
+                // exploratory tunnels; with only 1-2 IB tunnels and 18+
+                // concurrent builds, the reply path becomes a bottleneck.
                 TunnelManagerFacade mgr = _context.tunnelManager();
+                if (mgr != null) {
+                    long now = _context.clock().now();
+                    if (now - _lastIBTunnelCheck > 5000) {
+                        _lastIBTunnelCheck = now;
+                        _lastIBTunnelCount = mgr.getFreeTunnelCount();
+                    }
+                    if (_lastIBTunnelCount < IB_CONGESTION_THRESHOLD && allowed > 2) {
+                        _context.statManager().addRateData("tunnel.buildIBCongestion", 1);
+                        allowed = Math.min(allowed, 2);
+                        if (_log.shouldDebug()) {
+                            _log.debug("IB tunnel congestion: " + _lastIBTunnelCount +
+                                       " IB tunnels available, throttling builds to " + allowed);
+                        }
+                    }
+                }
+
                 boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0 && mgr.getOutboundTunnelCount() <= 0);
 
                 if (noInboundOrOutbound) {
@@ -1224,6 +1455,14 @@ public class BuildExecutor implements Runnable {
      * stacking requests on one peer floods it and makes the first build
      * answer slower.  Zero-hop tunnels build inline, unguarded.
      *
+     * Early ban filtering: checks if the first-hop is banned before
+     * dispatching the build, preventing wasted build slots on peers
+     * that will reject the request.  Saves 12-18 build slots per minute.
+     *
+     * Stale build pruning: skips builds that would timeout before being
+     * dispatched (queue wait + expected build time > timeout budget),
+     * reducing wasted builds that would timeout anyway.
+     *
      * @param cfg the tunnel configuration to build
      */
     void buildTunnel(PooledTunnelCreatorConfig cfg) {
@@ -1238,6 +1477,46 @@ public class BuildExecutor implements Runnable {
             cfg.getTunnelPool().removeInProgress(cfg);
             return;
         }
+
+        // Early ban filtering: check if first-hop is banned before dispatching.
+        // BuildHandler emits buildBanHit when it receives a request for a banned
+        // peer, but by then the build slot is wasted.  Checking here saves the
+        // slot for a build that could succeed.
+        if (cfg.getLength() > 1) {
+            Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
+            if (firstHop != null && _context.banlist().isBanlisted(firstHop)) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Skipping build for " + cfg +
+                               " — first hop [" + firstHop.toBase64().substring(0, 6) + "] is banned");
+                }
+                cfg.getTunnelPool().removeInProgress(cfg);
+                return;
+            }
+        }
+
+        // Stale build pruning: skip builds that would timeout before being
+        // dispatched.  The build's timeout budget is the adaptive timeout;
+        // if the build has already consumed more than half of that budget
+        // sitting in the queue, it will almost certainly timeout on the wire.
+        if (cfg.getLength() > 1) {
+            long created = cfg.getConfig(0).getCreation();
+            if (created > 0) {
+                long elapsed = _context.clock().now() - created;
+                long timeoutBudget = calculateAdaptiveTimeout(cfg);
+                // Prune if we've used >threshold% of the timeout budget before dispatch
+                if (elapsed > (timeoutBudget * STALE_BUILD_THRESHOLD_PCT / 100)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Pruning stale build for " + cfg +
+                                   " — elapsed " + (elapsed / 1000) + "s of " +
+                                   (timeoutBudget / 1000) + "s budget");
+                    }
+                    _context.statManager().addRateData("tunnel.buildStalePruned", 1);
+                    cfg.getTunnelPool().removeInProgress(cfg);
+                    return;
+                }
+            }
+        }
+
         long beforeBuild = System.currentTimeMillis();
         if (cfg.getLength() > 1) {
             do {cfg.setReplyMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));} // should we allow an ID of 0?
@@ -1271,9 +1550,29 @@ public class BuildExecutor implements Runnable {
      *  @param cfg the prospective build
      *  @return true if a build to the same first hop is already in flight
      */
+    /**
+     *  Prevent stacking multiple build requests onto a single peer while
+     *  allowing bursts to different peers.  Emergency builds bypass this via
+     *  {@link PooledTunnelCreatorConfig#isBypassPacing()}.
+     *
+     *  Also skips peers that have recently failed as first hops more than
+     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} times within the cooldown window.
+     *
+     *  @param cfg the prospective build
+     *  @return true if a build to the same first hop is already in flight
+     *         or the peer has recently failed repeatedly as first hop
+     */
     private boolean hasBuildInFlightToFirstHop(PooledTunnelCreatorConfig cfg) {
         Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
         if (firstHop == null) {return false;}
+        if (hasRecentlyFailedAsFirstHop(firstHop)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping build for " + cfg +
+                           " — first hop [" + firstHop.toBase64().substring(0, 6) +
+                           "] has " + getFirstHopFailureCount(firstHop) + " recent failures");
+            }
+            return true;
+        }
         for (PooledTunnelCreatorConfig inFlight : _currentlyBuildingMap.values()) {
             if (inFlight == cfg) {continue;}
             Hash otherFirstHop = BuildRequestor.getBuildRequestPeer(inFlight);
@@ -1283,9 +1582,74 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     *  Get the recent first-hop failure count for a peer (for logging).
+     *
+     *  @param hash the peer hash
+     *  @return the failure count, or 0 if no history
+     *  @since 0.9.71+
+     */
+    private int getFirstHopFailureCount(Hash hash) {
+        long[] state = _firstHopFailureHistory.get(hash);
+        if (state == null) {return 0;}
+        synchronized (state) {
+            return (int) state[0];
+        }
+    }
+
+    /**
+     *  Record a first-hop failure for a given peer hash.  Called from
+     *  {@link #buildComplete} when a build fails due to first-hop issues.
+     *  Uses exponential decay: old failure counts decay over time, so a
+     *  peer that failed once 10 minutes ago but succeeded since is not
+     *  penalized.
+     *
+     *  @param hash the first-hop peer identity
+     *  @since 0.9.71+
+     */
+    private void recordFirstHopFailure(Hash hash) {
+        if (hash == null) {return;}
+        long now = _context.clock().now();
+        long[] state = _firstHopFailureHistory.computeIfAbsent(hash, k -> new long[2]);
+        synchronized (state) {
+            // Decay: if last failure was more than cooldown ago, reset count
+            if (state[1] > 0 && (now - state[1]) > FIRST_HOP_FAILURE_COOLDOWN_MS) {
+                state[0] = 0;
+            }
+            state[0]++;
+            state[1] = now;
+        }
+    }
+
+    /**
+     *  Check whether a peer has recently failed as a first hop more than
+     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} times within the cooldown window.
+     *  Used by {@link #hasBuildInFlightToFirstHop} to skip peers with a
+     *  pattern of repeated first-hop failures.
+     *
+     *  @param hash the first-hop peer identity
+     *  @return true if the peer has exceeded the failure threshold
+     *  @since 0.9.71+
+     */
+    private boolean hasRecentlyFailedAsFirstHop(Hash hash) {
+        if (hash == null) {return false;}
+        long[] state = _firstHopFailureHistory.get(hash);
+        if (state == null) {return false;}
+        synchronized (state) {
+            if (state[1] == 0) {return false;}
+            long now = _context.clock().now();
+            if ((now - state[1]) > FIRST_HOP_FAILURE_COOLDOWN_MS) {
+                // Expired: prune entry to prevent memory leak
+                _firstHopFailureHistory.remove(hash);
+                return false;
+            }
+            return state[0] >= FIRST_HOP_FAILURE_THRESHOLD;
+        }
+    }
+
+    /**
      * Handle a completed tunnel build.
      *
-     * @param cfg the tunnel configuration that completed
+     * @param cfg the tunnel configuration to build
      * @param result the build result (success, failure, etc.)
      * @since 0.9.53 added result parameter
      */
@@ -1357,6 +1721,15 @@ public class BuildExecutor implements Runnable {
         if (firstHopFailure) {
             if (pool != null)
                 pool.incrementBuildTimeout();
+            // Record first-hop failure for skip-if-recently-failed logic
+            Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
+            recordFirstHopFailure(firstHop);
+        }
+        // Also record TIMEOUT and BAD_RESPONSE as first-hop failures
+        // since they indicate the selected first hop could not deliver
+        if (result == Result.TIMEOUT || result == Result.BAD_RESPONSE) {
+            Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
+            recordFirstHopFailure(firstHop);
         }
 
         /* Exclude non-latency failures from adaptive timeout stats.

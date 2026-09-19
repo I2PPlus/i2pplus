@@ -108,6 +108,11 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("tunnel.testJob.maxTestDelay", _x("Max Delay Between Tests"));
         DISPLAY_NAMES.put("i2p.tunnel.testJob.maxTestPeriod", _x("Tunnel Test Failure Window"));
         DISPLAY_NAMES.put("i2p.tunnel.testJob.minTestPeriod", _x("Tunnel Test Failure Window Floor"));
+        DISPLAY_NAMES.put("tunnel.build.firstHopCooldown", _x("First-Hop Failure Cooldown"));
+        DISPLAY_NAMES.put("tunnel.build.firstHopThreshold", _x("First-Hop Failure Threshold"));
+        DISPLAY_NAMES.put("tunnel.build.inboundCongestion", _x("Inbound Congestion Threshold"));
+        DISPLAY_NAMES.put("tunnel.build.staleThreshold", _x("Stale Build Pruning Threshold"));
+        DISPLAY_NAMES.put("tunnel.build.concurrencyThrottle", _x("Concurrency Throttle Threshold"));
         DISPLAY_NAMES.put("ntcp.reader.threads", _x("NTCP Reader Threads"));
         DISPLAY_NAMES.put("ntcp.writer.threads", _x("NTCP Writer Threads"));
         DISPLAY_NAMES.put("ntcp.failsafe.iterationFreq", _x("NTCP Pumper Failsafe Interval"));
@@ -251,6 +256,11 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("tunnel.testJob.maxTestDelay", _x("Max interval between tunnel tests (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.testJob.maxTestPeriod", _x("Max time a tunnel test may take before failure (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.testJob.minTestPeriod", _x("Floor for the tunnel test failure window (ms)."));
+        PARAM_DESCRIPTIONS.put("tunnel.build.firstHopCooldown", _x("How long a peer is skipped after first-hop failures (ms)."));
+        PARAM_DESCRIPTIONS.put("tunnel.build.firstHopThreshold", _x("Failures before a peer is skipped during cooldown."));
+        PARAM_DESCRIPTIONS.put("tunnel.build.inboundCongestion", _x("Inbound tunnel count below which builds are throttled."));
+        PARAM_DESCRIPTIONS.put("tunnel.build.staleThreshold", _x("Queue-wait fraction of timeout budget before pruning a build (%)."));
+        PARAM_DESCRIPTIONS.put("tunnel.build.concurrencyThrottle", _x("Timeout rate that triggers concurrent build reduction (%)."));
         PARAM_DESCRIPTIONS.put("ntcp.reader.threads", _x("Threads decrypting inbound NTCP data."));
         PARAM_DESCRIPTIONS.put("ntcp.writer.threads", _x("Threads that encrypt outbound NTCP messages."));
         PARAM_DESCRIPTIONS.put("ntcp.failsafe.iterationFreq", _x("Failsafe scan interval for stuck NTCP pumps (ms)."));
