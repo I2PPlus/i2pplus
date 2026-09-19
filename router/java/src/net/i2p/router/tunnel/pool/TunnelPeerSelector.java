@@ -347,9 +347,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  empty, so first-build selection has no proven preference and may pick
      *  unreliable peers.  Seeding with random high-tier peers provides a warm
      *  start that converges to real proven data after the first few builds.
-     *  Seeded entries use a past timestamp (now - PROVEN_RESPONDER_WINDOW_MS / 2)
-     *  so they carry less weight than real proven data but more than nothing.
-     *  Best-effort; concurrent access is safe (ConcurrentHashMap).
+     *  Seeded entries use a near-expired timestamp (now - window + 5 min) so
+     *  they expire quickly and only provide anti-concentration, not a quality
+     *  boost over truly proven peers.  Best-effort; concurrent access is safe.
      *
      *  @param ctx the router context
      *  @param now current time in ms
@@ -360,7 +360,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         ctx.profileOrganizer().selectFastPeers(
             MIN_PROVEN_RESPONDER_COUNT * 2, null, peers, 0, null);
         if (peers.isEmpty()) return;
-        long seedTime = now - PROVEN_RESPONDER_WINDOW_MS / 2;
+        // Expire in 5 min — anti-concentration only, not a quality bias
+        long seedTime = now - PROVEN_RESPONDER_WINDOW_MS + 5 * 60 * 1000;
         for (Hash peer : peers) {
             if (_provenResponders.size() >= MIN_PROVEN_RESPONDER_COUNT) break;
             _provenResponders.putIfAbsent(peer, seedTime);
@@ -942,12 +943,16 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return configured;
         }
 
-        boolean shouldRelax = buildSuccess < ATTACK_THRESHOLD;
-        if (buildSuccess >= 0.45) {
-            shouldRelax = false;
-        }
+        // Two-level hysteresis: ATTACK (enter <0.40, exit >=0.44) and
+        // STARTUP (always relax during first 5 min).  The 4% hysteresis
+        // band prevents flapping when buildSuccess oscillates around 0.40.
+        boolean shouldRelax = false;
         if (uptimeMs > 0 && uptimeMs < STARTUP_WARNING_SUPPRESS_MS) {
             shouldRelax = true;
+        } else if (buildSuccess < ATTACK_THRESHOLD) {
+            shouldRelax = true;
+        } else if (buildSuccess >= 0.44) {
+            shouldRelax = false;
         }
 
         if (!shouldRelax) {
@@ -1520,14 +1525,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                     log.warn("Connection check failed at hop [" + (i+1) + " -> " + i +
                              "] in tunnel (Gateway -> Endpoint)\n* Tunnel: " + buf.toString());
                 }
-                // Blame them both
-                // treat as a timeout in the profile
-                // tunnelRejected() would set the last heard from time
+                // Blame only the adjacent hop (hf = source) — matching
+                // BuildExecutor.penalizeTimeout() which blames only the
+                // contacted peer.  Blaming ht (destination) double-penalises
+                // innocent middle hops and causes tier eviction.
                 Hash us = ctx.routerHash();
                 if (!hf.equals(us))
                     ctx.profileManager().tunnelTimedOut(hf);
-                if (!ht.equals(us))
-                    ctx.profileManager().tunnelTimedOut(ht);
+                if (!ht.equals(us) && log.shouldDebug()) {
+                    log.debug("checkTunnel failed between [" + hf.toBase64().substring(0,6) +
+                              "] and [" + ht.toBase64().substring(0,6) + "] — ht not blamed");
+                }
                 rv = false;
                 break;
             }
@@ -1953,12 +1961,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         long window = base * _windowMultiplier;
 
         // Acute floor: when builds are degraded, never let the window fall below
-        // 6 hours regardless of active-peer count, to break the pruning loop fast
+        // 4 hours regardless of active-peer count, to break the pruning loop fast
         // (the Tuner multiplier reacts more slowly across cycles).
-        // Raised from 4h to 6h to retain more peer candidates during sustained
-        // degradation — the old 4h floor still excluded too many viable peers.
         if (buildSuccess > 0 && buildSuccess < DEGRADED_BUILD_THRESHOLD) {
-            window = Math.max(window, 6 * 60 * 60 * 1000L);
+            window = Math.max(window, 4 * 60 * 60 * 1000L);
         }
 
         return Math.min(window, 12 * 60 * 60 * 1000L);
@@ -2004,12 +2010,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // would otherwise re-read router statistics up to 400 times.
         double buildSuccess = getBuildSuccess(ctx);
 
-        // Collect top Fast + HighCap peers that aren't in first-hop fail cooldown
-        Set<Hash> targets = new HashSet<>(512);
+        // Collect top Fast + HighCap peers that aren't in first-hop fail cooldown.
+        // Budget 200 (reduced from 400) — ~800 hash lookups + 200× isStalePeer
+        // every 30s was the main CPU cost; 200 is sufficient to keep sessions
+        // alive for the top-tier peers that builds actually need.
+        Set<Hash> targets = new HashSet<>(256);
         // Must use mutable set — locked_selectPeers may add to the exclude set
-        rctx.profileOrganizer().selectFastPeers(400, new HashSet<>(4), targets);
+        rctx.profileOrganizer().selectFastPeers(200, new HashSet<>(4), targets);
         // Also add top HighCap to cover more candidates
-        rctx.profileOrganizer().selectHighCapacityPeers(400, targets, targets);
+        rctx.profileOrganizer().selectHighCapacityPeers(200, targets, targets);
         // Remove self
         targets.remove(rctx.routerHash());
 
@@ -2020,8 +2029,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         int preConnected = 0;
 
         for (Hash peer : targets) {
-            if (keepalived + preConnected >= 400)
-                break; // per-cycle budget (doubled)
+            if (keepalived + preConnected >= 200)
+                break; // per-cycle budget
 
             // Skip peers in first-hop fail cooldown — they've proven unreachable recently
             if (isFirstHopFailing(rctx, peer))

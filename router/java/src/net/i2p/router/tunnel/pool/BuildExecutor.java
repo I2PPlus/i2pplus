@@ -55,10 +55,10 @@ public class BuildExecutor implements Runnable {
      *  score only arbitrates among ordinary demand.
      */
     private static int score(TunnelPool p) {
-        int active = p.getActiveTunnelCount();
+        int active = p.getUsableTunnelCount();
         int target = Math.max(2, p.getSettings().getTotalQuantity());
         int deficit = target - active;
-        // Tier 1: collapsed (0 active) outranks everything.
+        // Tier 1: collapsed (0 usable) outranks everything.
         if (active == 0) {return 1 << 20;}
         // Tier 2: near-collapse (1-2 active) gets a large boost.
         int s = active <= 2 ? (1 << 16) : 0;
@@ -880,10 +880,11 @@ public class BuildExecutor implements Runnable {
         // Outbound builds have a longer reply path: the build reply comes back
         // through an IB exploratory tunnel.  If exploratory tunnels are congested
         // (2 tunnels handling 18+ concurrent build replies), OB builds timeout
-        // at 2x the rate of IB builds (54% vs 80% success).  Adding extra time
-        // for OB builds compensates for this reply-path latency.
+        // at 2x the rate of IB builds (54% vs 80% success).  The SSU2 handshake
+        // alone takes ~8.5s, so +5s was insufficient when the IB reply path is
+        // also under load.  Raised to 8s to cover handshake + moderate queue.
         if (!cfg.isInbound()) {
-            baseTimeout += 5 * 1000L;
+            baseTimeout += 8 * 1000L;
         }
 
         // Feedforward from measured network RTT: when the baseline round-trip
@@ -966,10 +967,15 @@ public class BuildExecutor implements Runnable {
         }
 
         int maxConcurrentBuilds = getAdaptiveMaxConcurrentBuilds();
+        // Use base (unthrottled) max for the throughput calculation so the
+        // adaptive throttle doesn't compound with the bandwidth constraint.
+        // Without this, throttling adaptiveMax from 32→25 also reduces
+        // throughput, creating AND-stacking: bandwidth(10) AND adaptive(25).
+        int baseMax = getMaxConcurrentBuilds();
 
         if (avg > 0) {
             int throttleFactor = isSlow ? 100 : 160;
-            int throughput = (int)(throttleFactor * maxConcurrentBuilds / avg);
+            int throughput = (int)(throttleFactor * baseMax / avg);
             // Don't let throughput boost override the conservative base by more than 2x
             if (throughput > allowed * 2) {
                 throughput = allowed * 2;

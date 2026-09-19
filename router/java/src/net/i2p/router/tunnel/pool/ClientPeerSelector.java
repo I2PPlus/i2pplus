@@ -135,7 +135,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // drawn from non-ghost candidates.  Previously the filter ran in
             // finalizeSelection() after the fallback, so an all-ghost
             // selection aborted the whole cycle with no replacement attempt.
+            List<Hash> beforeGhostFilter = new ArrayList<>(rv);
             rv = filterGhostPeers(rv);
+            if (rv.isEmpty() && !beforeGhostFilter.isEmpty()) {
+                // All selected peers were ghosts — add them to the exclude
+                // set so shortfall fallback tiers (HighCap, Active, etc.)
+                // cannot re-select them.
+                ex.exclude.addAll(beforeGhostFilter);
+            }
             if (rv.size() < length) {
                 rv = applyShortfallFallbacks(settings, rv, length, params, ex);
                 if (rv.isEmpty()) {return Collections.emptyList();}
@@ -219,17 +226,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
         }
         // Per-pool diversity: exclude peers already in an active tunnel of this pool.
         // No peer should appear in more than 1 tunnel of the same pool.
-        // Relaxed when the pool is struggling (incomplete LeaseSet or active
-        // tunnels below target) so replacement builds can reuse peers rather
-        // than starving the pool of build candidates.  Also relaxed when the
-        // pool has fewer than 3 active tunnels, to prioritize pool recovery
-        // over diversity during rebuild phases.
+        // Always enforce peer diversity (prevents pool-local circular dependency);
+        // relax only IP restriction via getIPRestriction() under attack, not
+        // peer identity — relaxing identity causes pool-local correlated failures.
         Hash dest = settings.getDestination();
         if (dest != null) {
             TunnelManagerFacade tmf = ctx.tunnelManager();
             TunnelPool pool = isInbound ? tmf.getInboundPool(dest)
                                         : tmf.getOutboundPool(dest);
-            if (pool != null && !pool.isStruggling() && pool.getActiveTunnelCount() >= 3) {
+            if (pool != null) {
                 Set<Hash> poolPeers = getPeersInPool(ctx, pool);
                 exclude.addAll(poolPeers);
             }
@@ -649,6 +654,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // Raised from 8 to 16 to reduce starvation when many peers
             // are on first-hop cooldown or stale during degradation.
             int qualityAttempts = 0;
+            int refills = 0;
             boolean inStartup = isStartupGracePeriod(ctx);
             // When very few candidates remain, start at tier 1 (accept
             // connecting) rather than tier 0 (accept any) to still
@@ -671,6 +677,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                  " previously failed as first hop, retrying...");
                     }
                     matches.remove(firstHop);
+                    // Refill: re-select a replacement so the slot isn't wasted
+                    if (refills < 3 && matches.isEmpty()) {
+                        ex.exclude.add(firstHop);
+                        refillFirstHop(params, randomKey, ex, matches, inStartup);
+                        refills++;
+                    }
                     continue;
                 }
                 if (isStalePeer(ctx, firstHop, params.buildSuccess)) {
@@ -679,11 +691,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                  " is stale (no contact >4hrs), retrying selection...");
                     }
                     matches.remove(firstHop);
+                    if (refills < 3 && matches.isEmpty()) {
+                        ex.exclude.add(firstHop);
+                        refillFirstHop(params, randomKey, ex, matches, inStartup);
+                        refills++;
+                    }
                     continue;
                 }
                 if (tier <= 1 && !ctx.commSystem().isEstablished(firstHop) &&
                     !ctx.commSystem().isConnecting(firstHop)) {
                     matches.remove(firstHop);
+                    if (refills < 3 && matches.isEmpty()) {
+                        ex.exclude.add(firstHop);
+                        refillFirstHop(params, randomKey, ex, matches, inStartup);
+                        refills++;
+                    }
                     continue;
                 }
                 break;
@@ -716,6 +738,41 @@ class ClientPeerSelector extends TunnelPeerSelector {
         }
         // Shortfall fallback below reuses the (wrapped) exclude
         ex.exclude = exclude;
+    }
+
+    /**
+     *  Refill the first-hop candidate after a quality-loop ejection.
+     *  Tries the same tier cascade as selectFirstHop (HighCap → Fast →
+     *  Active → NotFailing) with the ejected peer excluded, so the slot
+     *  isn't wasted.  At most 3 refills per build cycle.
+     *
+     *  @param params selection parameters
+     *  @param randomKey random key for Fast tier sub-tiering
+     *  @param ex exclusion set (ejected peer added by caller)
+     *  @param matches singleton set to populate with replacement
+     *  @param inStartup true if still in startup grace period
+     *  @since 0.9.71+
+     */
+    private void refillFirstHop(SelectionParams params, SessionKey randomKey,
+                                SelectionExclusions ex, ArraySet<Hash> matches,
+                                boolean inStartup) {
+        if (matches.isEmpty()) {
+            if (params.useHighCapPrimary) {
+                ctx.profileOrganizer().selectHighCapacityPeers(1, ex.exclude, matches, params.ipRestriction, params.ipSet);
+                if (matches.isEmpty()) {
+                    ctx.profileOrganizer().selectNotFailingPeers(1, ex.exclude, matches, false, 0, null);
+                }
+            } else {
+                boolean wideSlice = params.buildSuccess < 0.70;
+                ctx.profileOrganizer().selectFastPeers(1, ex.exclude, matches, randomKey, wideSlice ? SLICE_2_3 : SLICE_1, params.ipRestriction, params.ipSet);
+            }
+        }
+        if (matches.isEmpty()) {
+            ctx.profileOrganizer().selectActiveNotFailingPeers(1, ex.exclude, matches, 0, null);
+        }
+        if (matches.isEmpty()) {
+            ctx.profileOrganizer().selectNotFailingPeers(1, ex.exclude, matches, false, 0, null);
+        }
     }
 
     /**

@@ -1544,11 +1544,14 @@ public class ProfileOrganizer {
      */
     long computeAdaptiveRttCeiling(double boundaryRttMs, double buildSuccess) {
         long ceiling = computeFastRttCeiling(boundaryRttMs);
-        // During degradation (buildSuccess < 0.65), floor the ceiling at
-        // 2× the startup baseline to prevent amplification.
-        if (buildSuccess < 0.65d && _baselineRTT > 0) {
-            long baselineFloor = (long) (_baselineRTT * 2);
-            ceiling = Math.max(ceiling, Math.max(baselineFloor, AUTO_RTT_FLOOR_MS));
+        // During degradation (buildSuccess < 0.65), cap the ceiling so the
+        // whole-network slowdown doesn't inflate it to 3000ms, which would
+        // admit peers with rtt≈2500ms that cause build timeouts.
+        // Cap at min(2×boundary, 1500ms) — enough headroom for legitimate
+        // slow peers, tight enough to reject truly congested paths.
+        if (buildSuccess < 0.65d) {
+            long degradedCap = Math.min((long)(boundaryRttMs * 2), 1500);
+            ceiling = Math.min(ceiling, Math.max(degradedCap, AUTO_RTT_FLOOR_MS));
         }
         return ceiling;
     }
@@ -2156,7 +2159,9 @@ public class ProfileOrganizer {
             }
             if (mask > 0 && !notRestricted(peer, ipSet, mask)) continue;
             if (aboveRttCeiling(entry.getValue(), rttCeiling)) {
-                if (toExclude != null) toExclude.add(peer);
+                // Don't add to toExclude — RTT is a soft signal, not a hard
+                // gate.  Filling the 384-cap Excluder with RTT-only skips
+                // evicts more useful entries (too-many-tunnels, etc.).
                 continue;
             }
             candidates.add(entry);
@@ -2198,7 +2203,8 @@ public class ProfileOrganizer {
             }
             if (mask > 0 && !notRestricted(peer, ipSet, mask)) continue;
             if (aboveRttCeiling(entry.getValue(), rttCeiling)) {
-                if (toExclude != null) toExclude.add(peer);
+                // Don't add to toExclude — RTT is a soft signal, not a hard
+                // gate.  See note in first overload.
                 continue;
             }
 
