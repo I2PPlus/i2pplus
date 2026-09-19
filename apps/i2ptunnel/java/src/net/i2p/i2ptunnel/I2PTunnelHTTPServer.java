@@ -1425,6 +1425,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 if (ioex != null) {propagateFailure(ioex, req);}
                 if (_waiter != null) {_waiter.set(_keepalive ? 2 : 1);} // We are now run inline, no need to notify()
+                // Close the I2PSocket first to signal the streaming layer that
+                // the connection is dead.  This lets browserout.close() (which
+                // calls MessageOutputStream.flush → PacketLocal.waitForCompletion)
+                // exit immediately instead of blocking up to getDisconnectTimeout().
+                if (!_keepalive) try { _browser.close(); } catch (IOException ioe) { /* ignored */ }
                 if (browserout != null) {
                     try {
                         if (_keepalive) {
@@ -1437,7 +1442,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (!_keepalive && browserin != null) try { browserin.close(); } catch (IOException ioe) { /* ignored */ }
                 if (serverin != null) try { serverin.close(); } catch (IOException ioe) { /* ignored */ }
                 try { _webserver.close(); } catch (IOException ioe) { /* ignored */ }
-                if (!_keepalive) try { _browser.close(); } catch (IOException ioe) { /* ignored */ }
                 if (_log.shouldDebug()) {
                     _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
                                urlSuffix(req));
