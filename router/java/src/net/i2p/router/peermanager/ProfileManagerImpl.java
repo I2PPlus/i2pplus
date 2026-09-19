@@ -142,7 +142,11 @@ public class ProfileManagerImpl implements ProfileManager {
     public void tunnelTimedOut(Hash peer) {
         PeerProfile data = getProfile(peer);
         if (data == null) return;
-        data.getTunnelHistory().incrementRejected(TunnelHistory.TUNNEL_REJECT_BANDWIDTH);
+        // Transient overload (not bandwidth rejection): a timeout means the
+        // peer didn't respond in time, not that it rejected due to bandwidth.
+        // Using TUNNEL_REJECT_BANDWIDTH inflated the rejection counter and
+        // drove isLowTunnelAcceptance() to exclude peers that were simply slow.
+        data.getTunnelHistory().incrementRejected(TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD);
     }
 
     /**
