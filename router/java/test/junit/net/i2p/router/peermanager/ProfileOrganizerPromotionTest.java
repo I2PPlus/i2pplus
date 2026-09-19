@@ -115,11 +115,21 @@ public class ProfileOrganizerPromotionTest {
 
     @Test
     public void testZeroTunnelHistoryPeerSkipped() throws Exception {
-        // Peers with no tunnel test history must not be in fast/high-cap tiers
+        // Peers with no tunnel test history AND no recent activity are excluded
         PeerProfile profile = seedProfile(7, "fO");
         TunnelHistory th = profile.getTunnelHistory();
         assertEquals(0, th.getLifetimeAgreedTo() + th.getLifetimeRejected());
         assertTrue(skips(profile));
+    }
+
+    @Test
+    public void testZeroHistoryWithRecentActivityNotSkipped() throws Exception {
+        // Zero tunnel history but recently heard from — allow into tiers
+        PeerProfile profile = seedProfile(11, "fO");
+        TunnelHistory th = profile.getTunnelHistory();
+        assertEquals(0, th.getLifetimeAgreedTo() + th.getLifetimeRejected());
+        profile.setLastHeardFrom(_ctx.clock().now());
+        assertFalse(skips(profile));
     }
 
     @Test

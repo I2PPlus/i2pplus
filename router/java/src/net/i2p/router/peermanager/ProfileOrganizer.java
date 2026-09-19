@@ -1479,7 +1479,7 @@ public class ProfileOrganizer {
         // proof-of-life filtering peers that were already vetted at tier entry.
         return passesBasicGates(profile.getPeer()) &&
                !hasExcessiveLifetimeFailures(profile.getPeer()) &&
-               !isLowTunnelAcceptance(profile, buildSuccess) &&
+               !isLowTunnelAcceptance(profile, buildSuccess, now) &&
                !hasRecentTunnelFailures(profile) &&
                !inLossProbation(profile, now);
     }
@@ -1755,7 +1755,7 @@ public class ProfileOrganizer {
         if (!passesBasicGates(peer) || hasExcessiveLifetimeFailures(peer)) return false;
         if (hasRecentTunnelFailures(profile)) return false;
         if (highCap ? hasHighLoss(profile, now) : inLossProbation(profile, now)) return false;
-        return !isLowTunnelAcceptance(profile, buildSuccess);
+        return !isLowTunnelAcceptance(profile, buildSuccess, now);
     }
 
     /**
@@ -2546,14 +2546,15 @@ public class ProfileOrganizer {
      *  @since 0.9.71+
      */
      boolean skipsPromotion(PeerProfile profile, Hash peer, double buildSuccess) {
+         long now = _context.clock().now();
          boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
          // Use basic gates instead of isSelectable to avoid stale RouterInfo
          // proof-of-life filtering peers that were already vetted at tier entry.
          boolean isPeerSelectable = passesBasicGates(peer) && !hasExcessiveLifetimeFailures(peer);
-         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess);
+         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess, now);
          boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
          boolean congested = isCongestedPeer(peer);
-         boolean highLoss = inLossProbation(profile, _context.clock().now());
+         boolean highLoss = inLossProbation(profile, now);
          return !isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss;
      }
 
@@ -2845,10 +2846,11 @@ public class ProfileOrganizer {
      *
      * @param profile the peer profile
      * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     * @param now current time in ms
      * @return whether low tunnel acceptance (true = exclude from fast/high-cap tiers)
      * @since 0.9.71+
      */
-    private boolean isLowTunnelAcceptance(PeerProfile profile, double buildSuccess) {
+    private boolean isLowTunnelAcceptance(PeerProfile profile, double buildSuccess, long now) {
         TunnelHistory th = profile.getTunnelHistory();
         if (th == null) return false;
 
@@ -2857,9 +2859,10 @@ public class ProfileOrganizer {
         long totalRequests = agreed + rejected;
 
         if (totalRequests == 0) {
-            // No tunnel test history — exclude from fast/high-cap tiers until
-            // they accumulate enough data through exploratory builds.
-            return true;
+            // No tunnel test history — allow alive peers into tiers so they
+            // can accumulate tunnel data.  Stale peers (not heard from recently)
+            // are excluded; under-performers are evicted by existing mechanisms.
+            return !hasRecentTierActivity(profile, now - NO_HISTORY_ACTIVITY_WINDOW_MS);
         }
 
         double ratio = (double) agreed / totalRequests;
@@ -3372,6 +3375,17 @@ public class ProfileOrganizer {
     private volatile double _cachedBuildSuccess = 1.0;
     private volatile long _cachedBuildSuccessTime;
     private static final long BUILD_SUCCESS_CACHE_MS = 15_000;
+
+    /**
+     *  Peers with zero tunnel history are allowed into fast/high-cap tiers if
+     *  they were heard from within this window.  Alive peers that haven't yet
+     *  built tunnels get a chance; dead peers are excluded.  Under-performers
+     *  are evicted by existing mechanisms (latency, acceptance ratio, loss
+     *  probation) within minutes.
+     *
+     *  @since 0.9.71+
+     */
+    private static final long NO_HISTORY_ACTIVITY_WINDOW_MS = 5 * 60 * 1000L;
 
     /**
      *  Recent tunnel build success ratio, from router statistics.
