@@ -43,15 +43,15 @@ public class GhostPeerManagerTest {
         _ctx = mock(RouterContext.class);
         when(_ctx.getConfigDir()).thenReturn(_tmpDir);
         when(_ctx.getProperty(anyString(), anyString())).thenReturn(new File(_tmpDir, "logger.config").getAbsolutePath());
-        // Defaults mirror the real ones: timeout threshold 3, cooldown 180s
-        // (60s under stress, which getTunnelBuildSuccess() toggles).
+        // Defaults mirror the real ones: timeout threshold 2, cooldown 300s
+        // (120s under stress, which getTunnelBuildSuccess() toggles).
         // Note: the cooldown literals in GhostPeerManager are ints, so the
         // (String, int) overload is the one that matters here.
         when(_ctx.getProperty(anyString(), anyInt())).thenAnswer(inv -> {
             String key = inv.getArgument(0);
-            if ("i2p.tunnel.ghostPeer.attackCooldownMs".equals(key)) {return 60_000;}
-            if ("i2p.tunnel.ghostPeer.cooldownMs".equals(key)) {return 180_000;}
-            return 3; // i2p.tunnel.ghostPeer.timeoutThreshold
+            if ("i2p.tunnel.ghostPeer.attackCooldownMs".equals(key)) {return 120_000;}
+            if ("i2p.tunnel.ghostPeer.cooldownMs".equals(key)) {return 300_000;}
+            return 2; // i2p.tunnel.ghostPeer.timeoutThreshold
         });
         LogManager lm = new LogManager(_ctx);
         when(_ctx.logManager()).thenReturn(lm);
@@ -88,11 +88,10 @@ public class GhostPeerManagerTest {
     public void testMarkedAfterThresholdTimeouts() {
         assertFalse(_mgr.isGhost(hash(1)));
         _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
-        assertFalse("below threshold", _mgr.isGhost(hash(1)));
+        assertFalse("below threshold (1 of 2)", _mgr.isGhost(hash(1)));
         assertEquals(0, _mgr.getGhostCount());
         _mgr.recordTimeout(hash(1));
-        assertTrue("at threshold", _mgr.isGhost(hash(1)));
+        assertTrue("at threshold (2 of 2)", _mgr.isGhost(hash(1)));
         assertEquals(1, _mgr.getGhostCount());
     }
 
@@ -100,13 +99,12 @@ public class GhostPeerManagerTest {
     public void testGhostExpiresAfterCooldown() {
         _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
 
-        when(_clock.now()).thenReturn(NOW + 100_000L); // normal cooldown is 180s
+        when(_clock.now()).thenReturn(NOW + 200_000L); // normal cooldown is 300s
         assertTrue("still excluded mid-cooldown", _mgr.isGhost(hash(1)));
 
-        when(_clock.now()).thenReturn(NOW + 181_000L);
+        when(_clock.now()).thenReturn(NOW + 301_000L);
         assertFalse("released after cooldown", _mgr.isGhost(hash(1)));
         assertEquals(0, _mgr.getGhostCount());
     }
@@ -117,36 +115,35 @@ public class GhostPeerManagerTest {
         for (int i = 0; i < 5; i++) _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
 
-        when(_clock.now()).thenReturn(NOW + 30_000L);
-        assertTrue("still excluded before 60s", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(NOW + 60_000L);
+        assertTrue("still excluded before 120s", _mgr.isGhost(hash(1)));
 
-        when(_clock.now()).thenReturn(NOW + 61_000L);
-        assertFalse("released after 60s stress cooldown", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(NOW + 121_000L);
+        assertFalse("released after 120s stress cooldown", _mgr.isGhost(hash(1)));
     }
 
     @Test
     public void testCooldownSnapshottedAtMarkTime() {
-        // marked under stress (60s)...
+        // marked under stress (120s)...
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
         for (int i = 0; i < 5; i++) _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
-        // ...network recovers mid-cooldown: the 60s grant must not be extended to 180s
+        // ...network recovers mid-cooldown: the 120s grant must not be extended to 300s
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
-        when(_clock.now()).thenReturn(NOW + 61_000L);
+        when(_clock.now()).thenReturn(NOW + 121_000L);
         assertFalse("released per the cooldown at mark time", _mgr.isGhost(hash(1)));
 
-        // and the reverse: a normal (180s) mark must not be shortened by stress
+        // and the reverse: a normal (300s) mark must not be shortened by stress
         when(_clock.now()).thenReturn(NOW);
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
-        for (int i = 0; i < 3; i++) _mgr.recordTimeout(hash(2));
+        for (int i = 0; i < 2; i++) _mgr.recordTimeout(hash(2));
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
-        when(_clock.now()).thenReturn(NOW + 100_000L);
-        assertTrue("180s grant respected", _mgr.isGhost(hash(2)));
+        when(_clock.now()).thenReturn(NOW + 200_000L);
+        assertTrue("300s grant respected", _mgr.isGhost(hash(2)));
     }
 
     @Test
     public void testSuccessClearsGhost() {
-        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
@@ -157,7 +154,6 @@ public class GhostPeerManagerTest {
 
     @Test
     public void testClearGhost() {
-        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
