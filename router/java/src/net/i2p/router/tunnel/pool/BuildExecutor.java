@@ -167,6 +167,18 @@ public class BuildExecutor implements Runnable {
     private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
     private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
     /**
+     *  Sliding window of recent build results for smooth rate calculation.
+     *  Replaces the old counter-halving approach which caused sawtooth
+     *  oscillation in the timeout rate.  Each entry is a Result ordinal:
+     *  SUCCESS(0), BAD_RESPONSE(1), ..., TIMEOUT(10), etc.  The window
+     *  is indexed by a monotonically increasing counter modulo WINDOW_SIZE.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int WINDOW_SIZE = 100;
+    private final byte[] _buildResults = new byte[WINDOW_SIZE];
+    private final AtomicInteger _windowWriteIndex = new AtomicInteger();
+    /**
      *  Adaptive concurrency throttle: tracks the timeout rate and adjusts
      *  maxConcurrentBuilds dynamically.  When timeout rate exceeds 30%,
      *  builds are throttled to prevent overwhelming the IB reply path.
@@ -449,6 +461,12 @@ public class BuildExecutor implements Runnable {
     double getTimeoutRate() { return _timeoutRate; }
 
     /**
+     *  Package-visible for tests: returns how many results are in the window.
+     *  @since 0.9.71+
+     */
+    int getWindowCount() { return Math.min(_windowWriteIndex.get(), WINDOW_SIZE); }
+
+    /**
      * The maximum number of concurrent builds allowed.
      * @param val the maximum concurrent builds
      * @since 0.9.70+
@@ -633,6 +651,10 @@ public class BuildExecutor implements Runnable {
      */
     private void updateBuildStats(Result result) {
         StatManager sm = _context.statManager();
+        // Record result in sliding window
+        int idx = _windowWriteIndex.getAndIncrement() % WINDOW_SIZE;
+        _buildResults[idx] = (byte) result.ordinal();
+        // Also track legacy counters for backward-compatible stat emission
         if (result == Result.SUCCESS) {
             _buildSuccessCount.incrementAndGet();
         } else if (result == Result.TIMEOUT) {
@@ -640,24 +662,23 @@ public class BuildExecutor implements Runnable {
         } else {
             _buildFailureCount.incrementAndGet();
         }
-        // Emit actual computed success rate (0-100) from counters
-        int success = _buildSuccessCount.get();
-        int failure = _buildFailureCount.get();
-        int timeout = _buildTimeoutCount.get();
-        int total = success + failure + timeout;
-        if (total > 0) {
-            int rate = (success * 100) / total;
-            sm.addRateData("tunnel.buildSuccessRate", rate, 0);
-            sm.addRateData("tunnel.buildFailureRate", ((long) failure * 100) / total, 0);
-            sm.addRateData("tunnel.buildTimeoutRate", ((long) timeout * 100) / total, 0);
+        // Compute rates from sliding window (smooth, no sawtooth artifact)
+        int count = Math.min(_windowWriteIndex.get(), WINDOW_SIZE);
+        if (count > 0) {
+            int successes = 0, timeouts = 0, failures = 0;
+            for (int i = 0; i < count; i++) {
+                byte r = _buildResults[i];
+                if (r == Result.SUCCESS.ordinal()) successes++;
+                else if (r == Result.TIMEOUT.ordinal()) timeouts++;
+                else if (r != 0) failures++;
+            }
+            sm.addRateData("tunnel.buildSuccessRate", (successes * 100) / count, 0);
+            sm.addRateData("tunnel.buildFailureRate", ((long) failures * 100) / count, 0);
+            sm.addRateData("tunnel.buildTimeoutRate", ((long) timeouts * 100) / count, 0);
         }
-        // Every 50 builds, recalculate adaptive timeout
-        if (total >= 50) {
+        // Recalculate adaptive timeout every 50 builds (smooth window, no counter reset)
+        if (_windowWriteIndex.get() % 50 == 0 && _windowWriteIndex.get() >= 50) {
             calculateAdaptiveTimeoutFromSuccess();
-            // Reset counters periodically to favor recent behavior
-            _buildSuccessCount.set(_buildSuccessCount.getAndSet(0) / 2);
-            _buildFailureCount.set(_buildFailureCount.getAndSet(0) / 2);
-            _buildTimeoutCount.set(_buildTimeoutCount.getAndSet(0) / 2);
         }
     }
 
@@ -696,6 +717,22 @@ public class BuildExecutor implements Runnable {
     public static int getConcurrencyRestoreThresholdPct() { return (int) (CONCURRENCY_RESTORE_THRESHOLD * 100); }
 
     /**
+     *  Calculate the per-iteration build cap from the current timeout rate.
+     *  Proportional scaling (1-4) avoids the binary oscillation that the
+     *  old 2-vs-4 threshold caused around the 30% boundary.
+     *
+     *  @param timeoutRate the current timeout rate (0.0-1.0)
+     *  @return cap between 1 and 4
+     *  @since 0.9.71+
+     */
+    static int calculatePerIterationCap(double timeoutRate) {
+        if (timeoutRate <= CONCURRENCY_RESTORE_THRESHOLD) return 4;
+        if (timeoutRate <= CONCURRENCY_THROTTLE_THRESHOLD) return 3;
+        if (timeoutRate <= 0.50) return 2;
+        return 1;
+    }
+
+    /**
      * Calculate adaptive timeouts based on recorded build outcomes.
      * Starts from mainline's base values (13s/10s) and adjusts
      * marginally in either direction based on success rate.
@@ -710,14 +747,17 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+ adaptive concurrency throttle added
      */
     private void calculateAdaptiveTimeoutFromSuccess() {
-        int successCount = _buildSuccessCount.get();
-        int failureCount = _buildFailureCount.get();
-        int timeoutCount = _buildTimeoutCount.get();
-        int total = successCount + failureCount + timeoutCount;
-        if (total < 10) { return; }
+        int count = Math.min(_windowWriteIndex.get(), WINDOW_SIZE);
+        if (count < 10) { return; }
 
-        double successRate = (double) successCount / total;
-        double timeoutRate = (double) timeoutCount / total;
+        int successes = 0, timeouts = 0;
+        for (int i = 0; i < count; i++) {
+            byte r = _buildResults[i];
+            if (r == Result.SUCCESS.ordinal()) successes++;
+            else if (r == Result.TIMEOUT.ordinal()) timeouts++;
+        }
+        double successRate = (double) successes / count;
+        double timeoutRate = (double) timeouts / count;
         _timeoutRate = timeoutRate;
 
         // Base timeout from mainline (13s normal, 15s slow)
@@ -760,16 +800,19 @@ public class BuildExecutor implements Runnable {
         // per-build success rate at the cost of slower aggregate build speed.
         int baseMax = getMaxConcurrentBuilds();
         if (timeoutRate > CONCURRENCY_THROTTLE_THRESHOLD) {
-            // Throttle: reduce by 25% per threshold crossing (capped at 50% of base)
-            int throttled = (int) (baseMax * 0.75);
-            throttled = Math.max(throttled, baseMax / 2);
+            // Throttle: reduce by 20% per threshold crossing (floored at 60% of base).
+            // Softer step (was 75%/50%) to avoid over-throttling on transient spikes.
+            int throttled = (int) (baseMax * 0.80);
+            throttled = Math.max(throttled, (int) (baseMax * 0.60));
             if (_adaptiveMaxConcurrentBuilds > throttled) {
                 _adaptiveMaxConcurrentBuilds = throttled;
             }
         } else if (timeoutRate < CONCURRENCY_RESTORE_THRESHOLD &&
                    successRate > CONCURRENCY_RESTORE_SUCCESS_THRESHOLD) {
-            // Restore: increase by 10% toward base (never exceed base)
-            int restored = _adaptiveMaxConcurrentBuilds + Math.max(1, baseMax / 10);
+            // Restore: increase by 25% toward base (never exceed base).
+            // Faster recovery (was 10%) to avoid prolonged throttling after
+            // a transient spike subsides.
+            int restored = _adaptiveMaxConcurrentBuilds + Math.max(1, baseMax / 4);
             _adaptiveMaxConcurrentBuilds = Math.min(restored, baseMax);
         }
 
@@ -806,8 +849,8 @@ public class BuildExecutor implements Runnable {
         if (_log.shouldDebug()) {
             _log.debug("Adaptive timeout: " + (_adaptiveTimeout / 1000) +
                        "s (success: " + (int)(successRate * 100) +
-                       "%, timeouts: " + _buildTimeoutCount.get() +
-                       "/" + total + ", concurrency: " + _adaptiveMaxConcurrentBuilds + "/" + baseMax + ")");
+                       "%, timeouts: " + timeouts +
+                       "/" + count + ", concurrency: " + _adaptiveMaxConcurrentBuilds + "/" + baseMax + ")");
         }
     }
 
@@ -922,7 +965,7 @@ public class BuildExecutor implements Runnable {
             }
         }
 
-        int maxConcurrentBuilds = getMaxConcurrentBuilds();
+        int maxConcurrentBuilds = getAdaptiveMaxConcurrentBuilds();
 
         if (avg > 0) {
             int throttleFactor = isSlow ? 100 : 160;
@@ -1182,11 +1225,7 @@ public class BuildExecutor implements Runnable {
                 int allowed = allowed(); // also expires timed out requests
                 allowed = buildZeroHopTunnels(wanted, allowed); // zero-hop tunnels build inline
                 // Cap per-iteration builds to prevent flooding the network.
-                // Dynamic cap: reduce from 4 to 2 when timeout rate exceeds 30%
-                // to prevent overwhelming the IB reply path.  Under normal
-                // conditions, 4 allows faster recovery from cascading pool
-                // collapse; under congestion, 2 reduces burst load.
-                int perIterationCap = _timeoutRate > CONCURRENCY_THROTTLE_THRESHOLD ? 2 : 4;
+                int perIterationCap = calculatePerIterationCap(_timeoutRate);
                 if (allowed > perIterationCap) allowed = perIterationCap;
 
                 // Transport congestion backpressure: when the send pipeline is

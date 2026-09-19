@@ -4,6 +4,24 @@
     responders at selection entry
   * Profile: Dual-gate lifetime failure exclusion with soft penalty ramp
   * Console: Don't display empty countries on netdb summary
+  * Tunnel: Block ghost peers from tier promotion, demote on build
+    timeout; tune ghost peer threshold and cooldowns
+  * Tuner: Add ghost peer count to system health signal; expose 5 new
+    auto-tunable cascade-failure parameters
+  * PeerManager: Allow alive zero-history peers into fast/high-cap
+    tiers; reclassify tunnelTimedOut as transient overload
+  * I2PTunnel: Expire idle server executor threads after 30s keepalive;
+    close socket before output stream on requestor teardown
+  * Streaming:
+    - Micro-optimize RTT/RTO accessors, per-packet telemetry sampling,
+      and BDP in-flight cap caching
+    - Shard the retransmission timer across two independent timers
+    - Reap expired SYNs with a periodic accept-queue sweeper; fix
+      Retry-After substitution in the HTTP limit response
+  * Tunnel: Fix build success degradation — wire adaptive concurrency
+    into allowed(), replace counter-halving with sliding window,
+    proportional per-iteration cap, tune throttle recovery
+  * Garlic: Rate-limit decrypt failure warnings during LeaseSet rotation
 
 2026-09-18 dr|z3d
   * Streaming:
