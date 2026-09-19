@@ -30,6 +30,8 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelManagerFacade;
+import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
@@ -2466,6 +2468,21 @@ public class ProfileOrganizer {
     private void locked_promoteProfileToTiers(PeerProfile profile, double buildSuccess) {
         Hash peer = profile.getPeer();
         PeerProfile notFailingProfile = _notFailingPeers.get(peer);
+
+        // Ghost peers are excluded from promotion: a peer that consistently fails
+        // to respond to tunnel builds must not re-enter fast/high-cap tiers even
+        // if its profile stats are still above threshold.  The ghost check is
+        // cheap (ConcurrentHashMap lookup) and runs only during reorganize.
+        TunnelManagerFacade tmf = _context.tunnelManager();
+        if (tmf != null) {
+            GhostPeerManager ghostMgr = tmf.getGhostPeerManager();
+            if (ghostMgr != null && ghostMgr.isGhost(peer)) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Skipping ghost peer from promotion: " + peer.toBase32().substring(0, 6));
+                }
+                return;
+            }
+        }
 
         boolean recentFailures = hasRecentTunnelFailures(profile);
 

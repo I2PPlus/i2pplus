@@ -1077,6 +1077,13 @@ public class BuildExecutor implements Runnable {
                 if (_ghostPeerManager != null) {
                     _ghostPeerManager.recordTimeout(peer);
                 }
+                // Immediate tier demotion: peers that fail to respond to build
+                // requests are removed from fast/high-cap tiers without waiting
+                // for the slower data-phase demoteIfUnreachable strike path.
+                // This prevents re-selection of unresponsive peers in subsequent
+                // builds where ghost filtering may not yet be active (first
+                // timeout) or the ghost cooldown has just expired.
+                _context.profileOrganizer().demoteIfUnreachable(peer);
             }
         }
     }
