@@ -15,6 +15,11 @@ package net.i2p.router.peermanager;
  */
 public enum FloodfillReliability {
     /**
+     * Has demonstrated repeated failures to respond to lookups or stores.
+     * Excluded from tunnel building and lookup routing.
+     */
+    BAD,
+    /**
      * Advertises the floodfill capability but has no proven request-handling history.
      * Lookups are sent only sporadically (1 in N) to probe reliability.
      */
@@ -29,10 +34,5 @@ public enum FloodfillReliability {
      * Has a proven track record of handling lookups and stores reliably.
      * Treated as a trusted floodfill; eligible for full lookup routing.
      */
-    GOOD,
-    /**
-     * Has demonstrated repeated failures to respond to lookups or stores.
-     * Excluded from tunnel building and lookup routing.
-     */
-    BAD
+    GOOD
 }

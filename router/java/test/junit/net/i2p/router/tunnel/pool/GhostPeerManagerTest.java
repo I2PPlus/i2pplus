@@ -114,9 +114,7 @@ public class GhostPeerManagerTest {
     @Test
     public void testStressCooldownIsShorter() {
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2); // below attack threshold
-        _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
+        for (int i = 0; i < 5; i++) _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
 
         when(_clock.now()).thenReturn(NOW + 30_000L);
@@ -130,9 +128,7 @@ public class GhostPeerManagerTest {
     public void testCooldownSnapshottedAtMarkTime() {
         // marked under stress (60s)...
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
-        _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
+        for (int i = 0; i < 5; i++) _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
         // ...network recovers mid-cooldown: the 60s grant must not be extended to 180s
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
@@ -141,9 +137,8 @@ public class GhostPeerManagerTest {
 
         // and the reverse: a normal (180s) mark must not be shortened by stress
         when(_clock.now()).thenReturn(NOW);
-        _mgr.recordTimeout(hash(2));
-        _mgr.recordTimeout(hash(2));
-        _mgr.recordTimeout(hash(2));
+        when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
+        for (int i = 0; i < 3; i++) _mgr.recordTimeout(hash(2));
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
         when(_clock.now()).thenReturn(NOW + 100_000L);
         assertTrue("180s grant respected", _mgr.isGhost(hash(2)));

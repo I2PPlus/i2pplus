@@ -43,7 +43,7 @@ import net.i2p.util.SystemVersion;
  */
 public class BuildExecutor implements Runnable {
     private static int getTunnelTargetMin(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.targetMin", 2);
+        return ctx != null ? ctx.getProperty("i2p.tunnel.build.targetMin", 2) : 2;
     }
 
     /**
@@ -193,7 +193,7 @@ public class BuildExecutor implements Runnable {
      *
      *  @since 0.9.71+
      */
-    private static volatile long FIRST_HOP_FAILURE_COOLDOWN_MS = 5 * 60 * 1000L;
+    private static volatile long FIRST_HOP_FAILURE_COOLDOWN_MS = 2 * 60 * 1000L;
 
     /**
      *  Number of failures within {@link #FIRST_HOP_FAILURE_COOLDOWN_MS}
@@ -231,7 +231,7 @@ public class BuildExecutor implements Runnable {
     public static void setFirstHopFailureThreshold(int count) { FIRST_HOP_FAILURE_THRESHOLD = Math.max(1, Math.min(10, count)); }
     /**
      *  IB tunnel congestion tracking: monitors the count of available IB
-     *  exploratory tunnels.  When IB tunnels are low (<3), builds are
+     *  exploratory tunnels.  When IB tunnels are low (<2), builds are
      *  throttled to prevent overwhelming the reply path.
      *
      *  @since 0.9.71+
@@ -245,17 +245,17 @@ public class BuildExecutor implements Runnable {
      *
      *  @since 0.9.71+
      */
-    private static volatile int IB_CONGESTION_THRESHOLD = 3;
+    private static volatile int IB_CONGESTION_THRESHOLD = 2;
 
     /**
      *  Stale build pruning threshold fraction.  When the time elapsed
      *  since a build was configured exceeds this fraction of the adaptive
      *  timeout budget, the build is skipped (it would timeout anyway).
-     *  Expressed as percentage (e.g. 60 means 60%).  Tunable via {@link Tuner}.
+     *  Expressed as percentage (e.g. 40 means 40%).  Tunable via {@link Tuner}.
      *
      *  @since 0.9.71+
      */
-    private static volatile int STALE_BUILD_THRESHOLD_PCT = 60;
+    private static volatile int STALE_BUILD_THRESHOLD_PCT = 40;
 
     /**
      *  The IB congestion threshold.
@@ -372,7 +372,7 @@ public class BuildExecutor implements Runnable {
     public static int getTunnelTargetBuffer(RouterContext ctx) {
         int tuned = _tunedTargetBuffer;
         if (tuned >= 0) return tuned;
-        return ctx.getProperty("i2p.tunnel.targetBuffer", 0);
+        return ctx != null ? ctx.getProperty("i2p.tunnel.targetBuffer", 0) : 0;
     }
 
     /**
@@ -1196,9 +1196,9 @@ public class BuildExecutor implements Runnable {
                 }
 
                 // IB tunnel congestion detection: when available IB exploratory
-                // tunnels are low (<3), builds are throttled because the reply
+                // tunnels are low (<2), builds are throttled because the reply
                 // path is congested.  OB build replies come back through IB
-                // exploratory tunnels; with only 1-2 IB tunnels and 18+
+                // exploratory tunnels; with only 1 IB tunnel and 18+
                 // concurrent builds, the reply path becomes a bottleneck.
                 TunnelManagerFacade mgr = _context.tunnelManager();
                 if (mgr != null) {
@@ -1207,7 +1207,7 @@ public class BuildExecutor implements Runnable {
                         _lastIBTunnelCheck = now;
                         _lastIBTunnelCount = mgr.getFreeTunnelCount();
                     }
-                    if (_lastIBTunnelCount < IB_CONGESTION_THRESHOLD && allowed > 2) {
+                    if (_lastIBTunnelCount < IB_CONGESTION_THRESHOLD) {
                         _context.statManager().addRateData("tunnel.buildIBCongestion", 1);
                         allowed = Math.min(allowed, 2);
                         if (_log.shouldDebug()) {

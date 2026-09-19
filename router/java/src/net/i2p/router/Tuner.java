@@ -8549,7 +8549,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.tunnel.build.firstHopTimeout", "Build first-hop delivery timeout (ms)",
                   SUB_ROUTER,
 
-                  5000, 10000, 1000, "tunnel.buildFailFirstHop", _context);
+                  5000, 20000, 1000, "tunnel.buildFailFirstHop", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -8573,17 +8573,29 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = tunnel.buildFailFirstHop event count (first-hop delivery failures per period)
             // Primary signal: if first hops are failing, we need MORE delivery time.
             // Cross-refs: concurrentBuilds (storm detection), dropLoadBacklog (pending build queue),
-            //             testSuccessTime (actual tunnel latency)
+            //             testSuccessTime (actual tunnel latency),
+            //             buildTimeoutRate (overall timeout rate — primary driver of low success)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double backlog = getAdditionalStat(_context, "tunnel.dropLoadBacklog");
+            double timeoutRate = getAdditionalStatHourly(_context, "tunnel.buildTimeoutRate");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean tunnelSlow = !Double.isNaN(testTime) && testTime > 5000;
             boolean buildsBackedUp = !Double.isNaN(backlog) && backlog > 10;
+            boolean highTimeoutRate = !Double.isNaN(timeoutRate) && timeoutRate > 35;
 
             // Build storm: DON'T increase (storm = too many concurrent, not timeout issue)
             if (buildStorm) return current;
+
+            // High timeout rate + first-hop failures: increase aggressively
+            // (both symptoms point to premature timeout expiry)
+            if (highTimeoutRate && observed > 2)
+                return Math.min(_max, current + _step * 2);
+
+            // High timeout rate alone: builds need more delivery time
+            if (highTimeoutRate)
+                return Math.min(_max, current + _step);
 
             // Builds backed up + first-hop failures: increase (queue pressure + delivery issue)
             if (buildsBackedUp && observed > 2)
@@ -8600,12 +8612,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (observed > 2)
                 return Math.min(_max, current + _step);
 
-            // Storm cleared + no first-hop failures + backlog drained = decrease aggressively
-            if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5 && observed < 1 && !buildsBackedUp)
+            // Storm cleared + no first-hop failures + backlog drained + low timeout rate = decrease
+            if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5 && observed < 1 && !buildsBackedUp && !highTimeoutRate)
                 return Math.max(_min, current - _step * 2);
 
-            // No failures + backlog drained = decrease (room to go faster)
-            if (observed < 1 && !buildsBackedUp)
+            // No failures + backlog drained + low timeout rate = decrease (room to go faster)
+            if (observed < 1 && !buildsBackedUp && !highTimeoutRate)
                 return Math.max(_min, current - _step);
 
             return current;

@@ -86,7 +86,7 @@ public class ExploratoryPeerSelectorCooldownTest {
             matches.add(hash(1));
             matches.add(hash(2));
             return null;
-        }).when(_po).selectNotFailingPeers(anyInt(), any(Set.class), any(Set.class), anyBoolean(), anyInt(), any());
+        }).when(_po).selectNotFailingPeers(anyInt(), any(Set.class), any(Set.class), anyBoolean(), anyInt(), any(), anyBoolean());
 
         TunnelManagerFacade tmf = mock(TunnelManagerFacade.class);
         when(tmf.getGhostPeerManager()).thenReturn(null);
@@ -173,7 +173,7 @@ public class ExploratoryPeerSelectorCooldownTest {
         // Empty profileOrganizer selection must not return null either:
         // with no candidates the selection degrades to a self-only list
         // (zero-hop), which is a valid non-null result.
-        doNothing().when(_po).selectNotFailingPeers(anyInt(), any(Set.class), any(Set.class), anyBoolean(), anyInt(), any());
+        doNothing().when(_po).selectNotFailingPeers(anyInt(), any(Set.class), any(Set.class), anyBoolean(), anyInt(), any(), anyBoolean());
         List<Hash> rv = _selector.selectPeers(settings(true));
         assertNotNull(rv);
         assertEquals(Collections.singletonList(_self), rv);

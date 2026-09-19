@@ -593,11 +593,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
                 }
             } else {
-                // Single pass over the fast tier; a re-run with identical
-                // parameters cannot add peers (candidates are consumed into
-                // matches in one pass), so the no-slice escalation below is
-                // the only retry that can differ.
-                ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, params.ipRestriction, params.ipSet);
+                // Under moderate stress (success < 70%), widen candidate pool
+                // by using high-capacity slice instead of fast-only slice.
+                // This gives the quality loop more candidates to filter
+                // through, reducing starvation when the fast tier is
+                // depleted or on cooldown.  2-hop always uses wide slice.
+                boolean wideSlice = params.buildSuccess < 0.70 || length == 2;
+                ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, wideSlice ? SLICE_2_3 : SLICE_1, params.ipRestriction, params.ipSet);
             }
         }
         // Fallback to connected peers. KeepAlive job maintains active peer count
@@ -649,9 +651,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
             int qualityAttempts = 0;
             boolean inStartup = isStartupGracePeriod(ctx);
             // When very few candidates remain, start at tier 1 (accept
-            // connecting) rather than tier 2 (accept any) to still
+            // connecting) rather than tier 0 (accept any) to still
             // prefer peers with an active transport session.
-            int tier = (matches.size() < 3) ? 1 : 0;
+            // Under moderate stress (success < 70%), also start at tier 1
+            // to widen the acceptable peer pool faster and reduce
+            // first-hop selection starvation.
+            int tier = (matches.size() < 3 || params.buildSuccess < 0.70) ? 1 : 0;
             while (qualityAttempts < 16 && !matches.isEmpty()) {
                 qualityAttempts++;
                 tier = firstHopQualityTier(qualityAttempts, inStartup, tier);
@@ -1453,8 +1458,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * @return negative if p1 is more reliable, positive if p2 is more reliable, 0 if equal
      */
     public static int compareReliability(PeerProfile prof1, PeerProfile prof2) {
-        FloodfillReliability r1 = prof1 != null ? prof1.getFloodfillReliability() : FloodfillReliability.UNKNOWN;
-        FloodfillReliability r2 = prof2 != null ? prof2.getFloodfillReliability() : FloodfillReliability.UNKNOWN;
+        FloodfillReliability r1 = prof1 != null ? prof1.getFloodfillReliability() : null;
+        FloodfillReliability r2 = prof2 != null ? prof2.getFloodfillReliability() : null;
+        if (r1 == null) r1 = FloodfillReliability.UNKNOWN;
+        if (r2 == null) r2 = FloodfillReliability.UNKNOWN;
         // Higher ordinal = more reliable: BAD(0) < UNKNOWN(1) < OK(2) < GOOD(3)
         // Sort descending so GOOD sorts first
         return Integer.compare(r2.ordinal(), r1.ordinal());

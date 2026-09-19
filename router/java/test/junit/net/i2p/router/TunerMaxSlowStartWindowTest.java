@@ -53,9 +53,9 @@ public class TunerMaxSlowStartWindowTest {
     }
 
     @Test
-    public void belowRecoveryFloorStopsAtFactoryDefault() {
-        // at 1500 (below 2048 but above 1024) → increase toward 2048
-        assertEquals(2048, target(1500, 500));
+    public void belowFactoryDefaultIncreasesByStep() {
+        // at 1500 (below 2048 but above 1024) → increase by step toward 2048
+        assertEquals(1500 + STEP, target(1500, 500));
     }
 
     @Test

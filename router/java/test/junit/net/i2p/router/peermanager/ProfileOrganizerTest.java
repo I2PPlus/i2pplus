@@ -69,6 +69,9 @@ public class ProfileOrganizerTest {
         Set<RouterAddress> addresses = new HashSet<>(1);
         addresses.add(new RouterAddress("NTCP", addrProps, 10));
         info.setAddresses(addresses);
+        // publish time must be recent so hasValidRouterInfo() does not
+        // reject the peer as stale (DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2)
+        info.setPublished(System.currentTimeMillis());
         return info;
     }
 

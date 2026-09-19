@@ -107,7 +107,7 @@ public class ProfileOrganizer {
     /** @since 0.9.70+ */
     public static int getDefaultMinFastPeers() { return _defaultMinFastPeers; }
     /** @since 0.9.70+ */
-    public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(3000, val)); }
+    public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
 
     /**
      * PROP_MAX_ROUTERINFO_AGE_HOURS.
@@ -130,7 +130,7 @@ public class ProfileOrganizer {
     /** @since 0.9.70+ */
     public static int getDefaultMaxFastPeers() { return _defaultMaxFastPeers; }
     /** @since 0.9.70+ */
-    public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(5000, val)); }
+    public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(3000, val)); }
 
     /**
      * PROP_MINIMUM_HIGH_CAPACITY_PEERS.
@@ -2857,11 +2857,9 @@ public class ProfileOrganizer {
         long totalRequests = agreed + rejected;
 
         if (totalRequests == 0) {
-            // No tunnel test history — allow into tiers so they
-            // can accumulate profiling data through exploratory builds.
-            // isLowAcceptanceLowSample/Mature will filter out peers
-            // that build a poor track record over time.
-            return false;
+            // No tunnel test history — exclude from fast/high-cap tiers until
+            // they accumulate enough data through exploratory builds.
+            return true;
         }
 
         double ratio = (double) agreed / totalRequests;
