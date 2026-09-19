@@ -239,8 +239,26 @@ public class GhostPeerManager {
     }
 
     private static int getThreshold(RouterContext ctx, double buildSuccess) {
-        return isUnderAttack(buildSuccess) ? ATTACK_TIMEOUT_THRESHOLD : getTimeoutThreshold(ctx);
+        int configured = getTimeoutThreshold(ctx);
+        // Base 3: with default config (2) + 1 margin, a peer must fail 3
+        // consecutive builds within 60s to be ghosted.  Under severe attack
+        // (<0.30), drop back to 2 for faster eviction of actual ghosts.
+        // The configured value acts as a floor for the boosted baseline.
+        int base;
+        if (buildSuccess < SEVERE_GHOST_THRESHOLD) {
+            base = configured;
+        } else {
+            base = configured + 1;
+        }
+        return base;
     }
+
+    /**
+     *  Below this build-success ratio, use the un-boosted (lower) threshold
+     *  for faster ghost eviction during severe attacks.
+     *  @since 0.9.71+
+     */
+    private static final double SEVERE_GHOST_THRESHOLD = 0.30;
 
     /**
      * Clear ghost status for a peer (manual intervention).

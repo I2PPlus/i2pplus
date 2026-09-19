@@ -88,15 +88,18 @@ public class GhostPeerManagerTest {
     public void testMarkedAfterThresholdTimeouts() {
         assertFalse(_mgr.isGhost(hash(1)));
         _mgr.recordTimeout(hash(1));
-        assertFalse("below threshold (1 of 2)", _mgr.isGhost(hash(1)));
+        assertFalse("below threshold (1 of 3)", _mgr.isGhost(hash(1)));
         assertEquals(0, _mgr.getGhostCount());
         _mgr.recordTimeout(hash(1));
-        assertTrue("at threshold (2 of 2)", _mgr.isGhost(hash(1)));
+        assertFalse("below threshold (2 of 3)", _mgr.isGhost(hash(1)));
+        _mgr.recordTimeout(hash(1));
+        assertTrue("at threshold (3 of 3)", _mgr.isGhost(hash(1)));
         assertEquals(1, _mgr.getGhostCount());
     }
 
     @Test
     public void testGhostExpiresAfterCooldown() {
+        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
@@ -136,7 +139,7 @@ public class GhostPeerManagerTest {
         // and the reverse: a normal (300s) mark must not be shortened by stress
         when(_clock.now()).thenReturn(NOW);
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
-        for (int i = 0; i < 2; i++) _mgr.recordTimeout(hash(2));
+        for (int i = 0; i < 3; i++) _mgr.recordTimeout(hash(2));
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
         when(_clock.now()).thenReturn(NOW + 200_000L);
         assertTrue("300s grant respected", _mgr.isGhost(hash(2)));
@@ -144,6 +147,7 @@ public class GhostPeerManagerTest {
 
     @Test
     public void testSuccessClearsGhost() {
+        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
@@ -154,6 +158,7 @@ public class GhostPeerManagerTest {
 
     @Test
     public void testClearGhost() {
+        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
