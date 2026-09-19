@@ -104,6 +104,35 @@ public class ServerExecutorOverflowTest {
         }
     }
 
+    /**
+     * Idle core threads must expire after the keepalive period, not live
+     * forever.  Without {@code allowCoreThreadTimeOut(true)}, the
+     * core==max pool with LinkedBlockingQueue never reclaims threads,
+     * causing unbounded growth (1200+ TunnelSrv threads under load).
+     */
+    @Test
+    public void testIdleCoreThreadsExpireAfterKeepalive() throws InterruptedException {
+        int threads = 4;
+        ThreadPoolExecutor exec = TunnelControllerGroup.createServerExecutor(threads, new AtomicLong());
+        try {
+            // Allowing core timeout: the pool should report it.
+            assertTrue("core threads must be allowed to time out",
+                       exec.allowsCoreThreadTimeOut());
+            // Submit a task to create core threads, then let them idle.
+            java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(threads);
+            for (int i = 0; i < threads; i++) {
+                exec.execute(done::countDown);
+            }
+            done.await();
+            // Wait for keepalive (30s) + margin.  Idle threads should shrink.
+            Thread.sleep(32_000);
+            assertTrue("idle core threads should have expired, but pool size is " + exec.getPoolSize(),
+                       exec.getPoolSize() < threads);
+        } finally {
+            exec.shutdownNow();
+        }
+    }
+
     private static void await(java.util.concurrent.CountDownLatch l) {
         try { l.await(); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
     }
