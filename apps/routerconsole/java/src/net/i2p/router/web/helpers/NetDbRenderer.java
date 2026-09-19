@@ -1300,6 +1300,7 @@ class NetDbRenderer {
                     int[] tier = countryTiers.get(country);
                     int xtier = tier != null ? tier[0] : 0;
                     int flood = tier != null ? tier[1] : 0;
+                    if (totalCount <= 0) {continue;}
                     buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
                        .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
                        .append(" src=\"/flags.jsp?c=").append(country).append("\" loading=lazy>")
