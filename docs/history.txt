@@ -1,8 +1,67 @@
+2026-09-19 dr|z3d
+  * Tunnel: Mitigate build cascade failure — jitter pool backoff, raise
+    attack ghost threshold to 5 with 60s time-decay, seed proven
+    responders at selection entry
+  * Profile: Dual-gate lifetime failure exclusion with soft penalty ramp
+  * Console: Don't display empty countries on netdb summary; dark theme
+    tweaks
+
+2026-09-18 dr|z3d
+  * Streaming:
+    - Optimize throughput and stability: window size, dead zone, RTO,
+      tags, ack delay
+    - Rotate tunnel on soft failure to break stalled downloads; restore
+      persistDelay cap to 15s with retransmit-stall tunnel rotation
+    - Fix retransmit-stall detection, resource leaks; revert per-packet
+      rotation to SYN-only
+  * Tunnel:
+    - Make preConnectTo conditional to eliminate ~8.5s startup latency;
+      prefer unproven peers for exploratory builds
+  * Profile:
+    - Require proof-of-life for stale RouterInfo, allow unproven peers
+      into fast/high-cap tiers, latency-driven tier caps
+  * Floodfill: Add UNKNOWN reliability tier and integrate into peer
+    selection
+  * Router: Remove force-fail of viable tunnels on rotation saturation
+  * Core: Extend tunnel build timeout from 20min to 1hr globally
+
+2026-09-17 dr|z3d
+  * Streaming: Rotate outbound tunnel on retransmit stall; repair
+    maxSlowStartWindow dead zone and factory default floor
+  * I2PTunnel: Add connection-level failover across session tunnel pool
+  * Tuner: Fix stale default corruption in refreshDefault/autoRevertToDefault
+  * PeerManager: Fix buildSuccessRatio mixing RTT values with event counts
+  * Tuner/Router/Streaming: Implement forceTunnelFailure streaming support
+
+2026-09-16 dr|z3d
+  * Streaming:
+    - Multi-threaded accept worker pool with dynamic scaling; cancel
+      timers on disconnect to prevent spurious TIME-WAIT events
+    - CA growth rate: 20-bit fixed-point accumulator and 16x deficit
+      multiplier; reduce ackPackets() lock contention and batching delays
+    - Fix unchoking, notifyCloseSent, sender choke on out-of-order
+      packets; track data packets for tunnel failure retry
+    - Subsession-aware ping and lifecycle support
+  * I2PTunnel:
+    - Sticky proxy selection for SOCKS4a and SOCKS5 servers
+    - Fix socket open timeout, lookupWithTimeout, DCCServer expiration
+    - Flush browser output before socket reset to prevent truncated
+      HTTP responses
+  * I2PSnark:
+    - Catch unbounded bdecode recursion; sorted dictionaries in
+      extensions; uppercase infohash in magnet names
+    - Improve path traversal checks; don't NPE on missing extension map
+  * SAM: Fix DG2/3 subsessions listening on wrong protocol
+  * Core: Add I2PClientFactory.createClient(I2PAppContext)
+  * Router: Add IPV6_FORCE_ON enum constant for force-ipv6 support
+  * Addressbook: Check for dest mismatch in action=update
+
 2026-09-15 dr|z3d
   * Profiles:
     - Use router uptime for floodfill heard-age grace period
     - Add floodfill status classification and display column
     - Spread floodfill lookups wider during startup grace period
+    - Sort floodfill status column by quality
 
 2026-09-14 dr|z3d
   * Streaming: Floor ssthresh anchor at 1s RTT, reset strikes on ACK
