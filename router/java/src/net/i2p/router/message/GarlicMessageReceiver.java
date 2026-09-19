@@ -22,6 +22,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Handles the reception and decryption of GarlicMessages. Decrypts the garlic message using
  * the appropriate keys, validates each garlic clove, and passes valid cloves to the configured
@@ -38,6 +40,16 @@ public class GarlicMessageReceiver {
     private final Log _log;
     private final CloveReceiver _receiver;
     private final Hash _clientDestination;
+
+    /**
+     *  Rate-limited decrypt failure counter.  Individual failures are logged
+     *  at DEBUG; a summary WARN is emitted every {@code FAIL_WARN_INTERVAL}
+     *  failures to keep the log usable during normal LeaseSet rotation.
+     *
+     *  @since 0.9.71+
+     */
+    private static final AtomicInteger _decryptFailCount = new AtomicInteger();
+    private static final int FAIL_WARN_INTERVAL = 50;
 
     /**
      * Interface for handling decrypted garlic cloves. Implementations should process or dispatch
@@ -171,7 +183,14 @@ public class GarlicMessageReceiver {
                         _context.routerHash().toBase32().startsWith(_clientDestination.toBase32().substring(0, 6));
                 final String d = (_clientDestination != null && !isUs) ? nick : "Our Router";
                 final String keysUsed = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
-                _log.warn("Failed to decrypt " + message + " with " + keysUsed + " -> Target: " + d);
+                _log.debug("Failed to decrypt " + message + " with " + keysUsed + " -> Target: " + d);
+            }
+            // Rate-limited WARN: most failures are expected during LeaseSet rotation;
+            // emit a summary every FAIL_WARN_INTERVAL instead of one per failure.
+            int failures = _decryptFailCount.incrementAndGet();
+            if (failures % FAIL_WARN_INTERVAL == 1) {
+                _log.warn("Failed to decrypt " + failures +
+                          " GarlicMessages total (most are expected during LeaseSet rotation)");
             }
             _context.messageHistory().messageProcessingError(message.getUniqueId(), message.getClass().getName(),
                     "Garlic could not be decrypted");
