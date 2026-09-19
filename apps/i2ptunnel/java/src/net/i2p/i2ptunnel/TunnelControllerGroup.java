@@ -1798,7 +1798,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.71+
      */
     static ThreadPoolExecutor createServerExecutor(int threads, AtomicLong index) {
-        return new ThreadPoolExecutor(
+        ThreadPoolExecutor tpe = new ThreadPoolExecutor(
             threads, threads,
             SERVER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<>(serverBacklogQueueCapacity),
@@ -1810,6 +1810,13 @@ public class TunnelControllerGroup implements ClientApp {
             },
             new ThreadPoolExecutor.AbortPolicy()
         );
+        // Allow idle core threads to expire after SERVER_KEEPALIVE_MS (30s).
+        // Without this, core threads live forever even when idle, because
+        // keepAlive only applies to threads above corePoolSize by default.
+        // With a bounded queue, idle threads are reclaimed and recreated on
+        // demand (~1ms overhead, negligible vs network latency).
+        tpe.allowCoreThreadTimeOut(true);
+        return tpe;
     }
 
     /**
