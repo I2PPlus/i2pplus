@@ -27,6 +27,7 @@ import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.tunnel.pool.BuildHandler;
 import net.i2p.router.tunnel.pool.BuildExecutor;
 import net.i2p.router.tunnel.pool.BuildRequestor;
+import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.ParticipatingThrottler;
 import net.i2p.router.tunnel.pool.RequestThrottler;
 import net.i2p.router.tunnel.pool.TestJob;
@@ -11596,6 +11597,7 @@ protected int computeTarget(double observed) {
             double sendFailScore = scoreSendFailure();
             double buildStormScore = scoreBuildStorms();
             double latencyScore = scoreLatency();
+            double ghostScore = scoreGhostPeers();
 
             // Weighted geometric mean — skip NaN factors (insufficient data).
             // Renormalize weights so the total is 1.0 across available factors.
@@ -11606,6 +11608,7 @@ protected int computeTarget(double observed) {
             if (!Double.isNaN(sendFailScore))   { total *= Math.pow(sendFailScore, 0.15);   weightSum += 0.15; }
             if (!Double.isNaN(buildStormScore)) { total *= Math.pow(buildStormScore, 0.10); weightSum += 0.10; }
             if (!Double.isNaN(latencyScore))    { total *= Math.pow(latencyScore, 0.30);    weightSum += 0.30; }
+            if (!Double.isNaN(ghostScore))      { total *= Math.pow(ghostScore, 0.10);      weightSum += 0.10; }
             _score = (weightSum > 0) ? Math.pow(total, 1.0 / weightSum) : 1.0;
         }
 
@@ -11838,6 +11841,22 @@ protected int computeTarget(double observed) {
             if (avg <= 100) return 1.0;
             if (avg <= 1000) return 1.0 - 0.5 * (avg - 100) / 900;
             return clamp(0.5 - 0.5 * (avg - 1000) / 4000);
+        }
+
+        /**
+         * Ghost peer count: many ghosts indicate widespread unreachability.
+         * 0 ghosts → 1.0, 20+ ghosts → 0.0.  A high ghost count is a
+         * strong signal that the router is selecting peers that cannot
+         * respond, which drives build failures and wastes tunnel slots.
+         */
+        private double scoreGhostPeers() {
+            TunnelManagerFacade mgr = _ctx.tunnelManager();
+            if (mgr == null) return Double.NaN;
+            GhostPeerManager ghostMgr = mgr.getGhostPeerManager();
+            if (ghostMgr == null) return Double.NaN;
+            int count = ghostMgr.getGhostCount();
+            // 0→1.0, 20→0.0
+            return clamp(1.0 - (count / 20.0));
         }
 
         /**
