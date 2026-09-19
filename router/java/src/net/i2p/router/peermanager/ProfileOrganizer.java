@@ -86,6 +86,14 @@ public class ProfileOrganizer {
     private double _thresholdCapacityValue;
     private double _thresholdIntegrationValue;
     private double _thresholdRTT;
+    /**
+     * First-measured fast-tier RTT boundary, captured during the initial
+     * reorganize pass.  Used by {@link #computeAdaptiveRttCeiling} to floor the
+     * adaptive ceiling at 2× the startup baseline when build success is
+     * degraded, preventing RTT ceiling amplification during cascade failure.
+     * @since 0.9.71+
+     */
+    private volatile double _baselineRTT;
     private final InverseCapacityComparator _comp;
 
     /**
@@ -160,12 +168,32 @@ public class ProfileOrganizer {
     /** Cooldown period (ms) after demotion before peer can be re-promoted */
     private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
     /**
-     * Exclude peers from tunnel selection after this many cumulative failures.
-     * Without this, the blame system (tunnelFailed) only increments counters —
-     * peers with 200+ failures keep getting selected because ghost peer clears
-     * on any success and first-hop cooldown is only 5 minutes.
+     *  Exclude peers from tunnel selection after this many cumulative failures
+     *  OR when the lifetime failure ratio exceeds {@link #MAX_LIFETIME_FAILURE_RATIO},
+     *  whichever is stricter.  The hard cap is high (50) to avoid permanently
+     *  excluding long-lived peers that accumulated failures over days but are
+     *  currently healthy.  Between {@link #SOFT_FAILURE_PENALTY_THRESHOLD} (20)
+     *  and this cap, peers are penalized (lower selection priority) but not
+     *  excluded — a lightweight exponential backoff that still allows recovery.
+     *
+     *  @since 0.9.71+ (raised from 20)
      */
-    private static final long MAX_LIFETIME_TUNNEL_FAILURES = 20;
+    private static final long MAX_LIFETIME_TUNNEL_FAILURES = 50;
+    /**
+     *  Failure count above which peers receive a selection priority penalty
+     *  but are not excluded.  Between this and {@link #MAX_LIFETIME_TUNNEL_FAILURES},
+     *  peers are deprioritized rather than banned.
+     *  @since 0.9.71+
+     */
+    private static final long SOFT_FAILURE_PENALTY_THRESHOLD = 20;
+    /**
+     *  Maximum lifetime failure ratio (failed / (agreed + failed)) before a peer
+     *  is excluded.  A peer with 50%+ failure rate is unreliable regardless of
+     *  absolute count.  Combined with {@link #MAX_LIFETIME_TUNNEL_FAILURES},
+     *  this prevents long-lived peers with terrible records from staying selectable.
+     *  @since 0.9.71+
+     */
+    private static final double MAX_LIFETIME_FAILURE_RATIO = 0.50;
 
     /**
      * When high-cap tier has at least this many peers, require actual capacity
@@ -234,11 +262,14 @@ public class ProfileOrganizer {
     private static final float DEFAULT_LOSSY_MODERATE_THRESHOLD = 0.10f;
     /**
      * Minimum time after a loss demotion before a peer may be re-admitted,
-     * even with fresh clean evidence. Asymmetric hysteresis: demotion is
-     * instant on weak evidence, re-admission requires both this age and a
-     * fresh clean measurement (see shouldReadmitLossy).
+     * even with fresh clean evidence. Reduced from 30 min to 10 min to
+     * accelerate tier recovery after congestion clears. Asymmetric
+     * hysteresis: demotion is instant on weak evidence, re-admission
+     * requires both this age and a fresh clean measurement (see
+     * {@link #shouldReadmitLossy}).
+     * @since 0.9.71+ (reduced from 30 min)
      */
-    private static final long LOSS_READMIT_MIN_AGE = 30 * 60 * 1000L;
+    private static final long LOSS_READMIT_MIN_AGE = 10 * 60 * 1000L;
     /**
      * Selection penalty for moderately-lossy peers: their random priority
      * range is multiplied by this factor, so they are this many times less
@@ -677,7 +708,7 @@ public class ProfileOrganizer {
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
-        try {locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, computeFastRttCeiling(_thresholdRTT));}
+        try {locked_selectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess));}
         finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
@@ -705,7 +736,7 @@ public class ProfileOrganizer {
         double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
         try {
-            long rttCeiling = computeFastRttCeiling(_thresholdRTT);
+            long rttCeiling = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess);
             if (subTierMode != Slice.SLICE_ALL)
                 locked_selectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode, mask, ipSet, buildSuccess, rttCeiling);
             else
@@ -786,7 +817,7 @@ public class ProfileOrganizer {
          try {
              // More lenient RTT ceiling for high-capacity peers:
              // they typically have higher latency than fast-tier peers.
-             long cap = computeFastRttCeiling(_thresholdRTT) * 2;
+             long cap = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess) * 2;
              long rttCeiling = Math.min(cap, AUTO_RTT_CAP_MS);
              locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
          } finally {releaseReadLock();}
@@ -1496,6 +1527,31 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Compute the adaptive absolute-RTT ceiling for fast-tier selection,
+     * floored at 2× the startup baseline when build success is degraded.
+     * Prevents RTT ceiling amplification during cascade failure: when the
+     * entire network slows, the ceiling rises with it and peers that would
+     * cause failures are allowed through.  The baseline floor keeps the
+     * ceiling tight during degradation while allowing natural growth when
+     * builds are healthy.
+     *
+     * @param boundaryRttMs the fast-tier RTT boundary from the last reorganize
+     * @param buildSuccess current tunnel build success ratio [0.0, 1.0]
+     * @return the selection ceiling in ms
+     * @since 0.9.71+
+     */
+    long computeAdaptiveRttCeiling(double boundaryRttMs, double buildSuccess) {
+        long ceiling = computeFastRttCeiling(boundaryRttMs);
+        // During degradation (buildSuccess < 0.65), floor the ceiling at
+        // 2× the startup baseline to prevent amplification.
+        if (buildSuccess < 0.65d && _baselineRTT > 0) {
+            long baselineFloor = (long) (_baselineRTT * 2);
+            ceiling = Math.max(ceiling, Math.max(baselineFloor, AUTO_RTT_FLOOR_MS));
+        }
+        return ceiling;
+    }
+
+    /**
      * True if the peer's measured tunnel-test RTT exceeds the adaptive selection
      * ceiling, indicating it should be excluded from this fast-tier pick while
      * still remaining in the tier (soft signal — the ceiling applies at selection
@@ -2020,6 +2076,13 @@ public class ProfileOrganizer {
 
         // Record the boundary peer's measured latency for display and diagnostics
         _thresholdRTT = candidates.get(cutoff).getTunnelTestTimeAverage();
+        // Capture the baseline RTT on the first reorganize pass.  This is used
+        // to floor the adaptive ceiling when the network is degraded, preventing
+        // RTT ceiling amplification where the ceiling rises with the network
+        // and peers that would cause failures are allowed through.
+        if (_baselineRTT <= 0 && _thresholdRTT > 0) {
+            _baselineRTT = _thresholdRTT;
+        }
         return candidates.get(cutoff).getSpeedValue();
     }
 
@@ -2248,20 +2311,57 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Returns true when the peer has excessive lifetime tunnel failures.
+     *  Returns true when the peer has excessive cumulative tunnel failures.
+     *  Uses a dual gate: hard exclusion at {@link #MAX_LIFETIME_TUNNEL_FAILURES}
+     *  failures or when the lifetime failure ratio exceeds
+     *  {@link #MAX_LIFETIME_FAILURE_RATIO}.  Between
+     *  {@link #SOFT_FAILURE_PENALTY_THRESHOLD} and the hard cap, peers are not
+     *  excluded but receive a selection priority penalty (handled by the caller
+     *  via {@link #getExcessiveFailurePenalty(Hash)}).
+     *  <p>
+     *  The blame system (tunnelFailed()) only increments statistics — it never
+     *  bans.  Without this check, peers with 200+ failures keep getting selected
+     *  because the ghost peer system clears on any success and the first-hop
+     *  cooldown is only 5 minutes.
+     *
+     *  @param peer the peer hash
+     *  @return true when the peer should be excluded from selection
      */
     private boolean hasExcessiveLifetimeFailures(Hash peer) {
-        // Exclude peers with excessive cumulative tunnel failures.
-        // The blame system (tunnelFailed()) only increments statistics — it never
-        // bans.  Without this check, peers with 200+ failures keep getting selected
-        // because the ghost peer system clears on any success and the first-hop
-        // cooldown is only 5 minutes.
         PeerProfile prof = getProfileNonblocking(peer);
-        if (prof != null) {
-            long lifetimeFailed = prof.getTunnelHistory().getLifetimeFailed();
-            if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return true;
+        if (prof == null) return false;
+        long lifetimeFailed = prof.getTunnelHistory().getLifetimeFailed();
+        if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return true;
+        long lifetimeAgreed = prof.getTunnelHistory().getLifetimeAgreedTo();
+        long totalRequests = lifetimeAgreed + lifetimeFailed;
+        if (totalRequests > 0) {
+            double ratio = (double) lifetimeFailed / totalRequests;
+            if (ratio > MAX_LIFETIME_FAILURE_RATIO) return true;
         }
         return false;
+    }
+
+    /**
+     *  Selection penalty multiplier for peers between the soft and hard failure
+     *  thresholds.  Peers with {@link #SOFT_FAILURE_PENALTY_THRESHOLD} to
+     *  {@link #MAX_LIFETIME_TUNNEL_FAILURES} lifetime failures are not excluded
+     *  but receive a penalty that lowers their selection priority.  Returns
+     *  1.0 (no penalty) for peers below the soft threshold or above the hard
+     *  threshold (they'd be excluded anyway).  Pure decision — no side effects.
+     *
+     *  @param peer the peer hash
+     *  @return a penalty multiplier in (1.0, 2.0] — higher means more penalized
+     *  @since 0.9.71+
+     */
+    static double getExcessiveFailurePenalty(Hash peer, PeerProfile prof) {
+        if (prof == null) return 1.0;
+        long lifetimeFailed = prof.getTunnelHistory().getLifetimeFailed();
+        if (lifetimeFailed <= SOFT_FAILURE_PENALTY_THRESHOLD) return 1.0;
+        if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return 1.0;
+        // Linear ramp from 1.0 (at soft threshold) to 2.0 (at hard cap)
+        double frac = (double) (lifetimeFailed - SOFT_FAILURE_PENALTY_THRESHOLD) /
+                      (MAX_LIFETIME_TUNNEL_FAILURES - SOFT_FAILURE_PENALTY_THRESHOLD);
+        return 1.0 + frac;
     }
 
     /**
@@ -2874,7 +2974,12 @@ public class ProfileOrganizer {
     /**
      * Check if a peer has had recent tunnel failures (failed tests or builds).
      * Used to gate fast/high-cap tier admission when tier counts are healthy.
-     * @return true if the peer has had any tunnel failures in the last hour
+     * Requires more than 3 failures in the last hour AND either a failure
+     * ratio above 30% or more than 5 absolute failures/hour — peers with
+     * 1-3 transient failures during a network blip stay in tiers rather
+     * than being purged.  This prevents tier collapse during brief
+     * network-wide events where many peers experience isolated failures.
+     * @return true if the peer has sustained recent tunnel failures
      * @since 0.9.70+
      */
     private boolean hasRecentTunnelFailures(PeerProfile profile) {
@@ -2882,7 +2987,16 @@ public class ProfileOrganizer {
         if (th == null) return false;
         Rate failed = th.getFailedRate().getRate(RateConstants.ONE_HOUR);
         if (failed == null) return false;
-        return failed.getCurrentEventCount() > 0;
+        long failCount = failed.getCurrentEventCount();
+        // Allow transient failures (1-3) during network blips
+        if (failCount <= 3) return false;
+        // Reject peers with sustained failures (>30% failure ratio)
+        long agreed = th.getLifetimeAgreedTo();
+        long rejected = th.getLifetimeRejected();
+        long total = agreed + rejected + failCount;
+        if (total > 0 && (double) failCount / total > 0.3) return true;
+        // Reject peers with high absolute failure count (>5 failures/hour)
+        return failCount > 5;
     }
 
     /**
@@ -2928,6 +3042,11 @@ public class ProfileOrganizer {
      * peer that recovered organically accumulates new packets (netDb traffic
      * continues while it is demoted) and reports a fresh clean ratio, while a
      * peer that is still lossy never does.
+     * <p>
+     * Fast-track: peers with a fresh clean loss report (loss ratio below 5%
+     * within the lossy freshness window, default 10 min) are readmitted
+     * immediately regardless of the minimum age, accelerating tier recovery
+     * after brief congestion episodes.
      *
      * @param profile the profile
      * @param now current time in ms
@@ -2937,10 +3056,16 @@ public class ProfileOrganizer {
     private boolean shouldReadmitLossy(PeerProfile profile, long now) {
         long since = profile.getLossySince();
         if (since <= 0) return true;
-        if (now - since < LOSS_READMIT_MIN_AGE) return false;
         float threshold = getLossyThreshold(_context);
-        return now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW) &&
-               profile.getLossRatio() < threshold;
+        boolean freshClean = now - profile.getLossRatioLastUpdate() < _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW) &&
+                             profile.getLossRatio() < threshold;
+        // Fast-track: peer has fresh clean evidence (loss ratio below threshold
+        // within the freshness window) AND the loss ratio is very low (<5%),
+        // indicating recovery from brief congestion.  Skip the minimum age
+        // requirement to accelerate tier re-admission.
+        if (freshClean && profile.getLossRatio() < 0.05f) return true;
+        if (now - since < LOSS_READMIT_MIN_AGE) return false;
+        return freshClean;
     }
 
     /**
