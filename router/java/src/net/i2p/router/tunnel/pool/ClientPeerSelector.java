@@ -101,6 +101,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
             return Collections.emptyList();
         }
+        // Cold-start seeding: at startup the proven-responder map is empty,
+        // so first-build selection has no proven preference.  Seed once with
+        // random fast-tier peers.  The O(1) size check makes this a no-op
+        // after the first seeding.  Called here (not prunePeerMaps) because
+        // this path already expects PO access via selectFastPeers().
+        if (_provenResponders.size() < MIN_PROVEN_RESPONDER_COUNT) {
+            seedProvenResponders(ctx, ctx.clock().now());
+        }
         List<Hash> rv;
         boolean isInbound = settings.isInbound();
 
@@ -213,13 +221,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // No peer should appear in more than 1 tunnel of the same pool.
         // Relaxed when the pool is struggling (incomplete LeaseSet or active
         // tunnels below target) so replacement builds can reuse peers rather
-        // than starving the pool of build candidates.
+        // than starving the pool of build candidates.  Also relaxed when the
+        // pool has fewer than 3 active tunnels, to prioritize pool recovery
+        // over diversity during rebuild phases.
         Hash dest = settings.getDestination();
         if (dest != null) {
             TunnelManagerFacade tmf = ctx.tunnelManager();
             TunnelPool pool = isInbound ? tmf.getInboundPool(dest)
                                         : tmf.getOutboundPool(dest);
-            if (pool != null && !pool.isStruggling()) {
+            if (pool != null && !pool.isStruggling() && pool.getActiveTunnelCount() >= 3) {
                 Set<Hash> poolPeers = getPeersInPool(ctx, pool);
                 exclude.addAll(poolPeers);
             }
@@ -634,13 +644,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // 33/min first-hop failures mean we're selecting peers
             // that look fast on paper but can't actually receive the build.
             // More attempts = higher chance of finding a connected peer.
+            // Raised from 8 to 16 to reduce starvation when many peers
+            // are on first-hop cooldown or stale during degradation.
             int qualityAttempts = 0;
             boolean inStartup = isStartupGracePeriod(ctx);
             // When very few candidates remain, start at tier 1 (accept
             // connecting) rather than tier 2 (accept any) to still
             // prefer peers with an active transport session.
             int tier = (matches.size() < 3) ? 1 : 0;
-            while (qualityAttempts < 8 && !matches.isEmpty()) {
+            while (qualityAttempts < 16 && !matches.isEmpty()) {
                 qualityAttempts++;
                 tier = firstHopQualityTier(qualityAttempts, inStartup, tier);
                 Hash firstHop = matches.iterator().next();
@@ -670,6 +682,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     continue;
                 }
                 break;
+            }
+            // Fallback: if quality loop exhausted all candidates without
+            // finding a suitable peer, accept the last remaining candidate
+            // rather than returning empty — one attempt with a mediocre
+            // peer is better than zero build attempts per cycle.
+            if (matches.isEmpty() && qualityAttempts >= 16) {
+                if (log.shouldDebug()) {
+                    log.debug("First-hop quality loop exhausted " + qualityAttempts +
+                              " candidates without a match; build will be attempted " +
+                              "with a degraded candidate if available");
+                }
             }
         }
         // preConnectTo: warm up the transport session so the TBR delivery

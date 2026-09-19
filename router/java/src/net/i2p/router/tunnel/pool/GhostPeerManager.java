@@ -2,7 +2,6 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
@@ -21,10 +20,27 @@ import net.i2p.util.Log;
 public class GhostPeerManager {
     private final Log _log;
     private final RouterContext _context;
-    private final ConcurrentHashMap<Hash, AtomicInteger> _timeoutCounts;
+    private final ConcurrentHashMap<Hash, long[]> _timeoutStateMap;
     private final ConcurrentHashMap<Hash, Long> _ghostUntil;
 
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
+    /**
+     *  Number of timeouts under attack before a peer is ghosted.  Raised
+     *  from 3 to 5 to prevent ghost cascades during brief network hiccups:
+     *  a peer that times out sporadically isn't ghosted; only peers with
+     *  sustained no-reply patterns during genuine attacks are excluded.
+     *  @since 0.9.71+ (raised from 3)
+     */
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 5;
+
+    /**
+     *  Only count timeouts within this window toward the ghost threshold.
+     *  Timeouts older than 60s are decayed (not counted), so sporadic
+     *  failures over a long window don't trigger ghosting.  This prevents
+     *  ghost cascades during brief network hiccups where many peers timeout
+     *  once or twice but recover quickly.
+     *  @since 0.9.71+
+     */
+    private static final long TIMEOUT_DECAY_WINDOW_MS = 60 * 1000L;
 
     private static int getTimeoutThreshold(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 3);
@@ -64,7 +80,7 @@ public class GhostPeerManager {
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);
-        _timeoutCounts = new ConcurrentHashMap<>(MAX_TRACKED_PEERS);
+        _timeoutStateMap = new ConcurrentHashMap<>(MAX_TRACKED_PEERS);
         _ghostUntil = new ConcurrentHashMap<>(MAX_TRACKED_PEERS);
     }
 
@@ -75,6 +91,11 @@ public class GhostPeerManager {
      * The exclusion expiry (mark time + cooldown) is snapshotted at mark
      * time, so a later change of network state doesn't extend or shorten
      * an active exclusion.
+     * <p>
+     * Time-decay: only timeouts within {@link #TIMEOUT_DECAY_WINDOW_MS}
+     * count toward the threshold.  Timeouts older than the decay window
+     * are forgotten, so sporadic failures over a long period don't trigger
+     * ghosting — only sustained no-reply patterns do.
      *
      * @param peer the peer
      */
@@ -82,18 +103,31 @@ public class GhostPeerManager {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
         pruneToLimit();
 
-        AtomicInteger count = _timeoutCounts.putIfAbsent(peer, new AtomicInteger(1));
-        if (count != null) {
-            count.incrementAndGet();
+        long now = _context.clock().now();
+        ConcurrentHashMap<Hash, long[]> timeoutState = _timeoutStateMap;
+        long[] state = timeoutState.get(peer);
+        if (state == null) {
+            state = new long[]{0, now}; // [count, lastTimeoutMs]
+            long[] existing = timeoutState.putIfAbsent(peer, state);
+            if (existing != null) state = existing;
+        }
+        // Time-decay: if the last timeout was outside the decay window,
+        // reset the counter so sporadic failures don't accumulate.
+        synchronized (state) {
+            if (now - state[1] > TIMEOUT_DECAY_WINDOW_MS) {
+                state[0] = 0;
+            }
+            state[0]++;
+            state[1] = now;
         }
 
-        int newCount = count != null ? count.get() : 1;
+        long newCount = state[0];
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         if (newCount >= getThreshold(_context, buildSuccess)) {
             long cooldownMs = getActiveCooldownMs(_context, buildSuccess);
-            Long existingExpiry = _ghostUntil.putIfAbsent(peer, _context.clock().now() + cooldownMs);
+            Long existingExpiry = _ghostUntil.putIfAbsent(peer, now + cooldownMs);
             if (existingExpiry == null) {
-                logGhostMark(peer, newCount, isUnderAttack(buildSuccess), cooldownMs);
+                logGhostMark(peer, (int) newCount, isUnderAttack(buildSuccess), cooldownMs);
             }
         }
     }
@@ -126,24 +160,24 @@ public class GhostPeerManager {
      *  Best-effort under concurrency; size can transiently exceed the limit.
      */
     private void pruneToLimit() {
-        if (_timeoutCounts.size() < MAX_TRACKED_PEERS) {
+        if (_timeoutStateMap.size() < MAX_TRACKED_PEERS) {
             return;
         }
         int threshold = getThreshold(_context, _context.profileOrganizer().getTunnelBuildSuccess());
         long now = _context.clock().now();
-        for (Map.Entry<Hash, AtomicInteger> e : _timeoutCounts.entrySet()) {
+        for (Map.Entry<Hash, long[]> e : _timeoutStateMap.entrySet()) {
             Hash peer = e.getKey();
-            AtomicInteger count = e.getValue();
+            long[] state = e.getValue();
             Long until = _ghostUntil.get(peer);
             // Evict expired ghosts (cooldown elapsed without an isGhost() cleanup)
             // and sub-threshold counts (would otherwise live forever).
             boolean evict = until != null ? (now >= until)
-                                          : count.get() < threshold;
+                                          : state[0] < threshold;
             if (evict) {
                 _ghostUntil.remove(peer);
-                _timeoutCounts.remove(peer, count);
+                _timeoutStateMap.remove(peer, state);
             }
-            if (_timeoutCounts.size() < MAX_TRACKED_PEERS) {
+            if (_timeoutStateMap.size() < MAX_TRACKED_PEERS) {
                 return;
             }
         }
@@ -158,9 +192,11 @@ public class GhostPeerManager {
     public void recordSuccess(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
 
-        _timeoutCounts.computeIfPresent(peer, (k, count) -> {
-            count.set(0);
-            return count;
+        _timeoutStateMap.computeIfPresent(peer, (k, state) -> {
+            synchronized (state) {
+                state[0] = 0;
+            }
+            return state;
         });
         _ghostUntil.remove(peer);
     }
@@ -181,15 +217,15 @@ public class GhostPeerManager {
         if (until == null) {return false;}
         if (_context.clock().now() < until) {return true;}
 
-        // expired mark: drop both entries (also keeps _timeoutCounts bounded)
-        _timeoutCounts.remove(peer);
+        // expired mark: drop both entries (also keeps _timeoutStateMap bounded)
+        _timeoutStateMap.remove(peer);
         _ghostUntil.remove(peer);
         return false;
     }
 
     /**
-     *  The current timeout threshold: 3 under stress, else the configured
-     *  value.
+     *  The current timeout threshold: {@link #ATTACK_TIMEOUT_THRESHOLD} (5)
+     *  under stress, else the configured value.
      *
      *  @return threshold number of timeouts before exclusion
      */
@@ -208,7 +244,7 @@ public class GhostPeerManager {
      */
     public void clearGhost(Hash peer) {
         if (peer == null) {return;}
-        _timeoutCounts.remove(peer);
+        _timeoutStateMap.remove(peer);
         _ghostUntil.remove(peer);
     }
 

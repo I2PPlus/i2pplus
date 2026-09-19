@@ -164,6 +164,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
 
     /**
+     *  Minimum proven-responder entries before cold-start seeding kicks in.
+     *  At startup the map is empty, so first-build selection has no proven
+     *  preference.  Seeding with random high-tier peers provides a warm
+     *  start that converges to real data quickly.
+     *  @since 0.9.71+
+     */
+    static final int MIN_PROVEN_RESPONDER_COUNT = 50;
+
+    /**
      *  Peers whose most recent tunnel participation succeeded, mapped to the
      *  time of that success. Selection prefers fresh entries via
      *  {@code ClientPeerSelector.compareQuality}; entries older than
@@ -328,6 +337,33 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (_firstHopFails.size() > FAILURE_MAP_MAX_SIZE) {
             long cutoff = now - FIRST_HOP_FAIL_COOLDOWN_MS;
             _firstHopFails.entrySet().removeIf(e -> e.getValue() < cutoff);
+        }
+    }
+
+    /**
+     *  Seed the proven-responder map with random peers from the router's peer
+     *  profiles when the map is below {@link #MIN_PROVEN_RESPONDER_COUNT}.
+     *  At cold start (after router restart or long idle period) the map is
+     *  empty, so first-build selection has no proven preference and may pick
+     *  unreliable peers.  Seeding with random high-tier peers provides a warm
+     *  start that converges to real proven data after the first few builds.
+     *  Seeded entries use a past timestamp (now - PROVEN_RESPONDER_WINDOW_MS / 2)
+     *  so they carry less weight than real proven data but more than nothing.
+     *  Best-effort; concurrent access is safe (ConcurrentHashMap).
+     *
+     *  @param ctx the router context
+     *  @param now current time in ms
+     */
+    static void seedProvenResponders(RouterContext ctx, long now) {
+        if (_provenResponders.size() >= MIN_PROVEN_RESPONDER_COUNT) return;
+        Set<Hash> peers = new HashSet<>();
+        ctx.profileOrganizer().selectFastPeers(
+            MIN_PROVEN_RESPONDER_COUNT * 2, null, peers, 0, null);
+        if (peers.isEmpty()) return;
+        long seedTime = now - PROVEN_RESPONDER_WINDOW_MS / 2;
+        for (Hash peer : peers) {
+            if (_provenResponders.size() >= MIN_PROVEN_RESPONDER_COUNT) break;
+            _provenResponders.putIfAbsent(peer, seedTime);
         }
     }
 

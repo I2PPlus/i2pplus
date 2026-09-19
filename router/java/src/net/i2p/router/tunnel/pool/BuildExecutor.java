@@ -186,6 +186,19 @@ public class BuildExecutor implements Runnable {
     private static volatile long POOL_BACKOFF_MS = 12 * 1000L;
 
     /**
+     *  Jittered backoff: randomize within ±33% of {@link #POOL_BACKOFF_MS}
+     *  to prevent synchronized backoff where all pools are skipped in the
+     *  same cycle.  With a 12s base, the effective range is 8-16s.
+     *
+     *  @return a jittered backoff duration in ms
+     *  @since 0.9.71+
+     */
+    private long jitteredBackoff() {
+        long jitter = POOL_BACKOFF_MS / 3;
+        return POOL_BACKOFF_MS - jitter + _context.random().nextLong(2 * jitter + 1);
+    }
+
+    /**
      * The pool failure threshold.
      * @return the threshold
      * @since 0.9.70+
@@ -794,7 +807,7 @@ public class BuildExecutor implements Runnable {
                             state[0]++;
                         }
                         if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
-                            state[1] = _context.clock().now() + POOL_BACKOFF_MS;
+                            state[1] = _context.clock().now() + jitteredBackoff();
                         }
                     }
                 }
@@ -861,11 +874,16 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Cool down every non-self hop of a failed build so the immediate retry
-     *  selects different peers. Selection-scope only — entries live for
+     *  Cool down the contacted hop of a failed build so the immediate retry
+     *  selects a different peer.  Only the hop the build request was dispatched
+     *  to (the gateway for inbound, the next hop for outbound) is responsible
+     *  for delivering the reply — cooling the other hops punishes innocent peers
+     *  and saturates the cooldown map during network-wide no-reply events
+     *  (observed 247/247 client hops in cooldown on a single-destination router).
+     *  Selection-scope only — entries live for
      *  {@link TunnelPeerSelector#PEER_SELECTION_COOLDOWN_MS} and both peer
-     *  selectors consult this map; profile penalties are separate and, for
-     *  timeouts, go to the contacted hop only via
+     *  selectors consult this map; profile penalties are separate and go to
+     *  the contacted hop only via
      *  {@link #penalizeTimeout(PooledTunnelCreatorConfig)}.
      *
      *  @param cfg the failed build config
@@ -873,12 +891,9 @@ public class BuildExecutor implements Runnable {
      */
     void cooldownFailedPeers(PooledTunnelCreatorConfig cfg) {
         if (cfg == null || cfg.getLength() <= 1) {return;}
-        long now = _context.clock().now();
-        for (int iPeer = 0; iPeer < cfg.getLength(); iPeer++) {
-            Hash peer = cfg.getPeer(iPeer);
-            if (peer != null && !peer.equals(_context.routerHash())) {
-                TunnelPeerSelector._peerCooldowns.put(peer, now);
-            }
+        Hash contacted = BuildRequestor.getBuildRequestPeer(cfg);
+        if (contacted != null && !contacted.equals(_context.routerHash())) {
+            TunnelPeerSelector._peerCooldowns.put(contacted, _context.clock().now());
         }
     }
 
@@ -1157,12 +1172,12 @@ public class BuildExecutor implements Runnable {
 
     /**
      *  Check if a pool is in backoff due to consecutive build failures.
-     *  Uses a 12s backoff to prevent build storms while allowing recovery
-     *  before expiring tunnels deplete the pool.
+     *  Uses a jittered backoff window (8-16s, centered on {@link #POOL_BACKOFF_MS})
+     *  to prevent synchronized backoff where all pools are skipped in the same
+     *  cycle.  During collapse (0 usable tunnels), backoff is skipped entirely
+     *  so collapsed pools get rebuilt immediately instead of waiting.
      *  On backoff expiry, resets the failure counter so the pool gets a
      *  fresh window of attempts.
-     *  During collapse (0 usable tunnels), backoff is shortened to 4s
-     *  to allow faster recovery while still preventing build storms.
      *
      *  @param pool the tunnel pool to check
      *  @return true if the pool is in backoff
@@ -1172,11 +1187,16 @@ public class BuildExecutor implements Runnable {
         if (state == null) return false;
         long backoffUntil = state[1];
         if (backoffUntil > 0 && _context.clock().now() < backoffUntil) {
-            // During collapse (0 usable tunnels), shorten backoff to 4s
-            // to allow faster recovery while still preventing build storms.
+            // During collapse (0 usable tunnels), skip backoff entirely
+            // so collapsed pools get rebuilt immediately.  Without this,
+            // all pools enter backoff simultaneously after a cascade,
+            // causing synchronized starvation.
             if (pool.getUsableTunnelCount() == 0) {
-                long shortBackoff = backoffUntil - POOL_BACKOFF_MS + 4 * 1000L;
-                return _context.clock().now() < shortBackoff;
+                synchronized (state) {
+                    state[0] = 0;
+                    state[1] = 0;
+                }
+                return false;
             }
             return true;
         }
@@ -1318,7 +1338,7 @@ public class BuildExecutor implements Runnable {
                     state[0]++;
                 }
                 if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
-                    state[1] = _context.clock().now() + POOL_BACKOFF_MS;
+                    state[1] = _context.clock().now() + jitteredBackoff();
                     if (_log.shouldDebug()) {
                         _log.debug("Pool backoff engaged after " + (int) state[0] +
                                    " consecutive failures for " + pool);
