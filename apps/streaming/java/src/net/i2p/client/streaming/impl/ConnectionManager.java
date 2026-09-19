@@ -826,6 +826,10 @@ class ConnectionManager {
                 _log.warn("Received a SYN packet without FROM: " + synPacket);
             return null;
         }
+        // SHA-256 of the peer dest; used by every gate below (flood, refusal,
+        // response, accounting). Computed once — calculateHash() on a fresh
+        // SYN payload is real work.
+        Hash fromHash = from.calculateHash();
         ByteArray ba = _cache.acquire();
         boolean sigOk = synPacket.verifySignature(_context, ba.getData());
         _cache.release(ba);
@@ -833,24 +837,21 @@ class ConnectionManager {
             long[] nacks = synPacket.getNacks();
             if (nacks != null && nacks.length == 8) {
                 // we use the packet's session because it may be a subsession
-                Hash hash = synPacket.getSession().getMyDestination().calculateHash();
-                byte[] h = hash.getData();
-                for (int i = 0; i < 8; i++) {
-                    if (nacks[i] != DataHelper.fromLong(h, i << 2, 4)) {
-                        if (_log.shouldWarn()) {
-                            // glue it back together for logging only
-                            byte[] g = new byte[32];
-                            for (int j = 0; j < 8; j++) {
-                                DataHelper.toLong(g, j << 2, 4, nacks[j]);
-                            }
-                            Hash ghash = new Hash(g);
-                            _log.warn("Signature passed but hash failed, sending reset, expected: " + hash.toBase32() +
-                                      " received: " + ghash.toBase32() +
-                                      " from: " + from.calculateHash().toBase32());
+                Hash localHash = synPacket.getSession().getMyDestination().calculateHash();
+                if (!synNacksMatch(nacks, localHash)) {
+                    if (_log.shouldWarn()) {
+                        // glue it back together for logging only
+                        byte[] g = new byte[32];
+                        for (int j = 0; j < 8; j++) {
+                            DataHelper.toLong(g, j << 2, 4, nacks[j]);
                         }
-                        _packetHandler.sendResetUnverified(synPacket);
-                        return null;
+                        Hash ghash = new Hash(g);
+                        _log.warn("Signature passed but hash failed, sending reset, expected: " + localHash.toBase32() +
+                                  " received: " + ghash.toBase32() +
+                                  " from: " + fromHash.toBase32());
                     }
+                    _packetHandler.sendResetUnverified(synPacket);
+                    return null;
                 }
                 if (sigOk && _log.shouldInfo())
                     _log.info("Validated SYN NACKS from: " + from.toBase32());
@@ -872,18 +873,17 @@ class ConnectionManager {
         // auto-banned immediately, BEFORE the stream budget or refusal counters
         // are consulted, so the burst cannot first consume budget slots.
         if (from != null) {
-            Hash bh = from.calculateHash();
             long now = _context.clock().now();
-            if (!isTempBanned(bh, now) && checkSynBurst(bh, now)) {
-                banPeer(bh, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms",
+            if (!isTempBanned(fromHash, now) && checkSynBurst(fromHash, now)) {
+                banPeer(fromHash, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms",
                         now);
             }
         }
 
-        if (tooManyStreamsForDest(from.calculateHash(), getEffectiveMaxStreams())) {
+        if (tooManyStreamsForDest(fromHash, getEffectiveMaxStreams())) {
             // If already temp-banned, drop the SYN silently before any processing,
             // SYN-ACK, or refusal logging, so a banned dest can't keep hammering.
-            if (from != null && isTempBanned(from.calculateHash(), _context.clock().now())) {
+            if (isTempBanned(fromHash, _context.clock().now())) {
                 if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldDebug())
                     _log.debug("Dropping SYN from temp-banned " + from.toBase32().substring(0, 6));
                 return null;
@@ -897,11 +897,8 @@ class ConnectionManager {
             // A dest refused this many times in the current window is hammering its
             // per-dest budget; promote it to an autoban so its SYNs are dropped
             // before they can keep starving legitimate announces.
-            if (from != null) {
-                Hash h = from.calculateHash();
-                if (refusalThresholdMet(_refusalCounter.increment(h), _tempBanRefusals))
-                    banPeer(h, "exceeded max " + _tempBanRefusals + " refusals/min", _context.clock().now());
-            }
+            if (refusalThresholdMet(_refusalCounter.increment(fromHash), _tempBanRefusals))
+                banPeer(fromHash, "exceeded max " + _tempBanRefusals + " refusals/min", _context.clock().now());
             reject = true;
             retryAfter = 120;
         } else {
@@ -918,65 +915,7 @@ class ConnectionManager {
         _context.statManager().addRateData("stream.receiveActive", 1);
 
         if (reject) {
-            String resp = _defaultOptions.getLimitAction();
-            if ("drop".equals(resp)) {
-                // always drop
-                return null;
-            }
-            Hash h = from.calculateHash();
-            if (retryAfter >= MAX_TIME) {
-                // always drop these regardless of setting
-                return null;
-            }
-
-            if ((_minuteThrottler != null && _minuteThrottler.isOverBy(h, getDropOverLimit())) ||
-                (_hourThrottler != null && _hourThrottler.isOverBy(h, getDropOverLimit())) ||
-                (_dayThrottler != null && _dayThrottler.isOverBy(h, getDropOverLimit()))) {
-                // A signed RST/close packet + ElGamal + session tags is fairly expensive, so
-                // once a limit is significantly exceeded for a particular peer, don't even send it.
-                // This is a tradeoff, because it will keep retransmitting the SYN for a while,
-                // thus more inbound, but let's not spend several KB on the outbound.
-                if (_log.shouldInfo())
-                    _log.info("Dropping limit response to " + from.toBase32());
-                return null;
-            }
-
-            boolean reset = resp == null || resp.equals("reset") || resp.length() <= 0 ||
-                            synPacket.getLocalPort() == 443;
-            boolean http = !reset && "http".equals(resp);
-            boolean custom = !(reset || http);
-            String sendResponse;
-            if (http) {
-                if (retryAfter > 0)
-                    sendResponse = LIMIT_HTTP_RESPONSE.replace("900", Integer.toString(retryAfter));
-                else
-                    sendResponse = LIMIT_HTTP_RESPONSE.replace("Retry-After: 900\r\n", "");
-            } else if (custom) {
-                sendResponse = resp.replace("\\r", "\r").replace("\\n", "\n");
-            } else {
-                sendResponse = null;
-            }
-
-            PacketLocal reply = new PacketLocal(_context, from, synPacket.getSession());
-            if (sendResponse != null) {
-                reply.setFlag(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE | Packet.FLAG_SIGNATURE_INCLUDED);
-                reply.setSequenceNum(0);
-                ByteArray payload = new ByteArray(DataHelper.getUTF8(sendResponse));
-                reply.setPayload(payload);
-            } else {
-                reply.setFlag(Packet.FLAG_RESET | Packet.FLAG_SIGNATURE_INCLUDED);
-            }
-            reply.setAckThrough(synPacket.getSequenceNum());
-            reply.setSendStreamId(synPacket.getReceiveStreamId());
-            long rcvStreamId = assignRejectId();
-            reply.setReceiveStreamId(rcvStreamId);
-            reply.setOptionalFrom();
-            reply.setLocalPort(synPacket.getLocalPort());
-            reply.setRemotePort(synPacket.getRemotePort());
-            if (_log.shouldInfo())
-                _log.info("Over limit, sending " + reply + " to " + from.toBase32());
-            // this just sends the packet - no retries or whatnot
-            _outboundQueue.enqueue(reply);
+            sendRejectResponse(synPacket, from, fromHash, retryAfter);
             return null;
         }
 
@@ -1018,7 +957,7 @@ class ConnectionManager {
                                         _timer.getSharedTimer(), _outboundQueue, _conPacketHandler, opts, true);
         _tcbShare.updateOptsFromShare(con);
         assignReceiveStreamId(con);
-        addStream(from.calculateHash());
+        addStream(fromHash);
 
         // finally, we know enough that we can log the packet with the conn filled in
         if (I2PSocketManagerFull.pcapWriter != null &&
@@ -1035,6 +974,115 @@ class ConnectionManager {
 
         _context.statManager().addRateData("stream.connectionReceived", 1);
         return con;
+    }
+
+    /**
+     * Send the configured response for a rejected SYN (RESET, HTTP-style
+     * Retry-After payload, or custom payload), subject to the peer's throttler
+     * status. Only called when the SYN was already judged rejectable;
+     * extracted from {@link #receiveConnection(Packet)} to bound its
+     * complexity.
+     *
+     * @param synPacket the incoming SYN being rejected
+     * @param from the peer destination
+     * @param fromHash {@code from.calculateHash()} (already computed by the caller)
+     * @param retryAfter seconds for the Retry-After header; {@link #MAX_TIME}
+     *                   means never retry (silent drop)
+     */
+    private void sendRejectResponse(Packet synPacket, Destination from, Hash fromHash, int retryAfter) {
+        String resp = _defaultOptions.getLimitAction();
+        if ("drop".equals(resp)) {
+            // always drop
+            return;
+        }
+        if (retryAfter >= MAX_TIME) {
+            // always drop these regardless of setting
+            return;
+        }
+        if ((_minuteThrottler != null && _minuteThrottler.isOverBy(fromHash, getDropOverLimit())) ||
+            (_hourThrottler != null && _hourThrottler.isOverBy(fromHash, getDropOverLimit())) ||
+            (_dayThrottler != null && _dayThrottler.isOverBy(fromHash, getDropOverLimit()))) {
+            // A signed RST/close packet + ElGamal + session tags is fairly expensive, so
+            // once a limit is significantly exceeded for a particular peer, don't even send it.
+            // This is a tradeoff, because it will keep retransmitting the SYN for a while,
+            // thus more inbound, but let's not spend several KB on the outbound.
+            if (_log.shouldInfo())
+                _log.info("Dropping limit response to " + from.toBase32());
+            return;
+        }
+        String sendResponse = limitResponse(resp, retryAfter, synPacket.getLocalPort() == 443);
+        PacketLocal reply = new PacketLocal(_context, from, synPacket.getSession());
+        if (sendResponse != null) {
+            reply.setFlag(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE | Packet.FLAG_SIGNATURE_INCLUDED);
+            reply.setSequenceNum(0);
+            ByteArray payload = new ByteArray(DataHelper.getUTF8(sendResponse));
+            reply.setPayload(payload);
+        } else {
+            reply.setFlag(Packet.FLAG_RESET | Packet.FLAG_SIGNATURE_INCLUDED);
+        }
+        reply.setAckThrough(synPacket.getSequenceNum());
+        reply.setSendStreamId(synPacket.getReceiveStreamId());
+        reply.setReceiveStreamId(assignRejectId());
+        reply.setOptionalFrom();
+        reply.setLocalPort(synPacket.getLocalPort());
+        reply.setRemotePort(synPacket.getRemotePort());
+        if (_log.shouldInfo())
+            _log.info("Over limit, sending " + reply + " to " + from.toBase32());
+        // this just sends the packet - no retries or whatnot
+        _outboundQueue.enqueue(reply);
+    }
+
+    /**
+     * The payload to send in a limit-response SYN/CLOSE, or null for a RESET.
+     *
+     * <p>Pure decision helper (extracted from {@code receiveConnection}):
+     * the "reset" limit action, an empty action, and port 443 (the synth
+     * HTTPS over I2P port, which must not be tricked into a text payload)
+     * all produce a plain RESET; "http" produces an HTTP Retry-After body;
+     * anything else is echoed verbatim after normalizing {@code \r}/\code{n}
+     * escape sequences. HTTPS (443) always stacks the port check too, per RFC-compliant
+     * servers that disregard limit responses on that port.
+     *
+     * @param limitAction the configured i2p.streaming.limitAction value, may be null
+     * @param retryAfter seconds for the Retry-After header, or 0 to omit it
+     * @param sslPort true if the SYN arrived on local port 443
+     * @return the response payload, or null for a RESET
+     * @since 0.9.71
+     */
+    static String limitResponse(String limitAction, int retryAfter, boolean sslPort) {
+        if (limitAction == null || limitAction.equals("reset") || limitAction.length() <= 0 || sslPort)
+            return null;
+        if ("http".equals(limitAction)) {
+            // The template's placeholder is "600" (the historical suggestion
+            // for a 429); the caller's computed retryAfter replaces it, or the
+            // whole header is dropped when 0 (the caller said "retry later"
+            // without a number).
+            if (retryAfter > 0)
+                return LIMIT_HTTP_RESPONSE.replace("600", Integer.toString(retryAfter));
+            return LIMIT_HTTP_RESPONSE.replace("Retry-After: 600\r\n", "");
+        }
+        return limitAction.replace("\\r", "\r").replace("\\n", "\n");
+    }
+
+    /**
+     * Whether a SYN's 8 NACK words match the local destination hash.
+     * A NACK that does not match the local hash means the sender is wrong
+     * about who we are; extracted so the word-split comparison is unit-testable.
+     *
+     * @param nacks the packet's NACK values, or null
+     * @param localHash the local destination hash to compare against
+     * @return true if the NACKs are absent or all 8 words match
+     * @since 0.9.71
+     */
+    static boolean synNacksMatch(long[] nacks, Hash localHash) {
+        if (nacks == null || nacks.length != 8)
+            return true;
+        byte[] h = localHash.getData();
+        for (int i = 0; i < 8; i++) {
+            if (nacks[i] != DataHelper.fromLong(h, i << 2, 4))
+                return false;
+        }
+        return true;
     }
 
     /**

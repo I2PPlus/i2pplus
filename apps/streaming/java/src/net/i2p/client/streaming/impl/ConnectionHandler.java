@@ -4,6 +4,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -78,6 +79,9 @@ class ConnectionHandler {
     static final int SYN_EXPIRE_THRESHOLD_DEFAULT = 60;
     /** Minimum interval between re-sampling tunnel build success (ms). */
     private static final long SYN_STRESS_SAMPLE_INTERVAL = 10 * 1000;
+    /** Interval between SYN accept-queue sweeps (ms). Far shorter than any
+     *  accept timeout, so expiry latency is dominated by the timeout itself. */
+    static final long SYN_SWEEP_INTERVAL = 1000;
 
     /** Default max SYN queue size — large enough to absorb bursts. */
     private static final int DEFAULT_MAX_QUEUE_SIZE = 4096;
@@ -87,7 +91,8 @@ class ConnectionHandler {
     /**
      * This is both SYNs and subsequent packets, and with an initial window size of 12,
      * this is a backlog of 5 to 64 Syns, which seems like plenty for now
-     * Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
+     * Don't make this too big: removal of an expired entry is O(queue size), so
+     * a sweep that reaps the whole queue is O(n**2) - sortof.
      * Read dynamically from config or Tuner — no restart required.
      * @return the max queue size
      */
@@ -112,7 +117,7 @@ class ConnectionHandler {
     /**
      * Compute the effective SYN accept-queue timeout for an inbound SYN.
      *
-     * <p>A queued SYN is reset via {@code TimeoutSyn} after this window, so it
+     * <p>A queued SYN is reset via {@link SynReaper} after this window, so it
      * bounds how long a client waits for a connection the server never got
      * around to accepting.  A fixed low clamp (e.g. the historical 10s) fails
      * fast on genuinely dead tunnels but also expires slow-but-alive handshakes
@@ -146,7 +151,7 @@ class ConnectionHandler {
      * @param recentExpireRatePct percent of recent SYN-queue entries that expired un-accepted,
      *                            or a negative value when the rate is not known yet
      * @param rttMs a recent round-trip time sample in milliseconds, or &lt;=0 when unavailable
-     * @return the timeout (ms) to arm the TimeoutSyn with
+     * @return the timeout (ms) to arm the SYN reap with
      */
     static int getAdaptiveSynTimeout(int configuredTimeoutMs, double buildSuccess,
                                      int recentExpireRatePct, int rttMs) {
@@ -181,14 +186,19 @@ class ConnectionHandler {
     private volatile double _tunnelBuildSuccess;
     /** SYNs added to the acceptance queue within the current sample window. */
     private volatile int _synQueueProcessed;
-    /** SYNs that expired un-accepted (removed by {@code TimeoutSyn}) in the current window. */
+    /** SYNs that expired un-accepted (removed by {@link SynReaper}) in the current window. */
     private volatile int _synQueueExpired;
     /** Most recently observed SYN accept-queue residence time (ms), i.e. how long a fresh SYN
      *  waited in the queue before being accepted. 0 until the first acceptance. */
     private volatile int _synQueueResidenceMs;
-    /** Enqueue clock-times for packets currently in the accept queue, keyed by packet identity. */
-    private final ConcurrentHashMap<Packet, Long> _synEnqueueTimes =
-            new ConcurrentHashMap<Packet, Long>();
+    /** Enqueue records for packets currently in (or just polled from) the accept queue,
+     *  keyed by packet identity. Value holds the enqueue clock-time and the accept
+     *  timeout snapshot taken at that moment; a worker that polls a SYN refreshes the
+     *  entry so the expiry matches the timeout the client was quoted.
+     *  Swept by {@link SynReaper}; re-arming is O(1) per SYN instead of the
+     *  two per-packet timer events of the old {@code TimeoutSyn} design. */
+    private final ConcurrentHashMap<Packet, SynEntry> _synEnqueueTimes =
+            new ConcurrentHashMap<Packet, SynEntry>();
 
     /**
      * Tunnel build success fraction, sampled at most once per
@@ -220,7 +230,7 @@ class ConnectionHandler {
      * Recent SYN expire rate, sampled on the same interval as build success.
      *
      * <p>Counts SYNs added to the accept queue ({@code _synQueueProcessed}) and
-     * SYNs later removed by {@code TimeoutSyn} without being accepted
+     * SYNs later removed by {@link SynReaper} without being accepted
      * ({@code _synQueueExpired}).  The window resets whenever a full
      * {@link #SYN_STRESS_SAMPLE_INTERVAL} elapses, so the rate reflects the
      * most recent tunnel-health window rather than the ever since startup.
@@ -286,7 +296,7 @@ class ConnectionHandler {
      * The configured value is re-read on every call, so a router.config change
      * or Tuner override applies without a restart.
      *
-     * @return timeout in ms to arm TimeoutSyn with
+     * @return timeout in ms to arm the SYN reap with
      */
     private int getEffectiveAcceptTimeout() {
         int timeoutMs = resolveAcceptTimeout(_acceptTimeout, getAcceptTimeout());
@@ -308,7 +318,7 @@ class ConnectionHandler {
      *
      * @param overrideMs the explicit override, or &lt; 0 for "not set"
      * @param configDefaultMs the live configured accept timeout
-     * @return the timeout in ms to arm TimeoutSyn with
+     * @return the timeout in ms to arm the SYN reap with
      * @since 0.9.71+
      */
     static int resolveAcceptTimeout(int overrideMs, int configDefaultMs) {
@@ -348,10 +358,10 @@ class ConnectionHandler {
      */
     private void sampleSynResidence(Packet syn) {
         if (syn == null) {return;}
-        Long enqueuedAt = _synEnqueueTimes.remove(syn);
-        if (enqueuedAt == null) {return;}
+        SynEntry entry = _synEnqueueTimes.remove(syn);
+        if (entry == null) {return;}
         int residence = (int) Math.min(Integer.MAX_VALUE,
-                _context.clock().now() - enqueuedAt.longValue());
+                _context.clock().now() - entry.enqueuedMs);
         if (residence < 0) {residence = 0;}
         int prev = _synQueueResidenceMs;
         _synQueueResidenceMs = (prev + residence) / 2;
@@ -438,6 +448,9 @@ class ConnectionHandler {
             t.start();
             _activeWorkerCount.incrementAndGet();
         }
+        // One self-rescheduling sweeper per activation; it stops re-arming
+        // when the handler deactivates. Replaces two per-SYN timer events.
+        _timer.addEvent(new SynReaper(), SYN_SWEEP_INTERVAL);
     }
 
     /**
@@ -508,9 +521,10 @@ class ConnectionHandler {
                         }
                     }
                     int timeoutMs = getEffectiveAcceptTimeout();
-                    _synEnqueueTimes.put(syn, Long.valueOf(_context.clock().now()));
+                    // Refreshes the enqueue record so a depart-of-timeout SYN matches
+                    // the timeout quoted when the worker picked it up.
+                    _synEnqueueTimes.put(syn, new SynEntry(_context.clock().now(), timeoutMs));
                     _synQueueProcessed++;
-                    _timer.addEvent(new TimeoutSyn(syn), timeoutMs);
                     try {
                         sampleSynResidence(syn);
                         Connection con = _manager.receiveConnection(syn);
@@ -559,9 +573,8 @@ class ConnectionHandler {
         // applies without a restart.
         boolean success = _synQueue.size() < getMaxQueueSize() && _synQueue.offer(packet);
         if (success) {
-            _synEnqueueTimes.put(packet, Long.valueOf(_context.clock().now()));
+            _synEnqueueTimes.put(packet, new SynEntry(_context.clock().now(), timeoutMs));
             _synQueueProcessed++;
-            _timer.addEvent(new TimeoutSyn(packet), timeoutMs);
         } else {
             // Send RESET so the client can establish a new connection
             // immediately (via its own connect retry logic) rather than
@@ -802,31 +815,68 @@ class ConnectionHandler {
     }
 
     /**
-     * Timer event that removes a SYN packet from the queue after the
-     * accept timeout expires, sending a reset if it was a SYN.
+     * Accept-queue bookkeeping for one enqueued SYN.
+     *
+     * <p>Holds the enqueue clock-time and the accept-timeout snapshot taken at
+     * that moment. The timeout is snapshotted because the adaptive
+     * {@link #getEffectiveAcceptTimeout()} moves as tunnel health changes; the
+     * expiry must match what the client was quoted, not what health looks like
+     * later. A worker that polls the SYN stores a fresh record, so expiry keeps
+     * tracking the most recent quote.
      */
-    private class TimeoutSyn extends SimpleTimer2.TimedEvent {
-        private final Packet _synPacket;
+    static class SynEntry {
+        final long enqueuedMs;
+        final int timeoutMs;
 
-        TimeoutSyn(Packet packet) {
-            super();
-            _synPacket = packet;
-        }
+        SynEntry(long enqueuedMs, int timeoutMs) {this.enqueuedMs = enqueuedMs; this.timeoutMs = timeoutMs;}
+
+        /** true once the accept window has fully elapsed */
+        boolean expired(long now) {return now - enqueuedMs >= timeoutMs;}
+    }
+
+    /**
+     * Periodic reaper that removes SYN packets from the accept queue after
+     * their accept timeout has elapsed, sending a reset if it was a SYN.
+     *
+     * <p>Replaces two per-SYN {@code TimedEvent}s (one at enqueue in
+     * {@link #receiveNewSyn(Packet)}, one at dequeue in the accept worker) with
+     * a single self-rescheduling event that scans the enqueue table every
+     * {@link #SYN_SWEEP_INTERVAL}. Under a SYN flood the old model posted O(n)
+     * timer events per second; this is O(1) posts per second regardless of
+     * load. The time-between-sweeps bound means a SYN may persist at most
+     * one interval past its timeout — negligible against 10s+ accept timeouts.
+     *
+     * <p>The two-argument removal on the concurrent map is atomic against the
+     * worker's refresh, so a packet that was re-quoted after this sweep read its
+     * entry is left alone for the next sweep.
+     */
+    private class SynReaper extends SimpleTimer2.TimedEvent {
+        SynReaper() {super();}
 
         public void timeReached() {
-            boolean removed = _synQueue.remove(_synPacket);
-            if (removed) {
-                _synEnqueueTimes.remove(_synPacket);
-                _synQueueExpired++;
-                if (_synPacket.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                    if (_log.shouldWarn())
-                        _log.warn(synExpiryMessage(_synPacket, _synQueue.size(),
-                                                   getMaxQueueSize(), getEffectiveAcceptTimeout()));
-                    sendReset(_synPacket);
-                } else {
-                    reReceivePacket(_synPacket);
+            long now = _context.clock().now();
+            for (Map.Entry<Packet, SynEntry> e : _synEnqueueTimes.entrySet()) {
+                SynEntry entry = e.getValue();
+                if (!entry.expired(now)) {continue;}
+                Packet syn = e.getKey();
+                // atomic vs. the worker's refresh: only reap the record we read
+                if (!_synEnqueueTimes.remove(syn, entry)) {continue;}
+                if (_synQueue.remove(syn)) {
+                    _synQueueExpired++;
+                    if (syn.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
+                        if (_log.shouldWarn())
+                            _log.warn(synExpiryMessage(syn, _synQueue.size(),
+                                                       getMaxQueueSize(), entry.timeoutMs));
+                        sendReset(syn);
+                    } else {
+                        reReceivePacket(syn);
+                    }
                 }
+                // else: packet was already polled; the reaper only cleans the
+                // stale record so a rejected SYN doesn't linger in the table.
             }
+            if (_active)
+                _timer.addEvent(this, SYN_SWEEP_INTERVAL);
         }
     }
 

@@ -10,7 +10,8 @@ import org.junit.Test;
  * Tests the stress-adaptive SYN accept-queue timeout decision in
  * {@link ConnectionHandler#getAdaptiveSynTimeout(int, double, int, int)}.
  *
- * <p>A queued SYN is reset via {@code TimeoutSyn} after the accept timeout.
+ * <p>A queued SYN is reset via the periodic reaper (formerly a {@code TimeoutSyn}
+ * timer event) after the accept timeout.
  * The historical implementation clamped to a flat 10s whenever tunnel build
  * success fell below {@code SYN_STRESS_THRESHOLD}, which also expired
  * slow-but-alive handshakes on a high-latency / congested fabric (seen as empty
