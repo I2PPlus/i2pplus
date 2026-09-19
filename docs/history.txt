@@ -3,8 +3,7 @@
     attack ghost threshold to 5 with 60s time-decay, seed proven
     responders at selection entry
   * Profile: Dual-gate lifetime failure exclusion with soft penalty ramp
-  * Console: Don't display empty countries on netdb summary; dark theme
-    tweaks
+  * Console: Don't display empty countries on netdb summary
 
 2026-09-18 dr|z3d
   * Streaming:
