@@ -24,13 +24,15 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, Long> _ghostUntil;
 
     /**
-     *  Number of timeouts under attack before a peer is ghosted.  Raised
-     *  from 3 to 5 to prevent ghost cascades during brief network hiccups:
-     *  a peer that times out sporadically isn't ghosted; only peers with
-     *  sustained no-reply patterns during genuine attacks are excluded.
-     *  @since 0.9.71+ (raised from 3)
+     *  Number of timeouts under attack before a peer is ghosted.
+     *  Lowered from 5 to 2 to match the observed reality: with a 56%
+     *  timeout rate, a peer that fails to respond to 2 consecutive builds
+     *  within the decay window is almost certainly unreachable, not just
+     *  slow.  The time-decay window prevents ghosting during brief
+     *  network hiccups — only sustained failures within 60s count.
+     *  @since 0.9.71+ (lowered from 5)
      */
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 5;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 2;
 
     /**
      *  Only count timeouts within this window toward the ghost threshold.
@@ -43,21 +45,24 @@ public class GhostPeerManager {
     private static final long TIMEOUT_DECAY_WINDOW_MS = 60 * 1000L;
 
     private static int getTimeoutThreshold(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 3);
+        return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 2);
     }
 
     private static long getCooldownMs(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.cooldownMs", 180*1000);
+        return ctx.getProperty("i2p.tunnel.ghostPeer.cooldownMs", 300*1000);
     }
 
     private static long getAttackCooldownMs(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 60*1000);
+        return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 120*1000);
     }
 
     /**
      *  Cooldown for the current network state: under stress, rehabilitate
      *  peers faster — many get ghosted through no fault of their own when
-     *  the whole network is slow.  Defaults: 60s under stress, 180s normal.
+     *  the whole network is slow.  Defaults: 120s under stress, 300s normal.
+     *  Longer normal cooldown keeps unreachable peers excluded through the
+     *  worst of a timeout storm; the shorter stress cooldown prevents ghost
+     *  cascades during network-wide blips where most peers recover quickly.
      */
     private static long getActiveCooldownMs(RouterContext ctx, double buildSuccess) {
         return isUnderAttack(buildSuccess) ? getAttackCooldownMs(ctx) : getCooldownMs(ctx);
