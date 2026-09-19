@@ -29,6 +29,15 @@ class ConnectionPacketHandler {
     /** Byte cache for packet buffers. */
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
+    /** Record every Nth receive-size stat sample. Per-packet RateStat updates
+     *  lock each period's Rate; these size stats are display-only telemetry, so
+     *  sampling the aggregate (scaling the recorded value by the period)
+     *  preserves the graph with a fraction of the monitor traffic. */
+    private static final int TELEMETRY_SAMPLE_PERIOD = 16;
+    /** Sample counters for the per-packet size stats (one per call site). */
+    private int _receiveMsgSizeCnt;
+    private int _receiveDupMsgSizeCnt;
+
     /**
      * Maximum slow start window size.
      * Tunable via i2p.streaming.maxSlowStartWindow (default: 32).
@@ -188,7 +197,9 @@ class ConnectionPacketHandler {
             return;
         } // else we will call setChoking(false) below
 
-        _context.statManager().addRateData("stream.con.receiveMessageSize", packet.getPayloadSize());
+        if ((++_receiveMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
+            _context.statManager().addRateData("stream.con.receiveMessageSize",
+                                               packet.getPayloadSize() * (long) TELEMETRY_SAMPLE_PERIOD);
 
         boolean allowAck = true;
         /** Whether the packet has the SYN flag set. */
@@ -249,7 +260,9 @@ class ConnectionPacketHandler {
             }
         } else {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) || isSYN) {
-                _context.statManager().addRateData("stream.con.receiveDuplicateSize", packet.getPayloadSize());
+                if ((++_receiveDupMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
+                    _context.statManager().addRateData("stream.con.receiveDuplicateSize",
+                                                       packet.getPayloadSize() * (long) TELEMETRY_SAMPLE_PERIOD);
                 con.incrementDupMessagesReceived(1);
 
                 // take note of congestion

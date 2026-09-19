@@ -43,6 +43,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final boolean ENABLE_STATUS_LISTEN = true;
     private static final long I2CP_EXPIRATION_ADJUST = Math.min(25, Connection.getMinResendDelay() / 4);
 
+    /** Record every Nth send-size stat sample. Per-packet RateStat updates lock
+     *  each period's Rate; these size stats are display-only telemetry, so
+     *  sampling the aggregate (scaling the recorded value by the period)
+     *  preserves the graph with a fraction of the monitor traffic. */
+    private static final int TELEMETRY_SAMPLE_PERIOD = 16;
+    /** Sample counters for the per-packet size stats (one per call site). */
+    private int _sendMsgSizeCnt;
+    private int _sendDupMsgSizeCnt;
+
     /**
      * PacketQueue.
      */
@@ -224,10 +233,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             if ((end-begin > 1000) && (_log.shouldWarn()))
                 _log.warn("Slow message delivery -> Took " + (end-begin) + "ms to send: " + packet);
 
-            _context.statManager().addRateData("stream.con.sendMessageSize", size, packet.getLifetime());
+            if ((++_sendMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
+                _context.statManager().addRateData("stream.con.sendMessageSize", size * (long) TELEMETRY_SAMPLE_PERIOD,
+                                                   packet.getLifetime() * (long) TELEMETRY_SAMPLE_PERIOD);
             long lifetime = packet.getLifetime();
-            if (packet.getNumSends() > 1)
-                _context.statManager().addRateData("stream.con.sendDuplicateSize", size, lifetime);
+            if (packet.getNumSends() > 1) {
+                if ((++_sendDupMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
+                    _context.statManager().addRateData("stream.con.sendDuplicateSize", size * (long) TELEMETRY_SAMPLE_PERIOD,
+                                                       lifetime * (long) TELEMETRY_SAMPLE_PERIOD);
+            }
 
             if (con != null) {
                 con.incrementBytesSent(size);

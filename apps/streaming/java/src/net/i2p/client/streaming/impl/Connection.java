@@ -263,6 +263,23 @@ class Connection {
     /** Bandwidth estimator. */
     private final BandwidthEstimator _bwEstimator;
 
+    /** Recompute the BDP in-flight cap at most this often. The cap feathers
+     *  at the RTT/estimator cadence anyway, so a cached value remains accurate
+     *  across the several write attempts an eagerly blocked app will issue. */
+    private static final long BDP_CACHE_MS = 250;
+    /** Router-clock time of the last {@link #getBDPBasedInFlightCap()} sample. */
+    private long _lastBdpCapAt;
+    /** Last computed BDP in-flight cap. Single writer (app writer thread): no volatile. */
+    private int _lastBdpCap;
+
+    /** Record every Nth choke-size stat sample. These fire per packet sent or
+     *  released; sampling the aggregate (scaling the value by the period)
+     *  preserves the display stats with a fraction of the Rate lock traffic. */
+    private static final int TELEMETRY_SAMPLE_PERIOD = 16;
+    /** Sample counters for the choke-size stats (one per call site). */
+    private int _chokeSizeBeginCnt;
+    private int _chokeSizeEndCnt;
+
     /** Atomic long. */
     private final AtomicLong _lifetimeBytesSent = new AtomicLong();
     /** Atomic long. */
@@ -993,7 +1010,10 @@ class Connection {
             boolean send = false;
             int chokeSize = 0;
             synchronized (_outboundPacketsLock) {
-                if (!started) {_context.statManager().addRateData("stream.chokeSizeBegin", outboundSizeLocked());}
+                if (!started && (++_chokeSizeBeginCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0) {
+                    _context.statManager().addRateData("stream.chokeSizeBegin",
+                                                       outboundSizeLocked() * (long) TELEMETRY_SAMPLE_PERIOD);
+                }
                 if (start + 5*60*1000 < now) {return false;}
 
                 if (!isConnectedOrError()) {return false;}
@@ -1042,7 +1062,10 @@ class Connection {
                 }
             }
             if (send) {
-                _context.statManager().addRateData("stream.chokeSizeEnd", chokeSize);
+                if ((++_chokeSizeEndCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0) {
+                    _context.statManager().addRateData("stream.chokeSizeEnd",
+                                                       chokeSize * (long) TELEMETRY_SAMPLE_PERIOD);
+                }
                 return true;
             }
         }
@@ -1064,13 +1087,23 @@ class Connection {
      *  the pipe can hold, floored at the global max window size to preserve
      *  the legacy baseline on low-BDP or uncalibrated paths.
      *
+     *  <p>The result is cached for {@link #BDP_CACHE_MS} so a persistently full
+     *  window (the app keeps writing, the choke loop keeps blocking) does not
+     *  re-lock the synchronized estimator and re-read RTT on every write
+     *  attempt; the Westwood+ sample only moves on ACK cadence anyway.
+     *
      *  @return max allowed in-flight packets, in [globalMax, ABSOLUTE_MAX_WINDOW]
      */
     private int getBDPBasedInFlightCap() {
+        long now = _context.clock().now();
+        if (now - _lastBdpCapAt < BDP_CACHE_MS) {return _lastBdpCap;}
         float bwe = _bwEstimator.getBandwidthEstimate(); // packets/ms
         int rtt = Math.max(_options.getRTT(), 500);       // ms
         int bdp = Math.max(getGlobalMaxWindowSize(), (int)(bwe * rtt));
-        return Math.min(ABSOLUTE_MAX_WINDOW, bdp);
+        int cap = Math.min(ABSOLUTE_MAX_WINDOW, bdp);
+        _lastBdpCap = cap;
+        _lastBdpCapAt = now;
+        return cap;
     }
 
     /**

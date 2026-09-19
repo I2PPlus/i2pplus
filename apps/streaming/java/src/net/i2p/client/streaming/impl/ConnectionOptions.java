@@ -34,17 +34,19 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private int _profile;
     /** Max connect timeout override in ms, 0 = use global i2p.streaming.maxConnectTimeout. */
     private long _maxConnectTimeout;
-    /** Smoothed rtt. */
-    private int _smoothedRtt;
+    /** Smoothed rtt. Volatile: read from the throttle/retransmit hot path
+     *  (writer thread, timer thread, reader thread) without the monitor the
+     *  compound methods still use. */
+    private volatile int _smoothedRtt;
     /** Min rtt. Unknown until the first sample: seeding the floor with a
      *  guess (e.g. the initial RTT) would fabricate a minimum on any path whose
      *  real floor is higher, and _minRtt feeds the bandwidth-derived ssthresh
      *  floor. Like mainline: Integer.MAX_VALUE until updateRTT() narrows it. */
-    private int _minRtt = Integer.MAX_VALUE;
+    private volatile int _minRtt = Integer.MAX_VALUE;
     /** Rtt deviation. */
-    private int _rttDeviation;
+    private volatile int _rttDeviation;
     /** Retransmit timeout. */
-    private int _retransmitTimeout = defaultInitialRTO;
+    private volatile int _retransmitTimeout = defaultInitialRTO;
     /** Retransmit delay. */
     private int _retransmitDelay;
     /** Ack delay. */
@@ -728,9 +730,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND, onlyIfSet, v -> _tagsToSend = v);
         applyInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD, onlyIfSet, v -> _tagThreshold = v);
 
-        synchronized(this) {
-            _retransmitTimeout = getInt(opts, PROP_INITIAL_RTO, defaultInitialRTO);
-        }
+        _retransmitTimeout = getInt(opts, PROP_INITIAL_RTO, defaultInitialRTO);
     }
 
     /**
@@ -839,7 +839,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @return current SRTT value in ms
      */
-    public synchronized int getRTT() {return _smoothedRtt;}
+    public int getRTT() {return _smoothedRtt;}
 
     /**
      * Minimum RTT observed, greater than zero
@@ -847,7 +847,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return minimum RTT in ms
      * @since 0.9.46
      */
-    public synchronized int getMinRTT() {return _minRtt;}
+    public int getMinRTT() {return _minRtt;}
 
     /**
      * Smoothed RTT. Not public, use updateRTT().
@@ -862,9 +862,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param ms new RTT value in ms
      */
     private void setRTT(int ms) {
-        synchronized(this) {
-            _smoothedRtt = ms;
-        }
+        _smoothedRtt = ms;
     }
 
     /**
@@ -892,7 +890,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *
      * @return current RTO in ms
      */
-    public synchronized int getRTO() {return _retransmitTimeout;}
+    public int getRTO() {return _retransmitTimeout;}
 
     /**
      * RTT deviation for RTO calculation
@@ -900,13 +898,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return RTT variance in ms
      * @since 0.9.8
      */
-    synchronized int getRTTDev() {return _rttDeviation;}
+    int getRTTDev() {return _rttDeviation;}
 
     /**
      * RTT deviation for RTO calculation.
      * @param rttDev RTT deviation in ms
      */
-    private synchronized void setRTTDev(int rttDev) {_rttDeviation = rttDev;}
+    private void setRTTDev(int rttDev) {_rttDeviation = rttDev;}
 
     /**
      * Load cached RTT/deviation/window from TCB and transition directly to STEADY state
