@@ -299,13 +299,13 @@ public class TunerStaticOverrideTest {
 
     @Test
     public void nextHopLookupTimeoutUnsetFallsBackToConfig() {
-        when(_ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", 3000)).thenReturn(4000);
+        when(_ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", 5000)).thenReturn(4000);
         assertEquals(4000, BuildHandler.getNextHopLookupTimeout(_ctx));
     }
 
     @Test
     public void nextHopLookupTimeoutUnsetPassthroughDefault() {
-        when(_ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", 3000)).thenReturn(3000);
+        when(_ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", 5000)).thenReturn(3000);
         assertEquals(3000, BuildHandler.getNextHopLookupTimeout(_ctx));
     }
 
