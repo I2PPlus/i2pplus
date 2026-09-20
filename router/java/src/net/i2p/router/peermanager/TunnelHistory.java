@@ -20,11 +20,13 @@ public class TunnelHistory {
     private final Log _log;
     private final AtomicLong _lifetimeAgreedTo = new AtomicLong();
     private final AtomicLong _lifetimeRejected = new AtomicLong();
+    private final AtomicLong _lifetimeTimedOut = new AtomicLong();
     private volatile long _lastAgreedTo;
     private volatile long _lastRejectedCritical;
     private volatile long _lastRejectedBandwidth;
     private volatile long _lastRejectedTransient;
     private volatile long _lastRejectedProbabalistic;
+    private volatile long _lastTimedOut;
     private final AtomicLong _lifetimeFailed = new AtomicLong();
     private volatile long _lastFailed;
     private volatile long _lastTestedSuccessfully;
@@ -56,8 +58,10 @@ public class TunnelHistory {
 
     /** Total tunnels the peer has agreed to participate in */
     public long getLifetimeAgreedTo() {return _lifetimeAgreedTo.get();}
-    /** Total tunnels the peer has refused to participate in */
+    /** Total tunnels the peer has refused to participate in (does not include timeouts) */
     public long getLifetimeRejected() {return _lifetimeRejected.get();}
+    /** Total tunnel builds to this peer that timed out without a response */
+    public long getLifetimeTimedOut() {return _lifetimeTimedOut.get();}
     /** Total tunnels the peer has agreed to participate in that were later marked as failed prematurely */
     public long getLifetimeFailed() {return _lifetimeFailed.get();}
     /** When the peer last agreed to participate in a tunnel */
@@ -70,6 +74,8 @@ public class TunnelHistory {
     public long getLastRejectedTransient() {return _lastRejectedTransient;}
     /** When the peer last refused to participate in a tunnel probabalistically */
     public long getLastRejectedProbabalistic() {return _lastRejectedProbabalistic;}
+    /** When the peer last timed out without responding to a tunnel request */
+    public long getLastTimedOut() {return _lastTimedOut;}
     /** When the last tunnel the peer participated in failed */
     public long getLastFailed() {return _lastFailed;}
 
@@ -86,6 +92,7 @@ public class TunnelHistory {
 
     /**
      * Calculate the ratio of accepted to rejected tunnel requests.
+     * Timeouts are excluded — they indicate the peer was slow, not hostile.
      *
      * @return ratio (0.0 to 1.0), or 1.0 if no data available
      */
@@ -129,6 +136,19 @@ public class TunnelHistory {
         else if (severity >= TUNNEL_REJECT_PROBABALISTIC_REJECT) {_lastRejectedProbabalistic = now;}
         // a rejection is always a rejection, don't factor based on severity,
         // which could impact our ability to avoid a congested peer
+        _rejectRate.addData(1);
+    }
+
+    /**
+     * Count a tunnel build timeout (peer did not respond in time).
+     * Timeouts are tracked separately from rejections because a peer that
+     * is slow to respond is different from a peer that actively refuses.
+     * Timeouts do NOT count toward {@link #getLifetimeRejected()} and
+     * therefore do not affect {@link #getAcceptanceRatio()}.
+     */
+    public void incrementTimedOut() {
+        _lifetimeTimedOut.incrementAndGet();
+        _lastTimedOut = _context.clock().now();
         _rejectRate.addData(1);
     }
 
@@ -205,6 +225,7 @@ public class TunnelHistory {
         if (_lastFailed != 0) {addDate(buf, addComments, "lastFailed", _lastFailed, "Last time of participating tunnel failure for peer:");}
         if (_lifetimeAgreedTo.get() > 0) {add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());}
         if (_lifetimeRejected.get() > 0) {add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total tunnels peer refused to participate in: " + _lifetimeRejected.get());}
+        if (_lifetimeTimedOut.get() > 0) {add(buf, addComments, "lifetimeTimedOut", _lifetimeTimedOut.get(), "Total tunnel builds that timed out waiting for response: " + _lifetimeTimedOut.get());}
         if (_lifetimeFailed.get() > 0) {add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());}
         out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
         _rejectRate.store(out, "tunnelHistory.rejectRate", addComments);
@@ -237,6 +258,7 @@ public class TunnelHistory {
         _lifetimeAgreedTo.set(getLong(props, "tunnels.lifetimeAgreedTo"));
         _lifetimeFailed.set(getLong(props, "tunnels.lifetimeFailed"));
         _lifetimeRejected.set(getLong(props, "tunnels.lifetimeRejected"));
+        _lifetimeTimedOut.set(getLong(props, "tunnels.lifetimeTimedOut"));
         try {
             _rejectRate.load(props, "tunnelHistory.rejectRate", true);
         } catch (IllegalArgumentException iae) {

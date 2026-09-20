@@ -2576,11 +2576,10 @@ public class ProfileOrganizer {
         boolean recentFailures = hasRecentTunnelFailures(profile);
 
         if (skipsPromotion(profile, peer, buildSuccess)) {
-            if ((profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30) &&
-                _log.shouldDebug()) {
+            if (_log.shouldDebug()) {
                 _log.debug("Skipping peer [" + peer.toBase32().substring(0, 6) +
-                           "] from promotion: highLatency=true capBonus=" +
-                           profile.getCapacityBonus() + " raw=" + profile.getCapacityBonusRaw() +
+                           "] from promotion: notPeerSelectable=" + !passesBasicGates(peer) +
+                           " excessiveFailures=" + hasExcessiveLifetimeFailures(peer) +
                            " sameObj=" + (profile == notFailingProfile));
             }
             return;
@@ -2677,10 +2676,9 @@ public class ProfileOrganizer {
          // proof-of-life filtering peers that were already vetted at tier entry.
          boolean isPeerSelectable = passesBasicGates(peer) && !hasExcessiveLifetimeFailures(peer);
          boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess, now);
-         boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
          boolean congested = isCongestedPeer(peer);
          boolean highLoss = inLossProbation(profile, now);
-         return !isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested || highLoss;
+         return !isPeerSelectable || isStrictCountry || lowTunnelAcceptance || congested || highLoss;
      }
 
     /**
@@ -2806,9 +2804,6 @@ public class ProfileOrganizer {
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
-                // Set capacityBonus = -30 so UI shows ✖ and reorganize excludes this peer
-                PeerProfile profile = locked_getProfile(peer);
-                if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
             }
         } finally {
@@ -2837,8 +2832,6 @@ public class ProfileOrganizer {
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
-                PeerProfile profile = locked_getProfile(peer);
-                if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
             }
         } finally {
@@ -2873,8 +2866,6 @@ public class ProfileOrganizer {
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
-                PeerProfile profile = locked_getProfile(peer);
-                if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
             }
         } finally {
@@ -2900,8 +2891,6 @@ public class ProfileOrganizer {
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
-                PeerProfile profile = locked_getProfile(peer);
-                if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
             }
         } finally {
@@ -2991,8 +2980,6 @@ public class ProfileOrganizer {
                 _demotedPeers.put(peer, now);
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
-                PeerProfile profile = locked_getProfile(peer);
-                if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
             }
         } finally {
@@ -3039,9 +3026,6 @@ public class ProfileOrganizer {
                     }
                     if (inFast) removeFastPeer(peer);
                     if (inHighCap) _highCapacityPeers.remove(peer);
-                    // Set capacityBonus = -30 so UI shows ✖ and reorganize excludes this peer
-                    PeerProfile profile = locked_getProfile(peer);
-                    if (profile != null) profile.setCapacityBonus(-30);
                     promoteToFillTiers();
                 }
             } finally {
@@ -3207,15 +3191,15 @@ public class ProfileOrganizer {
         Rate failed = th.getFailedRate().getRate(RateConstants.ONE_HOUR);
         if (failed == null) return false;
         long failCount = failed.getCurrentEventCount();
-        // Allow transient failures (1-3) during network blips
-        if (failCount <= 3) return false;
+        // Allow transient failures during network blips
+        if (failCount <= 15) return false;
         // Reject peers with sustained failures (>30% failure ratio)
         long agreed = th.getLifetimeAgreedTo();
         long rejected = th.getLifetimeRejected();
         long total = agreed + rejected + failCount;
         if (total > 0 && (double) failCount / total > 0.3) return true;
-        // Reject peers with high absolute failure count (>5 failures/hour)
-        return failCount > 5;
+        // Reject peers with high absolute failure count (>15 failures/hour)
+        return false;
     }
 
     /**

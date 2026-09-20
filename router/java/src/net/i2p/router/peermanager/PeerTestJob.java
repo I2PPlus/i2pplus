@@ -361,9 +361,8 @@ public class PeerTestJob extends JobImpl {
                 } else if (data.routerInfo != null && data.profile != null && data.capabilities != null &&
                     (!data.isReachable || data.bandwidthTier.equals("K") || data.bandwidthTier.equals("L") ||
                      data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
-                    data.profile.setCapacityBonus(-30);
                     if (_log.shouldInfo())
-                        _log.info("Setting capacity bonus to -30 and skipping test for [" + data.shortHash + "] -> K, L, M, N or unreachable");
+                        _log.info("Skipping test for [" + data.shortHash + "] -> K, L, M, N or unreachable");
                 // Missing RouterInfo: cannot test
                 } else if (data.routerInfo == null && _log.shouldInfo()) {
                         _log.info("Test of [" + data.shortHash + "] failed: No local RouterInfo");
@@ -604,10 +603,9 @@ public class PeerTestJob extends JobImpl {
 
         private void handleSlowTier(PeerProfile prof) {
             try {
-                prof.setCapacityBonus(-30);
                 getContext().profileOrganizer().demoteIfHighLatency(_peer);
                 if (_log.shouldInfo())
-                    _log.info("Setting capacity bonus to -30 for [" + _shortHash + "] -> L, M, N or unreachable");
+                    _log.info("Demoting [" + _shortHash + "] -> L, M, N or unreachable");
             } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
@@ -619,11 +617,10 @@ public class PeerTestJob extends JobImpl {
 
             if (isHighBandwidthTier(data)) {
                 try {
-                    data.profile.setCapacityBonus(-30);
                     data.profile.setLowLatency(false);
                     getContext().profileOrganizer().demoteIfNotLowLatency(_peer);
                     if (_log.shouldInfo())
-                        _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]");
+                        _log.info("Demoting [" + _shortHash + "] -> test timeout");
                 } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
@@ -642,25 +639,19 @@ public class PeerTestJob extends JobImpl {
 
             if (testAvg > (timeout * 2L) && isHighBandwidthTier(data)) {
                 try {
-                    data.profile.setCapacityBonus(-30);
                     data.profile.setLowLatency(false);
                     getContext().profileOrganizer().demoteIfNotLowLatency(_peer);
                     if (_log.shouldInfo())
-                        _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]" +
+                        _log.info("Demoting [" + _shortHash + "]" +
                                   " -> Average response is over twice timeout value");
                 } catch (NumberFormatException nfe) { /* ignored */ }
                 return false;
             }
 
-            if ((data.profile.getCapacityBonus() == -30 || !data.profile.isLowLatency()) &&
+            if (!data.profile.isLowLatency() &&
                 data.capabilities != null && data.isReachable && testAvg < (timeout * 2) &&
                 isHighOrMidBandwidthTier(data)) {
                 try {
-                    if (data.profile.getCapacityBonus() == -30) {
-                        data.profile.setCapacityBonus(0);
-                        if (_log.shouldInfo())
-                            _log.info("Resetting capacity bonus to 0 for [" + _shortHash + "]");
-                    }
                     if (!data.profile.isLowLatency() && data.capabilities != null &&
                         data.isReachable && isHighBandwidthTier(data)) {
                         data.profile.setLowLatency(true);
@@ -757,18 +748,16 @@ public class PeerTestJob extends JobImpl {
                         return;
                     } else if (prof != null && cap != null && (!reachable || bw.equals("L") || (bw.equals("M")))) {
                         try {
-                            prof.setCapacityBonus(-30);
                             getContext().profileOrganizer().demoteIfHighLatency(h);
                             if (_log.shouldInfo())
-                                _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "] -> L or M tier or unreachable");
+                                _log.info("Demoting [" + _peer.toBase64().substring(0,6) + "] -> L or M tier or unreachable");
                         } catch (NumberFormatException nfe) { /* ignored */ }
                         return;
                     } else if (prof != null && cap == null) {
                         try {
-                            prof.setCapacityBonus(-30);
                             getContext().profileOrganizer().demoteIfHighLatency(h);
                             if (_log.shouldInfo())
-                                _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) +
+                                _log.info("Demoting [" + _peer.toBase64().substring(0,6) +
                                           "] -> No capabilities published in RouterInfo");
                         } catch (NumberFormatException nfe) { /* ignored */ }
                         return;
@@ -776,10 +765,9 @@ public class PeerTestJob extends JobImpl {
                                (cap.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
                                 cap.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
                         try {
-                            prof.setCapacityBonus(-30);
                             getContext().profileOrganizer().demoteIfCongested(h);
                             if (_log.shouldInfo())
-                                _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) +
+                                _log.info("Demoting [" + _peer.toBase64().substring(0,6) +
                                           "] -> Congestion cap (D/E) detected");
                         } catch (NumberFormatException nfe) { /* ignored */ }
                         return;
@@ -846,11 +834,10 @@ public class PeerTestJob extends JobImpl {
             if (data.routerInfo != null && data.profile != null && data.capabilities != null &&
                 (!data.isReachable || data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
                 try {
-                    data.profile.setCapacityBonus(-30);
                     data.profile.setLowLatency(false);
                     getContext().profileOrganizer().demoteIfNotLowLatency(_peer.getIdentity().getHash());
                     if (_log.shouldInfo())
-                        _log.info("Setting capacity bonus to -30 for [" +
+                        _log.info("Demoting [" +
                                   shortHash + "] -> Slow or unreachable");
                 } catch (NumberFormatException nfe) { /* ignored */ }
             }

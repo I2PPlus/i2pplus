@@ -159,20 +159,24 @@ class ProfileOrganizerRenderer {
                 }
                 candidates.add(prof);
             }
-            int size = candidates.size();            if (size >= 5000) {
-                hideWindow = 10*60*1000;
-            } else if (size >= 4000) {
-                hideWindow = 15*60*1000;
-            } else if (size >= 3000) {
-                hideWindow = 30*60*1000;
-            } else if (size >= 2000) {
-                hideWindow = 60*60*1000;
-            } else if (size >= 1000) {
-                hideWindow = 2*60*60*1000;
-            } else if (size >= 500) {
-                hideWindow = 4*60*60*1000;
-            } else {
-                hideWindow = 0;
+            int size = candidates.size();
+            // Fast and high-cap views show all tier peers without hiding stale ones
+            // — the numbers are manageable and users need visibility into full tier membership.
+            // Only the "all" view (mode 0) applies the activity cutoff.
+            if (mode == 0) {
+                if (size >= 5000) {
+                    hideWindow = 10*60*1000;
+                } else if (size >= 4000) {
+                    hideWindow = 15*60*1000;
+                } else if (size >= 3000) {
+                    hideWindow = 30*60*1000;
+                } else if (size >= 2000) {
+                    hideWindow = 60*60*1000;
+                } else if (size >= 1000) {
+                    hideWindow = 2*60*60*1000;
+                } else if (size >= 500) {
+                    hideWindow = 4*60*60*1000;
+                }
             }
             long hideBefore = hideWindow > 0 ? now - hideWindow : Long.MIN_VALUE;
             long freshBefore = now - Math.min(60*60*1000, hideWindow);
