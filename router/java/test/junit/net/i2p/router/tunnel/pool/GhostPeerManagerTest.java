@@ -43,7 +43,7 @@ public class GhostPeerManagerTest {
         _ctx = mock(RouterContext.class);
         when(_ctx.getConfigDir()).thenReturn(_tmpDir);
         when(_ctx.getProperty(anyString(), anyString())).thenReturn(new File(_tmpDir, "logger.config").getAbsolutePath());
-        // Defaults mirror the real ones: timeout threshold 2, cooldown 300s
+        // Defaults mirror the real ones: timeout threshold 1, cooldown 300s
         // (120s under stress, which getTunnelBuildSuccess() toggles).
         // Note: the cooldown literals in GhostPeerManager are ints, so the
         // (String, int) overload is the one that matters here.
@@ -51,7 +51,7 @@ public class GhostPeerManagerTest {
             String key = inv.getArgument(0);
             if ("i2p.tunnel.ghostPeer.attackCooldownMs".equals(key)) {return 120_000;}
             if ("i2p.tunnel.ghostPeer.cooldownMs".equals(key)) {return 300_000;}
-            return 2; // i2p.tunnel.ghostPeer.timeoutThreshold
+            return 1; // i2p.tunnel.ghostPeer.timeoutThreshold
         });
         LogManager lm = new LogManager(_ctx);
         when(_ctx.logManager()).thenReturn(lm);
@@ -88,19 +88,12 @@ public class GhostPeerManagerTest {
     public void testMarkedAfterThresholdTimeouts() {
         assertFalse(_mgr.isGhost(hash(1)));
         _mgr.recordTimeout(hash(1));
-        assertFalse("below threshold (1 of 3)", _mgr.isGhost(hash(1)));
-        assertEquals(0, _mgr.getGhostCount());
-        _mgr.recordTimeout(hash(1));
-        assertFalse("below threshold (2 of 3)", _mgr.isGhost(hash(1)));
-        _mgr.recordTimeout(hash(1));
-        assertTrue("at threshold (3 of 3)", _mgr.isGhost(hash(1)));
+        assertTrue("at threshold (1 of 1)", _mgr.isGhost(hash(1)));
         assertEquals(1, _mgr.getGhostCount());
     }
 
     @Test
     public void testGhostExpiresAfterCooldown() {
-        _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
 
@@ -115,7 +108,7 @@ public class GhostPeerManagerTest {
     @Test
     public void testStressCooldownIsShorter() {
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2); // below attack threshold
-        for (int i = 0; i < 5; i++) _mgr.recordTimeout(hash(1));
+        _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
 
         when(_clock.now()).thenReturn(NOW + 60_000L);
@@ -129,7 +122,7 @@ public class GhostPeerManagerTest {
     public void testCooldownSnapshottedAtMarkTime() {
         // marked under stress (120s)...
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
-        for (int i = 0; i < 5; i++) _mgr.recordTimeout(hash(1));
+        _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
         // ...network recovers mid-cooldown: the 120s grant must not be extended to 300s
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
@@ -139,7 +132,7 @@ public class GhostPeerManagerTest {
         // and the reverse: a normal (300s) mark must not be shortened by stress
         when(_clock.now()).thenReturn(NOW);
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
-        for (int i = 0; i < 3; i++) _mgr.recordTimeout(hash(2));
+        _mgr.recordTimeout(hash(2));
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
         when(_clock.now()).thenReturn(NOW + 200_000L);
         assertTrue("300s grant respected", _mgr.isGhost(hash(2)));
@@ -147,8 +140,6 @@ public class GhostPeerManagerTest {
 
     @Test
     public void testSuccessClearsGhost() {
-        _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
         _mgr.recordSuccess(hash(1));
@@ -158,8 +149,6 @@ public class GhostPeerManagerTest {
 
     @Test
     public void testClearGhost() {
-        _mgr.recordTimeout(hash(1));
-        _mgr.recordTimeout(hash(1));
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
         _mgr.clearGhost(hash(1));

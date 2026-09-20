@@ -24,15 +24,14 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, Long> _ghostUntil;
 
     /**
-     *  Number of timeouts under attack before a peer is ghosted.
-     *  Lowered from 5 to 2 to match the observed reality: with a 56%
-     *  timeout rate, a peer that fails to respond to 2 consecutive builds
-     *  within the decay window is almost certainly unreachable, not just
-     *  slow.  The time-decay window prevents ghosting during brief
-     *  network hiccups — only sustained failures within 60s count.
-     *  @since 0.9.71+ (lowered from 5)
+     *  Number of timeouts before a peer is ghosted.
+     *  A single ignored build request is enough to shift to another peer —
+     *  with a large candidate pool, there's no reason to retry an unresponsive
+     *  peer.  The ghost period (120-300s) is short; legitimate peers recover
+     *  quickly via recordSuccess().
+     *  @since 0.9.71+ (lowered from 2)
      */
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 2;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 1;
 
     /**
      *  Only count timeouts within this window toward the ghost threshold.
@@ -45,7 +44,7 @@ public class GhostPeerManager {
     private static final long TIMEOUT_DECAY_WINDOW_MS = 60 * 1000L;
 
     private static int getTimeoutThreshold(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 2);
+        return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 1);
     }
 
     private static long getCooldownMs(RouterContext ctx) {
@@ -229,8 +228,10 @@ public class GhostPeerManager {
     }
 
     /**
-     *  The current timeout threshold: {@link #ATTACK_TIMEOUT_THRESHOLD} (5)
-     *  under stress, else the configured value.
+     *  The current timeout threshold: 1 timeout ghosts a peer.
+     *  Under severe attack (&lt;0.30), use the configured value directly;
+     *  otherwise add no margin — a single ignored request is enough to
+     *  shift to another peer when the candidate pool is large.
      *
      *  @return threshold number of timeouts before exclusion
      */
@@ -240,25 +241,8 @@ public class GhostPeerManager {
 
     private static int getThreshold(RouterContext ctx, double buildSuccess) {
         int configured = getTimeoutThreshold(ctx);
-        // Base 3: with default config (2) + 1 margin, a peer must fail 3
-        // consecutive builds within 60s to be ghosted.  Under severe attack
-        // (<0.30), drop back to 2 for faster eviction of actual ghosts.
-        // The configured value acts as a floor for the boosted baseline.
-        int base;
-        if (buildSuccess < SEVERE_GHOST_THRESHOLD) {
-            base = configured;
-        } else {
-            base = configured + 1;
-        }
-        return base;
+        return configured;
     }
-
-    /**
-     *  Below this build-success ratio, use the un-boosted (lower) threshold
-     *  for faster ghost eviction during severe attacks.
-     *  @since 0.9.71+
-     */
-    private static final double SEVERE_GHOST_THRESHOLD = 0.30;
 
     /**
      * Clear ghost status for a peer (manual intervention).

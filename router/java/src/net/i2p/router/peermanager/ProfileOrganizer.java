@@ -204,6 +204,14 @@ public class ProfileOrganizer {
      */
     private static final int MIN_HC_TIGHT_COUNT = 1000;
     /**
+     * When fast tier has at least this many peers, require all tests
+     * passing — peer test (low latency), active, no recent failures,
+     * AND proven tunnel throughput.  Peers that are low-latency but
+     * have never participated in a real tunnel are excluded.
+     * @since 0.9.71+
+     */
+    private static final int MIN_FAST_QUALITY_COUNT = 300;
+    /**
      * When fast tier has at least this many peers, require speed threshold
      * — stop admitting via low-latency bypass alone.
      * @since 0.9.70+
@@ -2525,15 +2533,24 @@ public class ProfileOrganizer {
         }
 
         // Fast tier
-        // When tier count is healthy, require all tests passing — peer test
-        // (low latency), active, AND no recent tunnel failures. When filling,
-        // allow speed-based admission and low-latency bypass as before.
+        // Three-tier admission: filling (<300), quality (300-799), tight (≥800).
+        // Quality mode requires all tests passing — peer test (low latency),
+        // active, no recent failures, AND proven tunnel throughput.  This
+        // streams the fast tier to only include peers with a real track record.
         if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers()) {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
+            boolean fastQuality = _fastPeers.size() >= MIN_FAST_QUALITY_COUNT;
             boolean fastTight = _fastPeers.size() >= MIN_FAST_TIGHT_COUNT;
             if (fastTight) {
                 // Tight mode: require peer test passing + active + no recent failures
                 if (profile.isLowLatency() && profile.getIsActive() && !recentFailures) {
+                    _fastPeers.put(peer, profile);
+                }
+            } else if (fastQuality) {
+                // Quality mode: all tests passing — peer test, active,
+                // no recent failures, AND proven tunnel throughput
+                if (profile.isLowLatency() && profile.getIsActive() &&
+                    !recentFailures && hasProvenThroughput) {
                     _fastPeers.put(peer, profile);
                 }
             } else {
