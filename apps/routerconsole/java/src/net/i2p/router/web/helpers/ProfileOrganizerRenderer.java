@@ -341,6 +341,34 @@ class ProfileOrganizerRenderer {
             else if (!ok) statusSort = 1;
             else if (fails == 0) statusSort = 3;
             else statusSort = 2;
+
+            // Compute fail percentage for any peer with tunnel history
+            double failPercentage = 0;
+            long total = 0;
+            if (fails > 0) {
+                Rate accepted = null;
+                RateStat acceptedStat = prof.getTunnelCreateResponseTime();
+                if (acceptedStat != null) {accepted = acceptedStat.getRate(RateConstants.ONE_HOUR);}
+                total = fails + (accepted != null ? accepted.computeAverages(ra, false).getTotalEventCount() : 0);
+                if (total > 0) {failPercentage = (double) fails / total * 100;}
+            }
+
+            // Instant demotion: banned and unreachable always; >5% fail when tier is healthy
+            if (isBanned) {
+                if (bonus == 9999999) {prof.setSpeedBonus(0);}
+                prof.setCapacityBonus(-30);
+                _context.profileOrganizer().demoteIfBanned(peer);
+            } else if (isUnreachable) {
+                if (bonus == 9999999) {prof.setSpeedBonus(0);}
+                prof.setCapacityBonus(-30);
+                _context.profileOrganizer().demoteIfUnreachableNow(peer);
+            } else if (failPercentage > 5.0 && _organizer.isFast(peer) &&
+                       _organizer.getFastQualityCount() >= 300) {
+                if (bonus == 9999999) {prof.setSpeedBonus(0);}
+                prof.setCapacityBonus(-30);
+                _context.profileOrganizer().demoteIfHighLatency(peer);
+            }
+
             buf.append("</td><td class=status data-sort=").append(statusSort).append(">");
             if (ok && fails == 0) {buf.append("<span class=\"ok").append(isTesting ? " testing" : "").append("\">").append(_t("OK")).append("</span>");}
             else if (!ok) {
@@ -348,18 +376,6 @@ class ProfileOrganizerRenderer {
                    .append(isUnreachable ? " unreachable" : "").append(isTesting ? " testing" : "");
 
                 if (fails > 0) {
-                    Rate accepted = null;
-                    RateStat acceptedStat = prof.getTunnelCreateResponseTime();
-                    if (acceptedStat != null) {accepted = acceptedStat.getRate(RateConstants.ONE_HOUR);}
-                    long total = fails + (accepted != null ? accepted.computeAverages(ra, false).getTotalEventCount() : 0);
-                    double failPercentage = (double) fails / total * 100;
-
-                    if (failPercentage > 5.0) { // demote if failure rate exceeds 5%
-                        if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                        prof.setCapacityBonus(-30);
-                        _context.profileOrganizer().demoteIfHighLatency(peer);
-                    }
-
                     boolean failHigh = failPercentage >= 10.0;
                     if (failHigh) {
                         buf.append(" failing").append(failPercentage >= 50.0 ? " fiftyPercent" : "");
@@ -378,9 +394,6 @@ class ProfileOrganizerRenderer {
                     if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
                 } else if (isUnreachable) {
                     buf.append("\" title=\"\u2022 ").append(_t("Unreachable"));
-                    if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                    prof.setCapacityBonus(-30);
-                    _context.profileOrganizer().demoteIfHighLatency(peer);
                 } else if (isBanned) {
                     buf.append("\" title=\"\u2022 ").append(_t("Banned"));
                 }

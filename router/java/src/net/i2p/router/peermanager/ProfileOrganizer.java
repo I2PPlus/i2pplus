@@ -651,6 +651,17 @@ public class ProfileOrganizer {
     public boolean isFast(Hash peer) {return isX(_fastPeers, peer);}
 
     /**
+     * The number of quality peers currently in the fast tier.
+     * A quality peer is fast and either high-capacity or has proven throughput.
+     * Used by the renderer to gate demotion of failing peers — when the tier
+     * is healthy (&ge;300 quality peers), non-ok peers are evicted instantly.
+     *
+     * @return the count of quality fast peers
+     * @since 0.9.71+
+     */
+    public int getFastQualityCount() {return _fastQualityCount;}
+
+    /**
      * Check whether a peer is classified in the high-capacity tier.
      *
      * @param peer the router hash to check
@@ -1747,10 +1758,19 @@ public class ProfileOrganizer {
         Iterator<Map.Entry<Hash, PeerProfile>> it = tier.entrySet().iterator();
         while (it.hasNext()) {
             PeerProfile profile = it.next().getValue();
-            if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
+            Hash peer = profile.getPeer();
+            String reason = null;
+            if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) {
+                reason = "banned";
+            } else if (_context.commSystem() != null && _context.commSystem().wasUnreachable(peer)) {
+                reason = "unreachable";
+            } else if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
+                reason = "recent tunnel failures";
+            }
+            if (reason != null) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
-                               "] from " + tierName + " tier: recent tunnel failures");
+                    _log.debug("Purging peer [" + peer.toBase32().substring(0, 6) +
+                               "] from " + tierName + " tier: " + reason);
                 }
                 it.remove();
                 if (isFast && isQualityFastPeer(profile, _highCapacityPeers))
@@ -2752,6 +2772,60 @@ public class ProfileOrganizer {
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
                 // Set capacityBonus = -30 so UI shows ✖ and reorganize excludes this peer
+                PeerProfile profile = locked_getProfile(peer);
+                if (profile != null) profile.setCapacityBonus(-30);
+                promoteToFillTiers();
+            }
+        } finally {
+            releaseWriteLock();
+        }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers if it is banned.
+     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Non-blocking - only acts if the peer is currently in those tiers.
+     * @since 0.9.71+
+     */
+    public void demoteIfBanned(Hash peer) {
+        if (!getWriteLock()) return;
+        try {
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if (inFast || inHighCap) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers: banned");
+                }
+                if (inFast) removeFastPeer(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
+                PeerProfile profile = locked_getProfile(peer);
+                if (profile != null) profile.setCapacityBonus(-30);
+                promoteToFillTiers();
+            }
+        } finally {
+            releaseWriteLock();
+        }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers if it is unreachable.
+     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
+     * Non-blocking - only acts if the peer is currently in those tiers.
+     * @since 0.9.71+
+     */
+    public void demoteIfUnreachableNow(Hash peer) {
+        if (!getWriteLock()) return;
+        try {
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if (inFast || inHighCap) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers: unreachable");
+                }
+                if (inFast) removeFastPeer(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
                 PeerProfile profile = locked_getProfile(peer);
                 if (profile != null) profile.setCapacityBonus(-30);
                 promoteToFillTiers();
