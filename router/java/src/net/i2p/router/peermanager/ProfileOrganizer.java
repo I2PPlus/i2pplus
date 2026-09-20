@@ -1198,6 +1198,34 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Return the current fast tier membership directly.
+     * Used by the renderer to avoid iterating all peers for fast-only views.
+     *
+     * @return unmodifiable snapshot of fast tier hashes
+     * @since 0.9.71+
+     */
+    public Set<Hash> selectFastPeers() {
+        getReadLock();
+        try {
+            return java.util.Collections.unmodifiableSet(new HashSet<>(_fastPeers.keySet()));
+        } finally {releaseReadLock();}
+    }
+
+    /**
+     * Return the current high-capacity tier membership directly.
+     * Used by the renderer to avoid iterating all peers for highcap-only views.
+     *
+     * @return unmodifiable snapshot of high-capacity tier hashes
+     * @since 0.9.71+
+     */
+    public Set<Hash> selectHighCapacityPeers() {
+        getReadLock();
+        try {
+            return java.util.Collections.unmodifiableSet(new HashSet<>(_highCapacityPeers.keySet()));
+        } finally {releaseReadLock();}
+    }
+
+    /**
      * Last known number of profiles stored on disk, from the most recent load,
      * cleanup, or purge in the persistence helper.
      *

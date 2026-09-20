@@ -139,44 +139,57 @@ class ProfileOrganizerRenderer {
      *  @since 0.9.70+
      */
     private ProfileSelection loadProfiles(int mode) {
-        Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
         Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator());
         int older = 0;
         long hideWindow = 0;
-        if (mode != 3) {
-            // Pass 1: collect the tier's candidates to size the cutoff
+        if (mode == 1) {
+            // Fast tier: iterate only fast peers, no hideWindow
+            Set<Hash> fastPeers = _organizer.selectFastPeers();
+            for (Hash peer : fastPeers) {
+                PeerProfile prof = _organizer.getProfile(peer);
+                if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
+                order.add(prof);
+            }
+        } else if (mode == 2) {
+            // High-capacity (non-fast): iterate only high-cap peers, no hideWindow
+            Set<Hash> hcPeers = _organizer.selectHighCapacityPeers();
+            for (Hash peer : hcPeers) {
+                PeerProfile prof = _organizer.getProfile(peer);
+                if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
+                if (_organizer.isFast(peer)) {continue;}
+                order.add(prof);
+            }
+        } else if (mode == 3) {
+            // Floodfill: iterate all peers, no hideWindow
+            Set<Hash> peers = _organizer.selectAllPeers();
+            for (Hash peer : peers) {
+                PeerProfile prof = _organizer.getProfile(peer);
+                if (prof == null || !isValid(prof, peer, _organizer.getUs(), false)) {continue;}
+                order.add(prof);
+            }
+        } else {
+            // All peers: apply hideWindow
+            Set<Hash> peers = _organizer.selectAllPeers();
             List<PeerProfile> candidates = new ArrayList<>();
             for (Hash peer : peers) {
                 PeerProfile prof = _organizer.getProfile(peer);
                 if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
-                if (mode == 1) {
-                    // Fast tier only
-                    if (!_organizer.isFast(peer)) {continue;}
-                } else if (mode == 2) {
-                    // High Capacity (non-fast) only
-                    if (!_organizer.isHighCapacity(peer) || _organizer.isFast(peer)) {continue;}
-                }
                 candidates.add(prof);
             }
             int size = candidates.size();
-            // Fast and high-cap views show all tier peers without hiding stale ones
-            // — the numbers are manageable and users need visibility into full tier membership.
-            // Only the "all" view (mode 0) applies the activity cutoff.
-            if (mode == 0) {
-                if (size >= 5000) {
-                    hideWindow = 10*60*1000;
-                } else if (size >= 4000) {
-                    hideWindow = 15*60*1000;
-                } else if (size >= 3000) {
-                    hideWindow = 30*60*1000;
-                } else if (size >= 2000) {
-                    hideWindow = 60*60*1000;
-                } else if (size >= 1000) {
-                    hideWindow = 2*60*60*1000;
-                } else if (size >= 500) {
-                    hideWindow = 4*60*60*1000;
-                }
+            if (size >= 5000) {
+                hideWindow = 10*60*1000;
+            } else if (size >= 4000) {
+                hideWindow = 15*60*1000;
+            } else if (size >= 3000) {
+                hideWindow = 30*60*1000;
+            } else if (size >= 2000) {
+                hideWindow = 60*60*1000;
+            } else if (size >= 1000) {
+                hideWindow = 2*60*60*1000;
+            } else if (size >= 500) {
+                hideWindow = 4*60*60*1000;
             }
             long hideBefore = hideWindow > 0 ? now - hideWindow : Long.MIN_VALUE;
             long freshBefore = now - Math.min(60*60*1000, hideWindow);
@@ -189,12 +202,6 @@ class ProfileOrganizerRenderer {
                         continue;
                     }
                 }
-                order.add(prof);
-            }
-        } else {
-            for (Hash peer : peers) {
-                PeerProfile prof = _organizer.getProfile(peer);
-                if (prof == null || !isValid(prof, peer, _organizer.getUs(), false)) {continue;}
                 order.add(prof);
             }
         }
@@ -360,16 +367,13 @@ class ProfileOrganizerRenderer {
             // Instant demotion: banned and unreachable always; >5% fail when tier is healthy
             if (isBanned) {
                 if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                prof.setCapacityBonus(-30);
                 _context.profileOrganizer().demoteIfBanned(peer);
             } else if (isUnreachable) {
                 if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                prof.setCapacityBonus(-30);
                 _context.profileOrganizer().demoteIfUnreachableNow(peer);
             } else if (failPercentage > 5.0 && _organizer.isFast(peer) &&
                        _organizer.getFastQualityCount() >= 300) {
                 if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                prof.setCapacityBonus(-30);
                 _context.profileOrganizer().demoteIfHighLatency(peer);
             }
 
