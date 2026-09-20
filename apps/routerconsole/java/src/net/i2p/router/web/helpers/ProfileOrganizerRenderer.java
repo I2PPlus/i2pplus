@@ -235,9 +235,10 @@ class ProfileOrganizerRenderer {
                .append("<thead>\n<tr>")
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
-               .append("<th>").append(_t("Version")).append("</th>");
-             buf.append("<th class=host data-sort-method=string data-sort-caseinsensitive>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
-            buf.append("<th class=status>").append(_t("Status")).append("</th>")
+               .append("<th>").append(_t("Version")).append("</th>")
+               .append("<th class=host data-sort-method=string data-sort-caseinsensitive>")
+               .append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>")
+               .append("<th class=status data-sort-method=number>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
                .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
@@ -316,7 +317,6 @@ class ProfileOrganizerRenderer {
                 buf.append("<span class=host_ipv6>").append(ip);
             }
             buf.append("</span>");
-            buf.append("</td><td class=status>");
             boolean ok = true;
             boolean isBanned = false;
             boolean isUnreachable = false;
@@ -335,6 +335,13 @@ class ProfileOrganizerRenderer {
             long capBonus = prof.getCapacityBonus();
             boolean isTesting = prof != null && prof.getLastTestStarted() > 0 &&
                                 (_context.clock().now() - prof.getLastTestStarted() < 15000);
+            // 3=OK, 2=most tests passing, 1=failing, 0=banned — for tablesort number sort
+            int statusSort;
+            if (isBanned) statusSort = 0;
+            else if (!ok) statusSort = 1;
+            else if (fails == 0) statusSort = 3;
+            else statusSort = 2;
+            buf.append("</td><td class=status data-sort=").append(statusSort).append(">");
             if (ok && fails == 0) {buf.append("<span class=\"ok").append(isTesting ? " testing" : "").append("\">").append(_t("OK")).append("</span>");}
             else if (!ok) {
                 buf.append("<span class=\"notOk").append(isBanned ? " banned" : "")
