@@ -681,7 +681,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new UntestedMultiplierParam());
         _params.add(new FirstHopFailureCooldownParam());
         _params.add(new FirstHopFailureThresholdParam());
-        _params.add(new IbCongestionThresholdParam());
         _params.add(new StaleBuildThresholdParam());
         _params.add(new ConcurrencyThrottleThresholdParam());
 
@@ -13188,45 +13187,6 @@ protected int computeTarget(double observed) {
             if (manyPacedOut && !healthy)
                 return Math.min(_max, current + 1);
             if (!Double.isNaN(observed) && observed < 50)
-                return Math.max(_min, current - 1);
-            return current;
-        }
-    }
-
-    /**
-     * Tunes the inbound exploratory tunnel count below which concurrent
-     * builds are throttled.  Higher values throttle earlier (more
-     * aggressive); lower values only throttle when IB tunnels are very
-     * scarce.
-     */
-    private class IbCongestionThresholdParam extends BaseParam {
-        IbCongestionThresholdParam() {
-            super("tunnel.build.inboundCongestion",
-                  "Inbound congestion threshold",
-                  SUB_TUNNEL, 1, 10, 1,
-                  "tunnel.buildSuccessRate", _context);
-        }
-        protected void applyValue(int value) {
-            BuildExecutor.setIbCongestionThreshold(value);
-        }
-        protected int getRuntimeValue() {
-            return BuildExecutor.getIbCongestionThreshold();
-        }
-        protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
-        }
-        protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            double ibCongestion = getAdditionalEventCount(_context, "tunnel.buildIBCongestion");
-            boolean congestionActive = !Double.isNaN(ibCongestion) && ibCongestion > 10;
-            boolean healthy = !Double.isNaN(observed) && observed > 80;
-            if (congestionActive && !healthy)
-                return Math.min(_max, current + 1);
-            if (healthy)
                 return Math.max(_min, current - 1);
             return current;
         }

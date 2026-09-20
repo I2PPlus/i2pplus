@@ -242,24 +242,6 @@ public class BuildExecutor implements Runnable {
      */
     public static void setFirstHopFailureThreshold(int count) { FIRST_HOP_FAILURE_THRESHOLD = Math.max(1, Math.min(10, count)); }
     /**
-     *  IB tunnel congestion tracking: monitors the count of available IB
-     *  exploratory tunnels.  When IB tunnels are low (<2), builds are
-     *  throttled to prevent overwhelming the reply path.
-     *
-     *  @since 0.9.71+
-     */
-    private volatile int _lastIBTunnelCount;
-    private volatile long _lastIBTunnelCheck;
-    /**
-     *  IB tunnel congestion threshold.  When available IB exploratory
-     *  tunnels drop below this value, concurrent builds are throttled.
-     *  Tunable via {@link Tuner}.
-     *
-     *  @since 0.9.71+
-     */
-    private static volatile int IB_CONGESTION_THRESHOLD = 2;
-
-    /**
      *  Stale build pruning threshold fraction.  When the time elapsed
      *  since a build was configured exceeds this fraction of the adaptive
      *  timeout budget, the build is skipped (it would timeout anyway).
@@ -270,17 +252,17 @@ public class BuildExecutor implements Runnable {
     private static volatile int STALE_BUILD_THRESHOLD_PCT = 40;
 
     /**
-     *  The IB congestion threshold.
-     *  @return the threshold
+     *  Maximum concurrent in-flight builds per pool per direction (inbound
+     *  or outbound).  Enforces fair build distribution across pools so no
+     *  single pool monopolizes build slots.  Each pool's inbound and
+     *  outbound directions are tracked independently, so a pool with
+     *  target 3/2 can have 2 in-flight inbound and 2 in-flight outbound
+     *  simultaneously.
+     *
      *  @since 0.9.71+
      */
-    public static int getIbCongestionThreshold() { return IB_CONGESTION_THRESHOLD; }
-    /**
-     *  Set the IB congestion threshold (called by Tuner).
-     *  @param val the threshold (1-10)
-     *  @since 0.9.71+
-     */
-    public static void setIbCongestionThreshold(int val) { IB_CONGESTION_THRESHOLD = Math.max(1, Math.min(10, val)); }
+    private static final int MAX_PER_POOL_DIR = 2;
+
     /**
      *  The stale build pruning threshold percentage.
      *  @return the threshold percentage (30-80)
@@ -582,7 +564,6 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildIBCongestion", "Builds throttled due to IB tunnel congestion", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildStalePruned", "Builds pruned due to stale queue", "Tunnels", RATES);
 
         StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
@@ -1247,27 +1228,7 @@ public class BuildExecutor implements Runnable {
                     }
                 }
 
-                // IB tunnel congestion detection: when available IB exploratory
-                // tunnels are low (<2), builds are throttled because the reply
-                // path is congested.  OB build replies come back through IB
-                // exploratory tunnels; with only 1 IB tunnel and 18+
-                // concurrent builds, the reply path becomes a bottleneck.
                 TunnelManagerFacade mgr = _context.tunnelManager();
-                if (mgr != null) {
-                    long now = _context.clock().now();
-                    if (now - _lastIBTunnelCheck > 5000) {
-                        _lastIBTunnelCheck = now;
-                        _lastIBTunnelCount = mgr.getFreeTunnelCount();
-                    }
-                    if (_lastIBTunnelCount < IB_CONGESTION_THRESHOLD) {
-                        _context.statManager().addRateData("tunnel.buildIBCongestion", 1);
-                        allowed = Math.min(allowed, 2);
-                        if (_log.shouldDebug()) {
-                            _log.debug("IB tunnel congestion: " + _lastIBTunnelCount +
-                                       " IB tunnels available, throttling builds to " + allowed);
-                        }
-                    }
-                }
 
                 boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0 && mgr.getOutboundTunnelCount() <= 0);
 
@@ -1318,6 +1279,36 @@ public class BuildExecutor implements Runnable {
                         Arrays.sort(scored, DISPATCH_COMPARATOR);
                         for (int si = 0; si < sz; si++) {
                             wanted.set(si, (TunnelPool) scored[si][1]);
+                        }
+
+                        // Per-pool, per-direction in-flight cap: removes pools
+                        // that already have MAX_PER_POOL_DIR builds in flight
+                        // for a given direction (inbound or outbound).  Derived
+                        // from _currentlyBuildingMap so there's no second map to
+                        // keep in sync across all completion paths.
+                        if (!_currentlyBuildingMap.isEmpty()) {
+                            Map<TunnelPool, int[]> inflight = null;
+                            for (PooledTunnelCreatorConfig bld : _currentlyBuildingMap.values()) {
+                                TunnelPool p = bld.getTunnelPool();
+                                if (p == null) continue;
+                                if (inflight == null) inflight = new HashMap<>(4);
+                                boolean in = p.getSettings().isInbound();
+                                int[] dir = inflight.computeIfAbsent(p, k -> new int[2]);
+                                dir[in ? 0 : 1]++;
+                            }
+                            if (inflight != null) {
+                                Iterator<TunnelPool> wit = wanted.iterator();
+                                while (wit.hasNext()) {
+                                    TunnelPool pool = wit.next();
+                                    int[] dir = inflight.get(pool);
+                                    if (dir != null) {
+                                        boolean in = pool.getSettings().isInbound();
+                                        if ((in ? dir[0] : dir[1]) >= MAX_PER_POOL_DIR) {
+                                            wit.remove();
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {

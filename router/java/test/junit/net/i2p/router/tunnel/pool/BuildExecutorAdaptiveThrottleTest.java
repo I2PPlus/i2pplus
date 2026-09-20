@@ -20,42 +20,10 @@ public class BuildExecutorAdaptiveThrottleTest {
     /** Restore defaults after each test to avoid cross-test pollution. */
     @After
     public void restoreDefaults() {
-        BuildExecutor.setIbCongestionThreshold(3);
         BuildExecutor.setStaleBuildThresholdPct(60);
         BuildExecutor.setFirstHopFailureCooldownMs(5 * 60 * 1000L);
         BuildExecutor.setFirstHopFailureThreshold(3);
         BuildExecutor.setConcurrencyThrottleThresholdPct(30);
-    }
-
-    // ---- IB congestion threshold ----
-
-    @Test
-    public void testIbCongestionDefault() {
-        assertEquals(3, BuildExecutor.getIbCongestionThreshold());
-    }
-
-    @Test
-    public void testIbCongestionClampedLow() {
-        BuildExecutor.setIbCongestionThreshold(0);
-        assertEquals(1, BuildExecutor.getIbCongestionThreshold());
-        BuildExecutor.setIbCongestionThreshold(-5);
-        assertEquals(1, BuildExecutor.getIbCongestionThreshold());
-    }
-
-    @Test
-    public void testIbCongestionClampedHigh() {
-        BuildExecutor.setIbCongestionThreshold(11);
-        assertEquals(10, BuildExecutor.getIbCongestionThreshold());
-        BuildExecutor.setIbCongestionThreshold(100);
-        assertEquals(10, BuildExecutor.getIbCongestionThreshold());
-    }
-
-    @Test
-    public void testIbCongestionValidRange() {
-        for (int i = 1; i <= 10; i++) {
-            BuildExecutor.setIbCongestionThreshold(i);
-            assertEquals(i, BuildExecutor.getIbCongestionThreshold());
-        }
     }
 
     // ---- Stale build pruning threshold ----
