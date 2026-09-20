@@ -620,8 +620,8 @@ public class PeerTestJob extends JobImpl {
             if (isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
-                    getContext().profileOrganizer().demoteIfHighLatency(_peer);
                     data.profile.setLowLatency(false);
+                    getContext().profileOrganizer().demoteIfNotLowLatency(_peer);
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]");
                 } catch (NumberFormatException nfe) { /* ignored */ }
@@ -643,8 +643,8 @@ public class PeerTestJob extends JobImpl {
             if (testAvg > (timeout * 2L) && isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
-                    getContext().profileOrganizer().demoteIfHighLatency(_peer);
                     data.profile.setLowLatency(false);
+                    getContext().profileOrganizer().demoteIfNotLowLatency(_peer);
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" + _shortHash + "]" +
                                   " -> Average response is over twice timeout value");
@@ -847,8 +847,8 @@ public class PeerTestJob extends JobImpl {
                 (!data.isReachable || data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
                 try {
                     data.profile.setCapacityBonus(-30);
-                    getContext().profileOrganizer().demoteIfHighLatency(_peer.getIdentity().getHash());
                     data.profile.setLowLatency(false);
+                    getContext().profileOrganizer().demoteIfNotLowLatency(_peer.getIdentity().getHash());
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 for [" +
                                   shortHash + "] -> Slow or unreachable");

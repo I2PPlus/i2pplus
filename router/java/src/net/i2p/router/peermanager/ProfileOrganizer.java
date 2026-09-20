@@ -2622,9 +2622,14 @@ public class ProfileOrganizer {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
             boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
             boolean fastQuality = _fastQualityCount >= MIN_FAST_QUALITY_COUNT;
-            if (!recentFailures && isHighBandwidthCapable(peer)) {
+            if (!recentFailures && isHighBandwidthCapable(peer) &&
+                (profile.isLowLatency() || !profile.hasBeenTested())) {
                 // Bandwidth tier fast-track: X/P/O peers are inherently
-                // capable — let them demonstrate throughput in a tunnel.
+                // capable, but only if they're not known to be slow.
+                // Untested peers get a chance; tested-but-slow peers are
+                // excluded — their bandwidth tier is real, but their
+                // responsiveness isn't, and putting them in fast tier
+                // causes build failures that degrade build success ratio.
                 putFastPeer(peer, profile);
             } else if (fastQuality) {
                 // Quality mode: all tests passing — peer test, active,
@@ -2809,6 +2814,45 @@ public class ProfileOrganizer {
         } finally {
             releaseWriteLock();
         }
+    }
+
+    /**
+     * Immediately demote a peer from fast/high-cap tiers when a peer test
+     * shows it is no longer low-latency.  Called from PeerTestJob when a
+     * test result arrives that contradicts the peer's tier membership.
+     * Non-blocking — only acts if the peer is currently in those tiers.
+     *
+     * @param peer the peer
+     * @since 0.9.71+
+     */
+    public void demoteIfNotLowLatency(Hash peer) {
+        if (!getWriteLock()) return;
+        try {
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if ((inFast || inHighCap) && !isLowLatency(peer)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers: no longer low-latency");
+                }
+                if (inFast) removeFastPeer(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
+                PeerProfile profile = locked_getProfile(peer);
+                if (profile != null) profile.setCapacityBonus(-30);
+                promoteToFillTiers();
+            }
+        } finally {
+            releaseWriteLock();
+        }
+    }
+
+    /**
+     * Check whether the peer's profile has low-latency status.
+     * Non-blocking — returns the profile's flag without acquiring locks.
+     */
+    private boolean isLowLatency(Hash peer) {
+        PeerProfile profile = getProfileNonblocking(peer);
+        return profile != null && profile.isLowLatency();
     }
 
     /**

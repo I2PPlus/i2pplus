@@ -793,6 +793,16 @@ public class PeerProfile {
     }
 
     /**
+     * Whether the peer has been tested (has a peer test response time average).
+     * Used by the bandwidth tier fast-track to distinguish "untested, give a
+     * chance" from "tested and known slow".
+     *
+     * @return true if the peer has a measured peer test average
+     * @since 0.9.71+
+     */
+    public boolean hasBeenTested() {return _peerTestResponseTimeAvg > 0;}
+
+    /**
      * Recalculate the low-latency flag from the accumulated peer test time average.
      * Low latency is defined as an average response time under 3x the peer test timeout
      * (default 750ms, so 2250ms threshold), matching the same threshold used in BuildExecutor.
