@@ -14,8 +14,8 @@ import net.i2p.router.RouterContext;
  * - RTT penalty reduces score for high-latency peers (linear: factor = max(0.1, 1 - RTT/16s))
  * - Congestion caps (D=0.75x, E=0.50x) multiply down the effective speed
  * - Actual peak 1-min tunnel throughput adds to bandwidth tier estimate when available
- * - When no throughput data exists, estimatedSpeed decays by 50% per 30 minutes
- * to gradually deprioritize idle-but-capable peers
+ * - When no throughput data exists, the bandwidth-tier estimate stands alone
+ *   (freshness is handled by selection gates, not by eroding the score)
  */
 class SpeedCalculator {
 
@@ -52,18 +52,15 @@ class SpeedCalculator {
 
         double speed;
         if (actualThroughput > 0) {
-            // Peer has proven throughput — use it as floor, no time-based decay
-            // Peak throughput is a persistent capability indicator
+            // Peer has proven throughput — use it as additive bonus.
+            // The tier estimate provides the floor, measured throughput
+            // rewards peers that actually deliver beyond their tier.
             speed = estimatedSpeed + actualThroughput;
         } else {
-            // No throughput data: use bandwidth-tier estimate with slow decay
-            // 50% decay every 30 minutes (was 5 min — too aggressive; caused
-            // good-but-idle peers to drop below speed threshold during cascades)
-            long lastUpdate = profile.getLastThroughputUpdate();
-            long now = context.clock().now();
-            long minutesSinceUpdate = lastUpdate > 0 ? (now - lastUpdate) / (60 * 1000L) : 0;
-            double decay = Math.pow(0.5, Math.min(minutesSinceUpdate, 240) / 30.0);
-            speed = estimatedSpeed * decay;
+            // No throughput data: the bandwidth-tier estimate IS the speed.
+            // Freshness is handled by selection gates (isLowLatency,
+            // getIsActive, hasValidRouterInfo), not by decaying this score.
+            speed = estimatedSpeed;
         }
 
         return Math.max(speed, 0.0d);

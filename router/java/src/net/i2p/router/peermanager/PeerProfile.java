@@ -110,14 +110,6 @@ public class PeerProfile {
     private final float[] _peakTunnel1mThroughput = new float[THROUGHPUT_COUNT];
     private long _lastTestStarted;
     private volatile long _lastThroughputUpdate;
-    /** Periodically cut the measured throughput values. */
-    private static final int DEGRADES_PER_DAY = 4;
-    // one in this many times, ~= 61
-    private static final int DEGRADE_PROBABILITY = PeerManager.REORGANIZES_PER_DAY / DEGRADES_PER_DAY;
-    private static final double TOTAL_DEGRADE_PER_DAY = 0.5d;
-    // the goal is to cut an unchanged profile in half in 24 hours.
-    // x**4 = .5; x = 4th root of .5,  x = .5**(1/4), x ~= 0.84
-    private static final float DEGRADE_FACTOR = (float) Math.pow(TOTAL_DEGRADE_PER_DAY, 1.0d / DEGRADES_PER_DAY);
     private long _lastCoalesceDate = System.currentTimeMillis();
     private static final long[] TUNNEL_CREATE_RESPONSE_RATES = {
         RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY
@@ -1042,12 +1034,19 @@ public class PeerProfile {
         _expandedDB = false;
     }
 
+    /**
+     *  Coalesce throughput peaks: insert new measurement into the sorted
+     *  peak arrays.  Existing peaks are never modified — they represent
+     *  demonstrated capability, not recency.  Freshness is handled by
+     *  selection gates (isLowLatency, getIsActive, hasValidRouterInfo)
+     *  rather than by eroding the data.
+     *
+     *  @param decay ignored, retained for call-site compatibility
+     */
     private void coalesceThroughput(boolean decay) {
         long now = System.currentTimeMillis();
         long measuredPeriod = now - _lastCoalesceDate;
         if (measuredPeriod >= 60*1000L) {
-            // so we don't call random() twice
-            boolean shouldDecay =  decay && _context.random().nextInt(DEGRADE_PROBABILITY) <= 0;
             long tot = _peakThroughputCurrentTotal.getAndSet(0);
             float lowPeak = _peakThroughput[THROUGHPUT_COUNT-1];
             if (tot > lowPeak) {
@@ -1057,19 +1056,6 @@ public class PeerProfile {
                         _peakThroughput[i] = tot;
                         break;
                     }
-                }
-            } else {
-                if (shouldDecay) {
-                    for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakThroughput[i] *= DEGRADE_FACTOR;}
-                }
-            }
-
-            // we degrade the tunnel throughput here too, regardless of the current
-            // activity
-            if (shouldDecay) {
-                for (int i = 0; i < THROUGHPUT_COUNT; i++) {
-                    _peakTunnelThroughput[i] *= DEGRADE_FACTOR;
-                    _peakTunnel1mThroughput[i] *= DEGRADE_FACTOR;
                 }
             }
             _lastCoalesceDate = now;
