@@ -586,13 +586,11 @@ class GraphRenderer {
             graph = new RrdGraph(def, new SVGImageWorker(0, 0,
                     _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow")));
         } catch (NullPointerException npe) {
-            _log.error("Error rendering graph", npe);
-            GraphGenerator.setDisabled(_context);
-            throw new IOException("Error rendering - disabling graph generation.");
+            _log.error("Error rendering graph (not disabling — transient)", npe);
+            throw new IOException("Error rendering graph", npe);
         } catch (Error e) {
-            _log.error("Error rendering graph", e);
-            GraphGenerator.setDisabled(_context);
-            throw new IOException("Error rendering - disabling graph generation.");
+            _log.error("Error rendering graph (not disabling — transient)", e);
+            throw new IOException("Error rendering graph", e);
         }
 out.write(graph.getRrdGraphInfo().getBytes());
     }

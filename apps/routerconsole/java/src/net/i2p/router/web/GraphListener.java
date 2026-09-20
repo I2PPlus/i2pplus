@@ -64,6 +64,10 @@ public class GraphListener implements RateSummaryListener {
     private GraphRenderer _renderer;
     /** Number of rows in the RRD archive. */
     private int _rows;
+    /** Consecutive write failures before permanently stopping. */
+    private static final int MAX_CONSECUTIVE_ERRORS = 5;
+    /** Current consecutive error count. */
+    private volatile int _consecutiveErrors;
 
     /** Number of periods in one day (1440 = 60 minutes * 24 hours at 1-minute resolution). */
     static final int PERIODS = 60 * 24;  // 1440
@@ -127,6 +131,7 @@ public class GraphListener implements RateSummaryListener {
                 _sample.setValue(_name, val);
                 _sample.setValue(_eventName, eventCount);
                 _sample.update();
+                _consecutiveErrors = 0;
             } catch (IllegalArgumentException iae) {
                 String msg = iae.getMessage();
                 if (msg != null && msg.startsWith("Bad sample time:")) {
@@ -134,11 +139,16 @@ public class GraphListener implements RateSummaryListener {
                         _log.warn("RRD time skew", iae);
                     }
                 } else {
-                    _log.error("RRD error", iae);
-                    String path = _isPersistent ? _db.getPath() : null;
-                    stopListening();
-                    if (path != null) {
-                        (new File(path)).delete();
+                    if (_log.shouldWarn()) {
+                        _log.warn("RRD error (" + (_consecutiveErrors + 1) + "/" + MAX_CONSECUTIVE_ERRORS + ")", iae);
+                    }
+                    if (++_consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
+                        _log.error("RRD permanently stopped after " + MAX_CONSECUTIVE_ERRORS + " consecutive errors");
+                        String path = _isPersistent ? _db.getPath() : null;
+                        stopListening();
+                        if (path != null) {
+                            (new File(path)).delete();
+                        }
                     }
                 }
             } catch (RrdException re) {
@@ -148,8 +158,13 @@ public class GraphListener implements RateSummaryListener {
                     _log.warn("Error adding", re);
                 }
             } catch (IOException ioe) {
-                _log.error("Error adding", ioe);
-                stopListening();
+                if (_log.shouldWarn()) {
+                    _log.warn("Error adding (" + (_consecutiveErrors + 1) + "/" + MAX_CONSECUTIVE_ERRORS + ")", ioe);
+                }
+                if (++_consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
+                    _log.error("RRD permanently stopped after " + MAX_CONSECUTIVE_ERRORS + " consecutive errors");
+                    stopListening();
+                }
             }
         }
     }
@@ -245,8 +260,7 @@ public class GraphListener implements RateSummaryListener {
         } catch (IllegalArgumentException iae) {
             // No backend from RrdBackendFactory
             _log.error("Error starting RRD for stat " + baseName, iae);
-            _log.log(Log.CRIT, "RRD4J backend error, graphs disabled");
-            GraphGenerator.setDisabled(_context);
+            _log.log(Log.WARN, "RRD4J backend error for " + baseName + " (not disabling all graphs)");
         } catch (NoSuchMethodError nsme) {
             // Covariant fail Java 8/9/10
             // see e.g. https://jira.mongodb.org/browse/JAVA-2559
@@ -256,7 +270,6 @@ public class GraphListener implements RateSummaryListener {
                        " and no bootclasspath specified when building." +
                        "\nContact packager.";
             _log.warn(s);
-            GraphGenerator.setDisabled(_context);
         } catch (Throwable t) {
             _log.error("Error starting RRD for stat " + baseName, t);
         }

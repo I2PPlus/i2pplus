@@ -347,6 +347,22 @@ public class GraphGenerator implements Runnable, ClientApp {
                 IOException ioe = new IOException(s);
                 ioe.initCause(ncdfe);
                 throw ioe;
+            } catch (NullPointerException npe) {
+                // RRD4J internal NPE — log but don't disable all graphs
+                _log.error("RRD4J render error (transient)", npe);
+                throw new IOException("Error rendering graph", npe);
+            } catch (Error e) {
+                // Only disable on classpath/linkage errors, not runtime Errors
+                if (e instanceof OutOfMemoryError || e instanceof StackOverflowError) {
+                    _log.error("RRD4J render error (transient)", e);
+                    throw new IOException("Error rendering graph", e);
+                }
+                setDisabled();
+                String s = "Error rendering - disabling graph generation.";
+                _log.logAlways(Log.WARN, s);
+                IOException ioe = new IOException(s);
+                ioe.initCause(e);
+                throw ioe;
             }
         } finally {_sem.release();}
     }
@@ -477,6 +493,20 @@ public class GraphGenerator implements Runnable, ClientApp {
                 _log.logAlways(Log.WARN, s);
                 IOException ioe = new IOException(s);
                 ioe.initCause(ncdfe);
+                throw ioe;
+            } catch (NullPointerException npe) {
+                _log.error("RRD4J combined render error (transient)", npe);
+                throw new IOException("Error rendering combined graph", npe);
+            } catch (Error e) {
+                if (e instanceof OutOfMemoryError || e instanceof StackOverflowError) {
+                    _log.error("RRD4J combined render error (transient)", e);
+                    throw new IOException("Error rendering combined graph", e);
+                }
+                setDisabled();
+                String s = "Error rendering - disabling graph generation.";
+                _log.logAlways(Log.WARN, s);
+                IOException ioe = new IOException(s);
+                ioe.initCause(e);
                 throw ioe;
             }
         } finally {_sem.release();}
