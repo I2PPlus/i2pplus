@@ -2192,6 +2192,29 @@ public class ProfileOrganizer {
                caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0;
     }
 
+    /**
+     *  Check if a peer is high-bandwidth capable (X, P, or O tier) and
+     *  not degraded (no D/E congestion caps, no G no-tunnels cap).
+     *  These peers are eligible for fast-tier fast-track regardless of
+     *  measured throughput — bandwidth tier is a fact about the peer,
+     *  not an observation that can erode over time.
+     *
+     *  @param peer the peer hash
+     *  @return true if the peer is X/P/O and not degraded
+     *  @since 0.9.71+
+     */
+    private boolean isHighBandwidthCapable(Hash peer) {
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        if (peerInfo == null) return false;
+        String tier = peerInfo.getBandwidthTier();
+        if (!"X".equals(tier) && !"P".equals(tier) && !"O".equals(tier)) return false;
+        String caps = peerInfo.getCapabilities();
+        if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) return false;
+        if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0) return false;
+        if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) return false;
+        return true;
+    }
+
     private PeerProfile locked_getProfile(Hash peer) {
         return _notFailingPeers.get(peer);
     }
@@ -2585,18 +2608,25 @@ public class ProfileOrganizer {
         }
 
         // Fast tier
-        // Two-tier admission: filling (<300 quality peers) and quality (≥300).
-        // Quality mode requires all tests passing — peer test (low latency),
-        // active, no recent failures, AND proven tunnel throughput.  This
-        // streams the fast tier to only include peers with a real track record.
-        // Exception: peers already in high-capacity tier bypass the throughput
-        // requirement — they've proven capacity and just need a chance to
-        // demonstrate throughput in a tunnel.
+        // Three-tier admission:
+        // 1. Bandwidth tier fast-track: X/P/O peers (not D/E/G) are
+        //    auto-eligible — bandwidth tier is a fact about the peer,
+        //    not an observation that erodes over time.  Subject to
+        //    basic gates (no recent failures, not banned, not ghost).
+        // 2. Quality mode (≥300 quality peers): requires low latency,
+        //    active, no recent failures, AND proven throughput (or
+        //    already high-cap).
+        // 3. Filling mode (<300): speed-based or low-latency bypass,
+        //    no recent failures.
         if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers()) {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
             boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
             boolean fastQuality = _fastQualityCount >= MIN_FAST_QUALITY_COUNT;
-            if (fastQuality) {
+            if (!recentFailures && isHighBandwidthCapable(peer)) {
+                // Bandwidth tier fast-track: X/P/O peers are inherently
+                // capable — let them demonstrate throughput in a tunnel.
+                putFastPeer(peer, profile);
+            } else if (fastQuality) {
                 // Quality mode: all tests passing — peer test, active,
                 // no recent failures, AND proven throughput (or already high-cap)
                 if (profile.isLowLatency() && profile.getIsActive() &&
