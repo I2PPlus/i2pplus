@@ -28,7 +28,6 @@ public class TunnelHistory {
     private final AtomicLong _lifetimeFailed = new AtomicLong();
     private volatile long _lastFailed;
     private volatile long _lastTestedSuccessfully;
-    private long _lastCoalesce = System.currentTimeMillis();
     private final RateStat _rejectRate;
     private final RateStat _failRate;
     /** Rate periods for history tracking */
@@ -157,41 +156,22 @@ public class TunnelHistory {
      */
     public RateStat getFailedRate() {return _failRate;}
 
-    private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
-    private static final long DECAY_NUMERATOR = 3;
-    private static final long DECAY_DENOMINATOR = 4;
-
     /**
      * Coalesce the rate statistics.
+     *
+     *  <p>Lifetime counters ({@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
+     *  {@link #_lifetimeFailed}) are no longer decayed.  The old 3/4-per-15-min
+     *  decay erased failure history within hours, allowing problematic peers
+     *  back into the pool.  Recency is already handled by the RateStats
+     *  (10-minute and 1-hour windows) and by selection gates
+     *  ({@code isLowLatency}, {@code getIsActive},
+     *  {@code hasValidRouterInfo}).  Lifetime counters track the actual
+     *  lifetime of the peer relationship — they should not be zeroed.
      */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats...");}
         _rejectRate.coalesceStats();
         _failRate.coalesceStats();
-
-        long now = System.currentTimeMillis();
-        long elapsed = now - _lastCoalesce;
-        if (elapsed >= DECAY_INTERVAL_MS) {
-            decayCounter(_lifetimeRejected, "rejected");
-            decayCounter(_lifetimeFailed, "failed");
-            decayCounter(_lifetimeAgreedTo, "agreedTo");
-            _lastCoalesce = now;
-        }
-    }
-
-    /** Apply decay to a counter. Keeps the same rate as divide-by-3 hourly
-     *  but spreads it over 15-minute intervals for smoother response. */
-    private void decayCounter(AtomicLong counter, String name) {
-        long val = counter.get();
-        if (val > 0) {
-            long newVal = Math.max(0, val * DECAY_NUMERATOR / DECAY_DENOMINATOR);
-            if (newVal != val) {
-                counter.set(newVal);
-                if (_log.shouldDebug()) {
-                    _log.debug("Decayed lifetime " + name + ": " + val + " -> " + newVal);
-                }
-            }
-        }
     }
 
     private static final String NL = System.getProperty("line.separator");
