@@ -66,8 +66,32 @@ public class ProfileOrganizer {
     private final Log _log;
     private final RouterContext _context;
     private final Map<Hash, PeerProfile> _fastPeers;
-    /** Count of fast-tier peers that passed all tests (proven throughput or high-cap bypass) */
+    /**
+     * Count of fast-tier peers that passed all tests (proven throughput or high-cap bypass).
+     * Maintained exclusively via {@link #putFastPeer} and {@link #removeFastPeer}.
+     */
     private int _fastQualityCount;
+
+    /** True when a peer in the fast tier has proven throughput or is in the high-cap tier. */
+    private static boolean isQualityFastPeer(PeerProfile profile, Map<Hash, PeerProfile> highCap) {
+        return profile.getPeakTunnel1mThroughputKBps() > 0 ||
+               highCap.containsKey(profile.getPeer());
+    }
+
+    /** Add a peer to the fast tier, maintaining the quality counter. */
+    private void putFastPeer(Hash peer, PeerProfile profile) {
+        PeerProfile prev = _fastPeers.put(peer, profile);
+        if (prev == null && isQualityFastPeer(profile, _highCapacityPeers))
+            _fastQualityCount++;
+    }
+
+    /** Remove a peer from the fast tier, maintaining the quality counter. */
+    private PeerProfile removeFastPeer(Hash peer) {
+        PeerProfile removed = _fastPeers.remove(peer);
+        if (removed != null && isQualityFastPeer(removed, _highCapacityPeers))
+            _fastQualityCount--;
+        return removed;
+    }
     private final Map<Hash, PeerProfile> _highCapacityPeers;
     private final Map<Hash, PeerProfile> _wellIntegratedPeers;
     private final Map<Hash, PeerProfile> _notFailingPeers;
@@ -1628,7 +1652,7 @@ public class ProfileOrganizer {
                 if (_fastPeers.size() >= target) break;
                 PeerProfile profile = candidates.get(i);
                 if (profile.isLowLatency() && passesTierGates(profile, buildSuccess, now)) {
-                    _fastPeers.put(profile.getPeer(), profile);
+                    putFastPeer(profile.getPeer(), profile);
                     clearLossIfReadmitted(profile);
                     added++;
                 }
@@ -1643,7 +1667,7 @@ public class ProfileOrganizer {
                     PeerProfile profile = candidates.get(i);
                     if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
                         passesTierGates(profile, buildSuccess, now)) {
-                        _fastPeers.put(profile.getPeer(), profile);
+                        putFastPeer(profile.getPeer(), profile);
                         clearLossIfReadmitted(profile);
                         added++;
                     }
@@ -1661,7 +1685,7 @@ public class ProfileOrganizer {
                 for (PeerProfile profile : activeProfiles) {
                     if (_fastPeers.size() >= target) break;
                     if (isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
-                        _fastPeers.put(profile.getPeer(), profile);
+                        putFastPeer(profile.getPeer(), profile);
                         clearLossIfReadmitted(profile);
                         added++;
                     }
@@ -1719,6 +1743,7 @@ public class ProfileOrganizer {
      *  @param now current time in ms
      */
     private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now) {
+        boolean isFast = (tier == _fastPeers);
         Iterator<Map.Entry<Hash, PeerProfile>> it = tier.entrySet().iterator();
         while (it.hasNext()) {
             PeerProfile profile = it.next().getValue();
@@ -1728,6 +1753,8 @@ public class ProfileOrganizer {
                                "] from " + tierName + " tier: recent tunnel failures");
                 }
                 it.remove();
+                if (isFast && isQualityFastPeer(profile, _highCapacityPeers))
+                    _fastQualityCount--;
             }
         }
     }
@@ -1792,7 +1819,7 @@ public class ProfileOrganizer {
                 Hash peer = entry.getKey();
                 PeerProfile profile = entry.getValue();
                 if (isRestorableTierPeer(peer, profile, _fastPeers, buildSuccess, now, false)) {
-                    _fastPeers.put(peer, profile);
+                    putFastPeer(peer, profile);
                     clearLossIfReadmitted(profile);
                     restored++;
                 }
@@ -2466,7 +2493,7 @@ public class ProfileOrganizer {
         Hash peer = profile.getPeer();
 
         // Remove existing entries (idempotent)
-        _fastPeers.remove(peer);
+        removeFastPeer(peer);
         _highCapacityPeers.remove(peer);
         _wellIntegratedPeers.remove(peer);
 
@@ -2554,8 +2581,7 @@ public class ProfileOrganizer {
                 // no recent failures, AND proven throughput (or already high-cap)
                 if (profile.isLowLatency() && profile.getIsActive() &&
                     !recentFailures && (hasProvenThroughput || alreadyHighCap)) {
-                    _fastPeers.put(peer, profile);
-                    _fastQualityCount++;
+                    putFastPeer(peer, profile);
                 }
             } else {
                 // Filling mode: speed-based or low-latency bypass, but still reject recent failures
@@ -2563,8 +2589,7 @@ public class ProfileOrganizer {
                     ((profile.getSpeedValue() >= effectiveSpeedThreshold &&
                      (profile.getIsActive() || hasProvenThroughput)) ||
                     profile.isLowLatency())) {
-                    _fastPeers.put(peer, profile);
-                    if (hasProvenThroughput || alreadyHighCap) _fastQualityCount++;
+                    putFastPeer(peer, profile);
                 }
             }
         }
@@ -2676,7 +2701,7 @@ public class ProfileOrganizer {
                         _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
                                   "] from fast/high-cap tiers due to stale RouterInfo / no proof of life");
                     }
-                    if (inFast) _fastPeers.remove(peer);
+                    if (inFast) removeFastPeer(peer);
                     if (inHighCap) _highCapacityPeers.remove(peer);
                     promoteToFillTiers();
                 }
@@ -2700,7 +2725,7 @@ public class ProfileOrganizer {
                     _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
                               "] from fast/high-cap tiers due to high latency (capacityBonus = -30)");
                 }
-                if (inFast) _fastPeers.remove(peer);
+                if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
                 promoteToFillTiers();
             }
@@ -2724,7 +2749,7 @@ public class ProfileOrganizer {
                     _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
                               "] from fast/high-cap tiers due to congestion cap (D/E)");
                 }
-                if (inFast) _fastPeers.remove(peer);
+                if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
                 // Set capacityBonus = -30 so UI shows ✖ and reorganize excludes this peer
                 PeerProfile profile = locked_getProfile(peer);
@@ -2751,7 +2776,7 @@ public class ProfileOrganizer {
                     _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
                               "] from fast/high-cap tiers due to no tunnel built recently");
                 }
-                if (inFast) _fastPeers.remove(peer);
+                if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
                 promoteToFillTiers();
             }
@@ -2816,7 +2841,7 @@ public class ProfileOrganizer {
                               " unreachable first-hop failures");
                 }
                 _demotedPeers.put(peer, now);
-                if (inFast) _fastPeers.remove(peer);
+                if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
                 PeerProfile profile = locked_getProfile(peer);
                 if (profile != null) profile.setCapacityBonus(-30);
@@ -2864,7 +2889,7 @@ public class ProfileOrganizer {
                         _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
                                   "] from fast/high-cap tiers due to high RTT: " + responseTimeMs + "ms (threshold: " + (timeout * 2) + "ms)");
                     }
-                    if (inFast) _fastPeers.remove(peer);
+                    if (inFast) removeFastPeer(peer);
                     if (inHighCap) _highCapacityPeers.remove(peer);
                     // Set capacityBonus = -30 so UI shows ✖ and reorganize excludes this peer
                     PeerProfile profile = locked_getProfile(peer);
@@ -3149,7 +3174,7 @@ public class ProfileOrganizer {
         try {
             PeerProfile profile = locked_getProfile(peer);
             if (profile != null && hasHighLoss(profile, _context.clock().now())) {
-                boolean wasFast = _fastPeers.remove(peer) != null;
+                boolean wasFast = removeFastPeer(peer) != null;
                 boolean wasHighCap = _highCapacityPeers.remove(peer) != null;
                 // Start probation even if the peer was already out of the tiers,
                 // so it cannot be re-promoted on stale values before the
