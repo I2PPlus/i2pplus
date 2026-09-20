@@ -91,15 +91,17 @@ public class TunnelHistory {
     }
 
     /**
-     * Calculate the ratio of accepted to rejected tunnel requests.
-     * Timeouts are excluded — they indicate the peer was slow, not hostile.
+     * Calculate the ratio of accepted to total tunnel requests.
+     * Rejections and timeouts are both non-responses; a peer that
+     * never responds has a ratio near zero.
      *
      * @return ratio (0.0 to 1.0), or 1.0 if no data available
      */
     public double getAcceptanceRatio() {
         long agreed = _lifetimeAgreedTo.get();
         long rejected = _lifetimeRejected.get();
-        long total = agreed + rejected;
+        long timedOut = _lifetimeTimedOut.get();
+        long total = agreed + rejected + timedOut;
         if (total <= 0) {
             return 1.0;
         }

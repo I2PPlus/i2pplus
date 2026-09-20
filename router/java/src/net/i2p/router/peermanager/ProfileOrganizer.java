@@ -3086,7 +3086,8 @@ public class ProfileOrganizer {
 
         long agreed = th.getLifetimeAgreedTo();
         long rejected = th.getLifetimeRejected();
-        long totalRequests = agreed + rejected;
+        long timedOut = th.getLifetimeTimedOut();
+        long totalRequests = agreed + rejected + timedOut;
 
         if (totalRequests == 0) {
             // No tunnel test history — allow alive peers into tiers so they
@@ -3151,13 +3152,14 @@ public class ProfileOrganizer {
 
         long now = _context.clock().now();
         long lastBwReject = th.getLastRejectedBandwidth();
+        long timedOut = th.getLifetimeTimedOut();
         if (lastBwReject > 0 && (now - lastBwReject) < TUNNEL_DEMOTION_COOLDOWN_MS) {
             if (_log.shouldDebug()) {
                 long remaining = (TUNNEL_DEMOTION_COOLDOWN_MS - (now - lastBwReject)) / 60000;
                 _log.debug("Demoting peer from high-cap tier (bandwidth cooldown active): " +
                            profile.getPeer().toBase32().substring(0, 6) +
                            " ratio: " + String.format("%.2f", ratio * 100) + "% (" + agreed + " accept / " +
-                           rejected + " reject), cooldown: " + remaining + "min remaining");
+                           rejected + " reject / " + timedOut + " timeout), cooldown: " + remaining + "min remaining");
             }
             return true;
         }
@@ -3166,7 +3168,7 @@ public class ProfileOrganizer {
             _log.debug("Demoting peer from high-cap tier due to low tunnel acceptance: " +
                        profile.getPeer().toBase32().substring(0, 6) +
                        " ratio: " + String.format("%.2f", ratio * 100) + "% (" + agreed + " accept / " +
-                       rejected + " reject)");
+                       rejected + " reject / " + timedOut + " timeout)");
         }
         return true;
     }
