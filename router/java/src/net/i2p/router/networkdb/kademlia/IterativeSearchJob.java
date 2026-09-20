@@ -86,7 +86,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /** Max number of peers to query */
     private static final int TOTAL_SEARCH_LIMIT = 24;
     /** Max number of peers to query if we are ff */
-    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 10;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 16;
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
@@ -217,7 +217,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  live by the Tuner toward ~4x the observed netDb.successTime.
      *  @since 0.9.70+
      */
-    private static volatile int _maxRouterInfoLookupTime = 2*1000;
+    private static volatile int _maxRouterInfoLookupTime = 5*1000;
 
     /**
      *  @return the current RouterInfo lookup deadline cap in ms
@@ -230,7 +230,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  @since 0.9.70+
      */
     public static void setMaxRouterInfoLookupTime(int val) {
-        _maxRouterInfoLookupTime = Math.max(2000, Math.min((int) getMaxSearchTime(), val));
+        _maxRouterInfoLookupTime = Math.max(5000, Math.min((int) getMaxSearchTime(), val));
     }
 
     /**
@@ -314,7 +314,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         int known = ctx.netDb().getKnownRouters();
-        int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
+        int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 60*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
         // RouterInfo lookups use the message timeout, capped at the adaptive
         // RouterInfo deadline (shorter than the max search time) so transit next-hop
