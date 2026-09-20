@@ -66,6 +66,8 @@ public class ProfileOrganizer {
     private final Log _log;
     private final RouterContext _context;
     private final Map<Hash, PeerProfile> _fastPeers;
+    /** Count of fast-tier peers that passed all tests (proven throughput or high-cap bypass) */
+    private int _fastQualityCount;
     private final Map<Hash, PeerProfile> _highCapacityPeers;
     private final Map<Hash, PeerProfile> _wellIntegratedPeers;
     private final Map<Hash, PeerProfile> _notFailingPeers;
@@ -210,13 +212,14 @@ public class ProfileOrganizer {
      * have never participated in a real tunnel are excluded.
      * @since 0.9.71+
      */
-    private static final int MIN_FAST_QUALITY_COUNT = 300;
     /**
-     * When fast tier has at least this many peers, require speed threshold
-     * — stop admitting via low-latency bypass alone.
-     * @since 0.9.70+
+     * When fast tier has at least this many peers, require all tests
+     * passing — peer test (low latency), active, no recent failures,
+     * AND proven tunnel throughput.  Peers that are low-latency but
+     * have never participated in a real tunnel are excluded.
+     * @since 0.9.71+
      */
-    private static final int MIN_FAST_TIGHT_COUNT = 800;
+    private static final int MIN_FAST_QUALITY_COUNT = 300;
 
     /** Config property for the loss ratio above which a peer is demoted from fast/high-cap tiers. */
     public static final String PROP_LOSSY_THRESHOLD = "profileOrganizer.lossyThreshold";
@@ -647,6 +650,7 @@ public class ProfileOrganizer {
         if (!getWriteLock()) return;
         try {
             _fastPeers.clear();
+            _fastQualityCount = 0;
             _highCapacityPeers.clear();
             _notFailingPeers.clear();
             _notFailingPeersList.clear();
@@ -1298,6 +1302,7 @@ public class ProfileOrganizer {
             Map<Hash, PeerProfile> oldFastPeers = new HashMap<>(_fastPeers);
             Map<Hash, PeerProfile> oldHighCapPeers = new HashMap<>(_highCapacityPeers);
             _fastPeers.clear();
+            _fastQualityCount = 0;
             _highCapacityPeers.clear();
             _wellIntegratedPeers.clear();
             _notFailingPeers.clear();
@@ -1697,7 +1702,7 @@ public class ProfileOrganizer {
     private void purgeUnusableFromTiers(long now) {
         // Rebuild clears tiers, so this catches peers admitted via locked_promoteProfileToTiers()
         // that subsequently developed failures during this reorganize window.
-        if (_fastPeers.size() >= MIN_FAST_TIGHT_COUNT) {
+        if (_fastQualityCount >= MIN_FAST_QUALITY_COUNT) {
             purgeUnusableFromMap(_fastPeers, "fast", now);
         }
         if (_highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT) {
@@ -2533,25 +2538,24 @@ public class ProfileOrganizer {
         }
 
         // Fast tier
-        // Three-tier admission: filling (<300), quality (300-799), tight (≥800).
+        // Two-tier admission: filling (<300 quality peers) and quality (≥300).
         // Quality mode requires all tests passing — peer test (low latency),
         // active, no recent failures, AND proven tunnel throughput.  This
         // streams the fast tier to only include peers with a real track record.
+        // Exception: peers already in high-capacity tier bypass the throughput
+        // requirement — they've proven capacity and just need a chance to
+        // demonstrate throughput in a tunnel.
         if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers()) {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
-            boolean fastQuality = _fastPeers.size() >= MIN_FAST_QUALITY_COUNT;
-            boolean fastTight = _fastPeers.size() >= MIN_FAST_TIGHT_COUNT;
-            if (fastTight) {
-                // Tight mode: require peer test passing + active + no recent failures
-                if (profile.isLowLatency() && profile.getIsActive() && !recentFailures) {
-                    _fastPeers.put(peer, profile);
-                }
-            } else if (fastQuality) {
+            boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
+            boolean fastQuality = _fastQualityCount >= MIN_FAST_QUALITY_COUNT;
+            if (fastQuality) {
                 // Quality mode: all tests passing — peer test, active,
-                // no recent failures, AND proven tunnel throughput
+                // no recent failures, AND proven throughput (or already high-cap)
                 if (profile.isLowLatency() && profile.getIsActive() &&
-                    !recentFailures && hasProvenThroughput) {
+                    !recentFailures && (hasProvenThroughput || alreadyHighCap)) {
                     _fastPeers.put(peer, profile);
+                    _fastQualityCount++;
                 }
             } else {
                 // Filling mode: speed-based or low-latency bypass, but still reject recent failures
@@ -2560,6 +2564,7 @@ public class ProfileOrganizer {
                      (profile.getIsActive() || hasProvenThroughput)) ||
                     profile.isLowLatency())) {
                     _fastPeers.put(peer, profile);
+                    if (hasProvenThroughput || alreadyHighCap) _fastQualityCount++;
                 }
             }
         }
