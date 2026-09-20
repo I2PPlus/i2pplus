@@ -88,7 +88,7 @@ public class BuildHandler implements Runnable {
     /** TODO these may be too high, review and adjust */
     private static volatile int _maxQueue = IS_SLOW ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 3*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 5*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     /**
      *  Concurrent next-hop search ceiling. Deliberately NOT cores-scaled:
@@ -114,7 +114,7 @@ public class BuildHandler implements Runnable {
      * would clamp concurrency to near the floor exactly when inbound builds
      * need it most.
      */
-    private static final long STARTUP_LOOKUP_BOOST_MS = 10 * 60 * 1000L;
+    private static final long STARTUP_LOOKUP_BOOST_MS = 30 * 60 * 1000L;
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;

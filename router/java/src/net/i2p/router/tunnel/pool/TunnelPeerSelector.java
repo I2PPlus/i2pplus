@@ -904,7 +904,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.71+ (extracted from getExclusionReason)
      */
     static boolean hasConnectivitySignal(PeerProfile profile, long now, long activityWindow) {
-        long heardWindow = 30 * 60 * 1000L;
+        long heardWindow = 60 * 60 * 1000L;
         if (profile.getLastHeardFrom() > 0 && now - profile.getLastHeardFrom() < heardWindow) {return true;}
         if (profile.getLastSendSuccessful() > 0 && now - profile.getLastSendSuccessful() < heardWindow) {return true;}
         long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();

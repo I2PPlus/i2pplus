@@ -1,6 +1,5 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.data.Hash;
@@ -9,39 +8,19 @@ import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.util.Log;
 
 /**
- * Tracks routers that consistently fail to respond to tunnel build requests
- * and temporarily excludes them from tunnel selection during network stress.
+ * Temporarily excludes unresponsive peers from tunnel build selection.
  *
- * This helps mitigate ghost peer attacks where malicious routers accept tunnel
- * build requests but never respond, causing resource exhaustion.
+ * A single ignored build request ghosts a peer — with a large candidate pool
+ * there's no reason to retry an unresponsive peer.  The ghost period
+ * (120–300s) is short; legitimate peers recover quickly via
+ * {@link #recordSuccess}.
  *
  * @since 0.9.68+
  */
 public class GhostPeerManager {
     private final Log _log;
     private final RouterContext _context;
-    private final ConcurrentHashMap<Hash, long[]> _timeoutStateMap;
     private final ConcurrentHashMap<Hash, Long> _ghostUntil;
-
-    /**
-     *  Number of timeouts before a peer is ghosted.
-     *  A single ignored build request is enough to shift to another peer —
-     *  with a large candidate pool, there's no reason to retry an unresponsive
-     *  peer.  The ghost period (120-300s) is short; legitimate peers recover
-     *  quickly via recordSuccess().
-     *  @since 0.9.71+ (lowered from 2)
-     */
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 1;
-
-    /**
-     *  Only count timeouts within this window toward the ghost threshold.
-     *  Timeouts older than 60s are decayed (not counted), so sporadic
-     *  failures over a long window don't trigger ghosting.  This prevents
-     *  ghost cascades during brief network hiccups where many peers timeout
-     *  once or twice but recover quickly.
-     *  @since 0.9.71+
-     */
-    private static final long TIMEOUT_DECAY_WINDOW_MS = 60 * 1000L;
 
     private static int getTimeoutThreshold(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 1);
@@ -55,14 +34,6 @@ public class GhostPeerManager {
         return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 120*1000);
     }
 
-    /**
-     *  Cooldown for the current network state: under stress, rehabilitate
-     *  peers faster — many get ghosted through no fault of their own when
-     *  the whole network is slow.  Defaults: 120s under stress, 300s normal.
-     *  Longer normal cooldown keeps unreachable peers excluded through the
-     *  worst of a timeout storm; the shorter stress cooldown prevents ghost
-     *  cascades during network-wide blips where most peers recover quickly.
-     */
     private static long getActiveCooldownMs(RouterContext ctx, double buildSuccess) {
         return isUnderAttack(buildSuccess) ? getAttackCooldownMs(ctx) : getCooldownMs(ctx);
     }
@@ -73,33 +44,21 @@ public class GhostPeerManager {
 
     private static final int MAX_TRACKED_PEERS = 1024;
 
-    /** Rate limit for the ghost-mark WARN; per-peer detail stays at debug. */
     private static final long GHOST_WARN_INTERVAL_MS = 60 * 1000L;
 
     private volatile long _lastGhostWarnTime;
 
-    /**
-     * GhostPeerManager.
-     */
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);
-        _timeoutStateMap = new ConcurrentHashMap<>(MAX_TRACKED_PEERS);
         _ghostUntil = new ConcurrentHashMap<>(MAX_TRACKED_PEERS);
     }
 
     /**
      * Record that a peer timed out during tunnel build.
-     * Called from BuildExecutor when a tunnel build expires.
-     * Marks the peer as ghost once the timeout threshold is reached.
-     * The exclusion expiry (mark time + cooldown) is snapshotted at mark
-     * time, so a later change of network state doesn't extend or shorten
-     * an active exclusion.
-     * <p>
-     * Time-decay: only timeouts within {@link #TIMEOUT_DECAY_WINDOW_MS}
-     * count toward the threshold.  Timeouts older than the decay window
-     * are forgotten, so sporadic failures over a long period don't trigger
-     * ghosting — only sustained no-reply patterns do.
+     * Ghosts the peer immediately (threshold=1).  The exclusion expiry is
+     * snapshotted at mark time so a later state change doesn't extend or
+     * shorten an active exclusion.
      *
      * @param peer the peer
      */
@@ -108,45 +67,17 @@ public class GhostPeerManager {
         pruneToLimit();
 
         long now = _context.clock().now();
-        ConcurrentHashMap<Hash, long[]> timeoutState = _timeoutStateMap;
-        long[] state = timeoutState.get(peer);
-        if (state == null) {
-            state = new long[]{0, now}; // [count, lastTimeoutMs]
-            long[] existing = timeoutState.putIfAbsent(peer, state);
-            if (existing != null) state = existing;
-        }
-        // Time-decay: if the last timeout was outside the decay window,
-        // reset the counter so sporadic failures don't accumulate.
-        synchronized (state) {
-            if (now - state[1] > TIMEOUT_DECAY_WINDOW_MS) {
-                state[0] = 0;
-            }
-            state[0]++;
-            state[1] = now;
-        }
-
-        long newCount = state[0];
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (newCount >= getThreshold(_context, buildSuccess)) {
-            long cooldownMs = getActiveCooldownMs(_context, buildSuccess);
-            Long existingExpiry = _ghostUntil.putIfAbsent(peer, now + cooldownMs);
-            if (existingExpiry == null) {
-                logGhostMark(peer, (int) newCount, isUnderAttack(buildSuccess), cooldownMs);
-            }
+        long cooldownMs = getActiveCooldownMs(_context, buildSuccess);
+        Long existingExpiry = _ghostUntil.putIfAbsent(peer, now + cooldownMs);
+        if (existingExpiry == null) {
+            logGhostMark(peer, isUnderAttack(buildSuccess), cooldownMs);
         }
     }
 
-    /**
-     *  Log a newly-marked ghost peer.  Per-peer detail at debug; a single
-     *  WARN at most once per {@link #GHOST_WARN_INTERVAL_MS} so a cascade
-     *  of marks doesn't flood the log.
-     *
-     *  @since 0.9.71+
-     */
-    private synchronized void logGhostMark(Hash peer, int count, boolean underAttack, long cooldownMs) {
+    private synchronized void logGhostMark(Hash peer, boolean underAttack, long cooldownMs) {
         if (_log.shouldDebug()) {
-            _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] marked as ghost for " + cooldownMs / 1000 +
-                       "s -> " + count + " consecutive tunnel build timeouts" +
+            _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] marked as ghost for " + cooldownMs / 1000 + "s" +
                        (underAttack ? " (network under stress)" : ""));
         }
         long now = _context.clock().now();
@@ -157,31 +88,20 @@ public class GhostPeerManager {
     }
 
     /**
-     *  Enforce {@link #MAX_TRACKED_PEERS} when the tracked set is full:
-     *  evict peers that never reached the ghost threshold (their stale counts
-     *  would otherwise live forever) and ghosts whose cooldown has already
-     *  elapsed.  Active ghosts and counts at/above the threshold are kept.
+     *  Evict expired ghosts to enforce {@link #MAX_TRACKED_PEERS}.
      *  Best-effort under concurrency; size can transiently exceed the limit.
      */
     private void pruneToLimit() {
-        if (_timeoutStateMap.size() < MAX_TRACKED_PEERS) {
+        if (_ghostUntil.size() < MAX_TRACKED_PEERS) {
             return;
         }
-        int threshold = getThreshold(_context, _context.profileOrganizer().getTunnelBuildSuccess());
         long now = _context.clock().now();
-        for (Map.Entry<Hash, long[]> e : _timeoutStateMap.entrySet()) {
-            Hash peer = e.getKey();
-            long[] state = e.getValue();
+        for (Hash peer : _ghostUntil.keySet()) {
             Long until = _ghostUntil.get(peer);
-            // Evict expired ghosts (cooldown elapsed without an isGhost() cleanup)
-            // and sub-threshold counts (would otherwise live forever).
-            boolean evict = until != null ? (now >= until)
-                                          : state[0] < threshold;
-            if (evict) {
+            if (until != null && now >= until) {
                 _ghostUntil.remove(peer);
-                _timeoutStateMap.remove(peer, state);
             }
-            if (_timeoutStateMap.size() < MAX_TRACKED_PEERS) {
+            if (_ghostUntil.size() < MAX_TRACKED_PEERS) {
                 return;
             }
         }
@@ -189,27 +109,17 @@ public class GhostPeerManager {
 
     /**
      * Record successful tunnel participation by a peer.
-     * Clears ghost status when a peer successfully participates in a tunnel.
+     * Clears ghost status immediately.
      *
      * @param peer the peer
      */
     public void recordSuccess(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
-
-        _timeoutStateMap.computeIfPresent(peer, (k, state) -> {
-            synchronized (state) {
-                state[0] = 0;
-            }
-            return state;
-        });
         _ghostUntil.remove(peer);
     }
 
     /**
      * Check if a peer should be excluded from tunnel selection.
-     * A peer is a ghost exactly while an unexpired mark exists; marks are
-     * recorded eagerly by {@link #recordTimeout(Hash)} once the threshold
-     * is reached, so an unmarked count can never exclude a peer.
      *
      * @param peer the peer
      * @return true if the peer is a ghost and should be skipped
@@ -221,27 +131,17 @@ public class GhostPeerManager {
         if (until == null) {return false;}
         if (_context.clock().now() < until) {return true;}
 
-        // expired mark: drop both entries (also keeps _timeoutStateMap bounded)
-        _timeoutStateMap.remove(peer);
         _ghostUntil.remove(peer);
         return false;
     }
 
     /**
-     *  The current timeout threshold: 1 timeout ghosts a peer.
-     *  Under severe attack (&lt;0.30), use the configured value directly;
-     *  otherwise add no margin — a single ignored request is enough to
-     *  shift to another peer when the candidate pool is large.
+     *  The current timeout threshold.
      *
      *  @return threshold number of timeouts before exclusion
      */
     public int getThreshold() {
-        return getThreshold(_context, _context.profileOrganizer().getTunnelBuildSuccess());
-    }
-
-    private static int getThreshold(RouterContext ctx, double buildSuccess) {
-        int configured = getTimeoutThreshold(ctx);
-        return configured;
+        return getTimeoutThreshold(_context);
     }
 
     /**
@@ -251,7 +151,6 @@ public class GhostPeerManager {
      */
     public void clearGhost(Hash peer) {
         if (peer == null) {return;}
-        _timeoutStateMap.remove(peer);
         _ghostUntil.remove(peer);
     }
 

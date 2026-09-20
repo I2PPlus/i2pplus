@@ -50,8 +50,8 @@ public class TunnelPeerSelectorDecisionTest {
 
     @Test
     public void testConnectivitySignal_HeardFromTooOld() {
-        // 31 minutes ago is outside the 30-minute heard-from window
-        assertFalse(TunnelPeerSelector.hasConnectivitySignal(profile(NOW - 31 * MINUTE, 0, 0, 0.0), NOW, 4 * 60 * MINUTE));
+        // 61 minutes ago is outside the 60-minute heard-from window
+        assertFalse(TunnelPeerSelector.hasConnectivitySignal(profile(NOW - 61 * MINUTE, 0, 0, 0.0), NOW, 4 * 60 * MINUTE));
     }
 
     @Test
@@ -61,8 +61,8 @@ public class TunnelPeerSelectorDecisionTest {
 
     @Test
     public void testConnectivitySignal_SendSuccessfulExactBoundary() {
-        // Strictly-less-than: exactly 30 minutes ago is not enough
-        assertFalse(TunnelPeerSelector.hasConnectivitySignal(profile(0, NOW - 30 * MINUTE, 0, 0.0), NOW, 4 * 60 * MINUTE));
+        // Strictly-less-than: exactly 60 minutes ago is not enough
+        assertFalse(TunnelPeerSelector.hasConnectivitySignal(profile(0, NOW - 60 * MINUTE, 0, 0.0), NOW, 4 * 60 * MINUTE));
     }
 
     @Test
