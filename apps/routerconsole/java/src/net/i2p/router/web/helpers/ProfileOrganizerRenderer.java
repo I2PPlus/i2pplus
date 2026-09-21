@@ -9,7 +9,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Locale;
@@ -257,6 +260,7 @@ class ProfileOrganizerRenderer {
         Set<Hash> fastSet = sel.fastSet;
         Set<Hash> hcSet = sel.highCapSet;
         Set<Hash> intSet = sel.integratedSet;
+        Set<Hash> toDemote = new HashSet<>();
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (!_fragmentKeys) {
@@ -296,6 +300,12 @@ class ProfileOrganizerRenderer {
         }
         int rowsSinceFlush = 0;
 
+        // Pre-compute outside loop: uptime
+        long uptime = _context.router().getUptime();
+        Map<String, String> hostnameCache = new HashMap<>();
+        Map<String, String> domainCache = new HashMap<>();
+        Map<String, String> domainFullCache = new HashMap<>();
+
         for (PeerProfile prof : order) {
             Hash peer = prof.getPeer();
             String peerB64 = peer.toBase64();
@@ -324,25 +334,30 @@ class ProfileOrganizerRenderer {
                    .append("</a></span>");
             } else {buf.append("<span>&ensp;</span>");}
             buf.append("</td><td class=host>");
-            long uptime = _context.router().getUptime();
             String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
             String rl = null;
             if (ip != null && uptime > 30*1000) {
-                rl = _context.commSystem().getLocalHostName(ip);
+                rl = hostnameCache.computeIfAbsent(ip, _context.commSystem()::getLocalHostName);
             }
             if (rl != null && rl.equals("unknown")) {rl = ip;}
             if (rl != null && !rl.equals("null") && !rl.isEmpty() && !ip.equals(rl)) {
-                String whois = CommSystemFacadeImpl.getDomain(rl);
-                String whoisShort = WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim();
-                whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
-                                       .replace("asia pacific network information centre", "apnic")
-                                       .replace("mediacom communications corp", "mediacom")
-                                       .replace(", inc", "")
-                                       .replace(" inc", "")
-                                       .replace(" llc", "")
-                                       .replace("administered by ", "")
-                                       .trim();
-                buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(DataHelper.escapeHTML(whois)).append("\">").append(DataHelper.escapeHTML(whoisShort));
+                String whoisShort = domainCache.computeIfAbsent(rl, key -> {
+                    String whois = CommSystemFacadeImpl.getDomain(key);
+                    domainFullCache.put(key, whois);
+                    return WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim()
+                                      .replace("latin american and caribbean ip address regional registry", "lacnic")
+                                      .replace("asia pacific network information centre", "apnic")
+                                      .replace("mediacom communications corp", "mediacom")
+                                      .replace(", inc", "")
+                                      .replace(" inc", "")
+                                      .replace(" llc", "")
+                                      .replace("administered by ", "")
+                                      .trim();
+                });
+                String whois = domainFullCache.get(rl);
+                buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"")
+                   .append(DataHelper.escapeHTML(whois))
+                   .append("\">").append(DataHelper.escapeHTML(whoisShort));
             } else if (ip == null || ip.isEmpty() || ip.equals("null")) {buf.append("<span>").append(_t("unknown"));}
             else {
                 if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
@@ -385,18 +400,12 @@ class ProfileOrganizerRenderer {
                 if (total > 0) {failPercentage = (double) fails / total * 100;}
             }
 
-            // Instant demotion: banned, unreachable, and congested peers
-            // must not remain in fast or high-cap tiers
-            if (isBanned) {
+            // Collect peers that need demotion — batch after loop
+            if (isBanned || isUnreachable ||
+                (failPercentage > 5.0 && fastSet.contains(peer) &&
+                 _organizer.getFastQualityCount() >= 300)) {
                 prof.setSpeedBonus(0);
-                _context.profileOrganizer().demoteIfBanned(peer);
-            } else if (isUnreachable) {
-                prof.setSpeedBonus(0);
-                _context.profileOrganizer().demoteIfUnreachableNow(peer);
-            } else if (failPercentage > 5.0 && fastSet.contains(peer) &&
-                       _organizer.getFastQualityCount() >= 300) {
-                prof.setSpeedBonus(0);
-                _context.profileOrganizer().demoteIfHighLatency(peer);
+                toDemote.add(peer);
             }
 
             buf.append("</td><td class=status data-sort=").append(statusSort).append(">");
@@ -436,13 +445,13 @@ class ProfileOrganizerRenderer {
             buf.append("</td><td class=groups><span class=\"");
             if (isIntegrated) buf.append("integrated ");
 
-            // Congestion caps (D/E): demote immediately
+            // Congestion caps (D/E): collect for batch demotion
             if (info != null && prof != null) {
                 String caps = info.getCapabilities();
                 if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
                                      caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
                     prof.setCapacityBonus(-30);
-                    _context.profileOrganizer().demoteIfCongested(peer);
+                    toDemote.add(peer);
                 }
             }
             switch (tier) {
@@ -546,6 +555,8 @@ class ProfileOrganizerRenderer {
                 rowsSinceFlush = 0;
             }
         }
+        // Single lock acquisition for all demotions collected during render
+        _organizer.demoteBatch(toDemote);
         buf.append("</tbody>\n");
         if (!_fragmentKeys) {buf.append("</table></div>\n");}
         out.append(buf);
@@ -600,7 +611,7 @@ class ProfileOrganizerRenderer {
 
         // Tier pages: tier count as share of total profiles
         if (mode == 1) {renderTierCountRing(buf, fastSet.size(), total, _t("Fast"), "{0} fast peer", "{0} fast peers");}
-        else if (mode == 2) {renderTierCountRing(buf, hcSet.size(), total, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
+        else if (mode == 2) {renderTierCountRing(buf, order.size(), total, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
 
         // Share of profiles displayed
         if (mode == 0) {
@@ -618,7 +629,7 @@ class ProfileOrganizerRenderer {
             }
         } else {
             // Tier pages: share of this tier displayed
-            int tierSize = (mode == 1) ? fastSet.size() : hcSet.size();
+            int tierSize = (mode == 1) ? fastSet.size() : order.size();
             if (tierSize > 0) {
                 double shown = (double) order.size() / tierSize;
                 String tierLabel = (mode == 1) ? _t("Fast") : _t("High Cap");

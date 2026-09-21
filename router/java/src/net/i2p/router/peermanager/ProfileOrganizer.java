@@ -3041,6 +3041,39 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Batch-demote peers from fast/high-cap tiers under a single write lock.
+     * Peers not currently in any tier are silently skipped.
+     * One {@link #promoteToFillTiers()} call after all removals.
+     *
+     * @param peers peers to evict — may be empty (no-op, no lock)
+     * @since 0.9.71+
+     */
+    public void demoteBatch(Set<Hash> peers) {
+        if (peers.isEmpty()) return;
+        if (!getWriteLock()) return;
+        try {
+            int removed = 0;
+            for (Hash peer : peers) {
+                boolean inFast = _fastPeers.containsKey(peer);
+                boolean inHighCap = _highCapacityPeers.containsKey(peer);
+                if (inFast || inHighCap) {
+                    if (inFast) removeFastPeer(peer);
+                    if (inHighCap) _highCapacityPeers.remove(peer);
+                    removed++;
+                }
+            }
+            if (removed > 0) {
+                if (_log.shouldInfo()) {
+                    _log.info("Batch demoted " + removed + " of " + peers.size() + " peers from fast/high-cap tiers");
+                }
+                promoteToFillTiers();
+            }
+        } finally {
+            releaseWriteLock();
+        }
+    }
+
+    /**
      * Compute the next strike count after a failure, applying time-window
      * decay. A previous strike older than DEMOTE_STRIKE_DECAY_MS no longer
      * counts, so a peer that recovered is not demoted by one later failure.
