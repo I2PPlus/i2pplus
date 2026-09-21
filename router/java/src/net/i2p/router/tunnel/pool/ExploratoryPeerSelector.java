@@ -123,7 +123,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // in ANY active tunnel across ALL pools. Forces exploratory builds to use
         // different fast peers than client pools, driving variability and ensuring
         // fast peers accumulate tunnel history.
-        if (ctx.profileOrganizer().getFastPeerCount() > ClientPeerSelector.CROSS_POOL_DIVERSITY_THRESHOLD) {
+        // Under stress (< 40% build success), skip cross-pool exclusion —
+        // availability matters more than diversity when builds are failing.
+        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        if (ctx.profileOrganizer().getFastPeerCount() > ClientPeerSelector.CROSS_POOL_DIVERSITY_THRESHOLD
+            && buildSuccess >= ATTACK_THRESHOLD) {
             Set<Hash> allActive = getPeersInAllPools(ctx);
             exclude.addAll(allActive);
             if (log.shouldInfo())

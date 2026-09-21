@@ -247,7 +247,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // and ensuring fast peers accumulate tunnel history for proper
         // retention/demotion evaluation. Below the threshold, only per-pool
         // diversity is enforced to avoid starving pools.
-        if (ctx.profileOrganizer().getFastPeerCount() > CROSS_POOL_DIVERSITY_THRESHOLD) {
+        // Under stress (< 40% build success), skip cross-pool exclusion —
+        // availability matters more than diversity when builds are failing.
+        if (ctx.profileOrganizer().getFastPeerCount() > CROSS_POOL_DIVERSITY_THRESHOLD
+            && buildSuccess >= ATTACK_THRESHOLD) {
             Set<Hash> allActive = getPeersInAllPools(ctx);
             exclude.addAll(allActive);
         }

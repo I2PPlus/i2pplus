@@ -1633,7 +1633,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         REASON_LABELS.put("too-many-tunnels", "Too many tunnels");
         REASON_LABELS.put("recently-rejected", "Recently rejected");
         REASON_LABELS.put("unreachable", "Unreachable");
-        REASON_LABELS.put("no-routerinfo", "No router info");
+        REASON_LABELS.put("no-routerinfo", "No RouterInfo");
         REASON_LABELS.put("floodfill", "Floodfill");
         REASON_LABELS.put("U-cap", "Unreachable cap");
         REASON_LABELS.put("moderate-congestion", "Moderate congestion");
@@ -1703,7 +1703,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             _buildSuccess = buildSuccess;
         }
 
-    /**
+        /**
          *  When true, the no-signal check in {@link #getExclusionReason} is
          *  skipped, allowing untested peers to be considered for tunnel builds.
          *  Set by {@link #relaxNoSignalExclusions()} when peer scarcity demands it.
@@ -2214,4 +2214,5 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                      ", " + targets.size() + " targets)");
         }
     }
+
 }
