@@ -105,6 +105,14 @@ public class TunnelPool {
      */
     private volatile int _consecutiveEmergencies = 0;
     private static final int MAX_EMERGENCY_BOOST = 10;
+    /**
+     *  Hard cap on concurrent builds per pool direction when the pool is
+     *  collapsed (zero active tunnels).  Prevents the buildComplete →
+     *  ensureSufficientTunnels feedback loop from flooding the BuildExecutor
+     *  when every attempt fails.  Matches BuildExecutor.MAX_PER_POOL_DIR.
+     *  @since 0.9.72
+     */
+    static final int MAX_BUILD_PER_POOL_DIR = 2;
     /** Last time buildFallback() logged its zero-hop-refusal warning, to rate-limit it */
     private volatile long _lastFallbackWarnTime;
     /**
@@ -3763,12 +3771,25 @@ public class TunnelPool {
      *  Cap concurrent builds to prevent build storms: partial pools may run
      *  up to 2x target (capped at 6) so timed-out constructions are replaced
      *  without waiting for the slot; healthy pools stay at target + 1.
+     *  Collapsed pools (zero active) are hard-capped at
+     *  {@link #MAX_BUILD_PER_POOL_DIR} per direction to prevent the
+     *  buildComplete → ensureSufficientTunnels feedback loop from queuing
+     *  unlimited builds when every attempt fails.
      *
      *  @return true to skip the build cycle
      */
     private boolean shouldSkipDueToInProgress(int safeActive, int target, int inProgress) {
-        int cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6) : Math.max(target + 1, 2);
-        if (safeActive > 0 && inProgress >= cap) {
+        int cap;
+        if (safeActive > 0) {
+            cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6)
+                                        : Math.max(target + 1, 2);
+        } else {
+            // Collapsed pool: hard cap to prevent build storms.
+            // Without this, every failed build triggers ensureSufficientTunnels
+            // which queues more builds, creating an unlimited feedback loop.
+            cap = MAX_BUILD_PER_POOL_DIR;
+        }
+        if (inProgress >= cap) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: inProgress(" +
                           inProgress + ") >= cap " + cap +
@@ -4195,7 +4216,9 @@ public class TunnelPool {
 
     /**
      *  Build the requested number of replacement tunnels, skipping any
-     *  configuration failures.
+     *  configuration failures.  Capped at {@link #MAX_BUILD_PER_POOL_DIR}
+     *  in-flight builds to prevent the feedback loop where failed builds
+     *  re-trigger more builds without limit.
      *
      *  @param bypassPacing if true, mark each build as emergency recovery so
      *  it bypasses the executor's per-peer in-flight guard — used when the
@@ -4203,6 +4226,14 @@ public class TunnelPool {
      */
     private void buildReplacementTunnels(int needed, boolean bypassPacing) {
         for (int i = 0; i < needed; i++) {
+            int inProgress = getInProgressCount();
+            if (inProgress >= MAX_BUILD_PER_POOL_DIR) {
+                if (_log.shouldDebug()) {
+                    _log.debug(toString() + " -> buildReplacementTunnels: capping at " +
+                              inProgress + " in-progress (limit " + MAX_BUILD_PER_POOL_DIR + ")");
+                }
+                return;
+            }
             PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
             if (cfg != null) {
                 if (bypassPacing) {cfg.setBypassPacing();}
