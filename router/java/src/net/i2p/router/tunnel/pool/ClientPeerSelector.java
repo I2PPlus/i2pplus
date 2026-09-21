@@ -1,6 +1,5 @@
 package net.i2p.router.tunnel.pool;
 
-import static net.i2p.router.peermanager.ProfileOrganizer.Slice.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -481,8 +480,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, params.ipRestriction, params.ipSet);
             }
             if (matches.isEmpty()) {
-                ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey,
-                    length == 2 ? SLICE_0_1 : SLICE_0, params.ipRestriction, params.ipSet);
+                ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, params.ipRestriction, params.ipSet);
             }
             if (matches.isEmpty()) {
                 ctx.profileOrganizer().selectNotFailingPeers(1, lastHopExclude, matches, false, 0, null);
@@ -508,16 +506,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (params.useHighCapPrimary) {
             ctx.profileOrganizer().selectHighCapacityPeers(middleCount, ex.exclude, matches, params.ipRestriction, params.ipSet);
             if (matches.size() < middleCount) {
-                ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, randomKey, SLICE_2_3, params.ipRestriction, params.ipSet);
+                ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, params.ipRestriction, params.ipSet);
             }
             if (matches.size() < middleCount) {
                 ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, 0, null);
             }
         } else {
-            ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, randomKey, SLICE_2_3, params.ipRestriction, params.ipSet);
-            // Single pass over the slice-2/3 subtier; a re-run with identical
-            // parameters cannot add peers, so escalate straight to the
-            // slice-unrestricted pass below.
+            ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, params.ipRestriction, params.ipSet);
+            // IP-restricted pass may not find enough; escalate to
+            // unrestricted pass below.
             if (matches.size() < middleCount) {
                 ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, 0, null);
             }
@@ -613,11 +610,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             } else {
                 // Under moderate stress (success < 70%), widen candidate pool
                 // by using high-capacity slice instead of fast-only slice.
-                // This gives the quality loop more candidates to filter
-                // through, reducing starvation when the fast tier is
-                // depleted or on cooldown.  2-hop always uses wide slice.
-                boolean wideSlice = params.buildSuccess < 0.70 || length == 2;
-                ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, wideSlice ? SLICE_2_3 : SLICE_1, params.ipRestriction, params.ipSet);
+                ctx.profileOrganizer().selectFastPeers(1, exclude, matches, params.ipRestriction, params.ipSet);
             }
         }
         // Fallback to connected peers. KeepAlive job maintains active peer count
@@ -776,8 +769,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     ctx.profileOrganizer().selectNotFailingPeers(1, ex.exclude, matches, false, 0, null);
                 }
             } else {
-                boolean wideSlice = params.buildSuccess < 0.70;
-                ctx.profileOrganizer().selectFastPeers(1, ex.exclude, matches, randomKey, wideSlice ? SLICE_2_3 : SLICE_1, params.ipRestriction, params.ipSet);
+                ctx.profileOrganizer().selectFastPeers(1, ex.exclude, matches, params.ipRestriction, params.ipSet);
             }
         }
         if (matches.isEmpty()) {
