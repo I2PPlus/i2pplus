@@ -32,6 +32,7 @@ public class TunnelHistory {
     private volatile long _lastTestedSuccessfully;
     private final RateStat _rejectRate;
     private final RateStat _failRate;
+    private volatile long _lastCoalesce = System.currentTimeMillis();
     /** Rate periods for history tracking */
     static final long[] RATES = new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
@@ -92,16 +93,16 @@ public class TunnelHistory {
 
     /**
      * Calculate the ratio of accepted to total tunnel requests.
-     * Rejections and timeouts are both non-responses; a peer that
-     * never responds has a ratio near zero.
+     * Only explicit rejections are counted; timeouts are tracked
+     * separately via {@link #getLifetimeTimedOut()} and the
+     * time-windowed {@link #getRejectionRate()} RateStat.
      *
      * @return ratio (0.0 to 1.0), or 1.0 if no data available
      */
     public double getAcceptanceRatio() {
         long agreed = _lifetimeAgreedTo.get();
         long rejected = _lifetimeRejected.get();
-        long timedOut = _lifetimeTimedOut.get();
-        long total = agreed + rejected + timedOut;
+        long total = agreed + rejected;
         if (total <= 0) {
             return 1.0;
         }
@@ -178,22 +179,48 @@ public class TunnelHistory {
      */
     public RateStat getFailedRate() {return _failRate;}
 
+    private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
+    private static final long DECAY_NUMERATOR = 3;
+    private static final long DECAY_DENOMINATOR = 4;
+
     /**
-     * Coalesce the rate statistics.
+     * Coalesce the rate statistics and periodically decay lifetime counters.
      *
      *  <p>Lifetime counters ({@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
-     *  {@link #_lifetimeFailed}) are no longer decayed.  The old 3/4-per-15-min
-     *  decay erased failure history within hours, allowing problematic peers
-     *  back into the pool.  Recency is already handled by the RateStats
-     *  (10-minute and 1-hour windows) and by selection gates
-     *  ({@code isLowLatency}, {@code getIsActive},
-     *  {@code hasValidRouterInfo}).  Lifetime counters track the actual
-     *  lifetime of the peer relationship — they should not be zeroed.
+     *  {@link #_lifetimeTimedOut}, {@link #_lifetimeFailed}) are decayed at 75%
+     *  per 15 minutes (matching {@link DBHistory}).  This prevents unbounded
+     *  growth across restarts and ensures stale history does not permanently
+     *  block peers from tiers.  Recency is handled by the RateStats
+     *  (10-minute and 1-hour windows) and by selection gates.
      */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats...");}
         _rejectRate.coalesceStats();
         _failRate.coalesceStats();
+
+        long now = _context.clock().now();
+        long elapsed = now - _lastCoalesce;
+        if (elapsed >= DECAY_INTERVAL_MS) {
+            decayCounter(_lifetimeAgreedTo, "lifetimeAgreedTo");
+            decayCounter(_lifetimeRejected, "lifetimeRejected");
+            decayCounter(_lifetimeTimedOut, "lifetimeTimedOut");
+            decayCounter(_lifetimeFailed, "lifetimeFailed");
+            _lastCoalesce = now;
+        }
+    }
+
+    /** Apply decay to a counter. 3/4 per 15 min = ~1% after 4 hours. */
+    private void decayCounter(AtomicLong counter, String name) {
+        long val = counter.get();
+        if (val > 0) {
+            long newVal = val * DECAY_NUMERATOR / DECAY_DENOMINATOR;
+            if (newVal != val) {
+                counter.set(newVal);
+                if (_log.shouldDebug()) {
+                    _log.debug("Decayed " + name + ": " + val + " -> " + newVal);
+                }
+            }
+        }
     }
 
     private static final String NL = System.getProperty("line.separator");

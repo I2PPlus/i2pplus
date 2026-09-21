@@ -1226,6 +1226,21 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Return the current well-integrated tier membership directly.
+     * Used by the renderer to snapshot integration status without
+     * per-peer lock acquisitions during rendering.
+     *
+     * @return unmodifiable snapshot of well-integrated tier hashes
+     * @since 0.9.71+
+     */
+    public Set<Hash> selectWellIntegratedPeers() {
+        getReadLock();
+        try {
+            return java.util.Collections.unmodifiableSet(new HashSet<>(_wellIntegratedPeers.keySet()));
+        } finally {releaseReadLock();}
+    }
+
+    /**
      * Last known number of profiles stored on disk, from the most recent load,
      * cleanup, or purge in the persistence helper.
      *
@@ -2243,6 +2258,46 @@ public class ProfileOrganizer {
         return true;
     }
 
+    /**
+     *  Whether a peer is acceptable for high-capacity tier based on latency.
+     *  High-cap peers have a more relaxed RTT ceiling than fast-tier peers
+     *  ({@link #HIGH_CAP_RTT_MULTIPLIER} × the fast-tier boundary) — they
+     *  need to be able to host tunnels, but don't need the responsiveness
+     *  required by the fast tier.
+     *  <p>
+     *  Untested peers (no tunnel test data) are allowed through so they
+     *  can accumulate tunnel history; only tested-but-slow peers are gated.
+     *
+     *  @param profile the peer profile
+     *  @return true if the peer's latency is acceptable for high-cap
+     *  @since 0.9.71+
+     */
+    private boolean isAcceptableForHighCap(PeerProfile profile) {
+        float tunnelRtt = profile.getTunnelTestTimeAverage();
+        if (tunnelRtt <= 0) return true;
+        if (_thresholdRTT <= 0) return true;
+        return tunnelRtt <= _thresholdRTT * HIGH_CAP_RTT_MULTIPLIER;
+    }
+
+    /**
+     *  Multiplier applied to the fast-tier RTT boundary to get the high-cap
+     *  RTT ceiling.  High-cap peers need to host tunnels but don't need
+     *  fast-tier responsiveness.  2× keeps a meaningful high-cap pool while
+     *  excluding peers too slow to carry traffic.
+     */
+    private static final double HIGH_CAP_RTT_MULTIPLIER = 2.0;
+
+    /**
+     *  Get the high-capacity RTT ceiling for display and diagnostics.
+     *  Returns 0 if no threshold is available.
+     *
+     *  @return the high-cap RTT ceiling in ms, or 0
+     *  @since 0.9.71+
+     */
+    public double getHighCapRTTThreshold() {
+        return _thresholdRTT > 0 ? _thresholdRTT * HIGH_CAP_RTT_MULTIPLIER : 0;
+    }
+
     private PeerProfile locked_getProfile(Hash peer) {
         return _notFailingPeers.get(peer);
     }
@@ -2622,41 +2677,42 @@ public class ProfileOrganizer {
         double effectiveSpeedThreshold = _thresholdSpeedValue;
 
         // High-capacity tier
-        // When tier count is healthy, require actual capacity threshold AND no
-        // recent tunnel failures. Bucket-filling (size < min/max) only when we need more peers.
+        // High-cap means proven ability to host tunnels — not just
+        // advertised bandwidth tier.  Admission requires:
+        // - skipsPromotion() passed (acceptance ratio, loss, congestion)
+        // - Capacity above threshold, or room in the tier
+        // - Not excessively high latency (2× the fast-tier RTT boundary)
+        // Bandwidth tier (X/P/O) is used by the fast-tier gate, not here.
         boolean hcNeedsFilling = _highCapacityPeers.size() < minHighCap;
         boolean hcHasRoom = _highCapacityPeers.size() < getMaximumHighCapPeers();
         boolean hcTight = _highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT;
-        if (!_highCapacityPeers.containsKey(peer) &&
-            !(!hcTight && recentFailures) &&
-            (profile.getCapacityValue() >= effectiveCapThreshold ||
-            (!hcTight && (hcNeedsFilling || hcHasRoom)))) {
-            _highCapacityPeers.put(peer, profile);
+        if (!_highCapacityPeers.containsKey(peer)) {
+            boolean hasCapacity = profile.getCapacityValue() >= effectiveCapThreshold;
+            boolean tierRoom = !hcTight && (hcNeedsFilling || hcHasRoom);
+            boolean noRecentBlock = !(!hcTight && recentFailures);
+            boolean notTooSlow = isAcceptableForHighCap(profile);
+            if (noRecentBlock && notTooSlow && (hasCapacity || tierRoom)) {
+                _highCapacityPeers.put(peer, profile);
+            }
         }
 
         // Fast tier
-        // Three-tier admission:
-        // 1. Bandwidth tier fast-track: X/P/O peers (not D/E/G) are
-        //    auto-eligible — bandwidth tier is a fact about the peer,
-        //    not an observation that erodes over time.  Subject to
-        //    basic gates (no recent failures, not banned, not ghost).
-        // 2. Quality mode (≥300 quality peers): requires low latency,
-        //    active, no recent failures, AND proven throughput (or
-        //    already high-cap).
-        // 3. Filling mode (<300): speed-based or low-latency bypass,
-        //    no recent failures.
+        // Two-tier admission:
+        // 1. High-cap responsive: high-cap members that are also
+        //    low-latency or untested.  Bandwidth tier goes into high-cap;
+        //    fast requires demonstrated responsiveness.
+        // 2. Quality/filling mode for non-high-cap peers: speed-based
+        //    or low-latency bypass, no recent failures.
         if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers()) {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
             boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
             boolean fastQuality = _fastQualityCount >= MIN_FAST_QUALITY_COUNT;
-            if (!recentFailures && isHighBandwidthCapable(peer) &&
+            if (!recentFailures && alreadyHighCap &&
                 (profile.isLowLatency() || !profile.hasBeenTested())) {
-                // Bandwidth tier fast-track: X/P/O peers are inherently
-                // capable, but only if they're not known to be slow.
-                // Untested peers get a chance; tested-but-slow peers are
-                // excluded — their bandwidth tier is real, but their
-                // responsiveness isn't, and putting them in fast tier
-                // causes build failures that degrade build success ratio.
+                // High-cap responsive: peer is in high-cap (X/P/O or
+                // capacity-qualified) and is low-latency or untested.
+                // Tested-but-slow peers are excluded — their bandwidth
+                // tier is real, but their responsiveness isn't.
                 putFastPeer(peer, profile);
             } else if (fastQuality) {
                 // Quality mode: all tests passing — peer test, active,
@@ -3086,8 +3142,7 @@ public class ProfileOrganizer {
 
         long agreed = th.getLifetimeAgreedTo();
         long rejected = th.getLifetimeRejected();
-        long timedOut = th.getLifetimeTimedOut();
-        long totalRequests = agreed + rejected + timedOut;
+        long totalRequests = agreed + rejected;
 
         if (totalRequests == 0) {
             // No tunnel test history — allow alive peers into tiers so they
