@@ -120,27 +120,42 @@ public class PeerTestJob extends JobImpl {
         return (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
     }
 
+    /** Uptime threshold for the aggressive startup profiling phase (30 min). */
+    private static final long STARTUP_PHASE_MS = 30 * 60 * 1000L;
+    /** Uptime threshold for the warm-up decay phase (90 min). */
+    private static final long WARMUP_PHASE_MS = 90 * 60 * 1000L;
+    /** Delay during the aggressive startup phase. */
+    private static final long STARTUP_DELAY_MS = 5 * 1000L;
+    /** Delay during the warm-up decay phase. */
+    private static final long WARMUP_DELAY_MS = 8 * 1000L;
+    /** Delay during steady state. */
+    private static final long STEADY_DELAY_MS = 8 * 1000L;
+
     /**
      * Calculates the delay before starting the next round of peer tests.
      *
-     * Delay adapts based on router uptime and system load:
+     * <p>Three-phase decay based on uptime:</p>
      * <ul>
-     *   <li>+1000ms if uptime &gt; 3 hours or CPU load &gt; 80%</li>
-     *   <li>Base delay if uptime &gt;= 3 minutes</li>
-     *   <li>Inverse ramp-up based on remaining time to 3 minutes</li>
+     *   <li>0–30 min (startup): 5s — aggressively profile all fast peers</li>
+     *   <li>30–90 min (warm-up): 8s — ramp down while keeping data fresh</li>
+     *   <li>90+ min (steady): 8s — maintenance cadence</li>
      * </ul>
+     *
+     * <p>User override via {@link #PROP_PEER_TEST_DELAY} is respected for the steady-state
+     * value only; startup and warm-up phases use hardcoded values.</p>
      *
      * @return delay in milliseconds before next test round
      */
     private long getPeerTestDelay() {
         long uptime = getContext().router().getUptime();
-        long testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
-        if (uptime > 3*60*60*1000L || SystemVersion.getCPULoadAvg() > 80)
-            return testDelay + 1000;
-        else if (uptime >= 3*60*1000L)
-            return testDelay;
-        else
-            return testDelay + Math.min(30*1000L, 3*60*1000L - uptime);
+        if (uptime < STARTUP_PHASE_MS) {
+            return STARTUP_DELAY_MS;
+        } else if (uptime < WARMUP_PHASE_MS) {
+            return WARMUP_DELAY_MS;
+        } else {
+            long configured = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
+            return Math.max(configured, STEADY_DELAY_MS);
+        }
     }
 
     /**
@@ -162,22 +177,29 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Determines the number of peers to test concurrently based on system capabilities.
+     * Determines the number of peers to test concurrently based on router uptime.
      *
-     * <p>Concurrency is limited to 1 when CPU load exceeds 80% to prevent system overload.
-     * Default value adapts based on system resources (1-4 peers).</p>
+     * <p>Three-phase decay:</p>
+     * <ul>
+     *   <li>0–30 min (startup): 4 — profile all fast peers quickly</li>
+     *   <li>30–90 min (warm-up): 3 — ramp down</li>
+     *   <li>90+ min (steady): 1 — maintenance cadence</li>
+     * </ul>
+     *
+     * <p>Concurrency is limited to 1 when CPU load exceeds 95% to prevent system overload.</p>
      *
      * @return number of peers to test in parallel
      */
     private int getTestConcurrency() {
-        int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
-        if (SystemVersion.getCPULoadAvg() > 95) {testConcurrent = 1;}
-        // Double concurrency during first 5 minutes to quickly profile untested peers
+        if (SystemVersion.getCPULoadAvg() > 95) {return 1;}
         long uptime = getContext().router().getUptime();
-        if (uptime > 0 && uptime < 5 * 60 * 1000L) {
-            testConcurrent = Math.max(testConcurrent, DEFAULT_PEER_TEST_CONCURRENCY * 2);
+        if (uptime < STARTUP_PHASE_MS) {
+            return 4;
+        } else if (uptime < WARMUP_PHASE_MS) {
+            return 3;
+        } else {
+            return getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
         }
-        return testConcurrent;
     }
 
     /**
@@ -275,21 +297,29 @@ public class PeerTestJob extends JobImpl {
             testPeer(peer);
         }
 
-        // Adapt next run delay based on system performance
-        if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
-            requeue(getPeerTestDelay() * 2);
+        // Proportional backpressure: scale delay by job queue lag
+        long baseDelay = getPeerTestDelay();
+        long delay;
+        if (lag > 2000) {
+            // System under heavy load — skip this round entirely
             if (_log.shouldWarn()) {
-                if (lag > 300) {
-                    _log.info("High Job lag (" + lag + "ms) -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
-                } else {
-                    _log.info("High CPU load -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
-                }
+                _log.warn("Extreme Job lag (" + lag + "ms) -> skipping peer test round");
+            }
+            requeue(baseDelay * 5);
+            return;
+        } else if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
+            // Scale delay proportionally: 500ms lag → 2×, 1000ms lag → 3×
+            double multiplier = 1.0 + (lag / 500.0);
+            delay = Math.min((long)(baseDelay * multiplier), 5 * 60 * 1000L);
+            if (_log.shouldWarn()) {
+                _log.info("High Job lag (" + lag + "ms) -> scaling delay to " + delay + "ms (base: " + baseDelay + "ms)");
             }
         } else {
-            requeue(getPeerTestDelay());
+            delay = baseDelay;
         }
+        requeue(delay);
         if (_log.shouldInfo())
-            _log.info("Next Peer Test run in " + getPeerTestDelay() + "ms");
+            _log.info("Next Peer Test run in " + delay + "ms");
     }
 
     /**
@@ -364,7 +394,8 @@ public class PeerTestJob extends JobImpl {
             }
 
             // Sort: tier priority (fast=0, high-cap=1, other=2),
-            // then by lastTestedSuccessfully ascending (never tested first)
+            // then by tunnelTestTimeAvgLastUpdate ascending (never tested first).
+            // Uses persisted EWMA timestamp so untested peers are prioritized after restart.
             validCandidates.sort((a, b) -> {
                 int aTier = organizer.isFast(a.profile.getPeer()) ? 0
                           : organizer.isHighCapacity(a.profile.getPeer()) ? 1 : 2;
@@ -373,8 +404,8 @@ public class PeerTestJob extends JobImpl {
                 int tierCmp = aTier - bTier;
                 if (tierCmp != 0) return tierCmp;
                 return Long.compare(
-                    a.profile.getLastTestedSuccessfully(),
-                    b.profile.getLastTestedSuccessfully()
+                    a.profile.getTunnelTestTimeAvgLastUpdate(),
+                    b.profile.getTunnelTestTimeAvgLastUpdate()
                 );
             });
 
