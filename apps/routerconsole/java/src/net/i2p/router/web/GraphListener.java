@@ -65,7 +65,7 @@ public class GraphListener implements RateSummaryListener {
     /** Number of rows in the RRD archive. */
     private int _rows;
     /** Consecutive write failures before permanently stopping. */
-    private static final int MAX_CONSECUTIVE_ERRORS = 5;
+    private static final int MAX_CONSECUTIVE_ERRORS = 10;
     /** Current consecutive error count. */
     private volatile int _consecutiveErrors;
 
@@ -140,7 +140,7 @@ public class GraphListener implements RateSummaryListener {
                     }
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("RRD error (" + (_consecutiveErrors + 1) + "/" + MAX_CONSECUTIVE_ERRORS + ")", iae);
+                        _log.error("RRD write error (" + (_consecutiveErrors + 1) + "/" + MAX_CONSECUTIVE_ERRORS + ")", iae);
                     }
                     if (++_consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
                         _log.error("RRD permanently stopped after " + MAX_CONSECUTIVE_ERRORS + " consecutive errors");
