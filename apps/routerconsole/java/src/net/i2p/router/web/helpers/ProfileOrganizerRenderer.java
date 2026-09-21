@@ -170,7 +170,7 @@ class ProfileOrganizerRenderer {
                 order.add(prof);
             }
         } else if (mode == 2) {
-            // High-capacity (non-fast): show ALL high-cap peers
+            // High-cap only (non-fast): peers in hc but not in fast
             for (Hash peer : hcSnapshot) {
                 PeerProfile prof = _organizer.getProfile(peer);
                 if (prof == null || _organizer.getUs().equals(peer)) {continue;}
@@ -385,6 +385,20 @@ class ProfileOrganizerRenderer {
                 if (total > 0) {failPercentage = (double) fails / total * 100;}
             }
 
+            // Instant demotion: banned, unreachable, and congested peers
+            // must not remain in fast or high-cap tiers
+            if (isBanned) {
+                prof.setSpeedBonus(0);
+                _context.profileOrganizer().demoteIfBanned(peer);
+            } else if (isUnreachable) {
+                prof.setSpeedBonus(0);
+                _context.profileOrganizer().demoteIfUnreachableNow(peer);
+            } else if (failPercentage > 5.0 && fastSet.contains(peer) &&
+                       _organizer.getFastQualityCount() >= 300) {
+                prof.setSpeedBonus(0);
+                _context.profileOrganizer().demoteIfHighLatency(peer);
+            }
+
             buf.append("</td><td class=status data-sort=").append(statusSort).append(">");
             if (ok && fails == 0) {buf.append("<span class=\"ok").append(isTesting ? " testing" : "").append("\">").append(_t("OK")).append("</span>");}
             else if (!ok) {
@@ -421,6 +435,16 @@ class ProfileOrganizerRenderer {
 
             buf.append("</td><td class=groups><span class=\"");
             if (isIntegrated) buf.append("integrated ");
+
+            // Congestion caps (D/E): demote immediately
+            if (info != null && prof != null) {
+                String caps = info.getCapabilities();
+                if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
+                                     caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
+                    prof.setCapacityBonus(-30);
+                    _context.profileOrganizer().demoteIfCongested(peer);
+                }
+            }
             switch (tier) {
                 case 1: buf.append("fast\">").append(_t("Fast, High Capacity")); break;
                 case 2: buf.append("highcap\">").append(_t("High Capacity")); break;
@@ -574,29 +598,48 @@ class ProfileOrganizerRenderer {
                       RingRenderer.MODE_NEUTRAL, null));
         }
 
-        // Tier pages: tier count first, matching the Total ring position on the all page
-        if (mode == 1) {renderTierCountRing(buf, fastSet.size(), known, _t("Fast"), "{0} fast peer", "{0} fast peers");}
-        else if (mode == 2) {renderTierCountRing(buf, hcSet.size(), known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
+        // Tier pages: tier count as share of total profiles
+        if (mode == 1) {renderTierCountRing(buf, fastSet.size(), total, _t("Fast"), "{0} fast peer", "{0} fast peers");}
+        else if (mode == 2) {renderTierCountRing(buf, hcSet.size(), total, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
 
-        // Share of total profiles shown for this page mode
-        if (total > 0) {
-            double shown = (double) order.size() / total;
-            buf.append(RingRenderer.renderRingCell(shown, _t("Displayed"), pct(shown),
-                      new String[]{Messages.getString("Showing {0} of {1} profiles", order.size(), total, _context),
-                                   ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
-                      RingRenderer.MODE_ACTIVITY, null));
+        // Share of profiles displayed
+        if (mode == 0) {
+            // All page: share of total
+            if (total > 0) {
+                double shown = (double) order.size() / total;
+                buf.append(RingRenderer.renderRingCell(shown, _t("Displayed"), pct(shown),
+                          new String[]{Messages.getString("Showing {0} of {1} profiles", order.size(), total, _context),
+                                       ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
+                          RingRenderer.MODE_ACTIVITY, null));
+            } else {
+                buf.append(RingRenderer.renderRingCell(-1, _t("Displayed"), "\u2014",
+                          new String[]{_t("Share of total profiles shown")},
+                          RingRenderer.MODE_ACTIVITY, null));
+            }
         } else {
-            buf.append(RingRenderer.renderRingCell(-1, _t("Displayed"), "\u2014",
-                      new String[]{_t("Share of total profiles shown")},
-                      RingRenderer.MODE_ACTIVITY, null));
+            // Tier pages: share of this tier displayed
+            int tierSize = (mode == 1) ? fastSet.size() : hcSet.size();
+            if (tierSize > 0) {
+                double shown = (double) order.size() / tierSize;
+                String tierLabel = (mode == 1) ? _t("Fast") : _t("High Cap");
+                buf.append(RingRenderer.renderRingCell(shown, _t("Displayed"), pct(shown),
+                          new String[]{order.size() + " / " + tierSize + " " + tierLabel + " " + _t("peers")},
+                          RingRenderer.MODE_ACTIVITY, null));
+            } else {
+                buf.append(RingRenderer.renderRingCell(-1, _t("Displayed"), "\u2014",
+                          new String[]{_t("Share of tier profiles shown")},
+                          RingRenderer.MODE_ACTIVITY, null));
+            }
         }
 
         // Display cutoff: stale profiles not heard from within this window are hidden
         double windowScore = sel.hideWindow > 0 ? Math.min(sel.hideWindow / (4*60*60*1000.0), 1.0) : -1;
-        buf.append(RingRenderer.renderRingCell(windowScore, _t("Window"),
-                  sel.hideWindow > 0 ? DataHelper.formatDuration(sel.hideWindow) : "\u2014",
-                  new String[]{ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
-                  RingRenderer.MODE_NEUTRAL, null));
+        if (mode == 0) {
+            buf.append(RingRenderer.renderRingCell(windowScore, _t("Window"),
+                      sel.hideWindow > 0 ? DataHelper.formatDuration(sel.hideWindow) : "\u2014",
+                      new String[]{ngettext("{0} stale profile hidden", "{0} stale profiles hidden", sel.older)},
+                      RingRenderer.MODE_NEUTRAL, null));
+        }
 
         // Tier pages: fast-tier latency boundary and tier loss picture instead of Total
         if (mode != 0) {
@@ -619,8 +662,8 @@ class ProfileOrganizerRenderer {
 
         // All page: tier counts after the window ring
         if (mode == 0) {
-            renderTierCountRing(buf, fastSet.size(), known, _t("Fast"), "{0} fast peer", "{0} fast peers");
-            renderTierCountRing(buf, hcSet.size(), known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");
+            renderTierCountRing(buf, fastSet.size(), total, _t("Fast"), "{0} fast peer", "{0} fast peers");
+            renderTierCountRing(buf, hcSet.size(), total, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");
         }
 
         // Active share of known profiles
