@@ -70,6 +70,17 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     static final int MAX_PACKET_SIZE = 4 * 1024;
     /** network buffer size for buffered streams */
     static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
+    /**
+     *  Max number of times the outer empty-response reconnect loop may invoke the
+     *  callback.  The callback's own for-loop handles connect-failure backoff, but
+     *  when the destination is reachable yet always sends zero bytes each cycle
+     *  succeeds on attempt 1 and the outer loop would spin forever.  4 cycles ×
+     *  the default 9-attempt callback budget gives generous headroom for transient
+     *  failures while bounding the total to ~40 attempts / ~30s worst-case.
+     *
+     *  @since 0.9.71+
+     */
+    static final int MAX_EMPTY_RECONNECT_CYCLES = 4;
     /** Plain TCP socket (local or remote endpoint). */
     private final Socket s;
     /** I2P socket (the tunnel connection). Non-final so an "empty response"
@@ -688,7 +699,21 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 // loop as long as the callback offers a new connection, bailing to the
                 // normal failure path once it declines (budget exhausted) or a re-drive
                 // errors.
+                //
+                // MAX_EMPTY_RECONNECT_CYCLES caps the outer loop: the callback's own
+                // for-loop handles connect-failure backoff, but when the destination is
+                // reachable yet sends zero bytes each cycle succeeds on attempt 1 and
+                // the outer loop would spin forever.  4 cycles × callback's 9-attempt
+                // budget gives generous headroom for transient failures while bounding
+                // the total to ~40 attempts / ~30s worst-case.
+                int emptyReconnectCycles = 0;
                 while (shouldReconnectEmptyResponse(totalReceived, _reconnectCallback != null, isRetryableRequest(initialI2PData))) {
+                    if (emptyReconnectCycles++ >= MAX_EMPTY_RECONNECT_CYCLES) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Empty-response reconnect budget exhausted after " + MAX_EMPTY_RECONNECT_CYCLES + " cycles");
+                        }
+                        break;
+                    }
                     Exception e = fromI2P.getFailure();
                     if (e == null && toI2P != null) {e = toI2P.getFailure();}
                     I2PSocket fresh = _reconnectCallback.reconnect(e);
