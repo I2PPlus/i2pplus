@@ -330,6 +330,24 @@ class PeerManager {
     }
 
     /**
+     *  Non-blocking test peer selection.  Returns null if the read lock
+     *  cannot be acquired (reorganize in progress).  Used exclusively by
+     *  {@link PeerTestJob} to avoid blocking the job queue thread.
+     *
+     *  @return selected peers, or null if lock not acquired
+     *  @since 0.9.71+
+     */
+    List<Hash> selectTestPeersNonBlocking(int needed) {
+        Set<Hash> peers = new HashSet<>(needed);
+        Set<Hash> exclude = new HashSet<>(1);
+        exclude.add(_context.routerHash());
+        if (!_organizer.selectTestPeersNonBlocking(needed, exclude, peers)) {
+            return null;
+        }
+        return new ArrayList<>(peers);
+    }
+
+    /**
      *  @param caps non-null, case is ignored
      */
     public void setCapabilities(Hash peer, String caps) {

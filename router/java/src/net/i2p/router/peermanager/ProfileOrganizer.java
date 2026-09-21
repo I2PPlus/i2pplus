@@ -982,6 +982,41 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Non-blocking test peer selection: tries the full fast → high-cap →
+     *  active chain under a single {@link #tryReadLock()}.  Returns false
+     *  (leaving {@code matches} unchanged) if the read lock cannot be
+     *  acquired — the caller should skip this round and requeue.
+     *  Used exclusively by {@link PeerTestJob} to avoid blocking on
+     *  reorganize()'s write lock during startup profiling.
+     *
+     *  @param howMany target number of peers
+     *  @param exclude peers to exclude
+     *  @param matches output set populated with selected peer hashes
+     *  @return true if selection ran, false if lock was not acquired
+     *  @since 0.9.71+
+     */
+    public boolean selectTestPeersNonBlocking(int howMany, Set<Hash> exclude, Set<Hash> matches) {
+        if (!tryReadLock()) return false;
+        try {
+            double buildSuccess = getTunnelBuildSuccess();
+            long rttCeiling = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess);
+            locked_selectPeers(_fastPeers, howMany, exclude, matches, 0, null, buildSuccess, rttCeiling);
+            if (matches.size() < howMany) {
+                long cap = rttCeiling * 2;
+                long hcRtt = Math.min(cap, AUTO_RTT_CAP_MS);
+                locked_selectPeers(_highCapacityPeers, howMany, exclude, matches, 0, null, buildSuccess, hcRtt);
+            }
+            if (matches.size() < howMany) {
+                List<Hash> connected = _context.commSystem().getEstablished();
+                if (connected != null && !connected.isEmpty()) {
+                    locked_selectActive(connected, howMany, exclude, matches, 0, null, buildSuccess);
+                }
+            }
+            return true;
+        } finally {releaseReadLock();}
+    }
+
+    /**
      *  Select up to howMany peers from O/P/X bandwidth tiers (high shared bandwidth)
      *  that are not failing.  Falls through to selectAllNotFailingPeers on shortfall.
      *
