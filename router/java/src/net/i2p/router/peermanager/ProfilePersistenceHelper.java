@@ -202,6 +202,9 @@ class ProfilePersistenceHelper {
                 profile.getTunnelTestTimeAverage());
             add(buf, addComments, "tunnelTestTimeAvgLastUpdate", profile.getTunnelTestTimeAvgLastUpdate(), "Last update time for tunnel test EWMA:");
         }
+        if (profile.getPeerTestTimeAverage() != 0) {
+            add(buf, addComments, "peerTestTimeAverage", (long) profile.getPeerTestTimeAverage(), "Peer test response time average (ms):");
+        }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         if (profile.getPeakThroughputKBps() >= 1) {
             add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput (KB/s): " +
@@ -450,6 +453,7 @@ class ProfilePersistenceHelper {
 
             profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
             profile.setTunnelTestTimeAvgLastUpdate(getLong(props, "tunnelTestTimeAvgLastUpdate"));
+            profile.setPeerTestTimeAverage(getFloat(props, "peerTestTimeAverage"));
 
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
