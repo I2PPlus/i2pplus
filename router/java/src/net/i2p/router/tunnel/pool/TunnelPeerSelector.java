@@ -494,6 +494,36 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     * All non-self peers in active tunnels across ALL pools (client IB/OB + exploratory IB/OB).
+     * Used for cross-pool diversity: when the fast tier is large enough, each fast peer
+     * serves at most one pool, forcing the selector to use unused peers and accumulate
+     * tunnel history for proper retention/demotion decisions.
+     *
+     * @param ctx the router context
+     * @return set of peer hashes in any active tunnel
+     * @since 0.9.70
+     */
+    protected static Set<Hash> getPeersInAllPools(RouterContext ctx) {
+        Set<Hash> rv = new HashSet<>();
+        TunnelManagerFacade tmf = ctx.tunnelManager();
+        List<TunnelPool> pools = new ArrayList<>(4);
+        tmf.listPools(pools);
+        for (TunnelPool pool : pools) {
+            for (TunnelInfo ti : pool.listTunnels()) {
+                if (ti.getLength() > 1) {
+                    for (int j = 0; j < ti.getLength(); j++) {
+                        Hash peer = ti.getPeer(j);
+                        if (peer != null && !peer.equals(ctx.routerHash())) {
+                            rv.add(peer);
+                        }
+                    }
+                }
+            }
+        }
+        return rv;
+    }
+
+    /**
      *  Add cooldown entries still inside their window (value &gt; cutoff) to the
      *  exclusion set without mutating the map; returns the count added.
      *  Shared by both selectors; the maps themselves stay separate

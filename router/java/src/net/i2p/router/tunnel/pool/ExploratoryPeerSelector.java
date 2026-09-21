@@ -119,6 +119,16 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         exclude.addAll(poolPeers);
         if (log.shouldInfo() && !poolPeers.isEmpty())
             log.info("EPS per-pool exclusion: " + poolPeers.size() + " peers in active tunnels from=" + Thread.currentThread().getName());
+        // Cross-pool diversity: when the fast tier is large enough, exclude peers
+        // in ANY active tunnel across ALL pools. Forces exploratory builds to use
+        // different fast peers than client pools, driving variability and ensuring
+        // fast peers accumulate tunnel history.
+        if (ctx.profileOrganizer().getFastPeerCount() > ClientPeerSelector.CROSS_POOL_DIVERSITY_THRESHOLD) {
+            Set<Hash> allActive = getPeersInAllPools(ctx);
+            exclude.addAll(allActive);
+            if (log.shouldInfo())
+                log.info("EPS cross-pool exclusion: " + allActive.size() + " peers in ANY active tunnel from=" + Thread.currentThread().getName());
+        }
 
         // Special cases
         boolean nonzero = length > 0;

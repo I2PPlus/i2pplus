@@ -47,6 +47,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
     static final String PROP_PRECONNECT_OPTIMIZE = "i2p.tunnel.preConnect.optimize";
     /** Default: true. */
     private static final boolean PROP_PRECONNECT_OPTIMIZE_DEFAULT = true;
+    /** Cross-pool diversity: when fast tier exceeds this count, exclude peers in ANY
+     *  active tunnel across ALL pools to force each pool to use different fast peers. */
+    static final int CROSS_POOL_DIVERSITY_THRESHOLD = 300;
 
 
     private String getStrategy() {
@@ -238,6 +241,16 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 Set<Hash> poolPeers = getPeersInPool(ctx, pool);
                 exclude.addAll(poolPeers);
             }
+        }
+        // Cross-pool diversity: when the fast tier is large enough (> 300),
+        // exclude peers in ANY active tunnel across ALL pools. This forces
+        // each pool to use different fast peers, driving peer variability
+        // and ensuring fast peers accumulate tunnel history for proper
+        // retention/demotion evaluation. Below the threshold, only per-pool
+        // diversity is enforced to avoid starving pools.
+        if (ctx.profileOrganizer().getFastPeerCount() > CROSS_POOL_DIVERSITY_THRESHOLD) {
+            Set<Hash> allActive = getPeersInAllPools(ctx);
+            exclude.addAll(allActive);
         }
         return new SelectionExclusions(excluder, exclude,
                                        peerCooldownExcluded, firstHopFailCount, firstPeerExclusions);
