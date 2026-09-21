@@ -1692,10 +1692,14 @@ public class ProfileOrganizer {
         int target = minFast;
 
         if (_fastPeers.size() < target) {
-            // First, try from high-capacity peers
+            // First, try from high-capacity peers (already tier-gated)
             List<PeerProfile> candidates = new ArrayList<>(_highCapacityPeers.values());
             if (candidates.isEmpty()) {
-                candidates = new ArrayList<>(activeProfiles);
+                // No high-cap peers — filter active profiles to fast-tier-capable only
+                candidates = new ArrayList<>(activeProfiles.size());
+                for (PeerProfile p : activeProfiles) {
+                    if (isFastTierCapable(p.getPeer())) candidates.add(p);
+                }
             }
 
             // Sort by speed descending
@@ -1705,7 +1709,8 @@ public class ProfileOrganizer {
             for (int i = 0; i < candidates.size(); i++) {
                 if (_fastPeers.size() >= target) break;
                 PeerProfile profile = candidates.get(i);
-                if (profile.isLowLatency() && passesTierGates(profile, buildSuccess, now)) {
+                if (isFastTierCapable(profile.getPeer()) && profile.isLowLatency() &&
+                    passesTierGates(profile, buildSuccess, now)) {
                     putFastPeer(profile.getPeer(), profile);
                     clearLossIfReadmitted(profile);
                     added++;
@@ -1719,7 +1724,8 @@ public class ProfileOrganizer {
                 for (int i = 0; i < candidates.size(); i++) {
                     if (_fastPeers.size() >= target) break;
                     PeerProfile profile = candidates.get(i);
-                    if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
+                    if (isFastTierCapable(profile.getPeer()) && profile.getIsActive() &&
+                        profile.getSpeedValue() >= threshold &&
                         passesTierGates(profile, buildSuccess, now)) {
                         putFastPeer(profile.getPeer(), profile);
                         clearLossIfReadmitted(profile);
@@ -1729,16 +1735,14 @@ public class ProfileOrganizer {
             }
 
             // Third pass: accept any recently-active selectable peer to fill gaps
-            // During startup (first 15 min), skip activity requirement — we have
-            // no lastHeardFrom data yet.  After startup, use dynamic window:
-            // tight when many peers, wide when sparse.
             if (_fastPeers.size() < target) {
                 boolean inStartup = _context.router() != null &&
                                     _context.router().getUptime() < 15 * 60 * 1000L;
                 long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
                 for (PeerProfile profile : activeProfiles) {
                     if (_fastPeers.size() >= target) break;
-                    if (isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
+                    if (isFastTierCapable(profile.getPeer()) &&
+                        isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
                         putFastPeer(profile.getPeer(), profile);
                         clearLossIfReadmitted(profile);
                         added++;
@@ -1763,7 +1767,8 @@ public class ProfileOrganizer {
             long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
             for (PeerProfile profile : activeProfiles) {
                 if (_highCapacityPeers.size() >= minHighCap) break;
-                if (isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
+                if (isHighBandwidthCapable(profile.getPeer()) &&
+                    isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
                     _highCapacityPeers.put(profile.getPeer(), profile);
                     clearLossIfReadmitted(profile);
                     highCapAdded++;
@@ -1881,7 +1886,8 @@ public class ProfileOrganizer {
                 if (_fastPeers.size() >= oldFastSize) break;
                 Hash peer = entry.getKey();
                 PeerProfile profile = entry.getValue();
-                if (isRestorableTierPeer(peer, profile, _fastPeers, buildSuccess, now, false)) {
+                if (isFastTierCapable(peer) &&
+                    isRestorableTierPeer(peer, profile, _fastPeers, buildSuccess, now, false)) {
                     putFastPeer(peer, profile);
                     clearLossIfReadmitted(profile);
                     restored++;
@@ -1899,7 +1905,8 @@ public class ProfileOrganizer {
                 if (_highCapacityPeers.size() >= oldHighCapSize) break;
                 Hash peer = entry.getKey();
                 PeerProfile profile = entry.getValue();
-                if (isRestorableTierPeer(peer, profile, _highCapacityPeers, buildSuccess, now, true)) {
+                if (isHighBandwidthCapable(peer) &&
+                    isRestorableTierPeer(peer, profile, _highCapacityPeers, buildSuccess, now, true)) {
                     _highCapacityPeers.put(peer, profile);
                     restored++;
                 }
@@ -2246,6 +2253,16 @@ public class ProfileOrganizer {
      *  @return true if the peer is X/P/O and not degraded
      *  @since 0.9.71+
      */
+    /**
+     *  Whether the peer qualifies for the high-capacity tier based on
+     *  advertised bandwidth tier and capabilities.  Requires X/P/O bandwidth
+     *  tier and no D (congestion), E (severe congestion), or G (no tunnels)
+     *  capability flags.
+     *
+     *  @param peer the peer to check
+     *  @return true if X/P/O tier and no D/E/G caps
+     *  @since 0.9.71+
+     */
     private boolean isHighBandwidthCapable(Hash peer) {
         RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
         if (peerInfo == null) return false;
@@ -2255,6 +2272,25 @@ public class ProfileOrganizer {
         if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) return false;
         if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0) return false;
         if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) return false;
+        return true;
+    }
+
+    /**
+     *  Whether the peer qualifies for the fast tier based on advertised
+     *  bandwidth tier and capabilities.  Same as
+     *  {@link #isHighBandwidthCapable(Hash)} but additionally rejects
+     *  firewalled (U) peers — fast peers must be directly reachable.
+     *
+     *  @param peer the peer to check
+     *  @return true if X/P/O tier, no D/E/G caps, and not firewalled
+     *  @since 0.9.71+
+     */
+    private boolean isFastTierCapable(Hash peer) {
+        if (!isHighBandwidthCapable(peer)) return false;
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        if (peerInfo == null) return false;
+        String caps = peerInfo.getCapabilities();
+        if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) return false;
         return true;
     }
 
@@ -2647,12 +2683,11 @@ public class ProfileOrganizer {
         double effectiveSpeedThreshold = _thresholdSpeedValue;
 
         // High-capacity tier
-        // High-cap means proven ability to host tunnels — not just
-        // advertised bandwidth tier.  Admission requires:
+        // High-cap means proven ability to host tunnels with X/P/O bandwidth.
+        // Admission requires:
         // - skipsPromotion() passed (acceptance ratio, loss, congestion)
+        // - isHighBandwidthCapable: X/P/O tier, no D/E/G caps
         // - Capacity above threshold, or room in the tier
-        // - Not excessively high latency (2× the fast-tier RTT boundary)
-        // Bandwidth tier (X/P/O) is used by the fast-tier gate, not here.
         boolean hcNeedsFilling = _highCapacityPeers.size() < minHighCap;
         boolean hcHasRoom = _highCapacityPeers.size() < getMaximumHighCapPeers();
         boolean hcTight = _highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT;
@@ -2660,19 +2695,19 @@ public class ProfileOrganizer {
             boolean hasCapacity = profile.getCapacityValue() >= effectiveCapThreshold;
             boolean tierRoom = !hcTight && (hcNeedsFilling || hcHasRoom);
             boolean noRecentBlock = !(!hcTight && recentFailures);
-            if (noRecentBlock && (hasCapacity || tierRoom)) {
+            if (noRecentBlock && (hasCapacity || tierRoom) && isHighBandwidthCapable(peer)) {
                 _highCapacityPeers.put(peer, profile);
             }
         }
 
         // Fast tier
-        // Two-tier admission:
-        // 1. High-cap responsive: high-cap members that are also
-        //    low-latency or untested.  Bandwidth tier goes into high-cap;
-        //    fast requires demonstrated responsiveness.
-        // 2. Quality/filling mode for non-high-cap peers: speed-based
-        //    or low-latency bypass, no recent failures.
-        if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers()) {
+        // Fast = high-cap + responsive, with strict bandwidth gate:
+        // X/P/O only, no D/E/G/U caps.  Three admission paths:
+        // 1. High-cap responsive: already high-cap, low-latency or untested.
+        // 2. Quality mode: all tests passing, active, proven throughput.
+        // 3. Filling mode: speed-based or low-latency bypass.
+        if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers() &&
+            isFastTierCapable(peer)) {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
             boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
             boolean fastQuality = _fastQualityCount >= MIN_FAST_QUALITY_COUNT;

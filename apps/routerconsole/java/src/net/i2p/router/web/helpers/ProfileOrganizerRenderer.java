@@ -320,11 +320,54 @@ class ProfileOrganizerRenderer {
             if (intSet.contains(peer)) {
                 isIntegrated = true;
             }
+
+            // Pre-check demotion conditions before emitting any HTML for this row
+            boolean isBanned = _context.banlist().isBanlisted(peer);
+            boolean isUnreachable = !isBanned && _context.commSystem().wasUnreachable(peer);
+            RateAverages ra = RateAverages.getTemp();
+            Rate failed = prof.getTunnelHistory().getFailedRate().getRate(RateConstants.ONE_HOUR);
+            long fails = failed.computeAverages(ra, false).getTotalEventCount();
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+
+            // Skip row entirely for peers being demoted this render
+            if (isBanned || isUnreachable) {
+                prof.setSpeedBonus(0);
+                toDemote.add(peer);
+                continue;
+            } else if (info != null) {
+                String caps = info.getCapabilities();
+                String bwTier = info.getBandwidthTier();
+                boolean nonHighBandwidth = !"X".equals(bwTier) && !"P".equals(bwTier) && !"O".equals(bwTier);
+                boolean hasCongestionD = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0;
+                boolean hasCongestionE = caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0;
+                boolean hasNoTunnels = caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
+                boolean hasFirewalled = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+                boolean notHighCapable = nonHighBandwidth || hasCongestionD || hasCongestionE || hasNoTunnels;
+                // Non-X/P/O or D/E/G → evict from both tiers
+                if (notHighCapable) {
+                    if (fastSet.contains(peer)) toDemoteFastOnly.add(peer);
+                    if (hcSet.contains(peer)) toDemote.add(peer);
+                    continue;
+                }
+                // Firewalled (U) → evict from fast only (keep in high-cap)
+                if (hasFirewalled && fastSet.contains(peer)) {
+                    toDemoteFastOnly.add(peer);
+                    continue;
+                }
+                // Failing peers in fast tier → demote to high cap
+                if (fails > 0 && fastSet.contains(peer)) {
+                    toDemoteFastOnly.add(peer);
+                    continue;
+                }
+            } else if (fails > 0 && fastSet.contains(peer)) {
+                toDemoteFastOnly.add(peer);
+                continue;
+            }
+
             buf.append("<tr class=lazy");
             if (_fragmentKeys) {buf.append(" data-key=\"").append(peerB64, 0, KEY_LEN).append("\"");}
             buf.append("><td nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer, false));
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             buf.append("</td><td>");
             if (info != null) {buf.append(_context.commSystem().renderPeerCaps(peer, false));}
             buf.append("</td><td>");
@@ -365,20 +408,7 @@ class ProfileOrganizerRenderer {
                 buf.append("<span class=host_ipv6>").append(ip);
             }
             buf.append("</span>");
-            boolean ok = true;
-            boolean isBanned = false;
-            boolean isUnreachable = false;
-            if (_context.banlist().isBanlisted(peer)) {
-                ok = false;
-                isBanned = true;
-            }
-            if (_context.commSystem().wasUnreachable(peer)) {
-                ok = false;
-                isUnreachable = true;
-            }
-            RateAverages ra = RateAverages.getTemp();
-            Rate failed = prof.getTunnelHistory().getFailedRate().getRate(RateConstants.ONE_HOUR);
-            long fails = failed.computeAverages(ra, false).getTotalEventCount();
+            boolean ok = !isBanned && !isUnreachable;
             long bonus = prof.getSpeedBonus();
             long capBonus = prof.getCapacityBonus();
             boolean isTesting = prof != null && prof.getLastTestStarted() > 0 &&
@@ -399,15 +429,6 @@ class ProfileOrganizerRenderer {
                 if (acceptedStat != null) {accepted = acceptedStat.getRate(RateConstants.ONE_HOUR);}
                 total = fails + (accepted != null ? accepted.computeAverages(ra, false).getTotalEventCount() : 0);
                 if (total > 0) {failPercentage = (double) fails / total * 100;}
-            }
-
-            // Collect peers that need demotion — batch after loop
-            if (isBanned || isUnreachable) {
-                prof.setSpeedBonus(0);
-                toDemote.add(peer);
-            } else if (fails > 0 && fastSet.contains(peer)) {
-                // Fast peers with any test failures → demote to high cap only
-                toDemoteFastOnly.add(peer);
             }
 
             buf.append("</td><td class=status data-sort=").append(statusSort).append(">");
@@ -447,15 +468,6 @@ class ProfileOrganizerRenderer {
             buf.append("</td><td class=groups><span class=\"");
             if (isIntegrated) buf.append("integrated ");
 
-            // Congestion caps (D/E): collect for full batch demotion
-            if (info != null && prof != null) {
-                String caps = info.getCapabilities();
-                if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
-                    prof.setCapacityBonus(-30);
-                    toDemote.add(peer);
-                }
-            }
             switch (tier) {
                 case 1: buf.append("fast\">").append(_t("Fast, High Capacity")); break;
                 case 2: buf.append("highcap\">").append(_t("High Capacity")); break;
