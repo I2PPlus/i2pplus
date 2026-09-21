@@ -430,7 +430,7 @@ class TunnelRenderer {
                 }
                 if (doRows) {sb.append("</tbody>\n");}
                 if (doFooter) {
-                    sb.append("<tfoot id=statusnotes><tr><td colspan=8>");
+                    sb.append("<tfoot class=statusnotes><tr><td colspan=8>");
                     if (displayed >= 2) {
                         sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
                         if (inactive > 0) {
@@ -1191,7 +1191,7 @@ class TunnelRenderer {
 
         if (live > 0) {
             int colCount = 5 + maxLength;
-            buf.append("<tfoot id=statusnotes>")
+            buf.append("<tfoot class=statusnotes>")
                .append("<tr class=bwUsage><td colspan=").append(colCount)
                .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
                .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))

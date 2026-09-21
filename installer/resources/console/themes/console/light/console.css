@@ -1236,6 +1236,7 @@ h3+.statusnotes{margin-top:2px}
 .routerHash,.version{margin:0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.3;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;box-shadow:var(--highlight);background:var(--badge)}
 .routerHash{display:inline-block;vertical-align:middle;letter-spacing:.1em;font-family:var(--monospaced)}
 .rlookup{padding:0 2px;display:inline-block;vertical-align:middle;line-height:1.3;font-style:italic}
+.statusnotes td{border-top:2px solid #a7a7be}
 .tunnel_cap{min-width:24px;padding:1px 4px;display:inline-block;margin:1px 2px;text-align:center;vertical-align:middle}
 .tunnel_cap:empty::after{content:"?"}
 .tunneldisplay,.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}
@@ -1251,7 +1252,6 @@ h3+.statusnotes{margin-top:2px}
 .tunnels_participating td.cells:first-child{font-size:0}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
-#statusnotes td{border-top:2px solid #a7a7be}
 #transitbypeer #tunnels th{position:relative}
 #tnlfilter{position:absolute;top:4px;right:41px}
 #tnlfilter input[type="text"]{background:#fff var(--filter) no-repeat 7px center/12px}
@@ -1284,7 +1284,7 @@ h3+.statusnotes{margin-top:2px}
 #tunnels h3+h3 a:not(.lsview){display:none}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
 #tunnels th:nth-child(n+2),.statusnotes{font-size:90%}
-#statusnotes td{padding:4px}
+.statusnotes td{padding:4px}
 #tunnels td{text-align:center}
 #tunnels tbody td{border:var(--border_soft)}
 #tunnels tbody td:first-child{border-left:var(--border_inner)}

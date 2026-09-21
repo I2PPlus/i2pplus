@@ -1156,9 +1156,8 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnelPeerCount th:first-child,#transitSummary th:first-child{font-size:0}
 #tunnelPeerCount th:first-child::before,#transitSummary th:first-child::before,#sessionBanned th.country::before{width:12px;height:10px;display:inline-block;vertical-align:middle;font-size:0;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
 #tunnelPeerCount tr:last-child td:not(.rih):not(.rbw),#transitSummary tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
-#statusnotes::before{display:inline-block;with:100%;height:1px;position:absolute;top:0;left:0;content:""}
-#statusnotes td{padding:8px;border-top-width:2px;background:var(--th)}
-#statusnotes td,#statusnotes tr:hover td{color:var(--ink);text-shadow:none}
+.statusnotes td{padding:8px;border-top-width:2px;background:var(--th)}
+.statusnotes td,.statusnotes tr:hover td{color:var(--ink);text-shadow:none}
 #tunnels #exploratory{padding-left:35px;background:var(--globe) no-repeat 9px center/18px,var(--title)}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 4px 14px 10px}
 #tunnels h3 a{float:right}
