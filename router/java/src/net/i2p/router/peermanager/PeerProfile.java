@@ -815,8 +815,15 @@ public class PeerProfile {
     void recalculateLowLatency() {
         if (_peerTestResponseTimeAvg <= 0)
             return;
-        int peerTimeout = _context.getProperty("router.peerTestTimeout", 750);
-        _lowLatency = _peerTestResponseTimeAvg < 3 * peerTimeout;
+        ProfileOrganizer organizer = _context.profileOrganizer();
+        float cohortAvg = organizer.getAverageLowLatencyRTT();
+        // When the fast tier has enough data (≥ 300 peers), tighten the cap to
+        // the cohort average so only the faster half of fast peers qualify.
+        // Falls back to the fixed timeout-based cap otherwise.
+        double cap = (cohortAvg > 0 && organizer.getFastPeerCount() >= 300)
+                     ? cohortAvg
+                     : 1.5 * _context.getProperty("router.peerTestTimeout", 750);
+        _lowLatency = _peerTestResponseTimeAvg < cap;
     }
 
     /**

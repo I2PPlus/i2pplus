@@ -122,6 +122,15 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private volatile double _baselineRTT;
+    /**
+     * Average peer test response time across fast peers with data, computed
+     * during each reorganize.  Used by {@link PeerProfile#recalculateLowLatency()}
+     * to tighten the low-latency threshold to 1.5× the cohort average when the
+     * fast tier has sufficient data ({@value ClientPeerSelector#CROSS_POOL_DIVERSITY_THRESHOLD}).
+     *
+     * @since 0.9.71+
+     */
+    private volatile float _averageLowLatencyRTT;
     private final InverseCapacityComparator _comp;
 
     /**
@@ -1439,6 +1448,11 @@ public class ProfileOrganizer {
             // Step 6d: Count quality peers (fast/high-cap with good acceptance + recent activity)
             // Used by tuner to adjust tier limits based on viable tunnel candidates
             int qualityCount = countQualityPeers(now, buildSuccess);
+
+            // Step 6e: Compute average peer test RTT across fast peers with data.
+            // When the fast tier is large enough, PeerProfile.recalculateLowLatency()
+            // uses 1.5× this average instead of the fixed timeout-based cap.
+            _averageLowLatencyRTT = computeAverageLowLatencyRTT();
 
             // Step 7: Update global thresholds
             _strictCapacityOrder = newStrictCapacityOrder;
@@ -3871,6 +3885,40 @@ public class ProfileOrganizer {
      */
     public void writeProfile(PeerProfile profile) {
         _persistenceHelper.writeProfile(profile);
+    }
+
+    /**
+     * Average peer test response time (ms) across fast peers with data,
+     * computed during each {@link #reorganize()}.
+     * Used by {@link PeerProfile#recalculateLowLatency()} as a self-tightening
+     * low-latency cap (1× the cohort average) when the fast tier has ≥ 300 peers.
+     * Falls back to a fixed 1.5× timeout cap for cold-start profiles.
+     *
+     * @return the average RTT in ms, 0 if fewer than 3 peers have data
+     * @since 0.9.71+
+     */
+    public float getAverageLowLatencyRTT() {
+        return _averageLowLatencyRTT;
+    }
+
+    /**
+     * Compute average peer test response time across fast peers with data.
+     * Pure decision — no write lock required; reads the already-rebuilt _fastPeers.
+     *
+     * @return the average RTT in ms, 0 if fewer than 3 peers have data
+     * @since 0.9.71+
+     */
+    private float computeAverageLowLatencyRTT() {
+        long totalRTT = 0;
+        int count = 0;
+        for (PeerProfile p : _fastPeers.values()) {
+            float rtt = p.getPeerTestTimeAverage();
+            if (rtt > 0) {
+                totalRTT += rtt;
+                count++;
+            }
+        }
+        return count >= 3 ? (float) totalRTT / count : 0;
     }
 
 }
