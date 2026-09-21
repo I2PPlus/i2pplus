@@ -8455,6 +8455,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Build request reply timeout.
+     *
+     * <p>Primary signal: {@code tunnel.buildTimeoutRate} (0-100, 1-minute average
+     * timeout percentage).  The ratio is volume-independent — 5 timeouts in 10
+     * builds (50%) correctly triggers a ramp, while 5 timeouts in 200 builds
+     * (2.5%) does not.  The raw expire count ({@code tunnel.buildClientExpire})
+     * inflates with build volume and causes the tuner to over-react at scale.
+     *
+     * <p>Secondary signals: concurrentBuilds (storm detection),
+     * buildSuccessRate (overall health), testSuccessTime (actual tunnel latency),
+     * dropLoadBacklog (queue pressure).
      */
     private class BuildRequestTimeoutParam extends BaseParam {
 
@@ -8462,7 +8472,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.tunnel.build.requestTimeout", "Build request reply timeout (ms)",
                   SUB_ROUTER,
 
-                  5000, 15000, 1000, "tunnel.buildClientExpire", _context);
+                  5000, 15000, 1000, "tunnel.buildTimeoutRate", _context);
         }
 
         /** Apply the tunable value to the router configuration. */
@@ -8477,26 +8487,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
-            return getAdditionalEventCount(_context, _statName);
+            return getAdditionalStat(ctx, _statName);
         }
 
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildClientExpire event count (timed-out builds per period)
-            // Primary signal: direct count of builds that expired waiting for a reply.
-            // If builds are timing out, we need MORE time (not less).
-            // Cross-refs: concurrentBuilds (storm detection), dropLoadBacklog (pending build queue),
-            //             buildSuccessRate (overall health), testSuccessTime (actual tunnel latency)
+            // observed = tunnel.buildTimeoutRate (0-100, 1-minute average timeout percentage)
+            // Primary signal: ratio of timed-out builds to total builds, smoothed
+            // over one minute.  Volume-independent: 5 timeouts in 10 builds (50%)
+            // correctly triggers a ramp, while 5 in 200 (2.5%) does not.
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double buildSuccess = getBuildSuccessRate(_context);
             double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double backlog = getAdditionalStat(_context, "tunnel.dropLoadBacklog");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
-            boolean successLow = !Double.isNaN(buildSuccess) && buildSuccess < 0.5;
             boolean tunnelSlow = !Double.isNaN(testTime) && testTime > 5000;
             boolean buildsBackedUp = !Double.isNaN(backlog) && backlog > 10;
+
+            // No data: no change
+            if (Double.isNaN(observed)) return current;
 
             // Build storm: DON'T decrease timeout when builds are timing out.
             // If builds expire, the timeout is too short — the storm may be *caused* by
@@ -8505,34 +8516,33 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // When builds are expiring during a storm, fall through to the normal
             // increase logic below so the timeout grows until expirations stop.
             if (buildStorm) {
-                if (observed <= 2 && buildSuccess > 0.7)
+                if (observed < 10 && buildSuccess > 0.7)
                     return Math.max(_min, current - _step * 2);
-                if (observed <= 2)
+                if (observed < 10)
                     return current;
             }
 
-            // Builds backed up + expiring: increase timeout (queue pressure means peers need more time)
-            if (buildsBackedUp && observed > 5)
+            // High timeout rate (>30%): aggressive increase — peers need more time
+            if (observed > 30)
                 return Math.min(_max, current + _step * 2);
 
-            // Builds expiring + low success = increase timeout (peers need more time to respond)
-            if (observed > 5 && successLow)
-                return Math.min(_max, current + _step * 2);
-
-            // Tunnel tests slow = increase timeout (network latency is high)
-            if (tunnelSlow && observed > 2)
+            // Moderate timeout rate (15-30%) + low success or builds backed up: increase
+            if (observed > 15 && (buildsBackedUp ||
+                (!Double.isNaN(buildSuccess) && buildSuccess < 0.6)))
                 return Math.min(_max, current + _step);
 
-            // Builds expiring but success ok = increase slightly (edge case)
-            if (observed > 10)
+            // Tunnel tests slow + timeout rate elevated: network latency is high
+            if (tunnelSlow && observed > 10)
                 return Math.min(_max, current + _step);
 
-            // Storm cleared (concurrentBuilds < 5) + no expirations + backlog drained = decrease aggressively
-            if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5 && observed < 1 && !buildsBackedUp)
+            // Storm cleared (concurrentBuilds < 5) + low timeout rate + no backlog = decrease aggressively
+            if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5 &&
+                observed < 5 && !buildsBackedUp)
                 return Math.max(_min, current - _step * 2);
 
-            // No expirations + high success + backlog drained = decrease (room to go faster)
-            if (observed < 1 && !Double.isNaN(buildSuccess) && buildSuccess > 0.9 && !buildsBackedUp)
+            // Low timeout rate + high success + no backlog = decrease (room to go faster)
+            if (observed < 10 && !Double.isNaN(buildSuccess) && buildSuccess > 0.85 &&
+                !buildsBackedUp)
                 return Math.max(_min, current - _step);
 
             return current;
