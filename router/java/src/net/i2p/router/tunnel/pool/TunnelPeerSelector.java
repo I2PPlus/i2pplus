@@ -850,7 +850,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return "no-routerinfo";
         }
 
-        if (shouldExcludeFloodfillPeer(isExploratory, routerInfo)) {
+        // Client tunnel builds: never exclude based on floodfill lookup
+        // reliability — a peer bad at NetDB lookups can still be a fine
+        // tunnel hop.  Only apply to exploratory pools (used for lookups).
+        if (isExploratory && shouldExcludeFloodfillPeer(routerInfo)) {
             return "floodfill";
         }
 
@@ -1029,23 +1032,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return profile.getTunnelHistory().getLastRejectedBandwidth() > cutoff;
     }
 
-    private boolean shouldExcludeFloodfillPeer(boolean isExploratory, RouterInfo routerInfo) {
+    private boolean shouldExcludeFloodfillPeer(RouterInfo routerInfo) {
         String capabilities = routerInfo.getCapabilities();
         boolean isFloodfill = capabilities.contains(Character.toString(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL));
         if (!isFloodfill) {return false;}
-        // Get reliability classification from the peer's profile
         Hash peerHash = routerInfo.getIdentity().getHash();
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peerHash);
         FloodfillReliability reliability = profile != null ? profile.getFloodfillReliability() : FloodfillReliability.UNKNOWN;
-        // Always exclude BAD floodfills
-        if (reliability == FloodfillReliability.BAD) {return true;}
-        // For exploratory builds, randomly exclude UNKNOWN floodfills
-        // to reduce load on unproven peers (approximate 3/4 exclusion)
-        if (isExploratory && reliability == FloodfillReliability.UNKNOWN) {
-            return ctx.random().nextInt(4) != 0;
-        }
-        // OK and GOOD floodfills are always allowed
-        return false;
+        // Only exclude BAD floodfills — proven unreliable for lookups.
+        // UNKNOWN peers are allowed through so they accumulate lookup
+        // evidence and get classified; randomly blocking them delays
+        // their profile indefinitely.
+        return reliability == FloodfillReliability.BAD;
     }
 
     /**
