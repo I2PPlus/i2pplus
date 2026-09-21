@@ -1507,7 +1507,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (c != 0) {return c;}
         c = compareActivity(prof1, prof2, now, thirtyMinutes);
         if (c != 0) {return c;}
-        return compareLatency(lat1, lat2);
+        c = compareLatency(lat1, lat2);
+        if (c != 0) {return c;}
+        // When both latencies are 0 (expired or never tested), prefer
+        // peers with a test history over never-tested peers.
+        return compareTestHistory(prof1, prof2);
     }
 
     /**
@@ -1613,6 +1617,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
     /**
      *  Lower measured tunnel-test latency sorts first; measured beats unknown.
+     *  When both latencies are 0 (unknown), peers that have been tested before
+     *  (have a persisted test timestamp) sort before never-tested peers, so
+     *  proven peers with expired latency data are preferred over new peers.
      *
      *  @param lat1 first peer's tunnel test time average
      *  @param lat2 second peer's tunnel test time average
@@ -1631,6 +1638,24 @@ class ClientPeerSelector extends TunnelPeerSelector {
             return 1;   // only p2 has measured latency
         }
         return 0;
+    }
+
+    /**
+     *  When both peers have unknown latency (lat=0), peers with a proven
+     *  test history sort first.  Uses the persisted EWMA update timestamp
+     *  to distinguish tested peers from never-tested peers.
+     *
+     *  @param prof1 first peer's profile, or null
+     *  @param prof2 second peer's profile, or null
+     *  @return negative, zero, or positive
+     *  @since 0.9.71+
+     */
+    static int compareTestHistory(PeerProfile prof1, PeerProfile prof2) {
+        long t1 = prof1 != null ? prof1.getTunnelTestTimeAvgLastUpdate() : 0;
+        long t2 = prof2 != null ? prof2.getTunnelTestTimeAvgLastUpdate() : 0;
+        // Tested peers (t > 0) sort before never-tested peers (t == 0)
+        // Among tested peers, more recently tested sorts first
+        return Long.compare(t2, t1);
     }
 
     /**
