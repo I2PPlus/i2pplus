@@ -1060,6 +1060,36 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                 }
 
+                // Peer scarcity fallback: untested peers (no-signal) are not
+                // proven bad — they simply lack connectivity evidence.  When
+                // all standard fallbacks fail, relax the no-signal exclusion
+                // and retry so untested peers can be considered as candidates.
+                if (rv.size() < min) {
+                    int unblocked = ex.excluder.relaxNoSignalExclusions();
+                    if (unblocked > 0) {
+                        if (log.shouldInfo()) {
+                            log.info("Relaxing no-signal exclusion: " + unblocked +
+                                     " untested peers now available -> retrying fallback selection");
+                        }
+                        ArraySet<Hash> nsFallback = new ArraySet<>(min);
+                        ctx.profileOrganizer().selectHighCapacityPeers(min, ex.exclude, nsFallback, 0, null);
+                        nsFallback.remove(ctx.routerHash());
+                        adoptIfFilled(rv, nsFallback);
+                    }
+                    if (rv.size() < min) {
+                        ArraySet<Hash> nsFallback2 = new ArraySet<>(min);
+                        ctx.profileOrganizer().selectFastPeers(min, ex.exclude, nsFallback2, 0, null);
+                        nsFallback2.remove(ctx.routerHash());
+                        adoptIfFilled(rv, nsFallback2);
+                    }
+                    if (rv.size() < min) {
+                        ArraySet<Hash> nsFallback3 = new ArraySet<>(min);
+                        ctx.profileOrganizer().selectActiveNotFailingPeers(min, ex.exclude, nsFallback3, 0, null);
+                        nsFallback3.remove(ctx.routerHash());
+                        adoptIfFilled(rv, nsFallback3);
+                    }
+                }
+
                 // Final check - if still not enough peers and we have some, allow shorter tunnel
                 if (rv.size() < min) {
                     if (canUseStressFallback(params.buildSuccess, params.useHighCapPrimary, rv.size())) {

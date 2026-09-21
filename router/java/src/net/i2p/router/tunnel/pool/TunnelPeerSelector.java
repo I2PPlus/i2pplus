@@ -902,6 +902,63 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Hard exclusion reasons only — skips the no-signal (pre-qualification)
+     *  check.  Used when peer scarcity demands that untested peers be allowed
+     *  as tunnel candidates.  Only bans, unreachable, no-RouterInfo,
+     *  congestion, and slow/capped peers remain excluded.
+     *
+     *  @since 0.9.71+
+     */
+    private String getHardExclusionReason(Hash peerHash, boolean isInbound,
+                                           boolean isExploratory, double buildSuccess) {
+        if (ctx.banlist().isBanlisted(peerHash)) {
+            return "banned";
+        }
+
+        PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peerHash);
+        if (profile != null && wasRecentlyRejected(profile, 20_000L)) {
+            return "recently-rejected";
+        }
+
+        if (ctx.commSystem().wasUnreachable(peerHash)) {
+            return "unreachable";
+        }
+
+        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peerHash);
+        if (routerInfo == null) {
+            return "no-routerinfo";
+        }
+
+        if (isExploratory && shouldExcludeFloodfillPeer(routerInfo)) {
+            return "floodfill";
+        }
+
+        if (filterUnreachable(isInbound, isExploratory)) {
+            if (routerInfo.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
+                if (!allowFirewalledUnderAttack(routerInfo.getCapabilities(), buildSuccess)) {
+                    return "U-cap";
+                }
+            }
+        }
+
+        if (filterSlow(isInbound, isExploratory)) {
+            String caps = routerInfo.getCapabilities();
+            if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0) {
+                return "severe-congestion";
+            }
+            if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) {
+                return "moderate-congestion";
+            }
+            String excludeCaps = getEffectiveExcludeCaps(ctx, buildSuccess);
+            if (shouldExclude(ctx, routerInfo, excludeCaps, isExploratory, buildSuccess)) {
+                return "slow/capped";
+            }
+        }
+
+        return null;
+    }
+
+    /**
      *  Whether strict client-pool pre-qualification should be applied to a
      *  candidate peer.  Never for exploratory selections, never during the
      *  startup grace period, and never while the network is under stress
@@ -1646,9 +1703,29 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             _buildSuccess = buildSuccess;
         }
 
+    /**
+         *  When true, the no-signal check in {@link #getExclusionReason} is
+         *  skipped, allowing untested peers to be considered for tunnel builds.
+         *  Set by {@link #relaxNoSignalExclusions()} when peer scarcity demands it.
+         */
+        private volatile boolean _allowNoSignal;
+
     @Override
     public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
+            if (_allowNoSignal) {
+                // Under severe scarcity, only exclude for hard failures
+                // (banned, unreachable, no-routerinfo, congestion).  Peers
+                // merely lacking connectivity signal are untested, not bad.
+                Hash h = (Hash) o;
+                String reason = getHardExclusionReason(h, _isIn, _isExpl, _buildSuccess);
+                if (reason != null) {
+                    s.add(h);
+                    recordExclusion(h, reason);
+                    return true;
+                }
+                return false;
+            }
             Hash h = (Hash) o;
             String reason = getExclusionReason(h, _isIn, _isExpl, _buildSuccess);
             if (reason != null) {
@@ -1665,6 +1742,30 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return true;
             }
             return false;
+        }
+
+        /**
+         *  Relax no-signal exclusions under peer scarcity: remove all peers
+         *  previously excluded for "no-signal" from the underlying set, and
+         *  set a flag so future contains() calls skip the no-signal check.
+         *  This allows untested peers to be considered as tunnel candidates
+         *  when we can't build tunnels due to insufficient proven peers.
+         *
+         *  @return number of peers un-excluded
+         */
+        int relaxNoSignalExclusions() {
+            _allowNoSignal = true;
+            List<Hash> toRemove = new ArrayList<>();
+            for (Map.Entry<Hash, String> e : _reasons.entrySet()) {
+                if ("no-signal".equals(e.getValue())) {
+                    toRemove.add(e.getKey());
+                }
+            }
+            for (Hash h : toRemove) {
+                _reasons.remove(h);
+                s.remove(h);
+            }
+            return toRemove.size();
         }
 
         /**
