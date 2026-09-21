@@ -261,6 +261,7 @@ class ProfileOrganizerRenderer {
         Set<Hash> hcSet = sel.highCapSet;
         Set<Hash> intSet = sel.integratedSet;
         Set<Hash> toDemote = new HashSet<>();
+        Set<Hash> toDemoteFastOnly = new HashSet<>();
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (!_fragmentKeys) {
@@ -401,11 +402,12 @@ class ProfileOrganizerRenderer {
             }
 
             // Collect peers that need demotion — batch after loop
-            if (isBanned || isUnreachable ||
-                (failPercentage > 5.0 && fastSet.contains(peer) &&
-                 _organizer.getFastQualityCount() >= 300)) {
+            if (isBanned || isUnreachable) {
                 prof.setSpeedBonus(0);
                 toDemote.add(peer);
+            } else if (fails > 0 && fastSet.contains(peer)) {
+                // Fast peers with any test failures → demote to high cap only
+                toDemoteFastOnly.add(peer);
             }
 
             buf.append("</td><td class=status data-sort=").append(statusSort).append(">");
@@ -445,7 +447,7 @@ class ProfileOrganizerRenderer {
             buf.append("</td><td class=groups><span class=\"");
             if (isIntegrated) buf.append("integrated ");
 
-            // Congestion caps (D/E): collect for batch demotion
+            // Congestion caps (D/E): collect for full batch demotion
             if (info != null && prof != null) {
                 String caps = info.getCapabilities();
                 if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
@@ -557,6 +559,7 @@ class ProfileOrganizerRenderer {
         }
         // Single lock acquisition for all demotions collected during render
         _organizer.demoteBatch(toDemote);
+        _organizer.demoteFastOnlyBatch(toDemoteFastOnly);
         buf.append("</tbody>\n");
         if (!_fragmentKeys) {buf.append("</table></div>\n");}
         out.append(buf);
@@ -657,7 +660,7 @@ class ProfileOrganizerRenderer {
             double fastRTT = _organizer.getFastRTTThreshold();
             double rttScore = fastRTT > 0 ? Math.min(fastRTT / 2000.0, 1.0) : -1;
             buf.append(RingRenderer.renderRingCell(rttScore, _t("Fast RTT"),
-                      fastRTT > 0 ? Math.round(fastRTT) + " ms" : "\u2014",
+                      fastRTT > 0 ? Math.round(fastRTT) + "ms" : "\u2014",
                       new String[]{_t("Max RTT for fast-tier membership (ms)")},
                       RingRenderer.MODE_NEUTRAL, null));
 

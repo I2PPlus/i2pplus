@@ -3074,6 +3074,34 @@ public class ProfileOrganizer {
     }
 
     /**
+     * Batch-remove peers from fast tier only, keeping them in high-cap.
+     * Used to demote peers with test failures from fast to high cap.
+     * Does NOT call promoteToFillTiers() — re-promotion would undo the
+     * demotion. The next full reorganize() fills any gaps.
+     *
+     * @param peers peers to remove from fast tier — may be empty (no-op, no lock)
+     * @since 0.9.71+
+     */
+    public void demoteFastOnlyBatch(Set<Hash> peers) {
+        if (peers.isEmpty()) return;
+        if (!getWriteLock()) return;
+        try {
+            int removed = 0;
+            for (Hash peer : peers) {
+                if (_fastPeers.containsKey(peer)) {
+                    removeFastPeer(peer);
+                    removed++;
+                }
+            }
+            if (removed > 0 && _log.shouldInfo()) {
+                _log.info("Batch demoted " + removed + " of " + peers.size() + " peers from fast tier (kept in high-cap)");
+            }
+        } finally {
+            releaseWriteLock();
+        }
+    }
+
+    /**
      * Compute the next strike count after a failure, applying time-window
      * decay. A previous strike older than DEMOTE_STRIKE_DECAY_MS no longer
      * counts, so a peer that recovered is not demoted by one later failure.
