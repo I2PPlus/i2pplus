@@ -163,17 +163,17 @@ class ProfileOrganizerRenderer {
         int older = 0;
         long hideWindow = 0;
         if (mode == 1) {
-            // Fast tier: iterate only fast peers, no hideWindow
+            // Fast tier: show ALL fast peers, no filtering beyond profile existence
             for (Hash peer : fastSnapshot) {
                 PeerProfile prof = _organizer.getProfile(peer);
-                if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
+                if (prof == null || _organizer.getUs().equals(peer)) {continue;}
                 order.add(prof);
             }
         } else if (mode == 2) {
-            // High-capacity (non-fast): iterate only high-cap peers, no hideWindow
+            // High-capacity (non-fast): show ALL high-cap peers
             for (Hash peer : hcSnapshot) {
                 PeerProfile prof = _organizer.getProfile(peer);
-                if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
+                if (prof == null || _organizer.getUs().equals(peer)) {continue;}
                 if (fastSnapshot.contains(peer)) {continue;}
                 order.add(prof);
             }
@@ -542,8 +542,6 @@ class ProfileOrganizerRenderer {
     private void renderProfileRings(Writer out, int mode, ProfileSelection sel) throws IOException {
         Set<PeerProfile> order = sel.order;
         int known = order.size() + sel.older;
-        int fast = 0;
-        int reliable = 0;
         long lookupsGood = 0;
         long lookupsBad = 0;
         int storeGood = 0;
@@ -551,13 +549,6 @@ class ProfileOrganizerRenderer {
         Set<Hash> fastSet = sel.fastSet;
         Set<Hash> hcSet = sel.highCapSet;
         for (PeerProfile prof : order) {
-            Hash peer = prof.getPeer();
-            if (fastSet.contains(peer)) {
-                fast++;
-                reliable++;
-            } else if (hcSet.contains(peer)) {
-                reliable++;
-            }
             DBHistory dbh = prof.getDBHistory();
             if (dbh != null) {
                 lookupsGood += dbh.getSuccessfulLookups();
@@ -584,8 +575,8 @@ class ProfileOrganizerRenderer {
         }
 
         // Tier pages: tier count first, matching the Total ring position on the all page
-        if (mode == 1) {renderTierCountRing(buf, fast, known, _t("Fast"), "{0} fast peer", "{0} fast peers");}
-        else if (mode == 2) {renderTierCountRing(buf, reliable, known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
+        if (mode == 1) {renderTierCountRing(buf, fastSet.size(), known, _t("Fast"), "{0} fast peer", "{0} fast peers");}
+        else if (mode == 2) {renderTierCountRing(buf, hcSet.size(), known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");}
 
         // Share of total profiles shown for this page mode
         if (total > 0) {
@@ -628,8 +619,8 @@ class ProfileOrganizerRenderer {
 
         // All page: tier counts after the window ring
         if (mode == 0) {
-            renderTierCountRing(buf, fast, known, _t("Fast"), "{0} fast peer", "{0} fast peers");
-            renderTierCountRing(buf, reliable, known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");
+            renderTierCountRing(buf, fastSet.size(), known, _t("Fast"), "{0} fast peer", "{0} fast peers");
+            renderTierCountRing(buf, hcSet.size(), known, _t("High Cap"), "{0} high capacity peer", "{0} high capacity peers");
         }
 
         // Active share of known profiles

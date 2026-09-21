@@ -2259,44 +2259,14 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a peer is acceptable for high-capacity tier based on latency.
-     *  High-cap peers have a more relaxed RTT ceiling than fast-tier peers
-     *  ({@link #HIGH_CAP_RTT_MULTIPLIER} × the fast-tier boundary) — they
-     *  need to be able to host tunnels, but don't need the responsiveness
-     *  required by the fast tier.
-     *  <p>
-     *  Untested peers (no tunnel test data) are allowed through so they
-     *  can accumulate tunnel history; only tested-but-slow peers are gated.
-     *
-     *  @param profile the peer profile
-     *  @return true if the peer's latency is acceptable for high-cap
-     *  @since 0.9.71+
-     */
-    private boolean isAcceptableForHighCap(PeerProfile profile) {
-        float tunnelRtt = profile.getTunnelTestTimeAverage();
-        if (tunnelRtt <= 0) return true;
-        if (_thresholdRTT <= 0) return true;
-        return tunnelRtt <= _thresholdRTT * HIGH_CAP_RTT_MULTIPLIER;
-    }
-
-    /**
-     *  Multiplier applied to the fast-tier RTT boundary to get the high-cap
-     *  RTT ceiling.  High-cap peers need to host tunnels but don't need
-     *  fast-tier responsiveness.  2× keeps a meaningful high-cap pool while
-     *  excluding peers too slow to carry traffic.
-     */
-    private static final double HIGH_CAP_RTT_MULTIPLIER = 2.0;
-
-    /**
      *  Get the high-capacity RTT ceiling for display and diagnostics.
-     *  Returns 0 if no threshold is available.
+     *  High-cap has no RTT gate — acceptance ratio and loss gates
+     *  handle quality.  Returns 0 (no ceiling).
      *
-     *  @return the high-cap RTT ceiling in ms, or 0
+     *  @return 0 (high-cap has no RTT ceiling)
      *  @since 0.9.71+
      */
-    public double getHighCapRTTThreshold() {
-        return _thresholdRTT > 0 ? _thresholdRTT * HIGH_CAP_RTT_MULTIPLIER : 0;
-    }
+    public double getHighCapRTTThreshold() {return 0;}
 
     private PeerProfile locked_getProfile(Hash peer) {
         return _notFailingPeers.get(peer);
@@ -2690,8 +2660,7 @@ public class ProfileOrganizer {
             boolean hasCapacity = profile.getCapacityValue() >= effectiveCapThreshold;
             boolean tierRoom = !hcTight && (hcNeedsFilling || hcHasRoom);
             boolean noRecentBlock = !(!hcTight && recentFailures);
-            boolean notTooSlow = isAcceptableForHighCap(profile);
-            if (noRecentBlock && notTooSlow && (hasCapacity || tierRoom)) {
+            if (noRecentBlock && (hasCapacity || tierRoom)) {
                 _highCapacityPeers.put(peer, profile);
             }
         }
