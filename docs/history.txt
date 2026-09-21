@@ -1,3 +1,48 @@
+2026-09-21 dr|z3d
+  * Tunnel:
+    - Remove sub-tier slicing from client peer selection
+    - Cross-pool diversity when fast tier > 300 peers, relaxed under
+      build stress to prevent availability starvation
+    - Relax no-signal exclusion under peer scarcity; prefer proven
+      peers with expired latency over untested peers
+    - Decouple floodfill lookup reliability from client tunnel builds
+    - Reject firewalled (U) peers from fast and high-cap tiers
+    - Fix UnsupportedOperationException in fallback peer selection
+  * PeerManager:
+    - Gate fast/high-cap tiers on X/P/O bandwidth tier, reject
+      D/E/G/U capability flags from tier entry
+    - Demote fast peers with test failures to high cap instead of
+      evicting; tighten high-cap admission with lifetime decay
+    - Separate timeouts from rejections in acceptance ratio;
+      include timeouts in denominator
+    - Hard 1-hour latency expiry replacing exponential decay
+    - Tighten low-latency cap to cohort average when fast tier is
+      large; fall back to fixed timeout-based cap for cold start
+    - Test all profiled peers, sort by tier priority then staleness
+  * PeerTest:
+    - Extend startup ramp to 4h/12h with 3s/5s/8s cadence
+    - Add non-blocking test peer selection; ensure job never dies
+      on exception or lock contention
+    - Startup ramp with proportional backpressure; persist peer
+      test latency results across restarts
+  * I2PTunnel: Raise server handler pool baselines and read live
+    queue depth via reflection for auto-tuning
+  * Tuner: Use 1m timeout ratio instead of raw expire count for
+    BuildRequestTimeoutParam
+  * Console:
+    - Restore instant demotion in renderer, fix tier ring
+      denominators; batch demotions, cache hostname/whois lookups
+    - Remove high-cap RTT gate, fix tier page to show all peers;
+      pre-compute tier snapshots, remove demotion side-effects
+    - Optimize profiles page; raise graph error tolerance to 10
+      consecutive failures, make graphing resilient to RRD4J errors
+
+2026-09-20 dr|z3d
+  * PeerManager: Separate timeouts from rejections in tunnel
+    acceptance ratio; remove -30 penalty, show all tier peers
+  * Console: Optimize profiles page; make graphing resilient to
+    transient RRD4J errors
+
 2026-09-19 dr|z3d
   * Tunnel: Mitigate build cascade failure — jitter pool backoff, raise
     attack ghost threshold to 5 with 60s time-decay, seed proven
