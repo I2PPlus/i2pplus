@@ -122,14 +122,14 @@ public class TunnelControllerGroup implements ClientApp {
     /** Per-tunnel server-handler cap ceiling (Tuner per-tunnel param max). */
     static final int SERVER_HANDLER_PER_TUNNEL_MAX = 4096;
     /** Absolute floor for a live server tunnel's handler pool. */
-    static final int SERVER_HANDLER_FLOOR = 2;
+    static final int SERVER_HANDLER_FLOOR = 4;
 
     /** Tuned by Tuner: global budget for server handler threads, summed over all server tunnels */
-    private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
+    private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores() * 4, 16);
     /** Tuned by Tuner */
     private static volatile int clientRunnerMax = 1024;
     /** Tuned by Tuner: how many inbound connections may wait in the server handler queue */
-    private static volatile int serverBacklogQueueCapacity = 1024;
+    private static volatile int serverBacklogQueueCapacity = 2048;
 
     /**
      *  The number of server handler threads available in total across all server
@@ -170,6 +170,69 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static void setServerBacklogQueueCapacity(int val) {
         serverBacklogQueueCapacity = Math.max(16, Math.min(65536, val));
+    }
+
+    /**
+     *  Live aggregate queue depth across all server tunnel executor pools.
+     *  Reads directly from each {@link ThreadPoolExecutor#getQueue()#size()},
+     *  bypassing the Rate-averaged stat for instant saturation detection.
+     *
+     *  @return total queued tasks across all server handler pools, or 0 if none
+     *  @since 0.9.71+
+     */
+    public static int getLiveServerHandlerQueueDepth() {
+        TunnelControllerGroup g = instance;
+        if (g == null) return 0;
+        int total = 0;
+        for (ServerHandler h : g._serverHandlers.values()) {
+            ThreadPoolExecutor ex = h.executor;
+            if (ex != null) {
+                total += ex.getQueue().size();
+            }
+        }
+        return total;
+    }
+
+    /**
+     *  Live aggregate active thread count across all server tunnel executor pools.
+     *  Reads directly from each {@link ThreadPoolExecutor#getActiveCount()},
+     *  bypassing the Rate-averaged stat for instant saturation detection.
+     *
+     *  @return total active threads across all server handler pools, or 0 if none
+     *  @since 0.9.71+
+     */
+    public static int getLiveServerHandlerActiveCount() {
+        TunnelControllerGroup g = instance;
+        if (g == null) return 0;
+        int total = 0;
+        for (ServerHandler h : g._serverHandlers.values()) {
+            ThreadPoolExecutor ex = h.executor;
+            if (ex != null) {
+                total += ex.getActiveCount();
+            }
+        }
+        return total;
+    }
+
+    /**
+     *  Live aggregate max pool size across all server tunnel executor pools.
+     *  The sum of each pool's {@link ThreadPoolExecutor#getMaximumPoolSize()},
+     *  representing total handler capacity.
+     *
+     *  @return total max threads across all server handler pools, or 0 if none
+     *  @since 0.9.71+
+     */
+    public static int getLiveServerHandlerMaxThreads() {
+        TunnelControllerGroup g = instance;
+        if (g == null) return 0;
+        int total = 0;
+        for (ServerHandler h : g._serverHandlers.values()) {
+            ThreadPoolExecutor ex = h.executor;
+            if (ex != null) {
+                total += ex.getMaximumPoolSize();
+            }
+        }
+        return total;
     }
 
     /** Tuned by Tuner: default per-tunnel ceiling on server handler threads. */

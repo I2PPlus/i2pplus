@@ -10865,21 +10865,20 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getServerHandlerThreads");
         }
 
-        /** Read the observed stat value for autotuning decisions. */
+        /**
+         *  Read the live aggregate queue depth across all server tunnel pools.
+         *  Bypasses the 60s Rate average for instant saturation detection.
+         */
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return I2PTunnelReflector.invokeGetInt("getLiveServerHandlerQueueDepth");
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
+        /** Compute the target value based on live signals and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double blockingTime = getAdditionalStat(_context, "i2ptunnel.serverHandler.blockingHandleTime");
-            double active = getAdditionalStat(_context, "i2ptunnel.serverHandler.active");
+            double active = I2PTunnelReflector.invokeGetInt("getLiveServerHandlerActiveCount");
             double synExpire = getAdditionalStat(_context, "stream.con.synExpireRate");
             return computeServerHandlerThreads(current, _min, _effMax, observed, active,
                                               blockingTime, jobLag, synExpire);
@@ -11206,16 +11205,15 @@ protected int computeTarget(double observed) {
             return I2PTunnelReflector.invokeGetInt("getServerBacklogQueueCapacity");
         }
 
-        /** Read the observed stat value for autotuning decisions. */
+        /**
+         *  Read the live aggregate queue depth across all server tunnel pools.
+         *  Bypasses the 60s Rate average for instant saturation detection.
+         */
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return I2PTunnelReflector.invokeGetInt("getLiveServerHandlerQueueDepth");
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
+        /** Compute the target value based on live signals and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
