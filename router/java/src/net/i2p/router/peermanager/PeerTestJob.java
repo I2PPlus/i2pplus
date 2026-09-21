@@ -316,6 +316,7 @@ public class PeerTestJob extends JobImpl {
         synchronized(this) {
             manager = _manager;
         }
+        ProfileOrganizer organizer = getContext().profileOrganizer();
         Set<RouterInfo> peers = new HashSet<>();
 
         // First, test priority peers (from slow tunnels)
@@ -336,12 +337,15 @@ public class PeerTestJob extends JobImpl {
             }
         }
 
-        // Now get regular peers, prioritizing untested peers
+        // Now get regular peers, prioritizing by tier: fast > high-cap > all.
+        // All profiled peers with a RouterInfo are eligible; we sort by tier
+        // priority then by staleness so the most important and most stale
+        // peers are tested first.
         int needed = getTestConcurrency() - peers.size();
         if (needed > 0) {
             PeerSelectionCriteria criteria = new PeerSelectionCriteria();
             criteria.setMinimumRequired(needed);
-            criteria.setMaximumRequired(needed * 2); // Get extra to filter
+            criteria.setMaximumRequired(needed * 4); // Get extra to sort by tier
             criteria.setPurpose(PeerSelectionCriteria.PURPOSE_TEST);
             List<Hash> peerHashes = manager.selectPeers(criteria);
 
@@ -351,29 +355,28 @@ public class PeerTestJob extends JobImpl {
 
                 // Skip if already testing as priority
                 if (priorityPeers.contains(peer)) continue;
+                // Need RouterInfo and profile to test
+                if (data.routerInfo == null || data.profile == null) continue;
+                // Skip incompatible versions
+                if (VersionComparator.comp(data.routerInfo.getVersion(), "0.9.57") < 0) continue;
 
-                // Primary candidates: high-bandwidth, reachable, compatible version
-                if (data.routerInfo != null && data.profile != null && data.capabilities != null && data.isReachable &&
-                    VersionComparator.comp(data.routerInfo.getVersion(), "0.9.57") >= 0 &&
-                    (data.bandwidthTier.equals("O") || data.bandwidthTier.equals("P") || data.bandwidthTier.equals("X"))) {
-                    validCandidates.add(data);
-                // Low-bandwidth or unreachable peers: penalize but don't test
-                } else if (data.routerInfo != null && data.profile != null && data.capabilities != null &&
-                    (!data.isReachable || data.bandwidthTier.equals("K") || data.bandwidthTier.equals("L") ||
-                     data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
-                    if (_log.shouldInfo())
-                        _log.info("Skipping test for [" + data.shortHash + "] -> K, L, M, N or unreachable");
-                // Missing RouterInfo: cannot test
-                } else if (data.routerInfo == null && _log.shouldInfo()) {
-                        _log.info("Test of [" + data.shortHash + "] failed: No local RouterInfo");
-                }
+                validCandidates.add(data);
             }
 
-            // Sort candidates by lastTestedSuccessfully ascending: never tested (0) first, then oldest
-            validCandidates.sort((a, b) -> Long.compare(
-                a.profile.getLastTestedSuccessfully(),
-                b.profile.getLastTestedSuccessfully()
-            ));
+            // Sort: tier priority (fast=0, high-cap=1, other=2),
+            // then by lastTestedSuccessfully ascending (never tested first)
+            validCandidates.sort((a, b) -> {
+                int aTier = organizer.isFast(a.profile.getPeer()) ? 0
+                          : organizer.isHighCapacity(a.profile.getPeer()) ? 1 : 2;
+                int bTier = organizer.isFast(b.profile.getPeer()) ? 0
+                          : organizer.isHighCapacity(b.profile.getPeer()) ? 1 : 2;
+                int tierCmp = aTier - bTier;
+                if (tierCmp != 0) return tierCmp;
+                return Long.compare(
+                    a.profile.getLastTestedSuccessfully(),
+                    b.profile.getLastTestedSuccessfully()
+                );
+            });
 
             // Add top candidates up to concurrency limit
             for (PeerData data : validCandidates) {
