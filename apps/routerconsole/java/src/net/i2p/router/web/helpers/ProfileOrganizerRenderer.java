@@ -79,7 +79,7 @@ class ProfileOrganizerRenderer {
             renderFloodfill(out, sel.order);
         } else {
             renderProfileRings(out, mode, sel);
-            renderPbody(out, sel.order);
+            renderPbody(out, sel);
             out.append("</div>\n");
             out.flush();
             if (mode == 0 && !_context.getBooleanProperty("routerconsole.advanced")) {renderDefinitions(out);}
@@ -106,12 +106,15 @@ class ProfileOrganizerRenderer {
             return;
         }
         ProfileSelection sel = loadProfiles(mode);
-        if ("pbody".equals(id)) {renderPbody(out, sel.order);}
+        if ("pbody".equals(id)) {renderPbody(out, sel);}
         else if ("profilestats".equals(id)) {renderProfileRings(out, mode, sel);}
     }
 
     /**
-     *  The sorted peer set, hidden-stale count, and hide window from loadProfiles().
+     *  The sorted peer set, hidden-stale count, hide window, and pre-computed
+     *  tier snapshots from loadProfiles().  The tier sets are local copies
+     *  taken under the organizer read lock once, so renderers and comparators
+     *  can use {@code contains()} without acquiring any locks.
      *  @since 0.9.70+
      */
     private static class ProfileSelection {
@@ -119,10 +122,20 @@ class ProfileOrganizerRenderer {
         final int older;
         /** Hide window for stale profiles, 0 for none */
         final long hideWindow;
-        ProfileSelection(Set<PeerProfile> order, int older, long hideWindow) {
+        /** Snapshot of fast-tier hashes, taken once under organizer read lock. */
+        final Set<Hash> fastSet;
+        /** Snapshot of high-capacity-tier hashes, taken once under organizer read lock. */
+        final Set<Hash> highCapSet;
+        /** Snapshot of well-integrated hashes, taken once under organizer read lock. */
+        final Set<Hash> integratedSet;
+        ProfileSelection(Set<PeerProfile> order, int older, long hideWindow,
+                         Set<Hash> fastSet, Set<Hash> highCapSet, Set<Hash> integratedSet) {
             this.order = order;
             this.older = older;
             this.hideWindow = hideWindow;
+            this.fastSet = fastSet;
+            this.highCapSet = highCapSet;
+            this.integratedSet = integratedSet;
         }
     }
 
@@ -140,24 +153,28 @@ class ProfileOrganizerRenderer {
      */
     private ProfileSelection loadProfiles(int mode) {
         long now = _context.clock().now();
-        Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator());
+        // Snapshot tier membership once under a single read lock, then use
+        // local contains() throughout — avoids per-peer lock acquisitions
+        // in the comparator and render loop.
+        Set<Hash> fastSnapshot = Collections.unmodifiableSet(new java.util.HashSet<>(_organizer.selectFastPeers()));
+        Set<Hash> hcSnapshot = Collections.unmodifiableSet(new java.util.HashSet<>(_organizer.selectHighCapacityPeers()));
+        Set<Hash> intSnapshot = Collections.unmodifiableSet(new java.util.HashSet<>(_organizer.selectWellIntegratedPeers()));
+        Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator(fastSnapshot, hcSnapshot));
         int older = 0;
         long hideWindow = 0;
         if (mode == 1) {
             // Fast tier: iterate only fast peers, no hideWindow
-            Set<Hash> fastPeers = _organizer.selectFastPeers();
-            for (Hash peer : fastPeers) {
+            for (Hash peer : fastSnapshot) {
                 PeerProfile prof = _organizer.getProfile(peer);
                 if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
                 order.add(prof);
             }
         } else if (mode == 2) {
             // High-capacity (non-fast): iterate only high-cap peers, no hideWindow
-            Set<Hash> hcPeers = _organizer.selectHighCapacityPeers();
-            for (Hash peer : hcPeers) {
+            for (Hash peer : hcSnapshot) {
                 PeerProfile prof = _organizer.getProfile(peer);
                 if (prof == null || !isValid(prof, peer, _organizer.getUs(), true)) {continue;}
-                if (_organizer.isFast(peer)) {continue;}
+                if (fastSnapshot.contains(peer)) {continue;}
                 order.add(prof);
             }
         } else if (mode == 3) {
@@ -197,7 +214,7 @@ class ProfileOrganizerRenderer {
             for (PeerProfile prof : candidates) {
                 if (prof.getLastHeardFrom() <= hideBefore &&
                     prof.getFirstHeardAbout() < freshBefore) {
-                    if (!underAttack || !_organizer.isFast(prof.getPeer())) {
+                    if (!underAttack || !fastSnapshot.contains(prof.getPeer())) {
                         older++;
                         continue;
                     }
@@ -205,7 +222,7 @@ class ProfileOrganizerRenderer {
                 order.add(prof);
             }
         }
-        return new ProfileSelection(order, older, hideWindow);
+        return new ProfileSelection(order, older, hideWindow, fastSnapshot, hcSnapshot, intSnapshot);
     }
 
     /**
@@ -235,7 +252,11 @@ class ProfileOrganizerRenderer {
      *  @throws IOException if an I/O error occurs
      *  @since 0.9.70+
      */
-    private void renderPbody(Writer out, Set<PeerProfile> order) throws IOException {
+    private void renderPbody(Writer out, ProfileSelection sel) throws IOException {
+        Set<PeerProfile> order = sel.order;
+        Set<Hash> fastSet = sel.fastSet;
+        Set<Hash> hcSet = sel.highCapSet;
+        Set<Hash> intSet = sel.integratedSet;
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (!_fragmentKeys) {
@@ -280,12 +301,12 @@ class ProfileOrganizerRenderer {
             String peerB64 = peer.toBase64();
             int tier = 0;
             boolean isIntegrated = false;
-            if (_organizer.isFast(peer)) {
+            if (fastSet.contains(peer)) {
                 tier = 1;
-            } else if (_organizer.isHighCapacity(peer)) {
+            } else if (hcSet.contains(peer)) {
                 tier = 2;
             } else {tier = 3;}
-            if (_organizer.isWellIntegrated(peer)) {
+            if (intSet.contains(peer)) {
                 isIntegrated = true;
             }
             buf.append("<tr class=lazy");
@@ -364,19 +385,6 @@ class ProfileOrganizerRenderer {
                 if (total > 0) {failPercentage = (double) fails / total * 100;}
             }
 
-            // Instant demotion: banned and unreachable always; >5% fail when tier is healthy
-            if (isBanned) {
-                if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                _context.profileOrganizer().demoteIfBanned(peer);
-            } else if (isUnreachable) {
-                if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                _context.profileOrganizer().demoteIfUnreachableNow(peer);
-            } else if (failPercentage > 5.0 && _organizer.isFast(peer) &&
-                       _organizer.getFastQualityCount() >= 300) {
-                if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                _context.profileOrganizer().demoteIfHighLatency(peer);
-            }
-
             buf.append("</td><td class=status data-sort=").append(statusSort).append(">");
             if (ok && fails == 0) {buf.append("<span class=\"ok").append(isTesting ? " testing" : "").append("\">").append(_t("OK")).append("</span>");}
             else if (!ok) {
@@ -411,15 +419,6 @@ class ProfileOrganizerRenderer {
                    .append("\" title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");
             }
 
-            // Check for congestion caps (D/E) and demote immediately
-            if (info != null && prof != null) {
-                String caps = info.getCapabilities();
-                if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
-                    prof.setCapacityBonus(-30);
-                    _context.profileOrganizer().demoteIfCongested(peer);
-                }
-            }
             buf.append("</td><td class=groups><span class=\"");
             if (isIntegrated) buf.append("integrated ");
             switch (tier) {
@@ -549,11 +548,14 @@ class ProfileOrganizerRenderer {
         long lookupsBad = 0;
         int storeGood = 0;
         int storeBad = 0;
+        Set<Hash> fastSet = sel.fastSet;
+        Set<Hash> hcSet = sel.highCapSet;
         for (PeerProfile prof : order) {
-            if (_organizer.isFast(prof.getPeer())) {
+            Hash peer = prof.getPeer();
+            if (fastSet.contains(peer)) {
                 fast++;
                 reliable++;
-            } else if (_organizer.isHighCapacity(prof.getPeer())) {
+            } else if (hcSet.contains(peer)) {
                 reliable++;
             }
             DBHistory dbh = prof.getDBHistory();
@@ -1098,19 +1100,36 @@ class ProfileOrganizerRenderer {
         out.flush();
     }
 
-    private class ProfileComparator extends ProfComparator {
+    /**
+     *  Sorts profiles by tier (fast > high-cap > standard) using pre-computed
+     *  tier sets, then by binary hash order within each tier.  No locks are
+     *  acquired during comparison — the tier snapshot is taken once in
+     *  loadProfiles() and passed to this comparator.
+     *  @since 0.9.70+
+     */
+    private static class ProfileComparator extends ProfComparator {
+        private final Set<Hash> _fastSet;
+        private final Set<Hash> _highCapSet;
+        ProfileComparator(Set<Hash> fastSet, Set<Hash> highCapSet) {
+            _fastSet = fastSet;
+            _highCapSet = highCapSet;
+        }
         @Override
         public int compare(PeerProfile left, PeerProfile right) {
-            if (_context.profileOrganizer().isFast(left.getPeer())) {
-                if (_context.profileOrganizer().isFast(right.getPeer())) {return super.compare(left, right);}
+            Hash l = left.getPeer();
+            Hash r = right.getPeer();
+            boolean lFast = _fastSet.contains(l);
+            boolean rFast = _fastSet.contains(r);
+            if (lFast) {
+                if (rFast) {return super.compare(left, right);}
                 else {return -1;} // fast comes first
-            } else if (_context.profileOrganizer().isHighCapacity(left.getPeer())) {
-                if (_context.profileOrganizer().isFast(right.getPeer())) {return 1;}
-                else if (_context.profileOrganizer().isHighCapacity(right.getPeer())) {return super.compare(left, right);}
+            } else if (_highCapSet.contains(l)) {
+                if (rFast) {return 1;}
+                else if (_highCapSet.contains(r)) {return super.compare(left, right);}
                 else {return -1;}
             } else {
-                if (_context.profileOrganizer().isFast(right.getPeer())) {return 1;}
-                else if (_context.profileOrganizer().isHighCapacity(right.getPeer())) {return 1;}
+                if (rFast) {return 1;}
+                else if (_highCapSet.contains(r)) {return 1;}
                 else {return super.compare(left, right);}
             }
         }
