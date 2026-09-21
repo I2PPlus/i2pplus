@@ -1160,7 +1160,8 @@ class TunnelRenderer {
             if (length > maxLength) {maxLength = length;}
         }
         StringBuilder buf = new StringBuilder(32*1024);
-        if (!tunnels.isEmpty()) {
+        boolean tableOpen = !tunnels.isEmpty();
+        if (tableOpen) {
             appendTableHeader(buf, maxLength);
         }
         final String tib = _t("Inbound");
@@ -1199,7 +1200,9 @@ class TunnelRenderer {
                .append("B ").append(_t("out")).append("</b></td></tr></tfoot>\n");
         }
 
-        buf.append("</table>\n");
+        if (tableOpen) {
+            buf.append("</table>\n");
+        }
         flushBuf(out, buf);
     }
 
