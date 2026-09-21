@@ -49,6 +49,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
     /** Cross-pool diversity: when fast tier exceeds this count, exclude peers in ANY
      *  active tunnel across ALL pools to force each pool to use different fast peers. */
     static final int CROSS_POOL_DIVERSITY_THRESHOLD = 300;
+    /** Cross-pool diversity is only active when build success is above this threshold.
+     *  Higher than {@link TunnelPeerSelector#ATTACK_THRESHOLD} because cross-pool
+     *  exclusion is far more aggressive (excludes ALL active peers across ALL pools)
+     *  and can starve builds when most fast peers are in active tunnels. */
+    static final double CROSS_POOL_BUILD_SUCCESS_MIN = 0.60;
+    /** Cross-pool exclusion may not consume more than this fraction of the fast tier.
+     *  When most fast peers are in active tunnels, natural pool-local diversity
+     *  already provides enough variability — explicit exclusion risks starvation. */
+    static final double CROSS_POOL_EXCLUSION_RATIO = 0.50;
 
 
     private String getStrategy() {
@@ -247,12 +256,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // and ensuring fast peers accumulate tunnel history for proper
         // retention/demotion evaluation. Below the threshold, only per-pool
         // diversity is enforced to avoid starving pools.
-        // Under stress (< 40% build success), skip cross-pool exclusion —
-        // availability matters more than diversity when builds are failing.
-        if (ctx.profileOrganizer().getFastPeerCount() > CROSS_POOL_DIVERSITY_THRESHOLD
-            && buildSuccess >= ATTACK_THRESHOLD) {
+        // Under stress (< 60% build success), skip cross-pool exclusion —
+        // availability matters more than diversity when builds are degrading.
+        // Also skip when cross-pool exclusion would consume most of the fast
+        // tier: natural pool-local diversity already provides variability when
+        // most fast peers are in active tunnels.
+        int fastCount = ctx.profileOrganizer().getFastPeerCount();
+        if (fastCount > CROSS_POOL_DIVERSITY_THRESHOLD
+            && buildSuccess >= CROSS_POOL_BUILD_SUCCESS_MIN) {
             Set<Hash> allActive = getPeersInAllPools(ctx);
-            exclude.addAll(allActive);
+            if (allActive.size() < fastCount * CROSS_POOL_EXCLUSION_RATIO) {
+                exclude.addAll(allActive);
+            } else if (log.shouldDebug()) {
+                log.debug("Cross-pool exclusion skipped: " + allActive.size() + " of " + fastCount +
+                          " fast peers in active tunnels (ratio exceeds " + CROSS_POOL_EXCLUSION_RATIO + ")");
+            }
         }
         return new SelectionExclusions(excluder, exclude,
                                        peerCooldownExcluded, firstHopFailCount, firstPeerExclusions);

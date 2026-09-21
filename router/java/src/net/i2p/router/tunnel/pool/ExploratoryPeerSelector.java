@@ -123,15 +123,24 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // in ANY active tunnel across ALL pools. Forces exploratory builds to use
         // different fast peers than client pools, driving variability and ensuring
         // fast peers accumulate tunnel history.
-        // Under stress (< 40% build success), skip cross-pool exclusion —
-        // availability matters more than diversity when builds are failing.
+        // Under stress (< 60% build success), skip cross-pool exclusion —
+        // availability matters more than diversity when builds are degrading.
+        // Also skip when cross-pool exclusion would consume most of the fast
+        // tier: natural pool-local diversity already provides variability when
+        // most fast peers are in active tunnels.
         double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-        if (ctx.profileOrganizer().getFastPeerCount() > ClientPeerSelector.CROSS_POOL_DIVERSITY_THRESHOLD
-            && buildSuccess >= ATTACK_THRESHOLD) {
+        int fastCount = ctx.profileOrganizer().getFastPeerCount();
+        if (fastCount > ClientPeerSelector.CROSS_POOL_DIVERSITY_THRESHOLD
+            && buildSuccess >= ClientPeerSelector.CROSS_POOL_BUILD_SUCCESS_MIN) {
             Set<Hash> allActive = getPeersInAllPools(ctx);
-            exclude.addAll(allActive);
-            if (log.shouldInfo())
-                log.info("EPS cross-pool exclusion: " + allActive.size() + " peers in ANY active tunnel from=" + Thread.currentThread().getName());
+            if (allActive.size() < fastCount * ClientPeerSelector.CROSS_POOL_EXCLUSION_RATIO) {
+                exclude.addAll(allActive);
+                if (log.shouldInfo())
+                    log.info("EPS cross-pool exclusion: " + allActive.size() + " peers in ANY active tunnel from=" + Thread.currentThread().getName());
+            } else if (log.shouldDebug()) {
+                log.debug("EPS cross-pool exclusion skipped: " + allActive.size() + " of " + fastCount +
+                          " fast peers in active tunnels (ratio exceeds " + ClientPeerSelector.CROSS_POOL_EXCLUSION_RATIO + ")");
+            }
         }
 
         // Special cases
