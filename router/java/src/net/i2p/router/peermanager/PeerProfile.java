@@ -711,15 +711,17 @@ public class PeerProfile {
     /**
      *  EWMA average of the tunnel test response time.
      *
-     *  @return EWMA average with time-based decay (50% per hour since last update)
+     *  <p>Returns 0 if the data is older than 1 hour, treating the peer as
+     *  untested. This ensures stale peers are re-tested rather than selected
+     *  for tunnel builds based on outdated latency data.</p>
+     *
+     *  @return EWMA average in ms, or 0 if stale (&gt;1 hour since last update)
      */
     public float getTunnelTestTimeAverage() {
         if (_tunnelTestResponseTimeAvg <= 0 || _tunnelTestTimeAvgLastUpdate <= 0) return 0;
-        long hoursSinceUpdate = (_context.clock().now() - _tunnelTestTimeAvgLastUpdate) / (60 * 60 * 1000L);
-        if (hoursSinceUpdate <= 0) return _tunnelTestResponseTimeAvg;
-        // Decay by 50% per hour, cap at 4 hours (effectively zero)
-        float decay = (float) Math.pow(0.5, Math.min(hoursSinceUpdate, 4));
-        return _tunnelTestResponseTimeAvg * decay;
+        long msSinceUpdate = _context.clock().now() - _tunnelTestTimeAvgLastUpdate;
+        if (msSinceUpdate > 60 * 60 * 1000L) return 0;
+        return _tunnelTestResponseTimeAvg;
     }
 
     /**
@@ -727,7 +729,7 @@ public class PeerProfile {
      *
      * @return timestamp when the EWMA was last updated
      */
-    long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
+    public long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
 
     /**
      * The tunnel test time average.
