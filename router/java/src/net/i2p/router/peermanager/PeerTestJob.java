@@ -121,14 +121,14 @@ public class PeerTestJob extends JobImpl {
         return (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
     }
 
-    /** Uptime threshold for the aggressive startup profiling phase (30 min). */
-    private static final long STARTUP_PHASE_MS = 30 * 60 * 1000L;
-    /** Uptime threshold for the warm-up decay phase (90 min). */
-    private static final long WARMUP_PHASE_MS = 90 * 60 * 1000L;
+    /** Uptime threshold for the aggressive startup profiling phase (4 hours). */
+    private static final long STARTUP_PHASE_MS = 4 * 60 * 60 * 1000L;
+    /** Uptime threshold for the warm-up decay phase (12 hours). */
+    private static final long WARMUP_PHASE_MS = 12 * 60 * 60 * 1000L;
     /** Delay during the aggressive startup phase. */
-    private static final long STARTUP_DELAY_MS = 5 * 1000L;
+    private static final long STARTUP_DELAY_MS = 3 * 1000L;
     /** Delay during the warm-up decay phase. */
-    private static final long WARMUP_DELAY_MS = 8 * 1000L;
+    private static final long WARMUP_DELAY_MS = 5 * 1000L;
     /** Delay during steady state. */
     private static final long STEADY_DELAY_MS = 8 * 1000L;
 
@@ -137,9 +137,9 @@ public class PeerTestJob extends JobImpl {
      *
      * <p>Three-phase decay based on uptime:</p>
      * <ul>
-     *   <li>0–30 min (startup): 5s — aggressively profile all fast peers</li>
-     *   <li>30–90 min (warm-up): 8s — ramp down while keeping data fresh</li>
-     *   <li>90+ min (steady): 8s — maintenance cadence</li>
+     *   <li>0–4 hours (startup): 3s — aggressively profile all fast peers</li>
+     *   <li>4–12 hours (warm-up): 5s — ramp down while keeping data fresh</li>
+     *   <li>12+ hours (steady): 8s — maintenance cadence</li>
      * </ul>
      *
      * <p>User override via {@link #PROP_PEER_TEST_DELAY} is respected for the steady-state
@@ -182,9 +182,9 @@ public class PeerTestJob extends JobImpl {
      *
      * <p>Three-phase decay:</p>
      * <ul>
-     *   <li>0–30 min (startup): 4 — profile all fast peers quickly</li>
-     *   <li>30–90 min (warm-up): 3 — ramp down</li>
-     *   <li>90+ min (steady): 1 — maintenance cadence</li>
+     *   <li>0–4 hours (startup): 4 — profile all fast peers quickly</li>
+     *   <li>4–12 hours (warm-up): 3 — ramp down</li>
+     *   <li>12+ hours (steady): 1 — maintenance cadence</li>
      * </ul>
      *
      * <p>Concurrency is limited to 1 when CPU load exceeds 95% to prevent system overload.</p>
