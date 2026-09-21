@@ -349,9 +349,10 @@ class ProfileOrganizerRenderer {
                     if (hcSet.contains(peer)) toDemote.add(peer);
                     continue;
                 }
-                // Firewalled (U) → evict from fast only (keep in high-cap)
-                if (hasFirewalled && fastSet.contains(peer)) {
-                    toDemoteFastOnly.add(peer);
+                // Firewalled (U) → evict from both tiers
+                if (hasFirewalled) {
+                    if (fastSet.contains(peer)) toDemote.add(peer);
+                    if (hcSet.contains(peer)) toDemote.add(peer);
                     continue;
                 }
                 // Failing peers in fast tier → demote to high cap

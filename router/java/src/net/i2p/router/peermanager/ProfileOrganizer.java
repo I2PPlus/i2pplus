@@ -1812,6 +1812,8 @@ public class ProfileOrganizer {
                 reason = "banned";
             } else if (_context.commSystem() != null && _context.commSystem().wasUnreachable(peer)) {
                 reason = "unreachable";
+            } else if (isFast ? !isFastTierCapable(peer) : !isHighBandwidthCapable(peer)) {
+                reason = "not tier-capable (bw tier or caps)";
             } else if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
                 reason = "recent tunnel failures";
             }
@@ -2256,11 +2258,11 @@ public class ProfileOrganizer {
     /**
      *  Whether the peer qualifies for the high-capacity tier based on
      *  advertised bandwidth tier and capabilities.  Requires X/P/O bandwidth
-     *  tier and no D (congestion), E (severe congestion), or G (no tunnels)
-     *  capability flags.
+     *  tier and no D (congestion), E (severe congestion), G (no tunnels),
+     *  or U (firewalled/unreachable) capability flags.
      *
      *  @param peer the peer to check
-     *  @return true if X/P/O tier and no D/E/G caps
+     *  @return true if X/P/O tier and no D/E/G/U caps
      *  @since 0.9.71+
      */
     private boolean isHighBandwidthCapable(Hash peer) {
@@ -2272,26 +2274,23 @@ public class ProfileOrganizer {
         if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) return false;
         if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0) return false;
         if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) return false;
+        if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) return false;
         return true;
     }
 
     /**
      *  Whether the peer qualifies for the fast tier based on advertised
-     *  bandwidth tier and capabilities.  Same as
-     *  {@link #isHighBandwidthCapable(Hash)} but additionally rejects
-     *  firewalled (U) peers — fast peers must be directly reachable.
+     *  bandwidth tier and capabilities.  Currently identical to
+     *  {@link #isHighBandwidthCapable(Hash)} — both tiers reject X/P/O
+     *  with D/E/G/U caps.  Kept separate so fast tier can diverge
+     *  (e.g. stricter RTT gate) in the future.
      *
      *  @param peer the peer to check
-     *  @return true if X/P/O tier, no D/E/G caps, and not firewalled
+     *  @return true if X/P/O tier and no D/E/G/U caps
      *  @since 0.9.71+
      */
     private boolean isFastTierCapable(Hash peer) {
-        if (!isHighBandwidthCapable(peer)) return false;
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
-        if (peerInfo == null) return false;
-        String caps = peerInfo.getCapabilities();
-        if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) return false;
-        return true;
+        return isHighBandwidthCapable(peer);
     }
 
     /**
@@ -3627,6 +3626,17 @@ public class ProfileOrganizer {
             return Math.min(maxFromKnown, activeCap);
         }
         return maxFromKnown;
+    }
+
+    /**
+     * Current number of peers in the fast tier.
+     * Used by selectors to decide cross-pool diversity mode.
+     *
+     * @return fast tier size
+     * @since 0.9.70
+     */
+    public int getFastPeerCount() {
+        return _fastPeers.size();
     }
 
     /**
