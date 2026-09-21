@@ -1,6 +1,7 @@
 package net.i2p.router.peermanager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -291,35 +292,44 @@ public class PeerTestJob extends JobImpl {
         }
         if (!keepTesting) return;
 
-        // Select and test peers for this round
-        Set<RouterInfo> peers = selectPeersToTest();
-        for (RouterInfo peer : peers) {
-            testPeer(peer);
-        }
-
-        // Proportional backpressure: scale delay by job queue lag
-        long baseDelay = getPeerTestDelay();
-        long delay;
-        if (lag > 2000) {
-            // System under heavy load — skip this round entirely
-            if (_log.shouldWarn()) {
-                _log.warn("Extreme Job lag (" + lag + "ms) -> skipping peer test round");
+        try {
+            // Select and test peers for this round
+            Set<RouterInfo> peers;
+            try {
+                peers = selectPeersToTest();
+            } catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Error selecting peers to test", e);
+                peers = Collections.emptySet();
             }
-            requeue(baseDelay * 5);
-            return;
-        } else if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
-            // Scale delay proportionally: 500ms lag → 2×, 1000ms lag → 3×
-            double multiplier = 1.0 + (lag / 500.0);
-            delay = Math.min((long)(baseDelay * multiplier), 5 * 60 * 1000L);
-            if (_log.shouldWarn()) {
-                _log.info("High Job lag (" + lag + "ms) -> scaling delay to " + delay + "ms (base: " + baseDelay + "ms)");
+            for (RouterInfo peer : peers) {
+                testPeer(peer);
             }
-        } else {
-            delay = baseDelay;
+        } finally {
+            // Always requeue — even on exception — so the job never dies.
+            // A dead peer test job means startup profiling stalls permanently.
+            long baseDelay = getPeerTestDelay();
+            long delay;
+            if (lag > 2000) {
+                // System under heavy load — skip this round entirely
+                if (_log.shouldWarn()) {
+                    _log.warn("Extreme Job lag (" + lag + "ms) -> skipping peer test round");
+                }
+                delay = baseDelay * 5;
+            } else if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
+                // Scale delay proportionally: 500ms lag → 2×, 1000ms lag → 3×
+                double multiplier = 1.0 + (lag / 500.0);
+                delay = Math.min((long)(baseDelay * multiplier), 5 * 60 * 1000L);
+                if (_log.shouldWarn()) {
+                    _log.info("High Job lag (" + lag + "ms) -> scaling delay to " + delay + "ms (base: " + baseDelay + "ms)");
+                }
+            } else {
+                delay = baseDelay;
+            }
+            requeue(delay);
+            if (_log.shouldInfo())
+                _log.info("Next Peer Test run in " + delay + "ms");
         }
-        requeue(delay);
-        if (_log.shouldInfo())
-            _log.info("Next Peer Test run in " + delay + "ms");
     }
 
     /**
@@ -373,11 +383,14 @@ public class PeerTestJob extends JobImpl {
         // peers are tested first.
         int needed = getTestConcurrency() - peers.size();
         if (needed > 0) {
-            PeerSelectionCriteria criteria = new PeerSelectionCriteria();
-            criteria.setMinimumRequired(needed);
-            criteria.setMaximumRequired(needed * 4); // Get extra to sort by tier
-            criteria.setPurpose(PeerSelectionCriteria.PURPOSE_TEST);
-            List<Hash> peerHashes = manager.selectPeers(criteria);
+            // Use non-blocking selection to avoid stalling on reorganize()'s
+            // write lock.  If the lock is held, skip this round and requeue.
+            List<Hash> peerHashes = manager.selectTestPeersNonBlocking(needed * 4);
+            if (peerHashes == null) {
+                if (_log.shouldDebug())
+                    _log.debug("Read lock held by reorganize -> skipping peer test round");
+                return peers;
+            }
 
             List<PeerData> validCandidates = new ArrayList<>();
             for (Hash peer : peerHashes) {
