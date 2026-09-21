@@ -1717,7 +1717,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (log.shouldWarn()) {
                 log.warn("All selected peers were ghosts -> returning empty to allow fallback selection...");
             }
-            return Collections.emptyList();
+            // Must return a mutable list — callers (adoptIfFilled) mutate it.
+            return new ArrayList<>(0);
         }
 
         return filtered;
