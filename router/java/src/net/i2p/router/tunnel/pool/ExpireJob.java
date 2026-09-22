@@ -42,6 +42,16 @@ class ExpireJob extends JobImpl {
     private static final int BACKED_UP_THRESHOLD = 100;
 
     /**
+     *  Global throttle for ExpireJob: limit to once per 60s for ALL pools.
+     *  The job iterates all expiring tunnels and calls ensureSufficientTunnels
+     *  per pool, each doing peer selection.  One batch per minute is sufficient;
+     *  per-pool gates (15s) already limit each pool, but the job itself was
+     *  firing every 5s BATCH_WINDOW and iterating 8+ pools.
+     *  @since 0.9.71+
+     */
+    private static volatile long _lastGlobalRun;
+
+    /**
      *  Per-pool throttle for ensureSufficientTunnels() calls from ExpireJob.
      *  ExpireJob fires every BATCH_WINDOW (5s) and calls ensureSufficientTunnels()
      *  for every pool with expiring tunnels.  During collapse 8+ pools expire
@@ -186,6 +196,25 @@ class ExpireJob extends JobImpl {
             _isScheduled = false;
         }
         long now = getContext().clock().now();
+        if (now - _lastGlobalRun < 60000) {
+            Log logDbg = getContext().logManager().getLog(ExpireJob.class);
+            if (logDbg.shouldDebug())
+                logDbg.debug("ExpireJob throttled: " + (now - _lastGlobalRun) + "ms since last global run");
+            // Still reschedule, but skip this run's heavy work
+            int remainingDbg = _expirations.size();
+            if (remainingDbg > 0) {
+                synchronized (ExpireJob.class) {
+                    if (!_isScheduled) {
+                        _isScheduled = true;
+                        ExpireJob nextJob = new ExpireJob(getContext());
+                        nextJob.getTiming().setStartAfter(now + BATCH_WINDOW);
+                        getContext().jobQueue().addJob(nextJob);
+                    }
+                }
+            }
+            return;
+        }
+        _lastGlobalRun = now;
         Log log = getContext().logManager().getLog(ExpireJob.class);
 
         try {

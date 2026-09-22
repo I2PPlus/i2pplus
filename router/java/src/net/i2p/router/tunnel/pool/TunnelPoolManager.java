@@ -1002,6 +1002,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         private final TunnelPoolManager _mgr;
         private static final long STARTUP_DELAY = 90*1000L; // 90s after startup
         private static final AtomicInteger _runCount = new AtomicInteger(0);
+        /**
+         *  Global throttle: ensure the job runs at most once per 60s for ALL
+         *  pools, not once per pool per trigger.  The job iterates 8+ pools
+         *  each doing peer selection on 670 peers; without a global gate it
+         *  burns 98% on JobQueue even when per-pool gates (15–30s) allow each
+         *  pool individually.  One batch per minute is sufficient for slow-
+         *  tunnel culling and deficit builds.
+         *  @since 0.9.71+
+         */
+        private static volatile long _lastGlobalRun;
 
         /**
          * Remove slow tunnels periodically, starting after the startup delay.
@@ -1022,6 +1032,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
          * Remove slow tunnels and reschedule.
          */
         public void runJob() {
+            long nowRun = _mgr._context.clock().now();
+            if (nowRun - _lastGlobalRun < 60000) {
+                if (_mgr._log.shouldDebug())
+                    _mgr._log.debug("RemoveSlowTunnelsJob throttled: " + (nowRun - _lastGlobalRun) + "ms since last global run");
+                // Still reschedule for next interval
+                long interval = _mgr._context.getProperty(PROP_SLOW_TUNNEL_INTERVAL, DEFAULT_RUN_INTERVAL_MS);
+                requeue(interval);
+                return;
+            }
+            _lastGlobalRun = nowRun;
             if (_mgr.isShutdown()) {
                 if (_mgr._log.shouldInfo())
                     _mgr._log.info("Remove Slow Tunnels Job: Manager is shutdown, not rescheduling");
