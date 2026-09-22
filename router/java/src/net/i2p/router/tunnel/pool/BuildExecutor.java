@@ -166,10 +166,11 @@ public class BuildExecutor implements Runnable {
     /**
      *  Throttle for peer-selection hot path: BldExecutor was pegging at 98%
      *  in ClientPeerSelector.selectSingleHop → IBGWExcluder.contains
-     *  even after 60s endpoint caching, because the tight loop called
+     *  even after endpoint caching, because the tight loop called
      *  pool.configureNewTunnel() for every wanted pool without per-pool
      *  spacing.  Skip the heavy peer selection if this pool built within
-     *  the throttle window and still has builds in flight.
+     *  the throttle window and still has builds in flight.  Entries are
+     *  dropped in shutdown()/removePoolState() so the map cannot leak.
      *  @since 0.9.71+
      */
     private final ConcurrentHashMap<TunnelPool, Long> _lastConfigureTime = new ConcurrentHashMap<>(16);
@@ -605,19 +606,21 @@ public class BuildExecutor implements Runnable {
         _isRunning = false;
         _poolFailureState.clear();
         _lastRebuildTime.clear();
+        _lastConfigureTime.clear();
         restart();
     }
 
     /**
      *  Remove failure state for a pool that is being removed.
-     *  Prevents unbounded growth of _poolFailureState and _lastRebuildTime
-     *  across pool lifecycles.
+     *  Prevents unbounded growth of _poolFailureState, _lastRebuildTime,
+     *  and _lastConfigureTime across pool lifecycles.
      *  @param pool the pool to remove state for
      *  @since 0.9.70
      */
     void removePoolState(TunnelPool pool) {
         _poolFailureState.remove(pool);
         _lastRebuildTime.remove(pool);
+        _lastConfigureTime.remove(pool);
     }
 
     /**

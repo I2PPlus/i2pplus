@@ -1759,8 +1759,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
          *  added to the exclusion set {@code s} (they are allowed), but
          *  caching them here avoids re-calling allowAsIBGW on every
          *  contains() check.  The check is delegated to TunnelPeerSelector's
-         *  60s global cache on miss, so entries here are valid for the
-         *  lifetime of this excluder instance (one selectSingleHop call).
+         *  endpoint cache (300s TTL, banlist always live) on miss, so
+         *  entries here are valid for the lifetime of this excluder
+         *  instance (one selectSingleHop call).
          *  @since 0.9.71+ */
         private final Set<Hash> _allowed = new HashSet<>();
 

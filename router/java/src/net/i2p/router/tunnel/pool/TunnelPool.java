@@ -106,10 +106,11 @@ public class TunnelPool {
     private volatile int _consecutiveEmergencies = 0;
     private static final int MAX_EMERGENCY_BOOST = 10;
     /**
-     *  Hard cap on concurrent builds per pool direction when the pool is
-     *  collapsed (zero active tunnels).  Prevents the buildComplete →
-     *  ensureSufficientTunnels feedback loop from flooding the BuildExecutor
-     *  when every attempt fails.  Matches BuildExecutor.MAX_PER_POOL_DIR.
+     *  Hard cap on concurrent builds per pool direction in normal operation.
+     *  Prevents the buildComplete → ensureSufficientTunnels feedback loop
+     *  from flooding the BuildExecutor when every attempt fails.  Matches
+     *  BuildExecutor.MAX_PER_POOL_DIR.  Collapsed pools may raise the cap
+     *  via shouldSkipDueToInProgress / buildReplacementTunnels.
      *  @since 0.9.71+
      */
     static final int MAX_BUILD_PER_POOL_DIR = 2;
@@ -169,12 +170,38 @@ public class TunnelPool {
      *  10-40s; starting duplicate batches within 5s wastes capacity and fills
      *  the pool with UNTESTED tunnels that block the addTunnel cap.
      */
-     private volatile long _lastDeficitBuildTime;
+    private volatile long _lastDeficitBuildTime;
     /**
-     *  Throttle for ensureSufficientTunnels hot path: RemoveSlowTunnelsJob
-     *  and ExpireJob were calling this for every pool every 5-15s, each
-     *  triggering selectSingleHop → ArraySet.removeAll on 670 peers and
-     *  burning 97% CPU on JobQueue.  Gate to at most once per 2s per pool.
+     *  Normal minimum interval between ensureSufficientTunnels() runs for a
+     *  healthy or partially-degraded pool (usable tunnels &gt; 1).
+     *  @since 0.9.71+
+     */
+    private static final long ENSURE_THROTTLE_MS = 15_000;
+    /**
+     *  Floor between ensureSufficientTunnels() runs when the pool is collapsed
+     *  (usable tunnels &lt;= 1).  The long gate is bypassed so recovery is not
+     *  delayed, but this short floor still spaces prune+sweep work when
+     *  buildComplete → ensure fires rapidly after fast-failing builds.
+     *  @since 0.9.71+
+     */
+    private static final long ENSURE_COLLAPSED_MIN_MS = 2_000;
+    /**
+     *  Minimum interval between deficit-build batches on a non-collapsed pool.
+     *  @since 0.9.71+
+     */
+    private static final long DEFICIT_THROTTLE_MS = 30_000;
+    /**
+     *  Shorter deficit-build spacing while collapsed (usable &lt;= 1 and nothing
+     *  in flight).  Not a full bypass: fast-failing builds would otherwise
+     *  re-enter selectSingleHop on every completion and burn JobQueue CPU.
+     *  Matches {@link #EMERGENCY_COLLAPSE_COOLDOWN_MS} so recovery stays
+     *  prompt without build-storming.
+     *  @since 0.9.71+
+     */
+    private static final long DEFICIT_COLLAPSE_COOLDOWN_MS = 5_000;
+    /**
+     *  Throttle for ensureSufficientTunnels hot path (per pool).  See
+     *  {@link #ENSURE_THROTTLE_MS} and {@link #ENSURE_COLLAPSED_MIN_MS}.
      *  @since 0.9.71+
      */
     private volatile long _lastEnsureTime;
@@ -987,9 +1014,11 @@ public class TunnelPool {
     public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<>(_inProgress);}}
 
     /**
-     *  Count tunnels that are usable for routing — not failed, not expired,
-     *  not expiring within 5 minutes.  Used by the EMERGENCY balance check
-     *  so zombie tunnels don't skew the comparison.
+     *  Count tunnels that are usable for routing — not expired, not failed,
+     *  not marked FAILING.  Used by collapse detection and the EMERGENCY
+     *  balance check so zombie tunnels don't skew the comparison.
+     *  Does not exclude near-expiry tunnels; callers that care about lease
+     *  viability use their own windows.
      *
      *  @return the number of usable tunnels
      *  @since 0.9.69+
@@ -3810,10 +3839,10 @@ public class TunnelPool {
      *  Cap concurrent builds to prevent build storms: partial pools may run
      *  up to 2x target (capped at 6) so timed-out constructions are replaced
      *  without waiting for the slot; healthy pools stay at target + 1.
-     *  Collapsed pools (zero active) are hard-capped at
-     *  {@link #MAX_BUILD_PER_POOL_DIR} per direction to prevent the
-     *  buildComplete → ensureSufficientTunnels feedback loop from queuing
-     *  unlimited builds when every attempt fails.
+     *  Collapsed pools (zero safe tunnels) use {@code min(target+2, 8)} so
+     *  recovery is faster than the old hard cap of
+     *  {@link #MAX_BUILD_PER_POOL_DIR} while still bounding the
+     *  buildComplete → ensureSufficientTunnels feedback loop.
      *
      *  @return true to skip the build cycle
      */
@@ -3823,9 +3852,6 @@ public class TunnelPool {
             cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6)
                                         : Math.max(target + 1, 2);
         } else {
-            // Collapsed pool: allow more concurrent builds for faster recovery.
-            // The old hard-cap at MAX_BUILD_PER_POOL_DIR left pools dead for
-            // 20-40s when builds kept failing data-phase tests.
             cap = Math.min(target + 2, 8);
         }
         if (inProgress >= cap) {
@@ -3874,21 +3900,17 @@ public class TunnelPool {
             return;
         }
         int currentInProgress = getInProgressCount();
-        // Rate-limit deficit builds: skip repeated attempts within 30s.
-        // During collapse every ExpireJob cycle (5s BATCH_WINDOW) and every
-        // RemoveSlowTunnelsJob cycle (60s) would otherwise call
-        // ensureSufficientTunnels → buildDeficitReplacements → selectSingleHop
-        // on 670 peers, burning 200% CPU (now via RemoveSlowTunnelsJob at
-        // 97.9% in ArraySet.remove).  The 30s gate keeps recovery
-        // progressing without redundant work; bypass when truly collapsed
-        // (0 safe, 0 in-progress) so the first recovery attempt is never
-        // delayed.
-        if (now - _lastDeficitBuildTime < 30000
-            && !(stats.safeActive == 0 && currentInProgress == 0)) {
+        // Rate-limit deficit builds: 30s normally; while collapsed (usable <= 1
+        // and nothing in flight) use a short collapse cooldown instead of a
+        // full bypass so fast-failing builds cannot re-enter peer selection
+        // on every completion.  First attempt is never delayed (_last==0).
+        if (isDeficitThrottled(now, _lastDeficitBuildTime, stats.safeActive,
+                               currentInProgress)) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping deficit build: rate-limited (" +
                           (now - _lastDeficitBuildTime) + "ms since last, " +
-                          currentInProgress + " in progress)");
+                          currentInProgress + " in progress, safe=" +
+                          stats.safeActive + ")");
             }
             return;
         }
@@ -3920,7 +3942,56 @@ public class TunnelPool {
     }
 
     /**
-     *  Whether a deficit build cycle is warranted: some tunnels expiring soon,
+     *  Whether a deficit-build batch must wait.  Pure decision helper so
+     *  throttle policy is unit-testable without a router context.
+     *
+     *  <p>Policy: {@link #DEFICIT_THROTTLE_MS} (30s) when the pool still has
+     *  usable tunnels or builds in flight; {@link #DEFICIT_COLLAPSE_COOLDOWN_MS}
+     *  (5s) when collapsed (safeActive &lt;= 1 and nothing in flight) so
+     *  recovery stays prompt but repeated fast failures cannot hammer
+     *  selectSingleHop.  A zero {@code lastBuild} (never built) is never
+     *  throttled.
+     *
+     *  @param now current router time (ms)
+     *  @param lastBuild last deficit-build timestamp (ms), 0 if never
+     *  @param safeActive safe/usable tunnel count
+     *  @param inProgress builds currently in flight
+     *  @return true if the deficit build should be skipped this cycle
+     *  @since 0.9.71+
+     */
+    static boolean isDeficitThrottled(long now, long lastBuild, int safeActive,
+                                      int inProgress) {
+        if (lastBuild <= 0)
+            return false;
+        boolean collapsed = safeActive <= 1 && inProgress == 0;
+        long cooldown = collapsed ? DEFICIT_COLLAPSE_COOLDOWN_MS : DEFICIT_THROTTLE_MS;
+        return now - lastBuild < cooldown;
+    }
+
+    /**
+     *  Whether ensureSufficientTunnels() must wait for this pool.  Pure
+     *  decision helper for unit tests.
+     *
+     *  <p>Policy: {@link #ENSURE_THROTTLE_MS} (15s) normally;
+     *  {@link #ENSURE_COLLAPSED_MIN_MS} (2s) floor when the pool is collapsed
+     *  (usable tunnels &lt;= 1) so recovery is not stuck behind the long gate
+     *  but JobQueue still gets a breather between prune+sweep passes.
+     *
+     *  @param now current router time (ms)
+     *  @param lastEnsure last ensure timestamp (ms), 0 if never
+     *  @param usableTunnelCount current usable tunnel count
+     *  @return true if ensureSufficientTunnels() should return early
+     *  @since 0.9.71+
+     */
+    static boolean isEnsureThrottled(long now, long lastEnsure, int usableTunnelCount) {
+        if (lastEnsure <= 0)
+            return false;
+        long min = usableTunnelCount <= 1 ? ENSURE_COLLAPSED_MIN_MS : ENSURE_THROTTLE_MS;
+        return now - lastEnsure < min;
+    }
+
+    /**
+     *  Whether a deficit build is warranted: some tunnels expiring soon,
      *  none safe, or an incomplete LeaseSet that needs more GOOD tunnels —
      *  but not when the incomplete-LeaseSet trigger is already satisfied by
      *  the current good+untested count.
@@ -4118,10 +4189,10 @@ public class TunnelPool {
      */
     void ensureSufficientTunnels() {
         long nowEnsure = _context.clock().now();
-        // Robust throttle: gate to at most once per 15s per pool, but bypass
-        // when truly collapsed so recovery is not delayed.
-        boolean isCollapsed = getInProgressCount() == 0 && getUsableTunnelCount() == 0;
-        if (!isCollapsed && nowEnsure - _lastEnsureTime < 15000) {
+        // Per-pool throttle: long gate when healthy, short floor when
+        // collapsed (usable <= 1) so recovery is prompt without hammering
+        // prune+sweep on every buildComplete during fast-fail loops.
+        if (isEnsureThrottled(nowEnsure, _lastEnsureTime, getUsableTunnelCount())) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping ensureSufficientTunnels: throttled (" +
                           (nowEnsure - _lastEnsureTime) + "ms since last)");
@@ -4294,8 +4365,9 @@ public class TunnelPool {
      *  pool has zero usable tunnels and every build must go out now
      */
     private void buildReplacementTunnels(int needed, boolean bypassPacing) {
-        // During total collapse, allow up to 4 concurrent builds per direction
-        // so the pool recovers faster.  Normal operation stays at 2.
+        // Collapsed recovery (bypassPacing): allow up to `needed` in flight
+        // (bounded by target / emergency boost by callers).  Normal operation
+        // stays at MAX_BUILD_PER_POOL_DIR to prevent feedback storms.
         int cap = bypassPacing ? Math.max(MAX_BUILD_PER_POOL_DIR, needed) : MAX_BUILD_PER_POOL_DIR;
         for (int i = 0; i < needed; i++) {
             int inProgress = getInProgressCount();

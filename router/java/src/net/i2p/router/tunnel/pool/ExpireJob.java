@@ -41,31 +41,6 @@ class ExpireJob extends JobImpl {
     private static final int MAX_ITERATE_BACKED_UP = 5000;
     private static final int BACKED_UP_THRESHOLD = 100;
 
-    /**
-     *  Global throttle for ExpireJob: limit to once per 60s for ALL pools.
-     *  The job iterates all expiring tunnels and calls ensureSufficientTunnels
-     *  per pool, each doing peer selection.  One batch per minute is sufficient;
-     *  per-pool gates (15s) already limit each pool, but the job itself was
-     *  firing every 5s BATCH_WINDOW and iterating 8+ pools.
-     *  @since 0.9.71+
-     */
-    private static volatile long _lastGlobalRun;
-
-    /**
-     *  Per-pool throttle for ensureSufficientTunnels() calls from ExpireJob.
-     *  ExpireJob fires every BATCH_WINDOW (5s) and calls ensureSufficientTunnels()
-     *  for every pool with expiring tunnels.  During collapse 8+ pools expire
-     *  simultaneously, each triggering selectSingleHop on ~670 peers.  Without
-     *  throttling, the next ExpireJob cycle re-triggers the same pools while
-     *  their builds are still in progress, causing 200% CPU.  The throttle
-     *  skips the pre-build call if the pool was triggered within
-     *  PREBUILD_THROTTLE_MS and a build is still in progress.
-     *  @since 0.9.71+
-     */
-    private static final long PREBUILD_THROTTLE_MS = 30000L;
-    private static final ConcurrentHashMap<TunnelPool, Long> _lastPreBuildTime =
-        new ConcurrentHashMap<>(16);
-
     @Override
     public String getName() {return "Expire Local Tunnels";}
 
@@ -196,25 +171,10 @@ class ExpireJob extends JobImpl {
             _isScheduled = false;
         }
         long now = getContext().clock().now();
-        if (now - _lastGlobalRun < 60000) {
-            Log logDbg = getContext().logManager().getLog(ExpireJob.class);
-            if (logDbg.shouldDebug())
-                logDbg.debug("ExpireJob throttled: " + (now - _lastGlobalRun) + "ms since last global run");
-            // Still reschedule, but skip this run's heavy work
-            int remainingDbg = _expirations.size();
-            if (remainingDbg > 0) {
-                synchronized (ExpireJob.class) {
-                    if (!_isScheduled) {
-                        _isScheduled = true;
-                        ExpireJob nextJob = new ExpireJob(getContext());
-                        nextJob.getTiming().setStartAfter(now + BATCH_WINDOW);
-                        getContext().jobQueue().addJob(nextJob);
-                    }
-                }
-            }
-            return;
-        }
-        _lastGlobalRun = now;
+        // Always run phase 1/2: delaying LeaseSet refresh or dispatcher
+        // removal by a global throttle eats the client early-expiry margin.
+        // CPU is bounded by per-pool ensureSufficientTunnels gates
+        // (15s healthy / 2s collapsed floor) and deficit-build cooldowns.
         Log log = getContext().logManager().getLog(ExpireJob.class);
 
         try {
@@ -281,6 +241,7 @@ class ExpireJob extends JobImpl {
         // is primed when the pool shrinks.  Without this, removeTunnel() calls
         // ensureSufficientTunnels() which may not build if UNTESTED/TESTING tunnels
         // inflate the count — by then the pool has already lost a tunnel.
+        // Rate limiting is entirely inside ensureSufficientTunnels() (per-pool).
         Set<TunnelPool> poolsToPreBuild = new HashSet<>();
         for (TunnelExpiration te : readyToExpire) {
             PooledTunnelCreatorConfig cfg = te.config;
@@ -289,17 +250,6 @@ class ExpireJob extends JobImpl {
             if (pool != null) {poolsToPreBuild.add(pool);}
         }
         for (TunnelPool pool : poolsToPreBuild) {
-            Long last = _lastPreBuildTime.get(pool);
-            if (last != null && now - last < PREBUILD_THROTTLE_MS
-                && pool.getInProgressCount() > 0) {
-                if (log.shouldDebug()) {
-                    log.debug("Throttling pre-build for " + pool +
-                              " (" + (now - last) + "ms since last, " +
-                              pool.getInProgressCount() + " in progress)");
-                }
-                continue;
-            }
-            _lastPreBuildTime.put(pool, now);
             pool.ensureSufficientTunnels();
         }
 

@@ -2356,6 +2356,25 @@ public class ProfileOrganizer {
         return _notFailingPeers.get(peer);
     }
 
+    /**
+     *  Cap on how many tier peers to gate-check when selecting {@code howMany}
+     *  tunnels.  Scanning all ~670 fast peers per selection was a CPU hot path;
+     *  a 20× sample (min 20) gives locked_pickLowestPriority enough diversity
+     *  while cutting work ~10× on large tiers.  A 10× sample was tried first
+     *  and hurt build success (synchronized collapse), so 20× is the floor.
+     *
+     *  @param howMany tunnels requested (may be 0 or negative)
+     *  @param peerCount size of the tier map (may be 0)
+     *  @return maximum candidates to examine, never negative
+     *  @since 0.9.71+
+     */
+    static int maxCandidateSample(int howMany, int peerCount) {
+        if (peerCount <= 0)
+            return 0;
+        int need = Math.max(howMany, 1) * 20;
+        return Math.min(peerCount, Math.max(need, 20));
+    }
+
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess,
                                     long rttCeiling) {
@@ -2363,8 +2382,10 @@ public class ProfileOrganizer {
         // Re-checking isSelectable (which calls hasValidRouterInfo with proof-of-life)
         // at selection time filters out too many peers due to stale RouterInfo.
         // Only check fast-changing gates: banlist, first-hop cooldown, excessive lifetime failures.
-        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
+        int maxCandidates = maxCandidateSample(howMany, peers.size());
+        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(maxCandidates);
         for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
+            if (candidates.size() >= maxCandidates) break;
             Hash peer = entry.getKey();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
@@ -2403,8 +2424,10 @@ public class ProfileOrganizer {
         long k1 = DataHelper.fromLong8(rk, 8);
 
         // Build candidate list with subTier filtering
-        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
+        int maxCandidates2 = maxCandidateSample(howMany, peers.size());
+        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(maxCandidates2);
         for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
+            if (candidates.size() >= maxCandidates2) break;
             Hash peer = entry.getKey();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
