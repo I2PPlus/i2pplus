@@ -15,7 +15,7 @@ import org.junit.Test;
  * outlives {@code maxResends} router-side soft failures aborts a healthy long
  * stream (the 30-storm kill observed on long-lived transfers).
  *
- * @since 0.9.72
+ * @since 0.9.71+
  */
 public class ConnectionHardResendBudgetTest {
 

@@ -193,7 +193,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      *
      * @return the RTT sample in ms, or -1 if the packet was never sent or
      *         never ACKed
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     public synchronized int getRttTime() {
         if (_ackOn <= 0)
@@ -211,7 +211,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @param ackOn time the packet was ACKed in ms since epoch
      * @param lastSend time of the last transmission in ms since epoch
      * @return the RTT sample in ms, or -1 if either time is unknown (&lt;= 0)
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     static long rttSample(long ackOn, long lastSend) {
         if (ackOn <= 0 || lastSend <= 0)
@@ -231,7 +231,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      *  on the tunnel fabric, so the attempt should not consume the hard
      *  retransmit budget (see Connection.hardResendBudgetExceeded()).
      *
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
     public void incrementSoftResends() {
         _numSoftResends.incrementAndGet();
@@ -241,7 +241,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      *  Number of send attempts that were router soft failures.
      *
      *  @return the number of soft-failure-triggered resends
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
     public int getNumSoftResends() { return _numSoftResends.get(); }
 

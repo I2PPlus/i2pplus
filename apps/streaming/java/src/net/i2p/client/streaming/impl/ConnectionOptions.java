@@ -134,7 +134,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Minimum gap enforced between RTO doublings. Floors the once-per-RTT
      * guard in {@link #doubleRTO()} so a degenerately small smoothed RTT
      * cannot make the guard a no-op.
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     static final long MIN_RTO_DOUBLE_GAP_MS = 1000;
 
@@ -877,7 +877,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param sample raw measured RTT in ms (may be negative or zero)
      * @param maxRtt per-connection sample ceiling in ms; &lt;= 0 disables clamping
      * @return sample clamped to [0, maxRtt]
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     static int clampRttSample(int sample, int maxRtt) {
         if (maxRtt <= 0)

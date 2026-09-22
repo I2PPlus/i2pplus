@@ -110,7 +110,7 @@ public class TunnelPool {
      *  collapsed (zero active tunnels).  Prevents the buildComplete →
      *  ensureSufficientTunnels feedback loop from flooding the BuildExecutor
      *  when every attempt fails.  Matches BuildExecutor.MAX_PER_POOL_DIR.
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
     static final int MAX_BUILD_PER_POOL_DIR = 2;
     /** Last time buildFallback() logged its zero-hop-refusal warning, to rate-limit it */
@@ -169,7 +169,15 @@ public class TunnelPool {
      *  10-40s; starting duplicate batches within 5s wastes capacity and fills
      *  the pool with UNTESTED tunnels that block the addTunnel cap.
      */
-    private volatile long _lastDeficitBuildTime;
+     private volatile long _lastDeficitBuildTime;
+    /**
+     *  Throttle for ensureSufficientTunnels hot path: RemoveSlowTunnelsJob
+     *  and ExpireJob were calling this for every pool every 5-15s, each
+     *  triggering selectSingleHop → ArraySet.removeAll on 670 peers and
+     *  burning 97% CPU on JobQueue.  Gate to at most once per 2s per pool.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastEnsureTime;
 
     /** Default early expiration time for pruned tunnels (30 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
@@ -3866,15 +3874,17 @@ public class TunnelPool {
             return;
         }
         int currentInProgress = getInProgressCount();
-        // Rate-limit deficit builds: skip repeated attempts within 5s.
+        // Rate-limit deficit builds: skip repeated attempts within 30s.
         // During collapse every ExpireJob cycle (5s BATCH_WINDOW) and every
-        // RemoveSlowTunnelsJob cycle would otherwise call
+        // RemoveSlowTunnelsJob cycle (60s) would otherwise call
         // ensureSufficientTunnels → buildDeficitReplacements → selectSingleHop
-        // on 670 peers, burning 200% CPU.  The 5s gate keeps recovery
-        // progressing (one batch per cycle) without redundant work.
-        // Unconditional — even when inProgress==0, a failed build that
-        // returns 0 safe tunnels would otherwise retrigger immediately.
-        if (now - _lastDeficitBuildTime < 5000) {
+        // on 670 peers, burning 200% CPU (now via RemoveSlowTunnelsJob at
+        // 97.9% in ArraySet.remove).  The 30s gate keeps recovery
+        // progressing without redundant work; bypass when truly collapsed
+        // (0 safe, 0 in-progress) so the first recovery attempt is never
+        // delayed.
+        if (now - _lastDeficitBuildTime < 30000
+            && !(stats.safeActive == 0 && currentInProgress == 0)) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping deficit build: rate-limited (" +
                           (now - _lastDeficitBuildTime) + "ms since last, " +
@@ -4005,7 +4015,7 @@ public class TunnelPool {
      *  two locks, so taking them in this order cannot deadlock.
      *
      *  @return long[] {usableTunnelCount, inProgressCount} as of the snapshot
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
     private long[] snapshotPoolState() {
         long now = _context.clock().now();
@@ -4037,7 +4047,7 @@ public class TunnelPool {
      *  @param inProgressCount in-progress build count at snapshot time
      *  @return true if the cooldown has NOT yet elapsed, so the next emergency
      *          build must wait
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
     static boolean isEmergencyCooldownActive(long elapsedMs, long usableCount, long inProgressCount) {
         long cooldown = (usableCount == 0 && inProgressCount == 0) ?
@@ -4107,8 +4117,20 @@ public class TunnelPool {
      *  from silently draining to zero, avoiding tunnel collapse cascades.
      */
     void ensureSufficientTunnels() {
+        long nowEnsure = _context.clock().now();
+        // Robust throttle: gate to at most once per 15s per pool, but bypass
+        // when truly collapsed so recovery is not delayed.
+        boolean isCollapsed = getInProgressCount() == 0 && getUsableTunnelCount() == 0;
+        if (!isCollapsed && nowEnsure - _lastEnsureTime < 15000) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Skipping ensureSufficientTunnels: throttled (" +
+                          (nowEnsure - _lastEnsureTime) + "ms since last)");
+            }
+            return;
+        }
         if (!_alive || !_ensuringTunnels.compareAndSet(false, true)) {return;}
         try {
+        _lastEnsureTime = nowEnsure;
         // Clear out dead tunnels before counting, so FAILING/FAILED tunnels
         // don't inflate the count and block replacement builds.
         pruneNonGoodTunnels();

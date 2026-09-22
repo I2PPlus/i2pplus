@@ -15,7 +15,7 @@ import org.junit.Test;
  * {@link ConnectionOptions#MIN_RTO_DOUBLE_GAP_MS} so a degenerate smoothed RTT
  * cannot turn the guard into a no-op.
  *
- * @since 0.9.72
+ * @since 0.9.71+
  */
 public class ConnectionOptionsRttSampleClampTest {
 

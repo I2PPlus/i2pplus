@@ -170,10 +170,10 @@ public class BuildExecutor implements Runnable {
      *  pool.configureNewTunnel() for every wanted pool without per-pool
      *  spacing.  Skip the heavy peer selection if this pool built within
      *  the throttle window and still has builds in flight.
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
     private final ConcurrentHashMap<TunnelPool, Long> _lastConfigureTime = new ConcurrentHashMap<>(16);
-    private static final long CONFIGURE_THROTTLE_MS = 3000L;
+    private static final long CONFIGURE_THROTTLE_MS = 10000L;
     private final AtomicInteger _buildTimeoutCount = new AtomicInteger();
     private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
     private final AtomicInteger _firstHopFailureCount = new AtomicInteger();

@@ -59,7 +59,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final String PROP_SLOW_TUNNEL_INTERVAL = "router.tunnel.slowTunnelInterval";
     private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use avg latency with min
     private static final int DEFAULT_MIN_SLOW_THRESHOLD = 10000; // 10s minimum threshold if not configured
-    private static final int DEFAULT_RUN_INTERVAL_MS = (int) ((long) 15 * 1000); // 15s — fast rebuild after failures
+    private static final int DEFAULT_RUN_INTERVAL_MS = (int) ((long) 60 * 1000); // 60s — throttled to reduce RemoveSlowTunnelsJob CPU (was 15s, burned 97% on ArraySet.remove)
     private static final long REFRESH_DELAY_AFTER_REMOVAL = 15*1000L; // wait for new tunnels to build
     private static final double MAX_SHARE_RATIO = 100000d;
 

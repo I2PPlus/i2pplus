@@ -14,7 +14,7 @@ import org.junit.Test;
  * AND zero builds in progress — the shorter 5s cooldown applies so recovery
  * isn't stranded behind a stale 30s wait.
  *
- * @since 0.9.72
+ * @since 0.9.71+
  */
 public class TunnelPoolEmergencyCooldownTest {
 

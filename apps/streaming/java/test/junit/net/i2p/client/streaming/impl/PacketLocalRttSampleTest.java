@@ -14,7 +14,7 @@ import org.junit.Test;
  * pins RTO at its ceiling exactly when recovery is needed. These tests pin the
  * pure computation behind {@code getRttTime()}.
  *
- * @since 0.9.72
+ * @since 0.9.71+
  */
 public class PacketLocalRttSampleTest {
 

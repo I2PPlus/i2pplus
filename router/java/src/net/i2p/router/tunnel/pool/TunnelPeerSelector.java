@@ -77,9 +77,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  Entries expire after ENDPOINT_CACHE_TTL_MS; oversized maps are pruned
      *  opportunistically.  Pure performance — correctness is preserved on
      *  cache miss (re-check) and stale entries are bounded to 60s.
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
-    private static final long ENDPOINT_CACHE_TTL_MS = 60 * 1000L;
+    private static final long ENDPOINT_CACHE_TTL_MS = 300 * 1000L;
     private static final int ENDPOINT_CACHE_MAX_SIZE = 4096;
     private static final ConcurrentHashMap<Hash, EndpointCacheEntry> _ibgwCache =
         new ConcurrentHashMap<>(512);

@@ -18,7 +18,7 @@ import org.junit.Test;
  * configured initial RTO) instead of the flat global RTO.  A fresh destination stays in INIT
  * state, so it falls back to the global RTO.
  *
- * @since 0.9.72
+ * @since 0.9.71+
  */
 public class ConnectionOptionsLoadFromCacheTest {
 

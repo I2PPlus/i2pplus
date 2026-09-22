@@ -215,11 +215,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_META_ACTIVITY = "activity";
 
     /**
-     * Deprecated per-torrent keys removed in 0.9.72.
+     * Deprecated per-torrent keys removed in 0.9.71+.
      * preserveFileNames is now global; inOrder was removed entirely.
      * Stripped on load and migration.
      *
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     private static final String DEPRECATED_PRESERVE_FILE_NAMES = "preserveFileNames";
     private static final String DEPRECATED_IN_ORDER = "inOrder";
@@ -1471,7 +1471,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Remove deprecated per-torrent keys from metadata.
      * preserveFileNames is now global; inOrder was removed entirely.
      *
-     * @since 0.9.72
+     * @since 0.9.71+
      */
     private void stripDeprecatedKeys() {
         List<Object> toRemove = null;

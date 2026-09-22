@@ -50,9 +50,9 @@ class ExpireJob extends JobImpl {
      *  their builds are still in progress, causing 200% CPU.  The throttle
      *  skips the pre-build call if the pool was triggered within
      *  PREBUILD_THROTTLE_MS and a build is still in progress.
-     *  @since 0.9.72
+     *  @since 0.9.71+
      */
-    private static final long PREBUILD_THROTTLE_MS = 5000L;
+    private static final long PREBUILD_THROTTLE_MS = 30000L;
     private static final ConcurrentHashMap<TunnelPool, Long> _lastPreBuildTime =
         new ConcurrentHashMap<>(16);
 

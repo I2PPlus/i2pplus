@@ -1761,7 +1761,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
          *  contains() check.  The check is delegated to TunnelPeerSelector's
          *  60s global cache on miss, so entries here are valid for the
          *  lifetime of this excluder instance (one selectSingleHop call).
-         *  @since 0.9.72 */
+         *  @since 0.9.71+ */
         private final Set<Hash> _allowed = new HashSet<>();
 
         /**
@@ -1811,7 +1811,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
         /** Local cache of peers that passed the OBEP check — same lifecycle
          *  and rationale as {@link IBGWExcluder#_allowed}.
-         *  @since 0.9.72 */
+         *  @since 0.9.71+ */
         private final Set<Hash> _allowed = new HashSet<>();
 
         /**
