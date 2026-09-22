@@ -1554,6 +1554,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     private static class Sender implements Runnable {
+        private static final int BUF_SIZE = 16*1024;
         private final OutputStream _out;
         private final InputStream _in;
         private final String _name;
@@ -1578,14 +1579,24 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Copy data from the input stream to the output stream.
+         *  Copy data from the input stream to the output stream, flushing
+         *  after each write to push data through any intermediate buffers
+         *  (e.g. GZIP or MessageOutputStream). Without explicit flushes,
+         *  data can accumulate in GZIP's deflater buffer or the streaming
+         *  layer's MessageOutputStream buffer, causing sawtooth throughput
+         *  patterns and intermittent stalls on the receiving end.
          *  Logs any IOException that occurs during the copy.
          */
         @Override
         public void run() {
             if (_log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
             try {
-                DataHelper.copy(_in, _out);
+                byte[] buf = new byte[BUF_SIZE];
+                int read;
+                while ((read = _in.read(buf)) != -1) {
+                    _out.write(buf, 0, read);
+                    _out.flush();
+                }
                 if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending " + _name);}
             } catch (IOException ioe) {
                 if (ioe.getMessage() != null) {
