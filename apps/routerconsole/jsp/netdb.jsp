@@ -58,6 +58,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
         nextPageQuery.append("pg=").append(nextPage);
 %>
 <link rel=prefetch href="<%=request.getRequestURI() + "?" + nextPageQuery.toString() %>">
+<link rel=prefetch href="/netdb?show=all&ps=10000">
 <% } %>
 </head>
 <body>

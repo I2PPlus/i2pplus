@@ -25,6 +25,9 @@
 <% if (!net.i2p.router.web.ContentOnly.isContentOnly(request)) { %>
 <%=intl.title(title)%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
+<link href=/profiles rel=prefetch>
+<link href="/profiles?show=floodfill" rel=prefetch>
+<link href="/profiles?show=banned" rel=prefetch>
 </head>
 <body>
 <% } %>

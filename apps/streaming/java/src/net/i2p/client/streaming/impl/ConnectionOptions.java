@@ -195,7 +195,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static void setMinResendDelay(int val) { minResendDelay = Math.max(100, Math.min(5000, val)); }
 
     /**
-      * Max resend delay. Raised to 20000 to accommodate high-RTT paths without premature retransmit
+      * Max resend delay (ms). Raised to 20000 to accommodate high-RTT paths without premature retransmit
       * while still providing faster recovery than the 30000 default.
       */
     private static volatile int maxResendDelay = 20000;
