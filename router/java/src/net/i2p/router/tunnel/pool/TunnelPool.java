@@ -3815,10 +3815,10 @@ public class TunnelPool {
             cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6)
                                         : Math.max(target + 1, 2);
         } else {
-            // Collapsed pool: hard cap to prevent build storms.
-            // Without this, every failed build triggers ensureSufficientTunnels
-            // which queues more builds, creating an unlimited feedback loop.
-            cap = MAX_BUILD_PER_POOL_DIR;
+            // Collapsed pool: allow more concurrent builds for faster recovery.
+            // The old hard-cap at MAX_BUILD_PER_POOL_DIR left pools dead for
+            // 20-40s when builds kept failing data-phase tests.
+            cap = Math.min(target + 2, 8);
         }
         if (inProgress >= cap) {
             if (_log.shouldDebug()) {
@@ -4256,12 +4256,15 @@ public class TunnelPool {
      *  pool has zero usable tunnels and every build must go out now
      */
     private void buildReplacementTunnels(int needed, boolean bypassPacing) {
+        // During total collapse, allow up to 4 concurrent builds per direction
+        // so the pool recovers faster.  Normal operation stays at 2.
+        int cap = bypassPacing ? Math.max(MAX_BUILD_PER_POOL_DIR, needed) : MAX_BUILD_PER_POOL_DIR;
         for (int i = 0; i < needed; i++) {
             int inProgress = getInProgressCount();
-            if (inProgress >= MAX_BUILD_PER_POOL_DIR) {
+            if (inProgress >= cap) {
                 if (_log.shouldDebug()) {
                     _log.debug(toString() + " -> buildReplacementTunnels: capping at " +
-                              inProgress + " in-progress (limit " + MAX_BUILD_PER_POOL_DIR + ")");
+                              inProgress + " in-progress (limit " + cap + ")");
                 }
                 return;
             }
