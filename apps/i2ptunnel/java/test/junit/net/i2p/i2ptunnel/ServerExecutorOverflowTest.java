@@ -36,9 +36,9 @@ public class ServerExecutorOverflowTest {
         ThreadPoolExecutor exec = TunnelControllerGroup.createServerExecutor(threads, new AtomicLong());
         java.util.concurrent.CountDownLatch release = new java.util.concurrent.CountDownLatch(1);
         try {
-            // Occupy the single worker plus the full bounded queue (1024) so the
-            // pool is genuinely saturated: 1 running + 1024 queued.
-            int queueCapacity = 1024;
+            // Occupy the single worker plus the full bounded queue so the
+            // pool is genuinely saturated: 1 running + queueCapacity queued.
+            int queueCapacity = TunnelControllerGroup.getServerBacklogQueueCapacity();
             int toSubmit = threads + queueCapacity;
             java.util.concurrent.CountDownLatch entered = new java.util.concurrent.CountDownLatch(threads);
             for (int i = 0; i < toSubmit; i++) {

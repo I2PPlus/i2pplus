@@ -108,13 +108,15 @@ public class ServerHandlerAllocationTest {
         assertArrayEquals(new int[]{5, 5}, alloc);
     }
 
-    /** Cap eligibility: only 2..16384 counts as an override; everything else is "use default". */
+    /** Cap eligibility: only {@value TunnelControllerGroup#SERVER_HANDLER_FLOOR}..16384 counts as an override; everything else is "use default". */
     @Test
     public void testNormalizeThreadOverride() {
-        assertEquals(2, TunnelControllerGroup.normalizeThreadOverride(2));
+        assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(1));
+        assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(2));
+        assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(3));
+        assertEquals(TunnelControllerGroup.SERVER_HANDLER_FLOOR, TunnelControllerGroup.normalizeThreadOverride(TunnelControllerGroup.SERVER_HANDLER_FLOOR));
         assertEquals(16384, TunnelControllerGroup.normalizeThreadOverride(16384));
         assertEquals(64, TunnelControllerGroup.normalizeThreadOverride(64));
-        assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(1));
         assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(16385));
         assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(-1));
         assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(0));
