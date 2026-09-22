@@ -173,6 +173,54 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     *  I/O transfer pool size for Server→Client data forwarding.
+     *  Delegates to {@link I2PTunnelHTTPServer}.
+     *
+     *  @return the current I/O transfer thread count
+     *  @since 0.9.71+
+     */
+    public static int getIOTransferThreads() { return I2PTunnelHTTPServer.getIOTransferThreads(); }
+    /**
+     *  Set the I/O transfer pool size (clamped to [2, 64]).
+     *
+     *  @param val desired pool size
+     *  @since 0.9.71+
+     */
+    public static void setIOTransferThreads(int val) { I2PTunnelHTTPServer.setIOTransferThreads(val); }
+
+    /**
+     *  Active thread count in the I/O transfer pool (live saturation signal).
+     *
+     *  @return active threads, or 0 if pool not yet created
+     *  @since 0.9.71+
+     */
+    public static int getIOTransferActiveCount() { return I2PTunnelHTTPServer.getIOTransferActiveCount(); }
+
+    /**
+     *  I/O stall timeout in ms for Server→Client transfers.
+     *
+     *  @return the current stall timeout
+     *  @since 0.9.71+
+     */
+    public static long getIOStallTimeoutMs() { return I2PTunnelHTTPServer.getIOStallTimeoutMs(); }
+    /**
+     *  Set the I/O stall timeout in ms (clamped to [5000, 300000]).
+     *
+     *  @param val desired timeout in ms
+     *  @since 0.9.71+
+     */
+    public static void setIOStallTimeoutMs(long val) { I2PTunnelHTTPServer.setIOStallTimeoutMs(val); }
+
+    /**
+     *  Total stall events detected since router start (monotonically increasing).
+     *  Used by the Tuner as a real-time signal for stall timeout adjustment.
+     *
+     *  @return total stall event count
+     *  @since 0.9.71+
+     */
+    public static long getStallEventCount() { return I2PTunnelHTTPServer.getStallEventCount(); }
+
+    /**
      *  Live aggregate queue depth across all server tunnel executor pools.
      *  Reads directly from each {@link ThreadPoolExecutor#getQueue()#size()},
      *  bypassing the Rate-averaged stat for instant saturation detection.
@@ -1765,7 +1813,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  means "follow the Tuner-managed default".
      *
      *  @param v the raw per-tunnel override, or -1 for none
-     *  @return v if it is a valid cap in [2, {@value #SERVER_HANDLER_MAX_THREADS}], else -1
+     *  @return v if it is a valid cap in [{@value #SERVER_HANDLER_FLOOR}, {@value #SERVER_HANDLER_MAX_THREADS}], else -1
      *  @since 0.9.71+
      */
     static int normalizeThreadOverride(int v) {

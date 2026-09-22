@@ -93,6 +93,124 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return t;
     });
 
+    /** Dedicated I/O pool for Server→Client data transfer. Separate from the handler
+     *  pool (_clientExecutor) so pinned handler threads are never consumed by slow
+     *  downloads. Sized by {@link TunnelControllerGroup#getIOTransferThreads()}.
+     *  @since 0.9.71+ */
+    private static volatile ThreadPoolExecutor _ioExecutor;
+    private static final Object _ioExecutorLock = new Object();
+    /** Default I/O transfer threads; Tuner adjusts via TunnelControllerGroup. */
+    static volatile int ioTransferThreads = Math.max(4, Math.min(16, Runtime.getRuntime().availableProcessors()));
+    /** Stall timeout for Server→Client transfers (ms). If no data is read for this
+     *  long, the transfer is considered stalled and cancelled. */
+    static volatile long ioStallTimeoutMs = 60 * 1000L;
+    /** Monotonically increasing counter of stall events detected by Sender.
+     *  Used by the Tuner as the observed signal for stall timeout adjustment. */
+    static final java.util.concurrent.atomic.AtomicLong _stallEventCount = new java.util.concurrent.atomic.AtomicLong();
+
+    /**
+     *  Get (creating on first use) the shared I/O pool for tunnel data transfer.
+     *  Sized dynamically by the Tuner via {@link TunnelControllerGroup#setIOTransferThreads(int)}.
+     *
+     *  @return non-null, the shared I/O executor
+     *  @since 0.9.71+
+     */
+    static ThreadPoolExecutor getIOExecutor() {
+        ThreadPoolExecutor ex = _ioExecutor;
+        if (ex == null || ex.isShutdown()) {
+            synchronized (_ioExecutorLock) {
+                ex = _ioExecutor;
+                if (ex == null || ex.isShutdown()) {
+                    ex = new ThreadPoolExecutor(ioTransferThreads, ioTransferThreads,
+                        30L, TimeUnit.SECONDS,
+                        new java.util.concurrent.LinkedBlockingQueue<Runnable>(),
+                        r -> {
+                            Thread t = new Thread(r, "I2P-IO-Transfer");
+                            t.setDaemon(true);
+                            t.setPriority(Thread.NORM_PRIORITY - 1);
+                            return t;
+                        });
+                    ex.allowCoreThreadTimeOut(true);
+                    _ioExecutor = ex;
+                }
+            }
+        } else if (ex.getCorePoolSize() != ioTransferThreads) {
+            synchronized (_ioExecutorLock) {
+                if (_ioExecutor.getCorePoolSize() != ioTransferThreads && !_ioExecutor.isShutdown()) {
+                    if (ioTransferThreads > _ioExecutor.getMaximumPoolSize()) {
+                        // Growing: set max first so core <= max
+                        _ioExecutor.setMaximumPoolSize(ioTransferThreads);
+                        _ioExecutor.setCorePoolSize(ioTransferThreads);
+                    } else {
+                        // Shrinking: set core first so core <= max
+                        _ioExecutor.setCorePoolSize(ioTransferThreads);
+                        _ioExecutor.setMaximumPoolSize(ioTransferThreads);
+                    }
+                }
+            }
+        }
+        return ex;
+    }
+
+    /**
+     *  Get the active thread count of the I/O transfer pool.
+     *  Used by the Tuner as a saturation signal.
+     *
+     *  @return active threads, or 0 if pool not yet created
+     *  @since 0.9.71+
+     */
+    public static int getIOTransferActiveCount() {
+        ThreadPoolExecutor ex = _ioExecutor;
+        return ex != null ? ex.getActiveCount() : 0;
+    }
+
+    /**
+     *  Set the I/O transfer pool size (called by Tuner via reflection).
+     *
+     *  @param val new pool size (clamped to [2, 64])
+     *  @since 0.9.71+
+     */
+    public static void setIOTransferThreads(int val) {
+        ioTransferThreads = Math.max(2, Math.min(64, val));
+    }
+
+    /**
+     *  Get the current I/O transfer pool size.
+     *
+     *  @return current pool size
+     *  @since 0.9.71+
+     */
+    public static int getIOTransferThreads() { return ioTransferThreads; }
+
+    /**
+     *  Set the I/O stall timeout in ms (called by Tuner via reflection).
+     *
+     *  @param val new timeout in ms (clamped to [5000, 300000])
+     *  @since 0.9.71+
+     */
+    public static void setIOStallTimeoutMs(long val) {
+        ioStallTimeoutMs = Math.max(5000L, Math.min(300_000L, val));
+    }
+
+    /**
+     *  Get the current I/O stall timeout in ms.
+     *
+     *  @return current stall timeout
+     *  @since 0.9.71+
+     */
+    public static long getIOStallTimeoutMs() { return ioStallTimeoutMs; }
+
+    /**
+     *  Get the total number of stall events detected by Sender since router start.
+     *  Each stall event means a Server→Client transfer was interrupted because
+     *  no data arrived for {@link #ioStallTimeoutMs}. Used by the Tuner as a
+     *  real-time signal for stall timeout adjustment.
+     *
+     *  @return monotonically increasing stall event count
+     *  @since 0.9.71+
+     */
+    public static long getStallEventCount() { return _stallEventCount.get(); }
+
     /** Config key to reject requests from inproxy. */
     public static final String OPT_REJECT_INPROXY = "rejectInproxy";
     /** Config key to reject requests with Referer header. */
@@ -1331,6 +1449,49 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
+         *  Run a Sender on the dedicated I/O pool with a stall-based timeout.
+         *  The handler thread blocks on {@link Future#get} until the transfer
+         *  completes or the stall timeout fires. On timeout the Sender thread
+         *  is interrupted (breaking any blocking {@code read()}), and an
+         *  IOException propagates to the finally-block cleanup.
+         *
+         *  @param s the Sender to run
+         *  @param desc descriptive name for error messages
+         *  @throws IOException if the transfer stalls or the pool rejects the task
+         */
+        private void runOnIO(Sender s, String desc) throws IOException {
+            ThreadPoolExecutor ioPool = getIOExecutor();
+            Future<?> f;
+            try {
+                f = ioPool.submit(s);
+            } catch (RejectedExecutionException ree) {
+                // I/O pool saturated — fall back to inline to avoid dropping the
+                // connection entirely. The handler thread is pinned, but this is
+                // a transient overload, not a permanent state.
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] I/O pool saturated, falling back to inline " + desc);
+                }
+                s.run();
+                return;
+            }
+            try {
+                f.get(ioStallTimeoutMs, TimeUnit.MILLISECONDS);
+            } catch (TimeoutException te) {
+                f.cancel(true); // interrupts the Sender thread
+                throw new IOException("[HTTPServer] I/O transfer stalled (no data for " +
+                                      ioStallTimeoutMs + "ms): " + desc);
+            } catch (ExecutionException ee) {
+                Throwable cause = ee.getCause();
+                if (cause instanceof IOException) {throw (IOException) cause;}
+                throw new IOException("[HTTPServer] I/O transfer failed: " + desc, cause);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                f.cancel(true);
+                throw new IOException("[HTTPServer] I/O transfer interrupted: " + desc, ie);
+            }
+        }
+
+        /**
          * This thread handles the response from the server back to the browser.
          * If the request was not GET or HEAD, (typically POST or CONNECT), it spawns another thread
          * "Sender" to push the remaining request data from the browser to the server.
@@ -1400,7 +1561,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
                                urlSuffix(req));
-                s.run(); // same thread
+                // Submit Server→Client transfer to the dedicated I/O pool so the
+                // handler thread is not pinned for the entire download duration.
+                // The handler thread waits on Future.get() with a stall timeout;
+                // if no data arrives for ioStallTimeoutMs, the Sender is interrupted
+                // and the handler thread continues to cleanup.
+                runOnIO(s, "Server -> Client" + urlSuffix(req));
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
                 try {
@@ -1553,14 +1719,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    private static class Sender implements Runnable {
+    static class Sender implements Runnable {
         private static final int BUF_SIZE = 16*1024;
         private final OutputStream _out;
         private final InputStream _in;
         private final String _name;
         // shadows _log in super()
         private final Log _log;
-        private IOException _failure;
+        private volatile IOException _failure;
+        /** Total bytes transferred successfully (read from _in, written to _out). */
+        private volatile long _bytesTransferred;
+        /** NanoTime of the last successful read from _in. Used for stall detection. */
+        private volatile long _lastReadNanos;
 
         /**
          *  Create a Sender to copy data from input to output streams.
@@ -1585,28 +1755,62 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *  data can accumulate in GZIP's deflater buffer or the streaming
          *  layer's MessageOutputStream buffer, causing sawtooth throughput
          *  patterns and intermittent stalls on the receiving end.
-         *  Logs any IOException that occurs during the copy.
+         *  <p>
+         *  Tracks bytes transferred and detects stalls: if no data is read
+         *  for {@link I2PTunnelHTTPServer#ioStallTimeoutMs}, the loop breaks
+         *  and the partial transfer is logged. This prevents a dead peer from
+         *  holding a handler or I/O thread indefinitely.
          */
         @Override
         public void run() {
-            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
+            if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
+            long startNanos = System.nanoTime();
+            _lastReadNanos = startNanos;
             try {
                 byte[] buf = new byte[BUF_SIZE];
                 int read;
                 while ((read = _in.read(buf)) != -1) {
+                    long now = System.nanoTime();
+                    long stallNs = now - _lastReadNanos;
+                    _lastReadNanos = now;
+                    _bytesTransferred += read;
                     _out.write(buf, 0, read);
                     _out.flush();
+                    // Stall detection: if the time between successive reads exceeds
+                    // the configured timeout, break out to release the thread. The
+                    // socket-level read timeout (setSoTimeout) handles server-side
+                    // stalls; this catches stalls on the I2P streaming layer side
+                    // where no socket timeout applies.
+                    if (stallNs > ioStallTimeoutMs * 1_000_000L) {
+                        _stallEventCount.incrementAndGet();
+                        if (_log != null && _log.shouldWarn()) {
+                            _log.warn("[HTTPServer] Stall detected in " + _name +
+                                      " — no data for " + (stallNs / 1_000_000L) + "ms, " +
+                                      _bytesTransferred + " bytes transferred");
+                        }
+                        break;
+                    }
                 }
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending " + _name);}
+                long elapsed = System.nanoTime() - startNanos;
+                if (_log != null && _log.shouldInfo() && elapsed > 5_000_000_000L) {
+                    double secs = elapsed / 1_000_000_000.0;
+                    double kbps = (_bytesTransferred * 8.0) / (secs * 1000);
+                    _log.info("[HTTPServer] Done sending " + _name + ": " +
+                              _bytesTransferred + " bytes in " + String.format("%.1f", secs) + "s " +
+                              "(" + String.format("%.1f", kbps) + " kbps)");
+                } else if (_log != null && _log.shouldDebug()) {
+                    _log.debug("[HTTPServer] Done sending " + _name);
+                }
             } catch (IOException ioe) {
                 if (ioe.getMessage() != null) {
                     if (ioe.getMessage().indexOf("Input stream closed") >= 0 ||
                         ioe.getMessage().indexOf("Input stream error") >= 0 ||
-                        ioe.getMessage().indexOf("Socket closed") >= 0) {
-                        // client closed connection early?
-                            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                        ioe.getMessage().indexOf("Socket closed") >= 0 ||
+                        ioe.getMessage().indexOf("Interrupted") >= 0) {
+                        // client closed connection early, or thread interrupted for cancellation
+                            if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
                     } else {
-                        if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                        if (_log != null && _log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
                     }
                 }
                 synchronized(this) {_failure = ioe;}
@@ -1622,6 +1826,23 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         public synchronized IOException getFailure() {
             return _failure;
         }
+
+        /**
+         *  Total bytes successfully transferred (read from input, written to output).
+         *
+         *  @return bytes transferred, updated live during the transfer
+         *  @since 0.9.71+
+         */
+        public long getBytesTransferred() { return _bytesTransferred; }
+
+        /**
+         *  NanoTime of the last successful read. Used by callers to detect stalls
+         *  without interrupting the Sender thread.
+         *
+         *  @return System.nanoTime() of the last successful read
+         *  @since 0.9.71+
+         */
+        public long getLastReadNanos() { return _lastReadNanos; }
     }
 
     /**

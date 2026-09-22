@@ -645,6 +645,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new I2PTunnelServerHandlerThreadsParam());
         _params.add(new I2PTunnelServerThreadsParam());
         _params.add(new I2PTunnelServerBacklogParam());
+        _params.add(new I2PTunnelServerIOTransferParam());
+        _params.add(new I2PTunnelServerIOStallTimeoutParam());
         I2PTunnelClientRunnerMaxParam clientRunnerMax = new I2PTunnelClientRunnerMaxParam();
         _params.add(clientRunnerMax);
         _fastParams.add(clientRunnerMax);
@@ -2459,6 +2461,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (c == null) return;
             try {
                 c.getMethod(methodName, int.class).invoke(null, value);
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+
+        /** Call a static long getter via reflection. */
+        static long invokeGetLong(String methodName) {
+            Class<?> c = getCLS();
+            if (c == null) return -1L;
+            try {
+                return (Long) c.getMethod(methodName).invoke(null);
+            } catch (Exception e) {
+                return -1L;
+            }
+        }
+
+        /** Call a static long setter via reflection. */
+        static void invokeSetLong(String methodName, long value) {
+            Class<?> c = getCLS();
+            if (c == null) return;
+            try {
+                c.getMethod(methodName, long.class).invoke(null, value);
             } catch (Exception e) {
                 // ignore
             }
@@ -11218,6 +11242,121 @@ protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             return computeServerBacklogQueueCapacity(current, _min, _max, observed, jobLag);
+        }
+    }
+
+    /**
+     *  Tuner param for the I/O transfer pool size (Server→Client data forwarding).
+     *  Sized by CPU count; ceiling set by max heap (scales with available memory).
+     *  The pool is intentionally kept small (2–64 threads) — a handful of
+     *  slow transfers should not consume a large number of threads; the I/O
+     *  pool exists to unblock handler threads, not to create unlimited parallelism.
+     *
+     *  @since 0.9.71+
+     */
+    private class I2PTunnelServerIOTransferParam extends BaseParam {
+
+        I2PTunnelServerIOTransferParam() {
+            super("i2ptunnel.serverIO.threads", "I2PTunnel I/O transfer threads",
+                  SUB_TUNNEL,
+                   2, 64, 2, "i2ptunnel.serverIO.activeCount", _context);
+        }
+
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetInt("setIOTransferThreads", value);
+        }
+
+        protected int getRuntimeValue() {
+            return I2PTunnelReflector.invokeGetInt("getIOTransferThreads");
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            return I2PTunnelReflector.invokeGetInt("getIOTransferActiveCount");
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // Scale up when active threads approach capacity; scale down when idle.
+            // Keep the pool modest — I/O threads are cheap (blocking reads) but
+            // each one represents an active download.
+            double ratio = (observed + 1.0) / (current + 1.0);
+            int target;
+            if (ratio > 0.7) {
+                // >70% utilization — grow, but cap aggressively
+                target = Math.min(current + 2, _max);
+            } else if (ratio < 0.2 && current > _min) {
+                // <20% utilization — shrink toward minimum
+                target = Math.max(current - 1, _min);
+            } else {
+                target = current;
+            }
+            return Math.max(_min, Math.min(_max, target));
+        }
+    }
+
+    /**
+     *  Tuner param for the I/O stall timeout (ms). When no data arrives for
+     *  this long on a Server→Client transfer, the Sender is interrupted and
+     *  the handler thread continues to cleanup. Lower values free threads
+     *  faster when peers are unresponsive; higher values tolerate legitimate
+     *  slow transfers without premature cancellation.
+     *
+     *  Signal: delta stall events per tuning cycle. A high stall rate means
+     *  the current timeout is too aggressive (legitimate transfers being killed);
+     *  tightening further would make it worse. A low stall rate means we can
+     *  safely loosen the timeout to tolerate slower peers.
+     *
+     *  @since 0.9.71+
+     */
+    private class I2PTunnelServerIOStallTimeoutParam extends BaseParam {
+        private long _prevStallCount;
+
+        I2PTunnelServerIOStallTimeoutParam() {
+            super("i2ptunnel.serverIO.stallTimeoutMs", "I2PTunnel I/O stall timeout (ms)",
+                  SUB_TUNNEL,
+                   5000, 300_000, 5000, "i2ptunnel.serverIO.stallEvents", _context);
+            _prevStallCount = I2PTunnelReflector.invokeGetLong("getStallEventCount");
+        }
+
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetLong("setIOStallTimeoutMs", (long) value);
+        }
+
+        protected int getRuntimeValue() {
+            return (int) I2PTunnelReflector.invokeGetLong("getIOStallTimeoutMs");
+        }
+
+        /**
+         *  Observe the delta stall events since last tuning cycle.
+         *  A monotonically increasing counter; we return the per-cycle delta
+         *  so the Tuner sees a rate, not an accumulator.
+         */
+        protected double getObservedStat(RouterContext ctx) {
+            long now = I2PTunnelReflector.invokeGetLong("getStallEventCount");
+            long delta = now - _prevStallCount;
+            _prevStallCount = now;
+            return delta;
+        }
+
+        /**
+         *  Adjust timeout based on stall rate:
+         *  - High stall rate (>2 per cycle): the timeout is too tight, loosen it
+         *  - Zero stalls: timeout may be too conservative, tighten slightly
+         *  - Low stall rate (1 per cycle): no change
+         */
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            int target;
+            if (observed > 2) {
+                // Stalls happening frequently — loosen timeout to stop killing legit transfers
+                target = Math.min(current + 10_000, _max);
+            } else if (observed < 0.5) {
+                // No stalls — tighten timeout to free threads faster on real dead peers
+                target = Math.max(current - 5_000, _min);
+            } else {
+                target = current;
+            }
+            return Math.max(_min, Math.min(_max, target));
         }
     }
 

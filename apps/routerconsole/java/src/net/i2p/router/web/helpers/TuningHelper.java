@@ -148,6 +148,8 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2ptunnel.serverHandler.threads", _x("Server Handler Threads"));
         DISPLAY_NAMES.put("i2ptunnel.serverHandler.queueCapacity", _x("Server Handler Queue Capacity"));
         DISPLAY_NAMES.put("i2ptunnel.server.threads", _x("Server Default Threads per Tunnel"));
+        DISPLAY_NAMES.put("i2ptunnel.serverIO.threads", _x("I/O Transfer Threads"));
+        DISPLAY_NAMES.put("i2ptunnel.serverIO.stallTimeoutMs", _x("I/O Stall Timeout"));
         DISPLAY_NAMES.put("router.buildHandlerThreads", _x("Build Handler Threads"));
         DISPLAY_NAMES.put("i2ptunnel.clientRunner.max", _x("Client Runner Max Threads"));
         DISPLAY_NAMES.put("i2ptunnel.maxConnections", _x("Client Default Max Connections"));
@@ -294,6 +296,8 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverHandler.threads", _x("Handler threads for incoming I2PTunnel connections."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverHandler.queueCapacity", _x("Inbound connections that may wait for a free server handler thread."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.server.threads", _x("Default cap on server handler threads for each server tunnel."));
+        PARAM_DESCRIPTIONS.put("i2ptunnel.serverIO.threads", _x("Dedicated pool for Server→Client data transfer, unblocks handler threads."));
+        PARAM_DESCRIPTIONS.put("i2ptunnel.serverIO.stallTimeoutMs", _x("Stall timeout for Server→Client data transfers (ms)."));
         PARAM_DESCRIPTIONS.put("router.buildHandlerThreads", _x("Thread pool for inbound build request processing."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.clientRunner.max", _x("Ceiling for client proxy thread pool."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.maxConnections", _x("Default client connection cap."));
