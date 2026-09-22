@@ -163,6 +163,17 @@ public class BuildExecutor implements Runnable {
     private final AtomicInteger _buildSuccessCount = new AtomicInteger();
     private final AtomicInteger _buildFailureCount = new AtomicInteger();
     private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<>(64);
+    /**
+     *  Throttle for peer-selection hot path: BldExecutor was pegging at 98%
+     *  in ClientPeerSelector.selectSingleHop → IBGWExcluder.contains
+     *  even after 60s endpoint caching, because the tight loop called
+     *  pool.configureNewTunnel() for every wanted pool without per-pool
+     *  spacing.  Skip the heavy peer selection if this pool built within
+     *  the throttle window and still has builds in flight.
+     *  @since 0.9.72
+     */
+    private final ConcurrentHashMap<TunnelPool, Long> _lastConfigureTime = new ConcurrentHashMap<>(16);
+    private static final long CONFIGURE_THROTTLE_MS = 3000L;
     private final AtomicInteger _buildTimeoutCount = new AtomicInteger();
     private final AtomicInteger _firstHopSuccessCount = new AtomicInteger();
     private final AtomicInteger _firstHopFailureCount = new AtomicInteger();
@@ -1371,6 +1382,19 @@ public class BuildExecutor implements Runnable {
 
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
+                            // Throttle peer-selection hot path (see _lastConfigureTime).
+                            long nowCfg = System.currentTimeMillis();
+                            Long lastCfg = _lastConfigureTime.get(pool);
+                            if (lastCfg != null && nowCfg - lastCfg < CONFIGURE_THROTTLE_MS
+                                && pool.getInProgressCount() > 0) {
+                                if (_log.shouldDebug()) {
+                                    _log.debug("Throttling configureNewTunnel for " + pool +
+                                               " (" + (nowCfg - lastCfg) + "ms since last, " +
+                                               pool.getInProgressCount() + " in progress)");
+                                }
+                                continue;
+                            }
+                            _lastConfigureTime.put(pool, nowCfg);
 
                             long bef = System.currentTimeMillis();
                             PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
