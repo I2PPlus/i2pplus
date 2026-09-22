@@ -3866,6 +3866,22 @@ public class TunnelPool {
             return;
         }
         int currentInProgress = getInProgressCount();
+        // Rate-limit deficit builds: if a batch is already in progress, skip
+        // repeated build attempts within 5s.  During collapse every ExpireJob
+        // cycle (5s BATCH_WINDOW) would otherwise call ensureSufficientTunnels
+        // → buildDeficitReplacements → selectSingleHop on 670 peers, burning
+        // 200% CPU on two JobQueue threads for hours.  The 5s gate keeps
+        // recovery progressing (one batch per cycle) without redundant work.
+        // Bypass when nothing is in progress so the first recovery attempt
+        // is never delayed.
+        if (currentInProgress > 0 && now - _lastDeficitBuildTime < 5000) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Skipping deficit build: rate-limited (" +
+                          (now - _lastDeficitBuildTime) + "ms since last, " +
+                          currentInProgress + " in progress)");
+            }
+            return;
+        }
         int deficit = computeDeficit(stats, target, effectiveTarget, currentInProgress);
         if (deficit > 0) {
             // Cap per-cycle builds at base target — scale up gradually

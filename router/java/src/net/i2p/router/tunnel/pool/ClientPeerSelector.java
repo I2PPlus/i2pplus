@@ -1755,23 +1755,35 @@ class ClientPeerSelector extends TunnelPeerSelector {
      */
     private class IBGWExcluder extends ExcluderBase {
 
+        /** Local cache of peers that passed the IBGW check.  These are NOT
+         *  added to the exclusion set {@code s} (they are allowed), but
+         *  caching them here avoids re-calling allowAsIBGW on every
+         *  contains() check.  The check is delegated to TunnelPeerSelector's
+         *  60s global cache on miss, so entries here are valid for the
+         *  lifetime of this excluder instance (one selectSingleHop call).
+         *  @since 0.9.72 */
+        private final Set<Hash> _allowed = new HashSet<>();
+
         /**
-         *  Automatically check if peer is connected
-         *  and add the Hash to the set if not.
-         *
-         *  @param set not copied, contents will be modified by all methods
-         */
+          *  Automatically check if peer is connected
+          *  and add the Hash to the set if not.
+          *
+          *  @param set not copied, contents will be modified by all methods
+          */
         public IBGWExcluder(Set<Hash> set) {super(set);}
 
         /**
-         *  Automatically check if peer is connected
-         *  and add the Hash to the set if not.
-         *
-         *  @param o a Hash
-         *  @return true if peer should be excluded
-         */
+          *  Automatically check if peer is connected
+          *  and add the Hash to the set if not.
+          *  Passing peers are cached in {@code _allowed} so subsequent
+          *  contains() calls for the same Hash skip the global cache lookup.
+          *
+          *  @param o a Hash
+          *  @return true if peer should be excluded
+          */
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
+            if (_allowed.contains(o)) {return false;}
             Hash h = (Hash) o;
             boolean rv = !allowAsIBGW(h);
             if (rv) {
@@ -1780,6 +1792,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (log.shouldDebug()) {
                     log.debug("InboundGateway exclude [" + h.toBase64().substring(0,6) + "]");
                 }
+            } else {
+                _allowed.add(h);
             }
             return rv;
         }
@@ -1795,23 +1809,31 @@ class ClientPeerSelector extends TunnelPeerSelector {
      */
     private class OBEPExcluder extends ExcluderBase {
 
+        /** Local cache of peers that passed the OBEP check — same lifecycle
+         *  and rationale as {@link IBGWExcluder#_allowed}.
+         *  @since 0.9.72 */
+        private final Set<Hash> _allowed = new HashSet<>();
+
         /**
-         *  Automatically check if peer is connected
-         *  and add the Hash to the set if not.
-         *
-         *  @param set not copied, contents will be modified by all methods
-         */
+          *  Automatically check if peer is connected
+          *  and add the Hash to the set if not.
+          *
+          *  @param set not copied, contents will be modified by all methods
+          */
         public OBEPExcluder(Set<Hash> set) {super(set);}
 
         /**
-         *  Automatically check if peer is connected
-         *  and add the Hash to the set if not.
-         *
-         *  @param o a Hash
-         *  @return true if peer should be excluded
-         */
+          *  Automatically check if peer is connected
+          *  and add the Hash to the set if not.
+          *  Passing peers are cached in {@code _allowed} so subsequent
+          *  contains() calls for the same Hash skip the global cache lookup.
+          *
+          *  @param o a Hash
+          *  @return true if peer should be excluded
+          */
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
+            if (_allowed.contains(o)) {return false;}
             Hash h = (Hash) o;
             boolean rv = !allowAsOBEP(h);
             if (rv) {
@@ -1820,6 +1842,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (log.shouldDebug()) {
                     log.debug("OutboundEndpoint exclude [" + h.toBase64().substring(0,6) + "]");
                 }
+            } else {
+                _allowed.add(h);
             }
             return rv;
         }

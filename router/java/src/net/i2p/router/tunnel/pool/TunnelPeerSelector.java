@@ -68,6 +68,50 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
+     *  Endpoint eligibility cache: avoids re-checking ~670 fast peers on every
+     *  selectSingleHop / buildReplacementTunnels cycle.  Both passing and
+     *  failing results are cached for 60s so repeated ExpireJob and
+     *  buildDeficitReplacements cycles hit cache instead of doing banlist +
+     *  netDb + canConnect checks per peer.  Separate caches for IBGW and OBEP
+     *  because the same Hash can have different eligibility per role.
+     *  Entries expire after ENDPOINT_CACHE_TTL_MS; oversized maps are pruned
+     *  opportunistically.  Pure performance — correctness is preserved on
+     *  cache miss (re-check) and stale entries are bounded to 60s.
+     *  @since 0.9.72
+     */
+    private static final long ENDPOINT_CACHE_TTL_MS = 60 * 1000L;
+    private static final int ENDPOINT_CACHE_MAX_SIZE = 4096;
+    private static final ConcurrentHashMap<Hash, EndpointCacheEntry> _ibgwCache =
+        new ConcurrentHashMap<>(512);
+    private static final ConcurrentHashMap<Hash, EndpointCacheEntry> _obepCache =
+        new ConcurrentHashMap<>(512);
+
+    private static final class EndpointCacheEntry {
+        final boolean allowed;
+        final long expiresAt;
+        EndpointCacheEntry(boolean allowed, long expiresAt) {
+            this.allowed = allowed;
+            this.expiresAt = expiresAt;
+        }
+        boolean isExpired(long now) { return now >= expiresAt; }
+    }
+
+    /**
+     *  Prune expired entries when the cache grows too large.  Called
+     *  opportunistically before inserts — no background thread needed.
+     */
+    private static void pruneEndpointCache(ConcurrentHashMap<Hash, EndpointCacheEntry> cache, long now) {
+        if (cache.size() <= ENDPOINT_CACHE_MAX_SIZE) return;
+        // Remove expired entries first
+        cache.entrySet().removeIf(e -> e.getValue().isExpired(now));
+        // If still oversized (many non-expired entries), clear to bound memory;
+        // the cache will repopulate on next build cycle.
+        if (cache.size() > ENDPOINT_CACHE_MAX_SIZE) {
+            cache.clear();
+        }
+    }
+
+    /**
      *  Refresh the cached peer-selection configuration from properties at
      *  most once per CONFIG_REFRESH_MS, or immediately when the context
      *  changes.  Benign race: duplicate refreshes are idempotent writes.
@@ -1127,13 +1171,26 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsOBEP(Hash h) {
+        long now = ctx.clock().now();
+        EndpointCacheEntry cached = _obepCache.get(h);
+        if (cached != null && !cached.isExpired(now)) {
+            return cached.allowed;
+        }
+        boolean result;
         // Never use a banlisted peer as an endpoint — it may refuse or drop our builds.
-        if (ctx.banlist().isBanlisted(h))
-            return false;
-        RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
-        if (ri == null)
-            return true;
-        return canConnect(ri, ANY_V4);
+        if (ctx.banlist().isBanlisted(h)) {
+            result = false;
+        } else {
+            RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
+            if (ri == null) {
+                result = true;
+            } else {
+                result = canConnect(ri, ANY_V4);
+            }
+        }
+        pruneEndpointCache(_obepCache, now);
+        _obepCache.put(h, new EndpointCacheEntry(result, now + ENDPOINT_CACHE_TTL_MS));
+        return result;
     }
 
     /**
@@ -1149,15 +1206,28 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsIBGW(Hash h) {
+        long now = ctx.clock().now();
+        EndpointCacheEntry cached = _ibgwCache.get(h);
+        if (cached != null && !cached.isExpired(now)) {
+            return cached.allowed;
+        }
+        boolean result;
         // Never use a banlisted peer as an endpoint — it may refuse or drop our builds.
-        if (ctx.banlist().isBanlisted(h))
-            return false;
-        RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
-        if (ri == null)
-            return true;
-        if (ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0)
-            return false;
-        return canConnect(ANY_V4, ri);
+        if (ctx.banlist().isBanlisted(h)) {
+            result = false;
+        } else {
+            RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
+            if (ri == null) {
+                result = true;
+            } else if (ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0) {
+                result = false;
+            } else {
+                result = canConnect(ANY_V4, ri);
+            }
+        }
+        pruneEndpointCache(_ibgwCache, now);
+        _ibgwCache.put(h, new EndpointCacheEntry(result, now + ENDPOINT_CACHE_TTL_MS));
+        return result;
     }
 
     /**

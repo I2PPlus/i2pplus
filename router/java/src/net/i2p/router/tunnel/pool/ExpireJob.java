@@ -41,6 +41,21 @@ class ExpireJob extends JobImpl {
     private static final int MAX_ITERATE_BACKED_UP = 5000;
     private static final int BACKED_UP_THRESHOLD = 100;
 
+    /**
+     *  Per-pool throttle for ensureSufficientTunnels() calls from ExpireJob.
+     *  ExpireJob fires every BATCH_WINDOW (5s) and calls ensureSufficientTunnels()
+     *  for every pool with expiring tunnels.  During collapse 8+ pools expire
+     *  simultaneously, each triggering selectSingleHop on ~670 peers.  Without
+     *  throttling, the next ExpireJob cycle re-triggers the same pools while
+     *  their builds are still in progress, causing 200% CPU.  The throttle
+     *  skips the pre-build call if the pool was triggered within
+     *  PREBUILD_THROTTLE_MS and a build is still in progress.
+     *  @since 0.9.72
+     */
+    private static final long PREBUILD_THROTTLE_MS = 5000L;
+    private static final ConcurrentHashMap<TunnelPool, Long> _lastPreBuildTime =
+        new ConcurrentHashMap<>(16);
+
     @Override
     public String getName() {return "Expire Local Tunnels";}
 
@@ -245,6 +260,17 @@ class ExpireJob extends JobImpl {
             if (pool != null) {poolsToPreBuild.add(pool);}
         }
         for (TunnelPool pool : poolsToPreBuild) {
+            Long last = _lastPreBuildTime.get(pool);
+            if (last != null && now - last < PREBUILD_THROTTLE_MS
+                && pool.getInProgressCount() > 0) {
+                if (log.shouldDebug()) {
+                    log.debug("Throttling pre-build for " + pool +
+                              " (" + (now - last) + "ms since last, " +
+                              pool.getInProgressCount() + " in progress)");
+                }
+                continue;
+            }
+            _lastPreBuildTime.put(pool, now);
             pool.ensureSufficientTunnels();
         }
 
