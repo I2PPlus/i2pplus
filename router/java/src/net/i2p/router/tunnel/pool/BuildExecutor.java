@@ -918,9 +918,15 @@ public class BuildExecutor implements Runnable {
     private int allowed() {
         final CommSystemFacade csf = _context.commSystem();
         if (csf.getStatus() == Status.DISCONNECTED) {
+            if (_log.shouldInfo()) {
+                _log.info("allowed() returning 0: DISCONNECTED status, building=" + _currentlyBuildingMap.size());
+            }
             return 0;
         }
         if (csf.isDummy() && csf.countActivePeers() <= 0) {
+            if (_log.shouldInfo()) {
+                _log.info("allowed() returning 0: dummy status with 0 active peers, building=" + _currentlyBuildingMap.size());
+            }
             return 0;
         }
 
@@ -1018,7 +1024,17 @@ public class BuildExecutor implements Runnable {
             }
         }
 
+        // DIAGNOSTIC: report what allowed() found in the building map
         int concurrent = _currentlyBuildingMap.size();
+        if (_log.shouldInfo() && concurrent > 0) {
+            long now2 = _context.clock().now();
+            long oldestAge = now2 - getOldestBuildingCreation();
+            int expiredCount = expired != null ? expired.size() : 0;
+            _log.info("allowed() buildingMap=" + concurrent +
+                      " expired=" + expiredCount +
+                      " oldestAge=" + oldestAge + "ms" +
+                      " adaptiveTimeout=" + _adaptiveTimeout + "ms");
+        }
         allowed -= concurrent;
 
         if (expired != null) {
@@ -1061,6 +1077,24 @@ public class BuildExecutor implements Runnable {
         _context.statManager().addRateData("tunnel.concurrentBuilds", concurrent);
 
         return allowed;
+    }
+
+    /**
+     *  Get the creation timestamp of the oldest entry in _currentlyBuildingMap.
+     *  Used for diagnostic logging only.
+     *
+     *  @return creation time of oldest build, or 0 if map is empty
+     *  @since 0.9.71+
+     */
+    private long getOldestBuildingCreation() {
+        long oldest = Long.MAX_VALUE;
+        for (PooledTunnelCreatorConfig cfg : _currentlyBuildingMap.values()) {
+            long c = cfg.getConfig(0).getCreation();
+            if (c > 0 && c < oldest) {
+                oldest = c;
+            }
+        }
+        return oldest == Long.MAX_VALUE ? 0 : oldest;
     }
 
     /**
@@ -1180,6 +1214,17 @@ public class BuildExecutor implements Runnable {
                 _repoll = false;
                 _manager.listPools(pools);
 
+                // DIAGNOSTIC: confirm BldExecutor thread is alive each iteration
+                if (_log.shouldDebug()) {
+                    int building = _currentlyBuildingMap.size();
+                    int recently = _recentlyBuildingMap.size();
+                    long buildingAge = building > 0 ? _context.clock().now() - getOldestBuildingCreation() : 0;
+                    _log.debug("BldExecutor loop tick: building=" + building +
+                              " recently=" + recently +
+                              " buildingOldestAge=" + buildingAge + "ms" +
+                              " pools=" + pools.size());
+                }
+
                 // Proactive republish LeaseSets when all tunnels are healthy
                 for (TunnelPool pool : pools) {
                     if (pool.isAlive()) {
@@ -1230,9 +1275,18 @@ public class BuildExecutor implements Runnable {
 
                 TunnelManagerFacade mgr = _context.tunnelManager();
 
-                boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0 && mgr.getOutboundTunnelCount() <= 0);
+                int freeTunnelCount = mgr != null ? mgr.getFreeTunnelCount() : 0;
+                int outboundTunnelCount = mgr != null ? mgr.getOutboundTunnelCount() : 0;
+                boolean noInboundOrOutbound = (mgr == null) || (freeTunnelCount <= 0 && outboundTunnelCount <= 0);
 
                 if (noInboundOrOutbound) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("noInboundOrOutbound=true: freeTunnels=" + freeTunnelCount +
+                                  " outboundTunnels=" + outboundTunnelCount +
+                                  " mgr=" + (mgr != null) +
+                                  " buildingMap=" + _currentlyBuildingMap.size() +
+                                  " allowed=" + allowed + " wanted=" + wanted.size());
+                    }
                     // Kickstart inbound/outbound tunnels if missing to avoid stall
                     if (mgr != null) {
                         if (mgr.getFreeTunnelCount() <= 0) {
@@ -1257,6 +1311,10 @@ public class BuildExecutor implements Runnable {
                         }
                     }
                 } else {
+                    if (_log.shouldDebug()) {
+                        _log.debug("DISPATCH branch: allowed=" + allowed + " wanted=" + wanted.size() +
+                                  " buildingMap=" + _currentlyBuildingMap.size());
+                    }
                     if (allowed > 0 && !wanted.isEmpty()) {
                         // Snapshot scores before sorting to avoid TimSort crash from
                         // concurrent tunnel state changes during comparison (activeTunnelCount
@@ -1509,10 +1567,13 @@ public class BuildExecutor implements Runnable {
      * @param cfg the tunnel configuration to build
      */
     void buildTunnel(PooledTunnelCreatorConfig cfg) {
+        if (_log.shouldDebug()) {
+            _log.debug("buildTunnel() entry: " + cfg + " buildingMapSize=" + _currentlyBuildingMap.size());
+        }
         if (cfg.getLength() > 1 && !cfg.isBypassPacing() && hasBuildInFlightToFirstHop(cfg)) {
             _context.statManager().addRateData("tunnel.buildPacedOut", 1);
             if (_log.shouldDebug()) {
-                _log.debug("Not starting build for " + cfg + "\n* first hop already has a build in flight");
+                _log.debug("buildTunnel() GATED (pacing): first hop already in flight for " + cfg);
             }
             // Never sent to the network, so no timeout will fire — remove it
             // now or the pool's _inProgress count leaks upward forever,
@@ -1529,8 +1590,7 @@ public class BuildExecutor implements Runnable {
             Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
             if (firstHop != null && _context.banlist().isBanlisted(firstHop)) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Skipping build for " + cfg +
-                               " — first hop [" + firstHop.toBase64().substring(0, 6) + "] is banned");
+                    _log.debug("buildTunnel() GATED (ban): first hop [" + firstHop.toBase64().substring(0, 6) + "] is banned for " + cfg);
                 }
                 cfg.getTunnelPool().removeInProgress(cfg);
                 return;
@@ -1549,9 +1609,8 @@ public class BuildExecutor implements Runnable {
                 // Prune if we've used >threshold% of the timeout budget before dispatch
                 if (elapsed > (timeoutBudget * STALE_BUILD_THRESHOLD_PCT / 100)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Pruning stale build for " + cfg +
-                                   " — elapsed " + (elapsed / 1000) + "s of " +
-                                   (timeoutBudget / 1000) + "s budget");
+                        _log.debug("buildTunnel() GATED (stale): elapsed " + (elapsed / 1000) + "s of " +
+                                  (timeoutBudget / 1000) + "s budget for " + cfg);
                     }
                     _context.statManager().addRateData("tunnel.buildStalePruned", 1);
                     cfg.getTunnelPool().removeInProgress(cfg);
@@ -1564,9 +1623,17 @@ public class BuildExecutor implements Runnable {
         if (cfg.getLength() > 1) {
             do {cfg.setReplyMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));} // should we allow an ID of 0?
             while (addToBuilding(cfg)); // if a dup, go araound again
+            if (_log.shouldDebug()) {
+                _log.debug("buildTunnel() dispatched (addToBuilding ok): replyId=" + cfg.getReplyMessageId() + " for " + cfg);
+            }
         }
         boolean ok = BuildRequestor.request(_context, cfg, this, _adaptiveFirstHopTimeout);
-        if (!ok) {return;}
+        if (!ok) {
+            if (_log.shouldDebug()) {
+                _log.debug("buildTunnel() BuildRequestor.request() returned false for " + cfg);
+            }
+            return;
+        }
         if (cfg.getLength() > 1) {
             long buildTime = System.currentTimeMillis() - beforeBuild;
             _context.statManager().addRateData("tunnel.buildRequestTime", buildTime);
@@ -1917,7 +1984,15 @@ public class BuildExecutor implements Runnable {
     PooledTunnelCreatorConfig removeFromBuilding(long id) {
         Long key = Long.valueOf(id);
         PooledTunnelCreatorConfig rv = _currentlyBuildingMap.remove(key);
-        if (rv != null) {return rv;}
+        if (rv != null) {
+            if (_log.shouldDebug()) {
+                long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
+                if (rtt < 0) {rtt = 0;}
+                _log.debug("removeFromBuilding(): reply received (RTT: " + rtt + "ms) mapSize=" +
+                          _currentlyBuildingMap.size() + " for: " + rv);
+            }
+            return rv;
+        }
         rv = _recentlyBuildingMap.remove(key);
         if (rv != null) {
             if (_log.shouldInfo()) {

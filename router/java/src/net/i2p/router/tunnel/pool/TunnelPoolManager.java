@@ -892,8 +892,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         };
 
         // try to build up longer tunnels
-        _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
-        _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
+        _context.jobQueue().addJob(new BootstrapPool(_context, this, _outboundExploratory));
+        _context.jobQueue().addJob(new BootstrapPool(_context, this, _inboundExploratory));
         if (!_context.getBooleanProperty("router.tunnel.disableSlowTunnelRemoval")) {
             _context.jobQueue().addJob(new RemoveSlowTunnelsJob(_context, this));
         }
@@ -948,12 +948,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     private static class BootstrapPool extends JobImpl {
+        private final TunnelPoolManager _mgr;
         private final TunnelPool _pool;
+        private static final long BOOTSTRAP_INTERVAL_MS = 10_000L; // 10s between bootstrap attempts
+        private static final int MIN_BOOTSTRAP_TUNNELS = 2; // Minimum tunnels before stopping bootstrap
+
         /**
-         * Build the fallback tunnels for the pool after the startup delay.
+         * Build bootstrap tunnels for exploratory pools after the startup delay.
+         * For exploratory pools, builds 2-hop tunnels (not zero-hop) to provide
+         * usable reply paths. Reschedules until pool has sufficient tunnels.
          */
-        public BootstrapPool(RouterContext ctx, TunnelPool pool) {
+        public BootstrapPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPool pool) {
             super(ctx);
+            _mgr = mgr;
             _pool = pool;
             getTiming().setStartAfter(ctx.clock().now() + 5*1000);
         }
@@ -963,9 +970,32 @@ public class TunnelPoolManager implements TunnelManagerFacade {
          */
         public String getName() { return "Bootstrap Tunnel Pool"; }
         /**
-         * Build the fallback tunnels for the pool.
+         * Build bootstrap tunnels for the pool.
+         * Reschedules if the pool still needs more tunnels.
          */
-        public void runJob() {_pool.buildFallback();}
+        public void runJob() {
+            if (_mgr.isShutdown()) {
+                return;
+            }
+            boolean built = false;
+            if (_pool.getSettings().isExploratory()) {
+                built = _pool.buildBootstrapTunnels();
+            } else {
+                built = _pool.buildFallback();
+            }
+            // Reschedule if we built something or if pool still needs tunnels
+            int usable = _pool.getValidTunnelCount();
+            RouterContext ctx = getContext();
+            if (built || usable < MIN_BOOTSTRAP_TUNNELS) {
+                getTiming().setStartAfter(ctx.clock().now() + BOOTSTRAP_INTERVAL_MS);
+                ctx.jobQueue().addJob(this);
+            } else {
+                Log log = ctx.logManager().getLog(BootstrapPool.class);
+                if (log.shouldInfo()) {
+                    log.info("Bootstrap complete for " + _pool + " (usable: " + usable + ")");
+                }
+            }
+        }
     }
 
     private static class RemoveSlowTunnelsJob extends JobImpl {

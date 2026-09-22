@@ -3008,6 +3008,37 @@ public class TunnelPool {
     }
 
     /**
+     *  Build bootstrap tunnels for exploratory pools during cold start.
+     *  Unlike buildFallback(), this builds 2-hop tunnels (not zero-hop) to
+     *  provide usable reply paths for client tunnel builds.
+     *  Called by BootstrapPool during startup until the pool has sufficient tunnels.
+     *
+     *  @return true if a bootstrap tunnel build was initiated, false otherwise
+     *  @since 0.9.71+
+     */
+    boolean buildBootstrapTunnels() {
+        if (!_alive) {return false;}
+        if (!_settings.isExploratory()) {return false;}
+        int usable = getValidTunnelCount();
+        // Continue bootstrap until we have at least 2 usable tunnels
+        if (usable >= 2) {return false;}
+        // Don't start new builds if we already have builds in progress
+        if (getInProgressCount() >= 2) {return false;}
+
+        if (_log.shouldInfo()) {
+            _log.info(toString() + "\n* Building bootstrap tunnel (usable: " + usable + ", inProgress: " + getInProgressCount() + ")");
+        }
+        // Build a 2-hop tunnel (not zero-hop) to provide a reply path
+        // forceZeroHop=false allows normal peer selection for 2-hop tunnel
+        PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
+        if (cfg != null) {
+            _manager.getExecutor().buildTunnel(cfg);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Always build a LeaseSet with Leases in sorted order,
      * so that LeaseSet.equals() and lease-by-lease equals() always work.
      * The sort method is arbitrary, as far as the equals() tests are concerned,
