@@ -42,7 +42,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      *  See I2PTunnelHTTPServer or SAM's ReadLine if we need that.
      *  @since 0.9.33
      */
-    protected static final int INITIAL_SO_TIMEOUT = 15*1000;
+    protected static final int INITIAL_SO_TIMEOUT = 30*1000;
 
     private final HashMap<String, List<String>> proxies;  // port# + "" or "default" -> hostname list
 

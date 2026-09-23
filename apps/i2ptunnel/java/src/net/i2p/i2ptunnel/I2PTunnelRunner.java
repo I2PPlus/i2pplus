@@ -820,7 +820,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
 
     /**
      *  Re-drive the I2P→browser forwarder inline after a reconnect, waiting up
-     *  to the standard 120s for completion (same policy as the initial run).
+     *  to the standard 180s for completion (same policy as the initial run).
      *
      *  @param out browser-facing output stream (possibly HTTP-filtered)
      *  @param i2pin input stream of the current I2P socket (updated field preferred)
@@ -829,14 +829,16 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private void redriveReceiveForwarder(OutputStream out, InputStream i2pin) {
         finished = false;
         InputStream pin = i2pin;
-        // Prefer the field in case a prior path already swapped the socket.
+        // Prefer the live socket stream; on failure keep the caller-provided stream.
         try {
             if (i2ps != null) {pin = i2ps.getInputStream();}
-        } catch (IOException ioe) { /* keep caller-provided stream */ }
+        } catch (IOException ioe) {
+            if (_log.shouldDebug()) {_log.debug("redrive: falling back to prior i2p stream", ioe);}
+        }
         fromI2P = new StreamForwarder(pin, out, false, _onSuccess);
         fromI2P.run();
         synchronized (finishLock) {
-            long endTime = System.currentTimeMillis() + 2*60*1000;
+            long endTime = System.currentTimeMillis() + 3*60*1000;
             while (!finished) {
                 long remaining = endTime - System.currentTimeMillis();
                 if (remaining <= 0) {finished = true; finishLock.notifyAll(); break;}
@@ -1033,7 +1035,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             // We are already a thread, so run the second one inline
             fromI2P.run();
             synchronized (finishLock) {
-                long endTime = System.currentTimeMillis() + 2*60*1000; // 120 second timeout
+                long endTime = System.currentTimeMillis() + 3*60*1000; // 180 second timeout
                 while (!finished) {
                     long remaining = endTime - System.currentTimeMillis();
                     if (remaining <= 0) {

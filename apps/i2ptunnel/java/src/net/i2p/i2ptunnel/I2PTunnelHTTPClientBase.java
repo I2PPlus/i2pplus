@@ -91,7 +91,28 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  See I2PTunnelHTTPServer or SAM's ReadLine if we need that.
      *
      */
-    protected static final int INITIAL_SO_TIMEOUT = 15*1000;
+    protected static final int INITIAL_SO_TIMEOUT = 30*1000;
+
+    /**
+     *  Cookie that counts meta-refresh retries on a shed connection.
+     *  @since 0.9.71+
+     */
+    static final String SHED_COOKIE = "i2pshed";
+    /**
+     *  How many meta-refresh pages to serve before the final 503.
+     *  @since 0.9.71+
+     */
+    static final int SHED_MAX_REFRESH = 2;
+    /**
+     *  Refresh delay in seconds for the intermediate shed page.
+     *  @since 0.9.71+
+     */
+    static final int SHED_REFRESH_SECONDS = 10;
+    /**
+     *  Short SO_TIMEOUT while reading the shed request head (never on the hot path).
+     *  @since 0.9.71+
+     */
+    static final int SHED_READ_TIMEOUT_MS = 500;
 
     /**
      *  Failsafe
@@ -493,6 +514,143 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String authRequired = getTunnel().getClientOptions().getProperty(PROP_AUTH);
         if (authRequired == null) {return false;}
         return authRequired.toLowerCase(Locale.US).equals("digest");
+    }
+
+    /**
+     *  Write a real HTTP status on a shed connection so the browser never sees
+     *  an empty response: HTML GET navigations get a cookie-capped meta-refresh
+     *  page (up to {@link #SHED_MAX_REFRESH} times), everything else gets a 503.
+     *  Falls back to a plain 503 if the request head cannot be read in time.
+     *
+     *  @param s the accepted socket being shed; never null
+     *  @since 0.9.71+
+     */
+    @Override
+    protected void writeShedResponse(Socket s) {
+        String method = null;
+        String accept = null;
+        String cookie = null;
+        try {
+            s.setSoTimeout(SHED_READ_TIMEOUT_MS);
+            java.io.InputStream in = s.getInputStream();
+            String line = DataHelper.readLine(in);
+            if (line != null && line.length() > 0) {
+                // strip trailing \r (DataHelper only strips \n)
+                if (line.endsWith("\r")) {line = line.substring(0, line.length() - 1);}
+                int sp = line.indexOf(' ');
+                if (sp > 0) {method = line.substring(0, sp);}
+                int maxLines = 64;
+                for (int i = 0; i < maxLines; i++) {
+                    String h = DataHelper.readLine(in);
+                    if (h == null || h.length() <= 1) {break;}
+                    if (h.endsWith("\r")) {h = h.substring(0, h.length() - 1);}
+                    int colon = h.indexOf(':');
+                    if (colon <= 0) {continue;}
+                    String name = h.substring(0, colon);
+                    String value = h.substring(colon + 1).trim();
+                    if (name.equalsIgnoreCase("Accept")) {accept = value;}
+                    else if (name.equalsIgnoreCase("Cookie")) {cookie = value;}
+                }
+            }
+        } catch (IOException ioe) {
+            // head unreadable; fall through to 503
+        }
+        try {
+            OutputStream out = s.getOutputStream();
+            int attempt = parseShedAttempt(cookie);
+            if (shouldMetaRefresh(method, accept, attempt)) {
+                out.write(buildShedRefreshResponse(attempt + 1).getBytes(StandardCharsets.UTF_8));
+            } else {
+                out.write(buildShed503Response().getBytes(StandardCharsets.UTF_8));
+            }
+            out.flush();
+        } catch (IOException ioe) {
+            // ignored; socket closed below
+        }
+        try {s.close();}
+        catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
+     *  How many shed meta-refresh attempts the request's Cookie header already used.
+     *
+     *  @param cookie the full Cookie header value, or null
+     *  @return parsed attempt count, or 0 when absent/unparseable
+     *  @since 0.9.71+
+     */
+    static int parseShedAttempt(String cookie) {
+        if (cookie == null || cookie.isEmpty()) {return 0;}
+        String key = SHED_COOKIE + "=";
+        int idx = cookie.indexOf(key);
+        if (idx < 0) {return 0;}
+        int start = idx + key.length();
+        int end = start;
+        while (end < cookie.length() && cookie.charAt(end) >= '0' && cookie.charAt(end) <= '9') {end++;}
+        if (end == start) {return 0;}
+        try {
+            return Integer.parseInt(cookie.substring(start, end));
+        } catch (NumberFormatException nfe) {
+            return 0;
+        }
+    }
+
+    /**
+     *  Whether a shed connection should get a meta-refresh page instead of a 503.
+     *  Only HTML navigations qualify: GET with an Accept header that asks for
+     *  text/html, and fewer than {@link #SHED_MAX_REFRESH} prior attempts.
+     *
+     *  @param method HTTP method from the request line, or null
+     *  @param accept Accept header value, or null
+     *  @param attempt prior attempts from the shed cookie
+     *  @return true to emit a meta-refresh page
+     *  @since 0.9.71+
+     */
+    static boolean shouldMetaRefresh(String method, String accept, int attempt) {
+        if (attempt >= SHED_MAX_REFRESH) {return false;}
+        if (method == null || !method.equalsIgnoreCase("GET")) {return false;}
+        if (accept == null) {return false;}
+        return accept.toLowerCase(Locale.US).contains("text/html");
+    }
+
+    /**
+     *  Intermediate shed page: unquoted meta refresh (no nested quotes in the tag)
+     *  plus a Set-Cookie bump so the browser retries at most
+     *  {@link #SHED_MAX_REFRESH} times before the final 503.
+     *
+     *  @param nextAttempt the attempt count to store in the cookie (1-based after increment)
+     *  @return a complete HTTP/1.1 200 response with HTML body
+     *  @since 0.9.71+
+     */
+    static String buildShedRefreshResponse(int nextAttempt) {
+        String body = "<!DOCTYPE html><html><head><meta http-equiv=refresh content=" +
+                SHED_REFRESH_SECONDS + "></head><body>The server is busy. Retrying in " +
+                SHED_REFRESH_SECONDS + " seconds...</body></html>\n";
+        return "HTTP/1.1 200 OK\r\n" +
+               "Content-Type: text/html; charset=UTF-8\r\n" +
+               "Cache-Control: no-store\r\n" +
+               "Set-Cookie: " + SHED_COOKIE + "=" + nextAttempt + "; Path=/; Max-Age=60\r\n" +
+               "Connection: close\r\n" +
+               "Content-Length: " + body.length() + "\r\n" +
+               "\r\n" + body;
+    }
+
+    /**
+     *  Final shed response after refresh budget is exhausted (or non-HTML).
+     *
+     *  @return a complete HTTP/1.1 503 response
+     *  @since 0.9.71+
+     */
+    static String buildShed503Response() {
+        String body = "<!DOCTYPE html><html><head><title>503</title></head><body>" +
+                      "The server is busy. Please try again shortly.</body></html>\n";
+        return "HTTP/1.1 503 Service Unavailable\r\n" +
+               "Content-Type: text/html; charset=UTF-8\r\n" +
+               "Cache-Control: no-store\r\n" +
+               "Retry-After: " + SHED_REFRESH_SECONDS + "\r\n" +
+               "Set-Cookie: " + SHED_COOKIE + "=0; Path=/; Max-Age=0\r\n" +
+               "Connection: close\r\n" +
+               "Content-Length: " + body.length() + "\r\n" +
+               "\r\n" + body;
     }
 
     /**

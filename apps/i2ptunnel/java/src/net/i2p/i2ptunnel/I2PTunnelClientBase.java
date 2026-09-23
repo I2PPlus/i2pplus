@@ -60,7 +60,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /** The logging instance */
     protected final Logging l;
     /** Default connect timeout */
-    static final long DEFAULT_CONNECT_TIMEOUT = (long) 30*1000;
+    static final long DEFAULT_CONNECT_TIMEOUT = (long) 60*1000;
     /** Client ID counter */
     private static final AtomicLong __clientId = new AtomicLong();
     /** This client's ID */
@@ -1003,7 +1003,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private void initializeExecutor() {
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
         if (tcg != null) {
-            _executor = tcg.getClientRunnerExecutor(getTunnel(), getEffectiveMaxConnections());
+            // Customized tunnels pin their own ceiling; default tunnels pass 0 so
+            // the pool tracks the live Tuner-managed default on every rebalance
+            // instead of freezing the value captured at tunnel start.
+            int ceiling = resolveRunnerCeiling(_maxConnectionsCustomized, getEffectiveMaxConnections());
+            _executor = tcg.getClientRunnerExecutor(getTunnel(), ceiling);
         } else {
             /* Fallback in case TCG.getInstance() is null, never instantiated and we were not started by TCG.
              * Maybe a plugin loaded before TCG? Should be rare.
@@ -1088,6 +1092,22 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
+     *  Ceiling to pin on this tunnel's runner pool at creation time.
+     *  <p>
+     *  Customized tunnels keep their explicit cap; un-customized tunnels pass 0
+     *  so {@link TunnelControllerGroup} resolves the live Tuner default on each
+     *  rebalance rather than freezing the start-time value (ceiling staleness).
+     *
+     *  @param customized true when the tunnel set its own maxConnections
+     *  @param effectiveMax the tunnel's resolved effective maxConnections
+     *  @return the explicit ceiling, or 0 to track the live default
+     *  @since 0.9.71+
+     */
+    static int resolveRunnerCeiling(boolean customized, int effectiveMax) {
+        return customized ? effectiveMax : 0;
+    }
+
+    /**
      *  Manage the connection just opened on the specified socket
      *
      * @param s Socket to take care of
@@ -1097,8 +1117,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         ThreadPoolExecutor tpe = _executor;
         if (tpe == null) {
             _log.error("No executor for socket!");
-            try {s.close();}
-            catch (IOException ioe) { /* ignored */ }
+            writeShedResponse(s);
             return;
         }
         // Hard cap on concurrently handled connections. During an inbound flood (e.g.
@@ -1115,28 +1134,38 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             // This is the observable the Tuner uses to raise the default cap before
             // connections are dropped (P3 instrumentation).
             if (_context != null) {_context.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);}
-            try {s.close();}
-            catch (IOException ioe) { /* ignored */ }
+            writeShedResponse(s);
             return;
         }
         try {tpe.execute(new BlockingRunner(s));}
         catch (RejectedExecutionException ree) {
-            // should never happen, we have an unbounded pool and never stop the executor, but
-            // if it does, return the slot and close the socket rather than leaking the reservation.
+            // Pool rejected (full or shutting down). Return the slot and shed
+            // rather than leaking the reservation.
             I2PTunnelServer.releaseConnectionSlot(_activeConnections);
             if (_log.shouldWarn()) {
                 _log.warn("Client pool rejected connection (executor full); shedding");
             }
-            // Mirrors the cap-path shed stat: a rejection here closes the socket with
-            // zero bytes, which a proxy browser reports as an empty response. Counting it
-            // as i2ptunnel.clientConnectionShed makes the executor (not just the admission
-            // gate) a visible overload signal to the Tuner, which needs it to grow the
-            // worker pool instead of holding back. Without this the worker pool collapse
-            // (e.g. 27 threads) sheds bursts invisibly to autotuning.
+            // Mirrors the cap-path shed stat: a rejection here would otherwise close
+            // the socket with zero bytes (empty proxy response). Count it so the
+            // Tuner grows the worker pool instead of holding back.
             if (_context != null) {_context.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);}
-            try {s.close();}
-            catch (IOException ioe) { /* ignored */ }
+            writeShedResponse(s);
         }
+    }
+
+    /**
+     *  Best-effort shed response on the browser-facing socket, then close it.
+     *  <p>
+     *  The default is a silent close (non-HTTP tunnels). HTTP subclasses override
+     *  this to emit a real status line — a cookie-capped meta-refresh page or a
+     *  503 — so browsers never see an empty response for a shed connection.
+     *
+     *  @param s the accepted socket being shed; never null
+     *  @since 0.9.71+
+     */
+    protected void writeShedResponse(Socket s) {
+        try {s.close();}
+        catch (IOException ioe) { /* ignored */ }
     }
 
     /**

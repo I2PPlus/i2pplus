@@ -56,4 +56,16 @@ public class ClientMaxConnectionsTest {
                      I2PTunnelClientBase.resolveEffectiveMaxConnections(false, I2PTunnelClientBase.DEFAULT_MAX_CONNECTIONS, 0));
         assertEquals(96, I2PTunnelClientBase.resolveEffectiveMaxConnections(false, 96, -1));
     }
+
+    /** Customized tunnels pin their own ceiling on the runner pool. */
+    @Test
+    public void testRunnerCeilingPinnedWhenCustomized() {
+        assertEquals(700, I2PTunnelClientBase.resolveRunnerCeiling(true, 700));
+    }
+
+    /** Un-customized tunnels pass 0 so the pool tracks the live Tuner default. */
+    @Test
+    public void testRunnerCeilingTracksLiveDefault() {
+        assertEquals(0, I2PTunnelClientBase.resolveRunnerCeiling(false, 256));
+    }
 }
