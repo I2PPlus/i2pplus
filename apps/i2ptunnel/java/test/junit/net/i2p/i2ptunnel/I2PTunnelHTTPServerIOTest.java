@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import junit.framework.TestCase;
 
@@ -17,14 +18,28 @@ import junit.framework.TestCase;
 public class I2PTunnelHTTPServerIOTest extends TestCase {
 
     /**
-     * Test that the I/O pool is created lazily and returns a valid executor.
+     * Test that an I/O pool factory creates a valid, non-shutdown executor.
      */
     public void testIOPoolCreation() {
-        java.util.concurrent.ThreadPoolExecutor pool = I2PTunnelHTTPServer.getIOExecutor();
+        ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(4);
         assertNotNull("I/O pool must not be null", pool);
         assertFalse("I/O pool must not be shutdown", pool.isShutdown());
-        // The pool we got must be the same on subsequent calls
-        assertSame("I/O pool must be a singleton", pool, I2PTunnelHTTPServer.getIOExecutor());
+        assertTrue("I/O pool core size respects floor", pool.getCorePoolSize() >= I2PTunnelHTTPServer.IO_POOL_FLOOR);
+        pool.shutdownNow();
+    }
+
+    /**
+     * Each tunnel gets its own I/O pool instance (isolation), not a shared singleton.
+     */
+    public void testIOPoolsAreIsolated() {
+        ThreadPoolExecutor a = I2PTunnelHTTPServer.createIOExecutor(4);
+        ThreadPoolExecutor b = I2PTunnelHTTPServer.createIOExecutor(4);
+        try {
+            assertNotSame("I/O pools must be per-tunnel, not a singleton", a, b);
+        } finally {
+            a.shutdownNow();
+            b.shutdownNow();
+        }
     }
 
     /**

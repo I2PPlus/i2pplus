@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 import java.util.zip.GZIPInputStream;
 
 import net.i2p.I2PAppContext;
@@ -86,10 +87,11 @@ public class CompressedRequestorTest {
         Constructor<?> ctor = clazz.getDeclaredConstructor(Socket.class, I2PSocket.class, String.class,
                                                            I2PAppContext.class, Log.class, boolean.class,
                                                            boolean.class, ThreadPoolExecutor.class,
-                                                           boolean.class, AtomicInteger.class);
+                                                           boolean.class, AtomicInteger.class,
+                                                           Supplier.class);
         ctor.setAccessible(true);
         return (Runnable) ctor.newInstance(webserver, browser, headers, CTX, LOG, compress, upgrade,
-                                           executor, keepalive, waiter);
+                                           executor, keepalive, waiter, (Supplier<ThreadPoolExecutor>) () -> executor);
     }
 
     private static byte[] readRequest(InputStream in) throws IOException {

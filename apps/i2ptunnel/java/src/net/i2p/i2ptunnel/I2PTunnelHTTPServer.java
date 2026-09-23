@@ -18,15 +18,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -93,14 +97,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return t;
     });
 
-    /** Dedicated I/O pool for Server→Client data transfer. Separate from the handler
-     *  pool (_clientExecutor) so pinned handler threads are never consumed by slow
-     *  downloads. Sized by {@link TunnelControllerGroup#getIOTransferThreads()}.
+    /** Per-tunnel I/O pools for Server→Client data transfer, keyed by this
+     *  server instance so a saturated dest cannot consume every IO thread.
+     *  Sized as shares of {@link TunnelControllerGroup#getIOTransferThreads()}.
+     *  Separate from the runner pool so pinned runner threads are never
+     *  consumed by slow downloads.
      *  @since 0.9.71+ */
-    private static volatile ThreadPoolExecutor _ioExecutor;
+    private static final ConcurrentHashMap<Object, ThreadPoolExecutor> _ioPools =
+        new ConcurrentHashMap<>(4);
     private static final Object _ioExecutorLock = new Object();
-    /** Default I/O transfer threads; Tuner adjusts via TunnelControllerGroup. */
+    /** Default I/O transfer threads (global budget); Tuner adjusts via TunnelControllerGroup. */
     static volatile int ioTransferThreads = Math.max(4, Math.min(16, Runtime.getRuntime().availableProcessors()));
+    /** Absolute floor for a live server tunnel's I/O pool. @since 0.9.71+ */
+    static final int IO_POOL_FLOOR = 2;
     /** Idle timeout for Server→Client transfers (ms). If no read/write progress
      *  occurs for this long, the transfer is considered stalled and cancelled.
      *  Measured between progress events, not as a total transfer deadline —
@@ -109,62 +118,124 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** Monotonically increasing counter of stall events detected by runOnIO
      *  or the Sender. Used by the Tuner as the observed signal for stall
      *  timeout adjustment. */
-    static final java.util.concurrent.atomic.AtomicLong _stallEventCount = new java.util.concurrent.atomic.AtomicLong();
+    static final AtomicLong _stallEventCount = new AtomicLong();
 
     /**
-     *  Get (creating on first use) the shared I/O pool for tunnel data transfer.
-     *  Sized dynamically by the Tuner via {@link TunnelControllerGroup#setIOTransferThreads(int)}.
+     *  Get (creating on first use) this tunnel's private I/O pool for data
+     *  transfer. The pool is a share of the global ioTransferThreads budget so
+     *  one tunnel's bulk downloads cannot starve another's.
      *
-     *  @return non-null, the shared I/O executor
+     *  @return non-null, this tunnel's I/O executor
      *  @since 0.9.71+
      */
-    static ThreadPoolExecutor getIOExecutor() {
-        ThreadPoolExecutor ex = _ioExecutor;
-        if (ex == null || ex.isShutdown()) {
-            synchronized (_ioExecutorLock) {
-                ex = _ioExecutor;
-                if (ex == null || ex.isShutdown()) {
-                    ex = new ThreadPoolExecutor(ioTransferThreads, ioTransferThreads,
-                        30L, TimeUnit.SECONDS,
-                        new java.util.concurrent.LinkedBlockingQueue<Runnable>(),
-                        r -> {
-                            Thread t = new Thread(r, "I2P-IO-Transfer");
-                            t.setDaemon(true);
-                            t.setPriority(Thread.NORM_PRIORITY - 1);
-                            return t;
-                        });
-                    ex.allowCoreThreadTimeOut(true);
-                    _ioExecutor = ex;
-                }
+    ThreadPoolExecutor getIOExecutor() {
+        synchronized (_ioExecutorLock) {
+            ThreadPoolExecutor ex = _ioPools.get(this);
+            if (ex == null || ex.isShutdown()) {
+                ex = createIOExecutor(1);
+                _ioPools.put(this, ex);
             }
-        } else if (ex.getCorePoolSize() != ioTransferThreads) {
-            synchronized (_ioExecutorLock) {
-                if (_ioExecutor.getCorePoolSize() != ioTransferThreads && !_ioExecutor.isShutdown()) {
-                    if (ioTransferThreads > _ioExecutor.getMaximumPoolSize()) {
-                        // Growing: set max first so core <= max
-                        _ioExecutor.setMaximumPoolSize(ioTransferThreads);
-                        _ioExecutor.setCorePoolSize(ioTransferThreads);
-                    } else {
-                        // Shrinking: set core first so core <= max
-                        _ioExecutor.setCorePoolSize(ioTransferThreads);
-                        _ioExecutor.setMaximumPoolSize(ioTransferThreads);
-                    }
-                }
-            }
+            rebalanceIOPools();
+            return _ioPools.get(this);
         }
+    }
+
+    /**
+     *  Create a fixed-size I/O transfer pool. Package-visible for tests.
+     *
+     *  @param threads fixed core/max worker count
+     *  @return non-null executor
+     *  @since 0.9.71+
+     */
+    static ThreadPoolExecutor createIOExecutor(int threads) {
+        int n = Math.max(IO_POOL_FLOOR, threads);
+        ThreadPoolExecutor ex = new ThreadPoolExecutor(n, n,
+            30L, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(),
+            r -> {
+                Thread t = new Thread(r, "I2P-IO-Transfer");
+                t.setDaemon(true);
+                t.setPriority(Thread.NORM_PRIORITY - 1);
+                return t;
+            });
+        ex.allowCoreThreadTimeOut(true);
         return ex;
     }
 
     /**
-     *  Get the active thread count of the I/O transfer pool.
+     *  Rebalance every live I/O pool from the global ioTransferThreads budget.
+     *  Must run under {@link #_ioExecutorLock}.
+     *  @since 0.9.71+
+     */
+    private static void rebalanceIOPools() {
+        int n = _ioPools.size();
+        if (n == 0) {return;}
+        int budget = ioTransferThreads;
+        int[] desired = new int[n];
+        for (int i = 0; i < n; i++) {desired[i] = budget;}
+        int[] alloc = TunnelControllerGroup.allocateServerThreads(budget, desired, IO_POOL_FLOOR);
+        int idx = 0;
+        for (ThreadPoolExecutor ex : _ioPools.values()) {
+            int want = alloc[idx++];
+            if (ex == null || ex.isShutdown()) {continue;}
+            resizeIOExecutor(ex, want);
+        }
+    }
+
+    /**
+     *  Resize an I/O pool, preserving core == max.
+     *  @param ex the pool; ignored if null or shut down
+     *  @param newThreads the new fixed size
+     *  @since 0.9.71+
+     */
+    private static void resizeIOExecutor(ThreadPoolExecutor ex, int newThreads) {
+        if (ex == null || ex.isShutdown()) {return;}
+        if (newThreads > ex.getMaximumPoolSize()) {
+            ex.setMaximumPoolSize(newThreads);
+            ex.setCorePoolSize(newThreads);
+        } else {
+            ex.setCorePoolSize(newThreads);
+            ex.setMaximumPoolSize(newThreads);
+        }
+    }
+
+    /**
+     *  Deregister this tunnel's I/O pool on stop so its budget share is freed.
+     *  @since 0.9.71+
+     */
+    private void ioPoolStopped() {
+        synchronized (_ioExecutorLock) {
+            ThreadPoolExecutor ex = _ioPools.remove(this);
+            if (ex != null) {ex.shutdown();}
+            rebalanceIOPools();
+        }
+    }
+
+    /**
+     *  Trigger a full I/O-pool rebalance after a global budget change (Tuner).
+     *  @since 0.9.71+
+     */
+    static void rebalanceAllIOPools() {
+        synchronized (_ioExecutorLock) {
+            rebalanceIOPools();
+        }
+    }
+
+    /**
+     *  Get the active thread count summed across all live I/O pools.
      *  Used by the Tuner as a saturation signal.
      *
-     *  @return active threads, or 0 if pool not yet created
+     *  @return active threads across pools, or 0 if none created
      *  @since 0.9.71+
      */
     public static int getIOTransferActiveCount() {
-        ThreadPoolExecutor ex = _ioExecutor;
-        return ex != null ? ex.getActiveCount() : 0;
+        synchronized (_ioExecutorLock) {
+            int total = 0;
+            for (ThreadPoolExecutor ex : _ioPools.values()) {
+                if (ex != null) {total += ex.getActiveCount();}
+            }
+            return total;
+        }
     }
 
     /**
@@ -175,6 +246,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     public static void setIOTransferThreads(int val) {
         ioTransferThreads = Math.max(2, Math.min(64, val));
+        rebalanceAllIOPools();
     }
 
     /**
@@ -744,7 +816,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         synchronized(this) {
             if (_postThrottler != null) {_postThrottler.stop();}
         }
-        return super.close(forced);
+        boolean closed = super.close(forced);
+        if (closed) {ioPoolStopped();}
+        return closed;
     }
 
     /**
@@ -919,7 +993,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean compress = allowGZIP && useGZIP;
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
-                                                     _log, compress, upgrade, _clientExecutor, keepalive, waiter);
+                                                     _log, compress, upgrade, _clientExecutor, keepalive, waiter,
+                                                     this::getIOExecutor);
                 // Persistent connections run inline so the waiter can gate the
                 // next request on this connection. Non-keepalive requests
                 // (including GET/HEAD with keepalive off or Connection: close)
@@ -1211,8 +1286,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     @Override
     protected void rejectConnection(I2PSocket socket) {
+        rejectConnection(socket, false);
+    }
+
+    /**
+     *  Refuse an inbound connection (queue-full or connection-cap): send a 503
+     *  (SSL port 443 resets instead) and close, then log the accurate reason.
+     *
+     *  @param socket the accepted but undelivered I2PSocket to reject
+     *  @param queueFull true if the handler queue gate rejected, false for the connection cap
+     *  @since 0.9.71+
+     */
+    @Override
+    protected void rejectConnection(I2PSocket socket, boolean queueFull) {
         sendErrorAndClose(socket);
-        super.rejectConnection(socket);
+        super.rejectConnection(socket, queueFull);
     }
 
     /**
@@ -1599,15 +1687,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final ThreadPoolExecutor _tpe;
         private volatile boolean _keepalive;
         private final AtomicInteger _waiter;
+        private final Supplier<ThreadPoolExecutor> _ioPool;
         private static final int BUF_SIZE = 16*1024;
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
          *  @param waiter to notify when done, if non-null; will set value to 1: not keepalive-able response, or 2: keepalive
+         *  @param ioPool resolves the owning tunnel's I/O transfer pool (never returns null in production)
          */
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
-                                   ThreadPoolExecutor tpe, boolean keepalive, AtomicInteger waiter) {
+                                   ThreadPoolExecutor tpe, boolean keepalive, AtomicInteger waiter,
+                                   Supplier<ThreadPoolExecutor> ioPool) {
             _webserver = webserver;
             _browser = browser;
             _headers = headers;
@@ -1618,6 +1709,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _tpe = tpe;
             _keepalive = keepalive;
             _waiter = waiter;
+            _ioPool = ioPool;
         }
 
         private static String urlSuffix(String req) {
@@ -1640,8 +1732,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *                      fails, or the pool rejects the task
          */
         private void runOnIO(Sender s, String desc) throws IOException {
-            ThreadPoolExecutor ioPool = getIOExecutor();
+            ThreadPoolExecutor ioPool = _ioPool != null ? _ioPool.get() : null;
             Future<?> f;
+            if (ioPool == null) {
+                // Headless/unit path: no owning server, run inline rather than drop.
+                s.run();
+                return;
+            }
             try {
                 f = ioPool.submit(s);
             } catch (RejectedExecutionException ree) {
