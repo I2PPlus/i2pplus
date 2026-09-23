@@ -126,7 +126,12 @@ class ExpireLeasesJob extends JobImpl {
             long expiry = ls.getLatestLeaseDate();
             if (expiry > now && expiry - now < REFRESH_THRESHOLD_MS) {
                 if (_log.shouldInfo()) {_log.info("Refreshing LeaseSet [" + h.toBase32().substring(0,8) + "] before expiry");}
-                _facade.lookupLeaseSetRemotely(h, null);
+                if (_facade.isClientDb()) {
+                    // Client sub-DB drops null-fromLocalDest searches; use main NetDb (exploratory)
+                    getContext().netDb().lookupLeaseSetRemotely(h, null);
+                } else {
+                    _facade.lookupLeaseSetRemotely(h, null);
+                }
             }
         }
     }

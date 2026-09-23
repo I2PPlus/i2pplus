@@ -929,7 +929,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                 }
             };
 
-            _facade.lookupLeaseSetRemotely(_ls.getHash(), onFound, onFailed, 10L * 1000, null);
+            // Verify remote publish; _dest selects tunnels (null would be dropped on client sub-DBs)
+            _facade.lookupLeaseSetRemotely(_ls.getHash(), onFound, onFailed, 10L * 1000, _dest);
         }
     }
 

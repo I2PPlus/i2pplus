@@ -22,6 +22,7 @@ import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -158,6 +159,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRequiredRateStat("netDb.failedTime", "Time a failed NetDb search takes", "NetworkDatabase", rate);
         _context.statManager().createRequiredRateStat("netDb.lookupsFailedLeaseSet", "Failed Iterative LeaseSet lookups", "NetworkDatabase", rate);
         _context.statManager().createRequiredRateStat("netDb.lookupsFailedRouterInfo", "Failed Iterative RouterInfo lookups", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.lookupsFailedLeaseSetZeroTry", "Failed LeaseSet lookups with zero peers queried", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.lookupsFailedRouterInfoZeroTry", "Failed RouterInfo lookups with zero peers queried", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedAttemptedPeers", "Number of peers we sent a search to that failed", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.successPeers", "Number of peers we sent a search to that succeeded", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedPeers", "Number of peers failing to respond to a NetDb lookup", "NetworkDatabase", rate);
@@ -174,7 +177,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // late reply grace period cache
         _context.statManager().createRateStat("netDb.lateReplyCacheSize", "Size of late reply grace period cache", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.lateReplyTimedOut", "Timed out peers added to late reply cache", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.clientSubDbExploratoryDrop", "Dropped Client subDb exploratory searches (missing dest)", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.clientSubDbExploratoryDrop", "Client subDb expl. drop (missing dest)", "NetworkDatabase", rate);
+        _context.statManager().createRateStat("netDb.clientSubDbExploratoryFallback", "Client subDb expl. fallback to main NetDb", "NetworkDatabase", rate);
         // No need to start the FloodfillMonitorJob for client subDb.
         if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null; _contactRefreshJob = null; _introducerLookupJob = null;}
         else {
@@ -830,26 +834,38 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Lookup using the client's tunnels.
      *
      * Caller should check negative cache and/or banlist before calling.
+     * Every path either schedules a search or queues onFailedLookupJob —
+     * never returns without notifying the caller.
      *
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @return null always
      * @since 0.9.10
      */
-    // ToDo: With repect to segmented netDb clients, this framework needs refinement.
-    // A client with a segmented netDb can not use exploratory tunnels.
-    // The return messages will not have sufficient information to be directed back to the client making the query.
+    // Client sub-DBs cannot use exploratory tunnels (reply routing needs the
+    // client's session); those searches are delegated to the main NetDb.
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) { // NOSONAR S3516 returns null by design, callers use callbacks
         if (key == null) {
-            if (_log.shouldWarn()) {_log.warn("NULL key search requested -> Dropping...");}
+            if (_log.shouldWarn()) {_log.warn("NULL key search requested -> Failing callbacks...");}
+            failSearchCallbacks(onFindJob, onFailedLookupJob);
             return null;
         } else if (fromLocalDest == null && isClientDb()) {
-            _context.statManager().addRateData("netDb.clientSubDbExploratoryDrop", 1);
-            long now = _context.clock().now();
-            long last = _lastClientSubDbWarn;
-            if (now - last > CLIENT_SUBDB_WARN_INTERVAL && _log.shouldWarn()) {
-                _lastClientSubDbWarn = now;
-                _log.warn("Dropping search from Client subDb using Exploratory tunnels -> Rate-limited...");
+            // Client sub-Db + no client tunnels: exploratory search cannot run
+            // here. Delegate to the main NetDb so the lookup still completes
+            // and callbacks fire, instead of dropping the job silently.
+            FloodfillNetworkDatabaseFacade main = getMainFacade();
+            if (main != null && main != this) {
+                _context.statManager().addRateData("netDb.clientSubDbExploratoryFallback", 1);
+                long now = _context.clock().now();
+                long last = _lastClientSubDbWarn;
+                if (now - last > CLIENT_SUBDB_WARN_INTERVAL && _log.shouldDebug()) {
+                    _lastClientSubDbWarn = now;
+                    _log.debug("Client subDb search delegated to main NetDb (no fromLocalDest) -> Rate-limited...");
+                }
+                return main.search(key, onFindJob, onFailedLookupJob, timeoutMs, isLease, null);
             }
+            // Main facade unavailable (startup/shutdown race): fail closed.
+            if (_log.shouldWarn()) {_log.warn("Main NetDb unavailable for delegated search -> Failing callbacks...");}
+            failSearchCallbacks(onFindJob, onFailedLookupJob);
             return null;
         } else if (fromLocalDest != null) {
             // Client-initiated search always starts immediately, even if a
@@ -897,6 +913,34 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             return null;
         }
+    }
+
+    /**
+     * Main (router) NetDb facade, or null if not yet available.
+     * Client sub-DBs delegate exploratory searches here so callbacks always fire.
+     *
+     * @return the main FloodfillNetworkDatabaseFacade, or null
+     * @since 0.9.71+
+     */
+    private FloodfillNetworkDatabaseFacade getMainFacade() {
+        NetworkDatabaseFacade ndb = _context.netDb();
+        if (ndb instanceof FloodfillNetworkDatabaseFacade) {return (FloodfillNetworkDatabaseFacade) ndb;}
+        return null;
+    }
+
+    /**
+     * Queue failure callbacks so a search that cannot start never leaves
+     * the caller waiting for a timeout that will never be scheduled.
+     * Success and failure jobs may both be non-null (lookupDestination);
+     * on failure both roles collapse to the finished/failed job.
+     *
+     * @param onFindJob may be null
+     * @param onFailedLookupJob may be null
+     * @since 0.9.71+
+     */
+    private void failSearchCallbacks(Job onFindJob, Job onFailedLookupJob) {
+        Job fail = onFailedLookupJob != null ? onFailedLookupJob : onFindJob;
+        if (fail != null) {_context.jobQueue().addJob(fail);}
     }
 
     /**
