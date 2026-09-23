@@ -66,6 +66,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Set<Hash> _unheardFrom;
     /** Query sent, failed, timed out, or got DSRM. */
     private final Set<Hash> _failedPeers;
+    /** True once any peer replied (DSRM); distinguishes definitive fails from pure timeouts. */
+    private volatile boolean _sawReply;
     /** The time the query was sent to a peer, which we need to update profiles correctly. */
     private final Map<Hash, Long> _sentTime;
     /** The routing key. */
@@ -343,6 +345,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (fromLocalDest != null && !isLease && _log.shouldWarn()) {
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         }
+        // FloodSearchJob does not extend SearchJob, so searchCount must be
+        // incremented here or iterative searches are invisible in the stats.
+        ctx.statManager().addRateData("netDb.searchCount", 1);
         // All createRateStat in FNDF
     }
 
@@ -691,6 +696,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             }
         }
         if (peer != null) {_sentTime.put(peer, Long.valueOf(now));}
+        getContext().statManager().addRateData("netDb.searchMessageCount", 1);
 
         EncType type = ri != null ? ri.getIdentity().getPublicKey().getType() : null;
         boolean encryptElG = ctx.getProperty(PROP_ENCRYPT_RI, DEFAULT_ENCRYPT_RI);
@@ -817,6 +823,13 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     @Override
     public String getName() {return "Start Iterative Search";}
+
+    /**
+     *  Note that a peer replied (DSRM processed); subsequent total failure
+     *  counts as definitive toward the negative cache, not a pure timeout.
+     *  @since 0.9.71+
+     */
+    void markSawReply() { _sawReply = true; }
 
     /**
      *  Note that the peer did not respond with a DSM (either a DSRM, timeout, or failure).
@@ -982,21 +995,28 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         _facade.complete(_key);
         releaseFloodfillQueries();
-        if (getContext().commSystem().getStatus() != Status.DISCONNECTED) {
+        int tries;
+        final List<Hash> unheard;
+        final boolean sawReply;
+        synchronized(this) {
+            tries = _unheardFrom.size() + _failedPeers.size();
+            unheard = new ArrayList<>(_unheardFrom);
+            sawReply = _sawReply;
+        }
+        if (getContext().commSystem().getStatus() != Status.DISCONNECTED
+                && NegativeLookupCache.countsAsDefinitiveFail(tries)) {
             // Count-based negative caching: NegativeLookupCache trips after
             // netdb.negativeCache.maxFails failures within its cleaner window,
             // so a peer that is truly gone starts failing fast for subsequent
             // lookups, while a single transient blip (one dropped search)
             // doesn't poison the key and cut off transit traffic through it.
-            _facade.lookupFailed(_key);
+            // Zero-try failures are local (no peer contacted) and must not
+            // poison the key. Pure timeouts use a higher threshold so a brief
+            // tunnel outage doesn't lock out a live destination.
+            if (sawReply) {_facade.lookupFailed(_key);}
+            else {_facade.lookupTimeout(_key);}
         }
         getContext().messageRegistry().unregisterPending(_out);
-        int tries;
-        final List<Hash> unheard;
-        synchronized(this) {
-            tries = _unheardFrom.size() + _failedPeers.size();
-            unheard = new ArrayList<>(_unheardFrom);
-        }
         // Blame the unheard-from (others already blamed in failed() above)
         for (Hash h : unheard) {getContext().profileManager().dbLookupFailed(h);}
         long time = System.currentTimeMillis() - _created;
@@ -1011,6 +1031,12 @@ public class IterativeSearchJob extends FloodSearchJob {
             getContext().statManager().addRateData("netDb.failedRetries", (long) tries - 1);
             getContext().statManager().addRateData(
                 _isLease ? "netDb.lookupsFailedLeaseSet" : "netDb.lookupsFailedRouterInfo", 1);
+        } else {
+            // Zero-try: banlist/negcache skip, no floodfill peers, or job drop.
+            // Callbacks still fire; keep these out of the iterative-fail counters
+            // so "real search failed" stays comparable to replyTimeout/searchCount.
+            getContext().statManager().addRateData(
+                _isLease ? "netDb.lookupsFailedLeaseSetZeroTry" : "netDb.lookupsFailedRouterInfoZeroTry", 1);
         }
         for (Job j : _onFailed) {getContext().jobQueue().addJob(j);}
         _onFailed.clear();

@@ -837,10 +837,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
-    /** Lookup lease set */
+    /** Lookup lease set. Fires onFailed if the router is not yet initialized. */
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob,
                                long timeoutMs, Hash fromLocalDest) {
-        if (!_initialized) return;
+        if (!_initialized) {
+            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+            return;
+        }
         LeaseSet ls = lookupLeaseSetLocally(key);
         if (ls != null) {
             if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
@@ -880,12 +883,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param onFailedLookupJob may be null
      */
     @Override
-    /** Lookup lease set remotely */
+    /** Lookup lease set remotely. Fires onFailed if uninitialized or negative-cached. */
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
                                        long timeoutMs, Hash fromLocalDest) {
-        if (!_initialized) {return;}
+        if (!_initialized) {
+            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+            return;
+        }
         key = blindCache().getHash(key);
-        if (isNegativeCached(key)) {return;}
+        if (isNegativeCached(key)) {
+            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+            return;
+        }
         search(key, onFindJob, onFailedLookupJob, timeoutMs, true, fromLocalDest);
     }
 
@@ -957,9 +966,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
-    /** Lookup destination */
+    /** Lookup destination. Fires onFinished if the router is not yet initialized. */
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {
-        if (!_initialized) return;
+        if (!_initialized) {
+            if (onFinishedJob != null) {_context.jobQueue().addJob(onFinishedJob);}
+            return;
+        }
         Destination d = lookupDestinationLocally(key);
         if (d != null) {_context.jobQueue().addJob(onFinishedJob);}
         else if (isNegativeCached(key)) {
@@ -3070,6 +3082,15 @@ return false;
     void lookupFailed(Hash key) {_negativeCache.lookupFailed(key);}
 
     /**
+     * Pure-timeout search failure (no peer replied).
+     * Higher negative-cache threshold than {@link #lookupFailed(Hash)}.
+     *
+     * @param key the key that timed out
+     * @since 0.9.71+
+     */
+    void lookupTimeout(Hash key) {_negativeCache.lookupTimeout(key);}
+
+    /**
      *  Is the key in the negative lookup cache?
      *
      *  @param key for Destinations or RouterIdentities
@@ -3079,6 +3100,19 @@ return false;
         boolean rv = _negativeCache.isCached(key);
         if (rv) {_context.statManager().addRateData("netDb.negativeCache", 1);}
         return rv;
+    }
+
+    /**
+     * Negative-cache check without recording an abort stat. Used by callers
+     * that need to branch on cache state before deciding cooldown/stats, so
+     * a single send path does not double-count {@code netDb.negativeCache}.
+     *
+     * @param key the key to check
+     * @return true if the key is negatively cached (transient or permanent)
+     * @since 0.9.71+
+     */
+    public boolean peekNegativeCached(Hash key) {
+        return key != null && _negativeCache.isCached(key);
     }
 
     /**

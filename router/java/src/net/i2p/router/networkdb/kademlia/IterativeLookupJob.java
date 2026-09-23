@@ -120,6 +120,7 @@ class IterativeLookupJob extends JobImpl {
         if (timeSent > 0) {
             ctx.profileManager().dbLookupReply(from, newPeers, oldPeers, invalidPeers, 0, now - timeSent);
         }
+        _search.markSawReply();
         _search.failed(from, false);
     }
 
