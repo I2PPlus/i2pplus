@@ -71,16 +71,71 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     /** network buffer size for buffered streams */
     static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
     /**
-     *  Max number of times the outer empty-response reconnect loop may invoke the
-     *  callback.  The callback's own for-loop handles connect-failure backoff, but
-     *  when the destination is reachable yet always sends zero bytes each cycle
-     *  succeeds on attempt 1 and the outer loop would spin forever.  4 cycles ×
-     *  the default 9-attempt callback budget gives generous headroom for transient
-     *  failures while bounding the total to ~40 attempts / ~30s worst-case.
+     *  Max number of consecutive <em>no-progress</em> cycles (stalls) the outer
+     *  empty-response / body-resume reconnect loop may invoke the callback for.
+     *  The callback's own for-loop handles connect-failure backoff, but when the
+     *  destination is reachable yet always sends zero bytes, each cycle succeeds
+     *  on attempt 1 and the outer loop would spin forever.  4 stall cycles ×
+     *  the default 9-attempt callback budget gives generous headroom for
+     *  transient failures while bounding a truly stuck transfer to ~40
+     *  attempts / ~30s worst-case.  A cycle that makes any forward progress on
+     *  the entity body resets this budget (see {@link #MAX_RESUME_CYCLES}).
      *
      *  @since 0.9.71+
      */
     static final int MAX_EMPTY_RECONNECT_CYCLES = 4;
+    /**
+     *  Absolute safety cap on total body-resume cycles regardless of progress.
+     *  Progress resets the stall budget ({@link #MAX_EMPTY_RECONNECT_CYCLES})
+     *  so a slowly-advancing transfer is never abandoned mid-body for lack of
+     *  progress, but a pathological trickle (one byte per cycle forever) must
+     *  still terminate.  Well above any legitimate need: a healthy resume
+     *  completes in 1–2 cycles.
+     *
+     *  @since 0.9.71+
+     */
+    static final int MAX_RESUME_CYCLES = 32;
+
+    /**
+     *  Progress-based budget for body-resume cycles. Pure decision state so
+     *  the {@link #resumeIncompleteBody} loop stays thin and tests can pin
+     *  stall-reset and absolute-cap behaviour without a live transfer.
+     *
+     *  <p>Only consecutive no-progress cycles count against
+     *  {@link #MAX_EMPTY_RECONNECT_CYCLES}; any forward progress resets that
+     *  counter. {@link #MAX_RESUME_CYCLES} bounds total attempts regardless
+     *  of progress so a pathological trickle still terminates.
+     *
+     *  @since 0.9.71+
+     */
+    static final class ResumeBudget {
+        private int stallCycles;
+        private int totalCycles;
+        private long lastBody = -1;
+
+        /**
+         *  Consume one resume cycle for the given body progress.
+         *
+         *  @param bodyReceived entity-body bytes delivered so far
+         *  @return true if another resume attempt may proceed
+         */
+        boolean tryConsume(long bodyReceived) {
+            boolean progressed = lastBody >= 0 && bodyReceived > lastBody;
+            if (progressed) {stallCycles = 0;}
+            lastBody = bodyReceived;
+            if (stallCycles >= MAX_EMPTY_RECONNECT_CYCLES) {return false;}
+            if (totalCycles >= MAX_RESUME_CYCLES) {return false;}
+            totalCycles++;
+            stallCycles++;
+            return true;
+        }
+
+        /** Stall cycles consumed so far (including the in-flight one). @since 0.9.71+ */
+        int getStallCycles() { return stallCycles; }
+        /** Total resume attempts consumed so far. @since 0.9.71+ */
+        int getTotalCycles() { return totalCycles; }
+    }
+
     /** Plain TCP socket (local or remote endpoint). */
     private final Socket s;
     /** I2P socket (the tunnel connection). Non-final so an "empty response"
@@ -380,6 +435,15 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  When null (default), forwarders use a fallback thread.
      */
     public void setExecutor(Executor exec) { _runnerExecutor = exec; }
+
+    /**
+     *  The tunnel's runner executor (set by {@link #setExecutor}), or null
+     *  when the runner will spawn a dedicated thread instead.
+     *
+     *  @return the executor, or null
+     *  @since 0.9.71+
+     */
+    Executor getRunnerExecutor() { return _runnerExecutor; }
 
     /**
      *  Gets the TCP socket input stream.
@@ -788,24 +852,30 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  <p>Rotates to a new tunnel via {@link ReconnectCallback}, re-sends the
      *  buffered GET/HEAD with {@code Range: bytes=N-} for the undelivered
      *  remainder, and splices the second response body onto the browser stream
-     *  without re-emitting headers. Bounded by {@link #MAX_EMPTY_RECONNECT_CYCLES}.
+     *  without re-emitting headers.  The budget is progress-based: only
+     *  consecutive stall cycles (no new body bytes since the previous attempt)
+     *  count against {@link #MAX_EMPTY_RECONNECT_CYCLES}; any forward progress
+     *  resets that counter so a slowly-advancing download is never abandoned
+     *  for lack of progress.  {@link #MAX_RESUME_CYCLES} is an absolute
+     *  safety cap on total attempts regardless of progress.
      *
      *  @param out browser-facing output stream
      *  @since 0.9.71+
      */
     private void resumeIncompleteBody(OutputStream out) {
         if (_reconnectCallback == null || !isRetryableRequest(initialI2PData)) {return;}
-        int cycles = 0;
+        ResumeBudget budget = new ResumeBudget();
         while (true) {
             BodyProgress bp = getBodyProgress();
             if (bp == null) {return;}
             boolean resume = shouldResumeIncompleteBody(bp.bodyReceived, bp.contentLength,
                     true, true, bp.headerWritten && bp.canRangeResume);
             if (!resume) {return;}
-            if (cycles++ >= MAX_EMPTY_RECONNECT_CYCLES) {
+            if (!budget.tryConsume(bp.bodyReceived)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Body-resume budget exhausted after " + MAX_EMPTY_RECONNECT_CYCLES +
-                              " cycles at " + bp.bodyReceived + '/' + bp.contentLength + " bytes");
+                    _log.warn("Body-resume budget exhausted at " + bp.bodyReceived + '/' +
+                              bp.contentLength + " bytes (stalls=" + budget.getStallCycles() +
+                              ", attempts=" + budget.getTotalCycles() + ')');
                 }
                 return;
             }
