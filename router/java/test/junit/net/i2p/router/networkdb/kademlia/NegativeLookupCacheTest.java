@@ -159,4 +159,130 @@ public class NegativeLookupCacheTest {
         assertNotNull(_cache.getBadDest(dest1.calculateHash()));
         assertNotNull(_cache.getBadDest(dest2.calculateHash()));
     }
+
+    @Test
+    public void testZeroTryFailureNotDefinitive() {
+        assertFalse("Zero peers queried must not count as definitive",
+                    NegativeLookupCache.countsAsDefinitiveFail(0));
+        assertTrue("Peers queried count as definitive",
+                   NegativeLookupCache.countsAsDefinitiveFail(1));
+    }
+
+    @Test
+    public void testTimeoutThresholdHigherThanDefinitive() {
+        Hash h = randomHash();
+        for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+            _cache.lookupTimeout(h);
+        }
+        assertFalse("MAX_FAILS timeouts should not cache (higher bar)",
+                    _cache.isCached(h));
+        for (int i = 0; i < NegativeLookupCache.MAX_TIMEOUT_FAILS - NegativeLookupCache.MAX_FAILS; i++) {
+            _cache.lookupTimeout(h);
+        }
+        assertTrue("MAX_TIMEOUT_FAILS timeouts should cache", _cache.isCached(h));
+    }
+
+    @Test
+    public void testClearResetsTimeoutCounter() {
+        Hash h = randomHash();
+        for (int i = 0; i < NegativeLookupCache.MAX_TIMEOUT_FAILS; i++) {
+            _cache.lookupTimeout(h);
+        }
+        assertTrue(_cache.isCached(h));
+        _cache.clear(h);
+        assertFalse("After clear, timeout count should be reset", _cache.isCached(h));
+    }
+
+    // --- Pure decision helpers for per-entry TTL ---
+
+    @Test
+    public void testEntryTtlFirstTripIsBase() {
+        assertEquals("First trip (gen=1) must use base TTL",
+                     NegativeLookupCache.ENTRY_TTL_BASE_MS,
+                     NegativeLookupCache.entryTtlMs(1));
+    }
+
+    @Test
+    public void testEntryTtlBackoffDoublesPerTrip() {
+        assertEquals("Gen 2 doubles base",
+                     NegativeLookupCache.ENTRY_TTL_BASE_MS * 2,
+                     NegativeLookupCache.entryTtlMs(2));
+        assertEquals("Gen 3 doubles again",
+                     NegativeLookupCache.ENTRY_TTL_BASE_MS * 4,
+                     NegativeLookupCache.entryTtlMs(3));
+    }
+
+    @Test
+    public void testEntryTtlCapsAtMax() {
+        assertEquals("Gen 4+ must cap at max, not keep doubling",
+                     NegativeLookupCache.ENTRY_TTL_MAX_MS,
+                     NegativeLookupCache.entryTtlMs(4));
+        assertEquals("Gen 100 must still cap",
+                     NegativeLookupCache.ENTRY_TTL_MAX_MS,
+                     NegativeLookupCache.entryTtlMs(100));
+    }
+
+    @Test
+    public void testEntryTtlZeroOrNegativeTreatedAsFirstTrip() {
+        assertEquals("Gen 0 treated as 1",
+                     NegativeLookupCache.ENTRY_TTL_BASE_MS,
+                     NegativeLookupCache.entryTtlMs(0));
+        assertEquals("Negative gen treated as 1",
+                     NegativeLookupCache.ENTRY_TTL_BASE_MS,
+                     NegativeLookupCache.entryTtlMs(-5));
+    }
+
+    @Test
+    public void testIsEntryExpiredBoundary() {
+        long until = 1_700_000_000_000L;
+        assertFalse("One ms before until must not expire",
+                    NegativeLookupCache.isEntryExpired(until, until - 1));
+        assertTrue("Exact until is expired (now >= until)",
+                   NegativeLookupCache.isEntryExpired(until, until));
+        assertTrue("One ms past until must expire",
+                   NegativeLookupCache.isEntryExpired(until, until + 1));
+    }
+
+    @Test
+    public void testIsStreakStale() {
+        long last = 1_700_000_000_000L;
+        long window = 120_000L;
+        assertFalse("No last-fail (-1) is never stale",
+                    NegativeLookupCache.isStreakStale(-1, last + window * 10, window));
+        assertFalse("Within window not stale",
+                    NegativeLookupCache.isStreakStale(last, last + window - 1, window));
+        assertTrue("Exact window is stale (age >= window)",
+                   NegativeLookupCache.isStreakStale(last, last + window, window));
+        assertTrue("Past window is stale",
+                   NegativeLookupCache.isStreakStale(last, last + window + 1, window));
+    }
+
+    @Test
+    public void testClearResetsTripSoRetripWorks() {
+        Hash h = randomHash();
+        for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+            _cache.lookupFailed(h);
+        }
+        assertTrue("Should be cached after first trip", _cache.isCached(h));
+        _cache.clear(h);
+        assertFalse("clear(h) must fully reset", _cache.isCached(h));
+        // Re-trip works after clear
+        for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+            _cache.lookupFailed(h);
+        }
+        assertTrue("Re-trip after clear must cache again", _cache.isCached(h));
+    }
+
+    @Test
+    public void testClearResetsPartialStreak() {
+        Hash h = randomHash();
+        for (int i = 0; i < NegativeLookupCache.MAX_FAILS - 1; i++) {
+            _cache.lookupFailed(h);
+        }
+        assertFalse("Partial streak not cached", _cache.isCached(h));
+        _cache.clear(h);
+        // One more fail after clear must still not cache (counter reset)
+        _cache.lookupFailed(h);
+        assertFalse("Counter must have been reset by clear(h)", _cache.isCached(h));
+    }
 }
