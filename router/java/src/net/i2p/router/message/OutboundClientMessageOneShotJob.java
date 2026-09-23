@@ -280,6 +280,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createRequiredRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetSkipNegCache", "LS lookup skipped (negative cache; no real search)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetSkipCooldown", "Send skipped (LS fail cooldown or probe interval)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
     }
 
@@ -377,6 +379,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (OutboundCache.shouldSkipLeaseSetSend(cooldownEnd, now, lastValid, lastLookup,
                                                      OutboundCache.TRANSIENT_GAP_GRACE_MS,
                                                      OutboundCache.LS_PROBE_INTERVAL_MS)) {
+                getContext().statManager().addRateData("client.leaseSetSkipCooldown", 1);
                 if (_log.shouldInfo()) {
                     _log.info("Skipping send to " + _toString +
                               " — LS fail cooldown active, " +
@@ -385,8 +388,27 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);
                 return;
             }
+            // Pure neg-cache abort (no real search): do not stack the 30s send
+            // cooldown on top of the NetDb negative-cache entry — the cache is
+            // already the gate, and a second timer thrashes against probe
+            // intervals. recentlyValid clears the cache below and does a real
+            // search, so only the non-probe path takes this shortcut.
+            if (!recentlyValid && kndf.peekNegativeCached(toHash)) {
+                getContext().statManager().addRateData("client.leaseSetSkipNegCache", 1);
+                _cache.lsLastLookup.put(toHash, now);
+                if (_log.shouldInfo()) {
+                    _log.info("Skipping send to " + _toString + " — LeaseSet negatively cached");
+                }
+                // Fail job sees _leaseSetLookupBegin == 0 and will not record
+                // leaseSetFailedRemoteTime; permanent negatives still map to
+                // UNSUPPORTED_ENCRYPTION inside the fail job.
+                LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
+                getContext().jobQueue().addJob(failed);
+                return;
+            }
             // Set cooldown optimistically before lookup — concurrent sends to the
             // same dest will see this and skip. Cleared on success in SendJob/ctor.
+            // Not set on the pure neg-cache path above.
             _cache.lsFailCooldown.put(toHash, now + OutboundCache.LS_FAIL_COOLDOWN_MS);
             _cache.lsLastLookup.put(toHash, now);
             if (recentlyValid) {
@@ -654,8 +676,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("LeaseSet lookup failed for " + _toString + " after " +
-                              DataHelper.formatDuration(getContext().clock().now() - _leaseSetLookupBegin));
+                    if (_leaseSetLookupBegin > 0) {
+                        _log.info("LeaseSet lookup failed for " + _toString + " after " +
+                                  DataHelper.formatDuration(getContext().clock().now() - _leaseSetLookupBegin));
+                    } else {
+                        // Pure neg-cache abort — no search ran, duration would be nonsense
+                        _log.info("LeaseSet lookup skipped for " + _toString + " — negatively cached");
+                    }
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
