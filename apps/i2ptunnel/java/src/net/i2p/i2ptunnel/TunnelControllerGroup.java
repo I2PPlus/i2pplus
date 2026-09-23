@@ -1974,6 +1974,12 @@ public class TunnelControllerGroup implements ClientApp {
      *  and on server start/stop; must run under {@link #_serverExecutorLock}.
      *  The global budget is a cap on the sum, so reducing one tunnel's share or
      *  removing a tunnel frees budget for the rest.
+     *
+     *  <p>Claims are load-aware: a tunnel with queued or active work claims its
+     *  full ceiling, while an idle tunnel claims only a base share so a busy
+     *  sibling (e.g. a tracker under announce flood) receives the budget when
+     *  the sum of ceilings exceeds the global cap. Under a sufficient budget
+     *  every tunnel still receives its full ceiling.
      *  @since 0.9.71+
      */
     private void rebalanceServerExecutors() {
@@ -1984,7 +1990,10 @@ public class TunnelControllerGroup implements ClientApp {
         int idx = 0;
         for (ServerHandler h : _serverHandlers.values()) {
             int cap = h.override >= SERVER_HANDLER_FLOOR ? h.override : serverThreadsPerTunnel;
-            desired[idx++] = Math.min(cap, budget);
+            ThreadPoolExecutor ex = h.executor;
+            int q = ex != null ? ex.getQueue().size() : 0;
+            int a = ex != null ? ex.getActiveCount() : 0;
+            desired[idx++] = claimServerHandlerShare(cap, SERVER_HANDLER_FLOOR, q, a);
         }
         int[] alloc = allocateServerThreads(budget, desired, SERVER_HANDLER_FLOOR);
         idx = 0;
@@ -1995,7 +2004,7 @@ public class TunnelControllerGroup implements ClientApp {
             ThreadPoolExecutor ex = h.executor;
             if (ex == null) {
                 h.executor = createServerExecutor(want, _serverExecutorThreadCount);
-            } else if (ex.getCorePoolSize() != want) {
+            } else if (ex.getMaximumPoolSize() != want) {
                 resizeServerExecutor(ex, want);
             }
         }
@@ -2003,6 +2012,36 @@ public class TunnelControllerGroup implements ClientApp {
         if (ctx != null) {
             ctx.statManager().addRateData("i2ptunnel.serverHandler.threads", total);
         }
+    }
+
+    /**
+     *  Load-aware claim for one server tunnel's share of the global handler
+     *  budget. Pure decision, no router context.
+     *
+     *  <p>When the sum of per-tunnel ceilings exceeds the budget, proportional
+     *  cutting of equal full-cap claims starves the busy tunnel just as much as
+     *  an idle one. Scaling the claim by observed load gives queued/active work
+     *  the threads it needs while idle tunnels keep only a base share (still at
+     *  or above the floor once {@link #allocateServerThreads} applies).
+     *
+     *  @param cap       this tunnel's ceiling (per-tunnel override or default)
+     *  @param floor     shared per-tunnel floor
+     *  @param queueDepth queued tasks in this tunnel's pool
+     *  @param active    busy handler threads in this tunnel's pool
+     *  @return claimed threads in [{@code floor}, {@code cap}]
+     *  @since 0.9.71+
+     */
+    static int claimServerHandlerShare(int cap, int floor, int queueDepth, int active) {
+        int c = Math.max(floor, cap);
+        int f = Math.max(0, floor);
+        if (f >= c) {return c;}
+        int load = queueDepth + active;
+        if (load <= 0) {
+            // Idle: base share only (half the ceiling, never below the floor).
+            return Math.max(f, c / 2);
+        }
+        // Busy: full ceiling claim so the proportional cut prefers this tunnel.
+        return c;
     }
 
     /** Trigger a full handler-pool rebalance after a global or per-tunnel cap change. */

@@ -140,4 +140,54 @@ public class ServerHandlerAllocationTest {
                                                                TunnelControllerGroup.RUNNER_POOL_FLOOR);
         assertArrayEquals(new int[]{256, 256}, fit);
     }
+
+    // =====================================================================
+    // Load-aware claims (claimServerHandlerShare)
+    // =====================================================================
+
+    /** Busy tunnel (queued or active work) claims its full ceiling. */
+    @Test
+    public void testBusyTunnelClaimsFullCeiling() {
+        assertEquals(64, TunnelControllerGroup.claimServerHandlerShare(64, 4, 10, 0));
+        assertEquals(64, TunnelControllerGroup.claimServerHandlerShare(64, 4, 0, 8));
+        assertEquals(64, TunnelControllerGroup.claimServerHandlerShare(64, 4, 3, 5));
+    }
+
+    /** Idle tunnel claims only a base share so a busy sibling can take the budget. */
+    @Test
+    public void testIdleTunnelClaimsBaseShare() {
+        assertEquals(32, TunnelControllerGroup.claimServerHandlerShare(64, 4, 0, 0));
+        assertEquals(8, TunnelControllerGroup.claimServerHandlerShare(16, 4, 0, 0));
+    }
+
+    /** Claim never drops below the floor or rises above the ceiling. */
+    @Test
+    public void testClaimRespectsFloorAndCeiling() {
+        // Cap below floor is raised to floor first.
+        assertEquals(4, TunnelControllerGroup.claimServerHandlerShare(2, 4, 0, 0));
+        assertEquals(4, TunnelControllerGroup.claimServerHandlerShare(4, 4, 0, 0));
+        assertEquals(4, TunnelControllerGroup.claimServerHandlerShare(4, 4, 100, 100));
+        // Negative floor treated as 0; idle base is still at least 0 and <= cap.
+        int idle = TunnelControllerGroup.claimServerHandlerShare(8, -1, 0, 0);
+        assertTrue("idle claim in range: " + idle, idle >= 0 && idle <= 8);
+    }
+
+    /**
+     * Under a tight budget, a busy tunnel's full claim beats an idle sibling's
+     * base share after proportional cutting — the flood port gets the threads.
+     */
+    @Test
+    public void testLoadAwareClaimPrefersBusyUnderTightBudget() {
+        int floor = TunnelControllerGroup.SERVER_HANDLER_FLOOR;
+        int[] desired = {
+            TunnelControllerGroup.claimServerHandlerShare(64, floor, 40, 12), // busy
+            TunnelControllerGroup.claimServerHandlerShare(64, floor, 0, 0),   // idle
+        };
+        assertEquals(64, desired[0]);
+        assertEquals(32, desired[1]);
+        int[] alloc = TunnelControllerGroup.allocateServerThreads(48, desired, floor);
+        assertEquals(48, total(alloc));
+        assertTrue("busy tunnel should get more than idle: " + alloc[0] + " vs " + alloc[1],
+                   alloc[0] > alloc[1]);
+    }
 }
