@@ -101,11 +101,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final Object _ioExecutorLock = new Object();
     /** Default I/O transfer threads; Tuner adjusts via TunnelControllerGroup. */
     static volatile int ioTransferThreads = Math.max(4, Math.min(16, Runtime.getRuntime().availableProcessors()));
-    /** Stall timeout for Server→Client transfers (ms). If no data is read for this
-     *  long, the transfer is considered stalled and cancelled. */
+    /** Idle timeout for Server→Client transfers (ms). If no read/write progress
+     *  occurs for this long, the transfer is considered stalled and cancelled.
+     *  Measured between progress events, not as a total transfer deadline —
+     *  multi-minute I2P downloads are expected and must not be killed. */
     static volatile long ioStallTimeoutMs = 60 * 1000L;
-    /** Monotonically increasing counter of stall events detected by Sender.
-     *  Used by the Tuner as the observed signal for stall timeout adjustment. */
+    /** Monotonically increasing counter of stall events detected by runOnIO
+     *  or the Sender. Used by the Tuner as the observed signal for stall
+     *  timeout adjustment. */
     static final java.util.concurrent.atomic.AtomicLong _stallEventCount = new java.util.concurrent.atomic.AtomicLong();
 
     /**
@@ -1622,15 +1625,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Run a Sender on the dedicated I/O pool with a stall-based timeout.
-         *  The handler thread blocks on {@link Future#get} until the transfer
-         *  completes or the stall timeout fires. On timeout the Sender thread
-         *  is interrupted (breaking any blocking {@code read()}), and an
-         *  IOException propagates to the finally-block cleanup.
+         *  Run a Sender on the dedicated I/O pool with idle-based stall detection.
+         *  The handler thread polls {@link Future#get} in short slices and cancels
+         *  only after {@link I2PTunnelHTTPServer#ioStallTimeoutMs} with no read
+         *  progress. A total-timeout Future.get would kill any transfer longer
+         *  than the stall window (a multi-minute I2P download at hundreds of
+         *  KB/s), which is expected latency — not a stall. On true idle the
+         *  Sender thread is interrupted (breaking any blocking {@code read()}),
+         *  and an IOException propagates to the finally-block cleanup.
          *
          *  @param s the Sender to run
          *  @param desc descriptive name for error messages
-         *  @throws IOException if the transfer stalls or the pool rejects the task
+         *  @throws IOException if the transfer goes idle for the stall timeout,
+         *                      fails, or the pool rejects the task
          */
         private void runOnIO(Sender s, String desc) throws IOException {
             ThreadPoolExecutor ioPool = getIOExecutor();
@@ -1647,12 +1654,27 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 s.run();
                 return;
             }
+            final long stallMs = ioStallTimeoutMs;
+            final long pollMs = Math.max(1_000L, Math.min(stallMs / 10, 5_000L));
+            final long started = System.nanoTime();
             try {
-                f.get(ioStallTimeoutMs, TimeUnit.MILLISECONDS);
-            } catch (TimeoutException te) {
-                f.cancel(true); // interrupts the Sender thread
-                throw new IOException("[HTTPServer] I/O transfer stalled (no data for " +
-                                      ioStallTimeoutMs + "ms): " + desc);
+                while (true) {
+                    try {
+                        f.get(pollMs, TimeUnit.MILLISECONDS);
+                        return;
+                    } catch (TimeoutException te) {
+                        // slice expired — fall through to idle check
+                    }
+                    long last = s.getLastReadNanos();
+                    if (last <= 0) {last = started;}
+                    long idleMs = (System.nanoTime() - last) / 1_000_000L;
+                    if (idleMs >= stallMs) {
+                        f.cancel(true); // interrupts the Sender thread
+                        _stallEventCount.incrementAndGet();
+                        throw new IOException("[HTTPServer] I/O transfer stalled (no data for " +
+                                              idleMs + "ms): " + desc);
+                    }
+                }
             } catch (ExecutionException ee) {
                 Throwable cause = ee.getCause();
                 if (cause instanceof IOException) {throw (IOException) cause;}
@@ -1736,9 +1758,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                urlSuffix(req));
                 // Submit Server→Client transfer to the dedicated I/O pool so the
                 // handler thread is not pinned for the entire download duration.
-                // The handler thread waits on Future.get() with a stall timeout;
-                // if no data arrives for ioStallTimeoutMs, the Sender is interrupted
-                // and the handler thread continues to cleanup.
+                // The handler thread polls for completion and only cancels after
+                // ioStallTimeoutMs with no read progress (idle, not total time);
+                // a progressing multi-minute transfer is left alone.
                 runOnIO(s, "Server -> Client" + urlSuffix(req));
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1949,11 +1971,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     _bytesTransferred += read;
                     _out.write(buf, 0, read);
                     _out.flush();
-                    // Stall detection: if the time between successive reads exceeds
-                    // the configured timeout, break out to release the thread. The
-                    // socket-level read timeout (setSoTimeout) handles server-side
-                    // stalls; this catches stalls on the I2P streaming layer side
-                    // where no socket timeout applies.
+                    // Progress includes the write: a slow but advancing I2P flush is
+                    // not a stall. Idle is measured from the last completed copy step
+                    // by runOnIO via getLastReadNanos(); the inter-read break below
+                    // only fires when successive reads themselves were far apart.
+                    _lastReadNanos = System.nanoTime();
                     if (stallNs > ioStallTimeoutMs * 1_000_000L) {
                         _stallEventCount.incrementAndGet();
                         if (_log != null && _log.shouldWarn()) {
