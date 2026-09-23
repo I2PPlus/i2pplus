@@ -2,6 +2,7 @@ package net.i2p.i2ptunnel;
 
 import static org.junit.Assert.*;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,13 +35,13 @@ public class ServerExecutorOverflowTest {
     public void testSaturatedPoolRejectsNotInlines() throws InterruptedException {
         int threads = 1;
         ThreadPoolExecutor exec = TunnelControllerGroup.createServerExecutor(threads, new AtomicLong());
-        java.util.concurrent.CountDownLatch release = new java.util.concurrent.CountDownLatch(1);
+        CountDownLatch release = new CountDownLatch(1);
         try {
             // Occupy the single worker plus the full bounded queue so the
             // pool is genuinely saturated: 1 running + queueCapacity queued.
             int queueCapacity = TunnelControllerGroup.getServerBacklogQueueCapacity();
             int toSubmit = threads + queueCapacity;
-            java.util.concurrent.CountDownLatch entered = new java.util.concurrent.CountDownLatch(threads);
+            CountDownLatch entered = new CountDownLatch(threads);
             for (int i = 0; i < toSubmit; i++) {
                 exec.execute(() -> {
                     entered.countDown();
@@ -92,7 +93,7 @@ public class ServerExecutorOverflowTest {
         ThreadPoolExecutor exec = TunnelControllerGroup.createServerExecutor(1, new AtomicLong());
         try {
             Object[] holder = new Object[1];
-            java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(1);
+            CountDownLatch done = new CountDownLatch(1);
             exec.execute(() -> { holder[0] = Thread.currentThread(); done.countDown(); });
             done.await();
             Thread t = (Thread) holder[0];
@@ -119,7 +120,7 @@ public class ServerExecutorOverflowTest {
             assertTrue("core threads must be allowed to time out",
                        exec.allowsCoreThreadTimeOut());
             // Submit a task to create core threads, then let them idle.
-            java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(threads);
+            CountDownLatch done = new CountDownLatch(threads);
             for (int i = 0; i < threads; i++) {
                 exec.execute(done::countDown);
             }
@@ -133,7 +134,7 @@ public class ServerExecutorOverflowTest {
         }
     }
 
-    private static void await(java.util.concurrent.CountDownLatch l) {
+    private static void await(CountDownLatch l) {
         try { l.await(); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
     }
 }

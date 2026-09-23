@@ -610,15 +610,35 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  @since 0.9.71+
      */
     protected void rejectConnection(I2PSocket socket) {
+        rejectConnection(socket, false);
+    }
+
+    /**
+     *  Refuse an inbound connection with an accurate reason. Queue-depth
+     *  rejects are not connection-cap rejects; conflating them made every
+     *  saturated-queue drop look like a maxConnections trip (and logged
+     *  maxConnections=0 when the cap was unlimited).
+     *
+     *  @param socket the accepted but undelivered I2PSocket to reject
+     *  @param queueFull true if the handler queue gate rejected, false for the connection cap
+     *  @since 0.9.71+
+     */
+    protected void rejectConnection(I2PSocket socket, boolean queueFull) {
         closeSilently(socket);
         long now = System.currentTimeMillis();
         long last = _lastRejectWarn.get();
         if (now - last < REJECT_WARN_MS) {return;}
         if (_lastRejectWarn.compareAndSet(last, now)) {
-            int max = _maxConnections;
-            _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
-                      " (maxConnections=" + max + ", active=" + _activeConnections.get() +
-                      ") -> rejecting new connection");
+            if (queueFull) {
+                _log.warn("Handler queue full for " + remoteHost + ':' + remotePort +
+                          " (active=" + _activeConnections.get() +
+                          ") -> rejecting new connection");
+            } else {
+                int max = _maxConnections;
+                _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
+                          " (maxConnections=" + max + ", active=" + _activeConnections.get() +
+                          ") -> rejecting new connection");
+            }
         }
     }
 
@@ -670,8 +690,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 return false;
             }
             open = false;
-            // Deregister this tunnel's private handler pool; its queued tasks drain
-            // and its worker threads exit, freeing the share of the global budget.
+            // Deregister this tunnel's private handler and runner pools; their
+            // queued tasks drain and worker threads exit, freeing the share of
+            // the global budgets.
             TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
             if (tcg != null) {tcg.serverStopped(this);}
             try {
@@ -838,7 +859,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         ThreadPoolExecutor serverExec;
         if (tcg != null) {
             serverExec = tcg.getServerExecutor(this, _serverThreadOverride);
-            _clientExecutor = tcg.getClientExecutor();
+            // Private runner pool split from the client budget so this tunnel's
+            // load cannot starve client tunnels (and vice versa).
+            _clientExecutor = tcg.getServerRunnerExecutor(this, _maxConnections);
         } else {
             _clientExecutor = new TunnelControllerGroup.CustomThreadPoolExecutor();
             serverExec = null;
@@ -863,7 +886,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                                         serverExec.getQueue().size() + serverExec.getQueue().remainingCapacity(),
                                         serverExec.getActiveCount(),
                                         serverExec.getMaximumPoolSize())) {
-                    rejectConnection(socketToHandle);
+                    rejectConnection(socketToHandle, true);
                     continue;
                 }
 
@@ -871,7 +894,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 // happens here (prompt, and before a handler thread is consumed), not inside
                 // the pool after saturation. Release runs in the handler wrapper's finally.
                 if (!tryAcquireConnection()) {
-                    rejectConnection(socketToHandle);
+                    rejectConnection(socketToHandle, false);
                     continue;
                 }
 

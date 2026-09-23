@@ -124,6 +124,19 @@ public class TunnelControllerGroup implements ClientApp {
     /** Absolute floor for a live server tunnel's handler pool. */
     static final int SERVER_HANDLER_FLOOR = 4;
 
+    /** Private runner pools for client and server tunnels, keyed by tunnel
+     *  identity (I2PTunnel or I2PTunnelServer). Each pool is a share of the
+     *  global clientRunnerMax budget so a saturated dest/tunnel cannot consume
+     *  every runner thread; rejection is per-tunnel (AbortPolicy-style via the
+     *  SynchronousQueue max) rather than global.
+     *  @since 0.9.71+ */
+    private final ConcurrentHashMap<Object, RunnerHandler> _runnerPools = new ConcurrentHashMap<>(8);
+    private static final AtomicLong _runnerPoolThreadCount = new AtomicLong();
+    private final Object _runnerPoolLock = new Object();
+    private boolean _runnerPoolStatsRegistered;
+    /** Absolute floor for a live tunnel's runner pool (shares of clientRunnerMax). */
+    static final int RUNNER_POOL_FLOOR = 4;
+
     /** Tuned by Tuner: global budget for server handler threads, summed over all server tunnels */
     private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores() * 4, 16);
     /** Tuned by Tuner */
@@ -336,6 +349,8 @@ public class TunnelControllerGroup implements ClientApp {
     public static void setClientRunnerMax(int val) {
         int floor = clientDefaultMaxConnections;
         clientRunnerMax = Math.max(floor, Math.min(CLIENT_RUNNER_MAX_MAX, val));
+        TunnelControllerGroup g = instance;
+        if (g != null) {g.rebalanceAllRunnerPools();}
     }
 
     /** Low clamp for the Tuner-managed default client cap. */
@@ -373,6 +388,8 @@ public class TunnelControllerGroup implements ClientApp {
      */
     public static void setClientDefaultMaxConnections(int val) {
         clientDefaultMaxConnections = Math.max(CLIENT_MAX_CONNECTIONS_MIN, Math.min(CLIENT_MAX_CONNECTIONS_MAX, val));
+        TunnelControllerGroup g = instance;
+        if (g != null) {g.rebalanceAllRunnerPools();}
     }
 
     /** Socket connect timeout in ms, tuned by Tuner */
@@ -1756,11 +1773,199 @@ public class TunnelControllerGroup implements ClientApp {
     void serverStopped(I2PTunnelServer server) {
         synchronized (_serverExecutorLock) {
             ServerHandler h = _serverHandlers.remove(server);
+            if (h != null) {
+                ThreadPoolExecutor ex = h.executor;
+                if (ex != null) {ex.shutdown();}
+                rebalanceServerExecutors();
+            }
+        }
+        runnerStopped(server);
+    }
+
+    /**
+     *  Get (creating and sizing on first use) the private runner pool for a
+     *  server tunnel's connection handlers (HTTP runner, CompressedRequestor,
+     *  IRC/DCC). Split from the client runner budget so inbound server load
+     *  cannot starve client tunnels and vice versa; each pool is a share of
+     *  the global clientRunnerMax budget.
+     *
+     *  @param server the server tunnel requesting a pool; never null
+     *  @param ceiling per-tunnel max-connections ceiling (&gt;0), or &lt;=0 for the default
+     *  @return non-null, the server's private runner executor
+     *  @since 0.9.71+
+     */
+    ThreadPoolExecutor getServerRunnerExecutor(I2PTunnelServer server, int ceiling) {
+        int want = ceiling > 0 ? ceiling : clientDefaultMaxConnections;
+        return getRunnerExecutor(server, want);
+    }
+
+    /**
+     *  Get (creating and sizing on first use) the private runner pool for a
+     *  client tunnel. Ceiling is the tunnel's effective maxConnections so a
+     *  flood on one dest cannot consume runners other tunnels need.
+     *
+     *  @param tunnel the client tunnel requesting a pool; may be null (falls back to the global executor)
+     *  @param ceiling per-tunnel max-connections ceiling (&gt;0), or &lt;=0 for the default
+     *  @return non-null, the tunnel's private runner executor (or the global fallback)
+     *  @since 0.9.71+
+     */
+    ThreadPoolExecutor getClientRunnerExecutor(I2PTunnel tunnel, int ceiling) {
+        if (tunnel == null) {return getClientExecutor();}
+        int want = ceiling > 0 ? ceiling : clientDefaultMaxConnections;
+        return getRunnerExecutor(tunnel, want);
+    }
+
+    /**
+     *  Deregister a stopped tunnel's runner pool: shut it down (queued tasks
+     *  drain via SynchronousQueue — none — then workers exit) and redistribute
+     *  its share of the global budget to the remaining tunnels.
+     *
+     *  @param key the stopped tunnel identity (I2PTunnel or I2PTunnelServer)
+     *  @since 0.9.71+
+     */
+    void runnerStopped(Object key) {
+        if (key == null) {return;}
+        synchronized (_runnerPoolLock) {
+            RunnerHandler h = _runnerPools.remove(key);
             if (h == null) {return;}
             ThreadPoolExecutor ex = h.executor;
             if (ex != null) {ex.shutdown();}
-            rebalanceServerExecutors();
+            rebalanceRunnerPools();
         }
+    }
+
+    /**
+     *  Shared create-or-get for a per-tunnel runner pool. Must run under
+     *  {@link #_runnerPoolLock}. Rebalances every live pool so the sum of
+     *  maxima never exceeds {@link #clientRunnerMax}.
+     *
+     *  @param key tunnel identity; never null
+     *  @param ceiling this tunnel's per-tunnel max-connections ceiling
+     *  @return non-null executor
+     */
+    private ThreadPoolExecutor getRunnerExecutor(Object key, int ceiling) {
+        synchronized (_runnerPoolLock) {
+            RunnerHandler h = _runnerPools.get(key);
+            if (h == null) {
+                h = new RunnerHandler(ceiling);
+                _runnerPools.put(key, h);
+            } else {
+                h.ceiling = ceiling;
+            }
+            rebalanceRunnerPools();
+            return h.executor;
+        }
+    }
+
+    /**
+     *  Rebalance every live runner pool from the global clientRunnerMax budget
+     *  and each tunnel's ceiling. Must run under {@link #_runnerPoolLock}.
+     *  The global budget is a cap on the sum of maxima, so reducing one
+     *  tunnel's share or removing a tunnel frees budget for the rest.
+     *  @since 0.9.71+
+     */
+    private void rebalanceRunnerPools() {
+        int n = _runnerPools.size();
+        if (n == 0) {return;}
+        ensureRunnerPoolStats();
+        int budget = clientRunnerMax;
+        int[] desired = new int[n];
+        int idx = 0;
+        for (RunnerHandler h : _runnerPools.values()) {
+            int cap = h.ceiling > 0 ? h.ceiling : clientDefaultMaxConnections;
+            desired[idx++] = Math.min(cap, budget);
+        }
+        int[] alloc = allocateServerThreads(budget, desired, RUNNER_POOL_FLOOR);
+        idx = 0;
+        int total = 0;
+        for (RunnerHandler h : _runnerPools.values()) {
+            int want = alloc[idx++];
+            total += want;
+            ThreadPoolExecutor ex = h.executor;
+            if (ex == null) {
+                h.executor = createRunnerExecutor(want, _runnerPoolThreadCount);
+            } else if (ex.getMaximumPoolSize() != want) {
+                resizeRunnerExecutor(ex, want);
+            }
+        }
+        I2PAppContext ctx = _context;
+        if (ctx != null) {
+            ctx.statManager().addRateData("i2ptunnel.clientRunner.threads", total);
+        }
+    }
+
+    /**
+     *  Register the per-tunnel runner pool rate stats exactly once.
+     *  @since 0.9.71+
+     */
+    private void ensureRunnerPoolStats() {
+        if (_runnerPoolStatsRegistered) {return;}
+        I2PAppContext ctx = _context;
+        if (ctx != null) {
+            ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.threads", "Sum of per-tunnel runner maxima", "I2PTunnel", RATES);
+            _runnerPoolStatsRegistered = true;
+        }
+    }
+
+    /** Trigger a full runner-pool rebalance after a global budget change. */
+    private void rebalanceAllRunnerPools() {
+        synchronized (_runnerPoolLock) {
+            rebalanceRunnerPools();
+        }
+    }
+
+    /**
+     *  Per-tunnel runner pool state: the explicit per-tunnel ceiling and the
+     *  lazily created executor.
+     *  @since 0.9.71+
+     */
+    static class RunnerHandler {
+        volatile int ceiling;
+        volatile ThreadPoolExecutor executor;
+        RunnerHandler(int ceiling) {this.ceiling = ceiling;}
+    }
+
+    /**
+     *  Create a thread-per-connection runner pool for one tunnel. Same
+     *  semantics as the historical shared CustomThreadPoolExecutor:
+     *  SynchronousQueue (no queueing — every admitted connection needs a
+     *  worker immediately), AbortPolicy on overflow so rejection surfaces as
+     *  RejectedExecutionException to that tunnel's accept path only, idle
+     *  threads reclaimed after the keepalive window.
+     *
+     *  @param maxThreads the fixed max worker count for this tunnel's pool
+     *  @param index an AtomicLong counter used to name worker threads
+     *  @return a never-null executor
+     *  @since 0.9.71+
+     */
+    static ThreadPoolExecutor createRunnerExecutor(int maxThreads, AtomicLong index) {
+        ThreadPoolExecutor tpe = new ThreadPoolExecutor(
+            0, Math.max(1, maxThreads),
+            HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
+            new SynchronousQueue<>(),
+            r -> {
+                Thread t = Executors.defaultThreadFactory().newThread(r);
+                t.setName("TunnelCln." + index.incrementAndGet());
+                t.setDaemon(true);
+                return t;
+            },
+            new ThreadPoolExecutor.AbortPolicy()
+        );
+        tpe.allowCoreThreadTimeOut(true);
+        return tpe;
+    }
+
+    /**
+     *  Resize a per-tunnel runner pool's max (core stays 0 for SynchronousQueue).
+     *  @param ex the pool; ignored if null or shut down
+     *  @param newMax the new max pool size
+     *  @since 0.9.71+
+     */
+    private static void resizeRunnerExecutor(ThreadPoolExecutor ex, int newMax) {
+        if (ex == null || ex.isShutdown()) {return;}
+        // ThreadPoolExecutor requires core <= max; core stays 0 so SynchronousQueue
+        // rejection still happens at the new max rather than queueing.
+        ex.setMaximumPoolSize(Math.max(1, newMax));
     }
 
     /**
@@ -1983,9 +2188,17 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  Shutdown the client executor, waiting for termination.
+     *  Shutdown the client executor and all per-tunnel runner pools, waiting
+     *  for termination of the shared fallback pool.
      */
     private void killClientExecutor() {
+        synchronized (_runnerPoolLock) {
+            for (RunnerHandler h : _runnerPools.values()) {
+                ThreadPoolExecutor ex = h.executor;
+                if (ex != null) {ex.shutdown();}
+            }
+            _runnerPools.clear();
+        }
         synchronized (_executorLock) {
             if (_executor != null) {
                 _executor.shutdown();
@@ -2005,7 +2218,8 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  Resize the client executor max pool size. Called by Tuner.
+     *  Resize the shared (fallback) client executor max pool size. Called by Tuner
+     *  for the null-tunnel path; per-tunnel pools are resized by rebalanceAllRunnerPools().
      */
     void resizeClientExecutor(int newMax) {
         synchronized (_executorLock) {
@@ -2016,6 +2230,7 @@ public class TunnelControllerGroup implements ClientApp {
                     ctx.statManager().addRateData("i2ptunnel.clientRunner.activeThreads", _executor.getActiveCount());
             }
         }
+        rebalanceAllRunnerPools();
     }
 
     /** Thread pool executor for I2P tunnel client handlers */

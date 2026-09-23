@@ -995,13 +995,16 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     *  Get the executor from the tunnel controller group, or create one locally
-     *  if the group was never started.
+     *  Get this tunnel's private runner pool from the tunnel controller group
+     *  (or create one locally if the group was never started). The pool is a
+     *  share of the global clientRunnerMax budget so another dest's flood
+     *  cannot consume every runner thread.
      */
     private void initializeExecutor() {
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
-        if (tcg != null) {_executor = tcg.getClientExecutor();}
-        else {
+        if (tcg != null) {
+            _executor = tcg.getClientRunnerExecutor(getTunnel(), getEffectiveMaxConnections());
+        } else {
             /* Fallback in case TCG.getInstance() is null, never instantiated and we were not started by TCG.
              * Maybe a plugin loaded before TCG? Should be rare.
              * Locally owned, so we shut it down in close().
@@ -1230,10 +1233,14 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 return false;
             }
         }
-        // shut down the executor only if we own it (TCG-owned executor is shared and shut down by TCG)
+        // shut down the executor only if we own it; TCG-owned per-tunnel pools
+        // are shut down and deregistered so their budget share is freed.
         if (_ownExecutor) {
             ThreadPoolExecutor tpe = _executor;
             if (tpe != null) {tpe.shutdownNow();}
+        } else {
+            TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+            if (tcg != null && t != null) {tcg.runnerStopped(t);}
         }
         return true;
     }

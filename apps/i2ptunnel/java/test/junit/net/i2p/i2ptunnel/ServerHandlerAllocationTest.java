@@ -121,4 +121,23 @@ public class ServerHandlerAllocationTest {
         assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(-1));
         assertEquals(-1, TunnelControllerGroup.normalizeThreadOverride(0));
     }
+
+    /**
+     * The same allocator drives per-tunnel runner pools (client + server) from
+     * the clientRunnerMax budget: floors, proportional cut, exact total.
+     */
+    @Test
+    public void testRunnerPoolAllocationSharesBudget() {
+        // Two tunnels with large ceilings under a modest budget: exact total, floors kept.
+        int[] alloc = TunnelControllerGroup.allocateServerThreads(100, new int[]{80, 80, 80},
+                                                                 TunnelControllerGroup.RUNNER_POOL_FLOOR);
+        assertEquals(100, total(alloc));
+        for (int x : alloc) {
+            assertTrue("entry below runner floor: " + x, x >= TunnelControllerGroup.RUNNER_POOL_FLOOR);
+        }
+        // Ceilings that fit: granted verbatim (isolation reserved, not free-for-all).
+        int[] fit = TunnelControllerGroup.allocateServerThreads(1024, new int[]{256, 256},
+                                                               TunnelControllerGroup.RUNNER_POOL_FLOOR);
+        assertArrayEquals(new int[]{256, 256}, fit);
+    }
 }

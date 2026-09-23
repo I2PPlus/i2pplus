@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -150,10 +151,16 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         // Close I2P resources in background if needed
         if (threadI2PClose) {
             I2PSocketCloser closer = new I2PSocketCloser(i2pin, i2pout, i2ps);
-            TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
-            if (tcg != null) {
+            // Prefer this connection's own tunnel runner pool so a close task
+            // never queues behind another dest's saturated pool.
+            Executor exec = getRunnerExecutor();
+            if (exec == null) {
+                TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+                if (tcg != null) {exec = tcg.getClientExecutor();}
+            }
+            if (exec != null) {
                 try {
-                    tcg.getClientExecutor().execute(closer);
+                    exec.execute(closer);
                 } catch (RejectedExecutionException e) {
                     if (_log.shouldWarn()) {
                         _log.warn("Executor rejected I2P socket closer task, falling back to thread", e);
