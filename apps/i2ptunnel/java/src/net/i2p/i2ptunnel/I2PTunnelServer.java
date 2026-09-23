@@ -46,6 +46,8 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.i2ptunnel.access.FilterFactory;
 import net.i2p.i2ptunnel.access.InvalidDefinitionException;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
@@ -583,23 +585,69 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  Decide whether a connection should be rejected because the handler
      *  queue is already drowning. Pure decision, no router context: called
      *  from the accept loop after accept() and before a handler thread is
-     *  consumed. Rejects when the queue is near capacity (would hit
-     *  AbortPolicy anyway) or when the backlog is several times the pool
-     *  size (handlers cannot drain it in reasonable time).
+     *  consumed.
+     *
+     *  <p>Admission policy (high throughput, minimal drops):
+     *  <ul>
+     *    <li>Hard stop near queue capacity (would hit AbortPolicy anyway).</li>
+     *    <li>If any handler thread is free, admit — the backlog drains as soon
+     *        as work is submitted; rejecting while capacity exists only creates
+     *        empty responses the browser reports as failures.</li>
+     *    <li>Only when the pool is fully busy is a drain-time estimate applied:
+     *        {@code queueDepth * avgHandleMs / threads}. Reject only when that
+     *        exceeds {@link #MAX_QUEUE_DRAIN_MS}, so short bursts queue and
+     *        drain instead of being dropped, while a hopeless backlog fails
+     *        fast rather than pinning sockets for minutes.</li>
+     *  </ul>
      *
      *  @param queueDepth current queued task count
      *  @param capacity total queue capacity; &lt;= 0 disables this gate
      *  @param active currently busy handler threads
      *  @param threads pool max threads; &lt;= 0 disables this gate
+     *  @param avgHandleMs average handler time in ms; &lt;= 0 uses {@link #DEFAULT_HANDLE_MS}
      *  @return true if the connection should be rejected with a 503
      *  @since 0.9.71+
      */
-    static boolean shouldRejectOnQueue(int queueDepth, int capacity, int active, int threads) {
+    static boolean shouldRejectOnQueue(int queueDepth, int capacity, int active, int threads,
+                                       long avgHandleMs) {
         if (capacity <= 0 || threads <= 0) {return false;}
         if (queueDepth >= capacity * 9 / 10) {return true;}
-        if (queueDepth > threads * 4) {return true;}
-        return false;
+        // Free handlers: admit so the pool absorbs the connection immediately.
+        if (active < threads) {return false;}
+        long handle = avgHandleMs > 0 ? avgHandleMs : DEFAULT_HANDLE_MS;
+        // Fully busy pool: estimate time to drain the backlog across `threads` workers.
+        long drainMs = (queueDepth * handle) / threads;
+        return drainMs > MAX_QUEUE_DRAIN_MS;
     }
+
+    /**
+     *  Back-compat overload when the caller has no handle-time sample yet.
+     *  Uses {@link #DEFAULT_HANDLE_MS} for the drain estimate.
+     *
+     *  @param queueDepth current queued task count
+     *  @param capacity total queue capacity; &lt;= 0 disables this gate
+     *  @param active currently busy handler threads
+     *  @param threads pool max threads; &lt;= 0 disables this gate
+     *  @return true if the connection should be rejected
+     *  @since 0.9.71+
+     */
+    static boolean shouldRejectOnQueue(int queueDepth, int capacity, int active, int threads) {
+        return shouldRejectOnQueue(queueDepth, capacity, active, threads, DEFAULT_HANDLE_MS);
+    }
+
+    /**
+     *  Fallback average handler time (ms) when no recent blockingHandleTime
+     *  sample is available for the drain estimate.
+     *  @since 0.9.71+
+     */
+    static final long DEFAULT_HANDLE_MS = 2_000L;
+    /**
+     *  Reject only when a fully busy pool would need longer than this to drain
+     *  the queue. Generous enough that normal bursts queue and complete
+     *  (minimal drops) without pinning sockets indefinitely.
+     *  @since 0.9.71+
+     */
+    static final long MAX_QUEUE_DRAIN_MS = 30_000L;
 
     /**
      *  Refuse an inbound connection when the gate cap is exceeded. Base implementation
@@ -619,27 +667,68 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  saturated-queue drop look like a maxConnections trip (and logged
      *  maxConnections=0 when the cap was unlimited).
      *
+     *  <p>The queue-full metrics line is emitted by {@link #warnQueueFull}
+     *  with real pool active/max/queue values; this method only rate-limits
+     *  and closes so a flood cannot spam the log.
+     *
      *  @param socket the accepted but undelivered I2PSocket to reject
      *  @param queueFull true if the handler queue gate rejected, false for the connection cap
      *  @since 0.9.71+
      */
     protected void rejectConnection(I2PSocket socket, boolean queueFull) {
         closeSilently(socket);
+        if (queueFull) {return;}
         long now = System.currentTimeMillis();
         long last = _lastRejectWarn.get();
         if (now - last < REJECT_WARN_MS) {return;}
         if (_lastRejectWarn.compareAndSet(last, now)) {
-            if (queueFull) {
-                _log.warn("Handler queue full for " + remoteHost + ':' + remotePort +
-                          " (active=" + _activeConnections.get() +
-                          ") -> rejecting new connection");
-            } else {
-                int max = _maxConnections;
-                _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
-                          " (maxConnections=" + max + ", active=" + _activeConnections.get() +
-                          ") -> rejecting new connection");
-            }
+            int max = _maxConnections;
+            _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
+                      " (maxConnections=" + max + ", active=" + _activeConnections.get() +
+                      ") -> rejecting new connection");
         }
+    }
+
+    /**
+     *  Rate-limited queue-full warning with the real pool metrics that drove
+     *  the gate (not the connection-slot counter, which is often 0 here).
+     *
+     *  @param ex the saturated handler pool
+     *  @param queueDepth queued task count at reject time
+     *  @param active busy handler threads at reject time
+     *  @param threads pool maximum at reject time
+     *  @since 0.9.71+
+     */
+    private void warnQueueFull(ThreadPoolExecutor ex, int queueDepth, int active, int threads) {
+        long now = System.currentTimeMillis();
+        long last = _lastRejectWarn.get();
+        if (now - last < REJECT_WARN_MS) {return;}
+        if (!_lastRejectWarn.compareAndSet(last, now)) {return;}
+        int cap = queueDepth + ex.getQueue().remainingCapacity();
+        _log.warn("Handler queue full for " + remoteHost + ':' + remotePort +
+                  " (queue=" + queueDepth + '/' + cap +
+                  ", pool=" + active + '/' + threads +
+                  ", slots=" + _activeConnections.get() +
+                  ") -> rejecting new connection");
+    }
+
+    /**
+     *  60s average handler time in ms for the queue drain estimate, or 0 when
+     *  no recent sample exists (caller falls back to the default).
+     *
+     *  @return average blockingHandleTime, or 0 if unavailable
+     *  @since 0.9.71+
+     */
+    private long avgHandleMs() {
+        I2PAppContext ctx = getTunnel() != null ? getTunnel().getContext() : null;
+        if (ctx == null) {return 0;}
+        RateStat rs = ctx.statManager().getRate("i2ptunnel.serverHandler.blockingHandleTime");
+        if (rs == null) {return 0;}
+        Rate rate = rs.getRate(60_000L);
+        if (rate == null || rate.getLastEventCount() == 0) {return 0;}
+        double avg = rate.getAverageValue();
+        if (Double.isNaN(avg) || avg <= 0) {return 0;}
+        return (long) avg;
     }
 
     /** Minimum interval between gate-rejection warnings. @since 0.9.71+ */
@@ -878,16 +967,19 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
                 final I2PSocket socketToHandle = i2ps;
 
-                // Queue-depth admission gate: reject promptly when the handler
-                // queue is near capacity or drowning, before a handler thread
-                // is consumed and before the connection slot is reserved.
-                if (serverExec != null &&
-                    shouldRejectOnQueue(serverExec.getQueue().size(),
-                                        serverExec.getQueue().size() + serverExec.getQueue().remainingCapacity(),
-                                        serverExec.getActiveCount(),
-                                        serverExec.getMaximumPoolSize())) {
-                    rejectConnection(socketToHandle, true);
-                    continue;
+                // Queue-depth admission gate: reject only when the pool is fully
+                // busy and the backlog cannot drain within the budget, or near
+                // hard capacity — never while a handler thread is free.
+                if (serverExec != null) {
+                    int qDepth = serverExec.getQueue().size();
+                    int qCap = qDepth + serverExec.getQueue().remainingCapacity();
+                    int active = serverExec.getActiveCount();
+                    int maxTh = serverExec.getMaximumPoolSize();
+                    if (shouldRejectOnQueue(qDepth, qCap, active, maxTh, avgHandleMs())) {
+                        warnQueueFull(serverExec, qDepth, active, maxTh);
+                        rejectConnection(socketToHandle, true);
+                        continue;
+                    }
                 }
 
                 // Connection admission gate: reserve a slot before dispatch so the rejection

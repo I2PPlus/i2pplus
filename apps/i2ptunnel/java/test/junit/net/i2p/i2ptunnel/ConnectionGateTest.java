@@ -148,33 +148,57 @@ public class ConnectionGateTest {
         assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, 0, 0, 8));
         assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, 2048, 0, 0));
         assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, -1, -1, -1));
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, 2048, 16, 0, 5000));
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, 0, 16, 8, 5000));
     }
 
-    /** Under both thresholds: admit. */
+    /** Free handler threads: admit even with a deep backlog (drain starts immediately). */
     @Test
-    public void testQueueGateAdmitsWhenUnderThresholds() {
+    public void testQueueGateAdmitsWhenPoolHasFreeThreads() {
         assertFalse(I2PTunnelServer.shouldRejectOnQueue(0, 2048, 4, 8));
         assertFalse(I2PTunnelServer.shouldRejectOnQueue(10, 2048, 4, 8));
-        assertFalse(I2PTunnelServer.shouldRejectOnQueue(32, 2048, 8, 8)); // == threads*4, not >
-        // Low backlog relative to a larger pool: well under both thresholds.
-        assertFalse(I2PTunnelServer.shouldRejectOnQueue(100, 2048, 4, 32));
+        // Deep queue but active < threads: free handlers absorb it.
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(200, 2048, 4, 8, 4600));
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(1000, 2048, 7, 8, 4600));
+        // Mid-size pool under load with partial occupancy.
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(42, 2048, 5, 9, 4600));
     }
 
-    /** Queue at/over 90% of capacity: reject (would hit AbortPolicy anyway). */
+    /** Queue at/over 90% of capacity: reject regardless of free threads (AbortPolicy). */
     @Test
     public void testQueueGateRejectsNearCapacity() {
         assertTrue(I2PTunnelServer.shouldRejectOnQueue(1844, 2048, 4, 8));  // 90%
         assertTrue(I2PTunnelServer.shouldRejectOnQueue(2048, 2048, 4, 8));  // full
         assertTrue(I2PTunnelServer.shouldRejectOnQueue(5000, 2048, 4, 8));  // over
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(1844, 2048, 0, 8, 100)); // free threads, still capacity
     }
 
-    /** Backlog more than 4x the pool: reject even if capacity remains. */
+    /**
+     * Fully busy pool whose backlog drains within the budget: admit (queued
+     * requests are served promptly instead of dropped).
+     */
     @Test
-    public void testQueueGateRejectsWhenBacklogExceedsThreads() {
-        assertTrue(I2PTunnelServer.shouldRejectOnQueue(33, 2048, 8, 8));   // > 8*4
-        assertTrue(I2PTunnelServer.shouldRejectOnQueue(1000, 2048, 8, 8));
-        // but not when equal to threads*4
+    public void testQueueGateAdmitsWhenDrainWithinBudget() {
+        // active == threads, queue=42, handle=4600ms, threads=9 -> drain ~21.5s < 30s
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(42, 2048, 9, 9, 4600));
+        // Fast handlers: deep queue still clears in time.
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(100, 2048, 8, 8, 200));
+        // Back-compat overload uses DEFAULT_HANDLE_MS; small backlog on small pool.
         assertFalse(I2PTunnelServer.shouldRejectOnQueue(32, 2048, 8, 8));
+    }
+
+    /**
+     * Fully busy pool whose estimated drain exceeds the budget: reject
+     * (hopeless backlog fails fast rather than pinning sockets for minutes).
+     */
+    @Test
+    public void testQueueGateRejectsWhenDrainExceedsBudget() {
+        // queue=100, handle=4600, threads=8 -> drain ~57.5s > 30s
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(100, 2048, 8, 8, 4600));
+        // queue=60, handle=4600, threads=9 -> drain ~30.7s > 30s
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(60, 2048, 9, 9, 4600));
+        // Absurd handle time with any real backlog on a busy pool.
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(50, 2048, 16, 16, 60_000));
     }
 
     /** parseServerThreadOverride: null / garbage / below-floor -> -1; valid passthrough. */
