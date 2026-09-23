@@ -431,20 +431,63 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int INITIAL_CONCURRENT = 2;
 
     /**
+     * Whether sendStore should wide-flood the entry via flood() when this
+     * router participates in floodfill.
+     *
+     * Floodfill participants wide-flood both RouterInfos (existing) and
+     * LeaseSets so published LSs reach the routing-key-closest peers that
+     * lookups query, not only the few peers chosen for the reply-based
+     * store job. Narrow store-only delivery leaves keys missing on other
+     * floodfills (verify FailNoKey).
+     *
+     * @param floodfillEnabled whether this router is a floodfill participant
+     * @param ds the entry being stored, may be null
+     * @return true if flood() should be invoked for this entry
+     * @since 0.9.71+
+     */
+    static boolean shouldFloodOnStore(boolean floodfillEnabled, DatabaseEntry ds) {
+        if (!floodfillEnabled || ds == null) {return false;}
+        int type = ds.getType();
+        return type == DatabaseEntry.KEY_TYPE_ROUTERINFO || ds.isLeaseSet();
+    }
+
+    /**
+     * How many FloodfillStoreJob instances sendStore should schedule
+     * alongside (or instead of) a wide flood.
+     *
+     * Floodfill + RouterInfo: 0 — wide flood only (existing; no reply-based job).
+     * Floodfill + LeaseSet: 1 — wide flood covers propagation; this job
+     * supplies reply-based success/failure callbacks and verify accounting.
+     * Otherwise: {@code selectedCount} staggered multi-peer jobs (non-floodfill path).
+     *
+     * @param floodfillEnabled whether this router is a floodfill participant
+     * @param ds the entry being stored, may be null
+     * @param selectedCount peers chosen by selectFloodfillParticipants
+     * @return number of FloodfillStoreJob instances to schedule; never negative
+     * @since 0.9.71+
+     */
+    static int storeJobCount(boolean floodfillEnabled, DatabaseEntry ds, int selectedCount) {
+        if (ds == null || selectedCount <= 0) {return 0;}
+        if (floodfillEnabled) {
+            if (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {return 0;}
+            if (ds.isLeaseSet()) {return 1;}
+        }
+        return selectedCount;
+    }
+
+    /**
      * Send out a store.
      *
      * @param key the DatabaseEntry hash
-     * @param onSuccess may be null, always called if we are ff and ds is an RI
-     * @param onFailure may be null, ignored if we are ff and ds is an RI
-     * @param sendTimeout timeout in ms for send operations if we are ff and ds is an RI
-     * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53,
-     *        unused if we are ff and ds is an RI
+     * @param onSuccess may be null; called on reply-based store success (not used for wide-flood-only RI path)
+     * @param onFailure may be null; called when no floodfill peers are available or reply-based store fails
+     * @param sendTimeout timeout in ms for the reply-based FloodfillStoreJob path
+     * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53;
+     *        passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
      */
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
         int concurrent = INITIAL_CONCURRENT;
-        // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
-        // of the flooding - instead, send them to random floodfill peers so they can flood 'em out.
         Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, concurrent);
         if (floodfillParticipants == null || floodfillParticipants.isEmpty()) {
             if (onFailure != null) {
@@ -452,39 +495,39 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             return;
         }
-        if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {flood(ds);}
-        else {
-            int idx = 0;
-            for (Hash peer : floodfillParticipants) {
-                // Schedule FloodfillStoreJob for each peer, passing onSuccess/onFailure
-                // as callbacks. The store job fires onSuccess via StoreJob.succeed() only
-                // when the store actually completes — NOT immediately. The old code short-
-                // circuited with addJob(onSuccess) which skipped the store entirely and
-                // was incorrect for LeaseSet publication.
-                final int delay = (int) Math.min(idx * 1000L, 10_000);
-                final int concurrentForLog = concurrent;
-                new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
-                    /** Submit the store job after delay to spread flood load. */
-                    @Override
-                    public void timeReached() {
-                        _context.jobQueue().addJob(new FloodfillStoreJob(
-                            _context, FloodfillNetworkDatabaseFacade.this,
-                            key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
-                    }
-                }.schedule(delay);
-                if (_log.shouldInfo()) {
-                    String name;
-                    if (ds instanceof LeaseSet) {
-                        String tunnelName = getTunnelName(((LeaseSet) ds).getDestination());
-                        name = tunnelName != null ? "LeaseSet for '" + tunnelName + "'" : "key for [" + key.toBase32().substring(0,8) + "]";
-                    } else {
-                        name = "key for [" + key.toBase32().substring(0,8) + "]";
-                    }
-                    _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
-                              "Resending to " + (concurrentForLog > 1 ? concurrentForLog + " new floodfills" : "a different floodfill") + "...");
+        if (shouldFloodOnStore(floodfillEnabled(), ds)) {flood(ds);}
+        int jobs = storeJobCount(floodfillEnabled(), ds, floodfillParticipants.size());
+        int idx = 0;
+        for (Hash peer : floodfillParticipants) {
+            if (idx >= jobs) {break;}
+            // Schedule FloodfillStoreJob, passing onSuccess/onFailure as callbacks.
+            // The store job fires onSuccess via StoreJob.succeed() only when the
+            // store actually completes — NOT immediately. The old code short-
+            // circuited with addJob(onSuccess) which skipped the store entirely and
+            // was incorrect for LeaseSet publication.
+            final int delay = (int) Math.min(idx * 1000L, 10_000);
+            final int concurrentForLog = concurrent;
+            new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+                /** Submit the store job after delay to spread flood load. */
+                @Override
+                public void timeReached() {
+                    _context.jobQueue().addJob(new FloodfillStoreJob(
+                        _context, FloodfillNetworkDatabaseFacade.this,
+                        key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
                 }
-                idx++;
+            }.schedule(delay);
+            if (_log.shouldInfo()) {
+                String name;
+                if (ds instanceof LeaseSet) {
+                    String tunnelName = getTunnelName(((LeaseSet) ds).getDestination());
+                    name = tunnelName != null ? "LeaseSet for '" + tunnelName + "'" : "key for [" + key.toBase32().substring(0,8) + "]";
+                } else {
+                    name = "key for [" + key.toBase32().substring(0,8) + "]";
+                }
+                _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
+                          "Resending to " + (concurrentForLog > 1 ? concurrentForLog + " new floodfills" : "a different floodfill") + "...");
             }
+            idx++;
         }
     }
 

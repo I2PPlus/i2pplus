@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import net.i2p.data.Hash;
+import net.i2p.data.LeaseSet2;
+import net.i2p.data.router.RouterInfo;
 
 import org.junit.Test;
 
@@ -137,5 +139,66 @@ public class FloodfillNetworkDatabaseFacadeTest {
 
         Set<Hash> rv = FloodfillNetworkDatabaseFacade.selectStoreParticipants(shuffled, 4, recentlyQueried);
         assertEquals(4, rv.size());
+    }
+
+    private static RouterInfo ri() {
+        return new RouterInfo();
+    }
+
+    private static LeaseSet2 ls2() {
+        return new LeaseSet2();
+    }
+
+    @Test
+    public void testShouldFloodOnStoreFloodfillLeaseSet() {
+        assertTrue(FloodfillNetworkDatabaseFacade.shouldFloodOnStore(true, ls2()));
+    }
+
+    @Test
+    public void testShouldFloodOnStoreFloodfillRouterInfo() {
+        assertTrue(FloodfillNetworkDatabaseFacade.shouldFloodOnStore(true, ri()));
+    }
+
+    @Test
+    public void testShouldFloodOnStoreNotFloodfill() {
+        assertFalse(FloodfillNetworkDatabaseFacade.shouldFloodOnStore(false, ls2()));
+        assertFalse(FloodfillNetworkDatabaseFacade.shouldFloodOnStore(false, ri()));
+    }
+
+    @Test
+    public void testShouldFloodOnStoreNullEntry() {
+        assertFalse(FloodfillNetworkDatabaseFacade.shouldFloodOnStore(true, null));
+        assertFalse(FloodfillNetworkDatabaseFacade.shouldFloodOnStore(false, null));
+    }
+
+    @Test
+    public void testStoreJobCountFloodfillLeaseSetIsOne() {
+        assertEquals(1, FloodfillNetworkDatabaseFacade.storeJobCount(true, ls2(), 2));
+    }
+
+    @Test
+    public void testStoreJobCountFloodfillRouterInfoIsZero() {
+        assertEquals(0, FloodfillNetworkDatabaseFacade.storeJobCount(true, ri(), 2));
+    }
+
+    @Test
+    public void testStoreJobCountNonFloodfillUsesSelectedCount() {
+        assertEquals(2, FloodfillNetworkDatabaseFacade.storeJobCount(false, ls2(), 2));
+        assertEquals(3, FloodfillNetworkDatabaseFacade.storeJobCount(false, ri(), 3));
+        assertEquals(1, FloodfillNetworkDatabaseFacade.storeJobCount(false, ls2(), 1));
+    }
+
+    @Test
+    public void testStoreJobCountNullOrNonPositiveSelected() {
+        assertEquals(0, FloodfillNetworkDatabaseFacade.storeJobCount(true, null, 2));
+        assertEquals(0, FloodfillNetworkDatabaseFacade.storeJobCount(false, null, 2));
+        assertEquals(0, FloodfillNetworkDatabaseFacade.storeJobCount(true, ls2(), 0));
+        assertEquals(0, FloodfillNetworkDatabaseFacade.storeJobCount(false, ls2(), -1));
+    }
+
+    @Test
+    public void testStoreJobCountFloodfillWithSingleSelected() {
+        assertEquals(1, FloodfillNetworkDatabaseFacade.storeJobCount(true, ls2(), 1));
+        assertEquals(0, FloodfillNetworkDatabaseFacade.storeJobCount(true, ri(), 1));
     }
 }
