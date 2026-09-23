@@ -237,13 +237,24 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     public boolean remove(Object o) {
         int i = indexOf(o);
         if (i < 0) return false;
+        removeAt(i);
+        return true;
+    }
+
+    /**
+     * Remove the entry at the given array index and shift the tail down.
+     * Index must be in [0, _size).
+     *
+     * @param i index of the entry to remove
+     * @since 0.9.71+
+     */
+    private void removeAt(int i) {
         modCount++;
         _size--;
         for (int j = i; j < _size; j++) {
             _entries[j] = _entries[j + 1];
         }
         _entries[_size] = null;
-        return true;
     }
 
     @Override
@@ -343,7 +354,11 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
             checkForComodification();
 
             try {
-                ArraySet.this.remove(lastRet);
+                // Must remove by index. remove(lastRet) boxed the int to
+                // Integer and looked up that value as an element, so the
+                // entry stayed put, _size never fell, and hasNext()
+                // (cursor != _size) spun forever after a failed remove.
+                ArraySet.this.removeAt(lastRet);
                 if (lastRet < cursor) cursor--;
                 lastRet = -1;
                 expectedModCount = modCount;

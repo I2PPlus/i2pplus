@@ -133,4 +133,65 @@ public class ArraySetTest {
         ArraySet<String> copy = new ArraySet<>(orig);
         assertEquals(orig, copy);
     }
+
+    /**
+     * AbstractSet.removeAll uses Iterator.remove() when this.size() &lt;= other.size().
+     * ASIterator.remove() used to box the index to Integer and call remove(Object),
+     * which never removed the entry — leaving cursor != _size so hasNext() spun
+     * forever (BldExecutor hang via ClientPeerSelector.selectSingleHop).
+     */
+    @Test(timeout = 2000)
+    public void testRemoveAllViaIteratorDoesNotHang() {
+        ArraySet<String> set = new ArraySet<>(4);
+        set.add("a");
+        set.add("b");
+        set.add("c");
+        java.util.Set<String> exclude = new java.util.HashSet<>();
+        exclude.add("b");
+        // size 3 <= exclude path still iterates this when c is larger;
+        // equal/smaller c uses iterator remove on this set.
+        java.util.Set<String> big = new java.util.HashSet<>();
+        for (int i = 0; i < 10; i++) big.add("x" + i);
+        big.add("b");
+        set.removeAll(big);
+        assertEquals(2, set.size());
+        assertTrue(set.contains("a"));
+        assertFalse(set.contains("b"));
+        assertTrue(set.contains("c"));
+    }
+
+    @Test(timeout = 2000)
+    public void testIteratorRemoveThenIterate() {
+        ArraySet<String> set = new ArraySet<>(4);
+        set.add("a");
+        set.add("b");
+        set.add("c");
+        Iterator<String> it = set.iterator();
+        while (it.hasNext()) {
+            if ("b".equals(it.next())) {
+                it.remove();
+            }
+        }
+        assertEquals(2, set.size());
+        assertFalse(set.contains("b"));
+        int count = 0;
+        for (String s : set) {
+            assertNotNull(s);
+            count++;
+        }
+        assertEquals(2, count);
+    }
+
+    @Test(timeout = 2000)
+    public void testRemoveAllAllElements() {
+        ArraySet<String> set = new ArraySet<>(4);
+        set.add("a");
+        set.add("b");
+        java.util.Set<String> all = new java.util.HashSet<>();
+        all.add("a");
+        all.add("b");
+        all.add("c");
+        set.removeAll(all);
+        assertTrue(set.isEmpty());
+    }
 }
