@@ -812,13 +812,30 @@ public class TunerTest {
     }
 
     /**
-     * Not saturated (active well below ceiling) but queue backlog: slower growth.
+     * Not saturated (active well below ceiling) but queue deeper than the pool:
+     * decisive growth — more tasks waiting than threads can run, even without
+     * latency-bound or saturation signals.
      */
     @Test
     public void testServerHandlerQueueBacklogGrows() {
-        assertEquals(SH_MIN + 4,
+        assertEquals(SH_MIN + 8,
                      Tuner.computeServerHandlerThreads(SH_MIN, SH_MIN, SH_MAX,
-                                                       150,      // queueDepth backlog
+                                                       150,      // queueDepth > current
+                                                       1,        // active low (NOT saturated)
+                                                       180,      // blockingTime fast
+                                                       20,
+                                                       Double.NaN));
+    }
+
+    /**
+     * Backlog above the absolute threshold but still under the pool size: the
+     * moderate (non-latency-bound) step, not the decisive queue-exceeds-pool step.
+     */
+    @Test
+    public void testServerHandlerQueueBacklogUnderPoolUsesModerateStep() {
+        assertEquals(250,
+                     Tuner.computeServerHandlerThreads(200, SH_MIN, SH_MAX,
+                                                       150,      // queueDepth > 100 but < current
                                                        1,        // active low (NOT saturated)
                                                        180,      // blockingTime fast
                                                        20,
@@ -909,6 +926,22 @@ public class TunerTest {
                                                        150,
                                                        20,
                                                        10)); // low SYN-expire rate
+    }
+
+    /**
+     * Latency-bound but the backlog exceeds the pool size: the queue itself is
+     * the bottleneck (more tasks waiting than threads), so grow decisively
+     * (+max(current/2, 8)) instead of the restrained +2 step.
+     */
+    @Test
+    public void testServerHandlerBacklogExceedingPoolGrowsDecisivelyWhenLatencyBound() {
+        assertEquals(300,
+                     Tuner.computeServerHandlerThreads(200, SH_MIN, SH_MAX,
+                                                       300,  // queueDepth > current
+                                                       10,   // active low
+                                                       150,  // blockingTime fast
+                                                       20,
+                                                       75)); // high SYN-expire rate
     }
 
     /**

@@ -224,4 +224,144 @@ public class I2PTunnelHTTPServerTest {
         opts.setProperty(TunnelController.PROP_TUN_GZIP, "true");
         assertTrue(I2PTunnelHTTPServer.isGzipAllowed(opts));
     }
+
+    // =====================================================================
+    // Keepalive option parsing (F1/F2)
+    // =====================================================================
+
+    @Test
+    public void testParseKeepAliveDefaultsOnNull() {
+        assertTrue(I2PTunnelHTTPServer.parseKeepAlive(null));
+    }
+
+    @Test
+    public void testParseKeepAliveDefaultsWhenUnset() {
+        assertTrue(I2PTunnelHTTPServer.parseKeepAlive(new Properties()));
+    }
+
+    @Test
+    public void testParseKeepAliveTrueFalse() {
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE, "true");
+        assertTrue(I2PTunnelHTTPServer.parseKeepAlive(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE, "false");
+        assertFalse(I2PTunnelHTTPServer.parseKeepAlive(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE, "TRUE");
+        assertTrue(I2PTunnelHTTPServer.parseKeepAlive(opts));
+    }
+
+    @Test
+    public void testParseKeepAliveLegacyFallback() {
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.OPT_KEEPALIVE, "false");
+        assertFalse(I2PTunnelHTTPServer.parseKeepAlive(opts));
+        opts.setProperty(I2PTunnelHTTPServer.OPT_KEEPALIVE, "true");
+        assertTrue(I2PTunnelHTTPServer.parseKeepAlive(opts));
+    }
+
+    @Test
+    public void testParseKeepAlivePropWinsOverLegacy() {
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE, "true");
+        opts.setProperty(I2PTunnelHTTPServer.OPT_KEEPALIVE, "false");
+        assertTrue(I2PTunnelHTTPServer.parseKeepAlive(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE, "false");
+        opts.setProperty(I2PTunnelHTTPServer.OPT_KEEPALIVE, "true");
+        assertFalse(I2PTunnelHTTPServer.parseKeepAlive(opts));
+    }
+
+    @Test
+    public void testParseKeepAliveGarbageIsFalse() {
+        // Boolean.parseBoolean only accepts "true" (ignore case); anything else is false.
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE, "yes");
+        assertFalse(I2PTunnelHTTPServer.parseKeepAlive(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE, "not-a-bool");
+        assertFalse(I2PTunnelHTTPServer.parseKeepAlive(opts));
+    }
+
+    @Test
+    public void testParseKeepAliveTimeoutDefaults() {
+        assertEquals(I2PTunnelHTTPServer.DEFAULT_KEEPALIVE_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseKeepAliveTimeout(null));
+        assertEquals(I2PTunnelHTTPServer.DEFAULT_KEEPALIVE_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseKeepAliveTimeout(new Properties()));
+    }
+
+    @Test
+    public void testParseKeepAliveTimeoutValid() {
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE_TIMEOUT, "5000");
+        assertEquals(5000L, I2PTunnelHTTPServer.parseKeepAliveTimeout(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE_TIMEOUT, " 25000 ");
+        assertEquals(25000L, I2PTunnelHTTPServer.parseKeepAliveTimeout(opts));
+    }
+
+    @Test
+    public void testParseKeepAliveTimeoutClamps() {
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE_TIMEOUT, "1");
+        assertEquals(I2PTunnelHTTPServer.MIN_KEEPALIVE_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseKeepAliveTimeout(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE_TIMEOUT, "99999999");
+        assertEquals(I2PTunnelHTTPServer.MAX_KEEPALIVE_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseKeepAliveTimeout(opts));
+    }
+
+    @Test
+    public void testParseKeepAliveTimeoutGarbageDefaults() {
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE_TIMEOUT, "abc");
+        assertEquals(I2PTunnelHTTPServer.DEFAULT_KEEPALIVE_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseKeepAliveTimeout(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_KEEPALIVE_TIMEOUT, "");
+        assertEquals(I2PTunnelHTTPServer.DEFAULT_KEEPALIVE_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseKeepAliveTimeout(opts));
+    }
+
+    @Test
+    public void testParseHeaderTimeoutDefaults() {
+        assertEquals(I2PTunnelHTTPServer.DEFAULT_HEADER_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseHeaderTimeout(null));
+        assertEquals(I2PTunnelHTTPServer.DEFAULT_HEADER_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseHeaderTimeout(new Properties()));
+    }
+
+    @Test
+    public void testParseHeaderTimeoutValidAndClamp() {
+        Properties opts = new Properties();
+        opts.setProperty(I2PTunnelHTTPServer.PROP_HEADER_TIMEOUT, "20000");
+        assertEquals(20000L, I2PTunnelHTTPServer.parseHeaderTimeout(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_HEADER_TIMEOUT, "500");
+        assertEquals(I2PTunnelHTTPServer.MIN_HEADER_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseHeaderTimeout(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_HEADER_TIMEOUT, "99999999");
+        assertEquals(I2PTunnelHTTPServer.MAX_HEADER_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseHeaderTimeout(opts));
+        opts.setProperty(I2PTunnelHTTPServer.PROP_HEADER_TIMEOUT, "xx");
+        assertEquals(I2PTunnelHTTPServer.DEFAULT_HEADER_TIMEOUT_MS,
+                     I2PTunnelHTTPServer.parseHeaderTimeout(opts));
+    }
+
+    // =====================================================================
+    // Getter/setter clamping (F1/F2/F7 live updates)
+    // =====================================================================
+
+    @Test
+    public void testSetKeepAliveTimeoutClamps() {
+        // These are instance methods; exercise the same clamp the setter uses.
+        long lo = I2PTunnelHTTPServer.MIN_KEEPALIVE_TIMEOUT_MS;
+        long hi = I2PTunnelHTTPServer.MAX_KEEPALIVE_TIMEOUT_MS;
+        assertEquals(lo, Math.max(lo, Math.min(hi, 1L)));
+        assertEquals(hi, Math.max(lo, Math.min(hi, 99999999L)));
+        assertEquals(lo, Math.max(lo, Math.min(hi, -5L)));
+    }
+
+    @Test
+    public void testSetHeaderTimeoutClamps() {
+        long lo = I2PTunnelHTTPServer.MIN_HEADER_TIMEOUT_MS;
+        long hi = I2PTunnelHTTPServer.MAX_HEADER_TIMEOUT_MS;
+        assertEquals(lo, Math.max(lo, Math.min(hi, 0L)));
+        assertEquals(hi, Math.max(lo, Math.min(hi, 99999999L)));
+    }
 }

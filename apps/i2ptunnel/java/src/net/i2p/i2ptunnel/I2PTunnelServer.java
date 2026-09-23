@@ -558,6 +558,48 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
+     *  Parse the per-tunnel server handler pool override.
+     *  Pure decision: null or non-numeric values yield -1 (use the Tuner-managed
+     *  default); values below the floor (&lt; 2) are also treated as "no override"
+     *  to match {@link TunnelControllerGroup#normalizeThreadOverride(int)}.
+     *
+     *  @param st the raw option value; may be null
+     *  @return the override thread count, or -1 for the default
+     *  @since 0.9.71+
+     */
+    static int parseServerThreadOverride(String st) {
+        if (st == null) {return -1;}
+        try {
+            int override = Integer.parseInt(st.trim());
+            return override >= 2 ? override : -1;
+        } catch (NumberFormatException nfe) {
+            return -1;
+        }
+    }
+
+    /**
+     *  Decide whether a connection should be rejected because the handler
+     *  queue is already drowning. Pure decision, no router context: called
+     *  from the accept loop after accept() and before a handler thread is
+     *  consumed. Rejects when the queue is near capacity (would hit
+     *  AbortPolicy anyway) or when the backlog is several times the pool
+     *  size (handlers cannot drain it in reasonable time).
+     *
+     *  @param queueDepth current queued task count
+     *  @param capacity total queue capacity; &lt;= 0 disables this gate
+     *  @param active currently busy handler threads
+     *  @param threads pool max threads; &lt;= 0 disables this gate
+     *  @return true if the connection should be rejected with a 503
+     *  @since 0.9.71+
+     */
+    static boolean shouldRejectOnQueue(int queueDepth, int capacity, int active, int threads) {
+        if (capacity <= 0 || threads <= 0) {return false;}
+        if (queueDepth >= capacity * 9 / 10) {return true;}
+        if (queueDepth > threads * 4) {return true;}
+        return false;
+    }
+
+    /**
      *  Refuse an inbound connection when the gate cap is exceeded. Base implementation
      *  closes the socket; I2PTunnelHTTPServer overrides to send a 503 first. Warnings are
      *  rate-limited so a flood of rejections cannot spam the log.
@@ -686,12 +728,16 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             l.log("✖ Bad " + PROP_MAX_CONNECTIONS + ": " + mc);
         }
         String st = props.getProperty(PROP_SERVER_THREADS);
-        try {
-            int override = st == null ? -1 : Integer.parseInt(st);
-            _serverThreadOverride = override >= 2 ? override : -1;
-        } catch (NumberFormatException nfe) {
+        if (st != null) {
+            try {
+                int override = Integer.parseInt(st.trim());
+                _serverThreadOverride = override >= 2 ? override : -1;
+            } catch (NumberFormatException nfe) {
+                _serverThreadOverride = -1;
+                l.log("✖ Bad " + PROP_SERVER_THREADS + ": " + st);
+            }
+        } else {
             _serverThreadOverride = -1;
-            l.log("✖ Bad " + PROP_SERVER_THREADS + ": " + st);
         }
         // Resize the private handler pool live if the cap changed on a running tunnel.
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
@@ -806,6 +852,18 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 i2ps = ci2pss.accept(); // blocking call
 
                 final I2PSocket socketToHandle = i2ps;
+
+                // Queue-depth admission gate: reject promptly when the handler
+                // queue is near capacity or drowning, before a handler thread
+                // is consumed and before the connection slot is reserved.
+                if (serverExec != null &&
+                    shouldRejectOnQueue(serverExec.getQueue().size(),
+                                        serverExec.getQueue().size() + serverExec.getQueue().remainingCapacity(),
+                                        serverExec.getActiveCount(),
+                                        serverExec.getMaximumPoolSize())) {
+                    rejectConnection(socketToHandle);
+                    continue;
+                }
 
                 // Connection admission gate: reserve a slot before dispatch so the rejection
                 // happens here (prompt, and before a handler thread is consumed), not inside

@@ -137,4 +137,58 @@ public class ConnectionGateTest {
             assertEquals(0, active.get());
         }
     }
+
+    // =====================================================================
+    // Queue-depth admission gate (shouldRejectOnQueue)
+    // =====================================================================
+
+    /** Disabled gate (capacity or threads <= 0) never rejects. */
+    @Test
+    public void testQueueGateDisabled() {
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, 0, 0, 8));
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, 2048, 0, 0));
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(10000, -1, -1, -1));
+    }
+
+    /** Under both thresholds: admit. */
+    @Test
+    public void testQueueGateAdmitsWhenUnderThresholds() {
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(0, 2048, 4, 8));
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(10, 2048, 4, 8));
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(32, 2048, 8, 8)); // == threads*4, not >
+        // Low backlog relative to a larger pool: well under both thresholds.
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(100, 2048, 4, 32));
+    }
+
+    /** Queue at/over 90% of capacity: reject (would hit AbortPolicy anyway). */
+    @Test
+    public void testQueueGateRejectsNearCapacity() {
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(1844, 2048, 4, 8));  // 90%
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(2048, 2048, 4, 8));  // full
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(5000, 2048, 4, 8));  // over
+    }
+
+    /** Backlog more than 4x the pool: reject even if capacity remains. */
+    @Test
+    public void testQueueGateRejectsWhenBacklogExceedsThreads() {
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(33, 2048, 8, 8));   // > 8*4
+        assertTrue(I2PTunnelServer.shouldRejectOnQueue(1000, 2048, 8, 8));
+        // but not when equal to threads*4
+        assertFalse(I2PTunnelServer.shouldRejectOnQueue(32, 2048, 8, 8));
+    }
+
+    /** parseServerThreadOverride: null / garbage / below-floor -> -1; valid passthrough. */
+    @Test
+    public void testParseServerThreadOverride() {
+        assertEquals(-1, I2PTunnelServer.parseServerThreadOverride(null));
+        assertEquals(-1, I2PTunnelServer.parseServerThreadOverride(""));
+        assertEquals(-1, I2PTunnelServer.parseServerThreadOverride("abc"));
+        assertEquals(-1, I2PTunnelServer.parseServerThreadOverride("1"));
+        assertEquals(-1, I2PTunnelServer.parseServerThreadOverride("0"));
+        assertEquals(-1, I2PTunnelServer.parseServerThreadOverride("-5"));
+        assertEquals(2, I2PTunnelServer.parseServerThreadOverride("2"));
+        assertEquals(64, I2PTunnelServer.parseServerThreadOverride("64"));
+        assertEquals(64, I2PTunnelServer.parseServerThreadOverride(" 64 "));
+        assertEquals(16384, I2PTunnelServer.parseServerThreadOverride("16384"));
+    }
 }

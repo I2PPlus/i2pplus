@@ -614,7 +614,7 @@
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <property name="hamcrest.home" value="${ant.home}/lib/"/>
+    <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
       <classpath>

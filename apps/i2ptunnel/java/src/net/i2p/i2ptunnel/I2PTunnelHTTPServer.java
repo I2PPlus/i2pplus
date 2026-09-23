@@ -219,8 +219,37 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public static final String OPT_REJECT_USER_AGENTS = "rejectUserAgents";
     /** Config key for User-Agent reject list. */
     public static final String OPT_USER_AGENTS = "userAgentRejectList";
-    /** Config key to enable keepalive. */
+    /** Config key to enable keepalive (legacy short form; see PROP_KEEPALIVE). */
     public static final String OPT_KEEPALIVE = "keepalive.i2p";
+    /** Config key to enable HTTP persistent connections; live via optionsUpdated.
+     *  Falls back to the legacy {@link #OPT_KEEPALIVE} short key when unset.
+     *  Key: tunnel.N.option.i2ptunnel.server.keepalive
+     *  @since 0.9.71+
+     */
+    public static final String PROP_KEEPALIVE = "i2ptunnel.server.keepalive";
+    /** Config key for the idle keepalive wait before closing a persistent
+     *  connection, in ms. Replaces the hard-coded 130s wait so a browser that
+     *  goes away does not pin a handler thread for over two minutes.
+     *  Key: tunnel.N.option.i2ptunnel.server.keepAliveTimeout
+     *  @since 0.9.71+
+     */
+    public static final String PROP_KEEPALIVE_TIMEOUT = "i2ptunnel.server.keepAliveTimeout";
+    /** Config key for the first-request header read timeout, in ms.
+     *  Key: tunnel.N.option.i2ptunnel.server.headerTimeout
+     *  @since 0.9.71+
+     */
+    public static final String PROP_HEADER_TIMEOUT = "i2ptunnel.server.headerTimeout";
+    /** Default idle keepalive wait (ms); short enough to free the handler
+     *  thread, long enough for a browser to reuse the connection. */
+    public static final long DEFAULT_KEEPALIVE_TIMEOUT_MS = 10 * 1000L;
+    /** Default first-request header timeout (ms); was a hard-coded 30s. */
+    public static final long DEFAULT_HEADER_TIMEOUT_MS = 15 * 1000L;
+    /** Bounds for {@link #PROP_KEEPALIVE_TIMEOUT} (ms). */
+    public static final long MIN_KEEPALIVE_TIMEOUT_MS = 1000L;
+    public static final long MAX_KEEPALIVE_TIMEOUT_MS = 300 * 1000L;
+    /** Bounds for {@link #PROP_HEADER_TIMEOUT} (ms). */
+    public static final long MIN_HEADER_TIMEOUT_MS = 1000L;
+    public static final long MAX_HEADER_TIMEOUT_MS = 120 * 1000L;
     /** Config key to add Allow response header. */
     public static final String OPT_ADD_RESPONSE_HEADER_ALLOW = "addResponseHeaderAllow";
     /** Config key to add Cache-Control response header. */
@@ -313,10 +342,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         SERVER_SKIPHEADERS.add(X_STYX_REQ_ID_HEADER);
     }
 
-    /** timeout for first request line */
-    private static final long HEADER_TIMEOUT = (long) 30*1000;
-    /** timeout for the rest of the request headers */
-    private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
+    /** Live first-request header timeout (ms); updated by optionsUpdated.
+     *  Was a hard-coded 30s constant.
+     *  @since 0.9.71+ */
+    private volatile long _headerTimeoutMs = DEFAULT_HEADER_TIMEOUT_MS;
+    /** Live idle keepalive wait (ms); updated by optionsUpdated.
+     *  Was a hard-coded 130s wait.
+     *  @since 0.9.71+ */
+    private volatile long _keepAliveTimeoutMs = DEFAULT_KEEPALIVE_TIMEOUT_MS;
+    /** Whether HTTP persistent connections are accepted; updated by optionsUpdated.
+     *  @since 0.9.71+ */
+    private volatile boolean _keepAlive = DEFAULT_KEEPALIVE;
+    /** Grace period for remaining header lines after the first line, on top of
+     *  the initial header timeout (slowloris bound). */
+    private static final long HEADER_FINISH_TIMEOUT = DEFAULT_HEADER_TIMEOUT_MS;
     /** min time before socket error is escalated to ERROR level */
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
@@ -575,6 +614,104 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Parse the keepalive enable flag from tunnel options.
+     *  Prefers {@link #PROP_KEEPALIVE}; falls back to the legacy
+     *  {@link #OPT_KEEPALIVE} short key; defaults to true when unset.
+     *
+     *  @param opts the client options; may be null
+     *  @return true if persistent connections are enabled
+     *  @since 0.9.71+
+     */
+    static boolean parseKeepAlive(Properties opts) {
+        if (opts == null) {return DEFAULT_KEEPALIVE;}
+        String v = opts.getProperty(PROP_KEEPALIVE);
+        if (v == null) {v = opts.getProperty(OPT_KEEPALIVE);}
+        if (v == null) {return DEFAULT_KEEPALIVE;}
+        return Boolean.parseBoolean(v.trim());
+    }
+
+    /**
+     *  Parse and clamp the idle keepalive timeout (ms) from tunnel options.
+     *  Unparseable values fall back to the default; out-of-range values clamp.
+     *
+     *  @param opts the client options; may be null
+     *  @return timeout in ms within [{@link #MIN_KEEPALIVE_TIMEOUT_MS},
+     *          {@link #MAX_KEEPALIVE_TIMEOUT_MS}]
+     *  @since 0.9.71+
+     */
+    static long parseKeepAliveTimeout(Properties opts) {
+        return parseTimeoutMs(opts, PROP_KEEPALIVE_TIMEOUT, DEFAULT_KEEPALIVE_TIMEOUT_MS,
+                              MIN_KEEPALIVE_TIMEOUT_MS, MAX_KEEPALIVE_TIMEOUT_MS);
+    }
+
+    /**
+     *  Parse and clamp the first-request header timeout (ms) from tunnel options.
+     *
+     *  @param opts the client options; may be null
+     *  @return timeout in ms within [{@link #MIN_HEADER_TIMEOUT_MS},
+     *          {@link #MAX_HEADER_TIMEOUT_MS}]
+     *  @since 0.9.71+
+     */
+    static long parseHeaderTimeout(Properties opts) {
+        return parseTimeoutMs(opts, PROP_HEADER_TIMEOUT, DEFAULT_HEADER_TIMEOUT_MS,
+                              MIN_HEADER_TIMEOUT_MS, MAX_HEADER_TIMEOUT_MS);
+    }
+
+    /**
+     *  Shared timeout parser: default on missing/unparseable, clamp to [min, max].
+     *
+     *  @param opts the options; may be null
+     *  @param key the property key
+     *  @param dflt default when unset or not a number
+     *  @param min inclusive lower bound
+     *  @param max inclusive upper bound
+     *  @return the parsed and clamped timeout in ms
+     *  @since 0.9.71+
+     */
+    private static long parseTimeoutMs(Properties opts, String key, long dflt, long min, long max) {
+        if (opts == null) {return dflt;}
+        String v = opts.getProperty(key);
+        if (v == null) {return dflt;}
+        try {
+            long t = Long.parseLong(v.trim());
+            return Math.max(min, Math.min(max, t));
+        } catch (NumberFormatException nfe) {
+            return dflt;
+        }
+    }
+
+    /** @return whether HTTP persistent connections are currently enabled
+     *  @since 0.9.71+ */
+    public boolean isKeepAlive() {return _keepAlive;}
+
+    /** Enable/disable HTTP persistent connections without a tunnel restart.
+     *  @param on true to accept persistent connections
+     *  @since 0.9.71+ */
+    public void setKeepAlive(boolean on) {_keepAlive = on;}
+
+    /** @return idle keepalive wait in ms
+     *  @since 0.9.71+ */
+    public long getKeepAliveTimeout() {return _keepAliveTimeoutMs;}
+
+    /** Set the idle keepalive wait, clamped to the configured bounds.
+     *  @param ms timeout in ms
+     *  @since 0.9.71+ */
+    public void setKeepAliveTimeout(long ms) {
+        _keepAliveTimeoutMs = Math.max(MIN_KEEPALIVE_TIMEOUT_MS, Math.min(MAX_KEEPALIVE_TIMEOUT_MS, ms));
+    }
+
+    /** @return first-request header timeout in ms
+     *  @since 0.9.71+ */
+    public long getHeaderTimeout() {return _headerTimeoutMs;}
+
+    /** Set the first-request header timeout, clamped to the configured bounds.
+     *  @param ms timeout in ms
+     *  @since 0.9.71+ */
+    public void setHeaderTimeout(long ms) {
+        _headerTimeoutMs = Math.max(MIN_HEADER_TIMEOUT_MS, Math.min(MAX_HEADER_TIMEOUT_MS, ms));
+    }
+
+    /**
      *  Get an integer option from the tunnel client options.
      *
      *  @param opt the option key
@@ -622,6 +759,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // see TunnelController.setSessionOptions()
         String spoofHost = props.getProperty(TunnelController.PROP_SPOOFED_HOST);
         _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
+        _keepAlive = parseKeepAlive(props);
+        _keepAliveTimeoutMs = parseKeepAliveTimeout(props);
+        _headerTimeoutMs = parseHeaderTimeout(props);
         super.optionsUpdated(tunnel);
     }
 
@@ -674,7 +814,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
             long afterAccept = getTunnel().getContext().clock().now();
             int requestCount = 0;
-            boolean keepalive = getBooleanOption(OPT_KEEPALIVE, DEFAULT_KEEPALIVE);
+            boolean keepalive = _keepAlive;
+            long headerTimeout = _headerTimeoutMs;
+            long keepAliveTimeout = _keepAliveTimeoutMs;
 
             do {
                 if (requestCount > 0 && _log.shouldDebug()) {
@@ -684,7 +826,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // The headers _should_ be in the first packet, but may not be, depending on the client-side options
 
                 StringBuilder command = new StringBuilder(128);
-                Map<String, List<String>> headers = readRequestHeaders(socket, command, requestCount, peerB32, getTunnel().getContext(), _log, tunnelId);
+                Map<String, List<String>> headers = readRequestHeaders(socket, command, requestCount, peerB32,
+                                                                       getTunnel().getContext(), _log, tunnelId,
+                                                                       headerTimeout, keepAliveTimeout);
                 if (headers == null) {return;}
 
                 validateRequestHost(headers, socket, peerB32);
@@ -731,7 +875,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  * We do NOT support keepalive on the server socket.
                  */
                 String cmd = command.toString().trim();
-                boolean isGetOrHead = cmd.startsWith("GET ") || cmd.startsWith("HEAD ");
                 if (!isKeepAliveRequest(cmd)) {keepalive = false;}
 
                 // we keep the enc sent by the browser before clobbering it, since it may have been x-i2p-gzip
@@ -774,10 +917,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
                                                      _log, compress, upgrade, _clientExecutor, keepalive, waiter);
-                // GET/HEAD requests run inline to support HTTP keepalive.
-                // Non-GET/HEAD requests offload to the executor pool to avoid
-                // blocking the handler thread on slow I2P socket writes.
-                if (isGetOrHead) {
+                // Persistent connections run inline so the waiter can gate the
+                // next request on this connection. Non-keepalive requests
+                // (including GET/HEAD with keepalive off or Connection: close)
+                // offload to the executor pool so a slow I2P write does not
+                // pin this handler thread.
+                if (keepalive) {
                     t.run();
                 } else {
                     try {
@@ -832,9 +977,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Read the request headers, handling the specific errors that can occur
-     *  by sending the appropriate error response to the client.
-     *  The 5 error handlers share this shape: send error, log, close, return null.
+     *  Read the request headers with the default timeouts.
+     *  Delegates to {@link #readRequestHeaders(I2PSocket, StringBuilder, int,
+     *  String, I2PAppContext, Log, String, long, long)}.
      *
      *  @param socket the client socket
      *  @param command buffer for the request line
@@ -848,12 +993,40 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     static Map<String, List<String>> readRequestHeaders(I2PSocket socket, StringBuilder command, int requestCount,
                                                         String peerB32, I2PAppContext ctx, Log log, String tunnelId) throws IOException {
+        return readRequestHeaders(socket, command, requestCount, peerB32, ctx, log, tunnelId,
+                                  DEFAULT_HEADER_TIMEOUT_MS, DEFAULT_KEEPALIVE_TIMEOUT_MS);
+    }
+
+    /**
+     *  Read the request headers, handling the specific errors that can occur
+     *  by sending the appropriate error response to the client.
+     *  The 5 error handlers share this shape: send error, log, close, return null.
+     *
+     *  @param socket the client socket
+     *  @param command buffer for the request line
+     *  @param requestCount the number of requests already handled on this connection (0 = first)
+     *  @param peerB32 the client's base32 for logging
+     *  @param ctx the I2P app context
+     *  @param log the logging instance
+     *  @param tunnelId "[nickname / b32prefix]" label for this server tunnel
+     *  @param headerTimeout first-request header timeout (ms)
+     *  @param keepAliveTimeout idle keepalive wait for subsequent requests (ms)
+     *  @return the parsed headers, or null if the request failed and the client was notified
+     *  @throws IOException on other I/O errors, propagated to the caller
+     *  @since 0.9.71+ timeout parameters added for live tuning
+     */
+    static Map<String, List<String>> readRequestHeaders(I2PSocket socket, StringBuilder command, int requestCount,
+                                                        String peerB32, I2PAppContext ctx, Log log, String tunnelId,
+                                                        long headerTimeout, long keepAliveTimeout) throws IOException {
         try {
             /*
              * Catch specific exceptions thrown, to return a good error to the client.
-             * Add 10s to client-side timeout so the client will timeout first and minimize races.
+             * Keepalive wait is the configured idle timeout; first request uses the
+             * (shorter) header timeout. Previously the keepalive wait was the
+             * client-side 120s timeout + 10s, which pinned a handler thread for
+             * over two minutes when a browser vanished mid-persistent-connection.
              */
-            long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
+            long timeout = requestCount > 0 ? keepAliveTimeout : headerTimeout;
             return readHeaders(socket, null, command, CLIENT_SKIPHEADERS, ctx, timeout);
         } catch (SocketTimeoutException ste) {
             if (requestCount > 0) {

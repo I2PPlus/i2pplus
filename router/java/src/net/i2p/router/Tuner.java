@@ -10986,9 +10986,16 @@ protected int computeTarget(double observed) {
                 ? Math.min(max, current + 2)
                 : Math.min(max, current + Math.max(current / 2, 8));
         }
-        // Queue backlog + no CPU pressure -> grow pool
-        if (!cpuPressure && queueDepth > 100)
+        // Queue backlog + no CPU pressure -> grow pool. When the backlog exceeds
+        // the pool size the queue is the bottleneck (more tasks waiting than
+        // threads can run), so grow decisively even if latency-bound — a high
+        // SYN-expire rate alone must not stall a pool that is demonstrably
+        // under-provisioned relative to its own queue.
+        if (!cpuPressure && queueDepth > 100) {
+            if (queueDepth > current)
+                return Math.min(max, current + Math.max(current / 2, 8));
             return Math.min(max, current + (latencyBound ? 2 : Math.max(current / 4, 4)));
+        }
 
         // Handlers blocking >2s -> grow pool to reduce per-handler load
         if (blockedSlow && !cpuPressure)
