@@ -140,20 +140,22 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
-     * Callback for reconnect-a-via-a-second route when the first attempt
-     * completes with zero upstream bytes.
+     * Callback for reconnecting via a second route when the first attempt
+     * completes with zero upstream bytes, or dies mid-body with an incomplete
+     * Content-Length response (Range resume).
      *
      * <p>Used by the HTTP client proxy to transparently retry an idempotent
-     * GET/HEAD against a fresh I2P connection without tearing down the browser
-     * socket (a silent zero-byte close becomes {@code NS_ERROR_NET_EMPTY_RESPONSE}
-     * for the browser). The runner keeps the local socket open across attempts;
-     * the callback supplies each new connection (or null to stop).
+     * GET/HEAD against a fresh I2P connection (a new tunnel) without tearing
+     * down the browser socket (a silent zero-byte close becomes
+     * {@code NS_ERROR_NET_EMPTY_RESPONSE} for the browser; a mid-body death
+     * would truncate a download). The runner keeps the local socket open across
+     * attempts; the callback supplies each new connection (or null to stop).
      *
      * @since 0.9.62
      */
     public interface ReconnectCallback {
         /**
-         * @param cause the cause of the empty completion, or null
+         * @param cause the cause of the empty or mid-body completion, or null
          * @return a freshly connected I2P socket to retry on, or null to give up
          */
         public I2PSocket reconnect(Exception cause);
@@ -359,9 +361,12 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  {@code toI2P} forwarder was never started) that completes with zero
      *  upstream bytes, {@link #run()} will call the callback to obtain a fresh
      *  I2P socket and re-drive the request on it, keeping the local browser
-     *  socket open. Only the {@link #onNoDataFailure(Exception)} path triggers a reconnect;
-     *  a genuine non-empty failure, a reset, or a {@code totalReceived > 0}
-     *  completion never does.
+     *  socket open. The same callback is used for mid-body Range resume when a
+     *  partial Content-Length body was already delivered. Only the
+     *  {@link #onNoDataFailure(Exception)} path triggers an <em>empty</em>
+     *  reconnect; a mid-body death with {@code totalReceived > 0} triggers
+     *  {@link #resumeIncompleteBody(OutputStream)} instead. A genuine non-empty
+     *  completion (full body, or no Content-Length to resume) never reconnects.
      *
      *  @param rc the callback, or null to disable reconnects
      *  @since 0.9.62
@@ -537,6 +542,144 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         return totalReceived <= 0 && hasReconnectCallback && retryableRequest;
     }
 
+    /**
+     *  Whether an incomplete Content-Length body should be resumed via HTTP Range
+     *  on a fresh I2P connection (new tunnel).
+     *
+     *  <p>Used when the browser has already been sent response headers with a
+     *  definite Content-Length, but the upstream stream died (tunnel failure,
+     *  write timeout, stall) after only part of the entity arrived. I2P delays
+     *  are expected; the download must not be abandoned. Reconnecting with
+     *  {@code Range: bytes=N-} fetches only the remainder so the browser-visible
+     *  byte stream stays contiguous. Only GET/HEAD qualify (idempotent, no
+     *  request body). Resume is refused when the body cannot be spliced safely
+     *  (unknown length, chunked, transparent gzip decode, or headers not yet
+     *  emitted — the latter is the empty-response case handled instead).
+     *
+     *  @param bodyReceived entity-body bytes already delivered to the browser
+     *  @param dataExpected original response Content-Length, or -1 if unknown
+     *  @param hasReconnectCallback whether a reconnect callback is installed
+     *  @param retryableRequest whether the buffered request is an idempotent GET/HEAD
+     *  @param canRangeResume whether the response stream can safely splice (see
+     *         {@code HTTPResponseOutputStream.canRangeResume()})
+     *  @return true if the transfer should resume on a fresh connection
+     *  @since 0.9.71+
+     */
+    static boolean shouldResumeIncompleteBody(long bodyReceived, long dataExpected,
+                                              boolean hasReconnectCallback,
+                                              boolean retryableRequest,
+                                              boolean canRangeResume) {
+        return canRangeResume
+               && dataExpected > 0
+               && bodyReceived >= 0
+               && bodyReceived < dataExpected
+               && hasReconnectCallback
+               && retryableRequest;
+    }
+
+    /**
+     *  Rewrite a buffered GET/HEAD request to resume at {@code start} via a
+     *  Range header, replacing any Range the browser already sent.
+     *
+     *  <p>The header is inserted immediately before the terminating blank line
+     *  of the header block. {@code start <= 0} returns the request unchanged
+     *  (full entity; no Range needed). A request with no header terminator is
+     *  returned unchanged rather than corrupted.
+     *
+     *  @param request the raw request bytes (request-line + headers), may be null
+     *  @param start first byte offset of the remaining entity (inclusive)
+     *  @return a new request array with the Range header, or the original when
+     *          no rewrite applies; never null if {@code request} is non-null
+     *  @since 0.9.71+
+     */
+    static byte[] withRangeHeader(byte[] request, long start) {
+        if (request == null || start <= 0) {return request;}
+        int end = indexOfHeaderEnd(request);
+        if (end < 0) {return request;}
+        // Strip any existing Range lines so the resume offset is authoritative.
+        byte[] base = stripRangeHeader(request, end);
+        end = indexOfHeaderEnd(base);
+        if (end < 0) {return base;}
+        byte[] range = DataHelper.getASCII("Range: bytes=" + start + "-\r\n");
+        // end points at the \r of the first CRLF in the terminating CRLFCRLF;
+        // insert after that CRLF so the new header is a full line before the blank.
+        int insertAt = end + 2;
+        if (insertAt > base.length) {return base;}
+        byte[] out = new byte[base.length + range.length];
+        System.arraycopy(base, 0, out, 0, insertAt);
+        System.arraycopy(range, 0, out, insertAt, range.length);
+        System.arraycopy(base, insertAt, out, insertAt + range.length, base.length - insertAt);
+        return out;
+    }
+
+    /**
+     *  Index of the first {@code \r\n\r\n} (or {@code \n\n}) header terminator.
+     *
+     *  @param data request or header bytes, may be null
+     *  @return index of the first byte of the terminator, or -1 if absent
+     */
+    private static int indexOfHeaderEnd(byte[] data) {
+        if (data == null) {return -1;}
+        for (int i = 0; i < data.length - 1; i++) {
+            if (data[i] == '\r' && data[i + 1] == '\n') {
+                if (i + 3 < data.length && data[i + 2] == '\r' && data[i + 3] == '\n') {
+                    return i;
+                }
+            } else if (data[i] == '\n' && data[i + 1] == '\n') {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     *  Return a copy of {@code request} with any {@code Range:} header line removed.
+     *  Only lines before the header terminator are considered.
+     *
+     *  @param request raw request bytes
+     *  @param headerEnd index from {@link #indexOfHeaderEnd(byte[])}
+     *  @return request without Range lines (new array if stripped, else original)
+     */
+    private static byte[] stripRangeHeader(byte[] request, int headerEnd) {
+        // Scan header lines (after the request line) for a case-insensitive "Range:".
+        int lineStart = 0;
+        for (int i = 0; i < headerEnd; i++) {
+            boolean eol = (request[i] == '\n')
+                || (request[i] == '\r' && i + 1 < headerEnd && request[i + 1] == '\n');
+            if (!eol) {continue;}
+            int lineEnd = i + 1;
+            if (request[i] == '\r') {lineEnd = i + 2;}
+            if (isRangeHeaderLine(request, lineStart, lineEnd)) {
+                byte[] out = new byte[request.length - (lineEnd - lineStart)];
+                System.arraycopy(request, 0, out, 0, lineStart);
+                System.arraycopy(request, lineEnd, out, lineStart, request.length - lineEnd);
+                return out;
+            }
+            lineStart = lineEnd;
+            if (request[i] == '\r') {i++;}
+        }
+        return request;
+    }
+
+    /**
+     *  Whether {@code [start, end)} is a {@code Range:} header line (not the request line).
+     *
+     *  @param data request bytes
+     *  @param start first byte of the line
+     *  @param end one past the line (including CRLF)
+     *  @return true if the line starts with {@code Range:} ignoring ASCII case
+     */
+    private static boolean isRangeHeaderLine(byte[] data, int start, int end) {
+        final byte[] prefix = { 'r', 'a', 'n', 'g', 'e', ':' };
+        if (end - start <= prefix.length) {return false;}
+        for (int i = 0; i < prefix.length; i++) {
+            byte b = data[start + i];
+            if (b >= 'A' && b <= 'Z') {b += 32;}
+            if (b != prefix[i]) {return false;}
+        }
+        return true;
+    }
+
     private static final byte[] GET = { 'G', 'E', 'T', ' ' };
     private static final byte[] HEAD = { 'H', 'E', 'A', 'D', ' ' };
     private static final byte[] POST = { 'P', 'O', 'S', 'T', ' ' };
@@ -561,6 +704,166 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      */
     static boolean isRetryableRequest(byte[] initialData) {
         return startsWithIgnoreCase(initialData, GET) || startsWithIgnoreCase(initialData, HEAD);
+    }
+
+    /**
+     *  Entity-body progress for a mid-body Range resume. Default: no HTTP
+     *  response stream (server-side or non-HTTP runner) — resume never applies.
+     *
+     *  @return body bytes delivered, content length (-1 if unknown), and whether
+     *          headers were written / Range can splice; defaults disable resume
+     *  @since 0.9.71+
+     */
+    protected BodyProgress getBodyProgress() { return null; }
+
+    /**
+     *  Prepare the HTTP response stream to swallow the next header block
+     *  (mid-body Range resume). No-op when there is no response stream.
+     *
+     *  @since 0.9.71+
+     */
+    protected void prepareBodyResume() { /* no HTTP response stream */ }
+
+    /**
+     *  Snapshot of body-delivery progress used by {@link #shouldResumeIncompleteBody}.
+     *
+     *  @since 0.9.71+
+     */
+    protected static final class BodyProgress {
+        /** Entity-body bytes already written to the browser. */
+        public final long bodyReceived;
+        /** Original Content-Length, or -1 if unknown. */
+        public final long contentLength;
+        /** Whether the first response headers were emitted to the browser. */
+        public final boolean headerWritten;
+        /** Whether a Content-Length body can be safely spliced (not gzip, etc.). */
+        public final boolean canRangeResume;
+
+        /**
+         *  @param bodyReceived entity bytes delivered
+         *  @param contentLength original Content-Length or -1
+         *  @param headerWritten whether browser already has headers
+         *  @param canRangeResume whether splice is safe
+         */
+        public BodyProgress(long bodyReceived, long contentLength,
+                            boolean headerWritten, boolean canRangeResume) {
+            this.bodyReceived = bodyReceived;
+            this.contentLength = contentLength;
+            this.headerWritten = headerWritten;
+            this.canRangeResume = canRangeResume;
+        }
+    }
+
+    /**
+     *  Re-drive the I2P→browser forwarder inline after a reconnect, waiting up
+     *  to the standard 120s for completion (same policy as the initial run).
+     *
+     *  @param out browser-facing output stream (possibly HTTP-filtered)
+     *  @param i2pin input stream of the current I2P socket (updated field preferred)
+     *  @since 0.9.71+
+     */
+    private void redriveReceiveForwarder(OutputStream out, InputStream i2pin) {
+        finished = false;
+        InputStream pin = i2pin;
+        // Prefer the field in case a prior path already swapped the socket.
+        try {
+            if (i2ps != null) {pin = i2ps.getInputStream();}
+        } catch (IOException ioe) { /* keep caller-provided stream */ }
+        fromI2P = new StreamForwarder(pin, out, false, _onSuccess);
+        fromI2P.run();
+        synchronized (finishLock) {
+            long endTime = System.currentTimeMillis() + 2*60*1000;
+            while (!finished) {
+                long remaining = endTime - System.currentTimeMillis();
+                if (remaining <= 0) {finished = true; finishLock.notifyAll(); break;}
+                try {finishLock.wait(Math.min(remaining, 5000));}
+                catch (InterruptedException ie) {Thread.currentThread().interrupt(); finished = true; break;}
+            }
+        }
+    }
+
+    /**
+     *  Resume an incomplete Content-Length body on a fresh I2P connection.
+     *
+     *  <p>Rotates to a new tunnel via {@link ReconnectCallback}, re-sends the
+     *  buffered GET/HEAD with {@code Range: bytes=N-} for the undelivered
+     *  remainder, and splices the second response body onto the browser stream
+     *  without re-emitting headers. Bounded by {@link #MAX_EMPTY_RECONNECT_CYCLES}.
+     *
+     *  @param out browser-facing output stream
+     *  @since 0.9.71+
+     */
+    private void resumeIncompleteBody(OutputStream out) {
+        if (_reconnectCallback == null || !isRetryableRequest(initialI2PData)) {return;}
+        int cycles = 0;
+        while (true) {
+            BodyProgress bp = getBodyProgress();
+            if (bp == null) {return;}
+            boolean resume = shouldResumeIncompleteBody(bp.bodyReceived, bp.contentLength,
+                    true, true, bp.headerWritten && bp.canRangeResume);
+            if (!resume) {return;}
+            if (cycles++ >= MAX_EMPTY_RECONNECT_CYCLES) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Body-resume budget exhausted after " + MAX_EMPTY_RECONNECT_CYCLES +
+                              " cycles at " + bp.bodyReceived + '/' + bp.contentLength + " bytes");
+                }
+                return;
+            }
+            Exception e = fromI2P != null ? fromI2P.getFailure() : null;
+            if (e == null && toI2P != null) {e = toI2P.getFailure();}
+            I2PSocket fresh = _reconnectCallback.reconnect(e);
+            if (fresh == null) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Body-resume reconnect declined at " + bp.bodyReceived + '/' +
+                              bp.contentLength + " bytes; leaving download truncated");
+                }
+                return;
+            }
+            if (sockList != null) {synchronized (slock) {sockList.remove(i2ps);}}
+            try {i2ps.close();} catch (IOException ioe) {/* ignored */}
+            i2ps = fresh;
+            InputStream i2pin;
+            OutputStream i2pout;
+            try {
+                i2pin = i2ps.getInputStream();
+                i2pout = i2ps.getOutputStream();
+            } catch (IOException ioe) {
+                if (_log.shouldWarn()) {_log.warn("Body-resume: failed to open fresh I2P streams", ioe);}
+                return;
+            }
+            byte[] req = withRangeHeader(initialI2PData, bp.bodyReceived);
+            try {
+                // Swallow the second response's headers before any byte arrives.
+                prepareBodyResume();
+                if (req != null) {
+                    i2pout.write(req);
+                    i2pout.flush();
+                }
+            } catch (IOException ioe) {
+                if (_log.shouldWarn()) {_log.warn("Body-resume: failed to send Range request", ioe);}
+                return;
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Body resume from byte " + bp.bodyReceived + '/' + bp.contentLength +
+                          " on a fresh I2P socket (tunnel rotation)");
+            }
+            redriveReceiveForwarder(out, i2pin);
+        }
+    }
+
+    /**
+     *  Whether an incomplete body is still eligible for Range resume — used by
+     *  the forwarder finally-block to keep the browser stream open.
+     *
+     *  @return true if resume should run (or may still run) after this forwarder
+     *  @since 0.9.71+
+     */
+    private boolean isBodyResumePending() {
+        if (_reconnectCallback == null || !isRetryableRequest(initialI2PData)) {return false;}
+        BodyProgress bp = getBodyProgress();
+        if (bp == null) {return false;}
+        return shouldResumeIncompleteBody(bp.bodyReceived, bp.contentLength,
+                true, true, bp.headerWritten && bp.canRangeResume);
     }
 
     /**
@@ -687,7 +990,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             }
 
             // This task is useful for the httpclient
-            if ((onTimeout != null || _onFail != null) && totalReceived <= 0) {
+            final boolean tookEmptyPath = (onTimeout != null || _onFail != null) && totalReceived <= 0;
+            if (tookEmptyPath) {
                 // "Empty response" retry: if a reconnect callback is installed and the
                 // buffered request is idempotent (GET/HEAD only, verified by
                 // isRetryableRequest() so a misconfigured callback can never re-send a
@@ -743,25 +1047,28 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     }
                     // Re-drive the receive forwarder inline; totalReceived is updated by it.
                     totalReceived = 0;
-                    finished = false;
-                    fromI2P = new StreamForwarder(i2pin, out, false, _onSuccess);
-                    fromI2P.run();
-                    synchronized (finishLock) {
-                        long endTime = System.currentTimeMillis() + 2*60*1000;
-                        while (!finished) {
-                            long remaining = endTime - System.currentTimeMillis();
-                            if (remaining <= 0) {finished = true; finishLock.notifyAll(); break;}
-                            try {finishLock.wait(Math.min(remaining, 5000));}
-                            catch (InterruptedException ie) {Thread.currentThread().interrupt(); finished = true; break;}
-                        }
-                    }
+                    redriveReceiveForwarder(out, i2pin);
                 }
                 if (totalReceived <= 0) {
                     Exception e = fromI2P.getFailure();
                     onNoDataFailure(e);
                 }
-            } else {
-                // Detect a reset on one side, and propagate to the other
+            }
+
+            // Mid-body Range resume: headers + partial Content-Length body already
+            // reached the browser; the upstream tunnel died (or stalled out) before
+            // the entity completed. I2P latency is expected — do not abandon the
+            // download. Reconnect on a fresh tunnel (rotate) and fetch only the
+            // remaining bytes via Range so the browser sees one contiguous body.
+            // Runs after the empty path too, when that path recovered a partial body.
+            if (totalReceived > 0) {
+                resumeIncompleteBody(out);
+            }
+
+            // Detect a reset on one side, and propagate to the other.
+            // Skipped when the empty path handled a still-empty transfer
+            // (onNoDataFailure already ran) — matches the pre-resume else-branch.
+            if (!tookEmptyPath || totalReceived > 0) {
                 Exception e1 = fromI2P.getFailure();
                 Exception e2 = toI2P != null ? toI2P.getFailure() : null;
                 Throwable c1 = e1 != null ? e1.getCause() : null;
@@ -1008,13 +1315,17 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                      * DON'T close if we have a timeout job and we haven't received anything, or else the timeout job can't
                      * write the error message to the stream.
                      * close() above will close it after the timeout job is run.
+                     *
+                     * Also keep the browser stream open when a mid-body Range resume
+                     * is still pending — closing it would sever the splice target.
                      */
+                    boolean resumePending = !_toI2P && isBodyResumePending();
                     if (!((onTimeout != null || _onFail != null) && (!_toI2P) && totalReceived <= 0)) {
-                        if (keepAliveTo) {out.flush();}
+                        if (keepAliveTo || resumePending) {out.flush();}
                         else {out.close();}
                     } else {
                         if (_log.shouldInfo()) {_log.info(direction + " Not closing stream so we can write the error message...");}
-                        if (keepAliveTo) {out.flush();}
+                        if (keepAliveTo || resumePending) {out.flush();}
                     }
                 } catch (IOException ioe) {
                     if (_log.shouldLog(Log.DEBUG)) {_log.debug(direction + " Error flushing stream before close (" + ioe.getMessage() + ")");}

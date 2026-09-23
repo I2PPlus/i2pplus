@@ -73,6 +73,107 @@ public class HTTPResponseOutputStreamTest {
     }
 
     @Test
+    public void testBodyReceivedTracksAfterHeaders() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        assertFalse(out.getHeaderWritten());
+        assertEquals(0, out.getBodyReceived());
+        out.write((RESPONSE_LINE + "Content-Length: 10\r\n\r\n").getBytes());
+        assertTrue(out.getHeaderWritten());
+        assertEquals(10, out.getDataExpected());
+        assertEquals(0, out.getBodyReceived());
+        out.write("hello".getBytes());
+        out.write("world!".getBytes(), 0, 5);
+        assertEquals(10, out.getBodyReceived());
+        assertFalse(out.canRangeResume()); // complete
+    }
+
+    @Test
+    public void testCanRangeResumeWhenPartial() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        out.write((RESPONSE_LINE + "Content-Length: 10\r\n\r\nabc").getBytes());
+        assertTrue(out.getHeaderWritten());
+        assertEquals(10, out.getDataExpected());
+        assertEquals(3, out.getBodyReceived());
+        assertTrue(out.canRangeResume());
+    }
+
+    @Test
+    public void testNoRangeResumeWithoutContentLength() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        out.write((RESPONSE_LINE + "\r\nxy").getBytes());
+        assertFalse(out.canRangeResume());
+    }
+
+    @Test
+    public void testPrepareBodyResumeSwallowsSecondHeaders() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        out.write((RESPONSE_LINE + "Content-Length: 10\r\n\r\nabc").getBytes());
+        assertEquals(3, out.getBodyReceived());
+        // Plain stream inserts Connection: close after the first response headers.
+        String first = RESPONSE_LINE + "Content-Length: 10\r\n" + CONNECTION_CLOSE + "\r\nabc";
+        out.prepareBodyResume();
+        assertFalse(out.getHeaderWritten());
+        // Second response: 206 with remaining length — must not hit the browser.
+        out.write("HTTP/1.1 206 Partial Content\r\nContent-Length: 7\r\n\r\ndefghij".getBytes());
+        String s = baos.toString();
+        assertTrue(s.startsWith(first));
+        assertFalse(s.contains("206 Partial"));
+        assertFalse(s.contains("Content-Length: 7"));
+        assertEquals(first + "defghij", s);
+        // Original content-length preserved; body counts first + second.
+        assertEquals(10, out.getDataExpected());
+        assertEquals(10, out.getBodyReceived());
+        assertFalse(out.canRangeResume());
+    }
+
+    @Test
+    public void testPrepareBodyResumeSkipsDuplicatedPrefixOn200() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        out.write((RESPONSE_LINE + "Content-Length: 10\r\n\r\nabc").getBytes());
+        out.prepareBodyResume();
+        // Server ignored Range and re-sent the full body (10 bytes, CL matches).
+        out.write("HTTP/1.1 200 OK\r\nContent-Length: 10\r\n\r\nabcdefghij".getBytes());
+        String s = baos.toString();
+        // Second status/headers suppressed; only the first response line remains,
+        // and the re-send's already-delivered prefix "abc" is dropped.
+        String first = RESPONSE_LINE + "Content-Length: 10\r\n" + CONNECTION_CLOSE + "\r\nabc";
+        assertTrue(s.startsWith(first));
+        assertEquals(first + "defghij", s);
+        assertEquals(1, countOccurrences(s, "HTTP/1.1"));
+        assertEquals(10, out.getBodyReceived());
+        assertFalse(out.canRangeResume());
+    }
+
+    private static int countOccurrences(String haystack, String needle) {
+        int n = 0;
+        int i = haystack.indexOf(needle);
+        while (i >= 0) {
+            n++;
+            i = haystack.indexOf(needle, i + needle.length());
+        }
+        return n;
+    }
+
+    @Test
+    public void testPrepareBodyResumeRejectsUnexpectedStatus() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        out.write((RESPONSE_LINE + "Content-Length: 10\r\n\r\nabc").getBytes());
+        out.prepareBodyResume();
+        try {
+            out.write("HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n".getBytes());
+            fail("Expected IOException on non-200/206 resume status");
+        } catch (IOException expected) {
+            assertTrue(expected.getMessage().contains("404"));
+        }
+    }
+
+    @Test
     public void testChunkedKeepAlive() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         AtomicInteger done = new AtomicInteger();

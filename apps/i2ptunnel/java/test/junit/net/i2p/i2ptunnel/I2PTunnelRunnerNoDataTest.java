@@ -130,4 +130,96 @@ public class I2PTunnelRunnerNoDataTest {
         // POST/PUT must never be re-sent even when empty and callback is wired.
         assertFalse(I2PTunnelRunner.shouldReconnectEmptyResponse(0L, true, false));
     }
+
+    // ---------- shouldResumeIncompleteBody ----------
+
+    @Test
+    public void testResumeIncompleteBody() {
+        assertTrue(I2PTunnelRunner.shouldResumeIncompleteBody(100L, 1000L, true, true, true));
+    }
+
+    @Test
+    public void testResumeFromZeroBodyAfterHeaders() {
+        // Headers written, Content-Length known, no body byte yet — still resume.
+        assertTrue(I2PTunnelRunner.shouldResumeIncompleteBody(0L, 1000L, true, true, true));
+    }
+
+    @Test
+    public void testNoResumeWhenBodyComplete() {
+        assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(1000L, 1000L, true, true, true));
+        assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(1001L, 1000L, true, true, true));
+    }
+
+    @Test
+    public void testNoResumeWithoutContentLength() {
+        assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(100L, -1L, true, true, true));
+        assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(100L, 0L, true, true, true));
+    }
+
+    @Test
+    public void testNoResumeWithoutCallbackOrRetryable() {
+        assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(100L, 1000L, false, true, true));
+        assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(100L, 1000L, true, false, true));
+    }
+
+    @Test
+    public void testNoResumeWhenCannotRangeResume() {
+        // gzip decode, chunked, or headers not yet written — splice unsafe.
+        assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(100L, 1000L, true, true, false));
+    }
+
+    // ---------- withRangeHeader ----------
+
+    private static final String GET_REQ = "GET /installers/i2pinstall.exe HTTP/1.1\r\nHost: skank.i2p\r\n\r\n";
+
+    @Test
+    public void testWithRangeHeaderInsertsBeforeBlankLine() {
+        byte[] out = I2PTunnelRunner.withRangeHeader(GET_REQ.getBytes(), 45294029L);
+        String s = new String(out);
+        assertTrue(s.endsWith("\r\n\r\n"));
+        assertTrue(s.contains("\r\nRange: bytes=45294029-\r\n\r\n"));
+        assertTrue(s.startsWith("GET /installers/i2pinstall.exe HTTP/1.1\r\n"));
+        assertTrue(s.contains("Host: skank.i2p\r\n"));
+    }
+
+    @Test
+    public void testWithRangeHeaderZeroLeavesRequestUnchanged() {
+        byte[] req = GET_REQ.getBytes();
+        assertSame(req, I2PTunnelRunner.withRangeHeader(req, 0L));
+        assertSame(req, I2PTunnelRunner.withRangeHeader(req, -5L));
+    }
+
+    @Test
+    public void testWithRangeHeaderNullSafe() {
+        assertNull(I2PTunnelRunner.withRangeHeader(null, 10L));
+    }
+
+    @Test
+    public void testWithRangeHeaderReplacesExistingRange() {
+        byte[] req = "GET /f HTTP/1.1\r\nRange: bytes=0-1023\r\nHost: x\r\n\r\n".getBytes();
+        byte[] out = I2PTunnelRunner.withRangeHeader(req, 999L);
+        String s = new String(out);
+        assertTrue(s.contains("Range: bytes=999-\r\n"));
+        assertFalse(s.contains("bytes=0-1023"));
+        assertEquals(1, countOccurrences(s, "Range:"));
+    }
+
+    @Test
+    public void testWithRangeHeaderNoTerminatorReturnsOriginal() {
+        byte[] req = "GET / HTTP/1.1\r\nHost: x".getBytes();
+        assertSame(req, I2PTunnelRunner.withRangeHeader(req, 10L));
+    }
+
+    @Test
+    public void testWithRangeHeaderStillRetryableAsGet() {
+        byte[] out = I2PTunnelRunner.withRangeHeader(GET_REQ.getBytes(), 42L);
+        assertTrue(I2PTunnelRunner.isRetryableRequest(out));
+    }
+
+    private static int countOccurrences(String s, String sub) {
+        int n = 0;
+        int i = 0;
+        while ((i = s.indexOf(sub, i)) >= 0) {n++; i += sub.length();}
+        return n;
+    }
 }

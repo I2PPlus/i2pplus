@@ -95,7 +95,32 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     }
 
     /**
+     * Body-delivery progress from the HTTP response stream, for Range resume.
+     *
+     * @return progress snapshot, or null if the response stream is not up yet
+     * @since 0.9.71+
+     */
+    @Override
+    protected BodyProgress getBodyProgress() {
+        if (_hout == null) {return null;}
+        return new BodyProgress(_hout.getBodyReceived(), _hout.getDataExpected(),
+                                _hout.getHeaderWritten(), _hout.canRangeResume());
+    }
+
+    /**
+     * Put the response stream into mid-body resume mode (swallow next headers).
+     *
+     * @since 0.9.71+
+     */
+    @Override
+    protected void prepareBodyResume() {
+        if (_hout != null) {_hout.prepareBodyResume();}
+    }
+
+    /**
      * Helper method to close resources quietly.
+     *
+     * @param resource may be null
      */
     private void closeQuietly(AutoCloseable resource) {
         if (resource != null) {

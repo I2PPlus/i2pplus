@@ -48,6 +48,16 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     /** lower-case, trimmed */
     protected String _contentEncoding;
     private final DoneCallback _callback;
+    /** Entity-body bytes delivered after the first header block (Range resume offset). */
+    private volatile long _bodyReceived;
+    /** Swallow the next header block (mid-body Range resume); do not emit to the browser. */
+    private volatile boolean _suppressHeaderOutput;
+    /** Content-Length from the first response; preserved across a resume header parse. */
+    private long _savedDataExpected = -1;
+    /** HTTP status of the response currently being parsed. */
+    private int _statusCode;
+    /** Body bytes to drop from the next response before forwarding (200 after Range). */
+    private long _resumeSkipBytes;
 
     private static final int CACHE_SIZE = 16*1024;
     private static final ByteCache _cache = ByteCache.getInstance(8, CACHE_SIZE);
@@ -122,6 +132,65 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     /**
+     * Whether the first response header block has been written to the browser.
+     *
+     * @return true once response headers have been emitted
+     * @since 0.9.71+
+     */
+    public boolean getHeaderWritten() { return _headerWritten; }
+
+    /**
+     * Original response Content-Length, or -1 if unknown/chunked/HEAD-empty.
+     * Preserved across a mid-body Range resume so completion checks stay stable
+     * when the second response reports a shorter (206) length.
+     *
+     * @return entity length in bytes, or -1 if not set
+     * @since 0.9.71+
+     */
+    public long getDataExpected() { return _dataExpected; }
+
+    /**
+     * Entity-body bytes forwarded to the browser after the first headers.
+     * This is the HTTP Range start offset for a mid-body resume.
+     *
+     * @return body bytes delivered; 0 before any body byte
+     * @since 0.9.71+
+     */
+    public long getBodyReceived() { return _bodyReceived; }
+
+    /**
+     * Whether a Content-Length body can be safely spliced with Range resume:
+     * headers written, a positive Content-Length, some body still missing,
+     * and no transparent gzip decode (which would desync the Range offset
+     * from wire bytes).
+     *
+     * @return true if {@link #prepareBodyResume()} is safe to attempt
+     * @since 0.9.71+
+     */
+    public boolean canRangeResume() {
+        return _headerWritten && !_suppressHeaderOutput && !_gzip
+               && _dataExpected > 0 && _bodyReceived < _dataExpected;
+    }
+
+    /**
+     * Enter mid-body resume mode: the next header block parsed from a fresh
+     * tunnel is consumed for bookkeeping only and must not be written to the
+     * browser (the original status line and Content-Length were already sent).
+     *
+     * @since 0.9.71+
+     */
+    public void prepareBodyResume() {
+        _savedDataExpected = _dataExpected;
+        _suppressHeaderOutput = true;
+        _headerWritten = false;
+        if (_headerBuffer == null) {
+            _headerBuffer = _cache.acquire();
+        } else {
+            _headerBuffer.setValid(0);
+        }
+    }
+
+    /**
      * write.
      */
     @Override
@@ -136,7 +205,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     @Override
     public void write(byte[] buf, int off, int len) throws IOException {
         if (_headerWritten) {
-            out.write(buf, off, len);
+            writeBody(buf, off, len);
             return;
         }
 
@@ -150,12 +219,34 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 writeHeader();
                 _headerWritten = true;
                 if (i + 1 < len) {
-                    // write out the remaining
-                    out.write(buf, off+i+1, len-i-1);
+                    // write out the remaining (body, after any resume skip)
+                    writeBody(buf, off + i + 1, len - i - 1);
                 }
                 return;
             }
         }
+    }
+
+    /**
+     * Forward entity-body bytes, applying any Range-resume skip of a
+     * full-body (200) re-send that duplicates an already-delivered prefix.
+     *
+     * @param buf source buffer
+     * @param off first body byte index
+     * @param len number of body bytes
+     * @throws IOException if the browser write fails
+     */
+    private void writeBody(byte[] buf, int off, int len) throws IOException {
+        if (len <= 0) {return;}
+        if (_resumeSkipBytes > 0) {
+            int skip = (int) Math.min(_resumeSkipBytes, len);
+            _resumeSkipBytes -= skip;
+            off += skip;
+            len -= skip;
+            if (len <= 0) {return;}
+        }
+        _bodyReceived += len;
+        out.write(buf, off, len);
     }
 
     /**
@@ -201,6 +292,15 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private void writeHeader() throws IOException {
         _chunked = false;
         _connectionSent = false;
+        if (_suppressHeaderOutput) {
+            // Mid-body Range resume: parse the second response for status and
+            // bookkeeping only. Do not emit headers (browser already has the
+            // original status/Content-Length) and do not re-wrap setupStreams
+            // (ByteLimit/Gunzip from the first response stay in place).
+            parseHeaders();
+            finishResumeHeaders();
+            return;
+        }
         parseHeaders();
 
         finalizeKeepAlive();
@@ -222,6 +322,44 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
         if (shouldCompress) {
             beginProcessing();
+        }
+    }
+
+    /**
+     * Complete a suppressed (resume) header block: restore the original
+     * Content-Length, decide how many body bytes to skip, and free the
+     * header buffer. Throws if the second response cannot be spliced.
+     *
+     * @throws IOException if the status is not 200/206 or the encoding changed
+     */
+    private void finishResumeHeaders() throws IOException {
+        _suppressHeaderOutput = false;
+        if (_headerBuffer != null) {
+            if (_headerBuffer.getData().length == CACHE_SIZE)
+                _cache.release(_headerBuffer);
+            _headerBuffer = null;
+        }
+        // 206 Content-Length is only the remaining range; keep the original full length.
+        if (_savedDataExpected >= 0) {
+            _dataExpected = _savedDataExpected;
+        }
+        if (_gzip) {
+            throw new IOException("Cannot Range-resume: response Content-Encoding changed to x-i2p-gzip");
+        }
+        if (_statusCode == 206) {
+            // Body is the remainder after the Range start — forward as-is.
+            _resumeSkipBytes = 0;
+        } else if (_statusCode == 200) {
+            // Server ignored Range and re-sent from byte 0 — drop the prefix
+            // the browser already has so the splice stays seamless.
+            _resumeSkipBytes = _bodyReceived;
+        } else {
+            throw new IOException("Cannot Range-resume: unexpected HTTP status " + _statusCode);
+        }
+        if (_log.shouldInfo()) {
+            _log.info("Body resume headers: status=" + _statusCode +
+                      " skip=" + _resumeSkipBytes + " bodySoFar=" + _bodyReceived +
+                      " contentLength=" + _dataExpected);
         }
     }
 
@@ -281,6 +419,12 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         int sp = responseLine.indexOf(" ");
         if (sp > 0) {
             String s = responseLine.substring(sp + 1);
+            try {
+                int end = s.indexOf(' ');
+                _statusCode = Integer.parseInt(end > 0 ? s.substring(0, end) : s.trim());
+            } catch (NumberFormatException nfe) {
+                _statusCode = 0;
+            }
             if (s.startsWith("1") || s.startsWith("204") || s.startsWith("304"))
                 _dataExpected = 0;
         } else {
@@ -289,7 +433,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             _keepAliveOut = false;
         }
 
-        out.write(DataHelper.getUTF8(responseLine));
+        if (!_suppressHeaderOutput) {
+            out.write(DataHelper.getUTF8(responseLine));
+        }
     }
 
     /**
@@ -324,12 +470,13 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 if ("connection".equals(lcKey)) {
                     if (val.toLowerCase(Locale.US).contains("upgrade")) {
                         // pass through for websocket
-                        out.write(DataHelper.getASCII("Connection: " + val + "\r\n"));
+                        if (!_suppressHeaderOutput)
+                            out.write(DataHelper.getASCII("Connection: " + val + "\r\n"));
                         // Disable persistence
                         _keepAliveOut = false;
                     } else {
                         // Strip to allow persistence, replace to disallow
-                        if (!_keepAliveOut)
+                        if (!_keepAliveOut && !_suppressHeaderOutput)
                             out.write(CONNECTION_CLOSE);
                     }
                     // We do not expect Connection: keep-alive here,
@@ -376,7 +523,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                             break;
                         }
                     }
-                    out.write(DataHelper.getUTF8(key.trim() + ": " + val + "\r\n"));
+                    if (!_suppressHeaderOutput)
+                        out.write(DataHelper.getUTF8(key.trim() + ": " + val + "\r\n"));
                 }
                 break;
             }

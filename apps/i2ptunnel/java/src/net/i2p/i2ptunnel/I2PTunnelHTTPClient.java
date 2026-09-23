@@ -1621,13 +1621,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 boolean keepaliveI2P = keepalive && getBooleanOption(OPT_KEEPALIVE_I2P, DEFAULT_KEEPALIVE_I2P);
                 hrunner = new I2PTunnelHTTPClientRunner(s, i2ps, sockLock, data, mySockets, onTimeout,
                                                         keepaliveI2P, keepalive, isHead);
-                // Transparent empty-response retry for request-body-free (GET/HEAD)
-                // requests: when the first upstream attempt yields zero bytes (an empty
-                // close the browser would report as NS_ERROR_NET_EMPTY_RESPONSE), reconnect
-                // to the same destination on a fresh I2P socket and re-send the request,
-                // keeping the browser socket open. Wired only for GET/HEAD because we hold
-                // the full request (line + headers) and resending is idempotent; the runner
-                // further guards that this only applies when no request-body forwarder ran.
+                // Transparent reconnect for request-body-free (GET/HEAD) requests on a
+                // fresh I2P socket (new tunnel), keeping the browser socket open:
+                //  1) empty-response retry — first attempt yields zero bytes (browser
+                //     would see NS_ERROR_NET_EMPTY_RESPONSE);
+                //  2) mid-body Range resume — headers + partial Content-Length body
+                //     already delivered, upstream died before the entity completed;
+                //     the runner re-sends with Range: bytes=N- to fetch only the rest.
+                // Wired only for GET/HEAD because we hold the full request (line +
+                // headers) and resending is idempotent; the runner further guards
+                // empty retry to transfers with no request-body forwarder.
                 final int emptyBudget = parseEmptyRetries(getTunnel().getClientOptions().getProperty(OPT_EMPTY_RETRIES, "" + DEFAULT_EMPTY_RETRIES));
                 if (("GET".equals(method) || "HEAD".equals(method)) && emptyBudget > 0) {
                     final Destination reconnectDest = clientDest;
