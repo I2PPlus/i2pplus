@@ -23,13 +23,13 @@ public class ServerWriteTimeoutTest {
     @Test
     public void testNullPropsUsesBoundedDefault() {
         long t = I2PTunnelServer.effectiveWriteTimeout(null);
-        assertEquals(15_000L, t);
+        assertEquals(60_000L, t);
     }
 
     @Test
     public void testEmptyPropsUsesBoundedDefault() {
         long t = I2PTunnelServer.effectiveWriteTimeout(new Properties());
-        assertEquals(15_000L, t);
+        assertEquals(60_000L, t);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class ServerWriteTimeoutTest {
         Properties p = new Properties();
         p.setProperty("i2ptunnel.server.readTimeout", "5000");
         p.setProperty("i2ptunnel.client.maxConnections", "10");
-        assertEquals(15_000L, I2PTunnelServer.effectiveWriteTimeout(p));
+        assertEquals(60_000L, I2PTunnelServer.effectiveWriteTimeout(p));
     }
 
     @Test

@@ -131,10 +131,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  MessageOutputStream.flush()/close(). A bounded write timeout fails after no ACK
      *  progress instead of blocking the handler; it does not cap throughput for a peer
      *  that is progressing, so it is safe for legitimate slow transfers.
-     *  15s is sufficient to detect dead peers while freeing handler threads quickly;
-     *  the streaming layer handles reconnection on its own.
+     *  60s is long enough that a normal I2P RTO blip (~30s avgRTO) with no other
+     *  forward-ACK progress does not fail the write, while still bounding a dead peer
+     *  well under the 120s disconnect timeout. A tighter default (15s) was tried and
+     *  false-failed mid-body downloads whenever a single lost ACK spanned the window.
      */
-    private static final long DEFAULT_WRITE_TIMEOUT = 15 * 1000L;
+    private static final long DEFAULT_WRITE_TIMEOUT = 60 * 1000L;
 
     /** Config key to override the outbound write timeout in ms (0 = use the streaming
      *  default, which can be the full 120s disconnect timeout with no ACK progress).
