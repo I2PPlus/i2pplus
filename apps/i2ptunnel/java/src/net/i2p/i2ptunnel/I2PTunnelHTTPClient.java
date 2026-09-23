@@ -16,6 +16,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PException;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -134,12 +136,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /**
      *  Active outbound I2P socket count per destination hash.
-     *  {@link java.util.concurrent.atomic.AtomicInteger} values; incremented
+     *  {@link AtomicInteger} values; incremented
      *  before {@code createI2PSocket()}, decremented when the socket closes.
      *
      *  @since 0.9.71+
      */
-    private static final ConcurrentHashMap<Hash, java.util.concurrent.atomic.AtomicInteger> _activeConns =
+    private static final ConcurrentHashMap<Hash, AtomicInteger> _activeConns =
         new ConcurrentHashMap<>(8);
 
     /**
@@ -155,10 +157,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     private static boolean tryAcquireConnPermit(Hash dest) {
         if (dest == null) {return true;}
-        java.util.concurrent.atomic.AtomicBoolean acquired = new java.util.concurrent.atomic.AtomicBoolean(false);
+        AtomicBoolean acquired = new AtomicBoolean(false);
         _activeConns.compute(dest, (key, existing) -> {
-            java.util.concurrent.atomic.AtomicInteger count =
-                (existing != null) ? existing : new java.util.concurrent.atomic.AtomicInteger();
+            AtomicInteger count =
+                (existing != null) ? existing : new AtomicInteger();
             if (count.get() >= MAX_CONNS_PER_DEST) {return existing;}
             count.incrementAndGet();
             acquired.set(true);
@@ -1642,13 +1644,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 if (reconnectPort > 0) {opts.setPort(reconnectPort);}
                                 I2PSocket fresh = createI2PSocket(reconnectDest, opts);
                                 if (_log.shouldInfo()) {
-                                    _log.info(getPrefix(requestId) + "Empty-response reconnect attempt " + attempt + '/' + emptyBudget +
+                                    // Shared callback serves both empty-response retry and
+                                    // mid-body Range resume; the runner already logged which
+                                    // path is active at Info before invoking us.
+                                    _log.info(getPrefix(requestId) + "I2P reconnect attempt " + attempt + '/' + emptyBudget +
                                               " to " + reconnectDest.calculateHash().toBase32());
                                 }
                                 return fresh;
                             } catch (IOException ioe) {
                                 if (_log.shouldInfo()) {
-                                    _log.info(getPrefix(requestId) + "Empty-response reconnect failed (attempt " + attempt +
+                                    _log.info(getPrefix(requestId) + "I2P reconnect failed (attempt " + attempt +
                                               '/' + emptyBudget + "): " + ioe.getMessage());
                                 }
                                 // Fail fast once the client outbound pool is provably dead:
