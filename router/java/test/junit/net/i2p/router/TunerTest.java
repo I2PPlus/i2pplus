@@ -965,9 +965,58 @@ public class TunerTest {
     public void testServerHandlerNaNSignalsHold() {
         assertEquals(16,
                      Tuner.computeServerHandlerThreads(16, SH_MIN, SH_MAX,
-                                                       Double.NaN, Double.NaN,
-                                                       Double.NaN, Double.NaN,
-                                                       Double.NaN));
+                                                        Double.NaN, Double.NaN,
+                                                        Double.NaN, Double.NaN,
+                                                        Double.NaN));
+    }
+
+    /**
+     * Mid-size pool with a backlog above the relative saturation floor but below
+     * the old fixed-50 threshold: must grow so Tuner stays ahead of the accept
+     * gate's drain-ETA (gate denies at ~30s drain while old Tuner waited for >50).
+     */
+    @Test
+    public void testServerHandlerGrowsBeforeOldFixedThreshold() {
+        // current=16 -> saturatedQueue = max(8, 8) = 8; queue=40 > 8, active pinned.
+        assertEquals(16 + Math.max(16 / 2, 8),
+                     Tuner.computeServerHandlerThreads(16, SH_MIN, SH_MAX,
+                                                        40,       // queueDepth > max(8, current/2)
+                                                        16,       // active == current (saturated)
+                                                        180,
+                                                        20,
+                                                        Double.NaN));
+    }
+
+    /**
+     * Backlog above the relative floor (current/2, min 32) grows even when not
+     * fully saturated — the queue is the bottleneck before every thread is busy.
+     */
+    @Test
+    public void testServerHandlerBacklogAboveRelativeFloorGrows() {
+        // current=96 -> backlogFloor = max(32, 48) = 48; queue=80 > 48, active low.
+        // queue < current -> moderate step: 96 + max(96/4, 4) = 120.
+        assertEquals(120,
+                     Tuner.computeServerHandlerThreads(96, SH_MIN, SH_MAX,
+                                                        80,
+                                                        10,
+                                                        180,
+                                                        20,
+                                                        Double.NaN));
+    }
+
+    /**
+     * Backlog under the relative floor on a healthy pool: hold (no thrash).
+     */
+    @Test
+    public void testServerHandlerHoldsWhenBacklogUnderFloor() {
+        // current=64 -> backlogFloor = max(32, 32) = 32; queue=20 <= 32, not saturated.
+        assertEquals(64,
+                     Tuner.computeServerHandlerThreads(64, SH_MIN, SH_MAX,
+                                                        20,
+                                                        10,
+                                                        180,
+                                                        20,
+                                                        Double.NaN));
     }
 
     // =====================================================================

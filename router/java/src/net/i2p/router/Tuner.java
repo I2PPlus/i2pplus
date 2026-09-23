@@ -10957,11 +10957,13 @@ protected int computeTarget(double observed) {
         // timeout. The transport (inbound I2P write) is the bottleneck, not handler
         // throughput, so restrain aggressive pool growth to a modest step.
         boolean latencyBound = !Double.isNaN(synExpire) && synExpire >= 50;
-        // Saturation: the fixed pool is fully busy (active pinned near the ceiling)
-        // and connections are backing up in the queue. This is the starvation case —
-        // handlers are stalled (on inbound I2P writes), so blockingHandleTime is low.
+        // Saturation: the fixed pool is fully busy and connections are backing up.
+        // Threshold is relative to the pool (not a fixed 50) so a small split pool
+        // grows before the accept gate's drain-ETA trips — the gate and this policy
+        // must stay aligned or the gate denies while Tuner still thinks all is well.
+        int saturatedQueue = Math.max(8, current / 2);
         boolean saturated = !Double.isNaN(active) && !Double.isNaN(queueDepth)
-                            && active >= current * 0.9 && queueDepth > 50;
+                            && active >= current * 0.9 && queueDepth > saturatedQueue;
 
         // Growth is proportional to the current pool size so the ramp accelerates as
         // the pool grows, letting a persistently saturated shared server-handler pool
@@ -10990,8 +10992,11 @@ protected int computeTarget(double observed) {
         // the pool size the queue is the bottleneck (more tasks waiting than
         // threads can run), so grow decisively even if latency-bound — a high
         // SYN-expire rate alone must not stall a pool that is demonstrably
-        // under-provisioned relative to its own queue.
-        if (!cpuPressure && queueDepth > 100) {
+        // under-provisioned relative to its own queue. Absolute floor of 32 keeps
+        // a tiny pool from thrashing on single-digit jitter; relative floor
+        // (current/2) fires before the gate's drain-ETA on large pools.
+        int backlogFloor = Math.max(32, current / 2);
+        if (!cpuPressure && queueDepth > backlogFloor) {
             if (queueDepth > current)
                 return Math.min(max, current + Math.max(current / 2, 8));
             return Math.min(max, current + (latencyBound ? 2 : Math.max(current / 4, 4)));
