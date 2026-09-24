@@ -1291,6 +1291,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             // PHASE B: Schedule early expiry for slow tunnels OUTSIDE the lock
             // Stagger expiry to prevent synchronized pool collapse — all slow
             // tunnels expiring at once drops the pool to 0, triggering EMERGENCY.
+            // Kick ensure first when nothing is building so replacements have
+            // a head start on the 30s early-expiry delay (RemoveSlow + send-fail race).
+            if (!toRemove.isEmpty() && pool.getInProgressCount() <= 0) {
+                pool.ensureSufficientTunnels();
+            }
             long now = _context.clock().now();
             long pruneDelay = _context.getProperty("router.tunnel.pruneEarlyExpiryDelay", 30000L);
             int staggerIdx = 0;
@@ -1482,7 +1487,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * alternative tunnels.
      *
      * @param tunnel the outbound tunnel to force-fail
-     * @since 0.9.73
+     * @since 0.9.71+
      */
     public void forceTunnelFailure(TunnelInfo tunnel) {
         if (tunnel == null) {return;}

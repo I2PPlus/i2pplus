@@ -7,18 +7,20 @@ import org.junit.Test;
 
 /**
  * Tests for ensure/deficit throttle decisions
- * ({@link TunnelPool#isEnsureThrottled(long, long, int, int, boolean)} and
- * {@link TunnelPool#isDeficitThrottled(long, long, int, int, boolean)}).
+ * ({@link TunnelPool#isEnsureThrottled(long, long, int, int, boolean)},
+ * {@link TunnelPool#isDeficitThrottled(long, long, int, int, boolean)}, and the
+ * healthySafe/safeActive split {@link TunnelPool#isDeficitThrottled(long, long, int, int, int, boolean)}).
  *
  * <p>Policy: long gates when the pool is healthy; intermediate gates while
- * the LeaseSet is incomplete or some usable tunnels are soft-degraded;
- * short floors when collapsed (zero healthy-safe, or &lt;= 1 with nothing
- * in flight) so recovery is prompt without letting fast-failing builds
- * hammer selectSingleHop on every completion.  An empty pool uses the short
- * floor even with builds in flight — hung builds (17-30s timeouts) must not
- * pin recovery on the 30s healthy gate.  Soft-degraded tunnels pass tests
- * but fail data-phase sends, so a full-looking pool of them must not hold
- * the 15s/30s healthy gates.
+ * the LeaseSet is incomplete or the pool is soft-degraded-dominated
+ * (safeActive &gt; 0 but healthySafe == 0); short floors only when safeActive
+ * is truly empty (or &lt;= 1 with nothing in flight) so recovery is prompt
+ * without letting fast-failing builds hammer selectSingleHop on every
+ * completion.  An empty pool uses the short floor even with builds in
+ * flight — hung builds (17-30s timeouts) must not pin recovery on the 30s
+ * healthy gate.  Soft-degraded tunnels pass tests but fail data-phase
+ * sends, so a full-looking pool of them must not hold the 15s/30s healthy
+ * gates, and must not thrash the 5s collapse rebuild either.
  *
  * @since 0.9.71+
  */
@@ -185,15 +187,43 @@ public class TunnelPoolThrottleTest {
     @Test
     public void testDeficitSoftDegradedHealthyCountUsesCollapseCooldown() {
         long last = 1_000_000L;
-        // Callers pass healthy-safe: full soft-degraded pool (healthy=0) uses
-        // the 5s collapse cooldown, not the 30s healthy gate — even with
-        // builds in flight (common during a soft-fail rebuild storm).
+        // 5-arg compatibility overload (healthy == safeActive): a truly empty
+        // pool uses the 5s collapse cooldown, not the 30s healthy gate — even
+        // with builds in flight (common during a soft-fail rebuild storm).
         assertTrue(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS - 1, last, 0, 0, false));
         assertFalse(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS, last, 0, 0, false));
         assertTrue(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS - 1, last, 0, 3, false));
         assertFalse(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS, last, 0, 3, false));
         // partial soft-degraded (healthy=2) still uses the long gate
         assertTrue(TunnelPool.isDeficitThrottled(last + 10_000L, last, 2, 0, false));
+    }
+
+    @Test
+    public void testDeficitSoftDominatedPoolUsesDegradedNotCollapse() {
+        long last = 1_000_000L;
+        // 6-arg: full soft-degraded pool (healthy=0, safeActive=6) occupies
+        // safe slots — 10s degraded gate, NOT the 5s collapse rebuild and
+        // NOT the 30s healthy gate.
+        assertTrue(TunnelPool.isDeficitThrottled(last + DEFICIT_DEGRADED_MS - 1, last, 0, 6, 0, false));
+        assertFalse(TunnelPool.isDeficitThrottled(last + DEFICIT_DEGRADED_MS, last, 0, 6, 0, false));
+        // past degraded but within healthy window: allowed
+        assertFalse(TunnelPool.isDeficitThrottled(last + 11_000L, last, 0, 6, 0, false));
+        assertTrue(TunnelPool.isDeficitThrottled(last + 11_000L, last, 6, 6, 0, false));
+        // soft-dominated with builds in flight still uses the degraded gate
+        assertTrue(TunnelPool.isDeficitThrottled(last + DEFICIT_DEGRADED_MS - 1, last, 0, 6, 3, false));
+        assertFalse(TunnelPool.isDeficitThrottled(last + DEFICIT_DEGRADED_MS, last, 0, 6, 3, false));
+    }
+
+    @Test
+    public void testDeficitTrulyEmptyStillCollapsesWith6Arg() {
+        long last = 1_000_000L;
+        // 6-arg empty pool (healthy=0, safeActive=0): 5s collapse, not 10s/30s
+        assertTrue(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS - 1, last, 0, 0, 0, false));
+        assertFalse(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS, last, 0, 0, 0, false));
+        assertFalse(TunnelPool.isDeficitThrottled(last + 6_000L, last, 0, 0, 0, false));
+        // one safe tunnel, nothing in flight: still collapsed
+        assertTrue(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS - 1, last, 1, 1, 0, false));
+        assertFalse(TunnelPool.isDeficitThrottled(last + DEFICIT_COLLAPSED_MS, last, 1, 1, 0, false));
     }
 
     @Test
@@ -204,5 +234,6 @@ public class TunnelPoolThrottleTest {
         assertFalse(TunnelPool.isDeficitThrottled(now, last, 0, 0, false));
         assertFalse(TunnelPool.isDeficitThrottled(now, last, 1, 0, false));
         assertFalse(TunnelPool.isDeficitThrottled(now, last, 5, 0, true));
+        assertFalse(TunnelPool.isDeficitThrottled(now, last, 0, 6, 0, false));
     }
 }

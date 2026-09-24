@@ -132,9 +132,11 @@ public class TunnelPool {
      *  rotated out — a pool of soft-degraded tunnels can pass tests yet
      *  fail every data-phase send (status 3), leaving clients with
      *  half-open connects while the ensure gate still sees a "full" pool.
-     *  @since 0.9.73+
+     *  Raised from 3 so transient congestion does not mark half the pool
+     *  degraded and trip collapse-sized rebuilds every few seconds.
+     *  @since 0.9.71+
      */
-    static final int SOFT_DEGRADED_FOR_ENSURE = 3;
+    static final int SOFT_DEGRADED_FOR_ENSURE = 5;
     /** Last time buildFallback() logged its zero-hop-refusal warning, to rate-limit it */
     private volatile long _lastFallbackWarnTime;
     /**
@@ -1088,7 +1090,7 @@ public class TunnelPool {
      *  while the pool cannot carry traffic.
      *
      *  @return the number of healthy (non soft-degraded) usable tunnels
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     int getHealthyTunnelCount() {
         long now = _context.clock().now();
@@ -1114,7 +1116,7 @@ public class TunnelPool {
      *  @param t tunnel to classify; may be null (not degraded)
      *  @return true when soft failures indicate the tunnel cannot be trusted
      *          to carry data even though tests may still pass
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     static boolean isSoftDegraded(TunnelInfo t) {
         return t != null && t.getSoftFailures() >= SOFT_DEGRADED_FOR_ENSURE;
@@ -2694,6 +2696,25 @@ public class TunnelPool {
                 ensureSufficientTunnels();
                 return;
             }
+            // Defer non-dead removals while the pool is already thin and no
+            // replacements are in flight — RemoveSlow early-expiry plus a burst
+            // of send-fail removals used to drain a full pool to zero before
+            // the next build completed.  Kick ensure first so capacity starts
+            // recovering, then drop this tunnel once builds are staged.
+            if (!isDead && shouldDeferRemovalForRebuild(remaining, getInProgressCount())) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Deferring " + (cfg.isInbound() ? "inbound" : "outbound") +
+                              " tunnel removal (" + failures + " failures, remaining=" + remaining +
+                              ", inProgress=0) until replacements are building \n* " + cfg);
+                }
+                ensureSufficientTunnels();
+                if (getInProgressCount() == 0) {
+                    // ensure was throttled or backoff-skipped; still remove so
+                    // a broken tunnel cannot pin the pool forever.
+                    removeTunnel(cfg);
+                }
+                return;
+            }
             if (_log.shouldWarn()) {
                 _log.warn("Removing " + (cfg.isInbound() ? "inbound" : "outbound") +
                           " tunnel via fail() -> " + failures +
@@ -2705,6 +2726,21 @@ public class TunnelPool {
     }
 
     /**
+     *  Whether a non-dead tunnel removal should wait for replacement builds.
+     *  Pure helper: defer when the pool is at or below two tunnels and no
+     *  builds are in flight (RemoveSlow + send-fail race).  Dead tunnels and
+     *  pools that still have capacity (or staged builds) remove immediately.
+     *
+     *  @param remaining tunnels currently in the pool
+     *  @param inProgress replacement builds already staged
+     *  @return true to defer removal and kick ensure first
+     *  @since 0.9.71+
+     */
+    static boolean shouldDeferRemovalForRebuild(int remaining, int inProgress) {
+        return remaining <= 2 && inProgress <= 0;
+    }
+
+    /**
      * Force a tunnel to fail immediately and trigger a replacement build.
      * Used when rotation is saturated and the pool has no viable
      * alternative tunnels. This bypasses the incremental failure counter
@@ -2712,7 +2748,7 @@ public class TunnelPool {
      * replacement without waiting for multiple failure reports.
      *
      * @param cfg the tunnel to force-fail
-     * @since 0.9.73
+     * @since 0.9.71+
      */
     public void forceTunnelFailure(TunnelInfo cfg) {
         if (cfg == null || cfg.getTunnelFailed()) {return;}
@@ -3069,7 +3105,7 @@ public class TunnelPool {
      *  @param now current router time (ms)
      *  @param throttleMs refresh throttle window (ms)
      *  @return true if the refresh should be deferred despite a null lookup
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     static boolean shouldDeferMissingPublished(long lastRefreshTime, long now, long throttleMs) {
         return lastRefreshTime > 0 && now - lastRefreshTime < throttleMs;
@@ -3085,7 +3121,7 @@ public class TunnelPool {
      *  @param now current router time (ms)
      *  @param throttleMs refresh throttle window (ms)
      *  @return true to skip the redundant requestLeaseSet
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     static boolean shouldSkipAsyncPublish(boolean hasPublishedLS, long lastRefreshTime,
                                           long now, long throttleMs) {
@@ -3843,7 +3879,7 @@ public class TunnelPool {
      *
      *  @param stats sweep counters for one ensure pass
      *  @return healthy (non soft-degraded) safe-active tunnel count
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     private static int countHealthySafe(TunnelStats stats) {
         return stats.safeActive - stats.softDegraded;
@@ -4137,21 +4173,20 @@ public class TunnelPool {
         }
         int currentInProgress = getInProgressCount();
         // Rate-limit deficit builds: 30s normally; 10s while the LeaseSet is
-        // incomplete; while collapsed (zero healthy-safe, or <=1 with nothing
-        // in flight) use a short collapse cooldown instead of a full bypass
-        // so fast-failing builds cannot re-enter peer selection on every
-        // completion.  An empty pool stays on the short cooldown even with
-        // builds in flight — hung builds must not pin recovery for 30s.
-        // First attempt is never delayed (_last==0).
-        // Pass healthy (non soft-degraded) safeActive so a soft-degraded-
-        // dominated pool uses the collapse cooldown, not the 30s gate.
-        if (isDeficitThrottled(now, _lastDeficitBuildTime, countHealthySafe(stats),
-                               currentInProgress, _hasIncompleteLeaseSet)) {
+        // incomplete or the pool is soft-degraded-dominated; 5s only when
+        // safeActive is truly empty (or <=1 with nothing in flight).  A pool
+        // of soft-degraded tunnels still occupies safe slots — treating it as
+        // collapsed (healthy-safe==0) rebuilt the full target every 5s and
+        // thrashed against RemoveSlow/send-fail removals.
+        int healthySafe = countHealthySafe(stats);
+        boolean softDominated = healthySafe == 0 && stats.safeActive > 0;
+        if (isDeficitThrottled(now, _lastDeficitBuildTime, healthySafe, stats.safeActive,
+                               currentInProgress, _hasIncompleteLeaseSet || softDominated)) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping deficit build: rate-limited (" +
                           (now - _lastDeficitBuildTime) + "ms since last, " +
                           currentInProgress + " in progress, safe=" +
-                          stats.safeActive + ", healthy=" + countHealthySafe(stats) + ")");
+                          stats.safeActive + ", healthy=" + healthySafe + ")");
             }
             return;
         }
@@ -4188,10 +4223,11 @@ public class TunnelPool {
      *  throttle policy is unit-testable without a router context.
      *
      *  <p>Policy: {@link #DEFICIT_THROTTLE_MS} (30s) when the pool still has
-     *  usable tunnels; {@link #DEFICIT_DEGRADED_MS} (10s) while the published
-     *  LeaseSet is incomplete but not collapsed; {@link #DEFICIT_COLLAPSE_COOLDOWN_MS}
-     *  (5s) when collapsed — zero healthy-safe tunnels, or &lt;= 1 with nothing
-     *  in flight — so recovery stays prompt but repeated fast failures cannot
+     *  healthy usable tunnels; {@link #DEFICIT_DEGRADED_MS} (10s) while the
+     *  published LeaseSet is incomplete, or the pool is soft-degraded-
+     *  dominated (safeActive &gt; 0 but healthySafe == 0); {@link #DEFICIT_COLLAPSE_COOLDOWN_MS}
+     *  (5s) only when safeActive is truly empty, or &lt;= 1 with nothing in
+     *  flight — so recovery stays prompt but repeated fast failures cannot
      *  hammer selectSingleHop.  An empty pool uses the short cooldown even
      *  with builds in flight: hung builds (17-30s timeouts) must not pin an
      *  empty pool on the 30s healthy gate.  Concurrent builds stay capped by
@@ -4200,30 +4236,42 @@ public class TunnelPool {
      *
      *  @param now current router time (ms)
      *  @param lastBuild last deficit-build timestamp (ms), 0 if never
-     *  @param safeActive healthy (non soft-degraded) safe tunnel count
+     *  @param healthySafe healthy (non soft-degraded) safe tunnel count
+     *  @param safeActive all safe tunnels including soft-degraded
      *  @param inProgress builds currently in flight
      *  @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
+     *          or is soft-degraded-dominated
      *  @return true if the deficit build should be skipped this cycle
      *  @since 0.9.71+
      */
-    static boolean isDeficitThrottled(long now, long lastBuild, int safeActive,
+    static boolean isDeficitThrottled(long now, long lastBuild, int healthySafe, int safeActive,
                                       int inProgress, boolean incompleteLeaseSet) {
         if (lastBuild <= 0)
             return false;
-        // Callers pass healthy (non soft-degraded) safeActive so a soft-
-        // degraded-dominated pool uses the collapse cooldown, not the 30s gate.
-        // Empty pool is always collapsed for cooldown purposes; a 1-tunnel
-        // pool still requires nothing in flight so fast-failing builds cannot
-        // hammer selectSingleHop while capacity remains.
+        // Collapse only when safeActive is empty (or <=1 with nothing in flight).
+        // A soft-degraded-dominated pool still occupies safe slots — treating
+        // healthySafe==0 as collapse rebuilt the full target every 5s.
         boolean collapsed = safeActive == 0 || (safeActive <= 1 && inProgress == 0);
+        boolean softDominated = healthySafe == 0 && safeActive > 1;
         long cooldown;
         if (collapsed)
             cooldown = DEFICIT_COLLAPSE_COOLDOWN_MS;
-        else if (incompleteLeaseSet)
+        else if (incompleteLeaseSet || softDominated)
             cooldown = DEFICIT_DEGRADED_MS;
         else
             cooldown = DEFICIT_THROTTLE_MS;
         return now - lastBuild < cooldown;
+    }
+
+    /**
+     *  Compatibility overload: callers that only have a single usable count
+     *  (no soft-degraded split) treat it as both healthy and safe.
+     *  @since 0.9.71+
+     */
+    static boolean isDeficitThrottled(long now, long lastBuild, int safeActive,
+                                      int inProgress, boolean incompleteLeaseSet) {
+        return isDeficitThrottled(now, lastBuild, safeActive, safeActive,
+                                  inProgress, incompleteLeaseSet);
     }
 
     /**
@@ -4246,7 +4294,7 @@ public class TunnelPool {
      *  @param healthyCount usable tunnels below {@link #SOFT_DEGRADED_FOR_ENSURE}
      *  @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
      *  @return true if ensureSufficientTunnels() should return early
-     *  @since 0.9.71+; healthy overload 0.9.73+
+     *  @since 0.9.71+
      */
     static boolean isEnsureThrottled(long now, long lastEnsure, int usableTunnelCount,
                                      boolean incompleteLeaseSet) {
@@ -4264,7 +4312,7 @@ public class TunnelPool {
      *  @param healthyCount usable tunnels below {@link #SOFT_DEGRADED_FOR_ENSURE}
      *  @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
      *  @return true if ensureSufficientTunnels() should return early
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     static boolean isEnsureThrottled(long now, long lastEnsure, int usableTunnelCount,
                                      int healthyCount, boolean incompleteLeaseSet) {
@@ -4313,23 +4361,60 @@ public class TunnelPool {
     /**
      *  Compute the build deficit.  Failing tunnels will likely die soon —
      *  count them as deficit so replacements build before the pool drains.
-     *  Zero GOOD tunnels: in-progress builds haven't produced usable tunnels
-     *  yet (~40s build+test) and expiring ones die first, so only build the
-     *  gap — bounded via Math.max so timeouts can't create a build → timeout
-     *  → build storm, and untested tunnels count against the deficit so
-     *  builds don't pile up faster than the test queue can process them.
+     *  Zero healthy-safe tunnels: soft-degraded tunnels still occupy safe
+     *  slots, so only the shortfall to effectiveTarget is built (not a full
+     *  empty-pool rebuild that overfills then thrash-trims).  When safeActive
+     *  is also empty, in-progress builds haven't produced usable tunnels yet
+     *  (~40s build+test) and expiring ones die first, so only build the gap —
+     *  bounded via Math.max so timeouts can't create a build → timeout →
+     *  build storm, and untested tunnels count against the deficit so builds
+     *  don't pile up faster than the test queue can process them.
+     *
+     *  @param stats sweep counters for this ensure pass
+     *  @param target base effective tunnel count
+     *  @param effectiveTarget target plus emergency/failure boost
+     *  @param currentInProgress builds currently in flight
+     *  @return number of replacement tunnels to request this cycle
+     *  @since 0.9.71+
      */
     private int computeDeficit(TunnelStats stats, int target, int effectiveTarget, int currentInProgress) {
-        // Healthy-safe excludes soft-degraded slots so a full-looking pool of
-        // data-phase-failing tunnels still computes a positive deficit.
+        return computeDeficit(countHealthySafe(stats), stats.safeActive, stats.softDegraded,
+                              stats.failingCount, stats.untestedCount,
+                              target, effectiveTarget, currentInProgress);
+    }
+
+    /**
+     *  Pure deficit calculation so unit tests can pin the soft-degraded
+     *  occupancy rules without a router context.
+     *
+     *  @param healthySafe non soft-degraded safe tunnels
+     *  @param safeActive all safe tunnels (includes soft-degraded)
+     *  @param softDegraded safe tunnels at or above {@link #SOFT_DEGRADED_FOR_ENSURE}
+     *  @param failingCount hard-failing tunnels (not in safeActive)
+     *  @param untestedCount untested tunnels counted against the deficit
+     *  @param target base effective tunnel count
+     *  @param effectiveTarget target plus emergency/failure boost
+     *  @param currentInProgress builds currently in flight
+     *  @return non-negative replacement count for this cycle
+     *  @since 0.9.71+
+     */
+    static int computeDeficit(int healthySafe, int safeActive, int softDegraded,
+                              int failingCount, int untestedCount,
+                              int target, int effectiveTarget, int currentInProgress) {
         // failingBoost covers hard-failing tunnels (not in safeActive) that
-        // will die soon and need replacement slots.
-        int healthySafe = countHealthySafe(stats);
-        int failingBoost = healthySafe == 0 ? 0 : Math.min(stats.failingCount, target);
+        // will die soon and need replacement slots.  Only applies when there
+        // is still some healthy capacity to scale from; an empty pool builds
+        // the full gap without double-counting failing slots.
+        int failingBoost = healthySafe == 0 ? 0 : Math.min(failingCount, target);
         if (healthySafe == 0) {
-            return Math.max(0, effectiveTarget - currentInProgress - stats.untestedCount) + failingBoost;
+            if (safeActive > 0) {
+                // Soft-degraded occupy safe slots: stage only the shortfall,
+                // never a full empty-pool rebuild on top of a full pool.
+                return Math.max(0, effectiveTarget - safeActive - currentInProgress - untestedCount);
+            }
+            return Math.max(0, effectiveTarget - currentInProgress - untestedCount) + failingBoost;
         }
-        return effectiveTarget - healthySafe - currentInProgress - stats.untestedCount + failingBoost;
+        return effectiveTarget - healthySafe - currentInProgress - untestedCount + failingBoost;
     }
 
     /**
@@ -4383,12 +4468,34 @@ public class TunnelPool {
 
     /**
      *  Whether the pool is in the emergency condition: zero safe, expiring
-     *  and untested tunnels, and not a ping pool.
+     *  and untested tunnels, no still-valid (soft-degraded / FAILING) tunnels
+     *  left to ride out, and not a ping pool.  Soft-degraded tunnels remain
+     *  valid for {@link #getValidTunnelCount()} — treating a soft-degraded
+     *  pool as fully dead forced a collapse rebuild every cycle while the
+     *  tunnels were still routing (or about to rotate out).
+     *
+     *  @param stats sweep counters for this ensure pass
+     *  @return true when an emergency rebuild is warranted
+     *  @since 0.9.71+
      */
     private boolean isEmergencySituation(TunnelStats stats) {
         boolean isPing = _settings.getDestinationNickname() != null &&
                          _settings.getDestinationNickname().startsWith("Ping");
-        return stats.safeActive == 0 && stats.nearExpiry == 0 && stats.untestedCount == 0 && !isPing;
+        if (isPing) {return false;}
+        if (stats.safeActive > 0 || stats.nearExpiry > 0 || stats.untestedCount > 0) {return false;}
+        return !hasValidTunnelsBlockingEmergency(getValidTunnelCount());
+    }
+
+    /**
+     *  Emergency collapse is deferred while valid tunnels remain (soft-degraded
+     *  or FAILING-but-not-FAILED).  Pure helper for unit tests.
+     *
+     *  @param validCount {@link #getValidTunnelCount()} at decision time
+     *  @return true when valid tunnels are present, so do not fire EMERGENCY
+     *  @since 0.9.71+
+     */
+    static boolean hasValidTunnelsBlockingEmergency(int validCount) {
+        return validCount > 0;
     }
 
     /**
@@ -4522,7 +4629,7 @@ public class TunnelPool {
      *  soft-degraded tunnels still inflate getUsableTunnelCount().
      *
      *  @param nowEnsure router time to stamp as the last ensure run
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     private void ensureSufficientTunnelsNow(long nowEnsure) {
         if (!_alive || !_ensuringTunnels.compareAndSet(false, true)) {return;}
