@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
+import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
@@ -1381,7 +1382,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
             Hash h = e.getKey();
             if (h.equals(ctx.routerHash())) {continue;}
             if (excludePeers != null && excludePeers.contains(h)) {continue;}
-            if (ctx.banlist().isBanlisted(h)) {continue;}
+            Banlist banlist = ctx.banlist();
+            if (banlist != null && banlist.isBanlisted(h)) {continue;}
             Long cd = _peerCooldowns.get(h);
             if (cd != null && now - cd < PEER_SELECTION_COOLDOWN_MS) {continue;}
             if (ctx.netDb().lookupLocallyWithoutValidation(h) == null) {continue;}
@@ -1761,9 +1763,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
     List<Hash> filterBannedPeers(List<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return peers;}
 
+        Banlist banlist = ctx != null ? ctx.banlist() : null;
+        if (banlist == null) {return peers;}
+
         List<Hash> filtered = new ArrayList<>(peers.size());
         for (Hash peer : peers) {
-            if (peer != null && ctx.banlist().isBanlisted(peer)) {
+            if (peer != null && banlist.isBanlisted(peer)) {
                 if (log.shouldDebug()) {
                     log.debug("Skipping banlisted peer: " + peer.toBase32().substring(0, 6));
                 }

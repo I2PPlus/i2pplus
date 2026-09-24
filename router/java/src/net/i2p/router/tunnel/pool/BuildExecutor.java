@@ -16,6 +16,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.stat.RateConstants;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.Banlist;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
@@ -1620,9 +1621,10 @@ public class BuildExecutor implements Runnable {
         // (not just the first) saves the slot for a build that could succeed —
         // a banned middle hop causes "Next peer is banned" drops at request time.
         if (cfg.getLength() > 1) {
-            for (int hop = 0; hop < cfg.getLength(); hop++) {
+            Banlist banlist = _context.banlist();
+            for (int hop = 0; banlist != null && hop < cfg.getLength(); hop++) {
                 Hash peer = cfg.getPeer(hop);
-                if (peer != null && _context.banlist().isBanlisted(peer)) {
+                if (peer != null && banlist.isBanlisted(peer)) {
                     if (_log.shouldDebug()) {
                         _log.debug("buildTunnel() GATED (ban): hop " + hop +
                                    " [" + peer.toBase64().substring(0, 6) +

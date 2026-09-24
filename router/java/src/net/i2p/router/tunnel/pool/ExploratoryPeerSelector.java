@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
+import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
@@ -370,9 +371,10 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // requests that BuildHandler will reject with "Next peer is banned".
         // Mirrors ClientPeerSelector.filterBannedPeers; fall back to the
         // original selection if every peer is banlisted.
-        if (rv.size() > 1) {
+        Banlist banlist = ctx != null ? ctx.banlist() : null;
+        if (banlist != null && rv.size() > 1) {
             List<Hash> before = new ArrayList<>(rv);
-            rv.removeIf(peer -> peer != null && ctx.banlist().isBanlisted(peer));
+            rv.removeIf(peer -> peer != null && banlist.isBanlisted(peer));
             if (rv.isEmpty()) {
                 rv.addAll(before);
             } else if (rv.size() != before.size() && log.shouldDebug()) {
