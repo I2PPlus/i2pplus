@@ -170,18 +170,22 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
         // Save original value
         int origThreads = I2PTunnelHTTPServer.ioTransferThreads;
         try {
-            I2PTunnelHTTPServer.setIOTransferThreads(4);
-            assertEquals(4, I2PTunnelHTTPServer.getIOTransferThreads());
+            I2PTunnelHTTPServer.setIOTransferThreads(16);
+            assertEquals(16, I2PTunnelHTTPServer.getIOTransferThreads());
 
-            I2PTunnelHTTPServer.setIOTransferThreads(32);
-            assertEquals(32, I2PTunnelHTTPServer.getIOTransferThreads());
+            I2PTunnelHTTPServer.setIOTransferThreads(64);
+            assertEquals(64, I2PTunnelHTTPServer.getIOTransferThreads());
 
-            // Clamp test
+            // Clamp test — floor is IO_POOL_FLOOR (8), not 2
             I2PTunnelHTTPServer.setIOTransferThreads(1);
-            assertEquals("Minimum should be 2", 2, I2PTunnelHTTPServer.getIOTransferThreads());
+            assertEquals("Minimum should be the I/O pool floor",
+                         I2PTunnelHTTPServer.IO_POOL_FLOOR,
+                         I2PTunnelHTTPServer.getIOTransferThreads());
 
-            I2PTunnelHTTPServer.setIOTransferThreads(100);
-            assertEquals("Maximum should be 64", 64, I2PTunnelHTTPServer.getIOTransferThreads());
+            I2PTunnelHTTPServer.setIOTransferThreads(10_000);
+            assertEquals("Maximum should be IO_THREADS_MAX",
+                         I2PTunnelHTTPServer.IO_THREADS_MAX,
+                         I2PTunnelHTTPServer.getIOTransferThreads());
         } finally {
             I2PTunnelHTTPServer.ioTransferThreads = origThreads;
         }

@@ -28,6 +28,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
@@ -106,10 +107,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final ConcurrentHashMap<Object, ThreadPoolExecutor> _ioPools =
         new ConcurrentHashMap<>(4);
     private static final Object _ioExecutorLock = new Object();
-    /** Default I/O transfer threads (global budget); Tuner adjusts via TunnelControllerGroup. */
-    static volatile int ioTransferThreads = Math.max(4, Math.min(16, Runtime.getRuntime().availableProcessors()));
-    /** Absolute floor for a live server tunnel's I/O pool. @since 0.9.71+ */
-    static final int IO_POOL_FLOOR = 2;
+    /** Default I/O transfer threads (global budget); Tuner adjusts via TunnelControllerGroup.
+     *  Sized for concurrent body transfers across many server tunnels (e.g. 16
+     *  eepsites x floor 8 = 128 threads when fully loaded). */
+    static volatile int ioTransferThreads =
+        Math.max(32, Math.min(128, Runtime.getRuntime().availableProcessors() * 4));
+    /** Absolute floor for a live server tunnel's I/O pool. Sized so several
+     *  concurrent downloads can start without queueing past the browser's
+     *  body-stall window. @since 0.9.71+ */
+    static final int IO_POOL_FLOOR = 8;
+    /** Maximum global I/O budget (Tuner max must match). @since 0.9.71+ */
+    static final int IO_THREADS_MAX = 256;
     /** Idle timeout for Server→Client transfers (ms). If no read/write progress
      *  occurs for this long, the transfer is considered stalled and cancelled.
      *  Measured between progress events, not as a total transfer deadline —
@@ -132,7 +140,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         synchronized (_ioExecutorLock) {
             ThreadPoolExecutor ex = _ioPools.get(this);
             if (ex == null || ex.isShutdown()) {
-                ex = createIOExecutor(1);
+                ex = createIOExecutor(IO_POOL_FLOOR);
                 _ioPools.put(this, ex);
             }
             rebalanceIOPools();
@@ -174,6 +182,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         int[] desired = new int[n];
         for (int i = 0; i < n; i++) {desired[i] = budget;}
         int[] alloc = TunnelControllerGroup.allocateServerThreads(budget, desired, IO_POOL_FLOOR);
+        // Soft-floor: never starve a live tunnel below IO_POOL_FLOOR even when
+        // the global budget cannot cover every pool. Brief oversubscription is
+        // preferable to body Senders queueing past the browser body-stall.
+        for (int i = 0; i < alloc.length; i++) {
+            if (alloc[i] < IO_POOL_FLOOR) {alloc[i] = IO_POOL_FLOOR;}
+        }
         int idx = 0;
         for (ThreadPoolExecutor ex : _ioPools.values()) {
             int want = alloc[idx++];
@@ -222,17 +236,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Get the active thread count summed across all live I/O pools.
-     *  Used by the Tuner as a saturation signal.
+     *  Get the saturation pressure summed across all live I/O pools:
+     *  running workers plus queued transfers. Used by the Tuner as the
+     *  reactive growth signal (queued bodies count as pressure so a backlog
+     *  grows the budget on the next cycle, not only when workers are full).
      *
-     *  @return active threads across pools, or 0 if none created
+     *  @return active + queued transfers across pools, or 0 if none created
      *  @since 0.9.71+
      */
     public static int getIOTransferActiveCount() {
         synchronized (_ioExecutorLock) {
             int total = 0;
             for (ThreadPoolExecutor ex : _ioPools.values()) {
-                if (ex != null) {total += ex.getActiveCount();}
+                if (ex != null) {total += ex.getActiveCount() + ex.getQueue().size();}
             }
             return total;
         }
@@ -241,11 +257,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /**
      *  Set the I/O transfer pool size (called by Tuner via reflection).
      *
-     *  @param val new pool size (clamped to [2, 64])
+     *  @param val new pool size (clamped to [{@link #IO_POOL_FLOOR}, {@link #IO_THREADS_MAX}])
      *  @since 0.9.71+
      */
     public static void setIOTransferThreads(int val) {
-        ioTransferThreads = Math.max(2, Math.min(64, val));
+        ioTransferThreads = Math.max(IO_POOL_FLOOR, Math.min(IO_THREADS_MAX, val));
         rebalanceAllIOPools();
     }
 
@@ -285,6 +301,66 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @since 0.9.71+
      */
     public static long getStallEventCount() { return _stallEventCount.get(); }
+
+    /**
+     *  Submit a Server→Client Sender to the I/O pool and return without
+     *  waiting for the transfer to finish, so the handler thread is free
+     *  for the next request. Falls back to an inline run when the pool is
+     *  null, shut down, or rejects the task so the body is never dropped.
+     *
+     *  @param pool I/O executor; may be null (headless/unit path)
+     *  @param s the Sender to run
+     *  @param desc descriptive name for error messages
+     *  @return true if the body was submitted asynchronously, false if it ran inline
+     *  @since 0.9.71+
+     */
+    static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc)
+            throws IOException {
+        return handOffBody(pool, s, desc, null);
+    }
+
+    /**
+     *  As {@link #handOffBody(ThreadPoolExecutor, Sender, String)} with a
+     *  completion callback invoked after the Sender finishes (success or
+     *  failure), on the pool worker when submitted or on the caller when
+     *  falling back inline.
+     *
+     *  @param onCompletion may be null; must not throw
+     *  @return true if the body was submitted asynchronously, false if it ran inline
+     *  @since 0.9.71+
+     */
+    static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc,
+                               Runnable onCompletion) throws IOException {
+        final Runnable task = () -> {
+            try {
+                if (s != null) {s.run();}
+            } finally {
+                if (onCompletion != null) {
+                    try {onCompletion.run();}
+                    catch (Throwable t) {
+                        // Completion must not kill the pool worker
+                        // (finish runs under AtomicBoolean; swallow here).
+                    }
+                }
+            }
+        };
+        if (s == null) {
+            task.run();
+            return false;
+        }
+        if (pool == null || pool.isShutdown()) {
+            task.run();
+            return false;
+        }
+        try {
+            pool.execute(task);
+            return true;
+        } catch (RejectedExecutionException ree) {
+            // Unbounded queue normally never rejects; shutdown races do.
+            task.run();
+            return false;
+        }
+    }
 
     /** Config key to reject requests from inproxy. */
     public static final String OPT_REJECT_INPROXY = "rejectInproxy";
@@ -1726,6 +1802,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *  Sender thread is interrupted (breaking any blocking {@code read()}),
          *  and an IOException propagates to the finally-block cleanup.
          *
+         *  Used for keepalive responses (must wait before the next request)
+         *  and as a fallback when async handoff is not taken.
+         *
          *  @param s the Sender to run
          *  @param desc descriptive name for error messages
          *  @throws IOException if the transfer goes idle for the stall timeout,
@@ -1799,6 +1878,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             Sender sender = null;
             IOException ioex = null;
             String req = null;
+            // Finish exactly once: async body completion and the finally path
+            // both may call finishTransfer (inline fallback vs pool worker).
+            final AtomicBoolean finished = new AtomicBoolean(false);
+            boolean bodySubmitted = false;
             try {
                 serverout = _webserver.getOutputStream();
                 serverout.write(DataHelper.getUTF8(_headers));
@@ -1842,22 +1925,48 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive, _headers);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
+                    // Push headers before the body handoff so TTFB does not
+                    // wait on MessageOutputStream's passive flush interval.
+                    compressedout.flush();
                     s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
                                    urlSuffix(req), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
+                    browserout.flush();
                     s = new Sender(browserout, serverin, "Server -> Client " +
                                    urlSuffix(req), _log);
                 }
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
                                urlSuffix(req));
-                // Submit Server→Client transfer to the dedicated I/O pool so the
-                // handler thread is not pinned for the entire download duration.
-                // The handler thread polls for completion and only cancels after
-                // ioStallTimeoutMs with no read progress (idle, not total time);
-                // a progressing multi-minute transfer is left alone.
+                // Non-keepalive: submit the body and free the handler thread
+                // immediately. Keepalive still waits (runOnIO) so the next
+                // request on this connection sees a finished body.
+                if (!_keepalive) {
+                    final Sender body = s;
+                    final Sender reqSender = sender;
+                    final OutputStream fServerOut = serverout;
+                    final OutputStream fBrowserOut = browserout;
+                    final CompressedResponseOutputStream fCompressedOut = compressedout;
+                    final InputStream fBrowserIn = browserin;
+                    final InputStream fServerIn = serverin;
+                    final String fReq = req;
+                    bodySubmitted = handOffBody(_ioPool != null ? _ioPool.get() : null,
+                            body, "Server -> Client" + urlSuffix(fReq),
+                            () -> finishTransfer(finished, body, reqSender,
+                                    fServerOut, fBrowserOut, fCompressedOut,
+                                    fBrowserIn, fServerIn, fReq));
+                    if (bodySubmitted) {
+                        // Non-keepalive is already decided; publish waiter before
+                        // the pool worker's finishTransfer so the caller does
+                        // not race on waiter.get() after run() returns.
+                        if (_waiter != null) {_waiter.set(1);}
+                        return;
+                    }
+                    // Inline fallback: handOffBody already ran body + finish
+                    return;
+                }
                 runOnIO(s, "Server -> Client" + urlSuffix(req));
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1877,33 +1986,65 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 ioex = ioe;
                 _keepalive = false;
             } finally {
-                if (ioex == null && s != null) {
-                    ioex = s.getFailure();
-                    if (ioex == null && sender != null) {ioex = sender.getFailure();}
+                if (!bodySubmitted) {
+                    finishTransfer(finished, s, sender, serverout, browserout,
+                            compressedout, browserin, serverin, req);
                 }
-                if (ioex != null) {propagateFailure(ioex, req);}
-                if (_waiter != null) {_waiter.set(_keepalive ? 2 : 1);} // We are now run inline, no need to notify()
-                // Close the I2PSocket first to signal the streaming layer that
-                // the connection is dead.  This lets browserout.close() (which
-                // calls MessageOutputStream.flush → PacketLocal.waitForCompletion)
-                // exit immediately instead of blocking up to getDisconnectTimeout().
-                if (!_keepalive) try { _browser.close(); } catch (IOException ioe) { /* ignored */ }
-                if (browserout != null) {
-                    try {
-                        if (_keepalive) {
-                            if (compressedout != null) {compressedout.finish();}
-                            else {browserout.flush();}
-                        } else {browserout.close();}
-                    } catch (IOException ioe) { /* ignored */ }
-                }
-                if (serverout != null) try { serverout.close(); } catch (IOException ioe) { /* ignored */ }
-                if (!_keepalive && browserin != null) try { browserin.close(); } catch (IOException ioe) { /* ignored */ }
-                if (serverin != null) try { serverin.close(); } catch (IOException ioe) { /* ignored */ }
-                try { _webserver.close(); } catch (IOException ioe) { /* ignored */ }
-                if (_log.shouldDebug()) {
-                    _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               urlSuffix(req));
-                }
+                // bodySubmitted: pool worker owns finishTransfer after the body
+            }
+        }
+
+        /**
+         *  Tear down a completed (or failed) request exactly once. Invoked from
+         *  the handler finally when the body ran on this thread, or from the
+         *  I/O pool worker after an async body handoff.
+         *
+         *  @param finished CAS flag; first caller performs cleanup
+         *  @param body Server→Client Sender (may be null)
+         *  @param reqSender Client→Server Sender (may be null)
+         *  @param serverout local webserver output (may be null)
+         *  @param browserout browser-side output (may be null)
+         *  @param compressedout gzip wrapper (may be null)
+         *  @param browserin local webserver input (may be null)
+         *  @param serverin I2P-side response body (may be null)
+         *  @param req request URL for logging (may be null)
+         *  @since 0.9.71+
+         */
+        private void finishTransfer(AtomicBoolean finished, Sender body, Sender reqSender,
+                                    OutputStream serverout, OutputStream browserout,
+                                    CompressedResponseOutputStream compressedout,
+                                    InputStream browserin, InputStream serverin,
+                                    String req) {
+            if (!finished.compareAndSet(false, true)) {return;}
+            IOException ioex = null;
+            if (body != null) {
+                ioex = body.getFailure();
+                if (ioex == null && reqSender != null) {ioex = reqSender.getFailure();}
+            } else if (reqSender != null) {
+                ioex = reqSender.getFailure();
+            }
+            if (ioex != null) {propagateFailure(ioex, req);}
+            if (_waiter != null) {_waiter.set(_keepalive ? 2 : 1);} // We are now run inline, no need to notify()
+            // Close the I2PSocket first to signal the streaming layer that
+            // the connection is dead.  This lets browserout.close() (which
+            // calls MessageOutputStream.flush → PacketLocal.waitForCompletion)
+            // exit immediately instead of blocking up to getDisconnectTimeout().
+            if (!_keepalive) try { _browser.close(); } catch (IOException ioe) { /* ignored */ }
+            if (browserout != null) {
+                try {
+                    if (_keepalive) {
+                        if (compressedout != null) {compressedout.finish();}
+                        else {browserout.flush();}
+                    } else {browserout.close();}
+                } catch (IOException ioe) { /* ignored */ }
+            }
+            if (serverout != null) try { serverout.close(); } catch (IOException ioe) { /* ignored */ }
+            if (!_keepalive && browserin != null) try { browserin.close(); } catch (IOException ioe) { /* ignored */ }
+            if (serverin != null) try { serverin.close(); } catch (IOException ioe) { /* ignored */ }
+            try { _webserver.close(); } catch (IOException ioe) { /* ignored */ }
+            if (_log.shouldDebug()) {
+                _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
+                           urlSuffix(req));
             }
         }
 
