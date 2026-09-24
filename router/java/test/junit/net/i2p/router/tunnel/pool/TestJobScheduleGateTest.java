@@ -186,6 +186,35 @@ public class TestJobScheduleGateTest {
         assertFalse(TestJob.isZeroActivePool(poolWithActive(false, 1)));
     }
 
+    // ---------------- isPoolDeficit ----------------
+
+    @Test
+    public void testBelowTargetIsDeficit() {
+        assertTrue(TestJob.isPoolDeficit(0, 4));
+        assertTrue(TestJob.isPoolDeficit(3, 4));
+        assertTrue(TestJob.isPoolDeficit(2, 8));
+    }
+
+    @Test
+    public void testAtOrAboveTargetNotDeficit() {
+        assertFalse(TestJob.isPoolDeficit(4, 4));
+        assertFalse(TestJob.isPoolDeficit(5, 4));
+        assertFalse(TestJob.isPoolDeficit(2, 2));
+    }
+
+    @Test
+    public void testZeroTargetNotDeficit() {
+        assertFalse(TestJob.isPoolDeficit(0, 0));
+    }
+
+    @Test
+    public void testDeficitStrictlyWiderThanCritical() {
+        // critical pools are a subset of deficit pools (for target > 0);
+        // the mild expedited tier covers the gap beyond criticality
+        assertTrue(TestJob.isPoolDeficit(1, 4) && TestJob.isPoolCritical(1, 4));
+        assertTrue(TestJob.isPoolDeficit(3, 8) && !TestJob.isPoolCritical(3, 8));
+    }
+
     // ---------------- computeMaxTestJobs ----------------
 
     @Test

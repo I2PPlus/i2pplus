@@ -325,10 +325,8 @@ public class TestJob extends JobImpl {
      * Prevents ever-increasing backlogs that could cause job lag.
      *
      * Scales down under job queue pressure to prevent TestJobs from
-     * starving critical router jobs. When the queue is backed up
-     * (lag > 5s or ready count > 2x runners), the limit is halved.
-     * When the queue is severely backlogged (lag > 15s), it is
-     * quartered.
+     * starving critical router jobs, but never below half the base
+     * limit — see {@link #scaleHardLimit(int, long)}.
      *
      * Tunable via i2p.tunnel.testJob.hardLimit (default: 512 fast / 384 slow)
      * @param ctx the router context
@@ -336,17 +334,31 @@ public class TestJob extends JobImpl {
      */
     public static int getHardLimit(RouterContext ctx) {
         refreshTestJobConfig(ctx);
-        int base = _cachedHardLimit;
         // Scale down under job queue pressure so TestJobs don't starve
         // critical jobs like lease set renewal, tunnel building, and
         // database lookups.
-        long maxLag = ctx.jobQueue().getMaxLag();
-        if (maxLag > 15_000) {
-            return base / 4;
-        } else if (maxLag > 5_000) {
-            return base / 2;
+        return scaleHardLimit(_cachedHardLimit, ctx.jobQueue().getMaxLag());
+    }
+
+    /**
+     *  Scale the TestJob hard limit down when the job queue is lagging, with
+     *  the scale-down floored at half the base limit.  Quartering under
+     *  sustained lag starved the tunnel test queue — UNTESTED tunnels piled
+     *  up while the shrunken limit blocked scheduling, and the pool never
+     *  recovered enough GOOD tunnels to publish — so extreme lag now gets
+     *  the same half-limit response as moderate lag.
+     *
+     *  @param base configured hard limit; values &lt;= 0 pass through untouched
+     *  @param maxLag current job queue max lag (ms)
+     *  @return base unchanged when lag is at or below 5s (or base is
+     *          non-positive), otherwise at least {@code base / 2}
+     *  @since 0.9.71+
+     */
+    static int scaleHardLimit(int base, long maxLag) {
+        if (base <= 0 || maxLag <= 5_000) {
+            return base;
         }
-        return base;
+        return Math.max(base / 2, 1);
     }
 
     /**
@@ -552,7 +564,12 @@ public class TestJob extends JobImpl {
             int activeCount = pool.getActiveTunnelCount();
             int target = pool.getSettings().getTotalQuantity();
             isCritical = isPoolCritical(activeCount, target);
-            if (isCritical && !cfg.needsExpeditedTest()) {
+            // Deficit pools (below target but not yet critical) also run
+            // expedited — the pool is under-filled exactly when its UNTESTED
+            // backlog is holding publication back, so its tests go first
+            // (higher lag tolerance, larger job allowance).  Queue-cap and
+            // budget bypass stay reserved for critical pools only.
+            if ((isCritical || isPoolDeficit(activeCount, target)) && !cfg.needsExpeditedTest()) {
                 cfg.requestExpeditedTest();
             }
         }
@@ -722,6 +739,23 @@ Long tunnelKey = getTunnelKey(cfg);
      */
     static boolean isPoolCritical(int activeCount, int target) {
         return activeCount == 0 || (activeCount < target && activeCount <= 2);
+    }
+
+    /**
+     *  Whether a pool is running below its target active-tunnel count.
+     *  Deficit pools get expedited test treatment (see the expedited
+     *  request in {@link #shouldSchedule}) so their UNTESTED backlog drains
+     *  before the pool drops further behind — but unlike
+     *  {@link #isPoolCritical(int, int)} they do not bypass queue caps or
+     *  per-pool budgets, which stay reserved for collapsed pools.
+     *
+     *  @param activeCount current active tunnel count
+     *  @param target configured total quantity
+     *  @return true when the pool has fewer active tunnels than its target
+     *  @since 0.9.71+
+     */
+    static boolean isPoolDeficit(int activeCount, int target) {
+        return activeCount < target;
     }
 
     /**

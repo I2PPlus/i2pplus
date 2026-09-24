@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -89,6 +90,45 @@ public class TunnelPool {
     private final String _rateName;
     private final long _firstInstalled;
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
+    /**
+     *  Rolling window of build outcomes for the per-pool timeout rate that
+     *  scales the pre-build window (see timeoutRate() / computePreBuildWindowMs()).
+     *  @since 0.9.71+
+     */
+    private static final long BUILD_RATE_WINDOW_MS = 10 * 60 * 1000L;
+    private final AtomicLong _windowAttempts = new AtomicLong();
+    private final AtomicLong _windowTimeouts = new AtomicLong();
+    private volatile long _windowStartMs;
+    /** Guards the rolling window rotation; one lock per build completion. */
+    private final Object _rateWindowLock = new Object();
+    /**
+     *  Base pre-build window: start replacements this long before existing
+     *  tunnels expire so fresh builds (10-40s) complete before the old
+     *  tunnels die.
+     *  @since 0.9.71+
+     */
+    static final long PRE_BUILD_WINDOW_MS = 3L * 60 * 1000;
+    /**
+     *  Cap on the failure-scaled pre-build window — beyond this, starting
+     *  earlier would keep nearly the whole pool's lifetime in build mode.
+     *  @since 0.9.71+
+     */
+    static final long MAX_PRE_BUILD_WINDOW_MS = 6L * 60 * 1000;
+    /**
+     *  Minimum remaining life for a stale UNTESTED tunnel to be worth one
+     *  last-chance test before pruning: a test needs a minute of runway for
+     *  the request/reply round trip (plus the test itself) before the tunnel
+     *  expires anyway.  Below this the tunnel is pruned as before.
+     *  @since 0.9.71+
+     */
+    static final long LAST_CHANCE_MIN_LIFE_MS = 60 * 1000L;
+    /**
+     *  Cap on last-chance tests enqueued per sweep pass — the global test
+     *  caps still apply, but an explicit small bound keeps a fully-UNTESTED
+     *  pool from flooding the queue in one ensure cycle.
+     *  @since 0.9.71+
+     */
+    static final int MAX_LAST_CHANCE_PER_SWEEP = 2;
     /** Cached rate-stat handles so per-build lookups skip the StatManager map. */
     private final RateStat[] _expireStatSlot = new RateStat[1];
     private final RateStat[] _rejectStatSlot = new RateStat[1];
@@ -145,6 +185,17 @@ public class TunnelPool {
      *  same aging leases.
      */
     private static final int STRUGGLE_RESERVE = 2;
+    /**
+     *  Consecutive build timeouts at which the pool starts holding one
+     *  spare tunnel above target (see computeDifficultySpare()).
+     *  @since 0.9.71+
+     */
+    static final int SPARE_LOW_THRESHOLD = 2;
+    /**
+     *  Consecutive build timeouts at which the spare grows to two tunnels.
+     *  @since 0.9.71+
+     */
+    static final int SPARE_HIGH_THRESHOLD = 6;
     /**
      *  A tunnel counts as in use when it has carried verified traffic within
      *  this window.  Generous on purpose: streaming retransmit chains can
@@ -1776,8 +1827,12 @@ public class TunnelPool {
                 // leases while replacements build.  The extra slot absorbs
                 // churn without starving the LeaseSet.  Under stress (build
                 // success < ATTACK_THRESHOLD) the buffer tightens to 1 so
-                // replacement builds start sooner.
-                int maxUsable = Math.max(target + getReplacementTunnelBuffer(getBuildSuccessRate()), 2);
+                // replacement builds start sooner.  The difficulty spare is
+                // added on top so a spare built during sustained build
+                // timeouts is not dropped at the door when the stressed
+                // buffer would only allow target + 1.
+                int maxUsable = Math.max(target + getReplacementTunnelBuffer(getBuildSuccessRate())
+                                         + getDifficultySpare(), 2);
                 if (!addOrReplaceTunnel(info, gatewayId, now, usable, maxUsable, target)) {
                     return;
                 }
@@ -3886,6 +3941,8 @@ public class TunnelPool {
         private int staleUntestedCount;  // UNTESTED tunnels the test queue never reached
         private int failingCount;     // tunnels that have failed tests — likely to die soon
         private int softDegraded;     // live tunnels with soft failures >= SOFT_DEGRADED_FOR_ENSURE
+        /** Lazily created: stale UNTESTED tunnels kept for one last-chance test. */
+        private List<PooledTunnelCreatorConfig> lastChanceTests;
     }
 
     /**
@@ -3903,17 +3960,158 @@ public class TunnelPool {
     }
 
     /**
+     *  Spare tunnels held above target while the pool is having difficulty
+     *  building.  Config-free replacement for a static backupQuantity:
+     *  difficulty is tracked with the existing consecutive build-timeout
+     *  counter (reset on any successful or answered build), so the reserve
+     *  grows only while builds are silently timing out and decays as soon
+     *  as builds complete again.
+     *
+     *  @param consecutiveBuildTimeouts consecutive silent build timeouts
+     *          since the last successful or answered build
+     * @return 0 with no sustained difficulty, 1 after
+     *         {@link #SPARE_LOW_THRESHOLD} timeouts, 2 after
+     *         {@link #SPARE_HIGH_THRESHOLD}
+     * @since 0.9.71+
+     */
+    static int computeDifficultySpare(int consecutiveBuildTimeouts) {
+        if (consecutiveBuildTimeouts >= SPARE_HIGH_THRESHOLD) {
+            return 2;
+        }
+        if (consecutiveBuildTimeouts >= SPARE_LOW_THRESHOLD) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+     *  Current difficulty spare for this pool.
+     *  @return spare tunnels to hold above target, 0-2
+     *  @since 0.9.71+
+     */
+    int getDifficultySpare() {
+        return computeDifficultySpare(_consecutiveBuildTimeouts.get());
+    }
+
+    /**
+     *  Roll the build-rate window forward when it has expired.
+     *
+     *  @param windowStart start of the current window (ms), 0 if none
+     *  @param now current router time (ms)
+     *  @param windowMs window length (ms)
+     *  @return start time to use for the next count — {@code now} when the
+     *          window is missing or expired, otherwise unchanged
+     *  @since 0.9.71+
+     */
+    static long rotateWindowStart(long windowStart, long now, long windowMs) {
+        if (windowStart <= 0 || now - windowStart >= windowMs) {
+            return now;
+        }
+        return windowStart;
+    }
+
+    /**
+     *  Fraction of counted build attempts that timed out.
+     *
+     *  @param attempts build attempts in the window, may be 0
+     *  @param timeouts timed-out attempts in the window
+     *  @return rate clamped to [0.0, 1.0]; 0.0 when there were no attempts
+     *  @since 0.9.71+
+     */
+    static double timeoutRate(long attempts, long timeouts) {
+        if (attempts <= 0) {
+            return 0.0;
+        }
+        if (timeouts <= 0) {
+            return 0.0;
+        }
+        if (timeouts >= attempts) {
+            return 1.0;
+        }
+        return (double) timeouts / attempts;
+    }
+
+    /**
+     *  How far ahead of expiry to start building replacements, scaled by how
+     *  badly this pool's builds are failing: a pool with a high build-timeout
+     *  rate needs more lead time because each attempt may burn a full timeout
+     *  (17-30s) before the next one starts.  Missing or invalid data (NaN)
+     *  keeps the base window — absent statistics are not evidence of failure.
+     *
+     *  @param rate build-timeout rate in [0.0, 1.0], NaN for no data
+     *  @return pre-build window in ms, in
+     *          [{@value #PRE_BUILD_WINDOW_MS}, {@value #MAX_PRE_BUILD_WINDOW_MS}]
+     *  @since 0.9.71+
+     */
+    static long computePreBuildWindowMs(double rate) {
+        double clamped;
+        if (Double.isNaN(rate) || rate < 0.0) {
+            clamped = 0.0;
+        } else if (rate > 1.0) {
+            clamped = 1.0;
+        } else {
+            clamped = rate;
+        }
+        long scaled = (long) (PRE_BUILD_WINDOW_MS * (1.0 + clamped));
+        return Math.min(Math.max(scaled, PRE_BUILD_WINDOW_MS), MAX_PRE_BUILD_WINDOW_MS);
+    }
+
+    /**
+     *  Record one build outcome in the rolling rate window.  Only results
+     *  where a build actually went to the network count — local skips
+     *  (NO_TUNNELS, NO_NETDB, SKIPPED, OTHER_FAILURE) are not evidence of
+     *  peer timeout behavior.
+     *
+     *  @param timedOut true if this attempt timed out
+     *  @param now current router time (ms)
+     *  @since 0.9.71+
+     */
+    private void recordBuildOutcome(boolean timedOut, long now) {
+        synchronized (_rateWindowLock) {
+            long start = rotateWindowStart(_windowStartMs, now, BUILD_RATE_WINDOW_MS);
+            if (start != _windowStartMs) {
+                _windowStartMs = start;
+                _windowAttempts.set(0);
+                _windowTimeouts.set(0);
+            }
+            _windowAttempts.incrementAndGet();
+            if (timedOut) {
+                _windowTimeouts.incrementAndGet();
+            }
+        }
+    }
+
+    /**
+     *  This pool's build-timeout rate over the current rolling window.
+     *
+     *  @return rate in [0.0, 1.0]; 0.0 when the window is empty or stale
+     *          (no builds within {@link #BUILD_RATE_WINDOW_MS})
+     *  @since 0.9.71+
+     */
+    private double getBuildTimeoutRate() {
+        synchronized (_rateWindowLock) {
+            long start = _windowStartMs;
+            if (start <= 0 ||
+                _context.clock().now() - start >= BUILD_RATE_WINDOW_MS) {
+                return 0.0;
+            }
+            return timeoutRate(_windowAttempts.get(), _windowTimeouts.get());
+        }
+    }
+
+    /**
      *  Effective build target: base target plus the dynamic emergency boost,
-     *  the Tuner's failure buffer, and the struggle reserve.
+     *  the Tuner's failure buffer, and a reserve.  The reserve is the larger
+     *  of the struggle reserve (pool below target or thin LeaseSet) and the
+     *  difficulty spare (sustained build timeouts) — the two signals describe
+     *  the same "keep headroom" need, so they never stack.
      */
     private int computeEffectiveTarget(int target) {
         int failureBuffer = Tuner.getBuildFailureBuffer();
         int effectiveTarget = Math.min(target + _consecutiveEmergencies + failureBuffer,
                                        target + MAX_EMERGENCY_BOOST + failureBuffer);
-        if (isStruggling()) {
-            effectiveTarget += STRUGGLE_RESERVE;
-        }
-        return effectiveTarget;
+        int reserve = isStruggling() ? STRUGGLE_RESERVE : 0;
+        return effectiveTarget + Math.max(reserve, getDifficultySpare());
     }
 
     /**
@@ -3946,7 +4144,7 @@ public class TunnelPool {
                 }
                 // Count UNTESTED — they're in the pool awaiting test.
                 if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
-                    handleStaleUntested(it, t, stats, wallNow, preBuildThreshold);
+                    handleStaleUntested(it, t, stats, now, wallNow, preBuildThreshold);
                     continue;
                 }
                 // Count FAILING/FAILED tunnels separately — they can't route traffic
@@ -3983,11 +4181,15 @@ public class TunnelPool {
      *  Handle an UNTESTED tunnel: a tunnel still UNTESTED within the
      *  pre-build window (expiring in < 3 min) is stuck — the test queue
      *  never reached it (saturated) or it was abandoned after a pool
-     *  reset.  It can never become a usable lease, so prune it, unless
-     *  it has recently carried verified traffic.
+     *  reset.  If it still has enough life for one test round trip, keep
+     *  it and queue that last-chance test (the sweep schedules it outside
+     *  the lock) instead of discarding an unproven lease; otherwise prune
+     *  it, unless it has recently carried verified traffic.  A kept tunnel
+     *  counts as near-expiring: it still triggers deficit replacements and
+     *  remains usable until it expires or the test resolves it.
      */
     private void handleStaleUntested(Iterator<TunnelInfo> it, TunnelInfo t, TunnelStats stats,
-                                     long wallNow, long preBuildThreshold) {
+                                     long now, long wallNow, long preBuildThreshold) {
         if (t.getExpiration() < preBuildThreshold) {
             // In-use protection: never tear down a tunnel that has
             // recently carried verified traffic.
@@ -3999,11 +4201,68 @@ public class TunnelPool {
                 }
                 return;
             }
+            if (t instanceof PooledTunnelCreatorConfig &&
+                isLastChanceTestable(t.getExpiration(), now, LAST_CHANCE_MIN_LIFE_MS)) {
+                if (stats.lastChanceTests == null) {
+                    stats.lastChanceTests = new ArrayList<PooledTunnelCreatorConfig>(2);
+                }
+                stats.lastChanceTests.add((PooledTunnelCreatorConfig) t);
+                stats.nearExpiry++;
+                return;
+            }
             removeTunnelFromPool(it, t);
             stats.staleUntestedCount++;
             return;
         }
         stats.untestedCount++;
+    }
+
+    /**
+     *  Whether a tunnel expiring within the pre-build window still has
+     *  enough life left for a last-chance test to mean anything.
+     *
+     *  @param expiration tunnel expiration (router clock, ms)
+     *  @param now current router time (ms)
+     *  @param minLifeMs minimum remaining life for the test to be worthwhile
+     *  @return true when at least {@code minLifeMs} of life remains
+     *  @since 0.9.71+
+     */
+    static boolean isLastChanceTestable(long expiration, long now, long minLifeMs) {
+        return expiration - now >= minLifeMs;
+    }
+
+    /**
+     *  Queue one last-chance test for each stale-but-testable UNTESTED
+     *  tunnel the sweep kept.  Called outside the pool lock; the normal
+     *  scheduling gates ({@link TestJob#shouldSchedule}) still apply, and a
+     *  tunnel already registered in the test queue is skipped there, so
+     *  repeated ensure passes cannot double-schedule.
+     */
+    private void scheduleLastChanceTests(TunnelStats stats) {
+        List<PooledTunnelCreatorConfig> tests = stats.lastChanceTests;
+        if (tests == null || tests.isEmpty()) {
+            return;
+        }
+        if (_context.router().gracefulShutdownInProgress() || _manager.disableTunnelTesting()) {
+            return;
+        }
+        int scheduled = 0;
+        for (PooledTunnelCreatorConfig cfg : tests) {
+            if (scheduled >= MAX_LAST_CHANCE_PER_SWEEP) {
+                break;
+            }
+            if (TestJob.shouldSchedule(_context, cfg)) {
+                TestJob job = new TestJob(_context, cfg, this);
+                if (job.isValid()) {
+                    _context.jobQueue().addJob(job);
+                    scheduled++;
+                }
+            }
+        }
+        if (scheduled > 0 && _log.shouldInfo()) {
+            _log.info(toString() + " -> Queued " + scheduled + " last-chance test(s) for " +
+                      "stale UNTESTED tunnel(s) expiring within the pre-build window");
+        }
     }
 
     /**
@@ -4363,7 +4622,45 @@ public class TunnelPool {
     static boolean isEnsureThrottled(long now, long lastEnsure, int usableTunnelCount,
                                      int healthyCount, boolean incompleteLeaseSet,
                                      long lastRemoval) {
+        // Unknown in-progress count (legacy overload): no bypass.
+        return isEnsureThrottled(now, lastEnsure, usableTunnelCount, healthyCount,
+                                 incompleteLeaseSet, lastRemoval, -1);
+    }
+
+    /**
+     *  Whether ensureSufficientTunnels() must wait for this pool, using
+     *  separate usable and healthy counts, a removal-time signal, and the
+     *  number of builds in flight.  Pure decision helper.
+     *
+     *  <p>Policy: {@link #ENSURE_THROTTLE_MS} (15s) normally;
+     *  {@link #ENSURE_DEGRADED_MS} (5s) while the published LeaseSet is
+     *  incomplete (thin reachability), or when some usable tunnels are
+     *  soft-degraded but the pool still has healthy capacity;
+     *  {@link #ENSURE_COLLAPSED_MIN_MS} (2s) floor when the pool is collapsed
+     *  (usable tunnels &lt;= 1), healthy (non soft-degraded) tunnels &lt;= 1,
+     *  <b>or</b> a tunnel was removed since the last ensure run — a removal
+     *  is a liveness signal that must not wait behind the healthy gate.
+     *  A fully empty pool with no builds in flight bypasses the gate
+     *  entirely: there is nothing to rate-limit (the deficit and emergency
+     *  throttles still pace the builds themselves), and waiting even 2s on
+     *  the way to an empty pool extends the outage for no benefit.
+     *
+     *  @param now current router time (ms)
+     *  @param lastEnsure last ensure timestamp (ms), 0 if never
+     *  @param usableTunnelCount current usable tunnel count (includes soft-degraded)
+     *  @param healthyCount usable tunnels below {@link #SOFT_DEGRADED_FOR_ENSURE}
+     *  @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
+     *  @param lastRemoval last tunnel-removal timestamp (ms), 0 if never
+     *  @param inProgress builds currently in flight, or -1 when unknown
+     *  @return true if ensureSufficientTunnels() should return early
+     *  @since 0.9.71+
+     */
+    static boolean isEnsureThrottled(long now, long lastEnsure, int usableTunnelCount,
+                                     int healthyCount, boolean incompleteLeaseSet,
+                                     long lastRemoval, int inProgress) {
         if (lastEnsure <= 0)
+            return false;
+        if (usableTunnelCount == 0 && inProgress == 0)
             return false;
         long min;
         if (usableTunnelCount <= 1 || healthyCount <= 1 || lastRemoval > lastEnsure)
@@ -4657,10 +4954,13 @@ public class TunnelPool {
         // Per-pool throttle: long gate when healthy, short floor when
         // collapsed (usable <= 1), soft-degraded-dominated (healthy <= 1),
         // or the LeaseSet is incomplete so recovery is prompt without
-        // hammering prune+sweep on every buildComplete during fast-fail loops.
+        // hammering prune+sweep on every buildComplete during fast-fail
+        // loops.  An empty pool with nothing in flight bypasses the gate
+        // entirely — pacing of the builds themselves is handled by the
+        // deficit/emergency throttles.
         if (isEnsureThrottled(nowEnsure, _lastEnsureTime, getUsableTunnelCount(),
                               getHealthyTunnelCount(), _hasIncompleteLeaseSet,
-                              _lastRemovalTime)) {
+                              _lastRemovalTime, getInProgressCount())) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping ensureSufficientTunnels: throttled (" +
                           (nowEnsure - _lastEnsureTime) + "ms since last)");
@@ -4689,13 +4989,21 @@ public class TunnelPool {
             int target = getEffectiveTarget();
             int effectiveTarget = computeEffectiveTarget(target);
             long now = _context.clock().now();
-            // Build replacements 3 minutes before the existing tunnels expire, so
-            // fresh builds (10-40s) complete well before the old tunnels die and
-            // the pool never holds a LeaseSet whose leases are about to expire.
-            long preBuildThreshold = now + 3L * 60 * 1000;
+            // Build replacements before the existing tunnels expire, so fresh
+            // builds (10-40s) complete well before the old tunnels die and the
+            // pool never holds a LeaseSet whose leases are about to expire.
+            // Scale the window up when this pool's builds are timing out —
+            // each failed attempt burns a full timeout (17-30s), so a
+            // struggling pool must start its replacements earlier to land a
+            // build in time (3min base, up to 6min at a 100% timeout rate).
+            long preBuildThreshold = now + computePreBuildWindowMs(getBuildTimeoutRate());
 
             TunnelStats stats = sweepExpiredAndCountTunnels(now, preBuildThreshold);
             logCleanupSummary(stats);
+            // Queue last-chance tests outside the pool lock; each kept
+            // stale-UNTESTED tunnel gets one shot at proving itself before
+            // its expiry, instead of being discarded unread.
+            scheduleLastChanceTests(stats);
 
             int inProgress = getInProgressCount();
             decayEmergencyCounter(stats.safeActive, effectiveTarget, target);
@@ -5253,8 +5561,13 @@ public class TunnelPool {
     private void handleBuildResult(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
         switch (result) {
             case SUCCESS:
-                _consecutiveBuildTimeouts.set(0);
+                // Add before resetting the timeout counter so the capacity
+                // cap still sees the difficulty spare that justified this
+                // build — a pool recovering from a timeout streak keeps the
+                // headroom it just rebuilt instead of dropping it at the door.
                 addTunnel(cfg);
+                _consecutiveBuildTimeouts.set(0);
+                recordBuildOutcome(false, _context.clock().now());
                 updatePairedProfile(cfg, true);
                 break;
 
@@ -5263,11 +5576,13 @@ public class TunnelPool {
             case DUP_ID:
                 // Peer responded but couldn't build tunnel — reset timeout counter
                 _consecutiveBuildTimeouts.set(0);
+                recordBuildOutcome(false, _context.clock().now());
                 updatePairedProfile(cfg, true);
                 break;
 
             case TIMEOUT:
                 _consecutiveBuildTimeouts.incrementAndGet();
+                recordBuildOutcome(true, _context.clock().now());
                 updatePairedProfile(cfg, false);
                 ensureSufficientTunnels();
                 break;

@@ -9,7 +9,9 @@ import org.junit.Test;
  * Tests for ensure/deficit throttle decisions
  * ({@link TunnelPool#isEnsureThrottled(long, long, int, int, boolean)},
  * {@link TunnelPool#isDeficitThrottled(long, long, int, int, boolean)}, and the
- * healthySafe/safeActive split {@link TunnelPool#isDeficitThrottled(long, long, int, int, int, boolean)}).
+ * healthySafe/safeActive split {@link TunnelPool#isDeficitThrottled(long, long, int, int, int, boolean)}
+ * plus the in-flight-aware ensure overload
+ * {@link TunnelPool#isEnsureThrottled(long, long, int, int, boolean, long, int)}).
  *
  * <p>Policy: long gates when the pool is healthy; intermediate gates while
  * the LeaseSet is incomplete or the pool is soft-degraded-dominated
@@ -276,5 +278,46 @@ public class TunnelPoolThrottleTest {
         // collapsed pool + removal: still short floor
         assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last, 0, 0, false, removal));
         assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS, last, 0, 0, false, removal));
+    }
+
+    // --- isEnsureThrottled (7-arg: with in-flight build count) ---
+
+    @Test
+    public void testEnsureEmptyPoolWithNothingInFlightBypassesGate() {
+        long last = 1_000_000L;
+        // usable == 0 and inProgress == 0: run immediately, no floor at all
+        assertFalse(TunnelPool.isEnsureThrottled(last + 1, last, 0, 0, false, 0, 0));
+        assertFalse(TunnelPool.isEnsureThrottled(last + 1, last, 0, 0, true, last + 1, 0));
+        // first run still never throttled regardless of counts
+        assertFalse(TunnelPool.isEnsureThrottled(1L, 0, 0, 0, false, 0, 0));
+    }
+
+    @Test
+    public void testEnsureEmptyPoolWithBuildsInFlightUsesShortFloor() {
+        long last = 1_000_000L;
+        // builds already in flight: the floor still paces repeated wakeups
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last, 0, 0, false, 0, 2));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS, last, 0, 0, false, 0, 2));
+    }
+
+    @Test
+    public void testEnsureNonEmptyPoolNeverBypasses() {
+        long last = 1_000_000L;
+        // healthy pool with nothing in flight still uses the long gate
+        assertTrue(TunnelPool.isEnsureThrottled(last + 6_000L, last, 5, 5, false, 0, 0));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_HEALTHY_MS, last, 5, 5, false, 0, 0));
+        // one usable tunnel: short floor, not the bypass
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last, 1, 1, false, 0, 0));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS, last, 1, 1, false, 0, 0));
+    }
+
+    @Test
+    public void testEnsureUnknownInProgressDoesNotBypass() {
+        long last = 1_000_000L;
+        // -1 means unknown: collapsed floor applies, no bypass
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last, 0, 0, false, 0, -1));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS, last, 0, 0, false, 0, -1));
+        // the legacy 6-arg overload delegates with unknown in-progress
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last, 0, 0, false, 0));
     }
 }

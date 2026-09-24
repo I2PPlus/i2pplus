@@ -166,4 +166,102 @@ public class GhostPeerManagerTest {
         assertFalse(_mgr.isGhost(null));
         assertEquals(0, _mgr.getGhostCount());
     }
+
+    // --- repeat-offense escalation (0.9.71+) ---
+
+    @Test
+    public void testRepeatTimeoutEscalatesCooldown() {
+        _mgr.recordTimeout(hash(1)); // first offense: base 300s
+        when(_clock.now()).thenReturn(NOW + 301_000L);
+        assertFalse("base cooldown expired", _mgr.isGhost(hash(1)));
+
+        _mgr.recordTimeout(hash(1)); // second offense within the decay window
+        // escalated to 2x base (600s) from the repeat mark time
+        when(_clock.now()).thenReturn(NOW + 301_000L + 599_000L);
+        assertTrue("2x cooldown respected", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(NOW + 301_000L + 601_000L);
+        assertFalse("2x cooldown released", _mgr.isGhost(hash(1)));
+    }
+
+    @Test
+    public void testEscalationCappedAtFourX() {
+        _mgr.recordTimeout(hash(1)); // offense 0: 300s
+        when(_clock.now()).thenReturn(NOW + 301_000L);
+        _mgr.recordTimeout(hash(1)); // offense 1: 600s
+        when(_clock.now()).thenReturn(NOW + 301_000L + 601_000L);
+        _mgr.recordTimeout(hash(1)); // offense 2: 1200s (cap)
+        long markAt = NOW + 301_000L + 601_000L;
+        when(_clock.now()).thenReturn(markAt + 1_199_000L);
+        assertTrue("4x cooldown respected", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(markAt + 1_201_000L);
+        assertFalse("4x cooldown released", _mgr.isGhost(hash(1)));
+
+        // further offenses stay at the cap, never grow unbounded
+        when(_clock.now()).thenReturn(markAt + 1_201_000L);
+        _mgr.recordTimeout(hash(1));
+        long cappedAt = markAt + 1_201_000L;
+        when(_clock.now()).thenReturn(cappedAt + 1_199_000L);
+        assertTrue("still capped at 4x", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(cappedAt + 1_201_000L);
+        assertFalse("capped cooldown released", _mgr.isGhost(hash(1)));
+    }
+
+    @Test
+    public void testOffenseDecaysAfterWindow() {
+        _mgr.recordTimeout(hash(1)); // first offense: 300s
+        // repeat much later than OFFENSE_DECAY_MS: history decayed, base again
+        when(_clock.now()).thenReturn(NOW + GhostPeerManager.OFFENSE_DECAY_MS + 1_000L);
+        assertFalse("original mark expired", _mgr.isGhost(hash(1)));
+        _mgr.recordTimeout(hash(1));
+        when(_clock.now()).thenReturn(NOW + GhostPeerManager.OFFENSE_DECAY_MS + 301_000L);
+        assertFalse("decayed repeat gets base 300s again", _mgr.isGhost(hash(1)));
+    }
+
+    @Test
+    public void testSuccessClearsOffenseHistory() {
+        _mgr.recordTimeout(hash(1));
+        _mgr.recordSuccess(hash(1));
+        when(_clock.now()).thenReturn(NOW + 1_000L);
+        _mgr.recordTimeout(hash(1)); // proven live since: back to base 300s
+        when(_clock.now()).thenReturn(NOW + 301_000L);
+        assertFalse("success reset escalation", _mgr.isGhost(hash(1)));
+    }
+
+    @Test
+    public void testExpiredMarkKeepsWorkingAsExclusionBoundary() {
+        // expired but unpruned entry must not poison the next mark
+        // (regression: putIfAbsent used to silently no-op on stale entries)
+        _mgr.recordTimeout(hash(1));
+        when(_clock.now()).thenReturn(NOW + 400_000L);
+        assertFalse(_mgr.isGhost(hash(1)));
+        _mgr.recordTimeout(hash(1));
+        assertTrue("re-marked after stale expiry", _mgr.isGhost(hash(1)));
+        assertEquals(1, _mgr.getGhostCount());
+    }
+
+    // --- pure helpers ---
+
+    @Test
+    public void testEscalationCooldownHelper() {
+        assertEquals(300_000L, GhostPeerManager.escalationCooldownMs(300_000L, 0));
+        assertEquals(300_000L, GhostPeerManager.escalationCooldownMs(300_000L, -1));
+        assertEquals(600_000L, GhostPeerManager.escalationCooldownMs(300_000L, 1));
+        assertEquals(1_200_000L, GhostPeerManager.escalationCooldownMs(300_000L, 2));
+        assertEquals(1_200_000L, GhostPeerManager.escalationCooldownMs(300_000L, 99));
+        assertEquals(0L, GhostPeerManager.escalationCooldownMs(0L, 5));
+    }
+
+    @Test
+    public void testNextOffensesHelper() {
+        assertEquals(0, GhostPeerManager.nextOffenses(0, 0, 1_000L, 60_000L));
+        assertEquals(1, GhostPeerManager.nextOffenses(0, 500L, 1_000L, 60_000L));
+        assertEquals(3, GhostPeerManager.nextOffenses(2, 500L, 1_000L, 60_000L));
+        // decay: previous mark outside the window resets
+        assertEquals(0, GhostPeerManager.nextOffenses(2, 500L, 61_000L, 60_000L));
+        // clock skew / unset mark: no escalation
+        assertEquals(0, GhostPeerManager.nextOffenses(2, 0, 1_000L, 60_000L));
+        assertEquals(0, GhostPeerManager.nextOffenses(2, 1_000L, 500L, 60_000L));
+        // negative input treated as zero
+        assertEquals(0, GhostPeerManager.nextOffenses(-3, 500L, 61_000L, 60_000L));
+    }
 }
