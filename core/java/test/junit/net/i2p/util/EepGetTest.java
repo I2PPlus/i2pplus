@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -505,6 +506,39 @@ public class EepGetTest extends TestCase {
                 _ss.close();
             } catch (IOException ioe) { /* ignored */ }
         }
+    }
+
+    // ---------- isStalledButProgressing ----------
+
+    public void testStallWithSocketTimeoutAndProgress() {
+        assertTrue(EepGet.isStalledButProgressing(
+                new SocketTimeoutException("Read timed out"), 100, 200));
+    }
+
+    public void testStallWithWatchdogAbortAndProgress() {
+        assertTrue(EepGet.isStalledButProgressing(
+                new IOException("Timed out reading the HTTP data"), 100, 200));
+    }
+
+    public void testStallWithoutProgress() {
+        // header-phase timeout: nothing appended this attempt
+        assertFalse(EepGet.isStalledButProgressing(
+                new SocketTimeoutException("Read timed out"), 100, 100));
+    }
+
+    public void testStallWithBackwardsByteCount() {
+        assertFalse(EepGet.isStalledButProgressing(
+                new SocketTimeoutException("Read timed out"), 200, 100));
+    }
+
+    public void testNonTimeoutFailureWithProgress() {
+        assertFalse(EepGet.isStalledButProgressing(
+                new IOException("Connection reset"), 100, 200));
+    }
+
+    public void testHeaderTimeoutMessageNotStall() {
+        assertFalse(EepGet.isStalledButProgressing(
+                new IOException("Timed out reading the HTTP headers"), 100, 200));
     }
 
     private interface Handler {

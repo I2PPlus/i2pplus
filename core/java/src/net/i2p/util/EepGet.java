@@ -16,6 +16,7 @@ import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -217,6 +218,8 @@ public class EepGet {
     protected static final int DEFAULT_RETRY_DELAY = 5*1000;
     /** Maximum additional jitter in milliseconds added to the base retry delay @since 0.9.71+ */
     protected static final int DEFAULT_RETRY_JITTER = 10*1000;
+    /** Data-phase stall abort message, thrown when the SocketTimeout watchdog fires mid-body @since 0.9.71+ */
+    private static final String MSG_DATA_TIMEOUT = "Timed out reading the HTTP data";
     /** @deprecated use DEFAULT_CONNECT_TIMEOUT */
     protected static final int CONNECT_TIMEOUT = DEFAULT_CONNECT_TIMEOUT;
     /** @deprecated use DEFAULT_INACTIVITY_TIMEOUT */
@@ -1052,7 +1055,10 @@ public class EepGet {
 
         if (_log.shouldDebug())
             _log.debug("Fetching (proxied? " + _shouldProxy + ") url=" + _actualURL);
+        boolean usedStallImmediateRetry = false;
         while (_keepFetching) {
+            long attemptStartBytes = _alreadyTransferred;
+            boolean stalledProgressing = false;
             SocketTimeout timeout = null;
             if (_fetchHeaderTimeout > 0) {
                 // We create the SocketTimeout with an inactivity time of the header timeout.
@@ -1086,6 +1092,7 @@ public class EepGet {
                     return true;
                 break;
             } catch (IOException ioe) {
+                stalledProgressing = isStalledButProgressing(ioe, attemptStartBytes, _alreadyTransferred);
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
                 int truncate = _url.indexOf("&");
@@ -1122,8 +1129,21 @@ public class EepGet {
                 break;
             _redirects.set(0);
             long delay = _retryDelayMs;
-            if (delay < 0)
+            boolean usingDefaultDelay = delay < 0;
+            if (usingDefaultDelay)
                 delay = DEFAULT_RETRY_DELAY + _context.random().nextInt(DEFAULT_RETRY_JITTER);
+            if (stalledProgressing && usingDefaultDelay && !usedStallImmediateRetry) {
+                // A timeout that still advanced the transfer is a working path
+                // briefly interrupted (tunnel rebuild, etc.): retry at once so
+                // the Range-resume picks up where it left off. One immediate
+                // retry per fetch() keeps this from becoming a tight loop; the
+                // attempt still counts toward _numRetries.
+                usedStallImmediateRetry = true;
+                delay = 0;
+                if (_log.shouldDebug())
+                    _log.debug("Stalled after " + _alreadyTransferred + " bytes on " + _url
+                               + ", immediate retry " + _currentAttempt + "/" + _numRetries);
+            }
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
@@ -1142,6 +1162,27 @@ public class EepGet {
                 _log.warn("Eepget error: All attempts failed for [" + _url + "]");
             }
         return false;
+    }
+
+    /**
+     *  Whether a failed attempt was a data-phase stall on an otherwise working
+     *  path: the read timed out (socket soTimeout or our SocketTimeout watchdog
+     *  abort) but the attempt still appended bytes.  Header-phase timeouts make
+     *  no progress within the attempt and non-timeout failures return false,
+     *  so callers only skip the default backoff for one immediate
+     *  Range-resume retry.
+     *
+     *  @param ioe failure raised by the attempt
+     *  @param attemptStartBytes bytes already transferred when the attempt started
+     *  @param bytesTransferred bytes transferred now, after the failure
+     *  @return true when the attempt timed out after making progress
+     *  @since 0.9.71+
+     */
+    static boolean isStalledButProgressing(IOException ioe, long attemptStartBytes, long bytesTransferred) {
+        if (bytesTransferred <= attemptStartBytes)
+            return false;
+        return ioe instanceof SocketTimeoutException
+            || MSG_DATA_TIMEOUT.equals(ioe.getMessage());
     }
 
     /**
@@ -1305,7 +1346,7 @@ public class EepGet {
         }
 
         if (_aborted)
-            throw new IOException("Timed out reading the HTTP data");
+            throw new IOException(MSG_DATA_TIMEOUT);
 
         if (timeout != null)
             timeout.cancel();
