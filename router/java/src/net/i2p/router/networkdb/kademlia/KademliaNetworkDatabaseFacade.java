@@ -57,6 +57,7 @@ import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.TransportImpl;
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
@@ -936,9 +937,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public void accessLeaseSet(Hash key) {
         if (!isClientDb() || key == null) return;
-        // Never track our own published LeaseSets or tunnel participants
-        if (_context.clientManager().isLocal(key)) return;
         long now = _context.clock().now();
+        if (_context.clientManager().isLocal(key)) {
+            // In-use own destination: pre-emptively refresh the published
+            // LeaseSet when the earliest lease is near expiry so the re-mint
+            // and floodfill complete before capacity starts draining.
+            refreshLocalLeaseSetIfExpiring(key, now);
+            return;
+        }
         // Use compute for atomic check-and-update
         _clientLeaseSetAccessTime.compute(key, (k, lastUpdate) -> {
             if (lastUpdate == null || now - lastUpdate > LOCAL_LEASESET_REFRESH_INTERVAL) {
@@ -946,6 +952,32 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
             return lastUpdate;
         });
+    }
+
+    /**
+     *  Nudge the inbound pool to re-publish our own LeaseSet when a client
+     *  is actively using it and the earliest lease is inside the proactive
+     *  window.  No-op without a stored LeaseSet or when the earliest lease
+     *  still has ample remaining life.
+     *
+     *  @param key local destination hash
+     *  @param now current router time (ms)
+     *  @since 0.9.71+
+     */
+    private void refreshLocalLeaseSetIfExpiring(Hash key, long now) {
+        DatabaseEntry ds = _ds.get(key);
+        if (ds == null || !ds.isLeaseSet()) return;
+        LeaseSet ls = (LeaseSet) ds;
+        long earliest = ls.getEarliestLeaseDate();
+        if (earliest <= 0 || earliest - now > getProactiveRepublishThreshold()) return;
+        TunnelPool pool = _context.tunnelManager().getInboundPool(key);
+        if (pool != null) {
+            // force=false: resolveRefreshForce still forces when the earliest
+            // lease is inside the refresh throttle, but a still-healthy
+            // earliest (throttle window not yet critical) only schedules a
+            // deferred refresh — repeated access must not republish-storm.
+            pool.refreshLeaseSet(false);
+        }
     }
 
     /** Remove a LeaseSet from refresh tracking. Call this after HostChecker completes to avoid unnecessary refreshes. */
@@ -1515,7 +1547,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         LeaseSet ls = lookupLeaseSetLocally(hash);
 
         // First publication or lease expiring soon — queue immediately, don't batch
-        if (!hadExistingJob || (ls != null && ls.getLatestLeaseDate() - now < getProactiveRepublishThreshold())) {
+        if (!hadExistingJob || (ls != null && ls.getEarliestLeaseDate() - now < getProactiveRepublishThreshold())) {
             RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
             if (!job.registerSelf()) {
                 if (_log.shouldDebug()) {
@@ -3303,7 +3335,9 @@ return false;
         DatabaseEntry ds = _ds.get(key);
         if (ds != null && ds.isLeaseSet()) {
             LeaseSet ls = (LeaseSet) ds;
-            long expires = ls.getLatestLeaseDate();
+            // Earliest lease: refresh before the first lease dies so capacity
+            // stays full and floodfill propagation can complete in time.
+            long expires = ls.getEarliestLeaseDate();
             long timeToExpiry = expires - now;
             if (timeToExpiry > 0 && timeToExpiry < PROACTIVE_REFRESH_THRESHOLD) {
                 _clientLeaseSetAccessTime.put(key, now);

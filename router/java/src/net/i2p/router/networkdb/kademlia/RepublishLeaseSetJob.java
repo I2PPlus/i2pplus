@@ -233,7 +233,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                 handleExpiredLeaseSet(ls, name);
             } else {
-                long timeUntilExpiry = ls.getLatestLeaseDate() - now;
+                long timeUntilExpiry = ls.getEarliestLeaseDate() - now;
                 handleValidLeaseSet(ls, name, now, timeUntilExpiry);
             }
         } else {
@@ -313,7 +313,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         } else {
             // LeaseSet still current: keep the chain alive until expiry so the
             // stale copy is dropped instead of lingering forever.
-            long untilExpiry = ls.getLatestLeaseDate() - getContext().clock().now() + 1000;
+            long untilExpiry = ls.getEarliestLeaseDate() - getContext().clock().now() + 1000;
             scheduleRepublish(Math.max(MIN_RESCHEDULE, untilExpiry));
         }
     }
@@ -562,7 +562,7 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     private void refloatLeaseSet(String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
-        long freshTimeUntilExpiry = fresh != null ? fresh.getLatestLeaseDate() - now : 0;
+        long freshTimeUntilExpiry = fresh != null ? fresh.getEarliestLeaseDate() - now : 0;
         if (_log.shouldInfo()) {
             _log.info("refloatLeaseSet " + name + " [" + shortHash() + "]" +
                       " storedExpiry=" + DataHelper.formatDuration(timeUntilExpiry) +

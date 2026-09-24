@@ -119,6 +119,11 @@ public class AliasedTunnelPool extends TunnelPool {
     }
 
     @Override
+    public void refreshLeaseSet(boolean force) {
+        // No-op - aliased pool refreshes via primary pool
+    }
+
+    @Override
     boolean buildFallback() {
         return _aliasOf.buildFallback();
     }

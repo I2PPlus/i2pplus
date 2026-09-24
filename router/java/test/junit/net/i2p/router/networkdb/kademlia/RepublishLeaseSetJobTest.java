@@ -483,6 +483,7 @@ public class RepublishLeaseSetJobTest {
         when(ls.getDestination()).thenReturn(dest);
         when(ls.isCurrent(anyLong())).thenReturn(true);
         when(ls.getLatestLeaseDate()).thenReturn(latestLeaseDate);
+        when(ls.getEarliestLeaseDate()).thenReturn(latestLeaseDate);
         when(ls.getLeaseCount()).thenReturn(2);
         return ls;
     }
@@ -498,6 +499,7 @@ public class RepublishLeaseSetJobTest {
     private static LeaseSet freshPoolLeaseSet(long latestLeaseDate, int leaseCount) {
         LeaseSet ls = mock(LeaseSet.class);
         when(ls.getLatestLeaseDate()).thenReturn(latestLeaseDate);
+        when(ls.getEarliestLeaseDate()).thenReturn(latestLeaseDate);
         when(ls.getLeaseCount()).thenReturn(leaseCount);
         for (int i = 0; i < leaseCount; i++) {
             Lease lease = mock(Lease.class);
