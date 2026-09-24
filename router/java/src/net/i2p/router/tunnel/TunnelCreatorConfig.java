@@ -40,6 +40,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private long _verifiedBytesTransferred;
     private long _lastTransferredTime;
     private final AtomicInteger _failures = new AtomicInteger();
+    private final AtomicInteger _softFailures = new AtomicInteger();
     private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
 
     private volatile boolean _reused;
@@ -329,6 +330,26 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public void incrementTestFailures() {
         _failures.incrementAndGet();
+    }
+
+    /**
+     *  Increment the soft best-effort timeout counter only.
+     *  Soft status-3 must not trip getTunnelFailed() or selection gates
+     *  that key on the hard/test counter — congestion is not tunnel death.
+     *
+     *  @since 0.9.73+
+     */
+    public void incrementSoftFailures() {
+        _softFailures.incrementAndGet();
+    }
+
+    /**
+     *  Soft best-effort timeout count.
+     *  @return the soft failure count
+     *  @since 0.9.73+
+     */
+    public int getSoftFailures() {
+        return _softFailures.get();
     }
 
     /**

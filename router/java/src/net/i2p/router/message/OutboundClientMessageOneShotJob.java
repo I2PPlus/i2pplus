@@ -1212,9 +1212,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         clearCaches();
         // Report data-phase failures to the tunnel pool so it can
         // rotate away from failing tunnels faster than TestJob alone.
-        // Only report for tunnel-related statuses — remote-destination
-        // failures (bad LS, bad encryption) are not the tunnel's fault.
-        if (_outTunnel != null && isTunnelRelatedFailure(status)) {
+        // Hard dispatch statuses and soft send timeouts (3) are reported;
+        // remote-destination failures (bad LS, bad encryption) are not the
+        // tunnel's fault.  Soft timeouts use a higher removal bar inside
+        // reportSendFailure so congestion cannot mass-remove healthy tunnels.
+        if (_outTunnel != null &&
+            (isTunnelRelatedFailure(status) || isSoftSendFailure(status))) {
             getContext().tunnelManager().reportSendFailure(_outTunnel, status);
         }
         //getContext().messageHistory().sendPayloadMessage(_clientMessageId.getMessageId(), false, sendTime);
@@ -1226,28 +1229,43 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Whether the I2CP failure status indicates a tunnel or local
-     *  problem (as opposed to a remote-destination problem).
-     *  Only tunnel-related failures should be reported to the pool
-     *  for failure tracking — remote failures are not the tunnel's fault.
+     *  Whether the I2CP failure status indicates the outbound tunnel itself
+     *  rejected the message during dispatch, as opposed to a timeout,
+     *  destination problem, or reply-path issue.
+     *  <p>
+     *  Hard dispatch failures are reported to the pool at the normal
+     *  removal bar.  Statuses 14 (expired) and 16 (no tunnels) are local
+     *  queue / pool-empty conditions, not a fault of this specific tunnel.
      *
      *  @param status the I2CP MessageStatusMessage failure code
-     *  @return true if the failure is likely caused by the outbound tunnel
+     *  @return true only for hard outbound-dispatch failures
      *  @since 0.9.71+
      */
-    private static boolean isTunnelRelatedFailure(int status) {
+    static boolean isTunnelRelatedFailure(int status) {
         switch (status) {
-            case MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS:   // 16
-            case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:        // 7
-            case MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED:      // 14
-            case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:  // 3
-            case MessageStatusMessage.STATUS_SEND_FAILURE_ROUTER:       // 8
-            case MessageStatusMessage.STATUS_SEND_FAILURE_NETWORK:      // 9
-            case MessageStatusMessage.STATUS_SEND_FAILURE_OVERFLOW:     // 13
+            case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:    // 7
+            case MessageStatusMessage.STATUS_SEND_FAILURE_ROUTER:   // 8
+            case MessageStatusMessage.STATUS_SEND_FAILURE_NETWORK:  // 9
+            case MessageStatusMessage.STATUS_SEND_FAILURE_OVERFLOW: // 13
                 return true;
             default:
                 return false;
         }
+    }
+
+    /**
+     *  Whether the status is a best-effort send timeout (3) after a
+     *  successful dispatch.  Reported to the pool at a higher removal bar
+     *  so a congested destination or slow reply path cannot cascade-kill
+     *  healthy tunnels, while a tunnel that times out repeatedly still
+     *  rotates out before peers accumulate dozens of unreported failures.
+     *
+     *  @param status the I2CP MessageStatusMessage failure code
+     *  @return true for soft send timeouts only
+     *  @since 0.9.71+
+     */
+    static boolean isSoftSendFailure(int status) {
+        return status == MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE;
     }
 
     /**

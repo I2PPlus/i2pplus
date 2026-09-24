@@ -179,6 +179,24 @@ public interface TunnelInfo {
     public void incrementTestFailures();
 
     /**
+     *  Increment the soft (best-effort timeout) failure count only.
+     *  Soft status-3 timeouts must not touch the hard/test counter that
+     *  drives {@link #getTunnelFailed()} and selection gates.
+     *
+     *  @since 0.9.73+
+     */
+    public void incrementSoftFailures();
+
+    /**
+     *  Soft best-effort timeout count (status 3). Independent of
+     *  {@link #getConsecutiveFailures()}.
+     *
+     *  @return the soft failure count
+     *  @since 0.9.73+
+     */
+    public int getSoftFailures();
+
+    /**
      * The latency of the last tunnel test.
      *
      * @return latency in milliseconds, or -1 if not available
