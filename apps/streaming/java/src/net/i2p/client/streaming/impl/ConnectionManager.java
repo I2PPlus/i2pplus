@@ -222,6 +222,15 @@ class ConnectionManager {
     private final ConcurrentHashMap<Hash, long[]> _recentSyns = new ConcurrentHashMap<>();
 
     /**
+     *  Epoch-ms of each dest's most recent SYN-burst strike (first trip within
+     *  the burst window). A second trip within {@link #STRIKE_WINDOW_MS} of
+     *  this timestamp autobans; after the window the entry is cleared so a
+     *  single unlucky page-load burst is forgiven. Swept by BanExpiry.
+     *  @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, Long> _synBurstStrikes = new ConcurrentHashMap<>();
+
+    /**
      *  Cached sub-second burst config, refreshed by the BanExpiry sweeper rather than
      *  re-read from the property store on every validated SYN (hot path).
      *  @since 0.9.71+
@@ -285,15 +294,24 @@ class ConnectionManager {
 
     /**
      *  Autoban property: sub-second burst threshold (SYNs within rate window).
-     *  Default 20 SYNs per 1s = 20 req/s instantaneous.
-     *  A browser page load to a local service can easily fire 15-20 parallel
-     *  connections, each with SYN retransmits — the threshold must accommodate
-     *  legitimate parallel connection bursts, especially when
-     *  {@code i2cp.disableLoopback} routes local traffic over the network.
+     *  Default 40 SYNs per 1s = 40 req/s instantaneous.
+     *  A browser page load can fire 15-20 parallel connections, each with SYN
+     *  retransmits; empty-response retry dual-race adds up to 4 SYNs/s per
+     *  dest. The threshold must sit well above legitimate bursts so only a
+     *  serious abuser trips it. First trip is a strike (no ban); a second
+     *  trip within {@link #STRIKE_WINDOW_MS} autobans.
      *  @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_SYN_BURST = "i2p.streaming.tempBanSynBurst";
-    private static final int DEFAULT_TEMP_BAN_SYN_BURST = 20;
+    private static final int DEFAULT_TEMP_BAN_SYN_BURST = 40;
+
+    /**
+     *  Strike window for the two-strike SYN-burst gate: a second trip within
+     *  this many ms of the first autobans. A dest that trips once and then
+     *  quiesces for the window is forgiven (single unlucky page-load burst).
+     *  @since 0.9.71+
+     */
+    static final long STRIKE_WINDOW_MS = 60 * 1000;
 
     /**
      *  Ban a dest for the configured duration. Idempotent; an existing longer ban
@@ -510,6 +528,51 @@ class ConnectionManager {
     }
 
     /**
+     *  Pure decision for the two-strike SYN-burst gate: a first trip within
+     *  the burst window records a strike and does not ban (a single unlucky
+     *  page-load burst must not cost a 5-minute outage); a second trip within
+     *  {@link #STRIKE_WINDOW_MS} of the first autobans. After the window the
+     *  strike is forgiven.
+     *
+     *  @param lastStrikeAt epoch-ms of this dest's previous burst strike, or null
+     *  @param now current clock time
+     *  @param windowMs strike window (pass {@link #STRIKE_WINDOW_MS})
+     *  @return true if this trip should immediately autoban
+     *  @since 0.9.71+
+     */
+    static boolean shouldBanSynBurst(Long lastStrikeAt, long now, long windowMs) {
+        if (lastStrikeAt == null || windowMs <= 0)
+            return false;
+        long age = now - lastStrikeAt.longValue();
+        return age >= 0 && age < windowMs;
+    }
+
+    /**
+     *  Record a SYN-burst strike for {@code h} and decide whether this trip
+     *  autobans. First trip (or a trip after the strike window): store the
+     *  timestamp, return false. Second trip inside the window: leave the
+     *  timestamp in place (the ban reason supersedes further strikes), return
+     *  true.
+     *
+     *  @param h remote dest hash, non-null
+     *  @param now current clock time
+     *  @return true if this trip should autoban
+     *  @since 0.9.71+
+     */
+    private boolean noteSynBurstStrike(Hash h, long now) {
+        Long prev = _synBurstStrikes.get(h);
+        if (shouldBanSynBurst(prev, now, STRIKE_WINDOW_MS))
+            return true;
+        _synBurstStrikes.put(h, Long.valueOf(now));
+        if (_log.shouldWarn()) {
+            _log.warn("SYN burst strike for " + h.toBase32().substring(0, 6) +
+                      " (>" + _synBurst + " SYNs/" + _synRateMs + "ms); " +
+                      "second strike within " + (STRIKE_WINDOW_MS / 1000) + "s autobans");
+        }
+        return false;
+    }
+
+    /**
      *  Package-visible flood gate for the retransmit-SYN path in
      *  {@link ConnectionHandler#receiveNewSyn(Packet)}. A retransmitted SYN carries the
      *  stream IDs of a connection that already exists in the manager, so it never
@@ -522,13 +585,14 @@ class ConnectionManager {
      *
      *  <p>This routes the retransmit through the <em>same</em> per-destination
      *  sub-second burst window as fresh SYNs, so a dest that exceeds the burst
-     *  threshold across new <em>or</em> retransmitted SYNs is autobanned. Once
-     *  banned, subsequent calls return {@code true} (drop) immediately.
+     *  threshold across new <em>or</em> retransmitted SYNs is autobanned on the
+     *  second strike within the strike window. Once banned, subsequent calls
+     *  return {@code true} (drop) immediately.
      *
-     *  @param h remote dest hash of the retransmitted SYN's source, non-null
+     *  @param h remote dest hash, non-null
      *  @param now current clock time
      *  @return true if this SYN should be dropped (dest already temp-banned, or
-     *          this SYN tripped the burst gate and just banned it)
+     *          this SYN is the second burst strike and just banned it)
      *  @since 0.9.71+
      */
     boolean checkInboundSynFlood(Hash h, long now) {
@@ -537,9 +601,11 @@ class ConnectionManager {
         if (isTempBanned(h, now))
             return true;
         if (checkSynBurst(h, now)) {
-            banPeer(h, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms on inbound retransmit",
-                    now);
-            return true;
+            if (noteSynBurstStrike(h, now)) {
+                banPeer(h, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms on inbound retransmit",
+                        now);
+                return true;
+            }
         }
         return false;
     }
@@ -869,14 +935,17 @@ class ConnectionManager {
                         synPacket.getOptionalFrom().toBase32().substring(0, 6);
 
         // Sub-second SYN burst gate: a dest that blasts > tempBanSynBurst SYNs
-        // within tempBanSynRate-ms (a legit announce client never does) is
-        // auto-banned immediately, BEFORE the stream budget or refusal counters
-        // are consulted, so the burst cannot first consume budget slots.
+        // within tempBanSynRate-ms records a strike; a second strike within the
+        // strike window autobans, BEFORE the stream budget or refusal counters
+        // are consulted, so a sustained burst cannot first consume budget slots.
+        // A single unlucky page-load burst only strikes (no ban).
         if (from != null) {
             long now = _context.clock().now();
             if (!isTempBanned(fromHash, now) && checkSynBurst(fromHash, now)) {
-                banPeer(fromHash, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms",
-                        now);
+                if (noteSynBurstStrike(fromHash, now)) {
+                    banPeer(fromHash, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms",
+                            now);
+                }
             }
         }
 
@@ -2196,6 +2265,10 @@ if (tooManyStreamsForDest(peer.calculateHash(), getEffectiveMaxStreams())) {
             long windowMs = _synRateMs;
             if (windowMs > 0)
                 _recentSyns.entrySet().removeIf(e -> now - e.getValue()[0] >= windowMs);
+            // Forgive strikes older than the strike window so a single unlucky
+            // page-load burst never carries a ban across a long idle gap.
+            _synBurstStrikes.entrySet().removeIf(e ->
+                    now - e.getValue().longValue() >= STRIKE_WINDOW_MS);
             // Reconcile per-dest stream budgets against the live connection table once
             // per sweep, so any teardown that missed its removeStream() (e.g. a dest
             // torn down before the remote peer was established) cannot permanently

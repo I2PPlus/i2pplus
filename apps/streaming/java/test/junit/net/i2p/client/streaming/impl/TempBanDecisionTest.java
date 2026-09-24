@@ -125,6 +125,44 @@ public class TempBanDecisionTest {
         assertFalse(ConnectionManager.synBurstTripped(Long.valueOf(now - 100), 99, now, 500, 0));
     }
 
+    /* shouldBanSynBurst (two-strike gate) */
+
+    @Test
+    public void testFirstStrikeNeverBans() {
+        long now = 1000000;
+        // no prior strike -> record strike only, do not ban
+        assertFalse(ConnectionManager.shouldBanSynBurst(null, now, ConnectionManager.STRIKE_WINDOW_MS));
+    }
+
+    @Test
+    public void testSecondStrikeInsideWindowBans() {
+        long now = 1000000;
+        long w = ConnectionManager.STRIKE_WINDOW_MS;
+        // second trip 1s after first -> ban
+        assertTrue(ConnectionManager.shouldBanSynBurst(now - 1000, now, w));
+        // just inside the window boundary
+        assertTrue(ConnectionManager.shouldBanSynBurst(now - (w - 1), now, w));
+    }
+
+    @Test
+    public void testStrikeAgedOutForgives() {
+        long now = 1000000;
+        long w = ConnectionManager.STRIKE_WINDOW_MS;
+        // strike at or before the window boundary is forgiven (age >= w)
+        assertFalse(ConnectionManager.shouldBanSynBurst(now - w, now, w));
+        assertFalse(ConnectionManager.shouldBanSynBurst(now - (w + 1), now, w));
+        // clock skew (prior strike in the future) must not ban
+        assertFalse(ConnectionManager.shouldBanSynBurst(now + 5000, now, w));
+    }
+
+    @Test
+    public void testStrikeWindowDisabledNeverBans() {
+        long now = 1000000;
+        // windowMs <= 0 disables the two-strike ban path
+        assertFalse(ConnectionManager.shouldBanSynBurst(now - 1, now, 0));
+        assertFalse(ConnectionManager.shouldBanSynBurst(now - 1, now, -1));
+    }
+
     /* tooManyStreamsForDest (per-dest stream budget) */
 
     @Test

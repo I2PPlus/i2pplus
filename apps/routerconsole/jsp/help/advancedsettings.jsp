@@ -581,10 +581,10 @@
 <tr><td><%=intl._t("Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.tempBanSynBurst={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before an immediate autoban is imposed. This provides a sub-second fast-path ban for connection floods that would otherwise overwhelm the refusal counter. [Default is 20]")%></td></tr>
+<tr><td><%=intl._t("Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.tempBanSynRate={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, an immediate autoban is triggered. [Default is 1000 (1 second)]")%></td></tr>
+<tr><td><%=intl._t("Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxMaxConcurrentStreams={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]")%></td></tr>
