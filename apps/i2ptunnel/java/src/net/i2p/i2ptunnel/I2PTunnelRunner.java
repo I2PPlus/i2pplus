@@ -7,12 +7,17 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PushbackInputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.net.ssl.SSLException;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocket;
@@ -95,6 +100,92 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  @since 0.9.71+
      */
     static final int MAX_RESUME_CYCLES = 32;
+
+    /**
+     *  Base delay before empty-retry cycle N+1 (ms). Combined with exponential
+     *  growth this keeps successful-connect-but-empty retries from spinning
+     *  back-to-back and stampeding the remote SYN-burst gate.
+     *  @since 0.9.71+
+     */
+    static final long EMPTY_CYCLE_BASE_DELAY_MS = 150;
+    /** Cap for empty-retry inter-cycle delay (ms). @since 0.9.71+ */
+    static final long EMPTY_CYCLE_MAX_DELAY_MS = 1200;
+    /** Per-dest race token bucket capacity (SYNs worth of budget). @since 0.9.71+ */
+    static final int RACE_TOKENS_MAX = 6;
+    /** Token refill rate: tokens per second, keyed per remote dest. @since 0.9.71+ */
+    static final int RACE_REFILL_PER_SEC = 6;
+    /** Budget cost of one dual-race open (two SYNs). @since 0.9.71+ */
+    static final int RACE_COST_TOKENS = 2;
+    /** Budget cost of one single-socket open on the empty path. @since 0.9.71+ */
+    static final int SINGLE_COST_TOKENS = 1;
+    /** Stagger between the two race connects (ms) to avoid same-tick double SYN. @since 0.9.71+ */
+    static final long RACE_STAGGER_MS = 100;
+    /** Overall wait for a race winner's first response byte (ms). @since 0.9.71+ */
+    static final long EMPTY_RACE_TIMEOUT_MS = 30 * 1000;
+    /**
+     *  No-bytes read timeout (ms) once a response body has started streaming.
+     *  Armed after the first body byte so a black-holed tunnel fails over to
+     *  Range resume instead of pinning the runner for the full browser window.
+     *  @since 0.9.71+
+     */
+    static final long BODY_STALL_READ_TIMEOUT_MS = 30 * 1000;
+
+    /**
+     *  Delay before empty-retry cycle {@code cycle} (1-based, after the cycle
+     *  counter has been incremented). Cycle 1 races immediately (the prior
+     *  attempt already failed); later cycles back off exponentially so a
+     *  reachable-but-empty dest cannot spin at full rate.
+     *
+     *  @param cycle 1-based empty-retry cycle number
+     *  @return delay in ms before invoking the reconnect callback
+     *  @since 0.9.71+
+     */
+    static long emptyCycleDelayMs(int cycle) {
+        if (cycle <= 1) {return 0;}
+        int shift = cycle - 2;
+        if (shift > 3) {shift = 3;}
+        return Math.min(EMPTY_CYCLE_MAX_DELAY_MS, EMPTY_CYCLE_BASE_DELAY_MS << shift);
+    }
+
+    /**
+     *  Refill a per-dest race token bucket in place. State is
+     *  {@code {tokensMilli, lastRefillMs}}; tokens are held in milli-units so
+     *  a whole-second refill can be applied from a millisecond delta without
+     *  truncation to zero.
+     *
+     *  @param state non-null {@code long[2]} bucket, updated in place
+     *  @param now current epoch-ms
+     *  @return the same state array
+     *  @since 0.9.71+
+     */
+    static long[] refillRaceBudget(long[] state, long now) {
+        if (state == null) {return null;}
+        if (now > state[1]) {
+            long tokens = state[0] + (now - state[1]) * RACE_REFILL_PER_SEC;
+            state[0] = Math.min(RACE_TOKENS_MAX * 1000L, tokens);
+            state[1] = now;
+        }
+        return state;
+    }
+
+    /**
+     *  Try to consume {@code costTokens} from the race budget, refilling first.
+     *  Insufficient balance leaves the bucket unchanged and returns false.
+     *
+     *  @param state non-null {@code long[2]} bucket, updated in place when consumed
+     *  @param now current epoch-ms
+     *  @param costTokens whole tokens to consume (1 = single open, 2 = dual-race)
+     *  @return true if the budget allowed the open
+     *  @since 0.9.71+
+     */
+    static boolean tryConsumeRaceBudget(long[] state, long now, int costTokens) {
+        if (state == null || costTokens <= 0) {return false;}
+        refillRaceBudget(state, now);
+        long cost = costTokens * 1000L;
+        if (state[0] < cost) {return false;}
+        state[0] -= cost;
+        return true;
+    }
 
     /**
      *  Progress-based budget for body-resume cycles. Pure decision state so
@@ -214,6 +305,32 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
          * @return a freshly connected I2P socket to retry on, or null to give up
          */
         public I2PSocket reconnect(Exception cause);
+
+        /**
+         *  Open one or two sockets for an empty-response retry. Two sockets are
+         *  raced by the runner (first response byte wins) so a dest that black-holes
+         *  one tunnel path still recovers on the alternate. The default opens a
+         *  single socket via {@link #reconnect(Exception)} so existing callbacks
+         *  keep working unchanged.
+         *
+         *  @param cause the cause of the empty completion, or null
+         *  @return 1–2 freshly connected sockets (index 0 is primary), or null to give up
+         *  @since 0.9.71+
+         */
+        public default I2PSocket[] reconnectPair(Exception cause) {
+            I2PSocket s = reconnect(cause);
+            return s == null ? null : new I2PSocket[]{s};
+        }
+
+        /**
+         *  Release any per-dest permit held for a dual-race's secondary socket.
+         *  Called by the runner as soon as the race settles (winner chosen or
+         *  both legs failed) so the extra permit is not held for the download.
+         *  Default no-op for single-socket callbacks.
+         *
+         *  @since 0.9.71+
+         */
+        public default void releaseRacePermit() { /* no extra permit */ }
     }
 
     /**
@@ -849,6 +966,143 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
+     *  Winner of a dual-race empty retry: the socket that produced the first
+     *  response byte, with a pushback stream that still holds that byte so the
+     *  forwarder never loses the head of the response.
+     */
+    private static final class RaceWin {
+        final I2PSocket sock;
+        final InputStream in;
+
+        RaceWin(I2PSocket sock, InputStream in) {
+            this.sock = sock;
+            this.in = in;
+        }
+    }
+
+    /**
+     *  Race two freshly connected sockets for an empty-response retry: write
+     *  the buffered request to both, then the first socket to deliver a
+     *  non-EOF byte wins. The loser is closed; a total failure (both empty,
+     *  timed out, or errored) returns null so the outer cycle can burn an
+     *  attempt. Pure I/O — no budget/permit decisions live here.
+     *
+     *  @param pair two non-null sockets from {@link ReconnectCallback#reconnectPair}
+     *  @param request buffered request bytes, may be null (nothing to re-send)
+     *  @return the winner with its pushback stream, or null if neither produced data
+     *  @since 0.9.71+
+     */
+    private RaceWin raceEmptyPair(I2PSocket[] pair, byte[] request) {
+        final I2PSocket sockA = pair[0];
+        final I2PSocket sockB = pair[1];
+        final AtomicReference<RaceWin> winner = new AtomicReference<>();
+        final AtomicInteger failures = new AtomicInteger();
+        final CountDownLatch settled = new CountDownLatch(1);
+        PushbackInputStream pA;
+        PushbackInputStream pB;
+        try {
+            pA = new PushbackInputStream(sockA.getInputStream(), 32);
+            pB = new PushbackInputStream(sockB.getInputStream(), 32);
+            if (request != null) {
+                // isRetryableRequest() guarantees GET/HEAD — no body, flush is safe.
+                OutputStream outA = sockA.getOutputStream();
+                outA.write(request);
+                outA.flush();
+                OutputStream outB = sockB.getOutputStream();
+                outB.write(request);
+                outB.flush();
+            }
+        } catch (IOException ioe) {
+            if (_log.shouldWarn()) {_log.warn("Empty-race: failed to prepare sockets", ioe);}
+            closeQuietly(sockA);
+            closeQuietly(sockB);
+            return null;
+        }
+        final PushbackInputStream inA = pA;
+        final PushbackInputStream inB = pB;
+        startRaceLeg("A", sockA, inA, winner, failures, settled);
+        startRaceLeg("B", sockB, inB, winner, failures, settled);
+        try {
+            if (!settled.await(EMPTY_RACE_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+                if (_log.shouldWarn()) {_log.warn("Empty-race: no first byte within " + EMPTY_RACE_TIMEOUT_MS + "ms");}
+            }
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+        RaceWin win = winner.get();
+        if (win != null) {
+            I2PSocket loser = (win.sock == sockA) ? sockB : sockA;
+            closeQuietly(loser);
+            if (_log.shouldInfo()) {_log.info("Empty-race winner selected");}
+            return win;
+        }
+        closeQuietly(sockA);
+        closeQuietly(sockB);
+        if (_log.shouldInfo()) {
+            _log.info("Empty-race both legs failed (settled=" + settled.getCount() +
+                      ", failures=" + failures.get() + ')');
+        }
+        return null;
+    }
+
+    /**
+     *  One race leg: read a single first byte, unread it into a pushback
+     *  stream, and publish the win. EOF / timeout / IOException counts as a
+     *  leg failure; the second failure (or overall timeout) settles the race.
+     *
+     *  @param label "A" or "B" for log context
+     *  @param sock  the socket this leg is reading from (closed by caller on loss)
+     *  @param in    pushback stream wrapping that socket's input
+     *  @param winner shared winner slot (first CAS wins)
+     *  @param failures shared failure counter
+     *  @param settled counted down when the race has a winner or both legs failed
+     *  @since 0.9.71+
+     */
+    private void startRaceLeg(String label, final I2PSocket sock, final PushbackInputStream in,
+                              final AtomicReference<RaceWin> winner,
+                              final AtomicInteger failures, final CountDownLatch settled) {
+        Runnable leg = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int b = in.read();
+                    if (b >= 0) {
+                        in.unread(b);
+                        if (winner.compareAndSet(null, new RaceWin(sock, in))) {
+                            settled.countDown();
+                            return;
+                        }
+                    }
+                } catch (IOException ioe) {
+                    if (_log.shouldDebug()) {_log.debug("Empty-race leg " + label + " failed: " + ioe.getMessage());}
+                }
+                if (failures.incrementAndGet() >= 2) {
+                    settled.countDown();
+                }
+            }
+        };
+        Thread t = new Thread(leg, "EmptyRace-" + label);
+        t.setDaemon(true);
+        t.start();
+    }
+
+    private static void closeQuietly(I2PSocket sock) {
+        if (sock == null) {return;}
+        try {sock.close();} catch (IOException ioe) {/* ignored */}
+    }
+
+    private static boolean sleepQuietly(long delayMs) {
+        if (delayMs <= 0) {return true;}
+        try {
+            Thread.sleep(delayMs);
+            return true;
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
+    }
+
+    /**
      *  Resume an incomplete Content-Length body on a fresh I2P connection.
      *
      *  <p>Rotates to a new tunnel via {@link ReconnectCallback}, re-sends the
@@ -1090,10 +1344,16 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         }
                         break;
                     }
+                    // Pace later cycles so a reachable-but-empty dest cannot spin
+                    // back-to-back SYNs through the remote burst gate.
+                    if (emptyCycleDelayMs(emptyReconnectCycles) > 0 &&
+                        !sleepQuietly(emptyCycleDelayMs(emptyReconnectCycles))) {
+                        break;
+                    }
                     Exception e = fromI2P.getFailure();
                     if (e == null && toI2P != null) {e = toI2P.getFailure();}
-                    I2PSocket fresh = _reconnectCallback.reconnect(e);
-                    if (fresh == null) {break;}
+                    I2PSocket[] pair = _reconnectCallback.reconnectPair(e);
+                    if (pair == null || pair.length == 0) {break;}
                     // The dead connection is done; retire it from the shared socket list
                     // and swap in the fresh one the callback obtained.
                     //
@@ -1106,7 +1366,22 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     // which would sever the very browser socket we are trying to keep open.
                     if (sockList != null) {synchronized (slock) {sockList.remove(i2ps);}}
                     try {i2ps.close();} catch (IOException ioe) {/* ignored */}
-                    i2ps = fresh;
+                    if (pair.length >= 2) {
+                        RaceWin win = raceEmptyPair(pair, initialI2PData);
+                        _reconnectCallback.releaseRacePermit();
+                        if (win == null) {continue;}
+                        i2ps = win.sock;
+                        i2pin = win.in;
+                        i2pout = null;
+                        if (sockList != null) {synchronized (slock) {sockList.add(i2ps);}}
+                        if (_log.shouldInfo()) {
+                            _log.info("Empty-response dual-race selected a winner socket");
+                        }
+                        totalReceived = 0;
+                        redriveReceiveForwarder(out, i2pin);
+                        continue;
+                    }
+                    i2ps = pair[0];
                     i2pin = i2ps.getInputStream();
                     i2pout = i2ps.getOutputStream();
                     if (initialI2PData != null) {
@@ -1286,6 +1561,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         private volatile Exception _failure;
         /** flag to signal this forwarder should stop */
         public volatile boolean done;
+        /** true once the stall read-timeout has been armed on the I2P socket */
+        private boolean _stallArmed;
 
         /**
          *  @param cb may be null, only used for toI2P == false
@@ -1318,6 +1595,13 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         if (_toI2P) {totalSent += len;}
                         else {
                             if (totalReceived == 0 && _callback != null) {_callback.onSuccess();}
+                            // First body byte: arm a stall timeout so a subsequent
+                            // black-hole fails over instead of blocking forever.
+                            if (!_stallArmed) {
+                                _stallArmed = true;
+                                try {i2ps.setReadTimeout(BODY_STALL_READ_TIMEOUT_MS);}
+                                catch (RuntimeException re) { /* older socket impl */ }
+                            }
                             // Count the upstream bytes BEFORE the browser write. If the
                             // browser socket is already closed (e.g. Pipe closed under a
                             // congested stream), the write throws and the bytes would

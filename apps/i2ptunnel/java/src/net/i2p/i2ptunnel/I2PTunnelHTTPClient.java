@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PushbackInputStream;
 import java.io.Writer;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
@@ -18,6 +20,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import net.i2p.I2PException;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -112,9 +115,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  fire many parallel requests that each independently call
      *  {@code createI2PSocket()}, creating a SYN storm to the remote server
      *  (20+ simultaneous SYNs observed).  The server's inbound SYN-burst gate
-     *  ({@code ConnectionManager.checkSynBurst}) can auto-ban the source for
-     *  24 hours once the burst exceeds {@code tempBanSynBurst} in
-     *  {@code tempBanSynRate} ms.
+     *  ({@code ConnectionManager.checkSynBurst}) records a strike for exceeding
+     *  {@code tempBanSynBurst} SYNs in {@code tempBanSynRate} ms and autobans
+     *  on a second strike within 60 seconds.
      *
      *  <p>The gate is pure insurance: browsers already self-limit parallel
      *  connections per host (typically 6 over HTTP/1.1, fewer under HTTP/2),
@@ -128,7 +131,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  <p>A permit is acquired before {@code createI2PSocket()} and released when
      *  the I2P socket is closed (after the tunnel-runner completes).  With I2P
      *  keepalive the socket is reopened per request, so the permit lifecycle
-     *  matches the actual connection lifetime.
+     *  matches the actual connection lifetime.  A dual-race secondary socket
+     *  holds an extra permit only until the race settles.
      *
      *  @since 0.9.71+
      */
@@ -142,6 +146,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *  @since 0.9.71+
      */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _activeConns =
+        new ConcurrentHashMap<>(8);
+
+    /**
+     *  Per-remote-dest race token bucket for empty-response dual-race opens.
+     *  Values are {@code long[2]} = {@code {tokensMilli, lastRefillMs}}, shared
+     *  across all parallel requests to the same dest so the SYN budget is a
+     *  property of the remote (one source dest from their view), not of a
+     *  single browser request. See {@link I2PTunnelRunner#tryConsumeRaceBudget}.
+     *
+     *  @since 0.9.71+
+     */
+    private static final ConcurrentHashMap<Hash, long[]> _raceBudget =
         new ConcurrentHashMap<>(8);
 
     /**
@@ -507,10 +523,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         boolean plus = false;
         I2PSocket i2ps = null;
         Hash heldPermitDest = null;
+        // Speculative secondary connect for GET/HEAD body-resume failover.
+        final AtomicReference<WarmConn> warmRef = new AtomicReference<>();
         try {
             s.setSoTimeout(INITIAL_SO_TIMEOUT);
             out = s.getOutputStream();
-            InputReader reader = new InputReader(s.getInputStream());
+            // Pushback so a peer-closed probe during I2P connect retries can
+            // unread a pipelined byte instead of consuming it.
+            InputReader reader = new InputReader(new PushbackInputStream(s.getInputStream(), 64));
             int requestCount = 0;
             // HTTP Persistent Connections (RFC 2616)
             // for the local browser-to-client-proxy socket.
@@ -1568,13 +1588,38 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // Fail fast when the client tunnel pool provably has no tunnels
                 // and none are being built - further retries cannot succeed.
                 int connectAttempts = 0;
+                int timeoutConnectAttempts = 0;
                 while (true) {
                     try {
                         i2ps = createI2PSocket(clientDest, sktOpts);
                         break;
                     } catch (IOException ioe) {
                         connectAttempts++;
-                        if (connectAttempts >= I2P_CONNECT_MAX_RETRIES || poolIsDefinitivelyDown()) {
+                        boolean timedOut = isConnectTimeout(ioe);
+                        if (timedOut) {timeoutConnectAttempts++;}
+                        // Do not burn the remaining connect budget on a browser that
+                        // already hung up (CLOSE-WAIT): free the thread and permit now.
+                        if (isBrowserPeerClosed(s, reader, method)) {
+                            if (_log.shouldInfo()) {
+                                _log.info(getPrefix(requestId) +
+                                          "Browser closed during I2P connect; aborting retries");
+                            }
+                            if (heldPermitDest != null) {
+                                releaseConnPermit(heldPermitDest);
+                                heldPermitDest = null;
+                            }
+                            throw ioe;
+                        }
+                        // createI2PSocket already failover-ed across tunnels; do not
+                        // outer-retry timeouts (each attempt can burn MAX_TIMEOUT_FAILOVER
+                        // full connect-timeout legs).
+                        if (connectAttempts >= I2P_CONNECT_MAX_RETRIES || poolIsDefinitivelyDown() ||
+                            timedOut) {
+                            if (_log.shouldWarn() && timedOut) {
+                                _log.warn(getPrefix(requestId) +
+                                          "Connect timed out after " + timeoutConnectAttempts +
+                                          " attempt(s); not retrying");
+                            }
                             if (heldPermitDest != null) {
                                 releaseConnPermit(heldPermitDest);
                                 heldPermitDest = null;
@@ -1637,38 +1682,93 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 if (("GET".equals(method) || "HEAD".equals(method)) && emptyBudget > 0) {
                     final Destination reconnectDest = clientDest;
                     final int reconnectPort = remotePort;
-                    hrunner.setReconnectCallback((cause) -> {
-                        for (int attempt = 1; attempt <= emptyBudget; attempt++) {
+                    // Secondary-socket permit for a dual race; held only until the
+                    // runner settles the race (releaseRacePermit).
+                    final AtomicReference<Hash> racePermit = new AtomicReference<>();
+                    hrunner.setReconnectCallback(new I2PTunnelRunner.ReconnectCallback() {
+                        @Override
+                        public I2PSocket reconnect(Exception cause) {
+                            WarmConn w = warmRef.getAndSet(null);
+                            if (w != null) {
+                                // Hand the warm socket over as the request's primary.
+                                // heldPermitDest already covers this request; drop the
+                                // warm permit so we are not double-counting, then
+                                // replenish a fresh speculative connect in background.
+                                releaseConnPermit(w.permit);
+                                openSpeculativeWarm(reconnectDest, reconnectPort, emptyBudget,
+                                                    requestId, warmRef);
+                                if (_log.shouldInfo()) {
+                                    _log.info(getPrefix(requestId) +
+                                              "Body-resume took speculative warm socket");
+                                }
+                                return w.sock;
+                            }
+                            return openEmptyReconnect(reconnectDest, reconnectPort, emptyBudget, requestId, false);
+                        }
+
+                        @Override
+                        public I2PSocket[] reconnectPair(Exception cause) {
+                            Hash destHash = reconnectDest.calculateHash();
+                            long now = System.currentTimeMillis();
+                            long[] budget = _raceBudget.computeIfAbsent(destHash,
+                                    k -> new long[]{I2PTunnelRunner.RACE_TOKENS_MAX * 1000L, now});
+                            boolean wantRace;
+                            synchronized (budget) {
+                                wantRace = I2PTunnelRunner.tryConsumeRaceBudget(budget, now,
+                                        I2PTunnelRunner.RACE_COST_TOKENS);
+                            }
+                            if (!wantRace) {
+                                I2PSocket single = openEmptyReconnect(reconnectDest, reconnectPort,
+                                        emptyBudget, requestId, false);
+                                return single == null ? null : new I2PSocket[]{single};
+                            }
+                            // Race needs an extra permit for the second socket; the first
+                            // socket rides the request's existing heldPermitDest. Fail open
+                            // to single-socket when at MAX_CONNS_PER_DEST.
+                            if (!tryAcquireConnPermit(destHash)) {
+                                if (_log.shouldInfo()) {
+                                    _log.info(getPrefix(requestId) + "Empty-race at connection cap, falling back to single");
+                                }
+                                I2PSocket single = openEmptyReconnect(reconnectDest, reconnectPort,
+                                        emptyBudget, requestId, false);
+                                return single == null ? null : new I2PSocket[]{single};
+                            }
                             try {
-                                I2PSocketOptions opts = getDefaultOptions();
-                                if (reconnectPort > 0) {opts.setPort(reconnectPort);}
-                                I2PSocket fresh = createI2PSocket(reconnectDest, opts);
-                                if (_log.shouldInfo()) {
-                                    // Shared callback serves both empty-response retry and
-                                    // mid-body Range resume; the runner already logged which
-                                    // path is active at Info before invoking us.
-                                    _log.info(getPrefix(requestId) + "I2P reconnect attempt " + attempt + '/' + emptyBudget +
-                                              " to " + reconnectDest.calculateHash().toBase32());
+                                I2PSocket first = openEmptyReconnect(reconnectDest, reconnectPort,
+                                        emptyBudget, requestId, true);
+                                if (first == null) {
+                                    releaseConnPermit(destHash);
+                                    return null;
                                 }
-                                return fresh;
-                            } catch (IOException ioe) {
-                                if (_log.shouldInfo()) {
-                                    _log.info(getPrefix(requestId) + "I2P reconnect failed (attempt " + attempt +
-                                              '/' + emptyBudget + "): " + ioe.getMessage());
+                                sleepQuietly(I2PTunnelRunner.RACE_STAGGER_MS);
+                                I2PSocket second = openEmptyReconnect(reconnectDest, reconnectPort,
+                                        emptyBudget, requestId, false);
+                                if (second == null) {
+                                    closeQuietly(first);
+                                    releaseConnPermit(destHash);
+                                    return null;
                                 }
-                                // Fail fast once the client outbound pool is provably dead:
-                                // no further attempt can succeed, so return null to surface a
-                                // swift empty-response error instead of stalling the browser
-                                // across the whole backoff budget.
-                                if (shouldStopEmptyReconnect(poolState())) {return null;}
-                                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
-                            } catch (I2PException ie) {
-                                if (shouldStopEmptyReconnect(poolState())) {return null;}
-                                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
+                                racePermit.set(destHash);
+                                if (_log.shouldInfo()) {
+                                    _log.info(getPrefix(requestId) + "Empty-race opened dual sockets to " +
+                                              destHash.toBase32());
+                                }
+                                return new I2PSocket[]{first, second};
+                            } catch (RuntimeException re) {
+                                releaseConnPermit(destHash);
+                                throw re;
                             }
                         }
-                        return null;
+
+                        @Override
+                        public void releaseRacePermit() {
+                            Hash h = racePermit.getAndSet(null);
+                            if (h != null) {releaseConnPermit(h);}
+                        }
                     });
+                    // Open one secondary I2P socket while the primary is healthy so a
+                    // mid-body stall/failure can fail over without a cold handshake.
+                    openSpeculativeWarm(reconnectDest, reconnectPort, emptyBudget, requestId, warmRef);
                 }
                 t = hrunner;
             }
@@ -1689,6 +1789,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 releaseConnPermit(heldPermitDest);
                 heldPermitDest = null;
             }
+            discardWarmSocket(warmRef);
 
             // check if whatever was in the response does not allow keepalive
             if (keepalive && hrunner != null && !hrunner.getKeepAliveSocket()) {
@@ -1736,6 +1837,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 releaseConnPermit(heldPermitDest);
                 heldPermitDest = null;
             }
+            discardWarmSocket(warmRef);
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
@@ -1759,6 +1861,174 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         buf.append("\r\nConnection: close\r\n\r\n");
         try {out.write(buf.toString().getBytes(StandardCharsets.UTF_8));}
         catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
+     *  Probe whether the browser peer has closed while we wait on I2P connect.
+     *  Only meaningful for GET/HEAD (no request body still unread). A timed
+     *  read returns -1 on FIN (peer closed), times out when still open, or
+     *  yields a pipelined byte which is pushed back so it is not lost.
+     *
+     *  @param s      browser-facing socket
+     *  @param reader the request reader wrapping a PushbackInputStream
+     *  @param method HTTP method, or null
+     *  @return true if the peer has closed (or the socket is unusable)
+     *  @since 0.9.71+
+     */
+    static boolean isBrowserPeerClosed(Socket s, InputReader reader, String method) {
+        if (s == null || reader == null) {return false;}
+        if (method != null && !("GET".equals(method) || "HEAD".equals(method))) {
+            // Request body may still be unread; probing would steal bytes.
+            return false;
+        }
+        return reader.peerClosed(s);
+    }
+
+    /**
+     *  Speculative secondary I2P connection held ready for mid-body failover.
+     *  Owns its own per-dest permit until taken (permit released by the take
+     *  path, which then relies on the request's heldPermitDest) or discarded.
+     *
+     *  @since 0.9.71+
+     */
+    private static final class WarmConn {
+        final I2PSocket sock;
+        final Hash permit;
+
+        WarmConn(I2PSocket sock, Hash permit) {
+            this.sock = sock;
+            this.permit = permit;
+        }
+    }
+
+    /**
+     *  Open one secondary I2P socket in the background while the primary is
+     *  healthy. Fail-open: if the per-dest permit is unavailable or the connect
+     *  fails, no warm socket is installed and resume falls back to a cold open.
+     *  Skipped when {@link #poolIsDefinitivelyDown()} so a dead outbound pool
+     *  does not accumulate speculative connect storms.
+     *
+     *  @param dest remote destination
+     *  @param port remote port (0 = default)
+     *  @param emptyBudget connect attempt budget for the secondary
+     *  @param requestId logging prefix id
+     *  @param warmRef slot holding the warm connection, or null
+     *  @since 0.9.71+
+     */
+    private void openSpeculativeWarm(final Destination dest, final int port,
+                                     final int emptyBudget, final long requestId,
+                                     final AtomicReference<WarmConn> warmRef) {
+        if (warmRef == null || warmRef.get() != null) {return;}
+        // Do not open warm sockets while the outbound pool is provably dead;
+        // each warm open is a full createI2PSocket (failover × timeout).
+        if (poolIsDefinitivelyDown()) {
+            if (_log.shouldDebug()) {
+                _log.debug(getPrefix(requestId) + "Skipping speculative warm; pool down");
+            }
+            return;
+        }
+        final Hash destHash = dest.calculateHash();
+        if (!tryAcquireConnPermit(destHash)) {
+            // At cap; resume will cold-open if it can (fail-open).
+            return;
+        }
+        I2PThread t = new I2PThread(new Runnable() {
+            @Override
+            public void run() {
+                I2PSocket s = null;
+                boolean installed = false;
+                try {
+                    if (warmRef.get() != null) {return;}
+                    s = openEmptyReconnect(dest, port, emptyBudget, requestId, true);
+                    if (s == null) {return;}
+                    WarmConn w = new WarmConn(s, destHash);
+                    if (warmRef.compareAndSet(null, w)) {
+                        installed = true;
+                        s = null;
+                        if (_log.shouldInfo()) {
+                            _log.info(getPrefix(requestId) +
+                                      "Opened speculative warm socket to " + destHash.toBase32());
+                        }
+                    }
+                } finally {
+                    if (!installed) {
+                        closeQuietly(s);
+                        releaseConnPermit(destHash);
+                    }
+                }
+            }
+        }, "SpecWarmConnect");
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /**
+     *  Close an unused speculative warm socket and release its permit.
+     *  Safe to call with an empty reference.
+     *
+     *  @param warmRef the warm-connection slot; cleared atomically
+     *  @since 0.9.71+
+     */
+    private static void discardWarmSocket(AtomicReference<WarmConn> warmRef) {
+        if (warmRef == null) {return;}
+        WarmConn w = warmRef.getAndSet(null);
+        if (w == null) {return;}
+        closeQuietly(w.sock);
+        releaseConnPermit(w.permit);
+    }
+
+    /**
+     *  Open a single fresh I2P socket for an empty-response / body-resume
+     *  reconnect, with the standard attempt budget and dead-pool fail-fast.
+     *  Shared by the {@code reconnect()} and {@code reconnectPair()} legs of
+     *  the callback so both paths get identical backoff and stop conditions.
+     *
+     *  @param dest remote destination
+     *  @param port remote port (0 = default)
+     *  @param emptyBudget max connect attempts for this request
+     *  @param requestId logging prefix id
+     *  @param quiet when true, suppress per-attempt Info logs (used for the
+     *         staggered first race leg so the second leg's log is the pair marker)
+     *  @return a connected socket, or null if the budget / dead pool stopped us
+     *  @since 0.9.71+
+     */
+    private I2PSocket openEmptyReconnect(Destination dest, int port, int emptyBudget,
+                                         long requestId, boolean quiet) {
+        for (int attempt = 1; attempt <= emptyBudget; attempt++) {
+            try {
+                I2PSocketOptions opts = getDefaultOptions();
+                if (port > 0) {opts.setPort(port);}
+                I2PSocket fresh = createI2PSocket(dest, opts);
+                if (!quiet && _log.shouldInfo()) {
+                    // Shared callback serves both empty-response retry and
+                    // mid-body Range resume; the runner already logged which
+                    // path is active at Info before invoking us.
+                    _log.info(getPrefix(requestId) + "I2P reconnect attempt " + attempt + '/' + emptyBudget +
+                              " to " + dest.calculateHash().toBase32());
+                }
+                return fresh;
+            } catch (IOException ioe) {
+                if (!quiet && _log.shouldInfo()) {
+                    _log.info(getPrefix(requestId) + "I2P reconnect failed (attempt " + attempt +
+                              '/' + emptyBudget + "): " + ioe.getMessage());
+                }
+                // Fail fast once the client outbound pool is provably dead:
+                // no further attempt can succeed, so return null to surface a
+                // swift empty-response error instead of stalling the browser
+                // across the whole backoff budget.
+                if (shouldStopEmptyReconnect(poolState())) {return null;}
+                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
+            } catch (I2PException ie) {
+                if (shouldStopEmptyReconnect(poolState())) {return null;}
+                if (!sleepQuietly(getConnectRetryDelayMs(attempt))) {return null;}
+            }
+        }
+        return null;
+    }
+
+    private static void closeQuietly(I2PSocket sock) {
+        if (sock == null) {return;}
+        try {sock.close();} catch (IOException ioe) {/* ignored */}
     }
 
     /**
@@ -1987,6 +2257,42 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
         String readLine() throws IOException {
             return DataHelper.readLine(_s);
+        }
+
+        /**
+         *  Probe whether the peer closed during a long wait. A timed read
+         *  returns -1 on FIN (peer closed), times out when still open, or
+         *  yields a pipelined byte which is pushed back so it is not lost.
+         *
+         *  @param sock the peer-facing socket (used only for SO_TIMEOUT)
+         *  @return true if the peer has closed (or the stream is unusable)
+         *  @since 0.9.71+
+         */
+        boolean peerClosed(Socket sock) {
+            if (sock == null) {return false;}
+            int oldTimeout;
+            try {oldTimeout = sock.getSoTimeout();}
+            catch (IOException ioe) {return true;}
+            try {
+                sock.setSoTimeout(1);
+                try {
+                    int b = _s.read();
+                    if (b < 0) {return true;}
+                    if (_s instanceof PushbackInputStream) {
+                        ((PushbackInputStream) _s).unread(b);
+                    }
+                    return false;
+                } catch (SocketTimeoutException ste) {
+                    return false;
+                } catch (IOException ioe) {
+                    return true;
+                }
+            } catch (IOException ioe) {
+                return true;
+            } finally {
+                try {sock.setSoTimeout(oldTimeout);}
+                catch (IOException ioe) { /* restored best-effort */ }
+            }
         }
 
         /**
