@@ -262,6 +262,110 @@ public class PeerStateCongestionDecisionTest {
         assertEquals(2000, PeerState.cappedRefund(2000, 10, 2000));
     }
 
+    // ----- nextCongestionRTO -----
+
+    @Test
+    public void congestionDoesNotInflateRTOWithoutRTT() {
+        assertEquals(33000, PeerState.nextCongestionRTO(33000, 0, 0, 1000, 60000));
+        assertEquals(1000, PeerState.nextCongestionRTO(500, 0, 0, 1000, 60000));
+    }
+
+    @Test
+    public void congestionNeverDoublesRTO() {
+        // Pulls 2000 down to the RTT ceiling (1152); never inflates
+        assertEquals(1152, PeerState.nextCongestionRTO(2000, 96, 48, 1000, 60000));
+        // Below the RTT ceiling: unchanged
+        assertEquals(2000, PeerState.nextCongestionRTO(2000, 400, 100, 1000, 60000));
+    }
+
+    @Test
+    public void congestionCapsRunawayRTONotRTTEstimate() {
+        // rttRto = 96 + 48*4 = 288; ceiling = 288*4 = 1152
+        assertEquals(1152, PeerState.nextCongestionRTO(33000, 96, 48, 1000, 60000));
+    }
+
+    @Test
+    public void congestionLeansRTOWhenAlreadyBelowCeiling() {
+        // rttRto = 1000 + 250*4 = 2000; ceiling = 8000; current 3000 stays
+        assertEquals(3000, PeerState.nextCongestionRTO(3000, 1000, 250, 1000, 60000));
+    }
+
+    @Test
+    public void congestionRTOClampedToFloor() {
+        assertEquals(1000, PeerState.nextCongestionRTO(500, 100, 25, 1000, 60000));
+    }
+
+    @Test
+    public void congestionRTOClampedToCeilingParam() {
+        // ceiling would be 4000 but maxRTO is 3000
+        assertEquals(3000, PeerState.nextCongestionRTO(3000, 500, 100, 1000, 3000));
+    }
+
+    @Test
+    public void congestionRTTZeroOrNegativeTreatedAsUnknown() {
+        assertEquals(5000, PeerState.nextCongestionRTO(5000, -1, 100, 1000, 60000));
+        assertEquals(5000, PeerState.nextCongestionRTO(5000, 0, 0, 1000, 60000));
+    }
+
+    @Test
+    public void congestionHighRTTAllowsHigherRTO() {
+        // rttRto = 5000 + 500*4 = 7000; ceiling = 28000; current 20000 stays
+        assertEquals(20000, PeerState.nextCongestionRTO(20000, 5000, 500, 1000, 60000));
+    }
+
+    // ----- congestionCooldownElapsed -----
+
+    @Test
+    public void congestionCooldownRequiresFullRtoGap() {
+        assertFalse(PeerState.congestionCooldownElapsed(1000, 1000 + 4999, 1000));
+        assertTrue(PeerState.congestionCooldownElapsed(1000, 1000 + 5000, 1000));
+    }
+
+    @Test
+    public void congestionCooldownFloorsLowRto() {
+        // Post-death-spiral RTO of ~1s must not allow collapse every second
+        assertFalse(PeerState.congestionCooldownElapsed(1000, 1000 + 1000, 100));
+        assertFalse(PeerState.congestionCooldownElapsed(1000, 1000 + 4999, 100));
+        assertTrue(PeerState.congestionCooldownElapsed(1000, 1000 + 5000, 100));
+    }
+
+    @Test
+    public void congestionCooldownUsesRtoWhenAboveFloor() {
+        assertFalse(PeerState.congestionCooldownElapsed(0, 9999, 10000));
+        assertTrue(PeerState.congestionCooldownElapsed(0, 10000, 10000));
+    }
+
+    @Test
+    public void congestionCooldownFirstEventAfterFloor() {
+        assertFalse(PeerState.congestionCooldownElapsed(0, PeerState.CONGESTION_COOLDOWN_MIN_MS - 1, 100));
+        assertTrue(PeerState.congestionCooldownElapsed(0, PeerState.CONGESTION_COOLDOWN_MIN_MS, 100));
+    }
+
+    // ----- pathUnverifiedBlocksGrowth -----
+
+    @Test
+    public void pathUnverifiedBlocksGrowthDuringFreeze() {
+        assertTrue(PeerState.pathUnverifiedBlocksGrowth(1000, 5000));
+        assertTrue(PeerState.pathUnverifiedBlocksGrowth(4999, 5000));
+    }
+
+    @Test
+    public void pathUnverifiedAllowsGrowthAtAndAfterExpiry() {
+        assertFalse(PeerState.pathUnverifiedBlocksGrowth(5000, 5000));
+        assertFalse(PeerState.pathUnverifiedBlocksGrowth(5001, 5000));
+    }
+
+    @Test
+    public void pathUnverifiedZeroNeverBlocks() {
+        assertFalse(PeerState.pathUnverifiedBlocksGrowth(0, 0));
+        assertFalse(PeerState.pathUnverifiedBlocksGrowth(Long.MAX_VALUE, 0));
+    }
+
+    @Test
+    public void pathUnverifiedFreezeDurationIsPositive() {
+        assertTrue(PeerState.PATH_UNVERIFIED_FREEZE_MS > 0);
+    }
+
     /**
      *  A Mockito mock is enough for isTotalFail() (it only null-checks the
      *  message, so the real constructor's dependencies are never exercised).

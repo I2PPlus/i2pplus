@@ -80,6 +80,8 @@ public class PeerState {
     private int _receiveBytes;
     private long _receivePeriodBegin;
     private volatile long _lastCongestionOccurred;
+    /** When the path-unverified send-window growth freeze expires; 0 = not frozen. */
+    private volatile long _pathUnverifiedUntil;
     /**
      * When sendWindowBytes is below this, grow the window size quickly,
      * but after we reach it, grow it slowly.
@@ -248,11 +250,11 @@ public class PeerState {
         MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(MAX_SEND_WINDOW_CEILING, maxSendWindow));
 
         // RTO parameters
-        MIN_RTO = Math.max(250, Math.min(2000,
+        MIN_RTO = Math.max(100, Math.min(2000,
                    ctx.getProperty("i2p.transport.udp.minRTO", 1000)));
         INIT_RTO = Math.max(250, Math.min(2000,
                     ctx.getProperty("i2p.transport.udp.initRTO", 1000)));
-        MAX_RTO = Math.max(10000, Math.min(120000,
+        MAX_RTO = Math.max(3000, Math.min(120000,
                    ctx.getProperty("i2p.transport.udp.maxRTO", 60*1000)));
 
         // Concurrent message parameters
@@ -428,6 +430,22 @@ public class PeerState {
      */
     private static volatile int POST_RTO_WINDOW_MTUS = 3;
     /**
+     * Floor on the gap between full congestion responses (ms).
+     * Congestion cooldown used to track {@code _rto}, which the death-spiral
+     * fix pulled from tens of seconds down to ~1s — allowing a window collapse
+     * every second under sustained loss. Real congestion still uses
+     * {@code max(rto, this)}; migration never reaches this path.
+     * @since 0.9.72+
+     */
+    static final long CONGESTION_COOLDOWN_MIN_MS = 5000;
+    /**
+     * How long send-window growth stays frozen after a path-unverified
+     * migration signal (ms). Refreshed while the path remains unverified;
+     * cleared by {@link #pathVerified()} when migration ends.
+     * @since 0.9.72+
+     */
+    static final long PATH_UNVERIFIED_FREEZE_MS = 5000;
+    /**
      * Outbound message queue depth per peer, -1 = use router config.
      * Set by the Tuner when autotuning router.peerOutboundQueueSize.
      * @since 0.9.71+
@@ -479,17 +497,21 @@ public class PeerState {
 
     /**
      * Minimum RTO floor (called by Tuner).
-     * @param ms minimum RTO in ms, clamped 250-2000
+     * Floor is 100 so the Tuner's death-spiral cut is effective;
+     * recalculateTimeouts() still uses max(MIN_RTO, RTT-based estimate).
+     * @param ms minimum RTO in ms, clamped 100-2000
      * @since 0.9.70+
      */
-    public static void setMinRTO(int ms) { MIN_RTO = Math.max(250, Math.min(2000, ms)); }
+    public static void setMinRTO(int ms) { MIN_RTO = Math.max(100, Math.min(2000, ms)); }
 
     /**
      * Maximum RTO ceiling (called by Tuner).
-     * @param ms maximum RTO in ms, clamped 10000-120000
+     * Floor is 3000 so the Tuner's death-spiral cut is effective;
+     * default remains 60s for high-RTT paths until autotune tightens it.
+     * @param ms maximum RTO in ms, clamped 3000-120000
      * @since 0.9.70+
      */
-    public static void setMaxRTO(int ms) { MAX_RTO = Math.max(10000, Math.min(120000, ms)); }
+    public static void setMaxRTO(int ms) { MAX_RTO = Math.max(3000, Math.min(120000, ms)); }
 
     /**
      * Max send window / CWIN (called by Tuner).
@@ -1463,15 +1485,12 @@ public class PeerState {
      */
     private void congestionOccurred() {
         long now = _context.clock().now();
-        if (_lastCongestionOccurred + _rto > now) {return;} // only shrink once every few seconds
+        if (!congestionCooldownElapsed(_lastCongestionOccurred, now, _rto)) {return;}
         _lastCongestionOccurred = now;
-        // 1. Double RTO and backoff (RFC 6298 section 5.5 & 5.6)
-        // 2. cut ssthresh to bandwidth estimate, window to 1 MTU
-        // 3. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
+        // 1. Collapse window to POST_RTO_WINDOW_MTUS and cut ssthresh to BWE
+        // 2. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
+        // RTO is NOT doubled here — see nextCongestionRTO().
         int congestionAt = _sendWindowBytes.get();
-        // If we reduced the MTU, then we won't be able to send any previously-fragmented messages,
-        // so set to the max MTU. This is the easiest fix, although it violates the RFC.
-        //_sendWindowBytes = _mtu;
         int oldsst = _slowStartThreshold;
         float bwe;
         // window and SST set in highestSeqNumAcked()
@@ -1493,7 +1512,7 @@ public class PeerState {
 
         int oldRto = _rto;
         long oldTimer = _retransmitTimer.get() - now;
-        _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rto << 1 ));
+        _rto = nextCongestionRTO(_rto, _rtt, _rttDeviation, MIN_RTO, MAX_RTO);
         _retransmitTimer.set(now + _rto);
         if (_log.shouldInfo()) {
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
@@ -1503,6 +1522,68 @@ public class PeerState {
                       " bytes; SST: " + oldsst + " -> " + _slowStartThreshold +
                       "; FastRetransmit? " + _fastRetransmit);
         }
+    }
+
+    /**
+     *  Compute the RTO to apply after a congestion signal.
+     *
+     *  Congestion must not inflate RTO. RFC 6298 §5.5 doubling applies to
+     *  retransmit-timer expiry, not every retransmit volley (which includes
+     *  fast retransmit). Doubling here under sustained loss drove avgRTO to
+     *  33s while RTT stayed ~96ms — a death spiral that stalled each
+     *  retransmit for half a minute and collapsed CWIN. With a known RTT,
+     *  cap RTO at 4× the RFC 2988 estimate so historical inflation cannot
+     *  outlive fresh latency samples; without an RTT sample, leave the
+     *  current value unchanged (the RTT path in recalculateTimeouts()
+     *  remains the sole authority for growth).
+     *
+     *  @param currentRTO current RTO in ms
+     *  @param rtt smoothed RTT in ms, or &lt;= 0 if unknown
+     *  @param rttDeviation RTT deviation in ms
+     *  @param minRTO floor in ms
+     *  @param maxRTO ceiling in ms
+     *  @return the RTO to store, clamped to [minRTO, maxRTO]
+     *  @since 0.9.72+
+     */
+    static int nextCongestionRTO(int currentRTO, int rtt, int rttDeviation, int minRTO, int maxRTO) {
+        int clamped = Math.min(maxRTO, Math.max(minRTO, currentRTO));
+        if (rtt <= 0) {return clamped;}
+        // Floor applies only to the final result; applying minRTO to the
+        // estimate before *4 would inflate the ceiling (e.g. 288→1000→4000).
+        int ceiling = Math.min(maxRTO, (rtt + (rttDeviation << 2)) * 4);
+        return Math.max(minRTO, Math.min(clamped, ceiling));
+    }
+
+    /**
+     *  Whether enough time has elapsed since the last congestion response to
+     *  allow another one. Pure so the cooldown policy is unit-testable.
+     *
+     *  The cooldown is {@code max(rto, CONGESTION_COOLDOWN_MIN_MS)} so a low
+     *  RTO cannot shrink the gap to ~1s and collapse the window every second
+     *  under sustained loss.
+     *
+     *  @param last congestion timestamp in ms, or 0 if never
+     *  @param now current time in ms
+     *  @param rto current RTO in ms
+     *  @return true if a new congestion response may proceed
+     *  @since 0.9.72+
+     */
+    static boolean congestionCooldownElapsed(long last, long now, int rto) {
+        long cooldown = Math.max((long) rto, CONGESTION_COOLDOWN_MIN_MS);
+        return now >= last + cooldown;
+    }
+
+    /**
+     *  Whether send-window growth must be held because the path is unverified
+     *  (SSU2 connection migration). Pure so the freeze gate is unit-testable.
+     *
+     *  @param now current time in ms
+     *  @param pathUnverifiedUntil freeze expiry in ms, or 0 if not frozen
+     *  @return true if window growth must not proceed
+     *  @since 0.9.72+
+     */
+    static boolean pathUnverifiedBlocksGrowth(long now, long pathUnverifiedUntil) {
+        return pathUnverifiedUntil > 0 && now < pathUnverifiedUntil;
     }
 
     /**
@@ -1608,14 +1689,16 @@ public class PeerState {
             _log.debug("Concurrent msg limit [" + _remotePeer.toBase64().substring(0,6) + "] " +
                        oldLimit + " -> " + _concurrentMessagesAllowed + " (RTT=" + _rtt + "ms queued=" + queued + ")");
         }
+        long now = _context.clock().now();
         int sendWindow = _sendWindowBytes.get();
-        boolean grow = numSends < 2 && shouldGrowSendWindow(sendWindow, _slowStartThreshold, bytesACKed, _context.random().nextFloat());
+        boolean grow = numSends < 2
+                && !pathUnverifiedBlocksGrowth(now, _pathUnverifiedUntil)
+                && shouldGrowSendWindow(sendWindow, _slowStartThreshold, bytesACKed, _context.random().nextFloat());
         if (grow) {
             _sendWindowBytes.addAndGet(bytesACKed);
             synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
         }
         _sendWindowBytes.updateAndGet(v -> Math.min(v, MAX_SEND_WINDOW_BYTES));
-        long now = _context.clock().now();
         _lastSendFullyTime = now;
 
         synchronized(_sendWindowBytesRemainingLock) {
@@ -1846,9 +1929,12 @@ public class PeerState {
     /**
      * Retransmission timeout.
      *
+     * Clamped to the current [MIN_RTO, MAX_RTO] so a peer that inflated
+     * before the Tuner cut the ceiling is not stuck on a stale high RTO.
+     *
      * @return the RTO in ms
      */
-    public int getRTO() {return _rto;}
+    public int getRTO() {return Math.min(MAX_RTO, Math.max(MIN_RTO, _rto));}
     /**
      * RTT deviation.
      *
@@ -1926,14 +2012,26 @@ public class PeerState {
     }
 
     /**
-     *  Cut our send window as a congestion/backoff response.
-     *  Called during SSU2 connection migration ({@code limitSending}) to throttle
-     *  the peer while the path is unverified. Despite the name, explicit ECN
-     *  signalling is not implemented; this is the backoff hook.
+     *  Hold send-window growth while the path is unverified (SSU2 connection
+     *  migration, {@code limitSending}). Freezes growth only for a short window;
+     *  does not collapse CWIN or adjust RTO — migration is a path change, not
+     *  congestion, and a full collapse thrashes multi-homed peers.
+     *  Growth resumes via {@link #pathVerified()} or when the freeze expires.
+     *  @since 0.9.72+
      */
-    void ECNReceived() {
-        synchronized(_outboundLock) {congestionOccurred();}
-        _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes.get());
+    void pathUnverified() {
+        long now = _context.clock().now();
+        _pathUnverifiedUntil = now + PATH_UNVERIFIED_FREEZE_MS;
+        _context.statManager().addRateData("udp.pathUnverified", _sendWindowBytes.get());
+    }
+
+    /**
+     *  Clear the path-unverified growth freeze (migration completed, failed,
+     *  or cancelled — the current path is again the verified one).
+     *  @since 0.9.72+
+     */
+    void pathVerified() {
+        _pathUnverifiedUntil = 0;
     }
 
     /**

@@ -630,7 +630,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         limitSending = handleMigrationPending(from, packet, shouldLogDebug);
                     }
                 }
-                if (limitSending) {ECNReceived();}
+                if (limitSending) {pathUnverified();}
             } //// !_dead
 
             boolean ackImmediate = (header.data[SHORT_HEADER_FLAGS_OFFSET] & 0x01) != 0;
@@ -654,8 +654,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  migration only when it passes the pure {@link #shouldInitiateMigration}
      *  classifier (IP family match, highest-set ordering rule, validated source).
      *  Path Response processing happens earlier in receivePacket, so a completed
-     *  migration has already reset the state before this runs; any other host is
-     *  kept but sending is limited while the challenge is outstanding.
+     *  migration has already reset the state before this runs. Sending is limited
+     *  only while a challenge is actually outstanding; a refused migration must
+     *  not freeze the verified path.
      *
      *  Must be called with {@code _migrationLock} held.
      *
@@ -688,11 +689,13 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 _pendingRemoteHostId = from;
                 sendPathChallenge(packet.getPacket().getAddress(), from.getPort());
                 setLastSendTime(_migrationStarted);
+                // Limit growth only while a challenge is actually outstanding;
+                // a refused migration must not freeze the verified path.
+                limitSending = true;
             } else {
                 // don't attempt to switch
                 if (shouldLogDebug) {_log.debug("[SSU] Not migrating connection to " + from + ' ' + this);}
             }
-            limitSending = true;
         }
         return limitSending;
     }
@@ -723,11 +726,13 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             case CANCEL:
                 // packet from the current remote host, abort the migration
                 _migrationState = MigrationState.MIGRATION_STATE_NONE;
+                pathVerified();
                 if (shouldLogDebug) {_log.debug("[SSU] Cancelling connection migration" + this);}
                 break;
             case EXPIRED:
                 // time or retransmission budget exceeded
                 _migrationState = MigrationState.MIGRATION_STATE_NONE;
+                pathVerified();
                 if (shouldLog) {_log.warn("[SSU] Connection migration failed..." + this);}
                 break;
             case RETRANSMIT:
@@ -1172,6 +1177,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         if (DataHelper.eq(data, _pathChallengeData)) {
                             // Success: update peer address
                             _migrationState = MigrationState.MIGRATION_STATE_NONE;
+                            pathVerified();
                             _pathChallengeData = null;
 
                             if (shouldLogDebug) {
@@ -1212,6 +1218,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                 _log.warn("[SSU] Path response data mismatch" + this);
                             }
                             _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
+                            pathVerified();
                             messagePartiallyReceived(); // ACK-eliciting
                         }
                     } else if (_pathChallengeData != null && DataHelper.eq(data, _pathChallengeData)) {
@@ -1235,6 +1242,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         }
                         _pathChallengeData = null;
                         _migrationState = MigrationState.MIGRATION_STATE_NONE;
+                        pathVerified();
                         messagePartiallyReceived();
                     } else {
                         if (_log.shouldWarn()) {
@@ -1246,6 +1254,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                             _context.banlist().portHopping(_remotePeer);
                         }
                         _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
+                        pathVerified();
                         messagePartiallyReceived(); // ACK-eliciting
                     }
                     break;
