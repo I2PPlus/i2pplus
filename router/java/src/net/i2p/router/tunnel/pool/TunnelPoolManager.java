@@ -1680,6 +1680,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
+     * Nudge both of a destination's pools to run their ensure logic.
+     * Throttled inside each pool, so failure floods stay cheap.
+     *
+     * @param destination the client destination
+     * @since 0.9.71+
+     */
+    public void ensurePoolsFor(Hash destination) {
+        TunnelPool out = _clientOutboundPools.get(destination);
+        if (out != null) {out.ensureSufficientTunnels();}
+        TunnelPool in = _clientInboundPools.get(destination);
+        if (in != null) {in.ensureSufficientTunnels();}
+    }
+
+    /**
      * Emergency pool recovery: Check all registered clients have valid tunnel pools.
      * Recreates missing pools to prevent service interruption.
      * Called periodically by BuildExecutor.

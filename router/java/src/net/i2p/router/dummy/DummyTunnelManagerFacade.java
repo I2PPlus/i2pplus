@@ -111,6 +111,8 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     @Override
     public void reportSendFailure(TunnelInfo tunnel, int status) { /* no-op */ }
 
+    public void ensurePoolsFor(Hash destination) { /* Intentionally empty - dummy implementation */ }
+
     @Override
     public void forceTunnelFailure(TunnelInfo tunnel) { /* no-op */ }
 }

@@ -1227,6 +1227,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             (isTunnelRelatedFailure(status) || isSoftSendFailure(status))) {
             getContext().tunnelManager().reportSendFailure(_outTunnel, status);
         }
+        // Pool-empty liveness signal: 14 (expired while queued) and 16 (no
+        // tunnels) mean the destination's pools were starving when the data
+        // phase needed them — nudge both pools now instead of waiting for
+        // the next build-timer interval.  Each pool's ensure throttle still
+        // applies, so a message-flood of failures cannot build-storm.
+        if (isPoolStarvationFailure(status)) {
+            getContext().tunnelManager().ensurePoolsFor(_to.calculateHash());
+        }
         //getContext().messageHistory().sendPayloadMessage(_clientMessageId.getMessageId(), false, sendTime);
         long nonce = _clientMessage.getMessageNonce();
         if (nonce > 0) {
@@ -1258,6 +1266,23 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             default:
                 return false;
         }
+    }
+
+    /**
+     *  Whether the failure status means the destination's pools were empty
+     *  or starved when the send needed them: 14 (expired while queued —
+     *  nothing carried it before the deadline) and 16 (no tunnels
+     *  available).  These do not blame the outbound tunnel (see
+     *  {@link #isTunnelRelatedFailure}); they trigger a pool-level ensure
+     *  nudge instead (see dieFatal).
+     *
+     *  @param status the I2CP MessageStatusMessage failure code
+     *  @return true for pool-starvation statuses only
+     *  @since 0.9.71+
+     */
+    static boolean isPoolStarvationFailure(int status) {
+        return status == MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED ||
+               status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS;
     }
 
     /**

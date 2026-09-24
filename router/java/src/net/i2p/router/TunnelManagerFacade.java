@@ -267,6 +267,19 @@ public interface TunnelManagerFacade extends Service {
      */
     public TunnelPool getOutboundPool(Hash client);
 
+    /**
+     *  Run both of a destination's pools' ensure logic on demand instead of
+     *  waiting for the next build-timer interval.  Called from the data
+     *  phase when a send failed for pool-empty reasons (message expired
+     *  while queued, no tunnels available) — a liveness signal that the
+     *  pools need rebuilding now.  Each pool's internal ensure throttle
+     *  still applies, so a failure storm cannot become a build storm.
+     *
+     *  @param destination the client destination whose pools should rebuild
+     *  @since 0.9.71+
+     */
+    public void ensurePoolsFor(Hash destination);
+
     /** @since 0.8.13 */
     public void fail(Hash peer);
 

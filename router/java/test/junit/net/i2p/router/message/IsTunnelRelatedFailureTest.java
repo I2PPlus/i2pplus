@@ -8,13 +8,15 @@ import net.i2p.data.i2cp.MessageStatusMessage;
 
 /**
  * Unit tests for the pure decision helpers
- * {@link OutboundClientMessageOneShotJob#isTunnelRelatedFailure(int)} and
- * {@link OutboundClientMessageOneShotJob#isSoftSendFailure(int)}.
+ * {@link OutboundClientMessageOneShotJob#isTunnelRelatedFailure(int)},
+ * {@link OutboundClientMessageOneShotJob#isSoftSendFailure(int)} and
+ * {@link OutboundClientMessageOneShotJob#isPoolStarvationFailure(int)}.
  * <p>
  * Hard outbound-dispatch failures (7, 8, 9, 13) are reported at the normal
  * removal bar. Soft send timeout (3) is reported at a higher bar via
- * {@code isSoftSendFailure}. Expired (14), no-tunnels (16), and remote-
- * destination statuses must not blame the outbound tunnel.
+ * {@code isSoftSendFailure}. Pool-starvation statuses (14 expired, 16 no
+ * tunnels) nudge the destination's pools via {@code isPoolStarvationFailure}.
+ * Remote-destination statuses must not blame the outbound tunnel.
  *
  * @since 0.9.71+
  */
@@ -143,5 +145,42 @@ public class IsTunnelRelatedFailureTest {
     public void unknownStatusIsNotTunnelRelated() {
         assertFalse(OutboundClientMessageOneShotJob.isTunnelRelatedFailure(0));
         assertFalse(OutboundClientMessageOneShotJob.isTunnelRelatedFailure(42));
+    }
+
+    // ---------- pool-starvation statuses: nudge pools ----------
+
+    @Test
+    public void expiredIsPoolStarvation() {
+        assertTrue(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED));
+    }
+
+    @Test
+    public void noTunnelsIsPoolStarvation() {
+        assertTrue(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS));
+    }
+
+    @Test
+    public void tunnelFaultStatusesAreNotPoolStarvation() {
+        // tunnel faults go through reportSendFailure, not the pool nudge
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL));
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_FAILURE_NETWORK));
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_FAILURE_OVERFLOW));
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE));
+    }
+
+    @Test
+    public void remoteAndSuccessStatusesAreNotPoolStarvation() {
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET));
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(
+                MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET));
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(0));
+        assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(42));
     }
 }
