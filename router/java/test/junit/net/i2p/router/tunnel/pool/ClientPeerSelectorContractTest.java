@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.i2p.data.Hash;
+import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.util.LogManager;
@@ -117,5 +118,55 @@ public class ClientPeerSelectorContractTest {
     public void testFilterGhostPeersEmptyInputUnchanged() {
         List<Hash> empty = new ArrayList<>();
         assertTrue(_selector.filterGhostPeers(empty).isEmpty());
+    }
+
+    // ---------- filterBannedPeers ----------
+
+    @Test
+    public void testFilterBannedPeersAllBannedReturnsOriginal() {
+        Banlist banlist = mock(Banlist.class);
+        when(_ctx.banlist()).thenReturn(banlist);
+        when(banlist.isBanlisted(any(Hash.class))).thenReturn(true);
+        List<Hash> peers = threePeers();
+        List<Hash> rv = _selector.filterBannedPeers(peers);
+        assertNotNull(rv);
+        assertEquals(peers.size(), rv.size());
+        assertTrue(rv.containsAll(peers));
+    }
+
+    @Test
+    public void testFilterBannedPeersDropsOnlyBanned() {
+        Banlist banlist = mock(Banlist.class);
+        when(_ctx.banlist()).thenReturn(banlist);
+        when(banlist.isBanlisted(hash(1))).thenReturn(true);
+        when(banlist.isBanlisted(hash(0))).thenReturn(false);
+        when(banlist.isBanlisted(hash(2))).thenReturn(false);
+        List<Hash> rv = _selector.filterBannedPeers(threePeers());
+        assertNotNull(rv);
+        assertEquals(2, rv.size());
+        assertTrue(rv.contains(hash(0)));
+        assertFalse(rv.contains(hash(1)));
+        assertTrue(rv.contains(hash(2)));
+    }
+
+    @Test
+    public void testFilterBannedPeersNoBannedKeepsAll() {
+        Banlist banlist = mock(Banlist.class);
+        when(_ctx.banlist()).thenReturn(banlist);
+        when(banlist.isBanlisted(any(Hash.class))).thenReturn(false);
+        List<Hash> peers = threePeers();
+        List<Hash> rv = _selector.filterBannedPeers(peers);
+        assertEquals(peers, rv);
+    }
+
+    @Test
+    public void testFilterBannedPeersNullInputUnchanged() {
+        assertNull(_selector.filterBannedPeers(null));
+    }
+
+    @Test
+    public void testFilterBannedPeersEmptyInputUnchanged() {
+        List<Hash> empty = new ArrayList<>();
+        assertTrue(_selector.filterBannedPeers(empty).isEmpty());
     }
 }

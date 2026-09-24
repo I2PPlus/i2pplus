@@ -1207,8 +1207,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         }
 
-        // Filter out ghost peers before returning
+        // Filter out ghost peers and banned peers before returning
         rv = filterGhostPeers(rv);
+        rv = filterBannedPeers(rv);
 
         // Strategy-specific post-processing
         if (rv.size() > 2) {
@@ -1740,6 +1741,42 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
             // Must return a mutable list — callers (adoptIfFilled) mutate it.
             return new ArrayList<>(0);
+        }
+
+        return filtered;
+    }
+
+    /**
+     *  Drop banlisted peers from a selection so builds do not dispatch
+     *  requests that BuildHandler will reject with "Next peer is banned".
+     *  Mirrors {@link #filterGhostPeers}; falls back to the original list
+     *  when every peer is banned so the build can still be attempted
+     *  (selection already filters banlisted peers in provenCandidates,
+     *  but quality-sort / swap paths can reintroduce them).
+     *
+     *  @param peers the list of selected peers (excluding self)
+     *  @return filtered list without banlisted peers; never null
+     *  @since 0.9.71+
+     */
+    List<Hash> filterBannedPeers(List<Hash> peers) {
+        if (peers == null || peers.isEmpty()) {return peers;}
+
+        List<Hash> filtered = new ArrayList<>(peers.size());
+        for (Hash peer : peers) {
+            if (peer != null && ctx.banlist().isBanlisted(peer)) {
+                if (log.shouldDebug()) {
+                    log.debug("Skipping banlisted peer: " + peer.toBase32().substring(0, 6));
+                }
+            } else {
+                filtered.add(peer);
+            }
+        }
+
+        if (filtered.isEmpty() && !peers.isEmpty()) {
+            if (log.shouldWarn()) {
+                log.warn("All selected peers were banlisted -> returning original selection...");
+            }
+            return new ArrayList<>(peers);
         }
 
         return filtered;

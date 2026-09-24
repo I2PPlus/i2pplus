@@ -366,6 +366,19 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 log.debug("EPS ghost-filtered " + (before.size() - rv.size()) + " peer(s)");
             }
         }
+        // Banlist filter: drop banlisted peers so builds do not dispatch
+        // requests that BuildHandler will reject with "Next peer is banned".
+        // Mirrors ClientPeerSelector.filterBannedPeers; fall back to the
+        // original selection if every peer is banlisted.
+        if (rv.size() > 1) {
+            List<Hash> before = new ArrayList<>(rv);
+            rv.removeIf(peer -> peer != null && ctx.banlist().isBanlisted(peer));
+            if (rv.isEmpty()) {
+                rv.addAll(before);
+            } else if (rv.size() != before.size() && log.shouldDebug()) {
+                log.debug("EPS ban-filtered " + (before.size() - rv.size()) + " peer(s)");
+            }
+        }
         if (isInbound)
             rv.add(0, ctx.routerHash());
         else

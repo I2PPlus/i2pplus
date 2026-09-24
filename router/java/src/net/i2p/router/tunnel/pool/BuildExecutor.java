@@ -1614,18 +1614,24 @@ public class BuildExecutor implements Runnable {
             return;
         }
 
-        // Early ban filtering: check if first-hop is banned before dispatching.
+        // Early ban filtering: check if any hop is banned before dispatching.
         // BuildHandler emits buildBanHit when it receives a request for a banned
-        // peer, but by then the build slot is wasted.  Checking here saves the
-        // slot for a build that could succeed.
+        // peer, but by then the build slot is wasted.  Checking all hops here
+        // (not just the first) saves the slot for a build that could succeed —
+        // a banned middle hop causes "Next peer is banned" drops at request time.
         if (cfg.getLength() > 1) {
-            Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
-            if (firstHop != null && _context.banlist().isBanlisted(firstHop)) {
-                if (_log.shouldDebug()) {
-                    _log.debug("buildTunnel() GATED (ban): first hop [" + firstHop.toBase64().substring(0, 6) + "] is banned for " + cfg);
+            for (int hop = 0; hop < cfg.getLength(); hop++) {
+                Hash peer = cfg.getPeer(hop);
+                if (peer != null && _context.banlist().isBanlisted(peer)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("buildTunnel() GATED (ban): hop " + hop +
+                                   " [" + peer.toBase64().substring(0, 6) +
+                                   "] is banned for " + cfg);
+                    }
+                    _context.statManager().addRateData("tunnel.buildBanFiltered", 1);
+                    cfg.getTunnelPool().removeInProgress(cfg);
+                    return;
                 }
-                cfg.getTunnelPool().removeInProgress(cfg);
-                return;
             }
         }
 
