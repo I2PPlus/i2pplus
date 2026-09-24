@@ -203,6 +203,29 @@ public class TrackerClient implements Runnable {
     /** Sleep after lots of fails — shortened from 10m so post-recovery
      *  tracker retries fire within ~2m instead of waiting a full cycle. */
     private static final int LONG_SLEEP = 2 * 60 * 1000;
+    /** Max random spread added to the LONG_SLEEP failure floor so torrents
+     *  that failed together don't re-announce in lockstep @since 0.9.71+ */
+    private static final int LONG_SLEEP_JITTER = 30 * 1000;
+
+    /**
+     *  Failure backoff for a tracker that just hit MAX_CONSEC_FAILS: floor the
+     *  announce interval at LONG_SLEEP and add up to LONG_SLEEP_JITTER of
+     *  randomness so many torrents failing together don't re-announce in
+     *  lockstep every 2 minutes.  Intervals already at or above the floor and
+     *  out-of-range random values are handled: the jitter is clamped to
+     *  [0, LONG_SLEEP_JITTER] and only applied when the floor was raised.
+     *
+     *  @param currentInterval tracker's current announce interval in ms
+     *  @param randomJitter raw random jitter in ms, before clamping
+     *  @return the new announce interval in ms
+     *  @since 0.9.71+
+     */
+    static long longSleepWithJitter(long currentInterval, long randomJitter) {
+        if (currentInterval >= LONG_SLEEP)
+            return currentInterval;
+        long jitter = Math.min(Math.max(randomJitter, 0), LONG_SLEEP_JITTER);
+        return LONG_SLEEP + jitter;
+    }
     private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * (long) 60 * 1000;
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
     /** Periodic scrape interval: refresh the swarm size (seeds + leeches) between
@@ -954,10 +977,9 @@ public class TrackerClient implements Runnable {
                     }
                     if (++tr.consecutiveFails == MAX_CONSEC_FAILS) {
                         tr.seenPeers = 0;
-                        if (tr.interval < LONG_SLEEP) {
-                            tr.interval = LONG_SLEEP;
-                        } // slow down
-                    }
+                        tr.interval = longSleepWithJitter(tr.interval,
+                                _util.getContext().random().nextInt(LONG_SLEEP_JITTER));
+                    } // slow down
                 }
             } else {
                 if (_log.shouldInfo()) {

@@ -111,4 +111,33 @@ public class TrackerClientTest {
         assertFalse(
                 TrackerClient.needBackupTrackers(false, false, false, 0, false));
     }
+
+    // ---------- longSleepWithJitter (LONG_SLEEP = 120000, jitter cap = 30000) ----------
+
+    /** A below-floor interval is raised to the LONG_SLEEP floor. */
+    @Test
+    public void testLongSleepFloorsSmallInterval() {
+        assertEquals(120_000L, TrackerClient.longSleepWithJitter(5_000L, 0L));
+    }
+
+    /** Random jitter spreads the floor up to the cap. */
+    @Test
+    public void testLongSleepAddsJitter() {
+        assertEquals(135_000L, TrackerClient.longSleepWithJitter(5_000L, 15_000L));
+        assertEquals(150_000L, TrackerClient.longSleepWithJitter(5_000L, 30_000L));
+    }
+
+    /** Out-of-range jitter is clamped to [0, cap]. */
+    @Test
+    public void testLongSleepClampsJitter() {
+        assertEquals(150_000L, TrackerClient.longSleepWithJitter(0L, 999_999L));
+        assertEquals(120_000L, TrackerClient.longSleepWithJitter(0L, -5L));
+    }
+
+    /** Intervals already at or above the floor are left untouched. */
+    @Test
+    public void testLongSleepKeepsLargerInterval() {
+        assertEquals(120_000L, TrackerClient.longSleepWithJitter(120_000L, 15_000L));
+        assertEquals(600_000L, TrackerClient.longSleepWithJitter(600_000L, 15_000L));
+    }
 }
