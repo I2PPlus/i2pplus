@@ -1432,6 +1432,50 @@ Long tunnelKey = getTunnelKey(cfg);
      * Called when the tunnel test fails.
      * @param timeToFail time in milliseconds before the test failed
      */
+    /**
+     *  Base removal bar for data-carrying and client/exploratory tunnels.
+     *  Under degraded mode (low build success), allow more consecutive failures
+     *  before removal so pool churn does not waste scarce build capacity.
+     *  @return the base max consecutive failures before removal
+     *  @since 0.9.71+
+     */
+    static int baseRemovalThreshold(boolean degraded) {
+        return degraded ? 5 : 3;
+    }
+
+    /**
+     *  Raise the removal bar when the pool is nearly empty so a burst of
+     *  concurrent test failures cannot cascade the last tunnels out before
+     *  replacements finish building.  Thin pools (remaining ≤ 2) get +2
+     *  extra failures of grace.
+     *
+     *  @param base the base threshold from {@link #baseRemovalThreshold}
+     *  @param remainingTunnels tunnels still in the pool after this removal
+     *  @return the effective max consecutive failures before removal
+     *  @since 0.9.71+
+     */
+    static int removalThreshold(int base, int remainingTunnels) {
+        if (remainingTunnels <= 2) {
+            return base + 2;
+        }
+        return base;
+    }
+
+    /**
+     *  Whether an ASAP retest should be deferred because the pool is thin
+     *  and the tunnel already has failures.  Scheduling ASAP retries for a
+     *  failing tunnel while the pool has ≤ 2 remaining tunnels competes
+     *  with replacement builds and risks cascading the last survivors out.
+     *
+     *  @param remainingTunnels tunnels still in the pool
+     *  @param failures consecutive test failures for this tunnel
+     *  @return true when the retest should use the normal (non-ASAP) delay
+     *  @since 0.9.71+
+     */
+    static boolean shouldDeferFailingRetest(int remainingTunnels, int failures) {
+        return remainingTunnels <= 2 && failures > 0;
+    }
+
     private void testFailed(long timeToFail) {
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
@@ -1527,7 +1571,7 @@ Long tunnelKey = getTunnelKey(cfg);
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             int currentFailures = _cfg.getTunnelFailures();
-            int maxFailures = isDegraded() ? 5 : 3;
+            int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> Removing data-carrying tunnel after " +
@@ -1622,7 +1666,7 @@ Long tunnelKey = getTunnelKey(cfg);
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             int currentFailures = _cfg.getTunnelFailures();
-            int maxFailures = isDegraded() ? 5 : 3;
+            int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> Removing " + _cfg +
@@ -1785,6 +1829,22 @@ Long tunnelKey = getTunnelKey(cfg);
         }
 
         if (asap) {
+            // Thin-pool guard: a failing tunnel must not monopolize ASAP
+            // retest slots while the pool has ≤ 2 remaining tunnels —
+            // defer to the normal delay so replacement builds win the race.
+            if (shouldDeferFailingRetest(_pool.size(), _cfg.getTunnelFailures())) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Deferring ASAP retest: pool is thin (" +
+                               _pool.size() + " remaining, failures=" +
+                               _cfg.getTunnelFailures() + ")");
+                }
+                if (_cfg.getExpiration() > ctx.clock().now() + delay + ((long) 3 * getTestPeriod())) {
+                    getTiming().setStartAfter(ctx.clock().now() + delay);
+                    ctx.jobQueue().addJob(this);
+                    return true;
+                }
+                return false;
+            }
             // As soon as possible: only skip if tunnel is about to expire
             if (_cfg.getExpiration() > ctx.clock().now() + (60 * 1000L)) {
                 getTiming().setStartAfter(ctx.clock().now() + delay / 4);

@@ -227,13 +227,54 @@ public class TunnelPoolThrottleTest {
     }
 
     @Test
-    public void testDeficitFirstAttemptAfterLongSilenceAlwaysAllowed() {
+    public void testEnsureFirstAttemptAfterLongSilenceAlwaysAllowed() {
         // Simulates recovery after 50m collapse: last build long ago
         long now = 50L * 60_000L;
         long last = 1_000L;
-        assertFalse(TunnelPool.isDeficitThrottled(now, last, 0, 0, false));
-        assertFalse(TunnelPool.isDeficitThrottled(now, last, 1, 0, false));
-        assertFalse(TunnelPool.isDeficitThrottled(now, last, 5, 0, true));
-        assertFalse(TunnelPool.isDeficitThrottled(now, last, 0, 6, 0, false));
+        assertFalse(TunnelPool.isEnsureThrottled(now, last, 5, false));
+        assertFalse(TunnelPool.isEnsureThrottled(now, last, 0, false));
+        assertFalse(TunnelPool.isEnsureThrottled(now, last, 5, 5, false));
+        assertFalse(TunnelPool.isEnsureThrottled(now, last, 5, 5, false, 0));
+    }
+
+    // --- isEnsureThrottled (6-arg: with removal-time liveness signal) ---
+
+    @Test
+    public void testEnsureRemovalBypassesHealthyGate() {
+        long last = 1_000_000L;
+        long removal = last + 1_000L; // removal 1s after last ensure
+        // healthy pool + recent removal: short floor (2s), not the 15s gate
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last, 5, 5, false, removal));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS, last, 5, 5, false, removal));
+        // past short floor but within healthy window: allowed because of removal
+        assertFalse(TunnelPool.isEnsureThrottled(last + 6_000L, last, 5, 5, false, removal));
+        // without removal signal, same elapsed is still throttled
+        assertTrue(TunnelPool.isEnsureThrottled(last + 6_000L, last, 5, 5, false, 0));
+    }
+
+    @Test
+    public void testEnsureRemovalBeforeLastEnsureDoesNotBypass() {
+        long last = 1_000_000L;
+        long removal = last - 1_000L; // removal before last ensure
+        // removal older than last ensure: no bypass, healthy gate applies
+        assertTrue(TunnelPool.isEnsureThrottled(last + 6_000L, last, 5, 5, false, removal));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_HEALTHY_MS, last, 5, 5, false, removal));
+    }
+
+    @Test
+    public void testEnsureRemovalZeroTimestampDoesNotBypass() {
+        long last = 1_000_000L;
+        // no removal ever (0): healthy gate applies
+        assertTrue(TunnelPool.isEnsureThrottled(last + 6_000L, last, 5, 5, false, 0));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_HEALTHY_MS, last, 5, 5, false, 0));
+    }
+
+    @Test
+    public void testEnsureCollapsedWithRemovalStillUsesShortFloor() {
+        long last = 1_000_000L;
+        long removal = last + 1_000L;
+        // collapsed pool + removal: still short floor
+        assertTrue(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS - 1, last, 0, 0, false, removal));
+        assertFalse(TunnelPool.isEnsureThrottled(last + ENSURE_COLLAPSED_MS, last, 0, 0, false, removal));
     }
 }

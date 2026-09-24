@@ -217,6 +217,14 @@ public class TunnelPool {
      */
     private static final long ENSURE_DEGRADED_MS = 5_000;
     /**
+     *  Last time a tunnel was removed from this pool.  A removal after the
+     *  last ensure run is a liveness signal: the pool just shrank, so the
+     *  next ensure should use the short {@link #ENSURE_COLLAPSED_MIN_MS}
+     *  floor instead of waiting out the healthy 15s gate.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastRemovalTime;
+    /**
      *  Minimum interval between deficit-build batches on a non-collapsed pool.
      *  @since 0.9.71+
      */
@@ -2001,6 +2009,10 @@ public class TunnelPool {
 
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Removing tunnel " + info);}
 
+        // Stamp removal before ensure so the next throttle check sees a
+        // liveness signal and uses the short floor instead of the 15s gate.
+        _lastRemovalTime = _context.clock().now();
+
         // Do NOT cancel the ExpireJob here.  The 2-phase ExpireJob lifecycle
         // must complete: Phase 1 (pool removal + LS refresh) has already run
         // or will run, and Phase 2 (dispatcher removal) fires 10 min later
@@ -2062,6 +2074,7 @@ public class TunnelPool {
         } finally {_tunnelsLock.unlock();}
 
         if (removed) {
+            _lastRemovalTime = _context.clock().now();
             _manager.tunnelFailed();
             processRemovalStats(Collections.singletonList(info));
         }
@@ -2722,6 +2735,10 @@ public class TunnelPool {
                           (isDead ? ", dead" : "") + ") \n* " + cfg);
             }
             removeTunnel(cfg);
+            // Forced ensure after a fail() removal: removeTunnel's ensure may
+            // still be throttled; a fail() removal is a liveness signal that
+            // must rebuild capacity immediately.
+            if (_alive) {ensureSufficientTunnelsNow(_context.clock().now());}
         }
     }
 
@@ -4316,10 +4333,40 @@ public class TunnelPool {
      */
     static boolean isEnsureThrottled(long now, long lastEnsure, int usableTunnelCount,
                                      int healthyCount, boolean incompleteLeaseSet) {
+        return isEnsureThrottled(now, lastEnsure, usableTunnelCount, healthyCount,
+                                 incompleteLeaseSet, 0);
+    }
+
+    /**
+     *  Whether ensureSufficientTunnels() must wait for this pool, using
+     *  separate usable and healthy counts and a removal-time signal.  Pure
+     *  decision helper.
+     *
+     *  <p>Policy: {@link #ENSURE_THROTTLE_MS} (15s) normally;
+     *  {@link #ENSURE_DEGRADED_MS} (5s) while the published LeaseSet is
+     *  incomplete (thin reachability), or when some usable tunnels are
+     *  soft-degraded but the pool still has healthy capacity;
+     *  {@link #ENSURE_COLLAPSED_MIN_MS} (2s) floor when the pool is collapsed
+     *  (usable tunnels &lt;= 1), healthy (non soft-degraded) tunnels &lt;= 1,
+     *  <b>or</b> a tunnel was removed since the last ensure run — a removal
+     *  is a liveness signal that must not wait behind the healthy gate.
+     *
+     *  @param now current router time (ms)
+     *  @param lastEnsure last ensure timestamp (ms), 0 if never
+     *  @param usableTunnelCount current usable tunnel count (includes soft-degraded)
+     *  @param healthyCount usable tunnels below {@link #SOFT_DEGRADED_FOR_ENSURE}
+     *  @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
+     *  @param lastRemoval last tunnel-removal timestamp (ms), 0 if never
+     *  @return true if ensureSufficientTunnels() should return early
+     *  @since 0.9.71+
+     */
+    static boolean isEnsureThrottled(long now, long lastEnsure, int usableTunnelCount,
+                                     int healthyCount, boolean incompleteLeaseSet,
+                                     long lastRemoval) {
         if (lastEnsure <= 0)
             return false;
         long min;
-        if (usableTunnelCount <= 1 || healthyCount <= 1)
+        if (usableTunnelCount <= 1 || healthyCount <= 1 || lastRemoval > lastEnsure)
             min = ENSURE_COLLAPSED_MIN_MS;
         else if (incompleteLeaseSet || healthyCount < usableTunnelCount)
             min = ENSURE_DEGRADED_MS;
@@ -4612,7 +4659,8 @@ public class TunnelPool {
         // or the LeaseSet is incomplete so recovery is prompt without
         // hammering prune+sweep on every buildComplete during fast-fail loops.
         if (isEnsureThrottled(nowEnsure, _lastEnsureTime, getUsableTunnelCount(),
-                              getHealthyTunnelCount(), _hasIncompleteLeaseSet)) {
+                              getHealthyTunnelCount(), _hasIncompleteLeaseSet,
+                              _lastRemovalTime)) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping ensureSufficientTunnels: throttled (" +
                           (nowEnsure - _lastEnsureTime) + "ms since last)");
