@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.RejectedExecutionException;
@@ -60,7 +61,14 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /** The logging instance */
     protected final Logging l;
     /** Default connect timeout */
-    static final long DEFAULT_CONNECT_TIMEOUT = (long) 60*1000;
+    static final long DEFAULT_CONNECT_TIMEOUT = (long) 30*1000;
+    /**
+     *  Max consecutive connect timeouts before abandoning tunnel failover.
+     *  Each failover leg can burn the full connect timeout; with quantity=N
+     *  that multiplies, so timeout failures are capped well below tunnelCount.
+     *  @since 0.9.71+
+     */
+    static final int MAX_TIMEOUT_FAILOVER = 2;
     /** Client ID counter */
     private static final AtomicLong __clientId = new AtomicLong();
     /** This client's ID */
@@ -816,6 +824,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             tunnelCount = Math.max(inCount, outCount);
         }
         NoRouteToHostException lastEx = null;
+        int timeoutFailures = 0;
         for (int i = 0; i < tunnelCount; i++) {
             try {
                 I2PSocket s = sockMgr.connect(dest, opt);
@@ -825,14 +834,62 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 return s;
             } catch (NoRouteToHostException e) {
                 lastEx = e;
+                boolean timedOut = isConnectTimeout(e);
+                if (timedOut) {timeoutFailures++;}
+                boolean poolDown = poolIsDefinitivelyDown();
+                boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures, poolDown);
                 if (_log.shouldWarn()) {
                     _log.warn("Connect failed (tunnel " + i + "/" + tunnelCount + "): " + e.getMessage() +
-                              ", retrying...");
+                              (more ? ", retrying..." : ", giving up"));
                 }
+                if (!more) {break;}
             }
         }
         throw (lastEx != null) ? lastEx :
             new NoRouteToHostException("Failed to connect after " + tunnelCount + " attempts");
+    }
+
+    /**
+     *  Whether another tunnel-failover attempt is worthwhile after a connect failure.
+     *  <p>
+     *  Stops immediately when the outbound pool is provably dead (no valid tunnels,
+     *  none building) — further legs cannot succeed and each leg may burn the full
+     *  connect timeout. Also caps consecutive timeout failures at
+     *  {@link #MAX_TIMEOUT_FAILOVER} so a high tunnel quantity cannot multiply
+     *  worst-case latency (quantity × timeout × outer retries).
+     *
+     *  @param tunnelCount configured max failover legs (max inbound/outbound quantity)
+     *  @param attemptsMade legs already attempted (1-based)
+     *  @param timeoutFailures consecutive timeout-style failures so far
+     *  @param poolDown true if {@link #poolIsDefinitivelyDown()} was true after the failure
+     *  @return true to try the next tunnel leg
+     *  @since 0.9.71+
+     */
+    static boolean shouldContinueFailover(int tunnelCount, int attemptsMade, int timeoutFailures, boolean poolDown) {
+        if (poolDown) {return false;}
+        if (timeoutFailures >= MAX_TIMEOUT_FAILOVER) {return false;}
+        return attemptsMade < tunnelCount;
+    }
+
+    /**
+     *  @return true if the cause chain looks like a connect/read timeout
+     *          (streaming SYN give-up wrapped as NoRouteToHostException)
+     *  @since 0.9.71+
+     */
+    static boolean isConnectTimeout(Throwable e) {
+        Throwable t = e;
+        int depth = 0;
+        while (t != null && depth++ < 8) {
+            String m = t.getMessage();
+            if (m != null) {
+                String lm = m.toLowerCase(Locale.US);
+                if (lm.contains("timed out") || lm.contains("timeout")) {return true;}
+            }
+            Throwable cause = t.getCause();
+            if (cause == t) {break;}
+            t = cause;
+        }
+        return false;
     }
 
     /**
@@ -1028,6 +1085,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             _context.statManager().createRequiredRateStat("i2ptunnel.clientConnectionFailed",
                         "Client tunnel connections lost to uncaught error", "I2PTunnel",
                         TunnelControllerGroup.RATES);
+            // Tuner I2PTunnelClientRunnerMaxParam primary — ensure present even
+            // if the group never registered per-pool stats (fallback executor).
+            _context.statManager().createRequiredRateStat("i2ptunnel.clientRunner.activeThreads",
+                        "Client runner active threads", "I2PTunnel",
+                        TunnelControllerGroup.RATES);
         }
     }
 
@@ -1137,19 +1199,37 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             writeShedResponse(s);
             return;
         }
+        // Tuner feedback on the live per-tunnel pool (not the shared fallback).
+        // Sampled under load on every admit so clientRunner.max can grow from
+        // observed active threads, not only after a shed.
+        TunnelControllerGroup.sampleRunnerActiveThreads(tpe);
         try {tpe.execute(new BlockingRunner(s));}
         catch (RejectedExecutionException ree) {
-            // Pool rejected (full or shutting down). Return the slot and shed
-            // rather than leaking the reservation.
-            I2PTunnelServer.releaseConnectionSlot(_activeConnections);
-            if (_log.shouldWarn()) {
-                _log.warn("Client pool rejected connection (executor full); shedding");
+            // One load-aware rebalance + retry before shedding: an idle
+            // sibling may shrink its claim and free budget for this pool.
+            TunnelControllerGroup.rebalanceRunnerPoolsNow();
+            try {
+                tpe.execute(new BlockingRunner(s));
+                TunnelControllerGroup.sampleRunnerActiveThreads(tpe);
+                return;
+            } catch (RejectedExecutionException ree2) {
+                // Still full after rebalance. Return the slot and shed rather
+                // than leaking the reservation.
+                I2PTunnelServer.releaseConnectionSlot(_activeConnections);
+                if (_log.shouldWarn()) {
+                    _log.warn("Client pool rejected connection (executor full); shedding" +
+                              " (max=" + tpe.getMaximumPoolSize() +
+                              ", active=" + tpe.getActiveCount() +
+                              ", queue=" + tpe.getQueue().size() +
+                              ", cap=" + effectiveMax +
+                              ", open=" + _activeConnections.get() + ')');
+                }
+                // Mirrors the cap-path shed stat: a rejection here would otherwise close
+                // the socket with zero bytes (empty proxy response). Count it so the
+                // Tuner grows the worker pool instead of holding back.
+                if (_context != null) {_context.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);}
+                writeShedResponse(s);
             }
-            // Mirrors the cap-path shed stat: a rejection here would otherwise close
-            // the socket with zero bytes (empty proxy response). Count it so the
-            // Tuner grows the worker pool instead of holding back.
-            if (_context != null) {_context.statManager().addRateData("i2ptunnel.clientConnectionShed", 1L);}
-            writeShedResponse(s);
         }
     }
 
