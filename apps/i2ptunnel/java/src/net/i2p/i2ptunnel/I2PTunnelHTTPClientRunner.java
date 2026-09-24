@@ -119,6 +119,21 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     }
 
     /**
+     * Whether the last body-resume attempt failed with a transient status
+     * (408/502/503/504) rather than a real stall.  Observed once, then cleared
+     * so the next attempt starts fresh.
+     *
+     * @return true if the last resume aborted with a transient status
+     * @since 0.9.71+
+     */
+    @Override
+    protected boolean wasTransientResumeFailure() {
+        if (_hout == null || !_hout.isTransientResumeFailure()) {return false;}
+        _hout.clearTransientResumeFailure();
+        return true;
+    }
+
+    /**
      * Helper method to close resources quietly.
      *
      * @param resource may be null

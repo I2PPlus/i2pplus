@@ -225,6 +225,19 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         int getStallCycles() { return stallCycles; }
         /** Total resume attempts consumed so far. @since 0.9.71+ */
         int getTotalCycles() { return totalCycles; }
+
+        /**
+         *  Refund the last consume when a resume attempt failed with a
+         *  transient status (408/502/503/504) rather than a real stall —
+         *  the budget is for empty/stalled reconnects, not for a gateway
+         *  timeout that the next non-Range retry may resolve.
+         *
+         *  @since 0.9.71+
+         */
+        void refundLast() {
+            if (totalCycles > 0) {totalCycles--;}
+            if (stallCycles > 0) {stallCycles--;}
+        }
     }
 
     /** Plain TCP socket (local or remote endpoint). */
@@ -1174,8 +1187,24 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                           " on a fresh I2P socket (tunnel rotation)");
             }
             redriveReceiveForwarder(out, i2pin);
+            // Transient status (408/502/503/504) on the Range request:
+            // refund the budget charge so the next non-Range attempt is free.
+            if (wasTransientResumeFailure()) {
+                budget.refundLast();
+            }
         }
     }
+
+    /**
+     *  Whether the last body-resume attempt failed with a transient status
+     *  (408/502/503/504) rather than a real stall.  Subclasses with an HTTP
+     *  response stream override this; the base runner has no stream so it
+     *  always returns false.
+     *
+     *  @return true if the last resume aborted with a transient status
+     *  @since 0.9.71+
+     */
+    protected boolean wasTransientResumeFailure() { return false; }
 
     /**
      *  Whether an incomplete body is still eligible for Range resume — used by

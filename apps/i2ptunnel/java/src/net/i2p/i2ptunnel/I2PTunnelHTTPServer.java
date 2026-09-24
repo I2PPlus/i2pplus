@@ -393,8 +393,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** Default idle keepalive wait (ms); short enough to free the handler
      *  thread, long enough for a browser to reuse the connection. */
     public static final long DEFAULT_KEEPALIVE_TIMEOUT_MS = 10 * 1000L;
-    /** Default first-request header timeout (ms); was a hard-coded 30s. */
-    public static final long DEFAULT_HEADER_TIMEOUT_MS = 15 * 1000L;
+    /** Default first-request header timeout (ms).  30s matches the pre-config
+     *  hard-coded value and gives slow eepsites time to start responding before
+     *  the 408 kill fires (which aborts Range-resume downloads mid-body). */
+    public static final long DEFAULT_HEADER_TIMEOUT_MS = 30 * 1000L;
     /** Bounds for {@link #PROP_KEEPALIVE_TIMEOUT} (ms). */
     public static final long MIN_KEEPALIVE_TIMEOUT_MS = 1000L;
     public static final long MAX_KEEPALIVE_TIMEOUT_MS = 300 * 1000L;

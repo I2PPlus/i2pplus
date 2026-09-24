@@ -99,4 +99,42 @@ public class BodyResumeBudgetTest {
         assertTrue(b.tryConsume(500)); // not progress; stall budget not reset
         assertEquals(2, b.getStallCycles());
     }
+
+    /** Transient-status refund undoes the last consume so a 408 does not
+     *  permanently charge the budget for a non-stall failure. */
+    @Test
+    public void testRefundLastUndoesConsume() {
+        I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
+        assertTrue(b.tryConsume(100));
+        assertEquals(1, b.getTotalCycles());
+        assertEquals(1, b.getStallCycles());
+        b.refundLast();
+        assertEquals(0, b.getTotalCycles());
+        assertEquals(0, b.getStallCycles());
+        // can consume again after refund
+        assertTrue(b.tryConsume(100));
+        assertEquals(1, b.getTotalCycles());
+    }
+
+    /** Refund on empty budget is a no-op (never goes negative). */
+    @Test
+    public void testRefundLastOnEmptyIsNoop() {
+        I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
+        b.refundLast();
+        assertEquals(0, b.getTotalCycles());
+        assertEquals(0, b.getStallCycles());
+    }
+
+    /** Refund after partial consumption restores only the last cycle. */
+    @Test
+    public void testRefundLastAfterMultipleConsumes() {
+        I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
+        assertTrue(b.tryConsume(100));
+        assertTrue(b.tryConsume(200)); // progress resets stall
+        assertEquals(2, b.getTotalCycles());
+        assertEquals(1, b.getStallCycles());
+        b.refundLast();
+        assertEquals(1, b.getTotalCycles());
+        assertEquals(0, b.getStallCycles()); // stall was 0 after progress reset, then consume made it 1, refund back to 0
+    }
 }

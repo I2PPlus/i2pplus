@@ -58,6 +58,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private int _statusCode;
     /** Body bytes to drop from the next response before forwarding (200 after Range). */
     private long _resumeSkipBytes;
+    /** True when a transient status (408/502/503/504) aborted a Range resume —
+     *  next attempt must re-request from byte 0 without Range. */
+    private volatile boolean _transientResumeFailure;
 
     private static final int CACHE_SIZE = 16*1024;
     private static final ByteCache _cache = ByteCache.getInstance(8, CACHE_SIZE);
@@ -168,9 +171,28 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      * @since 0.9.71+
      */
     public boolean canRangeResume() {
+        if (_transientResumeFailure) {return false;}
         return _headerWritten && !_suppressHeaderOutput && !_gzip
                && _dataExpected > 0 && _bodyReceived < _dataExpected;
     }
+
+    /**
+     * True when a transient status (408/502/503/504) aborted a Range resume.
+     * The resume loop should fall back to a non-Range reconnect and refund the
+     * ResumeBudget charge for this attempt.
+     *
+     * @return true if the last resume failed with a transient status
+     * @since 0.9.71+
+     */
+    public boolean isTransientResumeFailure() { return _transientResumeFailure; }
+
+    /**
+     * Clear the transient-failure flag after the resume loop has observed it
+     * (budget refund / non-Range fallback decided).
+     *
+     * @since 0.9.71+
+     */
+    public void clearTransientResumeFailure() { _transientResumeFailure = false; }
 
     /**
      * Enter mid-body resume mode: the next header block parsed from a fresh
@@ -353,6 +375,17 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             // Server ignored Range and re-sent from byte 0 — drop the prefix
             // the browser already has so the splice stays seamless.
             _resumeSkipBytes = _bodyReceived;
+        } else if (_statusCode == 408 || _statusCode == 502 ||
+                   _statusCode == 503 || _statusCode == 504) {
+            // Transient status on the Range request (header timeout / gateway
+            // error).  Do not splice the error body over a partial download.
+            // Keep suppress mode so the next response can still be consumed
+            // without re-writing headers; clear Range eligibility so the next
+            // attempt re-requests from byte 0 (non-Range) and skips the
+            // already-delivered prefix on a fresh 200.
+            _transientResumeFailure = true;
+            _resumeSkipBytes = 0;
+            throw new IOException("Cannot Range-resume: transient HTTP status " + _statusCode);
         } else {
             throw new IOException("Cannot Range-resume: unexpected HTTP status " + _statusCode);
         }
