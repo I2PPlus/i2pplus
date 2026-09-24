@@ -18,7 +18,7 @@ import org.junit.Test;
  *
  * <p>A pure, stateless decision: testable without a running router.
  *
- * @since 0.9.73+
+ * @since 0.9.71+
  */
 public class ConnectionBandwidthSsthreshAnchorTest {
 

@@ -183,7 +183,7 @@ public interface TunnelInfo {
      *  Soft status-3 timeouts must not touch the hard/test counter that
      *  drives {@link #getTunnelFailed()} and selection gates.
      *
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     public void incrementSoftFailures();
 
@@ -192,7 +192,7 @@ public interface TunnelInfo {
      *  {@link #getConsecutiveFailures()}.
      *
      *  @return the soft failure count
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     public int getSoftFailures();
 

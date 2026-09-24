@@ -301,7 +301,7 @@ public interface TunnelManagerFacade extends Service {
      * for multiple failure reports.
      *
      * @param tunnel the outbound tunnel to force-fail
-     * @since 0.9.73
+     * @since 0.9.71+
      */
     public void forceTunnelFailure(TunnelInfo tunnel);
 }

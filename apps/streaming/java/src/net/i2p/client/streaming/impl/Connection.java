@@ -1231,7 +1231,7 @@ class Connection {
      *         the cut, -1 if none
      *  @param activeResends retransmits still awaiting their ACK
      *  @return true when the lost window has been recovered
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     static boolean lossEpisodeRecovered(boolean hadCongestionMark, long ackThrough,
                                         long lastCongestionHighestUnacked, int activeResends) {
@@ -3671,7 +3671,7 @@ class Connection {
      * throttle.  During slow-start the window itself is the bottleneck and the
      * pacing rate (computed from {@code DEFAULT_INITIAL_RTO = 2s}) would cap
      * throughput at ~108 KB/s regardless of actual path capacity.
-     * @since 0.9.73+
+     * @since 0.9.71+
      */
     static final int PACING_SLOWSTART_THRESHOLD = 8;
 

@@ -21,7 +21,7 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
  * which immediately removes a dead tunnel and triggers a replacement build
  * when rotation is saturated.
  *
- * @since 0.9.73
+ * @since 0.9.71+
  */
 public class TunnelPoolForceTunnelFailureTest {
 

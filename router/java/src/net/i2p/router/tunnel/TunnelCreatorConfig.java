@@ -337,7 +337,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  Soft status-3 must not trip getTunnelFailed() or selection gates
      *  that key on the hard/test counter — congestion is not tunnel death.
      *
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     public void incrementSoftFailures() {
         _softFailures.incrementAndGet();
@@ -346,7 +346,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  Soft best-effort timeout count.
      *  @return the soft failure count
-     *  @since 0.9.73+
+     *  @since 0.9.71+
      */
     public int getSoftFailures() {
         return _softFailures.get();
