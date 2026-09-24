@@ -586,9 +586,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MaxConcurrentMessagesParam());
         _params.add(new InitConcurrentMsgsParam());
         _params.add(new MinConcurrentMsgsParam());
-        _params.add(new InitRTOParam());
-        _params.add(new MinRTOParam());
-        _params.add(new UdpMaxRtoParam());
+        InitRTOParam initRto = new InitRTOParam();
+        _params.add(initRto);
+        _fastParams.add(initRto);
+        MinRTOParam minRto = new MinRTOParam();
+        _params.add(minRto);
+        _fastParams.add(minRto);
+        UdpMaxRtoParam udpMaxRto = new UdpMaxRtoParam();
+        _params.add(udpMaxRto);
+        _fastParams.add(udpMaxRto);
         _params.add(new MaxSendWindowParam());
         _params.add(new PostRTOWindowParam());
         _params.add(new MaxDispatchAgeParam());
@@ -645,7 +651,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new I2PTunnelServerHandlerThreadsParam());
         _params.add(new I2PTunnelServerThreadsParam());
         _params.add(new I2PTunnelServerBacklogParam());
-        _params.add(new I2PTunnelServerIOTransferParam());
+        I2PTunnelServerIOTransferParam ioTransfer = new I2PTunnelServerIOTransferParam();
+        _params.add(ioTransfer);
+        // Fast cycle: body-transfer backlog must grow the budget within ~5s,
+        // not wait for the 15s slow tick — a 15s lag under concurrent downloads
+        // pushes Senders into the browser body-stall window.
+        _fastParams.add(ioTransfer);
         _params.add(new I2PTunnelServerIOStallTimeoutParam());
         I2PTunnelClientRunnerMaxParam clientRunnerMax = new I2PTunnelClientRunnerMaxParam();
         _params.add(clientRunnerMax);
@@ -9871,7 +9882,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
             double congestedRTO = getAdditionalStat(_context, "udp.congestedRTO");
             boolean rtoInflated = !Double.isNaN(congestedRTO) && congestedRTO > current * 1.5;
-            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
             boolean deathSpiral = !Double.isNaN(rtxRatio) && rtxRatio > 1000;
 
             // Death spiral: rtxRatio > 1000 = cut maxRTO to minimum
@@ -11259,10 +11270,11 @@ protected int computeTarget(double observed) {
 
     /**
      *  Tuner param for the I/O transfer pool size (Server→Client data forwarding).
-     *  Sized by CPU count; ceiling set by max heap (scales with available memory).
-     *  The pool is intentionally kept small (2–64 threads) — a handful of
-     *  slow transfers should not consume a large number of threads; the I/O
-     *  pool exists to unblock handler threads, not to create unlimited parallelism.
+     *  Ceiling set by max heap (scales with available memory).
+     *  Budget is split across per-tunnel pools with an 8-thread floor so
+     *  concurrent downloads never starve a body Sender behind two threads.
+     *  Growth reacts to active+queued pressure on the 5s fast cycle with
+     *  large steps under saturation; shrink only when clearly idle.
      *
      *  @since 0.9.71+
      */
@@ -11271,7 +11283,7 @@ protected int computeTarget(double observed) {
         I2PTunnelServerIOTransferParam() {
             super("i2ptunnel.serverIO.threads", "I2PTunnel I/O transfer threads",
                   SUB_TUNNEL,
-                   2, 64, 2, "i2ptunnel.serverIO.activeCount", _context);
+                   8, 256, 4, "i2ptunnel.serverIO.activeCount", _context);
         }
 
         protected void applyValue(int value) {
@@ -11287,23 +11299,48 @@ protected int computeTarget(double observed) {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            // Scale up when active threads approach capacity; scale down when idle.
-            // Keep the pool modest — I/O threads are cheap (blocking reads) but
-            // each one represents an active download.
-            double ratio = (observed + 1.0) / (current + 1.0);
-            int target;
-            if (ratio > 0.7) {
-                // >70% utilization — grow, but cap aggressively
-                target = Math.min(current + 2, _max);
-            } else if (ratio < 0.2 && current > _min) {
-                // <20% utilization — shrink toward minimum
-                target = Math.max(current - 1, _min);
-            } else {
-                target = current;
-            }
-            return Math.max(_min, Math.min(_max, target));
+            return computeIOTransferTarget(getRuntimeValue(), observed, _min, _max);
         }
+    }
+
+    /**
+     *  Pure growth policy for the global Server→Client I/O budget.
+     *  Extracted (package-visible, static) so unit tests can exercise the
+     *  policy without a live RouterContext.
+     *
+     *  <p>Observed is active workers + queued transfers across per-tunnel
+     *  pools. Ratio near 1.0 means the budget is saturated (or bodies are
+     *  queueing); the step doubles the current budget so a download burst
+     *  cannot wait out a +2-per-cycle crawl (64→128→256). Between 70–90%
+     *  utilization growth is still aggressive (max(8, current/4)). Shrink
+     *  only below 20% so a quiet router does not ratchet the budget down
+     *  mid-incident.
+     *
+     *  @param current current runtime budget (clamped to [min,max] first)
+     *  @param observed active+queued pressure; NaN or negative leaves value unchanged
+     *  @param min inclusive lower bound
+     *  @param max inclusive upper bound
+     *  @return target budget in [min, max]
+     *  @since 0.9.71+
+     */
+    static int computeIOTransferTarget(int current, double observed, int min, int max) {
+        if (current < min) {current = min;}
+        if (current > max) {current = max;}
+        if (Double.isNaN(observed) || observed < 0) {return current;}
+        double ratio = (observed + 1.0) / (current + 1.0);
+        int target;
+        if (ratio > 0.9) {
+            long step = Math.max(16L, (long) current);
+            target = (int) Math.min((long) max, (long) current + step);
+        } else if (ratio > 0.7) {
+            int step = Math.max(8, current / 4);
+            target = Math.min(max, current + step);
+        } else if (ratio < 0.2 && current > min) {
+            target = Math.max(min, current - 1);
+        } else {
+            target = current;
+        }
+        return Math.max(min, Math.min(max, target));
     }
 
     /**
