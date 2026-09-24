@@ -842,14 +842,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             !_context.router().gracefulShutdownInProgress() &&
             (!disableTunnelTesting() || _context.router().isHidden() ||
              _context.router().getRouterInfo().getAddressCount() <= 0)) {
-            TunnelPool pool = cfg.getTunnelPool();
-            // Check if we should schedule a TestJob before creating it
-            if (TestJob.shouldSchedule(_context, cfg)) {
-                TestJob job = new TestJob(_context, cfg, pool);
-                if (job.isValid()) {
-                    _context.jobQueue().addJob(job);
-                }
-            }
+            // Offer to the batched first-test pump: the buffer absorbs build
+            // bursts and one pump job drains them under the in-flight gates,
+            // instead of one queue entry (and one drop under the queued cap)
+            // per tunnel.
+            TestJob.offerFirstTest(_context, cfg, cfg.getTunnelPool());
         }
     }
 

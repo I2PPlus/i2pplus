@@ -125,7 +125,7 @@ public class TunnelPool {
     /**
      *  Cap on last-chance tests enqueued per sweep pass — the global test
      *  caps still apply, but an explicit small bound keeps a fully-UNTESTED
-     *  pool from flooding the queue in one ensure cycle.
+     *  pool from flooding the first-test buffer in one ensure cycle.
      *  @since 0.9.71+
      */
     static final int MAX_LAST_CHANCE_PER_SWEEP = 2;
@@ -3943,6 +3943,8 @@ public class TunnelPool {
         private int softDegraded;     // live tunnels with soft failures >= SOFT_DEGRADED_FOR_ENSURE
         /** Lazily created: stale UNTESTED tunnels kept for one last-chance test. */
         private List<PooledTunnelCreatorConfig> lastChanceTests;
+        /** Lazily created: stranded UNTESTED tunnels whose first test was never scheduled. */
+        private List<PooledTunnelCreatorConfig> strandedTests;
     }
 
     /**
@@ -4186,7 +4188,10 @@ public class TunnelPool {
      *  the lock) instead of discarding an unproven lease; otherwise prune
      *  it, unless it has recently carried verified traffic.  A kept tunnel
      *  counts as near-expiring: it still triggers deficit replacements and
-     *  remains usable until it expires or the test resolves it.
+     *  remains usable until it expires or the test resolves it.  A tunnel
+     *  with more than the pre-build window of life is also collected for
+     *  the stranded re-offer — it must not wait for expiry to get its
+     *  first test.
      */
     private void handleStaleUntested(Iterator<TunnelInfo> it, TunnelInfo t, TunnelStats stats,
                                      long now, long wallNow, long preBuildThreshold) {
@@ -4214,6 +4219,19 @@ public class TunnelPool {
             stats.staleUntestedCount++;
             return;
         }
+        // Life beyond the pre-build window: still awaiting its first test.
+        // The test queue never reached it (a drop under the queued cap, or a
+        // build whose offer was denied) — collect it so the sweep re-offers
+        // stranded tunnels to the batched pump instead of only counting them.
+        if (t instanceof PooledTunnelCreatorConfig &&
+            (stats.strandedTests == null ||
+             stats.strandedTests.size() < TestJob.MAX_STRANDED_OFFERS_PER_SWEEP)) {
+            if (stats.strandedTests == null) {
+                stats.strandedTests = new ArrayList<PooledTunnelCreatorConfig>(
+                        TestJob.MAX_STRANDED_OFFERS_PER_SWEEP);
+            }
+            stats.strandedTests.add((PooledTunnelCreatorConfig) t);
+        }
         stats.untestedCount++;
     }
 
@@ -4232,11 +4250,12 @@ public class TunnelPool {
     }
 
     /**
-     *  Queue one last-chance test for each stale-but-testable UNTESTED
-     *  tunnel the sweep kept.  Called outside the pool lock; the normal
-     *  scheduling gates ({@link TestJob#shouldSchedule}) still apply, and a
-     *  tunnel already registered in the test queue is skipped there, so
-     *  repeated ensure passes cannot double-schedule.
+     *  Offer one last-chance test for each stale-but-testable UNTESTED
+     *  tunnel the sweep kept.  Called outside the pool lock; the candidates
+     *  go to the batched first-test pump ({@link TestJob#offerFirstTest}),
+     *  which dedupes by tunnel key and applies the in-flight gates at drain
+     *  time, so repeated ensure passes cannot double-queue and a denied
+     *  offer is retried on the next sweep.
      */
     private void scheduleLastChanceTests(TunnelStats stats) {
         List<PooledTunnelCreatorConfig> tests = stats.lastChanceTests;
@@ -4246,22 +4265,52 @@ public class TunnelPool {
         if (_context.router().gracefulShutdownInProgress() || _manager.disableTunnelTesting()) {
             return;
         }
-        int scheduled = 0;
+        int offered = 0;
         for (PooledTunnelCreatorConfig cfg : tests) {
-            if (scheduled >= MAX_LAST_CHANCE_PER_SWEEP) {
+            if (offered >= MAX_LAST_CHANCE_PER_SWEEP) {
                 break;
             }
-            if (TestJob.shouldSchedule(_context, cfg)) {
-                TestJob job = new TestJob(_context, cfg, this);
-                if (job.isValid()) {
-                    _context.jobQueue().addJob(job);
-                    scheduled++;
-                }
+            if (TestJob.offerFirstTest(_context, cfg, this)) {
+                offered++;
             }
         }
-        if (scheduled > 0 && _log.shouldInfo()) {
-            _log.info(toString() + " -> Queued " + scheduled + " last-chance test(s) for " +
+        if (offered > 0 && _log.shouldInfo()) {
+            _log.info(toString() + " -> Offered " + offered + " last-chance test(s) for " +
                       "stale UNTESTED tunnel(s) expiring within the pre-build window");
+        }
+    }
+
+    /**
+     *  Offer stranded UNTESTED tunnels — life beyond the pre-build window
+     *  whose first test never got scheduled (the queued cap dropped the
+     *  build-time offer or the pool was saturated) — to the batched
+     *  first-test pump.  Called outside the pool lock; offer-time dedupe
+     *  (buffer keys and the running-test registry) makes repeated sweeps
+     *  idempotent, and the pump's in-flight gates bound how many dispatch
+     *  per cycle.  Without this, the sweep only counted them: stranded
+     *  tunnels stayed UNTESTED until expiry while their untestedCount held
+     *  replacement builds back.
+     *
+     *  @param stats counters from the sweep that collected the candidates
+     *  @since 0.9.71+
+     */
+    private void offerStrandedTests(TunnelStats stats) {
+        List<PooledTunnelCreatorConfig> stranded = stats.strandedTests;
+        if (stranded == null || stranded.isEmpty()) {
+            return;
+        }
+        if (_context.router().gracefulShutdownInProgress() || _manager.disableTunnelTesting()) {
+            return;
+        }
+        int offered = 0;
+        for (PooledTunnelCreatorConfig cfg : stranded) {
+            if (TestJob.offerFirstTest(_context, cfg, this)) {
+                offered++;
+            }
+        }
+        if (offered > 0 && _log.shouldInfo()) {
+            _log.info(toString() + " -> Offered " + offered +
+                      " stranded UNTESTED tunnel(s) for first-test dispatch");
         }
     }
 
@@ -5000,10 +5049,11 @@ public class TunnelPool {
 
             TunnelStats stats = sweepExpiredAndCountTunnels(now, preBuildThreshold);
             logCleanupSummary(stats);
-            // Queue last-chance tests outside the pool lock; each kept
-            // stale-UNTESTED tunnel gets one shot at proving itself before
-            // its expiry, instead of being discarded unread.
+            // Queue last-chance tests and stranded-UNTESTED re-offers outside
+            // the pool lock; both feed the batched first-test pump, which
+            // applies the in-flight gates when it drains.
             scheduleLastChanceTests(stats);
+            offerStrandedTests(stats);
 
             int inProgress = getInProgressCount();
             decayEmergencyCounter(stats.safeActive, effectiveTarget, target);

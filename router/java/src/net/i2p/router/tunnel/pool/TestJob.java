@@ -1,10 +1,17 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -19,6 +26,7 @@ import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
@@ -35,6 +43,11 @@ import net.i2p.util.SystemVersion;
  * Sends a garlic-encrypted DeliveryStatusMessage through the tunnel and validates the reply.
  * Now includes adaptive backoff, avoids over-penalizing peers on transient failures,
  * and limits the number of concurrent tunnel tests to avoid overwhelming the router.
+ *
+ * First tests are not queued one job at a time: offers go to a bounded
+ * first-test buffer ({@link #offerFirstTest}) that a single paced pump job
+ * drains in small batches under the in-flight gates, so build bursts cannot
+ * flood the job queue.  Retests reuse this instance via {@link #scheduleRetest}.
  */
 public class TestJob extends JobImpl {
     private final Log _log;
@@ -250,9 +263,18 @@ public class TestJob extends JobImpl {
      *  coverageThreshold of a pool's active tunnels under test at once),
      *  and the absolute per-pool cap.  With defaults the Tuner budget
      *  (effectively unlimited) is superseded by the coverage cap.
+     *
+     *  Takes a pre-fetched active count: callers that already needed it
+     *  (criticality checks, zero-active bypasses) avoid a second O(tunnels)
+     *  scan inside this method.
+     *
+     *  @param ctx the router context
+     *  @param pool the client pool, never null
+     *  @param activeCount the pool's active tunnel count, fetched by the caller
+     *  @return maximum concurrent test claims for this pool
+     *  @since 0.9.71+
      */
-    private static int getClientPoolTestBudget(RouterContext ctx, TunnelPool pool) {
-        int activeCount = pool.getActiveTunnelCount();
+    private static int getClientPoolTestBudget(RouterContext ctx, TunnelPool pool, int activeCount) {
         int coverageCap = Math.max(1, (int) Math.ceil(activeCount * getPoolCoverageThreshold(ctx)));
         return Math.min(Math.min(Tuner.getTestClientBudget(), coverageCap), getMaxClientPerPool(ctx));
     }
@@ -281,11 +303,22 @@ public class TestJob extends JobImpl {
      *  How long after the last real traffic a tunnel test may run.  Tests are
      *  deferred while the tunnel is carrying real traffic: the traffic proves
      *  it works, and testing now would waste a job-queue slot and risk a
-     *  false negative under load.  Tests fire TRAFFIC_DEFER_MS after the
-     *  traffic stops.
+     *  false negative under load.  The defer is load-aware, not absolute —
+     *  during an ebb in test traffic the retest runs anyway (see
+     *  {@link #shouldDeferActiveGoodTunnel}).
      *  @since 0.9.71+
      */
-    private static final long TRAFFIC_DEFER_MS = 3 * 60 * 1000L;
+    static final long TRAFFIC_DEFER_MS = 3 * 60 * 1000L;
+
+    /**
+     *  In-flight cap divisor defining an "ebb" for active-GOOD retests: when
+     *  fewer than {@code maxConcurrent / ACTIVE_GOOD_EBB_DIVISOR} tests are
+     *  on the wire there is spare capacity to verify a busy tunnel.  With the
+     *  default cap of 64 the ebb is below 16 in flight, leaving the rest of
+     *  the cap for first-test dispatch so untested tunnels keep priority.
+     *  @since 0.9.71+
+     */
+    static final int ACTIVE_GOOD_EBB_DIVISOR = 4;
 
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
@@ -374,10 +407,42 @@ public class TestJob extends JobImpl {
     private static final ConcurrentHashMap<Long, TestJob> RUNNING_TESTS = new ConcurrentHashMap<>();
 
     /**
-     * Track which tunnel pools currently have tests running to ensure better coverage across pools.
-     * Key: pool identifier, Value: number of running tests in that pool
+     * Track test-instance claims per tunnel pool: one claim per created
+     * TestJob (queued or running), released exactly once when the instance
+     * terminates.  Feeds the per-pool budget in {@link #shouldSchedule}.
+     * Key: pool identifier, Value: outstanding claims in that pool
      */
     private static final ConcurrentHashMap<String, AtomicInteger> POOL_TEST_COUNTS = new ConcurrentHashMap<>();
+
+    /**
+     * Tests dispatched to the network and awaiting a reply or timeout, across
+     * all pools.  Unlike RUNNING_TESTS (which also counts delayed retests
+     * parked in the queue), this measures pressure actually on the wire and
+     * is the capacity gate for the batched first-test pump.
+     */
+    private static final AtomicInteger IN_FLIGHT = new AtomicInteger();
+
+    /**
+     * Per-pool dispatched tests awaiting completion, for the client and
+     * exploratory per-pool budget gates.
+     * Key: pool identifier, Value: in-flight tests in that pool
+     */
+    private static final ConcurrentHashMap<String, AtomicInteger> POOL_IN_FLIGHT = new ConcurrentHashMap<>();
+
+    /** Guards FIRST_TEST_BUFFER and BUFFERED_KEYS. */
+    private static final Object BUFFER_LOCK = new Object();
+
+    /** First-test candidates awaiting batched dispatch, oldest first. */
+    private static final Deque<PendingTest> FIRST_TEST_BUFFER = new ArrayDeque<PendingTest>();
+
+    /** Tunnel keys currently in FIRST_TEST_BUFFER, for offer-time dedupe. */
+    private static final Set<Long> BUFFERED_KEYS = new HashSet<Long>();
+
+    /** Set while a PumpJob is queued or running; cleared when the buffer drains. */
+    private static final AtomicBoolean PUMP_QUEUED = new AtomicBoolean();
+
+    /** Last time a batch-denial INFO line was logged (global rate limit). */
+    private static final AtomicLong _lastDenialLog = new AtomicLong();
 
     /**
      * Generate a unique key for a tunnel to track running tests.
@@ -423,6 +488,12 @@ public class TestJob extends JobImpl {
     /** Flag to indicate if this job is valid and should be queued */
     private boolean _valid = true;
 
+    /** True while this instance has a dispatched round awaiting reply or timeout. */
+    private volatile boolean _inFlightRound;
+
+    /** Pool id captured at dispatch so the terminal path can decrement the per-pool gauge. */
+    private volatile String _inFlightPoolId;
+
     /**
      * The total number of TestJob instances (active + queued) using atomic counter.
      * This provides more reliable limiting than job queue counting alone.
@@ -457,6 +528,10 @@ public class TestJob extends JobImpl {
     /**
      * Static method to check if a TestJob should be created and scheduled.
      * This prevents creating invalid job objects that would have timing issues.
+     * Note: the standard first-test entry points (build complete, stranded
+     * sweep, last chance) now route through {@link #offerFirstTest}, which
+     * applies the in-flight gates at drain time; this gate remains for
+     * direct scheduling.
      * @param ctx the router context
      * @param cfg the tunnel config
      * @return true if the job should be created and scheduled, false otherwise
@@ -501,7 +576,7 @@ public class TestJob extends JobImpl {
         // to stay UNTESTED indefinitely (a death spiral: UNTESTED tunnels
         // inflate the addTunnel() total, block new GOOD builds, and the pool
         // can never recover enough active tunnels to become non-critical).
-        boolean isFirstTest = (cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED);
+        boolean isFirstTest = (cfg.getTestStatus() == TunnelTestStatus.UNTESTED);
         if (isFirstTest) {
             int current = TOTAL_TEST_JOBS.get();
             // Check capacity: critical pools (0 GOOD) always get through,
@@ -513,33 +588,33 @@ public class TestJob extends JobImpl {
                     return false;
                 }
             }
-            AtomicInteger poolCount = null;
+            String claimedPoolId = null;
             if (pool != null && !pool.getSettings().isExploratory()) {
                 String poolId = getPoolId(pool);
                 int activeCount = pool.getActiveTunnelCount();
                 if (activeCount > 0) {
-                    int poolTestBudget = getClientPoolTestBudget(ctx, pool);
-                    poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
-                    int prev = poolCount.getAndIncrement();
+                    int poolTestBudget = getClientPoolTestBudget(ctx, pool, activeCount);
+                    int prev = claimPoolTestSlot(poolId) - 1;
                     if (prev >= poolTestBudget) {
-                        poolCount.decrementAndGet();
+                        releasePoolTestSlot(poolId);
                         return false;
                     }
+                    claimedPoolId = poolId;
                 }
             }
             if (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1)) {
-                if (poolCount != null) {poolCount.decrementAndGet();}
+                if (claimedPoolId != null) {releasePoolTestSlot(claimedPoolId);}
                 return false;
             }
             Long tunnelKey = getTunnelKey(cfg);
             if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
-                TOTAL_TEST_JOBS.decrementAndGet();
-                if (poolCount != null) {poolCount.decrementAndGet();}
+                decrementTotalJobs();
+                if (claimedPoolId != null) {releasePoolTestSlot(claimedPoolId);}
                 return false;
             }
             if (RUNNING_TESTS.size() >= getMaxConcurrentTests(ctx)) {
-                TOTAL_TEST_JOBS.decrementAndGet();
-                if (poolCount != null) {poolCount.decrementAndGet();}
+                decrementTotalJobs();
+                if (claimedPoolId != null) {releasePoolTestSlot(claimedPoolId);}
                 return false;
             }
             return true;
@@ -609,9 +684,9 @@ public class TestJob extends JobImpl {
             return false;
         }
 
-Long tunnelKey = getTunnelKey(cfg);
+        Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
-            TOTAL_TEST_JOBS.decrementAndGet();
+            decrementTotalJobs();
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
                 log.debug("Test already running for tunnel key " + tunnelKey + " -> Skipping duplicate test for " + cfg);
@@ -620,7 +695,7 @@ Long tunnelKey = getTunnelKey(cfg);
         }
 
         if (RUNNING_TESTS.size() >= getMaxConcurrentTests(ctx)) {
-            TOTAL_TEST_JOBS.decrementAndGet();
+            decrementTotalJobs();
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
                 log.debug("Concurrent test limit (" + getMaxConcurrentTests(ctx) + ") reached -> Not scheduling test for " + cfg);
@@ -634,19 +709,18 @@ Long tunnelKey = getTunnelKey(cfg);
             // UNTESTED tunnels must always get test priority to prevent pool
             // collapse — without tested tunnels, the LeaseSet expires and
             // the destination becomes unreachable.
-            boolean poolCritical = isZeroActivePool(pool);
-            if (!poolCritical) {
-                int poolTestBudget;
-                if (pool.getSettings().isExploratory()) {
-                    poolTestBudget = getMaxExploratoryPerPool(ctx);
-                } else {
-                    poolTestBudget = getClientPoolTestBudget(ctx, pool);
-                }
-                AtomicInteger poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
-                int prev = poolCount.getAndIncrement();
+            boolean exploratory = pool.getSettings().isExploratory();
+            // Active count drives the client budget only; exploratory pools
+            // use a fixed cap and never pay the O(tunnels) scan.
+            int activeCount = exploratory ? 0 : pool.getActiveTunnelCount();
+            if (exploratory || activeCount > 0) {
+                int poolTestBudget = exploratory
+                        ? getMaxExploratoryPerPool(ctx)
+                        : getClientPoolTestBudget(ctx, pool, activeCount);
+                int prev = claimPoolTestSlot(poolId) - 1;
                 if (prev >= poolTestBudget) {
-                    poolCount.decrementAndGet();
-                    TOTAL_TEST_JOBS.decrementAndGet();
+                    releasePoolTestSlot(poolId);
+                    decrementTotalJobs();
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " has " + prev +
@@ -661,7 +735,43 @@ Long tunnelKey = getTunnelKey(cfg);
     }
 
     /**
-     *  Whether the tunnel config has non-zero tunnel IDs at hop 0, i.e. the
+     * Claim one per-pool test-instance slot for {@code poolId}.
+     * The claim is done inside the map's compute() so it can never land on
+     * a counter that a concurrent {@link #releasePoolTestSlot} just removed
+     * (which would silently lose the claim and weaken the pool budget).
+     *
+     * @param poolId pool key, never null
+     * @return the pool's claim count after this claim; exact when no other
+     *         claim or release interleaves, otherwise a close reading used
+     *         only for the soft budget check
+     * @since 0.9.71+
+     */
+    static int claimPoolTestSlot(String poolId) {
+        AtomicInteger count = POOL_TEST_COUNTS.compute(poolId, (k, c) -> {
+            AtomicInteger a = c;
+            if (a == null) a = new AtomicInteger();
+            a.incrementAndGet();
+            return a;
+        });
+        return count.get();
+    }
+
+    /**
+     * Release one per-pool test-instance slot claimed by
+     * {@link #claimPoolTestSlot}, removing the counter at zero so the map
+     * stays bounded by the number of pools.  Decrement and removal happen in
+     * one computeIfPresent() step: a plain decrement-then-remove can unlink a
+     * counter a concurrent claim just incremented, losing the claim.
+     *
+     * @param poolId pool key, never null
+     * @since 0.9.71+
+     */
+    static void releasePoolTestSlot(String poolId) {
+        POOL_TEST_COUNTS.computeIfPresent(poolId, (k, c) -> c.decrementAndGet() > 0 ? c : null);
+    }
+
+    /**
+     * Whether the tunnel config has non-zero tunnel IDs at hop 0, i.e. the
      *  tunnel is fully built and can carry a test message.  Outbound tunnels
      *  only have a send tunnel ID at hop 0 (the gateway), inbound tunnels only
      *  a receive tunnel ID.  Any failure reading the IDs (not yet built) is
@@ -798,6 +908,570 @@ Long tunnelKey = getTunnelKey(cfg);
                              currentTestJobs >= expeditedJobLimit);
     }
 
+    // ---------------- Batched first-test dispatch ----------------
+    //
+    //  First tests (fresh builds, stranded sweeps, last-chance offers) flow
+    //  through a bounded buffer drained by a single PumpJob instead of one
+    //  queue entry per tunnel.  The pump claims candidates under the
+    //  in-flight gates and runs their TestJob directly, so draining a large
+    //  UNTESTED backlog costs one ready-queue slot per batch — paced by
+    //  queue health — instead of flooding the queue and having the queued
+    //  cap drop (and lose) the excess.
+
+    /**
+     * Maximum first-test candidates held in the batch buffer.  When full the
+     * oldest is evicted; the pool sweep re-offers evicted tunnels, so
+     * eviction only delays a test, never loses one.
+     * @since 0.9.71+
+     */
+    static final int MAX_BUFFERED_FIRST_TESTS = 128;
+
+    /**
+     * Candidates claimed from the buffer per pump run.  Small batches keep
+     * a burst from hitting the network at once while still retiring up to
+     * this many tunnels per ready-queue slot.
+     * @since 0.9.71+
+     */
+    static final int PUMP_BATCH_SIZE = 4;
+
+    /**
+     * Stranded-UNTESTED candidates a pool sweep offers per pass — bounds one
+     * ensure cycle's contribution to the buffer.
+     * @since 0.9.71+
+     */
+    static final int MAX_STRANDED_OFFERS_PER_SWEEP = 32;
+
+    /** Pump requeue delay while the job queue is quiet. @since 0.9.71+ */
+    static final long PUMP_DELAY_HEALTHY_MS = 250;
+
+    /** Pump requeue delay while the job queue is busy. @since 0.9.71+ */
+    static final long PUMP_DELAY_BUSY_MS = 1000;
+
+    /** Pump requeue delay when the job queue is badly lagging. @since 0.9.71+ */
+    static final long PUMP_DELAY_LAGGED_MS = 3000;
+
+    /** Job-queue lag above which the pump uses the busy delay (ms). @since 0.9.71+ */
+    static final long PUMP_BUSY_LAG_MS = MAX_LAG_FOR_SCHEDULE;
+
+    /** Job-queue lag above which the pump uses the lagged delay (ms). @since 0.9.71+ */
+    static final long PUMP_LAGGED_LAG_MS = 3000;
+
+    /** Minimum spacing between batch-denial INFO lines (ms). @since 0.9.71+ */
+    static final long DENIAL_LOG_INTERVAL_MS = 3 * 60 * 1000L;
+
+    /**
+     * A first-test candidate waiting in the batch buffer.
+     */
+    private static final class PendingTest {
+        final PooledTunnelCreatorConfig cfg;
+        final TunnelPool pool;
+
+        PendingTest(PooledTunnelCreatorConfig cfg, TunnelPool pool) {
+            this.cfg = cfg;
+            this.pool = pool;
+        }
+    }
+
+    /**
+     * Offer a tunnel's first test to the batched dispatch buffer instead of
+     * creating a queue entry per tunnel.  All first-test producers (fresh
+     * builds, stranded-UNTESTED sweeps, last-chance offers) funnel through
+     * here: the buffer absorbs bursts, a single {@link PumpJob} drains it in
+     * small batches paced by queue health, and the in-flight gates decide
+     * what actually dispatches.  Duplicate offers of the same tunnel key are
+     * dropped at offer time; gates are re-evaluated at drain time, so a
+     * denial here is only a later retry.  Every call also (re)starts the
+     * pump when it is idle, so a pump lost to queue overload is revived by
+     * the next offer (the sweeps re-offer at least every minute).
+     *
+     * @param ctx the router context
+     * @param cfg the tunnel config (first test only; retests keep the
+     *            existing queue path so delayed retests never sit in the buffer)
+     * @param pool the pool owning the tunnel; may be null (read from cfg)
+     * @return true if the candidate was newly buffered
+     * @since 0.9.71+
+     */
+    static boolean offerFirstTest(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
+        if (ctx == null || cfg == null) return false;
+        if (ctx.router().gracefulShutdownInProgress()) return false;
+        if (pool == null) pool = cfg.getTunnelPool();
+        Long key = getTunnelKey(cfg);
+        boolean newlyBuffered = false;
+        if (key != null && !RUNNING_TESTS.containsKey(key)) {
+            List<PendingTest> evicted = Collections.emptyList();
+            synchronized (BUFFER_LOCK) {
+                if (BUFFERED_KEYS.add(key)) {
+                    evicted = offerBounded(FIRST_TEST_BUFFER,
+                            new PendingTest(cfg, pool), MAX_BUFFERED_FIRST_TESTS);
+                    for (PendingTest old : evicted) {
+                        Long oldKey = getTunnelKey(old.cfg);
+                        if (oldKey != null) {
+                            BUFFERED_KEYS.remove(oldKey);
+                        }
+                    }
+                    newlyBuffered = true;
+                }
+            }
+            // Stats outside the lock: addRateData takes stat-manager locks the
+            // buffer must never sit behind.
+            for (int i = 0; i < evicted.size(); i++) {
+                ctx.statManager().addRateData("tunnel.testBufferDropped", 1);
+            }
+            if (newlyBuffered) {
+                ctx.statManager().addRateData("tunnel.testBufferOffered", 1);
+            }
+        }
+        // Revive the pump on every offer, including deduped ones: a pump
+        // dropped under queue overload must not wait for a future successful
+        // offer to drain a buffer that is already non-empty.  The buffer
+        // add above precedes this CAS so a pump cannot observe an empty
+        // buffer and clear the flag after work has landed.
+        if (PUMP_QUEUED.compareAndSet(false, true)) {
+            ctx.jobQueue().addJob(new PumpJob(ctx));
+        }
+        return newlyBuffered;
+    }
+
+    /**
+     * Drain up to {@code max} removable elements from the front of
+     * {@code buf}.  An element is removed when {@code eligible} returns true
+     * (dispatch it, or discard it as stale); the first element that is not
+     * eligible stays at the head and ends the claim, so a temporarily denied
+     * candidate pauses the batch behind it instead of being skipped and
+     * retried out of order, while permanently-stale entries never wedge the
+     * head (they test as eligible and are dropped by the caller).
+     *
+     * @param buf the buffer to claim from, modified in place
+     * @param max maximum number of elements to claim
+     * @param eligible removal predicate; false leaves the element in place
+     * @return the claimed elements in buffer order; never null
+     * @since 0.9.71+
+     */
+    static <T> List<T> claimBatch(Deque<T> buf, int max, Predicate<T> eligible) {
+        List<T> claimed = new ArrayList<T>();
+        while (claimed.size() < max && !buf.isEmpty()) {
+            T head = buf.peekFirst();
+            if (head == null || !eligible.test(head)) {
+                break;
+            }
+            buf.pollFirst();
+            claimed.add(head);
+        }
+        return claimed;
+    }
+
+    /**
+     * Pop up to {@code max} elements from the front of {@code buf} with no
+     * eligibility gate.  Callers that must not evaluate anything (expensive
+     * checks, lock-ordering rules) use this and triage the popped elements
+     * themselves, re-buffering the ones that cannot proceed.
+     *
+     * @param buf the buffer to claim from, modified in place
+     * @param max maximum number of elements to claim
+     * @return the claimed elements in buffer order; never null
+     * @since 0.9.71+
+     */
+    static <T> List<T> claimBatch(Deque<T> buf, int max) {
+        List<T> claimed = new ArrayList<T>();
+        while (claimed.size() < max && !buf.isEmpty()) {
+            T head = buf.pollFirst();
+            if (head == null) break;
+            claimed.add(head);
+        }
+        return claimed;
+    }
+
+    /**
+     * Append {@code elem} to the buffer, evicting from the front while at or
+     * above {@code bound} so the buffer can never grow without limit.
+     *
+     * @param buf the buffer to append to
+     * @param elem the element to append
+     * @param bound maximum buffer size after the append; non-positive means unbounded
+     * @return the evicted elements oldest first; empty when nothing was evicted
+     * @since 0.9.71+
+     */
+    static <T> List<T> offerBounded(Deque<T> buf, T elem, int bound) {
+        List<T> evicted = new ArrayList<T>(1);
+        while (bound > 0 && buf.size() >= bound) {
+            T old = buf.pollFirst();
+            if (old == null) break;
+            evicted.add(old);
+        }
+        buf.addLast(elem);
+        return evicted;
+    }
+
+    /**
+     * Pump requeue delay for the current job-queue lag: brisk while quiet,
+     * slower when busy, slowest when lagging, so draining a test backlog
+     * never competes with router-critical jobs.
+     *
+     * @param maxLag current job-queue max lag (ms)
+     * @return requeue delay in ms
+     * @since 0.9.71+
+     */
+    static long pumpDelayMs(long maxLag) {
+        if (maxLag > PUMP_LAGGED_LAG_MS) return PUMP_DELAY_LAGGED_MS;
+        if (maxLag > PUMP_BUSY_LAG_MS) return PUMP_DELAY_BUSY_MS;
+        return PUMP_DELAY_HEALTHY_MS;
+    }
+
+    /**
+     * Why a batch candidate cannot dispatch yet, or null when it can.
+     * Side-effect free (claims happen in {@link #claimBatchSlot} after the
+     * gate passes) and measured on in-flight pressure — tests actually on
+     * the wire — so delayed retests holding queue slots no longer starve
+     * first tests.
+     *
+     * @param inFlight dispatched tests awaiting completion (all pools)
+     * @param maxConcurrent configured in-flight cap
+     * @param poolInFlight dispatched tests for this pool
+     * @param poolBudget per-pool in-flight budget, or -1 to skip the pool gate
+     * @param total current TestJob instances (memory bound)
+     * @param hardLimit instance memory bound
+     * @return denial reason, or null when the candidate is admitted
+     * @since 0.9.71+
+     */
+    static String batchDenialReason(int inFlight, int maxConcurrent,
+                                    int poolInFlight, int poolBudget,
+                                    int total, int hardLimit) {
+        if (inFlight >= maxConcurrent) {
+            return "in-flight cap (" + inFlight + "/" + maxConcurrent + ")";
+        }
+        if (poolBudget >= 0 && poolInFlight >= poolBudget) {
+            return "pool budget (" + poolInFlight + "/" + poolBudget + ")";
+        }
+        if (total >= hardLimit) {
+            return "hard limit (" + total + "/" + hardLimit + ")";
+        }
+        return null;
+    }
+
+    /**
+     * Live gate evaluation for one buffered candidate: reads the in-flight
+     * gauges and configured budgets, then defers to the pure overload.
+     * Collapsed client pools bypass the pool budget (their UNTESTED tunnels
+     * must drain or the LeaseSet never republishes), mirroring
+     * {@link #shouldSchedule}.
+     *
+     * @param ctx the router context
+     * @param cfg the tunnel config
+     * @param pool the owning pool (may be null; read from cfg)
+     * @return denial reason, or null when the candidate is admitted
+     * @since 0.9.71+
+     */
+    static String batchDenialReason(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
+        if (cfg == null) return "no config";
+        if (pool == null) pool = cfg.getTunnelPool();
+        int poolBudget = -1;
+        int poolInFlight = 0;
+        if (pool != null) {
+            if (pool.getSettings().isExploratory()) {
+                poolBudget = getMaxExploratoryPerPool(ctx);
+            } else {
+                // One O(tunnels) scan feeds both the zero-active bypass
+                // (budget stays -1 when the pool is collapsed) and the
+                // client budget itself.
+                int activeCount = pool.getActiveTunnelCount();
+                if (activeCount > 0) {
+                    poolBudget = getClientPoolTestBudget(ctx, pool, activeCount);
+                }
+            }
+            AtomicInteger infl = POOL_IN_FLIGHT.get(getPoolId(pool));
+            if (infl != null) poolInFlight = infl.get();
+        }
+        return batchDenialReason(IN_FLIGHT.get(), getMaxConcurrentTests(ctx),
+                                 poolInFlight, poolBudget,
+                                 TOTAL_TEST_JOBS.get(), getHardLimit(ctx));
+    }
+
+    /**
+     * Whether a buffered candidate should be discarded instead of tested:
+     * its pool died, it was never fully built, it is a ping tunnel or was
+     * pruned for early expiry, its test already started (registered while
+     * buffered), or it is no longer UNTESTED (a prior dispatch tested or
+     * traffic-proven it while it waited).
+     *
+     * @param ctx the router context (clock for the early-expiry check)
+     * @param cfg the buffered tunnel config
+     * @param pool the owning pool (may be null; read from cfg)
+     * @return true when the candidate must be dropped rather than tested
+     * @since 0.9.71+
+     */
+    static boolean shouldDropPending(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
+        if (cfg == null) return true;
+        if (pool == null) pool = cfg.getTunnelPool();
+        if (pool == null || !pool.isAlive()) return true;
+        if (!hasValidTunnelIds(cfg)) return true;
+        if (isPingTunnel(cfg)) return true;
+        if (isEarlyExpiry(cfg, ctx.clock().now())) return true;
+        if (cfg.getTestStatus() != TunnelTestStatus.UNTESTED) return true;
+        Long key = getTunnelKey(cfg);
+        return key == null || RUNNING_TESTS.containsKey(key);
+    }
+
+    /**
+     * Reserve the instance slots a batched TestJob needs: the total counter
+     * (memory bound) and the per-pool claim.  The pool slot is claimed
+     * whenever the instance has a pool — exactly the condition under which
+     * the constructor's invalidation paths and {@link #cleanupTunnelTracking}
+     * release it — so claims and releases can never drift apart as pool state
+     * (active count, exploratory) changes between claim and release.
+     * Called only after {@link #batchDenialReason(int, int, int, int, int, int)}
+     * passed, so a lost CAS race is a rare skip the caller re-buffers.
+     *
+     * @param ctx the router context
+     * @param cfg the tunnel config
+     * @param pool the owning pool (may be null; read from cfg)
+     * @return true when both claims were acquired
+     * @since 0.9.71+
+     */
+    private static boolean claimBatchSlot(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
+        if (pool == null) pool = cfg.getTunnelPool();
+        int current = TOTAL_TEST_JOBS.get();
+        if (current >= getHardLimit(ctx)) {
+            return false;
+        }
+        if (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1)) {
+            return false;
+        }
+        if (pool != null) {
+            claimPoolTestSlot(getPoolId(pool));
+        }
+        return true;
+    }
+
+    /**
+     * Return candidates to the buffer head, preserving their order, after a
+     * gate denial or a lost claim race so the next pump run retries them
+     * instead of waiting for a sweep re-offer.  An entry whose tunnel key is
+     * already buffered again (a concurrent re-offer while it was popped) is
+     * dropped rather than duplicated.
+     *
+     * @param pending candidates in original buffer order; empty is a no-op
+     * @since 0.9.71+
+     */
+    private static void rebufferAll(List<PendingTest> pending) {
+        if (pending.isEmpty()) {
+            return;
+        }
+        synchronized (BUFFER_LOCK) {
+            for (int i = pending.size() - 1; i >= 0; i--) {
+                PendingTest p = pending.get(i);
+                Long key = getTunnelKey(p.cfg);
+                if (key == null || BUFFERED_KEYS.add(key)) {
+                    FIRST_TEST_BUFFER.addFirst(p);
+                }
+            }
+        }
+    }
+
+    /**
+     * Rate-limited INFO line for a batch denial, so the reason a backlog is
+     * not draining stays visible without flooding the log.
+     *
+     * @param ctx the router context
+     * @param reason the denial reason from the gate
+     * @since 0.9.71+
+     */
+    private static void logBatchDenial(RouterContext ctx, String reason) {
+        long now = ctx.clock().now();
+        long last = _lastDenialLog.get();
+        if (now - last >= DENIAL_LOG_INTERVAL_MS && _lastDenialLog.compareAndSet(last, now)) {
+            Log log = ctx.logManager().getLog(TestJob.class);
+            if (log.shouldInfo()) {
+                log.info("Batched first-test denied (" + reason + ") -> candidates stay buffered");
+            }
+        }
+    }
+
+    /**
+     * Drain one batch from the first-test buffer and dispatch admitted
+     * candidates directly (no per-tunnel queue entry).
+     *
+     * The pop runs under BUFFER_LOCK with zero evaluation — gate checks call
+     * pool.getActiveTunnelCount(), which takes the pool's tunnel lock, and
+     * taking pool locks under BUFFER_LOCK both stalls every offer behind an
+     * O(tunnels) scan and invites lock-order inversion.  Stale candidates are
+     * discarded, a denied or claim-raced candidate and the untested remainder
+     * are re-buffered in order (FIFO preserved, nothing skipped), and the
+     * denial is rate-limited logged.
+     *
+     * @param ctx the router context
+     * @return tests dispatched this run
+     * @since 0.9.71+
+     */
+    static int drainBuffer(RouterContext ctx) {
+        List<PendingTest> batch;
+        synchronized (BUFFER_LOCK) {
+            batch = claimBatch(FIRST_TEST_BUFFER, PUMP_BATCH_SIZE);
+            for (PendingTest p : batch) {
+                Long key = getTunnelKey(p.cfg);
+                if (key != null) {
+                    BUFFERED_KEYS.remove(key);
+                }
+            }
+        }
+        int dispatched = 0;
+        for (int i = 0; i < batch.size(); i++) {
+            PendingTest p = batch.get(i);
+            if (shouldDropPending(ctx, p.cfg, p.pool)) {
+                ctx.statManager().addRateData("tunnel.testBufferRejected", 1);
+                continue;
+            }
+            String reason = batchDenialReason(ctx, p.cfg, p.pool);
+            if (reason != null) {
+                rebufferAll(batch.subList(i, batch.size()));
+                ctx.statManager().addRateData("tunnel.testBatchDenied", 1);
+                logBatchDenial(ctx, reason);
+                break;
+            }
+            if (!claimBatchSlot(ctx, p.cfg, p.pool)) {
+                rebufferAll(batch.subList(i, batch.size()));
+                break;
+            }
+            TestJob job = new TestJob(ctx, p.cfg, p.pool);
+            if (!job.isValid()) {
+                // The constructor released the claims on its invalid paths.
+                ctx.statManager().addRateData("tunnel.testBufferRejected", 1);
+                continue;
+            }
+            dispatched++;
+            ctx.statManager().addRateData("tunnel.testBatchDispatched", 1);
+            try {
+                job.runJob();
+            } catch (Throwable t) {
+                // Release the instance's claims so a thrown test cannot leak
+                // the counters that gate further dispatch.
+                job.dropped();
+                Log log = ctx.logManager().getLog(TestJob.class);
+                if (log.shouldError()) {
+                    log.error("Batched test dispatch failed for " + p.cfg, t);
+                }
+            }
+        }
+        return dispatched;
+    }
+
+    /**
+     * Mark a round as dispatched: count it against the in-flight gates until
+     * the reply or timeout completes the round.  Called immediately before
+     * dispatchOutbound so the gauge never leads the wire.
+     *
+     * @since 0.9.71+
+     */
+    private void markInFlight() {
+        String poolId = _pool != null ? getPoolId(_pool) : null;
+        _inFlightPoolId = poolId;
+        _inFlightRound = true;
+        IN_FLIGHT.incrementAndGet();
+        if (poolId != null) {
+            // Increment inside compute(): a plain increment after
+            // computeIfAbsent can land on a counter a concurrent release just
+            // removed, losing the gauge entry.
+            POOL_IN_FLIGHT.compute(poolId, (k, c) -> {
+                AtomicInteger a = c;
+                if (a == null) a = new AtomicInteger();
+                a.incrementAndGet();
+                return a;
+            });
+        }
+    }
+
+    /**
+     * Release this instance's in-flight claim when its round terminates.
+     * Idempotent: only a round that actually dispatched (flag set in
+     * {@link #markInFlight}) decrements, and a second terminal for the same
+     * round is a no-op, so the gauges cannot drift negative.  The per-pool
+     * decrement removes the counter at zero atomically (computeIfPresent),
+     * so a concurrent markInFlight can never increment an unlinked counter.
+     *
+     * @since 0.9.71+
+     */
+    private void endInFlight() {
+        if (!_inFlightRound) return;
+        _inFlightRound = false;
+        IN_FLIGHT.decrementAndGet();
+        String poolId = _inFlightPoolId;
+        if (poolId != null) {
+            POOL_IN_FLIGHT.computeIfPresent(poolId, (k, c) -> c.decrementAndGet() > 0 ? c : null);
+        }
+    }
+
+    /**
+     * Single queue entry that drains the first-test buffer in small batches.
+     * Batched tunnels are dispatched directly from this job (no per-tunnel
+     * queue entry), so draining a large UNTESTED backlog costs one ready
+     * queue slot and a health-paced trickle instead of one slot per tunnel.
+     * The next run is queued while the buffer is non-empty and the flag
+     * stays set; the flag clears on an empty buffer, on shutdown, or when
+     * this job is dropped under overload (the next offer revives it).
+     */
+    private static class PumpJob extends JobImpl {
+        private final RouterContext _ctx;
+
+        PumpJob(RouterContext ctx) {
+            super(ctx);
+            _ctx = ctx;
+        }
+
+        @Override
+        public String getName() {
+            return "Batch Tunnel Test Pump";
+        }
+
+        @Override
+        public void runJob() {
+            boolean shuttingDown = _ctx.router().gracefulShutdownInProgress();
+            if (shuttingDown) {
+                PUMP_QUEUED.set(false);
+                return;
+            }
+            try {
+                drainBuffer(_ctx);
+            } catch (Throwable t) {
+                // Keep the pump alive: a non-empty buffer is requeued below
+                // and retried under the usual pacing.
+                Log log = _ctx.logManager().getLog(TestJob.class);
+                if (log.shouldError()) {
+                    log.error("Batched test pump drain failed", t);
+                }
+            }
+            boolean empty;
+            synchronized (BUFFER_LOCK) {
+                empty = FIRST_TEST_BUFFER.isEmpty();
+            }
+            if (!empty) {
+                scheduleNext();
+                return;
+            }
+            PUMP_QUEUED.set(false);
+            synchronized (BUFFER_LOCK) {
+                empty = FIRST_TEST_BUFFER.isEmpty();
+            }
+            if (empty) return;
+            // Raced with an offer that saw the flag still set: revive here.
+            if (PUMP_QUEUED.compareAndSet(false, true)) {
+                scheduleNext();
+            }
+        }
+
+        @Override
+        public void dropped() {
+            // Do not reschedule from here — under overload that would spin.
+            // The next offerFirstTest() (build or sweep) restarts the pump.
+            PUMP_QUEUED.set(false);
+        }
+
+        private void scheduleNext() {
+            PumpJob next = new PumpJob(_ctx);
+            next.getTiming().setStartAfter(_ctx.clock().now() +
+                    pumpDelayMs(_ctx.jobQueue().getMaxLag()));
+            _ctx.jobQueue().addJob(next);
+        }
+    }
+
     /**
      * Check if this TestJob instance is valid and should be queued.
      * @return true if valid, false if it should not be queued
@@ -807,7 +1481,7 @@ Long tunnelKey = getTunnelKey(cfg);
     }
 
     /**
-     * Verify total job counter not over hard limit (slot reserved in shouldSchedule).
+     * Verify total job counter not over hard limit (slot reserved by the scheduler).
      * @param ctx the router context
      * @return true if under hard limit, false if exceeded
      */
@@ -818,9 +1492,10 @@ Long tunnelKey = getTunnelKey(cfg);
 
     /**
      * Atomically decrement total job counter.
-     * Used only by constructor invalidation paths that run before the job is
-     * queued (and so can never race {@link #dropped()}).  Runtime completion
-     * paths must use {@link #decrementIfCounted()} for idempotency.
+     * Used by pre-queue paths that are never shared with a running instance:
+     * constructor invalidation, {@link #shouldSchedule} rollback, and
+     * {@link #claimBatchSlot} failure handling.  Runtime completion paths
+     * must use {@link #decrementIfCounted()} for idempotency.
      */
     private static void decrementTotalJobs() {
         TOTAL_TEST_JOBS.decrementAndGet();
@@ -841,26 +1516,17 @@ Long tunnelKey = getTunnelKey(cfg);
     /**
      * Clean up this test job from tunnel tracking.
      * Must be called when a test job completes or is cancelled.
+     * Idempotent: the pool slot is released only when this call actually
+     * removes the instance's RUNNING_TESTS registration, so a duplicate
+     * cleanup (defer path racing a terminal path) cannot double-release.
      * Note: This does NOT affect the TOTAL_TEST_JOBS counter.
      */
     private void cleanupTunnelTracking() {
         Long tunnelKey = getTunnelKey(_cfg);
-        if (tunnelKey != null) {
-            RUNNING_TESTS.remove(tunnelKey, this);
-        }
-
-        // Clean up pool test count tracking
+        boolean wasRegistered = tunnelKey != null && RUNNING_TESTS.remove(tunnelKey, this);
         TunnelPool pool = _pool;
-        if (pool != null) {
-            String poolId = getPoolId(pool);
-            AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
-            if (poolCount != null) {
-                poolCount.decrementAndGet();
-                // Remove from map if count reaches zero to prevent memory leak
-                if (poolCount.get() <= 0) {
-                    POOL_TEST_COUNTS.remove(poolId);
-                }
-            }
+        if (wasRegistered && pool != null) {
+            releasePoolTestSlot(getPoolId(pool));
         }
     }
 
@@ -877,28 +1543,24 @@ Long tunnelKey = getTunnelKey(cfg);
             if (_log.shouldError()) {
                 _log.error("Invalid Tunnel Test configuration → No pool for " + cfg, new Exception("origin"));
             }
+            // No pool means no pool-slot claim was made, but the scheduler
+            // already claimed the total slot — release it or the instance
+            // cap leaks one slot every time this fires.
+            decrementTotalJobs();
             _valid = false;
             return;
         }
-        // Pool test count was already claimed by shouldSchedule() —
-        // don't double-increment here.  Cleanup paths below handle
-        // the decrement if this TestJob is later invalidated.
+        // The pool test count and total slot were already claimed by the
+        // scheduler (claimBatchSlot() in the batch pump, or shouldSchedule()
+        // for direct scheduling) — don't double-increment here.  The invalid
+        // paths below release both claims.
 
         // Register this test as running for the tunnel
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey == null) {
             if (_log.shouldWarn())
                 _log.warn("Failed to generate tunnel key -> Invalidating test for " + cfg);
-            if (_pool != null) {
-                String poolId = getPoolId(_pool);
-                AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
-                if (poolCount != null) {
-                    poolCount.decrementAndGet();
-                    if (poolCount.get() <= 0) {
-                        POOL_TEST_COUNTS.remove(poolId);
-                    }
-                }
-            }
+            releasePoolTestSlot(getPoolId(_pool));
             decrementTotalJobs();
             _valid = false;
             return;
@@ -909,43 +1571,20 @@ Long tunnelKey = getTunnelKey(cfg);
             if (_log.shouldDebug()) {
                 _log.debug("Test already registered for tunnel key " + tunnelKey + " -> Invalidating duplicate test for " + cfg);
             }
-            // Clean up pool registration since we're not proceeding
-            if (_pool != null) {
-                String poolId = getPoolId(_pool);
-                AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
-                if (poolCount != null) {
-                    poolCount.decrementAndGet();
-                    if (poolCount.get() <= 0) {
-                        POOL_TEST_COUNTS.remove(poolId);
-                    }
-                }
-            }
-            decrementTotalJobs(); // Slot reserved in shouldSchedule, now unused
+            releasePoolTestSlot(getPoolId(_pool));
+            decrementTotalJobs(); // Slot reserved by the scheduler, now unused
             _valid = false;
             return;
         }
 
-        // Verify total job counter not over hard limit (slot reserved in shouldSchedule)
+        // Verify total job counter not over hard limit (slot reserved by the scheduler)
         if (!isUnderHardLimit(ctx)) {
             if (_log.shouldInfo()) {
                 _log.info("Hard limit (" + getHardLimit(ctx) + ") reached -> Not scheduling test for " + cfg);
             }
-            // Clean up tunnel registration
-            if (tunnelKey != null) {
-                RUNNING_TESTS.remove(tunnelKey, this);
-            }
-            // Clean up pool registration
-            if (_pool != null) {
-                String poolId = getPoolId(_pool);
-                AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
-                if (poolCount != null) {
-                    poolCount.decrementAndGet();
-                    if (poolCount.get() <= 0) {
-                        POOL_TEST_COUNTS.remove(poolId);
-                    }
-                }
-            }
-            decrementTotalJobs(); // Slot reserved in shouldSchedule, now unused
+            RUNNING_TESTS.remove(tunnelKey, this);
+            releasePoolTestSlot(getPoolId(_pool));
+            decrementTotalJobs(); // Slot reserved by the scheduler, now unused
             _valid = false;
             return;
         }
@@ -1002,13 +1641,18 @@ Long tunnelKey = getTunnelKey(cfg);
                 return;
             }
 
-            // Client tunnels: defer under pressure but don't abort
+            // Client tunnels: defer under pressure but don't abort.  Release
+            // the registration only when the retest cannot be queued — while
+            // the job stays queued it must keep holding its RUNNING_TESTS
+            // entry and counters, or a sweep re-offer can create a duplicate
+            // TestJob and the instance cap permanently under-counts.
             if (_log.shouldWarn()) {
                 _log.warn("Deferring test due to job lag (" + maxLag + "ms) -> " + _cfg);
             }
-            scheduleRetest(_cfg.needsExpeditedTest());
-            cleanupTunnelTracking();
-            decrementIfCounted();
+            if (!scheduleRetest(_cfg.needsExpeditedTest())) {
+                cleanupTunnelTracking();
+                decrementIfCounted();
+            }
             return;
         }
 
@@ -1020,7 +1664,11 @@ Long tunnelKey = getTunnelKey(cfg);
         // Defer retests of GOOD tunnels that are provably carrying real
         // traffic — the traffic shows they're in active use, and testing
         // them now wastes a job-queue slot and risks a false negative on
-        // high-bandwidth tunnels.  Deferral is GOOD-only: UNTESTED tunnels
+        // high-bandwidth tunnels.  The defer holds only while test slots
+        // are contended; during an ebb (see shouldDeferActiveGoodTunnel)
+        // the retest runs now, so a continuously-busy GOOD tunnel still
+        // gets a fresh latency sample for the console instead of staying
+        // unverified forever.  Deferral is GOOD-only: UNTESTED tunnels
         // must be tested regardless (otherwise active clients receive data
         // on every new tunnel before the test runs, the test is perpetually
         // skipped, the tunnel stays UNTESTED forever, and the pool never
@@ -1030,9 +1678,8 @@ Long tunnelKey = getTunnelKey(cfg);
         // delivery.  Must run before setTestStarted() flips the status to
         // TESTING.
         long lastTraffic = _cfg.getLastRealTraffic();
-        if (lastTraffic > 0 &&
-            _cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
-            now - lastTraffic < TRAFFIC_DEFER_MS) {
+        if (shouldDeferActiveGoodTunnel(lastTraffic, now, _cfg.getTestStatus(),
+                                        IN_FLIGHT.get(), getMaxConcurrentTests(ctx))) {
             if (_log.shouldInfo()) {
                 _log.info("Deferring test on " + _cfg + " -> Real traffic " +
                           (now - lastTraffic) + "ms ago");
@@ -1112,7 +1759,7 @@ Long tunnelKey = getTunnelKey(cfg);
             // they're obviously working and testing risks false failures
             // on high-traffic paths.  Tunnel must be tested at least once
             // so every tunnel gets an initial latency reading.
-            if (_cfg.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED &&
+            if (_cfg.getTestStatus() != TunnelTestStatus.UNTESTED &&
                 ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
                 if (_log.shouldInfo()) {
                     _log.info("Skipping test on " + _cfg + " -> Data recently received");
@@ -1270,6 +1917,9 @@ Long tunnelKey = getTunnelKey(cfg);
                        _outTunnel + " / " + _replyTunnel);
         }
 
+        // The round is going on the wire: count it against the in-flight
+        // gates until the reply or timeout completes it.
+        markInFlight();
         ctx.tunnelDispatcher().dispatchOutbound(
             m,
             _outTunnel.getSendTunnelId(0),
@@ -1285,6 +1935,7 @@ Long tunnelKey = getTunnelKey(cfg);
      * @param ms time in milliseconds the test took to succeed
      */
     public void testSuccessful(int ms) {
+        endInFlight();
         final RouterContext ctx = getContext();
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
@@ -1510,7 +2161,38 @@ Long tunnelKey = getTunnelKey(cfg);
         return remainingTunnels <= 2 && failures > 0;
     }
 
+    /**
+     *  Whether a retest of a GOOD tunnel carrying recent real traffic must
+     *  wait for the traffic to stop.  The traffic defer exists so busy
+     *  tunnels don't burn test slots or risk load-induced false negatives,
+     *  but deferring unconditionally starves a continuously-busy GOOD tunnel
+     *  of any test at all — it keeps no fresh latency sample, so the console
+     *  never shows a latency for it.  So the defer is load-aware: it holds
+     *  only while test slots are actually contended (in-flight at or above
+     *  {@code maxConcurrent / ACTIVE_GOOD_EBB_DIVISOR}); during an ebb the
+     *  retest runs now and refreshes the latency sample.  Untested tunnels
+     *  keep strict priority — they are never subject to this defer, and the
+     *  ebb line leaves most of the in-flight cap free for first tests.
+     *
+     *  @param lastTraffic ms timestamp of the tunnel's last real traffic,
+     *         or <= 0 when it has carried none
+     *  @param now current time in ms
+     *  @param status the tunnel's current test status
+     *  @param inFlight tests currently dispatched to the network (all pools)
+     *  @param maxConcurrent configured in-flight cap
+     *  @return true when the retest should wait for the traffic to ebb
+     *  @since 0.9.71+
+     */
+    static boolean shouldDeferActiveGoodTunnel(long lastTraffic, long now, TunnelTestStatus status,
+                                               int inFlight, int maxConcurrent) {
+        if (lastTraffic <= 0 || now - lastTraffic >= TRAFFIC_DEFER_MS) return false;
+        if (status != TunnelTestStatus.GOOD) return false;
+        if (maxConcurrent <= 0) return true;
+        return inFlight * ACTIVE_GOOD_EBB_DIVISOR >= maxConcurrent;
+    }
+
     private void testFailed(long timeToFail) {
+        endInFlight();
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
             decrementIfCounted();
@@ -2008,10 +2690,14 @@ Long tunnelKey = getTunnelKey(cfg);
 
     /**
      * Called when the job is dropped due to router overload.
-     * Ensure we clean up the total job counter when dropped.
+     * Ensure we clean up the total job counter when dropped.  Also releases
+     * any dispatch claim held by a run that threw after markInFlight() (the
+     * batch pump's catch calls this mid-run); for an ordinary queue drop the
+     * flag is clear and endInFlight() is a no-op.
      */
     @Override
     public void dropped() {
+        endInFlight();
         cleanupTunnelTracking();
         decrementIfCounted();
     }
