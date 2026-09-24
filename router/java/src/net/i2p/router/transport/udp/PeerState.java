@@ -435,14 +435,14 @@ public class PeerState {
      * fix pulled from tens of seconds down to ~1s — allowing a window collapse
      * every second under sustained loss. Real congestion still uses
      * {@code max(rto, this)}; migration never reaches this path.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static final long CONGESTION_COOLDOWN_MIN_MS = 5000;
     /**
      * How long send-window growth stays frozen after a path-unverified
      * migration signal (ms). Refreshed while the path remains unverified;
      * cleared by {@link #pathVerified()} when migration ends.
-     * @since 0.9.72+
+     * @since 0.9.71+
      */
     static final long PATH_UNVERIFIED_FREEZE_MS = 5000;
     /**
@@ -1543,7 +1543,7 @@ public class PeerState {
      *  @param minRTO floor in ms
      *  @param maxRTO ceiling in ms
      *  @return the RTO to store, clamped to [minRTO, maxRTO]
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static int nextCongestionRTO(int currentRTO, int rtt, int rttDeviation, int minRTO, int maxRTO) {
         int clamped = Math.min(maxRTO, Math.max(minRTO, currentRTO));
@@ -1566,7 +1566,7 @@ public class PeerState {
      *  @param now current time in ms
      *  @param rto current RTO in ms
      *  @return true if a new congestion response may proceed
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static boolean congestionCooldownElapsed(long last, long now, int rto) {
         long cooldown = Math.max((long) rto, CONGESTION_COOLDOWN_MIN_MS);
@@ -1580,7 +1580,7 @@ public class PeerState {
      *  @param now current time in ms
      *  @param pathUnverifiedUntil freeze expiry in ms, or 0 if not frozen
      *  @return true if window growth must not proceed
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     static boolean pathUnverifiedBlocksGrowth(long now, long pathUnverifiedUntil) {
         return pathUnverifiedUntil > 0 && now < pathUnverifiedUntil;
@@ -2017,7 +2017,7 @@ public class PeerState {
      *  does not collapse CWIN or adjust RTO — migration is a path change, not
      *  congestion, and a full collapse thrashes multi-homed peers.
      *  Growth resumes via {@link #pathVerified()} or when the freeze expires.
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     void pathUnverified() {
         long now = _context.clock().now();
@@ -2028,7 +2028,7 @@ public class PeerState {
     /**
      *  Clear the path-unverified growth freeze (migration completed, failed,
      *  or cancelled — the current path is again the verified one).
-     *  @since 0.9.72+
+     *  @since 0.9.71+
      */
     void pathVerified() {
         _pathUnverifiedUntil = 0;
