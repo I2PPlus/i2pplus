@@ -89,6 +89,16 @@ public class BuildHandler implements Runnable {
     private static volatile int _maxQueue = IS_SLOW ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 5*1000;
+    /**
+     *  Extra RI lookup attempts allowed after a next-hop lookup times out.
+     *  A timeout here is a local netdb miss (floodfills slow, RI just evicted),
+     *  not evidence the peer is bad — rejecting threw away builds the next
+     *  attempt would have completed.  One retry keeps the total inside the
+     *  originator's request budget ({@link BuildRequestor#getRequestTimeout},
+     *  gated by {@link #shouldRetryLookup}).
+     *  @since 0.9.71+
+     */
+    static final int MAX_NEXT_HOP_LOOKUP_RETRIES = 1;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     /**
      *  Concurrent next-hop search ceiling. Deliberately NOT cores-scaled:
@@ -329,15 +339,19 @@ public class BuildHandler implements Runnable {
      *  the pending queue drains only from release callbacks - freezing the
      *  queue full until restart. Observed live as exactly that deadlock.
      *  With this deadline, every attachment is guaranteed to release within
-     *  lookupTimeout + margin, so leaks self-heal and the queue always has
-     *  a drain trigger.
+     *  attempts × lookupTimeout + margin, so leaks self-heal and the queue
+     *  always has a drain trigger.  The attempt count covers the bounded
+     *  retry chain ({@link #MAX_NEXT_HOP_LOOKUP_RETRIES}) so the deadline
+     *  cannot reclaim the slot while a retry attempt is still in flight.
      *
      *  @param state the build request state carrying the per-request
      *               released flag shared with the callbacks
      *  @param nextPeer the attached next hop
      *  @param decremented exactly-once flag shared with HandleReq/TimeoutReq
+     *  @param attempts total lookup attempts covered (initial + retries)
      */
-    private void scheduleLookupDeadline(BuildMessageState state, Hash nextPeer, AtomicBoolean decremented) {
+    private void scheduleLookupDeadline(BuildMessageState state, Hash nextPeer,
+                                        AtomicBoolean decremented, int attempts) {
         JobImpl deadline = new JobImpl(_context) {
             @Override
             public String getName() { return "Next-hop lookup slot deadline"; }
@@ -356,8 +370,37 @@ public class BuildHandler implements Runnable {
             }
         };
         deadline.getTiming().setStartAfter(_context.clock().now() +
-                                           getNextHopLookupTimeout(_context) + LOOKUP_DEADLINE_MARGIN_MS);
+                                           (long) getNextHopLookupTimeout(_context) * Math.max(1, attempts) +
+                                           LOOKUP_DEADLINE_MARGIN_MS);
         _context.jobQueue().addJob(deadline);
+    }
+
+    /**
+     *  Whether a timed-out next-hop lookup deserves one more attempt.
+     *  Retry only when a full extra lookup still fits inside the originator's
+     *  build-request budget — past that, the originator has given up and
+     *  completing the join is wasted work (same reasoning as
+     *  {@link #pendingLookupMaxAge}).
+     *
+     *  @param retriesLeft remaining retries for this request
+     *  @param lookupStartedMs wall-clock time the first lookup started, 0 if unknown
+     *  @param nowMs current wall-clock time
+     *  @param lookupTimeoutMs per-lookup timeout (ms)
+     *  @param requestTimeoutMs originator's build request timeout (ms)
+     *  @return true when another full attempt fits in the remaining budget
+     *  @since 0.9.71+
+     */
+    static boolean shouldRetryLookup(int retriesLeft, long lookupStartedMs, long nowMs,
+                                     int lookupTimeoutMs, int requestTimeoutMs) {
+        if (retriesLeft <= 0 || lookupStartedMs <= 0 ||
+            lookupTimeoutMs <= 0 || requestTimeoutMs <= 0) {
+            return false;
+        }
+        long elapsed = nowMs - lookupStartedMs;
+        if (elapsed < 0) {
+            return false;
+        }
+        return elapsed + (long) lookupTimeoutMs < requestTimeoutMs;
     }
 
     /**
@@ -434,6 +477,7 @@ public class BuildHandler implements Runnable {
         int sz = ctx.getProperty(PROP_MAX_QUEUE, _maxQueue);
         _inboundBuildMessages = new LinkedBlockingQueue<>(sz);
         ctx.statManager().createRequiredRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.buildLookupRetry", "Next-hop lookup retried after timeout", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropConnLimits", "Dropped not rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
@@ -862,8 +906,10 @@ public class BuildHandler implements Runnable {
                               "] -> Distinct lookups: " + _lookupKeys.size() + " / " + limit + req);
                 }
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer, decremented),
-                                                  new TimeoutReq(_context, state, req, nextPeer, decremented), getNextHopLookupTimeout(_context));
-                scheduleLookupDeadline(state, nextPeer, decremented);
+                                                  new TimeoutReq(_context, state, req, nextPeer, decremented,
+                                                                 MAX_NEXT_HOP_LOOKUP_RETRIES), getNextHopLookupTimeout(_context));
+                scheduleLookupDeadline(state, nextPeer, decremented,
+                                       MAX_NEXT_HOP_LOOKUP_RETRIES + 1);
             } else {
                 int maxPending = getMaxPendingLookups(_context);
                 if (_pendingLookups.size() < maxPending) {
@@ -987,13 +1033,16 @@ public class BuildHandler implements Runnable {
         private final BuildRequestRecord _req;
         private final Hash _nextPeer;
         private final AtomicBoolean _decremented;
+        private final int _retriesLeft;
 
-        TimeoutReq(RouterContext ctx, BuildMessageState state, BuildRequestRecord req, Hash nextPeer, AtomicBoolean decremented) {
+        TimeoutReq(RouterContext ctx, BuildMessageState state, BuildRequestRecord req, Hash nextPeer,
+                   AtomicBoolean decremented, int retriesLeft) {
             super(ctx);
             _state = state;
             _req = req;
             _nextPeer = nextPeer;
             _decremented = decremented;
+            _retriesLeft = retriesLeft;
         }
 
         /**
@@ -1005,15 +1054,55 @@ public class BuildHandler implements Runnable {
         public String getName() {return "Timeout Locating Peer for Tunnel Join";}
 
         /**
-         * Reject the request. The lookup timeout is a local netdb miss, not a
-         * fault of the next hop, so the peer's profile is left untouched and
-         * any established connection is kept: blaming healthy peers here
+         * The next-hop lookup ran out of time.  First re-check the local
+         * netdb — the RI may have landed just as the timeout fired, which
+         * turns the common race into a success.  If it really is a local
+         * miss, retry the lookup once while the originator's budget still
+         * allows a full second attempt: the timeout is not evidence against
+         * the peer, and rejecting threw away builds a retry completes.
+         * Only when the budget is exhausted (or retries are used up) is the
+         * request rejected.  The reject leaves the peer's profile untouched
+         * and any established connection kept: blaming healthy peers here
          * degraded selection quality over time, and mayDisconnect() shed
          * connections that later builds could have used.
          */
         @Override
         public void runJob() {
-            if (_state.claimHandled()) {
+            RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(_nextPeer);
+            if (ri != null) {
+                if (_state.claimHandled()) {
+                    long started = _state.getLookupStartTime();
+                    long lookupTime = started > 0 ? System.currentTimeMillis() - started : 0;
+                    getContext().statManager().addRateData("tunnel.buildLookupSuccess", 1);
+                    if (lookupTime > 0) {
+                        getContext().statManager().addRateData("tunnel.nextHopLookupSuccessTime", lookupTime);
+                    }
+                    if (_log.shouldInfo()) {
+                        _log.info("Lookup for next hop completed at timeout boundary after " +
+                                  lookupTime + "ms, handling " + _req);
+                    }
+                    handleReq(ri, _state, _req, _nextPeer);
+                } else if (_log.shouldInfo()) {
+                    _log.info("Lookup for [" + _nextPeer.toBase64().substring(0,6) + "] completed after timeout fired, ignoring [MsgID " +
+                              _state.msg.getUniqueId() + "]");
+                }
+            } else if (shouldRetryLookup(_retriesLeft, _state.getLookupStartTime(),
+                                         System.currentTimeMillis(),
+                                         getNextHopLookupTimeout(_context),
+                                         BuildRequestor.getRequestTimeout(_context))) {
+                getContext().statManager().addRateData("tunnel.buildLookupRetry", 1);
+                if (_log.shouldInfo()) {
+                    _log.info("Retrying lookup for next hop [" + _nextPeer.toBase64().substring(0,6) +
+                              "], " + (_retriesLeft - 1) + " left [MsgID " + _state.msg.getUniqueId() + "]");
+                }
+                // State stays unclaimed and the lookup key held — the shared
+                // deadline was scheduled for the full attempt chain.
+                getContext().netDb().lookupRouterInfo(_nextPeer,
+                        new HandleReq(_context, _state, _req, _nextPeer, _decremented),
+                        new TimeoutReq(_context, _state, _req, _nextPeer, _decremented, _retriesLeft - 1),
+                        getNextHopLookupTimeout(_context));
+                return;
+            } else if (_state.claimHandled()) {
                 getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
                 Hash from = _state.fromHash;
@@ -1100,9 +1189,11 @@ public class BuildHandler implements Runnable {
             }
             _context.netDb().lookupRouterInfo(pending.nextPeer,
                 new HandleReq(_context, pending.state, pending.req, pending.nextPeer, decremented),
-                new TimeoutReq(_context, pending.state, pending.req, pending.nextPeer, decremented),
+                new TimeoutReq(_context, pending.state, pending.req, pending.nextPeer, decremented,
+                               MAX_NEXT_HOP_LOOKUP_RETRIES),
                 getNextHopLookupTimeout(_context));
-            scheduleLookupDeadline(pending.state, pending.nextPeer, decremented);
+            scheduleLookupDeadline(pending.state, pending.nextPeer, decremented,
+                                   MAX_NEXT_HOP_LOOKUP_RETRIES + 1);
         }
     }
 
