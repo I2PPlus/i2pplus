@@ -200,7 +200,9 @@ public class TrackerClient implements Runnable {
             try { Thread.sleep(Math.min(sleepMs, 1000) + 50); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); return; }
         }
     }
-    private static final int LONG_SLEEP = 10 * 60 * 1000; // sleep a while after lots of fails
+    /** Sleep after lots of fails — shortened from 10m so post-recovery
+     *  tracker retries fire within ~2m instead of waiting a full cycle. */
+    private static final int LONG_SLEEP = 2 * 60 * 1000;
     private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * (long) 60 * 1000;
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
     /** Periodic scrape interval: refresh the swarm size (seeds + leeches) between
