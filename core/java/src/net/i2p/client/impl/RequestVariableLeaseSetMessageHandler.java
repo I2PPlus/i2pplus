@@ -105,7 +105,15 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
         } else {
             leaseSet = new LeaseSet();
         }
+        if (msg.getEndpoints() <= 0) {
+            // Empty request leaves LeaseSet2._expires at 0; writeHeader would
+            // throw "LeaseSet expired". Surface a clear error instead.
+            session.propagateError("LeaseSet request contained no leases",
+                    new IllegalStateException("no leases"));
+            return;
+        }
         // Full Meta support TODO
+        long published = isLS2 ? ((LeaseSet2) leaseSet).getPublished() : 0;
         for (int i = 0; i < msg.getEndpoints(); i++) {
             Lease lease;
             if (isLS2) {
@@ -118,7 +126,7 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
                     lease.setTunnelId(old.getTunnelId());
                 }
                 lease.setGateway(old.getGateway());
-                lease.setEndDate(old.getEndTime());
+                lease.setEndDate(ensurePositiveLs2Expiry(old.getEndTime(), published));
             } else {
                 lease = msg.getEndpoint(i);
             }

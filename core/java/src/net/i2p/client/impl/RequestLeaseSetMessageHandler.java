@@ -82,6 +82,13 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     private static final boolean PREFER_NEW_ENC = true;
 
     /**
+     * Minimum remaining lifetime required on a lease end relative to the
+     * LS2 published timestamp so {@code LeaseSet2.writeHeader()} does not
+     * reject the set with "LeaseSet expired".
+     */
+    static final long MIN_LS2_LEASE_TTL_MS = 1000L;
+
+    /**
      * RequestLeaseSetMessageHandler.
      */
     public RequestLeaseSetMessageHandler(I2PAppContext context) {
@@ -195,7 +202,15 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         } else {
             leaseSet = new LeaseSet();
         }
+        if (msg.getEndpoints() <= 0) {
+            // Empty request leaves LeaseSet2._expires at 0; writeHeader would
+            // throw "LeaseSet expired". Surface a clear error instead.
+            session.propagateError("LeaseSet request contained no leases",
+                    new IllegalStateException("no leases"));
+            return;
+        }
         // Full Meta support TODO
+        long published = isLS2 ? ((LeaseSet2) leaseSet).getPublished() : 0;
         for (int i = 0; i < msg.getEndpoints(); i++) {
             Lease lease;
             if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {
@@ -208,11 +223,40 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 lease.setTunnelId(msg.getTunnelId(i));
             }
             lease.setGateway(msg.getRouter(i));
-            lease.setEndDate(msg.getEndDate().getTime());
+            lease.setEndDate(ensurePositiveLs2Expiry(msg.getEndDate().getTime(), published));
             // lease.setStartDate(msg.getStartDate());
             leaseSet.addLease(lease);
         }
         signLeaseSet(leaseSet, isLS2, session);
+    }
+
+    /**
+     * Floor a requested lease end so it remains strictly after the LS2
+     * published timestamp (second resolution). Without this, a stale or
+     * skewed end time makes {@code LeaseSet2.writeHeader()} throw
+     * "LeaseSet expired" and the session never recovers a usable set.
+     *
+     * @param leaseEnd absolute lease end from the router request
+     * @param published LS2 published timestamp, or 0 for LS1 / unset
+     * @return leaseEnd if already safely after published, else published + 1s
+     */
+    static long ensurePositiveLs2Expiry(long leaseEnd, long published) {
+        if (published <= 0) {
+            return leaseEnd;
+        }
+        long minEnd = published + MIN_LS2_LEASE_TTL_MS;
+        return leaseEnd > minEnd ? leaseEnd : minEnd;
+    }
+
+    /**
+     * Whether a LeaseSet can be signed (has at least one lease).
+     * An empty set leaves LeaseSet2._expires at 0 and always fails writeHeader.
+     *
+     * @param leaseSet candidate set, may be null
+     * @return true if the set has one or more leases
+     */
+    static boolean isSignable(LeaseSet leaseSet) {
+        return leaseSet != null && leaseSet.getLeaseCount() > 0;
     }
 
     /**
@@ -228,6 +272,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @since 0.9.7
      */
     protected synchronized void signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session) {
+        if (!isSignable(leaseSet)) {
+            session.propagateError("LeaseSet request contained no leases",
+                    new IllegalStateException("no leases"));
+            return;
+        }
         // must be before setDestination()
         if (isLS2 && _ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
             String secret = session.getOptions().getProperty(PROP_SECRET);
@@ -516,14 +565,26 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 }
             }
         } catch (DataFormatException dfe) {
+            if (isLS2 && leaseSet instanceof LeaseSet2) {
+                LeaseSet2 ls2 = (LeaseSet2) leaseSet;
+                _log.error("Unable to sign LeaseSet: " + dfe.getMessage() +
+                        " leases=" + leaseSet.getLeaseCount() +
+                        " published=" + ls2.getPublished() +
+                        " expires=" + ls2.getExpires() +
+                        " now=" + _context.clock().now());
+            } else {
+                _log.error("Unable to sign LeaseSet: " + dfe.getMessage());
+            }
             session.propagateError("Error signing the LeaseSet", dfe);
             // Transient expiry (e.g., "LeaseSet expired X seconds ago" from LeaseSet2.writeHeader)
-            // can occur if the router's requested end time is stale or clock-skewed.
-            // Don't destroy the session — let the router's failLeaseRequest retry with fresh leases.
-            // Permanent key/config errors will still be retried but will fail again and
-            // eventually trip the router's MAX_LEASE_FAILS disconnect.
+            // and empty-request guards can occur if the router's requested end time is stale
+            // or clock-skewed. Don't destroy the session — let the router's failLeaseRequest
+            // retry with fresh leases. Permanent key/config errors will still be retried but
+            // will fail again and eventually trip the router's MAX_LEASE_FAILS disconnect.
             String msg = dfe.getMessage();
-            boolean isTransient = msg != null && msg.toLowerCase(java.util.Locale.US).contains("expired");
+            boolean isTransient = msg != null &&
+                    (msg.toLowerCase(java.util.Locale.US).contains("expired") ||
+                     msg.contains("no leases"));
             if (!isTransient) {
                 session.destroySession();
             }
