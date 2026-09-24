@@ -190,4 +190,40 @@ public class ServerHandlerAllocationTest {
         assertTrue("busy tunnel should get more than idle: " + alloc[0] + " vs " + alloc[1],
                    alloc[0] > alloc[1]);
     }
+
+    // =====================================================================
+    // Runner-pool claims (claimRunnerShare) — shared clientRunnerMax budget
+    // =====================================================================
+
+    /** Busy runner pool claims full ceiling; idle claims half (runner floor). */
+    @Test
+    public void testClaimRunnerShareBusyVsIdle() {
+        assertEquals(256, TunnelControllerGroup.claimRunnerShare(256, 40, 30));
+        assertEquals(128, TunnelControllerGroup.claimRunnerShare(256, 0, 0));
+        assertEquals(8, TunnelControllerGroup.claimRunnerShare(16, 0, 0));
+        // Cap below floor is raised to the floor.
+        assertEquals(TunnelControllerGroup.RUNNER_POOL_FLOOR,
+                     TunnelControllerGroup.claimRunnerShare(2, 0, 0));
+    }
+
+    /**
+     * Under a tight clientRunnerMax budget, a busy HTTP-proxy pool's full claim
+     * beats idle siblings' base shares so the proxy is not starved into
+     * executor-full sheds.
+     */
+    @Test
+    public void testClaimRunnerSharePrefersBusyProxyUnderTightBudget() {
+        int floor = TunnelControllerGroup.RUNNER_POOL_FLOOR;
+        int[] desired = {
+            TunnelControllerGroup.claimRunnerShare(256, 40, 30), // busy proxy
+            TunnelControllerGroup.claimRunnerShare(256, 0, 0),   // idle client
+            TunnelControllerGroup.claimRunnerShare(256, 0, 0),   // idle client
+        };
+        assertEquals(256, desired[0]);
+        assertEquals(128, desired[1]);
+        int[] alloc = TunnelControllerGroup.allocateServerThreads(300, desired, floor);
+        assertEquals(300, total(alloc));
+        assertTrue("busy proxy should get more than idle: " + alloc[0] + " vs " + alloc[1],
+                   alloc[0] > alloc[1]);
+    }
 }

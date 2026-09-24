@@ -7,6 +7,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.Test;
@@ -16,7 +17,7 @@ import org.junit.Test;
  * semantics for per-tunnel runner pools.
  *
  * <p>Regression guard for cross-dest starvation: each tunnel must own a
- * private SynchronousQueue/AbortPolicy pool so a flood on one dest rejects
+ * private burst-queue/AbortPolicy pool so a flood on one dest rejects
  * only that dest's excess connections as RejectedExecutionException, never
  * running them inline and never consuming another tunnel's workers.
  *
@@ -24,29 +25,71 @@ import org.junit.Test;
  */
 public class RunnerExecutorOverflowTest {
 
-    /** Overflow must reject with RejectedExecutionException, not run inline. */
+    /** After workers and the burst queue are full, reject — not run inline. */
     @Test
     public void testSaturatedPoolRejectsNotInlines() throws InterruptedException {
         int threads = 1;
         ThreadPoolExecutor exec = TunnelControllerGroup.createRunnerExecutor(threads, new AtomicLong());
         CountDownLatch release = new CountDownLatch(1);
         try {
-            // SynchronousQueue: a second submission while the single worker is
-            // busy must be rejected immediately (no queue).
             CountDownLatch entered = new CountDownLatch(1);
             exec.execute(() -> {
                 entered.countDown();
                 try {release.await();} catch (InterruptedException ie) {Thread.currentThread().interrupt();}
             });
             assertTrue(entered.await(5, TimeUnit.SECONDS));
+            // Fill the burst queue while the single worker is blocked.
+            for (int i = 0; i < TunnelControllerGroup.RUNNER_BURST_QUEUE; i++) {
+                exec.execute(() -> {});
+            }
             AtomicBoolean rejectedTaskRan = new AtomicBoolean(false);
             try {
                 exec.execute(() -> rejectedTaskRan.set(true));
-                fail("expected RejectedExecutionException from a saturated SynchronousQueue pool");
+                fail("expected RejectedExecutionException once workers + burst queue are full");
             } catch (RejectedExecutionException expected) {
                 // correct
             }
             assertFalse("rejected task must NOT run inline", rejectedTaskRan.get());
+        } finally {
+            release.countDown();
+            exec.shutdownNow();
+        }
+    }
+
+    /**
+     * A micro-burst larger than the worker count but within the burst queue
+     * must be accepted (no RejectedExecutionException) and later run — this is
+     * the browser parallel-open case that previously shed as "server is busy".
+     */
+    @Test
+    public void testBurstQueueAbsorbsMicroBurst() throws InterruptedException {
+        int threads = 2;
+        ThreadPoolExecutor exec = TunnelControllerGroup.createRunnerExecutor(threads, new AtomicLong());
+        CountDownLatch release = new CountDownLatch(1);
+        try {
+            AtomicInteger started = new AtomicInteger();
+            CountDownLatch workersEntered = new CountDownLatch(threads);
+            // Occupy both workers with blocked tasks.
+            for (int i = 0; i < threads; i++) {
+                exec.execute(() -> {
+                    started.incrementAndGet();
+                    workersEntered.countDown();
+                    try {release.await();} catch (InterruptedException ie) {Thread.currentThread().interrupt();}
+                });
+            }
+            assertTrue(workersEntered.await(5, TimeUnit.SECONDS));
+            // Queue a micro-burst under the capacity limit — must not reject.
+            int burst = Math.min(8, TunnelControllerGroup.RUNNER_BURST_QUEUE);
+            for (int i = 0; i < burst; i++) {
+                exec.execute(started::incrementAndGet);
+            }
+            release.countDown();
+            long deadline = System.currentTimeMillis() + 5_000;
+            int expected = threads + burst;
+            while (started.get() < expected && System.currentTimeMillis() < deadline) {
+                try {Thread.sleep(5);} catch (InterruptedException ie) {Thread.currentThread().interrupt(); break;}
+            }
+            assertEquals("burst tasks must all run after workers free", expected, started.get());
         } finally {
             release.countDown();
             exec.shutdownNow();
@@ -87,13 +130,14 @@ public class RunnerExecutorOverflowTest {
         }
     }
 
-    /** Idle threads are reclaimable (allowCoreThreadTimeOut with core 0). */
+    /** Idle threads are reclaimable (allowCoreThreadTimeOut with core == max). */
     @Test
     public void testIdleThreadsAreReclaimable() {
         ThreadPoolExecutor exec = TunnelControllerGroup.createRunnerExecutor(8, new AtomicLong());
         try {
             assertTrue("idle runner threads must time out", exec.allowsCoreThreadTimeOut());
-            assertEquals("core stays 0 for SynchronousQueue", 0, exec.getCorePoolSize());
+            assertEquals("core == max so the burst queue is not entered with zero workers",
+                         8, exec.getCorePoolSize());
             assertEquals(8, exec.getMaximumPoolSize());
         } finally {
             exec.shutdownNow();
@@ -106,6 +150,20 @@ public class RunnerExecutorOverflowTest {
         ThreadPoolExecutor exec = TunnelControllerGroup.createRunnerExecutor(0, new AtomicLong());
         try {
             assertTrue("max must be >= 1", exec.getMaximumPoolSize() >= 1);
+            assertTrue("core must be >= 1 when a real queue is present", exec.getCorePoolSize() >= 1);
+        } finally {
+            exec.shutdownNow();
+        }
+    }
+
+    /** Burst queue capacity is the documented constant (not unbounded). */
+    @Test
+    public void testBurstQueueCapacityIsBounded() {
+        ThreadPoolExecutor exec = TunnelControllerGroup.createRunnerExecutor(4, new AtomicLong());
+        try {
+            assertEquals(TunnelControllerGroup.RUNNER_BURST_QUEUE, exec.getQueue().remainingCapacity());
+            assertTrue("queue must be finite", TunnelControllerGroup.RUNNER_BURST_QUEUE > 0);
+            assertTrue("queue must be finite", TunnelControllerGroup.RUNNER_BURST_QUEUE < 4096);
         } finally {
             exec.shutdownNow();
         }
