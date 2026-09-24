@@ -127,7 +127,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         if (length > 0) {
             SelectionParams params = computeSelectionParams(settings, length, isInbound);
             if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
-            SelectionExclusions ex = buildExclusions(settings, isInbound, params.buildSuccess);
+            SelectionExclusions ex = buildExclusions(settings, isInbound, params.buildSuccess, length);
             ArraySet<Hash> matches = new ArraySet<>(length);
             if (length == 1) {
                 rv = selectSingleHop(settings, length, params, ex, matches);
@@ -206,11 +206,22 @@ class ClientPeerSelector extends TunnelPeerSelector {
     }
 
     /** Build the lazy Excluder with client/shared cooldowns, first/last peer and pool diversity exclusions. */
-    private SelectionExclusions buildExclusions(TunnelPoolSettings settings, boolean isInbound, double buildSuccess) {
+    private SelectionExclusions buildExclusions(TunnelPoolSettings settings, boolean isInbound,
+                                                double buildSuccess, int length) {
         // Excluder is lazy — contains() auto-classifies and tracks reasons.
         // Don't copy to HashSet or reason tracking is lost.
         Excluder excluder = new Excluder(isInbound, false, buildSuccess);
         Set<Hash> exclude = excluder;
+
+        // This pool, fetched once: feeds both the cooldown-relax decision
+        // and the per-pool diversity pass below.
+        Hash dest = settings.getDestination();
+        TunnelPool pool = null;
+        if (dest != null) {
+            TunnelManagerFacade tmf = ctx.tunnelManager();
+            pool = isInbound ? tmf.getInboundPool(dest)
+                             : tmf.getOutboundPool(dest);
+        }
 
         // Check shared peer cooldowns (from checkTunnel failures across ALL pools).
         // Filter expired entries at read time instead of mutating the shared map
@@ -220,7 +231,20 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // map exceeds its size cap.
         long nowCooldown = ctx.clock().now();
         long sharedCooldownCutoff = nowCooldown - PEER_SELECTION_COOLDOWN_MS;
-        int peerCooldownExcluded = addFreshCooldownExclusions(_peerCooldowns, sharedCooldownCutoff, exclude);
+        int peerCooldownExcluded;
+        Set<Hash> firstHopCooldowns = null;
+        if (shouldRelaxCooldownToFirstHop(pool != null ? pool.getUsableTunnelCount() : -1, length)) {
+            // Near-collapsed pool: keep shared cooldowns out of the base
+            // exclude set — with usable <= 1, cooled peers can fill every
+            // middle/last slot, and freezing all hops on one checkTunnel
+            // cooldown starves selection outright. The cooled peers are
+            // filtered at first-hop selection instead, where the build
+            // actually talks to them.
+            firstHopCooldowns = new HashSet<Hash>(8);
+            peerCooldownExcluded = addFreshCooldownExclusions(_peerCooldowns, sharedCooldownCutoff, firstHopCooldowns);
+        } else {
+            peerCooldownExcluded = addFreshCooldownExclusions(_peerCooldowns, sharedCooldownCutoff, exclude);
+        }
         // firstHopFails entries expire lazily in isFirstHopFailing() /
         // hasRecoveredFromFailure() and are bulk-pruned by prunePeerMaps();
         // no per-selection sweep needed. They filter first-hop selection only.
@@ -241,15 +265,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // Always enforce peer diversity (prevents pool-local circular dependency);
         // relax only IP restriction via getIPRestriction() under attack, not
         // peer identity — relaxing identity causes pool-local correlated failures.
-        Hash dest = settings.getDestination();
-        if (dest != null) {
-            TunnelManagerFacade tmf = ctx.tunnelManager();
-            TunnelPool pool = isInbound ? tmf.getInboundPool(dest)
-                                        : tmf.getOutboundPool(dest);
-            if (pool != null) {
-                Set<Hash> poolPeers = getPeersInPool(ctx, pool);
-                exclude.addAll(poolPeers);
-            }
+        if (pool != null) {
+            Set<Hash> poolPeers = getPeersInPool(ctx, pool);
+            exclude.addAll(poolPeers);
         }
         // Cross-pool diversity: when the fast tier is large enough (> 300),
         // exclude peers in ANY active tunnel across ALL pools. This forces
@@ -274,7 +292,27 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         }
         return new SelectionExclusions(excluder, exclude,
-                                       peerCooldownExcluded, firstHopFailCount, firstPeerExclusions);
+                                       peerCooldownExcluded, firstHopFailCount, firstPeerExclusions,
+                                       firstHopCooldowns);
+    }
+
+    /**
+     *  Whether shared peer cooldowns should be relaxed to a first-hop-only
+     *  filter: with at most one usable tunnel the pool is near-collapsed,
+     *  and excluding checkTunnel-cooled peers from every hop can leave no
+     *  selectable path at all.  The cooled peers stay filtered at first-hop
+     *  selection (where the build actually contacts them); middle and last
+     *  hops may use them.  Single-hop tunnels (no multi-hop quality loop)
+     *  and unknown pools (negative count) never relax.
+     *
+     *  @param usableTunnels usable tunnels in this pool, or -1 when the pool
+     *          is unknown
+     *  @param length tunnel length being selected for
+     *  @return true when cooldowns should apply to the first hop only
+     *  @since 0.9.71+
+     */
+    static boolean shouldRelaxCooldownToFirstHop(int usableTunnels, int length) {
+        return length > 1 && usableTunnels >= 0 && usableTunnels <= 1;
     }
 
     /** Select the single hop of a 1-hop tunnel (with hidden-inbound special case). */
@@ -706,6 +744,22 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     matches.remove(firstHop);
                     // Refill: re-select a replacement so the slot isn't wasted
+                    if (refills < 3 && matches.isEmpty()) {
+                        ex.exclude.add(firstHop);
+                        refillFirstHop(params, randomKey, ex, matches, inStartup);
+                        refills++;
+                    }
+                    continue;
+                }
+                // Near-collapsed pools keep shared cooldowns out of the base
+                // exclude set (see buildExclusions) — enforce them here,
+                // first hop only, so middle/last hops can still be filled.
+                if (ex.firstHopCooldowns != null && ex.firstHopCooldowns.contains(firstHop)) {
+                    if (log.shouldInfo()) {
+                        log.info("First hop " + firstHop.toBase64().substring(0,6) +
+                                 " is on shared selection cooldown, retrying...");
+                    }
+                    matches.remove(firstHop);
                     if (refills < 3 && matches.isEmpty()) {
                         ex.exclude.add(firstHop);
                         refillFirstHop(params, randomKey, ex, matches, inStartup);
@@ -1320,13 +1374,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
         final int peerCooldownExcluded;
         final int firstHopFailCount;
         final Set<Hash> firstPeerExclusions;
+        /** Fresh shared-cooldown peers, first-hop-only filter (null when cooldowns are in the base exclude set). */
+        final Set<Hash> firstHopCooldowns;
         SelectionExclusions(Excluder excluder, Set<Hash> exclude,
-                            int peerCooldownExcluded, int firstHopFailCount, Set<Hash> firstPeerExclusions) {
+                            int peerCooldownExcluded, int firstHopFailCount, Set<Hash> firstPeerExclusions,
+                            Set<Hash> firstHopCooldowns) {
             this.excluder = excluder;
             this.exclude = exclude;
             this.peerCooldownExcluded = peerCooldownExcluded;
             this.firstHopFailCount = firstHopFailCount;
             this.firstPeerExclusions = firstPeerExclusions;
+            this.firstHopCooldowns = firstHopCooldowns;
         }
     }
     /**

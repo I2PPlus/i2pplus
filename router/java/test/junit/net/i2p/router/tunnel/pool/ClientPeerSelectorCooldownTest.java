@@ -118,4 +118,30 @@ public class ClientPeerSelectorCooldownTest {
         assertTrue(rv.isEmpty());
         assertEquals(Collections.singleton(obep), TunnelPeerSelector._peerCooldowns.keySet());
     }
+
+    // ---------- shouldRelaxCooldownToFirstHop ----------
+
+    @Test
+    public void testRelaxWhenNearCollapsedMultiHop() {
+        assertTrue(ClientPeerSelector.shouldRelaxCooldownToFirstHop(0, 3));
+        assertTrue(ClientPeerSelector.shouldRelaxCooldownToFirstHop(1, 3));
+    }
+
+    @Test
+    public void testNoRelaxWithUsableCapacity() {
+        assertFalse(ClientPeerSelector.shouldRelaxCooldownToFirstHop(2, 3));
+        assertFalse(ClientPeerSelector.shouldRelaxCooldownToFirstHop(4, 3));
+    }
+
+    @Test
+    public void testNoRelaxForSingleHopTunnels() {
+        // single-hop has no multi-hop quality loop: cooldowns stay in the base exclude set
+        assertFalse(ClientPeerSelector.shouldRelaxCooldownToFirstHop(0, 1));
+        assertFalse(ClientPeerSelector.shouldRelaxCooldownToFirstHop(1, 1));
+    }
+
+    @Test
+    public void testNoRelaxWhenPoolUnknown() {
+        assertFalse(ClientPeerSelector.shouldRelaxCooldownToFirstHop(-1, 3));
+    }
 }
