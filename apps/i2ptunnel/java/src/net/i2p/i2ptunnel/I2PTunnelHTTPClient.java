@@ -1610,15 +1610,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                             throw ioe;
                         }
-                        // createI2PSocket already failover-ed across tunnels; do not
-                        // outer-retry timeouts (each attempt can burn MAX_TIMEOUT_FAILOVER
-                        // full connect-timeout legs).
+                        // createI2PSocket already failover-ed across tunnels. Do not
+                        // outer-retry timeouts unless the outbound pool is mid-build:
+                        // allow exactly one outer wait for in-flight replacements, while
+                        // a healthy-or-dead pool would just burn another full connect
+                        // budget (MAX_TIMEOUT_FAILOVER legs each).
+                        boolean poolBuilding = poolState() == 0;
                         if (connectAttempts >= I2P_CONNECT_MAX_RETRIES || poolIsDefinitivelyDown() ||
-                            timedOut) {
+                            (timedOut && (!poolBuilding || timeoutConnectAttempts > 1))) {
                             if (_log.shouldWarn() && timedOut) {
                                 _log.warn(getPrefix(requestId) +
                                           "Connect timed out after " + timeoutConnectAttempts +
-                                          " attempt(s); not retrying");
+                                          " attempt(s); not retrying" +
+                                          (poolBuilding ? " (pool still building)" : ""));
                             }
                             if (heldPermitDest != null) {
                                 releaseConnPermit(heldPermitDest);

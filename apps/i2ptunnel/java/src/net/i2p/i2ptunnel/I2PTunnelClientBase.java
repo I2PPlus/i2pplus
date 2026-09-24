@@ -836,8 +836,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 lastEx = e;
                 boolean timedOut = isConnectTimeout(e);
                 if (timedOut) {timeoutFailures++;}
-                boolean poolDown = poolIsDefinitivelyDown();
-                boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures, poolDown);
+                int state = poolState();
+                boolean poolDown = state <= -1;
+                boolean poolBuilding = state == 0;
+                boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures, poolDown, poolBuilding);
                 if (_log.shouldWarn()) {
                     _log.warn("Connect failed (tunnel " + i + "/" + tunnelCount + "): " + e.getMessage() +
                               (more ? ", retrying..." : ", giving up"));
@@ -854,9 +856,12 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  <p>
      *  Stops immediately when the outbound pool is provably dead (no valid tunnels,
      *  none building) — further legs cannot succeed and each leg may burn the full
-     *  connect timeout. Also caps consecutive timeout failures at
+     *  connect timeout.  Caps consecutive timeout failures at
      *  {@link #MAX_TIMEOUT_FAILOVER} so a high tunnel quantity cannot multiply
-     *  worst-case latency (quantity × timeout × outer retries).
+     *  worst-case latency (quantity × timeout × outer retries), except while the
+     *  pool is mid-build ({@code poolBuilding}): in-flight replacements may
+     *  complete within the next legs, so a few extra timeout attempts are worth
+     *  the wait instead of failing the browser request at tunnel 1/4.
      *
      *  @param tunnelCount configured max failover legs (max inbound/outbound quantity)
      *  @param attemptsMade legs already attempted (1-based)
@@ -866,8 +871,25 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  @since 0.9.71+
      */
     static boolean shouldContinueFailover(int tunnelCount, int attemptsMade, int timeoutFailures, boolean poolDown) {
+        return shouldContinueFailover(tunnelCount, attemptsMade, timeoutFailures, poolDown, false);
+    }
+
+    /**
+     *  Whether another tunnel-failover attempt is worthwhile after a connect failure.
+     *
+     *  @param tunnelCount configured max failover legs (max inbound/outbound quantity)
+     *  @param attemptsMade legs already attempted (1-based)
+     *  @param timeoutFailures consecutive timeout-style failures so far
+     *  @param poolDown true if the outbound pool is provably dead
+     *  @param poolBuilding true when {@link #poolState()} reports builds in flight
+     *  @return true to try the next tunnel leg
+     *  @since 0.9.71+
+     */
+    static boolean shouldContinueFailover(int tunnelCount, int attemptsMade, int timeoutFailures,
+                                          boolean poolDown, boolean poolBuilding) {
         if (poolDown) {return false;}
-        if (timeoutFailures >= MAX_TIMEOUT_FAILOVER) {return false;}
+        int maxTimeout = poolBuilding ? MAX_TIMEOUT_FAILOVER + 2 : MAX_TIMEOUT_FAILOVER;
+        if (timeoutFailures >= maxTimeout) {return false;}
         return attemptsMade < tunnelCount;
     }
 

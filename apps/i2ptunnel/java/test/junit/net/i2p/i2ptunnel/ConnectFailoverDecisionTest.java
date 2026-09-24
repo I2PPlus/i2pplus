@@ -53,6 +53,41 @@ public class ConnectFailoverDecisionTest {
         assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 3, 0, false));
     }
 
+    // ---------- shouldContinueFailover (poolBuilding) ----------
+
+    @Test
+    public void testContinue_PoolBuildingAllowsExtraTimeoutLegs() {
+        int max = I2PTunnelClientBase.MAX_TIMEOUT_FAILOVER;
+        // mid-build: two extra timeout legs beyond MAX so in-flight
+        // replacements can complete within the failover budget
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(8, 1, max, false, true));
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(8, 2, max + 1, false, true));
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 3, max + 2, false, true));
+    }
+
+    @Test
+    public void testContinue_PoolNotBuildingKeepsNormalCap() {
+        int max = I2PTunnelClientBase.MAX_TIMEOUT_FAILOVER;
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 1, max - 1, false, false));
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false, false));
+        // building=false matches the 4-arg delegate
+        assertEquals(
+            I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false),
+            I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false, false));
+    }
+
+    @Test
+    public void testContinue_PoolBuildingStillStopsOnDeadPool() {
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 1, 0, true, true));
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 1, 1, true, true));
+    }
+
+    @Test
+    public void testContinue_PoolBuildingStillStopsAtTunnelCount() {
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 4, 0, false, true));
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 5, 1, false, true));
+    }
+
     // ---------- isConnectTimeout ----------
 
     @Test
