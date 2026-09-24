@@ -270,10 +270,12 @@ public class BuildExecutor implements Runnable {
      *  outbound directions are tracked independently, so a pool with
      *  target 3/2 can have 2 in-flight inbound and 2 in-flight outbound
      *  simultaneously.
+     *  Raised from 2 so incomplete-LeaseSet / depleted pools can stage
+     *  replacements in parallel without serializing on the configure throttle.
      *
      *  @since 0.9.71+
      */
-    private static final int MAX_PER_POOL_DIR = 2;
+    private static final int MAX_PER_POOL_DIR = 4;
 
     /**
      *  The stale build pruning threshold percentage.
@@ -1386,10 +1388,13 @@ public class BuildExecutor implements Runnable {
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
                             // Throttle peer-selection hot path (see _lastConfigureTime).
+                            // Only when at least 2 builds are already in flight for
+                            // this pool: one pending build must not block the next
+                            // configure for an incomplete-LeaseSet pool.
                             long nowCfg = System.currentTimeMillis();
                             Long lastCfg = _lastConfigureTime.get(pool);
                             if (lastCfg != null && nowCfg - lastCfg < CONFIGURE_THROTTLE_MS
-                                && pool.getInProgressCount() > 0) {
+                                && pool.getInProgressCount() >= 2) {
                                 if (_log.shouldDebug()) {
                                     _log.debug("Throttling configureNewTunnel for " + pool +
                                                " (" + (nowCfg - lastCfg) + "ms since last, " +
