@@ -848,6 +848,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         LeaseSet ls = lookupLeaseSetLocally(key);
         if (ls != null) {
             if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
+        } else if (shouldFailLocalWithoutRemoteSearch(isClientDb(), isLocalDestination(key))) {
+            // A client sub-NetDb miss for a destination we host cannot be
+            // repaired from the network: publish() mirrors the LS into the
+            // main NetDb only, and a remote search would query floodfills
+            // for a key we already hold (or are about to re-mint).
+            if (_log.shouldInfo()) {
+                _log.info("Local destination [" + key.toBase32().substring(0,8) +
+                          "] not in local store -> Failing without remote search");
+            }
+            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
         } else if (isNegativeCached(key)) {
             if (_log.shouldInfo()) {
                 _log.info("LeaseSet [" + key.toBase32().substring(0,8) +
@@ -858,6 +868,55 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             key = blindCache().getHash(key);
             search(key, onFindJob, onFailedLookupJob, timeoutMs, true, fromLocalDest);
         }
+    }
+
+    /**
+     * Whether a client sub-NetDb local miss for a destination this router
+     * hosts must fail immediately instead of starting a network search.
+     * Locally-published LeaseSets live in the main NetDb (mirrored on
+     * publish); querying floodfills for our own key is always wasted work
+     * and the client sub-Db path has no reply routing for that search.
+     *
+     * @param isClientDb true when this facade is a client sub-NetDb
+     * @param isLocalDest true when the key is a destination hosted on this router
+     * @return true to fail without a remote search
+     * @since 0.9.71+
+     */
+    static boolean shouldFailLocalWithoutRemoteSearch(boolean isClientDb, boolean isLocalDest) {
+        return isClientDb && isLocalDest;
+    }
+
+    /**
+     * Whether a client sub-NetDb local miss should be re-checked in the
+     * main NetDb. Only for destinations we host; remote keys must stay
+     * isolated in the caller's sub-NetDb.
+     *
+     * @param isClientDb true when this facade is a client sub-NetDb
+     * @param isLocalDest true when the key is a destination hosted on this router
+     * @param foundLocally true when this facade already held a current LeaseSet
+     * @return true to consult the main NetDb
+     * @since 0.9.71+
+     */
+    static boolean shouldFallbackLocalLookupToMain(boolean isClientDb, boolean isLocalDest, boolean foundLocally) {
+        return isClientDb && isLocalDest && !foundLocally;
+    }
+
+    /**
+     * @return true if the key is a destination currently registered locally
+     */
+    private boolean isLocalDestination(Hash key) {
+        return key != null && _context.clientManager() != null && _context.clientManager().isLocal(key);
+    }
+
+    /**
+     * Main (router) NetDb facade, or null if unavailable.
+     *
+     * @return the main facade, or null
+     */
+    private KademliaNetworkDatabaseFacade getMainFacade() {
+        NetworkDatabaseFacade ndb = _context.netDb();
+        if (ndb instanceof KademliaNetworkDatabaseFacade) {return (KademliaNetworkDatabaseFacade) ndb;}
+        return null;
     }
 
     /**
@@ -907,21 +966,43 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public LeaseSet lookupLeaseSetLocally(Hash key) {
         if (!_initialized) {return null;}
+        LeaseSet ls = getLocalLeaseSet(key);
+        if (ls == null && shouldFallbackLocalLookupToMain(isClientDb(), isLocalDestination(key), false)) {
+            // publish() mirrors locally-hosted LeaseSets into the main NetDb
+            // only, never into other clients' sub-NetDbs. Without this
+            // fallback, the HTTP proxy launches a remote search for a key
+            // the router already holds and every send dies on cooldown.
+            KademliaNetworkDatabaseFacade main = getMainFacade();
+            if (main != null && main != this) {ls = main.getLocalLeaseSet(key);}
+        }
+        if (ls == null) {
+            Hash explore = blindCache().getHash(key);
+            // Interesting key, so either refetch it or simply explore with it
+            if (_exploreKeys != null) {_exploreKeys.add(explore);}
+            return null;
+        }
+        // Track every LeaseSet we actually use so refreshClientLeaseSets()
+        // keeps it current - mainline behavior. Skip our own published
+        // LeaseSets; the refresh loop drops those anyway.
+        if (isClientDb() && !isLocalDestination(key)) {
+            _clientLeaseSetAccessTime.put(key, _context.clock().now());
+        }
+        return ls;
+    }
+
+    /**
+     * Read a current LeaseSet from this facade's store only.
+     * Returns null if missing, not a LeaseSet, or not current.
+     *
+     * @param key destination or blinded key
+     * @return the LeaseSet or null
+     */
+    private LeaseSet getLocalLeaseSet(Hash key) {
+        if (key == null || _ds == null) {return null;}
         DatabaseEntry ds = _ds.get(key);
         if (ds == null || !ds.isLeaseSet()) {return null;}
         LeaseSet ls = (LeaseSet) ds;
-        if (ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
-            // Track every LeaseSet we actually use so refreshClientLeaseSets()
-            // keeps it current - mainline behavior. Skip our own published
-            // LeaseSets; the refresh loop drops those anyway.
-            if (isClientDb() && !_context.clientManager().isLocal(key)) {
-                _clientLeaseSetAccessTime.put(key, _context.clock().now());
-            }
-            return ls;
-        }
-        key = blindCache().getHash(key);
-        // Interesting key, so either refetch it or simply explore with it
-        if (_exploreKeys != null) {_exploreKeys.add(key);}
+        if (ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {return ls;}
         return null;
     }
 
@@ -965,9 +1046,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @since 0.9.71+
      */
     private void refreshLocalLeaseSetIfExpiring(Hash key, long now) {
-        DatabaseEntry ds = _ds.get(key);
-        if (ds == null || !ds.isLeaseSet()) return;
-        LeaseSet ls = (LeaseSet) ds;
+        // lookupLeaseSetLocally falls back to the main NetDb for local dests
+        // when this is a client sub-NetDb without a mirrored copy.
+        LeaseSet ls = lookupLeaseSetLocally(key);
+        if (ls == null) return;
         long earliest = ls.getEarliestLeaseDate();
         if (earliest <= 0 || earliest - now > getProactiveRepublishThreshold()) return;
         TunnelPool pool = _context.tunnelManager().getInboundPool(key);

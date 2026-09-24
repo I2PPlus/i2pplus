@@ -372,11 +372,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // with no recent validity; a recently-valid dest gets one real
             // (negative-cache-clearing) probe per probe interval.
             Hash toHash = _to.calculateHash();
+            // Local destinations never take the cooldown/neg-cache gates:
+            // their LeaseSet is mirrored into the main NetDb, a miss is
+            // usually a transient mint gap, and holding a 30s fail cooldown
+            // here only makes the next send die before the main copy lands.
+            boolean isLocalDest = getContext().clientManager().isLocal(toHash);
             Long cooldownEnd = _cache.lsFailCooldown.get(toHash);
             Long lastValid = _cache.lsLastValid.get(toHash);
             Long lastLookup = _cache.lsLastLookup.get(toHash);
             boolean recentlyValid = lastValid != null && now - lastValid <= OutboundCache.TRANSIENT_GAP_GRACE_MS;
-            if (OutboundCache.shouldSkipLeaseSetSend(cooldownEnd, now, lastValid, lastLookup,
+            if (!isLocalDest && OutboundCache.shouldSkipLeaseSetSend(cooldownEnd, now, lastValid, lastLookup,
                                                      OutboundCache.TRANSIENT_GAP_GRACE_MS,
                                                      OutboundCache.LS_PROBE_INTERVAL_MS)) {
                 getContext().statManager().addRateData("client.leaseSetSkipCooldown", 1);
@@ -393,7 +398,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // already the gate, and a second timer thrashes against probe
             // intervals. recentlyValid clears the cache below and does a real
             // search, so only the non-probe path takes this shortcut.
-            if (!recentlyValid && kndf.peekNegativeCached(toHash)) {
+            if (!isLocalDest && !recentlyValid && kndf.peekNegativeCached(toHash)) {
                 getContext().statManager().addRateData("client.leaseSetSkipNegCache", 1);
                 _cache.lsLastLookup.put(toHash, now);
                 if (_log.shouldInfo()) {
@@ -408,8 +413,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             // Set cooldown optimistically before lookup — concurrent sends to the
             // same dest will see this and skip. Cleared on success in SendJob/ctor.
-            // Not set on the pure neg-cache path above.
-            _cache.lsFailCooldown.put(toHash, now + OutboundCache.LS_FAIL_COOLDOWN_MS);
+            // Not set on the pure neg-cache path above, or for local dests.
+            if (!isLocalDest) {
+                _cache.lsFailCooldown.put(toHash, now + OutboundCache.LS_FAIL_COOLDOWN_MS);
+            }
             _cache.lsLastLookup.put(toHash, now);
             if (recentlyValid) {
                 // Sweep any transient negative-cache abort so this probe actually
