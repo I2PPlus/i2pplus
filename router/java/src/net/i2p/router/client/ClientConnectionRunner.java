@@ -557,7 +557,20 @@ class ClientConnectionRunner {
      */
     public void failLeaseRequest(LeaseRequestState req) {
         boolean disconnect = false;
-        Hash h = req.getRequested().getDestination().calculateHash();
+        Destination requestedDest = req.getRequested().getDestination();
+        if (requestedDest == null) {
+            // Empty or incomplete request state — clear slot without disconnecting
+            synchronized (this) {
+                for (SessionParams sp : _sessions.values()) {
+                    if (sp.leaseRequest == req) {
+                        sp.leaseRequest = null;
+                        break;
+                    }
+                }
+            }
+            return;
+        }
+        Hash h = requestedDest.calculateHash();
         SessionParams sp = _sessions.get(h);
         if (sp == null) {return;}
         synchronized (this) {
@@ -1029,6 +1042,15 @@ class ClientConnectionRunner {
             }
             if (_log.shouldInfo())
                 _log.info("Using current LeaseSet as basis for renewal: " + set);
+        }
+        // Empty LeaseSets cannot be signed (LS2 expires stays 0) and only
+        // produce a 60s client timeout; refuse before allocating request state.
+        if (set.getLeaseCount() <= 0) {
+            if (_log.shouldWarn())
+                _log.warn("Requesting LeaseSet with no leases for " + h);
+            if (onFailedJob != null)
+                _context.jobQueue().addJob(onFailedJob);
+            return;
         }
         // We can't use LeaseSet.equals() here because the dest, keys, and sig on
         // the new LeaseSet are null. So we compare leases one by one.

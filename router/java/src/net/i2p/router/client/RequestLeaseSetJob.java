@@ -129,6 +129,23 @@ class RequestLeaseSetJob extends JobImpl {
             _runner.failLeaseRequest(_requestState);
             return;
         }
+        // An empty request produces an RVLS with zero endpoints; the client
+        // then builds a LeaseSet2 with _expires still 0 and signLeaseSet()
+        // fails with "LeaseSet expired ...", after which we wait out the full
+        // timeout. Fail immediately so the caller can rebuild.
+        if (requested.getLeaseCount() <= 0) {
+            if (_log.shouldError()) {
+                _log.error("Requested LeaseSet has no leases for [" +
+                           dest.calculateHash().toBase32().substring(0, 8) +
+                           "] — failing request without contacting the client");
+            }
+            _requestState.setIsSuccessful(false);
+            if (_requestState.getOnFailed() != null) {
+                getContext().jobQueue().addJob(_requestState.getOnFailed());
+            }
+            _runner.failLeaseRequest(_requestState);
+            return;
+        }
         SessionId id = _runner.getSessionId(dest.calculateHash());
         if (id == null) {
             if (_log.shouldWarn())
