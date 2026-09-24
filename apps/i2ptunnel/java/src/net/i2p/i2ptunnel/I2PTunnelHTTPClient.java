@@ -101,7 +101,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /** how long to wait for another request on the same socket */
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
     private static final boolean DEFAULT_KEEPALIVE_BROWSER = true;
-    private static final int I2P_CONNECT_MAX_RETRIES = 6;
+    static final int I2P_CONNECT_MAX_RETRIES = 6;
     /** Backoff floor and per-attempt multiply base for I2P connect retries. */
     static final long I2P_CONNECT_RETRY_BASE_DELAY = 1000;
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
@@ -1610,14 +1610,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                             throw ioe;
                         }
-                        // createI2PSocket already failover-ed across tunnels. Do not
-                        // outer-retry timeouts unless the outbound pool is mid-build:
-                        // allow exactly one outer wait for in-flight replacements, while
-                        // a healthy-or-dead pool would just burn another full connect
-                        // budget (MAX_TIMEOUT_FAILOVER legs each).
+                        // createI2PSocket already failover-ed across all tunnel
+                        // legs. Decide whether to re-enter that walk: always
+                        // allow one timeout retry (pool may have been mid-build),
+                        // a second while building, stop when the pool is dead or
+                        // the general connect budget is exhausted.
                         boolean poolBuilding = poolState() == 0;
-                        if (connectAttempts >= I2P_CONNECT_MAX_RETRIES || poolIsDefinitivelyDown() ||
-                            (timedOut && (!poolBuilding || timeoutConnectAttempts > 1))) {
+                        boolean poolDown = poolIsDefinitivelyDown();
+                        if (!shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts,
+                                                     timedOut, poolDown, poolBuilding,
+                                                     false)) {
                             if (_log.shouldWarn() && timedOut) {
                                 _log.warn(getPrefix(requestId) +
                                           "Connect timed out after " + timeoutConnectAttempts +

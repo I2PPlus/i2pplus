@@ -37,12 +37,15 @@ public class ConnectFailoverDecisionTest {
     }
 
     @Test
-    public void testContinue_TimeoutCapIndependentOfQuantity() {
-        // quantity=4 must not multiply timeout legs past MAX_TIMEOUT_FAILOVER
+    public void testContinue_TimeoutStillWalksAllLegs() {
+        // timeout on early legs must not stop the walk — remaining healthy
+        // legs are worth trying (previously capped at MAX_TIMEOUT_FAILOVER)
         int max = I2PTunnelClientBase.MAX_TIMEOUT_FAILOVER;
-        assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 1, max - 1, false));
-        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false));
-        assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 2, max, false));
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false));
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 2, max + 5, false));
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(8, 3, 10, false));
+        // only stops at the configured tunnel count
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 4, max, false));
     }
 
     @Test
@@ -56,24 +59,22 @@ public class ConnectFailoverDecisionTest {
     // ---------- shouldContinueFailover (poolBuilding) ----------
 
     @Test
-    public void testContinue_PoolBuildingAllowsExtraTimeoutLegs() {
+    public void testContinue_PoolBuildingStillWalksAllLegs() {
+        // poolBuilding no longer extends or shortens the walk — all legs tried
         int max = I2PTunnelClientBase.MAX_TIMEOUT_FAILOVER;
-        // mid-build: two extra timeout legs beyond MAX so in-flight
-        // replacements can complete within the failover budget
         assertTrue(I2PTunnelClientBase.shouldContinueFailover(8, 1, max, false, true));
-        assertTrue(I2PTunnelClientBase.shouldContinueFailover(8, 2, max + 1, false, true));
-        assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 3, max + 2, false, true));
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(8, 7, max + 5, false, true));
+        assertFalse(I2PTunnelClientBase.shouldContinueFailover(8, 8, max, false, true));
     }
 
     @Test
-    public void testContinue_PoolNotBuildingKeepsNormalCap() {
+    public void testContinue_PoolNotBuildingSameAsBuilding() {
+        // poolBuilding is retained for call-site compatibility only
         int max = I2PTunnelClientBase.MAX_TIMEOUT_FAILOVER;
-        assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 1, max - 1, false, false));
-        assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false, false));
-        // building=false matches the 4-arg delegate
         assertEquals(
-            I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false),
-            I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false, false));
+            I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false, false),
+            I2PTunnelClientBase.shouldContinueFailover(4, 1, max, false, true));
+        assertTrue(I2PTunnelClientBase.shouldContinueFailover(4, 3, max, false, false));
     }
 
     @Test
@@ -86,6 +87,52 @@ public class ConnectFailoverDecisionTest {
     public void testContinue_PoolBuildingStillStopsAtTunnelCount() {
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 4, 0, false, true));
         assertFalse(I2PTunnelClientBase.shouldContinueFailover(4, 5, 1, false, true));
+    }
+
+    // ---------- shouldOuterRetryConnect ----------
+
+    @Test
+    public void testOuterRetry_AlwaysAllowsOneTimeoutRetry() {
+        // even a healthy pool gets one outer retry so in-flight leg
+        // replacements can complete before the browser request fails
+        assertTrue(I2PTunnelClientBase.shouldOuterRetryConnect(
+                1, 1, false, false, false, false));
+        // poolBuilding does not block a non-timeout retry
+        assertTrue(I2PTunnelClientBase.shouldOuterRetryConnect(
+                1, 1, false, false, true, false));
+    }
+
+    @Test
+    public void testOuterRetry_StopsAtMaxRetries() {
+        assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(
+                I2PTunnelHTTPClient.I2P_CONNECT_MAX_RETRIES, 1, true, false, false, false));
+    }
+
+    @Test
+    public void testOuterRetry_StopsWhenPoolDead() {
+        assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(
+                1, 1, true, true, false, false));
+    }
+
+    @Test
+    public void testOuterRetry_TimeoutBudgetDependsOnPoolBuilding() {
+        // healthy pool: one timeout wait is enough, no second
+        assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(
+                1, 1, true, false, false, false));
+        // mid-build: after the first timeout still allow one more wait
+        assertTrue(I2PTunnelClientBase.shouldOuterRetryConnect(
+                1, 1, true, false, true, false));
+        // mid-build: stop after the second timeout wait
+        assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(
+                1, 2, true, false, true, false));
+    }
+
+    @Test
+    public void testOuterRetry_NonTimeoutUsesGeneralBudget() {
+        assertTrue(I2PTunnelClientBase.shouldOuterRetryConnect(
+                1, 1, false, false, false, false));
+        assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(
+                I2PTunnelHTTPClient.I2P_CONNECT_MAX_RETRIES, 1, false, false, false, false));
     }
 
     // ---------- isConnectTimeout ----------
