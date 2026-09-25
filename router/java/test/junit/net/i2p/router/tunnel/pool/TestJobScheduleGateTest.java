@@ -131,6 +131,33 @@ public class TestJobScheduleGateTest {
         assertFalse(TestJob.isEarlyExpiry(cfgExpiring(NOW + 10 * 60 * 1000), NOW));
     }
 
+    // ---------------- isEarlyExpiry vs last-chance admission ----------------
+
+    @Test
+    public void testAdmittedLastChanceSkipsEarlyExpiry() {
+        // a stale-but-untested tunnel inside its admission window must not
+        // be culled by the 60s early-expiry gate
+        PooledTunnelCreatorConfig cfg = cfgExpiring(NOW + 60 * 1000);
+        when(cfg.isLastChanceAdmitted(NOW)).thenReturn(true);
+        assertFalse(TestJob.isEarlyExpiry(cfg, NOW));
+    }
+
+    @Test
+    public void testAdmissionRevokedRestoresEarlyExpiry() {
+        PooledTunnelCreatorConfig cfg = cfgExpiring(NOW + 60 * 1000);
+        when(cfg.isLastChanceAdmitted(NOW)).thenReturn(true);
+        assertFalse(TestJob.isEarlyExpiry(cfg, NOW));
+        when(cfg.isLastChanceAdmitted(NOW)).thenReturn(false);
+        assertTrue(TestJob.isEarlyExpiry(cfg, NOW));
+    }
+
+    @Test
+    public void testAdmissionDoesNotMaskFarFutureExpiration() {
+        PooledTunnelCreatorConfig cfg = cfgExpiring(NOW + 10 * 60 * 1000);
+        when(cfg.isLastChanceAdmitted(NOW)).thenReturn(true);
+        assertFalse(TestJob.isEarlyExpiry(cfg, NOW));
+    }
+
     // ---------------- isPoolCritical ----------------
 
     @Test
@@ -272,5 +299,55 @@ public class TestJobScheduleGateTest {
     @Test
     public void testJobsBelowLimitNotOverloaded() {
         assertFalse(TestJob.isTestQueueOverloaded(false, 0, 3, 10, 150, 9, 10));
+    }
+
+    // ---------------- activeGoodDeferDelay (bounded ebb retry) ----------------
+
+    @Test
+    public void testNothingLeftToWaitOutUsesNormalDelay() {
+        assertEquals(45_000L, TestJob.activeGoodDeferDelay(0, 45_000L));
+        assertEquals(45_000L, TestJob.activeGoodDeferDelay(-5_000L, 45_000L));
+    }
+
+    @Test
+    public void testRemainingWindowIsCappedAtRetryCeiling() {
+        // Scheduling the whole traffic window let the tunnel expire before
+        // the retest ran, which made scheduleRetest() drop the test.
+        assertEquals(TestJob.ACTIVE_GOOD_EBB_RETRY_MS,
+                     TestJob.activeGoodDeferDelay(TestJob.TRAFFIC_DEFER_MS, 45_000L));
+        assertEquals(30_000L, TestJob.activeGoodDeferDelay(170_000L, 45_000L));
+        assertEquals(30_000L, TestJob.activeGoodDeferDelay(30_001L, 45_000L));
+    }
+
+    @Test
+    public void testShortRemainingWaitFloorsAtRetryFloor() {
+        // Below the floor the recheck would fire almost immediately and see
+        // the same contention it just saw.
+        assertEquals(TestJob.EBB_RETRY_FLOOR_MS, TestJob.activeGoodDeferDelay(1L, 45_000L));
+        assertEquals(5_000L, TestJob.activeGoodDeferDelay(4_999L, 45_000L));
+    }
+
+    @Test
+    public void testWindowInsideTheClampPassesThrough() {
+        assertEquals(5_000L, TestJob.activeGoodDeferDelay(5_000L, 45_000L));
+        assertEquals(10_000L, TestJob.activeGoodDeferDelay(10_000L, 45_000L));
+        assertEquals(30_000L, TestJob.activeGoodDeferDelay(30_000L, 45_000L));
+    }
+
+    @Test
+    public void testClampedDelayIsNeverNegativeAndNeverExceedsWindow() {
+        for (long remaining = -10_000L; remaining <= TestJob.TRAFFIC_DEFER_MS + 10_000L;
+             remaining += 1_000L) {
+            long delay = TestJob.activeGoodDeferDelay(remaining, 45_000L);
+            assertTrue("negative delay for remaining=" + remaining, delay >= 0);
+            if (remaining > 0) {
+                // a real window is always clamped to the retry ceiling
+                assertTrue("delay past the retry ceiling for remaining=" + remaining,
+                           delay <= TestJob.ACTIVE_GOOD_EBB_RETRY_MS);
+            } else {
+                // nothing left to wait out -> plain retry delay, unclamped
+                assertEquals(45_000L, delay);
+            }
+        }
     }
 }

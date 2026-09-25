@@ -517,6 +517,11 @@ public class JobQueue {
      */
     void shutdown() {
         _alive = false;
+        // The queues below are cleared without running dropped() or any
+        // timeout callback, so tell the batch-test subsystem to reclaim its
+        // slots, pending selectors, rounds, and buffer itself; anything left
+        // behind here would hold a permit that nothing will ever return.
+        TestJob.onJobQueueShutdown(_context);
         _scaler.shutdown();
         synchronized (_jobLock) {
             _timedJobs.clear();
@@ -537,10 +542,14 @@ public class JobQueue {
 
     /**
      * Check if the job queue is currently alive and processing jobs.
+     * Public so subsystems that queue long-lived work (notably
+     * {@link TestJob}'s batch dispatch) can refuse to hand it new jobs once
+     * the queue is gone — addJob() silently discards then, which would leave
+     * their internal state waiting on a pump that never runs.
      *
      * @return true if the queue is alive and running
      */
-    boolean isAlive() {return _alive;}
+    public boolean isAlive() {return _alive;}
 
     /**
      * Timestamp of when the last job began execution.
