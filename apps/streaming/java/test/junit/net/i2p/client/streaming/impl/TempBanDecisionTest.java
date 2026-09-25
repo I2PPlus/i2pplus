@@ -2,6 +2,12 @@ package net.i2p.client.streaming.impl;
 
 import static org.junit.Assert.*;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import net.i2p.data.Hash;
+
 import org.junit.Test;
 
 /**
@@ -125,42 +131,255 @@ public class TempBanDecisionTest {
         assertFalse(ConnectionManager.synBurstTripped(Long.valueOf(now - 100), 99, now, 500, 0));
     }
 
-    /* shouldBanSynBurst (two-strike gate) */
+    /* synBurstStrikeAction (two-strike gate: distinct burst windows only) */
 
     @Test
-    public void testFirstStrikeNeverBans() {
+    public void testFirstTripRecordsStrike() {
         long now = 1000000;
-        // no prior strike -> record strike only, do not ban
-        assertFalse(ConnectionManager.shouldBanSynBurst(null, now, ConnectionManager.STRIKE_WINDOW_MS));
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.synBurstStrikeAction(null, now - 100, now,
+                                                            ConnectionManager.STRIKE_WINDOW_MS));
     }
 
     @Test
-    public void testSecondStrikeInsideWindowBans() {
+    public void testSameWindowNeverBans() {
+        long w1 = 999900;
+        long now = 1000000;
+        // every repeat trip inside the window that already struck is ignored,
+        // however far over threshold the burst goes: a single unlucky page-load
+        // burst must never cost a 5-minute ban
+        assertEquals(ConnectionManager.SynBurstAction.IGNORE,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(w1, w1), w1, w1 + 1,
+                                                            ConnectionManager.STRIKE_WINDOW_MS));
+        assertEquals(ConnectionManager.SynBurstAction.IGNORE,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(w1, w1), w1, now,
+                                                            ConnectionManager.STRIKE_WINDOW_MS));
+        // window identity wins over age even for a long-lived same-window trip
+        assertEquals(ConnectionManager.SynBurstAction.IGNORE,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(w1, w1), w1, w1 + 30000,
+                                                            ConnectionManager.STRIKE_WINDOW_MS));
+    }
+
+    @Test
+    public void testSecondDistinctWindowBans() {
         long now = 1000000;
         long w = ConnectionManager.STRIKE_WINDOW_MS;
-        // second trip 1s after first -> ban
-        assertTrue(ConnectionManager.shouldBanSynBurst(now - 1000, now, w));
-        // just inside the window boundary
-        assertTrue(ConnectionManager.shouldBanSynBurst(now - (w - 1), now, w));
+        // a crossing in a different window shortly after the first strike is
+        // demonstrable repeat abuse -> ban
+        assertEquals(ConnectionManager.SynBurstAction.BAN,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(now - 1000, now - 1000),
+                                                            now - 500, now, w));
+        // just inside the strike-window boundary
+        assertEquals(ConnectionManager.SynBurstAction.BAN,
+                     ConnectionManager.synBurstStrikeAction(
+                             new ConnectionManager.SynStrike(now - (w - 1), now - (w - 1)),
+                             now - (w - 1) + 500, now, w));
     }
 
     @Test
     public void testStrikeAgedOutForgives() {
         long now = 1000000;
         long w = ConnectionManager.STRIKE_WINDOW_MS;
-        // strike at or before the window boundary is forgiven (age >= w)
-        assertFalse(ConnectionManager.shouldBanSynBurst(now - w, now, w));
-        assertFalse(ConnectionManager.shouldBanSynBurst(now - (w + 1), now, w));
+        // at or past the window boundary the old strike is forgiven: a fresh
+        // strike is recorded instead of banning
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(now - w, now - w),
+                                                            now - w + 500, now, w));
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(now - (w + 1), now - (w + 1)),
+                                                            now - (w + 1) + 500, now, w));
         // clock skew (prior strike in the future) must not ban
-        assertFalse(ConnectionManager.shouldBanSynBurst(now + 5000, now, w));
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(now + 5000, now + 5000),
+                                                            now - 500, now, w));
     }
 
     @Test
-    public void testStrikeWindowDisabledNeverBans() {
+    public void testStrikeWindowDisabledNeverActs() {
         long now = 1000000;
-        // windowMs <= 0 disables the two-strike ban path
-        assertFalse(ConnectionManager.shouldBanSynBurst(now - 1, now, 0));
-        assertFalse(ConnectionManager.shouldBanSynBurst(now - 1, now, -1));
+        assertEquals(ConnectionManager.SynBurstAction.IGNORE,
+                     ConnectionManager.synBurstStrikeAction(new ConnectionManager.SynStrike(now - 1, now - 1), now - 500, now, 0));
+        assertEquals(ConnectionManager.SynBurstAction.IGNORE,
+                     ConnectionManager.synBurstStrikeAction(null, now - 500, now, -1));
+    }
+
+    /**
+     * Forgiveness ages from the strike TIME, not the burst window that caused
+     * it: a window is only milliseconds long, so keying age to the window start
+     * (the pre-0.9.71+ value) forgave a strike almost immediately and the
+     * two-strike autoban never fired.
+     */
+    @Test
+    public void testStrikeAgesFromStrikeTimeNotWindowStart() {
+        long now = 1000000;
+        long w = ConnectionManager.STRIKE_WINDOW_MS;
+        // windowStart far older than the strike window, but the strike was
+        // recorded moments ago: still a live strike -> BAN on a new window
+        assertEquals("age must come from strikeTime, not windowStart",
+                     ConnectionManager.SynBurstAction.BAN,
+                     ConnectionManager.synBurstStrikeAction(
+                             new ConnectionManager.SynStrike(now - (w + 10000), now - 1000),
+                             now - 500, now, w));
+        // windowStart recent but the strike itself recorded before the window:
+        // forgiven -> RECORD
+        assertEquals("a recent windowStart must not keep an old strike alive",
+                     ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.synBurstStrikeAction(
+                             new ConnectionManager.SynStrike(now - 100, now - w - 500),
+                             now - 500, now, w));
+    }
+
+    /**
+     * Policy pin for the first abusive window: it trips the gate (so the burst
+     * is counted) but NEVER bans — only a second distinct window within the
+     * strike window does. The grace holds however far over threshold the first
+     * window goes.
+     */
+    @Test
+    public void testFirstWindowTripsButNeverBans() {
+        long now = 1000000;
+        long w = ConnectionManager.STRIKE_WINDOW_MS;
+        // far over threshold (10000 SYNs vs burst 10) inside the window
+        assertTrue(ConnectionManager.synBurstTripped(Long.valueOf(now - 100), 10000, now, 500, 10));
+        assertEquals("first window records, never bans",
+                     ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.synBurstStrikeAction(null, now - 100, now, w));
+    }
+
+    /* applySynBurstStrike (atomic strike recording) */
+
+    @Test
+    public void testApplyRecordsThenIgnoresSameWindow() {
+        ConcurrentHashMap<Hash, ConnectionManager.SynStrike> strikes =
+                new ConcurrentHashMap<Hash, ConnectionManager.SynStrike>();
+        Hash h = new Hash(new byte[32]);
+        long w1 = 1000000;
+        long sw = ConnectionManager.STRIKE_WINDOW_MS;
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.applySynBurstStrike(strikes, h, w1, w1 + 100, sw));
+        assertEquals(w1, strikes.get(h).windowStart);
+        assertEquals(w1 + 100, strikes.get(h).strikeTime);
+        assertEquals(ConnectionManager.SynBurstAction.IGNORE,
+                     ConnectionManager.applySynBurstStrike(strikes, h, w1, w1 + 200, sw));
+        assertEquals(w1, strikes.get(h).windowStart);
+        assertEquals(w1 + 100, strikes.get(h).strikeTime);
+    }
+
+    @Test
+    public void testApplyBansSecondWindowKeepsOriginalStrike() {
+        ConcurrentHashMap<Hash, ConnectionManager.SynStrike> strikes =
+                new ConcurrentHashMap<Hash, ConnectionManager.SynStrike>();
+        Hash h = new Hash(new byte[32]);
+        long w1 = 1000000;
+        long sw = ConnectionManager.STRIKE_WINDOW_MS;
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.applySynBurstStrike(strikes, h, w1, w1 + 100, sw));
+        assertEquals(ConnectionManager.SynBurstAction.BAN,
+                     ConnectionManager.applySynBurstStrike(strikes, h, w1 + 500, w1 + 600, sw));
+        // the original strike stays: the ban supersedes further strikes
+        assertEquals(w1, strikes.get(h).windowStart);
+        assertEquals(w1 + 100, strikes.get(h).strikeTime);
+    }
+
+    @Test
+    public void testApplyForgivesStaleStrike() {
+        ConcurrentHashMap<Hash, ConnectionManager.SynStrike> strikes =
+                new ConcurrentHashMap<Hash, ConnectionManager.SynStrike>();
+        Hash h = new Hash(new byte[32]);
+        long w1 = 1000000;
+        long sw = ConnectionManager.STRIKE_WINDOW_MS;
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.applySynBurstStrike(strikes, h, w1, w1 + 100, sw));
+        long w2 = w1 + sw + 1000;
+        assertEquals(ConnectionManager.SynBurstAction.RECORD,
+                     ConnectionManager.applySynBurstStrike(strikes, h, w2, w2 + 100, sw));
+        assertEquals(w2, strikes.get(h).windowStart);
+        assertEquals(w2 + 100, strikes.get(h).strikeTime);
+    }
+
+    @Test
+    public void testApplySameWindowConcurrentTripsStrikeOnce() throws InterruptedException {
+        final ConcurrentHashMap<Hash, ConnectionManager.SynStrike> strikes =
+                new ConcurrentHashMap<Hash, ConnectionManager.SynStrike>();
+        final Hash h = new Hash(new byte[32]);
+        final long w1 = 1000000;
+        final long now = w1 + 100;
+        final long sw = ConnectionManager.STRIKE_WINDOW_MS;
+        final int threads = 8;
+        final int trips = 250;
+        final CountDownLatch start = new CountDownLatch(1);
+        final AtomicInteger records = new AtomicInteger();
+        final AtomicInteger bans = new AtomicInteger();
+        final AtomicInteger ignores = new AtomicInteger();
+        Thread[] ts = new Thread[threads];
+        for (int i = 0; i < threads; i++) {
+            ts[i] = new Thread(() -> {
+                try {
+                    start.await();
+                } catch (InterruptedException ie) {
+                    return;
+                }
+                for (int j = 0; j < trips; j++) {
+                    ConnectionManager.SynBurstAction a =
+                            ConnectionManager.applySynBurstStrike(strikes, h, w1, now, sw);
+                    if (a == ConnectionManager.SynBurstAction.RECORD)
+                        records.incrementAndGet();
+                    else if (a == ConnectionManager.SynBurstAction.BAN)
+                        bans.incrementAndGet();
+                    else
+                        ignores.incrementAndGet();
+                }
+            });
+            ts[i].start();
+        }
+        start.countDown();
+        for (int i = 0; i < threads; i++)
+            ts[i].join();
+        assertEquals("exactly one strike recorded for the window", 1, records.get());
+        assertEquals("a single burst must never ban", 0, bans.get());
+        assertEquals(threads * trips - 1, ignores.get());
+        assertEquals(w1, strikes.get(h).windowStart);
+    }
+
+    @Test
+    public void testApplyDistinctWindowsConcurrentBans() throws InterruptedException {
+        final ConcurrentHashMap<Hash, ConnectionManager.SynStrike> strikes =
+                new ConcurrentHashMap<Hash, ConnectionManager.SynStrike>();
+        final Hash h = new Hash(new byte[32]);
+        final long now = 1000000;
+        final long sw = ConnectionManager.STRIKE_WINDOW_MS;
+        final int threads = 8;
+        final CountDownLatch start = new CountDownLatch(1);
+        final AtomicInteger records = new AtomicInteger();
+        final AtomicInteger bans = new AtomicInteger();
+        final AtomicInteger ignores = new AtomicInteger();
+        Thread[] ts = new Thread[threads];
+        for (int i = 0; i < threads; i++) {
+            final long windowStart = now - 1000 + i * 10; // distinct windows, all inside the strike window
+            ts[i] = new Thread(() -> {
+                try {
+                    start.await();
+                } catch (InterruptedException ie) {
+                    return;
+                }
+                ConnectionManager.SynBurstAction a =
+                        ConnectionManager.applySynBurstStrike(strikes, h, windowStart, now, sw);
+                if (a == ConnectionManager.SynBurstAction.RECORD)
+                    records.incrementAndGet();
+                else if (a == ConnectionManager.SynBurstAction.BAN)
+                    bans.incrementAndGet();
+                else
+                    ignores.incrementAndGet();
+            });
+            ts[i].start();
+        }
+        start.countDown();
+        for (int i = 0; i < threads; i++)
+            ts[i].join();
+        // racing second bursts can neither lose the first strike nor double-record it
+        assertEquals("exactly one strike recorded", 1, records.get());
+        assertEquals("every other distinct window bans", threads - 1, bans.get());
+        assertEquals(0, ignores.get());
     }
 
     /* tooManyStreamsForDest (per-dest stream budget) */

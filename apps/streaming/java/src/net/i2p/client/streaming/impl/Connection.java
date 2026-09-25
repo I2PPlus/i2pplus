@@ -64,6 +64,16 @@ class Connection {
     private final AtomicBoolean _connected = new AtomicBoolean(true);
     /** Whether the final disconnect sequence has been initiated. */
     private final AtomicBoolean _finalDisconnect = new AtomicBoolean();
+    /**
+     *  Slot-release claim: CAS'd exactly once when this connection's budget
+     *  slot is given back (reservation token consumed, or peer fallback when
+     *  no token was bound), and re-armed only when a new generation binds a
+     *  fresh token (assignReceiveStreamId). Lets every teardown path race to
+     *  release without any of them draining a slot twice — the failure mode
+     *  that lets a hard-disconnect sweep decrement a later stream's count.
+     *  @since 0.9.71+
+     */
+    private final AtomicBoolean _slotReleaseClaimed = new AtomicBoolean();
     /** Whether the connection has been hard-disconnected (unrecoverable). */
     private volatile boolean _hardDisconnected;
     /** Stream for receiving incoming data from the remote peer. */
@@ -263,14 +273,26 @@ class Connection {
     /** Bandwidth estimator. */
     private final BandwidthEstimator _bwEstimator;
 
-    /** Recompute the BDP in-flight cap at most this often. The cap feathers
-     *  at the RTT/estimator cadence anyway, so a cached value remains accurate
-     *  across the several write attempts an eagerly blocked app will issue. */
+    /** Recompute the per-stream window ceiling at most this often. The ceiling
+     *  feathers at the RTT/estimator cadence anyway, so a cached value remains
+     *  accurate across the several write attempts an eagerly blocked app will
+     *  issue. */
     private static final long BDP_CACHE_MS = 250;
-    /** Router-clock time of the last {@link #getBDPBasedInFlightCap()} sample. */
-    private long _lastBdpCapAt;
-    /** Last computed BDP in-flight cap. Single writer (app writer thread): no volatile. */
-    private int _lastBdpCap;
+    /** Headroom (%) applied to the BDP estimate for the per-stream ceiling.
+     *  The Westwood+ sample lags ACK cadence and the 500ms RTT floor
+     *  under-measures fast paths, so the raw estimate would park the window
+     *  just under the true pipe; loss — not the ceiling — bounds overshoot.
+     *  @since 0.9.71+ */
+    private static final int WINDOW_CEILING_HEADROOM_PCT = 125;
+    /**
+     *  Last {@link #getWindowCeiling()} sample, ceiling and timestamp as ONE
+     *  value: two separate volatiles let a reader pair one writer's ceiling
+     *  with the other writer's newer (or its own later) timestamp, serving a
+     *  stale ceiling for another BDP_CACHE_MS or inverting the age check.
+     *  Volatile: written from the app-writer choke loop and the ACK path.
+     *  @since 0.9.71+
+     */
+    private volatile WindowCeilingSample _windowCeilingSample;
 
     /** Record every Nth choke-size stat sample. These fire per packet sent or
      *  released; sampling the aggregate (scaling the value by the period)
@@ -378,8 +400,11 @@ class Connection {
 
     /**
      *  Default window size cap used when no per-connection or global override is set.
-     *  The effective ceiling is managed by getGlobalMaxWindowSize(), which the Tuner
-     *  adjusts based on observed RTT, bandwidth, and loss.
+     *  The effective ceiling is the per-stream minimum of this global — which the
+     *  Tuner adjusts based on observed RTT, bandwidth, loss, and memory pressure,
+     *  making it the hard safety valve — and the stream's own BDP
+     *  ({@link #getWindowCeiling()}), so a fast stream is not held back by
+     *  signals gathered from other streams.
      *  Raised from 1024 to 2048 to better utilize high-BDP paths.
      */
     public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 1024 : 2048;
@@ -1003,10 +1028,10 @@ class Connection {
         int persistBackoff = 0;
         while (true) {
             long timeLeft = writeExpire - now;
-            // Sample the bandwidth estimator outside the lock; it has its own
+            // Sample the ceiling outside the lock; the estimator has its own
             // lock, and the timer/estimator thread takes _outboundPacketsLock
             // in the opposite order (see ackPackets / RetransmitEvent comments).
-            int inFlightCap = getBDPBasedInFlightCap();
+            int windowCeiling = getWindowCeiling();
             boolean send = false;
             int chokeSize = 0;
             synchronized (_outboundPacketsLock) {
@@ -1021,7 +1046,7 @@ class Connection {
 
                 int unacked = outboundSizeLocked();
                 int wsz = _options.getWindowSize();
-                if (shouldWait(unacked, wsz, inFlightCap)) {
+                if (shouldWait(unacked, wsz, windowCeiling)) {
                     if (_isChoked) {
                         long persistDelay = Math.max(_options.getRTO(), 2000L);
                         if (persistBackoff > 0) {
@@ -1082,28 +1107,91 @@ class Connection {
     }
 
     /**
-     *  BDP-based upper bound on in-flight packets.
-     *  Uses the Westwood+ bandwidth estimator to compute how many packets
-     *  the pipe can hold, floored at the global max window size to preserve
-     *  the legacy baseline on low-BDP or uncalibrated paths.
+     *  Per-stream window ceiling: the minimum of the Tuner-managed global
+     *  ceiling (or the per-connection override) and this stream's own
+     *  bandwidth-delay product scaled by {@link #WINDOW_CEILING_HEADROOM_PCT}.
+     *  Each stream therefore responds to its own RTT and delivered-bandwidth
+     *  estimate — a fast stream grows toward its own pipe while the global
+     *  ceiling remains the hard safety valve the Tuner shrinks under memory
+     *  or loss pressure (the OOM guard).
+     *
+     *  <p>Before any ACK sample exists the ceiling falls back to the global
+     *  value, so an uncalibrated stream ramps exactly as before (bounded by
+     *  slow-start's ssthresh and the global ceiling).
      *
      *  <p>The result is cached for {@link #BDP_CACHE_MS} so a persistently full
      *  window (the app keeps writing, the choke loop keeps blocking) does not
      *  re-lock the synchronized estimator and re-read RTT on every write
-     *  attempt; the Westwood+ sample only moves on ACK cadence anyway.
+     *  attempt; the Westwood+ sample only moves on ACK cadence anyway. Both
+     *  writer threads may populate the cache; a ceiling from either is valid,
+     *  and ceiling + timestamp are stored as one value ({@link
+     *  WindowCeilingSample}) so a reader can never pair one writer's ceiling
+     *  with the other writer's newer timestamp — which would pin the cache
+     *  hit to the older ceiling for extra BDP_CACHE_MS windows — nor invert
+     *  the age check by pairing a stale timestamp with a fresh ceiling.
      *
-     *  @return max allowed in-flight packets, in [globalMax, ABSOLUTE_MAX_WINDOW]
+     *  @return max allowed in-flight packets for this stream, never above
+     *          {@code min(getMaxWindowSize(), ABSOLUTE_MAX_WINDOW)}
+     *  @since 0.9.71+
      */
-    private int getBDPBasedInFlightCap() {
+    int getWindowCeiling() {
         long now = _context.clock().now();
-        if (now - _lastBdpCapAt < BDP_CACHE_MS) {return _lastBdpCap;}
+        WindowCeilingSample sample = _windowCeilingSample;
+        if (sample != null && now - sample.at < BDP_CACHE_MS) {return sample.ceiling;}
         float bwe = _bwEstimator.getBandwidthEstimate(); // packets/ms
         int rtt = Math.max(_options.getRTT(), 500);       // ms
-        int bdp = Math.max(getGlobalMaxWindowSize(), (int)(bwe * rtt));
-        int cap = Math.min(ABSOLUTE_MAX_WINDOW, bdp);
-        _lastBdpCap = cap;
-        _lastBdpCapAt = now;
-        return cap;
+        int ceiling = computeWindowCeiling(_options.getMaxWindowSize(), bwe, rtt,
+                                           ConnectionOptions.getInitialWindowSize(),
+                                           ABSOLUTE_MAX_WINDOW);
+        _windowCeilingSample = new WindowCeilingSample(ceiling, now);
+        return ceiling;
+    }
+
+    /**
+     *  One {@link #getWindowCeiling()} cache entry: ceiling + sample time as a
+     *  single atomically-published value (see the field's Javadoc).
+     *  @since 0.9.71+
+     */
+    private static final class WindowCeilingSample {
+        /** Computed ceiling in messages. */
+        final int ceiling;
+        /** Router-clock ms of the sample. */
+        final long at;
+
+        /**
+         * @param ceiling computed ceiling in messages
+         * @param at router-clock ms of the sample
+         */
+        WindowCeilingSample(int ceiling, long at) {
+            this.ceiling = ceiling;
+            this.at = at;
+        }
+    }
+
+    /**
+     *  Pure decision helper for {@link #getWindowCeiling()}: the per-stream
+     *  window ceiling in messages —
+     *  {@code min(globalMax, max(floor, headroom * bwe * rtt))}, falling back
+     *  to {@code globalMax} when no bandwidth sample exists yet. The global
+     *  ceiling always binds downward, which is what keeps the Tuner's
+     *  memory/loss response effective on every stream.
+     *
+     *  @param globalMax Tuner-managed global or per-connection ceiling in messages; binds downward
+     * @param bwePerMs Westwood+ estimate in packets/ms; NaN or <= 0 means no sample yet
+     *  @param rttMs round-trip time in ms (caller applies the 500ms floor)
+     *  @param floorMsgs minimum ceiling while an estimate exists (the initial window)
+     *  @param absMaxMsgs absolute ceiling regardless of inputs (ABSOLUTE_MAX_WINDOW)
+     *  @return ceiling in messages, in {@code [1, min(globalMax, absMaxMsgs)]};
+     *          never above {@code globalMax}
+     *  @since 0.9.71+
+     */
+    static int computeWindowCeiling(int globalMax, float bwePerMs, int rttMs,
+                                    int floorMsgs, int absMaxMsgs) {
+        int cap = Math.min(absMaxMsgs, Math.max(1, globalMax));
+        if (Float.isNaN(bwePerMs) || bwePerMs <= 0.0f || rttMs <= 0)
+            return cap;
+        long bdp = (long) (bwePerMs * rttMs * (WINDOW_CEILING_HEADROOM_PCT / 100.0f));
+        return (int) Math.min(cap, Math.max(floorMsgs, bdp));
     }
 
     /**
@@ -1126,12 +1214,12 @@ class Connection {
      *  Whether the sender should block.
      *  @param unacked number of unacked packets
      *  @param wsz the current window size
-     *  @param inFlightCap BDP-based in-flight cap, sampled outside the lock
+     *  @param windowCeiling per-stream window ceiling from {@link #getWindowCeiling()}, sampled outside the lock
      *  @return true if the sender should block (window full or choked)
      */
-    private boolean shouldWait(int unacked, int wsz, int inFlightCap) {
+    private boolean shouldWait(int unacked, int wsz, int windowCeiling) {
         return _isChoked || unacked >= wsz ||
-               _lastSendId.get() - _highestAckedThrough.get() >= inFlightCap;
+               _lastSendId.get() - _highestAckedThrough.get() >= windowCeiling;
     }
 
     /**
@@ -2311,6 +2399,32 @@ class Connection {
     public long getReceiveStreamId() {return _receiveStreamId.get();}
 
     /**
+     *  Claim this connection's slot release, once per generation. The winner
+     *  (first CAS false→true) owns the budget release; every other teardown
+     *  path — a disconnectAllHard() sweep racing disconnectComplete(), a
+     *  failed bind's catch racing a later teardown — sees true and must skip
+     *  its release, or the dest's stream count is decremented for slots it
+     *  never took.
+     *
+     *  @return true if the caller now owns the one release for this generation
+     *  @since 0.9.71+
+     */
+    boolean claimSlotRelease() {
+        return _slotReleaseClaimed.compareAndSet(false, true);
+    }
+
+    /**
+     *  Re-arm the slot-release claim for a new generation, called by
+     *  ConnectionManager.assignReceiveStreamId() when a pooled connection
+     *  binds a fresh reservation token: the next teardown of this object must
+     *  be able to claim again.
+     *  @since 0.9.71+
+     */
+    void resetSlotRelease() {
+        _slotReleaseClaimed.set(false);
+    }
+
+    /**
      *  Stream ID that the peer sends data on.
      *  @param id 0 to 0xffffffff
      *  @throws IllegalStateException if already set to nonzero
@@ -2558,6 +2672,10 @@ class Connection {
                _preChokeWindowSize = -1;
                if (saved > 0) {
                    int restored = Math.max(saved, _ssthresh);
+                   // A saved window above the current per-stream ceiling must
+                   // not jump the queue past what the pipe/heap allows now.
+                   int ceiling = getWindowCeiling();
+                   if (restored > ceiling) {restored = ceiling;}
                    _options.setWindowSize(restored);
                    if (_log.shouldInfo()) {
                        _log.info("Restoring window to " + restored + " (was " + saved +
@@ -3239,6 +3357,12 @@ class Connection {
 
             // 2. cut ssthresh to bandwidth estimate, window to 1
             List<PacketLocal> toResend = null;
+            // Sampled before taking _outboundPacketsLock: getWindowCeiling() may
+            // lock the estimator, and estimator-monitor → _outboundPacketsLock is
+            // the established order (packetSendChoke()/shouldWait() sample first);
+            // taking the ceiling inside would extend that hold across the whole
+            // resend section. The result only bounds the cut below.
+            final int ceiling = getWindowCeiling();
             synchronized(_outboundPacketsLock) {
                 TreeMap<Long, PacketLocal> ob = _outboundPackets;
                 Map.Entry<Long, PacketLocal> e = ob == null ? null : ob.firstEntry();
@@ -3275,8 +3399,10 @@ class Connection {
                     // Floor at 4 so repeated RTO events don't collapse the window
                     // below a usable minimum — prevents degenerative behavior
                     // where each retransmit halves the window to 1, making every
-                    // subsequent send a single-packet-at-a-time ordeal.
-                    _options.setWindowSize(Math.min(maxSS, graduatedLossWindow(strikes, wsize)));
+                    // subsequent send a single-packet-at-a-time ordeal. Never above
+                    // the per-stream ceiling: the graduated cut alone could leave a
+                    // fast stream's window over its own BDP-derived pipe.
+                    _options.setWindowSize(Math.min(ceiling, Math.min(maxSS, graduatedLossWindow(strikes, wsize))));
                     updatePacingRate();
                 } else if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
@@ -3775,6 +3901,10 @@ class Connection {
             if (_packet.getReceiveStreamId() <= 0) {_packet.setReceiveStreamId(_receiveStreamId.get());}
             if (_packet.getSendStreamId() <= 0) {_packet.setSendStreamId(_sendStreamId.get());}
 
+            // Sampled before taking _outboundPacketsLock for the same lock-order
+            // reason as ResendPacketEvent.timeReached(); result bounds the
+            // fast-retransmit window cut below.
+            final int ceiling = getWindowCeiling();
             synchronized(_outboundPacketsLock) {
                 int newWindowSize = _options.getWindowSize();
                 if (_isChoked) {
@@ -3805,10 +3935,11 @@ class Connection {
                         int wsize = _options.getWindowSize();
                         // Floor ssthresh at the graduated window so the connection
                         // can regrow quickly after recovery, but keep the classic
-                        // fast-retransmit window choice (min(ssthresh, wsize)).
+                        // fast-retransmit window choice (min(ssthresh, wsize)),
+                        // never above the per-stream ceiling.
                         int maxSS = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
                         _ssthresh = Math.min(maxSS, Math.max(graduatedLossWindow(strikes, wsize), bwSsthresh));
-                        _options.setWindowSize(Math.min(_ssthresh, wsize));
+                        _options.setWindowSize(Math.min(ceiling, Math.min(_ssthresh, wsize)));
                         updatePacingRate(); // Update pacing when window changes
                     }
 

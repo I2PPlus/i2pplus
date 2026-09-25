@@ -465,6 +465,14 @@ class ConnectionPacketHandler {
      * @return true if congested
      */
     private boolean adjustWindow(Connection con, boolean isNew, long sequenceNum, int numResends, int acked, boolean choke) {
+        // Per-stream ceiling: min(tuner global, this stream's BDP + headroom),
+        // sampled once per adjustment (250ms cache) OUTSIDE windowLock:
+        // getWindowCeiling() may take the estimator's monitor, and sampling
+        // inside would hold windowLock → estimator nested across the whole
+        // adjustment. The only other nesting of these locks is
+        // _outboundPacketsLock → estimator (Connection.retransmit()/send()),
+        // so estimator is never the outer lock.
+        final int ceiling = con.getWindowCeiling();
         synchronized(con.getWindowLock()) {
             boolean congested;
             if (choke || (!isNew && sequenceNum > 0) || con.isChoked()) {
@@ -520,7 +528,7 @@ class ConnectionPacketHandler {
                         // integers, so lets use a random distribution instead
                         int caFactor = con.getOptions().getCongestionAvoidanceGrowthRateFactor();
                         int effAcked = acked;
-                        int maxWin = con.getOptions().getMaxWindowSize();
+                        int maxWin = ceiling;
                         if (newWindowSize < maxWin) {
                             // Deficit-driven growth: grow faster when well below max window
                             // so large windows recover quickly after a loss. Tapers to 1/RTT
@@ -557,6 +565,11 @@ class ConnectionPacketHandler {
 
                 if (newWindowSize <= 0)
                     newWindowSize = 1;
+                // Clamp to the per-stream ceiling before applying, so the
+                // congestion-window-end bookkeeping matches the real window
+                // and a shrunken ceiling (memory/loss) takes effect on ACK.
+                if (newWindowSize > ceiling)
+                    newWindowSize = ceiling;
 
                 con.getOptions().setWindowSize(newWindowSize);
                 con.setCongestionWindowEnd(newWindowSize + lowest);
