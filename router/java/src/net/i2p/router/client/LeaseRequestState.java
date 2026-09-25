@@ -17,12 +17,24 @@ import net.i2p.router.Job;
  *
  */
 class LeaseRequestState {
+    /**
+     * Maximum prompt re-requests after netdb publish() rejected the client's
+     * LeaseSet as expired. Bounds the retry loop when the client's clock or
+     * signer stays skewed; after the bound the timeout check resolves the
+     * request as before.
+     *
+     * @since 0.9.71+
+     */
+    static final int MAX_TRANSIENT_PUBLISH_RETRIES = 3;
+
     private final LeaseSet _requestedLeaseSet;
     private final Job _onGranted;
     private final Job _onFailed;
     private final long _expiration;
     private final long _currentEarliestLeastDate;
     private volatile boolean _successful;
+    private int _transientPublishRetries;
+    private boolean _resolutionClaimed;
 
     /**
      * Create a new LeaseRequestState.
@@ -90,6 +102,40 @@ class LeaseRequestState {
      * @param is true if successful
      */
     public void setIsSuccessful(boolean is) {_successful = is;}
+
+    /**
+     * Claim one attempt to re-request the LeaseSet after netdb publish()
+     * rejected it as expired (client clock skew or slow signing). The first
+     * {@link #MAX_TRANSIENT_PUBLISH_RETRIES} callers receive true so the
+     * request is promptly re-run with freshly floored lease times; later
+     * callers receive false so a persistently skewed client cannot loop.
+     *
+     * @return true if a retry attempt is available
+     * @since 0.9.71+
+     */
+    synchronized boolean claimTransientPublishRetry() {
+        if (_transientPublishRetries >= MAX_TRANSIENT_PUBLISH_RETRIES)
+            return false;
+        _transientPublishRetries++;
+        return true;
+    }
+
+    /**
+     * Claim the single accounting resolution for this request. Exactly one
+     * resolution path (early job failure, timeout-check success, or
+     * timeout-check failure) proceeds past this claim, so onFailed fires at
+     * most once and success/timeout stats are never double-counted when
+     * several checks or a retry and a check race each other.
+     *
+     * @return true if the caller owns the resolution
+     * @since 0.9.71+
+     */
+    synchronized boolean claimCheckResolution() {
+        if (_resolutionClaimed)
+            return false;
+        _resolutionClaimed = true;
+        return true;
+    }
 
     @Override
     public String toString() {

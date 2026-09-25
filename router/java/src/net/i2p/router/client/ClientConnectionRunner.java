@@ -552,12 +552,19 @@ class ClientConnectionRunner {
      * The counter decays after {@link #LEASE_FAIL_DECAY_MS} of no failures,
      * so a brief I2CP stall does not permanently prime a disconnect.
      * Counter resets to zero on successful LeaseSet receipt.
+     * All null states (request, requested LeaseSet, or its destination) are
+     * guarded before any dereference; RequestLeaseSetJob calls this with a
+     * null LeaseSet or null destination on its early-failure paths.
      *
-     * @param req the failed request, non-null
+     * @param req the failed request, or null to ignore
      */
     public void failLeaseRequest(LeaseRequestState req) {
+        if (req == null) {
+            return;
+        }
         boolean disconnect = false;
-        Destination requestedDest = req.getRequested().getDestination();
+        LeaseSet requested = req.getRequested();
+        Destination requestedDest = requested != null ? requested.getDestination() : null;
         if (requestedDest == null) {
             // Empty or incomplete request state — clear slot without disconnecting
             synchronized (this) {
@@ -994,6 +1001,36 @@ class ClientConnectionRunner {
     public void reportAbuse(Destination dest, String reason, int severity) {
         if (_dead) return;
         _context.jobQueue().addJob(new ReportAbuseJob(_context, this, dest, reason, severity));
+    }
+
+    /**
+     * Re-queue the pending lease request after netdb publish() rejected the
+     * client's LeaseSet as expired (client clock skew or slow signing). The
+     * same LeaseRequestState is re-run so the session slot, callbacks, and
+     * deadline stay intact while the job recomputes lease end times against
+     * the current clock, instead of leaving the request to wait out the full
+     * timeout check. Bounded by
+     * {@link LeaseRequestState#MAX_TRANSIENT_PUBLISH_RETRIES} so a
+     * persistently skewed client cannot re-request forever.
+     *
+     * @param dest the session destination, null for no session
+     * @return true if a retry was queued
+     * @since 0.9.71+
+     */
+    boolean rerequestAfterTransientPublishFailure(Destination dest) {
+        if (_dead || dest == null)
+            return false;
+        LeaseRequestState state;
+        synchronized (this) {
+            SessionParams sp = _sessions.get(dest.calculateHash());
+            if (sp == null)
+                return false;
+            state = sp.leaseRequest;
+            if (state == null || !state.claimTransientPublishRetry())
+                return false;
+        }
+        _context.jobQueue().addJob(new RequestLeaseSetJob(_context, this, state));
+        return true;
     }
 
     /**

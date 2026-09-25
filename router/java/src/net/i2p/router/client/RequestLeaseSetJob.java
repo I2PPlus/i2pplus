@@ -81,7 +81,7 @@ class RequestLeaseSetJob extends JobImpl {
             if (_log.shouldWarn()) {
                 _log.warn("Requested LeaseSet is null, cannot send request to client");
             }
-            _runner.failLeaseRequest(_requestState);
+            failEarlyRequest("Requested LeaseSet is null");
             return;
         }
         long endTime = requested.getEarliestLeaseDate();
@@ -126,7 +126,15 @@ class RequestLeaseSetJob extends JobImpl {
             if (_log.shouldWarn()) {
                 _log.warn("Requested LeaseSet has null destination");
             }
-            _runner.failLeaseRequest(_requestState);
+            failEarlyRequest("Requested LeaseSet has null destination");
+            return;
+        }
+        // A delayed or retry run must not act on a request that has already
+        // been resolved (cleared from the session slot by a timeout check,
+        // an earlier early-failure, or a successful LeaseSet).
+        if (_runner.getLeaseRequest(dest.calculateHash()) != _requestState) {
+            if (_log.shouldDebug())
+                _log.debug("LeaseSet request already resolved, not sending: " + _requestState);
             return;
         }
         // An empty request produces an RVLS with zero endpoints; the client
@@ -139,11 +147,7 @@ class RequestLeaseSetJob extends JobImpl {
                            dest.calculateHash().toBase32().substring(0, 8) +
                            "] — failing request without contacting the client");
             }
-            _requestState.setIsSuccessful(false);
-            if (_requestState.getOnFailed() != null) {
-                getContext().jobQueue().addJob(_requestState.getOnFailed());
-            }
-            _runner.failLeaseRequest(_requestState);
+            failEarlyRequest("Requested LeaseSet has no leases");
             return;
         }
         SessionId id = _runner.getSessionId(dest.calculateHash());
@@ -151,7 +155,7 @@ class RequestLeaseSetJob extends JobImpl {
             if (_log.shouldWarn())
                 _log.warn("No SessionId for destination " + dest.calculateHash().toBase32().substring(0,8) +
                           " in RequestLeaseSetJob");
-            _runner.failLeaseRequest(_requestState);
+            failEarlyRequest("No SessionId for destination");
             return;
         }
         I2CPMessage msg;
@@ -213,12 +217,30 @@ class RequestLeaseSetJob extends JobImpl {
         } catch (I2CPMessageException ime) {
             getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
             _log.error("Error sending I2CP message requesting the LeaseSet", ime);
+            failEarlyRequest("Error sending I2CP message");
+        }
+    }
+
+    /**
+     * Resolve a request that cannot be sent to the client. The claim makes
+     * onFailed fire at most once even when several paths (early validation,
+     * send failure, a timeout check) detect the same dead request, and the
+     * slot is always cleared through failLeaseRequest() so a later request
+     * can proceed.
+     *
+     * @param reason short description of the early failure, for the debug log
+     */
+    private void failEarlyRequest(String reason) {
+        if (_requestState.claimCheckResolution()) {
             _requestState.setIsSuccessful(false);
             if (_requestState.getOnFailed() != null) {
                 getContext().jobQueue().addJob(_requestState.getOnFailed());
             }
-            _runner.failLeaseRequest(_requestState);
+            if (_log.shouldDebug()) {
+                _log.debug("Failing LeaseSet request early: " + reason);
+            }
         }
+        _runner.failLeaseRequest(_requestState);
     }
 
     /**
@@ -240,6 +262,13 @@ class RequestLeaseSetJob extends JobImpl {
             if (_runner.isDead()) {
                 if (_log.shouldDebug())
                     _log.debug("Already dead, don't try to expire the leaseSet lookup");
+                return;
+            }
+            if (!_requestState.claimCheckResolution()) {
+                // An earlier check, a retry's early failure, or a previous
+                // resolution of this request already accounted for it.
+                if (_log.shouldDebug())
+                    _log.debug("LeaseSet request already resolved: " + _requestState);
                 return;
             }
             if (_requestState.getIsSuccessful()) {

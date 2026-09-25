@@ -706,11 +706,16 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                     (msg.contains("expired") || msg.contains("expiry date"));
             String destDesc = dest != null ? dest.toBase32().substring(0, Math.min(8, dest.toBase32().length())) + "..." : "unknown";
             if (isExpired) {
-                // Transient: the rerequest timer will mint a fresh LS. Disconnecting
-                // here would kill every tunnel on the session (seen with slow external
-                // I2CP clients such as BiglyBT), so log and return instead.
+                // Transient: re-queue the pending request so the client mints a
+                // fresh LS promptly instead of waiting out the full timeout
+                // check. Disconnecting here would kill every tunnel on the
+                // session (seen with slow external I2CP clients such as
+                // BiglyBT), so log and return instead.
+                boolean rerequest = _runner.rerequestAfterTransientPublishFailure(dest);
                 if (_log.shouldWarn()) {
-                    _log.warn("Rejected expired LeaseSet from [" + destDesc + "] (will rerequest): " + iae.getMessage());
+                    _log.warn("Rejected expired LeaseSet from [" + destDesc + "] (" +
+                              (rerequest ? "rerequesting" : "no pending request") + "): " +
+                              iae.getMessage());
                 }
                 return;
             }
