@@ -711,7 +711,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new RTOMultiplierParam());
         _params.add(new MaxRttParam());
         _params.add(new MaxSlowStartWindowParam());
-        _params.add(new MaxWindowSizeParam());
+        MaxWindowSizeParam maxWindowSize = new MaxWindowSizeParam();
+        _params.add(maxWindowSize);
+        // Fast cycle: a single fast stream's throughput is pinned to this
+        // ceiling; climbing within 5s (not 15s) unlocks a fast pipe quickly
+        // and lets memory/loss pressure pull a bad ceiling back down quickly.
+        _fastParams.add(maxWindowSize);
         _params.add(new MinResendDelayParam());
         _params.add(new MinPacingRateParam());
         _params.add(new PassiveFlushDelayParam());
@@ -4342,21 +4347,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * the cap, which lowers the read-out further, ...). The ceiling therefore
      * shrinks ONLY on hard negative signals (duplicate retransmits, gateway
      * congestion, memory pressure) and climbs on a clean path, bounded upward
-     * so gains are paced one step per cycle rather than yanked.
+     * and gated on heap headroom so a large jump can never be the event that
+     * pushes the heap into pressure.
+     *
+     * <p>The clean-path climb is hyper-responsive: with strong headroom
+     * (heap below 40%) it takes four steps per cycle, with moderate headroom
+     * (below 50%) two, and at 50% or above it holds until memory frees rather
+     * than spending headroom it may need. Combined with the 5s fast cycle,
+     * the 4096-message ceiling is reachable from the factory default in two
+     * strong cycles (~10s) instead of ~4 slow minutes; every climb is still
+     * bounded by {@code max} and scaled down by health dampening in
+     * {@code BaseParam.update()}.
      *
      * <p>Below the recovery floor ({@code max(min, defaultValue / 2)}) and
      * otherwise healthy, the ceiling climbs two steps toward the factory
      * default; under hard signals it shrinks half a step but never below the
      * recovery floor, so a depression cannot be torn back down to the floor
-     * trim. Climbing twice as fast as it shrinks implements the "ramp fast,
-     * decline slowly" profile while cutting a clean-path ramp from ~8 cycles
-     * to ~4 (~1 min to reach the 4096-message ceiling).
+     * trim. Shrinking is deliberately the fastest way to lose headroom: loss,
+     * congestion, or heap above 60% all pull the ceiling back within one
+     * (fast) cycle.
      *
      * @param current current ceiling value (Connection#getGlobalMaxWindowSize)
      * @param min lower bound for the ceiling (inclusive)
      * @param max upper bound for the ceiling (inclusive)
-     * @param step one tuning step; clean-path climbs use two steps and
-     *              hard-signal shrinks use half a step
+     * @param step one tuning step; clean-path climbs use four steps under
+     *              strong heap headroom and two otherwise, hard-signal
+     *              shrinks use half a step
      * @param defaultValue factory default ceiling; the recovery floor is max(min, defaultValue / 2)
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN if absent
      * @param dupSize stat {@code stream.con.sendDuplicateSize} in bytes, or NaN if absent
@@ -4378,17 +4394,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         // Hard negative signals: drops, congestion, or memory > 60% — shrink
         // half a step, floored at recovery.
-        if (dropping || congested || memPressure > 60.0)
+        if (dropping || congested || memPressure > SHRINK_MEM_PCT)
             return Math.max(recoveryFloor, current - Math.max(1, step / 2));
 
-        // Clean path: climb two steps toward the absolute cap. The former
-        // BDP-based shrink is gone because low measured bandwidth on a capped
-        // connection is an artifact of the cap (see class javadoc) and was
-        // never legitimate evidence to reduce it.
         if (current >= max)
             return max;
-        return Math.min(max, current + step * 2);
+        // Hyper-responsive climb, gated on heap headroom (see javadoc): four
+        // steps under strong headroom, two under moderate, hold at 50%+.
+        // The former BDP-based shrink is gone because low measured bandwidth
+        // on a capped connection is an artifact of the cap and was never
+        // legitimate evidence to reduce it.
+        if (memPressure < STRONG_CLEAN_MEM_PCT)
+            return Math.min(max, current + step * 4);
+        if (memPressure < CLIMB_HEADROOM_MEM_PCT)
+            return Math.min(max, current + step * 2);
+        return current;
     }
+
+    /** Heap % below which the streaming ceiling takes the full four-step jump.
+     *  @since 0.9.71+ */
+    private static final double STRONG_CLEAN_MEM_PCT = 40.0;
+    /** Heap % below which a clean path may take a two-step climb; holds at or
+     *  above this until memory frees. @since 0.9.71+ */
+    private static final double CLIMB_HEADROOM_MEM_PCT = 50.0;
+    /** Heap % above which the streaming ceiling shrinks half a step.
+     *  @since 0.9.71+ */
+    private static final double SHRINK_MEM_PCT = 60.0;
 
     /**
      * Tunes the global max window size ceiling for all streaming connections.
@@ -4407,8 +4438,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxWindowSize", "Streaming max window size",
                     SUB_STREAMING,
 
-                    // Step 512: on a clean path the 4096-message ceiling
-                    // (~8 MB/s at 0.89 s RTT) is reached in ~4 cycles (~1 min).
+                    // Step 512, fast (5s) cycle: on a clean path with heap
+                    // headroom the 4096-message ceiling (~8 MB/s at 0.89s
+                    // RTT) is reached in two four-step cycles (~10s),
+                    // before health dampening.
                     512, 4096, 512, "stream.con.initialRTT.out", _context, null,
                     SystemVersion.isSlow() ? 768 : 1024);
         }

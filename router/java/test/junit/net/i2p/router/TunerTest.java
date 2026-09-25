@@ -6,7 +6,12 @@ import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.List;
+
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 
 /**
  * Comprehensive tests for the Tuner auto-tuning framework.
@@ -1440,17 +1445,23 @@ public class TunerTest {
 
     // params: current, min, max, step, defaultValue, failLifetime, dupSize, memPct
 
-    /** Clean path climbs two steps toward the absolute cap — the ramp lever. */
+    /** Clean path with strong heap headroom climbs four steps toward the cap —
+     *  the hyper-responsive ramp lever (NaN memory reads as no pressure). */
     @Test
-    public void testMaxWindowCleanClimbsTwoSteps() {
-        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
-                                                                Double.NaN, Double.NaN, Double.NaN));
+    public void testMaxWindowCleanClimbsFourSteps() {
+        assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                 Double.NaN, Double.NaN, Double.NaN));
+        // two strong cycles from the factory default reach the cap
+        assertEquals(4096, Tuner.computeStreamingMaxWindowTarget(3584, 128, 4096, 128, 512,
+                                                                 Double.NaN, Double.NaN, 25.0));
     }
 
     /** At the absolute cap, a clean path holds (no overshoot). */
     @Test
     public void testMaxWindowAtCapHolds() {
         assertEquals(4096, Tuner.computeStreamingMaxWindowTarget(4096, 128, 4096, 128, 512,
+                                                                  Double.NaN, Double.NaN, Double.NaN));
+        assertEquals(4096, Tuner.computeStreamingMaxWindowTarget(4000, 128, 4096, 128, 512,
                                                                   Double.NaN, Double.NaN, Double.NaN));
     }
 
@@ -1460,10 +1471,10 @@ public class TunerTest {
      *  shrink, regardless of how low the bandwidth average is. */
     @Test
     public void testMaxWindowLowBdpNoLongerShrinks() {
-        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
-                                                                Double.NaN, Double.NaN, Double.NaN));
-        assertEquals(1152, Tuner.computeStreamingMaxWindowTarget(896, 128, 4096, 128, 512,
+        assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
                                                                  Double.NaN, Double.NaN, Double.NaN));
+        assertEquals(1408, Tuner.computeStreamingMaxWindowTarget(896, 128, 4096, 128, 512,
+                                                                  Double.NaN, Double.NaN, Double.NaN));
     }
 
     /** Duplicate retransmits (loss pressure) shrink half a step. */
@@ -1482,13 +1493,37 @@ public class TunerTest {
                                                                 9000.0, Double.NaN, Double.NaN));
     }
 
-    /** Memory pressure above 60% shrinks; at exactly 60% the path is still clean. */
+    /** The heap-headroom ladder: four steps below 40%, two below 50%, hold at
+     *  50% and above, shrink above 60%. The hold-at-50% rung is what makes the
+     *  large increments safe — a big jump can never be the event that pushes
+     *  the heap into pressure. */
     @Test
-    public void testMaxWindowMemoryPressureBoundary() {
+    public void testMaxWindowMemoryHeadroomLadder() {
+        // strong headroom: four steps
+        assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                 Double.NaN, Double.NaN, 39.9));
+        // boundary: exactly 40% drops to two steps
         assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, 40.0));
+        // moderate headroom: two steps
+        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, 49.9));
+        // no headroom: hold (no climb, no shrink)
+        assertEquals(512, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                Double.NaN, Double.NaN, 50.0));
+        assertEquals(512, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, 60.0));
+        // above 60%: shrink half a step
         assertEquals(576, Tuner.computeStreamingMaxWindowTarget(640, 128, 4096, 128, 512,
                                                                 Double.NaN, Double.NaN, 60.1));
+    }
+
+    /** A negative signal under strong headroom still shrinks — the ladder only
+     *  ever gates climbs. */
+    @Test
+    public void testMaxWindowNegativeSignalBeatsStrongHeadroom() {
+        assertEquals(960, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
+                                                                Double.NaN, 600.0, 25.0));
     }
 
     /** Below the recovery floor (max(min, default/2)) and healthy, climb two steps
@@ -1511,8 +1546,8 @@ public class TunerTest {
     /** Missing signals are treated as clean (never a reason to shrink). */
     @Test
     public void testMaxWindowMissingSignalsTreatClean() {
-        assertEquals(768, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
-                                                                Double.NaN, Double.NaN, Double.NaN));
+        assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                 Double.NaN, Double.NaN, Double.NaN));
         double nan = Double.NaN;
         assertEquals(384, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
                                                                 nan, nan, nan));
@@ -1563,6 +1598,93 @@ public class TunerTest {
                   int defaultMin, int defaultMax, int defaultStep) {
             super("test.param." + System.nanoTime(), "Test", "Test",
                   defaultMin, defaultMax, defaultStep, "test.stat", ctx, config, 100);
+        }
+
+        @Override protected void applyValue(int value) {}
+        @Override protected int getRuntimeValue() { return 0; }
+        @Override protected double getObservedStat(RouterContext ctx) { return 0; }
+        @Override protected int computeTarget(double observed) { return 0; }
+    }
+
+    // =====================================================================
+    // Section 8: 5-minute additional-stat reader (read side of E1a)
+    // =====================================================================
+
+    /**
+     * getAdditionalStat5Min() is what the congestion tuner reads for
+     * stream.rtxRatio and stream.rtxRatioBytes. It returns NaN unless the stat
+     * was registered with a five-minute period, so a writer that only offers
+     * minute/ten-minute/hour periods (what ConnectionManager did before
+     * 0.9.71+) feeds the tuner NaN forever no matter how much data it records.
+     * Pins the read half of that contract; the write half (registering
+     * FIVE_MINUTES) is covered by the streaming module's RtxRatioStatTest.
+     *
+     * <p>The reader reports the last <i>completed</i> window, so the positive
+     * case backdates the rate's coalesce timestamp instead of sleeping through
+     * five minutes.
+     *
+     * @since 0.9.71+
+     */
+    @Test
+    public void testFiveMinuteStatIsReadableByTuner() throws Exception {
+        Tuner.AutotuneConfig config = new Tuner.AutotuneConfig(_ctx);
+        StatReader reader = new StatReader(_ctx, config);
+        StatManager sm = _ctx.statManager();
+        String withPeriod = "stream.test.rtxRatio5min";
+        String withoutPeriod = "stream.test.rtxRatioNo5min";
+        sm.createRequiredRateStat(withPeriod, "test 5-minute", "Stream",
+                new long[] { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat(withoutPeriod, "test no 5-minute", "Stream",
+                new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        try {
+            assertTrue("nothing recorded yet", Double.isNaN(reader.readFiveMinutes(withPeriod)));
+            assertTrue("no such stat", Double.isNaN(reader.readFiveMinutes("stream.test.neverRegistered")));
+
+            sm.addRateData(withPeriod, 100, 1000);
+            sm.addRateData(withPeriod, 200, 1000);
+            sm.addRateData(withoutPeriod, 100, 1000);
+            // The window is still open, so there is nothing to report yet.
+            assertTrue("open window", Double.isNaN(reader.readFiveMinutes(withPeriod)));
+
+            completeWindow(sm.getRate(withPeriod).getRate(RateConstants.FIVE_MINUTES));
+            assertEquals(150.0, reader.readFiveMinutes(withPeriod), 0.001);
+
+            assertTrue("without the period, recorded data never reaches the tuner",
+                       Double.isNaN(reader.readFiveMinutes(withoutPeriod)));
+        } finally {
+            sm.removeRateStat(withPeriod);
+            sm.removeRateStat(withoutPeriod);
+        }
+    }
+
+    /**
+     * Pretend a rate's period has elapsed so coalesce() publishes the current
+     * window into the last-period counters the readers consult.
+     *
+     * @param rate rate to age, must not be null
+     * @throws Exception on reflective field access
+     * @throws AssertionError if rate is null
+     */
+    private static void completeWindow(Rate rate) throws Exception {
+        assertNotNull(rate);
+        Field lastCoalesce = Rate.class.getDeclaredField("_lastCoalesceDate");
+        lastCoalesce.setAccessible(true);
+        lastCoalesce.setLong(rate, System.currentTimeMillis() - rate.getPeriod() - 5000L);
+        rate.coalesce();
+    }
+
+    /**
+     * Exposes the protected five-minute reader from {@link Tuner.BaseParam},
+     * the exact path the congestion parameters use.
+     */
+    private static class StatReader extends Tuner.BaseParam {
+        StatReader(RouterContext ctx, Tuner.AutotuneConfig config) {
+            super("test.param.fiveMinStatReader", "Five-minute stat reader", "Test",
+                  1, 2, 1, "test.stat", ctx, config, 1);
+        }
+
+        double readFiveMinutes(String statName) {
+            return getAdditionalStat5Min(_ctx, statName);
         }
 
         @Override protected void applyValue(int value) {}
