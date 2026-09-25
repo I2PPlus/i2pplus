@@ -30,6 +30,7 @@ import net.i2p.util.Clock;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Thread that forwards traffic between an I2PSocket and a TCP Socket.
@@ -129,6 +130,22 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  @since 0.9.71+
      */
     static final long BODY_STALL_READ_TIMEOUT_MS = 30 * 1000;
+    /**
+     *  Deadline for the very first response byte after a request is written
+     *  upstream (ms). Without it, a peer that accepts the connection but never
+     *  sends a byte pins the runner forever: the body stall timeout is only
+     *  armed after the first byte and streaming inactivity is disabled for
+     *  HTTP tunnels, so nothing else bounds the wait. The anchor slides forward
+     *  on every request-side write, so a slow POST upload never trips it; it is
+     *  re-armed on each empty-response reconnect. 120s matches streaming's
+     *  default inactivity window and stays well inside browser patience (~300s)
+     *  across the empty-retry budget. Superseded permanently by the first
+     *  response byte, which hands off to {@link #BODY_STALL_READ_TIMEOUT_MS}.
+     *  @since 0.9.71+
+     */
+    static final long INITIAL_RESPONSE_TIMEOUT_MS = 120 * 1000;
+    /** Watchdog poll interval (ms); SimpleTimer2 rejects periods under 5s. @since 0.9.71+ */
+    static final long INITIAL_WATCHDOG_POLL_MS = 5 * 1000;
 
     /**
      *  Delay before empty-retry cycle {@code cycle} (1-based, after the cycle
@@ -145,6 +162,38 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         int shift = cycle - 2;
         if (shift > 3) {shift = 3;}
         return Math.min(EMPTY_CYCLE_MAX_DELAY_MS, EMPTY_CYCLE_BASE_DELAY_MS << shift);
+    }
+
+    /**
+     *  Effective first-response deadline (ms), read per watchdog tick.
+     *  Non-positive disables the watchdog entirely. Test hook; do not
+     *  modify in production.
+     *  @since 0.9.71+
+     */
+    static volatile long initialResponseTimeoutMs = INITIAL_RESPONSE_TIMEOUT_MS;
+
+    /**
+     *  Whether the first-response deadline has elapsed for the current
+     *  request attempt (pure predicate).
+     *
+     *  <p>The deadline only ever arms before the first response byte: once
+     *  any upstream byte has arrived the watchdog retires permanently and
+     *  {@link #BODY_STALL_READ_TIMEOUT_MS} takes over. An unset anchor means
+     *  no request has been written (server-side runners, or a runner that
+     *  never started), so nothing can be late.
+     *
+     *  @param lastRequestWriteMs epoch-ms of the most recent request-side
+     *                            write upstream, 0 if none
+     *  @param firstByteMs epoch-ms of the first response byte, 0 if none yet
+     *  @param nowMs current epoch-ms
+     *  @param timeoutMs deadline window in ms; non-positive disables it
+     *  @return true if the deadline expired with no response byte
+     *  @since 0.9.71+
+     */
+    static boolean initialResponseExpired(long lastRequestWriteMs, long firstByteMs,
+                                          long nowMs, long timeoutMs) {
+        if (timeoutMs <= 0 || firstByteMs > 0 || lastRequestWriteMs <= 0) {return false;}
+        return nowMs - lastRequestWriteMs >= timeoutMs;
     }
 
     /**
@@ -227,15 +276,19 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         int getTotalCycles() { return totalCycles; }
 
         /**
-         *  Refund the last consume when a resume attempt failed with a
-         *  transient status (408/502/503/504) rather than a real stall —
-         *  the budget is for empty/stalled reconnects, not for a gateway
-         *  timeout that the next non-Range retry may resolve.
+         *  Refund the last consume's stall charge when a resume attempt failed
+         *  with a transient status (408/502/503/504) rather than a real stall —
+         *  a gateway timeout must not eat the empty/stall budget, or the next
+         *  non-Range retry would be blocked for an unrelated reason.
+         *
+         *  <p>Only the stall charge is refunded. The total count stays
+         *  consumed so {@link #MAX_RESUME_CYCLES} remains an absolute cap
+         *  over ALL attempts; refunding it would let a persistently
+         *  transient-failing upstream reconnect forever.
          *
          *  @since 0.9.71+
          */
         void refundLast() {
-            if (totalCycles > 0) {totalCycles--;}
             if (stallCycles > 0) {stallCycles--;}
         }
     }
@@ -245,8 +298,10 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     /** I2P socket (the tunnel connection). Non-final so an "empty response"
      *  reconnect may replace it with a fresh connection while the local browser
      *  socket stays open. Only ever reassigned within {@link #run()} when a
-     *  {@link ReconnectCallback} is installed and yields a new connection. */
-    private I2PSocket i2ps;
+     *  {@link ReconnectCallback} is installed and yields a new connection.
+     *  Volatile so the initial-response watchdog on the timer thread sees the
+     *  swap when it fires. */
+    private volatile I2PSocket i2ps;
     /** Synchronization lock for socket access. */
     private final Object slock;
     private final Object finishLock = new Object();
@@ -269,6 +324,21 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     /** Prevent the no-data failure callback from firing more than once across
      *  the synchronous completion block and the exception/finally paths. */
     private boolean _noDataHandled;
+    /** Sliding anchor: epoch-ms of the most recent request-side write upstream.
+     *  Refreshed by the toI2P forwarder so a slow upload never trips the
+     *  initial-response deadline; reset on each empty-response re-send. */
+    private volatile long _lastRequestWriteMs;
+    /** Epoch-ms of the first response byte, 0 until one arrives; retires the
+     *  initial-response watchdog permanently. */
+    private volatile long _firstByteMs;
+    /** One-shot latch per request attempt so a fired deadline does not warn
+     *  and close again every watchdog tick; cleared when the anchor slides or
+     *  a re-send starts a new attempt. */
+    private volatile boolean _initialDeadlineFired;
+    /** Watchdog lifecycle: set on schedule, cleared on cancel, read by the
+     *  timer thread so a tick racing run()'s finally cannot re-arm. */
+    private volatile boolean _initialWatchdogOn;
+    private volatile SimpleTimer2.TimedEvent _initialWatchdog;
     /** Keep I2P socket alive after data transfer */
     protected volatile boolean _keepAliveI2P;
     /** Keep local socket alive after data transfer */
@@ -772,6 +842,32 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
+     *  Whether a non-Range full re-request is safe after a transient status
+     *  (408/502/503/504) aborted a Range resume attempt.
+     *
+     *  <p>Used by the resume loop instead of {@link #shouldResumeIncompleteBody}
+     *  while the fallback is pending: the response stream's header-written
+     *  state was reset when it swallowed the failed resume headers, so the
+     *  Range-specific {@code canRangeResume} gate can no longer pass even
+     *  though headers and a partial body were already delivered to the
+     *  browser. The remaining requirements are the same splice invariants —
+     *  a definite Content-Length so the delivered prefix is known, and an
+     *  incomplete body so there is still something to fetch. The caller
+     *  (resume loop entry) has already required a reconnect callback and an
+     *  idempotent GET/HEAD.
+     *
+     *  @param bodyReceived entity-body bytes already delivered to the browser
+     *  @param dataExpected original response Content-Length, or -1 if unknown
+     *  @return true if a fresh full-entity request may be issued
+     *  @since 0.9.71+
+     */
+    static boolean shouldFallbackFullBody(long bodyReceived, long dataExpected) {
+        return dataExpected > 0
+               && bodyReceived >= 0
+               && bodyReceived < dataExpected;
+    }
+
+    /**
      *  Rewrite a buffered GET/HEAD request to resume at {@code start} via a
      *  Range header, replacing any Range the browser already sent.
      *
@@ -804,6 +900,25 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         System.arraycopy(range, 0, out, insertAt, range.length);
         System.arraycopy(base, insertAt, out, insertAt + range.length, base.length - insertAt);
         return out;
+    }
+
+    /**
+     *  Return {@code request} with every {@code Range:} header line removed —
+     *  the non-Range fallback form re-requested after a transient status
+     *  (408/502/503/504) aborts a Range resume. The response then starts at
+     *  byte 0, and the resume stream drops the already-delivered prefix so the
+     *  splice stays seamless.
+     *
+     *  @param request the raw request bytes (request-line + headers), may be null
+     *  @return a copy without Range lines (original array when none present);
+     *          null if {@code request} is null
+     *  @since 0.9.71+
+     */
+    static byte[] withoutRangeHeader(byte[] request) {
+        if (request == null) {return null;}
+        int end = indexOfHeaderEnd(request);
+        if (end < 0) {return request;}
+        return stripRangeHeader(request, end);
     }
 
     /**
@@ -959,11 +1074,14 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private void redriveReceiveForwarder(OutputStream out, InputStream i2pin) {
         finished = false;
         InputStream pin = i2pin;
-        // Prefer the live socket stream; on failure keep the caller-provided stream.
+        // Preserve the caller-provided stream: the dual-race winner's pushback
+        // wrapper still holds the first response byte unread, and reacquiring a
+        // fresh socket stream would discard it, corrupting the response header.
+        // Only reacquire when the caller supplied nothing.
         try {
-            if (i2ps != null) {pin = i2ps.getInputStream();}
+            pin = pickRedriveStream(i2pin, i2ps);
         } catch (IOException ioe) {
-            if (_log.shouldDebug()) {_log.debug("redrive: falling back to prior i2p stream", ioe);}
+            if (_log.shouldDebug()) {_log.debug("redrive: falling back to caller-provided stream", ioe);}
         }
         fromI2P = new StreamForwarder(pin, out, false, _onSuccess);
         fromI2P.run();
@@ -979,11 +1097,35 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
+     *  Choose the stream a re-driven receive forwarder reads from.
+     *
+     *  <p>The caller-provided stream always wins when present: the dual-race
+     *  winner is delivered as a {@link PushbackInputStream} whose buffer holds
+     *  the first response byte the race already consumed, and reacquiring
+     *  {@code sock.getInputStream()} would start past that byte, truncating
+     *  the response header. A fresh socket stream is used only when the
+     *  caller supplied none.
+     *
+     *  @param supplied caller-provided stream (race winner's pushback wrapper
+     *                  or a fresh socket stream), may be null
+     *  @param sock current I2P socket to reacquire from, may be null
+     *  @return {@code supplied} when non-null; otherwise {@code sock}'s input
+     *          stream; otherwise null
+     *  @throws IOException if {@code sock} cannot open its input stream
+     *  @since 0.9.71+
+     */
+    static InputStream pickRedriveStream(InputStream supplied, I2PSocket sock) throws IOException {
+        if (supplied != null) {return supplied;}
+        if (sock != null) {return sock.getInputStream();}
+        return null;
+    }
+
+    /**
      *  Winner of a dual-race empty retry: the socket that produced the first
      *  response byte, with a pushback stream that still holds that byte so the
      *  forwarder never loses the head of the response.
      */
-    private static final class RaceWin {
+    static final class RaceWin {
         final I2PSocket sock;
         final InputStream in;
 
@@ -998,64 +1140,69 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  the buffered request to both, then the first socket to deliver a
      *  non-EOF byte wins. The loser is closed; a total failure (both empty,
      *  timed out, or errored) returns null so the outer cycle can burn an
-     *  attempt. Pure I/O — no budget/permit decisions live here.
+     *  attempt. Pure I/O — no budget/permit decisions live here. All socket
+     *  cleanup happens in {@code finally}: exactly the sockets not returned
+     *  are closed on every exit path, including unexpected exceptions.
      *
      *  @param pair two non-null sockets from {@link ReconnectCallback#reconnectPair}
      *  @param request buffered request bytes, may be null (nothing to re-send)
      *  @return the winner with its pushback stream, or null if neither produced data
      *  @since 0.9.71+
      */
-    private RaceWin raceEmptyPair(I2PSocket[] pair, byte[] request) {
+    RaceWin raceEmptyPair(I2PSocket[] pair, byte[] request) {
         final I2PSocket sockA = pair[0];
         final I2PSocket sockB = pair[1];
         final AtomicReference<RaceWin> winner = new AtomicReference<>();
         final AtomicInteger failures = new AtomicInteger();
         final CountDownLatch settled = new CountDownLatch(1);
-        PushbackInputStream pA;
-        PushbackInputStream pB;
+        RaceWin win = null;
         try {
-            pA = new PushbackInputStream(sockA.getInputStream(), 32);
-            pB = new PushbackInputStream(sockB.getInputStream(), 32);
-            if (request != null) {
-                // isRetryableRequest() guarantees GET/HEAD — no body, flush is safe.
-                OutputStream outA = sockA.getOutputStream();
-                outA.write(request);
-                outA.flush();
-                OutputStream outB = sockB.getOutputStream();
-                outB.write(request);
-                outB.flush();
+            PushbackInputStream pA;
+            PushbackInputStream pB;
+            try {
+                pA = new PushbackInputStream(sockA.getInputStream(), 32);
+                pB = new PushbackInputStream(sockB.getInputStream(), 32);
+                if (request != null) {
+                    // isRetryableRequest() guarantees GET/HEAD — no body, flush is safe.
+                    OutputStream outA = sockA.getOutputStream();
+                    outA.write(request);
+                    outA.flush();
+                    OutputStream outB = sockB.getOutputStream();
+                    outB.write(request);
+                    outB.flush();
+                }
+            } catch (IOException ioe) {
+                if (_log.shouldWarn()) {_log.warn("Empty-race: failed to prepare sockets", ioe);}
+                return null;
             }
-        } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("Empty-race: failed to prepare sockets", ioe);}
-            closeQuietly(sockA);
-            closeQuietly(sockB);
-            return null;
-        }
-        final PushbackInputStream inA = pA;
-        final PushbackInputStream inB = pB;
-        startRaceLeg("A", sockA, inA, winner, failures, settled);
-        startRaceLeg("B", sockB, inB, winner, failures, settled);
-        try {
-            if (!settled.await(EMPTY_RACE_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-                if (_log.shouldWarn()) {_log.warn("Empty-race: no first byte within " + EMPTY_RACE_TIMEOUT_MS + "ms");}
+            final PushbackInputStream inA = pA;
+            final PushbackInputStream inB = pB;
+            startRaceLeg("A", sockA, inA, winner, failures, settled);
+            startRaceLeg("B", sockB, inB, winner, failures, settled);
+            try {
+                if (!settled.await(EMPTY_RACE_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+                    if (_log.shouldWarn()) {_log.warn("Empty-race: no first byte within " + EMPTY_RACE_TIMEOUT_MS + "ms");}
+                }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
             }
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
-        RaceWin win = winner.get();
-        if (win != null) {
-            I2PSocket loser = (win.sock == sockA) ? sockB : sockA;
-            closeQuietly(loser);
-            if (_log.shouldInfo()) {_log.info("Empty-race winner selected");}
+            win = winner.get();
+            if (win != null && _log.shouldInfo()) {_log.info("Empty-race winner selected");}
+            if (win == null && _log.shouldInfo()) {
+                _log.info("Empty-race both legs failed (settled=" + settled.getCount() +
+                          ", failures=" + failures.get() + ')');
+            }
             return win;
+        } finally {
+            // Close exactly what was not returned: the loser when a winner was
+            // chosen, both sockets otherwise (failure, timeout, or exception).
+            if (win != null) {
+                closeQuietly(win.sock == sockA ? sockB : sockA);
+            } else {
+                closeQuietly(sockA);
+                closeQuietly(sockB);
+            }
         }
-        closeQuietly(sockA);
-        closeQuietly(sockB);
-        if (_log.shouldInfo()) {
-            _log.info("Empty-race both legs failed (settled=" + settled.getCount() +
-                      ", failures=" + failures.get() + ')');
-        }
-        return null;
     }
 
     /**
@@ -1121,7 +1268,11 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  <p>Rotates to a new tunnel via {@link ReconnectCallback}, re-sends the
      *  buffered GET/HEAD with {@code Range: bytes=N-} for the undelivered
      *  remainder, and splices the second response body onto the browser stream
-     *  without re-emitting headers.  The budget is progress-based: only
+     *  without re-emitting headers.  After a transient status (408/502/503/504)
+     *  aborts a Range attempt the stream can no longer splice, so the next
+     *  attempt re-requests the full entity with all Range headers stripped;
+     *  the fresh 200's already-delivered prefix is then dropped so the splice
+     *  stays seamless.  The budget is progress-based: only
      *  consecutive stall cycles (no new body bytes since the previous attempt)
      *  count against {@link #MAX_EMPTY_RECONNECT_CYCLES}; any forward progress
      *  resets that counter so a slowly-advancing download is never abandoned
@@ -1134,11 +1285,20 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private void resumeIncompleteBody(OutputStream out) {
         if (_reconnectCallback == null || !isRetryableRequest(initialI2PData)) {return;}
         ResumeBudget budget = new ResumeBudget();
+        // Set after a transient 408/502/503/504 aborts a Range attempt: the
+        // response stream's header-written state was reset while swallowing
+        // the failed resume headers, so Range eligibility (which requires
+        // headerWritten) can never become true again until a response header
+        // block completes. Without this flag the next eligibility check would
+        // see headerWritten==false and silently abandon the download.
+        boolean nonRangeFallback = false;
         while (true) {
             BodyProgress bp = getBodyProgress();
             if (bp == null) {return;}
-            boolean resume = shouldResumeIncompleteBody(bp.bodyReceived, bp.contentLength,
-                    true, true, bp.headerWritten && bp.canRangeResume);
+            boolean resume = nonRangeFallback
+                    ? shouldFallbackFullBody(bp.bodyReceived, bp.contentLength)
+                    : shouldResumeIncompleteBody(bp.bodyReceived, bp.contentLength,
+                            true, true, bp.headerWritten && bp.canRangeResume);
             if (!resume) {return;}
             if (!budget.tryConsume(bp.bodyReceived)) {
                 if (_log.shouldWarn()) {
@@ -1170,7 +1330,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 if (_log.shouldWarn()) {_log.warn("Body-resume: failed to open fresh I2P streams", ioe);}
                 return;
             }
-            byte[] req = withRangeHeader(initialI2PData, bp.bodyReceived);
+            byte[] req = nonRangeFallback
+                    ? withoutRangeHeader(initialI2PData)
+                    : withRangeHeader(initialI2PData, bp.bodyReceived);
             try {
                 // Swallow the second response's headers before any byte arrives.
                 prepareBodyResume();
@@ -1179,18 +1341,30 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     i2pout.flush();
                 }
             } catch (IOException ioe) {
-                if (_log.shouldWarn()) {_log.warn("Body-resume: failed to send Range request", ioe);}
+                if (_log.shouldWarn()) {_log.warn("Body-resume: failed to send " +
+                        (nonRangeFallback ? "non-Range" : "Range") + " request", ioe);}
                 return;
             }
             if (_log.shouldInfo()) {
-                _log.info("Body resume from byte " + bp.bodyReceived + '/' + bp.contentLength +
+                _log.info("Body resume " + (nonRangeFallback ? "from byte 0 (no Range)" :
+                          "from byte " + bp.bodyReceived) + '/' + bp.contentLength +
                           " on a fresh I2P socket (tunnel rotation)");
             }
             redriveReceiveForwarder(out, i2pin);
-            // Transient status (408/502/503/504) on the Range request:
-            // refund the budget charge so the next non-Range attempt is free.
+            // Transient status (408/502/503/504) on this attempt: refund the
+            // stall charge and switch to (or stay in) non-Range fallback so
+            // the next iteration re-requests the full entity from byte 0.
             if (wasTransientResumeFailure()) {
+                nonRangeFallback = true;
                 budget.refundLast();
+                if (_log.shouldInfo()) {
+                    _log.info("Body-resume attempt hit a transient status; " +
+                              "falling back to a non-Range re-request");
+                }
+            } else {
+                // Successful splice (or a genuine stall) restores Range mode:
+                // a completed header block re-enables headerWritten/canRangeResume.
+                nonRangeFallback = false;
             }
         }
     }
@@ -1207,8 +1381,25 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     protected boolean wasTransientResumeFailure() { return false; }
 
     /**
-     *  Whether an incomplete body is still eligible for Range resume — used by
-     *  the forwarder finally-block to keep the browser stream open.
+     *  Whether a transient status (408/502/503/504) is currently latched on
+     *  the response stream — observed without clearing, unlike
+     *  {@link #wasTransientResumeFailure()}. The resume loop clears the latch
+     *  when it observes the failure; the forwarder's finally-block runs first
+     *  and uses this peek to keep the browser stream open while the non-Range
+     *  fallback is still pending.
+     *
+     *  @return true if a transient status aborted the last resume attempt
+     *          and the loop has not yet observed it
+     *  @since 0.9.71+
+     */
+    protected boolean hasTransientResumeFailure() { return false; }
+
+    /**
+     *  Whether an incomplete body is still eligible for resume — used by
+     *  the forwarder finally-block to keep the browser stream open. A
+     *  latched transient status means the non-Range fallback is still
+     *  pending; closing the browser stream now would sever the splice target
+     *  before the loop can re-request the full entity.
      *
      *  @return true if resume should run (or may still run) after this forwarder
      *  @since 0.9.71+
@@ -1217,6 +1408,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         if (_reconnectCallback == null || !isRetryableRequest(initialI2PData)) {return false;}
         BodyProgress bp = getBodyProgress();
         if (bp == null) {return false;}
+        if (hasTransientResumeFailure()) {
+            return shouldFallbackFullBody(bp.bodyReceived, bp.contentLength);
+        }
         return shouldResumeIncompleteBody(bp.bodyReceived, bp.contentLength,
                 true, true, bp.headerWritten && bp.canRangeResume);
     }
@@ -1239,6 +1433,141 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             if (b != prefix[i]) {return false;}
         }
         return true;
+    }
+
+    /**
+     *  Whether this runner type arms the first-response deadline watchdog.
+     *  False in the base runner so idle long-lived sessions (HTTP CONNECT,
+     *  SOCKS, IRC, server-side tunnels) are never torn down for silence; the
+     *  HTTP request/response runner overrides it to true. For CONNECT the
+     *  remote proxy's 200 response would retire the watchdog anyway, but the
+     *  default keeps the deadline strictly scoped to request/response flows.
+     *
+     *  @return true to schedule the initial-response watchdog
+     *  @since 0.9.71+
+     */
+    protected boolean trackInitialResponseDeadline() { return false; }
+
+    /**
+     *  Record a request-side write upstream: start (or slide, or restart) the
+     *  first-response deadline for the current attempt. Sliding on every
+     *  toI2P write keeps a slow POST upload from tripping the deadline; a
+     *  re-send after an empty response restarts it for the fresh attempt.
+     *  Clears the fired latch so the new attempt may fire independently.
+     */
+    void noteRequestWritten() {
+        noteRequestWritten(System.currentTimeMillis());
+    }
+
+    /**
+     *  {@link #noteRequestWritten()} with an explicit timestamp (test hook).
+     *
+     *  @param nowMs epoch-ms to record as the request write anchor
+     */
+    void noteRequestWritten(long nowMs) {
+        _lastRequestWriteMs = nowMs;
+        _initialDeadlineFired = false;
+    }
+
+    /**
+     *  Record the first response byte upstream: permanently retires the
+     *  initial-response watchdog from here on ({@link #BODY_STALL_READ_TIMEOUT_MS}
+     *  covers further stalling).
+     */
+    void noteFirstResponseByte() {
+        _firstByteMs = System.currentTimeMillis();
+    }
+
+    /**
+     *  Enforce the first-response deadline: close the I2P socket if no
+     *  response byte arrived within {@link #initialResponseTimeoutMs} of the
+     *  last request-side write. Closing the socket is what unblocks the
+     *  receive forwarder (a blocked read throws once the stream closes), and
+     *  run()'s existing empty-transfer path then invokes the no-data failure
+     *  callback — the single choke point — so the browser sees a proper 5xx
+     *  instead of an indefinite hang. At most one close per request attempt;
+     *  a subsequent re-send re-arms via {@link #noteRequestWritten()}.
+     *
+     *  @param nowMs current epoch-ms
+     *  @return true if the socket was closed by this call
+     *  @since 0.9.71+
+     */
+    boolean checkInitialResponseDeadline(long nowMs) {
+        if (_initialDeadlineFired) {return false;}
+        if (!initialResponseExpired(_lastRequestWriteMs, _firstByteMs, nowMs,
+                                    initialResponseTimeoutMs)) {return false;}
+        // Claim the fire, then re-check: a request write may have raced in
+        // between the two checks above, in which case the deadline slid and
+        // this attempt must not be torn down.
+        _initialDeadlineFired = true;
+        if (!initialResponseExpired(_lastRequestWriteMs, _firstByteMs, nowMs,
+                                    initialResponseTimeoutMs)) {
+            _initialDeadlineFired = false;
+            return false;
+        }
+        I2PSocket sock = i2ps;
+        if (sock == null) {return false;}
+        if (_log.shouldWarn()) {
+            _log.warn("No response from peer within " + (initialResponseTimeoutMs / 1000) +
+                      "s of the request write (runner " + _runnerId + "), closing I2P socket");
+        }
+        try {sock.close();}
+        catch (IOException ioe) { /* ignored */ }
+        return true;
+    }
+
+    /**
+     *  Arm the first-response watchdog after the request has been written.
+     *  Idempotent; a no-op when {@link #trackInitialResponseDeadline()} is
+     *  false or the timer rejects scheduling (headless/broken context).
+     */
+    private void scheduleInitialResponseWatchdog() {
+        if (!trackInitialResponseDeadline() || _initialWatchdog != null) {return;}
+        _initialWatchdogOn = true;
+        SimpleTimer2.TimedEvent wd = new InitialResponseWatchdog();
+        _initialWatchdog = wd;
+        try {
+            I2PAppContext.getGlobalContext().simpleTimer2()
+                         .addPeriodicEvent(wd, INITIAL_WATCHDOG_POLL_MS, INITIAL_WATCHDOG_POLL_MS);
+        } catch (RuntimeException re) {
+            _initialWatchdogOn = false;
+            _initialWatchdog = null;
+            if (_log.shouldWarn()) {_log.warn("Failed to schedule initial-response watchdog", re);}
+        }
+    }
+
+    /**
+     *  Disarm the initial-response watchdog; called from run()'s finally so
+     *  a completed runner never leaves a timer event behind. Safe to call
+     *  when never scheduled.
+     */
+    private void cancelInitialResponseWatchdog() {
+        _initialWatchdogOn = false;
+        SimpleTimer2.TimedEvent wd = _initialWatchdog;
+        _initialWatchdog = null;
+        if (wd != null) {wd.cancel();}
+    }
+
+    /**
+     *  Periodic tick enforcing {@link #INITIAL_RESPONSE_TIMEOUT_MS}.
+     *
+     *  <p>Deliberately does NOT stop on {@code finished}: that flag flips when
+     *  the forwarders end, before run()'s empty-response reconnect loop has
+     *  re-driven the request on a fresh socket — exactly when a new attempt
+     *  needs its deadline. It retires only on a first response byte, or when
+     *  run()'s finally cancels it.
+     */
+    private final class InitialResponseWatchdog extends SimpleTimer2.TimedEvent {
+        @Override
+        public void timeReached() {
+            if (!_initialWatchdogOn || _firstByteMs > 0) {
+                cancel();
+                return;
+            }
+            checkInitialResponseDeadline(System.currentTimeMillis());
+            if (_initialWatchdogOn) {schedule(INITIAL_WATCHDOG_POLL_MS);}
+            else {cancel();}
+        }
     }
 
     /**
@@ -1277,7 +1606,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     !(DataHelper.eq(POST, 0, initialI2PData, 0, 5) ||
                       DataHelper.eq(PUT, 0, initialI2PData, 0, 4))))
                     i2pout.flush();
+                noteRequestWritten();
             }
+            scheduleInitialResponseWatchdog();
             if (initialSocketData != null) {out.write(initialSocketData);} // this does not increment totalReceived
             if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("Initial data -> " + (initialI2PData != null ? initialI2PData.length : 0)
@@ -1396,19 +1727,33 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     if (sockList != null) {synchronized (slock) {sockList.remove(i2ps);}}
                     try {i2ps.close();} catch (IOException ioe) {/* ignored */}
                     if (pair.length >= 2) {
-                        RaceWin win = raceEmptyPair(pair, initialI2PData);
-                        _reconnectCallback.releaseRacePermit();
-                        if (win == null) {continue;}
-                        i2ps = win.sock;
-                        i2pin = win.in;
-                        i2pout = null;
-                        if (sockList != null) {synchronized (slock) {sockList.add(i2ps);}}
-                        if (_log.shouldInfo()) {
-                            _log.info("Empty-response dual-race selected a winner socket");
+                        RaceWin win = null;
+                        try {
+                            try {
+                                win = raceEmptyPair(pair, initialI2PData);
+                            } finally {
+                                _reconnectCallback.releaseRacePermit();
+                            }
+                            if (win == null) {continue;}
+                            i2ps = win.sock;
+                            i2pin = win.in;
+                            i2pout = null;
+                            if (sockList != null) {synchronized (slock) {sockList.add(i2ps);}}
+                            if (_log.shouldInfo()) {
+                                _log.info("Empty-response dual-race selected a winner socket");
+                            }
+                            totalReceived = 0;
+                            redriveReceiveForwarder(out, i2pin);
+                            // raceEmptyPair() already sent the request on the winner;
+                            // restart the first-response deadline for this attempt.
+                            noteRequestWritten();
+                            continue;
+                        } finally {
+                            // A winner adopted above (i2ps = win.sock) is owned by run()'s
+                            // outer finally; close one that never made it past the swap so
+                            // an exception between the race and the adoption cannot leak it.
+                            if (win != null && win.sock != i2ps) {closeQuietly(win.sock);}
                         }
-                        totalReceived = 0;
-                        redriveReceiveForwarder(out, i2pin);
-                        continue;
                     }
                     i2ps = pair[0];
                     i2pin = i2ps.getInputStream();
@@ -1424,6 +1769,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     // Re-drive the receive forwarder inline; totalReceived is updated by it.
                     totalReceived = 0;
                     redriveReceiveForwarder(out, i2pin);
+                    noteRequestWritten();
                 }
                 if (totalReceived <= 0) {
                     Exception e = fromI2P.getFailure();
@@ -1490,6 +1836,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             _keepAliveSocket = false;
             onNoDataFailure(e);
         } finally {
+            cancelInitialResponseWatchdog();
             removeRef();
             if (i2pReset) {
                 if (_log.shouldInfo()) {_log.warn("Received I2P reset, resetting socket...");}
@@ -1628,6 +1975,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                             // black-hole fails over instead of blocking forever.
                             if (!_stallArmed) {
                                 _stallArmed = true;
+                                noteFirstResponseByte();
                                 try {i2ps.setReadTimeout(BODY_STALL_READ_TIMEOUT_MS);}
                                 catch (RuntimeException re) { /* older socket impl */ }
                             }
@@ -1641,6 +1989,10 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                             totalReceived += len;
                         }
                         out.write(buffer, 0, len);
+                        // Slide the first-response deadline so a slow request
+                        // upload (POST body) never trips the initial-response
+                        // watchdog mid-flight.
+                        if (_toI2P) {noteRequestWritten();}
                     }
                     try {
                         if (in.available() == 0) {out.flush();}

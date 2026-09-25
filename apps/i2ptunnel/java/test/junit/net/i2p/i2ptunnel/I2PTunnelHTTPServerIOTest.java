@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import junit.framework.TestCase;
 
@@ -224,5 +226,103 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
         assertEquals("Bytes before run", 0, sender.getBytesTransferred());
         assertEquals("LastReadNanos before run", 0, sender.getLastReadNanos());
         assertNull("No failure before run", sender.getFailure());
+    }
+
+    /**
+     * The I/O pool queue must be bounded so a saturated pool cannot park an
+     * unbounded number of sockets with their streams open.
+     */
+    public void testIOQueueBounded() {
+        ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(4);
+        try {
+            int cap = I2PTunnelHTTPServer.ioQueueCap(
+                    Math.max(I2PTunnelHTTPServer.IO_POOL_FLOOR, 4));
+            assertTrue("queue capacity floor", cap >= 32);
+            assertEquals("executor queue must match ioQueueCap",
+                         cap, pool.getQueue().remainingCapacity());
+            assertTrue("queue must be bounded",
+                       pool.getQueue().remainingCapacity() < Integer.MAX_VALUE);
+        } finally {
+            pool.shutdownNow();
+        }
+    }
+
+    /**
+     * ioQueueCap must grow with the worker count while keeping a hard floor.
+     */
+    public void testIOQueueCapFormula() {
+        assertEquals(32, I2PTunnelHTTPServer.ioQueueCap(1));
+        assertEquals(32, I2PTunnelHTTPServer.ioQueueCap(4));
+        assertEquals(32, I2PTunnelHTTPServer.ioQueueCap(8));
+        assertEquals(40, I2PTunnelHTTPServer.ioQueueCap(10));
+        assertEquals(64, I2PTunnelHTTPServer.ioQueueCap(16));
+    }
+
+    /**
+     * When every worker and queue slot is occupied, handOffBody falls back to
+     * running the body inline instead of dropping it or throwing.
+     */
+    public void testHandOffInlineFallbackWhenSaturated() throws Exception {
+        final CountDownLatch blocker = new CountDownLatch(1);
+        ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(
+                I2PTunnelHTTPServer.IO_POOL_FLOOR);
+        try {
+            int workers = pool.getCorePoolSize();
+            int cap = I2PTunnelHTTPServer.ioQueueCap(workers);
+            // Occupy every worker and every queue slot with blocked Senders.
+            for (int i = 0; i < workers + cap; i++) {
+                I2PTunnelHTTPServer.Sender block =
+                        new I2PTunnelHTTPServer.Sender(
+                                new ByteArrayOutputStream(),
+                                new ByteArrayInputStream(new byte[0]), "block", null) {
+                            @Override
+                            public void run() {
+                                try {
+                                    blocker.await(10, TimeUnit.SECONDS);
+                                } catch (InterruptedException ie) {
+                                    Thread.currentThread().interrupt();
+                                }
+                            }
+                        };
+                assertTrue("saturation task " + i + " must be accepted",
+                           I2PTunnelHTTPServer.handOffBody(pool, block, "block"));
+            }
+            assertEquals("queue must be full", cap, pool.getQueue().size());
+
+            // Next submission is rejected by the bounded queue and must run inline.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            I2PTunnelHTTPServer.Sender quick = new I2PTunnelHTTPServer.Sender(
+                    out, new ByteArrayInputStream("inline".getBytes()), "inline", null);
+            assertFalse("saturated handoff must fall back inline",
+                        I2PTunnelHTTPServer.handOffBody(pool, quick, "inline"));
+            assertEquals("inline fallback must copy the body",
+                         6, quick.getBytesTransferred());
+            assertEquals(6, out.size());
+        } finally {
+            blocker.countDown();
+            pool.shutdownNow();
+        }
+    }
+
+    /**
+     * Body watchdog stall decision: pure boundary, disabled, and not-started
+     * cases for isBodyWatchdogStalled().
+     */
+    public void testIsBodyWatchdogStalled() {
+        final long now = 1_000_000_000_000L;
+        final long stallNs = 60_000L * 1_000_000L;
+
+        assertFalse("task never started must not stall",
+                    I2PTunnelHTTPServer.isBodyWatchdogStalled(0, now, stallNs));
+        assertFalse("negative stamp must not stall",
+                    I2PTunnelHTTPServer.isBodyWatchdogStalled(-1, now, stallNs));
+        assertFalse("disabled window must not stall",
+                    I2PTunnelHTTPServer.isBodyWatchdogStalled(now - stallNs, now, 0));
+        assertFalse("read inside window must not stall",
+                    I2PTunnelHTTPServer.isBodyWatchdogStalled(now - stallNs + 1, now, stallNs));
+        assertTrue("read exactly at window must stall",
+                   I2PTunnelHTTPServer.isBodyWatchdogStalled(now - stallNs, now, stallNs));
+        assertTrue("read past window must stall",
+                   I2PTunnelHTTPServer.isBodyWatchdogStalled(now - 2 * stallNs, now, stallNs));
     }
 }

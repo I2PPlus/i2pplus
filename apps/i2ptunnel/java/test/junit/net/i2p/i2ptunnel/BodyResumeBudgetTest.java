@@ -100,8 +100,9 @@ public class BodyResumeBudgetTest {
         assertEquals(2, b.getStallCycles());
     }
 
-    /** Transient-status refund undoes the last consume so a 408 does not
-     *  permanently charge the budget for a non-stall failure. */
+    /** Transient-status refund gives back the stall charge so a 408 does not
+     *  eat the empty/stall budget; the total count stays consumed so
+     *  MAX_RESUME_CYCLES remains an absolute cap over ALL attempts. */
     @Test
     public void testRefundLastUndoesConsume() {
         I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
@@ -109,11 +110,11 @@ public class BodyResumeBudgetTest {
         assertEquals(1, b.getTotalCycles());
         assertEquals(1, b.getStallCycles());
         b.refundLast();
-        assertEquals(0, b.getTotalCycles());
-        assertEquals(0, b.getStallCycles());
-        // can consume again after refund
-        assertTrue(b.tryConsume(100));
         assertEquals(1, b.getTotalCycles());
+        assertEquals(0, b.getStallCycles());
+        // can consume again after refund (stall slot restored)
+        assertTrue(b.tryConsume(100));
+        assertEquals(2, b.getTotalCycles());
     }
 
     /** Refund on empty budget is a no-op (never goes negative). */
@@ -125,7 +126,7 @@ public class BodyResumeBudgetTest {
         assertEquals(0, b.getStallCycles());
     }
 
-    /** Refund after partial consumption restores only the last cycle. */
+    /** Refund after partial consumption restores only the stall charge. */
     @Test
     public void testRefundLastAfterMultipleConsumes() {
         I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
@@ -134,7 +135,23 @@ public class BodyResumeBudgetTest {
         assertEquals(2, b.getTotalCycles());
         assertEquals(1, b.getStallCycles());
         b.refundLast();
-        assertEquals(1, b.getTotalCycles());
-        assertEquals(0, b.getStallCycles()); // stall was 0 after progress reset, then consume made it 1, refund back to 0
+        assertEquals(2, b.getTotalCycles());
+        assertEquals(0, b.getStallCycles());
+    }
+
+    /** Repeated consume+refund cycles (a persistently transient upstream)
+     *  still stop at the absolute cap — refunding must not unbound the loop. */
+    @Test
+    public void testRepeatedRefundsStillBoundedByAbsoluteCap() {
+        I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
+        int allowed = 0;
+        for (int i = 1; i <= ABS * 3; i++) {
+            if (b.tryConsume(i)) {
+                allowed++;
+                b.refundLast();
+            }
+        }
+        assertEquals(ABS, allowed);
+        assertFalse(b.tryConsume(1));
     }
 }

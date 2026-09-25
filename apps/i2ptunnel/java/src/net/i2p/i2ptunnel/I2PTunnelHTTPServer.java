@@ -4,6 +4,7 @@
 package net.i2p.i2ptunnel;
 
 import java.io.BufferedInputStream;
+import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +48,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
 
 import java.nio.charset.StandardCharsets;
 /**
@@ -149,17 +151,33 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Maximum queued body tasks for an I/O pool with {@code threads} workers.
+     *  The queue is bounded so a saturated pool cannot park an unbounded number
+     *  of sockets with their browser and I2P streams open; overflow runs the
+     *  body on the handler thread instead (see {@link #handOffBody}), which
+     *  preserves a response whose headers were already sent. Package-visible
+     *  for tests.
+     *
+     *  @param threads pool worker count (already floored)
+     *  @return queue capacity, at least 32
+     *  @since 0.9.71+
+     */
+    static int ioQueueCap(int threads) {
+        return Math.max(32, threads * 4);
+    }
+
+    /**
      *  Create a fixed-size I/O transfer pool. Package-visible for tests.
      *
      *  @param threads fixed core/max worker count
-     *  @return non-null executor
+     *  @return non-null executor with a bounded queue ({@link #ioQueueCap(int)})
      *  @since 0.9.71+
      */
     static ThreadPoolExecutor createIOExecutor(int threads) {
         int n = Math.max(IO_POOL_FLOOR, threads);
         ThreadPoolExecutor ex = new ThreadPoolExecutor(n, n,
             30L, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(),
+            new LinkedBlockingQueue<Runnable>(ioQueueCap(n)),
             r -> {
                 Thread t = new Thread(r, "I2P-IO-Transfer");
                 t.setDaemon(true);
@@ -356,10 +374,45 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             pool.execute(task);
             return true;
         } catch (RejectedExecutionException ree) {
-            // Unbounded queue normally never rejects; shutdown races do.
+            // Bounded queue: saturation runs the body on the handler thread so
+            // a response whose headers were already sent is never dropped.
             task.run();
             return false;
         }
+    }
+
+    /**
+     *  Decide whether an async body handoff has stalled. Pure decision helper
+     *  for the body watchdog: true when the Sender's last-read stamp is at
+     *  least the stall window old. A task that has not started yet (stamp 0)
+     *  never stalls — queueing behind a healthy long transfer is normal — and
+     *  a disabled window (&lt;= 0) never stalls.
+     *
+     *  @param lastReadNanos Sender#getLastReadNanos(); 0 or negative if the
+     *                       worker has not started the copy yet
+     *  @param nowNanos current System.nanoTime()
+     *  @param stallNs stall window in nanoseconds; &lt;= 0 disables
+     *  @return true if the watchdog should close the streams and finish
+     *  @since 0.9.71+
+     */
+    static boolean isBodyWatchdogStalled(long lastReadNanos, long nowNanos, long stallNs) {
+        if (stallNs <= 0 || lastReadNanos <= 0)
+            return false;
+        return nowNanos - lastReadNanos >= stallNs;
+    }
+
+    /**
+     *  Close a stream, ignoring failures. Used by stall/teardown paths where
+     *  the close is best-effort (the stream may already be dead) and the goal
+     *  is only to unblock a thread parked in read or write.
+     *
+     *  @param c stream to close; ignored if null
+     *  @since 0.9.71+
+     */
+    private static void closeQuietly(Closeable c) {
+        if (c == null) {return;}
+        try { c.close(); }
+        catch (IOException ioe) { /* ignored */ }
     }
 
     /** Config key to reject requests from inproxy. */
@@ -1954,16 +2007,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     final InputStream fBrowserIn = browserin;
                     final InputStream fServerIn = serverin;
                     final String fReq = req;
+                    final Runnable finish = () -> finishTransfer(finished, body, reqSender,
+                            fServerOut, fBrowserOut, fCompressedOut,
+                            fBrowserIn, fServerIn, fReq);
                     bodySubmitted = handOffBody(_ioPool != null ? _ioPool.get() : null,
-                            body, "Server -> Client" + urlSuffix(fReq),
-                            () -> finishTransfer(finished, body, reqSender,
-                                    fServerOut, fBrowserOut, fCompressedOut,
-                                    fBrowserIn, fServerIn, fReq));
+                            body, "Server -> Client" + urlSuffix(fReq), finish);
                     if (bodySubmitted) {
                         // Non-keepalive is already decided; publish waiter before
                         // the pool worker's finishTransfer so the caller does
                         // not race on waiter.get() after run() returns.
                         if (_waiter != null) {_waiter.set(1);}
+                        // The handler thread detaches here, so nothing would
+                        // supervise a worker blocked on a non-reading browser;
+                        // attach the periodic watchdog before returning.
+                        scheduleBodyWatchdog(body, finished, finish,
+                                fBrowserIn, fBrowserOut, fServerIn, fServerOut);
                         return;
                     }
                     // Inline fallback: handOffBody already ran body + finish
@@ -1993,6 +2051,40 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             compressedout, browserin, serverin, req);
                 }
                 // bodySubmitted: pool worker owns finishTransfer after the body
+            }
+        }
+
+        /**
+         *  Attach a {@link BodyWatchdog} to a detached async body. The poll
+         *  interval is fixed at {@link BodyWatchdog#POLL_MS} (the SimpleTimer2
+         *  5s minimum); the stall window itself is {@link #ioStallTimeoutMs}.
+         *  The watchdog cancels itself on the next tick after finishTransfer
+         *  sets the finished flag, so it never outlives the connection.
+         *
+         *  @param body detached Server-to-Client Sender
+         *  @param finished request-wide finish-once flag
+         *  @param finish idempotent finish shared with the handoff
+         *  @param browserin browser-side request stream; may be null
+         *  @param browserout browser-side response stream; may be null
+         *  @param serverin I2P-side response body stream; may be null
+         *  @param serverout I2P-side request stream; may be null
+         *  @since 0.9.71+
+         */
+        private void scheduleBodyWatchdog(Sender body, AtomicBoolean finished,
+                                          Runnable finish, InputStream browserin,
+                                          OutputStream browserout, InputStream serverin,
+                                          OutputStream serverout) {
+            BodyWatchdog watchdog = new BodyWatchdog(body, finished, finish, browserin,
+                    browserout, serverin, serverout, _log);
+            try {
+                _ctx.simpleTimer2().addPeriodicEvent(watchdog,
+                        BodyWatchdog.POLL_MS, BodyWatchdog.POLL_MS);
+            } catch (RuntimeException re) {
+                // A context without a timer pool (headless tests) runs the
+                // transfer unsupervised; socket soTimeout still bounds reads.
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] Unable to schedule body watchdog", re);
+                }
             }
         }
 
@@ -2154,6 +2246,82 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
+    /**
+     *  Watchdog for an async (detached) body handoff. After {@link #handOffBody}
+     *  queues the Server-to-Client Sender and the handler thread returns,
+     *  nothing supervises the pool worker: a browser that stops reading pins it
+     *  in a blocked write indefinitely (socket soTimeout bounds reads only).
+     *  This periodic event polls the Sender's last-read stamp and, once no
+     *  progress is made for {@link #ioStallTimeoutMs}, closes the streams to
+     *  unblock the worker and runs the idempotent finish so the connection is
+     *  torn down exactly once. Polling is every 5s, the SimpleTimer2 minimum;
+     *  detection therefore lands within one poll of the stall window.
+     *
+     *  @since 0.9.71+
+     */
+    private static final class BodyWatchdog extends SimpleTimer2.TimedEvent {
+        /** SimpleTimer2 rejects periods below 5s. */
+        private static final long POLL_MS = 5000L;
+
+        private final Sender _body;
+        private final AtomicBoolean _finished;
+        private final Runnable _finish;
+        private final InputStream _browserin;
+        private final OutputStream _browserout;
+        private final InputStream _serverin;
+        private final OutputStream _serverout;
+        private final Log _log;
+
+        /**
+         *  @param body the detached Server-to-Client Sender being supervised
+         *  @param finished request-wide finish-once flag
+         *  @param finish idempotent finish to run once a stall is confirmed
+         *  @param browserin browser-side request stream; may be null
+         *  @param browserout browser-side response stream; may be null
+         *  @param serverin I2P-side response body stream; may be null
+         *  @param serverout I2P-side request stream; may be null
+         *  @param log may be null
+         */
+        BodyWatchdog(Sender body, AtomicBoolean finished, Runnable finish,
+                     InputStream browserin, OutputStream browserout,
+                     InputStream serverin, OutputStream serverout, Log log) {
+            _body = body;
+            _finished = finished;
+            _finish = finish;
+            _browserin = browserin;
+            _browserout = browserout;
+            _serverin = serverin;
+            _serverout = serverout;
+            _log = log;
+        }
+
+        @Override
+        public void timeReached() {
+            if (_finished.get()) {
+                cancel();
+                return;
+            }
+            long stallNs = ioStallTimeoutMs * 1_000_000L;
+            if (!isBodyWatchdogStalled(_body.getLastReadNanos(), System.nanoTime(), stallNs)) {
+                // Self-reschedule; cancel() in a later run terminates us.
+                schedule(POLL_MS);
+                return;
+            }
+            _stallEventCount.incrementAndGet();
+            if (_log != null && _log.shouldWarn()) {
+                _log.warn("[HTTPServer] Async body stalled - no read progress for " +
+                          ioStallTimeoutMs + "ms after " + _body.getBytesTransferred() +
+                          " bytes transferred, closing" + _body.getName());
+            }
+            closeQuietly(_browserin);
+            closeQuietly(_serverin);
+            closeQuietly(_browserout);
+            closeQuietly(_serverout);
+            _finish.run();
+            cancel();
+        }
+    }
+
     static class Sender implements Runnable {
         private static final int BUF_SIZE = 16*1024;
         private final OutputStream _out;
@@ -2269,6 +2437,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *  @since 0.9.71+
          */
         public long getBytesTransferred() { return _bytesTransferred; }
+
+        /**
+         *  @return the transfer description ("Server -&gt; Client ..."); never null
+         *  @since 0.9.71+
+         */
+        public String getName() { return _name; }
 
         /**
          *  NanoTime of the last successful read. Used by callers to detect stalls

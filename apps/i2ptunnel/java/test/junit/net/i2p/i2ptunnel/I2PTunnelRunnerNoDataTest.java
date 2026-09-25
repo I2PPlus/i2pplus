@@ -2,6 +2,12 @@ package net.i2p.i2ptunnel;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
+import net.i2p.client.streaming.I2PSocket;
 import org.junit.Test;
 
 /**
@@ -168,9 +174,71 @@ public class I2PTunnelRunnerNoDataTest {
         assertFalse(I2PTunnelRunner.shouldResumeIncompleteBody(100L, 1000L, true, true, false));
     }
 
+    // ---------- shouldFallbackFullBody ----------
+
+    @Test
+    public void testFallbackFullBodyWhenIncomplete() {
+        assertTrue(I2PTunnelRunner.shouldFallbackFullBody(3L, 10L));
+        assertTrue(I2PTunnelRunner.shouldFallbackFullBody(0L, 10L));
+    }
+
+    @Test
+    public void testNoFallbackWhenBodyComplete() {
+        assertFalse(I2PTunnelRunner.shouldFallbackFullBody(10L, 10L));
+        assertFalse(I2PTunnelRunner.shouldFallbackFullBody(11L, 10L));
+    }
+
+    @Test
+    public void testNoFallbackWithoutContentLength() {
+        assertFalse(I2PTunnelRunner.shouldFallbackFullBody(3L, -1L));
+        assertFalse(I2PTunnelRunner.shouldFallbackFullBody(3L, 0L));
+    }
+
+    @Test
+    public void testNoFallbackOnNegativeProgress() {
+        assertFalse(I2PTunnelRunner.shouldFallbackFullBody(-1L, 10L));
+    }
+
+    // ---------- withoutRangeHeader ----------
+
+    @Test
+    public void testWithoutRangeHeaderStripsExistingRange() {
+        byte[] req = "GET /f HTTP/1.1\r\nRange: bytes=0-1023\r\nHost: x\r\n\r\n".getBytes();
+        byte[] out = I2PTunnelRunner.withoutRangeHeader(req);
+        String s = new String(out);
+        assertFalse(s.contains("Range:"));
+        assertTrue(s.startsWith("GET /f HTTP/1.1\r\n"));
+        assertTrue(s.contains("Host: x\r\n"));
+        assertTrue(s.endsWith("\r\n\r\n"));
+    }
+
+    @Test
+    public void testWithoutRangeHeaderNoRangeReturnsOriginal() {
+        byte[] req = GET_REQ_BYTES;
+        assertSame(req, I2PTunnelRunner.withoutRangeHeader(req));
+    }
+
+    @Test
+    public void testWithoutRangeHeaderNullSafe() {
+        assertNull(I2PTunnelRunner.withoutRangeHeader(null));
+    }
+
+    @Test
+    public void testWithoutRangeHeaderNoTerminatorReturnsOriginal() {
+        byte[] req = "GET / HTTP/1.1\r\nHost: x".getBytes();
+        assertSame(req, I2PTunnelRunner.withoutRangeHeader(req));
+    }
+
+    @Test
+    public void testWithoutRangeHeaderStillRetryableAsGet() {
+        byte[] req = "GET /f HTTP/1.1\r\nRange: bytes=0-1023\r\nHost: x\r\n\r\n".getBytes();
+        assertTrue(I2PTunnelRunner.isRetryableRequest(I2PTunnelRunner.withoutRangeHeader(req)));
+    }
+
     // ---------- withRangeHeader ----------
 
     private static final String GET_REQ = "GET /installers/i2pinstall.exe HTTP/1.1\r\nHost: skank.i2p\r\n\r\n";
+    private static final byte[] GET_REQ_BYTES = GET_REQ.getBytes();
 
     @Test
     public void testWithRangeHeaderInsertsBeforeBlankLine() {
@@ -221,5 +289,135 @@ public class I2PTunnelRunnerNoDataTest {
         int i = 0;
         while ((i = s.indexOf(sub, i)) >= 0) {n++; i += sub.length();}
         return n;
+    }
+
+    // ---------- initial-response deadline ----------
+
+    /** Anchor value used by the deadline tests; arbitrary epoch-ms. */
+    private static final long T0 = 1_000_000L;
+
+    @Test
+    public void testInitialResponseNotExpiredBeforeWindow() {
+        long timeout = I2PTunnelRunner.INITIAL_RESPONSE_TIMEOUT_MS;
+        assertFalse(I2PTunnelRunner.initialResponseExpired(T0, 0, T0 + timeout - 1, timeout));
+    }
+
+    @Test
+    public void testInitialResponseExpiresAtWindowBoundary() {
+        long timeout = I2PTunnelRunner.INITIAL_RESPONSE_TIMEOUT_MS;
+        assertTrue(I2PTunnelRunner.initialResponseExpired(T0, 0, T0 + timeout, timeout));
+        assertTrue(I2PTunnelRunner.initialResponseExpired(T0, 0, T0 + timeout + 1, timeout));
+    }
+
+    @Test
+    public void testInitialResponseDeadlineSlidesWithAnchor() {
+        long timeout = I2PTunnelRunner.INITIAL_RESPONSE_TIMEOUT_MS;
+        // Request write slid forward: what looked late against the old anchor
+        // is inside the window against the new one (slow POST upload case).
+        assertFalse(I2PTunnelRunner.initialResponseExpired(T0 + timeout, 0, T0 + timeout, timeout));
+    }
+
+    @Test
+    public void testFirstByteRetiresInitialResponseDeadline() {
+        long timeout = I2PTunnelRunner.INITIAL_RESPONSE_TIMEOUT_MS;
+        assertFalse(I2PTunnelRunner.initialResponseExpired(T0, T0 + 1, T0 + 10 * timeout, timeout));
+    }
+
+    @Test
+    public void testNoRequestWrittenNeverExpires() {
+        long timeout = I2PTunnelRunner.INITIAL_RESPONSE_TIMEOUT_MS;
+        assertFalse(I2PTunnelRunner.initialResponseExpired(0, 0, T0 + 10 * timeout, timeout));
+    }
+
+    @Test
+    public void testNonPositiveTimeoutNeverExpires() {
+        assertFalse(I2PTunnelRunner.initialResponseExpired(T0, 0, T0 + 1_000_000, 0));
+        assertFalse(I2PTunnelRunner.initialResponseExpired(T0, 0, T0 + 1_000_000, -1));
+    }
+
+    @Test
+    public void testDeadlineClosesSocketOncePerAttempt() {
+        long saved = I2PTunnelRunner.initialResponseTimeoutMs;
+        try {
+            final AtomicBoolean closed = new AtomicBoolean();
+            I2PTunnelRunner r = newRunner(closed);
+            long timeout = I2PTunnelRunner.INITIAL_RESPONSE_TIMEOUT_MS;
+            r.noteRequestWritten(T0);
+            assertFalse(r.checkInitialResponseDeadline(T0 + timeout - 1));
+            assertFalse(closed.get());
+            assertTrue(r.checkInitialResponseDeadline(T0 + timeout));
+            assertTrue(closed.get());
+            // Latched: subsequent ticks must not warn or close again.
+            assertFalse(r.checkInitialResponseDeadline(T0 + 2 * timeout));
+            assertTrue(closed.get());
+            // An empty-response re-send restarts the attempt; it may fire again.
+            r.noteRequestWritten(T0 + 2 * timeout);
+            assertFalse(r.checkInitialResponseDeadline(T0 + 2 * timeout + timeout - 1));
+            assertTrue(r.checkInitialResponseDeadline(T0 + 3 * timeout));
+        } finally {
+            I2PTunnelRunner.initialResponseTimeoutMs = saved;
+        }
+    }
+
+    @Test
+    public void testFirstBytePreventsSocketClose() {
+        final AtomicBoolean closed = new AtomicBoolean();
+        I2PTunnelRunner r = newRunner(closed);
+        r.noteRequestWritten(T0);
+        r.noteFirstResponseByte();
+        assertFalse(r.checkInitialResponseDeadline(T0 + 10 * I2PTunnelRunner.INITIAL_RESPONSE_TIMEOUT_MS));
+        assertFalse(closed.get());
+    }
+
+    @Test
+    public void testDisabledTimeoutNeverClosesSocket() {
+        long saved = I2PTunnelRunner.initialResponseTimeoutMs;
+        try {
+            I2PTunnelRunner.initialResponseTimeoutMs = 0;
+            final AtomicBoolean closed = new AtomicBoolean();
+            I2PTunnelRunner r = newRunner(closed);
+            r.noteRequestWritten(T0);
+            assertFalse(r.checkInitialResponseDeadline(T0 + 10_000_000));
+            assertFalse(closed.get());
+        } finally {
+            I2PTunnelRunner.initialResponseTimeoutMs = saved;
+        }
+    }
+
+    @Test
+    public void testDeadlineScopedToHttpRunner() {
+        final AtomicBoolean closed = new AtomicBoolean();
+        I2PTunnelRunner base = newRunner(closed);
+        assertFalse(base.trackInitialResponseDeadline());
+        I2PTunnelRunner http = new I2PTunnelHTTPClientRunner(new Socket(), mockI2PSocket(closed),
+                new Object(), null, null, null, false, false, false);
+        assertTrue(http.trackInitialResponseDeadline());
+    }
+
+    /**
+     * Construct a never-started base runner around a mock I2PSocket whose
+     * close() flips the supplied flag.
+     */
+    private static I2PTunnelRunner newRunner(final AtomicBoolean closed) {
+        return new I2PTunnelRunner(new Socket(), mockI2PSocket(closed), new Object(),
+                                   null, null, null, null, false, false);
+    }
+
+    private static I2PSocket mockI2PSocket(final AtomicBoolean closed) {
+        return (I2PSocket) Proxy.newProxyInstance(I2PSocket.class.getClassLoader(),
+                new Class<?>[]{I2PSocket.class}, new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method m, Object[] args) {
+                        if ("close".equals(m.getName())) {
+                            closed.set(true);
+                            return null;
+                        }
+                        Class<?> rt = m.getReturnType();
+                        if (rt == boolean.class) {return Boolean.FALSE;}
+                        if (rt == int.class) {return Integer.valueOf(0);}
+                        if (rt == long.class) {return Long.valueOf(0);}
+                        return null;
+                    }
+                });
     }
 }

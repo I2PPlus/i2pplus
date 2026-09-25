@@ -59,6 +59,20 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * <p>True here: an HTTP request/response strictly precedes its response,
+     * so a peer that never sends the first byte must be torn down by the
+     * initial-response deadline instead of hanging the runner forever (read
+     * timeouts are disabled for HTTP tunnels and the body stall timeout is
+     * only armed after the first byte).
+     *
+     * @since 0.9.71+
+     */
+    @Override
+    protected boolean trackInitialResponseDeadline() { return true; }
+
+    /**
      * Returns a filtered HTTP response OutputStream that enforces the "Connection: close" header.
      * Should be called only once per instance.
      *
@@ -131,6 +145,19 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         if (_hout == null || !_hout.isTransientResumeFailure()) {return false;}
         _hout.clearTransientResumeFailure();
         return true;
+    }
+
+    /**
+     * Peek at the latched transient-failure flag without clearing it — used
+     * by the forwarder finally-block to keep the browser stream open while
+     * the non-Range fallback is still pending.
+     *
+     * @return true if a transient status aborted the last resume attempt
+     * @since 0.9.71+
+     */
+    @Override
+    protected boolean hasTransientResumeFailure() {
+        return _hout != null && _hout.isTransientResumeFailure();
     }
 
     /**

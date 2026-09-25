@@ -173,6 +173,66 @@ public class HTTPResponseOutputStreamTest {
         }
     }
 
+    /** A transient status on the Range attempt latches the fallback flag and
+     *  resets header-written state without disturbing delivered progress —
+     *  the preconditions for the non-Range re-request. */
+    @Test
+    public void testTransientStatusLatchesResumeFailure() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        out.write((RESPONSE_LINE + "Content-Length: 10\r\n\r\nabc").getBytes());
+        out.prepareBodyResume();
+        try {
+            out.write("HTTP/1.1 503 Service Unavailable\r\nContent-Length: 0\r\n\r\n".getBytes());
+            fail("Expected IOException on transient resume status");
+        } catch (IOException expected) {
+            assertTrue(expected.getMessage().contains("503"));
+        }
+        assertTrue(out.isTransientResumeFailure());
+        assertFalse(out.getHeaderWritten());
+        assertFalse(out.canRangeResume());
+        assertEquals(10, out.getDataExpected());
+        assertEquals(3, out.getBodyReceived());
+        // Nothing of the 503 response reached the browser.
+        assertEquals(1, countOccurrences(baos.toString(), "HTTP/1.1"));
+        // The loop observes-and-clears, then the next attempt re-prepares.
+        assertTrue(out.isTransientResumeFailure());
+        out.clearTransientResumeFailure();
+        assertFalse(out.isTransientResumeFailure());
+    }
+
+    /** Full recovery after a transient failure: the loop re-prepares and
+     *  re-requests without Range; the fresh 200's already-delivered prefix is
+     *  dropped so the browser sees one contiguous body and one status line. */
+    @Test
+    public void testNonRangeFallback200SkipsDeliveredPrefix() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newPlain(baos);
+        out.write((RESPONSE_LINE + "Content-Length: 10\r\n\r\nabc").getBytes());
+        String first = RESPONSE_LINE + "Content-Length: 10\r\n" + CONNECTION_CLOSE + "\r\nabc";
+        out.prepareBodyResume();
+        try {
+            out.write("HTTP/1.1 502 Bad Gateway\r\nContent-Length: 0\r\n\r\n".getBytes());
+            fail("Expected IOException on transient resume status");
+        } catch (IOException expected) {
+            // loop observes, refunds, switches to non-Range fallback
+        }
+        out.clearTransientResumeFailure();
+        out.prepareBodyResume();
+        assertFalse(out.getHeaderWritten());
+        // Fresh full-entity response (no Range was sent): skip prefix "abc".
+        out.write("HTTP/1.1 200 OK\r\nContent-Length: 10\r\n\r\nabcdefghij".getBytes());
+        String s = baos.toString();
+        assertEquals(first + "defghij", s);
+        assertEquals(1, countOccurrences(s, "HTTP/1.1"));
+        assertFalse(s.contains("502"));
+        assertEquals(10, out.getBodyReceived());
+        assertEquals(10, out.getDataExpected());
+        // Delivered everything: nothing left to resume.
+        assertFalse(out.canRangeResume());
+        assertTrue(out.getHeaderWritten());
+    }
+
     @Test
     public void testChunkedKeepAlive() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

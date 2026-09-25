@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import net.i2p.I2PException;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -107,6 +108,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
     /** Default reconnects on an empty upstream response before giving up. */
     private static final int DEFAULT_EMPTY_RETRIES = 9;
+    /**
+     *  In-session b32/b33 naming lookup budget, clamped to the shared
+     *  request connect deadline so naming cannot outlive the request.
+     *  @since 0.9.71+
+     */
+    static final long NAMING_IN_SESSION_TIMEOUT_MS = 20 * 1000;
+    /**
+     *  Naming-service lookup budget for out-of-session and hostname lookups,
+     *  clamped to the shared request connect deadline.
+     *  @since 0.9.71+
+     */
+    static final long NAMING_SERVICE_TIMEOUT_MS = 30 * 1000;
 
     /**
      *  Per-destination concurrent outbound connection limit.
@@ -523,8 +536,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         boolean plus = false;
         I2PSocket i2ps = null;
         Hash heldPermitDest = null;
-        // Speculative secondary connect for GET/HEAD body-resume failover.
-        final AtomicReference<WarmConn> warmRef = new AtomicReference<>();
+        // Speculative secondary connect for GET/HEAD body-resume failover;
+        // created per request iteration, retired in the loop end and finally.
+        WarmSlot warmSlot = null;
         try {
             s.setSoTimeout(INITIAL_SO_TIMEOUT);
             out = s.getOutputStream();
@@ -1309,6 +1323,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 return;
             }
 
+            // One wall-clock budget for this request: naming, the connect
+            // failover walk, retry sleeps, and outer re-walks all draw from
+            // the same deadline instead of stacking independent limits.
+            final long connectDeadline = connectDeadlineFrom(System.currentTimeMillis());
+
             // LOOKUP
             // If the host is "i2p", the getHostName() lookup failed, don't try to
             // look it up again as the naming service does not do negative caching
@@ -1362,6 +1381,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 verifySocketManager();
                 I2PSession sess = sockMgr.getSession();
                 if (!sess.isClosed()) {
+                    // Clamped so naming can never spend budget the connect
+                    // still needs; <= 0 skips the lookup and lets the
+                    // unreachable-destination error page fire.
+                    long lookupMs = clampToDeadlineMs(NAMING_IN_SESSION_TIMEOUT_MS,
+                                                      connectDeadline, System.currentTimeMillis());
                     if (len == 60) {
                         byte[] hData = Base32.decode(destination.substring(0, 52));
                         if (hData != null) {
@@ -1369,15 +1393,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 _log.info("[HTTPClient] Looking up b32 in-session: " + destination);
                             }
                             Hash hash = Hash.create(hData);
-                            clientDest = sess.lookupDest(hash, (long) 20*1000);
+                            clientDest = lookupMs > 0 ? sess.lookupDest(hash, lookupMs) : null;
                         } else {
                             clientDest = null;
                         }
-                    } else if (len >= 64) {
+                    } else if (len >= 64 && lookupMs > 0) {
                         if (_log.shouldInfo()) {
                             _log.info("[HTTPClient] Lookup b33 in-session " + destination);
                         }
-                        LookupResult lresult = sess.lookupDest2(destination, (long) 20*1000);
+                        LookupResult lresult = sess.lookupDest2(destination, lookupMs);
                         clientDest = lresult.getDestination();
                         int code = lresult.getResultCode();
                         if (code != LookupResult.RESULT_SUCCESS) {
@@ -1398,7 +1422,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     }
                     // lookupWithTimeout returns null on failure or timeout;
                     // fall through to the standard destination unreachable error page
-                    clientDest = lookupWithTimeout(destination, (long) 30*1000);
+                    long lookupMs = clampToDeadlineMs(NAMING_SERVICE_TIMEOUT_MS,
+                                                      connectDeadline, System.currentTimeMillis());
+                    clientDest = lookupMs > 0 ? lookupWithTimeout(destination, lookupMs) : null;
                     if (clientDest == null) {
                         if (_log.shouldWarn()) {
                             _log.warn("[HTTPClient] B32 lookup failed or timed out for: " + destination);
@@ -1413,7 +1439,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 if (_log.shouldInfo()) {
                     _log.info("[HTTPClient] Looking up hostname: " + destName);
                 }
-                clientDest = lookupWithTimeout(destination, (long) 30*1000);
+                long lookupMs = clampToDeadlineMs(NAMING_SERVICE_TIMEOUT_MS,
+                                                  connectDeadline, System.currentTimeMillis());
+                clientDest = lookupMs > 0 ? lookupWithTimeout(destination, lookupMs) : null;
                 if (clientDest == null) {
                     if (_log.shouldWarn()) {
                         _log.warn("[HTTPClient] Hostname lookup failed or timed out: " + destName);
@@ -1591,7 +1619,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 int timeoutConnectAttempts = 0;
                 while (true) {
                     try {
-                        i2ps = createI2PSocket(clientDest, sktOpts);
+                        i2ps = createI2PSocket(clientDest, sktOpts, connectDeadline);
                         break;
                     } catch (IOException ioe) {
                         connectAttempts++;
@@ -1611,20 +1639,22 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             throw ioe;
                         }
                         // createI2PSocket already failover-ed across all tunnel
-                        // legs. Decide whether to re-enter that walk: always
-                        // allow one timeout retry (pool may have been mid-build),
-                        // a second while building, stop when the pool is dead or
-                        // the general connect budget is exhausted.
-                        boolean poolBuilding = poolState() == 0;
-                        boolean poolDown = poolIsDefinitivelyDown();
+                        // legs. One pool reading per failure feeds the decision so
+                        // a single failure never mixes two pool observations, and
+                        // the shared deadline stops re-walks outright.
+                        int poolSnapshot = poolState();
+                        boolean deadlineExpired =
+                                isDeadlineExpired(connectDeadline, System.currentTimeMillis());
                         if (!shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts,
-                                                     timedOut, poolDown, poolBuilding,
-                                                     false)) {
-                            if (_log.shouldWarn() && timedOut) {
+                                                     timedOut, poolSnapshot, deadlineExpired)) {
+                            if (_log.shouldWarn() && (timedOut || deadlineExpired)) {
                                 _log.warn(getPrefix(requestId) +
-                                          "Connect timed out after " + timeoutConnectAttempts +
-                                          " attempt(s); not retrying" +
-                                          (poolBuilding ? " (pool still building)" : ""));
+                                          (deadlineExpired
+                                           ? "Connect deadline expired after " + connectAttempts +
+                                             " attempt(s); not retrying"
+                                           : "Connect timed out after " + timeoutConnectAttempts +
+                                             " attempt(s); not retrying" +
+                                             (poolSnapshot == 0 ? " (pool still building)" : "")));
                             }
                             if (heldPermitDest != null) {
                                 releaseConnPermit(heldPermitDest);
@@ -1635,7 +1665,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (_log.shouldInfo()) {
                             _log.info(getPrefix(requestId) + "Retrying after connection failure -> " + ioe.getMessage());
                         }
-                        try {Thread.sleep(getConnectRetryDelayMs(connectAttempts));} catch (InterruptedException ie) {
+                        long delayMs = clampToDeadlineMs(getConnectRetryDelayMs(connectAttempts),
+                                                         connectDeadline, System.currentTimeMillis());
+                        if (delayMs <= 0) {
+                            // No budget left to sleep in; fail now rather than
+                            // start a walk the deadline would cut off.
+                            if (heldPermitDest != null) {
+                                releaseConnPermit(heldPermitDest);
+                                heldPermitDest = null;
+                            }
+                            throw ioe;
+                        }
+                        try {Thread.sleep(delayMs);} catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                             throw ioe;
                         }
@@ -1686,28 +1727,30 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // empty retry to transfers with no request-body forwarder.
                 final int emptyBudget = parseEmptyRetries(getTunnel().getClientOptions().getProperty(OPT_EMPTY_RETRIES, "" + DEFAULT_EMPTY_RETRIES));
                 if (("GET".equals(method) || "HEAD".equals(method)) && emptyBudget > 0) {
+                    final WarmSlot slot = new WarmSlot(I2PTunnelHTTPClient::releaseConnPermit);
+                    warmSlot = slot;
                     final Destination reconnectDest = clientDest;
                     final int reconnectPort = remotePort;
+                    final Hash reconnectHash = reconnectDest.calculateHash();
                     // Secondary-socket permit for a dual race; held only until the
                     // runner settles the race (releaseRacePermit).
                     final AtomicReference<Hash> racePermit = new AtomicReference<>();
                     hrunner.setReconnectCallback(new I2PTunnelRunner.ReconnectCallback() {
                         @Override
                         public I2PSocket reconnect(Exception cause) {
-                            WarmConn w = warmRef.getAndSet(null);
-                            if (w != null) {
+                            I2PSocket warm = slot.take(reconnectHash, reconnectPort);
+                            if (warm != null) {
                                 // Hand the warm socket over as the request's primary.
-                                // heldPermitDest already covers this request; drop the
-                                // warm permit so we are not double-counting, then
-                                // replenish a fresh speculative connect in background.
-                                releaseConnPermit(w.permit);
+                                // take() already returned the warm permit, since
+                                // heldPermitDest covers this request; replenish a
+                                // fresh speculative connect in background.
                                 openSpeculativeWarm(reconnectDest, reconnectPort, emptyBudget,
-                                                    requestId, warmRef);
+                                                    requestId, slot);
                                 if (_log.shouldInfo()) {
                                     _log.info(getPrefix(requestId) +
                                               "Body-resume took speculative warm socket");
                                 }
-                                return w.sock;
+                                return warm;
                             }
                             return openEmptyReconnect(reconnectDest, reconnectPort, emptyBudget, requestId, false);
                         }
@@ -1774,7 +1817,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     });
                     // Open one secondary I2P socket while the primary is healthy so a
                     // mid-body stall/failure can fail over without a cold handshake.
-                    openSpeculativeWarm(reconnectDest, reconnectPort, emptyBudget, requestId, warmRef);
+                    openSpeculativeWarm(reconnectDest, reconnectPort, emptyBudget, requestId, slot);
                 }
                 t = hrunner;
             }
@@ -1795,7 +1838,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 releaseConnPermit(heldPermitDest);
                 heldPermitDest = null;
             }
-            discardWarmSocket(warmRef);
+            cancelWarmSlot(warmSlot);
+            warmSlot = null;
 
             // check if whatever was in the response does not allow keepalive
             if (keepalive && hrunner != null && !hrunner.getKeepAliveSocket()) {
@@ -1843,7 +1887,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 releaseConnPermit(heldPermitDest);
                 heldPermitDest = null;
             }
-            discardWarmSocket(warmRef);
+            cancelWarmSlot(warmSlot);
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
@@ -1891,40 +1935,259 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Speculative secondary I2P connection held ready for mid-body failover.
-     *  Owns its own per-dest permit until taken (permit released by the take
-     *  path, which then relies on the request's heldPermitDest) or discarded.
+     *  Request-scoped state machine for one speculative warm socket.
+     *  <p>
+     *  The slot leases a per-destination connection permit from
+     *  {@link #open(Hash, int, Hash)} until the socket is handed to the
+     *  request by {@link #take(Hash, int)} or the attempt is abandoned by
+     *  {@link #releaseLease()} / {@link #cancel()}; the releaser callback
+     *  fires at most once per acquisition. Each attempt carries a generation
+     *  so a background connect that completes after the slot moved on cannot
+     *  install its socket or leak its permit into a later attempt — the
+     *  failure modes of a plain holder: late install after teardown, handing
+     *  a socket to a different destination, and double or missing permit
+     *  release. All state is guarded by one lock because the background
+     *  connect races request teardown.
      *
      *  @since 0.9.71+
      */
-    private static final class WarmConn {
-        final I2PSocket sock;
-        final Hash permit;
+    static final class WarmSlot {
 
-        WarmConn(I2PSocket sock, Hash permit) {
-            this.sock = sock;
-            this.permit = permit;
+        /**
+         *  Slot lifecycle. Only {@link #OPEN} may start an attempt or hold an
+         *  installed socket; {@link #CANCELLED} is terminal for the request.
+         */
+        enum State {
+            /** Idle, or an attempt in flight (see {@code isIdle()}). */
+            OPEN,
+            /** A socket is installed and waiting to be taken. */
+            FULL,
+            /** Retired for this request; no reuse, no further permits. */
+            CANCELLED
+        }
+
+        private final Object _lock = new Object();
+        private final Consumer<Hash> _releaser;
+        private long _generation;
+        private long _attemptGen;
+        private Hash _dest;
+        private int _port;
+        private Hash _permit;
+        private I2PSocket _sock;
+        private State _state = State.OPEN;
+
+        /**
+         *  @param releaser callback that returns a permit to the pool; invoked
+         *         at most once per permit the slot has held
+         */
+        WarmSlot(Consumer<Hash> releaser) {
+            _releaser = releaser;
+        }
+
+        /**
+         *  Begin a warm-connect attempt, taking a lease on {@code permit}.
+         *  The lease is owned by the attempt until it installs, fails, or is
+         *  rejected — {@link #install(long, I2PSocket)} on success,
+         *  {@link #releaseLease()} otherwise.
+         *
+         *  @param destHash destination the attempt will connect to
+         *  @param port remote port (0 = default)
+         *  @param permit connection permit this attempt leases
+         *  @return the attempt generation, or -1 when the slot is not idle
+         *          (cancelled, full, or another attempt in flight); on -1 the
+         *          caller keeps ownership of {@code permit}
+         *  @since 0.9.71+
+         */
+        long open(Hash destHash, int port, Hash permit) {
+            synchronized (_lock) {
+                if (_state != State.OPEN || _attemptGen != 0) {return -1;}
+                _generation++;
+                _attemptGen = _generation;
+                _dest = destHash;
+                _port = port;
+                _permit = permit;
+                return _generation;
+            }
+        }
+
+        /**
+         *  Install the socket produced by the attempt for {@code gen}.
+         *  Rejects a stale generation (the attempt already failed or the slot
+         *  was cancelled) so a late completion can never surface as the
+         *  request's socket; the caller must close {@code sock} and call
+         *  {@link #releaseLease()} when this returns false.
+         *
+         *  @param gen generation returned by {@link #open(Hash, int, Hash)}
+         *  @param sock the connected socket
+         *  @return true when installed (slot is now {@link State#FULL}),
+         *          false when the attempt is stale or the slot retired
+         *  @since 0.9.71+
+         */
+        boolean install(long gen, I2PSocket sock) {
+            synchronized (_lock) {
+                if (_state != State.OPEN || gen <= 0 || gen != _attemptGen) {return false;}
+                _state = State.FULL;
+                _sock = sock;
+                _attemptGen = 0;
+                return true;
+            }
+        }
+
+        /**
+         *  Take an installed socket for the request.
+         *  On a destination/port match the socket is returned and its lease
+         *  is released — the request already holds its own permit
+         *  ({@code heldPermitDest}), so keeping the warm one would
+         *  double-count. On a mismatch the socket is discarded rather than
+         *  handed to a request it was not opened for, and the slot returns to
+         *  {@link State#OPEN} so a fresh attempt can be opened.
+         *
+         *  @param destHash destination the caller needs
+         *  @param port remote port the caller needs (0 = default)
+         *  @return the installed socket, or null when the slot is not full or
+         *          the installed socket was for a different destination/port
+         *  @since 0.9.71+
+         */
+        I2PSocket take(Hash destHash, int port) {
+            I2PSocket sock;
+            Hash permit;
+            boolean matched;
+            synchronized (_lock) {
+                if (_state != State.FULL) {return null;}
+                sock = _sock;
+                permit = _permit;
+                matched = destHash != null && destHash.equals(_dest) && port == _port;
+                _sock = null;
+                _permit = null;
+                _dest = null;
+                _port = 0;
+                _attemptGen = 0;
+                _state = State.OPEN;
+            }
+            if (permit != null) {_releaser.accept(permit);}
+            if (!matched) {
+                closeQuietly(sock);
+                return null;
+            }
+            return sock;
+        }
+
+        /**
+         *  Give back the lease held by the current attempt (failed, rejected,
+         *  or interrupted connect). No-op while a socket is installed — the
+         *  installed connection keeps its permit until taken or cancelled —
+         *  and no-op when nothing is held, so it is safe to call from every
+         *  attempt exit path without counting.
+         *
+         *  @since 0.9.71+
+         */
+        void releaseLease() {
+            Hash permit;
+            synchronized (_lock) {
+                if (_state == State.FULL) {return;}
+                permit = _permit;
+                _permit = null;
+                _attemptGen = 0;
+                _dest = null;
+                _port = 0;
+            }
+            if (permit != null) {_releaser.accept(permit);}
+        }
+
+        /**
+         *  Retire the slot: close an installed socket if any and release the
+         *  permit the slot still holds. An attempt still in flight keeps its
+         *  lease — it releases it itself when {@link #install(long,
+         *  I2PSocket)} rejects it. Idempotent.
+         *
+         *  @since 0.9.71+
+         */
+        void cancel() {
+            I2PSocket sock = null;
+            Hash permit = null;
+            synchronized (_lock) {
+                if (_state == State.CANCELLED) {return;}
+                if (_state == State.FULL) {
+                    sock = _sock;
+                    permit = _permit;
+                    _sock = null;
+                    _permit = null;
+                }
+                // OPEN with an attempt in flight keeps _permit/_attemptGen;
+                // that attempt's releaseLease() returns it.
+                _state = State.CANCELLED;
+            }
+            if (sock != null) {closeQuietly(sock);}
+            if (permit != null) {_releaser.accept(permit);}
+        }
+
+        /**
+         *  @return true when the slot is open with no attempt in flight and
+         *          no installed socket, i.e. free to start a warm connect
+         *  @since 0.9.71+
+         */
+        boolean isIdle() {
+            synchronized (_lock) {
+                return _state == State.OPEN && _attemptGen == 0 && _sock == null;
+            }
+        }
+
+        /**
+         *  @return the current lifecycle state (for tests and diagnostics)
+         *  @since 0.9.71+
+         */
+        State getState() {
+            synchronized (_lock) {
+                return _state;
+            }
+        }
+
+        /**
+         *  @return the last issued attempt generation (0 before any open)
+         *  @since 0.9.71+
+         */
+        long getGeneration() {
+            synchronized (_lock) {
+                return _generation;
+            }
         }
     }
 
     /**
+     *  Retire a request's warm slot: closes an installed socket, releases the
+     *  permit the slot still holds, and rejects an attempt still in flight
+     *  (its thread releases the lease when the install is refused). Idempotent
+     *  and null-safe — called from per-iteration cleanup and the request's
+     *  finally block, where either may already have run.
+     *
+     *  @param slot the warm slot to retire, or null
+     *  @since 0.9.71+
+     */
+    static void cancelWarmSlot(WarmSlot slot) {
+        if (slot != null) {slot.cancel();}
+    }
+
+    /**
      *  Open one secondary I2P socket in the background while the primary is
-     *  healthy. Fail-open: if the per-dest permit is unavailable or the connect
-     *  fails, no warm socket is installed and resume falls back to a cold open.
-     *  Skipped when {@link #poolIsDefinitivelyDown()} so a dead outbound pool
-     *  does not accumulate speculative connect storms.
+     *  healthy. Fail-open: if the slot is not idle, the per-dest permit is
+     *  unavailable, or the connect fails, no warm socket is installed and
+     *  resume falls back to a cold open. Skipped when
+     *  {@link #poolIsDefinitivelyDown()} so a dead outbound pool does not
+     *  accumulate speculative connect storms. The attempt is tagged with the
+     *  slot's generation, so a completion that races teardown is refused and
+     *  its permit released by this thread instead of leaking.
      *
      *  @param dest remote destination
      *  @param port remote port (0 = default)
      *  @param emptyBudget connect attempt budget for the secondary
      *  @param requestId logging prefix id
-     *  @param warmRef slot holding the warm connection, or null
+     *  @param slot request-scoped warm slot, or null
      *  @since 0.9.71+
      */
     private void openSpeculativeWarm(final Destination dest, final int port,
                                      final int emptyBudget, final long requestId,
-                                     final AtomicReference<WarmConn> warmRef) {
-        if (warmRef == null || warmRef.get() != null) {return;}
+                                     final WarmSlot slot) {
+        if (slot == null || !slot.isIdle()) {return;}
         // Do not open warm sockets while the outbound pool is provably dead;
         // each warm open is a full createI2PSocket (failover × timeout).
         if (poolIsDefinitivelyDown()) {
@@ -1938,17 +2201,25 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // At cap; resume will cold-open if it can (fail-open).
             return;
         }
+        final long gen = slot.open(destHash, port, destHash);
+        if (gen < 0) {
+            // Slot went busy or cancelled between the idle check and open();
+            // it never took the lease, so hand the permit straight back.
+            releaseConnPermit(destHash);
+            return;
+        }
         I2PThread t = new I2PThread(new Runnable() {
             @Override
             public void run() {
                 I2PSocket s = null;
                 boolean installed = false;
                 try {
-                    if (warmRef.get() != null) {return;}
+                    // Skip a connect that would be pointless: the request already
+                    // retired the slot (or another attempt finished installing).
+                    if (slot.getState() != WarmSlot.State.OPEN) {return;}
                     s = openEmptyReconnect(dest, port, emptyBudget, requestId, true);
                     if (s == null) {return;}
-                    WarmConn w = new WarmConn(s, destHash);
-                    if (warmRef.compareAndSet(null, w)) {
+                    if (slot.install(gen, s)) {
                         installed = true;
                         s = null;
                         if (_log.shouldInfo()) {
@@ -1959,28 +2230,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 } finally {
                     if (!installed) {
                         closeQuietly(s);
-                        releaseConnPermit(destHash);
+                        // Rejected (cancelled / stale) or failed: return the lease.
+                        slot.releaseLease();
                     }
                 }
             }
         }, "SpecWarmConnect");
         t.setDaemon(true);
         t.start();
-    }
-
-    /**
-     *  Close an unused speculative warm socket and release its permit.
-     *  Safe to call with an empty reference.
-     *
-     *  @param warmRef the warm-connection slot; cleared atomically
-     *  @since 0.9.71+
-     */
-    private static void discardWarmSocket(AtomicReference<WarmConn> warmRef) {
-        if (warmRef == null) {return;}
-        WarmConn w = warmRef.getAndSet(null);
-        if (w == null) {return;}
-        closeQuietly(w.sock);
-        releaseConnPermit(w.permit);
     }
 
     /**

@@ -63,12 +63,32 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /** Default connect timeout */
     static final long DEFAULT_CONNECT_TIMEOUT = (long) 30*1000;
     /**
-     *  Max consecutive connect timeouts before abandoning tunnel failover.
-     *  Each failover leg can burn the full connect timeout; with quantity=N
-     *  that multiplies, so timeout failures are capped well below tunnelCount.
+     *  Legacy cap on consecutive connect timeouts before abandoning tunnel
+     *  failover. The leg walk no longer stops on a timeout count — every
+     *  configured leg is tried while the pool has capacity — so the walk is
+     *  now bounded by {@link #REQUEST_CONNECT_DEADLINE_MS} instead. Retained
+     *  as a documented legacy bound.
      *  @since 0.9.71+
      */
     static final int MAX_TIMEOUT_FAILOVER = 2;
+    /**
+     *  Single wall-clock budget for establishing one proxied request.
+     *  Naming lookups, every tunnel-failover leg, retry sleeps, and outer
+     *  connect re-walks all draw from one deadline computed from this budget
+     *  instead of each keeping an independent limit, so a quantity-4 leg walk
+     *  plus outer retries can no longer stack well past two minutes before
+     *  the request gives up.
+     *  @since 0.9.71+
+     */
+    static final long REQUEST_CONNECT_DEADLINE_MS = 120 * 1000;
+    /**
+     *  Deadline sentinel for callers that have not adopted the shared
+     *  request budget (SOCKS, IRC, DCC, raw {@code createI2PSocket}): they
+     *  keep their original per-call limits because this sentinel never reads
+     *  as expired and never clamps.
+     *  @since 0.9.71+
+     */
+    static final long NO_DEADLINE = Long.MAX_VALUE;
     /** Client ID counter */
     private static final AtomicLong __clientId = new AtomicLong();
     /** This client's ID */
@@ -785,9 +805,37 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @throws I2PException if there is some other I2P-related problem
      */
     public I2PSocket createI2PSocket(Destination dest, I2PSocketOptions opt) throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
+        return createI2PSocket(dest, opt, NO_DEADLINE);
+    }
+
+    /**
+     * Create a new I2PSocket bounded by a shared request deadline.
+     * <p>
+     * The HTTP proxy threads one request-scoped deadline through naming,
+     * the failover walk, retry sleeps, and outer retries
+     * ({@link #REQUEST_CONNECT_DEADLINE_MS}). The walk starts no leg once
+     * the deadline has passed and shortens each leg's connect timeout to the
+     * remaining budget, so the whole operation cannot exceed the deadline by
+     * a full connect timeout. Because a deadline may shorten {@code opt} in
+     * place, a caller passing one must not share the options object with
+     * other requests.
+     *
+     * @param dest The destination to connect to, non-null
+     * @param opt Option to be used to open the socket
+     * @param deadlineMs absolute wall-clock deadline in ms since the epoch,
+     *        or {@link #NO_DEADLINE} for no shared budget
+     * @return a new I2PSocket
+     * @throws I2PException if there is some other I2P-related problem
+     * @throws ConnectException if the peer refuses the connection
+     * @throws NoRouteToHostException if the peer is not found or not reachable after retries
+     * @throws InterruptedIOException if the connection times out
+     * @since 0.9.71+
+     */
+    I2PSocket createI2PSocket(Destination dest, I2PSocketOptions opt, long deadlineMs)
+            throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
         if (dest == null) {throw new NullPointerException();}
         verifySocketManager();
-        I2PSocket i2ps = createI2PSocketWithFailover(dest, opt);
+        I2PSocket i2ps = createI2PSocketWithFailover(dest, opt, deadlineMs);
         synchronized (sockLock) {mySockets.add(i2ps);}
         return i2ps;
     }
@@ -799,9 +847,15 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * tunnel pools have multiple tunnels available. If a connection attempt
      * fails with {@link NoRouteToHostException}, the method retries,
      * allowing the session's tunnel pool to select a different tunnel.
+     * The walk is additionally bounded by {@code deadlineMs}: no new leg is
+     * started after the deadline, and each leg's connect timeout is clamped
+     * to the remaining budget. One pool-state snapshot is taken per failure
+     * to decide whether another leg is worthwhile.
      *
      * @param dest The destination to connect to, non-null
      * @param opt Socket options
+     * @param deadlineMs absolute wall-clock deadline in ms since the epoch,
+     *        or {@link #NO_DEADLINE} for no shared budget
      * @return a new I2PSocket
      * @throws I2PException if there is some other I2P-related problem
      * @throws ConnectException if the peer refuses the connection
@@ -809,7 +863,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @throws InterruptedIOException if the connection times out
      * @since 0.9.71+
      */
-    private I2PSocket createI2PSocketWithFailover(Destination dest, I2PSocketOptions opt)
+    private I2PSocket createI2PSocketWithFailover(Destination dest, I2PSocketOptions opt, long deadlineMs)
             throws I2PException, ConnectException, NoRouteToHostException, InterruptedIOException {
         // Determine number of tunnels from both inbound and outbound config
         // for retry count — both pools can have dead tunnels
@@ -826,6 +880,17 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         NoRouteToHostException lastEx = null;
         int timeoutFailures = 0;
         for (int i = 0; i < tunnelCount; i++) {
+            long now = System.currentTimeMillis();
+            if (isDeadlineExpired(deadlineMs, now)) {
+                if (lastEx != null) {break;}
+                throw new NoRouteToHostException("Connect deadline expired before first attempt");
+            }
+            // Fit this leg into the time left so the walk cannot overshoot
+            // the shared deadline by a full connect timeout.
+            long legTimeoutMs = clampToDeadlineMs(opt.getConnectTimeout(), deadlineMs, now);
+            if (legTimeoutMs > 0 && legTimeoutMs < opt.getConnectTimeout()) {
+                opt.setConnectTimeout(legTimeoutMs);
+            }
             try {
                 I2PSocket s = sockMgr.connect(dest, opt);
                 if (_log.shouldInfo() && i > 0) {
@@ -929,6 +994,76 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             return timeoutConnectAttempts < maxTimeout;
         }
         return true;
+    }
+
+    /**
+     *  Whether the outer HTTP connect loop should retry after a failure,
+     *  given the single pool-state snapshot taken for that failure.
+     *  <p>
+     *  Both derived flags ({@code poolDown}, {@code poolBuilding}) come from
+     *  one {@link #poolState()} reading so a failure never mixes two pool
+     *  observations — the reflective pool query is relatively expensive and
+     *  one failure must not repeat it.  Stops immediately when the shared
+     *  request deadline has passed, regardless of remaining attempt budget.
+     *
+     *  @param connectAttempts total connect attempts so far (1-based after failure)
+     *  @param timeoutConnectAttempts timeout-style attempts so far
+     *  @param timedOut true when the failure classified as a connect timeout
+     *  @param poolState the single {@link #poolState()} reading for this failure
+     *  @param deadlineExpired true when the shared request deadline has passed
+     *  @return true to sleep and retry the outer connect loop
+     *  @since 0.9.71+
+     */
+    static boolean shouldOuterRetryConnect(int connectAttempts, int timeoutConnectAttempts,
+                                           boolean timedOut, int poolState,
+                                           boolean deadlineExpired) {
+        if (deadlineExpired) {return false;}
+        return shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts, timedOut,
+                                       poolState <= -1, poolState == 0, false);
+    }
+
+    /**
+     *  Compute the shared connect deadline for a request starting now.
+     *
+     *  @param nowMs current time in ms since the epoch
+     *  @return the absolute deadline ({@code nowMs + REQUEST_CONNECT_DEADLINE_MS})
+     *  @since 0.9.71+
+     */
+    static long connectDeadlineFrom(long nowMs) {
+        return nowMs + REQUEST_CONNECT_DEADLINE_MS;
+    }
+
+    /**
+     *  Whether a shared connect deadline has passed.
+     *  Pure decision — no clock access, safe for unit tests.  With
+     *  {@link #NO_DEADLINE} this is always false, so callers that have not
+     *  adopted the shared budget keep their original behavior.
+     *
+     *  @param deadlineMs absolute deadline in ms since the epoch
+     *  @param nowMs current time in ms since the epoch
+     *  @return true when {@code nowMs} has reached or passed the deadline
+     *  @since 0.9.71+
+     */
+    static boolean isDeadlineExpired(long deadlineMs, long nowMs) {
+        return nowMs >= deadlineMs;
+    }
+
+    /**
+     *  Clamp a requested timeout to the time left before a shared deadline.
+     *  Used for naming lookups, retry sleeps, and per-leg connect timeouts so
+     *  no single step can spend budget the rest of the request still needs.
+     *  Pure decision — no clock access, safe for unit tests.
+     *
+     *  @param requestedMs the timeout the step would use with no deadline
+     *  @param deadlineMs absolute deadline in ms since the epoch, or {@link #NO_DEADLINE}
+     *  @param nowMs current time in ms since the epoch
+     *  @return the requested timeout reduced to the remaining budget; 0 when
+     *          the deadline has passed (callers must skip the step)
+     *  @since 0.9.71+
+     */
+    static long clampToDeadlineMs(long requestedMs, long deadlineMs, long nowMs) {
+        long remainingMs = isDeadlineExpired(deadlineMs, nowMs) ? 0 : deadlineMs - nowMs;
+        return Math.min(requestedMs, remainingMs);
     }
 
     /**
