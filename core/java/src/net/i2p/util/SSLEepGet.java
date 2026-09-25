@@ -519,7 +519,13 @@ public class SSLEepGet extends EepGet {
         Thread pusher = null;
         _decompressException = null;
         OutputStream pipeSink = null;
-        if (_isGzippedResponse) {
+        // no sink means no output was opened for this attempt's body (an
+        // early-return status such as a deferred 416); a stale or
+        // error-body gzip flag must not start a decompressor with
+        // nowhere to write, or persist a marker for bytes never written
+        if (_isGzippedResponse && _out != null) {
+            if (_outputStream == null)
+                markGzipPartial(new File(_outputFile));
             PipedInputStream pi = new PipedInputStream(64 * 1024);
             PipedOutputStream po = new PipedOutputStream(pi);
             pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGunzip");
@@ -660,8 +666,7 @@ public class SSLEepGet extends EepGet {
             // Assume that _alreadyTransferred holds the right value
             // (we should never be restarted to work on an old stream).
         } else {
-            File outFile = new File(_outputFile);
-            if (outFile.exists()) _alreadyTransferred = outFile.length();
+            _alreadyTransferred = getResumeOffset(new File(_outputFile));
         }
 
         String req = getRequest();

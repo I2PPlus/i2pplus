@@ -104,12 +104,12 @@ public class EepGet {
     protected OutputStream _out;
     /** Total bytes transferred across all attempts, including resumed content */
     protected long _alreadyTransferred;
-    /** Total bytes transferred including headers, retries, redirects, and discarded partial downloads */
+    /** Body bytes transferred in the current fetch(), summed across attempts */
     protected long _bytesTransferred;
     /** Remaining bytes on the current attempt, -1 if unknown (chunked or no Content-Length) */
     protected long _bytesRemaining;
-    /** Zero-based attempt counter for the current fetch */
-    protected int _currentAttempt;
+    /** Zero-based attempt counter for the current fetch; read by the watchdog command */
+    protected volatile int _currentAttempt;
     /** HTTP response status code, -1 if no response received */
     protected volatile int _responseCode = -1;
     /** HTTP response status text (e.g. "OK", "Not Found") */
@@ -162,6 +162,8 @@ public class EepGet {
     protected String _xContentTypeOptions;
     /** X-Powered-By header value from the response */
     protected String _xPoweredBy;
+    /** Content-Range header value from the response, for validating 206/416 resumes */
+    protected String _contentRange;
     /** Whether the current transfer attempt failed (non-2xx response code) */
     protected volatile boolean _transferFailed;
     /** Whether the fetch was aborted due to timeout or user request */
@@ -172,6 +174,18 @@ public class EepGet {
     protected volatile int _fetchTotalTimeout;
     /** Inactivity timeout in ms between data packets */
     protected volatile int _fetchInactivityTimeout;
+    /**
+     * Generation of the current fetch() call, incremented at each entry so a
+     * watchdog command from a previous fetch can never abort a reused instance.
+     * @since 0.9.71+
+     */
+    private volatile int _fetchGeneration;
+    /**
+     * Absolute deadline (System.currentTimeMillis()) for the whole fetch
+     * operation, or 0 for none. Set once at fetch() entry.
+     * @since 0.9.71+
+     */
+    private volatile long _fetchDeadlineMs;
     /** Maximum number of complete (zero-byte) failures before giving up */
     protected volatile int _maxCompleteFails;
     /** Counter tracking the number of HTTP redirects followed */
@@ -220,6 +234,14 @@ public class EepGet {
     protected static final int DEFAULT_RETRY_JITTER = 10*1000;
     /** Data-phase stall abort message, thrown when the SocketTimeout watchdog fires mid-body @since 0.9.71+ */
     private static final String MSG_DATA_TIMEOUT = "Timed out reading the HTTP data";
+    /**
+     * Suffix of the sidecar marker file recording that the output file holds
+     * transparently-decompressed (gunzipped) bytes rather than raw response
+     * bytes, so its length must not be used as a Range resume offset.
+     * @since 0.9.71+
+     */
+    static final String GZIP_PARTIAL_MARKER_SUFFIX = ".i2pgz";
+
     /** @deprecated use DEFAULT_CONNECT_TIMEOUT */
     protected static final int CONNECT_TIMEOUT = DEFAULT_CONNECT_TIMEOUT;
     /** @deprecated use DEFAULT_INACTIVITY_TIMEOUT */
@@ -1039,7 +1061,8 @@ public class EepGet {
      * Blocking fetch.
      *
      * @param fetchHeaderTimeout &lt;= 0 for none (proxy will timeout if none, none isn't recommended if no proxy)
-     * @param totalTimeout &lt;= 0 for default none
+     * @param totalTimeout operation-wide deadline for the whole fetch, including retries and
+     *                      backoff between attempts; &lt;= 0 for default none
      * @param inactivityTimeout &lt;= 0 for default 60 sec
      * @return success
      */
@@ -1052,12 +1075,30 @@ public class EepGet {
         _fetchTotalTimeout = (int) Math.min(totalTimeout, Integer.MAX_VALUE);
         _fetchInactivityTimeout = (int) Math.min(inactivityTimeout, Integer.MAX_VALUE);
         _keepFetching = true;
+        // Reused instances must start clean: a stale failure flag would report
+        // failure after a good download, an old attempt count would exhaust the
+        // retry budget immediately, and a stale watchdog from the previous fetch
+        // must not abort this one.
+        _transferFailed = false;
+        _currentAttempt = 0;
+        _bytesTransferred = 0;
+        _notModified = false;
+        _redirects.set(0);
+        final int fetchGeneration = ++_fetchGeneration;
+        final long fetchStartMs = System.currentTimeMillis();
+        _fetchDeadlineMs = _fetchTotalTimeout > 0 ? fetchStartMs + _fetchTotalTimeout : 0;
 
         if (_log.shouldDebug())
             _log.debug("Fetching (proxied? " + _shouldProxy + ") url=" + _actualURL);
         boolean usedStallImmediateRetry = false;
         while (_keepFetching) {
-            long attemptStartBytes = _alreadyTransferred;
+            final long now = System.currentTimeMillis();
+            if (_fetchDeadlineMs > 0 && now >= _fetchDeadlineMs)
+                break;
+            // Reset at loop top so a previous attempt's abort is never
+            // misread while classifying this attempt's failure.
+            _aborted = false;
+            long attemptStartBodyBytes = _bytesTransferred;
             boolean stalledProgressing = false;
             SocketTimeout timeout = null;
             if (_fetchHeaderTimeout > 0) {
@@ -1066,12 +1107,18 @@ public class EepGet {
                 timeout = new SocketTimeout(_fetchHeaderTimeout);
                 final SocketTimeout stimeout = timeout;
                 final Thread thread = Thread.currentThread();
+                final int attempt = _currentAttempt;
                 timeout.setTimeoutCommand(new Runnable() {
                     /**
                      * Timeout reached, abort the transfer and interrupt the fetching thread.
                      */
                     @Override
                     public void run() {
+                        // A timer from a previous attempt or a previous fetch()
+                        // must never abort the current one; cancel() races its
+                        // own command with this.
+                        if (attempt != _currentAttempt || fetchGeneration != _fetchGeneration)
+                            return;
                         if (_log.shouldDebug())
                             _log.debug("Timeout reached on " + _url + ": " + stimeout);
                         _aborted = true;
@@ -1079,7 +1126,7 @@ public class EepGet {
                     }
                 });
                 if (_fetchTotalTimeout > 0)
-                    timeout.setTotalTimeoutPeriod(_fetchTotalTimeout);
+                    timeout.setTotalTimeoutPeriod(Math.max(1, _fetchDeadlineMs - System.currentTimeMillis()));
             }
             try {
                 for (int i = 0; i < _listeners.size(); i++)
@@ -1092,7 +1139,20 @@ public class EepGet {
                     return true;
                 break;
             } catch (IOException ioe) {
-                stalledProgressing = isStalledButProgressing(ioe, attemptStartBytes, _alreadyTransferred);
+                // At catch time (pre-finally) only the watchdog can have
+                // closed _proxy with progress > 0, so a closed socket here is
+                // a watchdog abort even if its command has not yet set the flag.
+                boolean watchdogAborted = _aborted || (_proxy != null && _proxy.isClosed());
+                // A cancelled fetch (stopFetching()) is not a stall; the
+                // break-check below exits without retrying either way.
+                // The baseline is this attempt's body progress; header and
+                // connect phases advance no body bytes, so a file length
+                // loaded by sendRequest() is never mistaken for progress.
+                stalledProgressing = _keepFetching
+                        && !isTotalBudgetExhausted(_fetchTotalTimeout,
+                                fetchStartMs, System.currentTimeMillis())
+                        && isStalledButProgressing(ioe, watchdogAborted,
+                                attemptStartBodyBytes, _bytesTransferred);
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
                 int truncate = _url.indexOf("&");
@@ -1120,6 +1180,14 @@ public class EepGet {
                         _proxy = null;
                     } catch (IOException ioe) { /* ignored */ }
                 }
+                // A leftover abort interrupt from this attempt's watchdog is
+                // consumed here: the outcome above already classified it, and
+                // no exit path (success, retry, or break) may return the flag
+                // set and pollute the caller's next sleep or join. A fresh
+                // interrupt arriving while waiting in the backoff sleep below
+                // is an external stop request, so the sleep restores it and
+                // ends the fetch.
+                Thread.interrupted();
             }
 
             _currentAttempt++;
@@ -1144,9 +1212,14 @@ public class EepGet {
                     _log.debug("Stalled after " + _alreadyTransferred + " bytes on " + _url
                                + ", immediate retry " + _currentAttempt + "/" + _numRetries);
             }
+            if (_fetchDeadlineMs > 0 && System.currentTimeMillis() + delay >= _fetchDeadlineMs)
+                break;
             try {
                 Thread.sleep(delay);
-            } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                break;
+            }
         }
 
         for (int i = 0; i < _listeners.size(); i++)
@@ -1166,23 +1239,70 @@ public class EepGet {
 
     /**
      *  Whether a failed attempt was a data-phase stall on an otherwise working
-     *  path: the read timed out (socket soTimeout or our SocketTimeout watchdog
-     *  abort) but the attempt still appended bytes.  Header-phase timeouts make
-     *  no progress within the attempt and non-timeout failures return false,
-     *  so callers only skip the default backoff for one immediate
-     *  Range-resume retry.
+     *  path: the read timed out or our SocketTimeout watchdog aborted the
+     *  transfer (which closes the socket first, surfacing as a raw
+     *  SocketException, so the explicit {@code aborted} signal — flag set or
+     *  socket closed by the watchdog — not exception shape, identifies that
+     *  path) but the attempt still appended bytes.  Wrapped timeout causes
+     *  are walked so a single hop of context cannot hide a socket timeout.
+     *  Header-phase timeouts make no progress within the attempt and
+     *  non-timeout failures return false, so callers only skip the default
+     *  backoff for one immediate Range-resume retry.
      *
      *  @param ioe failure raised by the attempt
-     *  @param attemptStartBytes bytes already transferred when the attempt started
-     *  @param bytesTransferred bytes transferred now, after the failure
+     *  @param aborted whether our SocketTimeout watchdog aborted this attempt
+     *  @param attemptStartBytes body bytes transferred when the attempt started;
+     *                           header and connect phases advance no body bytes
+     *  @param bytesTransferred body bytes transferred now, after the failure
      *  @return true when the attempt timed out after making progress
      *  @since 0.9.71+
      */
-    static boolean isStalledButProgressing(IOException ioe, long attemptStartBytes, long bytesTransferred) {
+    static boolean isStalledButProgressing(IOException ioe, boolean aborted,
+                                           long attemptStartBytes, long bytesTransferred) {
         if (bytesTransferred <= attemptStartBytes)
             return false;
-        return ioe instanceof SocketTimeoutException
-            || MSG_DATA_TIMEOUT.equals(ioe.getMessage());
+        if (aborted)
+            return true;
+        return hasTimeoutCause(ioe);
+    }
+
+    /**
+     *  Whether an attempt has already consumed its total-timeout budget.
+     *  The budget is operation-wide: SocketTimeout's total period and
+     *  fetch()'s deadline both start at fetch() entry, so a failure at or
+     *  past that deadline is the caller's overall timeout, not a transient
+     *  stall; it must take the default retry backoff instead of an immediate
+     *  Range-resume retry.
+     *
+     *  @param totalTimeoutMs total timeout for the fetch, &lt;= 0 for none
+     *  @param attemptStartMs when fetch() started the operation
+     *  @param nowMs when the failure was classified
+     *  @return true if the total budget is exhausted
+     *  @since 0.9.71+
+     */
+    static boolean isTotalBudgetExhausted(long totalTimeoutMs, long attemptStartMs, long nowMs) {
+        return totalTimeoutMs > 0 && nowMs - attemptStartMs >= totalTimeoutMs;
+    }
+
+    /**
+     *  Whether the exception (or any cause within a bounded depth) is a read
+     *  timeout: SocketTimeoutException, or the canonical watchdog abort
+     *  message.  A bare InterruptedIOException is not classified; modern
+     *  socket reads do not throw it on interrupt, so it cannot be attributed
+     *  to our watchdog without the explicit abort signal.
+     *
+     *  @param t exception or cause chain head, may be null
+     *  @return true when a timeout cause is found
+     *  @since 0.9.71+
+     */
+    private static boolean hasTimeoutCause(Throwable t) {
+        for (int depth = 0; t != null && depth < 8; depth++, t = t.getCause()) {
+            if (t instanceof SocketTimeoutException)
+                return true;
+            if (MSG_DATA_TIMEOUT.equals(t.getMessage()))
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -1192,7 +1312,6 @@ public class EepGet {
      *  @throws IOException on IO error
      */
     protected void doFetch(SocketTimeout timeout) throws IOException {
-        _aborted = false;
         readHeaders();
         if (_aborted)
             throw new IOException("Eepget error: Timed out reading the HTTP headers");
@@ -1241,9 +1360,16 @@ public class EepGet {
         Thread pusher = null;
         _decompressException = null;
         OutputStream pipeSink = null;
-        if (_isGzippedResponse) {
+        // no sink means no output was opened for this attempt's body (an
+        // early-return status such as a deferred 416); a stale or
+        // error-body gzip flag must not start a decompressor with
+        // nowhere to write, or persist a marker for bytes never written
+        boolean gunzipping = _isGzippedResponse && _out != null;
+        if (gunzipping) {
             if (_log.shouldInfo())
                 _log.info("Gzipped response, starting decompressor");
+            if (_outputStream == null)
+                markGzipPartial(new File(_outputFile));
             PipedInputStream pi = new PipedInputStream(64*1024);
             PipedOutputStream po = new PipedOutputStream(pi);
             pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGunzip");
@@ -1254,14 +1380,17 @@ public class EepGet {
 
         long remaining = _bytesRemaining;
         byte[] buf = new byte[16*1024];
+        boolean sawEof = false;
         try {
             while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
                 int toRead = buf.length;
                 if (strictSize && toRead > remaining)
                     toRead = (int) remaining;
                 int read = _proxyIn.read(buf, 0, toRead);
-                if (read == -1)
+                if (read == -1) {
+                    sawEof = true;
                     break;
+                }
                 if (timeout != null)
                     timeout.resetTimer();
                 _out.write(buf, 0, read);
@@ -1320,7 +1449,14 @@ public class EepGet {
             throw e;
         }
 
-        if (_isGzippedResponse) {
+        // The body loop has ended: retire the watchdog so it cannot fire
+        // during flush/decompression, and consume its leftover interrupt —
+        // the _aborted flag, classified below, is authoritative.
+        if (timeout != null)
+            timeout.cancel();
+        Thread.interrupted();
+
+        if (gunzipping) {
             IOException closeFailure = null;
             if (_out != null) {
                 try {
@@ -1345,11 +1481,8 @@ public class EepGet {
             _out = null;
         }
 
-        if (_aborted)
+        if (fatalAbort(_aborted, strictSize, remaining, sawEof))
             throw new IOException(MSG_DATA_TIMEOUT);
-
-        if (timeout != null)
-            timeout.cancel();
 
         if (_log.shouldDebug())
             _log.debug("Done transferring " + _bytesTransferred + " (ok? " + !_transferFailed + ")");
@@ -1424,6 +1557,10 @@ public class EepGet {
                     _out = _outputStream;
                 } else {
                     _out = new FileOutputStream(_outputFile, false);
+                    // the file is rewritten from scratch; any gunzip state
+                    // for the old content is void. A gzip response below
+                    // recreates it before decompressed bytes are written.
+                    clearGzipMarker(new File(_outputFile));
                 }
                 _alreadyTransferred = 0;
                 rcOk = true;
@@ -1508,9 +1645,19 @@ public class EepGet {
                 redirect = rcOk;
                 _keepFetching = rcOk;
                 break;
-            case 416: // completed (or range out of reach)
+            case 416: // range not satisfiable: complete file or refused range,
+                      // decided by validateResumeResponse() once Content-Range
+                      // has been parsed with the rest of the headers below
                 _bytesRemaining = 0;  // NOPMD - AvoidDuplicateAssignmentsInCases
-                if (_alreadyTransferred > 0 || !_shouldWriteErrorToOutput) {
+                if (_alreadyTransferred > 0) {
+                    // defer: Content-Range: bytes */total has not been parsed yet
+                    rcOk = true;
+                    break;
+                }
+                // no Range was ever sent, so nothing can be satisfied; fail
+                // like other error codes instead of writing a success body
+                _transferFailed = true;
+                if (!_shouldWriteErrorToOutput) {
                     _keepFetching = false;
                     return;
                 }
@@ -1560,6 +1707,7 @@ public class EepGet {
         // clear out the arguments, as we use the same variables for return values
         _etag = null;
         _lastModified = null;
+        _contentRange = null;
 
         buf.setLength(0);
         byte[] lookahead = new byte[3];
@@ -1593,7 +1741,12 @@ public class EepGet {
                     if (isEndOfHeaders(lookahead)) {
                         if (!rcOk)
                             throw new IOException("Invalid HTTP response: " + _responseCode + ' ' + _responseText);
-                        if (_encodingChunked) {
+                        // resume-sensitive responses are decided here, with all
+                        // headers parsed; a body that must be skipped skips the
+                        // chunk-length read too, which would block on a body
+                        // we are never going to consume
+                        boolean bodyDiscarded = validateResumeResponse();
+                        if (_encodingChunked && !bodyDiscarded) {
                             _bytesRemaining = readChunkLength();
                         }
                         if (!redirect)
@@ -1658,6 +1811,211 @@ public class EepGet {
     }
 
     /**
+     *  Decide whether a watchdog abort observed after the body loop must
+     *  fail the attempt.  A transfer whose declared body completed — fixed
+     *  length reached, chunked terminator read, or EOF on an
+     *  unknown-length body — carries all its bytes, so an abort landing
+     *  between the last read and finalization must not report failure;
+     *  anything less is a genuine abort.
+     *
+     *  @param aborted the watchdog aborted this attempt
+     *  @param strictSize whether Content-Length framed the body
+     *  @param remaining declared bytes still unread after the loop
+     *  @param sawEof the body stream reached end of stream
+     *  @return true when the abort must fail the attempt
+     *  @since 0.9.71+
+     */
+    static boolean fatalAbort(boolean aborted, boolean strictSize, long remaining, boolean sawEof) {
+        if (!aborted)
+            return false;
+        return remaining != 0 && !(!strictSize && sawEof);
+    }
+
+    /**
+     *  Validate a resume-sensitive response once all headers are parsed.
+     *  A 206 must carry a Content-Range whose start matches the start we
+     *  requested — our resume offset or a caller-supplied Range — and
+     *  whose span matches the declared Content-Length, or appending its
+     *  body would corrupt the output.  A 416 to a partial fetch is only a
+     *  success when the server proves our offset equals the complete
+     *  length; anything else fails without a retry, since the same Range
+     *  would produce the same answer.  Other responses are untouched here.
+     *
+     *  @return true when the response body must be skipped
+     *  @throws IOException when the response cannot safely be applied
+     *  @since 0.9.71+
+     */
+    boolean validateResumeResponse() throws IOException {
+        if (_responseCode == 206) {
+            if (gzipMarkerExists())
+                throw new IOException("HTTP 206 received while the output file holds "
+                        + "decompressed data; a full restart is required");
+            if (_isGzippedResponse && _alreadyTransferred > 0)
+                throw new IOException("HTTP 206 gzip response cannot append to "
+                        + _alreadyTransferred + " existing bytes; a full restart is required");
+            ContentRange cr = parseContentRange(_contentRange);
+            if (cr == null || cr.start < 0)
+                throw new IOException("HTTP 206 with missing or unusable Content-Range ["
+                        + _contentRange + "]");
+            long expected = requestedRangeStart(_alreadyTransferred, _extraHeaders);
+            if (expected >= 0 && cr.start != expected)
+                throw new IOException("HTTP 206 Content-Range start " + cr.start
+                        + " does not match requested start " + expected);
+            if (_bytesRemaining >= 0 && cr.end - cr.start + 1 != _bytesRemaining)
+                throw new IOException("HTTP 206 Content-Range span "
+                        + (cr.end - cr.start + 1) + " does not match Content-Length "
+                        + _bytesRemaining);
+            return false;
+        }
+        if (_responseCode == 416 && _alreadyTransferred > 0) {
+            ContentRange cr = parseContentRange(_contentRange);
+            boolean complete = cr != null && cr.total >= 0 && _alreadyTransferred == cr.total;
+            _bytesRemaining = 0;
+            _keepFetching = false;
+            _transferFailed = !complete;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *  Determine the start offset this fetch requested, so a 206's
+     *  Content-Range can be validated against what was actually asked for.
+     *  A resume Range generated by this class (alreadyTransferred &gt; 0) is
+     *  written before any caller-supplied headers and wins; otherwise a
+     *  caller-supplied "Range: bytes=N-..." header (webseed piece fetches)
+     *  provides the offset; with no Range at all a 206 must start at zero.
+     *  A present but unparseable Range yields -1, leaving the start check to
+     *  the caller's own contract.
+     *
+     *  @param alreadyTransferred resume offset; greater than zero when this
+     *                            class generated the Range header
+     *  @param extraHeaders caller headers as "Name: value", may be null
+     *  @return the expected Content-Range start, or -1 when unknown
+     *  @since 0.9.71+
+     */
+    static long requestedRangeStart(long alreadyTransferred, List<String> extraHeaders) {
+        if (alreadyTransferred > 0)
+            return alreadyTransferred;
+        if (extraHeaders != null) {
+            for (String hdr : extraHeaders) {
+                if (hdr.length() > 6 && hdr.regionMatches(true, 0, "range:", 0, 6))
+                    return parseRangeHeaderStart(hdr.substring(6).trim());
+            }
+        }
+        return 0;
+    }
+
+    /**
+     *  Parse the start of a Range header value.  Only a simple single range
+     *  ("bytes=start-end" or "bytes=start-") is usable here; multi-ranges
+     *  and suffix ranges yield -1.
+     *
+     *  @param val Range header value without the field name, may be null
+     *  @return the requested start, or -1 if not a simple single range
+     *  @since 0.9.71+
+     */
+    private static long parseRangeHeaderStart(String val) {
+        if (val == null || val.length() < 8 || !val.regionMatches(true, 0, "bytes=", 0, 6))
+            return -1;
+        String spec = val.substring(6);
+        if (spec.indexOf(',') >= 0)
+            return -1;
+        int dash = spec.indexOf('-');
+        if (dash <= 0)
+            return -1;
+        return parseDigits(spec.substring(0, dash));
+    }
+
+    /**
+     *  Parsed Content-Range header value.
+     *
+     *  @since 0.9.71+
+     */
+    static final class ContentRange {
+        /** First byte of the range, or -1 for the unsatisfied form sent with 416 */
+        final long start;
+        /** Last byte of the range (inclusive), or -1 for the unsatisfied form sent with 416 */
+        final long end;
+        /** Total length of the representation, or -1 when the server sent a star */
+        final long total;
+
+        /**
+         * @param start first byte, or -1 if unknown
+         * @param end last byte, or -1 if unknown
+         * @param total total length, or -1 if unknown
+         */
+        ContentRange(long start, long end, long total) {
+            this.start = start;
+            this.end = end;
+            this.total = total;
+        }
+    }
+
+    /**
+     *  Parse a Content-Range header value.  Accepts the satisfiable form
+     *  ("bytes start-end/total") and the unsatisfied form sent with 416
+     *  ("bytes star&#47;total"), with the total optionally a star.
+     *
+     *  @param val header value, may be null
+     *  @return the parsed range, or null if missing or invalid
+     *  @since 0.9.71+
+     */
+    static ContentRange parseContentRange(String val) {
+        if (val == null)
+            return null;
+        String v = val.trim();
+        if (!v.regionMatches(true, 0, "bytes ", 0, 6))
+            return null;
+        v = v.substring(6).trim();
+        int slash = v.indexOf('/');
+        if (slash < 0)
+            return null;
+        String rangePart = v.substring(0, slash).trim();
+        String totalPart = v.substring(slash + 1).trim();
+        long total;
+        if ("*".equals(totalPart)) {
+            total = -1;
+        } else {
+            total = parseDigits(totalPart);
+            if (total < 0)
+                return null;
+        }
+        if ("*".equals(rangePart))
+            return new ContentRange(-1, -1, total);
+        int dash = rangePart.indexOf('-');
+        if (dash <= 0 || dash == rangePart.length() - 1)
+            return null;
+        long start = parseDigits(rangePart.substring(0, dash));
+        long end = parseDigits(rangePart.substring(dash + 1));
+        if (start < 0 || end < start)
+            return null;
+        if (total >= 0 && end >= total)
+            return null;
+        return new ContentRange(start, end, total);
+    }
+
+    /**
+     *  Parse an unsigned decimal byte count.
+     *
+     *  @param s digits, non-null
+     *  @return the value, or -1 if empty, non-digit, or too large
+     *  @since 0.9.71+
+     */
+    private static long parseDigits(String s) {
+        if (s.isEmpty() || s.length() > 18)
+            return -1;
+        long rv = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c < '0' || c > '9')
+                return -1;
+            rv = rv * 10 + (c - '0');
+        }
+        return rv;
+    }
+
+    /**
      * Parse the first status line and extract the response code.
      * Side effect: stores status text in _responseText.
      *
@@ -1702,6 +2060,8 @@ public class EepGet {
             } catch (NumberFormatException nfe) {
                 _log.error("Bad Content-Length header: [" + val + "]", nfe);
             }
+        } else if (key.equals("content-range")) {
+            _contentRange = val;
         } else if (key.equals("etag")) {
             _etag = val;
         } else if (key.equals("server")) {
@@ -1827,6 +2187,7 @@ public class EepGet {
                 _redirectLocation = null;
                 _etag = _etagOrig;
                 _lastModified = _lastModifiedOrig;
+                _contentRange = null;
                 _contentType = null;
                 _contentLanguage = null;
                 _server = null;
@@ -1847,7 +2208,10 @@ public class EepGet {
                 _xPoweredBy = null;
                 // TODO auth?
                 // minSize/maxSize/maxRetries discarded
-                _transferFailed = !get.fetch(_fetchHeaderTimeout, -1, _fetchInactivityTimeout);
+                long innerTotal = -1;
+                if (_fetchDeadlineMs > 0)
+                    innerTotal = Math.max(1, _fetchDeadlineMs - System.currentTimeMillis());
+                _transferFailed = !get.fetch(_fetchHeaderTimeout, innerTotal, _fetchInactivityTimeout);
                 _keepFetching = false;
                 // fixup the getters
                 _responseCode = get.getStatusCode();
@@ -1988,6 +2352,81 @@ public class EepGet {
     }
 
     /**
+     *  The sidecar marker file recording gunzipped state for outFile.
+     *
+     *  @param outFile output file, non-null
+     *  @return the marker file
+     *  @since 0.9.71+
+     */
+    private static File gzipMarkerFor(File outFile) {
+        return new File(outFile.getPath() + GZIP_PARTIAL_MARKER_SUFFIX);
+    }
+
+    /**
+     *  Whether this fetch's output file was written by the transparent
+     *  gunzipper, so its length is a decompressed size that must not be used
+     *  as a Range resume offset.
+     *
+     *  @return true when a gzip marker exists for the output file
+     *  @since 0.9.71+
+     */
+    boolean gzipMarkerExists() {
+        if (_outputFile == null || _outputStream != null)
+            return false;
+        return gzipMarkerFor(new File(_outputFile)).exists();
+    }
+
+    /**
+     *  Record that the output file now holds decompressed bytes.  Called
+     *  before the first decompressed byte is written, so an interrupted
+     *  fetch cannot leave decompressed content without its marker.
+     *
+     *  @param outFile output file being written by the gunzipper, non-null
+     *  @throws IOException if the marker cannot be persisted
+     *  @since 0.9.71+
+     */
+    void markGzipPartial(File outFile) throws IOException {
+        File marker = gzipMarkerFor(outFile);
+        if (marker.exists())
+            return;
+        if (!marker.createNewFile())
+            throw new IOException("Unable to create gzip resume marker " + marker);
+    }
+
+    /**
+     *  Drop the gunzip marker; called when the output file is rewritten
+     *  from scratch.
+     *
+     *  @param outFile output file, non-null
+     *  @since 0.9.71+
+     */
+    private static void clearGzipMarker(File outFile) {
+        gzipMarkerFor(outFile).delete();
+    }
+
+    /**
+     *  Byte offset to resume from for a file-based fetch, accounting for the
+     *  persisted gunzip state: a marker means the file holds decompressed
+     *  bytes, whose length is not a valid offset into the compressed
+     *  representation, so the fetch restarts instead of resuming.
+     *
+     *  @param outFile output file, may be absent
+     *  @return resume offset; 0 when the file is absent or must be restarted
+     *  @since 0.9.71+
+     */
+    protected long getResumeOffset(File outFile) {
+        File marker = gzipMarkerFor(outFile);
+        if (marker.exists()) {
+            if (!outFile.exists()) {
+                // stale marker for a file that is gone; nothing left to protect
+                clearGzipMarker(outFile);
+            }
+            return 0;
+        }
+        return outFile.exists() ? outFile.length() : 0;
+    }
+
+    /**
      *  Open connection and send HTTP request.
      *
      *  @param timeout may be null
@@ -2000,9 +2439,7 @@ public class EepGet {
             // Assume that _alreadyTransferred holds the right value
             // (we should never be restarted to work on an old stream).
         } else {
-            File outFile = new File(_outputFile);
-            if (outFile.exists())
-                _alreadyTransferred = outFile.length();
+            _alreadyTransferred = getResumeOffset(new File(_outputFile));
         }
 
         String req = getRequest();
