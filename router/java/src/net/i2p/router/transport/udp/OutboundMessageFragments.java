@@ -83,6 +83,19 @@ class OutboundMessageFragments {
         _context.statManager().createRateStat("udp.sendFragmentsPerPacket", "Fragments sent in a data packet", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendRejected", "What volley we were on when peer was throttled", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendVolleyTime", "Time (ms) to send a full volley", "Transport [UDP]", UDPTransport.RATES);
+        // Registered here rather than beside udp.avgRTO in UDPTransport: this
+        // class owns the periodic aggregate emission for the averages, and
+        // addRateData() silently drops samples for stats nobody registered,
+        // which is how udp.pathUnverified was written but never reported.
+        // Required, not createRateStat(): StatManager.createRateStat() is a
+        // no-op in the router unless stat.full is set, so the non-required
+        // form would leave the stat unregistered (and dropped) by default.
+        _context.statManager().createRequiredRateStat("udp.avgEffectiveRTO",
+                "Average effective retransmission timeout across peers, clamped to [MIN_RTO,MAX_RTO] (ms)",
+                "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("udp.pathUnverified",
+                "Send window (CWIN bytes) when an unverified-path send freeze began",
+                "Transport [UDP]", UDPTransport.RATES);
     }
 
     /**
@@ -280,6 +293,9 @@ class OutboundMessageFragments {
                         _context.statManager().addRateData("udp.avgSendWindow", agg[0]);
                         _context.statManager().addRateData("udp.avgRTO", agg[1]);
                         _context.statManager().addRateData("udp.avgConcurrentMsgs", agg[2]);
+                        // Only the clamp matters when scheduling retransmits, so
+                        // track it beside the raw estimate instead of only in it.
+                        _context.statManager().addRateData("udp.avgEffectiveRTO", agg[3]);
                     }
                 }
             }

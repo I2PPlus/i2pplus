@@ -277,19 +277,25 @@ public class PeerState {
      * Called periodically from OutboundMessageFragments.
      *
      * @param peers collection of active peer states
-     * @return array: [avgSendWindow, avgRTO, avgConcurrentMsgs] or null if no peers
-     * @since 0.9.70+
+     * @return array: [avgSendWindow, avgRTO, avgConcurrentMsgs, avgEffectiveRTO],
+     *         or null if no peers. Index 1 is the raw per-peer estimate (the
+     *         historical series, unchanged for existing readers); index 3 is
+     *         the clamped [MIN_RTO, MAX_RTO] value each peer actually uses to
+     *         schedule retransmits, so the two can be compared.
+     * @since 0.9.70+; index 3 added 0.9.71+
      */
     public static long[] getAggregateStats(Collection<PeerState> peers) {
         if (peers == null || peers.isEmpty()) { return null; }
         long totalSendWindow = 0;
         long totalRTO = 0;
         long totalConcurrent = 0;
+        long totalEffectiveRTO = 0;
         int count = 0;
         for (PeerState ps : peers) {
             if (ps._dead) { continue; }
             totalSendWindow += ps._sendWindowBytes.get();
             totalRTO += ps._rto;
+            totalEffectiveRTO += ps.getRTO();
             totalConcurrent += ps._concurrentMessagesAllowed;
             count++;
         }
@@ -297,7 +303,8 @@ public class PeerState {
         return new long[] {
             totalSendWindow / count,
             totalRTO / count,
-            totalConcurrent / count
+            totalConcurrent / count,
+            totalEffectiveRTO / count
         };
     }
 
@@ -1934,7 +1941,26 @@ public class PeerState {
      *
      * @return the RTO in ms
      */
-    public int getRTO() {return Math.min(MAX_RTO, Math.max(MIN_RTO, _rto));}
+    public int getRTO() {return effectiveRTO(_rto, MIN_RTO, MAX_RTO);}
+
+    /**
+     * Clamp a raw RTO estimate into the active [minRto, maxRto] window.
+     *
+     * Extracted from {@link #getRTO()} so telemetry can report the value a
+     * packet actually waits under — raw estimates can sit outside the window
+     * (set at INIT_RTO, then re-clamped only on the next RTT sample) and
+     * would otherwise make the effective-vs-raw comparison untestable.
+     *
+     * @param rto the raw retransmission timeout estimate
+     * @param minRto lower bound in ms
+     * @param maxRto upper bound in ms; if below minRto it is ignored
+     * @return the effective RTO in ms, within [minRto, maxRto]
+     * @since 0.9.71+
+     */
+    public static int effectiveRTO(int rto, int minRto, int maxRto) {
+        if (maxRto < minRto) { return rto < minRto ? minRto : rto; }
+        return Math.min(maxRto, Math.max(minRto, rto));
+    }
     /**
      * RTT deviation.
      *
