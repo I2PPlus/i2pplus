@@ -40,11 +40,17 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
         super(context, RequestVariableLeaseSetMessage.MESSAGE_TYPE);
     }
 
-    @Override
     /**
-     * Handle an incoming I2CP message.
+     * Handle an incoming I2CP message, tracking how many prompt re-runs a
+     * transient signing failure has already scheduled for this request.
+     *
+     * @param message the request from the router
+     * @param session the session the request is for
+     * @param attempt number of transient sign retries already performed
+     * @since 0.9.71+
      */
-    public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
+    @Override
+    protected void handleMessage(I2CPMessage message, I2PSessionImpl session, int attempt) {
         if (_log.shouldDebug()) {
             _log.debug("Handling " + message);
         }
@@ -97,23 +103,31 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
                 ls2.setOptions(props);
             }
 
-            // ensure 1-second resolution timestamp is higher than last one
-            long now = Math.max(_context.clock().now(), session.getLastLS2SignTime() + 1000);
-            ls2.setPublished(now);
-            session.setLastLS2SignTime(now);
             leaseSet = ls2;
         } else {
             leaseSet = new LeaseSet();
         }
-        if (msg.getEndpoints() <= 0) {
-            // Empty request leaves LeaseSet2._expires at 0; writeHeader would
-            // throw "LeaseSet expired". Surface a clear error instead.
-            session.propagateError("LeaseSet request contained no leases",
-                    new IllegalStateException("no leases"));
+        String validationError = validateEndpointCount(msg.getEndpoints());
+        if (validationError != null) {
+            session.propagateError(validationError,
+                    new IllegalStateException(validationError));
             return;
+        }
+        long publishStamp = 0;
+        if (isLS2) {
+            // Compute the monotonic publish floor only after the request is
+            // known valid; it is committed after a successful sign below so
+            // an empty or rejected request never pushes lastLS2SignTime
+            // ahead of the real clock. See
+            // RequestLeaseSetMessageHandler.handleMessage().
+            // ensure 1-second resolution timestamp is higher than last one
+            long now = Math.max(_context.clock().now(), session.getLastLS2SignTime() + 1000);
+            ((LeaseSet2) leaseSet).setPublished(now);
+            publishStamp = now;
         }
         // Full Meta support TODO
         long published = isLS2 ? ((LeaseSet2) leaseSet).getPublished() : 0;
+        long current = _context.clock().now();
         for (int i = 0; i < msg.getEndpoints(); i++) {
             Lease lease;
             if (isLS2) {
@@ -126,12 +140,16 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
                     lease.setTunnelId(old.getTunnelId());
                 }
                 lease.setGateway(old.getGateway());
-                lease.setEndDate(ensurePositiveLs2Expiry(old.getEndTime(), published));
+                lease.setEndDate(ensurePositiveLs2Expiry(old.getEndTime(), published, current));
             } else {
                 lease = msg.getEndpoint(i);
             }
             leaseSet.addLease(lease);
         }
-        signLeaseSet(leaseSet, isLS2, session);
+        boolean signed = signLeaseSet(leaseSet, isLS2, session, msg, attempt);
+        if (signed && publishStamp > 0) {
+            // Advance the monotonic floor only on a successful sign.
+            session.setLastLS2SignTime(publishStamp);
+        }
     }
 }

@@ -38,6 +38,7 @@ import net.i2p.data.SimpleDataStructure;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.RequestLeaseSetMessage;
 import net.i2p.util.OrderedProperties;
+import net.i2p.util.SimpleTimer2;
 
 import java.io.EOFException;
 import java.io.Serializable;
@@ -45,7 +46,9 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,6 +90,19 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * reject the set with "LeaseSet expired".
      */
     static final long MIN_LS2_LEASE_TTL_MS = 1000L;
+
+    /**
+     * Maximum prompt re-runs of a request after a transient signing failure.
+     * Each re-run rebuilds the set with fresh timestamps, so a clock-skewed
+     * or stale request heals within seconds instead of waiting out the
+     * router's 60-second check timeout.
+     */
+    static final int MAX_TRANSIENT_SIGN_RETRIES = 2;
+
+    /**
+     * Delay before a transient signing failure is re-run, in ms.
+     */
+    static final long TRANSIENT_SIGN_RETRY_DELAY_MS = 1000L;
 
     /**
      * RequestLeaseSetMessageHandler.
@@ -142,6 +158,19 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * Handle an incoming I2CP message.
      */
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
+        handleMessage(message, session, 0);
+    }
+
+    /**
+     * Handle an incoming I2CP message, tracking how many prompt re-runs a
+     * transient signing failure has already scheduled for this request.
+     *
+     * @param message the request from the router
+     * @param session the session the request is for
+     * @param attempt number of transient sign retries already performed
+     * @since 0.9.71+
+     */
+    protected void handleMessage(I2CPMessage message, I2PSessionImpl session, int attempt) {
         if (_log.shouldDebug()) {
             _log.debug("Handling " + message);
         }
@@ -194,23 +223,30 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 ls2.setOptions(props);
             }
 
-            // ensure 1-second resolution timestamp is higher than last one
-            long now = Math.max(_context.clock().now(), session.getLastLS2SignTime() + 1000);
-            ls2.setPublished(now);
-            session.setLastLS2SignTime(now);
             leaseSet = ls2;
         } else {
             leaseSet = new LeaseSet();
         }
-        if (msg.getEndpoints() <= 0) {
-            // Empty request leaves LeaseSet2._expires at 0; writeHeader would
-            // throw "LeaseSet expired". Surface a clear error instead.
-            session.propagateError("LeaseSet request contained no leases",
-                    new IllegalStateException("no leases"));
+        String validationError = validateLeaseSetRequest(msg.getEndpoints(), msg.getEndDate());
+        if (validationError != null) {
+            session.propagateError(validationError,
+                    new IllegalStateException(validationError));
             return;
+        }
+        long publishStamp = 0;
+        if (isLS2) {
+            // Compute the monotonic publish floor only after the request is
+            // known valid, but do not advance lastLS2SignTime yet: an empty
+            // or rejected request must not push the floor ahead of the real
+            // clock. The floor is committed after a successful sign below.
+            // ensure 1-second resolution timestamp is higher than last one
+            long now = Math.max(_context.clock().now(), session.getLastLS2SignTime() + 1000);
+            ((LeaseSet2) leaseSet).setPublished(now);
+            publishStamp = now;
         }
         // Full Meta support TODO
         long published = isLS2 ? ((LeaseSet2) leaseSet).getPublished() : 0;
+        long current = _context.clock().now();
         for (int i = 0; i < msg.getEndpoints(); i++) {
             Lease lease;
             if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {
@@ -223,40 +259,113 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 lease.setTunnelId(msg.getTunnelId(i));
             }
             lease.setGateway(msg.getRouter(i));
-            lease.setEndDate(ensurePositiveLs2Expiry(msg.getEndDate().getTime(), published));
+            lease.setEndDate(ensurePositiveLs2Expiry(msg.getEndDate().getTime(), published, current));
             // lease.setStartDate(msg.getStartDate());
             leaseSet.addLease(lease);
         }
-        signLeaseSet(leaseSet, isLS2, session);
+        boolean signed = signLeaseSet(leaseSet, isLS2, session, msg, attempt);
+        if (signed && publishStamp > 0) {
+            // Advance the monotonic floor only on a successful sign; a
+            // rejected or failed request must not move it past the clock.
+            session.setLastLS2SignTime(publishStamp);
+        }
     }
 
     /**
-     * Floor a requested lease end so it remains strictly after the LS2
-     * published timestamp (second resolution). Without this, a stale or
-     * skewed end time makes {@code LeaseSet2.writeHeader()} throw
-     * "LeaseSet expired" and the session never recovers a usable set.
+     * Floor a requested lease end so it remains strictly after both the LS2
+     * published timestamp (second resolution) and the current time, leaving
+     * at least {@link #MIN_LS2_LEASE_TTL_MS} of validity. Without this, a
+     * stale or skewed end time makes {@code LeaseSet2.writeHeader()} throw
+     * "LeaseSet expired", and a floor measured only from a stale published
+     * stamp would hand out an already-expired set when the clock has moved
+     * on by sign time.
      *
      * @param leaseEnd absolute lease end from the router request
      * @param published LS2 published timestamp, or 0 for LS1 / unset
-     * @return leaseEnd if already safely after published, else published + 1s
+     * @param now current time when the floor is computed; the later of
+     *        {@code published} and {@code now} sets the margin, so delay
+     *        between publishing and signing does not shrink it
+     * @return leaseEnd if already safely after both instants,
+     *         else max(published, now) + 1s
+     * @since 0.9.71+
      */
-    static long ensurePositiveLs2Expiry(long leaseEnd, long published) {
+    static long ensurePositiveLs2Expiry(long leaseEnd, long published, long now) {
         if (published <= 0) {
             return leaseEnd;
         }
-        long minEnd = published + MIN_LS2_LEASE_TTL_MS;
+        long floor = published > now ? published : now;
+        long minEnd = floor + MIN_LS2_LEASE_TTL_MS;
         return leaseEnd > minEnd ? leaseEnd : minEnd;
     }
 
     /**
-     * Whether a LeaseSet can be signed (has at least one lease).
-     * An empty set leaves LeaseSet2._expires at 0 and always fails writeHeader.
+     * Whether a LeaseSet can be signed. An empty set leaves
+     * LeaseSet2._expires at 0 and always fails writeHeader, except for a
+     * pre-decryption {@link EncryptedLeaseSet}: its leases are only visible
+     * after decryption, so an ELS2 with a non-zero expiry is signable even
+     * though getLeaseCount() reports 0.
      *
      * @param leaseSet candidate set, may be null
-     * @return true if the set has one or more leases
+     * @return true if the set can be signed
+     * @since 0.9.71+
      */
     static boolean isSignable(LeaseSet leaseSet) {
-        return leaseSet != null && leaseSet.getLeaseCount() > 0;
+        if (leaseSet == null) {
+            return false;
+        }
+        if (leaseSet.getLeaseCount() > 0) {
+            return true;
+        }
+        if (leaseSet instanceof EncryptedLeaseSet) {
+            return ((EncryptedLeaseSet) leaseSet).getExpires() > 0;
+        }
+        return false;
+    }
+
+    /**
+     * Validate a fixed-length LeaseSet request before any state is mutated.
+     * An empty request leaves LeaseSet2._expires at 0 and writeHeader would
+     * throw "LeaseSet expired"; more than {@link LeaseSet#MAX_LEASES}
+     * endpoints overflow addLease()'s cap and throw mid-build; a missing end
+     * date (0 on the wire) would NPE at msg.getEndDate().getTime(). One
+     * clear error keeps the publish floor and clock untouched on every
+     * reject.
+     *
+     * @param endpoints number of endpoints in the request
+     * @param endDate requested end date, null when absent on the wire
+     * @return the error to propagate, or null if the request is valid
+     * @since 0.9.71+
+     */
+    static String validateLeaseSetRequest(int endpoints, Date endDate) {
+        if (endpoints <= 0) {
+            return "LeaseSet request contained no leases";
+        }
+        if (endpoints > LeaseSet.MAX_LEASES) {
+            return "LeaseSet request contained too many leases";
+        }
+        if (endDate == null) {
+            return "LeaseSet request contained no end date";
+        }
+        return null;
+    }
+
+    /**
+     * Validate an endpoint count for the variable-length handler. The same
+     * empty and over-capacity rules apply, but the variable message carries
+     * no end date to check.
+     *
+     * @param endpoints number of endpoints in the request
+     * @return the error to propagate, or null if the count is valid
+     * @since 0.9.71+
+     */
+    static String validateEndpointCount(int endpoints) {
+        if (endpoints <= 0) {
+            return "LeaseSet request contained no leases";
+        }
+        if (endpoints > LeaseSet.MAX_LEASES) {
+            return "LeaseSet request contained too many leases";
+        }
+        return null;
     }
 
     /**
@@ -269,13 +378,37 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @param leaseSet the unsigned LeaseSet with leases already added
      * @param isLS2 true for LS2, false for LS1
      * @param session the I2CP session requesting the LeaseSet
+     * @return true if the LeaseSet was signed and handed to the session,
+     *         false if it was rejected or signing failed; callers use this
+     *         to advance the monotonic publish floor only on success
      * @since 0.9.7
      */
-    protected synchronized void signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session) {
+    protected synchronized boolean signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session) {
+        return signLeaseSet(leaseSet, isLS2, session, null, 0);
+    }
+
+    /**
+     * Finish creating and signing the new LeaseSet and submitting it to the router,
+     * with the originating request attached so a transient signing failure can
+     * schedule a prompt re-run instead of leaving the router to wait out its
+     * 60-second check timeout.
+     *
+     * @param leaseSet the unsigned LeaseSet with leases already added
+     * @param isLS2 true for LS2, false for LS1
+     * @param session the I2CP session requesting the LeaseSet
+     * @param message the request that produced this set, or null when the
+     *        caller cannot supply it (no transient retry is scheduled then)
+     * @param attempt number of prompt re-runs already performed for this request
+     * @return true if the LeaseSet was signed and handed to the session,
+     *         false if it was rejected or signing failed
+     * @since 0.9.71+
+     */
+    protected synchronized boolean signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session,
+                                                I2CPMessage message, int attempt) {
         if (!isSignable(leaseSet)) {
             session.propagateError("LeaseSet request contained no leases",
                     new IllegalStateException("no leases"));
-            return;
+            return false;
         }
         // must be before setDestination()
         if (isLS2 && _ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
@@ -439,6 +572,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 }
                 session.propagateError(s, new Exception());
                 session.destroySession();
+                // The session is destroyed; falling through would attempt to
+                // sign with the invalid offline signature anyway.
+                return false;
             }
         }
         try {
@@ -537,7 +673,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 if (_log.shouldWarn()) {
                     _log.warn("Session closed before LeaseSet creation, cannot create LeaseSet");
                 }
-                return;
+                return false;
             }
             try {
                 session.getProducer().createLeaseSet(session, leaseSet, spk, li.getPrivateKeys());
@@ -545,12 +681,13 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     if (_log.shouldWarn()) {
                         _log.warn("Session closed during LeaseSet creation");
                     }
-                    return;
+                    return false;
                 }
                 session.setLeaseSet(leaseSet);
                 if (_log.shouldInfo()) {
                     _log.info("Created and signed " + leaseSet);
                 }
+                return true;
             } catch (I2PSessionException ise) {
                 if (session.isClosed()) {
                     /*
@@ -563,6 +700,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 } else {
                     session.propagateError("Error sending the signed LeaseSet", ise);
                 }
+                return false;
             }
         } catch (DataFormatException dfe) {
             if (isLS2 && leaseSet instanceof LeaseSet2) {
@@ -577,18 +715,70 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             session.propagateError("Error signing the LeaseSet", dfe);
             // Transient expiry (e.g., "LeaseSet expired X seconds ago" from LeaseSet2.writeHeader)
-            // and empty-request guards can occur if the router's requested end time is stale
-            // or clock-skewed. Don't destroy the session — let the router's failLeaseRequest
-            // retry with fresh leases. Permanent key/config errors will still be retried but
-            // will fail again and eventually trip the router's MAX_LEASE_FAILS disconnect.
-            String msg = dfe.getMessage();
-            boolean isTransient = msg != null &&
-                    (msg.toLowerCase(java.util.Locale.US).contains("expired") ||
-                     msg.contains("no leases"));
-            if (!isTransient) {
+            // and empty-request guards occur when the router's requested end time is stale or
+            // clock-skewed. Re-run the same request promptly with fresh timestamps so it heals
+            // in seconds instead of waiting out the router's 60-second check timeout; once the
+            // bounded retries are exhausted the router's timeout still fails the request.
+            // Permanent key/config errors destroy the session immediately.
+            if (isTransientSignFailure(dfe.getMessage())) {
+                if (message != null) {
+                    scheduleSignRetry(message, session, attempt);
+                }
+            } else {
                 session.destroySession();
             }
+            return false;
         }
+    }
+
+    /**
+     * Is a signing failure transient — a stale or clock-skewed request the
+     * caller can fix with fresh data — rather than a permanent key or
+     * configuration error?
+     *
+     * @param reason the DataFormatException message, or null
+     * @return true for expiry and empty-request rejections that a prompt
+     *         re-run of the request can resolve
+     * @since 0.9.71+
+     */
+    static boolean isTransientSignFailure(String reason) {
+        if (reason == null) {
+            return false;
+        }
+        String lc = reason.toLowerCase(Locale.US);
+        return lc.contains("expired") || lc.contains("no leases");
+    }
+
+    /**
+     * Schedule a prompt re-run of a request whose signing failed transiently.
+     * Without this, no CreateLeaseSet is sent and the router waits out its
+     * 60-second CheckLeaseRequestStatus before retrying. The re-run rebuilds
+     * the set against the current clock, so a skewed published stamp or stale
+     * lease end is corrected on the next attempt; attempts are bounded and
+     * the router's check timeout remains the fallback once they are exhausted.
+     *
+     * @param message the request to re-run
+     * @param session the session the request is for
+     * @param attempt the attempt number just completed (0 for the first)
+     * @since 0.9.71+
+     */
+    void scheduleSignRetry(final I2CPMessage message, final I2PSessionImpl session, final int attempt) {
+        if (attempt >= MAX_TRANSIENT_SIGN_RETRIES) {
+            if (_log.shouldWarn()) {
+                _log.warn("Giving up after " + attempt + " transient LeaseSet sign retries for " + session);
+            }
+            return;
+        }
+        SimpleTimer2 timer = _context.simpleTimer2();
+        timer.addEvent(new SimpleTimer2.TimedEvent(timer) {
+            @Override
+            public void timeReached() {
+                if (session.isClosed()) {
+                    return;
+                }
+                handleMessage(message, session, attempt + 1);
+            }
+        }, TRANSIENT_SIGN_RETRY_DELAY_MS);
     }
 
     /**
