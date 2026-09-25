@@ -263,9 +263,9 @@
     <echo message="[DEBUG] hamcrest home before override is ${hamcrest.home}"/>
     <echo message="[DEBUG] mockito home before override is ${mockito.home}"/>
 
-    <property name="junit.home" value="${ant.home}/lib"/>
-    <property name="hamcrest.home" value="${ant.home}/lib"/>
-    <property name="mockito.home" value="${ant.home}/lib"/>
+    <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
 
     <echo message="[DEBUG] junit home after override is ${junit.home}"/>
     <echo message="[DEBUG] hamcrest home after override is ${hamcrest.home}"/>
@@ -329,9 +329,9 @@
       </fileset>
     </delete>
 
-    <property name="junit.home" value="${ant.home}/lib"/>
-    <property name="hamcrest.home" value="${ant.home}/lib"/>
-    <property name="mockito.home" value="${ant.home}/lib"/>
+    <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
+    <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
 
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
