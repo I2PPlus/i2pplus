@@ -1228,12 +1228,23 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             getContext().tunnelManager().reportSendFailure(_outTunnel, status);
         }
         // Pool-empty liveness signal: 14 (expired while queued) and 16 (no
-        // tunnels) mean the destination's pools were starving when the data
-        // phase needed them — nudge both pools now instead of waiting for
-        // the next build-timer interval.  Each pool's ensure throttle still
+        // tunnels) mean OUR pools were starving when the data phase needed
+        // them — nudge them now instead of waiting for the next build-timer
+        // interval.  Keyed by the local client (source) hash: the pool maps
+        // are keyed that way, so nudging the remote destination finds no
+        // pool and silently does nothing.  Each pool's ensure throttle still
         // applies, so a message-flood of failures cannot build-storm.
         if (isPoolStarvationFailure(status)) {
-            getContext().tunnelManager().ensurePoolsFor(_to.calculateHash());
+            Hash nudgeKey = starvationNudgeKey(
+                    _from != null ? _from.calculateHash() : null,
+                    _to != null ? _to.calculateHash() : null);
+            if (nudgeKey != null) {
+                int nudged = getContext().tunnelManager().ensurePoolsFor(nudgeKey);
+                if (nudged == 0 && _log.shouldDebug()) {
+                    _log.debug("Starvation nudge for status " + status +
+                               " found no local pools for client " + nudgeKey);
+                }
+            }
         }
         //getContext().messageHistory().sendPayloadMessage(_clientMessageId.getMessageId(), false, sendTime);
         long nonce = _clientMessage.getMessageNonce();
@@ -1283,6 +1294,25 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     static boolean isPoolStarvationFailure(int status) {
         return status == MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED ||
                status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS;
+    }
+
+    /**
+     *  Which hash a pool-starvation nudge must be addressed to.  The tunnel
+     *  pool maps are keyed by the <b>local client (source)</b> destination
+     *  hash — {@link net.i2p.router.tunnel.pool.TunnelPoolManager} registers
+     *  pools under {@code client.calculateHash()} for local destinations —
+     *  so the nudge always goes to the source hash.  Passing the remote
+     *  destination (the pre-fix behavior) finds no pool for every non-local
+     *  target and the starvation signal silently evaporates.
+     *
+     *  @param sourceHash the local sending destination's hash, or null when unknown
+     *  @param destHash the remote destination's hash (unused — kept so the
+     *         source-vs-dest choice is pinned by tests rather than implicit)
+     *  @return the pool-map key to nudge, or null when the source is unknown
+     *  @since 0.9.71+
+     */
+    static Hash starvationNudgeKey(Hash sourceHash, Hash destHash) {
+        return sourceHash;
     }
 
     /**

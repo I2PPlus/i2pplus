@@ -133,6 +133,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         ctx.statManager().createRequiredRateStat("tunnel.testSuccessLength", "Length (hops) of tunnels passing test", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testSuccessTime", "Time for tunnel test success (ms)", "Tunnels", TEST_RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testPeriod", "Tunnel test failure window (ms)", "Tunnels", RATES);
+        // The batch-dispatch counters TestJob writes, registered alongside the
+        // rest so addRateData() records them instead of reporting invalid names.
+        TestJob.registerBatchStats(ctx.statManager(), RATES);
     }
 
     /**
@@ -515,10 +518,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /** Restart all tunnel handlers and rebuild all tunnels */
     public synchronized void restart() {
-        _handler.restart();
-        _executor.restart();
-        shutdownExploratory();
-        startup();
+        // Quiesce the batch-test subsystem first: the restart replaces the
+        // pools and tunnels its buffer, permits, and running map describe,
+        // and draining the old state must happen before new offers arrive.
+        TestJob.beginBatchReset(_context);
+        try {
+            _handler.restart();
+            _executor.restart();
+            shutdownExploratory();
+            startup();
+        } finally {
+            TestJob.endBatchReset(_context);
+        }
     }
 
     /**
@@ -1289,12 +1300,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             // Stagger expiry to prevent synchronized pool collapse — all slow
             // tunnels expiring at once drops the pool to 0, triggering EMERGENCY.
             // Kick ensure first when nothing is building so replacements have
-            // a head start on the 30s early-expiry delay (RemoveSlow + send-fail race).
+            // a head start on the configured early-expiry delay (RemoveSlow +
+            // send-fail race).
             if (!toRemove.isEmpty() && pool.getInProgressCount() <= 0) {
                 pool.ensureSufficientTunnels();
             }
             long now = _context.clock().now();
-            long pruneDelay = _context.getProperty("router.tunnel.pruneEarlyExpiryDelay", 30000L);
+            long pruneDelay = TunnelPool.getPruneEarlyExpiry(_context);
             int staggerIdx = 0;
             for (TunnelInfo info : toRemove) {
                 // Re-verify tunnel is still valid (another thread may have removed it)
@@ -1308,7 +1320,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 // Use early expiry via ExpireJob for graceful removal
                 if (info instanceof PooledTunnelCreatorConfig) {
                     PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                    // Stagger: 30s base + 10s per tunnel to spread removals
+                    // Stagger: configured base delay + 10s per tunnel to spread removals
                     long staggeredDelay = pruneDelay + (staggerIdx * 10000L);
                     cfg.setExpiration(now + staggeredDelay);
                     cfg.setTestTooSlow();
@@ -1677,17 +1689,30 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Nudge both of a destination's pools to run their ensure logic.
+     * Nudge both of a local client's pools to run their ensure logic.
      * Throttled inside each pool, so failure floods stay cheap.
      *
-     * @param destination the client destination
+     * @param client the LOCAL client hash (the pool-map key)
+     * @return how many pools were nudged; 0 when none are registered
      * @since 0.9.71+
      */
-    public void ensurePoolsFor(Hash destination) {
-        TunnelPool out = _clientOutboundPools.get(destination);
-        if (out != null) {out.ensureSufficientTunnels();}
-        TunnelPool in = _clientInboundPools.get(destination);
-        if (in != null) {in.ensureSufficientTunnels();}
+    @Override
+    public int ensurePoolsFor(Hash client) {
+        int nudged = 0;
+        TunnelPool out = _clientOutboundPools.get(client);
+        if (out != null) {
+            out.ensureSufficientTunnels();
+            nudged++;
+        }
+        TunnelPool in = _clientInboundPools.get(client);
+        if (in != null) {
+            in.ensureSufficientTunnels();
+            nudged++;
+        }
+        if (nudged == 0 && _log.shouldDebug()) {
+            _log.debug("Starvation nudge found no pools for client " + client);
+        }
+        return nudged;
     }
 
     /**

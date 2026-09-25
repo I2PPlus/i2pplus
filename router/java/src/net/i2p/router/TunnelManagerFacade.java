@@ -268,17 +268,27 @@ public interface TunnelManagerFacade extends Service {
     public TunnelPool getOutboundPool(Hash client);
 
     /**
-     *  Run both of a destination's pools' ensure logic on demand instead of
+     *  Run both of a client's pools' ensure logic on demand instead of
      *  waiting for the next build-timer interval.  Called from the data
      *  phase when a send failed for pool-empty reasons (message expired
      *  while queued, no tunnels available) — a liveness signal that the
      *  pools need rebuilding now.  Each pool's internal ensure throttle
      *  still applies, so a failure storm cannot become a build storm.
      *
-     *  @param destination the client destination whose pools should rebuild
+     *  <p>The pool maps are keyed by the <b>local</b> client (source)
+     *  destination hash, never the remote destination: passing a remote
+     *  hash finds no pools and silently does nothing.
+     *
+     *  <p>Additive ABI: this method and its {@code int} return both postdate
+     *  0.9.70+ (no release ever shipped a {@code void} variant), so
+     *  implementations and callers only ever saw this signature; callers may
+     *  still ignore the returned count.
+     *
+     *  @param client the LOCAL client destination hash whose pools should rebuild
+     *  @return how many pools were nudged; 0 when none are registered for the client
      *  @since 0.9.71+
      */
-    public void ensurePoolsFor(Hash destination);
+    public int ensurePoolsFor(Hash client);
 
     /** @since 0.8.13 */
     public void fail(Hash peer);

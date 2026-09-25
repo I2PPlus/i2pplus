@@ -4,18 +4,21 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import net.i2p.data.Hash;
 import net.i2p.data.i2cp.MessageStatusMessage;
 
 /**
  * Unit tests for the pure decision helpers
  * {@link OutboundClientMessageOneShotJob#isTunnelRelatedFailure(int)},
- * {@link OutboundClientMessageOneShotJob#isSoftSendFailure(int)} and
- * {@link OutboundClientMessageOneShotJob#isPoolStarvationFailure(int)}.
+ * {@link OutboundClientMessageOneShotJob#isSoftSendFailure(int)},
+ * {@link OutboundClientMessageOneShotJob#isPoolStarvationFailure(int)} and
+ * {@link OutboundClientMessageOneShotJob#starvationNudgeKey(Hash, Hash)}.
  * <p>
  * Hard outbound-dispatch failures (7, 8, 9, 13) are reported at the normal
  * removal bar. Soft send timeout (3) is reported at a higher bar via
  * {@code isSoftSendFailure}. Pool-starvation statuses (14 expired, 16 no
- * tunnels) nudge the destination's pools via {@code isPoolStarvationFailure}.
+ * tunnels) nudge the local client's pools (keyed by the source hash) via
+ * {@code isPoolStarvationFailure}.
  * Remote-destination statuses must not blame the outbound tunnel.
  *
  * @since 0.9.71+
@@ -182,5 +185,28 @@ public class IsTunnelRelatedFailureTest {
                 MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET));
         assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(0));
         assertFalse(OutboundClientMessageOneShotJob.isPoolStarvationFailure(42));
+    }
+
+    // ---------- starvation nudge key: local client, not remote dest ----------
+
+    @Test
+    public void nudgeKeyIsSourceNotDestination() {
+        // The pool maps are keyed by the local (source) client hash.  A nudge
+        // addressed to the remote destination hash finds no pool for any
+        // non-local target — the starvation signal silently evaporates.
+        byte[] src = new byte[32];
+        byte[] dst = new byte[32];
+        src[0] = 1;
+        dst[0] = 2;
+        Hash source = new Hash(src);
+        Hash dest = new Hash(dst);
+        assertEquals(source, OutboundClientMessageOneShotJob.starvationNudgeKey(source, dest));
+    }
+
+    @Test
+    public void nudgeKeyNullSourceIsNoNudge() {
+        byte[] dst = new byte[32];
+        dst[0] = 9;
+        assertNull(OutboundClientMessageOneShotJob.starvationNudgeKey(null, new Hash(dst)));
     }
 }
