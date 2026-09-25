@@ -41,6 +41,16 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private long _lastTransferredTime;
     private final AtomicInteger _failures = new AtomicInteger();
     private final AtomicInteger _softFailures = new AtomicInteger();
+    /**
+     *  Wall-clock time of the most recent soft best-effort timeout, 0 if none.
+     *  With {@link #SOFT_FAILURE_WINDOW_MS} this bounds the soft streak at
+     *  read time: a failure older than the window decays out of the count, so
+     *  a tunnel that times out once in a while forever is never degraded or
+     *  rotated out, while a genuine burst still reaches the degraded and
+     *  removal bars.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastSoftFailure;
     private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
 
     private volatile boolean _reused;
@@ -67,6 +77,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * Maximum consecutive test failures before the tunnel is retired.
      */
     public static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
+    /**
+     *  Window in which soft best-effort send timeouts accumulate into a
+     *  consecutive streak (status-3 timeouts only — hard dispatch failures
+     *  use {@link #MAX_CONSECUTIVE_TEST_FAILURES}).  A soft failure older
+     *  than this is decayed out of the count, bounding both the degraded bar
+     *  ({@code TunnelPool.SOFT_DEGRADED_FOR_ENSURE}) and the soft removal bar
+     *  so sparse congestion timeouts over a long tunnel lifetime can never
+     *  retire a tunnel that carries data when it is sent.
+     *  @since 0.9.71+
+     */
+    static final long SOFT_FAILURE_WINDOW_MS = 10 * 60 * 1000L;
     private static final int LATENCY_SAMPLE_SIZE = 3;
     private volatile int _lastLatency = -1;
     private final int[] _latencyHistory = new int[LATENCY_SAMPLE_SIZE];
@@ -298,10 +319,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private volatile long _lastRealTraffic;
 
     /**
-     *  Record that the tunnel carried real traffic.
+     *  Record that the tunnel carried real traffic.  Real data proves the
+     *  tunnel works, so any soft best-effort streak accumulated before it is
+     *  cleared alongside it.
      *  @since 0.9.71+
      */
-    public void recordRealTraffic() {_lastRealTraffic = System.currentTimeMillis();}
+    public void recordRealTraffic() {
+        _lastRealTraffic = System.currentTimeMillis();
+        clearSoftFailures();
+    }
 
     /**
      *  When the tunnel last carried real traffic.
@@ -336,20 +362,68 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  Increment the soft best-effort timeout counter only.
      *  Soft status-3 must not trip getTunnelFailed() or selection gates
      *  that key on the hard/test counter — congestion is not tunnel death.
+     *  The streak is time-windowed: a failure that arrives after
+     *  {@link #SOFT_FAILURE_WINDOW_MS} without one starts the count over at
+     *  1 instead of extending an aging streak forever.
      *
      *  @since 0.9.71+
      */
     public void incrementSoftFailures() {
-        _softFailures.incrementAndGet();
+        long now = System.currentTimeMillis();
+        synchronized (this) {
+            int current = effectiveSoftFailures(_softFailures.get(), _lastSoftFailure,
+                                                now, SOFT_FAILURE_WINDOW_MS);
+            _softFailures.set(current + 1);
+            _lastSoftFailure = now;
+        }
     }
 
     /**
-     *  Soft best-effort timeout count.
-     *  @return the soft failure count
+     *  Soft best-effort timeout count, with failures older than
+     *  {@link #SOFT_FAILURE_WINDOW_MS} decayed out at read time (the
+     *  time-windowed form of the streak — no sweep required).
+     *  @return the effective soft failure count
      *  @since 0.9.71+
      */
     public int getSoftFailures() {
-        return _softFailures.get();
+        return effectiveSoftFailures(_softFailures.get(), _lastSoftFailure,
+                                     System.currentTimeMillis(), SOFT_FAILURE_WINDOW_MS);
+    }
+
+    /**
+     *  Reset the soft streak: verified traffic proves the tunnel carries
+     *  data, so congestion timeouts recorded before it no longer count.
+     *  Called from {@link #recordRealTraffic()} and
+     *  {@link #clearTestFailures()}, never from {@link #testSuccessful(int)} —
+     *  a passing test exercises the test path, not the data path.
+     *  @since 0.9.71+
+     */
+    public void clearSoftFailures() {
+        synchronized (this) {
+            _softFailures.set(0);
+            _lastSoftFailure = 0;
+        }
+    }
+
+    /**
+     *  Effective soft-failure streak for a raw count stamped at a point in
+     *  time.  Pure decision helper so the decay rule is unit-testable without
+     *  waiting out the real window.
+     *
+     *  @param raw stored soft failure count, &lt;= 0 means none
+     *  @param lastSoftFailure wall-clock time of the most recent soft
+     *          failure (ms), &lt;= 0 means none
+     *  @param now current wall-clock time (ms)
+     *  @param windowMs window in which soft failures accumulate (ms)
+     *  @return the count to act on: 0 once the streak has aged out
+     *  @since 0.9.71+
+     */
+    static int effectiveSoftFailures(int raw, long lastSoftFailure, long now, long windowMs) {
+        if (raw <= 0 || lastSoftFailure <= 0 || now < lastSoftFailure ||
+            now - lastSoftFailure >= windowMs) {
+            return 0;
+        }
+        return raw;
     }
 
     /**
@@ -397,11 +471,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  Reset the consecutive failure counter and mark the tunnel as GOOD.
      *  Used when a data-carrying tunnel fails a test — the data proves it
      *  works, so the tunnel should remain selectable and avoid pruning.
+     *  Also clears the soft best-effort streak for the same reason.
      *  @since 0.9.69+
      */
     public void clearTestFailures() {
         _failures.set(0);
         _testStatus = TunnelTestStatus.GOOD;
+        clearSoftFailures();
+        clearLastChanceAdmission();
     }
 
     /**
@@ -419,11 +496,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Mark the tunnel as GOOD, recording the latency of the successful test.
+     * Clears any last-chance admission — the test settled, so the early-expiry
+     * gate no longer needs the bypass.  Does NOT clear the soft streak: a test
+     * exercises the test path, not the data path.
      */
     public void testSuccessful(int ms) {
         _failures.set(0);
         _recentTestExemptions = 0;
         _testStatus = TunnelTestStatus.GOOD;
+        clearLastChanceAdmission();
         addLatencySample(ms);
     }
 
@@ -609,18 +690,110 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Mark tunnel as scheduled for early expiry (pruned from pool).
+     * Revokes any last-chance admission — the pool decided to retire it.
      * @since 0.9.69+
      */
     public void setTestTooSlow() {
         _testStatus = TunnelTestStatus.TOO_SLOW;
+        clearLastChanceAdmission();
     }
 
     /**
      * Mark tunnel as scheduled for early expiry due to pool being over budget.
+     * Revokes any last-chance admission — the pool decided to retire it.
      * @since 0.9.69+
      */
     public void setTestOverBudget() {
         _testStatus = TunnelTestStatus.OVER_BUDGET;
+        clearLastChanceAdmission();
+    }
+
+    /**
+     *  Why a tunnel that would normally be dropped by the early-expiry gate
+     *  was instead admitted for one last-chance test.  The admission is a
+     *  snapshot of intent taken when the pool offers the test, so the gate
+     *  cannot silently revoke it mid-schedule.
+     *
+     *  @since 0.9.71+
+     */
+    public enum LastChanceReason {
+        /** Not admitted for a last-chance test (the default). */
+        NONE,
+        /** Stale UNTESTED tunnel kept by the pool sweep for one first test. */
+        STALE_UNTESTED
+    }
+
+    private volatile LastChanceReason _lastChanceReason = LastChanceReason.NONE;
+    private volatile long _lastChanceDeadline;
+    private volatile long _lastChanceAdmission;
+
+    /**
+     *  Admit this tunnel for a last-chance test despite its remaining life
+     *  being inside the early-expiry window.  The deadline is snapshotted
+     *  from the expiration at admission time so later pool state changes
+     *  cannot extend it; natural expiry still bounds it.
+     *
+     *  @param now current wall-clock time (ms)
+     *  @param reason why the tunnel was admitted; {@code null} clears
+     *  @since 0.9.71+
+     */
+    public void admitLastChance(long now, LastChanceReason reason) {
+        if (reason == null || reason == LastChanceReason.NONE) {
+            clearLastChanceAdmission();
+            return;
+        }
+        _lastChanceAdmission = now;
+        _lastChanceDeadline = _expiration;
+        _lastChanceReason = reason;
+    }
+
+    /**
+     *  Is a last-chance test admission still valid at {@code now}?  Only
+     *  expiration shortens the window — the snapshot deadline prevents a
+     *  re-read of a later expiration from extending it, and
+     *  {@link #clearLastChanceAdmission()} revokes it once the test settles.
+     *
+     *  @param now current wall-clock time (ms)
+     *  @return true if an unexpired admission is in effect
+     *  @since 0.9.71+
+     */
+    public boolean isLastChanceAdmitted(long now) {
+        LastChanceReason reason = _lastChanceReason;
+        if (reason == null || reason == LastChanceReason.NONE) {return false;}
+        return now <= _lastChanceDeadline && now < _expiration;
+    }
+
+    /**
+     *  Why this tunnel was admitted for a last-chance test.
+     *  @return the reason, never null ({@link LastChanceReason#NONE} when absent)
+     *  @since 0.9.71+
+     */
+    public LastChanceReason getLastChanceReason() {
+        LastChanceReason reason = _lastChanceReason;
+        return reason != null ? reason : LastChanceReason.NONE;
+    }
+
+    /**
+     *  When the last-chance admission expires (deadline snapshot).
+     *  @return the deadline (ms), or 0 if never admitted
+     *  @since 0.9.71+
+     */
+    public long getLastChanceDeadline() {return _lastChanceDeadline;}
+
+    /**
+     *  When the last-chance admission was granted (ms), or 0 if never.
+     *  @since 0.9.71+
+     */
+    public long getLastChanceAdmission() {return _lastChanceAdmission;}
+
+    /**
+     *  Revoke the last-chance admission (test settled, or no longer needed).
+     *  @since 0.9.71+
+     */
+    public void clearLastChanceAdmission() {
+        _lastChanceReason = LastChanceReason.NONE;
+        _lastChanceDeadline = 0;
+        _lastChanceAdmission = 0;
     }
 
     /**

@@ -209,7 +209,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  Tuner-controlled multiplier for the peer-selection activity window.
      *  Widening it re-admits recently-good peers whose last successful test has
      *  aged out during a build slump. Adjusted by the Tuner's ActivityWindowParam
-     *  from {@code tunnel.buildSuccessRate}; clamped to [1, 8].
+     *  from {@code tunnel.buildSuccessRate}; clamped to [1, 4].
      */
     private static volatile int _windowMultiplier = DEFAULT_WINDOW_MULTIPLIER;
 
@@ -2172,9 +2172,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Tuner-controlled activity-window multiplier, clamped to [1, 8].
+     *  Tuner-controlled activity-window multiplier, clamped to [1, 4]
+     *  ({@link #MIN_WINDOW_MULTIPLIER}..{@link #MAX_WINDOW_MULTIPLIER}).
+     *  Values outside the range are clamped, not rejected, so a Tuner param
+     *  change can never widen the window past the configured maximum.
      *
-     *  @param mult the multiplier applied to the base activity window
+     *  @param mult requested multiplier; clamped into [1, 4] before storing
      *  @since 0.9.70+
      */
     public static void setWindowMultiplier(int mult) {
@@ -2184,7 +2187,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      *  Current Tuner-controlled activity-window multiplier.
      *
-     *  @return the current multiplier, in [1, 8]
+     *  @return the current multiplier, in [1, 4]
      *  @since 0.9.70+
      */
     public static int getWindowMultiplier() {

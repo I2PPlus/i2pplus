@@ -91,15 +91,16 @@ public class TunnelPool {
     private final long _firstInstalled;
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
     /**
-     *  Rolling window of build outcomes for the per-pool timeout rate that
-     *  scales the pre-build window (see timeoutRate() / computePreBuildWindowMs()).
+     *  Fixed (tumbling) window of build outcomes for the per-pool timeout
+     *  rate that scales the pre-build window — the counters reset to zero
+     *  whenever the window rotates (see timeoutRate() / computePreBuildWindowMs()).
      *  @since 0.9.71+
      */
     private static final long BUILD_RATE_WINDOW_MS = 10 * 60 * 1000L;
     private final AtomicLong _windowAttempts = new AtomicLong();
     private final AtomicLong _windowTimeouts = new AtomicLong();
     private volatile long _windowStartMs;
-    /** Guards the rolling window rotation; one lock per build completion. */
+    /** Guards the window rotation; one lock per build completion. */
     private final Object _rateWindowLock = new Object();
     /**
      *  Base pre-build window: start replacements this long before existing
@@ -308,9 +309,11 @@ public class TunnelPool {
      */
     private volatile long _lastEnsureTime;
 
-    /** Default early expiration time for pruned tunnels (30 seconds) */
+    /** Default early expiration time for pruned tunnels (120 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.pruneEarlyExpiryDelay";
+    /** Legacy alias for {@link #PROP_PRUNE_EARLY_EXPIRY}, read only as a fallback. */
+    private static final String LEGACY_PROP_PRUNE_EARLY_EXPIRY = "router.tunnel.pruneEarlyExpiryDelay";
     /** Non-published tunnels with more remaining life than this are fresh — never pruned. */
     private static final long PRUNE_KEEP_IF_FRESH_MS = 9L * 60 * 1000;
     /** Non-published tunnels with less remaining life than this are pruned at publication. */
@@ -332,11 +335,33 @@ public class TunnelPool {
 
     /**
      * Early expiry time for pruned tunnels.
-     * Reads from property router.tunnel.pruneEarlyExpiry, or uses default (30s).
+     * Reads from router.pruneEarlyExpiryDelay, falling back to the legacy
+     * router.tunnel.pruneEarlyExpiryDelay alias, then the default (120s).
      * @return early expiry time in milliseconds
      */
     long getPruneEarlyExpiry() {
-        return _context.getProperty(PROP_PRUNE_EARLY_EXPIRY, DEFAULT_PRUNE_EARLY_EXPIRY);
+        return getPruneEarlyExpiry(_context);
+    }
+
+    /**
+     *  Early expiry time for pruned tunnels, shared by every prune path
+     *  (pool sweep and Remove Slow) so one pool's tunnels cannot be given a
+     *  different head start than another's for the same configuration.
+     *  Precedence: canonical {@link #PROP_PRUNE_EARLY_EXPIRY} first, then the
+     *  legacy {@link #LEGACY_PROP_PRUNE_EARLY_EXPIRY} alias kept for configs
+     *  and scripts that predate the canonical name, else
+     *  {@link #DEFAULT_PRUNE_EARLY_EXPIRY}.
+     *
+     *  @param ctx the router context
+     *  @return early expiry time in milliseconds
+     *  @since 0.9.71+
+     */
+    static long getPruneEarlyExpiry(RouterContext ctx) {
+        long canonical = ctx.getProperty(PROP_PRUNE_EARLY_EXPIRY, -1L);
+        if (canonical >= 0) {return canonical;}
+        long legacy = ctx.getProperty(LEGACY_PROP_PRUNE_EARLY_EXPIRY, -1L);
+        if (legacy >= 0) {return legacy;}
+        return DEFAULT_PRUNE_EARLY_EXPIRY;
     }
 
     /**
@@ -1687,16 +1712,19 @@ public class TunnelPool {
      * Returns NaN if no data yet (early startup).
      * @return the build success rate
      */
-     private double getBuildSuccessRate() {
+    private double getBuildSuccessRate() {
         RateStat rs = getRateStat(_buildSuccessRateStatSlot, "tunnel.buildSuccessRate");
-        if (rs == null)
+        if (rs == null) {
             return Double.NaN;
+        }
         Rate rate = rs.getRate(RateConstants.TEN_MINUTES);
-        if (rate == null)
+        if (rate == null) {
             return Double.NaN;
+        }
         double avg = rate.getAverageValue();
-        if (Double.isNaN(avg))
+        if (Double.isNaN(avg)) {
             return Double.NaN;
+        }
         return avg / 100.0;
     }
 
@@ -2660,7 +2688,8 @@ public class TunnelPool {
                       ") for tunnel, failures now " + failures +
                       "\n* " + cfg);
         }
-        if (exceedsRemovalThreshold(failures, soft)) {
+        boolean removed = exceedsRemovalThreshold(failures, soft);
+        if (removed) {
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Removing tunnel after " +
                           failures +
@@ -2670,11 +2699,42 @@ public class TunnelPool {
             failWithCount(cfg, failures);
             tellProfileFailed(cfg);
         }
-        // Data-phase failure is a liveness signal: bypass the ensure
-        // throttle so replacements start immediately instead of waiting
-        // behind a healthy-pool gate that soft-degraded tunnels still
-        // satisfy via getUsableTunnelCount().
-        if (_alive) {ensureSufficientTunnelsNow(_context.clock().now());}
+        // Data-phase failure is a liveness signal, but only the signals that
+        // actually change pool composition bypass the ensure throttle: a hard
+        // failure, the soft degraded-bar crossing, or a removal.  Routine soft
+        // timeouts below the bar run the throttled path, so a status-3 flood
+        // cannot re-run the ensure body every few seconds while
+        // soft-degraded tunnels still inflate getUsableTunnelCount().
+        if (_alive && shouldBypassEnsureThrottle(soft, failures, removed)) {
+            ensureSufficientTunnelsNow(_context.clock().now());
+        } else if (_alive) {
+            ensureSufficientTunnels();
+        }
+    }
+
+    /**
+     *  Whether a data-phase failure signal is strong enough to run the
+     *  ensure body immediately instead of through the throttle gate.
+     *  Pure decision helper: hard failures and removals always change pool
+     *  composition; a soft timeout only does so at the degraded-bar
+     *  crossing, where a replacement starts building ahead of the removal
+     *  bar.  Below that bar a status-3 flood is congestion, not evidence
+     *  that the pool needs rebuilding now.
+     *
+     *  @param soft true when the reported status was a soft send timeout
+     *  @param failures the failure count just recorded
+     *  @param removed true if this failure removed the tunnel
+     *  @return true to bypass the ensure throttle
+     *  @since 0.9.71+
+     */
+    static boolean shouldBypassEnsureThrottle(boolean soft, int failures, boolean removed) {
+        if (removed) {
+            return true;
+        }
+        if (!soft) {
+            return true;
+        }
+        return failures == SOFT_DEGRADED_FOR_ENSURE;
     }
 
     /**
@@ -4059,7 +4119,7 @@ public class TunnelPool {
     }
 
     /**
-     *  Record one build outcome in the rolling rate window.  Only results
+     *  Record one build outcome in the fixed-width rate window.  Only results
      *  where a build actually went to the network count — local skips
      *  (NO_TUNNELS, NO_NETDB, SKIPPED, OTHER_FAILURE) are not evidence of
      *  peer timeout behavior.
@@ -4084,7 +4144,7 @@ public class TunnelPool {
     }
 
     /**
-     *  This pool's build-timeout rate over the current rolling window.
+     *  This pool's build-timeout rate over the current window.
      *
      *  @return rate in [0.0, 1.0]; 0.0 when the window is empty or stale
      *          (no builds within {@link #BUILD_RATE_WINDOW_MS})
@@ -4271,6 +4331,12 @@ public class TunnelPool {
                 break;
             }
             if (TestJob.offerFirstTest(_context, cfg, this)) {
+                // Record the admission so TestJob's early-expiry gate admits
+                // the test that is already queued for this stale tunnel;
+                // the deadline snapshots the current expiration, and the
+                // test's own settlement (or expiry) revokes it.
+                cfg.admitLastChance(_context.clock().now(),
+                                    TunnelCreatorConfig.LastChanceReason.STALE_UNTESTED);
                 offered++;
             }
         }
@@ -4803,7 +4869,22 @@ public class TunnelPool {
             if (safeActive > 0) {
                 // Soft-degraded occupy safe slots: stage only the shortfall,
                 // never a full empty-pool rebuild on top of a full pool.
-                return Math.max(0, effectiveTarget - safeActive - currentInProgress - untestedCount);
+                int shortfall = effectiveTarget - safeActive - currentInProgress - untestedCount;
+                if (shortfall > 0) {return shortfall;}
+                // Threshold crossing: the pool is full by the shortfall math
+                // but every safe tunnel is soft-degraded and nothing else is
+                // pending (no build in flight, no untested waiting on the test
+                // queue), so recovery would otherwise idle until the soft
+                // removal bar rotates the whole pool out.  Stage exactly one;
+                // the next cycle sees currentInProgress > 0, and the
+                // target + 2 capacity guard keeps it from being wasted when
+                // the pool already sits at addTunnel's cap.
+                if (softDegraded > 0 && currentInProgress == 0 &&
+                    untestedCount == 0 && safeActive <= effectiveTarget &&
+                    safeActive < target + 2) {
+                    return 1;
+                }
+                return 0;
             }
             return Math.max(0, effectiveTarget - currentInProgress - untestedCount) + failingBoost;
         }

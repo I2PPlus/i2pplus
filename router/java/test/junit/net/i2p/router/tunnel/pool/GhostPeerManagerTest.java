@@ -84,6 +84,16 @@ public class GhostPeerManagerTest {
         return Hash.create(data);
     }
 
+    /** Distinct across the full int range (hash(int) wraps every 256). */
+    private static Hash distinctHash(int i) {
+        byte[] data = new byte[Hash.HASH_LENGTH];
+        data[0] = (byte) i;
+        data[1] = (byte) (i >>> 8);
+        data[2] = (byte) (i >>> 16);
+        data[3] = (byte) (i >>> 24);
+        return Hash.create(data);
+    }
+
     @Test
     public void testMarkedAfterThresholdTimeouts() {
         assertFalse(_mgr.isGhost(hash(1)));
@@ -237,6 +247,88 @@ public class GhostPeerManagerTest {
         _mgr.recordTimeout(hash(1));
         assertTrue("re-marked after stale expiry", _mgr.isGhost(hash(1)));
         assertEquals(1, _mgr.getGhostCount());
+    }
+
+    // --- threshold gating (i2p.tunnel.ghostPeer.timeoutThreshold > 1) ---
+
+    /**
+     * Rebuild the manager with a custom timeout threshold and cooldown,
+     * keeping every other property at its real default.
+     */
+    private void stubThresholdAndCooldown(final int threshold, final int cooldownMs) {
+        when(_ctx.getProperty(anyString(), anyInt())).thenAnswer(inv -> {
+            String key = inv.getArgument(0);
+            if ("i2p.tunnel.ghostPeer.attackCooldownMs".equals(key)) {return 120_000;}
+            if ("i2p.tunnel.ghostPeer.cooldownMs".equals(key)) {return cooldownMs;}
+            if ("i2p.tunnel.ghostPeer.timeoutThreshold".equals(key)) {return threshold;}
+            return 1;
+        });
+        _mgr = new GhostPeerManager(_ctx);
+    }
+
+    @Test
+    public void testThresholdTwoTracksButDoesNotExcludeFirstStrike() {
+        stubThresholdAndCooldown(2, 300_000);
+        assertEquals(2, _mgr.getThreshold());
+
+        _mgr.recordTimeout(hash(1));
+        assertFalse("first strike tracked only", _mgr.isGhost(hash(1)));
+        assertEquals(1, _mgr.getTrackedCount());
+        assertEquals(0, _mgr.getGhostCount());
+
+        _mgr.recordTimeout(hash(1)); // second strike within the decay window
+        assertTrue("second strike excludes", _mgr.isGhost(hash(1)));
+        assertEquals(1, _mgr.getGhostCount());
+    }
+
+    @Test
+    public void testSubThresholdStrikeAfterDecayDoesNotRevokeActiveExclusion() {
+        stubThresholdAndCooldown(2, 3_600_000); // 1h cooldown
+
+        _mgr.recordTimeout(hash(1)); // strike 1: tracked only
+        assertFalse(_mgr.isGhost(hash(1)));
+
+        long secondAt = NOW + 600_000L;
+        when(_clock.now()).thenReturn(secondAt);
+        _mgr.recordTimeout(hash(1)); // strike 2 within the window: active
+        assertTrue(_mgr.isGhost(hash(1)));
+
+        // History has decayed, so this lands as a fresh sub-threshold strike;
+        // the active exclusion was granted earlier and must survive it.
+        long thirdAt = secondAt + GhostPeerManager.OFFENSE_DECAY_MS + 1_000L;
+        when(_clock.now()).thenReturn(thirdAt);
+        _mgr.recordTimeout(hash(1));
+        assertTrue("active exclusion survives a decayed strike", _mgr.isGhost(hash(1)));
+        assertEquals(1, _mgr.getGhostCount());
+
+        when(_clock.now()).thenReturn(secondAt + 3_600_000L);
+        assertFalse("original cooldown still honoured", _mgr.isGhost(hash(1)));
+    }
+
+    @Test
+    public void testTrackedMarkCountHardBounded() {
+        for (int i = 0; i < GhostPeerManager.MAX_TRACKED_PEERS + 64; i++) {
+            _mgr.recordTimeout(distinctHash(i));
+        }
+        assertTrue("bound enforced: " + _mgr.getTrackedCount(),
+                   _mgr.getTrackedCount() <= GhostPeerManager.MAX_TRACKED_PEERS);
+        assertTrue(_mgr.getGhostCount() <= _mgr.getTrackedCount());
+    }
+
+    @Test
+    public void testGhostCountCacheFollowsStaggeredExpiry() {
+        _mgr.recordTimeout(hash(1));                       // expires NOW + 300s
+        when(_clock.now()).thenReturn(NOW + 100_000L);
+        _mgr.recordTimeout(hash(2));                       // expires NOW + 400s
+        assertEquals(2, _mgr.getGhostCount());
+
+        // the cached due-time is the earliest expiry: the first lapse forces
+        // a rescan and leaves only the second mark active
+        when(_clock.now()).thenReturn(NOW + 301_000L);
+        assertEquals(1, _mgr.getGhostCount());
+
+        when(_clock.now()).thenReturn(NOW + 401_000L);
+        assertEquals(0, _mgr.getGhostCount());
     }
 
     // --- pure helpers ---
