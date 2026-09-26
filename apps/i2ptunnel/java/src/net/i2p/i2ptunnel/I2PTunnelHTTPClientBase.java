@@ -27,6 +27,7 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.IDN;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.URI;
@@ -34,6 +35,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -677,7 +679,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         }
         if (authorization == null) {return AuthResult.AUTH_BAD;}
         if (_log.shouldInfo()) {
-            _log.info(getPrefix(requestId) + "Auth: " + authorization);
+            _log.info(getPrefix(requestId) + "Auth: " + summarizeAuthorization(authorization));
         }
         String authLC = authorization.toLowerCase(Locale.US);
         if (authRequired.equals("true") || authRequired.equals(BASIC_AUTH)) {
@@ -705,27 +707,29 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     }
                     if (configPW != null && pw != null && DataHelper.eqCT(pw, configPW)) {
                         if (_log.shouldInfo()) {
-                            _log.info(getPrefix(requestId) + "Good auth - user: " + user);
+                            _log.info(getPrefix(requestId) + "Good auth - user: " + sanitizeLogValue(user) +
+                                      " on " + addrAndPort(s));
                         }
                         return AuthResult.AUTH_GOOD;
                     }
-                    _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
+                    _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " +
+                                    sanitizeLogValue(user) + " on " + addrAndPort(s));
                     // Rate-limit per-IP: brief sleep only on repeated failures.
                     // A full 5 s sleep per attempt is a DoS amplifier — an attacker
                     // can trivially exhaust the thread pool.  The auth failure itself
                     // already denies the request; a per-IP cooldown in the caller is
                     // not implemented.
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
-                    // no ':' in response
+                    // no ':' in response; never log the credential material itself
                     if (_log.shouldWarn()) {
-                        _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64: " + authorization, aioobe);
+                        _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64 (" + authorization.length() + " bytes)", aioobe);
                     }
                     return AuthResult.AUTH_BAD_REQ;
                 }
                 return AuthResult.AUTH_BAD;
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64: " + authorization);
+                    _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64 (" + authorization.length() + " bytes)");
                 }
                 return AuthResult.AUTH_BAD_REQ;
             }
@@ -762,7 +766,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         if (user == null || realm == null || nonce == null || qop == null ||
             uri == null || cnonce == null || nc == null || response == null) {
             if (_log.shouldInfo()) {
-                _log.info("[HTTPClient] Bad digest request: " + DataHelper.toString(args));
+                _log.info("[HTTPClient] Bad digest request: " + DataHelper.toString(sanitizeAuthArgs(args)));
             }
             return AuthResult.AUTH_BAD_REQ;
         }
@@ -774,7 +778,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             if (algorithm.equals("sha-256")) {isSHA256 = true;}
             else if (!algorithm.equals("md5")) {
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info("Bad digest request: " + DataHelper.toString(args));
+                    _log.info("Bad digest request: " + DataHelper.toString(sanitizeAuthArgs(args)));
                 }
                 return AuthResult.AUTH_BAD_REQ;
             }
@@ -783,7 +787,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         AuthResult check = verifyNonce(nonce, nc);
         if (check != AuthResult.AUTH_GOOD) {
             if (_log.shouldInfo()) {
-                _log.info("[HTTPClient] Bad digest nonce: " + check + ' ' + DataHelper.toString(args));
+                _log.info("[HTTPClient] Bad digest nonce: " + check + ' ' + DataHelper.toString(sanitizeAuthArgs(args)));
             }
             return check;
         }
@@ -791,8 +795,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String ha1 = getTunnel().getClientOptions().getProperty(
             PROP_PROXY_DIGEST_PREFIX + user + (isSHA256 ? PROP_PROXY_DIGEST_SHA256_SUFFIX : PROP_PROXY_DIGEST_SUFFIX));
         if (ha1 == null) {
-            _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
-             try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
+            _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " +
+                            sanitizeLogValue(user) + " on " + addrAndPort(s));
             return AuthResult.AUTH_BAD;
         }
         // get H(A2)
@@ -802,15 +806,284 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String kd = ha1 + ':' + nonce + ':' + nc + ':' + cnonce + ':' + qop + ':' + ha2;
         String hkd = isSHA256 ? PasswordManager.sha256Hex(kd) : PasswordManager.md5Hex(kd);
         if (!DataHelper.eqCT(response, hkd)) {
-            _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
+            _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " +
+                            sanitizeLogValue(user) + " on " + addrAndPort(s));
             if (_log.shouldInfo()) {
-                _log.info("[HTTPClient] Bad digest auth: " + DataHelper.toString(args));
+                _log.info("[HTTPClient] Bad digest auth: " + DataHelper.toString(sanitizeAuthArgs(args)));
             }
-            try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
             return AuthResult.AUTH_BAD;
         }
-        if (_log.shouldInfo()) {_log.info("[HTTPClient] Good digest auth - user: " + user);}
+        if (_log.shouldInfo()) {_log.info("[HTTPClient] Good digest auth - user: " + sanitizeLogValue(user) +
+                                          " on " + addrAndPort(s));}
         return AuthResult.AUTH_GOOD;
+    }
+
+    /**
+     *  Maximum length of an attacker-supplied value (e.g. a username) echoed
+     *  to the log.
+     *  @since 0.9.71+
+     */
+    private static final int MAX_LOG_VALUE = 64;
+
+    /**
+     *  Summarize an Authorization header for logging without disclosing
+     *  credential material. Basic auth carries a decodable user:password pair,
+     *  so only the scheme and the credential byte count are logged. The scheme
+     *  is attacker-supplied too, so anything with line breaks (log injection)
+     *  or an implausible length is replaced.
+     *
+     *  @param authorization the full header value e.g. "Basic dXNlcjpwYXNz"
+     *                       (no "Proxy-Authorization:" prefix), may be null
+     *  @return e.g. "Basic (13 bytes)", never the credentials; "null" if null
+     *          and "malformed" for a hostile scheme
+     *  @since 0.9.71+
+     */
+    static String summarizeAuthorization(String authorization) {
+        if (authorization == null) {return "null";}
+        int sp = authorization.indexOf(' ');
+        String scheme = sp >= 0 ? authorization.substring(0, sp) : authorization;
+        if (scheme.length() > 32 || scheme.indexOf('\r') >= 0 ||
+            scheme.indexOf('\n') >= 0 || scheme.indexOf('\0') >= 0) {
+            return "malformed";
+        }
+        int credLen = sp >= 0 ? authorization.length() - sp - 1 : 0;
+        return scheme + " (" + credLen + " bytes)";
+    }
+
+    /**
+     *  Strip line breaks and cap the length of an attacker-supplied value
+     *  before it is written to the log, so a hostile username cannot forge
+     *  extra log lines.
+     *
+     *  @param value the raw value, may be null
+     *  @return the sanitized value, empty string if null
+     *  @since 0.9.71+
+     */
+    static String sanitizeLogValue(String value) {
+        if (value == null) {return "";}
+        int len = Math.min(value.length(), MAX_LOG_VALUE);
+        StringBuilder rv = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = value.charAt(i);
+            if (c == '\r' || c == '\n' || c == '\0') {c = ' ';}
+            rv.append(c);
+        }
+        return rv.toString();
+    }
+
+    /**
+     *  Copy digest request arguments with the response hash redacted for
+     *  logging. The digest response is replayable inside its nonce window,
+     *  so it is credential material like the password itself.
+     *
+     *  @param args the parsed digest arguments, may be null
+     *  @return a copy with "response" replaced, empty map if null
+     *  @since 0.9.71+
+     */
+    static Map<String, String> sanitizeAuthArgs(Map<String, String> args) {
+        if (args == null) {return new HashMap<String, String>(0);}
+        Map<String, String> rv = new HashMap<String, String>(args);
+        if (rv.containsKey("response")) {rv.put("response", "redacted");}
+        return rv;
+    }
+
+    /**
+     *  Format the remote address as IP:PORT for ban and failure logging.
+     *  IPv6 addresses are bracketed so the port separator is unambiguous.
+     *
+     *  @param s the socket, may be null
+     *  @return e.g. "127.0.0.1:4444" or "[::1]:1234", "unknown" if unavailable
+     *  @since 0.9.71+
+     */
+    static String addrAndPort(Socket s) {
+        if (s == null) {return "unknown";}
+        InetAddress addr;
+        try {
+            addr = s.getInetAddress();
+        } catch (Exception e) {
+            return "unknown";
+        }
+        if (addr == null) {return "unknown";}
+        String host = addr.getHostAddress();
+        if (host.indexOf(':') >= 0) {host = '[' + host + ']';}
+        return host + ':' + s.getPort();
+    }
+
+    /**
+     *  Determine whether a proxy request target is a loopback, private,
+     *  link-local, shared, or otherwise non-routable address that must not be
+     *  reached through the proxy. Non-.i2p hosts are handed to the outproxy
+     *  plugin, which opens a raw socket from this machine, so a request for
+     *  127.0.0.1 or 10.x would otherwise reach the router itself or the LAN.
+     *
+     *  <p>The host is parsed as an address rather than matched with string
+     *  prefixes, so every address in a blocked block is caught (not only
+     *  10.0.x.x or 172.16.x.x) while a name that merely looks similar
+     *  (10.0.example.com) is not. Bracketed IPv6 literals, zone ids, and
+     *  v4-mapped forms are normalized first.</p>
+     *
+     *  @param host the request target host, without port, may be null
+     *  @return true if the host must not be proxied to
+     *  @since 0.9.71+
+     */
+    static boolean isBlockedLocalAddress(String host) {
+        if (host == null) {return true;}
+        String h = host.trim();
+        if (h.isEmpty()) {return true;}
+        if (h.charAt(0) == '[') {
+            int end = h.indexOf(']');
+            h = end > 0 ? h.substring(1, end) : h.substring(1);
+        }
+        h = h.toLowerCase(Locale.US);
+        if (h.equals("localhost") || h.endsWith(".localhost")) {return true;}
+        if (h.indexOf(':') < 0) {return isBlockedIPv4Address(h);}
+        int pct = h.indexOf('%');
+        if (pct >= 0) {h = h.substring(0, pct);}
+        int[] g = parseIPv6Groups(h);
+        if (g == null) {return false;}
+        if (g[0] == 0 && g[1] == 0 && g[2] == 0 && g[3] == 0 && g[4] == 0) {
+            if (g[5] == 0xffff) {
+                // v4-mapped, e.g. ::ffff:127.0.0.1
+                return isBlockedIPv4Address(((g[6] >> 8) & 0xff) + "." + (g[6] & 0xff) +
+                                            "." + ((g[7] >> 8) & 0xff) + "." + (g[7] & 0xff));
+            }
+            if (g[5] == 0 && g[6] == 0 && g[7] == 0) {return true;}  // :: unspecified
+            if (g[5] == 0 && g[6] == 0 && g[7] == 1) {return true;}  // ::1 loopback
+            return false;
+        }
+        if ((g[0] & 0xfe00) == 0xfc00) {return true;}  // fc00::/7 unique local
+        if ((g[0] & 0xffc0) == 0xfe80) {return true;}  // fe80::/10 link-local
+        if ((g[0] & 0xff00) == 0xff00) {return true;}  // ff00::/8 multicast
+        return false;
+    }
+
+    /**
+     *  Determine whether an IPv4 host is in a blocked non-routable block:
+     *  loopback, "this network", RFC 1918 private, link-local, carrier-grade
+     *  NAT, benchmarking, documentation, multicast, and reserved space.
+     *
+     *  <p>A host made only of digits and dots that is not a strict dotted quad
+     *  (127.1, 2130706433) is an ambiguous address literal rather than a name,
+     *  so it is blocked too; such a host cannot be a resolvable name, as no
+     *  top-level label may be all-numeric.</p>
+     *
+     *  @param host the IPv4 host, lowercase, no brackets, may be null
+     *  @return true if blocked
+     *  @since 0.9.71+
+     */
+    static boolean isBlockedIPv4Address(String host) {
+        if (host == null || host.isEmpty()) {return true;}
+        boolean numeric = true;
+        for (int i = 0; i < host.length(); i++) {
+            char c = host.charAt(i);
+            if (c != '.' && (c < '0' || c > '9')) {numeric = false; break;}
+        }
+        if (!numeric) {return false;}
+        int[] o = parseDottedQuad(host);
+        if (o == null) {return true;}
+        int b0 = o[0], b1 = o[1];
+        return b0 == 0 ||                 // 0.0.0.0/8 this network
+               b0 == 10 ||                // 10.0.0.0/8
+               b0 == 127 ||               // 127.0.0.0/8 loopback
+               (b0 == 100 && b1 >= 64 && b1 <= 127) ||   // 100.64.0.0/10 CGNAT
+               (b0 == 169 && b1 == 254) ||               // 169.254.0.0/16 link-local
+               (b0 == 172 && b1 >= 16 && b1 <= 31) ||    // 172.16.0.0/12
+               (b0 == 192 && b1 == 0 && o[2] == 0) ||     // 192.0.0.0/24 protocol
+               (b0 == 192 && b1 == 0 && o[2] == 2) ||     // 192.0.2.0/24 documentation
+               (b0 == 192 && b1 == 168) ||               // 192.168.0.0/16
+               (b0 == 198 && (b1 == 18 || b1 == 19)) ||   // 198.18.0.0/15 benchmarking
+               (b0 == 198 && b1 == 51 && o[2] == 100) ||  // 198.51.100.0/24 documentation
+               (b0 == 203 && b1 == 0 && o[2] == 113) ||   // 203.0.113.0/24 documentation
+               b0 >= 224;                  // 224.0.0.0/4 multicast and reserved
+    }
+
+    /**
+     *  Parse a strict dotted quad into four octets.
+     *
+     *  @param host lowercase host, digits and dots
+     *  @return the octets, or null if not exactly four in-range groups
+     *  @since 0.9.71+
+     */
+    private static int[] parseDottedQuad(String host) {
+        String[] parts = host.split("\\.", -1);
+        if (parts.length != 4) {return null;}
+        int[] o = new int[4];
+        for (int i = 0; i < 4; i++) {
+            String p = parts[i];
+            if (p.isEmpty() || p.length() > 3) {return null;}
+            int v = 0;
+            for (int j = 0; j < p.length(); j++) {
+                char c = p.charAt(j);
+                if (c < '0' || c > '9') {return null;}
+                v = v * 10 + (c - '0');
+            }
+            if (v > 255) {return null;}
+            o[i] = v;
+        }
+        return o;
+    }
+
+    /**
+     *  Parse an IPv6 address into its eight 16-bit groups, expanding "::"
+     *  and converting an embedded IPv4 tail.
+     *
+     *  @param s the address, lowercase, without brackets or zone id
+     *  @return the groups, or null if the address does not parse
+     *  @since 0.9.71+
+     */
+    private static int[] parseIPv6Groups(String s) {
+        if (s.isEmpty()) {return null;}
+        int dot = s.lastIndexOf('.');
+        if (dot >= 0) {
+            int colon = s.lastIndexOf(':', dot);
+            if (colon < 0) {return null;}
+            int[] o = parseDottedQuad(s.substring(colon + 1));
+            if (o == null) {return null;}
+            s = s.substring(0, colon + 1) + Integer.toHexString((o[0] << 8) | o[1]) +
+                ":" + Integer.toHexString((o[2] << 8) | o[3]);
+        }
+        int dbl = s.indexOf("::");
+        if (dbl != s.lastIndexOf("::")) {return null;}
+        String head = dbl >= 0 ? s.substring(0, dbl) : s;
+        String tail = dbl >= 0 ? s.substring(dbl + 2) : "";
+        String[] hp = head.isEmpty() ? new String[0] : head.split(":", -1);
+        String[] tp = tail.isEmpty() ? new String[0] : tail.split(":", -1);
+        if (dbl < 0) {
+            if (hp.length != 8) {return null;}
+        } else if (hp.length + tp.length > 7) {
+            return null;
+        }
+        int[] g = new int[8];
+        for (int i = 0; i < hp.length; i++) {
+            int v = parseHexGroup(hp[i]);
+            if (v < 0) {return null;}
+            g[i] = v;
+        }
+        int i = 8 - tp.length;
+        for (int j = 0; j < tp.length; j++, i++) {
+            int v = parseHexGroup(tp[j]);
+            if (v < 0) {return null;}
+            g[i] = v;
+        }
+        return g;
+    }
+
+    /**
+     *  Parse one IPv6 group of up to four hex digits.
+     *
+     *  @param s the group text
+     *  @return the value, or -1 if empty, too long, or non-hex
+     *  @since 0.9.71+
+     */
+    private static int parseHexGroup(String s) {
+        if (s.isEmpty() || s.length() > 4) {return -1;}
+        int v = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int d = Character.digit(s.charAt(i), 16);
+            if (d < 0) {return -1;}
+            v = (v << 4) | d;
+        }
+        return v;
     }
 
     /**
