@@ -4,14 +4,16 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import net.i2p.data.Hash;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelPoolSettings;
 
 import org.junit.Test;
 
@@ -131,7 +133,7 @@ public class ClientPeerSelectorDecisionTest {
         assertFalse(ClientPeerSelector.canUseStressFallback(0.40, false, 3));
     }
 
-    // ---- adoptIfFilled ----
+    // ---- insertNewPeers ----
 
     private static Hash hash(byte b) {
         byte[] data = new byte[32];
@@ -140,25 +142,73 @@ public class ClientPeerSelectorDecisionTest {
     }
 
     @Test
-    public void testEmptyFallbackNotAdopted() {
+    public void testEmptyPickedInsertsNothing() {
         List<Hash> rv = new ArrayList<>();
         rv.add(hash((byte) 1));
-        Set<Hash> fallback = new HashSet<>();
-        assertFalse(ClientPeerSelector.adoptIfFilled(rv, fallback));
+        assertEquals(0, ClientPeerSelector.insertNewPeers(rv, rv.size(), Collections.<Hash>emptyList(), 3));
         assertEquals(Collections.singletonList(hash((byte) 1)), rv);
     }
 
     @Test
-    public void testNonEmptyFallbackAdoptedReplacingRv() {
+    public void testDuplicatesAreSkippedAndOrderPreserved() {
         List<Hash> rv = new ArrayList<>();
         rv.add(hash((byte) 1));
-        Set<Hash> fallback = new HashSet<>();
-        fallback.add(hash((byte) 2));
-        fallback.add(hash((byte) 3));
-        assertTrue(ClientPeerSelector.adoptIfFilled(rv, fallback));
-        assertEquals(2, rv.size());
-        assertTrue(rv.contains(hash((byte) 2)));
-        assertTrue(rv.contains(hash((byte) 3)));
-        assertFalse(rv.contains(hash((byte) 1)));
+        rv.add(hash((byte) 9));
+        Set<Hash> picked = new LinkedHashSet<>();
+        picked.add(hash((byte) 2));
+        picked.add(hash((byte) 1));
+        picked.add(hash((byte) 3));
+        // insert before index 1 (the recorded first hop) -> endpoint stays put
+        assertEquals(2, ClientPeerSelector.insertNewPeers(rv, 1, picked, 5));
+        assertEquals(Arrays.asList(hash((byte) 1), hash((byte) 2), hash((byte) 3), hash((byte) 9)), rv);
+    }
+
+    @Test
+    public void testNeedCapsInsertions() {
+        List<Hash> rv = new ArrayList<>();
+        Set<Hash> picked = new LinkedHashSet<>();
+        picked.add(hash((byte) 2));
+        picked.add(hash((byte) 3));
+        picked.add(hash((byte) 4));
+        assertEquals(2, ClientPeerSelector.insertNewPeers(rv, 0, picked, 2));
+        assertEquals(Arrays.asList(hash((byte) 2), hash((byte) 3)), rv);
+    }
+
+    @Test
+    public void testIndexClampedToBounds() {
+        List<Hash> rv = new ArrayList<>();
+        rv.add(hash((byte) 1));
+        Set<Hash> picked = new LinkedHashSet<>();
+        picked.add(hash((byte) 2));
+        assertEquals(1, ClientPeerSelector.insertNewPeers(rv, 99, picked, 1));
+        assertEquals(Arrays.asList(hash((byte) 1), hash((byte) 2)), rv);
+        assertEquals(1, ClientPeerSelector.insertNewPeers(rv, -1, Collections.singleton(hash((byte) 3)), 1));
+        assertEquals(Arrays.asList(hash((byte) 3), hash((byte) 1), hash((byte) 2)), rv);
+    }
+
+    // ---- minRequestedLength ----
+
+    @Test
+    public void testMinRequestedLengthUsesConfiguredLength() {
+        TunnelPoolSettings settings = new TunnelPoolSettings(false);
+        settings.setLength(3);
+        settings.setLengthVariance(0);
+        assertEquals(3, ClientPeerSelector.minRequestedLength(settings));
+    }
+
+    @Test
+    public void testMinRequestedLengthAppliesNegativeVariance() {
+        TunnelPoolSettings settings = new TunnelPoolSettings(false);
+        settings.setLength(3);
+        settings.setLengthVariance(-1);
+        assertEquals(2, ClientPeerSelector.minRequestedLength(settings));
+    }
+
+    @Test
+    public void testMinRequestedLengthNeverNegative() {
+        TunnelPoolSettings settings = new TunnelPoolSettings(false);
+        settings.setLength(1);
+        settings.setLengthVariance(-3);
+        assertEquals(0, ClientPeerSelector.minRequestedLength(settings));
     }
 }

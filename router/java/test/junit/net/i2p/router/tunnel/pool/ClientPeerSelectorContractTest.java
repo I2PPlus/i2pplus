@@ -123,15 +123,14 @@ public class ClientPeerSelectorContractTest {
     // ---------- filterBannedPeers ----------
 
     @Test
-    public void testFilterBannedPeersAllBannedReturnsOriginal() {
+    public void testFilterBannedPeersAllBannedReturnsEmpty() {
         Banlist banlist = mock(Banlist.class);
         when(_ctx.banlist()).thenReturn(banlist);
         when(banlist.isBanlisted(any(Hash.class))).thenReturn(true);
         List<Hash> peers = threePeers();
         List<Hash> rv = _selector.filterBannedPeers(peers);
         assertNotNull(rv);
-        assertEquals(peers.size(), rv.size());
-        assertTrue(rv.containsAll(peers));
+        assertTrue(rv.isEmpty());
     }
 
     @Test
