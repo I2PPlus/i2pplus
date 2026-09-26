@@ -10,19 +10,28 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * <p>This class is used by the installer in Windows to process the <code>wrapper.config</code> file. It
- * <ul>
- * <li>corrects the paths, rewriting <code>/</code> to <code>\</code></li>
- * </ul>
- * <p>
- * Usage: <code>FixWinPaths [WrapperConfigFile]</code>
+ * <p>Post-install fixup of the installed <code>wrapper.config</code> on
+ * Windows, run by the installer as <code>Main fixwinpaths wrapper.config</code>.</p>
+ *
+ * The wrapper resolves a path containing a forward slash as a UNIX-style path
+ * and silently logs elsewhere, so the forward slashes that the izpack
+ * <code>&lt;parsable&gt;</code> substitution leaves in the shipped
+ * <code>wrapper.config</code> have to become backslashes. Only the four
+ * literal substitutions commented in <code>replace()</code> are applied - the
+ * file is not reparsed and paths are not made absolute, because the wrapper
+ * already resolves relative paths against its working directory. Other forward
+ * slashes in the file are left alone, and are harmless only because the wrapper
+ * accepts a mixed-separator path.
+ *
+ * Usage: <code>FixWinPaths wrapper.config</code>
+ *
  * @since 0.9.5
  */
 public class FixWinPaths{
     /**
-     *  Rewrite the wrapper.conf paths for Windows: convert forward slashes
-     *  and relative paths to backslash absolute paths.
-     *  @param args the wrapper config file, or nothing for the default
+     *  Rewrite the forward slashes in the given wrapper.config to backslashes.
+     *  Does nothing unless os.name starts with "Win".
+     *  @param args exactly one element, the path of the wrapper.config to fix
      */
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -35,8 +44,17 @@ public class FixWinPaths{
         replace(args[0]);
 
     }
+    /**
+     *  Rewrite wrapper.config in place, via a sibling .tmp file. Exits 1 if the
+     *  rewritten file cannot be put in place, and returns silently if the name
+     *  is not a wrapper.config or the file cannot be read or written.
+     *
+     *  @param file path of the wrapper.config to rewrite
+     */
     private static void replace(String file) {
-        if (!file.contains("wrapper.config")) {return;} //  Shouldn't be true
+        // the installer only ever passes the wrapper.config, so anything else
+        // means the caller is wrong and this must not be rewritten
+        if (!file.contains("wrapper.config")) {return;}
         String wConf = file;
         String wConfTemp = wConf + ".tmp";
 
@@ -47,6 +65,19 @@ public class FixWinPaths{
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(wConfTemp), "UTF-8"));
             String line;
             while ((line = br.readLine()) != null) {
+                // literal substring substitutions over the whole line, in this
+                // order. They are deliberately narrow: a line containing one of
+                // these strings anywhere would have it rewritten, so anything
+                // added to wrapper.config must avoid all four.
+                //   "\i2p/" -> "\i2p\"  separator directly after a directory
+                //                          component named "i2p", as in an
+                //                          install path ending in \i2p
+                //   "lib/"  -> "lib\"    classpath, library path and jarfile
+                //   "\/"    -> "\"       doubled separator, left when the install
+                //                          path already ends in a backslash; runs
+                //                          last so it collapses what the two
+                //                          above leave behind
+                //   "logs/log-router" -> "logs\log-router"  loggerFilenameOverride
                 if (line.contains("\\i2p/"))
                     line = line.replace("\\i2p/", "\\i2p\\");
                 if (line.contains("lib/"))

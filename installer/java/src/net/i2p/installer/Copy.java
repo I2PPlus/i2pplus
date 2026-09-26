@@ -11,9 +11,10 @@ import net.i2p.util.FileUtil;
  */
 public class Copy {
     /**
-     * main.
+     * Copy the file named by the first argument to the second.
+     *
+     * @param args [from] [to]
      */
-    /** @param args [from] [to] */
     public static void main(String[] args) {
         FileUtil.copy(args[0], args[1], true);
     }

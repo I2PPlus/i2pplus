@@ -25,9 +25,18 @@ import net.i2p.I2PAppContext;
  * Output translation stats by loading ResourceBundles from jars and wars,
  * in html or text format.
  *
- * Bundles only, does not support external resources (html files, man pages,
- * Debian po files) or the gettext properties files (with the exception of the
- * ndt property files, which are scanned as Other Resources).
+ * Compiled Java property bundles are read from the jars and wars in the build
+ * output directory, and are reported with a string count and a percentage.
+ *
+ * Non-compiled resources are not read. For the HTML help and readme pages,
+ * the man page PO files, the console PO files, the getopt property files and
+ * the ndt property files, a per-language translation counts as complete when
+ * the corresponding file exists in the source tree, so the report shows only
+ * presence or absence and no percentage. See the <code>FILES</code> list.
+ *
+ * The source tree is located with the {@code i2p.src.dir} system property,
+ * which the {@code translationReport} and {@code bundleTranslationReport}
+ * ant targets set; it falls back to the parent of the working directory.
  *
  * This is run at build time, so output is not tagged or translated.
  *
@@ -57,24 +66,33 @@ public class TranslationStatus {
                                                  "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "tr", "uk",
                                                  "vi", "zh" };
 
-    // Non-Java / non-compiled resources. Property and po files are scanned for
-    // existence per language; the ndt property files are included here.
-    // debian/po is intentionally omitted: the directory is empty in this tree.
-    private static final String[] FILES = { "core/java/src/gnu/getopt/MessagesBundle.properties",
-                                            "installer/resources/readme/readme.html",               // no country variants supported
+    // Non-compiled resources, as paths relative to the source root. Only the
+    // containing directory is checked for existence; the file name is used to
+    // derive the per-language name to look for (pfx_lang.sfx), so the base
+    // name need not exist if no untranslated variant is shipped.
+    private static final String[] FILES = { "core/java/src/gnu/getopt/MessagesBundle.properties",                       // property
+                                            "installer/resources/console/readme/readme.html",                        // no country variants supported
                                             "installer/resources/eepsite/docroot/help/index.html",
-                                            "installer/resources/locale-man/man.po",                // non-Java
-                                            "installer/resources/locale/po/messages.po",            // non-Java
+                                            "installer/resources/platform-specific/unix/locale-man/man.po",            // non-Java
+                                            "installer/resources/locale/po/messages.po",                             // non-Java
                                             "apps/routerconsole/java/src/edu/internet2/ndt/locale/Tcpbw100_msgs.properties" }; // property, non-Java
 
-    // Source trees scanned to derive the language list (relative to the build dir,
-    // which is one level below the project root).
+    // Source trees scanned to derive the language list (relative to the source
+    // root, see getSourceRoot()).
     private static final String[] PO_DIRS = { "apps/routerconsole/locale", "apps/susidns/locale",
                                               "apps/i2psnark/locale", "apps/i2ptunnel/locale",
                                               "apps/susimail/locale", "core/locale", "router/locale",
-                                              "installer/resources/locale/po", "installer/resources/locale-man",
+                                              "installer/resources/locale/po",
+                                              "installer/resources/platform-specific/unix/locale-man",
                                               "apps/routerconsole/java/src/edu/internet2/ndt/locale" };
 
+    /**
+     * Create a report generator.
+     *
+     * @param ctx context, used to locate the build output directory
+     * @param html true to emit an HTML fragment for the router console,
+     *             false to emit plain text
+     */
     public TranslationStatus(I2PAppContext ctx, boolean html) {
         _context = ctx;
         _html = html;
@@ -94,10 +112,11 @@ public class TranslationStatus {
      * @return immutable, alphabetically sorted list of language codes
      */
     private static List<String> buildLangList() {
+        File root = getSourceRoot();
         Set<String> found = new TreeSet<>();
         boolean any = false;
         for (String dir : PO_DIRS) {
-            File d = new File("..", dir);
+            File d = new File(root, dir);
             if (!d.isDirectory())
                 continue;
             File[] files = d.listFiles();
@@ -154,6 +173,21 @@ public class TranslationStatus {
     }
 */
 
+    /**
+     * Build the report.
+     *
+     * Each element of <code>files</code> is a jar or war in the build output
+     * directory; its compiled bundles are read and the per-resource tables are
+     * emitted, followed by the non-compiled <code>FILES</code> resources.
+     *
+     * A file that cannot be opened is reported on stderr and skipped, so a
+     * partially built output directory still produces a report.
+     *
+     * @param files jars and wars to scan
+     * @return the report, in HTML or plain text as selected at construction
+     * @throws IOException declared for compatibility; not thrown by this
+     *                     implementation, which handles I/O errors per file
+     */
     public String getStatus(File[] files) throws IOException {
         buf.setLength(0);
         buf2.setLength(0);
@@ -295,15 +329,16 @@ public class TranslationStatus {
                 s += '_' + country;
                 country = '(' + loc.getDisplayCountry() + ')';
             }
+            int missing = missingResources(resources, bundles.count(loc));
             if (_html) {
                 buf2.append(String.format(Locale.US, "<tr><td>%s %s %s</td><td>%s</td><td>%d</td>" +
                                                      "<td><span class=percentBarOuter title=\"%5.1f%%\">" +
                                                      "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td>" +
                                                       "</tr>%n",
-                                                      flag, lang, country, s, resources - bundles.count(loc), 100f * counts.count(loc) / grandtot,
+                                                      flag, lang, country, s, missing, 100f * counts.count(loc) / grandtot,
                                                       100f * counts.count(loc) / grandtot));
             } else {
-                buf2.append(String.format("%s\t%5.1f%%\t%s %s%n", s, 100f * counts.count(loc) / grandtot, resources - bundles.count(loc), lang, country));
+                buf2.append(String.format("%s\t%5.1f%%\t%s %s%n", s, 100f * counts.count(loc) / grandtot, missing, lang, country));
             }
         }
         if (_html) {
@@ -323,6 +358,23 @@ public class TranslationStatus {
         buf.setLength(0);
         buf2.setLength(0);
         return rv;
+    }
+
+    /**
+     * Number of resources a locale is still missing.
+     *
+     * The bundle count can exceed the resource total, because the gettext
+     * resources store Indonesian and Hebrew under the gettext codes "id" and
+     * "he" while the Java resources use "in" and "iw". Both codes are in the
+     * language list, so one translated file is counted twice. Such a locale
+     * has nothing left to translate, hence the floor at zero.
+     *
+     * @param resources total number of resources in the report
+     * @param bundlesForLocale number of resources the locale is translated in
+     * @return the number of resources still missing, never negative
+     */
+    private static int missingResources(int resources, int bundlesForLocale) {
+        return Math.max(0, resources - bundlesForLocale);
     }
 
     private void report(String clz, int max, int enTot, List<ResourceBundle> buns) {
@@ -447,23 +499,21 @@ public class TranslationStatus {
             buf.append("\nOther Resources\n\n");
         }
         for (String file : FILES) {
-            boolean nonJava = file.startsWith("installer/resources/locale-man/") ||
-                              file.startsWith("installer/resources/locale/po/") ||
-                              file.contains("ndt/locale/");
-            // installer/man/po use the gettext "id" code for Indonesian, while the
-            // ndt property files use the Java "in" code; only remap for the former.
-            boolean remapIn = file.startsWith("installer/resources/locale-man/") ||
-                              file.startsWith("installer/resources/locale/po/");
-            boolean noCountries = file.startsWith("apps/routerconsole/resources/docs/");
+            // the gettext man page and console PO dirs use the gettext "id" code
+            // for Indonesian, while the Java property files use the Java "in" code;
+            // only remap for the former.
+            boolean remapIn = file.startsWith("installer/resources/locale/po/") ||
+                              file.startsWith("installer/resources/platform-specific/unix/locale-man/");
+            // the readme is only translated by language, never by language and country
+            boolean noCountries = file.startsWith("installer/resources/console/readme/");
             int dot = file.lastIndexOf(".");
             int slash = file.lastIndexOf("/");
             String pfx = file.substring(slash + 1, dot);
             String sfx = file.substring(dot);
             String sdir = file.substring(0, slash);
-            // Resolve against the source root. When run from the build output
-            // (dir=build/), the source tree is not the parent, so prefer the
-            // i2p.src.dir system property set by the ant target; fall back to "..".
             File dir = new File(getSourceRoot(), sdir);
+            // a resource whose directory is gone (renamed or moved) is skipped
+            // rather than reported, so it does not count toward the total
             if (!dir.exists())
                 continue;
             rv++;
@@ -479,7 +529,6 @@ public class TranslationStatus {
             for (String lg : langs) {
                 String njlg = lg;
                 if (remapIn) {
-                    // installer/man/po use gettext locale codes
                     if (lg.equals("in"))
                         njlg = "id";
                     if (lg.equals("iw"))
@@ -524,9 +573,9 @@ public class TranslationStatus {
 
     /**
      * Resolve the source tree root used to locate non-compiled translation
-     * files. Prefers the {@code i2p.src.dir} system property (set by the ant
-     * target, which runs from the build output directory); falls back to the
-     * parent of the current working directory for manual invocations.
+     * files. Prefers the {@code i2p.src.dir} system property, which the ant
+     * targets set because they run from the build output directory; falls back
+     * to the parent of the working directory.
      *
      * @return source root directory
      */
@@ -534,7 +583,6 @@ public class TranslationStatus {
         String src = System.getProperty("i2p.src.dir");
         if (src != null && !src.isEmpty())
             return new File(src);
-        // we assume we're run from the build/ directory, so ".." is the source root
         return new File("..");
     }
 
@@ -544,7 +592,8 @@ public class TranslationStatus {
      * @param s locale code
      * @return Locale
      */
-    private static Locale localeFromString(String s) {        int c = s.indexOf('_');
+    private static Locale localeFromString(String s) {
+        int c = s.indexOf('_');
         if (c < 0)
             return new Locale(s);
         return new Locale(s.substring(0, c), s.substring(c + 1));
@@ -574,6 +623,20 @@ public class TranslationStatus {
         buf.append("\n");
     }
 
+    /**
+     * Write the report for the given jars and wars to stdout.
+     *
+     * Usage: TranslationStatus [-h] [jar-or-war ...]
+     * <p>
+     * Defaults to the {@link #JARS} list, resolved against the working
+     * directory, when no file is named. The non-compiled resources are only
+     * found if the {@code i2p.src.dir} system property points at the source
+     * tree, as the ant targets set, or if the working directory is directly
+     * below it.
+     *
+     * @param args optional "-h" for HTML output, then the jars and wars to scan
+     * @throws IOException if the report cannot be generated
+     */
     public static void main(String[] args) throws IOException {
         boolean html = false;
         if (args.length > 0 && args[0].equals("-h")) {
@@ -583,10 +646,8 @@ public class TranslationStatus {
         if (args.length == 0)
             args = JARS;
         File[] files = new File[args.length];
-        for (int i = 0; i < args.length; i++) {
-            String f = JARS[i];
-            files[i] = new File(f);
-        }
+        for (int i = 0; i < args.length; i++)
+            files[i] = new File(args[i]);
         TranslationStatus ts = new TranslationStatus(I2PAppContext.getGlobalContext(), html);
         System.out.print(ts.getStatus(files));
     }
