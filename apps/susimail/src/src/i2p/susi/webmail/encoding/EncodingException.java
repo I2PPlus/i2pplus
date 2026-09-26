@@ -16,7 +16,7 @@ public class EncodingException extends IOException {
 	 * Create an EncodingException with a message.
 	 *
 	 * @param msg the detail message
-	 * @since public since 0.9.33, was package private
+	 * @since 0.9.33
 	 */
 	public EncodingException( String msg )
 	{

@@ -139,7 +139,7 @@ public class Folder<O extends Object> {
 	 * Sorts the elements according to the order given by {@link #addSorter(String, Comparator)}
 	 * and {@link #setSortBy(String, SortOrder)}.
 	 *
-	 * @since public since 0.9.33
+	 * @since 0.9.33
 	 */
 	public synchronized void sort()
 	{

@@ -53,7 +53,7 @@ public class Base64 extends Encoding {
 	 *
 	 * @param in the input stream to encode
 	 * @see Base64#encode(String)
-	 * @since public since 0.9.33 with new params
+	 * @since 0.9.33
 	 */
 	@Override
 	public void encode(InputStream in, Writer strBuf) throws IOException

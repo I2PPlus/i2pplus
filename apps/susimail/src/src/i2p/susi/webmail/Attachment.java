@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Represents an email attachment with metadata and file data.
- * @since public since 0.9.33, was package private
+ * @since 0.9.33
  */
 public class Attachment {
     /**
