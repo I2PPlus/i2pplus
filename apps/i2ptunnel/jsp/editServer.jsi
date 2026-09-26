@@ -639,7 +639,7 @@
 <%      if (allowBlinding /* && isAdvanced */ && showLookupPassword) {
             String pwTitle = "title=\"" + intl._t("Set password required to access this service") + (canChangeEncType ? "" : (" - " + stopFirst)) + '"';
 %>
-<input type=password name="nofilter_blindedPassword" <%=pwTitle%> value="<%=editBean.getBlindedPassword(curTunnel)%>" class="freetext password readonly" <%=bdisabled%>>
+<input type=password name="nofilter_blindedPassword" <%=pwTitle%> value="<%=net.i2p.data.DataHelper.escapeHTML(editBean.getBlindedPassword(curTunnel))%>" class="freetext password readonly" <%=bdisabled%>>
 <%      } /* allowBlinding */ %>
 </td>
 </tr>
