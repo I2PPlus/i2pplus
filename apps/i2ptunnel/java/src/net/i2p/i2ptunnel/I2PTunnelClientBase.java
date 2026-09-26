@@ -89,6 +89,26 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  @since 0.9.71+
      */
     static final long NO_DEADLINE = Long.MAX_VALUE;
+    /**
+     *  Minimum remaining budget for starting one connect leg. Streaming
+     *  floors connect timeouts at 10s ({@code CONNECT_TIMEOUT_FLOOR_MS}),
+     *  so a leg with less than this left is guaranteed to be cut short —
+     *  it can only burn the shared deadline on a doomed attempt. The walk
+     *  skips such a leg instead.
+     *  @since 0.9.71+
+     */
+    static final long MIN_CONNECT_LEG_MS = 10 * 1000;
+    /**
+     *  One-shot deadline extension granted while the outbound tunnel pool is
+     *  still building ({@code poolState() == 0}) when the shared budget runs
+     *  out. No connect leg can succeed before the pool's first tunnel lands;
+     *  a healthy first build completes inside this window, so expiring the
+     *  request at the 120s mark would discard a request whose pool was
+     *  seconds from ready. At most one extension per request, keeping the
+     *  worst case at {@link #REQUEST_CONNECT_DEADLINE_MS} + this value.
+     *  @since 0.9.71+
+     */
+    static final long POOL_BUILD_DEADLINE_GRACE_MS = 45 * 1000;
     /** Client ID counter */
     private static final AtomicLong __clientId = new AtomicLong();
     /** This client's ID */
@@ -833,9 +853,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * fails with {@link NoRouteToHostException}, the method retries,
      * allowing the session's tunnel pool to select a different tunnel.
      * The walk is additionally bounded by {@code deadlineMs}: no new leg is
-     * started after the deadline, and each leg's connect timeout is clamped
-     * to the remaining budget. One pool-state snapshot is taken per failure
-     * to decide whether another leg is worthwhile.
+     * started after the deadline, each leg's connect timeout is clamped
+     * to the remaining budget (a default is substituted when the caller
+     * requested none, and legs with less than {@link #MIN_CONNECT_LEG_MS}
+     * left are skipped rather than doomed), and one pool-state snapshot is
+     * taken per failure to decide whether another leg is worthwhile.
      *
      * @param dest The destination to connect to, non-null
      * @param opt Socket options
@@ -870,10 +892,16 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 if (lastEx != null) {break;}
                 throw new NoRouteToHostException("Connect deadline expired before first attempt");
             }
-            // Fit this leg into the time left so the walk cannot overshoot
-            // the shared deadline by a full connect timeout.
-            long legTimeoutMs = clampToDeadlineMs(opt.getConnectTimeout(), deadlineMs, now);
-            if (legTimeoutMs > 0 && legTimeoutMs < opt.getConnectTimeout()) {
+            // Fit this leg into the time left: substitute a real timeout when
+            // none was requested, shrink to the remaining budget, and skip
+            // the leg entirely when the budget is below streaming's 10s
+            // connect floor (attempting it would only burn the deadline).
+            long legTimeoutMs = legConnectTimeoutMs(opt.getConnectTimeout(), deadlineMs, now);
+            if (legTimeoutMs < 0 && deadlineMs != NO_DEADLINE) {
+                if (lastEx != null) {break;}
+                throw new NoRouteToHostException("Connect deadline expired before first attempt");
+            }
+            if (legTimeoutMs > 0 && legTimeoutMs != opt.getConnectTimeout()) {
                 opt.setConnectTimeout(legTimeoutMs);
             }
             try {
@@ -1049,6 +1077,66 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     static long clampToDeadlineMs(long requestedMs, long deadlineMs, long nowMs) {
         long remainingMs = isDeadlineExpired(deadlineMs, nowMs) ? 0 : deadlineMs - nowMs;
         return Math.min(requestedMs, remainingMs);
+    }
+
+    /**
+     *  Compute the connect timeout to apply to one failover leg under a
+     *  shared deadline. Pure decision — no clock access, safe for unit tests.
+     *
+     *  <p>Three behaviors the raw clamp lacked: a caller that requested no
+     *  timeout at all ({@code requestedMs <= 0}, which streaming can report
+     *  when its effective connect window is not yet established) gets
+     *  {@link #DEFAULT_CONNECT_TIMEOUT} instead of waiting forever against a
+     *  wall-clock budget; the result is clamped to the remaining budget; and
+     *  a budget smaller than {@link #MIN_CONNECT_LEG_MS} returns {@code -1}
+     *  so the walk skips the leg rather than starting an attempt streaming
+     *  will cut short anyway. With {@link #NO_DEADLINE} the requested value
+     *  is passed through untouched, preserving legacy behavior for callers
+     *  that have not adopted the shared budget.
+     *
+     *  @param requestedMs the leg timeout the options carry; {@code <= 0} means no timeout requested
+     *  @param deadlineMs absolute deadline in ms since the epoch, or {@link #NO_DEADLINE}
+     *  @param nowMs current time in ms since the epoch
+     *  @return the timeout to apply to the options, or {@code -1} to skip this leg
+     *  @since 0.9.71+
+     */
+    static long legConnectTimeoutMs(long requestedMs, long deadlineMs, long nowMs) {
+        if (deadlineMs == NO_DEADLINE) {return requestedMs;}
+        long remainingMs = isDeadlineExpired(deadlineMs, nowMs) ? 0 : deadlineMs - nowMs;
+        if (remainingMs < MIN_CONNECT_LEG_MS) {return -1;}
+        long budgeted = requestedMs > 0 ? requestedMs : DEFAULT_CONNECT_TIMEOUT;
+        return Math.min(budgeted, remainingMs);
+    }
+
+    /**
+     *  One-shot deadline extension for a request whose outbound tunnel pool is
+     *  still building when the shared deadline runs out. Pure decision — no
+     *  clock access, safe for unit tests.
+     *
+     *  <p>Pool state 0 means the pool exists with no valid tunnel yet but
+     *  builds are in progress: no connect leg can succeed until one lands,
+     *  and a healthy first build finishes well inside the grace window.
+     *  Without this, a request racing a cold pool died at the full budget a
+     *  few seconds before its pool came up — the observed SYN-timeout
+     *  failure mode. The extension is granted at most once per request so
+     *  the worst case stays bounded by
+     *  {@link #REQUEST_CONNECT_DEADLINE_MS} + {@link #POOL_BUILD_DEADLINE_GRACE_MS},
+     *  and only when the deadline has actually expired (an expiring request
+     *  with a healthy pool still fails on schedule).
+     *
+     *  @param deadlineMs current deadline in ms since the epoch
+     *  @param nowMs current time in ms since the epoch
+     *  @param poolState latest {@link #poolState()} reading (0 = still building)
+     *  @param alreadyExtended true if this request already consumed its grace
+     *  @return the extended deadline, or {@code deadlineMs} unchanged when no
+     *          extension applies
+     *  @since 0.9.71+
+     */
+    static long extendDeadlineForBuildingPool(long deadlineMs, long nowMs, int poolState,
+                                              boolean alreadyExtended) {
+        if (alreadyExtended || poolState != 0 || !isDeadlineExpired(deadlineMs, nowMs))
+            return deadlineMs;
+        return deadlineMs + POOL_BUILD_DEADLINE_GRACE_MS;
     }
 
     /**

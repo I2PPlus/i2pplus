@@ -5,8 +5,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *  Unit tests for the shared request connect deadline (budget, expiry, and
- *  clamping) and the single pool-snapshot outer-retry decision it gates.
+ *  Unit tests for the shared request connect deadline (budget, expiry,
+ *  clamping, per-leg connect timeouts, and the pool-building grace), plus
+ *  the single pool-snapshot outer-retry decision it gates.
  */
 public class ConnectDeadlineTest {
 
@@ -81,6 +82,77 @@ public class ConnectDeadlineTest {
         assertEquals(0, I2PTunnelClientBase.clampToDeadlineMs(delay, 10_000, 10_000));
         // Per-leg connect timeout shrinks too.
         assertEquals(4_000, I2PTunnelClientBase.clampToDeadlineMs(30_000, 10_000, 6_000));
+    }
+
+    // ---------- per-leg connect timeout ----------
+
+    @Test
+    public void testLegTimeoutNoDeadlinePassesThrough() {
+        long now = System.currentTimeMillis();
+        assertEquals(30_000, I2PTunnelClientBase.legConnectTimeoutMs(
+                30_000, I2PTunnelClientBase.NO_DEADLINE, now));
+        // legacy: no timeout requested and no shared budget keeps 0 (unlimited)
+        assertEquals(0, I2PTunnelClientBase.legConnectTimeoutMs(
+                0, I2PTunnelClientBase.NO_DEADLINE, now));
+    }
+
+    @Test
+    public void testLegTimeoutSubstitutesDefaultWhenNoneRequested() {
+        // streaming can carry a 0 (not-yet-established) connect timeout;
+        // against a real deadline that must not mean "wait forever"
+        long now = 1_000;
+        long deadline = now + 120_000;
+        assertEquals(I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT,
+                     I2PTunnelClientBase.legConnectTimeoutMs(0, deadline, now));
+        assertEquals(I2PTunnelClientBase.DEFAULT_CONNECT_TIMEOUT,
+                     I2PTunnelClientBase.legConnectTimeoutMs(-1, deadline, now));
+    }
+
+    @Test
+    public void testLegTimeoutClampedToRemainingBudget() {
+        // 40s remaining shrinks a 60s request
+        assertEquals(40_000, I2PTunnelClientBase.legConnectTimeoutMs(60_000, 50_000, 10_000));
+        // budget larger than the request: the request is honored
+        assertEquals(30_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 130_000, 10_000));
+        // exactly the 10s floor still runs
+        assertEquals(10_000, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 20_000, 10_000));
+    }
+
+    @Test
+    public void testLegTimeoutSkipsBelowFloor() {
+        // under streaming's 10s connect floor the leg is doomed — skip it
+        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 19_999, 10_000));
+        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(30_000, 10_000, 10_000));
+        assertEquals(-1, I2PTunnelClientBase.legConnectTimeoutMs(0, 10_000, 12_000));
+    }
+
+    // ---------- pool-building grace ----------
+
+    @Test
+    public void testGraceExtendsExpiredDeadlineWhileBuilding() {
+        assertEquals(10_000 + I2PTunnelClientBase.POOL_BUILD_DEADLINE_GRACE_MS,
+                     I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, 0, false));
+        assertEquals(10_000 + I2PTunnelClientBase.POOL_BUILD_DEADLINE_GRACE_MS,
+                     I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 12_000, 0, false));
+    }
+
+    @Test
+    public void testGraceNotGrantedWhileDeadlineAlive() {
+        assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 9_999, 0, false));
+    }
+
+    @Test
+    public void testGraceNotGrantedForHealthyOrUnknownPool() {
+        assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, 1, false));
+        assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, -1, false));
+        assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, -2, false));
+    }
+
+    @Test
+    public void testGraceOnlyOncePerRequest() {
+        // a second expiry with the pool still building must not re-extend,
+        // keeping the worst case at budget + grace
+        assertEquals(10_000, I2PTunnelClientBase.extendDeadlineForBuildingPool(10_000, 10_000, 0, true));
     }
 
     // ---------- outer retry ----------

@@ -1324,7 +1324,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // One wall-clock budget for this request: naming, the connect
             // failover walk, retry sleeps, and outer re-walks all draw from
             // the same deadline instead of stacking independent limits.
-            final long connectDeadline = connectDeadlineFrom(System.currentTimeMillis());
+            // Non-final: one grace extension may be granted if the deadline
+            // runs out while the outbound pool is still building.
+            long connectDeadline = connectDeadlineFrom(System.currentTimeMillis());
+            boolean deadlineExtended = false;
 
             // LOOKUP
             // If the host is "i2p", the getHostName() lookup failed, don't try to
@@ -1639,10 +1642,23 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // createI2PSocket already failover-ed across all tunnel
                         // legs. One pool reading per failure feeds the decision so
                         // a single failure never mixes two pool observations, and
-                        // the shared deadline stops re-walks outright.
+                        // the shared deadline stops re-walks outright. If the
+                        // deadline ran out with the pool still building, grant
+                        // the one-shot grace first — the legs never had a
+                        // tunnel to ride.
                         int poolSnapshot = poolState();
-                        boolean deadlineExpired =
-                                isDeadlineExpired(connectDeadline, System.currentTimeMillis());
+                        long nowMs = System.currentTimeMillis();
+                        long extendedMs = extendDeadlineForBuildingPool(connectDeadline, nowMs,
+                                                                        poolSnapshot, deadlineExtended);
+                        if (extendedMs != connectDeadline) {
+                            connectDeadline = extendedMs;
+                            deadlineExtended = true;
+                            if (_log.shouldInfo()) {
+                                _log.info(getPrefix(requestId) +
+                                          "Extending connect deadline; outbound pool still building");
+                            }
+                        }
+                        boolean deadlineExpired = isDeadlineExpired(connectDeadline, nowMs);
                         if (!shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts,
                                                      timedOut, poolSnapshot, deadlineExpired)) {
                             if (_log.shouldWarn() && (timedOut || deadlineExpired)) {
