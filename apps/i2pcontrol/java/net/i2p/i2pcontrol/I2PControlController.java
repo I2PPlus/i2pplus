@@ -159,13 +159,15 @@ public class I2PControlController implements RouterApp {
 
 
     /**
-     * Builds a new server. Used for changing ports during operation and such.
-     * @return Server - A new server built from current configuration.
+     *  Builds the default SSL connector from the current configuration.
+     *  The connector is neither added to a server nor started here; only
+     *  {@link #buildServer()} does that.
+     *  @param server the server the connector is created for, may be null
+     *  @return the new connector
      */
     private Connector buildDefaultListener(Server server) {
-        Connector ssl = buildSslListener(server, _conf.getConf("i2pcontrol.listen.address", "127.0.0.1"),
-                                 _conf.getConf("i2pcontrol.listen.port", DEFAULT_PORT));
-        return ssl;
+        return buildSslListener(server, _conf.getConf("i2pcontrol.listen.address", "127.0.0.1"),
+                                _conf.getConf("i2pcontrol.listen.port", DEFAULT_PORT));
     }
 
 

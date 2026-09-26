@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.SecureRandom;
@@ -110,37 +111,49 @@ public class KeyStoreProvider {
     }
 
     /**
-     *  @return null on failure
+     *  Load the keystore, creating it first if it does not exist yet.
+     *
+     *  A keystore file that exists but cannot be read - wrong password,
+     *  truncated or corrupt contents - is never replaced, since that would
+     *  destroy any credentials it holds. That case, and any failure to create
+     *  a missing file, is logged at WARN and reported as null. Nothing is
+     *  cached in the failure case, so a later call retries the load.
+     *
+     *  @return the keystore, or null if it could not be read or created
      */
     public synchronized KeyStore getDefaultKeyStore() {
-        if (_keystore == null) {
-            File keyStoreFile = new File(getKeyStoreLocation());
-
-            try {
-                _keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-                if (keyStoreFile.exists()) {
-                    try (InputStream is = new FileInputStream(keyStoreFile)) {
-                        _keystore.load(is, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
-                        return _keystore;
-                    }
-                }
-
-                initialize();
-                if (keyStoreFile.exists()) {
-                    try (InputStream is = new FileInputStream(keyStoreFile)) {
-                        _keystore.load(is, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
-                        return _keystore;
-                    }
-                } else {
-                    throw new IOException("KeyStore file " + keyStoreFile.getAbsolutePath() + " wasn't readable");
-                }
-            } catch (Exception e) {
-                // Ignore. Not an issue. Let's just create a new keystore instead.
-            }
-            return null;
-        } else {
+        if (_keystore != null)
             return _keystore;
+
+        File keyStoreFile = new File(getKeyStoreLocation());
+        try {
+            KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+            if (keyStoreFile.exists())
+                return _keystore = load(ks, keyStoreFile);
+
+            initialize();
+            if (!keyStoreFile.exists())
+                throw new IOException("KeyStore file " + keyStoreFile.getAbsolutePath() + " wasn't created");
+            return _keystore = load(ks, keyStoreFile);
+        } catch (Exception e) {
+            _log.log(Log.WARN, "Failed to load or create the I2PControl keystore", e);
+            return null;
         }
+    }
+
+    /**
+     *  @param ks the empty keystore to load into
+     *  @param keyStoreFile the file to read, which must exist
+     *  @return ks, loaded from keyStoreFile
+     *  @throws IOException if the file cannot be read
+     *  @throws GeneralSecurityException if the file is not a valid keystore
+     *          for the default type
+     */
+    private static KeyStore load(KeyStore ks, File keyStoreFile) throws IOException, GeneralSecurityException {
+        try (InputStream is = new FileInputStream(keyStoreFile)) {
+            ks.load(is, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
+        }
+        return ks;
     }
 
     /** @return full path to the keystore file */

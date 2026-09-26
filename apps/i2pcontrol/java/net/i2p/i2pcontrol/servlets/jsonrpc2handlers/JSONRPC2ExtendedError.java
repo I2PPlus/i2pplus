@@ -64,22 +64,25 @@ public class JSONRPC2ExtendedError extends JSONRPC2Error {
 
     private static final long serialVersionUID = -6574632977222371077L;
 
-    /** Invalid JSON-RPC 2.0, implementation defined error (-32099 .. -32000) */
+    // The errors below are all JSON-RPC 2.0 implementation defined errors,
+    // in the reserved range -32099 .. -32000.
+
+    /** Invalid password provided. */
     public static final JSONRPC2Error INVALID_PASSWORD = new JSONRPC2ExtendedError(-32001, "Invalid password provided.");
 
-    /** Invalid JSON-RPC 2.0, implementation defined error (-32099 .. -32000) */
+    /** No authentication token presented. */
     public static final JSONRPC2Error NO_TOKEN = new JSONRPC2ExtendedError(-32002, "No authentication token presented.");
 
-    /** Invalid JSON-RPC 2.0, implementation defined error (-32099 .. -32000) */
+    /** Authentication token doesn't exist. */
     public static final JSONRPC2Error INVALID_TOKEN = new JSONRPC2ExtendedError(-32003, "Authentication token doesn't exist.");
 
-    /** Invalid JSON-RPC 2.0, implementation defined error (-32099 .. -32000) */
+    /** Provided authentication token was expired and will be removed. */
     public static final JSONRPC2Error TOKEN_EXPIRED = new JSONRPC2ExtendedError(-32004, "Provided authentication token was expired and will be removed.");
 
-    /** Invalid JSON-RPC 2.0, implementation defined error (-32099 .. -32000) */
+    /** The version of the I2PControl API wasn't specified, but is required to be specified. */
     public static final JSONRPC2Error UNSPECIFIED_API_VERSION = new JSONRPC2ExtendedError(-32005, "The version of the I2PControl API wasn't specified, but is required to be specified.");
 
-    /** Invalid JSON-RPC 2.0, implementation defined error (-32099 .. -32000) */
+    /** The version of the I2PControl API specified is not supported by I2PControl. */
     public static final JSONRPC2Error UNSUPPORTED_API_VERSION = new JSONRPC2ExtendedError(-32006, "The version of the I2PControl API specified is not supported by I2PControl.");
 
 

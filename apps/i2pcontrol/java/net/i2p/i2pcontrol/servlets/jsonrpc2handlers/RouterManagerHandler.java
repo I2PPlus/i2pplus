@@ -89,9 +89,7 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("Shutdown")) {
             outParams.put("Shutdown", null);
             (new Thread() {
-                /**
-                 * run.
-                 */
+                // so the response is sent before the router goes down
                 @Override
                 public void run() {
                     try {
@@ -107,9 +105,7 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("Restart")) {
             outParams.put("Restart", null);
             (new Thread() {
-                /**
-                 * run.
-                 */
+                // so the response is sent before the router goes down
                 @Override
                 public void run() {
                     try {
@@ -125,9 +121,7 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("ShutdownGraceful")) {
             outParams.put("ShutdownGraceful", null);
             (new Thread() {
-                /**
-                 * run.
-                 */
+                // so the response is sent before the router goes down
                 @Override
                 public void run() {
                     try {
@@ -143,9 +137,7 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("RestartGraceful")) {
             outParams.put("RestartGraceful", null);
             (new Thread() {
-                /**
-                 * run.
-                 */
+                // so the response is sent before the router goes down
                 @Override
                 public void run() {
                     try {
@@ -161,9 +153,7 @@ public class RouterManagerHandler implements RequestHandler {
         if (inParams.containsKey("Reseed")) {
             outParams.put("Reseed", null);
             (new Thread() {
-                /**
-                 * run.
-                 */
+                // started, not joined, so the reply is not delayed by the reseed
                 @Override
                 public void run() {
                     ReseedChecker reseeder = new ReseedChecker(_context);
@@ -175,9 +165,7 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("FindUpdates")) {
             Thread t = new Thread() {
-                /**
-                 * run.
-                 */
+                // joined below, so the result is in outParams before we reply
                 @Override
                 public void run() {
                     ClientAppManager clmgr = I2PAppContext.getCurrentContext().clientAppManager();
@@ -203,9 +191,7 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("Update")) {
             Thread t = new Thread() {
-                /**
-                 * run.
-                 */
+                // joined below, so the result is in outParams before we reply
                 @Override
                 public void run() {
                     ClientAppManager clmgr = I2PAppContext.getCurrentContext().clientAppManager();
@@ -256,7 +242,7 @@ public class RouterManagerHandler implements RequestHandler {
             _exitCode = exitCode;
         }
         /**
-         * run.
+         *  Tell the wrapper the router has stopped, so it restarts it.
          */
         public void run() {
             try {
