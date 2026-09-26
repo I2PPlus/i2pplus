@@ -266,8 +266,11 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
             updateStatus("<b>" + _t("Updating from {0}", linkify(updateURL)) + "</b>");
             if (_log.shouldDebug()) {_log.debug("Selected update URL: " + updateURL);}
 
-            // Check the first 56 bytes for the version
-            // FIXME PartialEepGet works with clearnet but not with SSL
+            // Check the first 56 bytes for the version.
+            // Only plaintext sources are pre-checked: the partial fetch uses
+            // EepGet, which cannot read from an SSL URL. Without the
+            // pre-check we download the whole file before knowing the version,
+            // and _newVersion stays null (see transferComplete()).
             _newVersion = null;
             if (!isSSL) {
                 _isPartial = true;
@@ -302,7 +305,8 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     // with a couple of adjustments depending on which mode.
 
     /**
-     * attemptFailed.
+     *  An attempt failed. We do not abort here - EepGet retries on its own -
+     *  so this only reports the failure to the user.
      */
     public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
         if (_log.shouldDebug()) {_log.debug("Attempt failed on " + url, cause);}
@@ -336,7 +340,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
             return;
         }
 
-        // FIXME if we didn't do a partial, we don't know
+        // No partial pre-check was done (SSL source), so the version in the
+        // file is unknown here. Report it as such rather than reading the
+        // file again; notifyComplete() verifies the signature anyway.
         if (_newVersion == null) {_newVersion = "unknown";}
         File tmp = new File(_updateFile);
         if (_mgr.notifyComplete(this, _newVersion, tmp)) {this.done = true;}
@@ -355,22 +361,25 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
-     * headerReceived.
+     *  HTTP response headers are not used to determine the update version.
      */
     public void headerReceived(String url, int attemptNum, String key, String val) { /* nop */ }
 
     /**
-     * attempting.
+     *  A retry is starting. Retries are counted by EepGet, which reports the
+     *  final failure through transferFailed(), so there is nothing to do.
      */
     public void attempting(String url) { /* nop */ }
 
     /**
-     * updateStatus.
+     *  Report progress to the user.
      */
     protected void updateStatus(String s) {_mgr.notifyProgress(this, s);}
 
     /**
-     * linkify.
+     *  Wrap a URL in an anchor tag for display.
+     *  @param url the URL to link to
+     *  @return the HTML
      */
     protected static String linkify(String url) {return ConsoleUpdateManager.linkify(url);}
 
@@ -383,7 +392,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected String _t(String s, Object o) {return _mgr._t(s, o);}
 
     /**
-     * toString.
+     *  @return the class name, type, ID, method and URI
      */
     @Override
     public String toString() {return getClass().getName() + ' ' + getType() + ' ' + getID() + ' ' + getMethod() + ' ' + getURI();}

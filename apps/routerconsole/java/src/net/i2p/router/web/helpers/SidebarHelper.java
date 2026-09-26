@@ -58,10 +58,8 @@ public class SidebarHelper extends HelperBase {
     /** Active HTTP session for nonce-based form validation */
     private HttpSession _session;
 
-    /**
-     *  Cached stats survive the request-scoped bean, so they are recomputed
-     *  once per sidebar refresh cycle instead of on every render.
-     */
+    // Cached stats survive the request-scoped bean, so they are recomputed
+    // once per sidebar refresh cycle instead of on every render.
     /** Expiry for the cached tunnel build success */
     private static volatile long _buildSuccessCachedUntil;
     /** Expiry for the cached concurrency string */

@@ -238,11 +238,11 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      * List of GraphListener instances
      * @return the listeners
-     * @since public since 0.9.33, was package private
+     * @since 0.9.33
      */
     public List<GraphListener> getListeners() { return _listeners; }
 
-    /**  @since public since 0.9.33, was package private */
+    /**  @since 0.9.33 */
     public static final String DEFAULT_DATABASES = "bw.sendRate.60000" +
                                                    ",bw.recvRate.60000" +
                                                    ",jobQueue.jobLag.60000" +
@@ -560,7 +560,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      * @param specs statName.period,statName.period,statName.period
      * @return list of Rate objects
-     * @since public since 0.9.33, was package private
+     * @since 0.9.33
      */
     public Set<Rate> parseSpecs(String specs) {
         if (specs == null) {return Collections.emptySet();}

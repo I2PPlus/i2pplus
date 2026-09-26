@@ -1130,7 +1130,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Adds to installed, removes from downloaded and available
      *  @param id subtype for plugins, or ""
      *  @param version null to remove from installed
-     *  @since public since 0.9.45
+     *  @since 0.9.45
      */
     @Override
     public void notifyInstalled(UpdateType type, String id, String version) {

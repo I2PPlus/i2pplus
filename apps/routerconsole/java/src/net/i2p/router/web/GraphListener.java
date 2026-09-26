@@ -31,7 +31,7 @@ import java.util.Arrays;
  *  @since 0.6.1.13
  */
 public class GraphListener implements RateSummaryListener {
-    /** @since public since 0.9.33, was package private */
+    /** @since 0.9.33 */
     public static final String PROP_PERSISTENT = "routerconsole.graphPersistent";
     /** note that .jrb files are NOT compatible with .rrd files */
     static final String RRD_DIR = "rrd";
@@ -81,7 +81,7 @@ public class GraphListener implements RateSummaryListener {
     static final int GRAPH_END_OFFSET_SECONDS = 75;
     /** Minimum number of rows to keep in the archive. */
     private static final int MIN_ROWS = PERIODS;
-    /** @since public since 0.9.33, was package private */
+    /** @since 0.9.33 */
     public static final int MAX_ROWS = 91 * MIN_ROWS;
     /** Three months in milliseconds (used to compute max rows for persistent RRDs). */
     private static final long THREE_MONTHS = 91L * 24 * 60 * 60 * 1000;

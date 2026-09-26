@@ -32,7 +32,8 @@ public class RingRenderer {
     /** Mode: anomaly — color by deviation from the router's own baseline, not an absolute cap */
     public static final String MODE_ANOMALY = "anomaly";
 
-    /** Deviation bands for MODE_ANOMALY, as a fraction of baseline (|current - baseline| / baseline) */
+    // Deviation bands for MODE_ANOMALY, as a fraction of baseline
+    // (|current - baseline| / baseline)
     /** Green anomaly band threshold */
     static final double ANOMALY_GREEN_BAND = 0.25;
     /** Yellow anomaly band threshold */

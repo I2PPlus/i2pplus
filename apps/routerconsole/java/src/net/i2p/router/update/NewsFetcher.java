@@ -264,9 +264,9 @@ class NewsFetcher extends UpdateRunner {
 
     /**
      *  Parse the installed (not the temp) news file for the latest version.
-     *  TODO: Real XML parsing
-     *  TODO: Check minVersion, use backup URLs specified
-     *  TODO: SU3
+     *  Only the first &lt;i2p.release entry is examined, and only with the
+     *  line-oriented fake XML parser described above, so an entry that is
+     *  spread over several lines is not recognized.
      */
     void checkForUpdates() {
         FileInputStream in = null;
@@ -327,9 +327,10 @@ class NewsFetcher extends UpdateRunner {
                             }
                             _log.logAlways(Log.CRIT, "Router is out of date, current version is: " + ver + " -> Update advised!");
 
-                            /** TODO: - if minversion > our version, continue and look for a second entry with clearnet URLs
-                             *        - clearnet URLs, notify with HTTP_CLEARNET and/or HTTPS_CLEARNET
-                             */
+                            // Not supported: a minversion above our version
+                            // does not make us look for a second news entry
+                            // offering clearnet URLs. The clearnet URLs of this
+                            // single entry are used below, if any.
                             Map<UpdateMethod, List<URI>> sourceMap = new HashMap<>(4);
                             // Must do su3 first
                             boolean enableVanillaUpdates = _context.getProperty(PROP_ENABLE_VANILLA_UPDATES, DEFAULT_ENABLE_VANILLA_UPDATES);

@@ -28,9 +28,6 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.9.33
  */
-/**
- * Helper for network database page rendering and form processing.
- */
 public class NetDbHelper extends FormHandler {
 
     public NetDbHelper() {}

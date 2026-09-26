@@ -28,27 +28,12 @@ public class ContentHelper extends HelperBase {
         _startAtBeginning = Boolean.parseBoolean(moo);
     }
     /**
-     * setLang.
+     *  Bean property setter, intentionally a no-op. An earlier version
+     *  persisted the language here for the desktopgui, but that bypassed the
+     *  CSRF nonce check; language is now handled by CSSHelper.
      */
     public void setLang(String l) {
-/*****
-        if((_lang == null || !_lang.equals(l)) && (l != null)) {
-            //Set language for router console
-            _lang = l;
-        Needed for desktopgui. But there's no nonce protection.
-        Move the following to CSSHelper setLang(), or disable completely,
-        See comments in CSSHelper
-            if(_context == null) {
-                setContextId(null);
-            }
-
-            if (_context.getBooleanProperty("desktopgui.enabled")) {
-                //Set language persistently throughout I2P
-                _context.router().saveConfig(Messages.PROP_LANG, _lang);
-                _context.setProperty(Messages.PROP_LANG, _lang);
-            }
-        }
-*****/
+        // not implemented, see above
     }
 
     /**

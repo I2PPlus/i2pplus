@@ -103,7 +103,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  stripped and a first nibble of 8-f gains an extra 0x00 byte. Password
      *  salts and hashes must round-trip at their exact stored width; using
      *  fromHexString here corrupted ~15/16 of PBKDF2 credentials and locked
-     *  users out of the console (see bd6fb3cc0a regression, DH-001).
+     *  users out of the console.
      *
      *  @param hex even-length hex string, either case, no prefix
      *  @return decoded bytes, always exactly hex.length()/2 long

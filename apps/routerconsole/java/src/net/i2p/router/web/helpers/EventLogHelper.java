@@ -90,9 +90,7 @@ public class EventLogHelper extends FormHandler {
      */
     public void setFrom(String s) {
         try {
-            /**
-             * parse long.
-             */
+            // s is in seconds
             _age = Long.parseLong(s) * 1000;
             if (_age > 0)
                 _from = _context.clock().now() - _age;
@@ -168,9 +166,6 @@ public class EventLogHelper extends FormHandler {
          _out.write(Long.toString(age));
          _out.write("\"");
          if (age == _age / 1000)
-             /**
-              * write.
-              */
              _out.write(HelperBase.SELECTED);
          _out.write(">");
          if (age == 0)

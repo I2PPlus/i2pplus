@@ -527,9 +527,15 @@ public class ConfigNetHandler extends FormHandler {
         return rv;
     }
 
+    /**
+     *  A full restart is required to apply a hidden mode change. The new keys
+     *  are not built on shutdown: {@link Router#PROP_REBUILD_KEYS} has been
+     *  saved as true, so the next startup kills the old keys. There is no
+     *  rekey-only path here, and registerWrapperNotifier() is safe to call
+     *  whether or not a wrapper is present - its shutdown task notifies the
+     *  wrapper only when there is one.
+     */
     private void hiddenSwitch() {
-        // Full restart required to generate new keys
-        // FIXME don't call wrapper if not present, only rekey
         ConfigServiceHandler.registerWrapperNotifier(_context, Router.EXIT_GRACEFUL_RESTART, false);
         _context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }

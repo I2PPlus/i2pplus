@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * Tests for ConsolePasswordManager.HexDecode()/HexEncode().
  *
- * Regression guard for bd6fb3cc0a: that commit delegated hex decoding to
+ * Regression guard for a past change that delegated hex decoding to
  * DataHelper.fromHexString(), which is a minimum-length, sign-aware
  * BigInteger decode. A leading '0' nibble loses a byte (32 stored bytes
  * decode to 31) and a first nibble of 8-f gains an extra 0x00 byte (decodes

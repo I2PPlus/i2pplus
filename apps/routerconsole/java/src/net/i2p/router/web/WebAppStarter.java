@@ -100,7 +100,7 @@ public class WebAppStarter {
      *  As of 0.9.34, the appName will be registered with the PortMapper.
      *
      *  @throws Exception just about anything, caller would be wise to catch Throwable
-     *  @since public since 0.9.33, was package private
+     *  @since 0.9.33
      */
     public static void startWebApp(RouterContext ctx, ContextHandlerCollection server,
                             String appName, String warPath) throws Exception {
@@ -235,7 +235,7 @@ public class WebAppStarter {
      *  Warning, this will NOT work during shutdown, because
      *  the console is already unregistered.
      *
-     *  @since public since 0.9.33, was package private
+     *  @since 0.9.33
      */
     public static void stopWebApp(RouterContext ctx, String appName) {
         ContextHandler wac = getWebApp(ctx, appName);
@@ -286,7 +286,7 @@ public class WebAppStarter {
      * the console is already unregistered.
      *
      * @return whether web app running
-     * @since public since 0.9.33; was package private
+     * @since 0.9.33
      */
     public static boolean isWebAppRunning(I2PAppContext ctx, String appName) {
         ContextHandler wac = getWebApp(ctx, appName);
@@ -356,7 +356,7 @@ public class WebAppStarter {
      * the console is already unregistered.
      *
      * @return the console server
-     * @since public since 0.9.33, was package private
+     * @since 0.9.33
      */
     public static ContextHandlerCollection getConsoleServer(I2PAppContext ctx) {
         Server s = RouterConsoleRunner.getConsoleServer(ctx);

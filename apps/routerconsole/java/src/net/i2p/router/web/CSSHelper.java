@@ -239,7 +239,7 @@ public class CSSHelper extends HelperBase {
      *  Get recent nonce for backward compatibility.
      *  @param index 0 for most recent, 1 for second most recent
      *  @return nonce or null if not available
-     *  @since 2.x.x
+     *  @since 0.9.70+
      */
     public static String getRecentNonce(int index) {
         if (index >= 0 && index < 2) {

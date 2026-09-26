@@ -123,7 +123,7 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  @since public since 0.9.33, was package private
+     *  @since 0.9.33
      */
     public static boolean pluginsEnabled(I2PAppContext ctx) {
          return ctx.getBooleanPropertyDefaultTrue("router.enablePlugins");
@@ -689,7 +689,7 @@ public class PluginStarter implements Runnable {
 
     /**
      *  @return true on success - caller should call stopPlugin() first
-     *  @since public since 0.9.33, was package private
+     *  @since 0.9.33
      */
     public static boolean deletePlugin(RouterContext ctx, String appName) throws Exception {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -1147,11 +1147,6 @@ public class PluginStarter implements Runnable {
         return rv;
     }
 
-    /**
-     *  Perhaps there's an easy way to use Thread.setContextClassLoader()
-     *  but I don't see how to make it magically get used for everything.
-     *  So add this to the whole JVM's classpath.
-     */
 /******
     private static void addToClasspath(String classpath, String clientName, Log log) {
         StringTokenizer tok = new StringTokenizer(classpath, ",");
@@ -1174,6 +1169,11 @@ public class PluginStarter implements Runnable {
 *****/
 
     /**
+     *  Convert a plugin classpath to URL array, for the plugin's own
+     *  classloader. Perhaps there's an easy way to use
+     *  Thread.setContextClassLoader(), but I don't see how to make it
+     *  magically get used for everything.
+     *
      *  @return null if no valid elements
      */
     private static URL[] classpathToURLArray(String classpath, String clientName, Log log) {

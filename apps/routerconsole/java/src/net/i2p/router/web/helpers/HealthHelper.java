@@ -28,9 +28,6 @@ import net.i2p.util.Log;
  *
  * @since 0.9.70+
  */
-/**
- * Helper for health checks.
- */
 public class HealthHelper extends HelperBase {
     private Log _log;
 

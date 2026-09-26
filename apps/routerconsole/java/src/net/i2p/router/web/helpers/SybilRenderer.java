@@ -184,13 +184,9 @@ public class SybilRenderer {
            .append("</a></li>\n").append("<li><a href=\"netdb?f=3&amp;m=3\">")
            .append(_t("IP close to us"))
            .append("</a></li>\n")
-/**
-           .append("<li><a href=\"netdb?f=3&amp;m=4\">") _t("Same IP")).append("</a></li>\n")
-           .append("<li><a href=\"netdb?f=3&amp;m=5\">") _t("Same IPv4")).append(" /24</a></li>\n")
-           .append("<li><a href=\"netdb?f=3&amp;m=6\">") _t("Same IPv4")).append(" /16</a></li>\n")
-           .append("<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6")).append(" /64</a></li>\n")
-           .append("<li><a href=\"netdb?f=3&amp;m=18\">") _t("Same IPv6")).append(" /48</a></li>\n")
-**/
+           // netdb modes 4, 5, 6, 17 and 18 ("Same IP", "Same IPv4 /24" and
+           // /16, "Same IPv6 /64" and /48) are implemented in
+           // renderRouterInfoHTML() but are deliberately not linked from here.
            .append("<li><a href=\"netdb?f=3&amp;m=7\">")
            .append(_t("Pair distance"))
            .append("</a></li>\n")

@@ -99,15 +99,6 @@ public class ConfigNetHelper extends HelperBase {
      * @return the internal SSU port
      */
     public String getUdpPort() {
-      /****
-        RouterAddress addr = _context.router().getRouterInfo().getTargetAddress("SSU");
-        if (addr == null)
-            return _t("unknown");
-        UDPAddress ua = new UDPAddress(addr);
-        if (ua.getPort() <= 0)
-            return _t("unknown");
-        return "" + ua.getPort();
-      ****/
         // Since we can't get to UDPTransport.getRequestedPort() from here, just use
         // configured port. If UDPTransport is changed such that the actual port
         // could be different, fix this.

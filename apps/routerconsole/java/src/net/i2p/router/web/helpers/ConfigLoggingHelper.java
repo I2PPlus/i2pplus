@@ -101,19 +101,8 @@ public class ConfigLoggingHelper extends HelperBase {
            .append(_t("Valid log levels are {0}.", "<b>DEBUG, INFO, WARN, ERROR, CRIT</b>"))
            .append("</p>\n");
 
-      /****
-        // this is too big and ugly
-        if (limits.size() <= 0)
-            return "";
-        buf.append("<table>");
-        for (String prefix : sortedLogs) {
-            buf.append("<tr><td>").append(prefix).append("</td><td>");
-            String level = limits.getProperty(prefix);
-            buf.append(getLogLevelBox("level-" + prefix, level, true)).append("</td></tr>");
-        }
-        buf.append("</table>");
-       ****/
-
+        // A per-prefix table of drop-downs was tried here and was too big and
+        // ugly, so the levels are edited in the textarea above instead.
         return buf.toString();
     }
 

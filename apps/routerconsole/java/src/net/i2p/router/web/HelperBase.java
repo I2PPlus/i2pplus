@@ -9,9 +9,6 @@ import net.i2p.util.Log;
  *  Provides common functionality for router context access,
  *  translation services, and UI helper methods.
  */
-/**
- * Creates a new HelperBase instance.
- */
 public abstract class HelperBase {
     /** the router context */
     protected RouterContext _context;
@@ -22,11 +19,11 @@ public abstract class HelperBase {
 
     /**
      *  Property key for advanced mode.
-     *  @since public since 0.9.33, was package private
+     *  @since 0.9.33
      */
     public static final String PROP_ADVANCED = "routerconsole.advanced";
     /**  Checked attribute for HTML checkboxes.
-     *  @since public since 0.9.33, was package private
+     *  @since 0.9.33
      */
     public static final String CHECKED = " checked ";
     /**  Selected attribute for HTML select options.
@@ -55,9 +52,6 @@ public abstract class HelperBase {
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);
     }
-
-    /** might be useful in the jsp's */
-
 
     /**
      *  Store the writer for output.

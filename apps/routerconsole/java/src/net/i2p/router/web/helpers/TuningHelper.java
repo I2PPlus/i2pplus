@@ -391,9 +391,7 @@ public class TuningHelper extends HelperBase {
         // Sort each group by display name
         for (List<ParamSnapshot> list : groups.values()) {
             Collections.sort(list, new Comparator<ParamSnapshot>() {
-                /**
-                 * Order params by display name within a subsystem group.
-                 */
+                // Order params by display name within a subsystem group.
                 @Override
                 public int compare(ParamSnapshot a, ParamSnapshot b) {
                     return dn.get(a.name).compareToIgnoreCase(dn.get(b.name));
