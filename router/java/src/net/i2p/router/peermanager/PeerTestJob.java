@@ -450,7 +450,7 @@ public class PeerTestJob extends JobImpl {
         RouterInfo inGateway = getContext().netDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
         if (inGateway == null) {
             if (_log.shouldWarn())
-                _log.warn("We can't find the gateway to our inbound tunnel?! Impossible?");
+                _log.warn("Gateway to our Inbound tunnel not found -> Probably a dead tunnel");
             return;
         }
 
