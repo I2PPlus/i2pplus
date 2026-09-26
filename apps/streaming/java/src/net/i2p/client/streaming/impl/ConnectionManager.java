@@ -1169,6 +1169,11 @@ class ConnectionManager {
         _context.statManager().createRequiredRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", RATES);
+        // Counts teardowns, not connections: a stream that never completes
+        // disconnectComplete() publishes none of its lifetime stats below, so
+        // comparing this with stream.connectionCreated tells a broken teardown
+        // (hard kill / never completed) apart from a broken publisher.
+        _context.statManager().createRateStat("stream.connectionClosed", "Number of streams whose disconnect completed", "Stream", RATES);
         // Stats for Connection
         _context.statManager().createRequiredRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("stream.connectionReceived", "Number of stream connections received", "Stream", RATES);
@@ -2256,6 +2261,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                 // the connection first, so a teardown racing this loop cannot have
                 // the slot released a second time.
                 releaseConnectionReservation(con);
+                // removeFromConMgr=false defers disconnectComplete() to the caller
+                // and nothing else was finishing the job: the socket, its streams
+                // and its lifetime stats were left dangling for every hard kill.
+                // Idempotent (one-shot CAS) and safe under the write lock; the
+                // second releaseConnectionReservation() inside is a claim no-op.
+                con.disconnectComplete();
             }
             // Every connection above has released its own slot; whatever the
             // ledger still holds is either a bound-but-orphaned token or a leak
@@ -2474,43 +2485,54 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                        + _connectionByInboundId.size() + "\n " + con);
         if (!removed && _log.shouldDebug())
             _log.debug("Failed to remove " + con + "\n" + _connectionByInboundId.values());
+    }
 
-        if (removed) {
-            _context.statManager().addRateData("stream.con.lifetimeMessagesSent", 1+con.getLastSendId(), con.getLifetime());
-            // Static-scan "stream may not be closed": false positive. The
-            // MessageInputStream is owned by Connection and is signalled closed
-            // via streamErrorOccurred() + _receiver.destroy() in
-            // Connection.disconnectComplete(), which always precedes
-            // removeConnection(). Nothing here acquires the stream.
-            MessageInputStream stream = con.getInputStream();
-            long rcvd = 1 + stream.getHighestBlockId();
-            long[] nacks = stream.getNacks();
-            if (nacks != null)
-                rcvd -= nacks.length;
-            _context.statManager().addRateData("stream.con.lifetimeMessagesReceived", rcvd, con.getLifetime());
-            _context.statManager().addRateData("stream.con.lifetimeBytesSent", con.getLifetimeBytesSent(), con.getLifetime());
-            _context.statManager().addRateData("stream.con.lifetimeBytesReceived", con.getLifetimeBytesReceived(), con.getLifetime());
-            _context.statManager().addRateData("stream.con.lifetimeDupMessagesSent", con.getLifetimeDupMessagesSent(), con.getLifetime());
-            _context.statManager().addRateData("stream.con.lifetimeDupMessagesReceived", con.getLifetimeDupMessagesReceived(), con.getLifetime());
-            // Retransmission ratio in per-mille (resends per 1000 messages sent) — a
-            // path-loss signal independent of message size, unlike sendDuplicateSize (bytes).
-            long msgsSent = 1 + con.getLastSendId();
-            if (msgsSent > 0) {
-                long rtxPerMille = 1000L * con.getLifetimeDupMessagesSent() / msgsSent;
-                _context.statManager().addRateData("stream.rtxRatio", rtxPerMille, con.getLifetime());
-            }
-            // Byte-weighted retransmit ratio: actual bandwidth overhead from
-            // retransmission, complementary to the message-count ratio above.
-            long bytesSent = con.getLifetimeBytesSent();
-            if (bytesSent > 0) {
-                long rtxBytesPerMille = 1000L * con.getLifetimeDupBytesSent() / bytesSent;
-                _context.statManager().addRateData("stream.rtxRatioBytes", rtxBytesPerMille, con.getLifetime());
-            }
-            _context.statManager().addRateData("stream.con.lifetimeRTT", con.getOptions().getRTT(), con.getLifetime());
-            _context.statManager().addRateData("stream.con.lifetimeSendWindowSize", con.getOptions().getWindowSize(), con.getLifetime());
-            if (I2PSocketManagerFull.pcapWriter != null)
-                I2PSocketManagerFull.pcapWriter.flush();
+    /**
+     * Publish a closing connection's lifetime counters. Called once per stream
+     * from Connection.disconnectComplete(), which is the single funnel every
+     * teardown goes through — deliberately not gated on whether the dispatch
+     * table still held the connection. A hard-killed or already-unlinked stream
+     * would otherwise silently lose every lifetime stat, and with them the
+     * retransmission ratios the Tuner reads for its loss decisions.
+     *
+     * @param con Connection that is done; never null
+     * @since 0.9.71+
+     */
+    void publishLifetimeStats(Connection con) {
+        _context.statManager().addRateData("stream.con.lifetimeMessagesSent", 1+con.getLastSendId(), con.getLifetime());
+        // Static-scan "stream may not be closed": false positive. The
+        // MessageInputStream is owned by Connection and is signalled closed
+        // via streamErrorOccurred() + _receiver.destroy() in
+        // Connection.disconnectComplete(), which always runs before this.
+        // Nothing here acquires the stream.
+        MessageInputStream stream = con.getInputStream();
+        long rcvd = 1 + stream.getHighestBlockId();
+        long[] nacks = stream.getNacks();
+        if (nacks != null)
+            rcvd -= nacks.length;
+        _context.statManager().addRateData("stream.con.lifetimeMessagesReceived", rcvd, con.getLifetime());
+        _context.statManager().addRateData("stream.con.lifetimeBytesSent", con.getLifetimeBytesSent(), con.getLifetime());
+        _context.statManager().addRateData("stream.con.lifetimeBytesReceived", con.getLifetimeBytesReceived(), con.getLifetime());
+        _context.statManager().addRateData("stream.con.lifetimeDupMessagesSent", con.getLifetimeDupMessagesSent(), con.getLifetime());
+        _context.statManager().addRateData("stream.con.lifetimeDupMessagesReceived", con.getLifetimeDupMessagesReceived(), con.getLifetime());
+        // Retransmission ratio in per-mille (resends per 1000 messages sent) — a
+        // path-loss signal independent of message size, unlike sendDuplicateSize (bytes).
+        long msgsSent = 1 + con.getLastSendId();
+        if (msgsSent > 0) {
+            long rtxPerMille = 1000L * con.getLifetimeDupMessagesSent() / msgsSent;
+            _context.statManager().addRateData("stream.rtxRatio", rtxPerMille, con.getLifetime());
         }
+        // Byte-weighted retransmit ratio: actual bandwidth overhead from
+        // retransmission, complementary to the message-count ratio above.
+        long bytesSent = con.getLifetimeBytesSent();
+        if (bytesSent > 0) {
+            long rtxBytesPerMille = 1000L * con.getLifetimeDupBytesSent() / bytesSent;
+            _context.statManager().addRateData("stream.rtxRatioBytes", rtxBytesPerMille, con.getLifetime());
+        }
+        _context.statManager().addRateData("stream.con.lifetimeRTT", con.getOptions().getRTT(), con.getLifetime());
+        _context.statManager().addRateData("stream.con.lifetimeSendWindowSize", con.getOptions().getWindowSize(), con.getLifetime());
+        if (I2PSocketManagerFull.pcapWriter != null)
+            I2PSocketManagerFull.pcapWriter.flush();
     }
 
     /** Connections currently managed.

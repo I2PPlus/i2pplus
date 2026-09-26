@@ -2283,6 +2283,15 @@ class Connection {
         _inputStream.streamErrorOccurred(new IOException("Socket closed"));
 
         if (_log.shouldInfo()) {_log.info("Connection disconnect complete\n" + toString());}
+        // Counted before the publisher so a failure below still records that
+        // this teardown ran; compared with stream.connectionCreated it separates
+        // a stream that never finished disconnecting from one whose stats were
+        // lost.
+        _context.statManager().addRateData("stream.connectionClosed", 1);
+        // Published ahead of the unlink: the lifetime counters describe the
+        // connection, not the dispatch table, so they must survive a table that
+        // was already swept by disconnectAllHard() or failed to unlink.
+        _connectionManager.publishLifetimeStats(this);
         _connectionManager.removeConnection(this);
         killOutstandingPackets();
     }
