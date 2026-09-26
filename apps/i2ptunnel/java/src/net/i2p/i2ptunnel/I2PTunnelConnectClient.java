@@ -223,6 +223,9 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     if (hostLowerCase.endsWith(".i2p")) {
                         // Destination gets the host name
                         destination = host;
+                    } else if (isBlockedLocalAddress(host)) {
+                        writeErrorMessage(ERR_LOCALHOST, out);
+                        return;
                     } else if (host.contains(".") || host.startsWith("[")) {
                         if (Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"))) {
                             ClientAppManager mgr = _context.clientAppManager();
@@ -252,11 +255,6 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                             usingWWWProxy = true;
                             newRequest.append("CONNECT ").append(host).append(restofline).append("\r\n"); // HTTP spec
                          }
-                    } else if (hostLowerCase.equals("localhost") || host.equals("127.0.0.1") ||
-                               hostLowerCase.endsWith(".localhost") ||
-                               host.startsWith("192.168.") || host.equals("[::1]")) {
-                        writeErrorMessage(ERR_LOCALHOST, out);
-                        return;
                     } else {  // full b64 address (hopefully)
                         destination = host;
                     }

@@ -790,7 +790,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             String header = getErrorPage("ahelper-notfound", ERR_AHELPER_NOTFOUND);
                                             try {
                                                 out.write(header.getBytes(StandardCharsets.UTF_8));
-                                                out.write(("<p>" + _t("This seems to be a bad destination:") + " " + ahelperKey + " " +
+                                                out.write(("<p>" + _t("This seems to be a bad destination:") + " " + DataHelper.escapeHTML(ahelperKey) + " " +
                                                            _t("i2paddresshelper cannot help you with a destination like that!") +
                                                            "</p>").getBytes(StandardCharsets.UTF_8));
                                                 writeFooter(out);
@@ -933,9 +933,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                     // end of (host endsWith(".i2p"))
 
-                    } else if (hostLowerCase.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("10.0.") ||
-                               host.startsWith("172.16.") || host.startsWith("192.168.") || host.equals("[::1]")) {
-                        // if somebody is trying to get to 192.168.example.com, oh well
+                    } else if (isBlockedLocalAddress(host)) {
                         writeErrorPage(out, reader, "localhost", ERR_LOCALHOST);
                         return;
                     } else if (host.contains(".") || host.startsWith("[")) {
@@ -2446,7 +2444,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
         } catch(Exception e) { /* ignored */ }
 
-        out.write("<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
+        out.write("<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + DataHelper.escapeHTML(ahelperKey) +
                   "</span></td></tr>\n</table>\n" + "<hr>\n" +
 
                    "<form method=GET action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
@@ -2456,7 +2454,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                   "<form method=GET action=\"http://" + LOCAL_SERVER + "/add\">\n" +
                   "<input type=hidden name=\"host\" value=\"" + DataHelper.escapeHTML(destination) + "\">\n" +
-                  "<input type=hidden name=\"dest\" value=\"" + ahelperKey + "\">\n" +
+                  "<input type=hidden name=\"dest\" value=\"" + DataHelper.escapeHTML(ahelperKey) + "\">\n" +
                   "<input type=hidden name=\"nonce\" value=\"" + _pageNonce + "\">\n" +
 
                   "<hr>\n<div class=option>\n<h4>" + _t("Save {0} to router address book and continue to website", DataHelper.escapeHTML(destination)) + "</h4>\n<p>" +
