@@ -838,12 +838,14 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (opts.getProperty("i2p.streaming.inactivityAction") == null) {
             opts.setProperty("i2p.streaming.inactivityAction", "1");
         } // 1 == disconnect, 2 == ping
-        if (opts.getProperty("i2p.streaming.initialWindowSize") == null) {
-            opts.setProperty("i2p.streaming.initialWindowSize", "8");
-        }
-        if (opts.getProperty("i2p.streaming.slowStartGrowthRateFactor") == null) {
-            opts.setProperty("i2p.streaming.slowStartGrowthRateFactor", "2");
-        }
+        // No session-level defaults for i2p.streaming.initialWindowSize or
+        // i2p.streaming.slowStartGrowthRateFactor. The router tunes both
+        // globally (Tuner.InitialWindowSizeParam / Tuner.SlowStartGrowthParam,
+        // which adjust the streaming-side defaults); pinning them here would
+        // hold every snark stream at a fixed window and growth factor for the
+        // life of the session and quietly undo that tuning, and snark is most
+        // of what a router pushes. An explicit operator value in router.config
+        // still wins, since it is inherited above.
         if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null) {
             opts.setProperty("i2p.streaming.maxConnsPerMinute", "32");
         } // per peer max incoming connections
