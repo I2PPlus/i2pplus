@@ -76,8 +76,10 @@ class SAMHandlerFactory {
             return null;
         }
 
+        boolean authenticated = false;
         if (secureSession != null) {
             boolean approval = secureSession.approveOrDenySecureSession(i2cpProps, props);
+            authenticated = approval;
             if (!approval && log.shouldWarn()) {
                 log.warn("SAM connection cancelled by user request");
             }
@@ -111,6 +113,9 @@ class SAMHandlerFactory {
         } catch (IOException e) {
             log.error("Error creating the handler for version " + verMajor + "\n* Error: " + e.getMessage());
             throw new SAMException("IOException caught during SAM handler instantiation");
+        }
+        if (authenticated) {
+            handler.setAuthUser(props.getProperty("USER"));
         }
         return handler;
     }

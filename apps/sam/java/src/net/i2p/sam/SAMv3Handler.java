@@ -593,6 +593,16 @@ class SAMv3Handler extends SAMv1Handler
             return false;
         }
 
+        if (!mayUseSession(rec)) {
+            if (_log.shouldWarn())
+                _log.warn("STREAM " + opcode + " denied for session " + nick +
+                          "; session belongs to another client; requester " + getRemoteAddrPort());
+            try {
+                notifyStreamResult(true, "I2P_ERROR", "STREAM SESSION ID " + nick + " is not accessible from this connection");
+            } catch (IOException e) { /* ignored */ }
+            return false;
+        }
+
         SAMv3Handler ctl = rec.getHandler();
         streamSession = ctl.streamSession;
         if (streamSession==null || !ctl.sessionReady) {
@@ -790,8 +800,60 @@ class SAMv3Handler extends SAMv1Handler
         }
     }
 
+    /**
+     * Determine whether this connection may change the bridge's authentication
+     * configuration. AUTH commands rewrite the credentials every future
+     * connection must present and are persisted to disk, so they are accepted
+     * only from the local host, or from a connection that authenticated when
+     * it connected.
+     *
+     * @return true if AUTH commands from this connection are accepted
+     * @since 0.9.71+
+     */
+    boolean mayManageAuth() {
+        return mayManageAuth(isLoopbackAddress(getClientIP()), getAuthUser(),
+                             Boolean.parseBoolean(i2cpProps.getProperty(SAMBridge.PROP_AUTH)));
+    }
+
+    /**
+     * Decide whether an AUTH command may be issued from a connection.
+     *
+     * @param fromLoopback whether the connection is from the local host
+     * @param authUser the user the connection authenticated as, may be null
+     * @param authEnabled whether bridge authentication is currently enabled
+     * @return true if AUTH commands from such a connection are accepted
+     * @since 0.9.71+
+     */
+    static boolean mayManageAuth(boolean fromLoopback, String authUser, boolean authEnabled) {
+        return fromLoopback || (authUser != null && authEnabled);
+    }
+
+    /**
+     * Determine whether this connection may operate on a session created by
+     * another connection. STREAM commands are issued from a connection other
+     * than the one that created the session, and nicknames are shared by the
+     * whole bridge, so access is allowed to the owning connection itself and
+     * to connections belonging to the same client: the same authenticated
+     * user, or the same address when authentication is disabled.
+     *
+     * @param rec the looked-up session record, may be null
+     * @return true if this connection may use that session
+     * @since 0.9.71+
+     */
+    boolean mayUseSession(SessionRecord rec) {
+        if (rec == null) {return false;}
+        SAMv3Handler owner = rec.getHandler();
+        if (owner == null) {return false;}
+        return sameClient(owner);
+    }
+
     /** @since 0.9.24 */
     private boolean execAuthMessage(String opcode, Properties props) {
+        if (!mayManageAuth()) {
+            if (_log.shouldWarn())
+                _log.warn("AUTH " + opcode + " rejected from unauthenticated client " + getRemoteAddrPort());
+            return writeString(AUTH_ERROR, "AUTH commands require an authenticated session or a localhost connection");
+        }
         if (opcode.equals("ENABLE")) {
             i2cpProps.setProperty(SAMBridge.PROP_AUTH, "true");
         } else if (opcode.equals("DISABLE")) {

@@ -9,6 +9,7 @@ package net.i2p.sam;
  */
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
@@ -65,6 +66,125 @@ abstract class SAMHandler implements Runnable, Handler {
      * stopHandler.
      */
     protected boolean stopHandler;
+
+    /**
+     * Username this connection authenticated with during the HELLO handshake,
+     * or null when the bridge has authentication disabled or the connection
+     * was never authenticated. Records created for sub-sessions copy the
+     * username of the control connection that created them.
+     *
+     * @since 0.9.71+
+     */
+    private volatile String authUser;
+
+    /**
+     * Get the username this connection authenticated with, if any.
+     *
+     * @return the authenticated username, or null if not authenticated
+     * @since 0.9.71+
+     */
+    final String getAuthUser() {
+        return authUser;
+    }
+
+    /**
+     * Record the username this connection authenticated with.
+     *
+     * @param user the authenticated username, or null
+     * @since 0.9.71+
+     */
+    final void setAuthUser(String user) {
+        authUser = user;
+    }
+
+    /**
+     * Get the remote address and port of this connection, bracketing IPv6,
+     * for rejection and ban logging.
+     *
+     * @return e.g. "127.0.0.1:54321" or "[::1]:1234", "unknown" if unavailable
+     * @since 0.9.71+
+     */
+    final String getRemoteAddrPort() {
+        InetAddress addr;
+        try {
+            addr = socket.socket().getInetAddress();
+        } catch (Exception e) {
+            return "unknown";
+        }
+        if (addr == null) {return "unknown";}
+        String host = addr.getHostAddress();
+        if (host.indexOf(':') >= 0) {host = '[' + host + ']';}
+        return host + ':' + socket.socket().getPort();
+    }
+
+    /**
+     * Get the remote address of this connection.
+     *
+     * @return the remote IP, or null if unavailable
+     * @since 0.9.71+
+     */
+    private String getRemoteHost() {
+        try {
+            InetAddress addr = socket.socket().getInetAddress();
+            return addr != null ? addr.getHostAddress() : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Determine whether two connections belong to the same client, which is
+     * what decides whether one of them may use a session nickname owned by
+     * the other. Connections that authenticated share their username;
+     * otherwise the remote address decides, so a session may be used by a
+     * second connection from the same host but not by a host that merely
+     * knows the nickname. All loopback addresses count as the same host.
+     *
+     * @param other the other connection's handler, may be null
+     * @return true if this connection may act on the other's sessions
+     * @since 0.9.71+
+     */
+    final boolean sameClient(SAMHandler other) {
+        if (other == null || other == this) {return true;}
+        return sameClient(authUser, other.authUser, getRemoteHost(), other.getRemoteHost());
+    }
+
+    /**
+     * Decide whether two SAM connections belong to the same client. When both
+     * carry an authenticated user the user decides; otherwise the connections
+     * are the same only if they come from the same address, with any loopback
+     * address treated as the same host since the platform may report it in
+     * several forms.
+     *
+     * @param myAuthUser authenticated user of this connection, may be null
+     * @param otherAuthUser authenticated user of the other connection, may be null
+     * @param myHost address of this connection, may be null
+     * @param otherHost address of the other connection, may be null
+     * @return true if the two connections belong to the same client
+     * @since 0.9.71+
+     */
+    static boolean sameClient(String myAuthUser, String otherAuthUser,
+                              String myHost, String otherHost) {
+        if (myAuthUser != null && otherAuthUser != null) {return myAuthUser.equals(otherAuthUser);}
+        if (myHost == null || otherHost == null) {return false;}
+        if (myHost.equals(otherHost)) {return true;}
+        return isLoopbackAddress(myHost) && isLoopbackAddress(otherHost);
+    }
+
+    /**
+     * Determine whether an address is a loopback address, in any of the
+     * forms the platform may report it.
+     *
+     * @param host the address, may be null
+     * @return true if it is a loopback address
+     * @since 0.9.71+
+     */
+    static boolean isLoopbackAddress(String host) {
+        if (host == null) {return false;}
+        if (host.equals("::1") || host.equals("0:0:0:0:0:0:0:1") ||
+            host.equals("::ffff:127.0.0.1")) {return true;}
+        return host.startsWith("127.");
+    }
 
     /**
      * SAMHandler constructor (to be called by subclasses)
