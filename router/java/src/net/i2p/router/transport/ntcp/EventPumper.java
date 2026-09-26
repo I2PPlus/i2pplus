@@ -1207,6 +1207,12 @@ class EventPumper implements Runnable {
             con.close();
             return false;
         }
+        if (con.isReadQueueFull()) {
+            // connection is not processing fast enough; drop read interest until
+            // the reader drains the queue (NTCPConnection.getNextReadBuf() re-arms)
+            clearInterest(key, SelectionKey.OP_READ);
+            return false;
+        }
         return !buf.hasRemaining();
     }
 

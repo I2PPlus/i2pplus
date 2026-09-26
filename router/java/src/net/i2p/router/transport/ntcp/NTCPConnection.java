@@ -66,9 +66,24 @@ public class NTCPConnection implements Closeable {
     private final FIFOBandwidthLimiter.CompleteListener _outboundListener;
     /**
      * Queue of ByteBuffer containing data we have read and are ready to process, oldest first.
-     * Unbounded and lockless.
+     * Lockless. Reads are paused at MAX_READ_BUFS entries so a peer that sends faster
+     * than we process applies backpressure to the socket instead of growing the queue
+     * without bound; the pause lifts once the queue has drained.
      */
     private final Queue<ByteBuffer> _readBufs;
+    /**
+     * Read buffers queued before the socket read interest is dropped (8 KB each),
+     * so one connection can hold at most about 256 KB of read-ahead.
+     *
+     * @since 0.9.71+
+     */
+    private static final int MAX_READ_BUFS = 32;
+    /**
+     * true while read interest is cleared because _readBufs is full.
+     *
+     * @since 0.9.71+
+     */
+    private volatile boolean _readPaused;
     /**
      * List of ByteBuffers containing fully populated and encrypted data, ready to write,
      * and already cleared through the bandwidth limiter.
@@ -83,6 +98,14 @@ public class NTCPConnection implements Closeable {
      * @since 0.9.70+
      */
     public static int getMaxWriteBufs() { return MAX_WRITE_BUFS; }
+
+    /**
+     * Current max read buffers per NTCP connection.
+     *
+     * @return the current max read buffers
+     * @since 0.9.71+
+     */
+    public static int getMaxReadBufs() { return MAX_READ_BUFS; }
 
     /**
      * Max write buffers per NTCP connection (called by Tuner).
@@ -1525,7 +1548,10 @@ public class NTCPConnection implements Closeable {
             // our reads used to be bw throttled (during which time we were no
             // longer interested in reading from the network), but we aren't
             // throttled anymore, so we should resume being interested in reading
-            _transport.getPumper().wantsRead(NTCPConnection.this);
+            // unless the read queue is full, in which case the reader thread
+            // re-arms reads once it has drained the queue
+            if (!_readPaused)
+                _transport.getPumper().wantsRead(NTCPConnection.this);
         }
     }
 
@@ -1657,7 +1683,43 @@ public class NTCPConnection implements Closeable {
             updateStats();
         }
         _readBufs.offer(buf);
+        if (shouldPauseReads(_readPaused, _readBufs.size())) {
+            _readPaused = true;
+            _context.statManager().addRateData("ntcp.readQueuePause", 1);
+            if (_readBufs.isEmpty()) {
+                // the reader drained the queue before the pause took effect,
+                // and its empty poll saw no pause to resume from, so resume
+                // here or nothing would re-arm the read interest
+                _readPaused = false;
+                _transport.getPumper().wantsRead(this);
+            }
+        }
         _transport.getReader().wantsRead(this);
+    }
+
+    /**
+     * Decide whether socket reads should stop because the queue of unread
+     * buffers has reached the limit. Once paused, reads stay paused until the
+     * queue drains, so a peer cannot push us back over the limit repeatedly.
+     *
+     * @param readPaused whether reads are already paused
+     * @param queuedReads buffers waiting to be processed
+     * @return true if the pause should be entered
+     * @since 0.9.71+
+     */
+    static boolean shouldPauseReads(boolean readPaused, int queuedReads) {
+        return !readPaused && queuedReads >= MAX_READ_BUFS;
+    }
+
+    /**
+     * Whether the read queue is full and the socket should stop being read
+     * until the queue has drained.
+     *
+     * @return true if reads are paused
+     * @since 0.9.71+
+     */
+    boolean isReadQueueFull() {
+        return _readPaused;
     }
 
     /**
@@ -1700,7 +1762,27 @@ public class NTCPConnection implements Closeable {
      * @return the next read buffer, or null
      */
     ByteBuffer getNextReadBuf() {
-        return _readBufs.poll();
+        ByteBuffer buf = _readBufs.poll();
+        if (shouldResumeReads(_readPaused, buf == null)) {
+            // queue drained: resume socket reads (re-arms OP_READ in the pumper)
+            _readPaused = false;
+            _transport.getPumper().wantsRead(this);
+        }
+        return buf;
+    }
+
+    /**
+     * Decide whether socket reads should start again after the read queue
+     * paused them. Only the empty queue ends the pause, so a slow reader keeps
+     * applying backpressure until it has caught up.
+     *
+     * @param readPaused whether reads are currently paused
+     * @param queueEmpty whether the queue came up empty
+     * @return true if the pause should be lifted
+     * @since 0.9.71+
+     */
+    static boolean shouldResumeReads(boolean readPaused, boolean queueEmpty) {
+        return readPaused && queueEmpty;
     }
 
     /**

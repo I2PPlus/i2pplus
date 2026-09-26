@@ -252,6 +252,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRequiredRateStat("ntcp.outboundEstablishFailed", "Failed NTCP Outbound Tunnel Establishment events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.outboundFailedIOEImmediate", "Failed NTCP Outbound Tunnel events (IOerror)", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.readError", "Number of NTCP read errors", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.readQueuePause", "Times the NTCP read queue filled and socket reads were paused", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.receiveCorruptEstablishment", "Corrupt NTCP establishment events received", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.receiveMeta", "Number of NTCP receiveMeta events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.registerConnect", "Number of NTCP registerConnect events", "Transport [NTCP]", RATES);
