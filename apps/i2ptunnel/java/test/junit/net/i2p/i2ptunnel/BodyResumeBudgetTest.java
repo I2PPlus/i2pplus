@@ -160,11 +160,11 @@ public class BodyResumeBudgetTest {
         assertFalse(b.tryConsume(1, -1L));
     }
 
-    /** Size ramp: a 40MB entity (10 ramp units) allows 4+10=14 consecutive
+    /** Size ramp: a 10MB entity (10 ramp units) allows 4+10=14 consecutive
      *  no-progress cycles before abandoning. */
     @Test
     public void testScaledStallBudgetForLargeEntity() {
-        long size = 40 * MB;
+        long size = 10 * MB;
         I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
         int allowed = 0;
         for (int i = 0; i < 30; i++) {
@@ -174,11 +174,11 @@ public class BodyResumeBudgetTest {
         assertFalse(b.tryConsume(54337L, size));
     }
 
-    /** Size ramp: the absolute cap for a 40MB entity is 32+10=42 total
+    /** Size ramp: the absolute cap for a 10MB entity is 32+10=42 total
      *  cycles even when every cycle makes progress. */
     @Test
     public void testScaledTotalCapForLargeEntity() {
-        long size = 40 * MB;
+        long size = 10 * MB;
         I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
         int allowed = 0;
         for (int i = 1; i <= 60; i++) {
@@ -188,10 +188,10 @@ public class BodyResumeBudgetTest {
         assertFalse(b.tryConsume(61, size));
     }
 
-    /** Size ramp: a sub-4MB entity keeps the exact baseline limits. */
+    /** Size ramp: a sub-1MB entity keeps the exact baseline limits. */
     @Test
     public void testSubUnitEntityKeepsBaseline() {
-        long size = 4 * MB - 1;
+        long size = MB - 1;
         I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
         int allowed = 0;
         for (int i = 0; i < 20; i++) {

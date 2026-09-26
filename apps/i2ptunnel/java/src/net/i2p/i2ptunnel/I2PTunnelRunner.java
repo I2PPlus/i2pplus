@@ -83,7 +83,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  destination is reachable yet always sends zero bytes, each cycle succeeds
      *  on attempt 1 and the outer loop would spin forever.  This is the
      *  baseline for entities under {@link #RETRY_RAMP_UNIT_BYTES};
-     *  {@link #stallCycleLimit(long)} ramps the cap by one cycle per 4MB of
+     *  {@link #stallCycleLimit(long)} ramps the cap by one cycle per 1MB of
      *  Content-Length so a large file can outlive proportionally more
      *  tunnel-pool churn.  A cycle that makes any forward progress on
      *  the entity body resets this budget (see {@link #MAX_RESUME_CYCLES}).
@@ -109,20 +109,32 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *
      *  @since 0.9.71+
      */
-    static final long RETRY_RAMP_UNIT_BYTES = 4 * 1024 * 1024;
+    static final long RETRY_RAMP_UNIT_BYTES = 1024 * 1024;
     /**
-     *  Hard cap on the size-scaled stall budget (8x baseline), bounding
+     *  Multiplier applied to a baseline budget to cap the size-scaled ramps.
+     *  The historical caps were 8x baseline under a 4MB ramp unit, i.e. 7x
+     *  baseline of headroom.  The 1MB unit is 4x finer, so preserving the same
+     *  saturation sizes (112MB for the stall budget, 896MB for the total
+     *  budget) needs 4 * 7 = 28x baseline of headroom, 29x baseline in total.
+     *
+     *  @since 0.9.71+
+     */
+    static final int SCALED_CAP_MULTIPLIER = 29;
+    /**
+     *  Hard cap on the size-scaled stall budget
+     *  ({@link #SCALED_CAP_MULTIPLIER} times baseline), bounding
      *  worst-case browser wait when the destination is genuinely stuck.
      *
      *  @since 0.9.71+
      */
-    static final int MAX_SCALED_STALL_CYCLES = MAX_EMPTY_RECONNECT_CYCLES * 8;
+    static final int MAX_SCALED_STALL_CYCLES = MAX_EMPTY_RECONNECT_CYCLES * SCALED_CAP_MULTIPLIER;
     /**
-     *  Hard cap on the size-scaled total cycle budget (8x baseline).
+     *  Hard cap on the size-scaled total cycle budget
+     *  ({@link #SCALED_CAP_MULTIPLIER} times baseline).
      *
      *  @since 0.9.71+
      */
-    static final int MAX_SCALED_RESUME_CYCLES = MAX_RESUME_CYCLES * 8;
+    static final int MAX_SCALED_RESUME_CYCLES = MAX_RESUME_CYCLES * SCALED_CAP_MULTIPLIER;
 
     /**
      *  Base delay before empty-retry cycle N+1 (ms). Combined with exponential
@@ -264,7 +276,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  <p>A long transfer lives through proportionally more tunnel-pool churn
      *  than a small file, so the stall budget ramps by one cycle per
      *  {@link #RETRY_RAMP_UNIT_BYTES} of the entity's verified Content-Length.
-     *  Unknown or sub-4MB entities keep the
+     *  Unknown or sub-1MB entities keep the
      *  {@link #MAX_EMPTY_RECONNECT_CYCLES} baseline, and the result is capped
      *  at {@link #MAX_SCALED_STALL_CYCLES} so a stuck destination still fails
      *  within a bounded browser wait.
@@ -285,7 +297,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  against this absolute cap, so it must grow with the entity the same way
      *  {@link #stallCycleLimit(long)} does: one cycle per
      *  {@link #RETRY_RAMP_UNIT_BYTES} of verified Content-Length, baseline
-     *  below 4MB, capped at {@link #MAX_SCALED_RESUME_CYCLES} so a pathological
+     *  below 1MB, capped at {@link #MAX_SCALED_RESUME_CYCLES} so a pathological
      *  trickle still terminates.
      *
      *  @param contentLength entity Content-Length in bytes, or -1 if unknown

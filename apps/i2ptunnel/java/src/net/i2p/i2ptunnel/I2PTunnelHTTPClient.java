@@ -2361,10 +2361,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *
      *  <p>Body-resume reconnects run after response headers have arrived, so
      *  the size is known and verifiable; the budget gains one attempt per
-     *  {@link I2PTunnelRunner#RETRY_RAMP_UNIT_BYTES} of entity, capped at 3x
+     *  {@link I2PTunnelRunner#RETRY_RAMP_UNIT_BYTES} of entity, capped at 9x
      *  the configured budget so a large file cannot pin the runner across an
-     *  unbounded connect-retry marathon.  Unknown length (empty-response
-     *  retry with no headers, or a sub-4MB entity) returns the base budget
+     *  unbounded connect-retry marathon.  The 9x cap saturates at the same
+     *  entity size as the original 3x cap at 4MB granularity (8MB per base
+     *  attempt).  Unknown length (empty-response
+     *  retry with no headers, or a sub-1MB entity) returns the base budget
      *  unchanged.  Pure decision — no context access, safe for unit tests.
      *
      *  @param baseBudget configured attempt budget for this request
@@ -2375,7 +2377,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     static int scaledEmptyReconnectBudget(int baseBudget, long contentLength) {
         if (baseBudget <= 0 || contentLength <= 0) {return Math.max(0, baseBudget);}
         long ramp = contentLength / I2PTunnelRunner.RETRY_RAMP_UNIT_BYTES;
-        return (int) Math.min((long) baseBudget + ramp, (long) baseBudget * 3);
+        return (int) Math.min((long) baseBudget + ramp, (long) baseBudget * 9);
     }
 
     /**
