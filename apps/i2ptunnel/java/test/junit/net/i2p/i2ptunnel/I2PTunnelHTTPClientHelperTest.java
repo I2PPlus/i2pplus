@@ -182,6 +182,34 @@ public class I2PTunnelHTTPClientHelperTest {
         assertEquals(0, I2PTunnelHTTPClient.parseEmptyRetries("--"));
     }
 
+    // ---------- scaledEmptyReconnectBudget ----------
+
+    private static final long RAMP_UNIT = 4L * 1024 * 1024;
+
+    @Test
+    public void testScaledBudgetBaselineWhenSizeUnknownOrSmall() {
+        assertEquals(9, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(9, -1));
+        assertEquals(9, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(9, 0));
+        assertEquals(9, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(9, RAMP_UNIT - 1));
+        // a disabled budget must stay disabled regardless of size
+        assertEquals(0, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(0, 100L * RAMP_UNIT));
+    }
+
+    @Test
+    public void testScaledBudgetRampsPerUnit() {
+        assertEquals(10, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(9, RAMP_UNIT));
+        assertEquals(19, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(9, 40L * 1024 * 1024));
+        // current installer entity: 45415943 / 4MB == 10
+        assertEquals(19, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(9, 45415943L));
+    }
+
+    @Test
+    public void testScaledBudgetCapsAtTripleBase() {
+        assertEquals(27, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(9, 4L * 1024 * 1024 * 1024));
+        assertEquals(30, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(10, Long.MAX_VALUE));
+        assertEquals(6, I2PTunnelHTTPClient.scaledEmptyReconnectBudget(2, Long.MAX_VALUE));
+    }
+
     // ---------- shouldStopEmptyReconnect ----------
 
     @Test

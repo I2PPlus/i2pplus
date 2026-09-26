@@ -1749,6 +1749,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     // Secondary-socket permit for a dual race; held only until the
                     // runner settles the race (releaseRacePermit).
                     final AtomicReference<Hash> racePermit = new AtomicReference<>();
+                    // hrunner is reassigned across keepalive iterations, so the
+                    // callback captures this effectively-final alias instead.
+                    final I2PTunnelHTTPClientRunner resumeRunner = hrunner;
                     hrunner.setReconnectCallback(new I2PTunnelRunner.ReconnectCallback() {
                         @Override
                         public I2PSocket reconnect(Exception cause) {
@@ -1766,7 +1769,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 }
                                 return warm;
                             }
-                            return openEmptyReconnect(reconnectDest, reconnectPort, emptyBudget, requestId, false);
+                            // Body-resume: headers already delivered, so the
+                            // verified Content-Length ramps the attempt budget.
+                            // Empty-response retry sees no headers (-1) and
+                            // keeps the configured budget unchanged.
+                            I2PTunnelRunner.BodyProgress bp = resumeRunner.getBodyProgress();
+                            long expectedLength = bp != null ? bp.contentLength : -1;
+                            return openEmptyReconnect(reconnectDest, reconnectPort,
+                                    scaledEmptyReconnectBudget(emptyBudget, expectedLength),
+                                    requestId, false);
                         }
 
                         @Override
@@ -2344,6 +2355,29 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         } catch (NumberFormatException nfe) {
             return 0;
         }
+    }
+
+    /**
+     *  Scale the reconnect attempt budget by the entity size already verified
+     *  from this exchange's Content-Length header.
+     *
+     *  <p>Body-resume reconnects run after response headers have arrived, so
+     *  the size is known and verifiable; the budget gains one attempt per
+     *  {@link I2PTunnelRunner#RETRY_RAMP_UNIT_BYTES} of entity, capped at 3x
+     *  the configured budget so a large file cannot pin the runner across an
+     *  unbounded connect-retry marathon.  Unknown length (empty-response
+     *  retry with no headers, or a sub-4MB entity) returns the base budget
+     *  unchanged.  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param baseBudget configured attempt budget for this request
+     *  @param contentLength entity Content-Length in bytes, or -1 if unknown
+     *  @return the scaled attempt budget; never below 0
+     *  @since 0.9.71+
+     */
+    static int scaledEmptyReconnectBudget(int baseBudget, long contentLength) {
+        if (baseBudget <= 0 || contentLength <= 0) {return Math.max(0, baseBudget);}
+        long ramp = contentLength / I2PTunnelRunner.RETRY_RAMP_UNIT_BYTES;
+        return (int) Math.min((long) baseBudget + ramp, (long) baseBudget * 3);
     }
 
     /**
