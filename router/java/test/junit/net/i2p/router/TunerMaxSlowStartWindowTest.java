@@ -15,6 +15,12 @@ import org.junit.Test;
  * The dead zone (factoryDefault to factoryDefault * 2) was removed
  * to allow faster convergence to the optimal window.
  *
+ * <p>Clean-path growth is exponential: each cycle adds
+ * {@code max(step, current / 4)}, converging on MAX in ~7 cycles from the
+ * factory default instead of 48 linear ones; near MIN the climb degenerates
+ * to the plain step. Shrink behavior is unchanged (one step down, or a drop
+ * to the recovery floor under hard signals).
+ *
  * @since 0.9.71+
  */
 public class TunerMaxSlowStartWindowTest {
@@ -53,23 +59,23 @@ public class TunerMaxSlowStartWindowTest {
     }
 
     @Test
-    public void belowFactoryDefaultIncreasesByStep() {
-        // at 1500 (below 2048 but above 1024) → increase by step toward 2048
-        assertEquals(1500 + STEP, target(1500, 500));
+    public void belowFactoryDefaultIncreasesExponentially() {
+        // at 1500 (below 2048 but above 1024) → 1500 + max(step, 1500/4)
+        assertEquals(1500 + 375, target(1500, 500));
     }
 
     @Test
     public void atRecoveryFloorIncreases() {
-        // at 1024 → increase toward 2048
-        assertEquals(1152, target(RECOVERY_FLOOR, 500));
+        // at 1024 → 1024 + max(step, 1024/4) toward 2048
+        assertEquals(1280, target(RECOVERY_FLOOR, 500));
     }
 
     // ----- dead zone removed tests -----
 
     @Test
     public void atFactoryDefaultIncreases() {
-        // current == 2048 → increase toward MAX (dead zone removed)
-        assertEquals(2176, target(DEFAULT, 500));
+        // current == 2048 → 2048 + max(step, 2048/4) toward MAX (dead zone removed)
+        assertEquals(2560, target(DEFAULT, 500));
     }
 
     @Test
@@ -128,8 +134,8 @@ public class TunerMaxSlowStartWindowTest {
 
     @Test
     public void afterCongestionBelowFactoryDefaultIncreases() {
-        // congested shrinks to 1024, then healthy → increase toward 2048
-        assertEquals(1152, target(RECOVERY_FLOOR, 500));
+        // congested shrinks to 1024, then healthy → 1024 + max(step, 256)
+        assertEquals(1280, target(RECOVERY_FLOOR, 500));
     }
 
     // ----- RTT-based decrease tests -----
@@ -171,5 +177,31 @@ public class TunerMaxSlowStartWindowTest {
     public void recoveryFloorAtMinStays() {
         // at 128, congested → stays at min
         assertEquals(MIN, targetCongested(MIN, 500, 9000));
+    }
+
+    // ----- exponential climb convergence -----
+
+    /** From the factory default a clean path reaches MAX in ~7 cycles instead
+     *  of 48 linear ones — four cycles are already far past four linear steps. */
+    @Test
+    public void cleanClimbReachesMaxInSevenCycles() {
+        int v = DEFAULT;
+        v = target(v, 500); // 2560
+        assertEquals(2560, v);
+        for (int i = 0; i < 3; i++)
+            v = target(v, 500); // 3200, 4000, 5000
+        // four linear cycles would only have reached 2048 + 4*128 = 2560
+        assertTrue("expected far past linear 2560, got " + v, v > 2560);
+        assertEquals(5000, v);
+        for (int i = 0; i < 10; i++)
+            v = target(v, 500);
+        assertEquals(MAX, v);
+    }
+
+    /** Near MIN the exponential term degenerates to the plain step. */
+    @Test
+    public void nearMinClimbIsLinearStep() {
+        // current/4 (50) < step (128) → the climb is exactly one step
+        assertEquals(200 + STEP, target(200, 500));
     }
 }

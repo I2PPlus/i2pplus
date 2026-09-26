@@ -305,8 +305,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /** Initial window size. */
     static int getInitialWindowSize() { return initialWindowSize; }
-    /** Initial window size. */
-    static void setInitialWindowSize(int val) { initialWindowSize = Math.max(4, Math.min(512, val)); }
+    /**
+     * Initial window size, clamped to [4, 1024] to match the Tuner's
+     * InitialWindowSizeParam bounds; the previous 512 cap silently
+     * truncated the param's 513-1024 range.
+     */
+    static void setInitialWindowSize(int val) { initialWindowSize = Math.max(4, Math.min(1024, val)); }
 
     /**
      *  Reactive cap on concurrent streams (both per-manager inbound budget and the

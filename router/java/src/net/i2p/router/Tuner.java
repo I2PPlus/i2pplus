@@ -4313,8 +4313,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * (heap below 40%) it takes four steps per cycle, with moderate headroom
      * (below 50%) two, and at 50% or above it holds until memory frees rather
      * than spending headroom it may need. Combined with the 5s fast cycle,
-     * the 4096-message ceiling is reachable from the factory default in two
-     * strong cycles (~10s) instead of ~4 slow minutes; every climb is still
+     * the 8192-message ceiling is reachable from the factory default in four
+     * strong cycles (~20s) instead of ~4 slow minutes; every climb is still
      * bounded by {@code max} and scaled down by health dampening in
      * {@code BaseParam.update()}.
      *
@@ -4387,9 +4387,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * congestion, and memory pressure so the cap lifts off clean paths (letting
      * a fast pipe actually reach it) and only comes back down under hard
      * negative signals, without over-committing memory on constrained routers.
-     * The ceiling spans the full streaming range up to the absolute cap (4096)
-     * so that on low-RTT, high-bandwidth paths the window can reach ~8 MB/s
-     * (4096 messages &times; 1730 bytes / 0.89 s RTT).
+     * The ceiling spans the full streaming range up to the absolute cap (8192,
+     * mirroring streaming's ABSOLUTE_MAX_WINDOW) so that on low-RTT,
+     * high-bandwidth paths the window can reach ~15.7 MB/s
+     * (8192 messages &times; 1730 bytes / 0.89 s RTT).
      */
     private class MaxWindowSizeParam extends BaseParam {
 
@@ -4398,10 +4399,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     SUB_STREAMING,
 
                     // Step 512, fast (5s) cycle: on a clean path with heap
-                    // headroom the 4096-message ceiling (~8 MB/s at 0.89s
-                    // RTT) is reached in two four-step cycles (~10s),
-                    // before health dampening.
-                    512, 4096, 512, "stream.con.initialRTT.out", _context, null,
+                    // headroom the 8192-message ceiling (~15.7 MB/s at 0.89s
+                    // RTT, matching streaming's ABSOLUTE_MAX_WINDOW) is
+                    // reached from the default in four four-step cycles
+                    // (~20s), before health dampening.
+                    512, 8192, 512, "stream.con.initialRTT.out", _context, null,
                     SystemVersion.isSlow() ? 768 : 1024);
         }
 
@@ -9928,6 +9930,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * <p>This is extracted to a static method for unit testing,
      * matching the pattern of {@link #sendWindowTarget}.
      *
+     * <p>Clean-path increases are exponential: a cycle adds
+     * {@code max(step, current / 4)}, so a healthy cap climbs from the
+     * recovery floor to {@code max} in ~8 cycles (~2 minutes on the 15s
+     * slow cycle) instead of one linear {@code step} per cycle (48 cycles,
+     * 12 minutes), unlocking slow start's exponential ramp on high-BDP paths
+     * much sooner. Near {@code min} the term degenerates to the linear
+     * {@code step}, and shrink branches are untouched: loss still pulls the
+     * cap back fast. Health dampening in {@code BaseParam.update()} still
+     * applies on top.
+     *
      * @param current current runtime value of the parameter
      * @param min minimum allowed value
      * @param max maximum allowed value
@@ -9946,6 +9958,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
 
         int recoveryFloor = factoryDefault / 2;
+        int climb = Math.max(step, current / 4);
 
         // At min: don't shrink below min
         if (current <= min) {
@@ -9956,7 +9969,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         // Below recovery floor: increase toward factory default
         if (current < recoveryFloor && !congested && observed <= 7000)
-            return Math.min(factoryDefault, current + step);
+            return Math.min(factoryDefault, current + climb);
 
         // Severe drops or congestion = shrink window cap
         if (dropping || congested) {
@@ -9971,11 +9984,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         // Below factory default: increase toward factory default
         if (current < factoryDefault && !dropping && !congested)
-            return Math.min(factoryDefault, current + step);
+            return Math.min(factoryDefault, current + climb);
 
         // Above factory default: increase toward max (dead zone removed for faster convergence)
         if (current >= factoryDefault && !dropping && !congested)
-            return Math.min(max, current + step);
+            return Math.min(max, current + climb);
 
         return current;
     }
