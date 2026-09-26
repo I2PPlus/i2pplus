@@ -26,9 +26,18 @@ import net.i2p.util.Log;
  * cooldown window.
  *
  * <p>Tracked marks are hard-bounded at {@link #MAX_TRACKED_PEERS} (expired
- * marks evicted first, then the oldest active ones), and the active exclusion
- * count is cached so {@link #getGhostCount()} is a volatile read on the hot
- * path instead of a full map scan.
+ * marks evicted first, then those nearest to expiry), and the *active*
+ * exclusion set is separately hard-bounded at {@link #MAX_ACTIVE_GHOSTS} by
+ * deactivating the exclusions closest to lapsing.  Without that second bound a
+ * burst of timeouts can exclude enough of the reachable set that tier selection
+ * returns no candidates at all — the exclusion list starves the very selection
+ * it is meant to protect.  Deactivation keeps {@code offenses} and
+ * {@code markedAt}, so escalation resumes if the peer times out again.
+ *
+ * <p>The active exclusion count is cached so {@link #getGhostCount()} is a
+ * volatile read on the hot path instead of a full map scan; its sweep deadline
+ * is bucketed to {@link #COUNT_GRANULARITY_MS} so scattered expiry times cost
+ * at most one rescan per bucket rather than one per mark.
  *
  * @since 0.9.68+
  */
@@ -109,6 +118,36 @@ public class GhostPeerManager {
     private static final int EVICTION_HEADROOM = 32;
 
     /**
+     * Hard bound on *active* exclusions.  Excluded peers are also gated out of
+     * tier selection, so an unbounded active set starves the candidate pool:
+     * observed as hundreds of "Skipping ghost peer" lines and "All selected
+     * peers were ghosts" build failures.  Keeping the active set well below the
+     * reachable peer count preserves the exclusion's value without ever letting
+     * it empty the tier.  Package-visible so tests can pin the bound.
+     * @since 0.9.71+
+     */
+    static final int MAX_ACTIVE_GHOSTS = 128;
+
+    /**
+     * Active exclusions are evicted down to this headroom, mirroring
+     * {@link #EVICTION_HEADROOM}, so a sustained timeout storm pays for a full
+     * count rescan every few marks rather than on every mark.
+     * @since 0.9.71+
+     */
+    private static final int ACTIVE_EVICTION_HEADROOM = 16;
+
+    /**
+     * Sweep deadlines are rounded up to this many milliseconds.  Marks expire
+     * at whatever offset the timeout landed on; without bucketing, a hundred
+     * staggered expiries would force a full map rescan per distinct millisecond
+     * as {@link #getGhostCount()} is polled.  Bucketing costs at most this much
+     * staleness in the *count* only — {@link #isGhost(Hash)} always reads the
+     * map directly, so selection is never affected.
+     * @since 0.9.71+
+     */
+    static final long COUNT_GRANULARITY_MS = 1000L;
+
+    /**
      * One ghost mark: exclusion expiry (snapshotted at mark time), the repeat
      * offense count that produced it, and when it was written so the count can
      * decay.
@@ -124,6 +163,17 @@ public class GhostPeerManager {
             this.markedAt = markedAt;
         }
     }
+
+    /**
+     * Eviction order by expiry ascending: expired marks sort first (oldest
+     * expiry first, so they go in the order they lapsed), followed by active
+     * marks nearest to lapsing.  Keying on the expiry rather than the mark time
+     * keeps whichever exclusions have the most protection left — a 4× escalated
+     * mark still ten minutes from lapsing outlives a base mark about to lapse,
+     * which {@code markedAt} ordering would get backwards.
+     */
+    private static final Comparator<Map.Entry<Hash, GhostMark>> BY_EXPIRY =
+        Comparator.comparingLong((Map.Entry<Hash, GhostMark> e) -> e.getValue().until);
 
     public GhostPeerManager(RouterContext context) {
         _context = context;
@@ -149,14 +199,23 @@ public class GhostPeerManager {
      */
     public void recordTimeout(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
-        pruneToLimit();
 
         final long now = _context.clock().now();
         final double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         final long baseCooldown = getActiveCooldownMs(_context, buildSuccess);
         final boolean underAttack = isUnderAttack(buildSuccess);
         final int threshold = Math.max(1, getTimeoutThreshold(_context));
-        _ghostMarks.compute(peer, (p, cur) -> {
+        GhostMark mark;
+        boolean isActive;
+        // One monitor section for prune + mark + count.  _ghostMarks is private
+        // to this class, so serialising every writer here makes the read/modify/
+        // write below atomic and lets the active count be maintained by delta
+        // instead of a full rescan per timeout.  The rate-limited ghost warning
+        // rides along in the same section: it was already a synchronized method,
+        // so this folds two acquisitions into one rather than adding hold time.
+        synchronized (this) {
+            pruneToLimitLocked(now);
+            GhostMark cur = _ghostMarks.get(peer);
             int offenses = cur == null ? 0
                 : nextOffenses(cur.offenses, cur.markedAt, now, OFFENSE_DECAY_MS);
             if (offenses < threshold - 1) {
@@ -165,19 +224,27 @@ public class GhostPeerManager {
                 // revoked by a later write — its expiry was snapshotted when
                 // the peer earned it.
                 long until = cur != null && now < cur.until ? cur.until : 0L;
-                return new GhostMark(until, offenses, now);
+                mark = new GhostMark(until, offenses, now);
+            } else {
+                // strikes = offenses + 1; shift so the first strike at or above
+                // the threshold gets the base cooldown (T=1: shift == offenses).
+                int shift = Math.max(0, offenses - (threshold - 1));
+                mark = new GhostMark(now + escalationCooldownMs(baseCooldown, shift),
+                                     offenses, now);
             }
-            // strikes = offenses + 1; shift so the first strike at or above
-            // the threshold gets the base cooldown (T=1: shift == offenses).
-            int shift = Math.max(0, offenses - (threshold - 1));
-            return new GhostMark(now + escalationCooldownMs(baseCooldown, shift),
-                                 offenses, now);
-        });
-        refreshActiveCount();
-        GhostMark mark = _ghostMarks.get(peer);
-        if (mark != null && now < mark.until) {
-            logGhostMark(peer, underAttack, mark.until - now, mark.offenses);
-        } else if (_log.shouldDebug()) {
+            boolean wasActive = cur != null && now < cur.until;
+            _ghostMarks.put(peer, mark);
+            adjustActiveLocked(wasActive, now < mark.until, mark.until);
+            capActiveLocked(now);
+            // The active-set cap may have just deactivated this very mark, so
+            // read it back rather than trusting the value we inserted.
+            mark = _ghostMarks.get(peer);
+            isActive = mark != null && now < mark.until;
+            if (isActive) {
+                logGhostMarkLocked(peer, underAttack, mark.until - now, mark.offenses, now);
+            }
+        }
+        if (!isActive && _log.shouldDebug()) {
             _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] strike " +
                        (mark != null ? mark.offenses + 1 : 1) + "/" + threshold +
                        (underAttack ? " (network under stress)" : "") +
@@ -222,14 +289,22 @@ public class GhostPeerManager {
         return baseMs << shift;
     }
 
-    private synchronized void logGhostMark(Hash peer, boolean underAttack, long cooldownMs, int offenses) {
+    /**
+     * Debug detail plus the once-per-minute warn summary.  Caller must hold
+     * {@code this} — the warn path both reads and writes the rate-limit stamp,
+     * and callers are already inside the section that owns the map mutation, so
+     * folding it in avoids a second acquisition per marked peer.
+     *
+     * @param now the caller's view of the clock, reused instead of re-reading it
+     */
+    private void logGhostMarkLocked(Hash peer, boolean underAttack, long cooldownMs,
+                                    int offenses, long now) {
         if (_log.shouldDebug()) {
             _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] marked as ghost for " +
                        cooldownMs / 1000 + "s" +
                        (offenses > 0 ? " (repeat offense " + offenses + ")" : "") +
                        (underAttack ? " (network under stress)" : ""));
         }
-        long now = _context.clock().now();
         if (_log.shouldWarn() && now - _lastGhostWarnTime >= GHOST_WARN_INTERVAL_MS) {
             _lastGhostWarnTime = now;
             _log.warn("Tunnel build timeouts are marking peers as ghost -> Enable debug logging for per-peer detail");
@@ -237,24 +312,109 @@ public class GhostPeerManager {
     }
 
     /**
-     * Enforce {@link #MAX_TRACKED_PEERS} as a hard bound: evict down to the
-     * headroom, expired marks first (oldest first), then the oldest active
-     * marks, so an hour of timeouts across many peers can never grow the map
-     * without limit.  O(n log n) but only runs once the bound is reached;
-     * the active count is recomputed at the end.
+     * Apply one mark insertion to the cached active count: +1 when the peer
+     * becomes newly excluded, −1 when it stops being excluded, and no change
+     * when it was and still is (or was not and still is not).  The deadline
+     * only ever moves earlier — pushing it out would risk serving a stale count
+     * past a real expiry, whereas an early deadline just costs one extra
+     * exact rescan.  Caller must hold {@code this}.
+     *
+     * @param wasActive whether the peer's previous mark was still excluding it
+     * @param isActive whether the new mark excludes it
+     * @param until new mark's expiry (ms), irrelevant when not active
      */
-    private synchronized void pruneToLimit() {
-        int size = _ghostMarks.size();
-        int target = MAX_TRACKED_PEERS - EVICTION_HEADROOM;
-        if (size <= target) {
+    private void adjustActiveLocked(boolean wasActive, boolean isActive, long until) {
+        CountSnapshot snap = _activeSnapshot;
+        int active = snap.active + (isActive ? 1 : 0) - (wasActive ? 1 : 0);
+        long due = snap.due;
+        if (active < 0) {
+            active = 0;
+        }
+        if (isActive && until < due) {
+            due = until;
+        }
+        _activeSnapshot = new CountSnapshot(active, bucketDue(due));
+    }
+
+    /**
+     * Round a sweep deadline up to the next {@link #COUNT_GRANULARITY_MS}
+     * boundary, so the cache is recomputed at most once per bucket instead of
+     * once per distinct expiry millisecond.  Idempotent; {@code Long.MAX_VALUE}
+     * (no active marks) passes through untouched.
+     *
+     * @param due earliest active expiry, or {@code Long.MAX_VALUE}
+     * @return the bucketed deadline
+     * @since 0.9.71+
+     */
+    static long bucketDue(long due) {
+        if (due == Long.MAX_VALUE || due <= 0) {
+            return due;
+        }
+        return (due + COUNT_GRANULARITY_MS - 1) / COUNT_GRANULARITY_MS
+               * COUNT_GRANULARITY_MS;
+    }
+
+    /**
+     * Enforce {@link #MAX_ACTIVE_GHOSTS}: a burst of timeouts that excludes
+     * enough of the reachable set makes tier selection return nothing — the
+     * exclusion intended to protect the build instead starves it (seen as
+     * "All selected peers were ghosts").  Deactivate the excess, dropping the
+     * exclusions nearest to lapsing so the set keeps the marks with the most
+     * time left.  Deactivation zeroes {@code until} only: the offense count and
+     * mark time survive, so a peer that keeps timing out re-escalates instead
+     * of starting over.  No-op — and so free — while the set is within bounds.
+     * Caller must hold {@code this}.
+     *
+     * @param now current router time (ms)
+     */
+    private void capActiveLocked(long now) {
+        CountSnapshot snap = _activeSnapshot;
+        if (snap.active < MAX_ACTIVE_GHOSTS) {
             return;
         }
-        long now = _context.clock().now();
-        int toEvict = size - target;
+        int target = MAX_ACTIVE_GHOSTS - ACTIVE_EVICTION_HEADROOM;
+        List<Map.Entry<Hash, GhostMark>> active = new ArrayList<>(snap.active);
+        for (Map.Entry<Hash, GhostMark> e : _ghostMarks.entrySet()) {
+            if (now < e.getValue().until) {
+                active.add(e);
+            }
+        }
+        active.sort(BY_EXPIRY);
+        int excess = active.size() - target;
+        if (excess <= 0) {
+            // Snapshot overstated the count (an expiry lapsed since the last
+            // sweep); publish the true one and skip the evict pass.
+            rescanActiveLocked(now);
+            return;
+        }
+        for (int i = 0; i < excess; i++) {
+            Map.Entry<Hash, GhostMark> victim = active.get(i);
+            GhostMark m = victim.getValue();
+            _ghostMarks.put(victim.getKey(), new GhostMark(0L, m.offenses, m.markedAt));
+        }
+        rescanActiveLocked(now);
+    }
+
+    /**
+     * Enforce {@link #MAX_TRACKED_PEERS} as a hard bound.  Triggered only once
+     * the bound is actually reached, then evicted down to the headroom, so the
+     * headroom really is the number of inserts absorbed before the next pass
+     * rather than the point the pass starts at.  Eviction order is
+     * {@link #BY_EXPIRY} — expired marks first, then actives nearest to lapsing.
+     * O(n log n), once per headroom's worth of inserts.  Rescans the active
+     * count only when it actually evicted, so the caller's single delta isn't
+     * undone by an unconditional recompute.  Caller must hold {@code this}.
+     *
+     * @param now current router time (ms)
+     */
+    private void pruneToLimitLocked(long now) {
+        int size = _ghostMarks.size();
+        if (size < MAX_TRACKED_PEERS) {
+            return;
+        }
+        int toEvict = size - (MAX_TRACKED_PEERS - EVICTION_HEADROOM);
         List<Map.Entry<Hash, GhostMark>> entries = new ArrayList<>(_ghostMarks.entrySet());
-        entries.sort(Comparator
-                .comparingLong((Map.Entry<Hash, GhostMark> e) -> now >= e.getValue().until ? 0 : 1)
-                .thenComparingLong(e -> e.getValue().markedAt));
+        entries.sort(BY_EXPIRY);
         for (int i = 0; i < toEvict && i < entries.size(); i++) {
             _ghostMarks.remove(entries.get(i).getKey());
         }
@@ -270,8 +430,13 @@ public class GhostPeerManager {
      */
     public void recordSuccess(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
-        if (_ghostMarks.remove(peer) != null) {
-            refreshActiveCount();
+        // Same monitor as recordTimeout so a removal can never interleave
+        // between its map write and its count delta.  Rare enough that the
+        // exact rescan is cheaper than tracking a removal delta here.
+        synchronized (this) {
+            if (_ghostMarks.remove(peer) != null) {
+                rescanActiveLocked(_context.clock().now());
+            }
         }
     }
 
@@ -309,17 +474,20 @@ public class GhostPeerManager {
      */
     public void clearGhost(Hash peer) {
         if (peer == null) {return;}
-        if (_ghostMarks.remove(peer) != null) {
-            refreshActiveCount();
+        synchronized (this) {
+            if (_ghostMarks.remove(peer) != null) {
+                rescanActiveLocked(_context.clock().now());
+            }
         }
     }
 
     /**
      * Count of currently excluded ghost peers (active marks only — expired
      * or sub-threshold entries retained for offense history are not counted).
-     * A single volatile read when the cached count is still within its
-     * deadline; a full rescan only when an exclusion has expired since the
-     * last refresh or the map was mutated.
+     * A single volatile read while the cached count is within its deadline;
+     * an exact rescan only once the bucketed deadline passes.  Deliberately
+     * capped by {@link #MAX_ACTIVE_GHOSTS}, which is what keeps a timeout
+     * storm from emptying the candidate tier.
      *
      * @return number of ghost peers
      */
@@ -347,19 +515,11 @@ public class GhostPeerManager {
     }
 
     /**
-     * Recompute the cached active count after a mutation.  Full rescan rather
-     * than deltas: the map is hard-bounded, mutations are per build result (not
-     * per packet), and one exact pass cannot drift the way incremental
-     * +/- accounting can under concurrent mark/write races.
-     */
-    private synchronized void refreshActiveCount() {
-        rescanActiveLocked(_context.clock().now());
-    }
-
-    /**
      * Recompute and publish the active count; caller must hold {@code this}.
-     * The deadline is the earliest expiry among active marks, so the cache is
-     * self-invalidating the moment the soonest exclusion lapses.
+     * The deadline is the earliest expiry among active marks, bucketed up to
+     * {@link #COUNT_GRANULARITY_MS}, so the cache is self-invalidating within
+     * one bucket of the soonest exclusion lapsing without forcing a rescan per
+     * staggered expiry.
      *
      * @param now current router time (ms)
      */
@@ -374,6 +534,6 @@ public class GhostPeerManager {
                 }
             }
         }
-        _activeSnapshot = new CountSnapshot(active, due);
+        _activeSnapshot = new CountSnapshot(active, bucketDue(due));
     }
 }

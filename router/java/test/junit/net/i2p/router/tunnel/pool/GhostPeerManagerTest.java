@@ -331,7 +331,93 @@ public class GhostPeerManagerTest {
         assertEquals(0, _mgr.getGhostCount());
     }
 
+    // --- active-set cap (0.9.71+) ---
+
+    @Test
+    public void testActiveGhostCountIsCapped() {
+        // A timeout burst must not be allowed to exclude the whole candidate
+        // pool: past the cap the exclusions nearest to lapsing are dropped, so
+        // tier selection always still has peers to pick from.
+        for (int i = 0; i < GhostPeerManager.MAX_ACTIVE_GHOSTS + 64; i++) {
+            when(_clock.now()).thenReturn(NOW + i);
+            _mgr.recordTimeout(distinctHash(i));
+        }
+        int active = _mgr.getGhostCount();
+        assertTrue("active capped at " + GhostPeerManager.MAX_ACTIVE_GHOSTS + ", was " + active,
+                   active > 0 && active <= GhostPeerManager.MAX_ACTIVE_GHOSTS);
+        // dropping an exclusion never drops its offense record
+        assertEquals(GhostPeerManager.MAX_ACTIVE_GHOSTS + 64, _mgr.getTrackedCount());
+    }
+
+    @Test
+    public void testActiveCapKeepsOffenseHistory() {
+        // One millisecond apart, so "nearest to lapsing" is deterministic: the
+        // first ones marked are the ones the cap drops.
+        for (int i = 0; i < GhostPeerManager.MAX_ACTIVE_GHOSTS; i++) {
+            when(_clock.now()).thenReturn(NOW + i);
+            _mgr.recordTimeout(distinctHash(i));
+        }
+        assertFalse("dropped by the active cap", _mgr.isGhost(distinctHash(0)));
+        assertTrue("protected (furthest from lapsing)",
+                   _mgr.isGhost(distinctHash(GhostPeerManager.MAX_ACTIVE_GHOSTS - 1)));
+
+        // Re-marking the dropped peer must still see its original offense: this
+        // is its second strike inside the decay window, so the cooldown doubles.
+        // A cap that dropped the history instead would grant the base 300s here.
+        long at = NOW + GhostPeerManager.MAX_ACTIVE_GHOSTS;
+        when(_clock.now()).thenReturn(at);
+        _mgr.recordTimeout(distinctHash(0));
+        assertTrue("re-marked", _mgr.isGhost(distinctHash(0)));
+        when(_clock.now()).thenReturn(at + 599_000L);
+        assertTrue("2x cooldown respected", _mgr.isGhost(distinctHash(0)));
+        when(_clock.now()).thenReturn(at + 601_000L);
+        assertFalse("2x cooldown released", _mgr.isGhost(distinctHash(0)));
+    }
+
+    @Test
+    public void testActiveCountStaysConsistentUnderMixedOps() {
+        for (int i = 0; i < 50; i++) {
+            _mgr.recordTimeout(distinctHash(i));
+        }
+        assertEquals(50, _mgr.getGhostCount());
+
+        for (int i = 0; i < 20; i++) {
+            _mgr.recordSuccess(distinctHash(i));
+        }
+        assertEquals(30, _mgr.getGhostCount());
+
+        for (int i = 0; i < 10; i++) {
+            _mgr.clearGhost(distinctHash(20 + i));
+        }
+        assertEquals(20, _mgr.getGhostCount());
+
+        // re-marking a peer that is already excluded must not double count it
+        _mgr.recordTimeout(distinctHash(40));
+        assertEquals(20, _mgr.getGhostCount());
+
+        // ...but that re-mark is a second timeout, so only its own cooldown
+        // escalates past the base while every other mark has lapsed
+        when(_clock.now()).thenReturn(NOW + 301_000L);
+        assertEquals(1, _mgr.getGhostCount());
+        when(_clock.now()).thenReturn(NOW + 601_000L);
+        assertEquals(0, _mgr.getGhostCount());
+    }
+
     // --- pure helpers ---
+
+    @Test
+    public void testBucketDueRoundsUpToWholeSeconds() {
+        assertEquals(Long.MAX_VALUE, GhostPeerManager.bucketDue(Long.MAX_VALUE));
+        assertEquals(0, GhostPeerManager.bucketDue(0));
+        assertEquals(1_000L, GhostPeerManager.bucketDue(1_000L));
+        assertEquals(2_000L, GhostPeerManager.bucketDue(1_001L));
+        assertEquals(2_000L, GhostPeerManager.bucketDue(1_999L));
+        assertEquals(1_234_000L, GhostPeerManager.bucketDue(1_234_000L));
+        assertEquals(1_235_000L, GhostPeerManager.bucketDue(1_234_001L));
+        // idempotent: re-bucketing an already bucketed deadline never moves it
+        assertEquals(GhostPeerManager.bucketDue(1_001L),
+                     GhostPeerManager.bucketDue(GhostPeerManager.bucketDue(1_001L)));
+    }
 
     @Test
     public void testEscalationCooldownHelper() {
