@@ -703,7 +703,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new InitialAckDelayParam());
         _params.add(new InitialResendDelayParam());
         _params.add(new InitialRTOParam());
-        _params.add(new InitialWindowSizeParam());
+        InitialWindowSizeParam initialWindowSize = new InitialWindowSizeParam();
+        _params.add(initialWindowSize);
+        // Fast cycle: the initial window governs the first few RTTs of every
+        // new connection, so it is worth reacting within 5s of a path change
+        // rather than waiting out the 15s slow cycle.
+        _fastParams.add(initialWindowSize);
         _params.add(new StreamingReceiveWorkersParam());
         _params.add(new MaxRetransmissionsParam());
         _params.add(new MaxResendDelayParam());
@@ -1970,6 +1975,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             Rate rate = rs.getRate(RateConstants.ONE_HOUR);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getLastEventCount();
+        }
+
+        /**
+         * Recent streaming retransmission rate for this tuning cycle.
+         *
+         * <p>One place to compute the rate so every streaming param asks the
+         * same question with the same units, instead of each one re-inventing
+         * a threshold against {@code sendDuplicateSize} (a mean message size
+         * in bytes, not a rate — see {@code STREAM_LOSSY_RATE}).
+         *
+         * @param ctx the router context
+         * @return retransmission rate in [0.0, 1.0], or NaN when there is no signal
+         * @see Tuner#streamingLossRate
+         * @since 0.9.71+
+         */
+        protected double getStreamingLossRate(RouterContext ctx) {
+            double dupEvents = getAdditionalEventCount(ctx, "stream.con.sendDuplicateSize");
+            double sendEvents = getAdditionalEventCount(ctx, "stream.con.sendMessageSize");
+            double rtxPerMille = getAdditionalStat5Min(ctx, "stream.rtxRatio");
+            double rtxBytesPerMille = getAdditionalStat5Min(ctx, "stream.rtxRatioBytes");
+            return streamingLossRate(dupEvents, sendEvents, rtxPerMille, rtxBytesPerMille);
         }
 
         /**
@@ -3720,19 +3746,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             rtxRatio (resends per 1000 sends — size-independent loss signal)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getBuildSuccessRate(_context);
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congestionWindow = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
-            double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
             double resets = getAdditionalEventCount(_context, "stream.resetReceived");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
-            // >5% retransmissions indicates genuine path loss regardless of message size.
-            boolean highRtx = !Double.isNaN(rtxRatio) && rtxRatio > 50;
-            boolean dropping = highRtx || (!Double.isNaN(dupSize) && dupSize > 500);
+            // A sustained retransmission rate means genuine path loss regardless
+            // of how big the resent messages are.
+            boolean dropping = isStreamLossy(lossRate);
             boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
@@ -3743,17 +3768,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // a size the path has proven it can't sustain (restrains growth only).
             boolean atCongestionCeiling = !Double.isNaN(congestionWindow) && current >= congestionWindow;
 
-            // FAST PATH: latency + drops = congestion-driven shrink
+            // FAST PATH: confirmed loss = congestion-driven shrink, at the ordinary
+            // step while the rate is moderate and doubled once it is severe.
             // High latency alone is not a reason to shrink streaming windows —
-            // it's often transit load or warm-up. Only shrink when drops confirm
-            // the window is too aggressive for the path.
-            if (!Double.isNaN(dupSize) && dupSize > 500) {
-                int aggression = dupSize > 1000 ? _step * 2 : _step;
+            // it's often transit load or warm-up. Only shrink when the loss rate
+            // confirms the window is too aggressive for the path.
+            if (dropping) {
+                int aggression = isStreamLossSevere(lossRate) ? _step * 2 : _step;
                 return Math.max(_min, current - aggression);
             }
 
-            // Drops or congestion = shrink (loss minimization)
-            if (dropping || congested)
+            // Congestion = shrink (loss minimization)
+            if (congested)
                 return Math.max(_min, current - _step);
 
             // Network unhealthy = shrink toward default
@@ -3763,9 +3789,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return current;
             }
 
+            // Exponential clean-path climb: one step near min, then a quarter of
+            // the current value, so a healthy pipe reaches the cap in a handful
+            // of (fast) cycles instead of one step at a time.
+            int climb = exponentialClimb(current, _step);
+
             // Completed streams slow + windows small = increase (pipe can handle larger windows)
             if (streamsSlow && windowsSmall && !dropping && !congested)
-                return Math.min(_max, current + _step);
+                return Math.min(_max, current + climb);
 
             // Choking = decrease (window too aggressive for path)
             if (choking)
@@ -3782,7 +3813,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Low RTT (fast pipe) + no drops + no congestion = increase window
             if (observed < 10000 && !dropping && !congested)
-                return Math.min(_max, current + _step);
+                return Math.min(_max, current + climb);
 
             // High RTT (slow pipe) + no drops + healthy network = cautiously increase
             if (observed > 7000 && !dropping && !congested && networkHealthy)
@@ -3830,7 +3861,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getBuildSuccessRate(_context);
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double connectFailed = getAdditionalEventCount(_context, "stream.connectFailed");
 
             // Retransmit ratio (per-mille) from closed streams: a lossy-path
@@ -3849,7 +3880,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
-            boolean spuriousRetransmits = !Double.isNaN(dupSize) && dupSize > 1000;
+            boolean spuriousRetransmits = isStreamLossy(lossRate);
             boolean highRTT = (!Double.isNaN(observed) && observed > 7000) ||
                               (!Double.isNaN(confirmTime) && confirmTime > 7000);
             // Connects are failing (SYN never ACKed): the initial RTO gives up before
@@ -4050,17 +4081,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // primary stat = stream.chokeSizeBegin (choke events per 60s)
-            // Cross-refs: retransmission ratio, memory pressure
-            double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
+            // Cross-refs: retransmission rate, memory pressure
+            double lossRate = getStreamingLossRate(_context);
             double memPressure = Tuner.getMemoryPressure();
 
             boolean choking = !Double.isNaN(observed) && observed > 0;
-            boolean highRtx = !Double.isNaN(rtxRatio) && rtxRatio > 50;
+            boolean retransmitting = isStreamLossy(lossRate);
             boolean memoryTight = memPressure > 0.75;
 
-            // Choking or high retransmissions = increase buffer
-            if (choking || highRtx) {
-                return Math.min(_max, current + _step);
+            // Choking or sustained retransmission = increase buffer. The cap spans
+            // 8 MB to 128 MB and the step is a full 8 MB, so a linear climb would
+            // need fifteen 15s cycles to reach a cap the receiver can actually use
+            // under a sustained choke rate; climbing half the current value each
+            // cycle gets there in four, while the memory-pressure shrink below
+            // still only ever moves one step.
+            if (choking || retransmitting) {
+                return Math.min(_max, current + Math.max(_step, current / 2));
             }
 
             // Memory pressure = decrease buffer
@@ -4119,10 +4155,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             sendDuplicateSize (drops!)
             double msgSize = getAdditionalStat(_context, "stream.con.sendMessageSize");
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
 
             boolean largeMessages = !Double.isNaN(msgSize) && msgSize > 1000;
-            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean dropping = isStreamLossy(lossRate);
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
 
             // FAST PATH: latency + drops = sender needs fast feedback
@@ -4189,10 +4225,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             sendDuplicateSize (drops!)
             double sendsBeforeAck = getAdditionalStat(_context, "stream.sendsBeforeAck");
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
 
             boolean manySends = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 3;
-            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean dropping = isStreamLossy(lossRate);
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
 
             // FAST PATH: latency + drops = flush immediately (clear HOL blocking)
@@ -4250,8 +4286,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
-            return maxSlowStartWindow(current, _min, _max, _step, _factoryDefault, observed, failLifetime, dupSize);
+            double lossRate = getStreamingLossRate(_context);
+            return maxSlowStartWindow(current, _min, _max, _step, _factoryDefault, observed, failLifetime, lossRate);
         }
     }
 
@@ -4261,6 +4297,118 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *  here because the router module cannot reference the streaming app constant.
      *  @since 0.9.71+ */
     private static final int STREAM_MSG_SIZE_DEFAULT = 1730;
+
+    /**
+     * Streaming retransmission rate at or above which a path counts as lossy:
+     * send-window growth is held and windows start backing off.
+     *
+     * <p>Previously every streaming param compared {@code sendDuplicateSize}
+     * — a <i>mean message size in bytes</i> (sampled &times;16) — against
+     * 500/1000/2000, so "is this path losing packets?" was really "is the
+     * average resent message bigger than 31 bytes?", which is true whenever
+     * anything is retransmitted at all. The threshold here is a genuine rate.
+     * 20% sits well above the few-percent retransmission that ordinary I2P
+     * tunnel churn produces, while still catching a window that is
+     * outrunning the path.
+     *
+     * @since 0.9.71+
+     */
+    private static final double STREAM_LOSSY_RATE = 0.20d;
+
+    /**
+     * Streaming retransmission rate at or above which loss is severe enough
+     * to take the doubled shrink step instead of the ordinary one.
+     *
+     * <p>Split from {@link #STREAM_LOSSY_RATE} so a mildly lossy path still
+     * backs off (single step) but is not torn down at full aggression every
+     * cycle — before this split, {@code sendDuplicateSize > 1000} put every
+     * cycle on the aggressive tier because the threshold was a size, not a
+     * rate.
+     *
+     * @since 0.9.71+
+     */
+    private static final double STREAM_SEVERE_LOSS_RATE = 0.60d;
+
+    /**
+     * Compute the recent streaming retransmission rate.
+     *
+     * <p>The 60-second send/duplicate event counts are the freshest signal
+     * and are always available while traffic flows: {@code PacketQueue}
+     * samples both counters once per 16 events, so the ratio of their event
+     * counts is the ratio of the populations they sample. Note that
+     * {@code PacketQueue} only counts a transmission as a duplicate once
+     * {@code numSends > 1}, i.e. from the third transmission onward, so a
+     * packet resent exactly once contributes no duplicate events — the
+     * returned rate is therefore a conservative (under-counting) estimate of
+     * retransmission pressure.
+     *
+     * <p>The closed-stream per-mille ratios are consulted only as a fallback:
+     * they are emitted when a stream is torn down, so they are the better
+     * signal once available but say nothing during startup or on a long-lived
+     * connection.
+     *
+     * @param dupEvents      60s event count of {@code stream.con.sendDuplicateSize}, or NaN
+     * @param sendEvents     60s event count of {@code stream.con.sendMessageSize}, or NaN
+     * @param rtxPerMille    {@code stream.rtxRatio} (resends per 1000 messages), or NaN
+     * @param rtxBytesPerMille {@code stream.rtxRatioBytes} (resend bytes per 1000 bytes), or NaN
+     * @return the retransmission rate clamped to [0.0, 1.0], or NaN when no
+     *         signal is available at all
+     * @since 0.9.71+
+     */
+    static double streamingLossRate(double dupEvents, double sendEvents,
+                                    double rtxPerMille, double rtxBytesPerMille) {
+        if (!Double.isNaN(sendEvents) && sendEvents > 0 && !Double.isNaN(dupEvents)) {
+            double rate = dupEvents / sendEvents;
+            if (rate < 0.0d) return 0.0d;
+            if (rate > 1.0d) return 1.0d;
+            return rate;
+        }
+        if (!Double.isNaN(rtxBytesPerMille) && rtxBytesPerMille >= 0.0d)
+            return Math.min(1.0d, rtxBytesPerMille / 1000.0d);
+        if (!Double.isNaN(rtxPerMille) && rtxPerMille >= 0.0d)
+            return Math.min(1.0d, rtxPerMille / 1000.0d);
+        return Double.NaN;
+    }
+
+    /**
+     * Is the streaming path losing enough that windows should stop growing?
+     *
+     * @param lossRate rate from {@link #streamingLossRate}, possibly NaN
+     * @return true when the rate is at or above {@link #STREAM_LOSSY_RATE}
+     * @since 0.9.71+
+     */
+    static boolean isStreamLossy(double lossRate) {
+        return !Double.isNaN(lossRate) && lossRate >= STREAM_LOSSY_RATE;
+    }
+
+    /**
+     * Is the streaming path losing enough to justify the aggressive shrink?
+     *
+     * @param lossRate rate from {@link #streamingLossRate}, possibly NaN
+     * @return true when the rate is at or above {@link #STREAM_SEVERE_LOSS_RATE}
+     * @since 0.9.71+
+     */
+    static boolean isStreamLossSevere(double lossRate) {
+        return !Double.isNaN(lossRate) && lossRate >= STREAM_SEVERE_LOSS_RATE;
+    }
+
+    /**
+     * Clean-path climb for a window-sized parameter: {@code max(step, current / 4)}.
+     *
+     * <p>Near the bottom of the range this degenerates to the plain linear
+     * {@code step} so a parameter parked at {@code min} cannot take a
+     * disproportionate jump, but once it has room the growth is geometric —
+     * a healthy window reaches its cap in a handful of cycles instead of
+     * one step per cycle for as many cycles as the range spans.
+     *
+     * @param current current runtime value
+     * @param step tuning step size
+     * @return the number of units to add this cycle
+     * @since 0.9.71+
+     */
+    static int exponentialClimb(int current, int step) {
+        return Math.max(step, current / 4);
+    }
 
     /**
      * Compute the streaming congestion-window target from the bandwidth-delay product.
@@ -4334,15 +4482,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *              shrinks use half a step
      * @param defaultValue factory default ceiling; the recovery floor is max(min, defaultValue / 2)
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN if absent
-     * @param dupSize stat {@code stream.con.sendDuplicateSize} in bytes, or NaN if absent
+     * @param lossRate streaming retransmission rate (0.0-1.0), or NaN if absent;
+     *                 see {@link #streamingLossRate}
      * @param memPct stat {@code jobQueue.memoryUsedPercent}, or NaN if absent
      * @return the new ceiling target within {@code [min, max]}
      * @since 0.9.71+
      */
     static int computeStreamingMaxWindowTarget(int current, int min, int max, int step, int defaultValue,
-                                               double failLifetime, double dupSize, double memPct) {
+                                               double failLifetime, double lossRate, double memPct) {
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-        boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+        boolean dropping = isStreamLossy(lossRate);
         double memPressure = !Double.isNaN(memPct) ? memPct : 0.0;
 
         // Recovery floor: never shrink below half the default; below it and
@@ -4425,10 +4574,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double memPct = getAdditionalStat(_context, "jobQueue.memoryUsedPercent");
             return computeStreamingMaxWindowTarget(current, _min, _max, _step, _defaultValue,
-                                                   failLifetime, dupSize, memPct);
+                                                   failLifetime, lossRate, memPct);
         }
     }
 
@@ -6255,11 +6404,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = udp.sendConfirmTime (ms, actual network RTT)
             // Cross-refs: stream.con.sendDuplicateSize (retransmit pressure),
             //             transport.sendMessageFailureLifetime (congestion)
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean highRTT = !Double.isNaN(observed) && observed > 7000;
-            boolean highDups = !Double.isNaN(dupSize) && dupSize > 1000;
+            boolean highDups = isStreamLossy(lossRate);
 
             // High retransmit pressure + high RTT = raise RTO ceiling (allow more headroom)
             if (highDups && highRTT && !congested)
@@ -6314,13 +6463,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = stream.con.sendDuplicateSize (avg duplicate ACK size)
+            // observed = stream.con.sendDuplicateSize (retained for sparkline history only)
             // Cross-refs: udp.sendConfirmTime (actual RTT)
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
+            double lossRate = getStreamingLossRate(_context);
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean highDups = !Double.isNaN(observed) && observed > 1000;
+            boolean highDups = isStreamLossy(lossRate);
 
             // Heavy duplicate pressure + congestion = increase multiplier (faster to max)
             if (highDups && congested)
@@ -6376,13 +6526,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: stream.con.sendDuplicateSize (retransmit pressure),
             //             stream.sendsBeforeAck (ACK efficiency),
             //             transport.sendMessageFailureLifetime (congestion)
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double sendsBeforeAck = getAdditionalStat(_context, "stream.sendsBeforeAck");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean highRTT = !Double.isNaN(observed) && observed > 7000;
-            boolean highDups = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean highDups = isStreamLossy(lossRate);
             boolean inefficientAck = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 8;
 
             // Spurious retransmits (high dups) + slow network = raise delay (stop hammering)
@@ -6435,13 +6585,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: stream.con.sendDuplicateSize (retransmit volume),
             //             stream.con.lifetimeSendWindowSize (connection health),
             //             transport.sendMessageFailureLifetime (congestion)
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean highRTT = !Double.isNaN(observed) && observed > 7000;
-            boolean retransmitsWorking = !Double.isNaN(dupSize) && dupSize > 0;
+            boolean retransmitsWorking = !Double.isNaN(lossRate) && lossRate > 0;
             boolean healthyWindow = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 32;
 
             // Healthy stream + retransmits working + no congestion = allow more retries
@@ -6499,11 +6649,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = udp.sendConfirmTime (ms, actual network RTT)
             // Cross-refs: stream.con.sendDuplicateSize (spurious retransmit rate),
             //             transport.sendMessageFailureLifetime (congestion)
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean spuriousFlood = !Double.isNaN(dupSize) && dupSize > 2000;
+            boolean spuriousFlood = isStreamLossSevere(lossRate);
 
             // Spurious flood = raise min delay (stop hammering the pipe)
             if (spuriousFlood)
@@ -6563,7 +6713,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Compute the target value based on observed stat and configured limits. */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = stream.con.sendDuplicateSize (retransmit volume)
+            // observed = stream.con.sendDuplicateSize (retained for sparkline history only)
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
             //             lifetimeRTT (completed stream RTT), lifetimeSendWindowSize (final window),
             //             chokeSizeBegin (choke pressure), windowSizeAtCongestion (CWIN at dup)
@@ -6573,6 +6723,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congWindowSize = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
+            double lossRate = getStreamingLossRate(_context);
             boolean windowsCongesting = !Double.isNaN(congWindowSize) && congWindowSize < 5;
 
             // Retransmit ratio (per-mille) from closed streams. Prefer the
@@ -6594,12 +6745,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
-            boolean dropping = observed > 500;
+            boolean dropping = isStreamLossy(lossRate);
             // Lower threshold to 3000ms so connections on modest-latency paths
             // (e.g. 3.5s RTT) are treated as slow and eligible for faster growth.
             boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 3000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
+            boolean strongGrowth = (streamsSlow && windowsSmall) ||
+                                   (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20);
 
             // Recovery floor: if below 50% of default, always increase back toward default
             int recoveryFloor = Math.max(_min, _defaultValue / 2);
@@ -6618,8 +6771,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (choking)
                 return Math.max(recoveryFloor, current - _step);
 
-            // Dead zone: hold within 50%-200% of default unless signal is strong
-            if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested && !windowsCongesting && networkHealthy)
+            // Dead zone: hold within one step of default so a wobbling signal
+            // can't ping-pong the factor, but let a strong growth signal with a
+            // low retransmit ratio through. The old band was
+            // [recoveryFloor, default*2]; with range [1,4] and default 3 that
+            // covered the whole range, so every increase branch below was dead.
+            if (current >= _defaultValue - 1 && current <= _defaultValue + 1 &&
+                !dropping && !congested && !windowsCongesting && networkHealthy &&
+                !(strongGrowth && retransmitLow))
                 return current;
 
             // Completed streams slow + windows small = increase growth (need faster ramp).
@@ -6680,7 +6839,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             chokeSizeBegin (choke pressure)
             double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congWindowSize = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
@@ -6699,7 +6858,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean dropping = isStreamLossy(lossRate);
             // Use observed (initialRTT.out) as primary RTT for "streams slow"
             // since that's the RTT new connections see — more relevant than
             // lifetimeRTT for page-load connections. Lower threshold to 3000ms
@@ -6707,6 +6866,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean streamsSlow = !Double.isNaN(observed) && observed > 3000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
+            boolean strongGrowth = (streamsSlow && windowsSmall) ||
+                                   (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20);
 
             // Recovery floor: if below 50% of default, always increase back toward default
             int recoveryFloor = Math.max(_min, _defaultValue / 2);
@@ -6725,8 +6886,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (choking)
                 return Math.max(recoveryFloor, current - _step);
 
-            // Dead zone: hold within 50% of default unless signal is strong
-            if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested && !windowsCongesting && networkHealthy)
+            // Dead zone: hold within one step of default so a wobbling RTT can't
+            // ping-pong the factor, but let a strong growth signal with a low
+            // retransmit ratio (or a genuinely high RTT above default) through.
+            // The old band was [recoveryFloor, default*2]; with range [1,4] and
+            // default 3 that covered the whole range, so the increase and
+            // decrease branches below were both dead and the factor froze.
+            if (current >= _defaultValue - 1 && current <= _defaultValue + 1 &&
+                !dropping && !congested && !windowsCongesting && networkHealthy &&
+                !(strongGrowth && retransmitLow) &&
+                !(current > _defaultValue && observed > 8000))
                 return current;
 
             // Completed streams slow + windows small = increase ramp (need faster ramp)
@@ -6788,10 +6957,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = bw.sendBps (average send bandwidth in KB/s)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean dropping = isStreamLossy(lossRate);
             boolean highBandwidth = !Double.isNaN(observed) && observed > 100;
 
             // Congestion or drops on fast link = raise pacing floor (smoother transmission)
@@ -6845,14 +7014,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = stream.con.initialRTT.out (ms), falling back to udp.sendConfirmTime
             // Cross-refs: stream.con.sendDuplicateSize (retransmit pressure),
             //             transport.sendMessageFailureLifetime (congestion)
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             // Threshold must stay below the RTT cap (default 10000): observed RTT
             // is clamped to the cap, so a threshold >= cap would never trigger.
             boolean highRTT = !Double.isNaN(observed) && observed > 7000;
-            boolean highDups = !Double.isNaN(dupSize) && dupSize > 1000;
+            boolean highDups = isStreamLossy(lossRate);
 
             // Spurious retransmits + congestion = raise cap (RTT spikes are real)
             if (highDups && congested)
@@ -6905,14 +7074,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             sendDuplicateSize (spurious retransmit rate),
             //             sendMessageFailureLifetime (congestion)
             double sendsBeforeAck = getAdditionalStat(_context, "stream.sendsBeforeAck");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             // High sends-before-ACK = ACKs are slow, retransmits may be spurious
             boolean slowAcks = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 8;
-            // High dups = retransmits are happening when they shouldn't
-            boolean spuriousRetransmits = !Double.isNaN(dupSize) && dupSize > 2000;
+            // Severe loss = retransmits are dominating the stream
+            boolean spuriousRetransmits = isStreamLossSevere(lossRate);
 
             // Spurious retransmits or slow ACKs = raise delay (avoid hammering the pipe)
             if (spuriousRetransmits || (slowAcks && congested))
@@ -6960,13 +7129,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: sendDuplicateSize (retransmit pressure),
             //             sendMessageSize (throughput opportunity),
             //             sendMessageFailureLifetime (congestion)
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
             double msgSize = getAdditionalStat(_context, "stream.con.sendMessageSize");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            // High dups = sender is retransmitting = needs faster ACK feedback
-            boolean retransmitPressure = !Double.isNaN(dupSize) && dupSize > 1000;
+            // Lossy path = sender is retransmitting = needs faster ACK feedback
+            boolean retransmitPressure = isStreamLossy(lossRate);
             // Large messages = more data to piggyback ACKs on
             boolean largeMessages = !Double.isNaN(msgSize) && msgSize > 2000;
 
@@ -7023,18 +7192,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: stream.con.lifetimeRTT (slow pipe indicator),
             //             stream.con.sendDuplicateSize (retransmit pressure)
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
-            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lossRate = getStreamingLossRate(_context);
 
             boolean highRTT = !Double.isNaN(observed) && observed > 7000;
             boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 8000;
-            boolean congested = !Double.isNaN(dupSize) && dupSize > 1000;
+            boolean dropping = isStreamLossy(lossRate);
 
             // High RTT or slow streams = raise timeout (avoid killing slow transfers)
-            if (highRTT || (streamsSlow && !congested))
+            if (highRTT || (streamsSlow && !dropping))
                 return Math.min(_max, current + _step);
 
-            // Low RTT + no congestion = tighten timeout (faster resource reclamation)
-            if (observed < 5000 && !congested)
+            // Low RTT + no loss = tighten timeout (faster resource reclamation)
+            if (observed < 5000 && !dropping)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -9947,18 +10116,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param factoryDefault factory default value
      * @param observed outbound RTT in ms (may be NaN)
      * @param failLifetime sendMessageFailureLifetime stat (may be NaN)
-     * @param dupSize stream.con.sendDuplicateSize stat (may be NaN)
+     * @param lossRate streaming retransmission rate (0.0-1.0), or NaN if absent;
+     *                 see {@link #streamingLossRate}
      * @return target value clamped to [min, max]
      * @since 0.9.71+
      */
     static int maxSlowStartWindow(int current, int min, int max, int step,
                                      int factoryDefault, double observed,
-                                     double failLifetime, double dupSize) {
+                                     double failLifetime, double lossRate) {
         boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-        boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+        boolean dropping = isStreamLossy(lossRate);
 
         int recoveryFloor = factoryDefault / 2;
-        int climb = Math.max(step, current / 4);
+        int climb = exponentialClimb(current, step);
 
         // At min: don't shrink below min
         if (current <= min) {
