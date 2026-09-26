@@ -36,15 +36,40 @@ public class HttpHeaderFormatter {
      */
     public static String formatHeaders(Map<String, List<String>> headers, StringBuilder command) {
         StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
-        buf.append(command.toString().trim()).append("\r\n");
+        buf.append(stripLineBreaks(command.toString().trim())).append("\r\n");
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
-            String name = e.getKey();
+            String name = stripLineBreaks(e.getKey().trim());
             for (String val : e.getValue()) {
-                buf.append(name.trim()).append(": ").append(val.trim()).append("\r\n");
+                buf.append(name).append(": ").append(stripLineBreaks(val.trim())).append("\r\n");
             }
         }
         buf.append("\r\n");
         return buf.toString();
+    }
+
+    /**
+     * Removes CR and LF from a header name, value, or request line.
+     * <p>
+     * Header maps are rebuilt from text that was parsed line by line, so a line
+     * break can only reach this point through a value that was constructed
+     * elsewhere (a spoofed host, a security header, a server response rewrite).
+     * Stripping it keeps a hostile value from splitting the message into extra
+     * header lines or an injected body (HTTP response splitting).
+     * </p>
+     *
+     * @param s the header name, value, or request line, may be null
+     * @return the input with CR and LF removed, or null if null was passed
+     * @since 0.9.71+
+     */
+    static String stripLineBreaks(String s) {
+        if (s == null) {return null;}
+        if (s.indexOf('\r') < 0 && s.indexOf('\n') < 0) {return s;}
+        StringBuilder rv = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c != '\r' && c != '\n') {rv.append(c);}
+        }
+        return rv.toString();
     }
 
     /**
@@ -75,7 +100,7 @@ public class HttpHeaderFormatter {
      */
     public static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
         StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
-        String request = command.toString().trim();
+        String request = stripLineBreaks(command.toString().trim());
         if (request.contains("peer_id")) {
             int ampersand = request.indexOf("&");
             String truncatedRequest = request.substring(0, ampersand) + "...";
@@ -89,7 +114,7 @@ public class HttpHeaderFormatter {
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
             String name = e.getKey();
             String lcName = name.toLowerCase().trim();
-            String value = e.getValue().iterator().next().trim();
+            String value = stripLineBreaks(e.getValue().iterator().next().trim());
             boolean hasUA = name.toLowerCase().contains("user-agent") && !value.isEmpty();
             if (request.toLowerCase().contains("head")) {continue;}
             if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") ||
@@ -100,7 +125,7 @@ public class HttpHeaderFormatter {
                 continue;
             }
             for (String val : e.getValue()) {
-                buf.append("\n* ").append(name.trim()).append(": ").append(val.trim());
+                buf.append("\n* ").append(stripLineBreaks(name.trim())).append(": ").append(stripLineBreaks(val.trim()));
             }
         }
         return buf.toString();
