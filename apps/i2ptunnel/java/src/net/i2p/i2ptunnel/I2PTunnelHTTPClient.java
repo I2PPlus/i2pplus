@@ -515,9 +515,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     protected void clientConnectionRun(Socket s) {
         OutputStream out = null;
 
-        /**
-         * The URL after fixup, always starting with http:// or https://
-         */
+        // The URL after fixup, always starting with http:// or https://
         String targetRequest = null;
 
         // in-net outproxy
@@ -1009,10 +1007,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                         }
                     } else {
-                        // what is left for here? a hostname with no dots, and != "i2p"
-                        // and not a destination ???
-                        // Perhaps something in privatehosts.txt ...
-                        // Rather than look it up, just bail out.
+                        // Reached only for a host that is not an I2P name, not a
+                        // loopback or private-LAN address, and has neither a dot nor
+                        // an IPv6 bracket, so nothing above resolved it. The proxy
+                        // does no name resolution of its own; deny rather than guess.
                         if (_log.shouldWarn()) {
                             _log.warn("[HTTPClient] Malformed hostname " + request + " - aborting...");
                         }
@@ -2601,11 +2599,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     * Fix up URI strings with unescaped bracket and pipe characters
-     * that browsers don't properly escape, see ticket #2130.
+     * Fix up a URI whose path or query holds characters that RFC 3986 reserves
+     * but that browsers send unescaped: '[', ']', '|', '{' and '}'.
+     * <p>
+     * The scheme, host and port are left untouched, so a fixup cannot move the
+     * request to a different host.
      *
      * @param request the raw URI string from the request line
-     * @return the fixed URI
+     * @return the URI, percent-escaped if a fixup was required
      * @throws URISyntaxException if the URI is invalid even after fixup
      * @since 0.9
      */
@@ -2613,7 +2614,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         try {
             return new URI(request);
         } catch (URISyntaxException use) {
-            // fixup []| in path/query not escaped by browsers, see ticket #2130
             boolean error = true;
             // find 3rd /
             int idx = 0;
@@ -2627,7 +2627,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (idx > 0) {
                 String schemeHostPort = request.substring(0, idx);
                 String rest = request.substring(idx);
-                // not escaped by all browsers, may be specific to query, see ticket #2130
                 rest = rest.replace("[", "%5B");
                 rest = rest.replace("]", "%5D");
                 rest = rest.replace("|", "%7C");

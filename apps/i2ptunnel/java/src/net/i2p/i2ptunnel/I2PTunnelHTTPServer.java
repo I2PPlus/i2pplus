@@ -1072,39 +1072,34 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // process http_blocklist.txt entries
                 if (command.length() > 0) {processBlocklist(socket, command);}
 
-                /**
-                 * HTTP Persistent Connections (RFC 2616)
-                 * for the I2P socket.
-                 * Keep it very simple.
-                 * Will be set to false for non-GET/HEAD, non-HTTP/1.1,
-                 * Connection: close, InternalSocket,
-                 * or after analysis of the response headers in CompressedOutputStream,
-                 * or on errors in I2PTunnelRunner.
-                 * We do NOT support keepalive on the server socket.
-                 */
+                // HTTP Persistent Connections (RFC 2616) for the I2P socket.
+                // Keep it very simple.
+                // Will be set to false for non-GET/HEAD, non-HTTP/1.1,
+                // Connection: close, InternalSocket,
+                // or after analysis of the response headers in CompressedOutputStream,
+                // or on errors in I2PTunnelRunner.
+                // We do NOT support keepalive on the server socket.
                 String cmd = command.toString().trim();
                 if (!isKeepAliveRequest(cmd)) {keepalive = false;}
 
                 // we keep the enc sent by the browser before clobbering it, since it may have been x-i2p-gzip
                 String enc = getEntryOrNull(headers, "Accept-Encoding");
                 String altEnc = getEntryOrNull(headers, "X-Accept-Encoding");
-
-                /**
-                 *  According to rfc2616 s14.3, this *should* force identity, even if 'identity;q=1, *;q=0' didn't.
-                 *  As of 0.9.23, the client passes this header through, and we do the same, so if the server and browser
-                 *  can do the compression/decompression, we don't have to setEntry(headers, "Accept-Encoding", "");
-                 */
+                // We leave "Accept-Encoding" as the browser sent it. RFC 2616 s14.3
+                // says '*;q=0' should force identity even without an explicit
+                // 'identity;q=0', but the client passes the header through and so
+                // do we: if the server and the browser can both do the
+                // compression there is nothing to force.
 
                 socket.setReadTimeout(readTimeout);
                 Socket s = getSocket(peerHash, socket.getLocalPort());
                 long afterSocket = getTunnel().getContext().clock().now();
 
-                /**
-                 *  Instead of i2ptunnelrunner, use something that reads the HTTP request from the socket,
-                 *  modifies the headers, sends the request to the server, reads the response headers,
-                 *  rewriting to include 'Content-Encoding: x-i2p-gzip' if it was one of the
-                 *  Accept-Encoding: values, and gzip the payload
-                 */
+                // Instead of i2ptunnelrunner, use something that reads the HTTP
+                // request from the socket, modifies the headers, sends the request
+                // to the server, reads the response headers, rewriting to include
+                // 'Content-Encoding: x-i2p-gzip' if it was one of the
+                // Accept-Encoding: values, and gzips the payload
                 boolean allowGZIP = isGzipAllowed(opts);
                 if (_log.shouldDebug() && (enc != null || altEnc != null)) {
                     _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);

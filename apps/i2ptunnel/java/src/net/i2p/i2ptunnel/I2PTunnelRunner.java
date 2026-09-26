@@ -1629,9 +1629,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     try {
                         exec.execute(toI2P);
                     } catch (RejectedExecutionException ree) {
-                        // All runner threads busy - drop this connection cleanly instead of
-                        // proceeding half-forwarded (the old code let the REE escape and the
-                        // generic catch in run() logged "Internal error").
+                        // All runner threads busy - drop this connection cleanly.
+                        // Continuing would leave only the I2P-to-client forwarder
+                        // running, so the client would hang instead of failing.
                         if (_log.shouldWarn())
                             _log.warn(direction + " Connection dropped: client pool saturated");
                         onNoDataFailure(ree);

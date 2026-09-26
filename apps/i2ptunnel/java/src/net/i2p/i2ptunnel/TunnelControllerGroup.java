@@ -241,7 +241,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  Live aggregate queue depth across all server tunnel executor pools.
-     *  Reads directly from each {@link ThreadPoolExecutor#getQueue()#size()},
+     *  Reads directly from each {@link ThreadPoolExecutor#getQueue}'s {@code size},
      *  bypassing the Rate-averaged stat for instant saturation detection.
      *
      *  @return total queued tasks across all server handler pools, or 0 if none

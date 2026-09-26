@@ -610,8 +610,9 @@ class SOCKS5Server extends SOCKSServer {
      * Loop here looking for more, never return normally,
      * or else I2PSocksTunnel will create a streaming lib connection.
      *
-     * Do UDP Socks clients actually send more than one Associate request?
-     * RFC 1928 isn't clear... maybe not.
+     * RFC 1928 defines one UDP relay per TCP control connection, but a client
+     * may open more; each additional ASSOCIATE request gets its own local port.
+     * The loop ends on any other command, or on a closed control connection.
      */
     private void handleUDP(DataInputStream in, DataOutputStream out) throws SOCKSException {
         List<Integer> ports = new ArrayList<>(1);
@@ -634,7 +635,8 @@ class SOCKS5Server extends SOCKSServer {
                 sendRequestReply(Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName("127.0.0.1"), null, myPort, out);
             } catch (IOException ioe) { break; }
 
-            // wait for more ???
+            // Block for the next control command; anything but another
+            // ASSOCIATE ends the loop and closes the UDP relays.
             try {
                 int command = manageRequest(in, out);
                 // don't do this...

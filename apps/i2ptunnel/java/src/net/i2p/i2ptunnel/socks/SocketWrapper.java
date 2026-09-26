@@ -1,19 +1,5 @@
 package net.i2p.i2ptunnel.socks;
 
-/**
- * I2PSocket implementation wrapping a standard TCP Socket for outproxy connections.
- * <p>
- * This class adapts a regular Socket (typically from an outproxy connection)
- * to the I2PSocket interface, allowing seamless integration with
- * I2P tunneling infrastructure. It provides dummy destination
- * information and delegates all I2PSocket operations to the underlying
- * Socket.
- * <p>
- * Used when SOCKS or HTTP tunnels route traffic through external
- * outproxies, enabling the tunnel framework to treat outproxy
- * connections as I2P connections for consistent handling.
- */
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,8 +10,13 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 
 /**
- *  Wrapper around the Socket obtained from the Outproxy, which is a
- *  wrapper around the Orchid Stream.
+ *  I2PSocket implementation wrapping a standard TCP Socket obtained from an
+ *  outproxy, which is itself a wrapper around the Orchid stream.
+ *  <p>
+ *  SOCKS and HTTP tunnels use this so the tunnel framework can treat an
+ *  outproxy connection as an I2P connection and handle it uniformly. All
+ *  I2PSocket operations are delegated to the underlying Socket, and the
+ *  destination is a fixed dummy: there is no I2P destination to report.
  *
  *  @since 0.9.27
  */
@@ -131,7 +122,9 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     *  Deprecated, unimplemented, does nothing
+     *  Not supported: the wrapper never reports socket errors to a listener.
+     *
+     *  @param lsnr ignored
      */
     public void setSocketErrorListener(SocketErrorListener lsnr) { /* no-op */ }
 

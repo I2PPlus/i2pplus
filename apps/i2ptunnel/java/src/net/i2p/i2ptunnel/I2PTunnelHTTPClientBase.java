@@ -684,7 +684,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             if (!authLC.startsWith("basic ")) {return AuthResult.AUTH_BAD;}
             authorization = authorization.substring(6);
 
-            // hmm safeDecode(foo, true) to use standard alphabet is private in Base64
+            // The browser sends the standard Base64 alphabet, but Base64.decode()
+            // uses the I2P alphabet ('~' is 63), so remap before decoding. The
+            // standard-alphabet path (safeDecode with useStandardAlphabet) is private.
             byte[] decoded = Base64.decode(authorization.replace("/", "~").replace("+", "="));
             if (decoded != null) {
                 // We send Accept-Charset: UTF-8 in the 407 so hopefully it comes back that way inside the B64 ?
@@ -711,8 +713,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     // Rate-limit per-IP: brief sleep only on repeated failures.
                     // A full 5 s sleep per attempt is a DoS amplifier — an attacker
                     // can trivially exhaust the thread pool.  The auth failure itself
-                    // already denies the request; a per-IP cooldown in the caller
-                    // (ticket #1234) would be a better long-term fix.
+                    // already denies the request; a per-IP cooldown in the caller is
+                    // not implemented.
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
                     // no ':' in response
                     if (_log.shouldWarn()) {

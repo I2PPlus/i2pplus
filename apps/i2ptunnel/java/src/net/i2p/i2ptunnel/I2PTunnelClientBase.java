@@ -601,7 +601,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * Actually open the local socket and start working on incoming connections.
      * *Must* be called by derived classes after initialization.
-     * (this wasn't actually true until 0.9.20)
      *
      * This will be fast if i2cp.delayOpen is true, but could take
      * a LONG TIME if it is false, as it connects to the router and builds tunnels.
@@ -769,20 +768,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         return createI2PSocket(dest, opts);
     }
 
-    /**
-     * Create a new I2PSocket towards to the specified destination,
-     * adding it to the list of connections actually managed by this
-     * tunnel.
-     *
-     * @param dest The destination to connect to, non-null
-     * @param opt Option to be used to open when opening the socket
-     * @return a new I2PSocket
-     *
-     * @throws ConnectException if the peer refuses the connection
-     * @throws NoRouteToHostException if the peer is not found or not reachable
-     * @throws InterruptedIOException if the connection timeouts
-     * @throws I2PException if there is some other I2P-related problem
-     */
     /**
      * Create a new I2PSocket towards to the specified destination,
      * adding it to the list of connections actually managed by this

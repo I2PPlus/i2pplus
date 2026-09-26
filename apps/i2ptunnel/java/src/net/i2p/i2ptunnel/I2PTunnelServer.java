@@ -324,9 +324,20 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Add a non-DSA_SHA1 subsession to the DSA_SHA1 server if necessary.
+     *  Add an alternate EdDSA_SHA512_Ed25519 subsession alongside a DSA_SHA1
+     *  primary session.
+     *  <p>
+     *  Runs only when {@link #PROP_ALT_PKF} names a resolvable key file and the
+     *  primary session's destination really is DSA_SHA1; a primary session of
+     *  any other signature type is left alone. Any failure to read the file or
+     *  add the subsession is logged and null is returned, leaving the primary
+     *  session and its tunnel running without the alternate destination. The
+     *  signature type is declared here rather than read back from the key file,
+     *  so the nickname labels below assume an EdDSA key file.
      *
-     *  @return subsession, or null if none was added
+     *  @param sMgr the primary session's socket manager
+     *  @param alt value of {@link #PROP_ALT_PKF}, a key file path
+     *  @return the subsession, or null if none was added
      *  @since 0.9.30
      */
     private I2PSession addSubsession(I2PSocketManager sMgr, String alt) {
@@ -336,7 +347,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (sess.getMyDestination().getSigType() != SigType.DSA_SHA1) {return null;}
         Properties props = new Properties();
         props.putAll(getTunnel().getClientOptions());
-        // fixme get actual sig type
+        // Distinguish the alternate destination from the primary in logs and
+        // the console.
         String name = props.getProperty("inbound.nickname");
         if (name != null) {props.setProperty("inbound.nickname", name + " (EdDSA)");}
         name = props.getProperty("outbound.nickname");

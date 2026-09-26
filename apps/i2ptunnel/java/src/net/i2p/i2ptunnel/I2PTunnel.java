@@ -321,7 +321,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /** With newlines except for last line */
     private static String usage() {
-        // not sure this all makes sense, just documenting what's above
+        // Hand-maintained mirror of the Getopt spec in the constructor;
+        // option letters here must match longopts and the short option string.
         return
             "Usage: i2ptunnel [options] [commandFile]\n" +
             "  Default is to run the GUI.\n" +
@@ -337,24 +338,29 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Returns a copy of the task list
+     *  Snapshot of the running tasks.
      *
-     *  @return A copy, unmodifiable, non-null
+     *  @return an unmodifiable snapshot, non-null; changes to the tunnel's task
+     *          list are not reflected in an already-returned list
      *  @since public since 0.9.53 for advanced plugin usage, was package private
      */
     public List<I2PTunnelTask> getTasks() {
-        return new ArrayList<>(tasks);
+        return Collections.unmodifiableList(new ArrayList<>(tasks));
     }
 
     /**
-     * Returns a copy of the session list
+     *  Snapshot of the primary sessions in use by this tunnel's tasks.
+     *  Subsessions are not tracked here; a task's own getSocketManager()
+     *  remains the way to reach them.
      *
-     *  @return A copy, unmodifiable, non-null
+     *  @return an unmodifiable snapshot, non-null; changes to the tunnel's session
+     *          set are not reflected in an already-returned list. The iteration
+     *          order follows the underlying set and is not specified.
      *  @since public since 0.9.53 for advanced plugin usage, was package private
      */
     public List<I2PSession> getSessions() {
         if (_sessions.isEmpty()) {return Collections.emptyList();}
-        return new ArrayList<>(_sessions);
+        return Collections.unmodifiableList(new ArrayList<>(_sessions));
     }
 
     /**

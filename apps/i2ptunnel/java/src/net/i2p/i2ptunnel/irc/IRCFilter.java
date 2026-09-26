@@ -87,13 +87,12 @@ abstract class IRCFilter {
 
         if ("PONG".equals(command)) {
             // Turn the received ":irc.freshcoffee.i2p PONG irc.freshcoffee.i2p :127.0.0.1"
-            // into ":127.0.0.1 PONG 127.0.0.1 " so that the caller can append the client's extra parameter
-            // though, does 127.0.0.1 work for irc clients connecting remotely?  and for all of them?  sure would
-            // be great if irc clients actually followed the RFCs here, but i guess thats too much to ask.
-            // If we haven't PINGed them, or the PING we sent isn't something we know how to filter, this
-            // is blank.
-            //
-            // If we aren't going to rewrite it, pass it through
+            // into ":127.0.0.1 PONG 127.0.0.1 " so that the caller can append the client's extra parameter.
+            // The echoed token is whatever serverLocation the client itself sent (see
+            // filterPing), so a client is satisfied whatever address it believes it has,
+            // and no real proxy address is disclosed. If we haven't PINGed them, or the
+            // PING we sent isn't something we know how to filter, expectedPong is blank
+            // and the line passes through unchanged.
             String pong = expectedPong.length() > 0 ? expectedPong.toString() : s;
             expectedPong.setLength(0);
             return pong;
@@ -200,7 +199,7 @@ abstract class IRCFilter {
                 "TOPIC",
                 "UNINVITE",
                 "USERHOST",
-                "USERS", // Ticket 1249
+                "USERS", // RFC 2812 administrative query, no client-visible data
                 "VHOST",
                 "WATCH",
                 "WHO",
@@ -284,11 +283,10 @@ abstract class IRCFilter {
         String[] field = DataHelper.split(s, " ", 4);
 
         if(field[0].isEmpty())
-            return null; // W T F?
-
+            return null; // leading space, so the command field is empty
 
         if(field[0].charAt(0)==':')
-            return null; // ???
+            return null; // server prefix on a client-to-server line, not a command
 
         int idx = 0;
         // https://www.unrealircd.org/docs/Message_tags
@@ -353,9 +351,6 @@ abstract class IRCFilter {
         // We don't want to send them our proxy's IP address, so we need to rewrite the PING
         // sent to the server, but when we get a PONG back, use what we expected, rather than
         // what they sent.
-        //
-        // Yuck.
-
         String rv = null;
         expectedPong.setLength(0);
         if (field.length == idx) { // PING
@@ -617,7 +612,8 @@ abstract class IRCFilter {
         int port = -1;
         if (haveIP) {
             if (cPort > 0) {
-                // nonzero port but bogus IP? hmm. Fix IP and hope.
+                // A nonzero port with a first octet of 0 is not a usable IPv4
+                // destination; substitute loopback so the connect stays local.
                 if (ip[0] == 0)
                     ip = new byte[] {127, 0, 0, 1};
                 port = helper.newOutgoing(ip, cPort, type);
