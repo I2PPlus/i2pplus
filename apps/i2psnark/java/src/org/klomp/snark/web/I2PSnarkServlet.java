@@ -7506,8 +7506,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.54+
      */
     boolean isStandalone() {
-        if (_context.isRouterContext()) {return false;}
-        else {return true;}
+        return !_context.isRouterContext();
     }
 }
 

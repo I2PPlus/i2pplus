@@ -29,7 +29,6 @@ public class StreamSinkTestStandalone {
 
         System.setProperty("tunnels.depthInbound", ""+hops);
 
-        @Override
         new Thread(new Runnable() {
             public void run() {
                 StreamSinkServer.main(new String[] { HOST1, PORT1, "streamSinkTestDir", "streamSinkTestServer.key" });

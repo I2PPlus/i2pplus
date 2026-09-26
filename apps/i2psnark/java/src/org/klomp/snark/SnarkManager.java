@@ -5809,7 +5809,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String filterPattern = toks[i + 1].trim().replace("&#44;", ",");
             if ((!name.isEmpty()) && (!filterPattern.isEmpty())) {
                 String[] data = DataHelper.split(filterPattern, "=", 2);
-                boolean isDefault = data.length > 1 ? true : false;
+                boolean isDefault = data.length > 1;
                 _torrentCreateFilterMap.put(
                         name, new TorrentCreateFilter(name, data[0], "contains", isDefault));
             }
