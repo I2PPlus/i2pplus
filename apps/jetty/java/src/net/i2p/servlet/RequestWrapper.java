@@ -15,24 +15,18 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 /**
- *  Refactored in 0.9.33 to use Servlet 3.0 API and remove dependency
- *  on old Jetty 5 MultiPartRequest code. See ticket 2109.
+ *  Wraps an HttpServletRequest and adds multipart-aware access to the
+ *  parameters and files of a <code>multipart/form-data</code> request,
+ *  using the Servlet 3.0 <code>Part</code> API.
  *
- *  Previous history:
+ *  Only the multipart variants of the accessors are wrapped; everything
+ *  else is passed straight through. The Servlet API container already
+ *  parses multipart requests, so this class deliberately does not parse
+ *  them again.
  *
- *  Required major changes for Jetty 6
- *  to support change from MultiPartRequest to MultiPartFilter.
- *  See http://docs.codehaus.org/display/JETTY/File+Upload+in+jetty6
- *  Unfortunately, Content-type not available until Jetty 8
- *  See https://bugs.eclipse.org/bugs/show_bug.cgi?id=349110
- *
- *  So we could either extend and fix MultiPartFilter, and rewrite everything here,
- *  or copy MultiPartRequest into our war and fix it so it compiles with Jetty 6.
- *  We do the latter.
- *
- *  The filter would have been added in web.xml,
- *  see that file, where it's commented out.
- *  Filter isn't supported until Tomcat 7 (Servlet 3.0)
+ *  A part larger than the 64KB MAX_STRING_SIZE limit is not read into a
+ *  String, and an IllegalStateException from the container (which signals an
+ *  oversized request) is logged and rethrown.
  *
  *  @author user
  *  @since 0.9.19 moved from susimail so it may be used by routerconsole too

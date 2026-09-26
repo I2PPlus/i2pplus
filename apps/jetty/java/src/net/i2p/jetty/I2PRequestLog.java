@@ -313,6 +313,11 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     _buffers.add(u8buf);
                 }
             } else {
+                // The optional sections append to the same shared _writer, so
+                // they have to run inside the lock that serializes writes to
+                // it. The lock is therefore held for them as well; that is
+                // inherent to writing to the shared writer, and the work done
+                // under it is only request attribute formatting.
                 synchronized(_writer) {
                     int l=buf.length();
                     if (l>_copy.length) {l=_copy.length;}
@@ -321,10 +326,8 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     u8buf.reset();
                     _buffers.add(u8buf);
 
-                    // TODO do outside synchronized scope
                     if (_extended) {logExtended(request, _writer);}
 
-                    // TODO do outside synchronized scope
                     if (_logCookies) {
                         Cookie[] cookies = request.getCookies();
                         if (cookies == null || cookies.length == 0) {_writer.write(" -");}

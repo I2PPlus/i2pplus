@@ -13,23 +13,18 @@ import java.util.jar.Manifest;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Simply call org.apache.jasper.JspC, then exit.
+ *  Build-time wrapper that calls org.apache.jasper.JspC reflectively and
+ *  then exits, so the build does not depend on the Jasper API at compile time.
  *
- *  As of Tomcat 8.5.33, forking their JspC won't complete,
- *  because the JspC compilation is now threaded and the thread pool workers aren't daemons.
- *  Will fixed in a 8.5.35, but we don't know what version distros may have.
+ *  The build forks a JVM to run this. Running JspC in-process does not
+ *  terminate on Tomcat 8.5.33 or 9.0.11 and later, where the JSP compilation
+ *  is threaded and the thread pool workers are not daemon threads.
+ *  See https://tomcat.apache.org/tomcat-8.5-doc/changelog.html
  *
- *  Additionally, if the system property build.reproducible is "true",
- *  attempts to generate a reproducible build by compiling the
- *  jsps in order, for a consistent web.xml file.
- *
- *  https://tomcat.apache.org/tomcat-8.5-doc/changelog.html
- *  https://bz.apache.org/bugzilla/show_bug.cgi?id=53492
- *  http://trac.i2p2.i2p/ticket/2307
- *  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908884
- *  https://bz.apache.org/bugzilla/show_bug.cgi?id=62674
- *
- *  We could set fork=false in build.xml, but then the paths are all wrong.
+ *  If the system property build.reproducible is "true", the arguments are
+ *  rewritten to compile the jsps in a fixed order, and to force a single
+ *  compiler thread where the jasper in use supports -threadCount, so that
+ *  the generated web.xml is reproducible.
  *
  *  Warning - used in build process only, not included in runtime jars, not for external use.
  *  Only for use in build scripts, obviously not a public API.
