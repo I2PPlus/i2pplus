@@ -25,13 +25,16 @@ public class DirKeyRing implements KeyRing {
     private final File _base;
 
     /**
-     * DirKeyRing.
+     * Constructor for a read-only keyring on the local filesystem.
+     *
+     * @param baseDir the directory holding one subdirectory per scope
      */
     public DirKeyRing(File baseDir) {
         _base = baseDir;
     }
 
     /**
+     *  Load a public key from the certificate in the given scope.
      *  Cert must be in the file (escaped keyName).crt,
      *  and have a CN == keyName.
      *
@@ -39,13 +42,12 @@ public class DirKeyRing implements KeyRing {
      *
      *  CN check unsupported on Android.
      *
+     *  @param keyName the key name, also the expected certificate CN
+     *  @param scope the directory under the keyring base
+     *  @param type unused
      *  @return null if file doesn't exist, throws on all other errors
      */
     @Override
-    /**
-     * Look up a public key.
-     * @return the key
-     */
     public PublicKey getKey(String keyName, String scope, SigType type) throws GeneralSecurityException, IOException {
         String fileName = keyName.replace("@", "_at_").replace("<", "_").replace(">", "_");
         File test = new File(fileName);
@@ -65,11 +67,12 @@ public class DirKeyRing implements KeyRing {
     }
 
     /**
-     *  Unimplemented, unused.
+     *  Store a public key. Unimplemented, unused - this ring is read-only.
+     *
+     *  @param keyName the key name
+     *  @param scope the directory under the keyring base
+     *  @param key the key
      */
     @Override
-    /**
-     * Store a public key.
-     */
     public void setKey(String keyName, String scope, PublicKey key) { /* nop */ }
 }

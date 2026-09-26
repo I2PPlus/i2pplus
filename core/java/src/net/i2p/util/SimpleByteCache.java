@@ -4,8 +4,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Like ByteCache but works directly with byte arrays, not ByteArrays.
- * These are designed to be small caches, so there's no cleaner task
- * like there is in ByteCache. And we don't zero out the arrays here.
+ * These are designed to be small caches. Unlike ByteCache, the arrays are
+ * not zeroed before being returned to the cache, so a caller that needs
+ * cleanup must zero the array itself.
+ *
+ * A single global cleanup task runs once a minute over all caches and halves
+ * any cache that has been underfilled for 90 seconds, so the array sizes of
+ * an idle program are not retained indefinitely.
+ *
  * Only the static methods are public here.
  *
  * @since 0.8.3
@@ -59,7 +65,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     * Cache responsible for arrays of the given size.
+     * Cache responsible for arrays of the given size, using the default size.
      *
      * @param size how large should the objects cached be?
      * @return the instance
@@ -72,10 +78,13 @@ public final class SimpleByteCache {
     /**
      * Cache responsible for objects of the given size.
      *
-     * @param cacheSize how large we want the cache to grow
-     *                  (number of objects, NOT memory size)
-     *                  before discarding released objects.
+     * There is one cache per size for the life of the JVM, and cacheSize is
+     * (re)applied to it on every call: a later call with a different cacheSize
+     * resizes the shared cache, discarding the excess on a shrink. The arrays
+     * evicted are simply garbage collected - nothing zeroes them.
      *
+     * @param cacheSize how many objects (NOT memory bytes) to keep before
+     *                  discarding released objects
      * @param size how large should the objects cached be?
      * @return the instance
      */
@@ -127,10 +136,15 @@ public final class SimpleByteCache {
         _entrySize = entrySize;
     }
 
+    /**
+     * Apply a new object count to the existing cache. Shrinking evicts the
+     * excess immediately; growing only raises the ceiling for future
+     * releases. Concurrent acquire/release calls are unaffected.
+     *
+     * @param maxCachedEntries the new maximum number of entries
+     */
     private void resize(int maxCachedEntries) {
-        // TryCache doesn't support dynamic resize, but we could create a new cache
-        // For now, this is a no-op as TryCache uses a fixed-size ConcurrentLinkedDeque
-        // To fully support resize, TryCache would need modification
+        _available.resize(maxCachedEntries);
     }
 
     /**

@@ -870,15 +870,15 @@ public abstract class NamingService {
      * WARNING - for use by I2PAppContext only - others must use
      * I2PAppContext.namingService()
      *
-     * Get a naming service instance. This method ensures that there
-     * will be only one naming service instance (singleton) as well as
-     * choose the implementation from the "i2p.naming.impl" system
-     * property.
-     *
-     * FIXME Actually, it doesn't ensure that. Only call this once!!!
+     * Create a naming service instance, choosing the implementation from the
+     * "i2p.naming.impl" system property (defaulting to the router or client
+     * implementation according to the context type). This is a factory, not a
+     * cache: every call constructs and returns a new instance, and no
+     * deduplication happens here. I2PAppContext.namingService() owns the
+     * single instance per context, so call this at most once per context.
      *
      * @param context the application context
-     * @return a NamingService instance
+     * @return a new NamingService instance
      * @throws RuntimeException if the naming service cannot be loaded
      */
     public static final synchronized NamingService createInstance(I2PAppContext context) {

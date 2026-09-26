@@ -22,9 +22,9 @@ import org.junit.Test;
 
 /**
  * Round-trip tests for Datagram2, including the offline (transient key) path.
- * Regression test for upstream b24aae44c7 (ported as dd35346915): the transient
- * public key and the main signature must use the transient sig type, not the
- * destination sig type.
+ * Regression test for the transient-key type mixup: the transient public key
+ * and the main signature must use the transient sig type, not the destination
+ * sig type.
  *
  * @since 0.9.71+
  */

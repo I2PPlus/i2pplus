@@ -196,7 +196,10 @@ public final class SigUtil {
             else if (ECConstants.equals(spec, ECConstants.P384_SPEC)) type = SigType.ECDSA_SHA384_P384;
             else if (ECConstants.equals(spec, ECConstants.P521_SPEC)) type = SigType.ECDSA_SHA512_P521;
             else {
-                // failing on Android (ticket #2296)
+                // No I2P SigType maps to this curve, so we cannot convert the
+                // key. Android's provider was reported to return a spec that
+                // is not equal to any of the three curves above
+                // (I2P ticket #2296), so this is the path taken there.
                 throw new InvalidKeyException("Unknown EC type: " + pk.getClass() + " spec: " + spec.getClass());
             }
             return fromJavaKey(k, type);

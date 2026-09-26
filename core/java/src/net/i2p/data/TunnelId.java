@@ -14,70 +14,53 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Tunnel identifier for routing messages through a sequence of routers in I2P.
+ * Tunnel identifier: a 32-bit unsigned value, held in a long, that names a
+ * tunnel within the network database and in lease sets.
  *
- * <p>TunnelId provides unique identification within tunnel routing:</p>
+ * <p>Value:</p>
  * <ul>
- *   <li><strong>Local Uniqueness:</strong> Must be unique on each router in tunnel</li>
- *   <li><strong>4-Byte Value:</strong> 32-bit identifier (1 to 0xffffffff)</li>
- *   <li><strong>Random Generation:</strong> Typically generated from cryptographically secure random</li>
- *   <li><strong>Routing Coordination:</strong> Prevents message delivery to wrong tunnels</li>
+ *   <li>Valid range is 1 to {@link #MAX_ID_VALUE} (0xffffffff). 0 is reserved
+ *       for a direct reply in a DatabaseStoreMessage, and the no-argument
+ *       constructor leaves the invalid value -1 in place until the ID is set
+ *       by a constructor argument, {@link #setTunnelId(long)} or
+ *       {@link #readBytes(InputStream)}.</li>
+ *   <li>Uniqueness is only local: each router picks and enforces its own IDs,
+ *       nothing here generates or checks them.</li>
  * </ul>
  *
- * <p><strong>Constraints and Validation:</strong></p>
+ * <p>Comparison:</p>
  * <ul>
- *   <li><strong>Minimum Value:</strong> Must be greater than zero (ID > 0)</li>
- *   <li><strong>Maximum Value:</strong> Limited to 0xffffffff (32-bit unsigned integer)</li>
- *   <li><strong>Special Case:</strong> Zero reserved for direct replies in DatabaseStoreMessage</li>
- *   <li><strong>Uniqueness:</strong> Router must enforce uniqueness across its tunnels</li>
+ *   <li>{@link #equals(Object)} requires an instance of TunnelId, so unlike
+ *       {@link SimpleDataStructure} this class is safe to mix with other types
+ *       in a Set or Map.</li>
+ *   <li>{@link #hashCode()} is the low 32 bits of the ID, which is the whole
+ *       valid range.</li>
  * </ul>
  *
- * <p><strong>Usage in I2P:</strong></p>
+ * <p>Mutability and thread safety:</p>
  * <ul>
- *   <li><strong>Tunnel Routing:</strong> Messages forwarded through tunnel chain</li>
- *   <li><strong>Message Delivery:</strong> Ensures messages reach correct tunnel endpoint</li>
- *   <li><strong>Tunnel Management:</strong> Creation, configuration, and teardown</li>
- *   <li><strong>Load Balancing:</strong> Multiple tunnels for traffic distribution</li>
- *   <li><strong>Client Communication:</strong> I2CP tunnel establishment and management</li>
- * </ul>
- *
- * <p><strong>Performance Considerations:</strong></p>
- * <ul>
- *   <li><strong>Efficient Storage:</strong> Compact 4-byte representation</li>
- *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode() methods</li>
- *   <li><strong>Minimal Overhead:</strong> No object inheritance since 0.9.48</li>
- *   <li><strong>Memory Efficiency:</strong> Primitive long storage</li>
- * </ul>
- *
- * <p><strong>Security Aspects:</strong></p>
- * <ul>
- *   <li><strong>ID Randomness:</strong> Use cryptographically secure random generation</li>
- *   <li><strong>ID Unpredictability:</strong> Prevent tunnel ID guessing attacks</li>
- *   <li><strong>Collision Avoidance:</strong> Local uniqueness prevents routing confusion</li>
- *   <li><strong>Isolation:</strong> Different tunnels have separate ID spaces</li>
- * </ul>
- *
- * <p><strong>Implementation Notes:</strong></p>
- * <ul>
- *   <li><strong>Space Optimization:</strong> Does not extend DataStructureImpl since 0.9.48</li>
- *   <li><strong>External Use:</strong> Not recommended for external use, subject to change</li>
- *   <li><strong>Thread Safety:</strong> Immutable objects are inherently thread-safe</li>
- *   <li><strong>Validation:</strong> Constructor enforces valid ID range</li>
- * </ul>
- *
- * <p><strong>Constants:</strong></p>
- * <ul>
- *   <li>{@link #MAX_ID_VALUE} - Maximum allowed tunnel ID (0xffffffff)</li>
+ *   <li>Not immutable: the ID is a plain non-volatile long that
+ *       {@link #setTunnelId(long)}, {@link #readBytes(InputStream)} and the
+ *       constructors can replace, even after the object has been shared.
+ *       Publish or synchronize the object, or replace it, rather than mutating
+ *       a TunnelId another thread may already hold.</li>
+ *   <li>A TunnelId whose ID is set before publication and never changed
+ *       afterwards can be shared freely between threads.</li>
  * </ul>
  *
  * @author jrandom
  */
 public class TunnelId {
+    /** LOCKING: this, see setTunnelId() */
     private long _tunnelId;
 
     /** Maximum tunnel ID value (2^32 - 1). */
     public static final long MAX_ID_VALUE = 0xffffffffL;
 
+    /**
+     * Create a TunnelId with the invalid value -1, for reading from a stream
+     * or for setTunnelId().
+     */
     public TunnelId() {
         _tunnelId = -1;
     }
@@ -92,7 +75,8 @@ public class TunnelId {
     }
 
     /**
-     * Tunnel ID.
+     * Tunnel ID, or -1 if not set or not yet read.
+     *
      *  @return the tunnel ID
      */
     public long getTunnelId() {
@@ -100,7 +84,7 @@ public class TunnelId {
     }
 
     /**
-     *  Sets the tunnel ID for this lease.
+     *  Sets the tunnel ID for this lease, replacing any previous value.
      *
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
@@ -132,7 +116,13 @@ public class TunnelId {
         DataHelper.writeLong(out, 4, _tunnelId);
     }
 
-    /** {@inheritDoc} */
+    /**
+     *  Two TunnelIds are equal when their IDs are equal. Two unset
+     *  TunnelIds (both -1) are equal to each other.
+     *
+     *  @param obj the object to compare
+     *  @return true if the IDs match
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -140,13 +130,22 @@ public class TunnelId {
         return _tunnelId == ((TunnelId) obj)._tunnelId;
     }
 
-    /** {@inheritDoc} */
+    /**
+     *  The low 32 bits of the ID, which is the whole valid range, or -1 if
+     *  the ID is not set.
+     *
+     *  @return the hash code
+     */
     @Override
     public int hashCode() {
         return (int) _tunnelId;
     }
 
-    /** {@inheritDoc} */
+    /**
+     *  The ID in decimal.
+     *
+     *  @return a string representation
+     */
     @Override
     public String toString() {
         return String.valueOf(_tunnelId);

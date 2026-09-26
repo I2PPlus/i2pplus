@@ -48,7 +48,7 @@ import net.i2p.util.TempDirScanner;
  *
  * As a simplification, there is also a global context - if some component needs
  * access to one of the singletons but doesn't have its own context from which
- * to root itself, it binds to the I2PAppContext's globalAppContext(), which is
+ * to root itself, it binds to the I2PAppContext's getGlobalContext(), which is
  * the first context that was created within the JVM, or a new one if no context
  * existed already.  This functionality is often used within the I2P core for
  * logging - e.g. <pre>
@@ -713,12 +713,19 @@ public class I2PAppContext {
     /**
      * Add a callback, which will fire upon changes in the property
      * given in the specific callback.
-     * Unimplemented in I2PAppContext: this only makes sense in a router context.
+     *
+     * This is an intentional no-op in a plain I2PAppContext: its properties are
+     * only populated in the constructor, so there is nothing to notify. A
+     * subclass that allows properties to change at runtime overrides this to
+     * register the callback with its I2PProperties - see
+     * RouterContext.addPropertyCallback(). Callers that depend on
+     * property-change notifications must therefore only do so in such a
+     * context.
      *
      * @param callback The implementation of the callback.
      */
     public void addPropertyCallback(I2PPropertyCallback callback) {
-        // TODO
+        // no property changes possible in a base context
     }
     /**
      * The statistics component with which we can track various events
@@ -1020,9 +1027,14 @@ public class I2PAppContext {
     }
 
     /**
-     * [insert snarky comment here]
+     * The random source for this context, created on first use.
      *
-     * @return the random source
+     * The first caller initializes it, holding a lock so that concurrent
+     * callers share one instance; every later caller gets that same object.
+     * The instance is a FortunaRandomSource, seeded from /dev/urandom and
+     * ./prngseed.rnd, so the first call may block while it gathers entropy.
+     *
+     * @return the random source, non-null
      */
     public RandomSource random() {
         if (!_randomInitialized)

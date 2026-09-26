@@ -444,7 +444,13 @@ public class EepGet {
     /**
      * Command-line entry point for EepGet.
      *
-     * Usage: eepget [-p 127.0.0.1:4444] [-n #retries] [-e etag] [-o outputFile] [-m markSize lineLen] url
+     * Usage: eepget [-p 127.0.0.1:4444 | -c] [-n #retries] [-e etag] [-o outputFile]
+     *              [-t inactivityTimeout] [-u username] [-x password]
+     *              [-h name=value] [-m markSize] [-l lineLen] url
+     *
+     * All timeouts are in seconds. The header timeout is not settable from the
+     * command line; it comes from the eepget.connectTimeout property, and the
+     * -t option sets the inactivity timeout instead (eepget.inactivityTimeout).
      *
      * As of 0.9.45, supports https and redirect to https
      *
@@ -552,7 +558,7 @@ public class EepGet {
         }
 
         if (error || args.length - g.getOptind() != 1) {
-            System.out.println(usage());
+            usage();
             System.exit(1);
         }
         String url = args[g.getOptind()];
@@ -686,23 +692,38 @@ public class EepGet {
     }
 
     /**
-     * Returns a usage string describing command-line options.
+     *  The command-line help text, listing every option accepted by main().
+     *  The defaults shown must match the constants and properties read in
+     *  main().
      *
-     * @return the usage help text
+     *  @return the usage help text
+     *  @since 0.9.71+
      */
-    private static String usage() {
+    static String usageText() {
         return
             "Usage:\n" +
             "  eepget [opts] <url>  retrieve webpage or file from remote server\n\n" +
             "Options:\n" +
             "  -c                   do not use proxy\n" +
-            "  -n <value>           number of retries (default 10)\n" +
+            "  -e <etag>            send If-None-Match, do not download if unchanged\n" +
+            "  -h <name=value>      add a request header\n" +
+            "  -l <value>           status line length (default 10)\n" +
+            "  -m <value>           status mark size in bytes (default 1024)\n" +
+            "  -n <value>           number of retries (default " + DEFAULT_NUM_RETRIES + ")\n" +
             "  -o <filename>        use specified output filename\n" +
             "  -p <host:port>       use alternative proxy (default is 127.0.0.1:4444)\n" +
-            "  -t <value>           timeout in seconds (default 120)\n" +
+            "  -t <value>           inactivity timeout in seconds (default "
+                               + (DEFAULT_INACTIVITY_TIMEOUT / 1000) + ")\n" +
             "  -u <value>           proxy username\n" +
             "  -x <value>           proxy password\n";
     }
+
+    /**
+     *  Print the command-line help to stdout.
+     *
+     *  @see #usageText()
+     */
+    private static void usage() { System.out.println(usageText()); }
 
     /**
      *  Callback interface for monitoring EepGet transfer progress.
@@ -1037,7 +1058,10 @@ public class EepGet {
     /**
      * Blocking fetch, returning true if the URL was retrieved, false if all retries failed.
      *
-     * Header timeout default 45 sec, total timeout default none, inactivity timeout default 60 sec.
+     * Uses the timeouts configured when this instance was created: the header
+     * timeout defaults to {@link #DEFAULT_CONNECT_TIMEOUT} (90 seconds), the total
+     * timeout to none, and the inactivity timeout to
+     * {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes).
      *
      * @return success
      */
@@ -1048,7 +1072,8 @@ public class EepGet {
      * don't come back in the time given.  If the timeout is zero or less, this will
      * wait indefinitely.
      *
-     * Total timeout default none, inactivity timeout default 60 sec.
+     * Total timeout default none, inactivity timeout default
+     * {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes).
      *
      * @param fetchHeaderTimeout timeout in ms
      * @return success
@@ -1060,10 +1085,16 @@ public class EepGet {
     /**
      * Blocking fetch.
      *
+     * The three timeouts are independent: the header timeout covers the wait for
+     * the response status line and headers of each attempt, the total timeout
+     * covers the whole operation including retries and backoff, and the
+     * inactivity timeout covers the wait between bytes once the body has started.
+     *
      * @param fetchHeaderTimeout &lt;= 0 for none (proxy will timeout if none, none isn't recommended if no proxy)
+     *                      forced to totalTimeout if totalTimeout is set and this is &lt;= 0
      * @param totalTimeout operation-wide deadline for the whole fetch, including retries and
      *                      backoff between attempts; &lt;= 0 for default none
-     * @param inactivityTimeout &lt;= 0 for default 60 sec
+     * @param inactivityTimeout &lt;= 0 for default {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes)
      * @return success
      */
     @SuppressWarnings("PMD.AvoidInstanceofChecksInCatchClause")
@@ -1776,10 +1807,13 @@ public class EepGet {
 
     /**
      *  Parse a chunk length from the HTTP response stream.
-     *  TODO does not skip chunk extensions (RFC 2616 sec. 3.6.1)
+     *  The chunk-size line is read whole, so any chunk extensions
+     *  (RFC 9112 sec. 7.1.1, "chunk-ext") come along with it and are
+     *  discarded rather than rejected. A trailer section after the
+     *  terminating zero-length chunk is not consumed.
      *
      *  @return the chunk length
-     *  @throws IOException on IO error
+     *  @throws IOException on IO error, or if the chunk-size line is not hex
      */
     protected long readChunkLength() throws IOException {
         StringBuilder buf = new StringBuilder(8);
@@ -1802,9 +1836,31 @@ public class EepGet {
                 break;
         }
 
-        String len = buf.toString().trim();
+        return parseChunkLength(buf.toString());
+    }
+
+    /**
+     *  Extract the chunk size from a chunk-size line, dropping any
+     *  chunk extensions. Only the hex digits before the first ';' are
+     *  significant, per RFC 9112 sec. 7.1, so a negative size, which is
+     *  outside that grammar, is rejected rather than silently ending the
+     *  transfer early.
+     *
+     *  @param line the raw chunk-size line, without the trailing CRLF
+     *  @return the chunk length, never negative
+     *  @throws IOException if the chunk size is not a hex number
+     *  @since 0.9.71+
+     */
+    static long parseChunkLength(String line) throws IOException {
+        String len = line.trim();
+        int semi = len.indexOf(';');
+        if (semi >= 0)
+            len = len.substring(0, semi).trim();
         try {
-            return Long.parseLong(len, 16);
+            long rv = Long.parseLong(len, 16);
+            if (rv < 0)
+                throw new NumberFormatException("negative");
+            return rv;
         } catch (NumberFormatException nfe) {
             throw new IOException("Invalid chunk length [" + len + "]");
         }
@@ -2685,7 +2741,6 @@ public class EepGet {
      *  @return the server
      *  @since 0.9.47
      */
-
     public String getServer() {
         return _server;
     }
@@ -2696,7 +2751,6 @@ public class EepGet {
      *  @return the content language
      *  @since 0.9.47
      */
-
     public String getContentLanguage() {
         if (_contentLanguage != null && _contentLanguage.equals("und"))
             return "";
@@ -2710,7 +2764,6 @@ public class EepGet {
      *  @return the transfer encoding
      *  @since 0.9.47
      */
-
     public String getTransferEncoding() {
         return _transferEncoding;
     }
@@ -2721,7 +2774,6 @@ public class EepGet {
      *  @return the content encoding
      *  @since 0.9.47
      */
-
     public String getContentEncoding() {
         return _contentEncoding;
     }
@@ -2732,7 +2784,6 @@ public class EepGet {
      *  @return the cache control
      *  @since 0.9.47
      */
-
     public String getCacheControl() {
         return _cacheControl;
     }
@@ -2743,7 +2794,6 @@ public class EepGet {
      *  @return the accept ranges
      *  @since 0.9.47
      */
-
     public String getAcceptRanges() {
         return _acceptRanges;
     }
@@ -2754,7 +2804,6 @@ public class EepGet {
      *  @return the expiry date
      *  @since 0.9.47
      */
-
     public String getExpiryDate() {
         return _expiryDate;
     }
@@ -2765,7 +2814,6 @@ public class EepGet {
      *  @return the cookie
      *  @since 0.9.47
      */
-
     public String getCookie() {
         return _cookie;
     }
@@ -2774,7 +2822,6 @@ public class EepGet {
      *  Referrer-Policy header.
      *  @return the referrer policy, or null
      */
-
     public String getReferrerPolicy() {
         return _referrerPolicy;
     }
@@ -2783,7 +2830,6 @@ public class EepGet {
      *  Vary header.
      *  @return the vary value, or null
      */
-
     public String getVary() {
         return _vary;
     }
@@ -2792,7 +2838,6 @@ public class EepGet {
      *  X-Frame-Options header.
      *  @return the frame options, or null
      */
-
     public String getXframeOptions() {
         return _xframeOptions;
     }
@@ -2801,7 +2846,6 @@ public class EepGet {
      *  Content-Security-Policy header.
      *  @return the CSP value, or null
      */
-
     public String getCSP() {
         return _csp;
     }
@@ -2810,7 +2854,6 @@ public class EepGet {
      *  X-XSS-Protection header.
      *  @return the XSS protection value, or null
      */
-
     public String getXSSProtection() {
         return _xssProtection;
     }
@@ -2819,7 +2862,6 @@ public class EepGet {
      *  X-Content-Type-Options header.
      *  @return the content type options, or null
      */
-
     public String getXContentTypeOptions() {
         return _xContentTypeOptions;
     }
@@ -2828,7 +2870,6 @@ public class EepGet {
      *  X-Powered-By header.
      *  @return the powered-by value, or null
      */
-
     public String getXPoweredBy() {
         return _xPoweredBy;
     }

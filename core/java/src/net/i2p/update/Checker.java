@@ -11,7 +11,9 @@ public interface Checker {
     /**
      *  Check for updates.
      *  Should not block.
-     *  If any are found, call back to UpdateManager.notifyUpdateAvailable().
+     *  If any are found, call back to notifyVersionAvailable() in
+     *  {@link UpdateManager} - the overload taking a sourceMap when more
+     *  than one update method was found at once.
      *
      *  @param type update type
      *  @param method update method

@@ -35,11 +35,16 @@ public class BuildTime {
     private static final long _latestTime;
     private static final long YEARS_25 = 25L * 365 * 24 * 60 * 60 * 1000;
 
-    /** Update this periodically. */
+    /**
+     * Update this periodically, and keep EARLIEST_LONG in sync with it.
+     * A build older than this is reported as a strange build time.
+     */
     private static final String EARLIEST = "2025-01-01 12:00:00 UTC";
 
-    // fallback if parse fails ticket #1976
-    // date -d 202x-xx-xx +%s
+    // Fallback if EARLIEST fails to parse (I2P ticket #1976):
+    // 2025-01-02 00:00:00 UTC, 12 hours later than EARLIEST, so it is a
+    // weaker bound. Regenerate with:
+    // date -u -d '2025-01-01 12:00:00 UTC' +%s
     private static final long EARLIEST_LONG = 1735776000 * 1000L;
 
     static {

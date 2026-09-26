@@ -130,7 +130,7 @@ public final class KeyGenerator {
      *  @param passphrase the password
      *  @param rounds iteration count (1000 for legacy, 1000000 for current)
      *  @return derived key
-     *  @since 2.x.x
+     *  @since 2.13.0
      */
     public SessionKey generateSessionKey(byte[] salt, byte[] passphrase, int rounds) {
         byte[] salted = new byte[16 + passphrase.length];
@@ -145,7 +145,7 @@ public final class KeyGenerator {
      *  Get current rounds for new encryptions.
      *
      *  @return 1000000
-     *  @since 2.x.x
+     *  @since 2.13.0
      */
     public int getPBERT() { return PBE_ROUNDS; }
 
@@ -153,7 +153,7 @@ public final class KeyGenerator {
      *  Get legacy rounds for migration.
      *
      *  @return 1000
-     *  @since 2.x.x
+     *  @since 2.13.0
      */
     public int getPBERTLegacy() { return PBE_ROUNDS_LEGACY; }
 

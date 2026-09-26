@@ -31,7 +31,15 @@ public class EepPost extends EepGet {
     private static final int PROP_MAX_POST_PAYLOAD_RAM = 32 * 1024;
 
     /**
-     * EepPost.
+     *  Constructor for a POST session. The post body is supplied later by one of
+     *  the post() methods; fetch() is not supported.
+     *
+     *  @param ctx the app context
+     *  @param proxyHost the proxy hostname, empty for no proxy
+     *  @param proxyPort the proxy port, 0 for no proxy
+     *  @param numRetries number of retries
+     *  @param outputFile file to save the response to
+     *  @param url URL to post to
      */
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         /*
@@ -209,7 +217,9 @@ public class EepPost extends EepGet {
      *  Adapted from old jrandom EepPost
      */
     private static void sendField(StringBuilder out, String field, String val) {
-        // TODO % encoding
+        // Only the space-to-plus substitution of
+        // application/x-www-form-urlencoded is done here; reserved characters
+        // in names or values are sent verbatim.
         out.append(field.replace(" ", "+")).append('=').append(val.replace(" ", "+"));
     }
 
@@ -254,7 +264,16 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * EepPost [-p 127.0.0.1:4444] [-n #retries] url
+     * Command-line entry point for EepPost. See usage() for the full option list.
+     *
+     * Usage: eeppost [-p 127.0.0.1:4444 | -c] [-n #retries] [-o outputFile]
+     *               [-s key=value] | [-f key=file] url
+     *
+     * At least one -s (string field) or -f (file field) is required. All timeouts
+     * are in seconds: -t is the inactivity timeout, -v the header timeout, and
+     * -w the total timeout, which is unlimited by default.
+     *
+     * @param args command-line arguments
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
@@ -359,7 +378,7 @@ public class EepPost extends EepGet {
 
         if (error || args.length - g.getOptind() != 1 || fields.isEmpty()) {
             if (fields.isEmpty()) System.err.println("At least one -s or -f parameter required");
-            usage();
+            System.err.print(usage());
             System.exit(1);
         }
         String url = args[g.getOptind()];
@@ -390,13 +409,27 @@ public class EepPost extends EepGet {
         }
     }
 
-    private static void usage() {
-        System.err.println("eeppost [-p 127.0.0.1[:4444]] [-c] [-o outputFile]\n" + "        [-s key=value]*\n"
-                + "        [-f key=file]*\n" + "        [-m markSize] (default 1024)\n"
-                + "        [-l lineLen]  (default 40)\n" + "        [-n #retries] (default 0)\n"
-                + "        [-t headerTimeout]  (default 45 sec)\n"
-                + "        [-u inactivityTimeout]  (default 60 sec)\n"
-                + "        [-w totalTimeout]  (default unlimited)\n" + "        [-u username] [-x password] url\n"
-                + "        (use -c or -p :0 for no proxy)");
+    /**
+     *  Usage text for the command-line entry point. Every option accepted by
+     *  main() must appear here, with the defaults main() actually uses.
+     *
+     *  @return the help text
+     *  @since 0.9.71+
+     */
+    static String usage() {
+        int inactivity = DEFAULT_INACTIVITY_TIMEOUT / 1000;
+        int header = DEFAULT_CONNECT_TIMEOUT / 1000;
+        return "eeppost [-p 127.0.0.1[:4444]] [-c] [-o outputFile]\n"
+                + "        [-s key=value]*\n"
+                + "        [-f key=file]*\n"
+                + "        [-m markSize] (default 1024)\n"
+                + "        [-l lineLen]  (default 40)\n"
+                + "        [-n #retries] (default 0)\n"
+                + "        [-t inactivityTimeout]  (default " + inactivity + " sec)\n"
+                + "        [-v headerTimeout]  (default " + header + " sec)\n"
+                + "        [-w totalTimeout]  (default unlimited)\n"
+                + "        [-u username] [-x password] url\n"
+                + "        (use -c or -p :0 for no proxy)\n"
+                + "        (all timeouts in seconds; at least one -s or -f is required)";
     }
 }

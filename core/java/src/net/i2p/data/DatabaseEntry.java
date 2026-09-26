@@ -382,9 +382,9 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      *
      * @since 0.9.58 moved up from LeaseSet
      *
-     * use this carefully, when updating the flags make sure the old and new
-     * leaseSet are actually equivalent, or simply copy over the reply value,
-     * see KademliaNetworkDatabaseFacade.java line 997 for more information.
+     * use this carefully, when updating the flag make sure the old and new
+     * leaseSet are actually equivalent, or simply copy the reply value,
+     * as copyStoreMetadata() in KademliaNetworkDatabaseFacade does.
      */
     public void setReceivedAsPublished() {
         _receivedAsPublished = true;

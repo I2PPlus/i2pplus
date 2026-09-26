@@ -89,11 +89,12 @@ public class TunnelRemovalEvent {
         return _timestamp;
     }
 
-    @Override
     /**
      * Return a string representation.
+     *
      * @return a string representation
      */
+    @Override
     public String toString() {
         return "TunnelRemovalEvent [" + _poolName + " id=" + _tunnelId +
                " direction=" + (_isInbound ? "inbound" : "outbound") +

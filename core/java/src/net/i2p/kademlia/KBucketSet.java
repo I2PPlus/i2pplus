@@ -79,9 +79,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * @param context the router context
      * @param us the local identity (typically a SHA1Hash or Hash)
      *           The class must have a zero-argument constructor.
-     * @param max the Kademlia value "k", the max per bucket, k &gt;= 4
+     * @param max the Kademlia value "k", the max per bucket, must be &gt; 4
      * @param b the Kademlia value "b", split buckets an extra 2**(b-1) times,
-     *           b &gt; 0, use 1 for bittorrent, Kademlia paper recommends 5
+     *           1 &lt;= b &lt;= 8, use 1 for bittorrent, Kademlia paper recommends 5
+     * @throws IllegalArgumentException if max &lt;= 4, or b is outside 1..8
+     * @throws RuntimeException if the us class has no zero-argument constructor
      */
     public KBucketSet(I2PAppContext context, T us, int max, int b) {
         this(context, us, max, b, new RandomTrimmer<>(context, max));
@@ -92,9 +94,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *
      * @param context the router context
      * @param us the local identity
-     * @param max the Kademlia value "k", the max per bucket
-     * @param b the Kademlia value "b"
+     * @param max the Kademlia value "k", the max per bucket, must be &gt; 4
+     * @param b the Kademlia value "b", 1 &lt;= b &lt;= 8
      * @param trimmer the trim strategy
+     * @throws IllegalArgumentException if max &lt;= 4, or b is outside 1..8
+     * @throws RuntimeException if the us class has no zero-argument constructor
      */
     public KBucketSet(I2PAppContext context, T us, int max, int b, KBucketTrimmer<T> trimmer) {
         _us = us;

@@ -42,10 +42,30 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         _listeners = new ConcurrentHashMap<>(4);
     }
 
+    /**
+     * Intentional no-op. Notifications reach a registered listener through the
+     * four-argument overload below, which knows the protocol and ports to match
+     * on; a muxed session never calls this one, because its availability
+     * notifier is the MuxedAvailabilityNotifier.
+     *
+     * @param session session to notify
+     * @param msgId message number available
+     * @param size size of the message payload in bytes
+     */
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size) {
-        // TODO
     }
+
+    /**
+     * Notify the best-matching listener for the protocol and port.
+     *
+     * @param session session to notify
+     * @param msgId message number available
+     * @param size size of the message payload in bytes
+     * @param proto 1-254 or 0 for unspecified
+     * @param fromport 1-65535 or 0 for unspecified
+     * @param toport 1-65535 or 0 for unspecified
+     */
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromport, int toport) {
         I2PSessionMuxedListener l = findListener(proto, toport);

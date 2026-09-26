@@ -256,13 +256,19 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * Configure a set of options or statistics that the router can expose.
-     * Makes a copy.
+     * Makes a copy, and replaces any options set previously.
      *
      * @param options if null, clears current options
      * @throws IllegalStateException if LeaseSet2 is already signed
      */
     public void setOptions(Properties options) {
         if (_signature != null) {throw new IllegalStateException();}
+        if (options == null) {
+            // null means "no options"; restore the state of a fresh LeaseSet2
+            // rather than leaving an empty Properties behind.
+            _options = null;
+            return;
+        }
         if (_options != null) {_options.clear();}
         else {_options = new OrderedProperties();}
         _options.putAll(options);

@@ -12,79 +12,46 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 /**
- * Base class for I2P data structures containing a single fixed-length byte array.
+ * Base class for I2P data structures holding a single byte array in a
+ * protected {@link #_data} field.
  *
- * <p>SimpleDataStructure provides efficient storage and caching for fixed-size data:</p>
+ * <p>What the base class actually provides:</p>
  * <ul>
- *   <li><strong>Fixed Length:</strong> Each subclass defines exact byte array size</li>
- *   <li><strong>Caching Support:</strong> Built-in LRU caching for frequently used objects</li>
- *   <li><strong>Immutability:</strong> Data becomes immutable after first non-null assignment</li>
- *   <li><strong>Memory Efficient:</strong> Optimized for high-performance scenarios</li>
+ *   <li><strong>Length:</strong> {@link #length()} is abstract, and subclasses
+ *       fix it per type - 32 bytes for {@link Hash} or {@link SessionKey}, 256
+ *       for an ElGamal {@link PublicKey}, and 20, 32, 64 or 256 for a
+ *       {@link SigningPublicKey} depending on the algorithm. It is a fixed
+ *       length per subclass, not per instance.</li>
+ *   <li><strong>Single assignment:</strong> {@link #setData(byte[])},
+ *       {@link #readBytes(InputStream)} and {@link #fromBase64(String)} all
+ *       refuse to overwrite non-null data with a {@link RuntimeException}, and
+ *       reject a wrong length. {@link #fromByteArray(byte[])} and
+ *       {@link #fromBase64(String)} additionally reject null.</li>
+ *   <li><strong>No copy:</strong> {@link #getData()} and
+ *       {@link #toByteArray()} return the backing array itself, not a copy.</li>
+ *   <li><strong>Encoding:</strong> {@link #toBase64()} and, where a subclass
+ *       adds it, its own base32 rendering.</li>
+ *   <li><strong>Comparison:</strong> {@link #equals(Object)} compares the raw
+ *       arrays without checking the class or length, so two different
+ *       SimpleDataStructure subclasses of equal length holding equal bytes
+ *       compare equal (e.g. a 32-byte {@link SessionKey} and a 32-byte
+ *       {@link Hash}). {@link #hashCode()} uses the first 4 bytes only, which
+ *       requires the data to be random - subclasses with structured data
+ *       override it.</li>
  * </ul>
  *
- * <p><strong>Key Features:</strong></p>
+ * <p>Not provided here:</p>
  * <ul>
- *   <li><strong>Length Specification:</strong> Abstract {@link #length()} method defines size</li>
- *   <li><strong>Data Access:</strong> Direct byte array access via {@link #getData()}</li>
- *   <li><strong>Serialization:</strong> Standard read/write operations for streams</li>
- *   <li><strong>Encoding:</strong> Base64 and byte array conversions</li>
- * </ul>
- *
- * <p><strong>Caching System:</strong></p>
- * <ul>
- *   <li><strong>LRU Cache:</strong> Least-recently-used caching with size limits</li>
- *   <li><strong>Static Factories:</strong> {@code create()} methods for cache access</li>
- *   <li><strong>Efficient Lookup:</strong> First 4 bytes used as cache index</li>
- *   <li><strong>Memory Management:</strong> Automatic cache size adjustment based on memory</li>
- * </ul>
- *
- * <p><strong>Immutability Model:</strong></p>
- * <ul>
- *   <li><strong>Initial State:</strong> Can be created with null data</li>
- *   <li><strong>First Assignment:</strong> setData(), readBytes(), fromByteArray(), fromBase64()</li>
- *   <li><strong>Immutable After:</strong> Once non-null data is set, cannot be changed</li>
- *   <li><strong>Protection:</strong> Subsequent modifications throw {@link RuntimeException}</li>
- * </ul>
- *
- * <p><strong>Usage Patterns:</strong></p>
- * <ul>
- *   <li><strong>Creation:</strong> Use static factory methods for cache efficiency</li>
- *   <li><strong>Comparison:</strong> Efficient equals() and hashCode() implementations</li>
- *   <li><strong>Storage:</strong> Minimal memory footprint for large collections</li>
- *   <li><strong>Network:</strong> Fast serialization for protocol messages</li>
- * </ul>
- *
- * <p><strong>Performance Optimizations:</strong></p>
- * <ul>
- *   <li><strong>No DataStructureImpl:</strong> As of 0.9.48, extends DataStructure directly</li>
- *   <li><strong>Byte Caching:</strong> Shared byte arrays via SimpleByteCache</li>
- *   <li><strong>Reduced Overhead:</strong> Minimal object size and memory usage</li>
- *   <li><strong>Fast Hashing:</strong> Optimized hashCode() for collections</li>
- * </ul>
- *
- * <p><strong>Common Subclasses:</strong></p>
- * <ul>
- *   <li>{@link Hash} - 32-byte SHA-256 hashes</li>
- *   <li>{@link PublicKey} - Variable-length encryption keys</li>
- *   <li>{@link PrivateKey} - Variable-length decryption keys</li>
- *   <li>{@link SigningPublicKey} - Variable-length signing keys</li>
- *   <li>{@link SigningPrivateKey} - Variable-length signing private keys</li>
- *   <li>{@link SessionKey} - 32-byte session encryption keys</li>
- *   <li>{@link Signature} - Variable-length digital signatures</li>
- * </ul>
- *
- * <p><strong>Thread Safety:</strong></p>
- * <ul>
- *   <li><strong>Immutable Data:</strong> Thread-safe after data is set</li>
- *   <li><strong>Static Caches:</strong> Thread-safe LRU cache implementation</li>
- *   <li><strong>Factory Methods:</strong> Thread-safe object creation</li>
- * </ul>
- *
- * <p><strong>Evolution:</strong></p>
- * <ul>
- *   <li><strong>0.8.2:</strong> Initial implementation with retrofitted classes</li>
- *   <li><strong>0.8.3:</strong> Added caching support and immutability</li>
- *   <li><strong>0.9.48:</strong> Removed DataStructureImpl inheritance for space savings</li>
+ *   <li><strong>No cache:</strong> there is no LRU or any other cache in this
+ *       class. Subclasses that want one supply their own static
+ *       {@link SDSCache} and expose create() factory methods that go through
+ *       it - see {@link Hash}.</li>
+ *   <li><strong>Not thread-safe:</strong> nothing here is synchronized and
+ *       {@link #_data} is not volatile, so an instance must be published
+ *       safely (final field, or a happens-before edge) before other threads
+ *       read it. Safe sharing applies only to a fully populated instance that
+ *       nobody mutates - and callers that mutate the array returned by
+ *       getData() break that.</li>
  * </ul>
  *
  * @author zzz
@@ -118,7 +85,9 @@ public abstract class SimpleDataStructure implements DataStructure {
     public abstract int length();
 
     /**
-     * Data reference (not a copy).
+     * Data reference (not a copy). Mutating the returned array mutates this
+     * structure, and breaks the hashCode contract of any subclass that caches
+     * a hash of the data.
      *
      * @return the data
      */
@@ -127,7 +96,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     }
 
     /**
-     * The byte array data, or null.
+     * The byte array data, or null. Not a copy - see the class documentation.
      *
      * @param data of correct length, or null
      * @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok)
@@ -258,12 +227,13 @@ public abstract class SimpleDataStructure implements DataStructure {
     }
 
     /**
-     * Warning - this returns true for two different classes with the same size
-     * and same data, e.g. SessionKey and SessionTag, but you wouldn't
-     * put them in the same Set, would you?
+     * Compares the raw data only: two different SimpleDataStructure subclasses
+     * of the same length holding the same bytes are equal, e.g. a 32-byte
+     * SessionKey and a 32-byte Hash. Only compare instances of the same class,
+     * and only use them as map keys or set members when that cannot happen.
      *
      * @param obj the object to compare
-     * @return true if equal
+     * @return true if the data arrays are equal
      */
     @Override
     public boolean equals(Object obj) {

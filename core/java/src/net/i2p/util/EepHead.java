@@ -237,8 +237,8 @@ public class EepHead extends EepGet {
         return "Usage:\n" + "  eephead [opts] <url>   request server headers for url\n\n" + "Options:\n"
                 + "  -c               do not use proxy\n" + "  -n <value>       number of retries (default 1)\n"
                 + "  -p <host:port>   use alternative proxy (default is 127.0.0.1:4444)\n"
-                + "  -t <value>       timeout in seconds (default 10)\n" + "  -u <value>       proxy username\n"
-                + "  -x <value>       proxy password\n";
+                + "  -t <value>       inactivity timeout in seconds (default 10)\n"
+                + "  -u <value>       proxy username\n" + "  -x <value>       proxy password\n";
     }
 
     /**

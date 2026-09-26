@@ -23,18 +23,22 @@ package net.i2p.client;
  * @author jrandom
  */
 public interface I2PSessionListener {
-    /** Instruct the client that the given session has received a message with
+    /**
+     * Instruct the client that the given session has received a message with
      * size # of bytes.
      *
      * After this is called, the client should call receiveMessage(msgId).
-     * There is currently no method for the client to reject the message.
-     * If the client does not call receiveMessage() within a timeout period
-     * (currently 30 seconds), the session will delete the message and
-     * log an error.
+     * A message can be dropped without being read by calling
+     * discardMessage(msgId), which avoids the decompression cost.
+     * If the client does not claim the message, the session drops it on a
+     * later pass of its unclaimed-message sweep (every 60 seconds) and logs
+     * a warning naming the message ID.
      *
      * @param session session to notify
      * @param msgId message number available
-     * @param size size of the message - why it's a long and not an int is a mystery
+     * @param size size of the message payload in bytes. The I2CP payload size
+     *             is an int internally and is widened to long here, so the
+     *             value is never negative
      */
     void messageAvailable(I2PSession session, int msgId, long size);
 
@@ -59,8 +63,8 @@ public interface I2PSessionListener {
      * Notify the client that some error occurred
      *
      * @param session the session
-     * @param message the error message
-     * @param error can be null? or not?
+     * @param message a human-readable description of the error
+     * @param error the cause, non-null
      */
     void errorOccurred(I2PSession session, String message, Throwable error);
 }

@@ -152,10 +152,15 @@ public class SimpleTimer2 {
 
     /**
      * Schedule a periodic event backed by SimpleTimer2.TimedEvent.
-     * The event self-reschedules via schedule() in timeReached().
+     * The event self-reschedules via schedule() in timeReached(); this method
+     * only sets the initial delay and the minimum-period check. The period the
+     * event actually runs at is whatever its timeReached() passes to
+     * schedule()/reschedule().
      *
      * @param event the event
-     * @param timeoutMs period in ms between executions
+     * @param timeoutMs delay to the first run, in ms, and lower bound for the
+     *                  period the event chooses for itself; the value is not
+     *                  enforced after the first run
      * @throws IllegalArgumentException if timeoutMs less than 5000
      * @since 0.9.70+
      */
@@ -165,10 +170,13 @@ public class SimpleTimer2 {
 
     /**
      * Schedule a periodic event backed by SimpleTimer2.TimedEvent.
+     * The event self-reschedules via schedule() in timeReached(); the period
+     * this method validates is not passed to the executor as a repetition rate.
      *
      * @param event the event
      * @param delay run the first iteration after delay ms
-     * @param timeoutMs period in ms between executions
+     * @param timeoutMs lower bound in ms for the period the event picks for
+     *                  itself, enforced only by the check below
      * @throws IllegalArgumentException if timeoutMs less than 5000
      * @since 0.9.70+
      */

@@ -212,7 +212,11 @@ public class LogManager implements Flushable {
     /** String (scope) or Log.LogScope to Log object */
     private final ConcurrentHashMap<Object, Log> _logs;
 
-    /** Who clears and writes our records. */
+    /**
+     * Who clears and writes our records. Volatile so the writer started here
+     * is safely published to the callers that read the field without holding
+     * this object's monitor.
+     */
     private volatile LogWriter _writer;
 
     private volatile boolean _shutdown;
@@ -300,9 +304,14 @@ public class LogManager implements Flushable {
         }
     }
 
-    /** @since 0.8.2 */
+    /**
+     * Start the log writer thread, if it isn't running already.
+     * Synchronized so only one writer is started; the field itself is volatile
+     * because the threads that use the writer do not hold this monitor.
+     *
+     * @since 0.8.2
+     */
     private synchronized void startLogWriter() {
-        // yeah, this doesn't always work, _writer should be volatile
         if (_writer != null) {
             return;
         }

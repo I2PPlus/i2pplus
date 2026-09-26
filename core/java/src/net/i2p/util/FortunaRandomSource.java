@@ -308,7 +308,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
                 _fortuna.addRandomBytes(data, offset, len);
             }
         } catch (RuntimeException e) {
-            // AIOOBE seen, root cause unknown, ticket #1576
+            // AIOOBE has been seen here from unknown input (I2P ticket #1576).
+            // A failed reseed must not reach the caller: the PRNG keeps the
+            // state it had, so the only signal is this warning.
             Log log = _context.logManager().getLog(FortunaRandomSource.class);
             log.warn("feedEntropy()", e);
         }

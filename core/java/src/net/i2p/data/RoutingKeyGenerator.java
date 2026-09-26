@@ -12,68 +12,32 @@ package net.i2p.data;
 import net.i2p.I2PAppContext;
 
 /**
- * Interface for transforming hashes into routing keys for I2P network database operations.
+ * Interface for transforming a hash into the key under which it is stored in
+ * the network database (KBucketSet).
  *
- * <p>RoutingKeyGenerator provides hash transformation for distributed hash table routing:</p>
+ * <p>What the interface defines:</p>
  * <ul>
- *   <li><strong>Hash Transformation:</strong> Consistent munging of hashes into routing keys</li>
- *   <li><strong>Mod Data:</strong> Transformation parameters updated periodically</li>
- *   <li><strong>DHT Routing:</strong> Enables efficient key-based lookup in network database</li>
- *   <li><strong>Load Distribution:</strong> Spreads storage and lookup load across key space</li>
+ *   <li>{@link #getRoutingKey(Hash)} maps a hash to a routing key. The
+ *       transformation, and whether it is a function of changing network-wide
+ *       "mod data", is up to the implementation - this interface says nothing
+ *       about reversibility, caching, or cost.</li>
+ *   <li>{@link #getLastChanged()} reports when that mod data last changed, so
+ *       a caller holding a previously derived key can tell whether it is
+ *       stale and needs to be regenerated.</li>
+ *   <li>{@link #getInstance()} returns the generator of the global context,
+ *       which is null unless that context is a router context.</li>
  * </ul>
  *
- * <p><strong>Key Operations:</strong></p>
+ * <p>Availability:</p>
  * <ul>
- *   <li>{@link #getRoutingKey(Hash)} - Transform hash to routing key</li>
- *   <li>{@link #getLastChanged()} - Get current mod data version</li>
- *   <li>{@link #getInstance()} - Get generator for current context</li>
+ *   <li>Not available in a plain I2PAppContext - I2PAppContext.routingKeyGenerator()
+ *       returns null there, because only a router holds a network database.</li>
+ *   <li>The implementation is {@code net.i2p.data.router.RouterKeyGenerator},
+ *       which appends the current GMT date to the hash and hashes the result,
+ *       rotating daily at midnight GMT.</li>
  * </ul>
  *
- * <p><strong>Transformation Process:</strong></p>
- * <ul>
- *   <li><strong>Consistent Algorithm:</strong> Same transformation applied to all hashes</li>
- *   <li><strong>Mod Data Input:</strong> Current network parameters affect transformation</li>
- *   <li><strong>Deterministic:</strong> Same hash always produces same routing key</li>
- *   <li><strong>Reversible:</strong> Process can be inverted for analysis</li>
- * </ul>
- *
- * <p><strong>Context Availability:</strong></p>
- * <ul>
- *   <li><strong>Router Context:</strong> Available only in RouterContext, not I2PAppContext</li>
- *   <li><strong>Implementation:</strong> Concrete implementation in RouterKeyGenerator</li>
- *   <li><strong>Client Limitation:</strong> Not available for client-only operations</li>
- * </ul>
- *
- * <p><strong>Evolution:</strong></p>
- * <ul>
- *   <li><strong>Pre-0.9.16:</strong> Full implementation with transformation logic</li>
- *   <li><strong>Post-0.9.16:</strong> Interface with router-specific implementation</li>
- *   <li><strong>Separation:</strong> Core interface in data package, implementation in router</li>
- * </ul>
- *
- * <p><strong>Usage in I2P:</strong></p>
- * <ul>
- *   <li><strong>NetDb Storage:</strong> Keys determine database storage location</li>
- *   <li><strong>Floodfill Operations:</strong> Routing keys used for network distribution</li>
- *   <li><strong>Lookup Efficiency:</strong> Fast key-based data retrieval</li>
- *   <li><strong>Load Balancing:</strong> Distributes network load across key space</li>
- * </ul>
- *
- * <p><strong>Security Considerations:</strong></p>
- * <ul>
- *   <li><strong>Key Distribution:</strong> Prevents targeted attacks on specific keys</li>
- *   <li><strong>Load Balancing:</strong> Avoids hotspots in network database</li>
- *   <li><strong>Sybil Resistance:</strong> Makes targeted attacks more difficult</li>
- *   <li><strong>Mod Data Rotation:</strong> Periodic changes prevent long-term attacks</li>
- * </ul>
- *
- * <p><strong>Performance Aspects:</strong></p>
- * <ul>
- *   <li><strong>Efficient Lookup:</strong> O(1) key-based database access</li>
- *   <li><strong>Uniform Distribution:</strong> Spreads load across all network nodes</li>
- *   <li><strong>Cache Optimization:</strong> Hot routing keys cached for fast access</li>
- *   <li><strong>Minimal Computation:</strong> Fast transformation algorithm</li>
- * </ul>
+ * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator
  */
 public abstract class RoutingKeyGenerator {
 
@@ -89,15 +53,20 @@ public abstract class RoutingKeyGenerator {
     /**
      *  The version of the current (today's) mod data.
      *  Use to determine if the routing key should be regenerated.
-     * @return the last changed
+     *
+     *  @return the last changed
      */
     public abstract long getLastChanged();
 
     /**
      * Routing key for a key.
      *
-     * @throws IllegalArgumentException if origKey is null
-     * @return the routing key
+     *  The result depends on the mod data of the implementing generator, so
+     *  compare getLastChanged() before reusing a previously derived key.
+     *
+     *  @param origKey non-null
+     *  @return the routing key
+     *  @throws IllegalArgumentException if origKey is null
      */
     public abstract Hash getRoutingKey(Hash origKey);
 }

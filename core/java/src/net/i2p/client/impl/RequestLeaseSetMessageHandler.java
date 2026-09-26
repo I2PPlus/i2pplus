@@ -153,10 +153,13 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         return true;
     }
 
-    @Override
     /**
      * Handle an incoming I2CP message.
+     *
+     * @param message the message
+     * @param session the session
      */
+    @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         handleMessage(message, session, 0);
     }
@@ -656,12 +659,20 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 spk = null;
             } // no revocation key in LS2
             else if (!_context.isRouterContext() && spk.getType() != SigType.DSA_SHA1) {
-                /**
-                 * Workaround for unparsable serialized signing private key for revocation
-                 * Send him a dummy DSA_SHA1 private key since it's unused anyway
-                 * See CreateLeaseSetMessage.doReadMessage()
-                 * For LS1 only
-                 */
+                // LS1 only - an LS2 carries no revocation key.
+                // Neither private key in CreateLeaseSetMessage has a type or
+                // length prefix, so the reader infers both lengths from the
+                // leading bytes and tries the known layouts, DSA_SHA1 (20
+                // bytes) first (see CreateLeaseSetMessage.doReadMessage()).
+                // A 20-byte dummy therefore matches whichever encryption-key
+                // length follows it.
+                // The value is never used to sign or verify anything: the
+                // LeaseSet above is signed with the session private key, and
+                // the router only registers the revocation key without
+                // verifying it (see ClientMessageEventListener). The
+                // consequence is that the revocation key the router derives
+                // from this dummy does not match the public key in the
+                // LeaseSet, so the LeaseSet cannot be revoked later.
                 byte[] dummy = new byte[SigningPrivateKey.KEYSIZE_BYTES];
                 _context.random().nextBytes(dummy);
                 spk = new SigningPrivateKey(dummy);

@@ -29,10 +29,13 @@ class MessageStatusMessageHandler extends HandlerImpl {
         super(context, MessageStatusMessage.MESSAGE_TYPE);
     }
 
-    @Override
     /**
      * Handle an incoming I2CP message.
+     *
+     * @param message the message
+     * @param session the session
      */
+    @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldDebug()) {
             _log.debug("Handling " + message);

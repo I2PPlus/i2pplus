@@ -20,15 +20,16 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * If you register via addSessionListener(),
      * this will be called only for the proto(s) and toport(s) you register for.
      *
-     * After this is called, the client should call receiveMessage(msgId).
-     * There is currently no method for the client to reject the message.
-     * If the client does not call receiveMessage() within a timeout period
-     * (currently 30 seconds), the session will delete the message and
-     * log an error.
+     * After this is called, the client should call receiveMessage(msgId), or
+     * discardMessage(msgId) to drop it without decompressing it. A message the
+     * client never claims is dropped by the session's unclaimed-message sweep
+     * (every 60 seconds), which logs a warning naming the message ID.
      *
      * @param session session to notify
      * @param msgId message number available
-     * @param size size of the message - why it's a long and not an int is a mystery
+     * @param size size of the message payload in bytes. The I2CP payload size
+     *             is an int internally and is widened to long here, so the
+     *             value is never negative
      */
     @Override
     void messageAvailable(I2PSession session, int msgId, long size);
@@ -39,18 +40,19 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * Will be called only if you register via addMuxedSessionListener().
      * Will be called only for the proto(s) and toport(s) you register for.
      *
-     * After this is called, the client should call receiveMessage(msgId).
-     * There is currently no method for the client to reject the message.
-     * If the client does not call receiveMessage() within a timeout period
-     * (currently 30 seconds), the session will delete the message and
-     * log an error.
+     * After this is called, the client should call receiveMessage(msgId), or
+     * discardMessage(msgId) to drop it without decompressing it. A message the
+     * client never claims is dropped by the session's unclaimed-message sweep
+     * (every 60 seconds), which logs a warning naming the message ID.
      *
      * Only one listener is called for a given message, even if more than one
      * have registered. See I2PSessionDemultiplexer for details.
      *
      * @param session session to notify
      * @param msgId message number available
-     * @param size size of the message - why it's a long and not an int is a mystery
+     * @param size size of the message payload in bytes. The I2CP payload size
+     *             is an int internally and is widened to long here, so the
+     *             value is never negative
      * @param proto 1-254 or 0 for unspecified
      * @param fromport 1-65535 or 0 for unspecified
      * @param toport 1-65535 or 0 for unspecified
@@ -81,7 +83,9 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * Notify the client that some error occurred.
      * All registered listeners will be called.
      *
-     * @param error can be null? or not?
+     * @param session the session
+     * @param message a human-readable description of the error
+     * @param error the cause, non-null
      */
     @Override
     void errorOccurred(I2PSession session, String message, Throwable error);

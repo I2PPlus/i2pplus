@@ -60,4 +60,49 @@ public class SimpleByteCacheTest {
             SimpleByteCache.release(buf);
         }
     }
+
+    /**
+     * getInstance(cacheSize, size) documents that cacheSize is applied to the
+     * shared cache, so a later smaller value must shrink it. Uses an array
+     * size no other component asks for, so the shared cache is untouched.
+     */
+    @Test
+    public void testResizeShrinksSharedCache() {
+        int size = 3001;
+        SimpleByteCache.getInstance(4, size);
+        byte[] a = new byte[size];
+        byte[] b = new byte[size];
+        byte[] c = new byte[size];
+        byte[] d = new byte[size];
+        SimpleByteCache.release(a);
+        SimpleByteCache.release(b);
+        SimpleByteCache.release(c);
+        SimpleByteCache.release(d);
+        SimpleByteCache.getInstance(1, size);
+        int reused = 0;
+        for (int i = 0; i < 4; i++) {
+            byte[] got = SimpleByteCache.acquire(size);
+            if (got == a || got == b || got == c || got == d) {
+                reused++;
+            }
+        }
+        assertEquals("only one array may be retained after shrinking to 1", 1, reused);
+    }
+
+    @Test
+    public void testResizeGrowsSharedCache() {
+        int size = 3002;
+        SimpleByteCache.getInstance(1, size);
+        byte[] a = new byte[size];
+        SimpleByteCache.release(a);
+        // grow before releasing the rest, so none is discarded
+        SimpleByteCache.getInstance(4, size);
+        byte[] b = new byte[size];
+        byte[] c = new byte[size];
+        SimpleByteCache.release(b);
+        SimpleByteCache.release(c);
+        assertSame(c, SimpleByteCache.acquire(size));
+        assertSame(b, SimpleByteCache.acquire(size));
+        assertSame(a, SimpleByteCache.acquire(size));
+    }
 }

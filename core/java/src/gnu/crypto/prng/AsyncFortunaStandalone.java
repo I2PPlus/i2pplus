@@ -50,8 +50,8 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         _log = context.logManager().getLog(AsyncFortunaStandalone.class);
     }
 
-    @Override
     /** Return a copy of this object */
+    @Override
     public Object clone() {
         return super.clone();
     }
@@ -115,12 +115,10 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     }
 
     /**
-     *  The refiller thread
+     *  The refiller thread. Runs until shutdown() is called, refilling
+     *  empty buffers and swapping out full ones.
      */
     @Override
-    /**
-     * Execute the task.
-     */
     public void run() {
         while (_isRunning) {
             AsyncBuffer aBuff = null;

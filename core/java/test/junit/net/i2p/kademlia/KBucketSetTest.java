@@ -162,4 +162,37 @@ public class KBucketSetTest extends TestCase {
             assertTrue(c.size() == i);
         }
     }
+
+    /**
+     * The documented preconditions are max &gt; 4 and 1 &lt;= b &lt;= 8;
+     * anything else throws IllegalArgumentException.
+     *
+     * @since 0.9.71+
+     */
+    public void testPreconditions() {
+        Hash us = new Hash(new byte[Hash.HASH_LENGTH]);
+        int[] badK = {0, 1, 2, 3, 4, -1};
+        for (int k : badK) {
+            try {
+                new KBucketSet<Hash>(context, us, k, 1);
+                fail("expected IllegalArgumentException for k=" + k);
+            } catch (IllegalArgumentException expected) {
+                // expected
+            }
+        }
+        int[] badB = {0, -1, 9, 16};
+        for (int b : badB) {
+            try {
+                new KBucketSet<Hash>(context, us, 8, b);
+                fail("expected IllegalArgumentException for b=" + b);
+            } catch (IllegalArgumentException expected) {
+                // expected
+            }
+        }
+        // the boundaries themselves are valid
+        KBucketSet<Hash> minSet = new KBucketSet<Hash>(context, us, 5, 1);
+        assertNotNull(minSet.getBuckets());
+        KBucketSet<Hash> maxB = new KBucketSet<Hash>(context, us, 5, 8);
+        assertNotNull(maxB.getBuckets());
+    }
 }

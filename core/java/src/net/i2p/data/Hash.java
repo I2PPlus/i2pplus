@@ -13,69 +13,52 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * SHA-256 hash implementation for I2P data identification and integrity.
+ * A 32-byte SHA-256 hash, used throughout I2P as a destination, router, or
+ * tunnel identifier and as an integrity value for hashed data.
  *
- * <p>Hash provides cryptographic hash functionality throughout I2P:</p>
+ * <p>Creating a Hash:</p>
  * <ul>
- *   <li><strong>Algorithm:</strong> SHA-256 cryptographic hash function</li>
- *   <li><strong>Fixed Size:</strong> Always 32 bytes (256 bits)</li>
- *   <li><strong>Uniqueness:</strong> Extremely low collision probability</li>
- *   <li><strong>Standardized:</strong> Consistent hash across all I2P components</li>
+ *   <li>{@link #create(byte[])} and its siblings go through a static
+ *       {@link SDSCache} and are the preferred way to obtain one. The cache is
+ *       keyed on the first 4 bytes of the data and holds weak references, so
+ *       entries disappear under memory pressure; its maximum size is scaled by
+ *       the JVM's available memory. On a cache hit the byte array passed in is
+ *       handed back to {@link net.i2p.util.SimpleByteCache} for reuse and must not be
+ *       touched afterwards.</li>
+ *   <li>{@code new Hash(byte[])} bypasses the cache entirely. Use create() when
+ *       the same hash may be built repeatedly.</li>
+ *   <li>{@link #create(InputStream)} reads exactly 32 bytes from the stream and
+ *       wraps them; it does not hash the stream. To hash arbitrary data, use
+ *       {@link #calculateHash()} or a SHA256Generator.</li>
  * </ul>
  *
- * <p><strong>Key Uses:</strong></p>
+ * <p>Rendering:</p>
  * <ul>
- *   <li><strong>Identification:</strong> Unique identifiers for destinations and routers</li>
- *   <li><strong>Integrity:</strong> Verify data hasn't been modified or corrupted</li>
- *   <li><strong>Indexing:</strong> Fast lookup keys in network database (NetDb)</li>
- *   <li><strong>Routing:</strong> Keys for distributed hash table (DHT) operations</li>
- *   <li><strong>Caching:</strong> Efficient storage and retrieval of frequently used hashes</li>
+ *   <li>{@link #toBase64()} caches its result in a volatile field.</li>
+ *   <li>{@link #toBase32()} is not cached; it encodes on every call.</li>
  * </ul>
  *
- * <p><strong>Performance Features:</strong></p>
+ * <p>Comparison:</p>
  * <ul>
- *   <li><strong>LRU Caching:</strong> Least-recently-used cache with size limits</li>
- *   <li><strong>Factory Methods:</strong> Static creation methods for cache efficiency</li>
- *   <li><strong>Efficient Comparison:</strong> Optimized equals() and hashCode() methods</li>
- *   <li><strong>Base32 Conversion:</strong> Cached .b32.i2p address generation</li>
- *   <li><strong>Memory Management:</strong> Automatic cache size adjustment</li>
+ *   <li>{@link #hashCode()} is the precomputed value of the first 4 bytes, held
+ *       in a volatile field. It is not constant-time.</li>
+ *   <li>equals() is inherited from {@link SimpleDataStructure} and is
+ *       {@link java.util.Arrays#equals(byte[], byte[])} - not constant-time, and
+ *       not class-specific, so another 32-byte SimpleDataStructure such as a
+ *       {@link SessionKey} holding the same bytes compares equal to a Hash.</li>
  * </ul>
  *
- * <p><strong>Security Properties:</strong></p>
+ * <p>Thread safety:</p>
  * <ul>
- *   <li><strong>Cryptographic Strength:</strong> SHA-256 provides 128-bit security against collisions</li>
- *   <li><strong>Preimage Resistance:</strong> Computationally infeasible to reverse</li>
- *   <li><strong>Second Preimage:</strong> Computationally infeasible to find similar inputs</li>
- *   <li><strong>Collision Resistance:</strong> Practically impossible to find colliding inputs</li>
- * </ul>
- *
- * <p><strong>Common Operations:</strong></p>
- * <ul>
- *   <li><strong>Data Hashing:</strong> Calculate hash of any byte array or data structure</li>
- *   <li><strong>Stream Hashing:</strong> Incremental hashing of large data streams</li>
- *   <li><strong>File Verification:</strong> Verify file integrity using hash comparison</li>
- *   <li><strong>Address Generation:</strong> Convert to Base32 for .b32.i2p addresses</li>
- * </ul>
- *
- * <p><strong>Constants:</strong></p>
- * <ul>
- *   <li>{@link #HASH_LENGTH} - Standard 32-byte hash size</li>
- *   <li>{@link #FAKE_HASH} - All-zero hash for testing/placeholder use</li>
- * </ul>
- *
- * <p><strong>Thread Safety:</strong></p>
- * <ul>
- *   <li><strong>Immutable Data:</strong> Hash data cannot be modified after creation</li>
- *   <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
- *   <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
- * </ul>
- *
- * <p><strong>Best Practices:</strong></p>
- * <ul>
- *   <li><strong>Factory Methods:</strong> Use static create() methods for cache efficiency</li>
- *   <li><strong>Hash Verification:</strong> Always verify critical data hashes</li>
- *   <li><strong>Constant Time:</strong> Use hash comparison for data integrity checks</li>
- *   <li><strong>Memory Efficiency:</strong> Reuse hash instances when possible</li>
+ *   <li>The data cannot be reassigned once set, so a Hash that is safely
+ *       published (constructed and then handed to other threads) can be shared
+ *       freely; the derived {@code _base64ed} and {@code _cachedHashCode} fields
+ *       are volatile. {@link #_data} itself is neither final nor volatile, so a
+ *       Hash built by a constructor and published through an unsynchronized
+ *       data structure may expose stale data.</li>
+ *   <li>{@link #getData()} hands out the backing array, so a caller that
+ *       mutates it corrupts the cached hash code and any byte cache that shares
+ *       the array.</li>
  * </ul>
  *
  * @author jrandom
@@ -89,6 +72,7 @@ public class Hash extends SimpleDataStructure {
     public static final int HASH_LENGTH = 32;
     /** Placeholder all-zero hash for testing. */
     public static final Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);
+    /** Initial cache capacity, scaled by available memory by SDSCache. */
     private static final int CACHE_SIZE = 2048;
 
     private static final SDSCache<Hash> _cache = new SDSCache<>(Hash.class, HASH_LENGTH, CACHE_SIZE);
@@ -171,13 +155,16 @@ public class Hash extends SimpleDataStructure {
         _cachedHashCode = super.hashCode();
     }
 
-    /** A Hash is a hash, so just use the first 4 bytes for speed. */
+    /**
+     * A Hash is a hash, so just use the first 4 bytes for speed.
+     * Precomputed at data-assignment time, so this does not read the data.
+     */
     @Override
     public int hashCode() {
         return _cachedHashCode;
     }
 
-    /** Returns the hash as a Base64 string. */
+    /** Returns the hash as a Base64 string. Cached after the first call. */
     @Override
     public String toBase64() {
         if (_base64ed == null) {
@@ -187,7 +174,8 @@ public class Hash extends SimpleDataStructure {
     }
 
     /**
-     *  For convenience.
+     *  The .b32.i2p form of the hash. Encoded on every call - unlike
+     *  toBase64(), the result is not cached.
      *
      *  @return "{52 chars}.b32.i2p" or null if data not set.
      *  @since 0.9.25
@@ -197,8 +185,12 @@ public class Hash extends SimpleDataStructure {
         return Base32.encode(_data) + ".b32.i2p";
     }
 
-    /** Clear the hash cache.
-    *
+    /**
+     *  Drop the shared cache of Hash instances, so cached instances become
+     *  eligible for collection. Hashes already handed to callers are unaffected,
+     *  and the byte arrays the cached instances held are not returned to the
+     *  byte cache.
+     *
      *  @since 0.9.17
      */
     public static void clearCache() {
