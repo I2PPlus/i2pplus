@@ -13,6 +13,11 @@ sourceSets {
             srcDir 'zxing/javase/src/main/java'
         }
     }
+    test {
+        java {
+            srcDir 'imagegen/webapp/src/test/java'
+        }
+    }
 }
 
 dependencies {

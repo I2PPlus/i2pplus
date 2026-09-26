@@ -21,7 +21,7 @@ import net.i2p.util.Log;
 
 /**
  * This servlet generates <i>identicon</i> (visual identifier) images ranging
- * from 16x16 to 512x512 in size.
+ * from 16x16 to 1024x1024 in size.
  *
  * <h2>Supported Image Formats</h2>
  * <p>
@@ -32,30 +32,35 @@ import net.i2p.util.Log;
  * <h2>Initialization Parameters:</h2>
  * <blockquote>
  * <dl>
- * <dt>inetSalt</dt>
- * <dd>salt used to generate identicon code with. must be fairly long.
- * (Required)</dd>
+ * <dt>version</dt>
+ * <dd>bump this to invalidate cached identicons after a change that alters
+ * the rendered result. It is part of the ETag. Defaults to 1.
+ * (Optional)</dd>
  * <dt>cacheProvider</dt>
  * <dd>full class path to <code>IdenticonCache</code> implementation.
+ * Without one, every request is rendered and nothing is cached.
  * (Optional)</dd>
  * </dl>
  * </blockquote>
- * <h2>Request ParametersP</h2>
+ * <h2>Request Parameters</h2>
  * <blockquote>
  * <dl>
- * <dt>code</dt>
- * <dd>identicon code to render. If missing, requester's IP addresses is used
- * to generated one. (Optional)</dd>
- * <dt>size</dt>
- * <dd>identicon size in pixels. If missing, a 16x16 pixels identicon is
- * returned. Minimum size is 16 and maximum is 64. (Optional)</dd>
+ * <dt>c</dt>
+ * <dd>identicon code to render, as a number, a base32 or base64 hash, or any
+ * other string. Required: a request without it is answered with 404 rather
+ * than an identicon derived from the requester's IP address.
+ * (Required)</dd>
+ * <dt>s</dt>
+ * <dd>identicon size in pixels. Defaults to 32x32. Values outside 16 to 1024
+ * are clamped to that range, and a non-numeric value is ignored in favour of
+ * the default. (Optional)</dd>
  * </dl>
  * </blockquote>
  *
  * @author don
  * @since 0.9.25
  */
-    public class IdenticonServlet extends HttpServlet {
+public class IdenticonServlet extends HttpServlet {
 
     private static final long serialVersionUID = -3507466186902317988L;
     private static final String INIT_PARAM_VERSION = "version";
@@ -65,6 +70,12 @@ import net.i2p.util.Log;
     private static final String IDENTICON_IMAGE_FORMAT = "PNG";
     private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
+    /** Requested size when the "s" parameter is missing or unparsable. */
+    static final int DEFAULT_IDENTICON_SIZE = 32;
+    /** Smallest size the renderer is asked for; smaller requests are clamped up. */
+    static final int MIN_IDENTICON_SIZE = 16;
+    /** Largest size the renderer is asked for; larger requests are clamped down. */
+    static final int MAX_IDENTICON_SIZE = 1024;
     private int version = 1;
     private final IdenticonRenderer renderer = new NineBlockIdenticonRenderer2();
     private IdenticonCache cache;
@@ -102,6 +113,46 @@ import net.i2p.util.Log;
     }
 
     /**
+     * Resolve the requested pixel size, clamping it to the supported range.
+     *
+     * @param sizeParam the "s" request parameter, may be null
+     * @return {@link #MIN_IDENTICON_SIZE} to {@link #MAX_IDENTICON_SIZE},
+     *         {@link #DEFAULT_IDENTICON_SIZE} if sizeParam is null or not a number
+     */
+    static int parseSize(String sizeParam) {
+        int size = DEFAULT_IDENTICON_SIZE;
+        if (sizeParam == null)
+            return size;
+        try {
+            size = Integer.parseInt(sizeParam);
+        } catch (NumberFormatException nfe) { /* keep the default */ }
+        if (size < MIN_IDENTICON_SIZE)
+            size = MIN_IDENTICON_SIZE;
+        else if (size > MAX_IDENTICON_SIZE)
+            size = MAX_IDENTICON_SIZE;
+        return size;
+    }
+
+    /**
+     * Convert the "c" request parameter to the int the renderer works with:
+     * a number is used as-is, a base32 or base64 hash is reduced to its
+     * Java hashCode, and anything else is hashed as a string.
+     *
+     * @param codeParam the "c" request parameter, must not be null or empty
+     * @return the identicon code to render
+     */
+    static int parseCode(String codeParam) {
+        try {
+            return Integer.parseInt(codeParam);
+        } catch (NumberFormatException nfe) {
+            Hash h = ConvertToHash.getHash(codeParam);
+            if (h != null)
+                return Arrays.hashCode(h.getData());
+            return codeParam.hashCode();
+        }
+    }
+
+    /**
      * Handle GET request: generate identicon image.
      */
     @Override
@@ -111,49 +162,25 @@ import net.i2p.util.Log;
         if (request.getCharacterEncoding() == null)
             request.setCharacterEncoding("UTF-8");
         String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
-        boolean codeSpecified = codeParam != null && !codeParam.isEmpty();
-        if (!codeSpecified) {
+        if (codeParam == null || codeParam.isEmpty()) {
             response.setStatus(404);
             return;
         }
-        String sizeParam = request.getParameter(PARAM_IDENTICON_SIZE_SHORT);
-        int size = 32;
-        if (sizeParam != null) {
-            try {
-                size = Integer.parseInt(sizeParam);
-                if (size < 16)
-                    size = 16;
-                else if (size > 1024)
-                    size = 1024;
-            } catch (NumberFormatException nfe) { /* ignored */ }
-        }
+        int size = parseSize(request.getParameter(PARAM_IDENTICON_SIZE_SHORT));
+        // The ETag has to be derived from the same code we render, since it
+        // is the cache key: deriving it from the raw parameter instead would
+        // let a cached image be served for a different code.
+        int code = parseCode(codeParam);
 
-        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size,
-                version);
+        String identiconETag = IdenticonUtil.getIdenticonETag(code, size, version);
         String requestETag = request.getHeader("If-None-Match");
 
         if (requestETag != null && requestETag.equals(identiconETag)) {
             response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
         } else {
-            // we try to interpret the codeParam parameter as:
-            // 1) a number
-            // 2) a base32 or base64 hash, which we take the Java hashcode of
-            // 3) a string, which we take the Java hashcode of
-            int code;
-            try {
-                code = Integer.parseInt(codeParam);
-            } catch (NumberFormatException nfe) {
-                Hash h = ConvertToHash.getHash(codeParam);
-                if (h != null)
-                    code = Arrays.hashCode(h.getData());
-                else
-                    code = codeParam.hashCode();
-            }
-            byte[] imageBytes;
-
             // retrieve image bytes from either cache or renderer
-            if (cache == null
-                    || (imageBytes = cache.get(identiconETag)) == null) {
+            byte[] imageBytes = (cache != null) ? cache.get(identiconETag) : null;
+            if (imageBytes == null) {
                 ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
                 RenderedImage image;
                 try {
@@ -169,19 +196,13 @@ import net.i2p.util.Log;
                 imageBytes = byteOut.toByteArray();
                 if (cache != null)
                     cache.add(identiconETag, imageBytes);
-            } else {
-                // FIXME this sends 403 if cached
-                response.setStatus(404);
-                return;
             }
 
-            // set ETag and, if code was provided, Expires header
+            // set ETag and Expires header; the code parameter is required,
+            // so the rendered image never varies with the requester's IP
             response.setHeader("ETag", identiconETag);
-            if (codeSpecified) {
-                long expires = System.currentTimeMillis()
-                        + identiconExpiresInMillis;
-                response.addDateHeader("Expires", expires);
-            }
+            long expires = System.currentTimeMillis() + identiconExpiresInMillis;
+            response.addDateHeader("Expires", expires);
 
             // return image bytes to requester
             response.setContentType(IDENTICON_IMAGE_MIMETYPE);
