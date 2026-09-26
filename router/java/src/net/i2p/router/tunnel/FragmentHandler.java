@@ -104,6 +104,16 @@ class FragmentHandler {
 
     /** Don't wait more than this long to completely receive a fragmented message. */
     static long MAX_DEFRAGMENT_TIME = 45*1000L;
+    /**
+     * Maximum number of partially reassembled messages held at once. Entries
+     * expire after MAX_DEFRAGMENT_TIME, but a peer that sends fragments for
+     * many distinct message IDs faster than they expire would otherwise grow
+     * the map without bound, so new messages are refused while the map is at
+     * the limit and the remaining fragments of those messages are dropped.
+     *
+     * @since 0.9.71+
+     */
+    static final int MAX_FRAGMENTED_MESSAGES = 1024;
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
 
     /**
@@ -390,27 +400,32 @@ class FragmentHandler {
                           "; Type: " + (preprocessed[offset] & 0xff));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {
-            FragmentedMessage msg;
             final long fMessageId = messageId;
-            msg = _fragmentedMessages.computeIfAbsent((int) messageId,
-                k -> new FragmentedMessage(_context, fMessageId));
-
-            // synchronized is required, fragments may be arriving in different threads
-            synchronized(msg) {
-                boolean ok = msg.receive(preprocessed, offset, size, false, router, tunnelId);
-                if (!ok) return -1;
-                if (msg.isComplete()) {
-                    _fragmentedMessages.remove((int) messageId);
-                    if (msg.getExpireEvent() != null)
-                        msg.getExpireEvent().cancel();
-                    receiveComplete(msg);
-                } else {
-                    if (msg.getExpireEvent() == null) {
-                        RemoveFailed evt = new RemoveFailed(msg);
-                        msg.setExpireEvent(evt);
-                        if (_log.shouldDebug())
-                            _log.debug("In " + (MAX_DEFRAGMENT_TIME / 1000) + "s, dropping [MsgID " + messageId + "]");
-                        evt.schedule(MAX_DEFRAGMENT_TIME);
+            FragmentedMessage msg = getOrCreate((int) messageId, fMessageId);
+            if (msg == null) {
+                // too many messages reassembling at once; drop the fragment,
+                // the sender will give up and retry
+                if (_log.shouldDebug())
+                    _log.debug("Dropping fragment of message " + messageId + "; " +
+                               _fragmentedMessages.size() + " messages in progress");
+            } else {
+                // synchronized is required, fragments may be arriving in different threads
+                synchronized(msg) {
+                    boolean ok = msg.receive(preprocessed, offset, size, false, router, tunnelId);
+                    if (!ok) return -1;
+                    if (msg.isComplete()) {
+                        _fragmentedMessages.remove((int) messageId);
+                        if (msg.getExpireEvent() != null)
+                            msg.getExpireEvent().cancel();
+                        receiveComplete(msg);
+                    } else {
+                        if (msg.getExpireEvent() == null) {
+                            RemoveFailed evt = new RemoveFailed(msg);
+                            msg.setExpireEvent(evt);
+                            if (_log.shouldDebug())
+                                _log.debug("In " + (MAX_DEFRAGMENT_TIME / 1000) + "s, dropping [MsgID " + messageId + "]");
+                            evt.schedule(MAX_DEFRAGMENT_TIME);
+                        }
                     }
                 }
             }
@@ -424,6 +439,41 @@ class FragmentHandler {
         offset += size;
 
         return offset;
+    }
+
+    /**
+     * Determine whether another message may begin reassembling given how many
+     * are already in progress. Refused messages are dropped until older ones
+     * complete or expire, which bounds the memory a single peer can pin.
+     *
+     * @param activeCount messages currently being reassembled
+     * @return true if a new message may be started
+     * @since 0.9.71+
+     */
+    static boolean mayStartNewFragmentedMessage(int activeCount) {
+        return activeCount < MAX_FRAGMENTED_MESSAGES;
+    }
+
+    /**
+     * Get the message being reassembled for the given ID, starting it if this
+     * is its first fragment. Refuses to start a new message while the map is
+     * at its cap; fragments of messages already in progress are always accepted
+     * so an existing reassembly can still finish.
+     *
+     * @param messageId the message ID
+     * @param fMessageId the message ID as a long, for the new message
+     * @return the message, or null if a new message may not be started
+     * @since 0.9.71+
+     */
+    FragmentedMessage getOrCreate(int messageId, long fMessageId) {
+        FragmentedMessage msg = _fragmentedMessages.get(messageId);
+        if (msg != null) {return msg;}
+        if (!mayStartNewFragmentedMessage(_fragmentedMessages.size())) {
+            _context.statManager().addRateData("tunnel.fragmentMapFull", 1);
+            return null;
+        }
+        return _fragmentedMessages.computeIfAbsent(messageId,
+            k -> new FragmentedMessage(_context, fMessageId));
     }
 
     /**
@@ -450,8 +500,16 @@ class FragmentHandler {
                                        + size + "; offset: " + offset + "; fragment:" + fragmentNum);
 
         final long fMessageId = messageId;
-        FragmentedMessage msg = _fragmentedMessages.computeIfAbsent((int) messageId,
-            k -> new FragmentedMessage(_context, fMessageId));
+        FragmentedMessage msg = getOrCreate((int) messageId, fMessageId);
+        if (msg == null) {
+            // too many messages reassembling at once; drop the fragment,
+            // the sender will give up and retry
+            if (_log.shouldDebug())
+                _log.debug("Dropping fragment of message " + messageId + "; " +
+                           _fragmentedMessages.size() + " messages in progress");
+            offset += size;
+            return offset;
+        }
 
         // synchronized is required, fragments may be arriving in different threads
         synchronized(msg) {
