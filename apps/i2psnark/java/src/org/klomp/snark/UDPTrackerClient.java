@@ -93,13 +93,19 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final int ACTION_ERROR = 3;
 
 
+    /** How long a connection ID stays valid, in milliseconds (BEP 15 connection lifetime). */
     private static final long CONN_EXPIRATION = 3 * (long) 60 * 1000;
+
+    /** Query timeout before any backoff, in milliseconds. */
     private static final long DEFAULT_TIMEOUT = (long) 90 * 1000;
 
-    /** In seconds. */
+    /** Announce interval used until a tracker reports one, in seconds. */
     private static final int DEFAULT_INTERVAL = 60 * 60;
 
+    /** Shortest announce interval accepted from a tracker, in seconds. */
     private static final int MIN_INTERVAL = 15 * 60;
+
+    /** Longest announce interval accepted from a tracker, in seconds. */
     private static final int MAX_INTERVAL = 8 * 60 * 60;
 
     public UDPTrackerClient(I2PAppContext ctx, I2PSession session, I2PSnarkUtil util) {
@@ -1141,7 +1147,12 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             this.notifyAll();
         }
 
-        /** Doubled for each consecutive failure. */
+        /**
+         * The query timeout for this connection: the default, doubled for each consecutive
+         * failure up to eight times the default.
+         *
+         * @return the timeout in milliseconds
+         */
         public synchronized long getTimeout() {
             return DEFAULT_TIMEOUT << Math.min(consecFails, 3);
         }

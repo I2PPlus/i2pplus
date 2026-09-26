@@ -27,6 +27,10 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
 class TrackerInfo {
     private final String failure_reason;
     private final int interval;
+    /**
+     * The peers from the response, unmodifiable and never null: a failure response has no
+     * peers, and is reported by {@link #getFailureReason()} instead.
+     */
     private final Set<Peer> peers;
     private int complete;
     private int incomplete;
@@ -60,7 +64,8 @@ class TrackerInfo {
         if (reason != null) {
             failure_reason = reason.getString();
             interval = -1;
-            peers = null;
+            // a failure response carries no peer list
+            peers = Collections.emptySet();
         } else {
             failure_reason = null;
             BEValue beInterval = m.get("interval");
@@ -82,7 +87,7 @@ class TrackerInfo {
                     // List of Dictionaries or List of Strings
                     p = getPeers(bePeers.getList(), my_id, infohash, metainfo, util);
                 }
-                peers = p;
+                peers = Collections.unmodifiableSet(p);
             }
 
             BEValue bev = m.get("complete");
@@ -134,7 +139,7 @@ class TrackerInfo {
             byte[] infohash,
             MetaInfo metainfo,
             I2PSnarkUtil util) {
-        peers = getPeers(hashes, my_id, infohash, metainfo, util);
+        peers = Collections.unmodifiableSet(getPeers(hashes, my_id, infohash, metainfo, util));
         this.interval = interval;
         this.complete = complete;
         this.incomplete = incomplete;
@@ -222,22 +227,22 @@ class TrackerInfo {
     }
 
     /**
-     *  Peers returned by the tracker, or an empty set if none.
+     * Peers returned by the tracker. Empty when the response was a failure, or carried no
+     * peer list.
      *
-     *  @return an unmodifiable set of peers, never null
+     * @return an unmodifiable set of peers, never null
      */
     public Set<Peer> getPeers() {
         return peers;
     }
 
     /**
-     *  Peer count including seeds and leeches from the tracker response.
+     * Peer count including seeds and leeches from the tracker response.
      *
-     *  @return the number of known peers, or 0 if none
+     * @return the number of known peers, or 0 if none
      */
     public int getPeerCount() {
-        int pc = peers == null ? 0 : peers.size();
-        return Math.max(pc, complete + incomplete - 1);
+        return Math.max(peers.size(), complete + incomplete - 1);
     }
 
     /**

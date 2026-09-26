@@ -1318,19 +1318,6 @@ class PeerState implements DataLoader {
      * @return the allowed fast set, never null
      * @since 0.9.71+
      */
-    /**
-     * Generate the BEP 6 allowed fast set for a peer.
-     *
-     * <p>The first four bytes of the peer's destination hash stand in for the masked IP
-     * address, so both ends of an I2P connection can compute the same up to ten piece
-     * indices from the torrent infohash.
-     *
-     * @param peerHash the 32-byte destination hash of the peer
-     * @param infohash the infohash of the torrent
-     * @param pieces the number of pieces in the torrent
-     * @return the allowed fast set, never null
-     * @since 0.9.71+
-     */
     static Set<Integer> generateAllowedFastSet(byte[] peerHash, byte[] infohash, int pieces) {
         Set<Integer> rv = new HashSet<>(10);
         if (peerHash == null || infohash == null || pieces <= 0 || peerHash.length < 4) {

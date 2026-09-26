@@ -74,9 +74,9 @@ class BasicServlet extends HttpServlet {
     protected final transient I2PAppContext _context;
     protected final transient Log _log;
     /**
-     * Base directory for serving static files.
+     * Base directory for serving static files. Effectively immutable after startup; volatile so
+     * request threads never lock to read it.
      */
-    /** effectively immutable after startup; volatile so request threads never lock to read it */
     protected volatile File _resourceBase;
     private String _warBase;
 

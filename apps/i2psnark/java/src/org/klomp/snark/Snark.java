@@ -409,13 +409,36 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private long _stopCount;
 
     /**
+     * Set when {@link #gotMetaInfo} could not create the storage. The torrent is then left
+     * with no metainfo and possibly with some of its files already created on disk, so a
+     * restart would fetch the metainfo again only to fail on the pre-existing data location.
+     * startTorrent() refuses to start such a torrent; the user has to remove the leftover
+     * files (or the torrent) and add it again.
+     *
+     * @since 0.9.71+
+     */
+    private volatile boolean _storageCreationFailed;
+
+    /**
      * Start up contacting peers and querying the tracker. Blocks if tunnel is not yet open.
+     *
+     * <p>Does nothing if the storage could not be created for a magnet: that leaves the
+     * torrent without metainfo and possibly with a partial data location on disk, and a
+     * restart would fail again on the leftover files.
      *
      * @throws RuntimeException via fatal()
      * @throws RouterException via fatalRouter()
      */
     public synchronized void startTorrent() {
         if (!stopped) {
+            return;
+        }
+        if (_storageCreationFailed) {
+            if (_log.shouldWarn()) {
+                _log.warn("Not restarting " + getBaseName()
+                        + ": its data location could not be created, remove the leftover files"
+                        + " and add the torrent again");
+            }
             return;
         }
         cancelRetry();
@@ -1141,7 +1164,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * The total length of all torrent files.
+     * The total length of all torrent files, padding files included.
      *
      * @return total of all torrent files, or total of metainfo file if fetching magnet, or -1
      * @since 0.8.4
@@ -1150,7 +1173,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         if (meta != null) {
             return meta.getTotalLength();
         }
-        return -1; // FIXME else return metainfo length if available
+        return -1;
     }
 
     /**
@@ -1189,8 +1212,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Bytes still wanted. DOES account for (i.e. does not include) skipped files. FIXME -1 when not
-     * running.
+     * Bytes still wanted. DOES account for (i.e. does not include) skipped files.
      *
      * @return exact value. or -1 if no storage yet or when not running.
      * @since 0.9.1
@@ -1227,9 +1249,14 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Does not account (i.e. includes) for skipped files.
+     * The number of pieces still missing. Does not account for (i.e. includes) skipped files.
      *
-     * @return number of pieces still needed (magnet mode or not), or -1 if unknown
+     * <p>In metadata-only mode (the metainfo is known from a magnet but no Storage exists
+     * yet, which is how a zzzot hashlist lookup is answered) no piece has been received,
+     * so the whole torrent counts as needed.
+     *
+     * @return number of pieces still needed, or -1 if neither the metainfo nor the storage
+     *     is available
      * @since 0.8.4
      */
     public long getNeeded() {
@@ -1237,9 +1264,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             return storage.needed();
         }
         if (meta != null) {
-            return meta.getTotalLength();
-        } // FIXME subtract chunks we have
-        return -1; // FIXME fake
+            return meta.getPieces();
+        }
+        return -1;
     }
 
     /**
@@ -1259,14 +1286,16 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * The number of pieces.
      *
-     * @return number of pieces
+     * @return number of pieces, or -1 if the metainfo is not known yet (a magnet that has
+     *     not resolved), in which case {@link #getPieceLength(int)} reports the 16 KiB
+     *     placeholder length
      * @since 0.8.4
      */
     public int getPieces() {
         if (meta != null) {
             return meta.getPieces();
         }
-        return -1; // FIXME else return metainfo pieces if available
+        return -1;
     }
 
     /**
@@ -1316,6 +1345,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Aborts program abnormally.
      *
+     * @param s the message
      * @throws RuntimeException always
      */
     private void fatal(String s) throws RuntimeException {
@@ -1323,8 +1353,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Aborts program abnormally.
+     * Aborts program abnormally: logs the failure, stops the torrent, tells the
+     * CompleteListener, and throws.
      *
+     * @param s the message
+     * @param t the cause, may be null
      * @throws RuntimeException always
      */
     private void fatal(String s, Throwable t) throws RuntimeException {
@@ -1443,8 +1476,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 // as on restart, Storage.reopen() will throw an ioe
                 storage = null;
             }
-            // TODO we're still in an inconsistent state, won't work if restarted
-            // (PeerState "disconnecting seed that connects to seeds"
+            // check() may have created some of the files before failing, so the data
+            // location can be left partially populated. Refuse to restart rather than
+            // fetching the metainfo again and failing on the leftover location.
+            _storageCreationFailed = true;
             fatal(
                     "Could not create file for "
                             + getBaseInfo().replace("Magnet", "info hash:")

@@ -897,6 +897,13 @@ class I2PSnarkConfigure {
 
     private static final String[] iopts = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };
 
+    /**
+     * Builds the I2CP options string from the individual tunnel quantity and length form
+     * parameters, appended to the free-form "i2cpOpts" value.
+     *
+     * @param req the HTTP request containing tunnel configuration parameters
+     * @return the combined I2CP options string
+     */
     private static String buildI2CPOpts(HttpServletRequest req) {
         StringBuilder buf = new StringBuilder(128);
         String p = req.getParameter("i2cpOpts");

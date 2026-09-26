@@ -226,7 +226,10 @@ public class TrackerClient implements Runnable {
         long jitter = Math.min(Math.max(randomJitter, 0), LONG_SLEEP_JITTER);
         return LONG_SLEEP + jitter;
     }
+    /** Shortest interval between HTTP tracker announces, in milliseconds. */
     private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * (long) 60 * 1000;
+
+    /** Shortest interval between DHT tracker announces, in milliseconds. */
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
     /** Periodic scrape interval: refresh the swarm size (seeds + leeches) between
      *  announces (BEP 15/48). The announce loop wakes every 5m, so this fires on
@@ -721,7 +724,9 @@ public class TrackerClient implements Runnable {
 
                 try {
                     // Sleep some minutes...
-                    // Sleep the minimum interval for all the trackers, but 60s minimum
+                    // This is the wake-up interval of the announce loop, not a per-tracker
+                    // interval: on each wake only the trackers whose own interval has passed
+                    // are contacted (see getPeersFromTrackers)
                     int delay;
                     Random r = _util.getContext().random();
                     int random = r.nextInt(120 * 1000);

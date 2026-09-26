@@ -1102,9 +1102,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     wantedBytes == 0 && bitfield != null && !bitfield.complete();
             Runnable r =
                     new Runnable() {
-                        /**
-                         * Run the peer connection lifecycle.
-                         */
                         public void run() {
                             peer.runConnection(
                                     _util,
@@ -2275,7 +2272,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Send a DHT message to the peer, if we both support DHT.
      *
-     * @since DHT
+     * @param peer the peer to send to
      */
     void sendDHT(Peer peer) {
         DHT dht = _util.getDHTForTorrent(getInfoHash());

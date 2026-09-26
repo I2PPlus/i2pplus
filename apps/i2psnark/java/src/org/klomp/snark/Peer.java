@@ -866,8 +866,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Should we request this many bytes?
+     * Should we request this many bytes? Only true for this peer, which is how a callback
+     * that was handed one peer is prevented from answering for another.
      *
+     * @param peer the peer the callback was invoked for
+     * @param size the requested size in bytes
      * @return whether request
      * @since 0.9.62
      */

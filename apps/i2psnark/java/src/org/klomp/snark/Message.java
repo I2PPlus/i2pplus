@@ -81,27 +81,27 @@ class Message {
     /** Reject a hash request (BEP 52). */
     static final byte HASH_REJECT = 23;
 
-    /** The message type */
-    // Not all fields are used for every message.
-    // KEEP_ALIVE doesn't have a real wire representation
+    /**
+     * The message type. Not all fields are used for every message; KEEP_ALIVE has no real
+     * wire representation.
+     */
     final byte type;
 
-    /** The piece index */
-    // Used for HAVE, REQUEST, PIECE and CANCEL messages.
-    // Also SUGGEST, REJECT, ALLOWED_FAST
-    // low byte used for EXTENSION message
-    // low two bytes used for PORT message
+    /**
+     * The piece index. Used for HAVE, REQUEST, PIECE and CANCEL messages, and also for
+     * SUGGEST, REJECT and ALLOWED_FAST; the low byte for EXTENSION messages and the low
+     * two bytes for PORT messages.
+     */
     final int piece;
 
-    /** The offset within the piece */
-    // Used for REQUEST, PIECE and CANCEL messages.
-    // Also REJECT
+    /**
+     * The offset within the piece. Used for REQUEST, PIECE, CANCEL and REJECT messages.
+     */
     final int begin;
     /** The data length */
     final int length;
 
-    /** The data payload */
-    // Used for PIECE and BITFIELD and EXTENSION messages
+    /** The data payload. Used for PIECE, BITFIELD and EXTENSION messages */
     byte[] data;
     /** The data offset */
     final int off;

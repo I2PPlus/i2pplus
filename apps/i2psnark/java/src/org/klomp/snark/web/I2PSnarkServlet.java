@@ -3679,13 +3679,6 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Builds the I2CP options string from individual form parameters.
-     *
-     * @param req the HTTP request containing tunnel configuration parameters
-     * @return the combined I2CP options string
-     */
-
-    /**
      * Returns the list of torrents sorted according to the current request's sort parameter.
      *
      * @param req the HTTP request containing the "sort" parameter
@@ -6268,10 +6261,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.44
      */
     private static boolean isAudio(String mime) {
-        /**
-         *  Don't include playlist files as the browser doesn't support them in the HTML5 player,
-         *  and if it did and prefetched, that could be a security issue
-         */
+        // Don't include playlist files as the browser doesn't support them in the HTML5
+        // player, and if it did and prefetched, that could be a security issue
         return (mime.startsWith("audio/") && !mime.equals("audio/mpegurl") && !mime.equals("audio/x-scpls")) ||
                 mime.equals("application/ogg");
     }
@@ -6311,13 +6302,6 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Is there at least one complete audio file in this directory or below?
-     * Recursive.
-     *
-     * @return whether complete audio is present
-     * @since 0.9.44
-     */
-    /**
      * First entry of names at or under prefix whose remaining byte count is
      * zero and whose name satisfies match, or null. names must be
      * index-aligned with remaining (Storage.getFileNames() paired with
@@ -6325,6 +6309,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * path ending with '/' - matching is a plain startsWith across all
      * descendant depths.
      *
+     * @param names the torrent file names, index-aligned with remaining
+     * @param remaining the remaining byte count of each name
+     * @param prefix '' at the torrent root, else a directory path ending with '/'
      * @param match caller-supplied name filter, e.g. the audio MIME check
      * @return the first matching name, or null when none qualifies
      * @since 0.9.71+
@@ -7189,18 +7176,6 @@ public class I2PSnarkServlet extends BasicServlet {
         return new EditParams(toAdd, toDel, primary, newComment, newCreatedBy);
     }
 
-    /**
-     * Renders a single file row for the torrent file browser table.
-     * Extracted from getListHTML for testability and UI responsiveness.
-     *
-     * @param buf the StringBuilder to append HTML to
-     * @param ctx immutable context (decoded base path, storage, priority flag, top-level flag)
-     * @param fai the file and its metadata from the sorted file list
-     * @param rowEven true for even row (alternating row class)
-     * @param counters mutable accumulators (video/img/text counts, save button flag)
-     * @return the next rowEven value (toggled)
-     * @since 0.9.71+
-     */
     /** Warn icon for missing/unrecognized files. */
     private String warnIcon(String alt, String tooltip) {
         StringBuilder ico = new StringBuilder();
@@ -7226,6 +7201,18 @@ public class I2PSnarkServlet extends BasicServlet {
         return ico.toString();
     }
 
+    /**
+     * Renders a single file row for the torrent file browser table.
+     * Extracted from getListHTML for testability and UI responsiveness.
+     *
+     * @param buf the StringBuilder to append HTML to
+     * @param ctx immutable context (decoded base path, storage, priority flag, top-level flag)
+     * @param fai the file and its metadata from the sorted file list
+     * @param rowEven true for even row (alternating row class)
+     * @param counters mutable accumulators (video/img/text counts, save button flag)
+     * @return the next rowEven value (toggled)
+     * @since 0.9.71+
+     */
     private boolean renderFileRow(StringBuilder buf, FileRowContext ctx, Sorters.FileAndIndex fai,
                                    boolean rowEven, FileRowCounters counters) {
         File item = fai.file;

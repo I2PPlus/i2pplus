@@ -1562,4 +1562,79 @@ public class StorageTest {
         assertTrue(s.complete());
         assertContent(base, 0, PIECE_LENGTH * 2);
     }
+
+    // ----- file name / remaining index alignment -----
+
+    /**
+     * getFileNames() must be index-aligned with remaining2(): callers pair the two to ask
+     * whether a given file is complete, so a list that skips an entry shifts every
+     * remaining count onto the wrong file.
+     */
+    @Test
+    public void testFileNamesAlignedWithRemaining() throws Throwable {
+        MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH, PIECE_LENGTH);
+        Storage s = newStorage(mi, new RecordingListener());
+        s.check(0, null);
+        List<String> names = s.getFileNames();
+        long[][] remaining = s.remaining2();
+        assertEquals(remaining[0].length, names.size());
+        assertEquals(remaining[1].length, names.size());
+        assertEquals(2, names.size());
+        // indexOf() is the other half of the contract: the same file, the same index
+        assertEquals(0, s.indexOf(new File(_dataDir, names.get(0))));
+        assertEquals(1, s.indexOf(new File(_dataDir, names.get(1))));
+    }
+
+    /** BEP 47: a padding file keeps its slot, so the alignment survives padding. */
+    @Test
+    public void testFileNamesAlignedWithPadding() throws Throwable {
+        int pieceLength = PIECE_LENGTH;
+        List<String> names = Arrays.asList("a.dat", ".pad/16384");
+        List<Long> sizes = Arrays.asList(Long.valueOf(pieceLength), Long.valueOf(pieceLength));
+        List<String> attrs = Arrays.asList("", "p");
+        byte[] content = new byte[2 * pieceLength];
+        for (int i = 0; i < pieceLength; i++) {
+            content[i] = (byte) ((i * 31 + 7) & 0xff);
+        }
+        writeFile(new File(_dataDir, "a.dat"), content, 0, pieceLength);
+        MetaInfo mi =
+                new MetaInfo(
+                        new ByteArrayInputStream(
+                                buildTorrentBytes(
+                                        names,
+                                        sizes,
+                                        attrs,
+                                        pieceLength,
+                                        computeHashes(content, pieceLength))));
+        Storage s = newStorage(mi, new RecordingListener());
+        s.check(0, null);
+        List<String> got = s.getFileNames();
+        long[][] remaining = s.remaining2();
+        assertEquals(remaining[0].length, got.size());
+        assertEquals(2, got.size());
+        // the pad entry keeps its slot, under the name the parsed metainfo gives it
+        // (MetaInfo runs every path component through Storage.filterName on parse, which
+        // rewrites the leading dot of ".pad")
+        assertTrue("pad file missing from " + got, got.get(1).contains("16384"));
+        assertTrue("pad file missing from " + got, got.get(1).contains("pad"));
+        assertEquals(0, s.indexOf(new File(_dataDir, got.get(0))));
+    }
+
+    /** A partially downloaded torrent must report the missing bytes against the right file. */
+    @Test
+    public void testRemainingCountsMatchTheNameAtTheSameIndex() throws Throwable {
+        MetaInfo mi = buildTwoFileTorrent(PIECE_LENGTH * 2, PIECE_LENGTH * 2);
+        // resume with only piece 0 present: a.dat owes piece 1, b.dat owes pieces 2 and 3
+        long savedTime = System.currentTimeMillis();
+        BitField saved = new BitField(mi.getPieces());
+        saved.set(0);
+        Storage s = newStorage(mi, new RecordingListener());
+        s.check(savedTime, saved);
+        assertFalse(s.complete());
+        assertEquals(3, s.needed());
+        List<String> names = s.getFileNames();
+        long[] remaining = s.remaining();
+        assertEquals(PIECE_LENGTH, remaining[names.indexOf("a.dat")]);
+        assertEquals(PIECE_LENGTH * 2, remaining[names.indexOf("b.dat")]);
+    }
 }

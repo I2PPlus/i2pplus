@@ -94,6 +94,12 @@ public class I2PSnarkUtil implements DisconnectListener {
     private String _i2cpHost;
     private int _i2cpPort;
     private final Map<String, String> _opts;
+    /**
+     * The shared session. Cleared by {@link #disconnect()} and {@link #sessionDisconnected()},
+     * both of which hold the instance monitor, while unsynchronized readers run on request and
+     * peer threads: a reader that null-checks the field and then dereferences it again can
+     * still see null on the second read. Read it once into a local and use the local.
+     */
     private volatile I2PSocketManager _manager;
     private volatile boolean _connecting;
     private final Set<Hash> _banlist;
@@ -311,8 +317,9 @@ public class I2PSnarkUtil implements DisconnectListener {
         // The bw limiter in I2CPMessageProducer is disabled since we now have
         // good bandwidth limiting here in snark; the additional throttling/drops
         // in I2CP cause streaming issues and make snark/streaming analysis harder.
-        if (_manager != null) {
-            I2PSession sess = _manager.getSession();
+        I2PSocketManager mgr = _manager;
+        if (mgr != null) {
+            I2PSession sess = mgr.getSession();
             if (sess != null) {
                 Properties newProps = new Properties();
                 synchronized (_opts) {
@@ -391,18 +398,22 @@ public class I2PSnarkUtil implements DisconnectListener {
         new Unbanlist(h).schedule(period);
     }
 
+    /**
+     * Set the minimum startup delay before auto-starting torrents.
+     *
+     * @param minutes the minimum startup delay in minutes
+     */
     public void setStartupDelayMin(int minutes) {
         _startupDelayMin = minutes;
-    /**
-     * The minimum startup delay in minutes before auto-starting torrents.
-     */
     }
 
+    /**
+     * Set the maximum startup delay before auto-starting torrents.
+     *
+     * @param minutes the maximum startup delay in minutes
+     */
     public void setStartupDelayMax(int minutes) {
         _startupDelayMax = minutes;
-    /**
-     * The maximum startup delay in minutes before auto-starting torrents.
-     */
     }
 
     /**
@@ -1456,7 +1467,14 @@ public class I2PSnarkUtil implements DisconnectListener {
         return _manager;
     }
 
-    /** Destroy the destination itself */
+    /**
+     * Tear down the shared session and every per-torrent destination.
+     *
+     * <p>The manager is taken into a local and the field cleared before it is destroyed, so
+     * that a reader which gets there after this point sees no manager at all rather than one
+     * that is being torn down. Readers that were already using a manager keep their local
+     * reference and must tolerate the I2CP connection going away under them.
+     */
     public synchronized void disconnect() {
         if (_dht != null) {
             _dht.stop();
@@ -1469,7 +1487,6 @@ public class I2PSnarkUtil implements DisconnectListener {
         removeAllTorrentDests();
         _startedTime = 0;
         I2PSocketManager mgr = _manager;
-        // FIXME this can cause race NPEs elsewhere
         _manager = null;
         _banlist.clear();
         if (mgr != null) {
@@ -1618,12 +1635,6 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Fetch the given URL to a file through the given socket manager.
-     *
-     * @param retries if &gt; 0, set timeout to a few seconds
-     * @return the file it is stored in, or null on error
-     */
-    /**
      * Fetch and log the result, truncating the display URL at the first '&amp;'.
      *
      * @param get the eepget to fetch
@@ -1658,6 +1669,15 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /**
+     * Fetch the given URL to a temporary file through the given socket manager.
+     *
+     * @param url the URL to fetch
+     * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
+     * @param retries if &gt; 0, set timeout to a few seconds
+     * @param mgr the socket manager to fetch through, may be null to use the shared manager
+     * @return the file the response was stored in, or null on error
+     */
     private File get(String url, boolean rewrite, int retries, I2PSocketManager mgr) {
         if (_log.shouldDebug()) {
             _log.debug(
@@ -1838,10 +1858,11 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.8.4
      */
     Destination getMyDestination() {
-        if (_manager == null) {
+        I2PSocketManager mgr = _manager;
+        if (mgr == null) {
             return null;
         }
-        I2PSession sess = _manager.getSession();
+        I2PSession sess = mgr.getSession();
         if (sess != null) {
             return sess.getMyDestination();
         }
@@ -1884,10 +1905,11 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (ip == null) return null;
         if (ip.endsWith(".i2p")) {
             if (ip.length() < 520) { // key + ".i2p"
-                if (_manager != null
+                I2PSocketManager mgr = _manager;
+                if (mgr != null
                         && ip.length() == BASE32_HASH_LENGTH + 8
                         && ip.endsWith(".b32.i2p")) {
-                    I2PSession sess = _manager.getSession();
+                    I2PSession sess = mgr.getSession();
                     if (sess != null) {
                         byte[] b = Base32.decode(ip.substring(0, BASE32_HASH_LENGTH));
                         if (b != null) {
@@ -2077,12 +2099,16 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * @since DHT
+     * Enable or disable the DHT, starting it against the shared session when it is enabled
+     * for the first time.
+     *
+     * @param yes true to use the DHT
      */
     public synchronized void setUseDHT(boolean yes) {
         _shouldUseDHT = yes;
-        if (yes && _manager != null && _dht == null) {
-            _dht = new KRPC(_context, _baseName, _manager.getSession());
+        I2PSocketManager mgr = _manager;
+        if (yes && mgr != null && _dht == null) {
+            _dht = new KRPC(_context, _baseName, mgr.getSession());
         } else if (!yes && _dht != null) {
             _dht.stop();
             _dht = null;
@@ -2094,7 +2120,6 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Whether the DHT is used.
      *
      * @return whether use d h t
-     * @since DHT
      */
     public boolean shouldUseDHT() {
         return _shouldUseDHT;
@@ -2344,9 +2369,16 @@ public class I2PSnarkUtil implements DisconnectListener {
     private static final Pattern ILLEGAL_VALUE = Pattern.compile("[\\r\\n]");
 
     /**
-     * Same as DataHelper.loadProps() but allows '#' in values, so we can have filenames with '#' in
-     * them in property files. '#' must be in column 1 for a comment.
+     * Load a properties file written by {@link #storeProps}: UTF-8, "key=value" per line.
+     * Blank lines, lines starting with '#' or ';', and lines with no '=' are ignored; for
+     * the rest, everything after the first '=' is the value.
      *
+     * <p>Same as DataHelper.loadProps() but allows '#' in values, so we can have filenames
+     * with '#' in them in property files. '#' must be in column 1 for a comment.
+     *
+     * @param props the properties to fill
+     * @param f the file to read
+     * @throws IOException on read failure
      * @since 0.9.58
      */
     static void loadProps(Properties props, File f) throws IOException {
@@ -2374,9 +2406,17 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Same as DataHelper.loadProps() but allows '#' in values, so we can have filenames with '#' in
-     * them in property files. '#' must be in column 1 for a comment.
+     * Write the properties to a file, in the format {@link #loadProps} reads: UTF-8, one
+     * "key=value" per line, with a two-line header. Entries whose key contains one of
+     * "#;=\r\n" or whose value contains CR or LF are skipped, and the first such key is
+     * reported in the IOException thrown after the rest of the file has been written.
      *
+     * <p>Writes to a ".tmp" file next to the target and renames it into place, so a reader
+     * never sees a half-written file.
+     *
+     * @param props the properties to write
+     * @param file the file to write to
+     * @throws IOException on write or rename failure, or if an entry had to be skipped
      * @since 0.9.58
      */
     static void storeProps(Properties props, File file) throws IOException {

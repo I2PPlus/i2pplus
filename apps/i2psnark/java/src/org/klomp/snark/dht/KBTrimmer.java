@@ -14,8 +14,8 @@ import net.i2p.kademlia.KBucketTrimmer;
  * stable.
  *
  * <p>Trimming strategy:<br>
- * - Only removes nodes older than 15 minutes<br>
- * - Only trims if the bucket hasn't changed in the last 5 minutes<br>
+ * - Only removes nodes not seen for MAX_NODE_AGE (30 minutes)<br>
+ * - Only trims if the bucket hasn't changed for MIN_BUCKET_AGE (5 minutes)<br>
  * - Prioritizes keeping recently active nodes in the routing table<br>
  * - Helps maintain DHT health by preventing premature eviction of good nodes
  *
@@ -28,10 +28,18 @@ class KBTrimmer implements KBucketTrimmer<NID> {
     private final I2PAppContext _ctx;
     private final int _max;
 
-    /** Minimum time (5 minutes) a bucket must be unchanged before trimming is allowed */
+    /**
+     * Minimum time (5 minutes) a bucket must be unchanged before trimming is allowed.
+     *
+     * @see #trim(KBucket, NID)
+     */
     private static final long MIN_BUCKET_AGE = 5 * (long) 60 * 1000;
 
-    /** Maximum age (30 minutes) for nodes before they become candidates for removal */
+    /**
+     * Maximum age (30 minutes) for nodes before they become candidates for removal.
+     *
+     * @see #trim(KBucket, NID)
+     */
     private static final long MAX_NODE_AGE = 30 * (long) 60 * 1000;
 
     /**
@@ -54,8 +62,8 @@ class KBTrimmer implements KBucketTrimmer<NID> {
      * reachable.
      *
      * <p>Trimming conditions:<br>
-     * 1. The bucket must not have changed in the last 5 minutes<br>
-     * 2. Only nodes not seen in the last 15 minutes are candidates for removal<br>
+     * 1. The bucket must not have changed for MIN_BUCKET_AGE (5 minutes)<br>
+     * 2. Only nodes not seen for MAX_NODE_AGE (30 minutes) are candidates for removal<br>
      * 3. If no stale nodes are found, trimming only succeeds if bucket is under capacity
      *
      * @param kbucket the Kademlia bucket to trim

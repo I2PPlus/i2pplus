@@ -539,10 +539,14 @@ public class MetaInfo {
         return url_list;
     }
 
-    /** Returns the original 20 byte SHA1 hash over the bencoded info map. */
+    /**
+     * Returns the original 20 byte SHA1 hash over the bencoded info map.
+     *
+     * @return not a copy, do not modify
+     */
     public byte[] getInfoHash() {
         return info_hash;
-    } // XXX - Should we return a clone, just to be sure?
+    }
 
     /**
      * Returns the piece hashes.

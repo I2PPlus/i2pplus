@@ -423,8 +423,11 @@ public class Storage implements Closeable {
      * Creates piece hashes for a new storage. This does NOT create the files, just the hashes. Also
      * sets all the bitfield bits.
      *
-     * <p>FIXME we can run out of fd's doing this, maybe some sort of global close-RAF-right-away
-     * flag would do the trick
+     * <p>Hashing walks the torrent from end to end, so a file handle is closed as soon as the
+     * piece that read it is done, rather than held until {@link #cleanRAFs()}: leaving every
+     * handle open for the duration exhausts the process file descriptor limit on torrents
+     * with many files, and there is no periodic sweep running yet because the Storage has not
+     * been handed to a PeerCheckerTask.
      */
     private byte[] fast_digestCreate() throws IOException {
         // Calculate piece_hashes
@@ -435,15 +438,31 @@ public class Storage implements Closeable {
         byte[] piece = new byte[piece_size];
         try {
             for (int i = 0; i < pieces; i++) {
-                int length = getUncheckedPiece(i, piece);
+                int length = getUncheckedPiece(i, piece, 0, getPieceLength(i), true);
                 digest.update(piece, 0, length);
                 digest.digest(piece_hashes, 20 * i, 20);
                 bitfield.set(i);
             }
         } catch (DigestException de) {
             throw new IOException(de);
+        } finally {
+            // nothing is left open, but a failed piece may have left a handle
+            // behind on a file it read before throwing
+            closeAllRAFs();
         }
         return piece_hashes;
+    }
+
+    /**
+     * Close every open file handle, whatever its last-use time. Used by the creation-time
+     * hash pass, which runs before any periodic {@link #cleanRAFs()} exists.
+     */
+    private void closeAllRAFs() {
+        for (TorrentFile tf : _torrentFiles) {
+            try {
+                tf.closeRAF();
+            } catch (IOException ioe) { /* ignored */ }
+        }
     }
 
     private List<TorrentFile> getFiles(File base, List<TorrentCreateFilter> filters)
@@ -798,6 +817,27 @@ public class Storage implements Closeable {
     }
 
     /**
+     * The torrent-relative paths of every file in the torrent, index-aligned with the arrays
+     * returned by {@link #remaining2()}.
+     *
+     * <p>BEP 47 padding files are included, as the synthetic name (a number, optionally
+     * "-n", under the .pad directory) the metainfo gives them, so that element i of this
+     * list describes the same file as element i of the remaining/preview arrays. Callers
+     * that must skip padding entries test the name for the .pad directory prefix, or use
+     * {@link #indexOf(File)} and the metainfo attribute list.
+     *
+     * @return a new list with one entry per torrent file, never null
+     * @since 0.9.71+
+     */
+    public List<String> getFileNames() {
+        List<String> rv = new ArrayList<>(_torrentFiles.size());
+        for (TorrentFile tf : _torrentFiles) {
+            rv.add(tf.name);
+        }
+        return rv;
+    }
+
+    /**
      * For efficiency, calculate remaining bytes for all files at once. Remaining bytes is rv[0].
      * Preview bytes is rv[1].
      *
@@ -805,21 +845,6 @@ public class Storage implements Closeable {
      *     use indexOf() to get index for a file
      * @since 0.9.45
      */
-    /**
-     * Snapshot of the torrent-relative paths of every non-padding file,
-     * index-aligned with the arrays returned by {@link #remaining2()}.
-     *
-     * @return a new list, never null
-     * @since 0.9.71+
-     */
-    public List<String> getFileNames() {
-        List<String> rv = new ArrayList<>(_torrentFiles.size());
-        for (TorrentFile tf : _torrentFiles) {
-            if (!tf.isPadding) {rv.add(tf.name);}
-        }
-        return rv;
-    }
-
     public long[][] remaining2() {
         long[] rv = new long[_torrentFiles.size()];
         long[] pv = new long[_torrentFiles.size()];
@@ -1079,8 +1104,9 @@ public class Storage implements Closeable {
                     active = workFile;
                 }
             } else if (!_base.exists() && !_base.createNewFile()) {
-                // createNewFile() can throw a "Permission denied" IOE even if the file exists???
-                // so do it second
+                // test for existence first: createNewFile() answers false for a file that
+                // is already there, but on some filesystems it throws a permission IOE
+                // for one instead, which would abort a check of an existing torrent
                 throw new IOException("Could not create file " + _base);
             }
             _torrentFiles.add(
@@ -1574,8 +1600,9 @@ public class Storage implements Closeable {
         if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {
             throw new IOException("Could not create directory " + parent);
         }
-        // createNewFile() can throw a "Permission denied" IOE even if the file exists???
-        // so do it second
+        // test for existence first: createNewFile() answers false for a file that is
+        // already there, but on some filesystems it throws a permission IOE for one
+        // instead, which would abort a recheck of an existing file
         if (!f.exists() && !f.createNewFile()) {
             throw new IOException("Could not create file " + f);
         }
@@ -1822,7 +1849,9 @@ public class Storage implements Closeable {
                     listener.storageAllocated(this, length);
                 }
                 _checkProgress.set(0);
-                resume = true; // XXX Could dynamicly check
+                // a file that is already at its full length is assumed to hold the data
+                // its piece hashes describe, so it is hashed but not reallocated
+                resume = true;
             } else if (length == 0) {
                 if (!exists) {
                     // File should exist when we get here, but could have vanished
@@ -2035,19 +2064,18 @@ public class Storage implements Closeable {
     }
 
     /**
-     * This creates a (presumably) sparse file so that reads won't fail with IOE. Sets isSparse[nr]
-     * = true. balloonFile(nr) should be called later to defrag the file.
+     * Extend one torrent file to its full length and report it to the listener, so that reads
+     * don't fail with an IOE before the piece arrives.
      *
-     * <p>This calls OpenRAF(); caller must synchronize and call closeRAF().
+     * @param tf the file to extend
+     * @throws IOException on allocation failure
      */
     private void allocateFile(TorrentFile tf) throws IOException {
-        // caller synchronized
         tf.allocateFile();
         if (listener != null) {
             listener.storageCreateFile(this, tf.name, tf.length);
             listener.storageAllocated(this, tf.length);
         }
-        // caller will close rafs[nr]
     }
 
     /**
@@ -2556,6 +2584,24 @@ public class Storage implements Closeable {
     }
 
     private int getUncheckedPiece(int piece, byte[] bs, int off, int length) throws IOException {
+        return getUncheckedPiece(piece, bs, off, length, false);
+    }
+
+    /**
+     * Read a piece, or part of one, into the buffer.
+     *
+     * @param piece the piece index
+     * @param bs the buffer
+     * @param off the offset within the piece
+     * @param length the number of bytes to read
+     * @param closeAfterRead if true, close each file handle as soon as the read that used it
+     *     completes. The creation-time hash pass walks the whole torrent and would otherwise
+     *     hold one handle per file until it finished.
+     * @return the number of bytes read
+     * @throws IOException on read failure
+     */
+    private int getUncheckedPiece(int piece, byte[] bs, int off, int length, boolean closeAfterRead)
+            throws IOException {
         // Early typecast, avoid possibly overflowing a temp integer
         FileCursor fc = new FileCursor(((long) piece * (long) piece_size) + off);
         int read = 0;
@@ -2572,6 +2618,9 @@ public class Storage implements Closeable {
                         RandomAccessFile raf = tf.checkRAF();
                         raf.seek(fc.getOffset());
                         raf.readFully(bs, read, len);
+                        if (closeAfterRead) {
+                            tf.closeRAF();
+                        }
                     } catch (IOException ioe) {
                         try {
                             tf.closeRAF();
@@ -2862,12 +2911,14 @@ public class Storage implements Closeable {
         }
 
         /**
-         * This creates a (presumably) sparse file so that reads won't fail with IOE. Sets
-         * isSparse[nr] = true. balloonFile(nr) should be called later to defrag the file.
+         * Extend the file to its full length so reads don't fail with an IOE, and record
+         * whether the file is still sparse.
          *
-         * <p>File MUST exist or will throw IOE
+         * <p>The file MUST already exist or this throws an IOE. A sparse file is defragged
+         * later by balloonFile(), when the caller that is checking the storage gets there.
          *
-         * <p>This calls openRAF(); caller must synchronize and call closeRAF().
+         * <p>Opens the file read-write through checkRAF(true); the caller must synchronize
+         * and call closeRAF().
          */
         public synchronized void allocateFile() throws IOException {
             // caller synchronized
@@ -2877,18 +2928,14 @@ public class Storage implements Closeable {
             checkRAF(true); // RW
             raf.setLength(length);
             boolean shouldPreallocate = _util.getPreallocateFiles();
-            /**
-             * Don't bother ballooning later on Windows since there is no sparse file support until
-             * JDK7 using the JSR-203 interface.
+            /*
+             * Don't bother ballooning later on Windows: no sparse file support there, and
+             * Windows zero-fills up to the point of the write, which leaves the file fairly
+             * unfragmented on average - at least until near the end, where it gets
+             * exponentially more fragmented. RAF seeks/writes do not create sparse files.
              *
-             * <p>RAF seeks/writes do not create sparse files.
-             *
-             * <p>Windows will zero-fill up to the point of the write, which will make the file
-             * fairly unfragmented, on average, at least until near the end where it will get
-             * exponentially more fragmented.
-             *
-             * <p>Also don't ballon on ARM, as a proxy for solid state disk, where fragmentation
-             * doesn't matter too much. Actual detection of SSD is almost impossible.
+             * Also don't balloon on ARM, as a proxy for solid state disk, where fragmentation
+             * doesn't matter much. Actual detection of SSD is almost impossible.
              */
             if (!_isWindows && !_isARM && shouldPreallocate) {
                 isSparse = true;

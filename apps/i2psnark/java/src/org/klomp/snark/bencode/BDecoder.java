@@ -22,8 +22,10 @@ import java.util.Map;
  *
  * <p>A bencoded byte stream can represent byte arrays, numbers, lists and maps (dictionaries).
  *
- * <p>It currently contains a hack to indicate a name of a dictionary of which a SHA-1 digest hash
- * should be calculated (the hash over the original bencoded bytes).
+ * <p>It also calculates, on request, the SHA-1 digest over the original bencoded bytes of the
+ * dictionary named "info", the info dictionary of a torrent. The info hash is defined as
+ * the digest of those bytes, which cannot be recomputed from the decoded map without
+ * re-encoding it byte for byte, so the bytes are hashed as they stream past.
  */
 public class BDecoder {
 
@@ -52,8 +54,14 @@ public class BDecoder {
     // The current nesting depth of lists and maps being decoded.
     private int depth = 0;
 
-    // Used for ugly hack to get SHA hash over the metainfo info map
+    /**
+     * Name of the dictionary whose bytes are hashed: the info dictionary of a torrent.
+     *
+     * @see #get_special_map_digest()
+     */
     private static final String special_map = "info";
+
+    /** True while the bytes being read belong to the info dictionary. */
     private boolean in_special_map = false;
 
     /**
@@ -63,10 +71,12 @@ public class BDecoder {
     private MessageDigest sha_digest;
 
     /**
-     * Returns the SHA-1 digest over bytes that make up the special map (info map).
-     * This is an ugly hack needed for torrent info hash calculation.
+     * Returns the SHA-1 digest over the original bytes of the info dictionary, which is the
+     * torrent's info hash. Must be called after that dictionary has been decoded, and only
+     * once: the digest is finalized by this call.
      *
-     * @return the SHA-1 digest of the special map bytes, or null if there was no special map
+     * @return the SHA-1 digest of the info dictionary bytes, or null if there was no info
+     *     dictionary in the stream
      */
     public byte[] get_special_map_digest() {
         if (sha_digest == null) return null;
@@ -96,7 +106,9 @@ public class BDecoder {
     }
 
     /**
-     * Creates the SHA-1 digest for the info map hack. Used internally for info hash calculation.
+     * Start hashing the info dictionary bytes. Only the first info dictionary of a stream is
+     * hashed: a second one, which the spec does not allow, would make the digest
+     * wrong, and MetaInfo's constructor rejects the resulting info hash mismatch.
      */
     private void createDigest() {
         if (sha_digest == null) {
@@ -105,10 +117,6 @@ public class BDecoder {
             } catch (NoSuchAlgorithmException nsa) {
                 throw new InternalError(nsa.toString());
             }
-        } else {
-            // there are two info maps, but not one inside the other,
-            // the resulting hash will be incorrect
-            // throw something? - no, the check in the MetaInfo constructor will catch it.
         }
     }
 
@@ -123,7 +131,7 @@ public class BDecoder {
     public int getNextIndicator() throws IOException {
         if (indicator == 0) {
             indicator = in.read();
-            // XXX - Used for ugly hack
+            // part of the info dictionary: it belongs in the info hash
             if (in_special_map) sha_digest.update((byte) indicator);
         }
         return indicator;
@@ -201,7 +209,8 @@ public class BDecoder {
                         "'e' expected after zero," + " not '" + (char) c + "'");
         }
 
-        // XXX - We don't support more the 255 char big integers
+        // collected as text, then parsed as the narrowest type that fits, down to
+        // BigInteger for 19 digits or more
         StringBuilder chars = new StringBuilder(16);
 
         if (c == '-') {
@@ -302,9 +311,10 @@ public class BDecoder {
                 // Dictionary keys are always strings.
                 String key = bdecode().getString();
 
-                // XXX ugly hack
-                // This will not screw up if an info map contains an info map,
-                // but it will if there are two info maps (not one inside the other)
+                // Hash the info dictionary's bytes as they are read. An info dictionary
+                // nested in another one is handled correctly, because in_special_map is
+                // already set; a second, unnested info dictionary is hashed incorrectly,
+                // which MetaInfo's info hash comparison rejects.
                 boolean special = (!in_special_map) && special_map.equals(key);
                 if (special) {
                     createDigest();
@@ -316,7 +326,6 @@ public class BDecoder {
                 if (old != null)
                     throw new InvalidBEncodingException("Duplicate key " + key + " in dictionary");
 
-                // XXX ugly hack continued
                 if (special) in_special_map = false;
 
                 c = getNextIndicator();

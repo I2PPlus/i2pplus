@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.i2p.data.DataHelper;
 
 import java.nio.charset.StandardCharsets;
 /**
@@ -31,7 +30,8 @@ import java.nio.charset.StandardCharsets;
  *   <li>byte[] - encoded as raw byte strings with length prefix
  *   <li>Numbers - encoded as integer values with 'i' prefix and 'e' suffix
  *   <li>List - encoded as ordered sequences starting with 'l' and ending with 'e'
- *   <li>Map - encoded as dictionaries with sorted keys, starting with 'd' and ending with 'e'
+ *   <li>Map - encoded as dictionaries whose keys are sorted in raw byte order (a shorter key
+ *     that is a prefix of a longer one first), starting with 'd' and ending with 'e'
  *   <li>BEValue - unwrapped and encoded according to its contained type
  * </ul>
  *
@@ -184,17 +184,17 @@ public class BEncoder {
         }
 
         if (l != null) {
-            // Keys must be sorted. XXX - This is not the correct order.
-            // Spec says to sort by bytes, not lexically
-            if (l.size() > 1) Collections.sort(l);
+            // The spec requires the keys to be sorted as raw byte strings, which is not the
+            // same as sorting the Strings: UTF-16 code unit order differs from UTF-8 byte
+            // order for everything above ASCII, and bencoding the String writes its UTF-8
+            // bytes. Compare the encoded forms so both key types sort identically.
+            if (l.size() > 1) Collections.sort(l, new StringKeyComparator());
             for (String key : l) {
                 bencode(key, out);
                 bencode(m.get(key), out);
             }
         } else if (b != null) {
-            // Works for arrays of equal lengths, otherwise is probably not
-            // what the bittorrent spec intends.
-            if (b.size() > 1) Collections.sort(b, new BAComparator());
+            if (b.size() > 1) Collections.sort(b, new ByteKeyComparator());
             for (byte[] key : b) {
                 bencode(key, out);
                 bencode(m.get(key), out);
@@ -205,20 +205,62 @@ public class BEncoder {
     }
 
     /**
-     * Comparator for byte arrays. Shorter arrays are less.
-     *
-     * @see DataHelper#compareTo(byte[], byte[])
+     * Compares bencode map keys given as Strings, in the order the spec requires: as their
+     * UTF-8 encodings, byte by byte, with a shorter key that is a prefix of a longer one
+     * ordered first.
      */
-    private static class BAComparator implements Comparator<byte[]>, Serializable {
+    private static class StringKeyComparator implements Comparator<String>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         /**
-         * Compares two byte arrays using lexicographic byte ordering.
+         * Compares two keys by their UTF-8 encodings.
          *
-         * @param l the first byte array
-         * @param r the second byte array
+         * @param l the first key
+         * @param r the second key
+         * @return negative if l is less, positive if greater, 0 if equal
+         */
+        public int compare(String l, String r) {
+            return compareBytes(
+                    l.getBytes(StandardCharsets.UTF_8), r.getBytes(StandardCharsets.UTF_8));
+        }
+    }
+
+    /** Comparator for bencode map keys given as byte arrays. */
+    private static class ByteKeyComparator implements Comparator<byte[]>, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * Compares two byte array keys lexicographically, treating bytes as unsigned.
+         *
+         * @param l the first key
+         * @param r the second key
          * @return negative if l is less, positive if greater, 0 if equal
          */
         public int compare(byte[] l, byte[] r) {
-            return DataHelper.compareTo(l, r);
+            return compareBytes(l, r);
         }
+    }
+
+    /**
+     * Lexicographic unsigned comparison of two byte strings, as bencode requires for map
+     * keys: the first differing byte decides, and a key that is a prefix of the other sorts
+     * first because it is shorter.
+     *
+     * <p>DataHelper.compareTo() is not usable here: it orders keys of differing length by
+     * length alone, without comparing the common prefix, so it sorts "info" before "files".
+     *
+     * @param lhs the first key
+     * @param rhs the second key
+     * @return negative if lhs is less, positive if greater, 0 if equal
+     */
+    private static int compareBytes(byte[] lhs, byte[] rhs) {
+        int len = Math.min(lhs.length, rhs.length);
+        for (int i = 0; i < len; i++) {
+            int diff = (lhs[i] & 0xff) - (rhs[i] & 0xff);
+            if (diff != 0) {
+                return diff;
+            }
+        }
+        return lhs.length - rhs.length;
     }
 }
