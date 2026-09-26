@@ -10,7 +10,7 @@ import org.junit.Test;
  * {@code MaxSlowStartWindowParam#computeTarget}.
  *
  * <p>Covers the recovery floor (below factoryDefault/2 always increases),
- * the congestion/drop shrink, the growth from recovery floor toward
+ * the congestion/retransmission-loss shrink, the growth from recovery floor toward
  * factory default, and the RTT-based decrease above factory default.
  * The dead zone (factoryDefault to factoryDefault * 2) was removed
  * to allow faster convergence to the optimal window.
@@ -44,10 +44,10 @@ public class TunerMaxSlowStartWindowTest {
                                            observed, failLifetime, Double.NaN);
     }
 
-    /** With drop signal. */
-    private static int targetDropping(int current, double observed, double dupSize) {
+    /** With the retransmission-loss signal (rate 0.0-1.0, NaN when absent). */
+    private static int targetDropping(int current, double observed, double lossRate) {
         return Tuner.maxSlowStartWindow(current, MIN, MAX, STEP, DEFAULT,
-                                           observed, Double.NaN, dupSize);
+                                           observed, Double.NaN, lossRate);
     }
 
     // ----- recovery floor tests -----
@@ -114,20 +114,21 @@ public class TunerMaxSlowStartWindowTest {
     @Test
     public void droppingShrinksFromDefault() {
         // dropping at 2048 → shrink toward recovery floor
-        assertEquals(RECOVERY_FLOOR, targetDropping(DEFAULT, 500, 600));
+        assertEquals(RECOVERY_FLOOR, targetDropping(DEFAULT, 500, 0.6));
     }
 
     @Test
     public void droppingShrinksAboveDefault() {
         // dropping at 3000 → shrink toward recovery floor
         assertEquals(Math.max(RECOVERY_FLOOR, 3000 - STEP),
-                     targetDropping(3000, 500, 600));
+                     targetDropping(3000, 500, 0.6));
     }
 
     @Test
     public void congestionAndDroppingTogetherShrink() {
-        // both congested and dropping at 2048 → shrink toward recovery floor
-        assertEquals(RECOVERY_FLOOR, targetCongested(DEFAULT, 500, 9000));
+        // both congested and losing at 2048 → shrink toward recovery floor
+        assertEquals(RECOVERY_FLOOR, Tuner.maxSlowStartWindow(DEFAULT, MIN, MAX, STEP, DEFAULT,
+                                                              500, 9000, 0.6));
     }
 
     // ----- recovery from congestion tests -----

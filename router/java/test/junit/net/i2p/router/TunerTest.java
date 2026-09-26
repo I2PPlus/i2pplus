@@ -1443,7 +1443,7 @@ public class TunerTest {
     // Section 11: Streaming max-window ceiling target tests
     // =====================================================================
 
-    // params: current, min, max, step, defaultValue, failLifetime, dupSize, memPct
+    // params: current, min, max, step, defaultValue, failLifetime, lossRate, memPct
 
     /** Clean path with strong heap headroom climbs four steps toward the cap —
      *  the hyper-responsive ramp lever (NaN memory reads as no pressure). */
@@ -1477,11 +1477,19 @@ public class TunerTest {
                                                                   Double.NaN, Double.NaN, Double.NaN));
     }
 
-    /** Duplicate retransmits (loss pressure) shrink half a step. */
+    /** Retransmission loss at/above the 60% severe threshold shrinks half a step. */
     @Test
     public void testMaxWindowShrinksOnDuplicates() {
         assertEquals(960, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
-                                                                Double.NaN, 600.0, Double.NaN));
+                                                                Double.NaN, 0.6, Double.NaN));
+    }
+
+    /** Loss under the 20% threshold is tunnel churn, not a full path: the
+     *  ceiling keeps climbing instead of backing off. */
+    @Test
+    public void testMaxWindowMildLossStillClimbs() {
+        assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
+                                                                 Double.NaN, 0.19, Double.NaN));
     }
 
     /** Gateway congestion (send-message-failure lifetime) shrinks half a step. */
@@ -1523,7 +1531,7 @@ public class TunerTest {
     @Test
     public void testMaxWindowNegativeSignalBeatsStrongHeadroom() {
         assertEquals(960, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
-                                                                Double.NaN, 600.0, 25.0));
+                                                                Double.NaN, 0.6, 25.0));
     }
 
     /** Below the recovery floor (max(min, default/2)) and healthy, climb two steps
@@ -1534,13 +1542,13 @@ public class TunerTest {
                                                                 Double.NaN, Double.NaN, Double.NaN));
     }
 
-    /** Under drops the ceiling never sinks below the recovery floor. */
+    /** Under loss the ceiling never sinks below the recovery floor. */
     @Test
     public void testMaxWindowShrinkFlooredAtRecovery() {
         assertEquals(256, Tuner.computeStreamingMaxWindowTarget(300, 128, 4096, 128, 512,
-                                                                Double.NaN, 600.0, Double.NaN));
+                                                                Double.NaN, 0.6, Double.NaN));
         assertEquals(256, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,
-                                                                Double.NaN, 600.0, Double.NaN));
+                                                                Double.NaN, 0.6, Double.NaN));
     }
 
     /** Missing signals are treated as clean (never a reason to shrink). */
