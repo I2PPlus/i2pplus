@@ -462,7 +462,8 @@ class ConnectionPacketHandler {
      * @return true if congested
      */
     private boolean adjustWindow(Connection con, boolean isNew, long sequenceNum, int numResends, int acked, boolean choke) {
-        // Per-stream ceiling: min(tuner global, this stream's BDP + headroom),
+        // Per-stream ceiling: the tuner global floor lifted by this stream's
+        // BDP + headroom (capped at ABSOLUTE_MAX_WINDOW),
         // sampled once per adjustment (250ms cache) OUTSIDE windowLock:
         // getWindowCeiling() may take the estimator's monitor, and sampling
         // inside would hold windowLock → estimator nested across the whole

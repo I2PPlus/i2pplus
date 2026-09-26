@@ -415,10 +415,11 @@ class Connection {
 
     /**
      *  Default window size cap used when no per-connection or global override is set.
-     *  The effective ceiling is the per-stream minimum of this global — which the
-     *  Tuner adjusts based on observed RTT, bandwidth, loss, and memory pressure,
-     *  making it the hard safety valve — and the stream's own BDP
-     *  ({@link #getWindowCeiling()}), so a fast stream is not held back by
+     *  This global is the guaranteed floor of the per-stream ceiling
+     *  ({@link #getWindowCeiling()}), which the Tuner adjusts based on observed
+     *  RTT, bandwidth, loss, and memory pressure — every stream ramps at least
+     *  to this value, while its own BDP may lift the ceiling toward
+     *  {@link #ABSOLUTE_MAX_WINDOW} so a fast stream is not held back by
      *  signals gathered from other streams.
      *  Raised from 1024 to 2048 to better utilize high-BDP paths.
      */
@@ -1122,16 +1123,18 @@ class Connection {
     }
 
     /**
-     *  Per-stream window ceiling: the minimum of the Tuner-managed global
-     *  ceiling (or the per-connection override) and this stream's own
-     *  bandwidth-delay product scaled by {@link #WINDOW_CEILING_HEADROOM_PCT}.
-     *  Each stream therefore responds to its own RTT and delivered-bandwidth
-     *  estimate — a fast stream grows toward its own pipe while the global
-     *  ceiling remains the hard safety valve the Tuner shrinks under memory
-     *  or loss pressure (the OOM guard).
+     *  Per-stream window ceiling: the minimum of {@link #ABSOLUTE_MAX_WINDOW}
+     *  and the larger of the Tuner-managed global ceiling (or the per-connection
+     *  override) and this stream's own bandwidth-delay product scaled by
+     *  {@link #WINDOW_CEILING_HEADROOM_PCT}. The global value is the FLOOR of
+     *  the cap — every stream can always ramp to the Tuner's base capacity —
+     *  while a proven pipe lifts its own ceiling toward the absolute cap. Each
+     *  stream responds to its own RTT and delivered-bandwidth estimate, and the
+     *  Tuner still pulls the floor down under memory or loss pressure while
+     *  {@link #ABSOLUTE_MAX_WINDOW} bounds every stream unconditionally.
      *
      *  <p>Before any ACK sample exists the ceiling falls back to the global
-     *  value, so an uncalibrated stream ramps exactly as before (bounded by
+     *  floor, so an uncalibrated stream ramps exactly as before (bounded by
      *  slow-start's ssthresh and the global ceiling).
      *
      *  <p>The result is cached for {@link #BDP_CACHE_MS} so a persistently full
@@ -1144,8 +1147,8 @@ class Connection {
      *  hit to the older ceiling for extra BDP_CACHE_MS windows — nor invert
      *  the age check by pairing a stale timestamp with a fresh ceiling.
      *
-     *  @return max allowed in-flight packets for this stream, never above
-     *          {@code min(getMaxWindowSize(), ABSOLUTE_MAX_WINDOW)}
+     *  @return max allowed in-flight packets for this stream, at least the
+     *          global/floor base and never above {@code ABSOLUTE_MAX_WINDOW}
      *  @since 0.9.71+
      */
     int getWindowCeiling() {
@@ -1185,27 +1188,38 @@ class Connection {
     /**
      *  Pure decision helper for {@link #getWindowCeiling()}: the per-stream
      *  window ceiling in messages —
-     *  {@code min(globalMax, max(floor, headroom * bwe * rtt))}, falling back
-     *  to {@code globalMax} when no bandwidth sample exists yet. The global
-     *  ceiling always binds downward, which is what keeps the Tuner's
-     *  memory/loss response effective on every stream.
+     *  {@code min(absMax, max(globalMax, floor, headroom * bwe * rtt))}, falling
+     *  back to {@code min(absMax, max(globalMax, floor))} when no bandwidth
+     *  sample exists yet.
      *
-     *  @param globalMax Tuner-managed global or per-connection ceiling in messages; binds downward
-     * @param bwePerMs Westwood+ estimate in packets/ms; NaN or {@code <= 0} means no sample yet
+     *  <p>The Tuner global is the FLOOR of the cap, never its ceiling: a
+     *  measured-goodput BDP term that binds downward is self-defeating — the
+     *  window gets pinned at the floor, measured goodput cannot grow past the
+     *  pinned window, and the ceiling stays pinned there forever (the
+     *  observed 128-message absorbing state that capped a fast path at
+     *  ~85 KB/s). With the global as the floor, slow start and congestion
+     *  avoidance always ramp to at least the Tuner base, the BDP term may
+     *  lift the cap toward {@code absMaxMsgs} once the path proves capacity,
+     *  loss response stays with the graduated window cuts, and the Tuner's
+     *  memory/loss shrink still lowers the guaranteed base on every stream.
+     *
+     *  @param globalMax Tuner-managed global or per-connection ceiling in messages; the guaranteed floor
+     *  @param bwePerMs Westwood+ estimate in packets/ms; NaN or {@code <= 0} means no sample yet
      *  @param rttMs round-trip time in ms (caller applies the 500ms floor)
-     *  @param floorMsgs minimum ceiling while an estimate exists (the initial window)
+     *  @param floorMsgs minimum ceiling regardless of the estimate (the initial window, so the cap is never below a connection's starting cwnd)
      *  @param absMaxMsgs absolute ceiling regardless of inputs (ABSOLUTE_MAX_WINDOW)
-     *  @return ceiling in messages, in {@code [1, min(globalMax, absMaxMsgs)]};
-     *          never above {@code globalMax}
+     *  @return ceiling in messages, in
+     *          {@code [min(absMax, max(1, globalMax, floorMsgs)), absMaxMsgs]}
      *  @since 0.9.71+
      */
     static int computeWindowCeiling(int globalMax, float bwePerMs, int rttMs,
                                     int floorMsgs, int absMaxMsgs) {
-        int cap = Math.min(absMaxMsgs, Math.max(1, globalMax));
+        int base = Math.min(absMaxMsgs,
+                            Math.max(Math.max(1, globalMax), Math.max(1, floorMsgs)));
         if (Float.isNaN(bwePerMs) || bwePerMs <= 0.0f || rttMs <= 0)
-            return cap;
+            return base;
         long bdp = (long) (bwePerMs * rttMs * (WINDOW_CEILING_HEADROOM_PCT / 100.0f));
-        return (int) Math.min(cap, Math.max(floorMsgs, bdp));
+        return (int) Math.min(absMaxMsgs, Math.max(base, bdp));
     }
 
     /**
