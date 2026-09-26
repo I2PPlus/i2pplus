@@ -117,7 +117,7 @@ class ConnectionHandler {
     /**
      * Compute the effective SYN accept-queue timeout for an inbound SYN.
      *
-     * <p>A queued SYN is reset via {@link SynReaper} after this window, so it
+     * <p>A queued SYN is reset via {@code SynReaper} after this window, so it
      * bounds how long a client waits for a connection the server never got
      * around to accepting.  A fixed low clamp (e.g. the historical 10s) fails
      * fast on genuinely dead tunnels but also expires slow-but-alive handshakes
@@ -186,7 +186,7 @@ class ConnectionHandler {
     private volatile double _tunnelBuildSuccess;
     /** SYNs added to the acceptance queue within the current sample window. */
     private volatile int _synQueueProcessed;
-    /** SYNs that expired un-accepted (removed by {@link SynReaper}) in the current window. */
+    /** SYNs that expired un-accepted (removed by {@code SynReaper}) in the current window. */
     private volatile int _synQueueExpired;
     /** Most recently observed SYN accept-queue residence time (ms), i.e. how long a fresh SYN
      *  waited in the queue before being accepted. 0 until the first acceptance. */
@@ -195,7 +195,7 @@ class ConnectionHandler {
      *  keyed by packet identity. Value holds the enqueue clock-time and the accept
      *  timeout snapshot taken at that moment; a worker that polls a SYN refreshes the
      *  entry so the expiry matches the timeout the client was quoted.
-     *  Swept by {@link SynReaper}; re-arming is O(1) per SYN instead of the
+     *  Swept by {@code SynReaper}; re-arming is O(1) per SYN instead of the
      *  two per-packet timer events of the old {@code TimeoutSyn} design. */
     private final ConcurrentHashMap<Packet, SynEntry> _synEnqueueTimes =
             new ConcurrentHashMap<Packet, SynEntry>();
@@ -230,7 +230,7 @@ class ConnectionHandler {
      * Recent SYN expire rate, sampled on the same interval as build success.
      *
      * <p>Counts SYNs added to the accept queue ({@code _synQueueProcessed}) and
-     * SYNs later removed by {@link SynReaper} without being accepted
+     * SYNs later removed by {@code SynReaper} without being accepted
      * ({@code _synQueueExpired}).  The window resets whenever a full
      * {@link #SYN_STRESS_SAMPLE_INTERVAL} elapses, so the rate reflects the
      * most recent tunnel-health window rather than the ever since startup.
@@ -594,13 +594,11 @@ class ConnectionHandler {
      *
      * @param timeoutMs max amount of time to wait for a connection (if less
      *                  than 1ms, wait indefinitely)
-     * @return connection received. Prior to 0.9.17, or null if there was a timeout or the
-     *                  handler was shut down. As of 0.9.17, never null.
-     * @throws RouterRestartException (extends I2PException) if the router is apparently restarting, since 0.9.34
-     * @throws ConnectException since 0.9.17, returned null before;
-     *                  if the I2PServerSocket is closed, or if interrupted.
-     * @throws SocketTimeoutException since 0.9.17, returned null before;
-     *                  if a timeout was previously set with setSoTimeout and the timeout has been reached.
+     * @return the connection received, never null; a timeout or a shut-down
+     *         handler is reported by throwing instead
+     * @throws RouterRestartException (extends I2PException) if the router is apparently restarting
+     * @throws ConnectException if the I2PServerSocket is closed, or if interrupted.
+     * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
         if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called...");}

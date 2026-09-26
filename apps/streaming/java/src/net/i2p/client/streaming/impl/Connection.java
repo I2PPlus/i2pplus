@@ -325,16 +325,31 @@ class Connection {
     public static int getDisconnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 2*60*1000);
     }
-    /** Default connect timeout in milliseconds. */
+    /**
+     *  Default <em>base</em> connect timeout in milliseconds (30 seconds), the
+     *  value used for an outbound connect that has none configured.  It is not
+     *  the effective connect window: that is this value (plus the connect delay
+     *  on the delayed-SYN path) scaled by {@link #getConnectTimeoutMultiplier()}
+     *  and capped at {@link #getMaxConnectTimeout()}.
+     */
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
-    /** @since 0.9.70+ */
+    /**
+     *  Router-wide absolute cap on the effective connect window, in
+     *  milliseconds.  Defaults to 75 seconds; an operator may raise or lower it
+     *  with {@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT}, and a
+     *  per-connection override (ConnectionOptions#setMaxConnectTimeout()) wins
+     *  when set.
+     *  @return the global cap in ms, never negative
+     *  @since 0.9.70+
+     */
     static long getGlobalMaxConnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT, 75*1000);
     }
     /**
-     *  Absolute cap on this connection's connect window.
+     *  Absolute cap on this connection's connect window, in milliseconds.
      *  Uses the per-connection override (ConnectionOptions#getMaxConnectTimeout())
      *  when set, otherwise the router-wide i2p.streaming.maxConnectTimeout.
+     *  @return the cap in ms, never negative
      *  @since 0.9.71+
      */
     long getMaxConnectTimeout() {
@@ -1124,8 +1139,7 @@ class Connection {
      *  re-lock the synchronized estimator and re-read RTT on every write
      *  attempt; the Westwood+ sample only moves on ACK cadence anyway. Both
      *  writer threads may populate the cache; a ceiling from either is valid,
-     *  and ceiling + timestamp are stored as one value ({@link
-     *  WindowCeilingSample}) so a reader can never pair one writer's ceiling
+     *  and ceiling + timestamp are stored as one value ({@code WindowCeilingSample}) so a reader can never pair one writer's ceiling
      *  with the other writer's newer timestamp — which would pin the cache
      *  hit to the older ceiling for extra BDP_CACHE_MS windows — nor invert
      *  the age check by pairing a stale timestamp with a fresh ceiling.
@@ -1177,7 +1191,7 @@ class Connection {
      *  memory/loss response effective on every stream.
      *
      *  @param globalMax Tuner-managed global or per-connection ceiling in messages; binds downward
-     * @param bwePerMs Westwood+ estimate in packets/ms; NaN or <= 0 means no sample yet
+     * @param bwePerMs Westwood+ estimate in packets/ms; NaN or {@code <= 0} means no sample yet
      *  @param rttMs round-trip time in ms (caller applies the 500ms floor)
      *  @param floorMsgs minimum ceiling while an estimate exists (the initial window)
      *  @param absMaxMsgs absolute ceiling regardless of inputs (ABSOLUTE_MAX_WINDOW)
@@ -1817,7 +1831,7 @@ class Connection {
             for (int i = 0; i < nacks.length; i++) {
                 if ((lowest < 0) || (nacks[i] < lowest)) {lowest = nacks[i];}
             }
-            /** New val. */
+            // New val.
             final long newVal = lowest - 1;
             _highestAckedThrough.updateAndGet(cur -> Math.max(cur, newVal));
         }
@@ -3421,12 +3435,13 @@ class Connection {
             boolean sentAny = false;
             int burstCount = 0;
             for (PacketLocal packet : toResend) {
-                // Skip packets acknowledged or cancelled after the snapshot was
-                // built (line 2634) but before this resend runs. ackPackets() and
-                // cancelled() release the payload back to the buffer pool under a
-                // different lock, so a stale reference here would re-enqueue a
-                // packet whose _payload is now null and crash the I2CP write
-                // (use-after-release TOCTOU; mirrors the paced-path guard below).
+                // Skip packets acknowledged or cancelled after the ob.values()
+                // snapshot was built but before this resend runs.
+                // ackPackets() and cancelled() release the payload back to the
+                // buffer pool under a different lock, so a stale reference here
+                // would re-enqueue a packet whose _payload is now null and
+                // crash the I2CP write (use-after-release TOCTOU; mirrors the
+                // paced-path guard below).
                 if (packet.writeReleased()) {
                     // A cancelled-but-still-mapped packet can never be
                     // retransmitted and freezes every give-up branch below
@@ -3447,7 +3462,7 @@ class Connection {
                     }
                     continue;
                 }
-                /** N resends. */
+                // N resends.
                 final int nResends = packet.getNumSends();
                 // "Resume, don't close": once forward progress has been made an
                 // established download must not be torn down merely because one
@@ -3999,11 +4014,13 @@ class Connection {
                     }
                     _unackedPacketsReceived.set(0);
                     _lastSendTime = _context.clock().now();
-                    resetActivityTimer(); // timer reset added 0.9.1
+                    resetActivityTimer();
                 }
             }
 
-            // ACKed during resending (... or somethin') ????????????
+            // The ACK landed while this resend was going out, so the resend is
+            // already accounted for: drop the outstanding-resend count and wake
+            // anyone waiting on the outbound queue rather than letting it age out.
             if ((_packet.getAckTime() > 0) && (_packet.getNumSends() > 1)) {
                 _activeResends.decrementAndGet();
                 synchronized (_outboundPacketsLock) {

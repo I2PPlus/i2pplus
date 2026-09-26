@@ -1148,17 +1148,14 @@ class ConnectionManager {
                                          session.getMyDestination().calculateHash().toBase64().substring(0, 4));
         _connectionHandler = new ConnectionHandler(_context, this, _timer.getSharedTimer());
         _tcbShare = new TCBShare(_context, _timer.getSharedTimer());
-        // PROTO_ANY is for backward compatibility (pre-0.7.1)
-        // PacketQueue has sent PROTO_STREAMING since the beginning of mux support (0.7.1)
-        // As of 0.9.1, new option to enforce streaming protocol, off by default
-        // As of 0.9.1, listen on configured port (default 0 = all)
-        // enforce protocol default changed to true in 0.9.36
-        // disable option in 0.9.71
+        // Listen on the streaming protocol only. The pre-mux PROTO_ANY
+        // wildcard is no longer accepted, so packets on any other protocol are
+        // never dispatched to the streaming mux listener.
         int protocol = I2PSession.PROTO_STREAMING;
         _session.addMuxedSessionListener(_messageHandler, protocol, defaultOptions.getLocalPort());
         _outboundQueue = new PacketQueue(_context, _timer.getSharedTimer());
         _recentlyClosed = new LHMCache<>(512);
-        /** Socket timeout for accept() */
+        // Socket timeout for accept()
         _soTimeout = -1;
 
         // Stats for this class
@@ -1654,7 +1651,9 @@ class ConnectionManager {
                 return false;
             }
         } else {
-            // in-connection ping to a 3rd party ???
+            // A ping that arrived on an existing connection may only come from
+            // that connection's remote peer; treating it as an open relay would
+            // let one peer probe a third party through our tunnels.
             if (!dest.equals(con.getRemotePeer())) {
                 _log.logAlways(Log.WARN, "Dropping ping to 3rd party from: " + con.getRemotePeer().toBase32() +
                                          "\n* Target: " + dest.toBase32());
@@ -1666,7 +1665,7 @@ class ConnectionManager {
         pong.setReceiveStreamId(ping.getSendStreamId());
         pong.setLocalPort(ping.getLocalPort());
         pong.setRemotePort(ping.getRemotePort());
-        // as of 0.9.18, return the payload
+        // Echo the payload back, truncated to MAX_PONG_PAYLOAD
         ByteArray payload = ping.getPayload();
         if (payload != null) {
             if (payload.getValid() > MAX_PONG_PAYLOAD)
@@ -2006,7 +2005,6 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
          return con;
     }
 
-    /** Locked too many streams. */
     /**
      * Encapsulates a connection rejection reason with an optional
      * Retry-After duration in seconds.
@@ -2229,8 +2227,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     public boolean answerPings() { return _defaultOptions.getAnswerPings(); }
 
     /**
-     * Something b0rked hard, so kill all of our connections without mercy.
-     * Don't bother sending close packets.
+     * Drop every connection, sending a RESET instead of a CLOSE handshake.
      * This will not close the ServerSocket.
      * This will not kill the timer threads.
      *
@@ -2635,7 +2632,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         packet.setOptionalFrom();
         packet.setLocalPort(fromPort);
         packet.setRemotePort(toPort);
-        /** Byte array. */
+        // Byte array.
         packet.setPayload(new ByteArray(payload));
         if (timeoutMs > getMaxPingTimeout())
             timeoutMs = getMaxPingTimeout();
@@ -2749,7 +2746,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         packet.setOptionalFrom();
         packet.setLocalPort(fromPort);
         packet.setRemotePort(toPort);
-        /** Byte array. */
+        // Byte array.
         packet.setPayload(new ByteArray(payload));
         if (timeoutMs > getMaxPingTimeout())
             timeoutMs = getMaxPingTimeout();

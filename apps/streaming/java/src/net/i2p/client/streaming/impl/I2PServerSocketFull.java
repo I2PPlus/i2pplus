@@ -27,15 +27,16 @@ class I2PServerSocketFull implements I2PServerSocket {
      * Waits for the next socket connecting.  If a remote user tried to make a
      * connection and the local application wasn't .accept()ing new connections,
      * they should get refused (if .accept() doesn't occur in some small period).
-     * Warning - unlike regular ServerSocket, may return null (through 0.9.16 only).
+     * Unlike a regular ServerSocket, a connection left unaccepted is answered
+     * with a streaming RESET and accept() reports the failure by throwing
+     * instead of returning null.
      *
-     * @return a connected I2PSocket OR NULL through 0.9.16; never null as of 0.9.17
+     * @return a connected I2PSocket, never null
      *
      * @throws I2PException if there is a problem with reading a new socket
      *         from the data available (e.g. the I2PSession is closed)
-     * @throws net.i2p.client.streaming.RouterRestartException (extends I2PException) if the router is apparently restarting, since 0.9.34
+     * @throws net.i2p.client.streaming.RouterRestartException (extends I2PException) if the router is apparently restarting
      * @throws ConnectException if the I2PServerSocket is closed, or if interrupted.
-     *         Not actually thrown through 0.9.16; thrown as of 0.9.17
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
     @Override

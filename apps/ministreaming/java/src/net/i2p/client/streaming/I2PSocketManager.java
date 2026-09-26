@@ -114,7 +114,8 @@ public interface I2PSocketManager {
     /**
      *  Create a modified copy of the current options, to be used in a setDefaultOptions() call.
      *
-     *  As of 0.9.19, defaults in opts are honored.
+     *  Defaults in opts are honored: a property absent from opts keeps its
+     *  current value rather than reverting to the default.
      *
      *  @param opts The new options, may be null
      *  @return a modified copy of the current options
@@ -242,7 +243,10 @@ public interface I2PSocketManager {
      * @param opts the options
      * @param name the name
      * @throws UnsupportedOperationException always
+     * @deprecated nothing calls this; build the manager with
+     *     I2PSocketManagerFactory.createManager().
      */
+    @Deprecated
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
 
     /**

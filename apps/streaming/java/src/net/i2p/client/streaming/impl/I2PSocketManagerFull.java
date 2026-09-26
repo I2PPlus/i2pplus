@@ -164,7 +164,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * How long to wait for the client app to accept() before sending back CLOSE?
-     * This includes the time waiting in the queue.  Currently set to 5 seconds.
+     * This includes the time waiting in the queue.  Set to 10 seconds.
      */
     private static final long ACCEPT_TIMEOUT_DEFAULT = (long) 10*1000;
 
@@ -252,7 +252,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * Create a modified copy of the current options, to be used in a setDefaultOptions() call.
      *
-     * As of 0.9.19, defaults in opts are honored.
+     * Defaults in opts are honored: a property absent from opts keeps its
+     * current value rather than reverting to the default.
      *
      * @param opts The new options, may be null
      * @return a new options object with the specified modifications
@@ -390,10 +391,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * This only listens on the primary session. There is no way to get
      * incoming connections on a subsession.
      *
-     * @return connected I2PSocket, or null through 0.9.16, non-null as of 0.9.17
+     * @return connected I2PSocket, never null
      * @throws I2PException if session is closed
-     * @throws net.i2p.client.streaming.RouterRestartException (extends I2PException) if the router is apparently restarting, since 0.9.34
-     * @throws ConnectException (since 0.9.17; I2PServerSocket interface always declared it)
+     * @throws net.i2p.client.streaming.RouterRestartException (extends I2PException) if the router is apparently restarting
+     * @throws ConnectException if the I2PServerSocket is closed, or if interrupted
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
      */
     public I2PSocket receiveSocket() throws I2PException, ConnectException, SocketTimeoutException {
@@ -517,8 +518,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      }
 
      /**
-      * Accept timeout in milliseconds.
-      * @return the accept timeout in milliseconds
+      * Set the accept timeout in milliseconds.
+      * @param ms the accept timeout in milliseconds
       */
      public void setAcceptTimeout(long ms) {
          _acceptTimeout = ms;
@@ -610,7 +611,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * Verify the session is connected, reconnecting if needed.
-     * @throws I2PException if session is closed; as of 0.9.61, this is an I2PSessionException which extends I2PException
+     * @throws I2PException if session is closed; this is an I2PSessionException which extends I2PException
      */
     private void verifySession() throws I2PException {
         verifySession(_connectionManager.getSession());

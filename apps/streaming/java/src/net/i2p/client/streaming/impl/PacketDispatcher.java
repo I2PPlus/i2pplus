@@ -133,7 +133,7 @@ class PacketDispatcher {
      *  the target shard's queue depth and any producer-blind back-pressure.
      *
      *  <p>The 1ms back-pressure wait runs OUTSIDE the read lock: a saturated
-     *  shard must not pin the lock, or {@link #shutdown()} / {@link #resize()}
+     *  shard must not pin the lock, or {@link #shutdown()} / {@link #resize(int)}
      *  (which need the write lock to flip {@code _running} / rebuild the shard
      *  array) would deadlock exactly when a worker is stuck behind a full
      *  queue. The shard is therefore re-resolved each iteration, so an entry

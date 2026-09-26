@@ -14,7 +14,7 @@ import org.junit.Test;
  * {@link Connection#waitForConnect(int)} reports its accurate error. The clamp
  * keeps adaptive tuning inside the same guarantees.
  *
- * @since 0.9.xx
+ * @since 0.9.71+
  */
 public class ConnectionMaxSynResendsTest {
 

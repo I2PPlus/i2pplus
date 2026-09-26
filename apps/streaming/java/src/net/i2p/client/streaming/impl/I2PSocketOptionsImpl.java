@@ -16,22 +16,26 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     private int _localPort;
     private int _remotePort;
 
-    /** DEFAULT_BUFFER_SIZE. */
+    /**
+     *  Default max buffer size.  Platform-dependent: a slow system, or one
+     *  reporting less than 512 MB of memory, gets 512 KB, everything else 1 MB
+     *  (see the sizing below).
+     */
     public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ?
         // Slow systems: 1730 * (1.5*192 + 2) = 500KB, rounded to 512KB for safety margin
         512*1024 :
         // Normal systems: 1730 * (1.5*384 + 2) = 998KB, rounded to 1MB for safety margin
         1024*1024;
-    /**
-     * DEFAULT_READ_TIMEOUT.
-     */
+    /** Default read timeout in ms; -1 means block forever. */
     public static final int DEFAULT_READ_TIMEOUT = -1;
-    /**
-     * DEFAULT_WRITE_TIMEOUT.
-     */
+    /** Default write timeout in ms; -1 means never time out. */
     public static final int DEFAULT_WRITE_TIMEOUT = -1;
     /**
-     * DEFAULT_CONNECT_TIMEOUT.
+     *  Default base connect timeout in ms (30 seconds).  This is the pre-scaling
+     *  window only: the effective window is scaled by the connect timeout
+     *  multiplier and capped at the absolute max connect timeout (75 seconds
+     *  by default), so a caller setting a longer value still waits no longer
+     *  than the cap.
      */
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
 
@@ -63,7 +67,8 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *  Max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
      *
-     *  As of 0.9.19, defaults in opts are honored.
+     *  A property absent from opts, or one that does not parse as an integer,
+     *  falls back to the corresponding default.
      *
      *  @param opts may be null
      */
@@ -75,7 +80,9 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *  Max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
      *
-     *  As of 0.9.19, defaults in opts are honored.
+     *  Only the properties present in opts are applied; anything absent from
+     *  opts keeps the value this object already has, so a partial opts
+     *  overrides only what it names.
      *
      *  @param opts may be null
      */
@@ -138,12 +145,17 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     }
 
     /**
-     * How long we will wait for the ACK from a SYN, in milliseconds.
+     * Base time to wait for the ACK from a SYN, in milliseconds.
      *
-     * Default 60 seconds. Max of 2 minutes enforced in Connection.java,
-     * and it also interprets &lt;= 0 as default.
+     * The stored value is un-scaled; the effective connect window adds the
+     * connect delay on the delayed-SYN path, is scaled by the connect timeout
+     * multiplier, and is capped at the absolute max connect timeout, so a
+     * stored value above that cap waits no longer than the cap.
      *
-     * @return milliseconds to wait, or -1 if we will wait indefinitely
+     * Default 30 seconds.
+     *
+     * @return milliseconds to wait, or a non-positive value for no connect
+     *         timeout, i.e. the handshake is not given up on a timer
      */
     @Override
     public long getConnectTimeout() {
@@ -153,9 +165,11 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * Define how long we will wait for the ACK from a SYN, in milliseconds.
      *
-     * Default 60 seconds. Max of 2 minutes enforced in Connection.java,
-     * and it also interprets &lt;= 0 as default.
+     * The value is stored un-scaled; see {@link #getConnectTimeout()}.
      *
+     * Default 30 seconds.
+     *
+     * @param ms timeout in ms, &lt;= 0 for no connect timeout
      */
     @Override
     public void setConnectTimeout(long ms) {
@@ -165,8 +179,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * What is the longest we'll block on the input stream while waiting
      * for more data.  If this value is exceeded, the read() throws
-     * SocketTimeoutException as of 0.9.36.
-     * Prior to that, the read() returned -1 or 0.
+     * SocketTimeoutException.
      *
      * WARNING: Default -1 (unlimited), which is probably not what you want.
      *
@@ -180,8 +193,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * What is the longest we'll block on the input stream while waiting
      * for more data.  If this value is exceeded, the read() throws
-     * SocketTimeoutException as of 0.9.36.
-     * Prior to that, the read() returned -1 or 0.
+     * SocketTimeoutException.
      *
      * WARNING: Default -1 (unlimited), which is probably not what you want.
      *
@@ -198,7 +210,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
      *
-     * Default 64 KB
+     * Default is {@link #DEFAULT_BUFFER_SIZE}, which is platform-dependent.
      *
      * @return buffer size limit, in bytes
      */
@@ -213,8 +225,9 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
      *
-     * Default 64 KB
+     * Default is {@link #DEFAULT_BUFFER_SIZE}, which is platform-dependent.
      *
+     * @param numBytes How much data will we accept that hasn't been written out yet.
      */
     @Override
     public void setMaxBufferSize(int numBytes) {
@@ -242,6 +255,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * is no timeout.
      *
      * Default -1 (unlimited)
+     * @param ms wait time to block on the output stream while waiting for the data to flush.
      */
     @Override
     public void setWriteTimeout(long ms) {

@@ -5,14 +5,14 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests the multi-threaded accept worker infrastructure in {@link ConnectionHandler}.
+ * Tests the accept-side tunables in {@link ConnectionHandler} and
+ * {@link I2PSocketManagerFull}: the accept worker pool and the SYN accept-queue
+ * size and timeout.
  *
- * <p>Regression tests for dev-vs-mainline: the streaming accept loop was
- * single-threaded ({@code FIXME} at {@code setActive(false)}), causing the
- * SYN accept queue to saturate at 255/256 and reject 96.7% of incoming
- * connections. The fix adds a configurable pool of accept worker threads
- * that pull from the shared SYN queue and populate a result queue, allowing
- * horizontal scaling to 100s-1000s of connections/s.
+ * <p>A pool of accept worker threads pulls from the shared SYN queue and
+ * populates a result queue, so concurrent connections are not served by a single
+ * thread and the queue cannot saturate. The worker count is a static tunable,
+ * clamped here because these tests set it.
  *
  * @since 0.9.71+
  */

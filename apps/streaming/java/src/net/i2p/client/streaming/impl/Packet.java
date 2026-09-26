@@ -504,7 +504,7 @@ class Packet {
      * @param buffer bytes to write to a destination
      * @param offset starting point in the buffer to send
      * @return Count actually written
-     * @throws IllegalStateException if there is data missing or otherwise b0rked
+     * @throws IllegalStateException if a required option is missing
      */
     public int writePacket(byte[] buffer, int offset) throws IllegalStateException {
         return writePacket(buffer, offset, 0);
@@ -517,7 +517,7 @@ class Packet {
      * @param fakeSigLen if 0, include the real signature in _optionSignature;
      *                   if nonzero, leave space for that many bytes
      * @return the number of bytes written
-     * @throws IllegalStateException if there is data missing or otherwise b0rked
+     * @throws IllegalStateException if a required option is missing
      */
     protected int writePacket(byte[] buffer, int offset, int fakeSigLen) throws IllegalStateException {
         int cur = offset;
@@ -643,12 +643,13 @@ class Packet {
      * the number of bytes read.
      *
      * @param buffer packet buffer containing the data
-     * @param offset index into the buffer to start readign
+     * @param offset index into the buffer to start reading
      * @param length how many bytes within the buffer past the offset are
      *               part of the packet?
      *
-     * @throws IllegalArgumentException if the data is b0rked
-     * @throws IndexOutOfBoundsException if the data is b0rked
+     * @throws IllegalArgumentException if the buffer is too small for the
+     *         declared length, or the header is shorter than the minimum
+     * @throws IndexOutOfBoundsException if the data ends mid-packet
      */
     public void readPacket(byte[] buffer, int offset, int length) throws IllegalArgumentException {
         if (buffer.length - offset < length)

@@ -258,8 +258,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public Connection getConnection() { return _connection; }
 
     /**
-     *  Will force a fast restransmit on the 3rd call (FAST_RETRANSMIT_THRESHOLD)
-     *  but only if it's the lowest unacked (see Connection.ResendPacketEvent)
+     *  Count a NACK for this packet, and on the
+     *  {@link Connection#FAST_RETRANSMIT_THRESHOLD}th one ask for a fast
+     *  retransmit, provided the retransmit timer has demonstrably not already
+     *  fired: the packet must have been sent at least max(4s, RTT) ago, and
+     *  only the first such NACK storm triggers it.
+     *  The retransmit is a no-op unless this is the lowest unacked packet
+     *  (see Connection.ResendPacketEvent).
      */
     public void incrementNACKs() {
         final int cnt = _nackCount.incrementAndGet();
@@ -269,7 +274,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             _retransmitted = true;
             Connection.ResendPacketEvent evt = _connection.newResendPacketEvent(this);
             evt.fastRetransmit();
-            // the predicate used to be '+', changing to '-' --zab
 
             if (_log.shouldDebug()) {
                 final String log = String.format("%s NACKS and retransmits. %n* Criteria: nacks=%d, retransmitted=%b,"+
@@ -314,7 +318,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @param buffer data to be written
      * @param offset starting point in the buffer
      * @return Count of bytes written
-     * @throws IllegalStateException if there is data missing or otherwise b0rked
+     * @throws IllegalStateException if the offline signature has expired, or
+     *         if signing the packet failed
      * @since 0.9.20 moved from Packet
      */
     public int writeSignedPacket(byte[] buffer, int offset) throws IllegalStateException {

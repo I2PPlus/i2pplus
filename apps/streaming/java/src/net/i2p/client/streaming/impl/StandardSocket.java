@@ -144,7 +144,7 @@ public class StandardSocket extends Socket {
 
     /**
      *  Local socket address.
-     *  @return an I2PSocketAddress as of 0.9.26; prior to that, returned null
+     *  @return an I2PSocketAddress, never null
      *  @since implemented in 0.9.26
      */
     @Override
@@ -197,7 +197,7 @@ public class StandardSocket extends Socket {
 
     /**
      *  Remote socket address.
-     *  @return an I2PSocketAddress as of 0.9.26; prior to that, threw UnsupportedOperationException
+     *  @return an I2PSocketAddress, never null
      *  @since implemented in 0.9.26
      */
     @Override

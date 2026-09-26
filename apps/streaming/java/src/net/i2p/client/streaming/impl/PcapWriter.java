@@ -266,8 +266,8 @@ public class PcapWriter implements Closeable, Flushable {
 
         // seq and acks 8 bytes
         long seq;
-        // wireshark wants the seq # in a SYN packet to be one less than the first data packet,
-        // so let's set it to 0. ???????????
+        // Wireshark expects a SYN's seq to be one less than the first data
+        // packet's, so the SYN carries 0xffffffff (that is, 0 - 1).
         if (pkt.isFlagSet(Packet.FLAG_SYNCHRONIZE))
             seq = 0xffffffffL;
         else

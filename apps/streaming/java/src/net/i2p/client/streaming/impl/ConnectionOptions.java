@@ -781,14 +781,26 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public void setMaxConnectTimeout(long maxConnectTimeoutMs) {_maxConnectTimeout = maxConnectTimeoutMs;}
 
     /**
-     * Sign all packets or only SYN/FIN? Unused — no property exists, always false.
+     *  Whether every packet on this connection must be signed, or only
+     *  SYN/FIN-class packets.
      *
-     * @return true if all packets should be signed, false for SYN/FIN only
+     *  <p>Defaults to false, and no property or GUI setting exposes it: it is
+     *  only ever set in-process via {@link #setRequireFullySigned(boolean)} and
+     *  carried to a new connection when options are copied from an existing
+     *  one.  When true it takes effect in both directions: every outbound
+     *  packet gets FLAG_SIGNATURE_INCLUDED and FLAG_SIGNATURE_REQUESTED, and
+     *  ConnectionPacketHandler rejects any inbound packet that does not carry a
+     *  valid signature.
+     *
+     *  @return true if all packets must be signed, false for SYN/FIN only
      */
     public boolean getRequireFullySigned() {return _fullySigned;}
     /**
-     * Whether all packets require signing.
-     * @param sign true to require all packets signed
+     *  Whether all packets on this connection require signing.  See
+     *  {@link #getRequireFullySigned()} for the effect; there is no property to
+     *  configure this with.
+     *
+     *  @param sign true to require all packets signed
      */
     public void setRequireFullySigned(boolean sign) {_fullySigned = sign;}
 

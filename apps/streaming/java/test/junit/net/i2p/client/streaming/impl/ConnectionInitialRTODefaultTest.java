@@ -13,7 +13,7 @@ import org.junit.Test;
  * 9000ms), and the clamp must never let the Tuner push the value outside a
  * sane retransmit window.
  *
- * @since 0.9.xx
+ * @since 0.9.71+
  */
 public class ConnectionInitialRTODefaultTest {
 

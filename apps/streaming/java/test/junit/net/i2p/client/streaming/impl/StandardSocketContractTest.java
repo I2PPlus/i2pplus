@@ -15,12 +15,13 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 /**
- * Tests for StandardSocket state machine fixes.
+ * Tests the StandardSocket state machine.
  *
- * <p>Regression tests for dev-vs-mainline bugs:
- * {@code isConnected()} always returning true after close,
- * {@code isInputShutdown()}/{@code isOutputShutdown()} returning
- * false after close, and missing double-close protection.
+ * <p>These pin the java.net.Socket contract a caller can observe:
+ * after close() {@code isConnected()} reports false, {@code isInputShutdown()}
+ * and {@code isOutputShutdown()} report true, a second close() throws
+ * {@link IOException}, and either shutdown half closes the socket. The send and
+ * receive buffer sizes both report the connection's inbound buffer size.
  *
  * @since 0.9.71+
  */

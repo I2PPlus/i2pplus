@@ -7,7 +7,14 @@ package net.i2p.client.streaming;
 public interface I2PSocketOptions {
     /** How much data will we accept that hasn't been written out yet. */
     public static final String PROP_BUFFER_SIZE = "i2p.streaming.bufferSize";
-    /** How long wait for the ACK from a SYN, in milliseconds. */
+    /**
+     *  Base time to wait for the ACK from a SYN, in milliseconds, before any
+     *  adaptive scaling is applied.  Default 30 seconds; a value &lt;= 0 turns
+     *  the connect timeout off, so the handshake is not given up on a timer.
+     *  The effective connect window adds the connect delay on the delayed-SYN
+     *  path, is scaled by the router's connect timeout multiplier, and is capped
+     *  by {@link #PROP_MAX_CONNECT_TIMEOUT}.
+     */
     public static final String PROP_CONNECT_TIMEOUT = "i2p.streaming.connectTimeout";
     /**
      *  Absolute cap on the time an outbound connect will wait for a SYN ACK,
@@ -38,30 +45,37 @@ public interface I2PSocketOptions {
      */
     public static final int PROFILE_INTERACTIVE = 2;
     /**
-     * How long we will wait for the ACK from a SYN, in milliseconds.
+     * Base time to wait for the ACK from a SYN, in milliseconds.
      *
-     * Default 60 seconds. Max of 2 minutes enforced in Connection.java,
-     * and it also interprets &lt;= 0 as default.
+     * This is the configured value only.  The effective connect window adds the
+     * connect delay on the delayed-SYN path, is scaled by the router's connect
+     * timeout multiplier, and is capped at {@link #PROP_MAX_CONNECT_TIMEOUT}
+     * (75 seconds by default), so a configured value above that cap waits no
+     * longer than the cap.
      *
-     * @return milliseconds to wait, or -1 if we will wait indefinitely
+     * Default 30 seconds.
+     *
+     * @return milliseconds to wait, or a non-positive value for no connect
+     *         timeout, i.e. the handshake is not given up on a timer
      */
     public long getConnectTimeout();
 
     /**
      * Define how long we will wait for the ACK from a SYN, in milliseconds.
      *
-     * Default 60 seconds. Max of 2 minutes enforced in Connection.java,
-     * and it also interprets &lt;= 0 as default.
+     * The value is the base window only; see {@link #getConnectTimeout()} for
+     * how the effective window is derived.
      *
-     * @param ms timeout in ms
+     * Default 30 seconds.
+     *
+     * @param ms timeout in ms, &lt;= 0 for no connect timeout
      */
     public void setConnectTimeout(long ms);
 
     /**
      * What is the longest we'll block on the input stream while waiting
      * for more data.  If this value is exceeded, the read() throws
-     * SocketTimeoutException as of 0.9.36.
-     * Prior to that, the read() returned -1 or 0.
+     * SocketTimeoutException.
      *
      * WARNING: Default -1 (unlimited), which is probably not what you want.
      *
@@ -72,8 +86,7 @@ public interface I2PSocketOptions {
     /**
      * What is the longest we'll block on the input stream while waiting
      * for more data.  If this value is exceeded, the read() throws
-     * SocketTimeoutException as of 0.9.36.
-     * Prior to that, the read() returned -1 or 0.
+     * SocketTimeoutException.
      *
      * WARNING: Default -1 (unlimited), which is probably not what you want.
      *
@@ -87,7 +100,8 @@ public interface I2PSocketOptions {
      * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
      *
-     * Default 64 KB
+     * Default is platform-dependent: 512 KB on a slow system or one with less
+     * than 512 MB of memory, otherwise 1 MB.
      *
      * @return buffer size limit, in bytes
      */
@@ -99,7 +113,8 @@ public interface I2PSocketOptions {
      * either some data is removed or the connection is closed.  If this is
      * less than or equal to zero, there is no limit (warning: can eat ram)
      *
-     * Default 64 KB
+     * Default is platform-dependent: 512 KB on a slow system or one with less
+     * than 512 MB of memory, otherwise 1 MB.
      *
      * @param numBytes How much data will we accept that hasn't been written out yet.
      */

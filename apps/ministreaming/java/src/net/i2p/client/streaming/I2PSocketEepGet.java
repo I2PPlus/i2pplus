@@ -39,8 +39,7 @@ import net.i2p.util.SocketTimeout;
  *  Supports http://example.i2p/blah
  *  Supports http://B32KEY.b32.i2p/blah
  *  Supports http://i2p/B64KEY/blah for compatibility with the eepproxy
- *  Supports http://B64KEY/blah for as of 0.9.42
- *  Supports http://B64KEY.i2p/blah as of 0.9.42
+ *  Supports http://B64KEY/blah
  *  Warning - does not support /eepproxy/blah, address helpers, http://B64KEY.i2p/blah,
  *  or other odd things that may be found in the HTTP proxy.
  *

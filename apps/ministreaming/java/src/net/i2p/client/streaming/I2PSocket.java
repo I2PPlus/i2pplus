@@ -28,8 +28,7 @@ public interface I2PSocket extends Closeable {
     public Destination getPeerDestination();
 
     /**
-     *  As of 0.9.9 will throw an IOE if socket is closed.
-     *  Prior to that would return null instead of throwing IOE.
+     *  Throws an IOException if the socket is closed; never returns null.
      *<p>
      *  Note that operations on the returned stream may return an
      *  {@link IOException} whose <i>cause</i> as returned by
@@ -37,14 +36,13 @@ public interface I2PSocket extends Closeable {
      *  If so, the client may retrieve a status code via
      *  {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
      *
-     * @return an InputStream to read from the socket. Non-null since 0.9.9.
-     * @throws IOException on failure
+     * @return an InputStream to read from the socket, never null
+     * @throws IOException on failure, including if the socket is closed
      */
     public InputStream getInputStream() throws IOException;
 
     /**
-     *  As of 0.9.9 will throw an IOE if socket is closed.
-     *  Prior to that would return null instead of throwing IOE.
+     *  Throws an IOException if the socket is closed; never returns null.
      *<p>
      *  Note that operations on the returned stream may return an
      *  {@link IOException} whose <i>cause</i> as returned by
@@ -52,8 +50,8 @@ public interface I2PSocket extends Closeable {
      *  If so, the client may retrieve a status code via
      *  {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
      *
-     * @return an OutputStream to write into the socket. Non-null since 0.9.9.
-     * @throws IOException on failure
+     * @return an OutputStream to write into the socket, never null
+     * @throws IOException on failure, including if the socket is closed
      */
     public OutputStream getOutputStream() throws IOException;
 
@@ -97,7 +95,10 @@ public interface I2PSocket extends Closeable {
      *  Deprecated, unimplemented, does nothing.
      *
      *  @param lsnr the listener (ignored)
+     *  @deprecated there is no socket error notification; a failed connection or
+     *      I/O is reported through the I/O exception on the stream instead.
      */
+    @Deprecated
     public void setSocketErrorListener(SocketErrorListener lsnr);
 
     /**
@@ -153,7 +154,10 @@ public interface I2PSocket extends Closeable {
      * TCP-like stream is closed (which may be a minute later, if the close message
      * times out as well).  This is not fired on normal close() activity.
      *
+     * @deprecated no implementation registers a listener; see
+     *     {@link #setSocketErrorListener(SocketErrorListener)}.
      */
+    @Deprecated
     public interface SocketErrorListener {
         /**
          * An error occurred communicating with the peer.

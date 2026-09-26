@@ -405,7 +405,7 @@ public class I2PSocketManagerFactory {
     private static I2PSocketManager createManager(I2PSession session, Properties opts, String name,
                                                   IncomingConnectionFilter filter) {
         I2PAppContext context = I2PAppContext.getGlobalContext();
-        // As of 0.9.12, ignore this setting, as jwebcache and i2phex set it to the old value.
+        // Ignore this setting: jwebcache and i2phex still set it to the old value.
         // There is no other valid manager.
         String classname = DEFAULT_MANAGER;
         try {

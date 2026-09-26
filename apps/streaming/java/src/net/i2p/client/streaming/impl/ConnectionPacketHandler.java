@@ -47,8 +47,8 @@ class ConnectionPacketHandler {
         return ConnectionOptions.getMaxSlowStartWindowStatic();
     }
 
-    // see tickets 1939 and 2584
-    /** Prop immediate ack delay. */
+    /** Immediate ACK delay in ms, applied as min(this, rtt/8) so it can only
+     *  ever delay an immediate ACK by a fraction of the measured RTT. */
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
     /** Period for rates. */
@@ -91,7 +91,7 @@ class ConnectionPacketHandler {
             return;
         }
 
-        /** Seq num. */
+        // Seq num.
         final long seqNum = packet.getSequenceNum();
         if (con.getHardDisconnected()) {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
@@ -144,7 +144,7 @@ class ConnectionPacketHandler {
         } else if (!con.isInbound() && packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             // SYN ACK w/o MAX_PACKET_SIZE?
             // specs not clear if this is allowed
-            /** Default MTU when SYN lacks size option. */
+            // Default MTU when SYN lacks size option.
             final int size = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
             if (size < con.getOptions().getMaxMessageSize()) {
                 if (_log.shouldInfo())
@@ -202,7 +202,7 @@ class ConnectionPacketHandler {
                                                packet.getPayloadSize() * (long) TELEMETRY_SAMPLE_PERIOD);
 
         boolean allowAck = true;
-        /** Whether the packet has the SYN flag set. */
+        // Whether the packet has the SYN flag set.
         final boolean isSYN = packet.isFlagSet(Packet.FLAG_SYNCHRONIZE);
 
         // We allow the SendStreamID to be 0 so that the originator can send
@@ -246,7 +246,6 @@ class ConnectionPacketHandler {
                 // Note: the delay below _may_ be a big limiter in how fast local "loopback" connections
                 // can go, however if it goes too fast then we start choking which causes
                 // frequent stalls anyway.
-                // see tickets 1939 and 2584
                 con.setNextSendTime(_context.clock().now() + Math.min(ConnectionOptions.getImmediateAckDelayStatic(), con.getOptions().getRTT() / 8));
             } else {
                 int delay;
@@ -267,11 +266,9 @@ class ConnectionPacketHandler {
 
                 // take note of congestion
 
-                /** Current timestamp for congestion timing. */
+                // Congestion timing is judged against these three.
                 final long now = _context.clock().now();
-                /** Ack delay. */
                 final int ackDelay = con.getOptions().getSendAckDelay();
-                /** Last send time. */
                 final long lastSendTime = con.getLastSendTime();
 
                 if (_log.shouldInfo())
@@ -281,7 +278,7 @@ class ConnectionPacketHandler {
                 // If this is longer than his RTO, he will always retransmit, and
                 // will be stuck at a window size of 1 forever. So we take the minimum
                 // of the ackDelay and half our estimated RTT to be sure.
-                /** Next send time. */
+                // Next send time.
                 final long nextSendTime = lastSendTime + Math.min(ackDelay, con.getOptions().getRTT() / 2);
                 if (nextSendTime <= now) {
                     if (_log.shouldInfo())
@@ -289,7 +286,7 @@ class ConnectionPacketHandler {
                     con.ackImmediately();
                     _context.statManager().updateFrequency("stream.ack.dup.immediate");
                 } else {
-                    /** Calculated delay for ACK scheduling. */
+                    // Calculated delay for ACK scheduling.
                     final long delay = nextSendTime - now;
                     if (_log.shouldInfo())
                         _log.info("Scheduling ACK in " + delay);
@@ -390,7 +387,7 @@ class ConnectionPacketHandler {
             return false;
 
         boolean lastPacketAcked = false;
-        /** Received ack. */
+        // Received ack.
         final boolean receivedAck = con.getOptions().receivedAck();
         if ((acked != null) && (!acked.isEmpty())) {
             if (_log.shouldDebug())
@@ -402,7 +399,7 @@ class ConnectionPacketHandler {
             for (int i = 0; i < acked.size(); i++) {
                 PacketLocal p = acked.get(i);
 
-                /** Num sends. */
+                // Num sends.
                 final int numSends = p.getNumSends();
                 // Send-based RTT sample: time between the packet's last
                 // transmission and its ACK, excluding queueing delay that would
@@ -697,16 +694,15 @@ class ConnectionPacketHandler {
 
     /**
      * Make sure this RST packet is valid, and if it is, act on it.
-     *
-     * Prior to 0.9.20, the reset packet must contain a FROM field,
-     * and we used that for verification.
-     * As of 0.9.20, we correctly use the connection's remote peer.
+     * The destination is verified against the connection's own remote peer, so
+     * a reset arriving on an established stream is checked against the peer we
+     * actually negotiated with, not against a FROM field in the packet.
      *
      * @param con non-null
      */
     private void verifyReset(Packet packet, Connection con) {
         if (con.getReceiveStreamId() == packet.getSendStreamId()) {
-            // check dest. match since 0.9.41
+            // check dest. match
             Destination d1 = con.getRemotePeer();
             Destination d2 = packet.getOptionalFrom();
             if (d1 != null && d2 != null && !d1.equals(d2)) {
@@ -747,7 +743,8 @@ class ConnectionPacketHandler {
      * @throws I2PException if the signature was necessary and it was invalid
      */
     private void verifySignature(Packet packet, Connection con) throws I2PException {
-        // check dest. match since 0.9.41
+        // a packet claiming a different FROM than the connection's remote peer
+        // is dropped before the signature is even considered
         Destination d1 = con.getRemotePeer();
         Destination d2 = packet.getOptionalFrom();
         if (d1 != null && d2 != null && !d1.equals(d2)) {
