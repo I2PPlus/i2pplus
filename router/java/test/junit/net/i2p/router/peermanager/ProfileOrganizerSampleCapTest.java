@@ -11,6 +11,9 @@ import org.junit.Test;
  *
  * <p>Scanning all ~670 tier peers per selection was a CPU hot path;
  * a 20× sample preserves selection quality while cutting gate checks.
+ * The 64-peer floor is what breaks the old stable-iteration clique:
+ * the cap used to drop to 20, so every hop of every tunnel drew from the
+ * same 20 peers and the rest of a 1000-peer tier was never examined.
  *
  * @since 0.9.71+
  */
@@ -23,17 +26,19 @@ public class ProfileOrganizerSampleCapTest {
     }
 
     @Test
-    public void testFloorOfTwenty() {
-        // howMany=1 → 20; peer tier smaller than floor is fully scanned
-        assertEquals(20, ProfileOrganizer.maxCandidateSample(1, 670));
+    public void testFloorOfSixtyFour() {
+        // 1 hop -> 20x is below the floor, so the floor applies
+        assertEquals(64, ProfileOrganizer.maxCandidateSample(1, 670));
+        // a tier smaller than the floor is fully scanned
         assertEquals(15, ProfileOrganizer.maxCandidateSample(1, 15));
         assertEquals(1, ProfileOrganizer.maxCandidateSample(1, 1));
     }
 
     @Test
     public void testScalesWithHowMany() {
-        assertEquals(40, ProfileOrganizer.maxCandidateSample(2, 670));
-        assertEquals(60, ProfileOrganizer.maxCandidateSample(3, 670));
+        // 2x20 and 3x20 are still under the floor; 10 hops is not
+        assertEquals(64, ProfileOrganizer.maxCandidateSample(2, 670));
+        assertEquals(64, ProfileOrganizer.maxCandidateSample(3, 670));
         assertEquals(200, ProfileOrganizer.maxCandidateSample(10, 670));
     }
 
@@ -45,14 +50,14 @@ public class ProfileOrganizerSampleCapTest {
 
     @Test
     public void testNonPositiveHowManyStillGetsFloor() {
-        assertEquals(20, ProfileOrganizer.maxCandidateSample(0, 670));
-        assertEquals(20, ProfileOrganizer.maxCandidateSample(-3, 670));
+        assertEquals(64, ProfileOrganizer.maxCandidateSample(0, 670));
+        assertEquals(64, ProfileOrganizer.maxCandidateSample(-3, 670));
     }
 
     @Test
     public void testTypicalFastTierIsMuchSmallerThanFullScan() {
         int cap = ProfileOrganizer.maxCandidateSample(3, 670);
-        assertEquals(60, cap);
+        assertEquals(64, cap);
         assertTrue(cap < 670);
         // At least 10× fewer gate checks than a full 670-peer scan
         assertTrue(670 / cap >= 10);

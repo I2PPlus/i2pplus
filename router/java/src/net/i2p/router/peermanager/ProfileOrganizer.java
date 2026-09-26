@@ -368,6 +368,14 @@ public class ProfileOrganizer {
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
 
     /**
+     *  Timestamp of the last starved-tier warning; selections hold only the read
+     *  lock, so this is read and written concurrently.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile long _lastStarveWarn;
+
+    /**
      * Creates a profile organizer with empty tier maps and registers
      * performance tracking statistics for peer classification.
      *
@@ -2343,11 +2351,37 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Minimum candidates to gate-check for a single-peer selection.  The sample
+     *  is the per-attempt lottery size, not the whole reachable set: the scan
+     *  start is rotated (see {@link #locked_selectPeers}) so selections are
+     *  spread across the tier instead of re-examining its first few entries.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int MIN_CANDIDATE_SAMPLE = 64;
+
+    /**
+     *  Minimum delay between "tier returned no candidates" warnings.  A starved
+     *  tier is the signal that one gate is rejecting everything, so the warning
+     *  carries the per-gate counts; it must not flood the log while starvation
+     *  persists across build passes.
+     *
+     *  @since 0.9.71+
+     */
+    private static final long STARVE_WARN_INTERVAL_MS = 60 * 1000;
+
+    /**
      *  Cap on how many tier peers to gate-check when selecting {@code howMany}
      *  tunnels.  Scanning all ~670 fast peers per selection was a CPU hot path;
-     *  a 20× sample (min 20) gives locked_pickLowestPriority enough diversity
-     *  while cutting work ~10× on large tiers.  A 10× sample was tried first
-     *  and hurt build success (synchronized collapse), so 20× is the floor.
+     *  a 20× sample (min 20) cut work ~10× on large tiers but, because HashMap
+     *  iteration order is stable, every selection examined the same prefix of
+     *  the tier — the rest of it stayed unreachable while that prefix kept
+     *  passing, so tier size never became choice.  With the scan start rotated,
+     *  the sample is the size of one attempt's lottery: 64 gives
+     *  locked_pickLowestPriority a real low-latency pick while remaining an
+     *  order of magnitude cheaper than a full tier scan.  A 10× sample was tried
+     *  before the original 20× and hurt build success, so the 20× multiplier for
+     *  larger requests is kept.
      *
      *  @param howMany tunnels requested (may be 0 or negative)
      *  @param peerCount size of the tier map (may be 0)
@@ -2358,40 +2392,118 @@ public class ProfileOrganizer {
         if (peerCount <= 0)
             return 0;
         int need = Math.max(howMany, 1) * 20;
-        return Math.min(peerCount, Math.max(need, 20));
+        return Math.min(peerCount, Math.max(need, MIN_CANDIDATE_SAMPLE));
     }
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess,
                                     long rttCeiling) {
-        // Peers in the tier map were already vetted by isSelectable at tier-entry time.
-        // Re-checking isSelectable (which calls hasValidRouterInfo with proof-of-life)
-        // at selection time filters out too many peers due to stale RouterInfo.
-        // Only check fast-changing gates: banlist, first-hop cooldown, excessive lifetime failures.
-        int maxCandidates = maxCandidateSample(howMany, peers.size());
-        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(maxCandidates);
-        for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
-            if (candidates.size() >= maxCandidates) break;
+        locked_selectPeers(peers, howMany, toExclude, matches, null, null, mask, ipSet, buildSuccess, rttCeiling);
+    }
+
+    /**
+     *  Collects up to {@link #maxCandidateSample} candidates from a tier and hands them to
+     *  {@link #locked_pickLowestPriority}.
+     *
+     *  <p>The scan start is a random offset into the tier.  Tier maps are plain
+     *  HashMaps, so iteration order is stable across calls; without the offset
+     *  every hop of every pool examined the same prefix, which both starved the
+     *  rest of the tier and piled "too many tunnels" onto the same few peers.
+     *  Peers in the tier were already vetted by isSelectable at tier-entry time,
+     *  so only fast-changing gates are re-checked here (banlist, ghosts,
+     *  first-hop cooldown, lifetime failures) rather than full proof-of-life,
+     *  which would reject too many peers on stale RouterInfo.
+     *
+     *  @param peers tier to scan; must be a field map so the starved warning can name it
+     *  @param howMany peers requested
+     *  @param toExclude live exclusion set, mutated with peers rejected by a hard gate
+     *  @param matches output set, already holding any previously selected peers
+     *  @param randomKey sub-tier slice key, or null to skip slicing
+     *  @param subTierMode sub-tier mask, or null to skip slicing
+     *  @param mask IP /n diversity restriction, 0 to disable
+     *  @param ipSet mutable subnet set, null when mask is 0
+     *  @param buildSuccess build success ratio fetched once by the caller
+     *  @param rttCeiling soft ceiling; peers above it are skipped, never excluded
+     */
+    private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
+                                    Set<Hash> matches, SessionKey randomKey, Slice subTierMode,
+                                    int mask, MaskedIPSet ipSet, double buildSuccess, long rttCeiling) {
+        int peerCount = peers.size();
+        if (peerCount == 0)
+            return;
+        int maxCandidates = maxCandidateSample(howMany, peerCount);
+        long k0 = 0;
+        long k1 = 0;
+        if (subTierMode != null) {
+            byte[] rk = randomKey.getData();
+            k0 = DataHelper.fromLong8(rk, 0);
+            k1 = DataHelper.fromLong8(rk, 8);
+        }
+
+        int start = peerCount > maxCandidates ? _context.random().nextInt(peerCount) : 0;
+        List<Map.Entry<Hash, PeerProfile>> candidates =
+                new ArrayList<Map.Entry<Hash, PeerProfile>>(Math.min(maxCandidates, peerCount));
+        int examined = 0;
+        int skipExcluded = 0;
+        int skipPicked = 0;
+        int skipGated = 0;
+        int skipSliced = 0;
+        int skipIp = 0;
+        int skipRtt = 0;
+
+        Iterator<Map.Entry<Hash, PeerProfile>> it = peers.entrySet().iterator();
+        for (int i = 0; i < start && it.hasNext(); i++)
+            it.next();
+        // Examine at most peerCount entries so the window wraps once and covers
+        // the whole tier exactly once, whichever entry it started from.
+        while (examined < peerCount) {
+            if (candidates.size() >= maxCandidates)
+                break;
+            if (!it.hasNext())
+                it = peers.entrySet().iterator();
+            if (!it.hasNext())
+                break;
+            Map.Entry<Hash, PeerProfile> entry = it.next();
+            examined++;
             Hash peer = entry.getKey();
-            if (toExclude != null && toExclude.contains(peer)) continue;
-            if (matches.contains(peer)) continue;
-            if (_us != null && _us.equals(peer)) continue;
+            if (toExclude != null && toExclude.contains(peer)) {
+                skipExcluded++;
+                continue;
+            }
+            if (matches.contains(peer) || (_us != null && _us.equals(peer))) {
+                skipPicked++;
+                continue;
+            }
+            if (subTierMode != null && (getSubTier(peer, k0, k1) & subTierMode.mask) != subTierMode.val) {
+                skipSliced++;
+                continue;
+            }
             if (!passesBasicGates(peer)) {
                 if (toExclude != null) toExclude.add(peer);
+                skipGated++;
                 continue;
             }
             if (hasExcessiveLifetimeFailures(peer)) {
                 if (toExclude != null) toExclude.add(peer);
+                skipGated++;
                 continue;
             }
-            if (mask > 0 && !notRestricted(peer, ipSet, mask)) continue;
+            if (mask > 0 && !notRestricted(peer, ipSet, mask)) {
+                skipIp++;
+                continue;
+            }
             if (aboveRttCeiling(entry.getValue(), rttCeiling)) {
-                // Don't add to toExclude — RTT is a soft signal, not a hard
-                // gate.  Filling the 384-cap Excluder with RTT-only skips
-                // evicts more useful entries (too-many-tunnels, etc.).
+                // Don't add to toExclude — RTT is a soft signal, not a hard gate.
+                // Filling the Excluder with RTT-only skips evicts more useful
+                // entries (too-many-tunnels, etc.).
+                skipRtt++;
                 continue;
             }
             candidates.add(entry);
+        }
+
+        if (candidates.isEmpty() && howMany > 0 && examined > 0 && skipExcluded + skipGated + skipIp + skipRtt > 0) {
+            warnTierStarved(peers, examined, skipExcluded, skipGated, skipSliced, skipIp, skipRtt);
         }
 
         // Select with random priority proportional to latency:
@@ -2401,48 +2513,34 @@ public class ProfileOrganizer {
         locked_pickLowestPriority(candidates, howMany, matches);
     }
 
-    private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
-                                    Set<Hash> matches, SessionKey randomKey, Slice subTierMode,
-                                    int mask, MaskedIPSet ipSet, double buildSuccess,
-                                    long rttCeiling) {
-        byte[] rk = randomKey.getData();
-        long k0 = DataHelper.fromLong8(rk, 0);
-        long k1 = DataHelper.fromLong8(rk, 8);
-
-        // Build candidate list with subTier filtering
-        int maxCandidates2 = maxCandidateSample(howMany, peers.size());
-        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(maxCandidates2);
-        for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
-            if (candidates.size() >= maxCandidates2) break;
-            Hash peer = entry.getKey();
-            if (toExclude != null && toExclude.contains(peer)) continue;
-            if (matches.contains(peer)) continue;
-            if (_us != null && _us.equals(peer)) continue;
-
-            int subTier = getSubTier(peer, k0, k1);
-            if ((subTier & subTierMode.mask) != subTierMode.val) continue;
-
-            if (!passesBasicGates(peer)) {
-                if (toExclude != null) toExclude.add(peer);
-                continue;
-            }
-            if (hasExcessiveLifetimeFailures(peer)) {
-                if (toExclude != null) toExclude.add(peer);
-                continue;
-            }
-            if (mask > 0 && !notRestricted(peer, ipSet, mask)) continue;
-            if (aboveRttCeiling(entry.getValue(), rttCeiling)) {
-                // Don't add to toExclude — RTT is a soft signal, not a hard
-                // gate.  See note in first overload.
-                continue;
-            }
-
-            candidates.add(entry);
+    /**
+     *  Rate-limited warning naming the gate that emptied a tier scan.  A tier
+     *  reporting zero candidates is invisible upstream — the caller just falls
+     *  through to the next tier — so without this a 1000-peer tier rejected by a
+     *  single gate looks identical to genuine scarcity.
+     *
+     *  @param peers the tier that produced no candidates
+     *  @param examined entries walked before giving up
+     *  @param skipExcluded rejected by the live exclusion set
+     *  @param skipGated rejected by a hard gate (ban, ghost, first-hop, lifetime failures)
+     *  @param skipSliced rejected by the sub-tier slice
+     *  @param skipIp rejected by IP diversity
+     *  @param skipRtt above the adaptive RTT ceiling
+     *  @since 0.9.71+
+     */
+    private void warnTierStarved(Map<Hash, PeerProfile> peers, int examined, int skipExcluded, int skipGated,
+                                 int skipSliced, int skipIp, int skipRtt) {
+        long now = System.currentTimeMillis();
+        if (now - _lastStarveWarn < STARVE_WARN_INTERVAL_MS)
+            return;
+        _lastStarveWarn = now;
+        if (_log.shouldWarn()) {
+            String tier = peers == _fastPeers ? "fast"
+                          : peers == _highCapacityPeers ? "highcapacity" : "tier";
+            _log.warn("Peer " + tier + " tier returned no candidates after " + examined +
+                      " examined (excluded=" + skipExcluded + " gated=" + skipGated +
+                      " subtier=" + skipSliced + " ip=" + skipIp + " rtt=" + skipRtt + ")");
         }
-
-        // Select with random priority proportional to latency. Moderately-lossy peers
-        // get their range widened so they are picked only after the clean peers.
-        locked_pickLowestPriority(candidates, howMany, matches);
     }
 
     /**
@@ -2539,6 +2637,16 @@ public class ProfileOrganizer {
      */
     private boolean passesBasicGates(Hash peer) {
         if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) return false;
+        // Ghost peers are rejected here rather than filtered after selection:
+        // a candidate slot spent on a peer that only times out on builds is a
+        // slot not spent on one that can complete, and a post-selection filter
+        // has no replacement left to offer.  Cheap ConcurrentHashMap lookup,
+        // and ghosts already never enter the fast/high-cap tiers on promotion.
+        TunnelManagerFacade tmf = _context.tunnelManager();
+        if (tmf != null) {
+            GhostPeerManager ghostMgr = tmf.getGhostPeerManager();
+            if (ghostMgr != null && ghostMgr.isGhost(peer)) return false;
+        }
         // Exclude peers that recently failed as first hop during tunnel builds.
         // Without this, the 5-min cooldown in TunnelPeerSelector is bypassed —
         // peers are selected by the tier system, fail as first hop, cooldown
