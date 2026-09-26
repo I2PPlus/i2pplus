@@ -135,6 +135,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
             I2PSession isess = socketMgr.getSession();
             subhandler = new SAMv3Handler(handler.getClientSocket(), handler.verMajor,
                                           handler.verMinor, handler.getBridge());
+            subhandler.setAuthUser(handler.getAuthUser());
             if (style.equals("RAW")) {
                 // codeql[java/toctou-race-condition] props is a per-call argument; no shared-state check-then-act
                 if (!props.containsKey("PORT"))
