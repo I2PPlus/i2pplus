@@ -160,17 +160,8 @@ public class Main implements RouterApp, NotificationService {
      *  Unless we do this, when we start DesktopGUI we get a Java coffee cup
      *  in the tray.
      *
-     *  Based on code from https://gist.github.com/bchapuis/1562406 , no apparent license.
-     *  See also https://stackoverflow.com/questions/6006173/how-do-you-change-the-dock-icon-of-a-java-program
-     *
-     *  TODO, if we wanted to add our own menu, see
-     *  https://stackoverflow.com/questions/1319805/java-os-x-dock-menu
-     *
-     *  TODO, if we want to make it bounce, see
-     *  https://stackoverflow.com/questions/15079783/how-to-make-my-app-icon-bounce-in-the-mac-dock
-     *
-     *  TODO, if we want to handle Quit, see
-     *  https://nakkaya.com/2009/04/19/java-osx-integration/
+     *  Same implementation as {@link ExternalMain}, which carries the
+     *  canonical macOS notes.
      *
      *  @since 0.9.33
      */

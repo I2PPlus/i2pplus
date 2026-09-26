@@ -114,19 +114,17 @@ public class ExternalMain implements ClientApp, NotificationService {
 
     /**
      *  Unless we do this, when we start DesktopGUI we get a Java coffee cup
-     *  in the tray.
+     *  in the tray. The icon is set by reflection, so there is no compile or
+     *  runtime dependency on the macOS-only eawt classes; every failure is
+     *  logged and otherwise ignored, since this is cosmetic.
+     *
+     *  This is the canonical documentation of the macOS integration:
+     *  {@link Main} has a copy of this method. The dock menu, dock icon
+     *  bounce and application Quit handling are not supported, and no code
+     *  for them exists.
      *
      *  Based on code from https://gist.github.com/bchapuis/1562406 , no apparent license.
      *  See also https://stackoverflow.com/questions/6006173/how-do-you-change-the-dock-icon-of-a-java-program
-     *
-     *  TODO, if we wanted to add our own menu, see
-     *  https://stackoverflow.com/questions/1319805/java-os-x-dock-menu
-     *
-     *  TODO, if we want to make it bounce, see
-     *  https://stackoverflow.com/questions/15079783/how-to-make-my-app-icon-bounce-in-the-mac-dock
-     *
-     *  TODO, if we want to handle Quit, see
-     *  https://nakkaya.com/2009/04/19/java-osx-integration/
      *
      *  @since 0.9.33
      */

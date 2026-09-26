@@ -45,14 +45,8 @@ abstract class TrayManager {
      */
     protected final boolean _useSwing;
     ///The tray area, or null if unsupported
-    /**
-     * tray.
-     */
     protected SystemTray tray;
     ///Our tray icon, or null if unsupported
-    /**
-     * trayIcon.
-     */
     protected TrayIcon trayIcon;
     /**
      * _showNotifications.
@@ -161,28 +155,13 @@ abstract class TrayManager {
         frame.add(menu);
         TrayIcon ti = new TrayIcon(getTrayImage(), tooltip, null);
         ti.addMouseListener(new MouseListener() {
-            /**
-             * mouseClicked.
-             */
             @Override
             public void mouseClicked(MouseEvent e)  { /* no-op */ }
-            /**
-             * mouseEntered.
-             */
             @Override
             public void mouseEntered(MouseEvent e)  { /* no-op */ }
-            /**
-             * mouseExited.
-             */
             @Override
             public void mouseExited(MouseEvent e)   { /* no-op */ }
-            /**
-             * mousePressed.
-             */
             public void mousePressed(MouseEvent e)  { handle(e); }
-            /**
-             * mouseReleased.
-             */
             @Override
             public void mouseReleased(MouseEvent e) { handle(e); }
             private void handle(MouseEvent e) {
@@ -195,48 +174,24 @@ abstract class TrayManager {
             }
         });
         menu.addPopupMenuListener(new PopupMenuListener() {
-            /**
-             * popupMenuCanceled.
-             */
             @Override
             public void popupMenuCanceled(PopupMenuEvent e)            { /* no-op */ }
-            /**
-             * popupMenuWillBecomeInvisible.
-             */
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { frame.setVisible(false); }
-            /**
-             * popupMenuWillBecomeVisible.
-             */
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)   { /* no-op */ }
         });
         menu.addFocusListener(new FocusListener() {
-            /**
-             * focusGained.
-             */
             @Override
             public void focusGained(FocusEvent e) { /* no-op */ }
-            /**
-             * focusLost.
-             */
             @Override
             public void focusLost(FocusEvent e)   { frame.setVisible(false); }
         });
         menu.addMenuKeyListener(new MenuKeyListener() {
-            /**
-             * menuKeyPressed.
-             */
             @Override
             public void menuKeyPressed(MenuKeyEvent e)  { /* no-op */ }
-            /**
-             * menuKeyReleased.
-             */
             @Override
             public void menuKeyReleased(MenuKeyEvent e) { /* no-op */ }
-            /**
-             * menuKeyTyped.
-             */
             @Override
             public void menuKeyTyped(MenuKeyEvent e)    {
                 if (e.getKeyChar() == (char) 0x1b)
@@ -353,15 +308,9 @@ abstract class TrayManager {
     protected void initializeNotificationItems() {
         final MenuItem notificationItem2 = new MenuItem(_t("Enable notifications"));
         notificationItem2.addActionListener(new ActionListener() {
-            /**
-             * actionPerformed.
-             */
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 new SwingWorker<Object, Object>() {
-                    /**
-                     * doInBackground.
-                     */
                     @Override
                     protected Object doInBackground() throws Exception {
                         configureNotifications(true);
@@ -374,15 +323,9 @@ abstract class TrayManager {
 
         final MenuItem notificationItem1 = new MenuItem(_t("Disable notifications"));
         notificationItem1.addActionListener(new ActionListener() {
-            /**
-             * actionPerformed.
-             */
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 new SwingWorker<Object, Object>() {
-                    /**
-                     * doInBackground.
-                     */
                     @Override
                     protected Object doInBackground() throws Exception {
                         configureNotifications(false);
@@ -402,15 +345,9 @@ abstract class TrayManager {
     protected void initializeJNotificationItems() {
         final JMenuItem notificationItem2 = new JMenuItem(_t("Enable notifications"));
         notificationItem2.addActionListener(new ActionListener() {
-            /**
-             * actionPerformed.
-             */
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 new SwingWorker<Object, Object>() {
-                    /**
-                     * doInBackground.
-                     */
                     @Override
                     protected Object doInBackground() throws Exception {
                         configureNotifications(true);
@@ -423,15 +360,9 @@ abstract class TrayManager {
 
         final JMenuItem notificationItem1 = new JMenuItem(_t("Disable notifications"));
         notificationItem1.addActionListener(new ActionListener() {
-            /**
-             * actionPerformed.
-             */
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 new SwingWorker<Object, Object>() {
-                    /**
-                     * doInBackground.
-                     */
                     @Override
                     protected Object doInBackground() throws Exception {
                         configureNotifications(false);
