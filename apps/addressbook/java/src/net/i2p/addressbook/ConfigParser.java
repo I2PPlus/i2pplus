@@ -268,7 +268,7 @@ class ConfigParser {
             if (!success) {tmp.delete();}
         }
         if (!success) {
-            // hmm, that didn't work, try it the old way
+            // the rename failed, fall back to writing in place
             write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8)));
         }
     }

@@ -717,7 +717,12 @@ public class BlockfileNamingService extends DummyNamingService {
      * @param hostname upper/lower case ok
      * @param lookupOptions If non-null and contains the key "list", lookup in
      *                that list only, otherwise all lists
-     * @param storedOptions options for persisting the result (unused)
+     * @param storedOptions output parameter, may be null. If non-null, the
+     *                properties stored with the entry ("a" date added, "s"
+     *                source, and any options given when the name was added)
+     *                are added to it when the name is found. A non-null value
+     *                also disables the Base32 cache, since the cache does not
+     *                retain the stored properties.
      * @return the destination, or null if not found
      */
     @Override

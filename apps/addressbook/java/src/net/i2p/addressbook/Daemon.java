@@ -239,9 +239,15 @@ public class Daemon {
                                                                " [" + addressbook.getLocation() + "]");
                                             }
                                             // now update the published addressbook
-                                            // ditto
                                             if (publishedNS != null) {
-                                                // FIXME this fails, no support in SFNS
+                                                // A published addressbook holds one
+                                                // destination per key, and this is an
+                                                // additional destination for a key that is
+                                                // already there, so addDestination()
+                                                // (putIfAbsent()) always fails here and is
+                                                // reported to the user. Replacing the entry
+                                                // would be wrong, so the additional
+                                                // destination is not published.
                                                 success = publishedNS.addDestination(key, dest, props);
                                                 if (log != null && !success)
                                                     log.append("Failed to add " + key + " to published addressbook [" + publishedNS.getName() + "]");
