@@ -1720,6 +1720,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.58
      */
     protected class Excluder extends ExcluderBase {
+        /**
+         *  Cap on classified exclusions.  Bulk-loaded diversity entries carry no
+         *  reason and are therefore never evicted; only reasoned entries are
+         *  bounded, oldest first.
+         */
         private static final int MAX_EXCLUDED_PEERS = 384;
 
         private final boolean _isIn;
@@ -1803,12 +1808,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (reason != null) {
                 s.add(h);
                 recordExclusion(h, reason);
-                if (s.size() > MAX_EXCLUDED_PEERS) {
-                    Iterator<Hash> it = s.iterator();
+                // Bound the *classified* exclusions by evicting the oldest
+                // reason, never the head of the underlying set.  Bulk-loaded
+                // entries (too-many-tunnels, pool and cross-pool diversity) are
+                // added without a reason, so head-of-set eviction silently
+                // dropped exactly those diversity guarantees — and did so first,
+                // when exclusion pressure was highest.
+                if (_reasons.size() > MAX_EXCLUDED_PEERS) {
+                    Iterator<Map.Entry<Hash, String>> it = _reasons.entrySet().iterator();
                     if (it.hasNext()) {
-                        Hash evicted = it.next();
+                        Hash evicted = it.next().getKey();
                         it.remove();
-                        _reasons.remove(evicted);
+                        s.remove(evicted);
                     }
                 }
                 return true;
