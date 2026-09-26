@@ -350,7 +350,7 @@ class ProfilePersistenceHelper {
  *
  * @since 0.9.4
  */
-    private void migrate(File[] files) { // NOSONAR S3012: called on line 271
+    private void migrate(File[] files) { // NOSONAR S3012: called from selectFiles()
         for (int i = 0; i < files.length; i++) {
             File from = files[i];
             if (!from.isFile()) {continue;}

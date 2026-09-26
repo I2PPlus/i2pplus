@@ -87,8 +87,13 @@ class LookupThrottler {
         CLEAN_TIME = cleanTime;
         this.counter = new ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>>();
         this.burstTimestamps = new LinkedHashMap<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>>() {
+            /**
+             * Evict the eldest Hash entry once the map exceeds MAX_ENTRIES.
+             *
+             * @param eldest the least recently used entry
+             * @return true to evict
+             */
             @Override
-            /** Remove eldest entry */
             protected boolean removeEldestEntry(Map.Entry<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> eldest) {
                 // Evict the eldest Hash entry to stay bounded.
                 // Cap is on unique Hash keys (not per-tunnel entries).
@@ -165,8 +170,11 @@ class LookupThrottler {
     private class Cleaner extends SimpleTimer2.TimedEvent {
         /** Schedule cleanup on the shared timer. */
         public Cleaner() { super(SimpleTimer2.getInstance()); }
+        /**
+         * Clear the burst and counting tables, then resample the throttle
+         * ceiling in case floodfill status changed.
+         */
         @Override
-        /** Time reached */
         public void timeReached() {
             int size;
             synchronized (burstTimestamps) {

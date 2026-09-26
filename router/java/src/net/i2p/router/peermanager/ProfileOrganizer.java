@@ -245,13 +245,6 @@ public class ProfileOrganizer {
      * have never participated in a real tunnel are excluded.
      * @since 0.9.71+
      */
-    /**
-     * When fast tier has at least this many peers, require all tests
-     * passing — peer test (low latency), active, no recent failures,
-     * AND proven tunnel throughput.  Peers that are low-latency but
-     * have never participated in a real tunnel are excluded.
-     * @since 0.9.71+
-     */
     private static final int MIN_FAST_QUALITY_COUNT = 300;
 
     /** Config property for the loss ratio above which a peer is demoted from fast/high-cap tiers. */
@@ -1305,11 +1298,11 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Run a standard reorganize round without coalescing or decay.
-     * Equivalent to reorganize(false, false).
+     * Run a standard reorganize round without coalescing.
+     * Equivalent to reorganize(false).
      */
     void reorganize() {
-        reorganize(false, false);
+        reorganize(false);
     }
 
     /**
@@ -1317,7 +1310,8 @@ public class ProfileOrganizer {
      * <p>
      * This method:
      * <ul>
-     *   <li>Coalesces and decays stats if requested and uptime conditions are met.</li>
+     *   <li>Coalesces stats if requested and uptime conditions are met. Peak
+     *       throughput values are never decayed.</li>
      *   <li>Filters out unreachable, inactive, or low-tier peers.</li>
      *   <li>Recalculates dynamic thresholds for speed, capacity, and integration.</li>
      *   <li>Rebuilds internal tier maps and the global profile ordering.</li>
@@ -1330,9 +1324,8 @@ public class ProfileOrganizer {
      * write lock to mitigate leaks during high contention.
      *
      * @param shouldCoalesce if {@code true}, coalesce statistics for active profiles
-     * @param shouldDecay if {@code true} and coalescing is performed, apply decay to historical stats
      */
-    void reorganize(boolean shouldCoalesce, boolean shouldDecay) {
+    void reorganize(boolean shouldCoalesce) {
         final long now = _context.clock().now();
         final long start = System.currentTimeMillis();
 
@@ -1370,7 +1363,7 @@ public class ProfileOrganizer {
                     long lastSend = prof.getLastSendSuccessful();
                     long expireWindow = lastSend > 0 ? expireActive : expirePassive;
                     if (lastSend >= now - expireWindow) {
-                        prof.coalesceOnly(shouldDecay);
+                        prof.coalesceOnly();
                     }
                 }
             } finally {
@@ -2294,21 +2287,14 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Check if a peer is high-bandwidth capable (X, P, or O tier) and
-     *  not degraded (no D/E congestion caps, no G no-tunnels cap).
-     *  These peers are eligible for fast-tier fast-track regardless of
-     *  measured throughput — bandwidth tier is a fact about the peer,
-     *  not an observation that can erode over time.
-     *
-     *  @param peer the peer hash
-     *  @return true if the peer is X/P/O and not degraded
-     *  @since 0.9.71+
-     */
-    /**
      *  Whether the peer qualifies for the high-capacity tier based on
      *  advertised bandwidth tier and capabilities.  Requires X/P/O bandwidth
      *  tier and no D (congestion), E (severe congestion), G (no tunnels),
      *  or U (firewalled/unreachable) capability flags.
+     *
+     *  <p>Bandwidth tier is a fact about the peer rather than an observation
+     *  that can erode, so these peers are eligible for fast-tier fast-track
+     *  regardless of measured throughput.
      *
      *  @param peer the peer to check
      *  @return true if X/P/O tier and no D/E/G/U caps

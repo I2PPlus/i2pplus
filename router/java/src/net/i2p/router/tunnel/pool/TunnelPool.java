@@ -4679,10 +4679,14 @@ public class TunnelPool {
      *  getUsableTunnelCount() while failing every data-phase send, so the
      *  long gate would starve replacements during a half-open outage.
      *
+     *  <p>Compatibility overload: callers that only have a single usable count
+     *  treat it as both usable and healthy. See
+     *  {@link #isEnsureThrottled(long, long, int, int, boolean)} for the full
+     *  policy.
+     *
      *  @param now current router time (ms)
      *  @param lastEnsure last ensure timestamp (ms), 0 if never
      *  @param usableTunnelCount current usable tunnel count (includes soft-degraded)
-     *  @param healthyCount usable tunnels below {@link #SOFT_DEGRADED_FOR_ENSURE}
      *  @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
      *  @return true if ensureSufficientTunnels() should return early
      *  @since 0.9.71+

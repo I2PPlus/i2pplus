@@ -73,7 +73,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB */
     private byte[] _curEncrypted;
     /** Alice's RouterIdentity, set after gotRI() validation succeeds */
-    private RouterIdentity _aliceIdent; // NOSONAR S1450: used on lines 958-959, 1073
+    private RouterIdentity _aliceIdent; // NOSONAR S1450: set and read in gotRI()
     /** Flag to ensure releaseBufs() is called only once */
     private volatile boolean _released;
 

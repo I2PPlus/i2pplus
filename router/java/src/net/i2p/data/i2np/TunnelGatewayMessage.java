@@ -142,19 +142,20 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
                                            " but remaining bytes: " + Math.min(data.length - curIndex, dataSize - 6));
         }
 
-        // OLD WAY full message parsing and instantiation
-        //handler.readMessage(data, curIndex);
-
-        // NEW WAY save lots of effort at the IBGW by reading as an UnknownI2NPMessage instead
-        // This will save a lot of object churn and processing,
-        // primarily for unencrypted msgs (V)TBRM, DatabaseStoreMessage, and DSRMs.
-        // DatabaseStoreMessages in particluar are intensive for readBytes()
-        // since the RI is decompressed.
-        // For a zero-hop IB tunnel, where we do need the real thing,
-        // it is converted to a real message class in TunnelGatewayZeroHop
-        // using UnknownI2NPMessage.convert() in TunnelGatewayZeroHop.
-        // We also skip processing the checksum as it's covered by the TGM checksum.
-        // If a zero-hop, the checksum will be verified in convert().
+        // The embedded I2NP message is held as an UnknownI2NPMessage rather
+        // than parsed into its concrete class. At the IBGW this saves a lot of
+        // object churn and processing, primarily for the unencrypted messages
+        // that arrive in bulk: (V)TBRM, DatabaseStoreMessage, and DSRMs.
+        // DatabaseStoreMessage is the worst case, because readBytes() has to
+        // decompress the RouterInfo.
+        //
+        // A zero-hop IB tunnel is the exception: it does need the real message,
+        // and TunnelGatewayZeroHop converts this UnknownI2NPMessage in place
+        // with UnknownI2NPMessage.convert().
+        //
+        // The message checksum is not verified here either, because the
+        // enclosing TunnelGatewayMessage checksum already covers it. For a
+        // zero-hop tunnel, convert() performs that verification.
         int utype = data[curIndex++] & 0xff;
         UnknownI2NPMessage umsg = new UnknownI2NPMessage(_context, utype);
         umsg.readBytes(data, utype, curIndex);

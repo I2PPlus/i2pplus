@@ -520,7 +520,13 @@ class ClientManager {
         /**
          * Distribute a message from one client connection directly to another.
          *
-         * @param msgId the router's ID for this message
+         * @param ctx the router context
+         * @param toDest the destination being sent to
+         * @param to the client connection the message goes to
+         * @param from the client connection the message came from
+         * @param fromDest the destination the message came from
+         * @param payload the message payload
+         * @param id the router's ID for this message
          * @param messageNonce the client's ID for this message
          */
         public DistributeLocal(RouterContext ctx, Destination toDest, ClientConnectionRunner to, ClientConnectionRunner from,

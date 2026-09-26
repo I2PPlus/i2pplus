@@ -766,7 +766,7 @@ public abstract class BuildRequestor {
     /**
      * Approach 2: Fire-and-forget fallback — attempt to establish
      * the transport session and retry the build once.  Called from
-     * {@link TunnelBuildFirstHopFailJob} when the first hop has no
+     * {@code TunnelBuildFirstHopFailJob} when the first hop has no
      * established or connecting transport session.
      * <p>
      * Calls {@link TunnelPeerSelector#preConnectTo} to force the

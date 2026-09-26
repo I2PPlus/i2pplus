@@ -165,7 +165,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 150*1000L;  // 2.5 minutes
 
     /** Singleton job to refresh client LeaseSets - only one instance exists */
-    private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob; // NOSONAR S1450: used on lines 483-485
+    private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob; // NOSONAR S1450: created and queued in startup()
 
     /**
      * Map of remote destination Hash to last access time for LeaseSets we're using as a client.
@@ -523,8 +523,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return _dbid != FloodfillNetworkDatabaseSegmentor.MAIN_DBID;
     }
 
+    /**
+     * Open the backing store, build the KBuckets, and prime the negative cache
+     * and the recurring expiry, refresh, and exploration jobs. Called once by
+     * the router at startup.
+     *
+     * @throws RuntimeException if the on-disk store cannot be opened
+     */
     @Override
-    /** Startup time tracking. */
     public void startup() {
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
@@ -825,8 +831,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return _ds.get(key);
     }
 
+    /**
+     *  Look up a LeaseSet, locally first.
+     *
+     *  <p>Searches remotely if the LeaseSet is not held locally, is not
+     *  negative-cached, and is not a local destination this router hosts.
+     *
+     *  @param key the LeaseSet key
+     *  @param onFindJob run if the LeaseSet is found locally or in the search, may be null
+     *  @param onFailedLookupJob run if the lookup cannot be attempted or fails, may be null
+     *  @param timeoutMs how long to wait for the search before failing
+     */
     @Override
-    /** Lookup lease set */
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         lookupLeaseSet(key, onFindJob, onFailedLookupJob, timeoutMs, null);
     }
@@ -835,10 +851,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Lookup using the client's tunnels
      *  Use lookupDestination() if you don't need the LS or don't need it validated.
      *
+     *  <p>A negative-cached key is not searched again: the failure job is run
+     *  instead. A client sub-NetDb local miss for a destination this router
+     *  hosts also fails without a search, since only the main NetDb holds such
+     *  a LeaseSet.
+     *
+     *  @param key the LeaseSet key
+     *  @param onFindJob run if the LeaseSet is found locally or in the search, may be null
+     *  @param onFailedLookupJob run if the router is uninitialized, the key is
+     *                           negative-cached, or the search fails, may be null
+     *  @param timeoutMs how long to wait for the search before failing
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
-    /** Lookup lease set. Fires onFailed if the router is not yet initialized. */
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob,
                                long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) {
@@ -920,14 +945,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Unconditionally lookup using the client's tunnels.
-     *  No success or failed jobs, no local lookup, no checks.
-     *  Use this to refresh a leaseset before expiration.
+     *  Unconditionally lookup using the client's tunnels, with no jobs.
+     *  No local lookup and no LeaseSet validation. Use this to refresh a
+     *  LeaseSet before expiration.
      *
+     *  <p>The one check that does apply is the negative cache: a
+     *  negative-cached key returns without searching, since a recent search
+     *  already established that the key is unresolvable. Nothing is sent to the
+     *  caller if the router is uninitialized.
+     *
+     *  @param key the LeaseSet key
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
-    /** Lookup lease set remotely */
     public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) {
         if (!_initialized) return;
         key = blindCache().getHash(key);
@@ -938,12 +968,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      *  Unconditionally lookup using the client's tunnels.
      *
+     *  <p>Same negative-cache suppression as the two-argument overload: a
+     *  negative-cached key is not searched again and the failure job is run
+     *  instead. Nothing is searched if the router is uninitialized.
+     *
+     *  @param key the LeaseSet key
+     *  @param onFindJob run if the LeaseSet is found, may be null
+     *  @param onFailedLookupJob run if the router is uninitialized, the key is
+     *                           negative-cached, or the search fails, may be null
+     *  @param timeoutMs how long to wait for the search before failing
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @param onFindJob may be null
-     *  @param onFailedLookupJob may be null
      */
     @Override
-    /** Lookup lease set remotely. Fires onFailed if uninitialized or negative-cached. */
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
                                        long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) {
@@ -1076,11 +1112,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Note that there are not separate success and fail jobs. Caller must call
      *  lookupDestinationLocally() in the job to determine success.
      *
-     *  @param onFinishedJob non-null
+     *  <p>The finished job is also run, without any search, if the router is
+     *  uninitialized or the key is negative-cached.
+     *
+     *  @param key the destination key
+     *  @param onFinishedJob run when the lookup finishes, may not be null
+     *  @param timeoutMs how long to wait for the search before finishing
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
-    /** Lookup destination. Fires onFinished if the router is not yet initialized. */
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) {
             if (onFinishedJob != null) {_context.jobQueue().addJob(onFinishedJob);}
@@ -1157,8 +1197,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // hostile blocklists) is unconditional.
         boolean policyBanAllowed = allowPolicyBan(key);
         if (policyBanAllowed && shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-        else if (policyBanAllowed && shouldBanlistXG(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-        else if (policyBanAllowed && shouldBanlistLU(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (policyBanAllowed && shouldBanlistXG(ri)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (policyBanAllowed && shouldBanlistLU(ri)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (policyBanAllowed && shouldBanlistByCapability(ri)) {handleCustomCapabilityBan(ri, key, onFailedLookupJob);}
         else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
         else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
@@ -1218,11 +1258,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * that is neither reachable nor unreachable and the XG banlist option is enabled.
      *
      * @param ri the router info to evaluate
-     * @param key the hash of the router (unused in this method, but kept for consistency)
      * @return true if the router matches the XG banlist criteria
-     *
+     * @since 0.9.72
      */
-    private boolean shouldBanlistXG(RouterInfo ri, Hash _key) {
+    private boolean shouldBanlistXG(RouterInfo ri) {
         if (!_context.banlist().isXgBanEnabled()) return false;
         boolean isG = containsCapability(ri, Router.CAPABILITY_NO_TUNNELS);
         boolean isXTier = containsCapability(ri, Router.CAPABILITY_BW_UNLIMITED);
@@ -1238,11 +1277,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * This is typically used to filter out low-performing routers.
      *
      * @param ri the router info to evaluate
-     * @param key the hash of the router (unused in this method, but kept for consistency)
      * @return true if the router matches the LU banlist criteria
-     *
+     * @since 0.9.72
      */
-    private boolean shouldBanlistLU(RouterInfo ri, Hash _key) {
+    private boolean shouldBanlistLU(RouterInfo ri) {
         if (!_context.banlist().isLuBanEnabled()) return false;
         boolean isLTier = containsCapability(ri, Router.CAPABILITY_BW12);
         boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
@@ -1366,8 +1404,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         @Override
         public String getName() { return "NetDb capability purge"; }
 
+        /**
+         * Purge every RouterInfo whose capabilities no longer qualify.
+         */
         @Override
-        /** Run the job */
         public void runJob() {
             if (!_initialized) return;
             while (_iter.hasNext()) {
@@ -1377,7 +1417,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 DatabaseEntry data = _ds.get(key);
                 if (data == null || !data.isRouterInfo()) continue;
                 RouterInfo ri = (RouterInfo) data;
-                if (shouldBanlistLU(ri, key) || shouldBanlistXG(ri, key) || shouldBanlistByCapability(ri)) {
+                if (shouldBanlistLU(ri) || shouldBanlistXG(ri) || shouldBanlistByCapability(ri)) {
                     handleBanlistAndRemove(ri, key, null);
                     _purged++;
                 }
@@ -1703,8 +1743,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         @Override
         public String getName() { return "Republish LeaseSets (batch)"; }
 
+        /**
+         * Drain the batch queue, creating one republish job per LeaseSet.
+         */
         @Override
-        /** Run the job */
         public void runJob() {
             int count = 0;
             Hash hash;
@@ -2005,8 +2047,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
     }
 
+    /**
+     * Store the LeaseSet without persisting it to disk.
+     *
+     * @param key the LeaseSet key
+     * @param leaseSet the LeaseSet to store
+     * @return the previous entry for the key, or null
+     * @throws IllegalArgumentException if the LeaseSet is not valid
+     */
     @Override
-    /** Store the entry */
     public LeaseSet store(Hash key, LeaseSet leaseSet) throws IllegalArgumentException {
         return store(key, leaseSet, false);
     }
@@ -2207,7 +2256,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * echo or duplicate cannot clobber fresher data (see {@link #isNewer}).
      *
      * Exception: when the stored copy has lapsed - its latest lease ends within
-     * {@link net.i2p.Router#CLOCK_FUDGE_FACTOR} of {@code now} - the stored copy
+     * {@link net.i2p.router.Router#CLOCK_FUDGE_FACTOR} of {@code now} - the stored copy
      * carries no reachability value, so any incoming copy (still validated by the
      * caller before {@link #store}) is accepted to restore service.  Without this,
      * a hidden service that re-publishes the same LeaseSet2 generation (unchanged
@@ -2337,7 +2386,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String slowDrop = dropSlowRouter(routerInfo, now, existing, caps, routerId);
         if (slowDrop != null) {return slowDrop;}
 
-        String addrCheckDrop = checkAddressesAndIntroducers(routerInfo, now, caps, routerId, isUs, dontFail);
+        String addrCheckDrop = checkAddressesAndIntroducers(routerInfo, caps, routerId, isUs, dontFail);
         if (addrCheckDrop != null) {return addrCheckDrop;}
 
         String expirationDrop = checkExpirationBasedDrop(routerInfo, upLongEnough, adjustedExpiration, now, caps, routerId, isUs);
@@ -2346,7 +2395,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String shortExpireDrop = checkShortExpiration(routerInfo, caps, routerId, isUs);
         if (shortExpireDrop != null) {return shortExpireDrop;}
 
-        String staleDropReason = checkStaleRouterInfo(routerInfo, upLongEnough, existing, caps, routerId, isUs);
+        String staleDropReason = checkStaleRouterInfo(routerInfo, upLongEnough, existing, routerId, isUs);
         if (staleDropReason != null) {return staleDropReason;}
 
         return null;
@@ -2423,7 +2472,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * The expiration time can be customized via the "router.expireRouterInfo" property (in hours),
      * or defaults based on the number of existing routers or whether this is a floodfill.
      *
-     * @param existing the number of routers currently in the KBucket
+     * @param existingRouters the number of routers currently in the KBucket
      * @return the adjusted expiration time in milliseconds
      */
     private long computeAdjustedExpiration(int existingRouters) {
@@ -2666,15 +2715,18 @@ return false;
     /**
      * Checks if the router has no valid addresses or introducers and has been published too long ago.
      *
+     * <p>Only applies once the router is past the 54 minute "introduced" window
+     * and while still inside the startup grace period ({@code dontFail}) is
+     * skipped, so a fresh router is never dropped on this check.
+     *
      * @param routerInfo the RouterInfo to evaluate
-     * @param now current timestamp in milliseconds
      * @param caps the capabilities string of the router
      * @param routerId the short ID of the router
      * @param isUs true if the router is the local router
      * @param dontFail whether to skip failure checks
      * @return a descriptive string if the router should be dropped, null otherwise
      */
-    private String checkAddressesAndIntroducers(RouterInfo routerInfo, long _now, String caps, String routerId, boolean isUs, boolean dontFail) {
+    private String checkAddressesAndIntroducers(RouterInfo routerInfo, String caps, String routerId, boolean isUs, boolean dontFail) {
         if (routerInfo == null) {return null;}
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
             if (routerInfo.getAddresses().isEmpty()) {
@@ -2757,15 +2809,26 @@ return false;
     }
 
     /**
-     * Checks if the router has expired within a short time window and lacks valid transports.
+     * Whether an otherwise-acceptable RouterInfo has aged past
+     * {@link #computeAdjustedExpiration(int)} and should now be dropped.
+     *
+     * <p>This is the last-resort stale-entry policy, applied after the address,
+     * introducer, expiration-property, and short-expiration checks. It only
+     * runs once the local router has been up long enough
+     * ({@link #isUptimeLongEnough(long)}) and never for the local router, and it
+     * is suppressed while the KBucket has fewer than
+     * {@link #MIN_REMAINING_ROUTERS} routers, so a thinning network does not
+     * drop down to nothing. Capabilities are not consulted here;
+     * {@link #checkAddressesAndIntroducers} is the check for missing transports.
      *
      * @param routerInfo the RouterInfo to evaluate
-     * @param caps the capabilities string of the router
+     * @param upLongEnough true if the local router has been up long enough
+     * @param existing the current number of routers in the KBucket
      * @param routerId the short ID of the router
      * @param isUs true if the router is the local router
      * @return a descriptive string if the router should be dropped, null otherwise
      */
-    private String checkStaleRouterInfo(RouterInfo routerInfo, boolean upLongEnough, int existing, String _caps, String routerId, boolean isUs) {
+    private String checkStaleRouterInfo(RouterInfo routerInfo, boolean upLongEnough, int existing, String routerId, boolean isUs) {
         if (routerInfo == null) {return null;}
         if (upLongEnough && !isUs && !routerInfo.isCurrent(computeAdjustedExpiration(existing))) {
             long age = _context.clock().now() - routerInfo.getPublished();
@@ -2788,12 +2851,13 @@ return false;
      * If the store fails due to unsupported crypto, it will banlist
      * the router hash until restart and then throw UnsupportedCrytpoException.
      *
+     * @param key the hash key
+     * @param routerInfo the router info to store
+     * @return previous entry or null
      * @throws IllegalArgumentException if the routerInfo is not valid
      * @throws UnsupportedCryptoException if that's why it failed.
-     * @return previous entry or null
      */
     @Override
-    /** Store the entry */
     public RouterInfo store(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         return store(key, routerInfo, true);
     }
@@ -3260,8 +3324,13 @@ return false;
     @Override
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
+    /**
+     *  Render the KBucket contents as HTML. Writes nothing before startup().
+     *
+     *  @param out where to write the HTML
+     *  @throws IOException on write errors
+     */
     @Override
-    /** Render status HTML */
     public void renderStatusHTML(Writer out) throws IOException {
         if (_kb == null) {return;}
         out.write(_kb.toString().replace("\n", "<br>\n"));
@@ -3466,8 +3535,10 @@ return false;
         @Override
         public String getName() { return "Refresh client LeaseSets"; }
 
+        /**
+         * Refresh the client LeaseSets we are tracking, then reschedule.
+         */
         @Override
-        /** Run the job */
         public void runJob() {
             _facade.refreshClientLeaseSets();
             requeue(LOCAL_LEASESET_REFRESH_INTERVAL);

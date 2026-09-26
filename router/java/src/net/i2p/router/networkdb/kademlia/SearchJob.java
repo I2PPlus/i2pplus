@@ -844,12 +844,12 @@ public class SearchJob extends JobImpl {
 
     public String getName() {return "Start Kademlia NetDb Search";}
 
-    @Override
     /**
      * Debug string with elapsed time since search started.
      *
      * @return debug string with elapsed time since search started
      */
+    @Override
     public String toString() {
         return super.toString() + " started "
                + DataHelper.formatDuration((getContext().clock().now() - _startedOn)) + " ago";

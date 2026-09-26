@@ -646,8 +646,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         byte[] ip = null;
         int port = 0;
         // Don't pass IP along if address has introducers
-        // Right now we publish the direct UDP address, even if publishing introducers,
-        // we probably shouldn't, see UDPTransport rebuildExternalAddress() TODO
+        // Tracked limitation: the direct UDP address is published even when
+        // introducers are being published, which we probably shouldn't. See
+        // UDPTransport.rebuildExternalAddress(boolean, boolean).
         if (udpAddr != null && udpAddr.getOption("itag0") == null) {
             ip = udpAddr.getIP();
             port = udpAddr.getPort();

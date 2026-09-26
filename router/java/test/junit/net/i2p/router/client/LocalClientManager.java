@@ -52,7 +52,7 @@ class LocalClientManager extends ClientManager {
 
     /**
      * Local only
-     * TODO: we could have per-destination delay/drop parameters in the client options
+     * Delay and drop are fixed constants, not client-configurable options.
      *
      * @param flags ignored for local
      */

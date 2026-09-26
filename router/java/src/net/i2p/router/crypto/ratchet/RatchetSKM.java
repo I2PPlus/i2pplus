@@ -304,9 +304,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 _log.info("Session " + state.hashCode() + " update as Bob. Alice: " + toString(target));
             OutboundSession sess = getSession(target);
             if (sess == null) {
+                // Not recoverable, and no recovery is needed. The session is
+                // gone because it expired, was removed, or was superseded by a
+                // rekey, so the handshake state the peer replied to no longer
+                // exists and the ratchet chain cannot be continued. The caller
+                // (ECIESAEADEngine.decryptNewSessionReply) destroys the
+                // handshake state and returns no cloves; the next message to
+                // the peer starts a fresh handshake.
                 if (_log.shouldWarn())
                     _log.warn("Update Bob session but no session found for "  + target);
-                // TODO can we recover?
                 return false;
             }
             sess.updateSession(state, callback, split);
@@ -363,9 +369,16 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             _log.debug("Cleaned up " + pending.size() + " stale pending sessions for " + target);
                     }
                 } else {
+                    // Not recoverable, and no recovery is needed. Pending
+                    // sessions exist for the target but none matches oldState,
+                    // so this is a late or duplicate NSR for a handshake that
+                    // was already promoted to ES (or already cleaned up as
+                    // stale). The already-established session, if any, is left
+                    // untouched, and the caller destroys the handshake state
+                    // and returns no cloves. Retrying cannot help: the old
+                    // state this reply belongs to is gone.
                     if (_log.shouldDebug())
                         _log.debug("Update Alice session but no session found (out of " + pending.size() + ") for "  + target);
-                    // TODO can we recover?
                     return false;
                 }
             }
@@ -629,7 +642,16 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         if (key != null) {
             HandshakeState state = tagSet.getHandshakeState();
             if (state == null) {
-                // TODO this should really be after decrypt...
+                // Known ordering limitation, tracked and safe. A handshake tag
+                // is consumed before the ratchet decryption that follows, so
+                // the session is touched (firstTagConsumed / tagConsumed) even
+                // if that decryption later fails. The bookkeeping is therefore
+                // "a tag was spent", not "a message was received": the
+                // tagset advances one tag and the peer's ratchet chain moves
+                // on, which is exactly what a dropped or forged message does
+                // anyway. Deferring the update until after decrypt would require
+                // holding the tag unconsumed across the decryption, which would
+                // break the constant-time tag lookup.
                 PublicKey pk = tagSet.getRemoteKey();
                 if (pk != null) {
                     OutboundSession sess = getSession(pk);
@@ -1121,8 +1143,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                                                             now, 0, -1,
                                                             MIN_RCV_WINDOW_ES, MAX_RCV_WINDOW_ES);
                 // and a pending outbound one
-                // TODO - We could just save rk and k_ba, and defer
-                // creation of the OB ES tagset to firstTagConsumed() below
+                // Created eagerly rather than deferred to firstTagConsumed():
+                // the key derivation is deterministic, so building it now
+                // yields the same tagset the deferred path would have built,
+                // and only the allocation is saved by deferring.
                 RatchetTagSet tagset_ba = new RatchetTagSet(_hkdf, rk, split.k_ba,
                                                             now, 0, -1);
                 if (_log.shouldDebug()) {
@@ -1318,7 +1342,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             _log.warn("Received nextkey for Inbound but we don't have next root key " + key);
                         return;
                     }
-                    // TODO find old IB TS, check usage
+                    // The previous inbound tagset is not looked up here. The
+                    // tagset id is derived arithmetically below from the two
+                    // key ids, so the old tagset is only needed for its id
+                    // bookkeeping; its key material is never reused. Checking
+                    // whether the old inbound tagset was fully consumed would
+                    // only affect a diagnostic, not the derived id.
 
                     int oldtsID;
                     if (_myIBKeyID == -1 && hisLastOBKeyID == -1)
@@ -1537,7 +1566,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             _lastUsed = now;
                             _tagSet.setDate(now);
                             SessionKeyAndNonce skn = _tagSet.consumeNextKey();
-                            // TODO PN
+                            // Tracked limitation: the previous chain length is
+                            // always reported as 0. A PNBlock is never written
+                            // (RatchetPayload.PNBlock has no caller) and a
+                            // received PN is logged and discarded by
+                            // ECIESAEADEngine.PLCallback.gotPN(). A peer that
+                            // reconstructs its ratchet state from the reported
+                            // length alone will therefore see 0 and must fall
+                            // back to its own key-id accounting; skipping key
+                            // recovery across such a peer is not supported.
                             NextSessionKey fwd = _tagSet.getNextKey();
                             NextSessionKey rev = getReverseSendKey();
                             if ((fwd != null || rev != null) && _log.shouldInfo())

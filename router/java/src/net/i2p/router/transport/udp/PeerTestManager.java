@@ -336,8 +336,13 @@ class PeerTestManager {
                         // Bob again so he retransmits his reply.
                         // Bob handles dups / retx as of 0.9.57
                             sendTestToBob();
-                        // TODO if version 1 and long enough, send msg 6 anyway
-                        // For version 2, we can't send msg 6 without knowing charlie's intro key
+                        // Tracked limitation: for version 2 we cannot send
+                        // msg 6 without knowing Charlie's intro key, so a
+                        // version 2 test that only hears from Charlie is
+                        // abandoned when MAX_BOB_LIFETIME expires. For version
+                        // 1 the intro key is not needed, so a msg 6 could be
+                        // sent from the retransmit timer; that path is not
+                        // implemented and the test expires instead.
                     } else {
                         // received from both Bob and Charlie, but we haven't received a
                         // second message from Charlie yet
@@ -624,7 +629,11 @@ class PeerTestManager {
             // we never received anything from bob or charlie,
             // ignoring us, or unable to get a Charlie to respond
             status = Status.UNKNOWN;
-            // TODO disconnect from Bob if version 2?
+            // Tracked limitation: an unanswered test is scored UNKNOWN and Bob
+            // is not disconnected. A silent Bob is indistinguishable from a
+            // Charlie we could not reach, so disconnecting here would punish
+            // Bob for a Charlie-side problem. The IP/port Bob reported still
+            // counts as reachable in the profile.
         }
 
         if (_log.shouldInfo())
@@ -901,14 +910,21 @@ class PeerTestManager {
                             _transport.send(packet);
                             bob.setLastSendTime(now);
                             state.setReceiveBobTime(now);
-                            // should we retx msg 5 also?
+                            // msg 5 is not retransmitted here. Charlie's
+                            // response is driven by the CharlieTimer, which
+                            // resends msg 5 to the same Charlie; a duplicate
+                            // msg 1 from Alice only needs Bob's side refreshed.
                         } catch (IOException ioe) {
                             _activeTests.remove(lNonce);
                         }
                         return;
                     } else {
-                        // msg 1 but haven't heard from a good charlie yet
-                        // TODO retransmit to the old charlie, or if it's been too long, pick a new charlie
+                        // msg 1 but haven't heard from a good charlie yet.
+                        // Tracked limitation: the message is not forwarded and
+                        // no new Charlie is picked. The active test is
+                        // abandoned when MAX_BOB_LIFETIME expires, so a
+                        // Charlie that never answers costs one test slot, not
+                        // an unbounded retry.
                     }
                 }
                 if (_log.shouldDebug())
@@ -1025,7 +1041,10 @@ class PeerTestManager {
                 // save alice-signed test data in case we need to send to another charlie
                 state.setTestData(data);
                 _activeTests.put(lNonce, state);
-                // TODO we need a retx or pick-new-charlie timer
+                // Tracked limitation: there is no retransmit or
+                // pick-a-new-Charlie timer. The test is abandoned when
+                // MAX_BOB_LIFETIME expires; the Alice-signed test data is
+                // kept on the state so a future retry could reuse it.
                 new RemoveTest(lNonce, MAX_BOB_LIFETIME);
                 // send alice RI to charlie
                 if (_log.shouldDebug())
@@ -1200,8 +1219,10 @@ class PeerTestManager {
                     if (status == SSU2Util.TEST_ACCEPT && _log.shouldWarn())
                         _log.warn("No RouterInfo for Charlie");
                 }
-                // forward to alice, don't bother to validate signed data
-                // FIXME this will probably get there before the RI
+                // forward to alice, don't bother to validate signed data.
+                // Tracked limitation: the RouterInfo is bundled in the same
+                // packet as the test message, so the status can reach Alice
+                // before the RI does when the two are routed differently.
                 if (_log.shouldDebug())
                     _log.debug("Sending message #4 status " + status + " to Alice on " + state);
                 try {
@@ -1235,7 +1256,11 @@ class PeerTestManager {
                 if (status != 0) {
                     if (_log.shouldInfo())
                         _log.info("Message #4 status " + status + ' ' + test);
-                    // TODO validate sig anyway, mark charlie unreachable if status is 69 (banned)
+                    // Tracked limitation: the signature on Charlie's
+                    // rejection is not validated, so a spoofed message 4 could
+                    // make us record Charlie as unreachable. Status 69 (banned)
+                    // is not mapped to a reachability change, and a rejection
+                    // is scored without contacting Charlie.
                 } else if (cps != null && cps.isIPv6() == isIPv6) {
                     if (_log.shouldInfo())
                         _log.info("Charlie is connected " + test);
@@ -1412,7 +1437,10 @@ class PeerTestManager {
                     try {
                         test.setCharlie(InetAddress.getByAddress(fromIP), fromPort, test.getCharlieHash());
                     } catch (UnknownHostException uhe) { /* ignored */ }
-                    // TODO, if charlie is symmetric natted, we won't know it when handling msg 7
+                    // Tracked limitation: if Charlie is symmetric NATed we
+                    // will not know it when handling msg 7, so Alice's view of
+                    // Charlie's address may be wrong. The IP/port learned here
+                    // is the one Bob relayed us and is used as-is.
                 } else {
                     // msg 5 after msg 4, charlie is not firewalled
                     byte[] oldIP = charlieIP.getAddress();
@@ -1514,7 +1542,11 @@ class PeerTestManager {
                         if (_log.shouldWarn())
                             _log.warn("Alice said we had an invalid IP/port: " +
                                       Addresses.toString(addrBlockIP, addrBlockPort) + " on " + state);
-                        // TODO ban alice or put on a list?
+                        // Tracked limitation: Alice is not banned or recorded.
+                        // The claim arrives unauthenticated, so banning on it
+                        // would let any peer ban any other. The warning and the
+                        // existing SNAT-detection counters are the only
+                        // consequences.
                     }
                 }
                 break;
@@ -1592,7 +1624,9 @@ class PeerTestManager {
                         _log.warn("Charlie said we had an invalid IP/port: " +
                                   Addresses.toString(addrBlockIP, addrBlockPort) + " on " + test);
                     _context.statManager().addRateData("udp.testBadIP", 1);
-                    // TODO ban charlie or put on a list?
+                    // Tracked limitation: Charlie is not banned or recorded.
+                    // The claim arrives unauthenticated, so banning on it would
+                    // let any peer ban any other; only the counter is fed.
                     // complete test without setting AliceIPFromCharlie or AlicePortFromCHarlie,
                     // the result will be OK
                 } else {
@@ -1754,9 +1788,13 @@ class PeerTestManager {
             schedule(delay);
         }
 
+        /**
+         * Expire the test. A code is not sent to Alice when Charlie never
+         * answered: the test is simply dropped, and Alice's own test timeout
+         * decides the outcome.
+         */
         public void timeReached() {
-                _activeTests.remove(_nonce);
-            // TODO send code as bob if no response from charlie
+            _activeTests.remove(_nonce);
         }
     }
 

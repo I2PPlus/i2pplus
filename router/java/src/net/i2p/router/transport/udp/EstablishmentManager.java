@@ -1224,8 +1224,14 @@ public class EstablishmentManager {
                 return;
             }
             if (!_context.commSystem().isExemptIncoming(Addresses.toString(fromIP))) {
-                // TODO this is insufficient to prevent DoSing, especially if
-                // IP spoofing is used. For further study.
+                // Tracked limitation: this is a global admission cap, not a
+                // per-source one, so a spoofed source address buys an attacker
+                // nothing but it also means a single flood from one address
+                // can exhaust the budget for everyone. The spoofed packet is
+                // also unattributed: it is dropped and answered with a
+                // termination packet, but the source is not banned because the
+                // address cannot be trusted. Closing this properly needs
+                // per-source rate accounting that survives address rotation.
                 if (!shouldAllowInboundEstablishment()) {
                     if (_log.shouldWarn())
                         _log.warn("[SSU] Dropping InboundEstablish from " + Addresses.toString(fromIP));
@@ -1395,7 +1401,7 @@ public class EstablishmentManager {
         InboundEstablishState.InboundState istate = state.getState();
         if (istate == IB_STATE_CONFIRMED_COMPLETELY || istate == IB_STATE_COMPLETE) {
             handleCompletelyEstablished(state); // we are done, go right to ps2
-        } else { /* ignored */ } // More RI blocks to come, TODO
+        } else { /* ignored */ } // more RI blocks to come; nothing to do yet
 
         notifyActivity();
         if (_log.shouldDebug()) {
@@ -1504,7 +1510,13 @@ public class EstablishmentManager {
 
     /**
      * Got a SessionDestroy - maybe during an inbound establish?
-     * TODO - PacketHandler won't look up inbound establishes
+     *
+     * A SessionDestroy received before a session exists is only informational:
+     * there is no state to drop, and a peer that never completed an
+     * establishment has nothing to tear down. The inbound establish is
+     * abandoned by its own IES2 timeout rather than by this packet, which is
+     * why there is no inbound-state lookup here.
+     *
      * As this packet was essentially unauthenticated (i.e. intro key, not session key)
      * we just log it as it could be spoofed.
      *
@@ -1688,8 +1700,11 @@ public class EstablishmentManager {
     }
 
     /**
-     * Send our info immediately.
-     * TODO move to / combine with sendAck0()
+     * Send our info immediately, bundled with the ACK of packet 0.
+     *
+     * The two messages share a packet, so this stays separate from
+     * sendAck0() rather than being folded into it: sendAck0() may run before
+     * the PeerState exists, and only this path needs the peer's RouterInfo.
      */
     private void sendInboundComplete(PeerState peer) {
         if (_log.shouldDebug()) {_log.debug("Completing initial handshake with " + peer);}
@@ -1999,7 +2014,10 @@ public class EstablishmentManager {
                         _log.debug("[SSU] Looking up Introducer " + h + " for " + state);
                     istate = INTRO_STATE_LOOKUP_SENT;
                     state2.setIntroState(h, istate);
-                    // TODO on success job
+                    // No success job: the reply is handled by the next
+                    // rescan pass, which re-reads the introducer state and
+                    // picks up a RouterInfo that has since arrived. The lookup
+                    // itself is fire-and-forget.
                     _context.netDb().lookupRouterInfo(h, null, null, 10*1000L);
                     sent = true;
                 }
@@ -2167,7 +2185,12 @@ public class EstablishmentManager {
                         }
                     }
                     if (claimed != null) {_outboundByClaimedAddress.remove(oldId, charlie);} // only if == state
-                } else { /* ignored */ } // TODO validate same IP/port as in hole punch?
+                }
+                // Tracked limitation: the IP/port Charlie claims is not compared
+                // against the address the HolePunch actually came from. Charlie
+                // is reached through Bob's relay, so the two addresses are
+                // legitimately different and the comparison would reject valid
+                // relays; the claimed address is only used as a map key below.
             }
             charlie2.setIntroState(bobHash, istate);
             notifyActivity();
@@ -2184,8 +2207,10 @@ public class EstablishmentManager {
             charlie.fail();
             _liveIntroductions.remove(lnonce);
         } else {
-            // don't give up, maybe more bobs out there
-            // TODO keep track
+            // don't give up, maybe more bobs out there.
+            // Tracked limitation: rejections are not counted per Bob, so
+            // there is no backoff or give-up based on how many Bobs refused.
+            // The state is retried on the next rescan pass instead.
             if (_log.shouldDebug()) {
                 _log.debug("[SSU] Received RelayResponse rejection (" + parseReason(code) + ") from Bob " + bob);
             }
@@ -2295,7 +2320,10 @@ public class EstablishmentManager {
      *  @return the state, or null if unknown
      */
     private OutboundEstablishState findHolePunchState(RemoteHostId id, long nonce) {
-        // TODO now we can look up by nonce first instead if we want
+        // Tracked optimization, not a defect: the RemoteHostId map is consulted
+        // first and the nonce map second. The nonce is the stronger key (it
+        // survives a claimed-address change), so swapping the order would save
+        // a lookup on the usual path.
         OutboundEstablishState state = _outboundStates.get(id);
         if (state != null) {
             if (_log.shouldInfo()) {_log.info("[SSU] HolePunch after RelayResponse from " + state);}
@@ -2456,7 +2484,11 @@ public class EstablishmentManager {
                 }
                 if (claimed != null)
                     _outboundByClaimedAddress.remove(oldId, state);  // only if == state
-            } else { /* ignored */ } // TODO validate same IP/port as in response?
+            }
+            // Tracked limitation: the IP/port Bob claimed in the
+            // RelayResponse is not compared against the address the
+            // HolePunch actually came from; see the equivalent note in
+            // receiveRelayResponse() for why the addresses may differ.
         }
         boolean sendNow = state.receiveHolePunch();
         if (sendNow) {

@@ -158,6 +158,73 @@ public class MLKEMTest {
         }
     }
 
+    /**
+     * FIPS 203 decapsulation uses implicit rejection, so a tampered ciphertext
+     * must not raise: it yields a different 32 byte key instead. Callers that
+     * need authentication must compare the key, not catch an exception.
+     */
+    @Test
+    public void testDecapTamperedCiphertextDoesNotThrow() throws GeneralSecurityException {
+        byte[][] keys = MLKEM.generateKeys(EncType.MLKEM768_X25519_INT);
+        byte[][] bob = MLKEM.encaps(EncType.MLKEM768_X25519_INT, keys[0]);
+        byte[] tampered = bob[0].clone();
+        tampered[0] ^= 0x01;
+        byte[] shared = MLKEM.decaps(EncType.MLKEM768_X25519_INT, tampered, keys[1]);
+        assertNotNull(shared);
+        assertEquals(32, shared.length);
+        assertFalse("implicit rejection must not return the encapsulated secret",
+                    DataHelper.eq(bob[1], shared));
+    }
+
+    /**
+     * Implicit rejection is deterministic: the same rejected ciphertext against
+     * the same decapsulation key always yields the same pseudorandom key, so a
+     * peer that retries cannot learn anything new from the failure.
+     */
+    @Test
+    public void testImplicitRejectionIsDeterministic() throws GeneralSecurityException {
+        byte[][] keys = MLKEM.generateKeys(EncType.MLKEM768_X25519_INT);
+        byte[][] bob = MLKEM.encaps(EncType.MLKEM768_X25519_INT, keys[0]);
+        byte[] tampered = bob[0].clone();
+        tampered[3] ^= 0x40;
+        byte[] first = MLKEM.decaps(EncType.MLKEM768_X25519_INT, tampered, keys[1]);
+        byte[] second = MLKEM.decaps(EncType.MLKEM768_X25519_INT, tampered, keys[1]);
+        assertArrayEquals(first, second);
+    }
+
+    /**
+     * Every bit of the ciphertext feeds the rejection key, so two different
+     * corruptions of the same ciphertext are rejected to different values.
+     */
+    @Test
+    public void testImplicitRejectionDependsOnCiphertext() throws GeneralSecurityException {
+        byte[][] keys = MLKEM.generateKeys(EncType.MLKEM1024_X25519_INT);
+        byte[][] bob = MLKEM.encaps(EncType.MLKEM1024_X25519_INT, keys[0]);
+        byte[] a = bob[0].clone();
+        byte[] b = bob[0].clone();
+        a[1] ^= 0x02;
+        b[1] ^= 0x04;
+        byte[] sharedA = MLKEM.decaps(EncType.MLKEM1024_X25519_INT, a, keys[1]);
+        byte[] sharedB = MLKEM.decaps(EncType.MLKEM1024_X25519_INT, b, keys[1]);
+        assertFalse(DataHelper.eq(sharedA, sharedB));
+    }
+
+    /**
+     * A ciphertext from a different key pair is also rejected silently rather
+     * than raising, so a peer cannot distinguish a wrong key from a bad
+     * ciphertext by the exception it gets back.
+     */
+    @Test
+    public void testDecapWrongKeyDoesNotThrow() throws GeneralSecurityException {
+        byte[][] bob = MLKEM.generateKeys(EncType.MLKEM512_X25519_INT);
+        byte[][] other = MLKEM.generateKeys(EncType.MLKEM512_X25519_INT);
+        byte[][] shared = MLKEM.encaps(EncType.MLKEM512_X25519_INT, bob[0]);
+        byte[] result = MLKEM.decaps(EncType.MLKEM512_X25519_INT, shared[0], other[1]);
+        assertNotNull(result);
+        assertEquals(32, result.length);
+        assertFalse(DataHelper.eq(shared[1], result));
+    }
+
     @Test
     public void testKeyFactoryMLKEM512() {
         testKeyFactory(MLKEM.MLKEM512KeyFactory, EncType.MLKEM512_X25519_INT);

@@ -469,7 +469,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             return;
         }
         long timeToDistribute = _context.clock().now() - beforeDistribute;
-        // TODO validate session id
+        // session already validated above: cfg was non-null or we returned
         _runner.ackSendMessage(sid, id, message.getNonce());
         if ((timeToDistribute > 50) && (_log.shouldDebug())) {
             _log.debug("Took too long to distribute the message (which holds up the ACK): " + timeToDistribute);
@@ -477,22 +477,83 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
+     * Outcome of validating a client-supplied receive request against the state
+     * the router holds for this connection.
+     *
+     * @since 0.9.72
+     */
+    enum ReceiveRequest {
+        /** The session is live and a payload is retained; serve or release it. */
+        ALLOWED,
+        /** The message names no live session on this connection. */
+        UNKNOWN_SESSION,
+        /** The session is live but no payload is retained for the message id. */
+        NO_PAYLOAD
+    }
+
+    /**
+     * Validate a ReceiveMessageBeginMessage before any retained payload is read.
+     *
+     * <p>The router keeps a single payload map per connection, not per session, so
+     * a message that names a message id alone is not enough to authorize access.
+     * The message must also name a live session on this connection. Session-level
+     * validation is the right granularity because every session on a connection
+     * must already share one keypair, so sessions of one connection are not
+     * mutually untrusted.
+     *
+     * @param cfg the session named by the message, or null if there is no such session
+     * @param payload the retained payload for the message id, or null if none is retained
+     * @return the request outcome, never null
+     * @since 0.9.72
+     */
+    static ReceiveRequest classifyReceiveBegin(SessionConfig cfg, Payload payload) {
+        if (cfg == null) {return ReceiveRequest.UNKNOWN_SESSION;}
+        if (payload == null) {return ReceiveRequest.NO_PAYLOAD;}
+        return ReceiveRequest.ALLOWED;
+    }
+
+    /**
+     * Validate a ReceiveMessageEndMessage before the retained payload is released.
+     *
+     * <p>Uses the same rule as {@link #classifyReceiveBegin}: the message must name
+     * a live session on this connection, and the payload must actually be retained.
+     * A message id that is not retained needs no action, so it is reported
+     * separately from a rejected session.
+     *
+     * @param cfg the session named by the message, or null if there is no such session
+     * @param payload the retained payload for the message id, or null if none is retained
+     * @return the request outcome, never null
+     * @since 0.9.72
+     */
+    static ReceiveRequest classifyReceiveEnd(SessionConfig cfg, Payload payload) {
+        return classifyReceiveBegin(cfg, payload);
+    }
+
+    /**
      * The client asked for a message, so we send it to them.
      *
      * This is only when not in fast receive mode.
      * In the default fast receive mode, data is sent in MessageReceivedJob.
+     *
+     * A message naming no live session is dropped, as is a message for which no
+     * payload is retained; see {@link #classifyReceiveBegin}.
      */
     private void handleReceiveBegin(ReceiveMessageBeginMessage message) {
         if (_runner.isDead()) {return;}
         if (_log.shouldDebug()) {_log.debug("Handling receive begin: id = " + message.getMessageId());}
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
-        if (payload == null) {
+        ReceiveRequest request = classifyReceiveBegin(_runner.getConfig(message.sessionId()), payload);
+        if (request != ReceiveRequest.ALLOWED) {
             if (_log.shouldWarn()) {
-                _log.warn("Payload for [MsgID " + message.getMessageId() + "] is null! -> Ignoring...");
+                if (request == ReceiveRequest.UNKNOWN_SESSION) {
+                    _log.warn("ReceiveBegin for unknown session " + message.sessionId() +
+                              " [MsgID " + message.getMessageId() + "] -> Ignoring...");
+                } else {
+                    _log.warn("Payload for [MsgID " + message.getMessageId() + "] is null! -> Ignoring...");
+                }
             }
             return;
         }
-        // TODO validate session id
         MessagePayloadMessage msg = new MessagePayloadMessage(message.getSessionId(), message.getMessageId(), payload);
         try {_runner.doSend(msg);}
         catch (I2CPMessageException ime) {
@@ -504,12 +565,24 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     * The client told us that the message has been received completely.  This currently
-     * does not do any security checking prior to removing the message from the
-     * pending queue, though it should.
+     * The client told us that the message has been received completely, so the
+     * retained payload is released.
      *
+     * The message must name a live session on this connection. The payload map
+     * is per connection rather than per session, so a message id alone would
+     * otherwise let a client release a payload it was never sent.
      */
     private void handleReceiveEnd(ReceiveMessageEndMessage message) {
+        Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
+        ReceiveRequest request = classifyReceiveEnd(_runner.getConfig(message.sessionId()), payload);
+        if (request == ReceiveRequest.UNKNOWN_SESSION) {
+            if (_log.shouldWarn()) {
+                _log.warn("ReceiveEnd for unknown session " + message.sessionId() +
+                          " [MsgID " + message.getMessageId() + "] -> Ignoring...");
+            }
+            return;
+        }
+        if (request == ReceiveRequest.NO_PAYLOAD) {return;}
         _runner.removePayload(new MessageId(message.getMessageId()));
     }
 

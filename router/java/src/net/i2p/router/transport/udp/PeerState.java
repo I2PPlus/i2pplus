@@ -362,54 +362,56 @@ public class PeerState {
     public static final int DEFAULT_MTU = 1484;
 
     /**
-     * IPv4 Min MTU
+     * IPv4 minimum MTU.
      *
-     * 596 gives us 588 IP byes, 568 UDP bytes, and with an SSU data message,
-     * 522 fragment bytes, which is enough to send a tunnel data message in 2
-     * packets. A tunnel data message sent over the wire is 1044 bytes, meaning
-     * we need 522 fragment bytes to fit it in 2 packets - add 46 for SSU, 20
-     * for UDP, and 8 for IP, giving us 596.  round up to mod 16, giving a total
-     * of 608
+     * Sized so a 1044 byte tunnel data message still fits in two packets: that
+     * needs 522 fragment bytes each, plus 46 for SSU, 20 for IP and 8 for UDP,
+     * giving 596. This leaves headroom above that floor (the smallest value
+     * meeting the floor and the alignment rule below would be 604) because the
+     * ACK allowance has to fit as well.
      *
-     * Well, we really need to count the acks as well, especially
-     * 1 + (4 * MAX_RESEND_ACKS_SMALL) which can take up a significant amount of space.
-     * We reduce the max acks when using the small MTU but it may not be enough...
+     * The IPv4 IP and UDP headers are 28 bytes, so the SSU payload area is
+     * 620 - 28 = 592, which is 37 whole 16-byte blocks.
+     * PacketBuilder2.buildPacket() requires that alignment for its padding.
      *
-     * Goal: VTBM msg fragments 2646 / (620 - 87) fits nicely.
-     *
-     * Assuming that we can enforce an MTU correctly, this % 16 should be 12,
-     * as the IP/UDP header is 28 bytes and data max should be mulitple of 16 for padding efficiency,
-     * and so PacketBuilder2.buildPacket() works correctly.
+     * ACKs also have to fit, especially 1 + (4 * MAX_RESEND_ACKS_SMALL), so the
+     * max acks are reduced when the small MTU is in use. That is a best effort:
+     * a 2646 byte maximum-size message needs about 5 fragments at this MTU
+     * (2646 / (620 - 87)), which the small-MTU ACK allowance does not cover.
      */
     public static final int MIN_MTU = 620;
 
     /**
-     * IPv6/UDP header is 48 bytes, so we want MTU % 16 == 0.
+     * IPv6 minimum MTU. The IPv6 IP and UDP headers are 48 bytes, so
+     * 1280 - 48 = 1232, which is 77 whole 16-byte blocks.
      */
     public static final int MIN_IPV6_MTU = 1280;
-    /** The maximum IPv6 MTU. */
+
+    /**
+     * IPv6 maximum MTU. 1488 - 48 = 1440, which is 90 whole 16-byte blocks, so
+     * it satisfies the same payload alignment as {@link #MIN_IPV6_MTU}.
+     */
     public static final int MAX_IPV6_MTU = 1488;
 
     /**
-     * IPv4 Max MTU
+     * IPv4 maximum MTU.
      *
-     * based on measurements, 1350 fits nearly all reasonably small I2NP messages
-     * (larger I2NP messages may be up to 1900B-4500B, which isn't going to fit
-     * into a live network MTU anyway)
+     * <p>The size is set by two constraints.
      *
-     * TODO
-     * VTBM is 2646, it would be nice to fit in two large
-     * 2646 / 2 = 1323
-     * 1323 + 74 + 46 + 1 + (4 * 9) = 1480
-     * So why not make it 1492 (old ethernet is 1492, new is 1500)
-     * Changed to 1492 in 0.8.9
+     * <p>First, 1480 bytes are needed to carry a maximum-size I2NP message as
+     * two fragments: 2646 / 2 = 1323 data bytes each, plus 157 bytes of
+     * per-packet SSU and datagram overhead (74 + 46 + 1 + 4 * 9, the last term
+     * covering the fragment block header and four nine-byte ACK allowances).
      *
-     * BUT through 0.8.11,
-     * Size estimate was bad, actual packet was up to 48 bytes bigger
-     * To be figured out. Curse the ACKs.
-     * Assuming that we can enforce an MTU correctly, this % 16 should be 12,
-     * as the IP/UDP header is 28 bytes and data max should be mulitple of 16 for padding efficiency,
-     * and so PacketBuilder2.buildPacket() works correctly.
+     * <p>Second, the IPv4 IP and UDP headers are 28 bytes, so the SSU payload
+     * area must be a whole number of 16-byte blocks for
+     * PacketBuilder2.buildPacket() to pad correctly. 1480 would leave 1452
+     * bytes, which is not a multiple of 16; the next aligned size is
+     * 1484 - 28 = 1456 = 91 * 16. 1484 is therefore the smallest value that
+     * meets both constraints.
+     *
+     * <p>Measurements put most small I2NP messages well below this; messages
+     * of 1900 to 4500 bytes do not fit any live network MTU anyway.
      */
     public static final int LARGE_MTU = 1484;
 
@@ -422,7 +424,10 @@ public class PeerState {
     /** Amount to adjust up or down in adjustMTU() - should be multiple of 16, at least for SSU 1 */
     private static final int MTU_STEP = 64;
 
-    /** Minimum retransmission timeout — configurable via i2p.transport.udp.minRTO */
+    /**
+     * Minimum retransmission timeout in milliseconds, configurable via
+     * "i2p.transport.udp.minRTO" and clamped to [100, 2000].
+     */
     private static volatile int MIN_RTO = 1000;
     /** Initial RTO before first RTT sample — configurable via i2p.transport.udp.initRTO */
     private static volatile int INIT_RTO = 1000;

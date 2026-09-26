@@ -795,7 +795,8 @@ public final class ECIESAEADEngine {
      *
      * @param tag 8 bytes, same as first 8 bytes of data
      * @param data 56 bytes minimum
-     * @param state will be cloned here
+     * @param oldState will be cloned here, then destroyed on failure
+     * @param keyManager the session key manager for this handshake
      * @return null if decryption fails
      */
     private CloveSet decryptNewSessionReply(byte[] tag, byte[] data, HandshakeState oldState, RatchetSKM keyManager)
@@ -912,7 +913,11 @@ public final class ECIESAEADEngine {
         if (_log.shouldDebug())
             _log.debug("NewSessionReply decryption success from PK " + Base64.encode(bobPK));
         if (Arrays.equals(bobPK, NULLPK)) {
-            // TODO
+            // A reply that carries an all-zero static key cannot name a
+            // session we hold: we never publish a zero static key, and
+            // x_encrypt() refuses to encrypt to one, so there is no valid
+            // peer to attach this handshake to. Drop the handshake rather
+            // than registering a session under an unusable key.
             if (_log.shouldWarn())
                 _log.warn("NewSessionReply reply to zero static key NewSession");
             state.destroy();
@@ -1490,7 +1495,7 @@ public final class ECIESAEADEngine {
             skm = keyManager;
             remote = remoteKey;
         }
-/** Process a datetime field from the payload */
+        /** Process a datetime field from the payload */
 
         public void gotDateTime(long time) throws DataFormatException {
             if (_log.shouldDebug())
@@ -1504,21 +1509,31 @@ public final class ECIESAEADEngine {
                 throw new DataFormatException("Excess clock skew in Inbound NewSession: " + DataHelper.formatTime(time));
             }
         }
-/** Process an options field from the payload */
-
+        /**
+         *  Process an options field from the payload.
+         *
+         *  <p>Intentionally a log-only no-op. This router never emits an
+         *  OPTIONS block (no option bytes are negotiated in
+         *  {@code createPayload()}) and no local state transition, tag,
+         *  session key, or acknowledgement behavior is defined in terms of
+         *  OPTIONS, so ignoring a received block is protocol-correct. The
+         *  length and framing are already validated by the parser.
+         *
+         *  @param options the option bytes
+         *  @param isHandshake true only for message 3 part 2
+         */
         public void gotOptions(byte[] options, boolean isHandshake) {
             if (_log.shouldDebug())
                 _log.debug("Received OPTIONS block (" + options.length + " bytes)");
-            // TODO
         }
-/** Process a garlic clove field from the payload */
+        /** Process a garlic clove field from the payload */
 
         public void gotGarlic(GarlicClove clove) {
             if (_log.shouldDebug())
                 _log.debug("Received GARLIC block: " + clove);
             cloveSet.add(clove);
         }
-/** Process a next key field from the payload */
+        /** Process a next key field from the payload */
 
         public void gotNextKey(NextSessionKey next) {
             if (_log.shouldDebug())
@@ -1529,7 +1544,7 @@ public final class ECIESAEADEngine {
                 nextKeys = new ArrayList<>(2);
             nextKeys.add(next);
         }
-/** Process an ack field from the payload */
+        /** Process an ack field from the payload */
 
         public void gotAck(int id, int n) {
             if (_log.shouldDebug())
@@ -1539,34 +1554,51 @@ public final class ECIESAEADEngine {
             else if (_log.shouldWarn())
                 _log.warn("ACK in NS/NSR?");
         }
-/** Process an ack request field from the payload */
+        /** Process an ack request field from the payload */
 
         public void gotAckRequest() {
             if (_log.shouldDebug())
                 _log.debug("Received ACK REQUEST block");
             ackRequested = true;
         }
-/** Process a termination field from the payload */
-
+        /**
+         *  Process a termination field from the payload.
+         *
+         *  <p>Intentionally a log-only no-op. Ratchet sessions here end by
+         *  ratchet key rotation or by the session expiring in
+         *  {@code RatchetSKM.aggressiveExpire()}, never by a peer-sent
+         *  TERMINATION block, and this router never emits one. The parser
+         *  already rejects any block following a TERMINATION other than
+         *  padding, so the framing is enforced without acting on the reason.
+         *
+         *  @param reason the peer's termination reason code, 0-255
+         */
         public void gotTermination(int reason) {
             if (_log.shouldDebug())
                 _log.debug("Received TERMINATION block, reason: " + reason);
-            // TODO
         }
-/** Process a PN field from the payload */
-
+        /**
+         *  Process a PN field from the payload.
+         *
+         *  <p>Intentionally a log-only no-op. The message number block is an
+         *  optional advisory hint for out-of-order reassembly; ratchet
+         *  decryption here is authenticated per message and does not dedupe by
+         *  number, and this router never emits a PN block. Accepting and
+         *  ignoring it is therefore protocol-correct.
+         *
+         *  @param pn the peer's message number, 0-65535
+         */
         public void gotPN(int pn) {
             if (_log.shouldDebug())
                 _log.debug("Received PN block, pn: " + pn);
-            // TODO
         }
-/** Process an unknown field from the payload */
+        /** Process an unknown field from the payload */
 
         public void gotUnknown(int type, int len) {
             if (_log.shouldDebug())
                 _log.debug("Received UNKNOWN block, type: " + type + " len: " + len);
         }
-/** Process a padding field from the payload */
+        /** Process a padding field from the payload */
 
         public void gotPadding(int paddingLength, int frameLength) {
             if (_log.shouldDebug())
@@ -1597,7 +1629,7 @@ public final class ECIESAEADEngine {
      *  @param ackreq to request an ack, must be false for NS/NSR
      *  @param nextKey1 may be null
      *  @param nextKey2 may be null
-     *  @param acksTOSend may be null
+     *  @param acksToSend may be null
      *  @param overhead bytes to be added later, to assist in padding calculation
      */
     private byte[] createPayload(CloveSet cloves, long expiration,

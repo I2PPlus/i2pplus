@@ -1383,13 +1383,13 @@ public class NTCPTransport extends TransportImpl {
     public void adjustWriterThreads() { _writer.adjustThreads(); }
 
     /**
-     *  Only does something if myPort > 0 and myPort != current bound port
+     *  Only does something if port > 0 and port != current bound port
      *  (or there's no current port, or the configured interface or hostname changed).
      *  If we are changing the bound port, this restarts everything, which takes a long time.
      *
      *  call from synchronized method
      *
-     *  @param myPort does nothing if <= 0
+     *  @param port the requested bind port, does nothing if <= 0
      *  @return new address ONLY if bound to specific address, otherwise null
      */
     private RouterAddress bindAddress(int port) {
@@ -1433,7 +1433,10 @@ public class NTCPTransport extends TransportImpl {
                         }
                         return null;
                     }
-                    // FIXME support multiple binds
+                    // Tracked limitation: a port change restarts every
+                    // listener, so only a single bind address per family is
+                    // supported. Multiple binds would need the endpoint list
+                    // reworked rather than restarted.
                     stopWaitAndRestart();
                 }
                 if (!TransportUtil.isValidPort(port)) {
@@ -1442,7 +1445,8 @@ public class NTCPTransport extends TransportImpl {
                 ServerSocketChannel chan = ServerSocketChannel.open();
                 try {
                 chan.configureBlocking(false);
-                // TODO retry
+                // No retry: an IOException here is fatal for NTCP, is
+                // logged, and leaves NTCP unstarted.
                 chan.socket().bind(addr);
                 _endpoints.add(addr);
                 if (_log.shouldInfo()) {_log.info("[NTCP] Listening on " + addr);}
@@ -1559,7 +1563,8 @@ public class NTCPTransport extends TransportImpl {
         if (isFixed && fixedHost != null) {
             try {
                 String testAddr = InetAddress.getByName(fixedHost).getHostAddress();
-                // FIXME range of IPv6 addresses
+                // Tracked limitation: only single IPv6 addresses are matched,
+                // so configuring an IPv6 range selects none of it.
                 if (Addresses.getAddresses().contains(testAddr))
                     return testAddr;
             } catch (UnknownHostException uhe) { /* ignored */ }
@@ -1877,8 +1882,10 @@ public class NTCPTransport extends TransportImpl {
             return null;
         }
 
-        // get first IPv4, if none then first IPv6
-        // TODO return both
+        // Tracked limitation: only the primary address is returned (first
+        // IPv4, else the first IPv6), even though up to one address of each
+        // family is parsed. Publishing both would require returning a list and
+        // changing the caller.
         return choosePrimaryIP(ipstrings);
     }
 
@@ -2035,7 +2042,8 @@ public class NTCPTransport extends TransportImpl {
      *  @since IPv6 moved from CSFI.notifyReplaceAddress()
      */
     private synchronized boolean externalAddressReceived(byte[] ip, boolean isIPv6, int port) {
-        // FIXME just take first address for now
+        // Tracked limitation: only the first address of the requested family
+        // is considered, so a multi-address NTCP change is partially applied.
         // Warning, this returns null when isIPv6 == true and it's an empty "46" address
         // See below
         RouterAddress oldAddr = getCurrentAddress(isIPv6);
@@ -2080,8 +2088,10 @@ public class NTCPTransport extends TransportImpl {
         if (!isBlank(name))
             enabled = "false";
 
-        // assume SSU is happy if the address is non-null
-        // TODO is this sufficient?
+        // Assume SSU is happy if the address is non-null. Tracked limitation:
+        // this is only a liveness guess, so NTCP will auto-configure its host
+        // from an SSU address that later proves unreachable. A real SSU
+        // reachability query is not consulted here.
         boolean ssuOK = ip != null;
         if (_log.shouldInfo())
             _log.info("Old: " + ohost + " Config: " + name + " Auto: " + enabled + " ssuOK? " + ssuOK);

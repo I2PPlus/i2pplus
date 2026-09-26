@@ -937,8 +937,9 @@ public class PeerProfile {
      * This is the speed value
      *
      * @return the average of the three fastest one-minute data transfers, on a per-tunnel basis,
-     *         through this peer. Ever. Except that the peak values are cut in half
-     *         periodically by coalesceThroughput().
+     *         through this peer. Ever. Peaks are never decayed; only a higher
+     *         measurement can raise them, and a lower one is ignored. Freshness
+     *         is judged by the selection gates, not by eroding these values.
      */
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;
@@ -1060,9 +1061,10 @@ public class PeerProfile {
      *  selection gates (isLowLatency, getIsActive, hasValidRouterInfo)
      *  rather than by eroding the data.
      *
-     *  @param decay ignored, retained for call-site compatibility
+     *  At most one measurement per minute is folded in, so the running total is
+     *  drained on a one-minute cadence.
      */
-    private void coalesceThroughput(boolean decay) {
+    private void coalesceThroughput() {
         long now = System.currentTimeMillis();
         long measuredPeriod = now - _lastCoalesceDate;
         if (measuredPeriod >= 60*1000L) {
@@ -1087,7 +1089,7 @@ public class PeerProfile {
      * @since 0.9.4
      */
     public synchronized void updateValues() {
-        if (!_coalescing) {coalesceOnly(false);} // can happen
+        if (!_coalescing) {coalesceOnly();} // can happen
         _coalescing = false;
         _speedValue = _speedValueNew;
         _capacityValue = _capacityValueNew;
@@ -1097,17 +1099,19 @@ public class PeerProfile {
      *  Coalesce all stats and update values
      */
     public synchronized void coalesceStats() {
-        coalesceOnly(true);
+        coalesceOnly();
         updateValues();
     }
 
     /**
      * Caller must next call updateValues().
      *
-     * @param shouldDecay whether to decay peak throughput values
+     * <p>No peak throughput value is decayed: coalescing only folds a new
+     * measurement into the peak arrays and never erases demonstrated capacity.
+     *
      * @since 0.9.4
      */
-    synchronized void coalesceOnly(boolean shouldDecay) {
+    synchronized void coalesceOnly() {
         _coalescing = true;
         boolean mature = _context.clock().now() - _firstHeardAbout > MIN_AGE_FOR_COALESCE;
         if (_expanded && mature) {
@@ -1119,7 +1123,7 @@ public class PeerProfile {
             if (_dbResponseTime != null) {_dbResponseTime.coalesceStats();}
             if (_dbHistory != null) {_dbHistory.coalesceStats();}
         }
-        coalesceThroughput(shouldDecay);
+        coalesceThroughput();
         if (_expanded && mature) {
             _speedValueNew = calculateSpeed();
             _capacityValueNew = calculateCapacity();

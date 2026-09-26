@@ -1698,14 +1698,6 @@ public class BuildExecutor implements Runnable {
      *  allowing bursts to different peers.  Emergency builds bypass this via
      *  {@link PooledTunnelCreatorConfig#isBypassPacing()}.
      *
-     *  @param cfg the prospective build
-     *  @return true if a build to the same first hop is already in flight
-     */
-    /**
-     *  Prevent stacking multiple build requests onto a single peer while
-     *  allowing bursts to different peers.  Emergency builds bypass this via
-     *  {@link PooledTunnelCreatorConfig#isBypassPacing()}.
-     *
      *  Also skips peers that have recently failed as first hops more than
      *  {@link #FIRST_HOP_FAILURE_THRESHOLD} times within the cooldown window.
      *

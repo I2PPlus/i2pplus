@@ -96,8 +96,14 @@ class PacketPusher implements Runnable {
      * Sends a single UDP packet directly out by selecting an appropriate UDPEndpoint.
      * This bypasses the outbound fragment pool's queue and only blocks if the endpoint queue is full.
      *
-     * Endpoint selection tries to match the packet's IP version to an endpoint's IP version.
-     * TODO: Improve to track peer-specific endpoint and ensure consistent sending.
+     * Endpoint selection tries to match the packet's IP version to an endpoint's
+     * IP version.
+     *
+     * <p>Tracked limitation: the first endpoint of the matching family wins, so
+     * packets to different peers on the same family can leave over different
+     * sockets. A per-peer endpoint affinity would keep a session on one socket
+     * for its lifetime; nothing here depends on that today, because the reply
+     * path keys off the peer's RouterIdentity rather than the local socket.
      *
      * @param packet the non-null UDPPacket to send
      */

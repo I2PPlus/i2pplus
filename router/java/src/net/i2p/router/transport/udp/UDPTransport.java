@@ -1179,7 +1179,6 @@ public class UDPTransport extends TransportImpl {
      * @return the requested port
      */
     @Override
-    /** Port configured or bound by the UDP endpoint. */
     public int getRequestedPort() {
         return getRequestedPort(false);
     }
@@ -1300,7 +1299,6 @@ public class UDPTransport extends TransportImpl {
      * @param port 0 if unknown
      */
     @Override
-    /** Listening port. */
     public void externalAddressReceived(Transport.AddressSource source, byte[] ip, int port) {
         if (_log.shouldWarn())
             _log.warn("Received address: " + Addresses.toString(ip, port) + " from: " + source);
@@ -1536,8 +1534,8 @@ public class UDPTransport extends TransportImpl {
      * Updates the external IP address and/or port based on feedback from a peer.
      * This is used when a peer reports our external address, or when we detect a change.
      *
-     * @param ip the new IP address (IPv4 or IPv6)
-     * @param port the new port number, or 0 to keep the current port
+     * @param ourIP the new IP address (IPv4 or IPv6)
+     * @param ourPort the new port number, or 0 to keep the current port
      * @return true if the address was successfully updated
      */
     private boolean changeAddress(byte[] ourIP, int ourPort) {
@@ -2653,11 +2651,10 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * An alternate supported style, or null.
-     * @return the alt style
+     * @return the alt style, always "SSU2"
      * @since 0.9.54
      */
     @Override
-    /** Returns "SSU2". */
     public String getAltStyle() {return STYLE2;}
 
     /**
@@ -2819,10 +2816,10 @@ public class UDPTransport extends TransportImpl {
     /**
      * Rebuild to get updated cost and introducers. IPv4 only, unless configured as IPv6 only.
      * Do not tell the router (he is the one calling this)
+     * @return the current router addresses
      * @since 0.7.12
      */
     @Override
-    /** Update and return the current router addresses. */
     public List<RouterAddress> updateAddress() {
         boolean ipv6 = getIPv6Config() == IPV6_ONLY;
         rebuildExternalAddress(false, ipv6);
@@ -2834,8 +2831,7 @@ public class UDPTransport extends TransportImpl {
      * This is called when the router needs to update its published address,
      * typically after a reachability change or IP update.
      *
-     * @param allowRebuildRouterInfo whether to trigger a full router info rebuild
-     * @param ipv6 whether to rebuild the IPv6 address
+     * @param ipv6 true to rebuild the IPv6 address, false for IPv4
      * @return the new router address if changed, otherwise null
      */
     private RouterAddress rebuildExternalAddress(boolean ipv6) {
@@ -3309,7 +3305,6 @@ public class UDPTransport extends TransportImpl {
      *  @param address the new address or null to remove all
      */
     @Override
-    /** Router address. */
     protected void replaceAddress(RouterAddress address) {
         super.replaceAddress(address);
         _context.commSystem().notifyReplaceAddress(address);
@@ -3318,10 +3313,10 @@ public class UDPTransport extends TransportImpl {
     /**
      *  Remove then tell NTCP that we changed.
      *
+     *  @param address the address to remove
      *  @since 0.9.20
      */
     @Override
-    /** Router address. */
     protected void removeAddress(RouterAddress address) {
         super.removeAddress(address);
         _context.commSystem().notifyRemoveAddress(address);
@@ -3330,10 +3325,10 @@ public class UDPTransport extends TransportImpl {
     /**
      *  Remove then tell NTCP that we changed.
      *
+     *  @param ipv6 true to remove the IPv6 address, false for IPv4
      *  @since 0.9.20
      */
     @Override
-    /** Remove address for the given IP version. */
     protected void removeAddress(boolean ipv6) {
         super.removeAddress(ipv6);
         if (ipv6)
@@ -3631,10 +3626,10 @@ public class UDPTransport extends TransportImpl {
      * Tell the transport that we may disconnect from this peer.
      * This is advisory only.
      *
+     * @param peer the peer to consider
      * @since 0.9.24
      */
     @Override
-    /** Check if peer can be disconnected. */
     public void mayDisconnect(final Hash peer) {
         /** Peer state. */
         final PeerState ps =  _peersByIdent.get(peer);
@@ -3701,7 +3696,6 @@ public class UDPTransport extends TransportImpl {
      * @return the clock skews
      */
     @Override
-    /** Peer clock skews in seconds. */
     public List<Long> getClockSkews() {
         List<Long> skews = new ArrayList<>(_peersByIdent.size());
 
@@ -3780,9 +3774,10 @@ public class UDPTransport extends TransportImpl {
         public Transport getTransport() { return UDPTransport.this; }
         /**
          * String representation.
+         *
+         * @return the transport and latency
          */
         @Override
-        /** Latency ms. */
         public String toString() { return "UDP bid @ " + getLatencyMs(); }
     }
 
@@ -4548,10 +4543,12 @@ if (_alive)
         }
 
         /**
-         * Remove eldest entry.
+         * Remove the eldest entry and kill its timers.
+         *
+         * @param eldest the least recently used entry
+         * @return true if the entry was evicted
          */
         @Override
-        /** Oldest entry age. */
         protected boolean removeEldestEntry(Map.Entry<Long, PeerStateDestroyed> eldest) {
             boolean rv = super.removeEldestEntry(eldest);
             if (rv) {

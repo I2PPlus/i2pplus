@@ -159,8 +159,11 @@ public class RepublishLeaseSetJob extends JobImpl {
         return _registered;
     }
 
+    /**
+     * Republish the LeaseSet if this job is still registered, then reschedule.
+     * An unregistered job has been superseded and does nothing.
+     */
     @Override
-    /** Run the job */
     public void runJob() {
         cleanupStaleEntries();
         if (!_registered) {

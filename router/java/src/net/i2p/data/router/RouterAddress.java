@@ -32,11 +32,10 @@ import net.i2p.util.OrderedProperties;
  * To ensure integrity of the RouterInfo, methods that change an element of the
  * RouterInfo will throw an IllegalStateException after the RouterInfo is signed.
  *
- * As of 0.9.3, expiration MUST be all zeros as it is ignored on
- * readin and the signature will fail.
- * If we implement expiration, or other use for the field, we must allow
- * several releases for the change to propagate as it is backwards-incompatible.
- * Restored as of 0.9.12.
+ * Expiration is accepted and returned, but the router MUST write all zeros:
+ * the field is ignored on readin and a non-zero value fails the signature
+ * check. Implementing expiration, or any other use of the field, requires
+ * several releases to propagate because it is backwards-incompatible.
  *
  * @author jrandom
  * @since 0.9.16 moved from net.i2p.data
@@ -197,9 +196,8 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  As of 0.9.3, expiration MUST be all zeros as it is ignored on
-     *  readin and the signature will fail.
-     *  Restored as of 0.9.12, wait several more releases before using.
+     *  Restores the expiration field, which is accepted but must be all zeros:
+     *  it is ignored on readin and a non-zero value fails the signature check.
      *  @throws IllegalStateException if was already read in
      */
     @Override

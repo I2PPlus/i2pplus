@@ -200,9 +200,14 @@ public class FragmentTest {
             return -1; // or do we need to return the real message ID?
         }
 
+        /**
+         * Intentional no-op: this receiver only ever consumes, it never sends,
+         * so there is no next hop to report.
+         *
+         * @return null, always
+         */
         @Override
         public Hash getSendTo() {
-            // TODO Auto-generated method stub
             return null;
         }
     }

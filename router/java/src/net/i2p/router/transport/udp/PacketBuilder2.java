@@ -491,10 +491,13 @@ class PacketBuilder2 {
 
         encryptDataPacket(packet, peer.getSendCipher(), pktNum, peer.getSendHeaderEncryptKey1(), peer.getSendHeaderEncryptKey2());
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
-        // FIXME ticket #2675
-        // the packet could have been built before the current mtu got lowered, so
-        // compare to LARGE_MTU
-        // Also happens on switch between IPv4 and IPv6
+        // Tracked limitation (ticket #2675): this oversize check runs after
+        // the payload was laid out against currentMTU, so a peer whose MTU was
+        // lowered between getMTU() and here can still produce a packet larger
+        // than its current MTU. The peer retransmits, so the window is a
+        // spurious retransmit rather than a stall. The same overshoot happens
+        // on a switch between IPv4 and IPv6, where the header size changes
+        // after the payload budget was computed.
         if (_log.shouldDebug() || _log.shouldInfo()) {
             off += MAC_LEN;
             if (_log.shouldDebug()) {

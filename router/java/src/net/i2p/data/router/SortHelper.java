@@ -38,10 +38,10 @@ class SortHelper {
     public static <T extends DataStructure> List<T> sortStructures(Collection<T> dataStructures) {
         if (dataStructures == null) return Collections.emptyList();
 
-        // This used to use Hash.toString(), which is insane, since a change to toString()
-        // would break the whole network. Now use Hash.toBase64().
-        // Note that the Base64 sort order is NOT the same as the raw byte sort order,
-        // despite what you may read elsewhere.
+        // Sort by Hash.toBase64(). Never sort by Hash.toString(): a change to
+        // toString() would then change the network's notion of node ordering.
+        // Note that the Base64 sort order is NOT the same as the raw byte sort
+        // order, despite what you may read elsewhere.
 
         ArrayList<T> rv = new ArrayList<>(dataStructures);
         sortStructureList(rv);

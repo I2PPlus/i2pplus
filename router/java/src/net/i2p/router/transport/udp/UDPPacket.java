@@ -39,9 +39,10 @@ class UDPPacket implements CDPQEntry {
 
         /**
          * New instance.
+         *
+         * @return a fresh, unreleased packet
          */
         @Override
-        /** New instance. */
         public UDPPacket newInstance() {
             return new UDPPacket(context);
         }
@@ -353,7 +354,6 @@ class UDPPacket implements CDPQEntry {
      * For logging and debugging purposes.
      */
     @Override
-    /** String representation. */
     public String toString() {
         if (_released)
             return "RELEASED PACKET";

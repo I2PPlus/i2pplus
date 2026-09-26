@@ -13,9 +13,8 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 /**
- * Defines a message containing arbitrary bytes of data
+ * Defines a message containing arbitrary bytes of data.
  * This is what goes in a GarlicClove.
- * It was also previously used for generating test messages.
  *
  * @author jrandom
  */

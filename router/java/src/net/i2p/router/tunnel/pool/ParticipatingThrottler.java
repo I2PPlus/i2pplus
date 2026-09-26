@@ -351,17 +351,6 @@ public class ParticipatingThrottler {
     }
 
     /**
-     * Handles banning and optionally disconnecting routers with no version info.
-     *
-     * @param shouldDisconnect whether to disconnect the router after banning
-     * @param h the router hash
-     * @param isBanned true if already banned
-     * @param caps router capabilities string
-     * @param bantime duration of the ban in milliseconds
-     * @param ri RouterInfo for IP extraction and logging
-     * @param version router version string, used if disconnect is scheduled
-     */
-    /**
      * Handles joins from routers whose held RouterInfo carries no version.
      *
      * Minor infraction: the offending join is answered with a transient
@@ -374,8 +363,7 @@ public class ParticipatingThrottler {
      * @param shouldDisconnect whether to disconnect the router after banning
      * @param h the router hash
      * @param isBanned true if already banned
-     * @param caps router capabilities string
-     *     escalated bans are fixed at one hour regardless of the default
+     * @param caps router capabilities string, used in log lines only
      * @param ri RouterInfo for IP extraction and logging
      * @param version router version string, used if disconnect is scheduled
      */

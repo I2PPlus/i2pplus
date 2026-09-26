@@ -268,7 +268,8 @@ public class KeyManager {
         /**
          *  Synchronize the given structure with the file on disk.
          *
-         *  @param param non-null, filled-in if exists is true, or without data if exists is false
+         *  @param keyFile the file holding the serialized structure
+         *  @param structure non-null, filled-in if exists is true, or without data if exists is false
          *  @param exists write to file if true, read from file if false
          *  @return structure or null on read error
          */

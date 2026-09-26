@@ -737,8 +737,8 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Decide whether {@link #rdnsCachePut(int, int)} must run a full-cache
-     *  cleanup sweep before inserting.
+     *  Decide whether a cache insert must run a full-cache cleanup sweep.
+     *  See {@link #needRdnscacheSweep(int, int, int)} for the amortization rule.
      *
      *  Sweeping on every put when the cache sits at its cap is O(n) per insert
      *  and shows up as CHM iterator churn on the rDNS hot path. Instead the

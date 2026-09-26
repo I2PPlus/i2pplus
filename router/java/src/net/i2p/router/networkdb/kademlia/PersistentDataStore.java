@@ -119,34 +119,46 @@ public class PersistentDataStore extends TransientDataStore {
         writer.start();
     }
 
-    @Override
     /**
-     * Whether the data store has completed initial loading.
+     * Whether the data store has completed initial loading, either because the
+     * read job finished or because enough RouterInfos have been loaded for the
+     * netdb to be usable.
      *
      * @return true if the data store has completed initial loading
      */
+    @Override
     public boolean isInitialized() {return _initialized || _readJob.isNetDbReady();}
 
-    // this doesn't stop the read job or the writer, maybe it should?
+    /**
+     * Stop the writer thread and clear the in-memory store.
+     *
+     * The read job is not stopped: it is a recurring SimpleTimer2 event with no
+     * cancellation flag, so it keeps rescanning until the router's graceful
+     * shutdown begins and runJob() returns early. A rescan after this point
+     * re-reads an empty store and is harmless, but it is an open question
+     * whether stop() should cancel the reader outright.
+     */
     @Override
-    /** Stop the writer thread and perform super shutdown. */
     public void stop() {
         super.stop();
         _writer.flush();
     }
 
+    /**
+     * Trigger an immediate rescan if the store is initialized.
+     */
     @Override
-    /** Trigger immediate rescan if initialized. */
     public void rescan() {
         if (_initialized) {_readJob.wakeup();}
     }
 
-    @Override
     /**
      * The entry stored for the key, or null if not found.
      *
+     * @param key the key to look up
      * @return the entry or null if not found
      */
+    @Override
     public DatabaseEntry get(Hash key) {return get(key, true);}
 
     /**
@@ -158,30 +170,49 @@ public class PersistentDataStore extends TransientDataStore {
         return super.get(key);
     }
 
-    @Override
-    /** Remove and optionally queue disk deletion. */
-    public DatabaseEntry remove(Hash key) {return remove(key, true);}
-
-    /*
-     *  @param persist if false, call super only, don't access disk
+    /**
+     * Remove from memory and queue the file for disk deletion.
+     *
+     * @param key the key to remove
+     * @return the removed entry, or null if none was stored
      */
     @Override
-    /** Remove from memory and optionally queue disk deletion. */
+    public DatabaseEntry remove(Hash key) {return remove(key, true);}
+
+    /**
+     * Remove from memory and optionally queue disk deletion.
+     *
+     * @param key the key to remove
+     * @param persist if false, call super only, don't access disk
+     * @return the removed entry, or null if none was stored
+     */
+    @Override
     public DatabaseEntry remove(Hash key, boolean persist) {
         if (persist) {_writer.remove(key);}
         return super.remove(key);
     }
 
-    @Override
-    /** Store and optionally persist RouterInfos to disk. */
-    public boolean put(Hash key, DatabaseEntry data) {return put(key, data, true);}
-
-    /*
-     *  @param persist if false, call super only, don't access disk
-     *  @return success
+    /**
+     * Store the entry and persist it to disk. Only RouterInfos are written;
+     * LeaseSets stay in memory.
+     *
+     * @param key the key to store under
+     * @param data the entry to store
+     * @return true if the entry was stored
      */
     @Override
-    /** Store and optionally persist to disk. */
+    public boolean put(Hash key, DatabaseEntry data) {return put(key, data, true);}
+
+    /**
+     * Store the entry and optionally persist it to disk. Only RouterInfos are
+     * written; LeaseSets stay in memory.
+     *
+     * @param key the key to store under
+     * @param data the entry to store, null to fail
+     * @param persist if false, call super only, don't access disk
+     * @return true if the entry was stored
+     */
+    @Override
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
         if ( (data == null) || (key == null) ) {return false;}
         boolean rv = super.put(key, data);
@@ -190,18 +221,16 @@ public class PersistentDataStore extends TransientDataStore {
         return rv;
     }
 
-    /*
-     *  Unconditionally store, bypass all newer/older checks.
-     *  Persists for RI only.
+    /**
+     *  Unconditionally store, bypassing all newer/older checks.
+     *  Persists for RouterInfos only.
      *
-     *  @param persist if false, call super only, don't access disk
-     *  @return success
      *  @param key non-null
      *  @param data non-null
+     *  @return success
      *  @since 0.9.64
      */
     @Override
-    /** Unconditionally store, bypassing new/old checks. */
     public boolean forcePut(Hash key, DatabaseEntry data) {
         boolean rv = super.forcePut(key, data);
         if (rv && data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {_writer.queue(key, data);}
@@ -350,7 +379,15 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        /** Signal the write loop to exit and flush pending writes. */
+        /**
+         * Signal the write loop to exit.
+         *
+         * Sets the quit flag and wakes the writer so it leaves
+         * {@code waitForNextCycle()}. The loop writes the batch it already
+         * drained before it re-checks the flag, so entries queued before the
+         * call are written; anything queued concurrently with or after it is
+         * not.
+         */
         public void flush() {
             synchronized(_waitLock) {
                 _quit = true;
@@ -703,8 +740,11 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        /**
+         * Scan for new RouterInfo files, then reschedule. The first run comes
+         * soon after startup; later runs use the full read interval.
+         */
         @Override
-        /** Scan for new RouterInfo files and manage reseed. */
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
                 return;
@@ -866,8 +906,10 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        /**
+         * Read a RouterInfo from disk and load it into memory.
+         */
         @Override
-        /** Read a RouterInfo from disk and load into memory. */
         public void runJob() {
             read();
         }

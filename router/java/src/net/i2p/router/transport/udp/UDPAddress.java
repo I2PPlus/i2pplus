@@ -421,9 +421,10 @@ class UDPAddress {
 
     /**
      * String representation.
+     *
+     * @return a human readable description of this address
      */
     @Override
-    /** String representation. */
     public String toString() {
         StringBuilder rv = new StringBuilder(64);
         if (_introHosts != null) {

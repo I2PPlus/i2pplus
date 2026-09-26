@@ -445,7 +445,7 @@ public class GeoIP {
      *  Write all IP ranges for country to blocklist-country.txt.
      *  Inline, blocking.
      *
-     *  @param two-letter lower-case country code
+     *  @param country lower-case two-letter country code
      *  @since 0.9.48
      */
     private void countryToIP(String country) {

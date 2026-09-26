@@ -390,15 +390,25 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
     /**
      * Take note of the fact that the given sessionTags associated with the key for
-     * encryption to the target have been sent. Whether to use the tags immediately
-     * (i.e. assume they will be received) or to wait until an ack, is implementation dependent.
+     * encryption to the target have been sent.
      *
-     * Here, we wait for the ack if the session is new, otherwise we use right away.
-     * Will this work???
-     * If the tags are pipelined sufficiently, it will.
+     * <p>Delivered tags are never usable straight away: every tag set starts
+     * unacked and only moves into the usable set when the peer acks it through
+     * {@link #tagsAcked(PublicKey, SessionKey, TagSetHandle)}. The ack is what
+     * proves the peer received the tags, so the implementation waits for it
+     * unconditionally rather than pipelining on how much was sent.
      *
-     * @return the TagSetHandle. Caller MUST subsequently call failTags() or tagsAcked()
-     * with this handle.
+     * <p>If the session does not exist yet it is created here, so the first ack
+     * also establishes the session. A tag set delivered under a different
+     * session key than the session currently holds is a rekey: the existing tag
+     * sets are dropped and the session goes back to waiting for acks.
+     *
+     * @param target public key to which the data is to be encrypted
+     * @param key the session key the tags are bound to
+     * @param sessionTags the tags that were sent
+     * @return the TagSetHandle, or null if the session could not be created.
+     *         Caller MUST subsequently call failTags() or tagsAcked()
+     *         with this handle.
      */
     @Override
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) {

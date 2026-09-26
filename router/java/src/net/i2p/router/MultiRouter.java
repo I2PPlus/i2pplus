@@ -53,7 +53,7 @@ public class MultiRouter {
 
     private static PrintStream out;
     private static ArrayList<Router> routers = new ArrayList<>(8);
-    private static I2PAppContext _defaultContext; // NOSONAR S1450: used on lines 78-79
+    private static I2PAppContext _defaultContext; // NOSONAR S1450: set in main()
 
     /** Boot the requested number of routers from the given arguments. */
     public static void main(String[] args) {

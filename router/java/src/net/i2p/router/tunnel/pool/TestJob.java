@@ -1242,7 +1242,7 @@ public class TestJob extends JobImpl {
      * Offer a tunnel's first test to the batched dispatch buffer instead of
      * creating a queue entry per tunnel.  All first-test producers (fresh
      * builds, stranded-UNTESTED sweeps, last-chance offers) funnel through
-     * here: the buffer absorbs bursts, a single {@link PumpJob} drains it in
+     * here: the buffer absorbs bursts, a single {@code PumpJob} drains it in
      * small batches paced by queue health, and the in-flight gates decide
      * what actually dispatches.  Candidates are validated at admission by
      * {@link #shouldRejectAtOffer}, so a stale, built-but-rejected, or no
@@ -3483,7 +3483,9 @@ public class TestJob extends JobImpl {
         }
 
         /**
-         * Report the test as failed on timeout.
+         * Job name for the test-timeout event.
+         *
+         * @return the name
          */
         @Override public String getName() { return "Timeout Tunnel Test"; }
 

@@ -43,8 +43,10 @@ class ExpireLeasesJob extends JobImpl {
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
     /** Refresh leasesets with less than this much time remaining before expiry */
     private static final long REFRESH_THRESHOLD_MS = 2 * 60 * 1000L;
-    /** Aggressive purge interval for client databases (ms) */
-    /** After this long past expiry, a leaseset is considered stale and purged immediately */
+    /**
+     * After this long past expiry, a leaseset is considered stale and purged
+     * immediately by {@link #purgeStaleLeasesets()} in a client database.
+     */
     private static final long STALE_EXPIRED_MS = 5 * 60 * 1000L;
 
     /**

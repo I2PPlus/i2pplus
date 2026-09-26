@@ -21,6 +21,13 @@ import net.i2p.util.Log;
  *
  * All counters use AtomicLong and timestamps use volatile for
  * thread-safe access from NetDB message handlers and transport threads.
+ *
+ * <p><b>Combined responsiveness rate.</b> {@link #getFailedLookupRate()} is a
+ * single rate covering <em>both</em> lookups and stores: every resolved lookup
+ * and every verified store adds 0, every failed lookup and every failed store
+ * verification adds 1. The persisted key stays "dbHistory.failedLookupRate" for
+ * profile compatibility, so the name understates what the rate covers. Read the
+ * rate as "fraction of NetDb requests this peer failed to answer".
  */
 public class DBHistory {
     private final Log _log;
@@ -43,7 +50,7 @@ public class DBHistory {
     public DBHistory(RouterContext context, String statGroup) {
         _context = context;
         _log = context.logManager().getLog(DBHistory.class);
-        _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup",
+        _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer fails to answer a NetDb lookup or store",
                                          statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer sends us a bad RouterInfo?",
                                          statGroup, new long[] { RateConstants.ONE_HOUR });
@@ -90,12 +97,28 @@ public class DBHistory {
     public long getUnpromptedDbStoreNew() {return _unpromptedDbStoreNew.get();}
     /** How many times have they sent us data we didn't ask for but that we have seen? */
     public long getUnpromptedDbStoreOld() {return _unpromptedDbStoreOld.get();}
-    /** How often does the peer fail to reply to a lookup request, broken into 1 hour and 1 day periods? */
+    /**
+     *  How often this peer failed to answer a NetDb request, in 10 minute and
+     *  1 hour periods.
+     *
+     *  <p>Despite the name, the rate covers stores as well as lookups: a resolved
+     *  lookup and a verified store both add 0, a failed lookup and a failed store
+     *  verification both add 1. Read it as "fraction of NetDb requests this peer
+     *  failed to answer". Lookup and store outcomes are also tracked separately
+     *  by {@link #getLastLookupSuccessful()}, {@link #getLastLookupFailed()},
+     *  {@link #getLastStoreSuccessful()} and {@link #getLastStoreFailed()}.
+     *
+     *  @return the combined lookup and store failure rate
+     */
     public RateStat getFailedLookupRate() {return _failedLookupRate;}
     /** Rate at which the peer sends us invalid reply data, to be investigated. */
     public RateStat getInvalidReplyRate() {return _invalidReplyRate;}
 
-    /** Note that the peer was not only able to respond to the lookup, but sent us the data we wanted! */
+    /**
+     *  Note that the peer was not only able to respond to the lookup, but sent us the data we wanted!
+     *
+     *  <p>Also feeds the combined failure rate with a success (0).
+     */
     public void lookupSuccessful() {
         _successfulLookups.incrementAndGet();
         _failedLookupRate.addData(0);
@@ -103,7 +126,11 @@ public class DBHistory {
         _lastLookupSuccessful = _context.clock().now();
     }
 
-    /** Note that the peer failed to respond to the db lookup in any way */
+    /**
+     *  Note that the peer failed to respond to the db lookup in any way
+     *
+     *  <p>Also feeds the combined failure rate with a failure (1).
+     */
     public void lookupFailed() {
         _failedLookups.incrementAndGet();
         _failedLookupRate.addData(1);
@@ -114,11 +141,12 @@ public class DBHistory {
     /**
      *  Note that we successfully stored to a floodfill peer and verified the result by asking another floodfill peer
      *
+     *  <p>Also feeds the combined failure rate with a success (0), and the
+     *  network-wide "peer.failedLookupRate" statistic with a success (0).
+     *
      *  @since 0.7.8
      */
     public void storeSuccessful() {
-        // Fixme, redefined this to include both lookup and store fails,
-        // need to fix the javadocs
         _failedLookupRate.addData(0);
         _context.statManager().addRateData("peer.failedLookupRate", 0);
         _lastStoreSuccessful = _context.clock().now();
@@ -127,10 +155,14 @@ public class DBHistory {
     /**
      *  Note that floodfill verify failed
      *
+     *  <p>Also feeds the combined failure rate with a failure (1). The
+     *  network-wide "peer.failedLookupRate" statistic is deliberately not fed
+     *  here, so a store failure is counted against this peer but only dilutes
+     *  rather than inflates the network-wide average.
+     *
      *  @since 0.7.8
      */
     public void storeFailed() {
-        // Fixme, redefined this to include both lookup and store fails, need to fix the javadocs
         _failedLookupRate.addData(1);
         _lastStoreFailed = _context.clock().now();
     }

@@ -82,7 +82,8 @@ public class BuildTestMessageJob extends JobImpl {
         // first goes to the peer then back to us.
         if (_log.shouldDebug()) _log.debug("Building garlic message to test " + _target.getIdentity().getHash().toBase64());
         GarlicConfig config = buildGarlicCloveConfig();
-        // TODO: make the last params on this specify the correct sessionKey and tags used
+        // The session key and tags below are placeholders: this job only
+        // exercises the build request path, never the reply decryption.
         ReplyJob replyJob = new JobReplyJob(getContext(), _onSend, config.getRecipient().getIdentity().getPublicKey(), config.getId(), null, new HashSet<SessionTag>());
         MessageSelector sel = buildMessageSelector();
         SendGarlicJob job = new SendGarlicJob(getContext(), config, null, _onSendFailed, replyJob, _onSendFailed, _timeoutMs, _priority, sel);

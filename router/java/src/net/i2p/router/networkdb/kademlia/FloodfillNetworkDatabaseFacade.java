@@ -884,9 +884,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @return null always
      * @since 0.9.10
      */
-    // Client sub-DBs cannot use exploratory tunnels (reply routing needs the
-    // client's session); those searches are delegated to the main NetDb.
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) { // NOSONAR S3516 returns null by design, callers use callbacks
+        // Client sub-DBs cannot use exploratory tunnels (reply routing needs the
+        // client's session); those searches are delegated to the main NetDb.
         if (key == null) {
             if (_log.shouldWarn()) {_log.warn("NULL key search requested -> Failing callbacks...");}
             failSearchCallbacks(onFindJob, onFailedLookupJob);

@@ -185,9 +185,14 @@ public abstract class GatewayITBase extends RouterITBase {
             return rv;
         }
 
+        /**
+         * Intentional no-op: this receiver only ever consumes, it never sends,
+         * so there is no next hop to report.
+         *
+         * @return null, always
+         */
         @Override
         public Hash getSendTo() {
-            // TODO Auto-generated method stub
             return null;
         }
     }

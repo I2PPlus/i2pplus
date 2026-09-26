@@ -274,15 +274,15 @@ abstract class StoreJob extends JobImpl {
         }
     }
 
+    /**
+     * Find the closest floodfill routers to a given key.
+     *
+     * @param key the target hash to find routers near
+     * @param numClosest how many routers to return
+     * @param alreadyChecked set of router hashes to skip
+     * @return list of closest floodfill router hashes, empty if there are no KBuckets
+     */
     private List<Hash> getClosestFloodfillRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
-        /**
-         * Find the closest floodfill routers to a given key.
-         *
-         * @param key the target hash to find routers near
-         * @param numClosest how many routers to return
-         * @param alreadyChecked set of router hashes to skip
-         * @return list of closest floodfill router hashes
-         */
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
         KBucketSet<Hash> ks = _facade.getKBuckets();
         if (ks == null) return new ArrayList<>();

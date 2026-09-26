@@ -145,8 +145,7 @@ class PeerManager {
         public void run() {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
-            boolean shouldDecay = uptime > 4*60*60*1000L;
-            try {_organizer.reorganize(true, shouldDecay);}
+            try {_organizer.reorganize(true);}
             catch (Exception t) {_log.log(Log.CRIT, "Error evaluating profiles", t);}
             // Evict profiles for peers no longer in netdb
             // Run after every other reorganize when uptime > 2h
@@ -164,7 +163,7 @@ class PeerManager {
                     storeProfiles();
                     long finished = System.currentTimeMillis();
 
-                    if (shouldDecay) {
+                    if (uptime > 4*60*60*1000L) {
                         int count = _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
                         if (count > 0 && _log.shouldInfo()) {_log.info("Deleted " + count + " old profiles");}
                     }

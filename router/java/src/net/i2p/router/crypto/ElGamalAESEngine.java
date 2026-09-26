@@ -374,13 +374,17 @@ public final class ElGamalAESEngine {
      * the decrypted data and update the session as necessary.  If the sentTag is not null,
      * consume it, but if it is null, record the keys, etc as part of a new session.
      *
+     * @param encrypted the encrypted block
+     * @param offset the offset of the encrypted data in the buffer
+     * @param encryptedLen the length of the encrypted data
+     * @param key the session key
+     * @param iv the AES initialization vector
+     * @param sentTag the tag sent with this message, or null to create a new session
      * @param foundTags set which is filled with any sessionTags found during decryption
      * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
      * @return decrypted data or null on failure
      */
-    /*
-     * Note: package private for ElGamalTest.testAES()
-     */
+    // Note: package private for ElGamalTest.testAES()
     byte[] decryptAESBlock(byte[] encrypted, int offset, int encryptedLen, SessionKey key, byte[] iv,
                            byte[] sentTag, Set<SessionTag> foundTags, SessionKey foundKey) {
         byte[] decrypted = new byte[encryptedLen];
