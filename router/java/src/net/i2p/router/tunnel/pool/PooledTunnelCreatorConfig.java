@@ -59,6 +59,13 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * so immediately stop using it.
      * For outbound non-zero-hop tunnels only.
      *
+     * Blames all peers proportionally via
+     * {@link TunnelPool#tunnelFailed(TunnelInfo)} rather than concentrating the
+     * full penalty on the first hop: most first-hop send failures are local
+     * congestion, not a dead peer, and single-peer blame at 100 points per
+     * failure destroyed healthy first-hop peers en masse (banlist grew 15x in
+     * 26 min on a live router).
+     *
      * @since 0.9.53
      */
     @Override
