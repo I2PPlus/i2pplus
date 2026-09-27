@@ -826,6 +826,11 @@ public class TunnelPool {
      */
     static boolean passesScanGates(TunnelInfo info, long now, boolean longTunnelsOnly) {
         if (info.getTunnelFailed()) {return false;}
+        // A tunnel marked FAILING or FAILED via setTestFailing()/setTestFailed()
+        // can have _failures == 0, so getTunnelFailed() alone does not exclude
+        // it — ask the status itself.  Shares isUnusable() with the usable-count
+        // helpers so scan eligibility and capacity counting cannot disagree.
+        if (info.getTestStatus().isUnusable()) {return false;}
         if (info.getConsecutiveFailures() > TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES) {return false;}
         if (info.getExpiration() <= now) {return false;}
         if (longTunnelsOnly && info.getLength() <= 1) {return false;}
@@ -1157,8 +1162,7 @@ public class TunnelPool {
         try {
             for (TunnelInfo t : _tunnels) {
                 if (t.getExpiration() <= now) continue;
-                if (t.getTunnelFailed() ||
-                    t.getTestStatus() == TunnelTestStatus.FAILING) continue;
+                if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
@@ -1173,8 +1177,8 @@ public class TunnelPool {
      *  them as healthy would hold the ensure gate at the long throttle
      *  while the pool cannot carry traffic.
      *
-     *  @return the number of healthy (non soft-degraded) usable tunnels
-     *  @since 0.9.71+
+     * @return the number of healthy (non soft-degraded) usable tunnels
+     * @since 0.9.71+
      */
     int getHealthyTunnelCount() {
         long now = _context.clock().now();
@@ -1183,8 +1187,7 @@ public class TunnelPool {
         try {
             for (TunnelInfo t : _tunnels) {
                 if (t.getExpiration() <= now) continue;
-                if (t.getTunnelFailed() ||
-                    t.getTestStatus() == TunnelTestStatus.FAILING) continue;
+                if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
                 if (t.getSoftFailures() >= SOFT_DEGRADED_FOR_ENSURE) continue;
                 count++;
             }
@@ -1503,7 +1506,9 @@ public class TunnelPool {
         if (!isServerPool()) {return;}
         Hash dest = _settings.getDestination();
         TunnelPool oppositePool = _manager.getOutboundPool(dest);
-        if (oppositePool == null || oppositePool.size() > 1) {return;}
+        // Use usable count (not size()) so a pool of FAILING/FAILED tunnels
+        // doesn't block pre-build — raw size would hide an effectively dead pool.
+        if (oppositePool == null || oppositePool.getUsableTunnelCount() > 1) {return;}
         if (size() <= 1) {return;}
         long nowMs = _context.clock().now();
         if (nowMs - _lastPreBuildTime < PRE_BUILD_THROTTLE_MS) {return;}
@@ -1528,7 +1533,9 @@ public class TunnelPool {
         Hash dest = _settings.getDestination();
         TunnelPool oppositePool = _manager.getOutboundPool(dest);
         if (oppositePool == null) {return false;}
-        int oppositeUsable = oppositePool.size();
+        // Use usable count (not size()) so a pool of FAILING/FAILED tunnels
+        // doesn't hide a synchronized-collapse risk behind raw capacity.
+        int oppositeUsable = oppositePool.getUsableTunnelCount();
         int oppositeMin = oppositePool.getSettings().getQuantity();
         if (oppositeUsable >= oppositeMin) {return false;}
         if (_log.shouldDebug()) {
@@ -3747,7 +3754,9 @@ public class TunnelPool {
         // Non-published tunnels are valid backups — they carry data and can be
         // included in the next LeaseSet.  Pruning them creates churn: build 3
         // → publish 1 gateway → prune 2 → pool drops to 0-1 → EMERGENCY → repeat.
-        int poolSize = size();
+        // Use usable count (not size()) so FAILING/FAILED tunnels don't inflate
+        // the collapse guard — pruning must not drop usable tunnels below target.
+        int poolSize = getUsableTunnelCount();
         if (wouldDropBelowTarget(poolSize, toRemove.size())) {return;}
         if (_log.shouldInfo()) {
             _log.info(toString() + " -> Pruning " + toRemove.size() +
@@ -4399,7 +4408,8 @@ public class TunnelPool {
         if (t instanceof PooledTunnelCreatorConfig) {
             PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) t;
             if (cfg.getVerifiedBytesTransferred() > 0 &&
-                wallNow - cfg.getLastTransferred() < IN_USE_TRAFFIC_MS) {
+                wallNow - cfg.getLastTransferred() < IN_USE_TRAFFIC_MS &&
+                cfg.getTestStatus() != TunnelTestStatus.FAILED) {
                 cfg.clearTestFailures();
                 return true;
             }
@@ -4421,14 +4431,15 @@ public class TunnelPool {
      *  call site, so the old inbound-only restriction no longer describes
      *  what the marker means.
      *
-     *  FAILED (3+ consecutive failures) is cleared alongside FAILING (1-2):
-     *  with removal deferred in favour of marking, a retained tunnel that then
-     *  carries real traffic has demonstrated exactly the recovery the mark was
-     *  provisional for, and should resume normal service instead of spending
-     *  the rest of its lifetime as a second-class citizen.  A genuinely dead
-     *  tunnel stamps neither marker, so it stays FAILING/FAILED, is excluded
-     *  from {@link #countUsableTunnels()} while marked, and ages out at
-     *  natural expiry — retention cannot strand it as usable.
+     *  FAILED (3+ consecutive failures) is dead and is NOT cleared here.  A
+     *  traffic stamp proves one packet got through, which is not evidence
+     *  against three consecutive failed tests; only a real passing test (or a
+     *  rebuild) returns a dead tunnel to service.  FAILING (1-2 failures) is
+     *  transient by definition and clears on a single proof.  A genuinely
+     *  dead tunnel stamps neither marker, so it stays FAILING/FAILED, is
+     *  excluded from {@link #getUsableTunnelCount()} and
+     *  {@link #getHealthyTunnelCount()} while marked, and ages out at natural
+     *  expiry — retention cannot strand it as usable.
      *
      *  UNTESTED tunnels that have delivered verified bytes are promoted to
      *  GOOD outright as well.  A tunnel that received real end-to-end traffic
@@ -4452,8 +4463,7 @@ public class TunnelPool {
                 TunnelInfo info = _tunnels.get(i);
                 if (!(info instanceof PooledTunnelCreatorConfig)) {continue;}
                 TunnelTestStatus ts = info.getTestStatus();
-                if (ts != TunnelTestStatus.FAILING && ts != TunnelTestStatus.FAILED &&
-                    ts != TunnelTestStatus.UNTESTED) {continue;}
+                if (ts != TunnelTestStatus.FAILING && ts != TunnelTestStatus.UNTESTED) {continue;}
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
                 long lastTraffic = cfg.getLastRealTraffic();
                 if (lastTraffic <= 0 || now - lastTraffic >= TestJob.TRAFFIC_PROOF_MS) {continue;}

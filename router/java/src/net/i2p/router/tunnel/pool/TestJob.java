@@ -65,6 +65,14 @@ public class TestJob extends JobImpl {
      * of counting it.  Reset at the start of every selection.
      */
     private boolean _partnerFallback;
+    /**
+     * Consecutive test rounds deferred because the partner tunnel was suspect.
+     * Bounded so a tunnel that genuinely fails tests is eventually marked even
+     * when its partner is also degraded — otherwise cascading deferrals delay
+     * failure detection indefinitely.
+     * @since 0.9.71+
+     */
+    private int _partnerDeferrals;
     private SessionTag _encryptTag;
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
@@ -93,6 +101,14 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     private static final int MAX_PAIRED_POOL_KICKS = 3;
+    /**
+     * Maximum consecutive test rounds that can be deferred because the partner
+     * tunnel was suspect before the failure is counted regardless.  A tunnel
+     * that genuinely fails tests must eventually be marked, even if its partner
+     * is also degraded.
+     * @since 0.9.71+
+     */
+    private static final int MAX_PARTNER_DEFERRALS = 3;
     private int _pairedPoolKicks = 0;
     /**
      * Maximum number of deferrals allowed after the paired-pool kick budget
@@ -2553,6 +2569,7 @@ public class TestJob extends JobImpl {
         // Set test status to TESTING
         _cfg.setTestStarted();
         _partnerFallback = false;
+        _partnerDeferrals = 0;
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
@@ -3112,8 +3129,7 @@ public class TestJob extends JobImpl {
         if (partner == null) {return false;}
         if (partner.getLength() <= 1) {return true;}
         if (partner.getTunnelFailed()) {return true;}
-        TunnelTestStatus ts = partner.getTestStatus();
-        if (ts == TunnelTestStatus.FAILED || ts == TunnelTestStatus.FAILING) {return true;}
+        if (partner.getTestStatus().isUnusable()) {return true;}
         return partnerFallback;
     }
 
@@ -3141,14 +3157,20 @@ public class TestJob extends JobImpl {
         // tunnel once that budget is spent.
         TunnelInfo partner = _cfg.isInbound() ? _outTunnel : _replyTunnel;
         if (shouldDeferForPartner(partner, _partnerFallback)) {
-            if (_log.shouldWarn()) {
-                _log.warn("Tunnel Test failed -> partner " + partner +
-                          (_partnerFallback ? " (exploratory fallback)" : "") +
-                          " is not usable -> deferring test of " + _cfg);
+            _partnerDeferrals++;
+            if (_partnerDeferrals >= MAX_PARTNER_DEFERRALS) {
+                _partnerDeferrals = 0;
+            } else {
+                if (_log.shouldWarn()) {
+                    _log.warn("Tunnel Test failed -> partner " + partner +
+                              (_partnerFallback ? " (exploratory fallback)" : "") +
+                              " is not usable -> deferring test of " + _cfg +
+                              " (" + _partnerDeferrals + "/" + MAX_PARTNER_DEFERRALS + ")");
+                }
+                deferForMissingPartner(_pool.getPairedPool(),
+                                       _cfg.isInbound() ? "outbound" : "inbound");
+                return;
             }
-            deferForMissingPartner(_pool.getPairedPool(),
-                                   _cfg.isInbound() ? "outbound" : "inbound");
-            return;
         }
 
         // Record the failed round so getSuccessRate() reflects reality and
