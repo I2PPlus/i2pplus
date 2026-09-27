@@ -137,6 +137,48 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     static final int MAX_SCALED_RESUME_CYCLES = MAX_RESUME_CYCLES * SCALED_CAP_MULTIPLIER;
 
     /**
+     *  Sentinel for "no wall-clock deadline", matching
+     *  {@code I2PTunnelClientBase.NO_DEADLINE}.
+     *
+     *  @since 0.9.71+
+     */
+    static final long NO_DEADLINE = -1;
+
+    /**
+     *  Wall-clock ceiling on one entity's resume/reconnect sequence (ms),
+     *  independent of Content-Length.
+     *
+     *  <p>The cycle caps in {@link #stallCycleLimit(long)} and
+     *  {@link #totalCycleLimit(long)} bound attempt <i>count</i>, but each
+     *  attempt may block for a full connect timeout, so a large entity's
+     *  29x-scaled budget can keep a runner busy for hours against a
+     *  destination that is answering but never finishing. This deadline is
+     *  the only bound expressed in the unit the browser actually waits in.
+     *
+     *  <p>Set well above what the baseline caps can consume (4 empty-reconnect
+     *  cycles, each bounded by a connect timeout) so ordinary small-entity
+     *  reconnects are never cut short; it only bounds the size-scaled ramp.
+     *
+     *  @since 0.9.71+
+     */
+    static final long RESUME_DEADLINE_MS = 30 * 60 * 1000;
+
+    /**
+     *  Largest Content-Length that may enlarge the retry ramp (bytes).
+     *
+     *  <p>The ramp exists because a genuinely long transfer survives
+     *  proportionally more tunnel-pool churn than a small file. A
+     *  Content-Length beyond this is not a long transfer, it is an upstream
+     *  claim no honest peer makes, and it must not be able to buy extra retry
+     *  budget: the cap is already saturated long before this size, so clamping
+     *  the input costs nothing real and denies a hostile or broken destination
+     *  the largest rung of the ladder.
+     *
+     *  @since 0.9.71+
+     */
+    static final long RETRY_RAMP_MAX_BYTES = 1024L * 1024L * 1024L;
+
+    /**
      *  Base delay before empty-retry cycle N+1 (ms). Combined with exponential
      *  growth this keeps successful-connect-but-empty retries from spinning
      *  back-to-back and stampeding the remote SYN-burst gate.
@@ -286,8 +328,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  @since 0.9.71+
      */
     static int stallCycleLimit(long contentLength) {
-        long ramp = contentLength > 0 ? contentLength / RETRY_RAMP_UNIT_BYTES : 0;
-        return (int) Math.min(MAX_EMPTY_RECONNECT_CYCLES + ramp, MAX_SCALED_STALL_CYCLES);
+        return scaledCycleLimit(contentLength, MAX_EMPTY_RECONNECT_CYCLES, MAX_SCALED_STALL_CYCLES);
     }
 
     /**
@@ -305,8 +346,49 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  @since 0.9.71+
      */
     static int totalCycleLimit(long contentLength) {
-        long ramp = contentLength > 0 ? contentLength / RETRY_RAMP_UNIT_BYTES : 0;
-        return (int) Math.min(MAX_RESUME_CYCLES + ramp, MAX_SCALED_RESUME_CYCLES);
+        return scaledCycleLimit(contentLength, MAX_RESUME_CYCLES, MAX_SCALED_RESUME_CYCLES);
+    }
+
+    /**
+     *  Whether a resume sequence has run past its wall-clock deadline. Pure
+     *  decision so the bound can be pinned without a live transfer.
+     *
+     *  <p>The cycle caps in {@link #stallCycleLimit(long)} and
+     *  {@link #totalCycleLimit(long)} bound attempt <i>count</i>, not elapsed
+     *  time: every attempt may block for a full connect timeout, so a large
+     *  entity's 29x-scaled budget can hold a runner busy for hours against a
+     *  destination that keeps answering but never finishes. This is the only
+     *  bound expressed in the unit the browser actually waits in, and it must
+     *  hold even while progress is being made and cycle budget remains.
+     *
+     * @param deadlineMs absolute deadline in ms, or {@link #NO_DEADLINE}
+     * @param nowMs current time in ms, ignored when no deadline applies
+     * @return true if the deadline applies and has been reached
+     * @since 0.9.71+
+     */
+    static boolean resumeDeadlineExpired(long deadlineMs, long nowMs) {
+        if (deadlineMs == NO_DEADLINE) {return false;}
+        return nowMs >= deadlineMs;
+    }
+
+    /**
+     *  Shared size-scaled cycle cap. Pure so both limits stay pinned by one
+     *  set of tests and neither can drift back to accepting an unclamped
+     *  Content-Length.
+     *
+     * @param contentLength entity Content-Length in bytes, or -1 if unknown
+     * @param baseline cap for entities at or below the ramp unit
+     * @param maxCap hard ceiling on the ramp
+     * @return the cap for this entity, never below the baseline
+     * @since 0.9.71+
+     */
+    private static int scaledCycleLimit(long contentLength, int baseline, int maxCap) {
+        // Clamp before dividing: a hostile or broken upstream can declare an
+        // arbitrarily large length, and the ramp is the only thing that turns
+        // that claim into extra retry attempts.
+        long len = contentLength > RETRY_RAMP_MAX_BYTES ? RETRY_RAMP_MAX_BYTES : contentLength;
+        long ramp = len > 0 ? len / RETRY_RAMP_UNIT_BYTES : 0;
+        return (int) Math.min(baseline + ramp, maxCap);
     }
 
     /**
@@ -326,6 +408,46 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         private int stallCycles;
         private int totalCycles;
         private long lastBody = -1;
+        private final long deadlineMs;
+        private final Clock _clock;
+
+        /**
+         *  Budget bounded by cycle caps alone, for callers that want the
+         *  historical behaviour and tests that pin the cycle arithmetic.
+         */
+        ResumeBudget() {
+            this(NO_DEADLINE, null);
+        }
+
+        /**
+         *  @param deadlineMs absolute wall-clock deadline for the whole resume
+         *         sequence, or {@link #NO_DEADLINE} to rely on the cycle caps
+         *         alone
+         */
+        ResumeBudget(long deadlineMs) {
+            this(deadlineMs, null);
+        }
+
+        /**
+         *  Production constructor: bounds the sequence by wall clock as well as
+         *  by cycle count.
+         *
+         * @param clock the context clock, used for the deadline only
+         */
+        ResumeBudget(Clock clock) {
+            this(clock.now() + RESUME_DEADLINE_MS, clock);
+        }
+
+        /**
+         *  @param deadlineMs absolute wall-clock deadline, or {@link #NO_DEADLINE}
+         *  @param clock clock to read, or null to read the system clock only
+         *         when a deadline is actually set (so the cycle-only path costs
+         *         no clock lookup at all)
+         */
+        ResumeBudget(long deadlineMs, Clock clock) {
+            this.deadlineMs = deadlineMs;
+            this._clock = clock;
+        }
 
         /**
          *  Consume one resume cycle for the given body progress.
@@ -336,6 +458,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
          *  @return true if another resume attempt may proceed
          */
         boolean tryConsume(long bodyReceived, long contentLength) {
+            if (resumeDeadlineExpired(deadlineMs, deadlineMs == NO_DEADLINE ? 0 : _nowMs())) {return false;}
             boolean progressed = lastBody >= 0 && bodyReceived > lastBody;
             if (progressed) {stallCycles = 0;}
             lastBody = bodyReceived;
@@ -344,6 +467,10 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             totalCycles++;
             stallCycles++;
             return true;
+        }
+
+        private long _nowMs() {
+            return _clock != null ? _clock.now() : System.currentTimeMillis();
         }
 
         /** Stall cycles consumed so far (including the in-flight one). @since 0.9.71+ */
@@ -1361,7 +1488,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      */
     private void resumeIncompleteBody(OutputStream out) {
         if (_reconnectCallback == null || !isRetryableRequest(initialI2PData)) {return;}
-        ResumeBudget budget = new ResumeBudget();
+        ResumeBudget budget = new ResumeBudget(I2PAppContext.getGlobalContext().clock());
         // Set after a transient 408/502/503/504 aborts a Range attempt: the
         // response stream's header-written state was reset while swallowing
         // the failed resume headers, so Range eligibility (which requires

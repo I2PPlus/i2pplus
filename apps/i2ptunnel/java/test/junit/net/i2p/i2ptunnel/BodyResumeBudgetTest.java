@@ -199,4 +199,73 @@ public class BodyResumeBudgetTest {
         }
         assertEquals(STALLS, allowed);
     }
+
+    /**
+     * The cycle caps bound attempt <i>count</i>, not elapsed time: each attempt
+     * can block for a full connect timeout, so a large entity's 29x-scaled
+     * budget can hold a runner for hours. The wall-clock deadline is the bound
+     * expressed in the unit the browser actually waits in.
+     */
+    @Test
+    public void testResumeDeadlineExpired() {
+        long deadline = 1000L;
+        assertFalse("well before", I2PTunnelRunner.resumeDeadlineExpired(deadline, 0L));
+        assertFalse("one ms before", I2PTunnelRunner.resumeDeadlineExpired(deadline, 999L));
+        assertTrue("reached exactly", I2PTunnelRunner.resumeDeadlineExpired(deadline, 1000L));
+        assertTrue("past", I2PTunnelRunner.resumeDeadlineExpired(deadline, 1001L));
+        assertTrue("far past", I2PTunnelRunner.resumeDeadlineExpired(deadline, Long.MAX_VALUE));
+    }
+
+    /** The no-deadline sentinel never expires, whatever the current time. */
+    @Test
+    public void testResumeDeadlineSentinelNeverExpires() {
+        assertFalse(I2PTunnelRunner.resumeDeadlineExpired(
+                I2PTunnelRunner.NO_DEADLINE, 0L));
+        assertFalse(I2PTunnelRunner.resumeDeadlineExpired(
+                I2PTunnelRunner.NO_DEADLINE, Long.MAX_VALUE));
+    }
+
+    /** An expired deadline stops the sequence even with cycle budget left and
+     *  forward progress being made — the case cycle caps cannot catch. */
+    @Test
+    public void testExpiredDeadlineStopsProgressingTransfer() {
+        // deadline already in the past at construction time
+        I2PTunnelRunner.ResumeBudget b =
+                new I2PTunnelRunner.ResumeBudget(System.currentTimeMillis() - 1L);
+        assertFalse("expired budget must refuse immediately", b.tryConsume(1, -1L));
+        assertEquals(0, b.getTotalCycles());
+        assertEquals(0, b.getStallCycles());
+    }
+
+    /** A future deadline does not shorten the cycle budget. */
+    @Test
+    public void testUnexpiredDeadlineLeavesCycleCapsIntact() {
+        I2PTunnelRunner.ResumeBudget b =
+                new I2PTunnelRunner.ResumeBudget(Long.MAX_VALUE);
+        int allowed = 0;
+        for (int i = 0; i < STALLS + 8; i++) {
+            if (b.tryConsume(54337L, -1L)) {allowed++;}
+        }
+        assertEquals(STALLS, allowed);
+    }
+
+    /** The cycle-only budget is unaffected by wall-clock time. */
+    @Test
+    public void testNoDeadlineBudgetIgnoresTime() {
+        I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
+        int allowed = 0;
+        for (int i = 0; i < STALLS + 8; i++) {
+            if (b.tryConsume(54337L, -1L)) {allowed++;}
+        }
+        assertEquals(STALLS, allowed);
+    }
+
+    /** The production deadline must be generous enough not to cut short the
+     *  baseline caps, which is what it exists to bound: the ramp, not the
+     *  normal case. */
+    @Test
+    public void testProductionDeadlineExceedsBaselineBudget() {
+        assertTrue("deadline must exceed a connect-timeout-scale baseline",
+                I2PTunnelRunner.RESUME_DEADLINE_MS > 60_000L);
+    }
 }

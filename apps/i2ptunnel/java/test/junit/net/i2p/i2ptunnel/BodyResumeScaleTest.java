@@ -60,4 +60,38 @@ public class BodyResumeScaleTest {
         assertEquals(116, I2PTunnelRunner.stallCycleLimit(Long.MAX_VALUE));
         assertEquals(928, I2PTunnelRunner.totalCycleLimit(Long.MAX_VALUE));
     }
+
+    /**
+     * A Content-Length beyond {@link I2PTunnelRunner#RETRY_RAMP_MAX_BYTES} is
+     * an upstream claim, not a long transfer. The ramp is the only thing that
+     * converts that claim into extra retry attempts, so the input is clamped
+     * before it is used. The cap is already saturated at 1GB, so this costs no
+     * real budget while denying a hostile destination the top of the ladder.
+     */
+    @Test
+    public void testRampInputIsClampedBeforeUse() {
+        long max = I2PTunnelRunner.RETRY_RAMP_MAX_BYTES;
+        assertEquals(max, 1024L * MB);
+        // everything at or above the clamp yields the identical budget
+        int stall = I2PTunnelRunner.stallCycleLimit(max);
+        int total = I2PTunnelRunner.totalCycleLimit(max);
+        for (long size : new long[] {max + 1, 2 * max, 4L * 1024 * MB, Long.MAX_VALUE}) {
+            assertEquals("stall limit for " + size,
+                    stall, I2PTunnelRunner.stallCycleLimit(size));
+            assertEquals("total limit for " + size,
+                    total, I2PTunnelRunner.totalCycleLimit(size));
+        }
+        // and it is still the saturated hard cap, not something larger
+        assertEquals(I2PTunnelRunner.MAX_SCALED_STALL_CYCLES, stall);
+        assertEquals(I2PTunnelRunner.MAX_SCALED_RESUME_CYCLES, total);
+    }
+
+    /** A negative length is treated as unknown, never as a negative ramp. */
+    @Test
+    public void testNegativeLengthIsUnknownNotNegativeRamp() {
+        for (long bad : new long[] {-1, -2, Long.MIN_VALUE}) {
+            assertEquals("stall for " + bad, 4, I2PTunnelRunner.stallCycleLimit(bad));
+            assertEquals("total for " + bad, 32, I2PTunnelRunner.totalCycleLimit(bad));
+        }
+    }
 }
