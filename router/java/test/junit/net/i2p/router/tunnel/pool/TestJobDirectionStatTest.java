@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import net.i2p.I2PAppContext;
 import net.i2p.stat.RateConstants;
@@ -10,14 +11,16 @@ import org.junit.Test;
 
 /**
  * Contract tests for the per-direction test outcome stats:
- * {@link TestJob#directionStat(boolean, boolean)} and
- * {@link TestJob#registerDirectionStats(StatManager, long[])}.
+ * {@link TestJob#directionStat(boolean, boolean)},
+ * {@link TestJob#registerDirectionStats(StatManager, long[])} and
+ * {@link TestJob#recordDirectionStat(StatManager, boolean, boolean)}.
  *
  * These counters exist because a passing test emits no log line at all, so
  * without them a log review cannot tell "no outbound tests passed" from
  * "passing tests are not logged". The name builder is shared by the registrar
  * and the emitters, so these tests pin the whole contract: the names, their
- * distinctness, and that declaring them actually makes them recordable.
+ * distinctness, that declaring them actually makes them recordable, and that
+ * the value written is a count rather than a duration.
  *
  * @since 0.9.71+
  */
@@ -123,5 +126,26 @@ public class TestJobDirectionStatTest {
             assertNotEquals(name, TestJob.directionStat(false, true));
             assertNotEquals(name, TestJob.directionStat(false, false));
         }
+    }
+
+    /**
+     * Every one of these stats is declared "(count)", so the emitter must write
+     * a unit event. Writing the round-trip time instead would make Average a
+     * sum of milliseconds — the console then reports thousands where the event
+     * count is in the hundreds, and the pass/fail rate becomes unreadable.
+     * Latency is already carried by tunnel.testSuccessTime / testFailedTime.
+     */
+    @Test
+    public void emissionRecordsUnitCountNotDuration() {
+        StatManager stats = mock(StatManager.class);
+        TestJob.recordDirectionStat(stats, true, true);
+        TestJob.recordDirectionStat(stats, true, false);
+        TestJob.recordDirectionStat(stats, false, true);
+        TestJob.recordDirectionStat(stats, false, false);
+        verify(stats).addRateData(eq("tunnel.testInboundSuccess"), eq(1L));
+        verify(stats).addRateData(eq("tunnel.testInboundFailed"), eq(1L));
+        verify(stats).addRateData(eq("tunnel.testOutboundSuccess"), eq(1L));
+        verify(stats).addRateData(eq("tunnel.testOutboundFailed"), eq(1L));
+        verifyNoMoreInteractions(stats);
     }
 }

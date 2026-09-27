@@ -624,6 +624,25 @@ public class TestJob extends JobImpl {
     }
 
     /**
+     * Record one per-direction test outcome event.
+     *
+     * All four stats are declared {@code (count)}, so every emission must pass
+     * a unit value.  The emitters already keep the round-trip time in
+     * {@code tunnel.testSuccessTime} / {@code tunnel.testFailedTime}; handing
+     * that duration to a count stat makes {@code Average} a sum of milliseconds
+     * and hides the pass/fail rate entirely.  Centralising the write here is
+     * what makes that mistake unrepresentable at the call sites.
+     *
+     * @param stats manager to record against
+     * @param inbound true for an inbound tunnel, false for outbound
+     * @param success true for a test that passed, false for one that failed
+     * @since 0.9.71+
+     */
+    static void recordDirectionStat(StatManager stats, boolean inbound, boolean success) {
+        stats.addRateData(directionStat(inbound, success), 1);
+    }
+
+    /**
      * Start a per-context reset of the batch-dispatch subsystem: a router
      * restart, as called from {@code TunnelPoolManager.restart()} before the
      * pools are torn down.  Offers and dispatch are refused while the state is
@@ -2783,7 +2802,7 @@ public class TestJob extends JobImpl {
 
         ctx.statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength());
         ctx.statManager().addRateData("tunnel.testSuccessTime", ms);
-        ctx.statManager().addRateData(directionStat(_cfg.isInbound(), true), ms);
+        recordDirectionStat(ctx.statManager(), _cfg.isInbound(), true);
 
         _outTunnel.incrementVerifiedBytesTransferred(1024);
         noteSuccess(ms, _outTunnel);
@@ -3091,7 +3110,7 @@ public class TestJob extends JobImpl {
             timeToFail);
         // Counted ahead of the inbound traffic exemption below, so this covers
         // every failure including the ones the exemption suppresses.
-        getContext().statManager().addRateData(directionStat(_cfg.isInbound(), false), timeToFail);
+        recordDirectionStat(getContext().statManager(), _cfg.isInbound(), false);
 
         _cfg.clearExpeditedTest();
 
