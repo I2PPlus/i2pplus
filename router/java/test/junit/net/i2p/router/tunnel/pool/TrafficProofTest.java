@@ -160,10 +160,12 @@ public class TrafficProofTest {
         assertEquals(1, cfg.getConsecutiveFailures());
     }
 
-    /** A FAILED tunnel with fresh real traffic is revived — retention is
-     *  provisional and real data is exactly the recovery it waits for. */
+    /** A FAILED tunnel is NOT cleared by a single traffic proof — FAILED
+     *  means 3+ consecutive test failures, which is conclusively dead.  A
+     *  single packet may be a fluke (partial delivery, stale path).  Only
+     *  FAILING (1-2 failures) clears on one proof. */
     @Test
-    public void testFailedClearedOnFreshTraffic() throws Exception {
+    public void testFailedNotClearedOnSingleTraffic() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         TunnelPool pool = createPool(true);
         PooledTunnelCreatorConfig cfg = config(3, true, true, pool);
@@ -172,8 +174,7 @@ public class TrafficProofTest {
 
         pool.clearFailingOnTraffic();
 
-        assertEquals(TunnelTestStatus.GOOD, cfg.getTestStatus());
-        assertEquals(0, cfg.getConsecutiveFailures());
+        assertEquals(TunnelTestStatus.FAILED, cfg.getTestStatus());
     }
 
     /** A FAILED tunnel whose traffic marker has aged out stays FAILED —

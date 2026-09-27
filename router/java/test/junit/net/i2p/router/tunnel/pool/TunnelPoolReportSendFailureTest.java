@@ -16,6 +16,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
@@ -229,6 +230,8 @@ public class TunnelPoolReportSendFailureTest {
         when(clean.getConsecutiveFailures()).thenReturn(failures.get());
         when(clean.getExpiration()).thenReturn(2_000_000L);
         when(clean.getLength()).thenReturn(3);
+        // the gate dereferences the status; a bare mock returns null
+        when(clean.getTestStatus()).thenReturn(TunnelTestStatus.GOOD);
         assertTrue(TunnelPool.passesScanGates(clean, 1_000_000L, false));
     }
 
