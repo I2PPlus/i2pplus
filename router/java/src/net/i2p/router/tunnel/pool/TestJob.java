@@ -66,13 +66,37 @@ public class TestJob extends JobImpl {
     private int _testPeriod;
 
     /**
-     * Maximum number of times a test can be deferred (no partner tunnel available)
-     * before forcing a test or marking the tunnel as failed.  Prevents test deadlock
-     * where both inbound and outbound pools are degraded and neither can test.
+     * Number of times a test can be deferred for lack of a partner tunnel
+     * before the paired pool is kicked to rebuild.  Prevents test deadlock
+     * where both inbound and outbound pools are degraded and neither can
+     * test.  Reaching the cap does NOT fail the tunnel: a pool-wide shortage
+     * is not evidence against this tunnel, and on a server pool that would
+     * drop a healthy tunnel out of the published LeaseSet.
      * @since 0.9.69+
      */
     private static final int MAX_DEFERRED = 3;
     private int _deferredCount = 0;
+    /**
+     * Lifetime budget of paired-pool kicks issued by the deferral escape in
+     * {@link #runJob()}.  A partner shortage is not evidence against this
+     * tunnel, so it is never failed for one — but the kick must still be
+     * bounded, or a paired pool that cannot recover turns into an unbounded
+     * rebuild loop against a tunnel that has no say in the matter.
+     * @since 0.9.71+
+     */
+    private static final int MAX_PAIRED_POOL_KICKS = 3;
+    private int _pairedPoolKicks = 0;
+    /**
+     * Maximum number of deferrals allowed after the paired-pool kick budget
+     * is exhausted before the tunnel is failed.  A tunnel that cannot be
+     * tested because its paired pool is permanently gone must not sit in the
+     * pool forever: it inflates {@code untestedCount}, which blocks new
+     * builds via the {@code addTunnel()} cap.  This bound gives the paired
+     * pool time to recover while still guaranteeing termination.
+     * @since 0.9.71+
+     */
+    private static final int MAX_POST_KICK_DEFERRALS = 2 * MAX_DEFERRED;
+    private int _postKickDeferrals = 0;
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -545,6 +569,58 @@ public class TestJob extends JobImpl {
         stats.createRequiredRateStat("tunnel.testBatchDispatched",
                 "Test rounds dispatched by the batch pump (count)",
                 "Tunnels", periods);
+        // Written from every defer path; previously undeclared, so
+        // addRateData() dropped it silently and deferrals were invisible.
+        stats.createRequiredRateStat("tunnel.testDeferred",
+                "Tests deferred (count)", "Tunnels", periods);
+        stats.createRequiredRateStat("tunnel.testPartnerUnavailable",
+                "No paired-pool partner (count)", "Tunnels", periods);
+        stats.createRequiredRateStat("tunnel.pairedPoolKickExhausted",
+                "Paired-pool kicks exhausted (count)", "Tunnels", periods);
+        stats.createRequiredRateStat("tunnel.postKickDeferralExhausted",
+                "Deferral budget exhausted (count)", "Tunnels", periods);
+    }
+
+    /**
+     * Name of a per-direction test outcome stat.
+     *
+     * A successful test emits no log line at all, so counters are the only way
+     * to see test health by direction — without them "no outbound tests passed"
+     * and "passing tests are not logged" are indistinguishable in a log review.
+     * Registration and emission both route through this method, so a stat can
+     * never be written without being declared: {@code addRateData()} silently
+     * drops names it has not seen.
+     *
+     * @param inbound true for an inbound tunnel, false for outbound
+     * @param success true for a test that passed, false for one that failed
+     * @return stat name, e.g. {@code tunnel.testOutboundFailed}
+     * @since 0.9.71+
+     */
+    static String directionStat(boolean inbound, boolean success) {
+        return "tunnel.test" + (inbound ? "Inbound" : "Outbound") + (success ? "Success" : "Failed");
+    }
+
+    /**
+     * Register the four per-direction test outcome stats written by
+     * {@link #testSuccessful(int)} and by the test-failure handler.
+     *
+     * The failure counters are written before the inbound traffic exemption is
+     * evaluated, so they include failures the exemption later suppresses; the
+     * size of that gap is how much the exemption is masking.
+     *
+     * @param stats manager to declare the stats against
+     * @param periods rate periods to record them over
+     * @since 0.9.71+
+     */
+    static void registerDirectionStats(StatManager stats, long[] periods) {
+        stats.createRequiredRateStat(directionStat(true, true),
+                "Inbound tunnel tests passed (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, true),
+                "Outbound tunnel tests passed (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, false),
+                "Inbound tunnel tests failed (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, false),
+                "Outbound tunnel tests failed (count)", "Tunnels", periods);
     }
 
     /**
@@ -802,7 +878,11 @@ public class TestJob extends JobImpl {
         // to stay UNTESTED indefinitely (a death spiral: UNTESTED tunnels
         // inflate the addTunnel() total, block new GOOD builds, and the pool
         // can never recover enough active tunnels to become non-critical).
-        boolean isFirstTest = (cfg.getTestStatus() == TunnelTestStatus.UNTESTED);
+        // Never-measured tunnels take this path regardless of status, so a
+        // traffic-promoted GOOD tunnel is queued as a first test instead of
+        // waiting behind retests of tunnels that already have a reading.
+        boolean isFirstTest = cfg.getTestStatus() == TunnelTestStatus.UNTESTED ||
+                              firstReadingPending(cfg);
         if (isFirstTest) {
             int current = state.totalTestJobs.get();
             // Critical pools (0 GOOD) always get through, non-critical ones
@@ -1556,10 +1636,30 @@ public class TestJob extends JobImpl {
         if (!hasValidTunnelIds(cfg)) return true;
         if (isPingTunnel(cfg)) return true;
         if (cfg.getExpiration() <= ctx.clock().now()) return true;
-        if (cfg.getTestStatus() != TunnelTestStatus.UNTESTED) return true;
+        // Accept anything that has never been measured: UNTESTED tunnels and
+        // tunnels promoted to GOOD by traffic proof without a test.  Both
+        // need a first reading before they count as tested.
+        if (cfg.getTestStatus() != TunnelTestStatus.UNTESTED && !firstReadingPending(cfg)) return true;
         Long key = getTunnelKey(cfg);
         if (key == null || batchState(ctx).runningTests.containsKey(key)) return true;
         return !isPoolMember(pool, cfg);
+    }
+
+    /**
+     *  Whether a tunnel has never produced a latency reading, i.e. no test
+     *  has ever completed against it.  True for every UNTESTED tunnel, and
+     *  for tunnels promoted to GOOD by {@link TunnelPool}-side traffic proof
+     *  — those are untested in every way that matters: they have no
+     *  measurement, the console shows no latency, and no retest chain exists
+     *  for them.  Such tunnels are first-test candidates and must outrank
+     *  retests of already-measured tunnels.
+     *
+     *  @param cfg the tunnel to inspect, may be null
+     *  @return true when no latency reading exists yet
+     *  @since 0.9.71+
+     */
+    static boolean firstReadingPending(TunnelInfo cfg) {
+        return cfg != null && cfg.getLastLatency() < 0;
     }
 
     /**
@@ -2459,29 +2559,7 @@ public class TestJob extends JobImpl {
                     }
                 }
                 if (_outTunnel == null) {
-                    _deferredCount++;
-                    if (_deferredCount >= MAX_DEFERRED) {
-                        // Test deadlock: both pools degraded, neither has a partner.
-                        // Mark this tunnel as failed to trigger pool recovery rather
-                        // than letting it sit UNTESTED forever blocking builds.
-                        if (_log.shouldWarn()) {
-                            _log.warn("Test deadlock after " + _deferredCount + " deferrals -> marking " +
-                                      _cfg + " as failed (pool may be recovering)");
-                        }
-                        _cfg.incrementTestFailures();
-                        _cfg.setTestFailed();
-                        cleanupTunnelTracking();
-                        decrementIfCounted();
-                        return;
-                    }
-                    if (_log.shouldWarn())
-                        _log.warn("No outbound tunnel for test of " + _cfg +
-                                  " -> Deferring (" + _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
-                    ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
-                    if (!scheduleRetest(false)) {
-                        cleanupTunnelTracking();
-                        decrementIfCounted();
-                    }
+                    deferForMissingPartner(_pool.getPairedPool(), "outbound");
                     return;
                 }
             }
@@ -2490,7 +2568,9 @@ public class TestJob extends JobImpl {
             // Skip testing outbound tunnels that recently sent data —
             // they're obviously working and testing risks false failures
             // on high-traffic paths.  Tunnel must be tested at least once
-            // so every tunnel gets an initial latency reading.
+            // so every tunnel gets an initial latency reading.  Ordering is
+            // unaffected: a tunnel with no reading is still queued first, it
+            // simply waits for the traffic like any other busy tunnel.
             if (_cfg.getTestStatus() != TunnelTestStatus.UNTESTED &&
                 ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
                 if (_log.shouldInfo()) {
@@ -2529,30 +2609,7 @@ public class TestJob extends JobImpl {
                     }
                 }
                 if (_replyTunnel == null) {
-                    _deferredCount++;
-                    if (_deferredCount >= MAX_DEFERRED) {
-                        // Test deadlock: both pools degraded, neither has a partner.
-                        // Mark this tunnel as failed to trigger pool recovery rather
-                        // than letting it sit UNTESTED forever blocking builds.
-                        if (_log.shouldWarn()) {
-                            _log.warn("Test deadlock after " + _deferredCount + " deferrals -> marking " +
-                                      _cfg + " as failed (pool may be recovering)");
-                        }
-                        _cfg.incrementTestFailures();
-                        _cfg.setTestFailed();
-                        cleanupTunnelTracking();
-                        decrementIfCounted();
-                        return;
-                    }
-                    if (_log.shouldWarn()) {
-                        _log.warn("No inbound tunnel for test of " + _cfg + " -> Deferring (" +
-                                  _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
-                    }
-                    ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
-                    if (!scheduleRetest(false)) {
-                        cleanupTunnelTracking();
-                        decrementIfCounted();
-                    }
+                    deferForMissingPartner(_pool.getPairedPool(), "inbound");
                     return;
                 }
             }
@@ -2726,6 +2783,7 @@ public class TestJob extends JobImpl {
 
         ctx.statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength());
         ctx.statManager().addRateData("tunnel.testSuccessTime", ms);
+        ctx.statManager().addRateData(directionStat(_cfg.isInbound(), true), ms);
 
         _outTunnel.incrementVerifiedBytesTransferred(1024);
         noteSuccess(ms, _outTunnel);
@@ -3031,6 +3089,9 @@ public class TestJob extends JobImpl {
         getContext().statManager().addRateData(
             isExploratory ? "tunnel.testExploratoryFailedTime" : "tunnel.testFailedTime",
             timeToFail);
+        // Counted ahead of the inbound traffic exemption below, so this covers
+        // every failure including the ones the exemption suppresses.
+        getContext().statManager().addRateData(directionStat(_cfg.isInbound(), false), timeToFail);
 
         _cfg.clearExpeditedTest();
 
@@ -3306,6 +3367,80 @@ public class TestJob extends JobImpl {
     }
 
     private boolean scheduleRetest(boolean asap) {return scheduleRetest(asap, false);}
+
+    /**
+     *  Handle a test round whose paired pool had no tunnel to pair with.
+     *
+     *  A partner shortage is a property of the pools, not of this tunnel, so
+     *  the round defers instead of failing: on a server pool a failed test
+     *  would drop a healthy inbound tunnel out of the published LeaseSet.
+     *  Recovery is requested by kicking the paired pool to rebuild, but the
+     *  kick is bounded by {@link #MAX_PAIRED_POOL_KICKS} for the life of this
+     *  job — a paired pool that cannot recover must not be rebuilt once per
+     *  deferral window against a tunnel that has no say in the matter.  Once
+     *  the kick budget is spent the round keeps deferring at the normal
+     *  retest cadence, but only for {@link #MAX_POST_KICK_DEFERRALS} more
+     *  rounds: a tunnel whose paired pool is permanently gone must not sit in
+     *  the pool forever inflating {@code untestedCount} and blocking new
+     *  builds via the {@code addTunnel()} cap, so the post-kick deferral
+     *  budget is the termination condition and the tunnel is failed when it
+     *  is exhausted.
+     *
+     *  @param paired pool that could not supply a partner, may be null
+     *  @param direction "inbound" or "outbound", for the log line
+     *  @since 0.9.71+
+     */
+    private void deferForMissingPartner(TunnelPool paired, String direction) {
+        _deferredCount++;
+        RouterContext ctx = getContext();
+        if (_deferredCount >= MAX_DEFERRED) {
+            ctx.statManager().addRateData("tunnel.testPartnerUnavailable", _cfg.getLength());
+            if (_pairedPoolKicks >= MAX_PAIRED_POOL_KICKS) {
+                ctx.statManager().addRateData("tunnel.pairedPoolKickExhausted", _cfg.getLength());
+                _postKickDeferrals++;
+                if (_postKickDeferrals >= MAX_POST_KICK_DEFERRALS) {
+                    ctx.statManager().addRateData("tunnel.postKickDeferralExhausted", _cfg.getLength());
+                    if (_log.shouldWarn()) {
+                        _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
+                                  direction + " partner for " + _cfg +
+                                  " -> paired-pool kick budget and post-kick deferral budget spent, failing tunnel");
+                    }
+                    _cfg.incrementTestFailures();
+                    _cfg.setTestFailed();
+                    cleanupTunnelTracking();
+                    decrementIfCounted();
+                    return;
+                }
+                if (_deferredCount == MAX_DEFERRED && _log.shouldWarn()) {
+                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
+                              direction + " partner for " + _cfg +
+                              " -> paired-pool kick budget spent, deferring");
+                }
+            } else {
+                _pairedPoolKicks++;
+                if (_log.shouldWarn()) {
+                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
+                              direction + " partner for " + _cfg +
+                              " -> rebuilding paired pool and retrying");
+                }
+                if (paired != null) {paired.ensureSufficientTunnels();}
+                // Restart the window so the paired pool is kicked once per
+                // MAX_DEFERRED rounds, not on every retry.
+                _deferredCount = 0;
+                _postKickDeferrals = 0;
+            }
+        } else {
+            ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
+            if (_log.shouldWarn()) {
+                _log.warn("No " + direction + " tunnel for test of " + _cfg + " -> Deferring (" +
+                          _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
+            }
+        }
+        if (!scheduleRetest(false)) {
+            cleanupTunnelTracking();
+            decrementIfCounted();
+        }
+    }
 
     /**
      *  Schedule a retest of this tunnel.

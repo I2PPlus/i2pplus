@@ -899,7 +899,7 @@ public class TestJobBatchQueueTest {
     // ---------------- registerBatchStats ----------------
 
     @Test
-    public void testRegisterBatchStatsCreatesAllFiveRates() {
+    public void testRegisterBatchStatsCreatesAllRates() {
         StatManager stats = mock(StatManager.class);
         long[] periods = RateConstants.SHORT_TERM_RATES;
 
@@ -914,6 +914,14 @@ public class TestJobBatchQueueTest {
         verify(stats).createRequiredRateStat(eq("tunnel.testBatchDenied"),
                 anyString(), eq("Tunnels"), same(periods));
         verify(stats).createRequiredRateStat(eq("tunnel.testBatchDispatched"),
+                anyString(), eq("Tunnels"), same(periods));
+        verify(stats).createRequiredRateStat(eq("tunnel.testDeferred"),
+                anyString(), eq("Tunnels"), same(periods));
+        verify(stats).createRequiredRateStat(eq("tunnel.testPartnerUnavailable"),
+                anyString(), eq("Tunnels"), same(periods));
+        verify(stats).createRequiredRateStat(eq("tunnel.pairedPoolKickExhausted"),
+                anyString(), eq("Tunnels"), same(periods));
+        verify(stats).createRequiredRateStat(eq("tunnel.postKickDeferralExhausted"),
                 anyString(), eq("Tunnels"), same(periods));
         verifyNoMoreInteractions(stats);
     }
