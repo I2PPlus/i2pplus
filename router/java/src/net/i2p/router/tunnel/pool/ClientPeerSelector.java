@@ -627,10 +627,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // (a busy router excludes most of the fast tier).  Retry against the
             // raw set before giving up: an endpoint-less tunnel cannot build at
             // all, so role exclusions are worth relaxing here alone.
+            //
+            // Only the role wrapper is relaxed. The IP restriction and set are
+            // still honoured, because they express a hard network policy
+            // (no US peers, say) rather than a preference about this hop's role.
             if (log.shouldWarn()) {
                 log.warn("CPS no endpoint peer under role exclusions -> retrying against raw exclusions");
             }
-            ctx.profileOrganizer().selectAllNotFailingPeers(1, rawExclude, matches, false);
+            ctx.profileOrganizer().selectAllNotFailingPeers(1, rawExclude, matches, false,
+                    params.ipRestriction, params.ipSet);
         }
         if (matches.isEmpty()) {
             if (log.shouldWarn()) {

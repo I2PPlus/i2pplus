@@ -952,10 +952,11 @@ public class ProfileOrganizer {
      * @param preferUnproven if true, prioritize peers with no tunnel
      *        test history so they accumulate profiling data
      */
-     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
-                                     int mask, MaskedIPSet ipSet, boolean preferUnproven) {
+    public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
+                                    int mask, MaskedIPSet ipSet, boolean preferUnproven) {
         if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, getTunnelBuildSuccess(), preferUnproven);
+            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet,
+                                     getTunnelBuildSuccess(), preferUnproven);
         }
     }
 
@@ -1051,7 +1052,8 @@ public class ProfileOrganizer {
     public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches,
                                          boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
         if (matches.size() < howMany) {
-            selectHighBandwidthPeers(howMany, exclude, matches, onlyNotFailing, getTunnelBuildSuccess());
+            selectHighBandwidthPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet,
+                                     getTunnelBuildSuccess());
         }
     }
 
@@ -1066,7 +1068,7 @@ public class ProfileOrganizer {
      * @param buildSuccess the build success ratio, fetched once per scan
      */
     private void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
-                                          double buildSuccess) {
+                                          int mask, MaskedIPSet ipSet, double buildSuccess) {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
             List<Hash> selected = new ArrayList<>(needed);
@@ -1078,6 +1080,7 @@ public class ProfileOrganizer {
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
                     if (!passesBasicGates(cur) || hasExcessiveLifetimeFailures(cur)) continue;
+                    if (mask > 0 && !notRestricted(cur, ipSet, mask)) continue;
                     RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(cur);
                     if (info != null) {
                         String tier = DataHelper.stripHTML(info.getBandwidthTier());
@@ -1098,7 +1101,7 @@ public class ProfileOrganizer {
             matches.addAll(selected);
         }
         if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, buildSuccess, false);
+            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet, buildSuccess, false);
         }
     }
 
@@ -1139,7 +1142,24 @@ public class ProfileOrganizer {
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      */
     public void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing) {
-        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, getTunnelBuildSuccess(), false);
+        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, 0, null, getTunnelBuildSuccess(), false);
+    }
+
+    /**
+     * Select from all not-failing peers randomly, honouring a /n subnet
+     * diversity restriction.
+     *
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param onlyNotFailing if true, exclude peers already in high-capacity tier
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet subnets already represented in this tunnel
+     */
+    public void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches,
+                                          boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
+        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet,
+                                 getTunnelBuildSuccess(), false);
     }
 
     /**
@@ -1150,12 +1170,14 @@ public class ProfileOrganizer {
      * @param exclude peers to exclude (may be null)
      * @param matches output set populated with selected peer hashes
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
-     * @param mask bitmask length for /n diversity restriction (0 to disable, unused here)
+     * @param mask bitmask length for /n diversity restriction (0 to disable)
+     * @param ipSet subnets already represented in this tunnel, consulted only
+     *        when mask is non-zero
      * @param preferUnproven if true, prioritize peers with no tunnel test history
      *        so they accumulate profiling data through exploratory builds
      */
      private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
-                                     int mask, double buildSuccess, boolean preferUnproven) {
+                                      int mask, MaskedIPSet ipSet, double buildSuccess, boolean preferUnproven) {
         if (matches.size() < howMany) {
             int needed = howMany - matches.size();
             List<Hash> selected = new ArrayList<>(needed);
@@ -1172,6 +1194,10 @@ public class ProfileOrganizer {
                             if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
                             PeerProfile prof = locked_getProfile(cur);
                             if (prof != null && inLossProbation(prof, now)) continue;
+                            // Same /n diversity gate the tier selectors apply, so
+                            // a caller reaching this last-resort pool still honours
+                            // a configured subnet restriction.
+                            if (mask > 0 && !notRestricted(cur, ipSet, mask)) continue;
                             // First pass: only unproven peers (totalRequests == 0)
                             // Second pass: all selectable peers
                             if (inPass && prof != null && prof.getTunnelHistory() != null &&
@@ -1189,6 +1215,7 @@ public class ProfileOrganizer {
                         // they only get picked if literally nothing else is usable.
                         PeerProfile prof = locked_getProfile(cur);
                         if (prof != null && inLossProbation(prof, now)) continue;
+                        if (mask > 0 && !notRestricted(cur, ipSet, mask)) continue;
                         if (isSelectable(cur, buildSuccess)) selected.add(cur);
                     }
                 }
