@@ -127,7 +127,8 @@
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${dist}/${war}">
-      <srcfiles dir="." includes="${build}/**/*.class, web.xml"/>
+      <srcfiles dir="${build}" includes="**/*.class"/>
+      <srcfiles dir="." includes="web.xml"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>

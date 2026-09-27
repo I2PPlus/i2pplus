@@ -108,7 +108,7 @@
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="${build.dir}/router.jar">
-      <srcfiles dir="." includes="build/obj/**/*.class"/>
+      <srcfiles dir="${build.dir}" includes="obj/**/*.class"/>
     </uptodate>
   </target>
 

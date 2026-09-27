@@ -245,7 +245,8 @@
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${build.dir}/i2psnark.war">
-      <srcfiles dir="." includes="build/obj/org/klomp/snark/web/*.class ../res/**/* ../web.xml build.xml ../../routerconsole/jsp/js/onVisible.js ../../routerconsole/jsp/js/morphdom.js"/>
+      <srcfiles dir="${build.dir}" includes="obj/org/klomp/snark/web/*.class"/>
+      <srcfiles dir="." includes="../res/**/* ../web.xml build.xml ../../routerconsole/jsp/js/onVisible.js ../../routerconsole/jsp/js/morphdom.js"/>
     </uptodate>
   </target>
 

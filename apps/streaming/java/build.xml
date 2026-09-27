@@ -241,7 +241,7 @@
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="${build.dir}/streaming.jar">
-      <srcfiles dir="." includes="build/obj/**/*.class"/>
+      <srcfiles dir="${build.dir}" includes="obj/**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>

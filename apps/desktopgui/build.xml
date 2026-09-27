@@ -123,7 +123,7 @@
 
   <target name="jarUpToDate">
     <uptodate property="jar.uptodate" targetfile="${dist}/${jar}">
-      <srcfiles dir="." includes="build/**/*.class"/>
+      <srcfiles dir="${build.dir}" includes="**/*.class"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>
