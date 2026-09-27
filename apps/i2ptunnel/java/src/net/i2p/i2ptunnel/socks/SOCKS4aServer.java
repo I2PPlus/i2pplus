@@ -22,6 +22,7 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
+import net.i2p.i2ptunnel.I2PTunnelHTTPClientBase;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.HexDump;
 
@@ -246,10 +247,8 @@ class SOCKS4aServer extends SOCKSServer {
                 I2PSocketOptions sktOpts = t.buildOptions(overrides);
                 sktOpts.setPort(connPort);
                 destSock = t.createI2PSocket(dest, sktOpts);
-            } else if ("localhost".equals(hostLowerCase) || "127.0.0.1".equals(connHostName) ||
-                       hostLowerCase.endsWith(".localhost") ||
-                       connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
-                String err = "No localhost accesses allowed through the Socks Proxy";
+            } else if (I2PTunnelHTTPClientBase.isBlockedLocalAddress(connHostName)) {
+                String err = "No local or private accesses allowed through the Socks Proxy: " + connHostName;
                 _log.error(err);
                 try {
                     sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);

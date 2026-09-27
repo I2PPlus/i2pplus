@@ -36,11 +36,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -872,20 +874,45 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     *  Copy digest request arguments with the response hash redacted for
-     *  logging. The digest response is replayable inside its nonce window,
-     *  so it is credential material like the password itself.
+     *  Digest arguments whose values are credential material and are replaced
+     *  wholesale before logging. The response hash is replayable inside its
+     *  nonce window; the username and nonce pair identifies the credential
+     *  being targeted; cnonce is the client half of the nonce.
      *
-     *  @param args the parsed digest arguments, may be null
-     *  @return a copy with "response" replaced, empty map if null
      *  @since 0.9.71+
+     */
+    private static final Set<String> AUTH_REDACTED_KEYS =
+            new HashSet<String>(Arrays.asList("response", "username", "nonce", "cnonce"));
+
+    /**
+     *  Copy digest request arguments into a form safe to log: credential
+     *  material is redacted, and every remaining value is stripped of line
+     *  breaks and capped, so a hostile upstream cannot forge extra log lines
+     *  or grow the log without bound.
+     *
+     *  <p>Non-secret protocol parameters (qop, nc, algorithm, realm, uri) are
+     *  kept because they are what makes a failed handshake diagnosable, but
+     *  they are attacker-controlled, so they pass through
+     *  {@link #sanitizeLogValue} rather than being logged raw.
+     *
+     * @param args the parsed digest arguments, may be null
+     * @return a sanitized copy, empty map if null
+     * @since 0.9.71+
      */
     static Map<String, String> sanitizeAuthArgs(Map<String, String> args) {
         if (args == null) {return new HashMap<String, String>(0);}
-        Map<String, String> rv = new HashMap<String, String>(args);
-        if (rv.containsKey("response")) {rv.put("response", "redacted");}
+        Map<String, String> rv = new HashMap<String, String>(args.size());
+        for (Map.Entry<String, String> e : args.entrySet()) {
+            String key = e.getKey();
+            if (AUTH_REDACTED_KEYS.contains(key)) {
+                rv.put(key, "redacted");
+            } else {
+                rv.put(key, sanitizeLogValue(e.getValue()));
+            }
+        }
         return rv;
     }
+
 
     /**
      *  Format the remote address as IP:PORT for ban and failure logging.
@@ -922,11 +949,15 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  (10.0.example.com) is not. Bracketed IPv6 literals, zone ids, and
      *  v4-mapped forms are normalized first.</p>
      *
-     *  @param host the request target host, without port, may be null
-     *  @return true if the host must not be proxied to
-     *  @since 0.9.71+
+     *  <p>Public so the SOCKS4a and SOCKS5 servers, which hand non-.i2p
+     *  targets to the same outproxy plugin, apply one policy rather than a
+     *  narrower copy of it.</p>
+     *
+     * @param host the request target host, without port, may be null
+     * @return true if the host must not be proxied to
+     * @since 0.9.71+
      */
-    static boolean isBlockedLocalAddress(String host) {
+    public static boolean isBlockedLocalAddress(String host) {
         if (host == null) {return true;}
         String h = host.trim();
         if (h.isEmpty()) {return true;}
@@ -967,11 +998,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  so it is blocked too; such a host cannot be a resolvable name, as no
      *  top-level label may be all-numeric.</p>
      *
-     *  @param host the IPv4 host, lowercase, no brackets, may be null
-     *  @return true if blocked
-     *  @since 0.9.71+
+     * @param host the IPv4 host, lowercase, no brackets, may be null
+     * @return true if blocked
+     * @since 0.9.71+
      */
-    static boolean isBlockedIPv4Address(String host) {
+    public static boolean isBlockedIPv4Address(String host) {
         if (host == null || host.isEmpty()) {return true;}
         boolean numeric = true;
         for (int i = 0; i < host.length(); i++) {

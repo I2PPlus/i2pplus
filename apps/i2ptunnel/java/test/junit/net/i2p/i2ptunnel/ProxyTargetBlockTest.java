@@ -88,4 +88,31 @@ public class ProxyTargetBlockTest {
         for (String host : allowed)
             assertFalse(host, I2PTunnelHTTPClientBase.isBlockedLocalAddress(host));
     }
+
+    /**
+     * The SOCKS4a and SOCKS5 servers used to carry their own narrower copy of
+     * this policy, refusing only "localhost", "127.0.0.1", "*.localhost",
+     * "192.168.*" and "[::1]" — which left 127.0.0.2, 10/8, 172.16/12,
+     * 169.254.169.254 and bare "::1" reachable through the outproxy plugin.
+     * Both now delegate to {@link I2PTunnelHTTPClientBase#isBlockedLocalAddress},
+     * so every target that is refused over HTTP is refused over SOCKS too.
+     */
+    @Test
+    public void testSocksServersShareTheHttpPolicy() {
+        // previously allowed through the SOCKS proxy
+        String[] socksBypass = {
+            "127.0.0.2", "127.1", "2130706433", "10.0.0.1", "172.16.0.1",
+            "169.254.169.254", "100.64.0.1", "::1", "0:0:0:0:0:0:0:1",
+            "fe80::1", "fd12:3456:789a::1", "0.0.0.0"
+        };
+        for (String host : socksBypass)
+            assertTrue(host, I2PTunnelHTTPClientBase.isBlockedLocalAddress(host));
+        // and the public targets both paths must still permit
+        String[] stillAllowed = {
+            "8.8.8.8", "1.2.3.4", "172.15.255.255", "172.32.0.1",
+            "2001:4860:4860::8888", "example.com"
+        };
+        for (String host : stillAllowed)
+            assertFalse(host, I2PTunnelHTTPClientBase.isBlockedLocalAddress(host));
+    }
 }

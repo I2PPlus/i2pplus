@@ -539,10 +539,8 @@ class SOCKS5Server extends SOCKSServer {
             I2PSocketOptions sktOpts = t.buildOptions(overrides);
             sktOpts.setPort(connPort);
             return t.createI2PSocket(dest, sktOpts);
-        } else if (hostLowerCase.equals("localhost") || connHostName.equals("127.0.0.1") ||
-                   hostLowerCase.endsWith(".localhost") ||
-                   connHostName.startsWith("192.168.") || connHostName.equals("[::1]")) {
-            String err = "No localhost accesses allowed through the Socks Proxy";
+        } else if (I2PTunnelHTTPClientBase.isBlockedLocalAddress(connHostName)) {
+            String err = "No local or private accesses allowed through the Socks Proxy: " + connHostName;
             _log.error(err);
             sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
             throw new SOCKSException(err);

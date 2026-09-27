@@ -61,20 +61,48 @@ public class AuthLogRedactionTest {
     }
 
     @Test
-    public void testSanitizeAuthArgsRedactsResponse() {
+    public void testSanitizeAuthArgsRedactsCredentialMaterial() {
         Map<String, String> args = new HashMap<String, String>();
         args.put("username", "alice");
         args.put("response", "0123456789abcdef0123456789abcdef");
+        args.put("nonce", "deadbeefdeadbeef");
+        args.put("cnonce", "feedfacefeedface");
         Map<String, String> out = I2PTunnelHTTPClientBase.sanitizeAuthArgs(args);
+        // every field that identifies or reconstructs the credential is redacted
         assertEquals("redacted", out.get("response"));
-        assertEquals("alice", out.get("username"));
+        assertEquals("redacted", out.get("username"));
+        assertEquals("redacted", out.get("nonce"));
+        assertEquals("redacted", out.get("cnonce"));
         // the original is left alone, only the copy is for logging
         assertEquals("0123456789abcdef0123456789abcdef", args.get("response"));
+        assertEquals("alice", args.get("username"));
         assertTrue(I2PTunnelHTTPClientBase.sanitizeAuthArgs(null).isEmpty());
-        Map<String, String> noResponse = new HashMap<String, String>();
-        noResponse.put("username", "bob");
-        assertEquals("bob", I2PTunnelHTTPClientBase.sanitizeAuthArgs(noResponse)
-                     .get("username"));
+    }
+
+    /**
+     * Non-secret protocol parameters stay readable so a failed handshake can
+     * still be diagnosed, but they are upstream-controlled and must be
+     * stripped of line breaks and capped like any other hostile value.
+     */
+    @Test
+    public void testSanitizeAuthArgsKeepsDiagnosticsButSanitizes() {
+        Map<String, String> args = new HashMap<String, String>();
+        args.put("qop", "auth");
+        args.put("nc", "00000001");
+        args.put("algorithm", "md5");
+        args.put("realm", "evil\r\nFORGED: yes");
+        args.put("uri", "/a/b/c");
+        Map<String, String> out = I2PTunnelHTTPClientBase.sanitizeAuthArgs(args);
+        assertEquals("auth", out.get("qop"));
+        assertEquals("00000001", out.get("nc"));
+        assertEquals("md5", out.get("algorithm"));
+        assertEquals("/a/b/c", out.get("uri"));
+        // CR/LF cannot forge an extra log line
+        assertEquals("evil  FORGED: yes", out.get("realm"));
+        StringBuilder pad = new StringBuilder();
+        for (int i = 0; i < 500; i++) {pad.append('y');}
+        args.put("uri", pad.toString());
+        assertEquals(64, I2PTunnelHTTPClientBase.sanitizeAuthArgs(args).get("uri").length());
     }
 
     @Test
