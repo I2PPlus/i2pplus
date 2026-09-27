@@ -1080,7 +1080,6 @@ public class ProfileOrganizer {
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
                     if (!passesBasicGates(cur) || hasExcessiveLifetimeFailures(cur)) continue;
-                    if (mask > 0 && !notRestricted(cur, ipSet, mask)) continue;
                     RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(cur);
                     if (info != null) {
                         String tier = DataHelper.stripHTML(info.getBandwidthTier());
@@ -1091,6 +1090,11 @@ public class ProfileOrganizer {
                                                                             _context.commSystem().isEstablished(cur))) {
                                 continue;
                             }
+                            // Subnet diversity runs last: notRestricted() marks this
+                            // peer's subnet (the mask's prefix length, e.g. /16) as
+                            // used in ipSet, so running it before the checks above
+                            // would consume that subnet for a peer then rejected.
+                            if (mask > 0 && !notRestricted(cur, ipSet, mask)) continue;
                             selected.add(cur);
                         }
                     }
@@ -1194,16 +1198,19 @@ public class ProfileOrganizer {
                             if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
                             PeerProfile prof = locked_getProfile(cur);
                             if (prof != null && inLossProbation(prof, now)) continue;
-                            // Same /n diversity gate the tier selectors apply, so
-                            // a caller reaching this last-resort pool still honours
-                            // a configured subnet restriction.
-                            if (mask > 0 && !notRestricted(cur, ipSet, mask)) continue;
                             // First pass: only unproven peers (totalRequests == 0)
                             // Second pass: all selectable peers
                             if (inPass && prof != null && prof.getTunnelHistory() != null &&
                                    prof.getTunnelHistory().getLifetimeAgreedTo() + prof.getTunnelHistory().getLifetimeRejected() > 0)
                                 continue;
-                            if (isSelectable(cur, buildSuccess)) selected.add(cur);
+                            // Same /n diversity gate the tier selectors apply, so
+                            // a caller reaching this last-resort pool still honours
+                            // a configured subnet restriction.  Runs last: it marks
+                            // the peer's subnet (the mask's prefix length) as used in
+                            // ipSet, so it must not run for a peer rejected above.
+                            if (isSelectable(cur, buildSuccess) &&
+                                    (mask <= 0 || notRestricted(cur, ipSet, mask)))
+                                selected.add(cur);
                         }
                     }
                 } else {
@@ -1215,8 +1222,14 @@ public class ProfileOrganizer {
                         // they only get picked if literally nothing else is usable.
                         PeerProfile prof = locked_getProfile(cur);
                         if (prof != null && inLossProbation(prof, now)) continue;
-                        if (mask > 0 && !notRestricted(cur, ipSet, mask)) continue;
-                        if (isSelectable(cur, buildSuccess)) selected.add(cur);
+                        // Same /n diversity gate the tier selectors apply, so
+                        // a caller reaching this last-resort pool still honours
+                        // a configured subnet restriction.  Runs last: it marks
+                        // the peer's subnet (the mask's prefix length) as used in
+                        // ipSet, so it must not run for a peer rejected above.
+                        if (isSelectable(cur, buildSuccess) &&
+                                (mask <= 0 || notRestricted(cur, ipSet, mask)))
+                            selected.add(cur);
                     }
                 }
             } finally {
@@ -2515,15 +2528,18 @@ public class ProfileOrganizer {
                 skipGated++;
                 continue;
             }
-            if (mask > 0 && !notRestricted(peer, ipSet, mask)) {
-                skipIp++;
-                continue;
-            }
             if (aboveRttCeiling(entry.getValue(), rttCeiling)) {
                 // Don't add to toExclude — RTT is a soft signal, not a hard gate.
                 // Filling the Excluder with RTT-only skips evicts more useful
                 // entries (too-many-tunnels, etc.).
                 skipRtt++;
+                continue;
+            }
+            // Subnet diversity runs last: notRestricted() marks this peer's subnet
+            // (the mask's prefix length, e.g. /16) as used in ipSet, so running it
+            // before the RTT gate would consume that subnet for a peer then rejected.
+            if (mask > 0 && !notRestricted(peer, ipSet, mask)) {
+                skipIp++;
                 continue;
             }
             candidates.add(entry);
