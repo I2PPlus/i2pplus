@@ -2644,6 +2644,26 @@ public class TunnelPool {
     }
 
     /**
+     *  Mark a tunnel failed without blaming any peer.
+     *
+     *  Called from {@code PooledTunnelCreatorConfig.tunnelFailedFirstHop()}
+     *  when a data-phase first-hop send-failure streak reaches the fatal
+     *  threshold.  The first-hop send-failure path records spaced, decayed
+     *  send failures that are overwhelmingly local congestion (expired-on-queue,
+     *  CoDel drops, no-bid replies), not a dead peer.  Blaming peers here
+     *  accumulates ~50 points per failure on each hop of a 3-hop tunnel —
+     *  8 consecutive failures banlists the first hop, the tunnel is removed,
+     *  the pool collapses to zero usable, and the cycle repeats on the next
+     *  generation.  No peer is proven guilty by a send that never left us.
+     *
+     *  @param cfg the tunnel that failed
+     *  @since 0.9.71+
+     */
+    void tunnelFailedWithoutBlame(TunnelInfo cfg) {
+        fail(cfg);
+    }
+
+    /**
      *  Remove the tunnel and blame only one peer.
      *  This may be called multiple times.
      *  Data-phase first-hop send failures also feed the selection cooldown

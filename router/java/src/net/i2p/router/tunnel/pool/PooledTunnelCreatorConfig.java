@@ -59,12 +59,10 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * so immediately stop using it.
      * For outbound non-zero-hop tunnels only.
      *
-     * Blames all peers proportionally via
-     * {@link TunnelPool#tunnelFailed(TunnelInfo)} rather than concentrating the
-     * full penalty on the first hop: most first-hop send failures are local
-     * congestion, not a dead peer, and single-peer blame at 100 points per
-     * failure destroyed healthy first-hop peers en masse (banlist grew 15x in
-     * 26 min on a live router).
+     * Does not blame any peer: first-hop send failures are local congestion,
+     * not a dead peer.  Proportional blame still accumulated ~50 points per
+     * failure per hop — 8 consecutive failures banlisted the first hop and
+     * collapsed the pool.
      *
      * @since 0.9.53
      */
@@ -72,7 +70,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public void tunnelFailedFirstHop() {
         if (isInbound() || getLength() <= 1) {return;}
         super.tunnelFailedFirstHop();
-        _pool.tunnelFailed(this);
+        _pool.tunnelFailedWithoutBlame(this);
     }
 
     /**
