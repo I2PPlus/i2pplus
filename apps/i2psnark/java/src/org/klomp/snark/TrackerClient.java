@@ -231,6 +231,12 @@ public class TrackerClient implements Runnable {
 
     /** Shortest interval between DHT tracker announces, in milliseconds. */
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
+
+    /** Random jitter added to {@link #MIN_DHT_ANNOUNCE_INTERVAL} so DHT
+     *  announces from many torrents do not fire in lockstep; the effective
+     *  threshold is 15m..19m. */
+    private static final int DHT_ANNOUNCE_JITTER = 4 * 60 * 1000;
+
     /** Periodic scrape interval: refresh the swarm size (seeds + leeches) between
      *  announces (BEP 15/48). The announce loop wakes every 5m, so this fires on
      *  every other wake per active torrent. */
@@ -1129,7 +1135,9 @@ public class TrackerClient implements Runnable {
         }
         if (meta != null
                 && _util.getContext().clock().now()
-                        <= lastDHTAnnounce + MIN_DHT_ANNOUNCE_INTERVAL) {
+                        <= lastDHTAnnounce + MIN_DHT_ANNOUNCE_INTERVAL
+                                + _util.getContext().random().nextInt(
+                                        DHT_ANNOUNCE_JITTER)) {
             return;
         }
         Thread t = _dhtThread;
