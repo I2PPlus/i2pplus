@@ -691,6 +691,23 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     public abstract List<Hash> selectPeers(TunnelPoolSettings settings);
 
     /**
+     *  Select peers for a new tunnel, with an optional set of first-hop peers
+     *  to exclude from selection.  The default implementation ignores the
+     *  exclusion set and delegates to {@link #selectPeers(TunnelPoolSettings)};
+     *  subclasses that support first-hop diversity (e.g. ClientPeerSelector)
+     *  override this to exclude those peers.
+     *
+     *  @param settings the tunnel pool settings
+     *  @param excludeFirstHops first-hop peers already targeted by concurrent
+     *         builds in the same dispatch batch, may be null
+     *  @return ordered list of Hash objects (ENDPOINT FIRST), never null
+     *  @since 0.9.71+
+     */
+    public List<Hash> selectPeers(TunnelPoolSettings settings, Set<Hash> excludeFirstHops) {
+        return selectPeers(settings);
+    }
+
+    /**
      *  Determine the tunnel length (number of hops).
      *
      *  @param settings the tunnel pool settings

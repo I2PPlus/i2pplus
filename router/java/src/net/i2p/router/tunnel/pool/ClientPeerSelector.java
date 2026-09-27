@@ -105,6 +105,57 @@ class ClientPeerSelector extends TunnelPeerSelector {
      *         no peers could be selected.
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
+        return selectPeers(settings, null);
+    }
+
+    /**
+     *  Select peers for a new tunnel, excluding given peers from first-hop
+     *  selection.  Used by the build executor's dispatch loop to ensure
+     *  concurrent builds in the same batch target diverse first-hop peers —
+     *  stacking multiple build requests on one peer floods it and makes the
+     *  first build answer slower.
+     *
+     *  The first hop is the last element of the returned list (endpoint-first
+     *  order).  If the selected first hop is excluded, selection retries up to
+     *  {@code MAX_DIVERSITY_RETRIES} times before returning the last result, so
+     *  a caller always gets a usable set even when the exclusion set covers
+     *  most of the tier.
+     *
+     *  @param settings pool settings
+     *  @param excludeFirstHops first-hop peers already targeted by concurrent
+     *         builds in the same dispatch batch, may be null
+     *  @return ordered hops, endpoint first; empty when nothing usable exists
+     *  @since 0.9.71+
+     */
+    public List<Hash> selectPeers(TunnelPoolSettings settings, Set<Hash> excludeFirstHops) {
+        if (excludeFirstHops == null || excludeFirstHops.isEmpty()) {
+            return selectPeersBase(settings);
+        }
+        List<Hash> rv = selectPeersBase(settings);
+        for (int retry = 0; retry < MAX_DIVERSITY_RETRIES && !rv.isEmpty(); retry++) {
+            Hash firstHop = rv.get(rv.size() - 1);
+            if (!excludeFirstHops.contains(firstHop)) {return rv;}
+            rv = selectPeersBase(settings);
+        }
+        return rv;
+    }
+
+    /**
+     * Maximum first-hop diversity retries when concurrent builds exclude
+     * already-selected first hops.  Bounded so a near-total exclusion set
+     * cannot turn selection into a long loop.
+     * @since 0.9.71+
+     */
+    private static final int MAX_DIVERSITY_RETRIES = 3;
+
+    /**
+     *  Select peers for a new tunnel.  Delegates to
+     *  {@link #selectPeers(TunnelPoolSettings, Set)} with a null exclusion set.
+     *
+     *  @param settings pool settings
+     *  @return ordered hops, endpoint first; empty when nothing usable exists
+     */
+    private List<Hash> selectPeersBase(TunnelPoolSettings settings) {
         int length = getLength(settings);
         if (length < 0 || ((length == 0) && (settings.getLength() + settings.getLengthVariance() > 0))) {
             if (log.shouldWarn()) {

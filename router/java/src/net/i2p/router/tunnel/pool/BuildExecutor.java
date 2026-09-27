@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -1387,6 +1388,7 @@ public class BuildExecutor implements Runnable {
                             }
                         }
 
+                        Set<Hash> batchFirstHops = new HashSet<>(MAX_PER_POOL_DIR * 2);
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
                             // Throttle peer-selection hot path (see _lastConfigureTime).
@@ -1407,7 +1409,7 @@ public class BuildExecutor implements Runnable {
                             _lastConfigureTime.put(pool, nowCfg);
 
                             long bef = System.currentTimeMillis();
-                            PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
+                            PooledTunnelCreatorConfig cfg = pool.configureNewTunnel(false, batchFirstHops);
                             if (cfg != null) {
                                 if (cfg.getLength() <= 1 && !pool.needFallback()) {
                                     if (_log.shouldDebug()) {
@@ -1418,6 +1420,10 @@ public class BuildExecutor implements Runnable {
                                     // must not feed the pool-backoff counter.
                                     pool.buildComplete(cfg, Result.SKIPPED);
                                     continue;
+                                }
+                                Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
+                                if (firstHop != null) {
+                                    batchFirstHops.add(firstHop);
                                 }
                                 if (_log.shouldDebug()) {
                                     _log.debug("Configuring new tunnel [" + i + "] for " + pool);
