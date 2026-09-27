@@ -2649,13 +2649,32 @@ public class TunnelPool {
      */
     void tunnelFailed(TunnelInfo cfg, Hash blamePeer) {
         fail(cfg);
-        // Blame all peers proportionally — we can't guarantee the first hop
-        // is the sole cause (intermediate hops may also be flaky).
-        tellProfileFailed(cfg);
-        // Additional first-hop-specific actions: selection cooldown and
-        // tier demotion so this peer isn't immediately re-selected.
+        // Single-peer blame: every caller passes the hop proven to be at
+        // fault (the first hop we could not send to, or the banned hop), and
+        // the message never left us, so proportional blame would penalise
+        // hops that never saw it.
+        blameSinglePeer(cfg, blamePeer);
+    }
+
+    /**
+     *  Apply the whole failure penalty to one peer: profile failure, the
+     *  selection cooldown, tier demotion, and a priority retest so a
+     *  persistently failing hop is not re-selected on the next generation.
+     *
+     *  @param cfg the tunnel that failed
+     *  @param blamePeer the single peer to blame, may be null
+     *  @since 0.9.71+
+     */
+    private void blameSinglePeer(TunnelInfo cfg, Hash blamePeer) {
+        if (blamePeer == null) {return;}
+        long startupTime = getStartupTime(_context);
+        int consecutiveFailures = _consecutiveBuildTimeouts.get();
+        logPeerBlame(blamePeer, 100, _context.router().getUptime(), startupTime, consecutiveFailures);
+        _context.profileManager().tunnelFailed(blamePeer, 100);
         TunnelPeerSelector.recordFirstHopFail(_context, blamePeer);
         _context.profileOrganizer().demoteIfUnreachable(blamePeer);
+        schedulePriorityPeerTests(
+                collectPeerForPriorityTest(null, blamePeer, cfg.getLength(), startupTime));
     }
 
     /**
@@ -4225,9 +4244,35 @@ public class TunnelPool {
                     continue;
                 }
                 countLiveTunnel(t, stats, preBuildThreshold);
+                // GOOD but never measured: promoted by traffic proof through
+                // clearTestFailures() rather than by a test, so it has no
+                // latency reading and no retest chain was ever created for
+                // it.  Re-offer it as a first test so it gets measured before
+                // already-tested tunnels are retested.
+                if (t instanceof PooledTunnelCreatorConfig && t.getLastLatency() < 0) {
+                    addStrandedTest(stats, (PooledTunnelCreatorConfig) t);
+                }
             }
         } finally { _tunnelsLock.unlock(); }
         return stats;
+    }
+
+    /**
+     *  Collect a tunnel for the stranded re-offer, bounded by
+     *  {@link TestJob#MAX_STRANDED_OFFERS_PER_SWEEP} per sweep.
+     *
+     *  @param stats counters from the running sweep
+     *  @param cfg the tunnel to collect
+     *  @since 0.9.71+
+     */
+    private static void addStrandedTest(TunnelStats stats, PooledTunnelCreatorConfig cfg) {
+        if (stats.strandedTests == null) {
+            stats.strandedTests = new ArrayList<PooledTunnelCreatorConfig>(
+                    TestJob.MAX_STRANDED_OFFERS_PER_SWEEP);
+        }
+        if (stats.strandedTests.size() < TestJob.MAX_STRANDED_OFFERS_PER_SWEEP) {
+            stats.strandedTests.add(cfg);
+        }
     }
 
     /**
@@ -4283,14 +4328,8 @@ public class TunnelPool {
         // The test queue never reached it (a drop under the queued cap, or a
         // build whose offer was denied) — collect it so the sweep re-offers
         // stranded tunnels to the batched pump instead of only counting them.
-        if (t instanceof PooledTunnelCreatorConfig &&
-            (stats.strandedTests == null ||
-             stats.strandedTests.size() < TestJob.MAX_STRANDED_OFFERS_PER_SWEEP)) {
-            if (stats.strandedTests == null) {
-                stats.strandedTests = new ArrayList<PooledTunnelCreatorConfig>(
-                        TestJob.MAX_STRANDED_OFFERS_PER_SWEEP);
-            }
-            stats.strandedTests.add((PooledTunnelCreatorConfig) t);
+        if (t instanceof PooledTunnelCreatorConfig) {
+            addStrandedTest(stats, (PooledTunnelCreatorConfig) t);
         }
         stats.untestedCount++;
     }
@@ -4347,15 +4386,16 @@ public class TunnelPool {
     }
 
     /**
-     *  Offer stranded UNTESTED tunnels — life beyond the pre-build window
-     *  whose first test never got scheduled (the queued cap dropped the
-     *  build-time offer or the pool was saturated) — to the batched
-     *  first-test pump.  Called outside the pool lock; offer-time dedupe
-     *  (buffer keys and the running-test registry) makes repeated sweeps
-     *  idempotent, and the pump's in-flight gates bound how many dispatch
-     *  per cycle.  Without this, the sweep only counted them: stranded
-     *  tunnels stayed UNTESTED until expiry while their untestedCount held
-     *  replacement builds back.
+     *  Offer tunnels that have never produced a latency reading — UNTESTED
+     *  tunnels whose first test never got scheduled (the queued cap dropped
+     *  the build-time offer or the pool was saturated), and tunnels promoted
+     *  to GOOD by traffic proof alone, which have no retest chain to inherit.
+     *  Called outside the pool lock; offer-time dedupe (buffer keys and the
+     *  running-test registry) makes repeated sweeps idempotent, and the
+     *  pump's in-flight gates bound how many dispatch per cycle.  Without
+     *  this, the sweep only counted them: stranded tunnels stayed UNTESTED
+     *  until expiry while their untestedCount held replacement builds back,
+     *  and traffic-promoted tunnels were never measured at all.
      *
      *  @param stats counters from the sweep that collected the candidates
      *  @since 0.9.71+
@@ -4376,7 +4416,7 @@ public class TunnelPool {
         }
         if (offered > 0 && _log.shouldInfo()) {
             _log.info(toString() + " -> Offered " + offered +
-                      " stranded UNTESTED tunnel(s) for first-test dispatch");
+                      " unmeasured tunnel(s) for first-test dispatch");
         }
     }
 
