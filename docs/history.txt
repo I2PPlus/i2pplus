@@ -1,3 +1,48 @@
+2026-09-27 dr|z3d
+  * Tunnel: Unthrottle the test pump and record per-direction test
+    outcomes as counts; retain and revive failing tunnels until
+    natural expiry instead of removing them, defer a round whose
+    partner is unusable, and re-offer never-measured tunnels for a
+    first test; space, decay, and bound first-hop
+    pre-connect before blaming only the proven hop; register the
+    fragment reassembly stats
+  * PeerManager: Apply the subnet diversity gate after the other
+    selection gates, including in the last-resort selectors
+  * I2PTunnel: Share the private-target blocklist across proxy
+    protocols and redact digest auth; bound body resume by wall clock
+    and clamp the retry ramp; restore the caller's connect timeout
+    after the failover walk
+  * Streaming: Publish lifetime RTT and window only once a sample exists
+  * Installer: Report a failed wrapper.config rewrite instead of
+    silent exit
+
+2026-09-26 dr|z3d
+  * Core: Align data, HTTP, naming, session contracts
+  * Router: Validate I2CP receive sessions; tighten crypto, transport
+    and tuning contracts; gate the streaming tuner on retransmission
+    rate; cap active ghost exclusions
+  * Streaming: Align socket options, timeouts and API contracts;
+    Tuner global is the window-ceiling floor so BDP lifts toward
+    8192; publish stream lifetime stats on disconnect
+  * Tuner: Window caps 8192/1024; exponential slow-start climb
+  * I2PTunnel: Redact proxy auth, block private/loopback targets,
+    strip CRLF from proxied headers, escape web UI XSS sinks; 10s
+    connect-leg floor with pool-build grace; retry budgets ramp per
+    1MB of verified Content-Length
+  * SAM: AUTH changes require an authenticated session or loopback;
+    STREAM sessions owned by the authenticating user
+  * Tunnel: Cap fragment reassembly at 1024 messages; evict the
+    oldest exclusion reason; insert shortfall hops before the first
+    hop and redraw unusable selections
+  * PeerManager: Rotate tier scan start and floor sample at 64
+  * NTCP: Bound the read queue with pause and resume backpressure
+  * I2PSnark: Fix storage alignment, bencode ordering and torrent
+    lifecycle; stop forcing stream window params when autotuner armed
+  * Console: Refresh update, console and web-helper contracts; fix
+    ImageGen identicon caching
+  * Installer: Correct Windows path handling and translation
+    resource scanning
+
 2026-09-25 dr|z3d
   * EepGet: Validate 206 Content-Range against the resume offset and
     the caller Range header; reject gzip-marker resumes before the
