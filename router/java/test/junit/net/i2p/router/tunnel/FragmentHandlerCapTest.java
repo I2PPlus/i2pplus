@@ -7,6 +7,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateStat;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,5 +61,44 @@ public class FragmentHandlerCapTest {
         assertNotNull(first);
         // a second fragment of the same message finds the existing one
         assertSame(first, handler.getOrCreate(7, 7));
+    }
+
+    /**
+     * StatManager.addRateData() silently discards data for a stat that was
+     * never registered, and createRateStat() is itself a no-op unless
+     * stat.full is set. Every stat FragmentHandler emits must therefore be
+     * declared as required, or the cap's drop counter is invisible in the
+     * default configuration and the attack it defends against has no signal.
+     *
+     * <p>Registration is asserted by invoking the declaration directly: a bare
+     * RouterContext defers tunnel wiring to initAll(), so the dispatcher's
+     * constructor never runs in a unit test.
+     */
+    @Test
+    public void testEmittedStatsAreRegistered() {
+        String[] emitted = {
+            "tunnel.fragmentMapFull", "tunnel.fragmentedDropped",
+            "tunnel.fragmentedComplete", "tunnel.corruptMessage",
+            "tunnel.smallFragments", "tunnel.fullFragments"
+        };
+        TunnelDispatcher.registerFragmentStats(_context.statManager());
+        for (String stat : emitted) {
+            assertNotNull(stat, _context.statManager().getRate(stat));
+        }
+    }
+
+    /**
+     * createRequiredRateStat() returns early when the name is already
+     * present, so declaring twice must not replace the live stat — otherwise
+     * a second declaration path would silently reset accumulated counters.
+     */
+    @Test
+    public void testRegistrationIsIdempotent() {
+        TunnelDispatcher.registerFragmentStats(_context.statManager());
+        RateStat first = _context.statManager().getRate("tunnel.fragmentMapFull");
+        assertNotNull(first);
+        TunnelDispatcher.registerFragmentStats(_context.statManager());
+        assertSame("re-registration must not replace the stat",
+                first, _context.statManager().getRate("tunnel.fragmentMapFull"));
     }
 }

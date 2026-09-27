@@ -469,6 +469,10 @@ class FragmentHandler {
         FragmentedMessage msg = _fragmentedMessages.get(messageId);
         if (msg != null) {return msg;}
         if (!mayStartNewFragmentedMessage(_fragmentedMessages.size())) {
+            // Registered in TunnelDispatcher.initializeStats(). The stat must be
+            // declared with createRequiredRateStat, not createRateStat: the
+            // latter is a no-op unless stat.full is set, and StatManager
+            // silently discards addRateData for an unregistered stat.
             _context.statManager().addRateData("tunnel.fragmentMapFull", 1);
             return null;
         }

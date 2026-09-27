@@ -25,6 +25,7 @@ import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.Service;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.SimpleTimer2;
@@ -472,6 +473,37 @@ public class TunnelDispatcher implements Service {
         _context.statManager().createRateStat("tunnel.ownedMessageCount", "Messages sent through a tunnel we created", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.failedCompletelyMessages", "Messages sent through a prematurely failed tunnel", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.failedPartially", "Messages sent through a partially failed tunnel", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.firstHopSendFailure",
+                "Spaced send failures to the first hop of an outbound tunnel", "Tunnels", RATES);
+        registerFragmentStats(_context.statManager());
+    }
+
+    /**
+     *  Declare the rate stats emitted by {@link FragmentHandler} on the
+     *  endpoint side.
+     *
+     *  <p>StatManager discards {@code addRateData} for a stat that was never
+     *  registered, and {@code createRateStat} is itself a no-op unless
+     *  {@code stat.full} is set, so these must be declared as required: they
+     *  are failure and abuse signals that have to exist in the default
+     *  configuration.
+     *
+     *  <p>Package-visible and static so a unit test can assert the
+     *  registration without standing up a whole router.
+     *
+     *  @param sm the stat manager to declare into
+     *  @since 0.9.71+
+     */
+    static void registerFragmentStats(StatManager sm) {
+        sm.createRequiredRateStat("tunnel.corruptMessage", "Corrupt or unverifiable I2NP messages", "Tunnels", RATES);
+        sm.createRequiredRateStat("tunnel.smallFragments", "Excess padding bytes seen in small fragments", "Tunnels", RATES);
+        sm.createRequiredRateStat("tunnel.fullFragments", "Maximum-size fragments received", "Tunnels", RATES);
+        sm.createRequiredRateStat("tunnel.fragmentedComplete", "Fragmented messages successfully reassembled", "Tunnels", RATES);
+        sm.createRequiredRateStat("tunnel.fragmentedDropped", "Incomplete fragmented messages dropped", "Tunnels", RATES);
+        // Reassembly is capped, so a nonzero rate here is the signal that the
+        // cap is being hit: either fragmentation churn or a flood of
+        // never-completed messages holding map slots.
+        sm.createRequiredRateStat("tunnel.fragmentMapFull", "New fragmented messages dropped (reassembly map at cap)", "Tunnels", RATES);
     }
 
     /**
