@@ -18,10 +18,12 @@ import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
- * Tests that a tunnel provably carrying real traffic is not marked failed:
- * the pool clears the FAILING flag on inbound tunnels with fresh real-traffic
- * markers (arrival is end-to-end proof), while outbound tunnels — where
- * dispatch is use, not proof — and FAILED tunnels stay removal-bound.
+ * Tests that a tunnel provably carrying real traffic is not held down by
+ * stale test bookkeeping: the pool clears FAILING and FAILED on either
+ * direction once the real-traffic marker is fresh — inbound stamps only
+ * after verified decrypt, outbound only after the remote reply — and
+ * promotes traffic-proven UNTESTED tunnels so LeaseSet building can see
+ * them.  A stale marker never revives a marked tunnel: proof has a window.
  *
  * @since 0.9.71+
  */
@@ -77,6 +79,57 @@ public class TrafficProofTest {
         assertTrue("Marker should advance", cfg.getLastRealTraffic() >= before);
     }
 
+    /** Real traffic restores the recent-traffic test exemption budget.  It
+     *  used to be refilled only by a passing test, so a tunnel that carried
+     *  data but whose reply path could never answer a test got exactly one
+     *  free pass for its whole lifetime and was then condemned by failures
+     *  it had no way to clear. */
+    @Test
+    public void testRealTrafficRefillsExemptionBudget() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PooledTunnelCreatorConfig cfg = config(0, true, false, createPool(true));
+        cfg.incrementRecentTestExemptions();
+        cfg.incrementRecentTestExemptions();
+        assertEquals(2, cfg.getRecentTestExemptions());
+
+        cfg.recordRealTraffic();
+
+        assertEquals(0, cfg.getRecentTestExemptions());
+    }
+
+    /** recordRealTraffic() owns the budget and the marker; promotion back to
+     *  GOOD stays the sweep's job, so a traffic-carrying tunnel that is still
+     *  marked keeps its status until clearFailingOnTraffic() runs. */
+    @Test
+    public void testRecordRealTrafficLeavesStatusAlone() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(1, true, false, pool);
+        assertEquals(TunnelTestStatus.FAILING, cfg.getTestStatus());
+
+        cfg.recordRealTraffic();
+
+        assertEquals(TunnelTestStatus.FAILING, cfg.getTestStatus());
+        assertEquals(1, cfg.getConsecutiveFailures());
+        assertEquals(0, cfg.getRecentTestExemptions());
+    }
+
+    /** Promotion back to GOOD also restores the budget: a revived tunnel must
+     *  not inherit the spend that produced the mark. */
+    @Test
+    public void testClearTestFailuresRestoresExemptionBudget() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        PooledTunnelCreatorConfig cfg = config(3, true, false, createPool(true));
+        assertEquals(TunnelTestStatus.FAILED, cfg.getTestStatus());
+        cfg.incrementRecentTestExemptions();
+        assertEquals(1, cfg.getRecentTestExemptions());
+
+        cfg.clearTestFailures();
+
+        assertEquals(TunnelTestStatus.GOOD, cfg.getTestStatus());
+        assertEquals(0, cfg.getRecentTestExemptions());
+    }
+
     /** An inbound FAILING tunnel with fresh real traffic is cleared to GOOD. */
     @Test
     public void testInboundFailingClearedOnFreshTraffic() throws Exception {
@@ -107,12 +160,29 @@ public class TrafficProofTest {
         assertEquals(1, cfg.getConsecutiveFailures());
     }
 
-    /** An inbound FAILED tunnel is never cleared — it stays removal-bound. */
+    /** A FAILED tunnel with fresh real traffic is revived — retention is
+     *  provisional and real data is exactly the recovery it waits for. */
     @Test
-    public void testFailedNeverCleared() throws Exception {
+    public void testFailedClearedOnFreshTraffic() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         TunnelPool pool = createPool(true);
         PooledTunnelCreatorConfig cfg = config(3, true, true, pool);
+        assertEquals(TunnelTestStatus.FAILED, cfg.getTestStatus());
+        injectTunnel(pool, cfg);
+
+        pool.clearFailingOnTraffic();
+
+        assertEquals(TunnelTestStatus.GOOD, cfg.getTestStatus());
+        assertEquals(0, cfg.getConsecutiveFailures());
+    }
+
+    /** A FAILED tunnel whose traffic marker has aged out stays FAILED —
+     *  stale proof must not keep a dead tunnel selectable. */
+    @Test
+    public void testFailedNotClearedWithoutFreshTraffic() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(true);
+        PooledTunnelCreatorConfig cfg = config(3, true, false, pool);
         assertEquals(TunnelTestStatus.FAILED, cfg.getTestStatus());
         injectTunnel(pool, cfg);
 
@@ -122,12 +192,28 @@ public class TrafficProofTest {
         assertEquals(3, cfg.getConsecutiveFailures());
     }
 
-    /** Outbound tunnels are never cleared on dispatch traffic — it is use, not proof. */
+    /** Outbound tunnels are cleared on fresh traffic too: the marker is
+     *  stamped by SendSuccessJob on the remote reply, not on dispatch. */
     @Test
-    public void testOutboundNeverClearedOnTraffic() throws Exception {
+    public void testOutboundClearedOnFreshTraffic() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         TunnelPool pool = createPool(false);
         PooledTunnelCreatorConfig cfg = config(1, false, true, pool);
+        assertEquals(TunnelTestStatus.FAILING, cfg.getTestStatus());
+        injectTunnel(pool, cfg);
+
+        pool.clearFailingOnTraffic();
+
+        assertEquals(TunnelTestStatus.GOOD, cfg.getTestStatus());
+        assertEquals(0, cfg.getConsecutiveFailures());
+    }
+
+    /** An outbound FAILING tunnel with no traffic at all stays FAILING. */
+    @Test
+    public void testOutboundNotClearedWithoutTraffic() throws Exception {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        TunnelPool pool = createPool(false);
+        PooledTunnelCreatorConfig cfg = config(1, false, false, pool);
         assertEquals(TunnelTestStatus.FAILING, cfg.getTestStatus());
         injectTunnel(pool, cfg);
 

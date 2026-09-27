@@ -2682,11 +2682,13 @@ public class TunnelPool {
      *  Called from the I2CP dispatch path (OutboundClientMessageOneShotJob)
      *  for hard outbound-dispatch failures (status 7, 8, 9, 13) and soft
      *  send timeouts (status 3).  Hard failures share the cumulative counter
-     *  with TestJob and remove once it exceeds
+     *  with TestJob and are marked once it exceeds
      *  {@link TunnelCreatorConfig#MAX_CONSECUTIVE_TEST_FAILURES}.
      *  Soft timeouts increment only the soft counter so congestion cannot
-     *  trip getTunnelFailed()/passesScanGates at the hard bar; they remove
-     *  only above {@link #SOFT_REMOVAL_THRESHOLD}.
+     *  trip getTunnelFailed()/passesScanGates at the hard bar; they are
+     *  marked only above {@link #SOFT_REMOVAL_THRESHOLD}.  Either way the
+     *  tunnel is retained in the pool rather than dropped — see
+     *  {@link #failWithCount(TunnelInfo, int)}.
      *
      *  @param cfg the tunnel that carried the failed message
      *  @param status the I2CP MessageStatusMessage failure code
@@ -2707,10 +2709,10 @@ public class TunnelPool {
                       ") for tunnel, failures now " + failures +
                       "\n* " + cfg);
         }
-        boolean removed = exceedsRemovalThreshold(failures, soft);
-        if (removed) {
+        boolean overBar = exceedsRemovalThreshold(failures, soft);
+        if (overBar) {
             if (_log.shouldWarn()) {
-                _log.warn(toString() + " -> Removing tunnel after " +
+                _log.warn(toString() + " -> Marking tunnel failing after " +
                           failures +
                           (soft ? " soft" : " cumulative") +
                           " failures (data-phase + test)\n* " + cfg);
@@ -2720,11 +2722,11 @@ public class TunnelPool {
         }
         // Data-phase failure is a liveness signal, but only the signals that
         // actually change pool composition bypass the ensure throttle: a hard
-        // failure, the soft degraded-bar crossing, or a removal.  Routine soft
-        // timeouts below the bar run the throttled path, so a status-3 flood
-        // cannot re-run the ensure body every few seconds while
+        // failure, the soft degraded-bar crossing, or the bar being crossed.
+        // Routine soft timeouts below the bar run the throttled path, so a
+        // status-3 flood cannot re-run the ensure body every few seconds while
         // soft-degraded tunnels still inflate getUsableTunnelCount().
-        if (_alive && shouldBypassEnsureThrottle(soft, failures, removed)) {
+        if (_alive && shouldBypassEnsureThrottle(soft, failures, overBar)) {
             ensureSufficientTunnelsNow(_context.clock().now());
         } else if (_alive) {
             ensureSufficientTunnels();
@@ -2734,20 +2736,20 @@ public class TunnelPool {
     /**
      *  Whether a data-phase failure signal is strong enough to run the
      *  ensure body immediately instead of through the throttle gate.
-     *  Pure decision helper: hard failures and removals always change pool
-     *  composition; a soft timeout only does so at the degraded-bar
-     *  crossing, where a replacement starts building ahead of the removal
-     *  bar.  Below that bar a status-3 flood is congestion, not evidence
-     *  that the pool needs rebuilding now.
+     *  Pure decision helper: hard failures and bar-crossing always change
+     *  pool composition — the tunnel is marked and a replacement starts
+     *  building; a soft timeout only does so at the degraded-bar crossing,
+     *  ahead of the marking bar.  Below that bar a status-3 flood is
+     *  congestion, not evidence that the pool needs rebuilding now.
      *
      *  @param soft true when the reported status was a soft send timeout
      *  @param failures the failure count just recorded
-     *  @param removed true if this failure removed the tunnel
+     *  @param overBar true if this failure crossed the tunnel's removal bar
      *  @return true to bypass the ensure throttle
      *  @since 0.9.71+
      */
-    static boolean shouldBypassEnsureThrottle(boolean soft, int failures, boolean removed) {
-        if (removed) {
+    static boolean shouldBypassEnsureThrottle(boolean soft, int failures, boolean overBar) {
+        if (overBar) {
             return true;
         }
         if (!soft) {
@@ -2784,11 +2786,12 @@ public class TunnelPool {
     }
 
     /**
-     *  Whether the given failure class exceeds its removal bar.
+     *  Whether the given failure class exceeds its marking bar.
      *
      *  @param failures hard (test+data) or soft failure count
      *  @param soft true when the reporting status was a soft send timeout
-     *  @return true if the tunnel should be removed from the pool
+     *  @return true if the tunnel should be marked and retained rather than
+     *          left selectable
      *  @since 0.9.71+
      */
     static boolean exceedsRemovalThreshold(int failures, boolean soft) {
@@ -2815,87 +2818,52 @@ public class TunnelPool {
     }
 
     /**
-     *  Remove a failing tunnel using the count that triggered the decision.
-     *  Soft removals pass the soft counter while getConsecutiveFailures()
-     *  may still be 0 — fail() would no-op on the hard counter alone.
+     *  Mark a failing tunnel for retention using the count that triggered the
+     *  decision.  Soft removals pass the soft counter while
+     *  getConsecutiveFailures() may still be 0 — fail() would no-op on the
+     *  hard counter alone.
      *
-     *  @param cfg the tunnel to consider for removal
+     *  The tunnel is marked, not dropped: {@link #passesScanGates(TunnelInfo,
+     *  long, boolean)} and the usable counts already exclude FAILING and
+     *  FAILED tunnels, so it stops receiving work and stops holding a good
+     *  slot, while {@link #addTunnel(TunnelInfo)} keeps building replacements
+     *  against the usable count rather than the raw pool size.  The tunnel
+     *  then either carries real traffic — {@link #clearFailingOnTraffic()}
+     *  promotes it back to GOOD once the traffic marker is fresh — or ages
+     *  out with the rest of its generation.
+     *
+     *  @param cfg the tunnel that failed
      *  @param failures the count that exceeded the removal bar
      */
     private void failWithCount(TunnelInfo cfg, int failures) {
-        if (failures > 1) {
-            int remaining = size();
-            // A tunnel that failed completely cannot route traffic, even if it
-            // is the pool's last one. tunnelFailedCompletely() sets the counter
-            // to exactly MAX+1 (4), so compare against getTunnelFailed() rather
-            // than a hardcoded threshold or the guard would keep a dead tunnel.
-            // The collapse guard only protects tunnels that are still failing
-            // tests (failures <= MAX), not ones already marked dead.
-            boolean isDead = cfg.getTunnelFailed();
-            if (remaining <= 1 && !isDead) {
-                // Collapse guard: don't remove if this would leave the pool
-                // with zero usable tunnels and the tunnel isn't conclusively dead.
-                if (_log.shouldWarn()) {
-                    _log.warn("Keeping " + (cfg.isInbound() ? "inbound" : "outbound") +
-                              " tunnel despite " + failures +
-                              " failures — would collapse pool (1 remaining) \n* " + cfg);
-                }
-                ensureSufficientTunnels();
-                return;
-            }
-            // Defer non-dead removals while the pool is already thin and no
-            // replacements are in flight — RemoveSlow early-expiry plus a burst
-            // of send-fail removals used to drain a full pool to zero before
-            // the next build completed.  Kick ensure first so capacity starts
-            // recovering, then drop this tunnel once builds are staged.
-            if (!isDead && shouldDeferRemovalForRebuild(remaining, getInProgressCount())) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Deferring " + (cfg.isInbound() ? "inbound" : "outbound") +
-                              " tunnel removal (" + failures + " failures, remaining=" + remaining +
-                              ", inProgress=0) until replacements are building \n* " + cfg);
-                }
-                ensureSufficientTunnels();
-                if (getInProgressCount() == 0) {
-                    // ensure was throttled or backoff-skipped; still remove so
-                    // a broken tunnel cannot pin the pool forever.
-                    removeTunnel(cfg);
-                }
-                return;
-            }
-            if (_log.shouldWarn()) {
-                _log.warn("Removing " + (cfg.isInbound() ? "inbound" : "outbound") +
-                          " tunnel via fail() -> " + failures +
-                          " failures (remaining=" + remaining +
-                          (isDead ? ", dead" : "") + ") \n* " + cfg);
-            }
-            removeTunnel(cfg);
-            // Forced ensure after a fail() removal: removeTunnel's ensure may
-            // still be throttled; a fail() removal is a liveness signal that
-            // must rebuild capacity immediately.
-            if (_alive) {ensureSufficientTunnelsNow(_context.clock().now());}
+        if (failures <= 1) {return;}
+        boolean isDead = cfg.getTunnelFailed();
+        if (isDead) {
+            // setTestFailed() derives FAILED from the hard counter, which is
+            // the state that already excludes this tunnel from selection.
+            cfg.setTestFailed();
+        } else {
+            // Soft-only failures leave the hard counter at 0, so setTestFailed()
+            // would report GOOD and the tunnel would keep being selected.
+            cfg.setTestFailing();
         }
-    }
-
-    /**
-     *  Whether a non-dead tunnel removal should wait for replacement builds.
-     *  Pure helper: defer when the pool is at or below two tunnels and no
-     *  builds are in flight (RemoveSlow + send-fail race).  Dead tunnels and
-     *  pools that still have capacity (or staged builds) remove immediately.
-     *
-     *  @param remaining tunnels currently in the pool
-     *  @param inProgress replacement builds already staged
-     *  @return true to defer removal and kick ensure first
-     *  @since 0.9.71+
-     */
-    static boolean shouldDeferRemovalForRebuild(int remaining, int inProgress) {
-        return remaining <= 2 && inProgress <= 0;
+        if (_log.shouldWarn()) {
+            _log.warn("Marking " + (cfg.isInbound() ? "inbound" : "outbound") +
+                      " tunnel " + (isDead ? "FAILED" : "FAILING") +
+                      " -> retained until expiry (" + failures +
+                      " failures, remaining=" + size() + ")" +
+                      (isDead ? ", dead" : "") + " \n* " + cfg);
+        }
+        // Retention is a liveness signal: capacity must recover immediately,
+        // not on the throttled schedule removeTunnel() used to drive.
+        if (_alive) {ensureSufficientTunnelsNow(_context.clock().now());}
     }
 
     /**
      * Force a tunnel to fail immediately and trigger a replacement build.
      * Used when rotation is saturated and the pool has no viable
      * alternative tunnels. This bypasses the incremental failure counter
-     * and directly removes the tunnel, ensuring the pool builds a
+     * and marks the tunnel conclusively dead, so the pool builds a
      * replacement without waiting for multiple failure reports.
      *
      * @param cfg the tunnel to force-fail
@@ -2903,7 +2871,8 @@ public class TunnelPool {
      */
     public void forceTunnelFailure(TunnelInfo cfg) {
         if (cfg == null || cfg.getTunnelFailed()) {return;}
-        // Mark as conclusively dead so fail() can remove it
+        // Mark as conclusively dead so fail() reports FAILED and the pool
+        // stops selecting it
         ((TunnelCreatorConfig) cfg).tunnelFailedCompletely();
         fail(cfg);
     }
@@ -4422,16 +4391,16 @@ public class TunnelPool {
 
     /**
      *  Whether an UNTESTED tunnel expiring within the pre-build window is
-     *  protected: it recently carried verified traffic.
+     *  protected: it recently carried verified traffic.  Protection also
+     *  retires stale test bookkeeping — verified bytes are proof in either
+     *  direction, same as {@link #clearFailingOnTraffic()}.
      */
     private boolean isProtectedInUse(TunnelInfo t, long wallNow) {
         if (t instanceof PooledTunnelCreatorConfig) {
             PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) t;
             if (cfg.getVerifiedBytesTransferred() > 0 &&
                 wallNow - cfg.getLastTransferred() < IN_USE_TRAFFIC_MS) {
-                if (_settings.isInbound()) {
-                    cfg.clearTestFailures();
-                }
+                cfg.clearTestFailures();
                 return true;
             }
         }
@@ -4439,34 +4408,38 @@ public class TunnelPool {
     }
 
     /**
-     *  Clear the FAILING flag on inbound tunnels that have provably carried
-     *  real traffic recently.  Data that actually arrived through the tunnel
-     *  (InboundEndpointProcessor) is end-to-end proof it works — the tunnel
-     *  has not failed, so it must stay selectable and in the pool.  A test
-     *  failure on such a tunnel is a reply-path false negative.
+     *  Clear FAILING/FAILED flags on tunnels that have provably carried real
+     *  traffic recently.  Data that actually moved through the tunnel is
+     *  stronger evidence than a tunnel test, so the tunnel has not failed and
+     *  must stay selectable and in the pool.  A test failure on such a tunnel
+     *  is a reply-path false negative.
      *
-     *  Inbound-only: for an outbound tunnel, dispatched bytes prove only
-     *  that the gateway accepted the message, not that the tunnel delivered
-     *  it — clearing on dispatch would keep a dead-tailed tunnel alive
-     *  while messages vanish into it.  Outbound tunnels are resolved by the
-     *  test itself (deferred while active, arbiter when quiet).
+     *  Proof is direction-neutral: InboundEndpointProcessor stamps only after
+     *  the tunnel's crypto verified, and OutboundClientMessageOneShotJob's
+     *  SendSuccessJob stamps only after the remote peer replied to the
+     *  message.  Neither dispatch nor a bare gateway accept reaches either
+     *  call site, so the old inbound-only restriction no longer describes
+     *  what the marker means.
      *
-     *  Only FAILING (1-2 consecutive failures) tunnels are cleared; FAILED
-     *  (3+) tunnels stay removal-bound so a genuinely dead tunnel is still
-     *  replaced.  Combined with the test deferral while traffic is fresh,
-     *  failures can only accumulate during quiet periods, so no tunnel
-     *  becomes immortal.
+     *  FAILED (3+ consecutive failures) is cleared alongside FAILING (1-2):
+     *  with removal deferred in favour of marking, a retained tunnel that then
+     *  carries real traffic has demonstrated exactly the recovery the mark was
+     *  provisional for, and should resume normal service instead of spending
+     *  the rest of its lifetime as a second-class citizen.  A genuinely dead
+     *  tunnel stamps neither marker, so it stays FAILING/FAILED, is excluded
+     *  from {@link #countUsableTunnels()} while marked, and ages out at
+     *  natural expiry — retention cannot strand it as usable.
      *
-     *  UNTESTED inbound tunnels that have actually delivered verified inbound
-     *  bytes are promoted to GOOD outright as well.  A tunnel that received
-     *  real end-to-end traffic through InboundEndpointProcessor is proven to
-     *  work — waiting for a TestJob that may never be scheduled (the fresh
-     *  tunnel can sit UNTESTED until expiry while the pool keeps rebuilding
-     *  replacements) means the published LeaseSet stays thin even though
-     *  usable tunnels are standing.  Promoting proof-of-traffic UNTESTED
-     *  tunnels lets LeaseSet building see them immediately.  Verified-bytes
-     *  is required (not just recency) because an UNTESTED tunnel has never
-     *  passed an explicit test, so its only proof is actual data arrival.
+     *  UNTESTED tunnels that have delivered verified bytes are promoted to
+     *  GOOD outright as well.  A tunnel that received real end-to-end traffic
+     *  is proven to work — waiting for a TestJob that may never be scheduled
+     *  (the fresh tunnel can sit UNTESTED until expiry while the pool keeps
+     *  rebuilding replacements) means the published LeaseSet stays thin even
+     *  though usable tunnels are standing.  Promoting proof-of-traffic
+     *  UNTESTED tunnels lets LeaseSet building see them immediately.
+     *  Verified-bytes is required for UNTESTED (not just recency) because
+     *  such a tunnel has never passed an explicit test, so its only proof is
+     *  actual data arrival.
      *
      *  Called from the periodic pool maintenance sweep (~15s).
      *  @since 0.9.71+
@@ -4477,23 +4450,20 @@ public class TunnelPool {
         try {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo info = _tunnels.get(i);
-                if (info instanceof PooledTunnelCreatorConfig &&
-                    info.isInbound() &&
-                    !info.getTunnelFailed()) {
-                    TunnelTestStatus ts = info.getTestStatus();
-                    if (ts != TunnelTestStatus.FAILING && ts != TunnelTestStatus.UNTESTED) {continue;}
-                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                    long lastTraffic = cfg.getLastRealTraffic();
-                    if (lastTraffic > 0 && now - lastTraffic < TestJob.TRAFFIC_PROOF_MS &&
-                        (ts == TunnelTestStatus.FAILING || cfg.getVerifiedBytesTransferred() > 0)) {
-                        long age = now - lastTraffic;
-                        cfg.clearTestFailures();
-                        if (_log.shouldWarn()) {
-                            _log.warn(toString() + " -> Marked inbound tunnel GOOD on traffic... \n* " +
-                                      cfg + " -> " + ts + " promoted, marked GOOD (verified bytes " +
-                                      cfg.getVerifiedBytesTransferred() + ", last real traffic " + age + "ms ago)");
-                        }
-                    }
+                if (!(info instanceof PooledTunnelCreatorConfig)) {continue;}
+                TunnelTestStatus ts = info.getTestStatus();
+                if (ts != TunnelTestStatus.FAILING && ts != TunnelTestStatus.FAILED &&
+                    ts != TunnelTestStatus.UNTESTED) {continue;}
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                long lastTraffic = cfg.getLastRealTraffic();
+                if (lastTraffic <= 0 || now - lastTraffic >= TestJob.TRAFFIC_PROOF_MS) {continue;}
+                if (ts == TunnelTestStatus.UNTESTED && cfg.getVerifiedBytesTransferred() <= 0) {continue;}
+                long age = now - lastTraffic;
+                cfg.clearTestFailures();
+                if (_log.shouldWarn()) {
+                    _log.warn(toString() + " -> Marked tunnel GOOD on traffic... \n* " +
+                              cfg + " -> " + ts + " promoted, marked GOOD (verified bytes " +
+                              cfg.getVerifiedBytesTransferred() + ", last real traffic " + age + "ms ago)");
                 }
             }
         } finally {_tunnelsLock.unlock();}

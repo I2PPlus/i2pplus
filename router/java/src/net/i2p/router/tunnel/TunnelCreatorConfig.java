@@ -373,12 +373,27 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  Record that the tunnel carried real traffic.  Real data proves the
      *  tunnel works, so any soft best-effort streak accumulated before it is
      *  cleared alongside it.
+     *
+     *  It also refills the recent-traffic test exemption budget.  That budget
+     *  is spent when a test fails while the tunnel demonstrably carried data
+     *  — a reply-path false negative rather than evidence against the tunnel —
+     *  and it used to be refilled only by {@link #testSuccessful()}, so a
+     *  tunnel that could never answer a test but could still carry data got
+     *  exactly one free pass for its whole lifetime and was then condemned by
+     *  failures it had no way to clear.  Traffic is the stronger proof: the
+     *  inbound caller only fires after the tunnel's crypto verified, and the
+     *  outbound caller only fires after the remote peer ACKed.
+     *
+     *  Status itself is not touched here — see
+     *  TunnelPool.clearFailingOnTraffic(), which owns promotion back to GOOD.
+     *
      *  @since 0.9.71+
      */
     public void recordRealTraffic() {
         _lastRealTraffic = System.currentTimeMillis();
         clearSoftFailures();
         clearFirstHopFailures();
+        _recentTestExemptions = 0;
     }
 
     /**
@@ -688,9 +703,13 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  Reset the consecutive failure counter and mark the tunnel as GOOD.
-     *  Used when a data-carrying tunnel fails a test — the data proves it
-     *  works, so the tunnel should remain selectable and avoid pruning.
-     *  Also clears the soft best-effort streak for the same reason.
+     *  Called only on traffic proof — never by {@link #testSuccessful(int)},
+     *  which reaches GOOD by being tested rather than by carrying data — so
+     *  it also restores the recent-traffic test exemption budget alongside
+     *  the soft streak: a tunnel promoted back from FAILING/FAILED must
+     *  resume normal service with a clean slate, not inherit the spend
+     *  that produced the mark.
+     *
      *  @since 0.9.69+
      */
     public void clearTestFailures() {
@@ -698,6 +717,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         _testStatus = TunnelTestStatus.GOOD;
         clearSoftFailures();
         clearLastChanceAdmission();
+        _recentTestExemptions = 0;
     }
 
     /**
@@ -913,6 +933,19 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         } else {
             _testStatus = TunnelTestStatus.GOOD;
         }
+    }
+
+    /**
+     * Mark the tunnel FAILING regardless of the hard-failure counter.
+     * {@link #setTestFailed()} derives the status from {@code _failures}, so
+     * it reports GOOD for a tunnel retained on soft send timeouts alone —
+     * which would leave the tunnel selectable and hold its slot in the pool's
+     * good-tunnel accounting while it keeps timing out.
+     *
+     * @since 0.9.71+
+     */
+    public void setTestFailing() {
+        _testStatus = TunnelTestStatus.FAILING;
     }
 
     /**

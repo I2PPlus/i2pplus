@@ -8,15 +8,15 @@ import org.junit.Test;
 
 /**
  * Pure decision tests for soft-degraded thrash guards:
- * {@link TunnelPool#computeDeficit(int, int, int, int, int, int, int, int)},
- * {@link TunnelPool#hasValidTunnelsBlockingEmergency(int)}, and
- * {@link TunnelPool#shouldDeferRemovalForRebuild(int, int)}.
+ * {@link TunnelPool#computeDeficit(int, int, int, int, int, int, int, int)} and
+ * {@link TunnelPool#hasValidTunnelsBlockingEmergency(int)}.
  *
  * <p>Policy: a soft-degraded pool still occupies safe slots — deficit builds
  * only the shortfall to target, never a full empty-pool rebuild on top of a
- * full pool; EMERGENCY is deferred while any valid tunnels remain; non-dead
- * removals on a thin pool wait until replacements are staged so RemoveSlow
- * early-expiry plus send-fail bursts cannot drain capacity to zero.
+ * full pool; EMERGENCY is deferred while any valid tunnels remain.  Failing
+ * tunnels are retained rather than removed (see TunnelPool.failWithCount),
+ * so the earlier "wait for replacement builds before removing" guard no
+ * longer applies — there is no removal to wait for.
  *
  * @since 0.9.71+
  */
@@ -144,27 +144,6 @@ public class TunnelPoolSoftDegradedDecisionTest {
         assertTrue(TunnelPool.hasValidTunnelsBlockingEmergency(1));
         assertTrue(TunnelPool.hasValidTunnelsBlockingEmergency(6));
         assertFalse(TunnelPool.hasValidTunnelsBlockingEmergency(0));
-    }
-
-    // ---------- shouldDeferRemovalForRebuild ----------
-
-    @Test
-    public void testDeferRemovalWhenThinAndNothingBuilding() {
-        assertTrue(TunnelPool.shouldDeferRemovalForRebuild(0, 0));
-        assertTrue(TunnelPool.shouldDeferRemovalForRebuild(1, 0));
-        assertTrue(TunnelPool.shouldDeferRemovalForRebuild(2, 0));
-    }
-
-    @Test
-    public void testImmediateRemovalWhenBuildsStaged() {
-        assertFalse(TunnelPool.shouldDeferRemovalForRebuild(2, 1));
-        assertFalse(TunnelPool.shouldDeferRemovalForRebuild(1, 2));
-    }
-
-    @Test
-    public void testImmediateRemovalWhenPoolStillHasCapacity() {
-        assertFalse(TunnelPool.shouldDeferRemovalForRebuild(3, 0));
-        assertFalse(TunnelPool.shouldDeferRemovalForRebuild(6, 0));
     }
 
     // ---------- SOFT_DEGRADED_FOR_ENSURE ----------

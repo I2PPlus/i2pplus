@@ -65,7 +65,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public void tunnelFailedFirstHop() {
         if (isInbound() || getLength() <= 1) {return;}
         super.tunnelFailedFirstHop();
-        _pool.tunnelFailed(this, getPeer(1));
+        _pool.tunnelFailed(this);
     }
 
     /**

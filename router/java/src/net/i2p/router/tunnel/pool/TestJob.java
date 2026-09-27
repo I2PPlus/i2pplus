@@ -57,6 +57,14 @@ public class TestJob extends JobImpl {
     private final PooledTunnelCreatorConfig _cfg;
     private TunnelInfo _outTunnel;
     private TunnelInfo _replyTunnel;
+    /**
+     * True when the partner for the current round came from the exploratory
+     * pool because the paired pool had nothing to offer.  A round routed
+     * through a borrowed partner can fail for reasons that have nothing to do
+     * with the tunnel under test, so {@link #testFailed(long)} defers instead
+     * of counting it.  Reset at the start of every selection.
+     */
+    private boolean _partnerFallback;
     private SessionTag _encryptTag;
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
@@ -265,9 +273,9 @@ public class TestJob extends JobImpl {
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
     /** Hard ceiling on consecutive test failures for server pool tunnels.
-     *  Without this, dead server pool tunnels accumulate indefinitely because
-     *  incrementTestFailures() keeps them alive for the LS republish cycle.
-     *  At 10+ failures the tunnel is clearly dead — force removal. */
+     *  Without this, dead server pool tunnels keep their slot indefinitely
+     *  because incrementTestFailures() holds them for the LS republish cycle.
+     *  At 10+ failures the tunnel is clearly dead — mark it conclusively. */
     private static final int MAX_SERVER_POOL_TEST_FAILURES = 10;
     private static double getPoolCoverageThreshold(RouterContext ctx) {
         refreshTestJobConfig(ctx);
@@ -2544,6 +2552,7 @@ public class TestJob extends JobImpl {
 
         // Set test status to TESTING
         _cfg.setTestStarted();
+        _partnerFallback = false;
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
@@ -2573,8 +2582,11 @@ public class TestJob extends JobImpl {
                         // server pools deadlock: inbound tests need outbound
                         // partners and vice versa, and neither can ever pass.
                         _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
-                        if (_outTunnel != null && _log.shouldWarn())
-                            _log.warn("Falling back to exploratory outbound tunnel for test of " + _cfg);
+                        if (_outTunnel != null) {
+                            _partnerFallback = true;
+                            if (_log.shouldWarn())
+                                _log.warn("Falling back to exploratory outbound tunnel for test of " + _cfg);
+                        }
                     }
                 }
                 if (_outTunnel == null) {
@@ -2622,8 +2634,11 @@ public class TestJob extends JobImpl {
                         // Fall back to exploratory inbound tunnel so tests can
                         // still proceed when the paired pool is empty.
                         _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
-                        if (_replyTunnel != null && _log.shouldWarn()) {
-                            _log.warn("Falling back to exploratory inbound tunnel for test of " + _cfg);
+                        if (_replyTunnel != null) {
+                            _partnerFallback = true;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Falling back to exploratory inbound tunnel for test of " + _cfg);
+                            }
                         }
                     }
                 }
@@ -3069,8 +3084,42 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Called when the tunnel test fails: record the failure, defer or remove
-     * the tunnel through the pool, and schedule the next test.
+     *  Whether a failed round should be deferred instead of charged to the
+     *  tunnel under test, because the partner tunnel — the one the round was
+     *  actually routed through — is itself suspect.
+     *
+     *  <p>A test of an inbound tunnel is sent out through an outbound partner
+     *  and answered back down the tunnel under test; a test of an outbound
+     *  tunnel is the mirror image.  The round therefore fails for two
+     *  independent reasons and the failure is charged to only one of them.
+     *  When the partner is a stub, already marked failing, or borrowed from
+     *  the exploratory pool because the paired pool had nothing, the round is
+     *  evidence about the partner pool — counting it here cascades one
+     *  degraded pool's failures into the other.  The tunnel under test is not
+     *  left immune: the defer runs through
+     *  {@link #deferForMissingPartner(TunnelPool, String)}, which kicks the
+     *  paired pool to rebuild and eventually fails the tunnel if it never
+     *  recovers, and data-phase send failures still report independently of
+     *  any test.
+     *
+     *  @param partner the tunnel the round was routed through, may be null
+     *  @param partnerFallback true when the partner came from the exploratory
+     *         pool because the paired pool could not supply one
+     *  @return true to defer the round rather than count the failure
+     *  @since 0.9.71+
+     */
+    static boolean shouldDeferForPartner(TunnelInfo partner, boolean partnerFallback) {
+        if (partner == null) {return false;}
+        if (partner.getLength() <= 1) {return true;}
+        if (partner.getTunnelFailed()) {return true;}
+        TunnelTestStatus ts = partner.getTestStatus();
+        if (ts == TunnelTestStatus.FAILED || ts == TunnelTestStatus.FAILING) {return true;}
+        return partnerFallback;
+    }
+
+    /**
+     * Called when the tunnel test fails: record the failure, defer the round
+     * or mark the tunnel through the pool, and schedule the next test.
      *
      * @param timeToFail time in milliseconds the test ran before failing
      */
@@ -3081,22 +3130,24 @@ public class TestJob extends JobImpl {
             return;
         }
 
-        // Reply-path protection: if the partner tunnel — the one the test was
-        // routed through, not the tunnel under test — is 0-hop, the failure is
-        // a partner artifact (the paired pool is degraded), not evidence
-        // against this tunnel.  Defer rather than count, otherwise a degraded
-        // paired pool cascades removals into this pool.
+        // Reply-path protection: the partner tunnel is the one the round was
+        // actually routed through, not the tunnel under test.  A round that
+        // fails because the partner is 0-hop, already marked failing, or
+        // borrowed from the exploratory pool is evidence about the partner
+        // pool, not about this tunnel — charge it here and a degraded paired
+        // pool cascades failures into this one.  Routing the defer through
+        // deferForMissingPartner() gives it the same bounded budget as a
+        // missing partner: kick the paired pool to rebuild, and only fail the
+        // tunnel once that budget is spent.
         TunnelInfo partner = _cfg.isInbound() ? _outTunnel : _replyTunnel;
-        if (partner != null && partner.getLength() <= 1) {
+        if (shouldDeferForPartner(partner, _partnerFallback)) {
             if (_log.shouldWarn()) {
-                _log.warn("Tunnel Test failed -> 0-hop partner " + partner +
-                          " -> Deferring test of " + _cfg);
+                _log.warn("Tunnel Test failed -> partner " + partner +
+                          (_partnerFallback ? " (exploratory fallback)" : "") +
+                          " is not usable -> deferring test of " + _cfg);
             }
-            getContext().statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
-            if (!scheduleRetest(false)) {
-                cleanupTunnelTracking();
-                decrementIfCounted();
-            }
+            deferForMissingPartner(_pool.getPairedPool(),
+                                   _cfg.isInbound() ? "outbound" : "inbound");
             return;
         }
 
@@ -3131,8 +3182,10 @@ public class TestJob extends JobImpl {
         //
         // This trust is NOT unlimited.  A tunnel that keeps failing tests despite
         // recent traffic has a broken test reply path or is genuinely degraded.
-        // We allow a few exemptions before counting failures normally, preventing
-        // immortal tunnels that block pool recovery.
+        // We allow a bounded number of exemptions before counting failures
+        // normally, so a tunnel cannot coast indefinitely on stale traffic.
+        // The budget refills in TunnelCreatorConfig.recordRealTraffic(), so it
+        // tracks proof rather than draining once per tunnel lifetime.
         if (_cfg.getVerifiedBytesTransferred() > 0 && _cfg.isInbound()) {
             getContext().statManager().addRateData(
                 "tunnel.testFailedDataTrust", _cfg.getVerifiedBytesTransferred());
@@ -3141,11 +3194,10 @@ public class TestJob extends JobImpl {
             long staleMs = nowMs - lastTransfer;
             if (staleMs < RECENT_TRAFFIC_MS) {
                 // Recently carried data — likely a reply-path false negative.
-                // Allow up to 1 recent-traffic exemption; after that, treat
-                // as a normal failure so the tunnel doesn't become immortal.
-                // Reduced from 2 to 1 to prevent broken tunnels from being kept
-                // alive too long when they're failing tests but recently carried
-                // data — this blocks replacement with working tunnels.
+                // Allow 1 exemption per refill; once spent it counts as a
+                // normal failure until the tunnel carries real traffic again,
+                // which is what keeps a genuinely broken tunnel from becoming
+                // immortal while a busy one stays shielded.
                 int recentExemptions = _cfg.getRecentTestExemptions();
                 if (recentExemptions < 1) {
                     _cfg.incrementRecentTestExemptions();
@@ -3168,14 +3220,15 @@ public class TestJob extends JobImpl {
                               " bytes, last transfer " + staleMs + "ms ago — counting failure");
                 }
             }
-            // Stale data or exhausted exemptions — count failure toward removal.
+            // Stale data or exhausted exemptions — count failure toward the
+            // mark that drops the tunnel out of selection.
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             int currentFailures = _cfg.getTunnelFailures();
             int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Removing data-carrying tunnel after " +
+                    _log.warn("Tunnel Test failed -> Marking data-carrying tunnel FAILED after " +
                               currentFailures + " consecutive failures \n* " + _cfg +
                               " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
                               " bytes, last transfer " + staleMs + "ms ago");
@@ -3212,34 +3265,34 @@ public class TestJob extends JobImpl {
         // tunnel replacement at republish time.
         boolean isServerPool = _pool.getSettings().isInbound() && !isExploratory;
 
-        // Always count the failure against the tunnel under test.
-        // Any partner tunnel is better than none — the 3-strike model
-        // (or server-pool keep-for-LS-cycle) handles this robustly.
+        // Rounds whose partner looks broken were already deferred above, so
+        // anything that reaches here is evidence about this tunnel: count it
+        // against the tunnel under test.  The 3-strike mark (or the
+        // server-pool keep-for-LS-cycle) takes it from there.
         if (isServerPool) {
-            // Server pool: mark failed but don't remove immediately.
+            // Server pool: mark failed but keep the tunnel in the pool.
             // pruneNonGoodTunnels() handles removal at LS republish.
             // However, route through fail() when failures are high so the
             // zombie ceiling in fail() can trigger — otherwise
             // failures accumulate indefinitely via incrementalTestFailures()
-            // without ever being checked, creating zombie tunnels.
-            // At >1 failures the tunnel is clearly broken — route through
-            // fail() promptly so the zombie ceiling can trigger and prevent
-            // pool collapse from accumulating dead tunnels.
-            // Reduced from >2 to >1 to prevent broken tunnels from being kept
-            // alive too long when they're failing tests — this blocks
-            // replacement with working tunnels.
+            // without ever being checked, leaving a tunnel that is FAILED
+            // but still counted toward the LeaseSet.  At >1 failures the
+            // tunnel is clearly broken — route through fail() promptly so
+            // the zombie ceiling trips and the tunnel stops being served,
+            // and so ensureSufficientTunnelsNow() stages its replacement.
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             _pool.notifyServerPoolTestFailed();
             int failures = _cfg.getTunnelFailures();
             if (failures > MAX_SERVER_POOL_TEST_FAILURES) {
-                // Hard ceiling: too many consecutive failures — force removal.
-                // Without this, dead server pool tunnels accumulate indefinitely
-                // because incrementTestFailures() keeps them alive for the
-                // LeaseSet republish cycle.  Peer lREgvu had 210 failures
-                // in 10 seconds and was never excluded from selection.
+                // Hard ceiling: too many consecutive failures — mark the
+                // tunnel conclusively dead.  Without this, dead server pool
+                // tunnels keep their slot indefinitely because
+                // incrementTestFailures() holds them for the LeaseSet
+                // republish cycle.  Peer lREgvu had 210 failures in 10
+                // seconds and was never excluded from selection.
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Removing server pool tunnel after " +
+                    _log.warn("Tunnel Test failed -> Marking server pool tunnel FAILED after " +
                               failures + " consecutive failures: " + _cfg);
                 }
                 _cfg.tunnelFailedCompletely();
@@ -3247,7 +3300,8 @@ public class TestJob extends JobImpl {
                 // Dead at the hard ceiling — stop testing it.  Falling through to
                 // scheduleRetest() would keep re-queueing tests (and holding the
                 // test slot) for a tunnel we just gave up on, until it expires.
-                // pruneNonGoodTunnels() removes it from the pool at LS republish.
+                // The mark already excludes it from selection; pruneNonGoodTunnels()
+                // drops it from the pool at LS republish.
                 cleanupTunnelTracking();
                 decrementIfCounted();
                 return;
@@ -3262,15 +3316,16 @@ public class TestJob extends JobImpl {
         } else {
             // Client/exploratory: count failures with adaptive thresholds.
             // Under degraded mode (low build success), allow more consecutive
-            // failures before removal.  This prevents pool churn from wasting
-            // build resources when the router is struggling to find good peers.
+            // failures before the tunnel is marked dead.  This prevents pool
+            // churn from wasting build resources when the router is struggling
+            // to find good peers.
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             int currentFailures = _cfg.getTunnelFailures();
             int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Removing " + _cfg +
+                    _log.warn("Tunnel Test failed -> Marking FAILED " + _cfg +
                               (maxFailures > 3 ? " (degraded mode)" : ""));
                 }
                 getContext().statManager().addRateData(

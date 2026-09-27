@@ -161,6 +161,17 @@ public interface TunnelInfo {
     public void setTestFailed();
 
     /**
+     * Mark this tunnel FAILING without consulting the hard-failure counter.
+     * Used when a tunnel is retained in the pool on a basis that does not
+     * increment {@link #getConsecutiveFailures()} — soft send timeouts, for
+     * example — so {@link #setTestFailed()} would still report GOOD. Without
+     * this the retained tunnel stays selectable and keeps being handed work.
+     *
+     * @since 0.9.71+
+     */
+    public void setTestFailing();
+
+    /**
      * The number of consecutive test failures.
      *
      * @return the count of consecutive failures
