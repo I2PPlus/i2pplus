@@ -47,7 +47,13 @@ public class FixWinPaths{
     /**
      *  Rewrite wrapper.config in place, via a sibling .tmp file. Exits 1 if the
      *  rewritten file cannot be put in place, and returns silently if the name
-     *  is not a wrapper.config or the file cannot be read or written.
+     *  is not a wrapper.config.
+     *
+     *  <p>Windows refuses a rename onto an existing file, so the original has
+     *  to be removed before the temp file can take its name. That ordering
+     *  makes a failed delete or rename destructive, so both are reported as
+     *  failures rather than being allowed to look like success, and the temp
+     *  file is verified before the original is touched.
      *
      *  @param file path of the wrapper.config to rewrite
      */
@@ -60,6 +66,7 @@ public class FixWinPaths{
 
         BufferedReader br = null;
         BufferedWriter bw = null;
+        boolean wroteTemp = false;
         try {
             br = new BufferedReader(new InputStreamReader(new FileInputStream(wConf), "UTF-8"));
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(wConfTemp), "UTF-8"));
@@ -89,7 +96,14 @@ public class FixWinPaths{
                 bw.write(line);
                 bw.newLine();
             }
-        } catch (IOException e) {return;}
+            wroteTemp = true;
+        } catch (IOException e) {
+            // A read or write failure leaves the original untouched, so there
+            // is nothing to recover, but it must not read as success: the
+            // wrapper would keep logging to the wrong place.
+            System.err.println("ERROR: Could not rewrite " + wConf + ": " + e.getMessage());
+            System.exit(1);
+        }
         finally {
             try {
                 if (br != null) {br.close();}
@@ -98,19 +112,31 @@ public class FixWinPaths{
                 if (bw != null) {bw.close();}
             } catch (IOException e) {}
         }
-        boolean successful = false;
-        File oldFile = new File(wConf);
-        File newFile = new File(wConfTemp);
-        // Once changes have been made, delete the original wrapper.conf
-        successful = oldFile.delete();
-        if (successful) {
-            // ...and rename temp file's name to wrapper.conf
-            successful = newFile.renameTo(oldFile);
-            if (!successful) {
-                System.err.println("ERROR: Problem processing " + wConf);
-                System.exit(1);
-            }
+        if (!wroteTemp || !replaceFromTemp(wConf, wConfTemp)) {
+            System.err.println("ERROR: Problem processing " + wConf);
+            System.exit(1);
         }
+    }
 
+    /**
+     *  Put a fully written temp file in place of the original.
+     *
+     *  <p>Refuses to remove the original unless the temp file is present and
+     *  non-empty, so a truncated or missing temp file cannot leave the install
+     *  with no wrapper.config at all.
+     *
+     * @param wConf path of the original file
+     * @param wConfTemp path of the rewritten sibling
+     * @return true if the temp file is now the original
+     */
+    static boolean replaceFromTemp(String wConf, String wConfTemp) {
+        File newFile = new File(wConfTemp);
+        // Verify before deleting: the delete is not reversible.
+        if (!newFile.isFile() || newFile.length() <= 0) {return false;}
+        File oldFile = new File(wConf);
+        if (!oldFile.delete()) {
+            return false;
+        }
+        return newFile.renameTo(oldFile);
     }
 }
