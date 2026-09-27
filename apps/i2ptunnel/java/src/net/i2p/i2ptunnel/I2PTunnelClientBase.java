@@ -886,44 +886,53 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
         NoRouteToHostException lastEx = null;
         int timeoutFailures = 0;
-        for (int i = 0; i < tunnelCount; i++) {
-            long now = System.currentTimeMillis();
-            if (isDeadlineExpired(deadlineMs, now)) {
-                if (lastEx != null) {break;}
-                throw new NoRouteToHostException("Connect deadline expired before first attempt");
-            }
-            // Fit this leg into the time left: substitute a real timeout when
-            // none was requested, shrink to the remaining budget, and skip
-            // the leg entirely when the budget is below streaming's 10s
-            // connect floor (attempting it would only burn the deadline).
-            long legTimeoutMs = legConnectTimeoutMs(opt.getConnectTimeout(), deadlineMs, now);
-            if (legTimeoutMs < 0 && deadlineMs != NO_DEADLINE) {
-                if (lastEx != null) {break;}
-                throw new NoRouteToHostException("Connect deadline expired before first attempt");
-            }
-            if (legTimeoutMs > 0 && legTimeoutMs != opt.getConnectTimeout()) {
-                opt.setConnectTimeout(legTimeoutMs);
-            }
-            try {
-                I2PSocket s = sockMgr.connect(dest, opt);
-                if (_log.shouldInfo() && i > 0) {
-                    _log.info("Connected after retry " + i + " (tunnel failover)");
+        // The per-leg timeout has to travel on the options object, which the
+        // caller owns and may reuse. Hold the caller's value so it is always
+        // handed back unchanged: a shrunken timeout left behind would silently
+        // shorten every later connect that reuses these options.
+        final long callerTimeoutMs = opt.getConnectTimeout();
+        try {
+            for (int i = 0; i < tunnelCount; i++) {
+                long now = System.currentTimeMillis();
+                if (isDeadlineExpired(deadlineMs, now)) {
+                    if (lastEx != null) {break;}
+                    throw new NoRouteToHostException("Connect deadline expired before first attempt");
                 }
-                return s;
-            } catch (NoRouteToHostException e) {
-                lastEx = e;
-                boolean timedOut = isConnectTimeout(e);
-                if (timedOut) {timeoutFailures++;}
-                int state = poolState();
-                boolean poolDown = state <= -1;
-                boolean poolBuilding = state == 0;
-                boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures, poolDown, poolBuilding);
-                if (_log.shouldWarn()) {
-                    _log.warn("Connect failed (tunnel " + i + "/" + tunnelCount + "): " + e.getMessage() +
-                              (more ? ", retrying..." : ", giving up"));
+                // Fit this leg into the time left: substitute a real timeout when
+                // none was requested, shrink to the remaining budget, and skip
+                // the leg entirely when the budget is below streaming's 10s
+                // connect floor (attempting it would only burn the deadline).
+                long legTimeoutMs = legConnectTimeoutMs(opt.getConnectTimeout(), deadlineMs, now);
+                if (legTimeoutMs < 0 && deadlineMs != NO_DEADLINE) {
+                    if (lastEx != null) {break;}
+                    throw new NoRouteToHostException("Connect deadline expired before first attempt");
                 }
-                if (!more) {break;}
+                if (legTimeoutMs > 0 && legTimeoutMs != opt.getConnectTimeout()) {
+                    opt.setConnectTimeout(legTimeoutMs);
+                }
+                try {
+                    I2PSocket s = sockMgr.connect(dest, opt);
+                    if (_log.shouldInfo() && i > 0) {
+                        _log.info("Connected after retry " + i + " (tunnel failover)");
+                    }
+                    return s;
+                } catch (NoRouteToHostException e) {
+                    lastEx = e;
+                    boolean timedOut = isConnectTimeout(e);
+                    if (timedOut) {timeoutFailures++;}
+                    int state = poolState();
+                    boolean poolDown = state <= -1;
+                    boolean poolBuilding = state == 0;
+                    boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures, poolDown, poolBuilding);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Connect failed (tunnel " + i + "/" + tunnelCount + "): " + e.getMessage() +
+                                  (more ? ", retrying..." : ", giving up"));
+                    }
+                    if (!more) {break;}
+                }
             }
+        } finally {
+            opt.setConnectTimeout(callerTimeoutMs);
         }
         throw (lastEx != null) ? lastEx :
             new NoRouteToHostException("Failed to connect after " + tunnelCount + " attempts");

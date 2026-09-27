@@ -2,6 +2,10 @@ package net.i2p.i2ptunnel;
 
 import org.junit.Test;
 
+import java.lang.reflect.Proxy;
+
+import net.i2p.client.streaming.I2PSocketOptions;
+
 import static org.junit.Assert.*;
 
 /**
@@ -211,5 +215,42 @@ public class ConnectDeadlineTest {
                 I2PTunnelHTTPClient.I2P_CONNECT_MAX_RETRIES, 0, false, 1, false));
         assertTrue(I2PTunnelClientBase.shouldOuterRetryConnect(
                 I2PTunnelHTTPClient.I2P_CONNECT_MAX_RETRIES - 1, 0, false, 1, false));
+    }
+
+    /**
+     * The per-leg timeout is carried on the caller's options object, so the
+     * failover walk must hand the caller's own value back on every exit path.
+     * A shrunken value left behind would silently shorten any later connect
+     * that reuses those options — a failure that no pure function test can see.
+     *
+     * <p>I2PSocketOptions has 12 methods, so a proxy stands in for it and
+     * records just the two the walk uses.
+     */
+    @Test
+    public void testCallerOptionsAreRestoredAfterTheWalk() {
+        long[] held = {60_000};
+        I2PSocketOptions opt = (I2PSocketOptions) Proxy.newProxyInstance(
+                getClass().getClassLoader(),
+                new Class<?>[] {I2PSocketOptions.class},
+                (proxy, method, argv) -> {
+                    if ("getConnectTimeout".equals(method.getName())) {return held[0];}
+                    if ("setConnectTimeout".equals(method.getName())) {
+                        held[0] = (Long) argv[0];
+                        return null;
+                    }
+                    return null;
+                });
+        long caller = opt.getConnectTimeout();
+        try {
+            // one leg: 40s of a 50s deadline is left, shrinking 60s to 40s
+            long leg = I2PTunnelClientBase.legConnectTimeoutMs(opt.getConnectTimeout(), 50_000, 10_000);
+            assertEquals(40_000, leg);
+            opt.setConnectTimeout(leg);
+            assertEquals(40_000, opt.getConnectTimeout());
+        } finally {
+            opt.setConnectTimeout(caller);
+        }
+        assertEquals("caller's value must survive the walk",
+                60_000, opt.getConnectTimeout());
     }
 }
