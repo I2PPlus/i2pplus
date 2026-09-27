@@ -155,9 +155,13 @@ public class TunnelPool {
      *  via shouldSkipDueToInProgress / buildReplacementTunnels.
      *  Raised from 2 so an incomplete LeaseSet / depleted pool can stage
      *  replacements in parallel instead of serializing one build per throttle.
+     *  Raised from 4 to 8 because four failure-handling interventions did not
+     *  move the outbound test failure rate — the bottleneck is build throughput,
+     *  not failure handling.  8 parallel builds per pool direction is safe
+     *  because exploratory pools already run higher concurrency without collapse.
      *  @since 0.9.71+
      */
-    static final int MAX_BUILD_PER_POOL_DIR = 4;
+    static final int MAX_BUILD_PER_POOL_DIR = 8;
     /**
      *  Higher removal bar for soft best-effort send timeouts (status 3).
      *  Congestion / slow destinations must not mass-remove healthy tunnels
@@ -165,7 +169,7 @@ public class TunnelPool {
      *  times with no successful tests still rotates out.
      *  @since 0.9.71+
      */
-    static final int SOFT_REMOVAL_THRESHOLD = 10;
+    static final int SOFT_REMOVAL_THRESHOLD = 7;
     /**
      *  Soft-failure count at which a still-usable tunnel is treated as
      *  degraded for ensure-throttle and deficit purposes.  Below the soft
@@ -178,6 +182,13 @@ public class TunnelPool {
      *  @since 0.9.71+
      */
     static final int SOFT_DEGRADED_FOR_ENSURE = 5;
+    /**
+     *  Priority weight for service pool builds.  Service pools carry
+     *  user-facing traffic (eepsites, I2PSnark) and should get priority
+     *  when the build executor is saturated.
+     *  @since 0.9.71+
+     */
+    static final double SERVICE_POOL_PRIORITY = 0.6;
     /** Last time buildFallback() logged its zero-hop-refusal warning, to rate-limit it */
     private volatile long _lastFallbackWarnTime;
     /**
@@ -5124,6 +5135,17 @@ public class TunnelPool {
      *  from silently draining to zero, avoiding tunnel collapse cascades.
      */
     void ensureSufficientTunnels() {
+        // Fast-path: if healthy tunnels are below 50% of target, start builds immediately
+        // without waiting for the throttle. A thin pool is an emergency.
+        int target = getEffectiveTarget();
+        int healthy = getHealthyTunnelCount();
+        if (target > 0 && healthy < target / 2) {
+            if (_log.shouldWarn()) {
+                _log.warn(toString() + " -> Thin pool (" + healthy + "/" + target + " healthy) -> fast-path pre-build");
+            }
+            ensureSufficientTunnelsNow(_context.clock().now());
+            return;
+        }
         long nowEnsure = _context.clock().now();
         // Per-pool throttle: long gate when healthy, short floor when
         // collapsed (usable <= 1), soft-degraded-dominated (healthy <= 1),
@@ -5332,7 +5354,20 @@ public class TunnelPool {
         // Collapsed recovery (bypassPacing): allow up to `needed` in flight
         // (bounded by target / emergency boost by callers).  Normal operation
         // stays at MAX_BUILD_PER_POOL_DIR to prevent feedback storms.
+        int target = getEffectiveTarget();
+        int healthy = getHealthyTunnelCount();
+        boolean isThin = target > 0 && healthy < target / 2;
         int cap = bypassPacing ? Math.max(MAX_BUILD_PER_POOL_DIR, needed) : MAX_BUILD_PER_POOL_DIR;
+        if (isThin && cap < MAX_BUILD_PER_POOL_DIR * 2) {
+            cap = MAX_BUILD_PER_POOL_DIR * 2;
+        }
+        // Service pools get priority: they carry user-facing traffic
+        if (isServerPool() && _manager.getExecutor().isPoolInBackoff(this)) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Service pool " + (isThin ? "(burst) " : "") +
+                          "priority build under executor saturation");
+            }
+        }
         for (int i = 0; i < needed; i++) {
             int inProgress = getInProgressCount();
             if (inProgress >= cap) {
@@ -5358,6 +5393,23 @@ public class TunnelPool {
      *  @return the configured tunnel, or null on failure
      */
     private PooledTunnelCreatorConfig configureNewTunnel(boolean forceZeroHop) {
+        return configureNewTunnel(forceZeroHop, Collections.emptySet());
+    }
+
+    /**
+     *  Configure a new tunnel, optionally excluding peers from first-hop
+     *  selection.  The exclusion set is used by the build executor's dispatch
+     *  loop to ensure concurrent builds in the same batch target diverse
+     *  first-hop peers — stacking multiple build requests on one peer
+     *  floods it and makes the first build answer slower.
+     *
+     *  @param forceZeroHop true to force a zero-hop tunnel
+     *  @param excludeFirstHops first-hop peers already selected by concurrent
+     *         builds in the same dispatch batch
+     *  @return the tunnel config, or null if none could be configured
+     *  @since 0.9.71+
+     */
+    PooledTunnelCreatorConfig configureNewTunnel(boolean forceZeroHop, Set<Hash> excludeFirstHops) {
         TunnelPoolSettings settings = getSettings();
         // Peers for new tunnel, including us, ENDPOINT FIRST
         List<Hash> peers = null;
@@ -5376,7 +5428,7 @@ public class TunnelPool {
             }
             if (peers == null) {
                 setLengthOverride();
-                peers = _peerSelector.selectPeers(settings);
+                peers = _peerSelector.selectPeers(settings, excludeFirstHops);
             }
 
             if ((peers == null) || (peers.isEmpty())) {
@@ -5753,18 +5805,28 @@ public class TunnelPool {
                 _consecutiveBuildTimeouts.set(0);
                 recordBuildOutcome(false, _context.clock().now());
                 updatePairedProfile(cfg, true);
+                if (_log.shouldInfo()) {
+                    _log.info("Build failed for " + toString() + " -> reason=" + result);
+                }
                 break;
 
             case TIMEOUT:
                 _consecutiveBuildTimeouts.incrementAndGet();
                 recordBuildOutcome(true, _context.clock().now());
                 updatePairedProfile(cfg, false);
+                if (_log.shouldInfo()) {
+                    _log.info("Build failed for " + toString() + " -> reason=" + result +
+                              " (consecutiveTimeouts=" + _consecutiveBuildTimeouts.get() + ")");
+                }
                 ensureSufficientTunnels();
                 break;
 
             case OTHER_FAILURE:
                 // Not a real failure (e.g., fallback skipping) — don't penalize
                 updatePairedProfile(cfg, false);
+                if (_log.shouldInfo()) {
+                    _log.info("Build failed for " + toString() + " -> reason=" + result);
+                }
                 ensureSufficientTunnels();
                 break;
 

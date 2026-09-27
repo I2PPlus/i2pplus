@@ -3327,7 +3327,7 @@ public class TestJob extends JobImpl {
                 cleanupTunnelTracking();
                 decrementIfCounted();
                 return;
-            } else if (failures > 1) {
+            } else if (failures > 2) {
                 // Route through fail() so zombie ceiling can trigger
                 _pool.tunnelFailed(_cfg);
             }
@@ -3528,8 +3528,8 @@ public class TestJob extends JobImpl {
         } else {
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             if (_log.shouldWarn()) {
-                _log.warn("No " + direction + " tunnel for test of " + _cfg + " -> Deferring (" +
-                          _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
+                _log.warn("No " + direction + " tunnel for test of " + _cfg + " \n* Deferring (" +
+                          _deferredCount + "/" + MAX_DEFERRED + " -> Pool may be recovering...)");
             }
         }
         if (!scheduleRetest(false)) {
