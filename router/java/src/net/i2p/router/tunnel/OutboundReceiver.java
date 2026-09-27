@@ -175,12 +175,28 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         public String getName() { return "OBGW Send Failure"; }
 
         /**
-         * Fail the tunnel since sending to the first hop failed.
+         * Record a failed send to the first hop and fail the tunnel only once
+         * the failure is not just a burst.
+         *
+         * The job is shared by every message on this tunnel and is only
+         * deduped while queued, so one congested second runs it many times.
+         * TunnelCreatorConfig collapses the burst, spaces the failures out,
+         * and latches the escalation, so a transient stall costs one log
+         * line and a dead first hop still fails the tunnel promptly.
          */
         public void runJob() {
-            if (_log.shouldWarn())
-                _log.warn("Send to [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config);
-            _config.tunnelFailedFirstHop();
+            int streak = _config.recordFirstHopSendFailure();
+            if (streak <= 0) {return;}
+            _context.statManager().addRateData("tunnel.firstHopSendFailure", streak);
+            _config.firstHopSendFailureStreak(streak);
+            if (_log.shouldWarn()) {
+                _log.warn("Send to [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed "
+                          + streak + "/" + TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD
+                          + " times for " + _config);
+            }
+            if (streak >= TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD) {
+                _config.tunnelFailedFirstHop();
+            }
         }
     }
 }

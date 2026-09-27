@@ -69,6 +69,30 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     }
 
     /**
+     * Re-warm the session to the first hop of an outbound tunnel whose send
+     * failures are approaching the fatal threshold.  A direct transport send
+     * forces the connection up again, so the next tunnel message is not
+     * queued behind a stale session.
+     *
+     * Gated to fire only when the streak is one below the failure threshold,
+     * as a last-ditch recovery attempt before the tunnel is retired.  Firing
+     * on every advance would add a DatabaseLookupMessage round-trip to the
+     * exact first hop that is already failing, loading a congested path.
+     *
+     * @param streak the current first-hop failure streak
+     * @since 0.9.71+
+     */
+    @Override
+    public void firstHopSendFailureStreak(int streak) {
+        if (isInbound() || getLength() <= 1) {return;}
+        // Only pre-warm when the streak is about to trigger tunnel failure:
+        // the recovery attempt should not add load to a path that is merely
+        // congested before the router has committed to blaming the peer.
+        if (streak < FIRST_HOP_FAILURE_THRESHOLD - 1) {return;}
+        TunnelPeerSelector.preConnectTo(_context, getPeer(1));
+    }
+
+    /**
      *  @return non-null
      */
     @Override

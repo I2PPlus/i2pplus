@@ -51,6 +51,29 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.71+
      */
     private volatile long _lastSoftFailure;
+    /**
+     *  Raw count of spaced first-hop send failures.  Decay and spacing are
+     *  applied at read time, see {@link #recordFirstHopSendFailure()}.
+     *  @since 0.9.71+
+     */
+    private final AtomicInteger _firstHopSendFailures = new AtomicInteger();
+    /**
+     *  Wall-clock time of the most recent counted first-hop send failure,
+     *  0 if none.  Only stamped when the count actually advances, so a
+     *  burst cannot keep pushing the spacing deadline forward and never
+     *  reach the threshold.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastFirstHopSendFailure;
+    /**
+     *  One-shot escalation latch: once the streak reached
+     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} the caller is told exactly once.
+     *  The send-failure job is shared by every message on the tunnel and is
+     *  only deduped while queued, so without this a single burst would call
+     *  {@link #tunnelFailedFirstHop()} for each failed message.
+     *  @since 0.9.71+
+     */
+    private volatile boolean _firstHopFailed;
     private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
 
     private volatile boolean _reused;
@@ -88,6 +111,34 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.71+
      */
     static final long SOFT_FAILURE_WINDOW_MS = 10 * 60 * 1000L;
+    /**
+     *  Consecutive first-hop send failures before an outbound tunnel is
+     *  retired.  Send failures are not proof the tunnel is dead: most come
+     *  from local congestion (expired-on-queue, CoDel drops, no-bid replies)
+     *  and land on a shared job that runs once per failed message, so the
+     *  bar sits above a single burst.  The count is spaced out by
+     *  {@link #FIRST_HOP_FAILURE_SPACING_MS} so a local stall collapses to
+     *  1 while a genuinely unreachable first hop reaches the bar on its own
+     *  within {@link #FIRST_HOP_FAILURE_WINDOW_MS}.
+     *  @since 0.9.71+
+     */
+    public static final int FIRST_HOP_FAILURE_THRESHOLD = 3;
+    /**
+     *  Minimum spacing between first-hop send failures that count towards
+     *  {@link #FIRST_HOP_FAILURE_THRESHOLD}.  Failures closer together are
+     *  one event, so a burst of 40 messages failing in the same second
+     *  records 1, not 40.
+     *  @since 0.9.71+
+     */
+    public static final long FIRST_HOP_FAILURE_SPACING_MS = 5 * 1000L;
+    /**
+     *  Window in which spaced first-hop send failures accumulate, mirroring
+     *  {@link #SOFT_FAILURE_WINDOW_MS}.  A failure older than this is decayed
+     *  out at read time, so an idle tunnel that finally loses a send never
+     *  inherits an unbounded streak.
+     *  @since 0.9.71+
+     */
+    public static final long FIRST_HOP_FAILURE_WINDOW_MS = 60 * 1000L;
     private static final int LATENCY_SAMPLE_SIZE = 3;
     private volatile int _lastLatency = -1;
     private final int[] _latencyHistory = new int[LATENCY_SAMPLE_SIZE];
@@ -327,6 +378,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void recordRealTraffic() {
         _lastRealTraffic = System.currentTimeMillis();
         clearSoftFailures();
+        clearFirstHopFailures();
     }
 
     /**
@@ -427,6 +479,141 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
+     *  Effective first-hop send failure streak for a raw count stamped at a
+     *  point in time.  Same time-windowed decay rule as
+     *  {@link #effectiveSoftFailures(int, long, long, long)} — both are
+     *  read-time filters over a raw counter, so no sweep is required.
+     *
+     *  @param raw stored first-hop failure count, &lt;= 0 means none
+     *  @param lastCounted wall-clock time of the most recent counted failure
+     *          (ms), &lt;= 0 means none
+     *  @param now current wall-clock time (ms)
+     *  @param windowMs window in which first-hop failures accumulate (ms)
+     *  @return the count to act on: 0 once the streak has aged out
+     *  @since 0.9.71+
+     */
+    static int effectiveFirstHopFailures(int raw, long lastCounted, long now, long windowMs) {
+        return effectiveSoftFailures(raw, lastCounted, now, windowMs);
+    }
+
+    /**
+     *  Next first-hop failure count for a send failure arriving at {@code now},
+     *  folding in both the decay window and the spacing rule.  Pure decision
+     *  helper so the burst/stale behaviour is unit-testable without real waits.
+     *
+     *  @param raw stored first-hop failure count, &lt;= 0 means none
+     *  @param lastCounted wall-clock time of the most recent counted failure
+     *          (ms), &lt;= 0 means none
+     *  @param now current wall-clock time (ms)
+     *  @param spacingMs minimum spacing between counted failures (ms)
+     *  @param windowMs window in which first-hop failures accumulate (ms)
+     *  @return the new count (&gt;= 1), or -1 when this failure is a burst
+     *          duplicate inside the spacing interval and must not be counted
+     *  @since 0.9.71+
+     */
+    static int nextFirstHopFailureCount(int raw, long lastCounted, long now,
+                                        long spacingMs, long windowMs) {
+        int effective = effectiveFirstHopFailures(raw, lastCounted, now, windowMs);
+        if (effective <= 0) {
+            return 1;
+        }
+        if (lastCounted > 0 && now >= lastCounted && now - lastCounted < spacingMs) {
+            return -1;
+        }
+        return effective + 1;
+    }
+
+    /**
+     *  Record a failed send to the first hop of an outbound tunnel.
+     *
+     *  Called from the outbound send-failure job, which fires for every
+     *  non-requeueable send failure (expired on queue, CoDel drop, no-bid
+     *  reply, dropped message) — most of which are local congestion, not a
+     *  dead peer.  Counting raw would retire the tunnel on one bad second,
+     *  so the streak is decayed by {@link #FIRST_HOP_FAILURE_WINDOW_MS} and
+     *  spaced by {@link #FIRST_HOP_FAILURE_SPACING_MS}.
+     *
+     *  @return -1 if not applicable (inbound or zero-hop tunnel), 0 if this
+     *          failure changed nothing (inside the spacing interval, or the
+     *          threshold was already reached and escalated), otherwise the
+     *          current streak; a return value of
+     *          {@link #FIRST_HOP_FAILURE_THRESHOLD} or more means the caller
+     *          must fail the tunnel, and it is only handed that signal once
+     *          until {@link #clearFirstHopFailures()} re-arms it
+     *  @since 0.9.71+
+     */
+    public int recordFirstHopSendFailure() {
+        return recordFirstHopSendFailure(System.currentTimeMillis());
+    }
+
+    /**
+     *  Timestamped form of {@link #recordFirstHopSendFailure()}, so spacing,
+     *  decay and latching are testable without real waits.
+     *
+     *  @param now wall-clock time (ms) of this failure
+     *  @return see {@link #recordFirstHopSendFailure()}
+     *  @since 0.9.71+
+     */
+    int recordFirstHopSendFailure(long now) {
+        if (isInbound() || getLength() <= 1) {return -1;}
+        if (_firstHopFailed) {return 0;}
+        synchronized (this) {
+            int next = nextFirstHopFailureCount(_firstHopSendFailures.get(), _lastFirstHopSendFailure,
+                                                now, FIRST_HOP_FAILURE_SPACING_MS,
+                                                FIRST_HOP_FAILURE_WINDOW_MS);
+            if (next <= 0) {return 0;}
+            _firstHopSendFailures.set(next);
+            // Only stamped on an advancing count, so a burst cannot extend
+            // the spacing deadline and stall the streak below the bar.
+            _lastFirstHopSendFailure = now;
+            if (next >= FIRST_HOP_FAILURE_THRESHOLD) {_firstHopFailed = true;}
+            return next;
+        }
+    }
+
+    /**
+     *  Effective first-hop send failure streak, with failures older than
+     *  {@link #FIRST_HOP_FAILURE_WINDOW_MS} decayed out at read time.
+     *
+     *  @return the streak count, 0 if none
+     *  @since 0.9.71+
+     */
+    public int getFirstHopSendFailures() {
+        return getFirstHopSendFailures(System.currentTimeMillis());
+    }
+
+    /**
+     *  Timestamped form of {@link #getFirstHopSendFailures()}.
+     *
+     *  @param now wall-clock time (ms) to evaluate the decay against
+     *  @return the streak count, 0 if none
+     *  @since 0.9.71+
+     */
+    int getFirstHopSendFailures(long now) {
+        return effectiveFirstHopFailures(_firstHopSendFailures.get(), _lastFirstHopSendFailure,
+                                         now, FIRST_HOP_FAILURE_WINDOW_MS);
+    }
+
+    /**
+     *  Reset the first-hop send failure streak and re-arm the escalation
+     *  latch.  Called whenever the tunnel proves it can still deliver: real
+     *  traffic on the data path, or a passing test, which for an outbound
+     *  tunnel is dispatched through the same send path that failed.  This
+     *  differs from {@link #clearSoftFailures()}, which a test does not
+     *  clear — a soft timeout is a data-path condition, while a first-hop
+     *  send failure is exactly what a successful test disproves.
+     *
+     *  @since 0.9.71+
+     */
+    public void clearFirstHopFailures() {
+        synchronized (this) {
+            _firstHopSendFailures.set(0);
+            _lastFirstHopSendFailure = 0;
+            _firstHopFailed = false;
+        }
+    }
+
+    /**
      * The tunnel failed completely, so definitely stop using it
      *
      * @since 0.9.53
@@ -450,6 +637,26 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void tunnelFailedFirstHop() {
         if (isInbound() || getLength() <= 1) {return;}
         tunnelFailedCompletely();
+    }
+
+    /**
+     *  Hook invoked when the first-hop send failure streak advances but has
+     *  not yet reached {@link #FIRST_HOP_FAILURE_THRESHOLD}, i.e. the tunnel
+     *  is being kept alive.  Gives subclasses a chance to re-warm the path to
+     *  the first hop: the failure may be a local stall rather than a dead
+     *  peer, and a fresh transport session makes the next send likely to land.
+     *  Not invoked for burst duplicates, so callers see at most one hook per
+     *  {@link #FIRST_HOP_FAILURE_SPACING_MS}.
+     *
+     *  Base config has no pool and nothing to warm; see
+     *  {@code PooledTunnelCreatorConfig}.
+     *
+     *  @param streak the current streak, always below
+     *         {@link #FIRST_HOP_FAILURE_THRESHOLD}
+     *  @since 0.9.71+
+     */
+    public void firstHopSendFailureStreak(int streak) {
+        // nothing to warm without a pool
     }
 
     /**
@@ -499,6 +706,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * Clears any last-chance admission — the test settled, so the early-expiry
      * gate no longer needs the bypass.  Does NOT clear the soft streak: a test
      * exercises the test path, not the data path.
+     *
+     * Does NOT clear the first-hop send-failure streak.  A passing test is
+     * evidence the peer is not dead, but not evidence it is not flaky — a
+     * flaky first hop that alternates fail/pass/fail/pass would never reach
+     * the failure threshold if each pass reset the streak.  The 60s decay
+     * window (FIRST_HOP_FAILURE_WINDOW_MS) already ages the streak naturally,
+     * so a genuinely dead peer's old failures expire without making
+     * accumulation impossible for a merely flaky one.
      */
     public void testSuccessful(int ms) {
         _failures.set(0);
