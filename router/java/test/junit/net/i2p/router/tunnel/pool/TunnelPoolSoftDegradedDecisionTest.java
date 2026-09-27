@@ -154,4 +154,13 @@ public class TunnelPoolSoftDegradedDecisionTest {
         // degraded and trip collapse-sized rebuilds every few seconds.
         assertEquals(5, TunnelPool.SOFT_DEGRADED_FOR_ENSURE);
     }
+
+    // ---------- SOFT_REMOVAL_THRESHOLD ----------
+
+    @Test
+    public void testSoftRemovalThreshold() {
+        // Set to 7 from 5 to reduce mark-and-replace cycle frequency without
+        // being as aggressive as 5 (which broke the soft-threshold test).
+        assertEquals(7, TunnelPool.SOFT_REMOVAL_THRESHOLD);
+    }
 }

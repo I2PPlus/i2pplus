@@ -68,10 +68,11 @@ public class TunnelPoolReportSendFailureTest {
 
     @Test
     public void softThresholdBelowBarIsFalse() {
-        assertFalse(TunnelPool.exceedsRemovalThreshold(TunnelPool.SOFT_REMOVAL_THRESHOLD, true));
+        int bar = TunnelPool.SOFT_REMOVAL_THRESHOLD;
+        assertFalse(TunnelPool.exceedsRemovalThreshold(bar, true));
         assertFalse(TunnelPool.exceedsRemovalThreshold(0, true));
-        assertFalse(TunnelPool.exceedsRemovalThreshold(4, true));
-        assertFalse(TunnelPool.exceedsRemovalThreshold(9, true));
+        assertFalse(TunnelPool.exceedsRemovalThreshold(bar - 3, true));
+        assertFalse(TunnelPool.exceedsRemovalThreshold(bar - 1, true));
     }
 
     @Test
