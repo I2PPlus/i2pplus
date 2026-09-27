@@ -189,16 +189,6 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     * Deprecated, unimplemented, does nothing.
-     *
-     * @param lsnr ignored
-     * @deprecated there is no socket error notification; see
-     *     {@link I2PSocket#setSocketErrorListener(I2PSocket.SocketErrorListener)}.
-     */
-    @Deprecated
-    public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) { /* no-op */ }
-
-    /**
      * Whether the socket is closed or not connected.
      * @return true if the socket is closed or not connected
      */

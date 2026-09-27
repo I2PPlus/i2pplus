@@ -92,16 +92,6 @@ public interface I2PSocket extends Closeable {
     public boolean isClosed();
 
     /**
-     *  Deprecated, unimplemented, does nothing.
-     *
-     *  @param lsnr the listener (ignored)
-     *  @deprecated there is no socket error notification; a failed connection or
-     *      I/O is reported through the I/O exception on the stream instead.
-     */
-    @Deprecated
-    public void setSocketErrorListener(SocketErrorListener lsnr);
-
-    /**
      *  The remote port.
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      *  @since 0.8.9
@@ -143,25 +133,4 @@ public interface I2PSocket extends Closeable {
      * @since 0.9.30
      */
     public void reset() throws IOException;
-
-    /**
-     * Deprecated, unimplemented, does nothing. Original description:
-     *
-     * Allow notification of underlying errors communicating across I2P without
-     * waiting for any sort of cleanup process.  For example, if some data could
-     * not be sent, this listener is notified immediately, and while the input/output
-     * streams are notified through IOExceptions, they are told only after the
-     * TCP-like stream is closed (which may be a minute later, if the close message
-     * times out as well).  This is not fired on normal close() activity.
-     *
-     * @deprecated no implementation registers a listener; see
-     *     {@link #setSocketErrorListener(SocketErrorListener)}.
-     */
-    @Deprecated
-    public interface SocketErrorListener {
-        /**
-         * An error occurred communicating with the peer.
-         */
-        void errorOccurred();
-    }
 }

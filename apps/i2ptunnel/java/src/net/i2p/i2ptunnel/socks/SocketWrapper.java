@@ -122,13 +122,6 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     *  Not supported: the wrapper never reports socket errors to a listener.
-     *
-     *  @param lsnr ignored
-     */
-    public void setSocketErrorListener(SocketErrorListener lsnr) { /* no-op */ }
-
-    /**
      *  The remote port.
      *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      */

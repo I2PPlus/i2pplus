@@ -64,7 +64,7 @@ import net.i2p.util.SimpleTimer2;
  * @see #fromI2P
  * @see I2PTunnelServer
  */
-public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErrorListener, DoneCallback {
+public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     protected final Log _log;
     private static final AtomicLong __runnerId = new AtomicLong();
     private final long _runnerId;
@@ -2283,15 +2283,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
          *
          * @return the failure
          */
-        public Exception getFailure() {return _failure;}
-    }
-
-    @Override
-    public void errorOccurred() {
-        synchronized (finishLock) {
-            finished = true;
-            finishLock.notifyAll();
-        }
+         public Exception getFailure() {return _failure;}
     }
 
 }
