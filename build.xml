@@ -171,8 +171,9 @@
     <echo message="  debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
     <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message="  debianhowto                                  Instructions on building Debian packages"/>
-    <echo message="  git-tag                                      Create annotated Git tag for release (e.g. v2.12.0-16+)"/>
+    <echo message="  git-tag                                      Create annotated Git tag for release (e.g. 0.9.70+)"/>
     <echo message="  pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
+    <echo message="  revisions                                    Count commits per author since the last release tag"/>
     <echo message="  slackpkg                                     Build Slackware package in ./distro/Slackware/i2p"/>
     <echo message="  tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
     <echo message=""/>
@@ -845,36 +846,69 @@
   <!-- git targets -->
 
   <target name="checkForGit">
-    <available property="git.available" file=".git" type="dir"/>
+    <!-- A linked worktree or submodule checkout has .git as a file, not a dir,
+         and Ant's <available> has no "any" type, so test for both. -->
+    <available property="git.dir.present" file=".git" type="dir"/>
+    <available property="git.file.present" file=".git" type="file"/>
+    <condition property="git.available">
+      <or>
+        <isset property="git.dir.present"/>
+        <isset property="git.file.present"/>
+      </or>
+    </condition>
   </target>
 
-  <target name="getGitRev" depends="checkForGit" if="git.available">
+  <target name="getGitRev" depends="checkForGit" if="git.available" description="Print the short Git revision of the workspace">
     <exec executable="git" outputproperty="workspace.version" errorproperty="git.error1" failifexecutionfails="false">
       <arg value="rev-parse"/>
       <arg value="--short=8"/>
       <arg value="HEAD"/>
     </exec>
+    <fail message="Could not read the Git revision of this workspace. git said: ${git.error1}">
+      <condition>
+        <not>
+          <matches pattern="[0-9a-f]{7,40}" string="${workspace.version}"/>
+        </not>
+      </condition>
+    </fail>
     <echo message="Current I2P+ Git revision in workspace: ${workspace.version}"/>
     <echo message="Note: local workspace changes may vary from the latest revision"/>
   </target>
 
-  <target name="getGitRevLong" depends="checkForGit" if="git.available">
+  <target name="getGitRevLong" depends="checkForGit" if="git.available" description="Print the full Git revision of the workspace">
     <exec executable="git" outputproperty="workspace.version" errorproperty="git.error1" failifexecutionfails="false">
       <arg value="rev-parse"/>
       <arg value="HEAD"/>
     </exec>
+    <fail message="Could not read the Git revision of this workspace. git said: ${git.error1}">
+      <condition>
+        <not>
+          <matches pattern="[0-9a-f]{40}" string="${workspace.version}"/>
+        </not>
+      </condition>
+    </fail>
     <echo message="Current I2P+ Git revision in workspace: ${workspace.version}"/>
     <echo message="Note: local workspace changes may vary from the latest revision"/>
   </target>
 
-  <target name="checkIfBumpedGit" depends="checkForGit" if="git.available">
-    <exec executable="git" outputproperty="bumped" errorproperty="git.error2" failifexecutionfails="false">
+  <target name="checkIfBumpedGit" depends="checkForGit" if="git.available" description="Check whether the version files differ from HEAD">
+    <exec executable="git" outputproperty="bumped" errorproperty="git.error2" resultproperty="bumped.result" failifexecutionfails="false">
       <arg value="status"/>
       <arg value="-s"/>
       <arg value="--porcelain"/>
       <arg value="router/java/src/net/i2p/router/RouterVersion.java"/>
     </exec>
-    <condition property="bumped.already">
+    <!-- Test the exit code, not errorproperty: Ant sets errorproperty even when
+         stderr is empty, so testing that property would always trip. -->
+    <fail message="git status failed (exit ${bumped.result}): ${git.error2}">
+      <condition>
+        <not>
+          <equals arg1="${bumped.result}" arg2="0"/>
+        </not>
+      </condition>
+    </fail>
+    <!-- "pending" means the file differs from HEAD, whether or not the change is staged -->
+    <condition property="version.bump.pending">
       <not>
         <equals arg1="${bumped}" arg2=""/>
       </not>
@@ -884,56 +918,125 @@
   <target name="checkoutFromGit" depends="checkForGit" if="git.available">
     <echo message="Checking out fresh copy into ${checkoutDir}"/>
     <delete dir="${checkoutDir}"/>
+    <condition property="git.clone.hardlink.flag" value="-l" else="--no-hardlinks">
+      <not>
+        <isset property="git.clone.nohardlinks"/>
+      </not>
+    </condition>
     <exec executable="git" failonerror="true">
       <arg value="clone"/>
-      <arg value="-l"/>
+      <arg value="${git.clone.hardlink.flag}"/>
       <arg value="."/>
       <arg value="${checkoutDir}"/>
     </exec>
   </target>
 
-  <target name="revisionsGit" depends="checkForGit, getReleaseNumber, getBuildNumber" if="git.available">
-    <!-- git log i2p-0.9.xx | grep '^Author:' | cut -d ' ' -f 2- | sort | uniq -c | sort -rn -->
-    <exec executable="git" outputproperty="getrevisions1" errorproperty="reverror1" failifexecutionfails="true">
+  <target name="release.tag.name" depends="getReleaseNumber, getBuildNumber">
+    <!--
+      API version, not the marketing release number, so tags land on the line the
+      development branch has always been tagged on (0.9.62+ ... 0.9.70+); the
+      i2p-2.x.y tags sit on the release line, which has diverged from it.  The
+      trailing ${build.extra} is RouterVersion.EXTRA, which is "+" for a branded
+      I2P+ build and empty otherwise, so this reproduces the existing 0.9.70+
+      names rather than hardcoding a plus.
+    -->
+    <property name="release.tag.name" value="${api.version}${build.extra}"/>
+  </target>
+
+  <target name="revisions.base" depends="checkForGit, release.tag.name" if="git.available">
+    <property name="revisions.base.tag" value="${release.tag.name}"/>
+    <!-- the quiet flag: a missing tag is the expected negative signal here, not an error to report -->
+    <exec executable="git" outputproperty="revisions.base.sha" failifexecutionfails="false">
+      <arg line="rev-parse --verify --quiet ${revisions.base.tag}^{commit}"/>
+    </exec>
+    <fail message="Revisions base ${revisions.base.tag} is not a commit in this repository. Override it with -Drevisions.base.tag=&lt;tag&gt;; git tag --merged HEAD lists the tags on this line.">
+      <condition>
+        <not>
+          <matches pattern="[0-9a-f]{40}" string="${revisions.base.sha}"/>
+        </not>
+      </condition>
+    </fail>
+    <property name="revisions.base" value="${revisions.base.tag}"/>
+    <exec executable="git" outputproperty="revisions.base.mergebase" errorproperty="revisions.base.mb.err" failifexecutionfails="false">
+      <arg line="merge-base ${revisions.base.sha} HEAD"/>
+    </exec>
+    <!-- The range <tag>..HEAD only means "changes since <tag>" when the tag is
+         an ancestor of HEAD.  When the two lines have diverged git reports every
+         commit on this line that the tag never had, so prove ancestry first. -->
+    <condition property="revisions.base.diverged" value="true" else="false">
+      <not>
+        <equals arg1="${revisions.base.sha}" arg2="${revisions.base.mergebase}"/>
+      </not>
+    </condition>
+    <!-- Read only for the divergence message, but cheap enough to always fetch -->
+    <exec executable="git" outputproperty="revisions.base.badcount" errorproperty="revisions.base.bc.err" failifexecutionfails="false">
+      <arg line="rev-list --count ${revisions.base.sha}..HEAD"/>
+    </exec>
+  </target>
+
+  <target name="revisions.base.check" depends="revisions.base">
+    <fail message="Revisions base ${revisions.base.tag} (${revisions.base.sha}) is not an ancestor of HEAD (${revisions.base.mergebase}). ${revisions.base} diverged from this branch, so ${revisions.base}..HEAD would report ${revisions.base.badcount} commits that are not new work. Pick a base on this line with -Drevisions.base.tag=&lt;tag&gt; (git tag --merged HEAD lists them).">
+      <condition>
+        <equals arg1="${revisions.base.diverged}" arg2="true"/>
+      </condition>
+    </fail>
+    <echo message="Revisions base: ${revisions.base.tag} (${revisions.base.sha})"/>
+  </target>
+
+  <target name="revisionsGit" depends="checkForGit, revisions.base.check, getBuildNumber" if="git.available" description="Count commits per author since the last release tag">
+    <property name="revisions.work.dir" location="${build.root}revisions"/>
+    <mkdir dir="${revisions.work.dir}"/>
+    <!-- git log <base>..HEAD | sort | uniq -c | sort -rn.  One line per commit is
+         required: the bodies would break the count.  %aN/%aE rather than %an/%ae
+         so a .mailmap, if one is ever added, collapses an author who commits
+         under several addresses into a single row.
+         failonerror, not just failifexecutionfails: a git error must not be
+         reported as an empty revision count. -->
+    <exec executable="git" output="${revisions.work.dir}/authors.raw" failonerror="true" failifexecutionfails="true" errorproperty="reverror1">
       <arg value="log"/>
-      <arg value="i2p-${release.number}..HEAD"/>
+      <arg value="--format=%aN &lt;%aE&gt;"/>
+      <arg line="${revisions.base}..HEAD"/>
     </exec>
-    <exec executable="grep" inputstring="${getrevisions1}" outputproperty="getrevisions2" failifexecutionfails="true">
-      <arg value="^Author:"/>
-    </exec>
-    <exec executable="cut" inputstring="${getrevisions2}" outputproperty="getrevisions3" failifexecutionfails="true">
-      <arg value="-d"/>
-      <arg value=" "/>
-      <arg value="-f"/>
-      <arg value="2-"/>
-    </exec>
-    <exec executable="sort" inputstring="${getrevisions3}" outputproperty="getrevisions4" failifexecutionfails="true"></exec>
-    <exec executable="uniq" inputstring="${getrevisions4}" outputproperty="getrevisions5" failifexecutionfails="true">
+    <exec executable="sort" input="${revisions.work.dir}/authors.raw" output="${revisions.work.dir}/authors.sorted" failonerror="true" failifexecutionfails="true" errorproperty="reverror2"/>
+    <exec executable="uniq" input="${revisions.work.dir}/authors.sorted" output="${revisions.work.dir}/authors.counted" failonerror="true" failifexecutionfails="true" errorproperty="reverror3">
       <arg value="-c"/>
     </exec>
-    <exec executable="sort" inputstring="${getrevisions5}" outputproperty="getrevisions6" failifexecutionfails="true">
+    <exec executable="sort" input="${revisions.work.dir}/authors.counted" output="${revisions.work.dir}/authors.final" failonerror="true" failifexecutionfails="true" errorproperty="reverror4">
       <arg value="-rn"/>
     </exec>
-    <echo message="Revisions since ${release.number}:"/>
-    <echo message="${getrevisions6}"/>
+    <loadfile srcFile="${revisions.work.dir}/authors.final" property="revisions.summary"/>
+    <!-- loadfile leaves the property unset when the range is empty (base already
+         on HEAD), which would echo the raw property name. Test isset, not the
+         value: an unset property reads as its own name, not as an empty string. -->
+    <condition property="revisions.output" value="(no commits since ${revisions.base})" else="${revisions.summary}">
+      <not>
+        <isset property="revisions.summary"/>
+      </not>
+    </condition>
+    <echo message="Revisions since ${revisions.base}:"/>
+    <echo message="${revisions.output}"/>
   </target>
   <!-- end git targets -->
 
   <target name="checkForVCS" depends="checkForGit"/>
 
   <target name="failIfNoVCS" depends="checkForVCS">
-    <fail message="This target cannot be used without Monotone or Git!">
+    <fail message="This target requires a Git working copy (.git)">
       <condition>
         <not>
-          <or>
-            <isset property="git.available"/>
-          </or>
+          <isset property="git.available"/>
         </not>
       </condition>
     </fail>
   </target>
 
-  <target name="trimRev" depends="getGitRev">
+  <target name="trimRev" depends="getGitRev" description="Print the 8-character short Git revision">
+    <!-- buildProperties defaults workspace.version to "unknown", which is the
+         usual no-git path and degrades cleanly. This guard only catches the
+         narrower case where getGitRev never ran and nothing supplied a default:
+         cut would then truncate the literal text "${workspace.version}" into a
+         bogus revision and exit 0. -->
+    <fail message="No Git revision available to trim" unless="workspace.version"/>
     <exec executable="cut" inputstring="${workspace.version}" outputproperty="shortHash" errorproperty="cut.error1" failifexecutionfails="true">
       <arg value="-c"/>
       <arg value="1-8"/>
@@ -945,7 +1048,7 @@
 
   <target name="bump" depends="bumpBuild"/>
 
-  <target name="bumpBuild" depends="checkIfBumped, getBuildNumber" unless="bumped.already">
+  <target name="bumpBuild" depends="checkIfBumped, getBuildNumber" unless="version.bump.pending">
     <exec executable="dc" outputproperty="new.i2p.build.number" errorproperty="dc.error" failifexecutionfails="true">
       <arg value="-e"/>
       <arg value="${i2p.build.number} 1 + n"/>
@@ -977,7 +1080,7 @@
     <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="release.major">
       <filterchain>
         <linecontains>
-          <contains value="public static final String VERSION"/>
+          <contains value='public static final String VERSION = "'/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"([0-9]+)\.[0-9]+\.[0-9]+";' replace="\1" flags="gi"/>
@@ -989,7 +1092,7 @@
     <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="release.minor">
       <filterchain>
         <linecontains>
-          <contains value="public static final String VERSION"/>
+          <contains value='public static final String VERSION = "'/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"[0-9]+\.([0-9]+)\.[0-9]+";' replace="\1" flags="gi"/>
@@ -1001,7 +1104,7 @@
     <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="api.sub">
       <filterchain>
         <linecontains>
-          <contains value="public static final String PUBLISHED_VERSION"/>
+          <contains value='public static final String PUBLISHED_VERSION = "'/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"0\.9\.([0-9]+)";' replace="\1" flags="gi"/>
@@ -1054,7 +1157,7 @@
 
   <target name="checkoutFromVCS" depends="failIfNoVCS, checkoutFromGit"/>
 
-  <target name="revisions" depends="failIfNoVCS, revisionsGit"/>
+  <target name="revisions" depends="failIfNoVCS, revisionsGit" description="Count commits per author since the last release tag"/>
   <!-- end git targets -->
 
   <!-- launch4j targets -->
@@ -1757,7 +1860,7 @@
     <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="release.number">
       <filterchain>
         <linecontains>
-          <contains value="public static final String VERSION"/>
+          <contains value='public static final String VERSION = "'/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"([^"]+)";' replace="\1" flags="gi"/>
@@ -1769,7 +1872,7 @@
     <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="api.version">
       <filterchain>
         <linecontains>
-          <contains value="public static final String PUBLISHED_VERSION"/>
+          <contains value='public static final String PUBLISHED_VERSION = "'/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"([^"]+)";' replace="\1" flags="gi"/>
@@ -1807,7 +1910,7 @@
     <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="i2p.build.number">
       <filterchain>
         <linecontains>
-          <contains value="public static final long BUILD"/>
+          <contains value='public static final long BUILD = '/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern=".*=\s+([0-9]+);" replace="\1" flags="gi"/>
@@ -1819,7 +1922,7 @@
     <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="build.extra">
       <filterchain>
         <linecontains>
-          <contains value="public static final String EXTRA"/>
+          <contains value='public static final String EXTRA = "'/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"(.*)";' replace="\1" flags="gi"/>
@@ -5104,13 +5207,10 @@
 
   <target name="getExtendedVersion" depends="buildProperties, trimRev">
     <property name="shortHash" value="unknown"/>
+    <!-- Only append a well-formed hash: an unresolved or truncated property
+         value must not end up inside the distribution version string. -->
     <condition property="Extended.Version" value="${full.version}-${shortHash}">
-      <not>
-        <or>
-          <equals arg1="${shortHash}" arg2=""/>
-          <equals arg1="${shortHash}" arg2="unknown"/>
-        </or>
-      </not>
+      <matches pattern="[0-9a-f]{7,40}" string="${shortHash}"/>
     </condition>
     <!-- If not set above we'll set it here -->
     <property name="Extended.Version" value="${full.version}"/>
@@ -5617,11 +5717,31 @@
     </copy>
   </target>
 
-  <target name="git-tag" depends="getReleaseNumber, getBuildNumber" description="Tag current commit as release (e.g. 2.12.0-16+)">
-    <property name="tag.name" value="v${release.number}-${i2p.build.number}${build.extra}"/>
-    <echo message="Creating tag: ${tag.name}"/>
+  <target name="git-tag" depends="release.tag.name, getBuildNumber" description="Tag current commit for release (e.g. 0.9.70+)">
+    <property name="tag.name" value="${release.tag.name}"/>
+    <exec executable="git" outputproperty="tag.exists" failifexecutionfails="false">
+      <arg value="tag"/>
+      <arg value="--list"/>
+      <arg value="${tag.name}"/>
+    </exec>
+    <condition property="tag.freshness" value="replaces an existing tag" else="new tag">
+      <not>
+        <equals arg1="${tag.exists}" arg2=""/>
+      </not>
+    </condition>
+    <condition property="tag.note" value="dry run, no tag written" else="${tag.freshness}">
+      <isset property="git.tag.dryrun"/>
+    </condition>
+    <echo message="Release tag: ${tag.name} (${tag.note})"/>
+    <antcall target="git-tag.create" inheritAll="true"/>
+  </target>
+
+  <!-- Split out so the dry-run gate can be a target-level unless: Ant 1.10
+       rejects if/unless on tasks, so it cannot live on the exec itself. -->
+  <target name="git-tag.create" unless="git.tag.dryrun">
     <exec executable="git" failonerror="true">
       <arg value="tag"/>
+      <arg value="-f"/>
       <arg value="-a"/>
       <arg value="${tag.name}"/>
       <arg value="-m"/>
