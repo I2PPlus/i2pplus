@@ -1170,9 +1170,12 @@ class ConnectionManager {
         _context.statManager().createRequiredRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", RATES);
         // Counts teardowns, not connections: a stream that never completes
-        // disconnectComplete() publishes none of its lifetime stats below, so
+        // disconnectComplete() publishes none of its lifetime stats at all, so
         // comparing this with stream.connectionCreated tells a broken teardown
-        // (hard kill / never completed) apart from a broken publisher.
+        // (hard kill / never completed) apart from a broken publisher. Note
+        // that a completed teardown of a connection killed before its first
+        // RTT sample still publishes no RTT or window size — see
+        // publishLifetimeStats().
         _context.statManager().createRateStat("stream.connectionClosed", "Number of streams whose disconnect completed", "Stream", RATES);
         // Stats for Connection
         _context.statManager().createRequiredRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
@@ -2495,6 +2498,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * would otherwise silently lose every lifetime stat, and with them the
      * retransmission ratios the Tuner reads for its loss decisions.
      *
+     * <p>RTT and send-window are the exception: they are only published once a
+     * real sample exists, since a connection killed during connect holds class
+     * defaults rather than observations.
+     *
      * @param con Connection that is done; never null
      * @since 0.9.71+
      */
@@ -2529,8 +2536,16 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             long rtxBytesPerMille = 1000L * con.getLifetimeDupBytesSent() / bytesSent;
             _context.statManager().addRateData("stream.rtxRatioBytes", rtxBytesPerMille, con.getLifetime());
         }
-        _context.statManager().addRateData("stream.con.lifetimeRTT", con.getOptions().getRTT(), con.getLifetime());
-        _context.statManager().addRateData("stream.con.lifetimeSendWindowSize", con.getOptions().getWindowSize(), con.getLifetime());
+        // RTT and send-window are only meaningful once a sample exists. A
+        // connection killed during connect still reports the ConnectionOptions
+        // defaults (DEFAULT_INITIAL_RTT, initialWindowSize), and publishing
+        // those as observations would drag every lifetime aggregate toward the
+        // floor once per hard kill. The counters above are genuine zeros and
+        // stay: a stream that moved nothing is worth recording.
+        if (con.getOptions().isRTTEstablished()) {
+            _context.statManager().addRateData("stream.con.lifetimeRTT", con.getOptions().getRTT(), con.getLifetime());
+            _context.statManager().addRateData("stream.con.lifetimeSendWindowSize", con.getOptions().getWindowSize(), con.getLifetime());
+        }
         if (I2PSocketManagerFull.pcapWriter != null)
             I2PSocketManagerFull.pcapWriter.flush();
     }

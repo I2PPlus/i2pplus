@@ -858,6 +858,23 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public int getRTT() {return _smoothedRtt;}
 
     /**
+     *  Whether a real RTT sample has ever been recorded for this connection.
+     *
+     *  <p>Until the first sample arrives, {@link #getRTT} and
+     *  {@link #getWindowSize} hold the class defaults rather than a
+     *  measurement. A connection torn down before that — a hard kill during
+     *  connect, say — must not have those defaults published as though they
+     *  were observed, or every such teardown biases the lifetime aggregates the
+     *  Tuner reads toward the floor.
+     *
+     * @return true if at least one RTT sample has been recorded
+     * @since 0.9.71+
+     */
+    public boolean isRTTEstablished() {
+        return _rttState != RttState.INIT;
+    }
+
+    /**
      * Minimum RTT observed, greater than zero
      *
      * @return minimum RTT in ms

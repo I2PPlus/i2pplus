@@ -149,4 +149,41 @@ public class ConnectionOptionsRTTTest {
         opts.updateRTT(500);
         assertTrue("After ack, receivedAck should be true", opts.receivedAck());
     }
+
+    /**
+     * A connection killed during connect has never sampled an RTT, so
+     * getRTT() and getWindowSize() still hold the class defaults. Those must
+     * not be published as observations at teardown, or each hard kill drags
+     * the lifetimeRTT / lifetimeSendWindowSize aggregates the Tuner reads
+     * toward the floor.
+     */
+    @Test
+    public void testRTTNotEstablishedBeforeFirstSample() {
+        ConnectionOptions opts = new ConnectionOptions();
+        assertFalse("no sample yet", opts.isRTTEstablished());
+        // the values a killed connection would otherwise publish
+        assertEquals(ConnectionOptions.DEFAULT_INITIAL_RTT, opts.getRTT());
+        assertEquals(ConnectionOptions.getInitialWindowSize(), opts.getWindowSize());
+    }
+
+    @Test
+    public void testRTTEstablishedAfterFirstSample() {
+        ConnectionOptions opts = new ConnectionOptions();
+        opts.updateRTT(500);
+        assertTrue("a sample has been recorded", opts.isRTTEstablished());
+        assertEquals(500, opts.getRTT());
+    }
+
+    /** Establishment must be monotonic: smoothing never reverts to the default. */
+    @Test
+    public void testRTTPresenceIsMonotonic() {
+        ConnectionOptions opts = new ConnectionOptions();
+        assertFalse(opts.isRTTEstablished());
+        opts.updateRTT(500);
+        assertTrue(opts.isRTTEstablished());
+        for (int i = 0; i < 20; i++) {
+            opts.updateRTT(2000);
+            assertTrue("must stay established", opts.isRTTEstablished());
+        }
+    }
 }
