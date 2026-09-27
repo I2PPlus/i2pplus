@@ -25,7 +25,8 @@ import net.i2p.util.LogManager;
  *   {@link TunnelCreatorConfig#FIRST_HOP_FAILURE_WINDOW_MS}
  * - the escalation latch fires exactly once until the streak is cleared
  * - inbound and zero-hop tunnels are not applicable
- * - real traffic and a passing test clear and re-arm the streak
+ * - real traffic clears and re-arms the streak, while a passing test leaves
+ *   it to age out (a flaky first hop must still be detectable)
  *
  * @since 0.9.71+
  */

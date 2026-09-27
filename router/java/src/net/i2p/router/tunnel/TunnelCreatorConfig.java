@@ -596,12 +596,19 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      *  Reset the first-hop send failure streak and re-arm the escalation
-     *  latch.  Called whenever the tunnel proves it can still deliver: real
-     *  traffic on the data path, or a passing test, which for an outbound
-     *  tunnel is dispatched through the same send path that failed.  This
-     *  differs from {@link #clearSoftFailures()}, which a test does not
-     *  clear — a soft timeout is a data-path condition, while a first-hop
-     *  send failure is exactly what a successful test disproves.
+     *  latch.  Only a data-carrying send proves the path to the first hop
+     *  works, so the sole caller is {@link #recordRealTraffic()}.
+     *
+     *  A passing test deliberately does not clear the streak: the round trip
+     *  proves the peer is not dead, but not that it is not flaky, and a first
+     *  hop that alternates fail/pass/fail/pass would never accumulate to
+     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} if every pass reset it.  Staleness
+     *  is handled by the {@link #FIRST_HOP_FAILURE_WINDOW_MS} read-time decay
+     *  instead, which ages out a genuinely dead peer's old failures without
+     *  making accumulation impossible for a merely flaky one.
+     *
+     *  This differs from {@link #clearSoftFailures()}, which likewise is never
+     *  called from {@link #testSuccessful(int)} for the same reason.
      *
      *  @since 0.9.71+
      */
@@ -640,18 +647,23 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
-     *  Hook invoked when the first-hop send failure streak advances but has
-     *  not yet reached {@link #FIRST_HOP_FAILURE_THRESHOLD}, i.e. the tunnel
-     *  is being kept alive.  Gives subclasses a chance to re-warm the path to
-     *  the first hop: the failure may be a local stall rather than a dead
-     *  peer, and a fresh transport session makes the next send likely to land.
-     *  Not invoked for burst duplicates, so callers see at most one hook per
+     *  Hook invoked whenever the first-hop send failure streak advances.
+     *  Gives subclasses a chance to re-warm the path to the first hop: the
+     *  failure may be a local stall rather than a dead peer, and a fresh
+     *  transport session makes the next send likely to land.  Not invoked for
+     *  burst duplicates, so callers see at most one hook per
      *  {@link #FIRST_HOP_FAILURE_SPACING_MS}.
+     *
+     *  The caller invokes this before it acts on the threshold, so the streak
+     *  handed in may equal {@link #FIRST_HOP_FAILURE_THRESHOLD}; a subclass
+     *  that only wants to re-warm a tunnel that is still going to be kept
+     *  alive must filter on the value itself — see
+     *  {@code PooledTunnelCreatorConfig.shouldPreConnect(int)}.
      *
      *  Base config has no pool and nothing to warm; see
      *  {@code PooledTunnelCreatorConfig}.
      *
-     *  @param streak the current streak, always below
+     *  @param streak the current streak, from 1 up to and including
      *         {@link #FIRST_HOP_FAILURE_THRESHOLD}
      *  @since 0.9.71+
      */
