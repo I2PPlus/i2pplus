@@ -92,4 +92,28 @@ public class PooledTunnelCreatorConfigTest {
         PooledTunnelCreatorConfig cfg = createConfig(3, false);
         assertFalse(cfg.isInbound());
     }
+
+    /**
+     * The first-hop re-warm must fire on exactly one strike: the last one at
+     * which the tunnel is still alive to benefit. Earlier strikes have not
+     * committed to blaming the peer, so a DatabaseLookupMessage round-trip
+     * would only add load to a path that may merely be congested; the
+     * threshold strike retires the tunnel as soon as the hook returns, so
+     * re-warming there would query a hop the router has already blamed.
+     */
+    @Test
+    public void testPreConnectGateFiresOnlyOneBelowThreshold() {
+        int th = TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD;
+        assertTrue("threshold must leave room for a strike below it", th >= 2);
+        // the streak is counted from 1; 0 means "no streak" and must never warm
+        assertFalse(PooledTunnelCreatorConfig.shouldPreConnect(0));
+        for (int streak = 1; streak < th - 1; streak++) {
+            assertFalse("streak " + streak + " is too early to pre-connect",
+                        PooledTunnelCreatorConfig.shouldPreConnect(streak));
+        }
+        assertTrue(PooledTunnelCreatorConfig.shouldPreConnect(th - 1));
+        assertFalse("streak " + th + " retires the tunnel anyway",
+                    PooledTunnelCreatorConfig.shouldPreConnect(th));
+        assertFalse(PooledTunnelCreatorConfig.shouldPreConnect(th + 1));
+    }
 }

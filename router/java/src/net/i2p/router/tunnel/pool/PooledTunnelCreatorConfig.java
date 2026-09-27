@@ -74,10 +74,8 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * forces the connection up again, so the next tunnel message is not
      * queued behind a stale session.
      *
-     * Gated to fire only when the streak is one below the failure threshold,
-     * as a last-ditch recovery attempt before the tunnel is retired.  Firing
-     * on every advance would add a DatabaseLookupMessage round-trip to the
-     * exact first hop that is already failing, loading a congested path.
+     * Gated by {@link #shouldPreConnect(int)}, so the DatabaseLookupMessage
+     * round-trip only ever reaches a hop the router has not yet given up on.
      *
      * @param streak the current first-hop failure streak
      * @since 0.9.71+
@@ -85,11 +83,27 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     @Override
     public void firstHopSendFailureStreak(int streak) {
         if (isInbound() || getLength() <= 1) {return;}
-        // Only pre-warm when the streak is about to trigger tunnel failure:
-        // the recovery attempt should not add load to a path that is merely
-        // congested before the router has committed to blaming the peer.
-        if (streak < FIRST_HOP_FAILURE_THRESHOLD - 1) {return;}
+        if (!shouldPreConnect(streak)) {return;}
         TunnelPeerSelector.preConnectTo(_context, getPeer(1));
+    }
+
+    /**
+     *  Whether a first-hop send-failure streak warrants a pre-connect re-warm.
+     *
+     *  Fires only on the strike immediately below
+     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} — the last point at which the
+     *  tunnel is still alive to benefit.  Earlier strikes have not yet
+     *  committed to blaming the peer, so a round-trip would only add load to a
+     *  path that may merely be congested; the threshold strike itself retires
+     *  the tunnel as soon as the hook returns, so re-warming there would send
+     *  a lookup to a hop the router has already decided to blame.
+     *
+     *  @param streak the current first-hop failure streak
+     *  @return true if the first-hop session should be re-warmed
+     *  @since 0.9.71+
+     */
+    static boolean shouldPreConnect(int streak) {
+        return streak == FIRST_HOP_FAILURE_THRESHOLD - 1;
     }
 
     /**
