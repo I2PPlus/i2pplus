@@ -1189,16 +1189,14 @@ class TunnelRenderer {
             }
         }
 
-        if (live > 0) {
-            int colCount = 5 + maxLength;
-            buf.append("<tfoot class=statusnotes>")
-               .append("<tr class=bwUsage><td colspan=").append(colCount)
-               .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
-               .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
-               .append("B ").append(_t("in")).append(", ")
-               .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
-               .append("B ").append(_t("out")).append("</b></td></tr></tfoot>\n");
-        }
+        int colCount = 5 + maxLength;
+        buf.append("<tfoot class=statusnotes>")
+           .append("<tr class=bwUsage><td colspan=").append(colCount)
+           .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
+           .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
+           .append("B ").append(_t("in")).append(", ")
+           .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
+           .append("B ").append(_t("out")).append("</b></td></tr></tfoot>\n");
 
         if (tableOpen) {
             buf.append("</table>\n");
@@ -1265,6 +1263,8 @@ class TunnelRenderer {
         boolean isGood = (testStatus == TunnelTestStatus.GOOD);
         boolean isTesting = (testStatus == TunnelTestStatus.TESTING);
         String rowClass = isFailed ? " class=failed" :
+                          isFailing && isTesting ? " class=\"failing testing\"" :
+                          isGood && isTesting ? " class=\"good testing\"" :
                           isFailing ? " class=failing" :
                           isGood ? " class=good" :
                           isTesting ? " class=testing" :
