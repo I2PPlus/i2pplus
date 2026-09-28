@@ -173,6 +173,15 @@ public class TunnelDispatcher implements Service {
     /** Validator used for tunnel IVs */
     private BloomFilterIVValidator _validator;
 
+    /**
+     *  The tunnel IV validator, so the Tuner can retune its size. Null before
+     *  setup and after shutdown.
+     *
+     *  @return the validator, or null
+     *  @since 0.9.71+
+     */
+    public BloomFilterIVValidator getIVValidator() { return _validator; }
+
     /** Job to expire tunnels we are participating in */
     private final LeaveTunnel _leaveJob;
 
@@ -986,11 +995,10 @@ public class TunnelDispatcher implements Service {
         long now = _context.clock().now();
         long age = now - msg.getMessageExpiration();
         TunnelGateway gw = _outboundGateways.get(outboundTunnel);
-        boolean hasMsg = !msg.toString().isEmpty();
 
         if (gw != null) {
             if (_log.shouldDebug()) {
-                _log.debug("Dispatching Outbound through " + outboundTunnel.getTunnelId() + (hasMsg ? msg : ""));
+                _log.debug("Dispatching Outbound through " + outboundTunnel.getTunnelId() + msg);
             }
 
             if (msg.getMessageExpiration() < now - Router.CLOCK_FUDGE_FACTOR) {
@@ -1001,12 +1009,12 @@ public class TunnelDispatcher implements Service {
                 return false;
             } else if (msg.getMessageExpiration() < now) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Dropping stale tunnel message  -> Expired " + age + "ms ago (Cutoff: 60s)" + (hasMsg ? msg : ""));
+                    _log.warn("Dropping stale tunnel message  -> Expired " + age + "ms ago (Cutoff: 60s)" + msg);
                 }
             } else if (msg.getMessageExpiration() > now + MAX_FUTURE_EXPIRATION) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping tunnel message that expires " + age + "ms in the future [!] (Cutoff: " +
-                               MAX_FUTURE_EXPIRATION / 1000 + "s)" + (hasMsg ? msg : ""));
+                               MAX_FUTURE_EXPIRATION / 1000 + "s)" + msg);
                 }
                 return false;
             }
