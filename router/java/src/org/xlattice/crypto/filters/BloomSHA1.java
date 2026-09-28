@@ -1,8 +1,7 @@
 package org.xlattice.crypto.filters;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * A Bloom filter for sets of SHA1 digests.  A Bloom filter uses a set
@@ -56,7 +55,20 @@ public class BloomSHA1 {
     private final int filterBits;
     private final int filterWords;
 
-    private final BlockingQueue<int[]> buf;
+    /**
+     *  Maximum scratch arrays retained per thread.
+     *  @since 0.9.71+
+     */
+    private static final int POOL_DEPTH = 4;
+    /**
+     *  Per-thread pool of offset scratch arrays, so that hashing a key does not
+     *  allocate its scratch space or contend on a shared queue. Thread
+     *  confined, so no locking is needed: a FilterKey is always created and
+     *  released by the same thread. Deques rather than single slots so nested
+     *  use stays correct. The FilterKey itself is still allocated per
+     *  getFilterKey() call, which is a small object holding the two arrays.
+     */
+    private final ThreadLocal<ArrayDeque<int[]>> bufPool;
 
     /**
      *  Creates a filter with 2^m bits and k 'hash functions', where
@@ -82,7 +94,9 @@ public class BloomSHA1 {
         filterWords = (filterBits + 31)/32;     // round up
         filter = new int[filterWords];
         ks = new KeySelector(m, k);
-        buf = new LinkedBlockingQueue<>(16);
+        // sized for the steady state (one bitOffset + one wordOffset in hand);
+        // recycle() caps it at POOL_DEPTH, and ArrayDeque grows if it is deeper
+        bufPool = ThreadLocal.withInitial(() -> new ArrayDeque<int[]>(2));
 
         // DEBUG
         //System.out.println("Bloom constructor: m = " + m + ", k = " + k
@@ -195,8 +209,8 @@ public class BloomSHA1 {
             filter[wordOffset[i]] |=  1 << bitOffset[i];
         }
         count++;
-        buf.offer(bitOffset);
-        buf.offer(wordOffset);
+        recycle(bitOffset);
+        recycle(wordOffset);
     }
 
     /**
@@ -221,13 +235,13 @@ public class BloomSHA1 {
         ks.getOffsets(b, offset, len, bitOffset, wordOffset);
         for (int i = 0; i < k; i++) {
             if (! ((filter[wordOffset[i]] & (1 << bitOffset[i])) != 0) ) {
-                buf.offer(bitOffset);
-                buf.offer(wordOffset);
+                recycle(bitOffset);
+                recycle(wordOffset);
                 return false;
             }
         }
-        buf.offer(bitOffset);
-        buf.offer(wordOffset);
+        recycle(bitOffset);
+        recycle(wordOffset);
         return true;
     }
 
@@ -324,10 +338,23 @@ public class BloomSHA1 {
      * @since 0.8.11
      */
     private int[] acquire() {
-        int[] rv = buf.poll();
+        int[] rv = bufPool.get().pollFirst();
         if (rv != null)
             return rv;
         return new int[k];
+    }
+
+    /**
+     * Returns a scratch array to this thread's pool, dropping it if the pool
+     * is already full so that a burst cannot retain an unbounded number.
+     *
+     * @param arr the array to recycle
+     * @since 0.9.71+
+     */
+    private void recycle(int[] arr) {
+        ArrayDeque<int[]> pool = bufPool.get();
+        if (pool.size() < POOL_DEPTH)
+            pool.addLast(arr);
     }
 
     /**
@@ -337,8 +364,8 @@ public class BloomSHA1 {
      * @since 0.8.11
      */
     public void release(FilterKey fk) {
-        buf.offer(fk.bitOffset);
-        buf.offer(fk.wordOffset);
+        recycle(fk.bitOffset);
+        recycle(fk.wordOffset);
     }
 
     /**
