@@ -173,6 +173,75 @@ public class TestJob extends JobImpl {
      *  @since 0.9.71+
      */
     static final int TEST_ROUND_BYTES = 1024;
+    /**
+     *  Grace period before a tunnel's first test failure can count against it.
+     *
+     *  <p>A tunnel that is condemned before it has had a realistic chance to
+     *  settle and carry traffic can never prove itself, and a pool in that
+     *  state cannot reach steady state.  Measured on a live router: outbound
+     *  pools were condemning a tunnel every ~1.8 min against a 10-12 min
+     *  configured lifetime, because the fastest retest interval and a
+     *  four-strike threshold condemn a failing tunnel in ~90s.  Nothing
+     *  distinguished "this tunnel is dead" from "this tunnel is ninety seconds
+     *  old".
+     *
+     *  <p>Must exceed the fastest path to condemnation — four strikes at the
+     *  30s minimum retest interval is 120s — or a young tunnel can still
+     *  reach the threshold inside its own grace and the loop is not broken.
+     *  Three minutes leaves margin over that 120s while staying well inside a
+     *  10-12 minute lifetime, so a genuinely dead tunnel is delayed by at most
+     *  this much: the grace defers the first charge, it does not excuse the
+     *  tunnel.
+     *
+     *  @since 0.9.71+
+     */
+    static final long YOUNG_TUNNEL_GRACE_MS = 3 * 60 * 1000L;
+
+    /**
+     *  Excuse a failed round because the tunnel is still inside its grace
+     *  period: it has not yet had a realistic chance to settle, join the
+     *  LeaseSet, or carry the traffic that would prove it, so the round is
+     *  observed but not charged.  Without this, the fastest retest interval
+     *  plus a four-strike threshold condemns a new tunnel in about 90s — a
+     *  sixth of its lifetime — and the pool never settles.
+     *
+     *  <p>Split out of {@link #testFailed}, which is already well past the
+     *  complexity budget, so this does not add to it.
+     *
+     * @return true when the round was deferred
+     *  @since 0.9.71+
+     */
+    private boolean deferIfTooYoungToJudge() {
+        if (!withinYoungTunnelGrace(_cfg.getCreationTime(), System.currentTimeMillis())) {
+            return false;
+        }
+        getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "GraceDeferred"), 1);
+        if (_log.shouldDebug()) {
+            _log.debug("Tunnel Test failed -> too young to judge, deferring test of " + _cfg);
+        }
+        if (!scheduleRetest(false)) {
+            cleanupTunnelTracking();
+            decrementIfCounted();
+        }
+        return true;
+    }
+
+    /**
+     *  Whether a failed round should be excused because the tunnel is too new
+     *  to have been fairly judged.  Static and clock-injected so the boundary
+     *  is testable, and so "never built" is representable.
+     *
+     * @param creationTimeMs when the tunnel was built, 0 if unknown
+     * @param nowMs current time in ms
+     * @return true when the tunnel is still inside its grace period
+     *  @since 0.9.71+
+     */
+    static boolean withinYoungTunnelGrace(long creationTimeMs, long nowMs) {
+        if (creationTimeMs <= 0) {return false;}
+        long age = nowMs - creationTimeMs;
+        // A creation time in the future means a clock step; do not excuse it.
+        return age >= 0 && age < YOUNG_TUNNEL_GRACE_MS;
+    }
     private int _replyPartnerDeferrals = 0;
     /**
      *  Reply partner router hash to the time it was last blamed for a failed
@@ -837,6 +906,10 @@ public class TestJob extends JobImpl {
                 "Confirmations failed: tunnel charged (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "ConfirmFailed"),
                 "Confirmations failed: tunnel charged (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "GraceDeferred"),
+                "Tests deferred: tunnel too young to judge (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "GraceDeferred"),
+                "Tests deferred: tunnel too young to judge (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(true, "ReplyPartnerNew"),
                 "Test failed, reply partner not yet implicated (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "ReplyPartnerNew"),
@@ -3275,13 +3348,23 @@ public class TestJob extends JobImpl {
         // occasional verification — aggressive retesting consumes slots
         // that could be testing new or recovering tunnels.
         float successRate = getSuccessRate();
+        int failuresSoFar = _cfg.getTunnelFailures();
         int scaled;
         if (successRate >= 1.0f) {
             scaled = getMinTestDelay(getContext()) * 4; // 100% success → 4x delay (2 min)
         } else if (successRate > 0.5f) {
             scaled = getMinTestDelay(getContext()) * 3 / 2; // >50% success → 1.5x delay
+        } else if (failuresSoFar == 0) {
+            // Low success rate but nothing has actually failed yet: this
+            // tunnel is unproven, not unreliable.  The old comment lumped
+            // "new" in with "unreliable" and handed both the fastest retest,
+            // which is how a fresh outbound tunnel collected four strikes in
+            // ~90s and was condemned at a sixth of its lifetime.  Give an
+            // unproven tunnel room to settle and carry traffic; once it has
+            // genuinely failed, the fast path below applies.
+            scaled = getMinTestDelay(getContext()) * 2;
         } else {
-            scaled = getMinTestDelay(getContext()); // unreliable or new → fastest retest
+            scaled = getMinTestDelay(getContext()); // has failed → fastest retest
         }
         // Backoff for tunnels with many failures: reduce retest frequency to
         // avoid saturating the test queue with DeliveryStatusMessage
@@ -3613,6 +3696,8 @@ public class TestJob extends JobImpl {
         _confirmPending = false;
         _excludedPartner = null;
         attributeFailureToReplyPartner(_cfg.isInbound(), _replyTunnel);
+
+        if (deferIfTooYoungToJudge()) {return;}
 
         // Record the failed round so getSuccessRate() reflects reality and
         // getDelay() retests a failing tunnel sooner rather than slower.
