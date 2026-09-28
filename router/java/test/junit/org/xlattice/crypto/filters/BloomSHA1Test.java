@@ -136,4 +136,52 @@ public class BloomSHA1Test {
         assertTrue(b.locked_member(v));
         assertTrue(b.member(v));
     }
+
+    /**
+     *  A prepared reset must clear every member and the size, and must be
+     *  reusable: a second reset prepared before the first is applied is still
+     *  valid, which is what lets a caller pay the allocation off the lock.
+     */
+    @Test
+    public void testPreparedReset() {
+        BloomSHA1 b = new BloomSHA1();
+        b.insert(value(1));
+        b.insert(value(2));
+        assertEquals(2, b.size());
+        BloomSHA1.Reset r1 = b.prepareReset();
+        BloomSHA1.Reset r2 = b.prepareReset();     // prepared before either is applied
+        b.applyReset(r1);
+        assertEquals("reset must empty the filter", 0, b.size());
+        assertFalse(b.member(value(1)));
+        b.insert(value(3));
+        assertTrue(b.member(value(3)));
+        b.applyReset(r2);                          // the older token is still good
+        assertEquals(0, b.size());
+        assertFalse(b.member(value(3)));
+    }
+
+    /** A reset token from a differently sized filter must be rejected. */
+    @Test
+    public void testPreparedResetWrongSizeRejected() {
+        BloomSHA1 small = new BloomSHA1(12, 6);
+        BloomSHA1 big = new BloomSHA1(20, 8);
+        try {
+            small.applyReset(big.prepareReset());
+            fail("expected IllegalArgumentException for a mismatched reset");
+        } catch (IllegalArgumentException expected) {
+            // as above
+        }
+    }
+
+    /** A null reset must be rejected rather than corrupting the filter. */
+    @Test
+    public void testNullResetRejected() {
+        BloomSHA1 b = new BloomSHA1();
+        try {
+            b.applyReset(null);
+            fail("expected IllegalArgumentException for a null reset");
+        } catch (IllegalArgumentException expected) {
+            // as above
+        }
+    }
 }
