@@ -2873,10 +2873,28 @@ public class TunnelPool {
      *  @param cfg the tunnel that failed
      *  @param failures the count that exceeded the removal bar
      */
+    /**
+     * Whether a failure report is a repeat of a condemnation already made.
+     * A tunnel that is both dead and FAILED has been excluded from selection
+     * and had its replacement requested already, so re-processing only re-logs,
+     * asks the pool for a tunnel it does not need, and lets the failure count
+     * of a retained-but-dead tunnel keep climbing.  The escalation that does
+     * matter — a soft-only failure turning FAILING into FAILED — is not
+     * matched here, because the status is not FAILED yet.
+     *
+     * @param isDead whether the tunnel's hard failure counter is tripped
+     * @param status the tunnel's current test status, may be null
+     * @return true when this report adds nothing
+     * @since 0.9.71+
+     */
+    static boolean alreadyCondemned(boolean isDead, TunnelTestStatus status) {
+        return isDead && status == TunnelTestStatus.FAILED;
+    }
+
     private void failWithCount(TunnelInfo cfg, int failures) {
         if (failures <= 1) {return;}
         boolean isDead = cfg.getTunnelFailed();
-        if (isDead && cfg.getTestStatus() == TunnelTestStatus.FAILED) {
+        if (alreadyCondemned(isDead, cfg.getTestStatus())) {
             // Already condemned, already excluded from selection, and the
             // replacement was already requested the first time this happened.
             // Repeating it only re-logs, asks for a second replacement the
