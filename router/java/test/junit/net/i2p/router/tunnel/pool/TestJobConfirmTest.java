@@ -60,21 +60,38 @@ public class TestJobConfirmTest {
     // ---- the confirming round must not reuse the partner that just failed ---
 
     @Test
-    public void confirmRoundExcludesTheFailedPartner() {
+    public void aDifferentPartnerIsUsableForTheConfirmingRound() {
         TunnelInfo failed = livePartner();
         TunnelInfo other = livePartner();
-        assertNotSame("a distinct partner must be offered to the confirming round",
-                      failed, other);
+        assertTrue("a partner other than the one that failed must be usable",
+                   TestJob.usablePartner(other, failed));
     }
 
     /**
-     * The partner is identified by identity, so a round that lands on the same
-     * instance again is unprovable and must not be treated as a confirmation.
+     * The core of the gate.  Reusing the failed partner would make the
+     * confirming round prove nothing, so the same instance is rejected — even
+     * though it is perfectly healthy, which is what makes this an identity
+     * check rather than a status check.
      */
     @Test
-    public void samePartnerIsNotAConfirmation() {
+    public void thePartnerThatJustFailedIsNotUsable() {
         TunnelInfo failed = livePartner();
-        assertSame(failed, failed);
+        assertFalse("the excluded partner must be rejected by identity, not by status",
+                    TestJob.usablePartner(failed, failed));
+    }
+
+    @Test
+    public void aNullCandidateIsNeverUsable() {
+        assertFalse("a missing partner cannot carry the round",
+                    TestJob.usablePartner(null, livePartner()));
+        assertFalse("null excluded and null candidate is still not usable",
+                    TestJob.usablePartner(null, null));
+    }
+
+    /** With no partner excluded, the ordinary path is unchanged. */
+    @Test
+    public void anyLivePartnerIsUsableWhenNoneIsExcluded() {
+        assertTrue(TestJob.usablePartner(livePartner(), null));
     }
 
     // ---- a known-good partner still charges after its budget is spent ----

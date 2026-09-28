@@ -760,7 +760,23 @@ public class TestJob extends JobImpl {
      *  @since 0.9.71+
      */
     private boolean usablePartner(TunnelInfo t) {
-        return t != null && t != _excludedPartner;
+        return usablePartner(t, _excludedPartner);
+    }
+
+    /**
+     * Whether a candidate partner may carry the confirming round.  Identity
+     * based, not status based: the point of the confirming round is that the
+     * reply came back through a *different* tunnel, and reusing the one that
+     * just failed would prove nothing.  A null candidate is never usable, and
+     * with nothing excluded every live candidate is.
+     *
+     * @param candidate the partner the round would use, may be null
+     * @param excluded the partner that must not be reused, may be null
+     * @return true when the candidate may be used
+     *  @since 0.9.71+
+     */
+    static boolean usablePartner(TunnelInfo candidate, TunnelInfo excluded) {
+        return candidate != null && candidate != excluded;
     }
 
     /**
