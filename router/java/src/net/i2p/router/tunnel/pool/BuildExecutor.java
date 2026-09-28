@@ -683,13 +683,22 @@ public class BuildExecutor implements Runnable {
         StatManager sm = _context.statManager();
         boolean in = cfg.isInbound();
         sm.addRateData(buildDirectionStat(in, "Attempted"), 1);
-        if (result == Result.SUCCESS) {
-            sm.addRateData(buildDirectionStat(in, "Succeeded"), 1);
-        } else if (result == Result.TIMEOUT) {
-            sm.addRateData(buildDirectionStat(in, "TimedOut"), 1);
-        } else {
-            sm.addRateData(buildDirectionStat(in, "Failed"), 1);
-        }
+        sm.addRateData(buildDirectionStat(in, buildOutcomeEvent(result)), 1);
+    }
+
+    /**
+     * Which outcome bucket a build result belongs to.  Everything that is not
+     * a success or a timeout counts as failed, so a newly added
+     * {@link Result} is reported rather than silently dropped.
+     *
+     * @param result the build outcome
+     * @return the event suffix, e.g. Succeeded
+     * @since 0.9.71+
+     */
+    static String buildOutcomeEvent(Result result) {
+        if (result == Result.SUCCESS) {return "Succeeded";}
+        if (result == Result.TIMEOUT) {return "TimedOut";}
+        return "Failed";
     }
 
     /**
