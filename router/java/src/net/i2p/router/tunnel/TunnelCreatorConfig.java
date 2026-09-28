@@ -315,13 +315,46 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public int getProcessedMessagesCount() {return _messagesProcessed.get();}
 
     /**
-     *  This calls profile manager tunnelDataPushed1m() for each peer
+     *  Record that {@code bytes} moved through this tunnel, counting as real
+     *  traffic: it also stamps the last-real-traffic clock that
+     *  {@link #getLastTransferred()} reports and the data-verified test trust
+     *  in TestJob keys off.  Only the real delivery paths — inbound data
+     *  arrival and outbound message dispatch — may call this.
+     *
+     * @param bytes bytes counted against the tunnel
+     *  @since 0.9.71+
      */
-    public synchronized void incrementVerifiedBytesTransferred(int bytes) {
+    public void incrementVerifiedBytesTransferred(int bytes) {
+        incrementVerifiedBytesTransferred(bytes, true);
+    }
+
+    /**
+     *  Record that {@code bytes} moved through this tunnel, optionally
+     *  counting as real traffic.
+     *
+     *  <p>The distinction matters because two things read this state.  The
+     *  throughput profile wants *every* byte, including the 1024 a test round
+     *  pushes, or the per-peer throughput figures understate a busy tunnel.
+     *  The data-verified test trust wants *only* real traffic, because it
+     *  reads getLastTransferred() to decide the tunnel has proven itself in
+     *  production.  When the test round called the unconditional form, a
+     *  passing test stamped the real-traffic clock on the tunnel under test —
+     *  which for an outbound test is the tunnel itself — so a tunnel that had
+     *  never carried a single production byte could grant itself the trust
+     *  that is meant to mean the opposite.
+     *
+     * @param bytes bytes counted against the tunnel
+     * @param realTraffic true when this is production traffic, false for
+     *        test or synthetic traffic
+     *  @since 0.9.71+
+     */
+    public synchronized void incrementVerifiedBytesTransferred(int bytes, boolean realTraffic) {
         _verifiedBytesTransferred += bytes;
         _peakThroughputCurrentTotal += bytes;
         long now = System.currentTimeMillis();
-        _lastTransferredTime = now;
+        if (realTraffic) {
+            _lastTransferredTime = now;
+        }
         long timeSince = now - _peakThroughputLastCoallesce;
         if (timeSince >= 60*1000) {
             long tot = _peakThroughputCurrentTotal;
