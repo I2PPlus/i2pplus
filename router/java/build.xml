@@ -464,7 +464,8 @@
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <sysproperty key="i2p.build.root" value="${build.root}"/>
       <sysproperty key="i2p.dir.config" value="${build.root}test-router"/>

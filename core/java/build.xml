@@ -495,7 +495,8 @@
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <junit printsummary="withOutAndErr" fork="yes" maxmemory="384m" showoutput="yes">
+    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <junit printsummary="withOutAndErr" fork="yes" maxmemory="384m" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <classpath>
         <pathelement location="../../installer/resources/"/>

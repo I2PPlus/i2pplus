@@ -586,7 +586,8 @@
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
       <sysproperty key="i2p.dir.base" value="${i2psnark.test.base}"/>
       <classpath>
         <pathelement location="${build.dir}/obj_test"/>

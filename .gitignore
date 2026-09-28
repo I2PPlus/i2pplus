@@ -140,6 +140,12 @@ core/c/jbigi/lib/
 core/c/jbigi/gmp-*/
 core/c/jbigi/*.tar.bz2
 
+# Ant <junit fork="yes"> scratch files. The junit tasks set tempdir to
+# ${java.io.tmpdir}/build-i2p/junit-tmp, so these should never land here, but an
+# interrupted or crashed test run can leave them behind in the module basedir.
+junit*.properties
+junitvmwatcher*.properties
+
 # Static analysis tools (downloaded at runtime)
 tools/*
 !apps/**/tools/

@@ -333,7 +333,8 @@
     <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
 
-    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <classpath>
         <pathelement path="${javac.classpath}"/>
