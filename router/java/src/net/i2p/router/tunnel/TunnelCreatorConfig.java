@@ -39,6 +39,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private final AtomicInteger _messagesProcessed = new AtomicInteger();
     private long _verifiedBytesTransferred;
     private long _lastTransferredTime;
+    /**
+     *  Wall-clock time this config was created, i.e. when its build started.
+     *  Lets the test cycle give a freshly built tunnel a grace period before
+     *  its results count against it — a tunnel cannot fairly be judged on a
+     *  round trip it had no realistic chance to complete.  Deliberately not
+     *  on {@link TunnelInfo}: the test cycle is the only reader, and adding a
+     *  method to a public interface for one caller would break out-of-tree
+     *  implementors.
+     *  @since 0.9.71+
+     */
+    private final long _creationTime = System.currentTimeMillis();
     private final AtomicInteger _failures = new AtomicInteger();
     private final AtomicInteger _softFailures = new AtomicInteger();
     /**
@@ -400,6 +411,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @return the last transferred
      */
     public synchronized long getLastTransferred() { return _lastTransferredTime; }
+
+    /**
+     *  When this tunnel was built, in wall-clock ms.  Never zero, so a caller
+     *  asking "is this young" needs no null or unset case.
+     *
+     * @return creation time in ms since the epoch
+     *  @since 0.9.71+
+     */
+    public long getCreationTime() { return _creationTime; }
 
     /**
      *  When the tunnel last carried real (non-test) traffic, or 0 if never.
