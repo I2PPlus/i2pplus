@@ -7,11 +7,12 @@ import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.DataHelper;
@@ -34,6 +35,7 @@ import net.i2p.router.crypto.ratchet.RatchetSKM;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.peermanager.ProfileOrganizer;
+import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
@@ -123,7 +125,7 @@ public class TestJob extends JobImpl {
      * is also degraded.
      * @since 0.9.71+
      */
-    private static final int MAX_PARTNER_DEFERRALS = 3;
+    static final int MAX_PARTNER_DEFERRALS = 3;
     private int _pairedPoolKicks = 0;
     /**
      * Maximum number of deferrals allowed after the paired-pool kick budget
@@ -136,6 +138,157 @@ public class TestJob extends JobImpl {
      */
     private static final int MAX_POST_KICK_DEFERRALS = 2 * MAX_DEFERRED;
     private int _postKickDeferrals = 0;
+    /**
+     *  How long a reply partner's failure stays attributed to it.  A round that
+     *  fails through the same partner within this window is evidence about that
+     *  partner's reply path rather than about the tunnel under test — which is
+     *  the one thing the aggregate pass/fail counters cannot express, because
+     *  a single test bit has no way to separate the tunnel from the leg the
+     *  reply came back through.
+     *  @since 0.9.71+
+     */
+    private static final long REPLY_PARTNER_MEMORY_MS = 30 * 60 * 1000L;
+    /**
+     *  Upper bound on remembered reply partners, so a router that churns
+     *  through many destinations cannot grow this without limit.  Reaching the
+     *  cap evicts the oldest entries.
+     *  @since 0.9.71+
+     */
+    private static final int MAX_REPLY_PARTNER_MEMORY = 512;
+    /**
+     *  Consecutive rounds that may be deferred because the same reply partner
+     *  was already blamed for a failed round, before the tunnel is charged
+     *  regardless.  Separate from {@link #MAX_PARTNER_DEFERRALS}, which
+     *  covers a partner that is <em>known</em> bad: this one covers a partner
+     *  that merely looks implicated, and it is deliberately smaller, because
+     *  the evidence is weaker.  Reaching the cap means the reply path is not
+     *  going to recover by trying another round, and continuing to defer would
+     *  let a genuinely dead tunnel sit in the pool indefinitely.
+     *  @since 0.9.71+
+     */
+    static final int MAX_REPLY_PARTNER_DEFERRALS = 2;
+    /**
+     *  Bytes credited to a tunnel for one completed test round.  Nominal: it
+     *  feeds the throughput profile, not the traffic proof.
+     *  @since 0.9.71+
+     */
+    static final int TEST_ROUND_BYTES = 1024;
+    private int _replyPartnerDeferrals = 0;
+    /**
+     *  Reply partner router hash to the time it was last blamed for a failed
+     *  round, per direction.  Split by direction because the diagnosis is
+     *  asymmetric: a reply leg that repeatedly fails for inbound tests is a
+     *  different finding from one that does so for outbound.
+     *  @since 0.9.71+
+     */
+    private static final Map<Hash, Long> _inboundReplyPartnerFailures = new ConcurrentHashMap<>();
+    private static final Map<Hash, Long> _outboundReplyPartnerFailures = new ConcurrentHashMap<>();
+
+    /**
+     *  Whether a failing round is evidence about its reply partner rather than
+     *  about the tunnel under test, because the same partner was already
+     *  blamed for a recent failed round.  Pure and static so the attribution
+     *  rule is testable without a router.
+     *
+     * @param memory partner to last-blamed timestamps, may be null
+     * @param replyPartner the tunnel the reply should have come back through
+     * @param now current time in ms
+     * @return true when this partner was blamed within the memory window
+     *  @since 0.9.71+
+     */
+    static boolean isRepeatReplyPartnerFailure(Map<Hash, Long> memory, TunnelInfo replyPartner, long now) {
+        if (memory == null || memory.isEmpty() || replyPartner == null) {return false;}
+        Hash gateway = replyPartner.getGateway();
+        // ConcurrentHashMap rejects a null key, and a partner's peer array is
+        // not populated until its build completes — a 0-hop tunnel is length 1
+        // with a null entry until then.  An unpopulated gateway means there is
+        // nothing to attribute, which is the same as "not a repeat".
+        if (gateway == null) {return false;}
+        Long last = memory.get(gateway);
+        return last != null && (now - last) < REPLY_PARTNER_MEMORY_MS;
+    }
+
+    /**
+     *  Blame a reply partner for a failed round, evicting the oldest entries
+     *  if the map is full.  Bounded because this is a rolling diagnostic over
+     *  every destination the router serves.
+     *
+     * @param memory partner to last-blamed timestamps
+     * @param replyPartner the tunnel the reply should have come back through
+     * @param now current time in ms
+     *  @since 0.9.71+
+     */
+    static void blameReplyPartner(Map<Hash, Long> memory, TunnelInfo replyPartner, long now) {
+        if (memory == null || replyPartner == null) {return;}
+        Hash gateway = replyPartner.getGateway();
+        // See isRepeatReplyPartnerFailure(): a null key is not an error here.
+        if (gateway == null) {return;}
+        memory.put(gateway, now);
+        if (memory.size() > MAX_REPLY_PARTNER_MEMORY) {
+            pruneStaleReplyPartners(memory, now);
+        }
+    }
+
+    /**
+     *  Drop partners whose blame has aged out of the memory window, keeping the
+     *  map bounded without a per-call scan.  Expiry rather than
+     *  least-recently-used eviction: the window is the same one
+     *  {@link #isRepeatReplyPartnerFailure} reads, so a stale entry is worth
+     *  nothing to the diagnostic, and pruning by age means the map drains
+     *  instead of pinning the oldest entries forever.  If everything is still
+     *  in-window the cap is enforced by dropping the oldest of them, which
+     *  costs one scan but only on the rare occasion the window is full of
+     *  live partners.
+     *
+     * @param memory partner to last-blamed timestamps
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    static void pruneStaleReplyPartners(Map<Hash, Long> memory, long now) {
+        int live = 0;
+        Hash oldestKey = null;
+        long oldest = Long.MAX_VALUE;
+        for (Map.Entry<Hash, Long> e : memory.entrySet()) {
+            long ts = e.getValue();
+            if (now - ts >= REPLY_PARTNER_MEMORY_MS) {
+                if (memory.remove(e.getKey(), ts)) {continue;}
+            }
+            live++;
+            if (ts < oldest) {oldest = ts; oldestKey = e.getKey();}
+        }
+        if (live > MAX_REPLY_PARTNER_MEMORY && oldestKey != null) {
+            memory.remove(oldestKey);
+        }
+    }
+
+    /**
+     *  Record a failed round against its reply partner and stat whether this
+     *  partner was already implicated, which is what separates "this tunnel is
+     *  bad" from "this reply path is bad".
+     *
+     * @param inbound true if the tunnel under test is inbound
+     * @param replyPartner the tunnel the reply should have come back through
+     *  @since 0.9.71+
+     */
+    /**
+     *  The reply-partner failure memory for a direction.
+     *
+     * @param inbound true for an inbound tunnel under test
+     * @return the memory to read and write for that direction
+     *  @since 0.9.71+
+     */
+    static Map<Hash, Long> replyPartnerMemory(boolean inbound) {
+        return inbound ? _inboundReplyPartnerFailures : _outboundReplyPartnerFailures;
+    }
+
+    private void attributeFailureToReplyPartner(boolean inbound, TunnelInfo replyPartner) {
+        if (replyPartner == null) {return;}
+        Map<Hash, Long> memory = inbound ? _inboundReplyPartnerFailures : _outboundReplyPartnerFailures;
+        StatManager sm = getContext().statManager();
+        boolean repeat = isRepeatReplyPartnerFailure(memory, replyPartner, getContext().clock().now());
+        sm.addRateData(directionStat(inbound, repeat ? "ReplyPartnerRepeat" : "ReplyPartnerNew"), 1);
+        blameReplyPartner(memory, replyPartner, getContext().clock().now());
+    }
 
     private static volatile RouterContext _cfgCtx;
     private static volatile long _cfgRefreshed;
@@ -684,6 +837,14 @@ public class TestJob extends JobImpl {
                 "Confirmations failed: tunnel charged (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "ConfirmFailed"),
                 "Confirmations failed: tunnel charged (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "ReplyPartnerNew"),
+                "Test failed, reply partner not yet implicated (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "ReplyPartnerNew"),
+                "Test failed, reply partner not yet implicated (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "ReplyPartnerRepeat"),
+                "Test failed, reply partner already implicated (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "ReplyPartnerRepeat"),
+                "Test failed, reply partner already implicated (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(true, "Condemned"),
                 "Tunnels marked FAILED by the test cycle (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "Condemned"),
@@ -777,6 +938,61 @@ public class TestJob extends JobImpl {
      */
     static boolean usablePartner(TunnelInfo candidate, TunnelInfo excluded) {
         return candidate != null && candidate != excluded;
+    }
+
+    /**
+     * Credit a completed test round's bytes to the tunnel that carried it, for
+     * the per-peer throughput profile only.
+     *
+     * <p>{@code realTraffic} is false and must stay false.  A test round is
+     * the tunnel under test carrying its own probe, so crediting it as real
+     * traffic would stamp {@link TunnelCreatorConfig#getLastTransferred()} —
+     * and for an outbound test the outgoing tunnel <em>is</em> the tunnel
+     * under test.  A tunnel that had never carried a single production byte
+     * would then look recently proven and could grant itself the data-verified
+     * test trust, which is decided on exactly that clock.  The exemption
+     * budget is unaffected, since only
+     * {@link TunnelCreatorConfig#recordRealTraffic()} refills it.
+     *
+     * <p>Static and taking the tunnel as an argument, so the call site itself
+     * is testable: asserting on {@code TunnelCreatorConfig} directly would
+     * pass even if this passed the wrong flag.
+     *
+     * @param outTunnel the tunnel the round was sent through, may be null
+     *  @since 0.9.71+
+     */
+    static void recordTestRoundBytes(TunnelInfo outTunnel) {
+        // Typed as TunnelInfo, so this needs the instanceof guard the
+        // testJobSuccessful() calls already use.  The two-argument form lives
+        // on TunnelCreatorConfig rather than the interface: it has one caller
+        // and one implementor, and adding a method to a public interface for
+        // that would break any out-of-tree implementor.
+        if (outTunnel instanceof TunnelCreatorConfig) {
+            ((TunnelCreatorConfig) outTunnel).incrementVerifiedBytesTransferred(
+                    TEST_ROUND_BYTES, false);
+        }
+    }
+
+    /**
+     * Whether a tunnel's last real traffic is recent enough to trust over a
+     * test failure.  Static and clock-injected so the staleness bound is
+     * testable without a running router, and so the direction of the
+     * comparison is pinned: a tunnel that never carried production traffic
+     * reports {@code lastTransfer == 0}, which is maximally stale and must
+     * therefore never qualify.
+     *
+     * @param lastTransferMs when the tunnel last carried production traffic,
+     *        0 if never
+     * @param nowMs current time in ms
+     * @return true when the traffic is recent enough to shield a test failure
+     *  @since 0.9.71+
+     */
+    static boolean isRecentDataTransfer(long lastTransferMs, long nowMs) {
+        if (lastTransferMs <= 0) {return false;}
+        long staleMs = nowMs - lastTransferMs;
+        // A timestamp in the future means a clock stepped backwards; treat it
+        // as stale rather than trusting an age we cannot compute.
+        return staleMs >= 0 && staleMs < RECENT_TRAFFIC_MS;
     }
 
     /**
@@ -2682,7 +2898,15 @@ public class TestJob extends JobImpl {
         // Set test status to TESTING
         _cfg.setTestStarted();
         _partnerFallback = false;
-        _partnerDeferrals = 0;
+        // The deferral budgets are deliberately NOT reset here.  They bound
+        // *consecutive* rounds, so they have to survive pick-up: resetting on
+        // every round caps each counter at 1, which makes the documented caps
+        // unreachable and lets a tunnel defer indefinitely.  They are reset
+        // only when the tunnel proves itself — a passing round in
+        // testSuccessful() — or when a cap is spent, so the next cycle starts
+        // clean.  Real production traffic is not a separate reset because the
+        // data-trust exemption below already covers that case, with its own
+        // budget.
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
@@ -2963,7 +3187,11 @@ public class TestJob extends JobImpl {
         ctx.statManager().addRateData("tunnel.testSuccessTime", ms);
         recordDirectionStat(ctx.statManager(), _cfg.isInbound(), true);
 
-        _outTunnel.incrementVerifiedBytesTransferred(1024);
+        recordTestRoundBytes(_outTunnel);
+        // Proof of life: the tunnel passed a round, so the consecutive-deferral
+        // budgets start again from zero.
+        _partnerDeferrals = 0;
+        _replyPartnerDeferrals = 0;
         noteSuccess(ms, _outTunnel);
         noteSuccess(ms, _replyTunnel);
 
@@ -3285,6 +3513,37 @@ public class TestJob extends JobImpl {
      *
      * @param timeToFail time in milliseconds the test ran before failing
      */
+    /**
+     *  Defer a round because the same reply partner was already blamed for a
+     *  recent failure, and kick the reply pool so the side that is actually
+     *  degraded is the side that rebuilds.  Bounded by
+     *  {@link #MAX_REPLY_PARTNER_DEFERRALS}: once spent the caller falls
+     *  through and charges the tunnel, so a reply path that never recovers
+     *  cannot shield a dead tunnel indefinitely.
+     *
+     *  <p>Split out of {@link #testFailed}, which is already well past the
+     *  complexity budget, so this does not add to it.
+     *
+     * @return true when the round was deferred
+     *  @since 0.9.71+
+     */
+    private boolean deferForImplicatedReplyPartner() {
+        if (_replyPartnerDeferrals >= MAX_REPLY_PARTNER_DEFERRALS) {return false;}
+        if (!isRepeatReplyPartnerFailure(replyPartnerMemory(_cfg.isInbound()), _replyTunnel,
+                                         getContext().clock().now())) {
+            return false;
+        }
+        _replyPartnerDeferrals++;
+        if (_log.shouldWarn()) {
+            _log.warn("Tunnel Test failed -> reply partner " + _replyTunnel +
+                      " already implicated in a recent failure -> deferring test of " + _cfg +
+                      " (" + _replyPartnerDeferrals + "/" + MAX_REPLY_PARTNER_DEFERRALS + ")");
+        }
+        deferForMissingPartner(_pool.getPairedPool(),
+                               _cfg.isInbound() ? "outbound" : "inbound");
+        return true;
+    }
+
     private void testFailed(long timeToFail) {
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
@@ -3319,6 +3578,17 @@ public class TestJob extends JobImpl {
             }
         }
 
+        // Reply-leg attribution.  The partner check above only catches a
+        // partner that is known bad.  A partner that is nominally GOOD but has
+        // already been blamed for a recent failed round is weaker evidence
+        // still, and a round that fails through the same partner twice in a row
+        // is more likely to be the reply path than the tunnel under test — the
+        // two are indistinguishable from a single test bit.  Defer, and kick the
+        // reply pool so the side that is actually degraded is the side that
+        // rebuilds.  Bounded, and the tunnel is charged once the budget is
+        // spent, so a bad reply path cannot shield a dead tunnel.
+        if (deferForImplicatedReplyPartner()) {return;}
+
         // Confirm-before-charge.  A round has two independent failure sources:
         // the tunnel under test, and the partner leg the reply came back (or
         // failed to come back) through.  The partner checks above only catch a
@@ -3342,6 +3612,7 @@ public class TestJob extends JobImpl {
         }
         _confirmPending = false;
         _excludedPartner = null;
+        attributeFailureToReplyPartner(_cfg.isInbound(), _replyTunnel);
 
         // Record the failed round so getSuccessRate() reflects reality and
         // getDelay() retests a failing tunnel sooner rather than slower.
@@ -3357,34 +3628,47 @@ public class TestJob extends JobImpl {
 
         _cfg.clearExpeditedTest();
 
-        // Data-verified trust: a tunnel that has successfully transferred real
-        // data has proven itself in production.  Test failures for such tunnels
-        // are usually due to reply-path issues (the remote peer used for the
-        // return path) or temporary network congestion, not the tunnel itself.
+        // Data-verified trust: a tunnel that has recently carried production
+        // traffic has proven its own leg in production.  A round trip is a
+        // composite — it exercises the tunnel under test AND the partner leg
+        // the reply came back through — so a test failure is only evidence
+        // against the tunnel when the leg the tunnel is responsible for is
+        // what broke.  Real traffic establishes that the tunnel's own leg
+        // works; a failure alongside it therefore indicts the reply leg, which
+        // belongs to a different tunnel, and charging the tunnel for it is a
+        // misattribution.
         //
-        // However, this trust must be INBOUND-ONLY.  For an inbound tunnel,
-        // verified bytes are data that actually reached us, proving the tunnel
-        // works in the inbound direction; a test failure is then a reply-path
-        // (outbound) false negative and shielding it is correct.  For an OUTBOUND
-        // (or exploratory) tunnel, verified bytes are data we sent out — that
-        // proves nothing about the reply path returning.  A failing test means
-        // the round trip did not complete, so the outbound tunnel may be dead;
-        // shielding it would let a dead tunnel persist and block replacement
-        // with a working one.  So only inbound tunnels get the traffic exemption.
+        // The argument is symmetric in direction, and was previously written as
+        // if it were not.  For an INBOUND tunnel under test the reply comes
+        // back down the tunnel under test, so verified inbound bytes prove that
+        // leg works and a failure is an outbound reply-path false negative.
+        // For an OUTBOUND tunnel under test the outgoing leg IS the tunnel
+        // under test, so verified outbound bytes prove that leg works just as
+        // well, and a failure is then evidence about the partner's reply leg.
+        // The earlier comment claimed outbound verified bytes "prove nothing
+        // about the reply path" — true, but the reply path is not the outbound
+        // tunnel's responsibility, which is the whole point.  Reading the two
+        // cases as asymmetric was what let outbound pools churn, since
+        // exempting them was thought to risk shielding a dead tunnel: the
+        // exemption only applies to tunnels that have *recently* delivered
+        // production traffic, and a dead tunnel cannot do that.
         //
-        // This trust is NOT unlimited.  A tunnel that keeps failing tests despite
-        // recent traffic has a broken test reply path or is genuinely degraded.
-        // We allow a bounded number of exemptions before counting failures
-        // normally, so a tunnel cannot coast indefinitely on stale traffic.
-        // The budget refills in TunnelCreatorConfig.recordRealTraffic(), so it
-        // tracks proof rather than draining once per tunnel lifetime.
-        if (_cfg.getVerifiedBytesTransferred() > 0 && _cfg.isInbound()) {
+        // This trust is NOT unlimited.  A tunnel that keeps failing tests
+        // despite recent traffic has a broken test reply path or is genuinely
+        // degraded.  We allow a bounded number of exemptions before counting
+        // failures normally, so a tunnel cannot coast indefinitely on stale
+        // traffic.  The budget refills in
+        // TunnelCreatorConfig.recordRealTraffic(), so it tracks proof rather
+        // than draining once per tunnel lifetime, and it is only refilled from
+        // the real delivery sites — the test round cannot grant it, since it
+        // no longer stamps the last-transferred clock.
+        if (_cfg.getVerifiedBytesTransferred() > 0 && _cfg.getLastTransferred() > 0) {
             getContext().statManager().addRateData(
                 "tunnel.testFailedDataTrust", _cfg.getVerifiedBytesTransferred());
             long lastTransfer = _cfg.getLastTransferred();
             long nowMs = System.currentTimeMillis();
             long staleMs = nowMs - lastTransfer;
-            if (staleMs < RECENT_TRAFFIC_MS) {
+            if (isRecentDataTransfer(lastTransfer, nowMs)) {
                 // Recently carried data — likely a reply-path false negative.
                 // Allow 1 exemption per refill; once spent it counts as a
                 // normal failure until the tunnel carries real traffic again,
