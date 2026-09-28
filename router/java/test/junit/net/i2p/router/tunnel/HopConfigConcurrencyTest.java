@@ -96,13 +96,17 @@ public class HopConfigConcurrencyTest {
             workers[i].start();
         }
 
+        // Release the workers before sampling: the drain loop below races them
+        // to sum the reset windows, so it can only make progress once they are
+        // running. Releasing the gate after the loop deadlocks, because the
+        // workers await the gate and the loop exits only when they finish.
+        startGate.countDown();
         long sum = 0;
         while (done.getCount() > 0) {
             sum += cfg.getAndResetRecentMessagesCount();
             if (done.await(1, TimeUnit.MILLISECONDS)) break;
         }
         sum += cfg.getAndResetRecentMessagesCount();
-        startGate.countDown();
         for (Thread t : workers)
             t.join(TIMEOUT_MS);
 
