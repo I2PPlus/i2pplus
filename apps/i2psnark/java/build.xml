@@ -587,7 +587,7 @@
       </fileset>
     </delete>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
-    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
       <sysproperty key="i2p.dir.base" value="${i2psnark.test.base}"/>
       <classpath>
         <pathelement location="${build.dir}/obj_test"/>

@@ -617,7 +617,7 @@
     <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
-    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
       <classpath>
         <pathelement path="${classpath}"/>
         <pathelement location="${build.dir}/obj"/>

@@ -342,7 +342,7 @@
       </fileset>
     </delete>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
-    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
       <classpath>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>

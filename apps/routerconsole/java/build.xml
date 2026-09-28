@@ -924,7 +924,7 @@
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <mkdir dir="${junit.reports.dir}/routerconsole/junit"/>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
-    <junit fork="yes" maxmemory="384M" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
+    <junit fork="yes" maxmemory="384M" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
       <classpath>
         <pathelement location="${build.dir}/obj"/>
         <pathelement location="${build.dir}/testobj"/>

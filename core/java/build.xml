@@ -496,7 +496,7 @@
       </fileset>
     </delete>
     <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
-    <junit printsummary="withOutAndErr" fork="yes" maxmemory="384m" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp">
+    <junit printsummary="withOutAndErr" fork="yes" maxmemory="384m" showoutput="yes" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <classpath>
         <pathelement location="../../installer/resources/"/>
