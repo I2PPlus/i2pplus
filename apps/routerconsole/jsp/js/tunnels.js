@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // #tunnelsContainer replace above. includeContainer exposes the realized
   // contentonly fragment on the refresh detail for that comparison.
   refreshElements(
-    "#tunnelsContainer td.status, #tunnelsContainer td.expiry, #tunnelsContainer td.latency, #tunnelsContainer td.data, #tunnelsContainer .bwUsage",
+    "#tunnelsContainer td.status, #tunnelsContainer td.expiry, #tunnelsContainer td.latency, #tunnelsContainer td.data, #tunnelsContainer .bwUsage td",
     "/tunnels", 10000, false, false, "tunnelsContainer", null, 0, true
   );
 });

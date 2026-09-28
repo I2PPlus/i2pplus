@@ -178,6 +178,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.streaming.rtoMultiplier", _x("RTO Backoff Multiplier"));
         DISPLAY_NAMES.put("i2p.tunnel.socketConnectTimeout", _x("Socket Connect Timeout"));
         DISPLAY_NAMES.put("i2p.tunnel.untestedMultiplier", _x("Untested Tunnel Cap Multiplier"));
+        DISPLAY_NAMES.put("i2p.tunnel.ivFilterM", _x("Tunnel IV Filter Size"));
         DISPLAY_NAMES.put("router.defaultProcessingTimeThrottle", _x("Message Processing Throttle"));
     }
 
@@ -326,6 +327,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.loadWeight", _x("Load score multiplier for request throttling (% of computed load)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.rtoMultiplier", _x("RTO growth multiplier per retransmission timeout (%, 100 = flat)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.socketConnectTimeout", _x("TCP socket connect timeout for tunnel server handler threads (ms)."));
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.ivFilterM", _x("Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."));
         PARAM_DESCRIPTIONS.put("router.defaultProcessingTimeThrottle", _x("Max average message delay before rejecting transit (ms)."));
     }
 

@@ -23,6 +23,7 @@ import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.transport.udp.SimpleBandwidthEstimator;
 import net.i2p.router.transport.udp.EstablishmentManager;
+import net.i2p.router.tunnel.BloomFilterIVValidator;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.tunnel.pool.BuildHandler;
 import net.i2p.router.tunnel.pool.BuildExecutor;
@@ -48,6 +49,7 @@ import net.i2p.router.networkdb.kademlia.SearchJob;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
+import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
@@ -450,9 +452,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Returns current heap memory pressure as a ratio from 0.0 (no pressure)
      * to 1.0 (heap full). Used to scale cache sizes and buffer pools.
      *
+     * <p>Public because it is the router-wide reading for this signal, and
+     * tunables outside this class size themselves against it too.
+     *
+     * @return heap pressure, 0.0 to 1.0
      * @since 0.9.70+
      */
-    static double getMemoryPressure() {
+    public static double getMemoryPressure() {
         Runtime rt = Runtime.getRuntime();
         long max = rt.maxMemory();
         if (max <= 0) return 0.0;
@@ -766,6 +772,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new ResendTimeoutParam());
         _params.add(new LeaseResendCountParam());
         _params.add(new ExploreBredthParam());
+        _params.add(new TunnelIVFilterMParam());
 
         // Peers
         _params.add(new MaxFastPeersParam());
@@ -2597,6 +2604,76 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return current;
         }
     }
+
+        // ==================== Tunnel Params ====================
+
+        /**
+         * Tunes the tunnel IV filter size.
+         *
+         * <p>The filter rejects repeated tunnel IVs, so an undersized filter
+         * shows up as legitimate tunnel data being dropped, which costs
+         * throughput and adds latency. The exponent is therefore driven by the
+         * entries actually seen in the last decay window, not by the configured
+         * share, and the share is never on its own a reason to shrink.
+         *
+         * <p>The ceiling is the largest exponent whose two buffers fit in the
+         * filter's share of the heap. See
+         * {@code wip/decaying-filter-adaptive-sizing-20260928.md}.
+         */
+        private class TunnelIVFilterMParam extends BaseParam {
+            TunnelIVFilterMParam() {
+                super("i2p.tunnel.ivFilterM", "Tunnel IV filter size (bits exponent)",
+                      SUB_TUNNEL,
+                      BloomFilterIVValidator.MIN_FILTER_M, DecayingBloomFilter.MAX_M, 1,
+                      "tunnel.ivFilterEntries", _context,
+                      null, BloomFilterIVValidator.DEFAULT_FILTER_M);
+            }
+
+            private BloomFilterIVValidator.IVFilterSizer sizer() {
+                TunnelDispatcher td = _context.tunnelDispatcher();
+                if (td == null)
+                    return null;
+                BloomFilterIVValidator v = td.getIVValidator();
+                return (v == null) ? null : v.getSizer();
+            }
+
+            protected void applyValue(int value) {
+                BloomFilterIVValidator.IVFilterSizer s = sizer();
+                if (s == null)
+                    return;
+                s.getValidator().reconfigure(value, s.getKBps());
+            }
+
+            protected int getRuntimeValue() {
+                BloomFilterIVValidator.IVFilterSizer s = sizer();
+                if (s == null)
+                    return _defaultValue;
+                return s.getValidator().getFilterM();
+            }
+
+            /** Entries in the last completed decay window, from the filter itself. */
+            protected double getObservedStat(RouterContext ctx) {
+                BloomFilterIVValidator.IVFilterSizer s = sizer();
+                if (s == null)
+                    return Double.NaN;
+                return s.getValidator().getLastWindowCount();
+            }
+
+            /**
+             * observed = entries in the last decay window.
+             * Cross-refs: the live false positive rate and the heap pressure the
+             *              sizer reads for itself.
+             */
+            protected int computeTarget(double observed) {
+                BloomFilterIVValidator.IVFilterSizer s = sizer();
+                if (s == null)
+                    return _defaultValue;
+                return BloomFilterIVValidator.IVFilterSizer.computeTargetM(
+                    s.getValidator().getFilterM(), (int) observed,
+                    s.getValidator().getMeasuredFalsePositiveRate(),
+                    BloomFilterIVValidator.filterBudgetBytes(), getMemoryPressure());
+            }
+        }
 
     /**
      * Tunes DATA_MESSAGE_TIMEOUT based on observed send confirm time
