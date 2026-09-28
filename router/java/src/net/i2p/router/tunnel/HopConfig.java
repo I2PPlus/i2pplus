@@ -1,5 +1,7 @@
 package net.i2p.router.tunnel;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
@@ -25,10 +27,11 @@ public class HopConfig {
     /*
      * These 4 were longs, let's save some space
      * 2 billion * 1KB / 10 minutes = 3 GBps in a single tunnel
-     * we use synchronization instead of an AtomicInteger here to save space
+     * Lock-free access keeps the pumped-message counters off the monitor,
+     * which is contended by every message through every participating tunnel.
      */
-    private int _messagesProcessed;
-    private int _oldMessagesProcessed;
+    private final AtomicInteger _messagesProcessed = new AtomicInteger();
+    private volatile int _oldMessagesProcessed;
     private volatile int _allocatedBW;
 
     /** Creates a new HopConfig with default values */
@@ -166,16 +169,15 @@ public class HopConfig {
     /**
      *  Take note of a message being pumped through this tunnel.
      *  "processed" is for incoming and "sent" is for outgoing (could be dropped in between)
-     *  We use synchronization instead of an AtomicInteger here to save space.
      */
-    public synchronized void incrementProcessedMessages() { _messagesProcessed++; }
+    public void incrementProcessedMessages() { _messagesProcessed.incrementAndGet(); }
 
     /**
      *  Processed messages count.
      *
      *  @return the processed messages count
      */
-    public synchronized int getProcessedMessagesCount() { return _messagesProcessed; }
+    public int getProcessedMessagesCount() { return _messagesProcessed.get(); }
 
     /**
      *  This returns the number of processed messages since
@@ -183,8 +185,8 @@ public class HopConfig {
      *  As of 0.9.23, does NOT reset the count, see getAndResetRecentMessagesCount().
      * @return the recent messages count
      */
-    public synchronized int getRecentMessagesCount() {
-        return _messagesProcessed - _oldMessagesProcessed;
+    public int getRecentMessagesCount() {
+        return _messagesProcessed.get() - _oldMessagesProcessed;
     }
 
     /**
@@ -192,11 +194,16 @@ public class HopConfig {
      *  and resets the count. It should only be called by code that updates the router stats.
      *  See TunnelDispatcher.updateParticipatingStats().
      *
+     *  The counter is sampled once so the returned delta and the stored baseline
+     *  refer to the same read; a concurrent increment lands in the next window.
+     *
+     *  @return the number of messages processed since the previous call
      *  @since 0.9.23
      */
-    synchronized int getAndResetRecentMessagesCount() {
-        int rv = _messagesProcessed - _oldMessagesProcessed;
-        _oldMessagesProcessed = _messagesProcessed;
+    int getAndResetRecentMessagesCount() {
+        int cur = _messagesProcessed.get();
+        int rv = cur - _oldMessagesProcessed;
+        _oldMessagesProcessed = cur;
         return rv;
     }
 
