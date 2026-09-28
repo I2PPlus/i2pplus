@@ -54,7 +54,8 @@ class BloomFilterIVValidator implements IVValidator {
         // Select the filter based on share bandwidth and memory.
         // Note that at rates above 512KB, we increase the filter size
         // to keep acceptable false positive rates.
-        // See DBF, BloomSHA1, and KeySelector for details.
+        // See DecayingBloomFilter.DEFAULT_M for the sizing rationale and the
+        // theoretical false positive rates behind these choices.
         long maxMemory = SystemVersion.getMaxMemory();
         if (_context.getBooleanProperty(PROP_FORCE)) {
             _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV");  // 2MB fixed
@@ -63,7 +64,7 @@ class BloomFilterIVValidator implements IVValidator {
         } else if (KBps < MIN_SHARE_KBPS_TO_USE_BLOOM || maxMemory < MIN_MEM_TO_USE_BLOOM) {
             if (KBps >= MIN_SHARE_KBPS_TO_USE_BLOOM)
                 warn(maxMemory, KBps, MIN_MEM_TO_USE_BLOOM, MIN_SHARE_KBPS_TO_USE_BLOOM);
-            _filter = new DecayingHashSet(ctx, HALFLIFE_MS, 16, "TunnelIVV"); // appx. 4MB max
+            _filter = new DecayingHashSet(ctx, HALFLIFE_MS, 16, "TunnelIVV"); // appx. 9MB at its cap
         } else if (KBps >= MIN_SHARE_KBPS_FOR_HUGE4_BLOOM && maxMemory >= MIN_MEM_FOR_HUGE4_BLOOM) {
             _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV", 28);  // 64MB fixed
         } else if (KBps >= MIN_SHARE_KBPS_FOR_HUGE3_BLOOM && maxMemory >= MIN_MEM_FOR_HUGE3_BLOOM) {
