@@ -56,6 +56,13 @@ public class DecayingBloomFilter {
     private final long _longToEntryMask;
     /** Thread-local buffer for extended entries */
     private final ThreadLocal<byte[]> _extendedBuf;
+    /**
+     *  Thread-local buffer for the long-to-entry conversion, sized _entryBytes.
+     *  Only the long overloads of add()/isKnown() use it, so it is null when the
+     *  entries are too wide to hold a long.
+     *  @since 0.9.71+
+     */
+    private final ThreadLocal<byte[]> _longToEntryBuf;
     /** Counter for current duplicates */
     protected final AtomicLong _currentDuplicates = new AtomicLong();
     /** Whether decay is still running */
@@ -68,11 +75,19 @@ public class DecayingBloomFilter {
     protected final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock();
 
     /**
-     *  Default sizing rationale. This filter is used only for participants and
-     *  OBEPs, not IBGWs, so depending on your assumptions of average tunnel
-     *  length, the performance is somewhat better than the gross share BW
-     *  would indicate. The m=23 rates below are theoretical; the remaining
-     *  tables are measured false positive rates at the indicated throughput.
+     *  Default sizing rationale.
+     *
+     *  The rates below are theoretical false positive rates for a filter of
+     *  2^m bits with k hash functions, (1 - e^(-k*n/m))^k, evaluated at
+     *  n = 600 * KBps entries: one message per second per KBps of share,
+     *  accumulated over a 600 second decay window. They are not measurements.
+     *  The formula understates the rate once the filter is close to full, so
+     *  treat the high figures at the end of each line as optimistic.
+     *
+     *  The larger m values are chosen by the caller, which also steps k down to
+     *  hold k*ln(2) roughly constant: 23/11, then 10 above m=23, then 9 above
+     *  m=26. m is capped at 29, which is where KeySelector's offset formula
+     *  stops fitting in a 32 byte key.
      *
      *<pre>
      *  m=23, k=11:
@@ -103,7 +118,42 @@ public class DecayingBloomFilter {
     private static final boolean ALWAYS_MISS = false;
 
     /**
-     * Only for extension by DecayingHashSet
+     *  Validate an entry size for a bloom filter. Entries are stretched to
+     *  exactly 32 bytes for hashing, in uniform blocks of entryBytes, so only
+     *  sizes that can reach 32 bytes without overrunning are usable: 1-16, and
+     *  32 itself. Sizes 17-31 would need a partial trailing block, which the
+     *  extender loop does not support, and hashing them unextended overruns
+     *  KeySelector. This does not apply to {@link DecayingHashSet}, which
+     *  hashes entries directly and accepts the full 1-32 range.
+     *
+     *  @param entryBytes how large are the entries
+     *  @throws IllegalArgumentException if entryBytes is not 1-16 or 32
+     *  @since 0.9.71+
+     */
+    protected static void checkEntryBytes(int entryBytes) {
+        if (entryBytes <= 0 || entryBytes > 32 || (entryBytes > 16 && entryBytes < 32))
+            throw new IllegalArgumentException("Bad size [" + entryBytes
+                                               + "], must be 1-16 or 32");
+    }
+
+    /**
+     *  How many extender blocks are needed to stretch an entryBytes entry out
+     *  to the 32 bytes that are hashed. This is the largest count that still
+     *  fits without overrunning the buffer, so a non-divisor size such as 6
+     *  yields the most extenders that are safe (4, using 30 of the 32 bytes).
+     *
+     *  @param entryBytes how large are the entries, already validated to 1-16
+     *         or 32, so for anything below 32 the result is always at least 1
+     *  @return the number of extenders; 0 only for a full 32 byte entry
+     *  @since 0.9.71+
+     */
+    private static int calcNumExtenders(int entryBytes) {
+        return (entryBytes >= 32) ? 0 : (32 / entryBytes) - 1;
+    }
+
+    /**
+     * Only for extension by DecayingHashSet, which validates entryBytes itself
+     * and never stretches entries, so it is deliberately not checked here.
      *
      * @param durationMs entries last for at least this long
      * @param entryBytes how large are the entries
@@ -120,6 +170,7 @@ public class DecayingBloomFilter {
         _extenders = null;
         _longToEntryMask = 0;
         _extendedBuf = null;
+        _longToEntryBuf = null;
         context.addShutdownTask(new Shutdown());
         _keepDecaying = true;
         if (_durationMs == 60*60*1000) {
@@ -137,9 +188,12 @@ public class DecayingBloomFilter {
      *
      * @param context the I2P app context
      * @param durationMs entries last for at least this long, but no more than twice this long
-     * @param entryBytes how large are the entries to be added?  if this is less than 32 bytes,
-     *                   the entries added will be expanded by concatenating their XORing
-     *                   against with sufficient random values.
+     * @param entryBytes how large are the entries to be added?  must be 1-16, or
+     *                   32.  Entries narrower than 32 bytes are expanded to 32 by
+     *                   concatenating their XORing against random values; 17-31
+     *                   cannot reach 32 in whole blocks and are refused.
+     * @throws IllegalArgumentException if entryBytes is not 1-16 or 32
+     * @see #checkEntryBytes(int)
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes) {
         this(context, durationMs, entryBytes, "DBF");
@@ -150,8 +204,9 @@ public class DecayingBloomFilter {
      *
      * @param context the I2P app context
      * @param durationMs entries last for at least this long
-     * @param entryBytes how large are the entries
+     * @param entryBytes how large are the entries, 1-16 or 32
      * @param name just for logging / debugging / stats
+     * @throws IllegalArgumentException if entryBytes is not 1-16 or 32
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes, String name) {
         // this is instantiated in four different places, they may have different
@@ -161,21 +216,25 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Memory usage is 2 * (2**m) bits or 2**(m-2) bytes.
+     * Memory usage is 2 * (2**m) bits or 2**(m-2) bytes, allocated up front for
+     * both buffers, so it does not grow with traffic.
      *
      * @param context the I2P app context
      * @param durationMs entries last for at least this long
-     * @param entryBytes how large are the entries
+     * @param entryBytes how large are the entries, 1-16 or 32
      * @param name filter name for logging
      * @param m filter size exponent, max is 29
+     * @throws IllegalArgumentException if entryBytes is not 1-16 or 32, or if m
+     *         is over 29
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes, String name, int m) {
+        checkEntryBytes(entryBytes);
         _context = context;
         _log = context.logManager().getLog(DecayingBloomFilter.class);
         _entryBytes = entryBytes;
         _name = name;
         int k = DEFAULT_K;
-        // max is (23,11) or (26,10) or (29,9); see KeySelector for details
+        // hold k*ln(2) ~ constant as m grows: (23,11), (26,10), (29,9)
         if (m > DEFAULT_M) {
             k--;
             if (m > 26) {
@@ -187,9 +246,7 @@ public class DecayingBloomFilter {
         _current = new BloomSHA1(m, k);
         _previous = new BloomSHA1(m, k);
         _durationMs = durationMs;
-        int numExtenders = (32+ (entryBytes-1))/entryBytes - 1;
-        if (numExtenders < 0)
-            numExtenders = 0;
+        int numExtenders = calcNumExtenders(entryBytes);
         if (numExtenders > 0) {
             _extenders = new byte[numExtenders][entryBytes];
             for (int i = 0; i < numExtenders; i++) {
@@ -197,11 +254,15 @@ public class DecayingBloomFilter {
             }
             _extendedBuf = ThreadLocal.withInitial(() -> new byte[32]);
             _longToEntryMask = (_entryBytes < 8) ? (1L << (_entryBytes * 8L)) -1 : 0;
+            // a long only fits in 8 bytes or fewer, see encodeLong()
+            _longToEntryBuf = (entryBytes <= 8)
+                              ? ThreadLocal.withInitial(() -> new byte[entryBytes]) : null;
         } else {
             // final
             _extenders = null;
             _extendedBuf = null;
             _longToEntryMask = 0;
+            _longToEntryBuf = null;
         }
         _keepDecaying = true;
         if (_durationMs == 60*60*1000) {
@@ -237,7 +298,7 @@ public class DecayingBloomFilter {
      */
     public long getCurrentDuplicateCount() { return _currentDuplicates.get(); }
 
-    /** Unsynchronized but only used for logging elsewhere. */
+    /** Unsynchronized; DecayingHashSet also reads this on the add() path. */
     public int getInsertedCount() {
             return _current.size() + _previous.size();
     }
@@ -283,25 +344,62 @@ public class DecayingBloomFilter {
     }
 
     /**
+     *  Encode a long entry into the byte array that gets hashed. Negative
+     *  values are stored as their magnitude with the top bit of the first byte
+     *  set as the sign, so a long and its negation stay distinct.
+     *
+     *  Single source of truth for the long-to-entry conversion, shared by
+     *  add(long) and isKnown(long) so the two cannot drift apart.
+     *
+     *  @param entry the value to encode
+     *  @return the thread's scratch array of exactly _entryBytes bytes. The
+     *          caller must consume it before the next call on the same thread.
+     *  @throws IllegalArgumentException if entryBytes is over 8, since
+     *          DataHelper.toLong() cannot write more than 8 bytes; use the
+     *          byte array form of add() for wider entries
+     *  @since 0.9.71+
+     */
+    private byte[] encodeLong(long entry) {
+        if (_entryBytes > 8)
+            throw new IllegalArgumentException("Bad size [" + _entryBytes
+                                               + "], a long cannot be encoded wider than 8 bytes");
+        if (_entryBytes <= 7)
+            entry ^= _longToEntryMask;
+        byte[] rv = _longToEntryBuf.get();
+        if (entry < 0) {
+            // 0 - Long.MIN_VALUE overflows back to Long.MIN_VALUE, which
+            // DataHelper.toLong() rejects, so fold that single value onto
+            // Long.MAX_VALUE and set the sign bit. That gives ff ff ... ff,
+            // which no positive value can produce, because a non-negative long
+            // never has a 0xff most significant byte. The fold therefore
+            // collides with nothing and the encoding stays injective over all
+            // 2**64 inputs: the sign takes the top bit, which
+            // DataHelper.toLong's big endian write leaves clear for every
+            // non-negative long, so no magnitude bit is given up. Below 8 bytes
+            // the same holds, as the mask keeps the magnitude clear of it.
+            long magnitude = (entry == Long.MIN_VALUE) ? Long.MAX_VALUE : 0 - entry;
+            DataHelper.toLong(rv, 0, _entryBytes, magnitude);
+            rv[0] |= (1 << 7);
+        } else {
+            DataHelper.toLong(rv, 0, _entryBytes, entry);
+        }
+        return rv;
+    }
+
+    /**
      * Add a long entry to the filter. The number of low order
      * bits used is determined by the entryBytes parameter used on creation of the
      * filter.
+     *
+     *  Only for filters built with 8 or fewer bytes per entry, since a long
+     *  cannot be encoded any wider. Use add(byte[], int, int) otherwise.
      *
      * @param entry the long value to add
      * @return true if the entry added is a duplicate
      */
     public boolean add(long entry) {
         if (ALWAYS_MISS) return false;
-        byte[] longToEntry = new byte[_entryBytes];
-        if (_entryBytes <= 7)
-            entry = ((entry ^ _longToEntryMask) & ((1 << 31)-1)) | (entry ^ _longToEntryMask);
-            //entry &= _longToEntryMask;
-        if (entry < 0) {
-            DataHelper.toLong(longToEntry, 0, _entryBytes, 0-entry);
-            longToEntry[0] |= (1 << 7);
-        } else {
-            DataHelper.toLong(longToEntry, 0, _entryBytes, entry);
-        }
+        byte[] longToEntry = encodeLong(entry);
         getReadLock();
         try {
             return locked_add(longToEntry, 0, _entryBytes, true);
@@ -311,21 +409,16 @@ public class DecayingBloomFilter {
     /**
      * Check if an entry is already known without adding it
      *
+     *  Only for filters built with 8 or fewer bytes per entry, since a long
+     *  cannot be encoded any wider.
+     *
      * @param entry the long value to check
      * @return true if the entry is already known.  this does NOT add the
      * entry however.
      */
     public boolean isKnown(long entry) {
         if (ALWAYS_MISS) return false;
-        byte[] longToEntry = new byte[_entryBytes];
-        if (_entryBytes <= 7)
-            entry = ((entry ^ _longToEntryMask) & ((1 << 31)-1)) | (entry ^ _longToEntryMask);
-        if (entry < 0) {
-            DataHelper.toLong(longToEntry, 0, _entryBytes, 0-entry);
-            longToEntry[0] |= (1 << 7);
-        } else {
-            DataHelper.toLong(longToEntry, 0, _entryBytes, entry);
-        }
+        byte[] longToEntry = encodeLong(entry);
         getReadLock();
         try {
             return locked_add(longToEntry, 0, _entryBytes, false);
@@ -335,6 +428,12 @@ public class DecayingBloomFilter {
     private boolean locked_add(byte[] entry, int offset, int len, boolean addIfNew) {
         if (_extenders != null) {
             // extend the entry to 32 bytes
+            // The extender loop only writes [0, entryBytes * (1 + numExtenders)),
+            // which is under 32 bytes for a non-divisor size. The untouched tail
+            // keeps the zeros it was created with, which is stable per thread,
+            // so the hashed key never depends on the previous entry. The buffer
+            // is deliberately not re-zeroed per call: the written prefix is a
+            // fixed length for the life of the filter, so the tail cannot drift.
             byte[] extended = _extendedBuf.get();
             System.arraycopy(entry, offset, extended, 0, len);
             for (int i = 0; i < _extenders.length; i++) {
@@ -345,7 +444,8 @@ public class DecayingBloomFilter {
             if (!seen)
                 seen = _previous.locked_member(key);
             if (seen) {
-                _currentDuplicates.incrementAndGet();
+                if (addIfNew)
+                    _currentDuplicates.incrementAndGet();
                 _current.release(key);
                 return true;
             } else {
@@ -361,7 +461,8 @@ public class DecayingBloomFilter {
             if (!seen)
                 seen = _previous.locked_member(key);
             if (seen) {
-                _currentDuplicates.incrementAndGet();
+                if (addIfNew)
+                    _currentDuplicates.incrementAndGet();
                 _current.release(key);
                 return true;
             } else {
@@ -412,7 +513,7 @@ public class DecayingBloomFilter {
         } finally { releaseWriteLock(); }
         if (_log.shouldDebug())
             _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
-                       + " elements and " + dups + " false positives with FPR = " + fpr);
+                       + " elements and " + dups + " duplicates with FPR = " + fpr);
     }
 
     private class DecayEvent extends SimpleTimer2.TimedEvent {
