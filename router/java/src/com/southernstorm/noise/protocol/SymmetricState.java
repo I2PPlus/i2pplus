@@ -1,6 +1,5 @@
 package com.southernstorm.noise.protocol;
 
-import java.io.UnsupportedEncodingException;
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -490,32 +489,4 @@ class SymmetricState implements Destroyable, Cloneable {
         buf.append(cipher.toString());
         return buf.toString();
     }
-
-/****
-    private static final int LENGTH = 33;
-
-    public static void main(String[] args) throws Exception {
-        net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-        byte[] rand = new byte[32];
-        byte[] data = new byte[LENGTH];
-        byte[] out = new byte[32];
-        System.out.println("Warmup");
-        int RUNS = 25000;
-        SymmetricState ss = new SymmetricState("ChaChaPoly", "SHA256");
-        for (int i = 0; i < RUNS; i++) {
-            ctx.random().nextBytes(rand);
-            ctx.random().nextBytes(data);
-            ss.hmac(rand, 0, 32, data, 0, LENGTH, out, 0, 32);
-        }
-        System.out.println("Start");
-        RUNS = 500000;
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < RUNS; i++) {
-            ss.hmac(rand, 0, 32, data, 0, LENGTH, out, 0, 32);
-        }
-        long time = System.currentTimeMillis() - start;
-        System.out.println("Time for " + RUNS + " HMAC-SHA256 computations:");
-        System.out.println("Noise time (ms): " + time);
-    }
-****/
 }

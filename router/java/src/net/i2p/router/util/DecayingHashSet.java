@@ -23,7 +23,10 @@ import net.i2p.util.ConcurrentHashSet;
  * <ul>
  *   <li>Zero false positive rate for ≤8 byte keys (lossy hash for larger keys)</li>
  *   <li>5.4E-20 false positive rate for larger keys</li>
- *   <li>Twice as fast as DBF in benchmarks</li>
+ *   <li>About 1.93x faster than {@link DecayingBloomFilter} for 8 byte (long)
+ *       entries and 2.46x faster for 16 byte entries</li>
+ *   <li>49.9 bytes of memory per entry, of which 16 bytes is the
+ *       {@link ArrayWrapper} itself, leaving about 34 bytes for the entry</li>
  *   <li>Space-proportional traffic handling</li>
  * </ul>
  * <p>
@@ -254,93 +257,4 @@ public class DecayingHashSet extends DecayingBloomFilter {
              return ((ArrayWrapper) o).longHashCode() == _longhashcode;
         }
     }
-
-    /**
-     *  Relative to DBF, this measures 1.93x faster for testByLong and 2.46x faster for testByBytes.
-     */
-/*****
-    public static void main(String[] args) {
-        // KBytes per sec, 1 message per KByte
-        int kbps = 256;
-        int iterations = 10;
-        //testSize();
-        testByLong(kbps, iterations);
-        testByBytes(kbps, iterations);
-    }
-*****/
-
-    /** The answer is: 49.9 bytes. The ArrayWrapper alone measured 16, so that's 34 for the HashSet entry. */
-/*****
-    private static void testSize() {
-        int qty = 256*1024;
-        byte[] b = new byte[8];
-        Random r = new Random();
-        long old = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        ConcurrentHashSet foo = new ConcurrentHashSet(qty);
-        for (int i = 0; i < qty; i++) {
-            r.nextBytes(b);
-            foo.add(new ArrayWrapper(b, 0, 8));
-        }
-        long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        System.out.println("Memory per ArrayWrapper: " + (((double) (used - old)) / qty));
-    }
-*****/
-
-    /** 8 bytes, simulate the router message validator */
-/*****
-    private static void testByLong(int kbps, int numRuns) {
-        int messages = 60 * 10 * kbps;
-        Random r = new Random();
-        DecayingBloomFilter filter = new DecayingHashSet(I2PAppContext.getGlobalContext(), 600*1000, 8);
-        int falsePositives = 0;
-        long totalTime = 0;
-        for (int j = 0; j < numRuns; j++) {
-            long start = System.currentTimeMillis();
-            for (int i = 0; i < messages; i++) {
-                if (filter.add(r.nextLong())) {
-                    falsePositives++;
-                    System.out.println("False positive " + falsePositives + " (testByLong j=" + j + " i=" + i + ")");
-                }
-            }
-            totalTime += System.currentTimeMillis() - start;
-            filter.clear();
-        }
-        System.out.println("False postive rate should be " + filter.getFalsePositiveRate());
-        filter.stopDecaying();
-        System.out.println("After " + numRuns + " runs pushing " + messages + " entries in "
-                           + DataHelper.formatDuration(totalTime/numRuns) + " per run, there were "
-                           + falsePositives + " false positives");
-
-    }
-*****/
-
-    /** 16 bytes, simulate the tunnel IV validator */
-/*****
-    private static void testByBytes(int kbps, int numRuns) {
-        byte[][] iv = new byte[60*10*kbps][16];
-        Random r = new Random();
-        for (int i = 0; i < iv.length; i++)
-            r.nextBytes(iv[i]);
-
-        DecayingBloomFilter filter = new DecayingHashSet(I2PAppContext.getGlobalContext(), 600*1000, 16);
-        int falsePositives = 0;
-        long totalTime = 0;
-        for (int j = 0; j < numRuns; j++) {
-            long start = System.currentTimeMillis();
-            for (int i = 0; i < iv.length; i++) {
-                if (filter.add(iv[i])) {
-                    falsePositives++;
-                    System.out.println("False positive " + falsePositives + " (testByBytes j=" + j + " i=" + i + ")");
-                }
-            }
-            totalTime += System.currentTimeMillis() - start;
-            filter.clear();
-        }
-        System.out.println("False postive rate should be " + filter.getFalsePositiveRate());
-        filter.stopDecaying();
-        System.out.println("After " + numRuns + " runs pushing " + iv.length + " entries in "
-                           + DataHelper.formatDuration(totalTime/numRuns) + " per run, there were "
-                           + falsePositives + " false positives");
-    }
-*****/
 }

@@ -254,29 +254,4 @@ public class AESEngine {
         if (((curSize + diff) % 16) != 0) numPadding += (16 - ((curSize + diff) % 16));
         return numPadding;
     }
-
-    /*
-         * Test code
-         *
-        public static void main(String[] args) {
-            I2PAppContext ctx = new I2PAppContext();
-            SessionKey key = ctx.keyGenerator().generateSessionKey();
-            byte[] iv = new byte[16];
-            RandomSource.getInstance().nextBytes(iv);
-
-            byte[] sbuf = new byte[16];
-            RandomSource.getInstance().nextBytes(sbuf);
-            byte[] se = new byte[16];
-            ctx.aes().encrypt(sbuf, 0, se, 0, key, iv, sbuf.length);
-            byte[] sd = new byte[16];
-            ctx.aes().decrypt(se, 0, sd, 0, key, iv, se.length);
-            ctx.logManager().getLog(AESEngine.class).debug("Short test: " + DataHelper.eq(sd, sbuf));
-
-            byte[] lbuf = new byte[1024];
-            RandomSource.getInstance().nextBytes(sbuf);
-            byte[] le = ctx.aes().safeEncrypt(lbuf, key, iv, 2048);
-            byte[] ld = ctx.aes().safeDecrypt(le, key, iv);
-            ctx.logManager().getLog(AESEngine.class).debug("Long test: " + DataHelper.eq(ld, lbuf));
-        }
-    ******/
 }

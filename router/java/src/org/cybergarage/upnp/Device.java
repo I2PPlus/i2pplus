@@ -2481,23 +2481,4 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * public void print() { PrintWriter pr = new PrintWriter(System.out);
      * output(pr); pr.flush(); }
      */
-
-    /*
-    	public static void main(String[] args) {
-    		test("/foo/x", "http://aa:123/");
-    		test("/foo/x", "http://aa:123/bar/");
-    		test("/foo/x", "http://aa:123/bar/baz");
-    		test("foo/x", "http://aa:123/");
-    		test("foo/x", "http://aa:123/bar/");
-    		test("foo/x", "http://aa:123/bar/baz");
-    	}
-
-    	private static void test(String a, String b) {
-    		Device d = new Device();
-    		String c = d.getAbsoluteURL(a, "", b);
-    		System.out.println(b + ' ' + a + ' ' + c);
-    		c = d.getAbsoluteURL(a, b, "");
-    		System.out.println(b + ' ' + a + ' ' + c);
-    	}
-    */
 }
