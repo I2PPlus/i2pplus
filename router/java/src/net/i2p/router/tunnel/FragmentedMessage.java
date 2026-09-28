@@ -152,9 +152,36 @@ class FragmentedMessage {
      * @return the fragment count
      */
     public int getFragmentCount() {
+        return countFragments(_fragments, _highFragmentNum);
+    }
+
+    /**
+     * Count the non-null fragment slots from 0 through the high-water mark.
+     *
+     * Slots above {@code highFragmentNum} cannot be non-null: both
+     * {@link #receive} overloads raise the mark to at least the index they store
+     * into, and the mark is never lowered, so scanning past it cannot add to the
+     * count. Bounding the scan therefore costs nothing in accuracy while
+     * skipping the unused tail of the array, and it makes this accessor agree
+     * with {@link #isComplete()}, {@link #getCompleteSize()},
+     * {@link #writeComplete} and {@link #releaseFragments}, all of which already
+     * stop at the mark.
+     *
+     * Static and driven by its parameters so the scan can be exercised without
+     * an I2PAppContext. The high-water mark is passed in rather than read in the
+     * loop condition: it is only ever increased, and passing it as an argument
+     * reads the volatile field exactly once instead of on every iteration.
+     *
+     * @param fragments fragment slots, indexed by fragment number; not null
+     * @param highFragmentNum highest fragment number received, or -1 if none received
+     * @return the number of non-null slots in 0..highFragmentNum, zero if none received
+     * @throws NullPointerException if {@code fragments} is null and the range to scan is non-empty
+     * @since 0.9.71+
+     */
+    static int countFragments(ByteArray[] fragments, int highFragmentNum) {
         int found = 0;
-        for (int i = 0; i < _fragments.length; i++)
-            if (_fragments[i] != null)
+        for (int i = 0; i <= highFragmentNum; i++)
+            if (fragments[i] != null)
                 found++;
         return found;
     }
