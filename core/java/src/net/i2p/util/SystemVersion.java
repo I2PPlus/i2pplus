@@ -75,6 +75,37 @@ public abstract class SystemVersion {
     /** Cached getCPULoad() result, 0..100. */
     private static volatile int _cpuLoad;
 
+    /**
+     *  Minimum interval between two OS queries for the system load average.
+     *  getSystemLoadAverage() is a native call (JDK reads /proc/loadavg), far
+     *  more expensive than a map lookup, and it sits on the per-build-request
+     *  path of both tunnel throttlers. The load average is itself a 1/5/15
+     *  minute metric, so 1s of staleness is far below its own resolution.
+     *
+     *  @since 0.9.71+
+     */
+    static final long SYSTEM_LOAD_CACHE_MS = 1000;
+
+    /** Last wall-clock ms a getSystemLoad() OS query ran, or 0 if never. */
+    private static volatile long _sysLoadQueried;
+
+    /** Cached getSystemLoad() result, 0..100. */
+    private static volatile int _sysLoad;
+
+    /**
+     *  Cached "router.cpuLoad" RateStat handle, or null if unresolved.
+     *  getCPULoadAvg() previously did two string-keyed statManager() lookups per
+     *  call across a dozen call sites (JobQueue pumper, both throttlers, peer
+     *  tests). The stat is created once at startup and never replaced, so the
+     *  handle is resolved once and reused until the context changes.
+     *
+     *  @since 0.9.71+
+     */
+    private static volatile RateStat _cpuLoadStat;
+
+    /** Context that {@link #_cpuLoadStat} was resolved against. */
+    private static volatile StatManager _cpuLoadStatCtx;
+
     private static final boolean _oneDotSix;
     private static final boolean _oneDotSeven;
     private static final boolean _oneDotEight;
@@ -839,17 +870,63 @@ public abstract class SystemVersion {
     }
 
     /**
+     *  Whether the cached system load sample is old enough to refresh.
+     *  Never-queried (lastQueried == 0) counts as stale so the first call
+     *  always queries the MXBean instead of returning the 0 initializer.
+     *  A wall-clock step backwards (NTP correction, manual change) also counts
+     *  as stale: a plain age comparison would report the sample as fresh until
+     *  the clock caught up again, pinning a stale value for the length of the
+     *  step.
+     *
+     *  @param lastQueried the wall-clock ms of the previous query, or 0
+     *  @param now the current wall-clock ms
+     *  @return true if the cache should be refreshed
+     *  @since 0.9.71+
+     */
+    static boolean sysLoadCacheStale(long lastQueried, long now) {
+        return lastQueried == 0 || now < lastQueried || now - lastQueried >= SYSTEM_LOAD_CACHE_MS;
+    }
+
+    /**
+     *  Resolve and cache the "router.cpuLoad" RateStat handle.
+     *  The stat is registered once during startup and never replaced, so the
+     *  handle stays valid for the life of the context. Re-resolves if the
+     *  context or its StatManager is swapped (as in unit tests).
+     *
+     *  @return the cached stat, or null if it is not registered yet
+     *  @since 0.9.71+
+     */
+    private static RateStat getCpuLoadStat() {
+        if (_ctx == null) {
+            return null;
+        }
+        StatManager sm = _ctx.statManager();
+        if (sm == null) {
+            return null;
+        }
+        if (_cpuLoadStatCtx != sm) {
+            _cpuLoadStat = null;
+            _cpuLoadStatCtx = sm;
+        }
+        if (_cpuLoadStat == null) {
+            _cpuLoadStat = sm.getRate("router.cpuLoad");
+        }
+        return _cpuLoadStat;
+    }
+
+    /**
      * Retrieve CPU Load Average of the JVM.
      *
      * @return the c p u load avg
      * @since 0.9.57+
      */
     public static int getCPULoadAvg() {
-        if (_ctx == null || _ctx.statManager() == null || _ctx.statManager().getRate("router.cpuLoad") == null) {
+        RateStat rs = getCpuLoadStat();
+        if (rs == null) {
             return 0;
         } else {
             int max = 100;
-            Rate stat = _ctx.statManager().getRate("router.cpuLoad").getRate(RateConstants.ONE_MINUTE);
+            Rate stat = rs.getRate(RateConstants.ONE_MINUTE);
             long loadAvg;
             long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
             if (count > 1) {
@@ -879,23 +956,33 @@ public abstract class SystemVersion {
     /**
      * Retrieve System Load as percentage (100% equals full system load)
      *
+     *  The MXBean query is a native /proc read and is cached for
+     *  {@link #SYSTEM_LOAD_CACHE_MS}, because this sits on the per-request path
+     *  of both tunnel throttlers while the underlying load average moves on a
+     *  multi-minute timescale.
+     *
      * @return the system load
      * @since 0.9.57+
      */
     public static int getSystemLoad() {
         if (_ctx == null || _ctx.statManager() == null) {
             return 0;
-        } else {
-            int cores = SystemVersion.getCores();
-            OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-            double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
-            int sysLoad = (int) systemLoadAvg;
-            if (sysLoad < 0) {
-                return 0;
-            } else {
-                return sysLoad;
-            }
         }
+        long now = System.currentTimeMillis();
+        if (!sysLoadCacheStale(_sysLoadQueried, now)) {
+            return _sysLoad;
+        }
+        int cores = SystemVersion.getCores();
+        OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        double systemLoadAvg = (osmxb.getSystemLoadAverage() / cores) * 100;
+        int sysLoad = (int) systemLoadAvg;
+        if (sysLoad < 0) {
+            _sysLoad = 0;
+        } else {
+            _sysLoad = sysLoad;
+        }
+        _sysLoadQueried = now;
+        return _sysLoad;
     }
 
     /**
