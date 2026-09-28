@@ -124,6 +124,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public static final int FIRST_HOP_FAILURE_THRESHOLD = 3;
     /**
+     *  Ceiling for {@link #incrementTestFailures}.  Comfortably above the
+     *  largest removal threshold any caller can compute (degraded mode with a
+     *  thin pool), so saturation never changes a decision — it only stops the
+     *  reported count from drifting.
+     *  @since 0.9.71+
+     */
+    public static final int FAILURE_COUNT_CEILING = 32;
+
+    /**
      *  Minimum spacing between first-hop send failures that count towards
      *  {@link #FIRST_HOP_FAILURE_THRESHOLD}.  Failures closer together are
      *  one event, so a burst of 40 messages failing in the same second
@@ -419,10 +428,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  Used when a previously GOOD tunnel fails a retest — we want to track
      *  the failure for selection deprioritization but keep the tunnel alive
      *  for further testing and data delivery.
+     *
+     *  <p>The count saturates.  Every caller compares the result against a
+     *  removal threshold, so once that threshold is passed the extra
+     *  increments change no decision — they only made the counter (and the
+     *  log line quoting it) grow without bound.  A condemned-but-retained
+     *  tunnel kept retesting reached counts in the hundreds, which made a
+     *  saturated metric impossible to read and hid the real failure ratio.
      *  @since 0.9.69+
      */
     public void incrementTestFailures() {
-        _failures.incrementAndGet();
+        _failures.getAndUpdate(cur -> (cur >= FAILURE_COUNT_CEILING) ? cur : cur + 1);
     }
 
     /**

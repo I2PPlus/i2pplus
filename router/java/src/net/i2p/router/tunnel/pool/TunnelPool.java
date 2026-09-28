@@ -2876,6 +2876,16 @@ public class TunnelPool {
     private void failWithCount(TunnelInfo cfg, int failures) {
         if (failures <= 1) {return;}
         boolean isDead = cfg.getTunnelFailed();
+        if (isDead && cfg.getTestStatus() == TunnelTestStatus.FAILED) {
+            // Already condemned, already excluded from selection, and the
+            // replacement was already requested the first time this happened.
+            // Repeating it only re-logs, asks for a second replacement the
+            // pool does not need, and lets a retained-but-dead tunnel's
+            // failure count keep climbing. The escalation that matters — a
+            // soft-only failure turning a FAILING tunnel into a FAILED one —
+            // does not match this guard, because the status is not FAILED yet.
+            return;
+        }
         if (isDead) {
             // setTestFailed() derives FAILED from the hard counter, which is
             // the state that already excludes this tunnel from selection.
