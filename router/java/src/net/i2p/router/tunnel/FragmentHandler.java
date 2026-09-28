@@ -1,5 +1,7 @@
 package net.i2p.router.tunnel;
 
+import java.security.DigestException;
+import java.security.MessageDigest;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -101,6 +103,18 @@ class FragmentHandler {
     private final AtomicInteger _completed = new AtomicInteger();
     private final AtomicInteger _failed = new AtomicInteger();
     private final boolean _isInbound;
+    /**
+     * Per-thread I2NP message reader, used for inbound data only.
+     *
+     * I2NPMessageHandler is NOT threadsafe because it caches the message it last
+     * parsed in an instance field that readMessage() and lastRead() share, and
+     * a single FragmentHandler is called by every UDPHandle thread reading tunnel
+     * messages.  One handler per thread keeps that state confined to the thread
+     * that wrote it, and costs an allocation per thread rather than per message.
+     *
+     * @since 0.9.71+
+     */
+    private final ThreadLocal<I2NPMessageHandler> _inboundHandler;
 
     /** Don't wait more than this long to completely receive a fragmented message. */
     static long MAX_DEFRAGMENT_TIME = 45*1000L;
@@ -136,6 +150,7 @@ class FragmentHandler {
         _fragmentedMessages = new ConcurrentHashMap<>(16);
         _receiver = receiver;
         _isInbound = isInbound;
+        _inboundHandler = ThreadLocal.withInitial(() -> new I2NPMessageHandler(_context));
         // all createRateStat in TunnelDispatcher
     }
 
@@ -230,16 +245,34 @@ class FragmentHandler {
      */
     public int getFailedCount() { return _failed.get(); }
 
-    private static final ByteCache _validateCache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
+    /**
+     * The two byte ranges the inbound verifier must hash, in the order they must
+     * be fed to the digest: {payloadOffset, payloadLength, ivOffset, ivLength}.
+     *
+     * The preprocessed buffer holds the IV at the front, but the spec hashes the
+     * payload followed by the IV, so the IV range is returned second even though
+     * it comes first in the buffer.  Hashing IV first would yield a different
+     * digest and fail every message, so the order here is load-bearing.
+     *
+     * @param offset where this message's data starts within the buffer
+     * @param validLength total number of bytes hashed, payload plus the IV
+     * @param paddingEnd one past the final padding byte, i.e. where the payload starts
+     * @return {payloadOffset, payloadLength, ivOffset, ivLength} in hash order
+     * @since 0.9.71+
+     */
+    static int[] hashRanges(int offset, int validLength, int paddingEnd) {
+        return new int[] { offset + paddingEnd, validLength - HopProcessor.IV_LENGTH,
+                           0, HopProcessor.IV_LENGTH };
+    }
 
     /**
      * Verify that the preprocessed data hasn't been modified by checking the
      * H(payload+IV)[0:3] vs preprocessed[16:19], where payload is the data
      * after the padding.  Remember, the preprocessed data is formatted as
-     * { IV + H[0:3] + padding + {instructions, fragment}* }.  This function is
-     * very wasteful of memory usage as it doesn't operate inline (since IV and
-     * payload are mixed up).  Later it may be worthwhile to explore optimizing
-     * this.
+     * { IV + H[0:3] + padding + {instructions, fragment}* }.  The IV and the
+     * payload are therefore not adjacent in the buffer, so the two ranges are
+     * fed to the digest separately, payload first, avoiding a copy into a
+     * contiguous staging buffer.
      */
     private boolean verifyPreprocessed(byte[] preprocessed, int offset, int length) {
         // now we need to verify that the message was received correctly
@@ -257,14 +290,19 @@ class FragmentHandler {
         }
         paddingEnd++; // skip the last
 
-        ByteArray ba = _validateCache.acquire(); // larger than necessary, but always sufficient
-        byte[] preV = ba.getData();
         int validLength = length - offset - paddingEnd + HopProcessor.IV_LENGTH;
-        System.arraycopy(preprocessed, offset + paddingEnd, preV, 0, validLength - HopProcessor.IV_LENGTH);
-        System.arraycopy(preprocessed, 0, preV, validLength - HopProcessor.IV_LENGTH, HopProcessor.IV_LENGTH);
+        int[] ranges = hashRanges(offset, validLength, paddingEnd);
         byte[] v = SimpleByteCache.acquire(Hash.HASH_LENGTH);
-        _context.sha().calculateHash(preV, 0, validLength, v, 0);
-        _validateCache.release(ba);
+        MessageDigest digest = _context.sha().acquire();
+        try {
+            digest.update(preprocessed, ranges[0], ranges[1]);
+            digest.update(preprocessed, ranges[2], ranges[3]);
+            digest.digest(v, 0, Hash.HASH_LENGTH);
+        } catch (DigestException de) {
+            throw new RuntimeException(de);
+        } finally {
+            _context.sha().release(digest);
+        }
 
         boolean eq = DataHelper.eq(v, 0, preprocessed, offset + HopProcessor.IV_LENGTH, 4);
         if (!eq) {
@@ -559,10 +597,7 @@ class FragmentHandler {
 
             I2NPMessage m;
             if (_isInbound) {
-                // Create a new handler per message — I2NPMessageHandler is NOT
-                // threadsafe and multiple UDPHandle threads may call this
-                // concurrently on the same FragmentHandler instance.
-                m = new I2NPMessageHandler(_context).readMessage(data);
+                m = _inboundHandler.get().readMessage(data);
             } else {
                 int utype = data[0] & 0xff;
                 m = new UnknownI2NPMessage(_context, utype);
@@ -603,10 +638,7 @@ class FragmentHandler {
 
             I2NPMessage m;
             if (_isInbound) {
-                // Create a new handler per message — I2NPMessageHandler is NOT
-                // threadsafe and multiple UDPHandle threads may call this
-                // concurrently on the same FragmentHandler instance.
-                I2NPMessageHandler h = new I2NPMessageHandler(_context);
+                I2NPMessageHandler h = _inboundHandler.get();
                 h.readMessage(data, offset, len);
                 m = h.lastRead();
             } else {
