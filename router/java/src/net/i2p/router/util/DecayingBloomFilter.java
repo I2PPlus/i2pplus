@@ -42,6 +42,14 @@ public class DecayingBloomFilter {
     protected final I2PAppContext _context;
     /** The logger */
     protected final Log _log;
+    /** Filter size exponent: each buffer holds 2^m bits. */
+    private final int _m;
+    /**
+     *  Entries seen in the most recently completed decay window, written under
+     *  the write lock. This is the quantity a filter has to be sized against,
+     *  and decay() already computes it, so tracking it is free.
+     */
+    private volatile int _lastWindowCount;
     /** Current bloom filter */
     private BloomSHA1 _current;
     /** Previous bloom filter */
@@ -161,6 +169,7 @@ public class DecayingBloomFilter {
      * @param context the I2P app context
      */
     protected DecayingBloomFilter(int durationMs, int entryBytes, String name, I2PAppContext context) {
+        _m = 0;    // no bit array in a subclass that does not use one
         _context = context;
         _log = context.logManager().getLog(getClass());
         _entryBytes = entryBytes;
@@ -233,14 +242,15 @@ public class DecayingBloomFilter {
         _log = context.logManager().getLog(DecayingBloomFilter.class);
         _entryBytes = entryBytes;
         _name = name;
+        _m = m;
         int k = DEFAULT_K;
         // hold k*ln(2) ~ constant as m grows: (23,11), (26,10), (29,9)
         if (m > DEFAULT_M) {
             k--;
             if (m > 26) {
                 k--;
-                if (m > 29)
-                    throw new IllegalArgumentException("Max m is 29");
+                if (m > MAX_M)
+                    throw new IllegalArgumentException("Max m is " + MAX_M);
             }
         }
         _current = new BloomSHA1(m, k);
@@ -297,6 +307,77 @@ public class DecayingBloomFilter {
      *  @return the current duplicate count
      */
     public long getCurrentDuplicateCount() { return _currentDuplicates.get(); }
+
+    /**
+     *  Filter size exponent. Each of the two buffers holds 2^m bits, so the
+     *  pair occupies 2^(m-2) bytes.
+     *
+     *  @return the exponent this filter was built with, 0 if it keeps no bits
+     *  @since 0.9.71+
+     */
+    public int getM() { return _m; }
+
+    /**
+     *  Bytes of memory this filter occupies, for both buffers.
+     *
+     *  @return 2^(m-2), or 0 for a subclass that keeps no bits
+     *  @since 0.9.71+
+     */
+    public long getMemoryBytes() {
+        return (_m < 2) ? 0L : (1L << (_m - 2));
+    }
+
+    /**
+     *  Entries seen in the most recently completed decay window, which is the
+     *  count this filter has to be sized against. Zero until the first decay.
+     *
+     *  @return entries in the last window, or 0 if none has completed
+     *  @since 0.9.71+
+     */
+    public int getLastWindowCount() { return _lastWindowCount; }
+
+    /**
+     *  Smallest exponent whose false positive rate stays at or under the target
+     *  for the given number of entries, at the optimal k for that exponent.
+     *
+     *  <p>Uses p ~= exp(-(ln2)^2/2 * 2^m / n), which is the standard optimal-k
+     *  Bloom bound. It reproduces the table in {@link #DEFAULT_M}: for
+     *  n=614400 it gives m=24 for a 1.48E-3 target, against 23 measured.
+     *
+     *  @param entries entries expected in a decay window, non-negative
+     *  @param targetFpr wanted false positive rate, in (0,1)
+     *  @return the exponent, never negative
+     *  @since 0.9.71+
+     */
+    public static int mForEntries(int entries, double targetFpr) {
+        if (entries <= 0 || !(targetFpr > 0) || targetFpr >= 1)
+            return 0;
+        // -ln(p) / ((ln2)^2 / 2)
+        double scale = -Math.log(targetFpr) / (Math.log(2) * Math.log(2) / 2.0d);
+        int m = (int) Math.ceil(Math.log(entries * scale) / Math.log(2));
+        return Math.max(0, m);
+    }
+
+    /**
+     *  Largest exponent whose pair of buffers fits in the given byte budget,
+     *  capped at the largest a 32 byte key can be hashed into.
+     *
+     *  @param budgetBytes memory available for the filter, non-negative
+     *  @return the exponent, never negative
+     *  @since 0.9.71+
+     */
+    public static int mForBudget(long budgetBytes) {
+        if (budgetBytes < 4)
+            return 0;
+        int m = 63 - Long.numberOfLeadingZeros(budgetBytes) + 2;
+        return Math.max(0, Math.min(MAX_M, m));
+    }
+
+    /**
+     *  Largest exponent usable for a 32 byte key. Above this the offset
+     *  arithmetic in KeySelector runs past the end of the key.
+     */
+    public static final int MAX_M = 29;
 
     /** Unsynchronized; DecayingHashSet also reads this on the add() path. */
     public int getInsertedCount() {
@@ -477,11 +558,15 @@ public class DecayingBloomFilter {
 
     /** Clear all filters and reset counts */
     public void clear() {
+        // prepare both replacements before taking the write lock, for the same
+        // reason decay() does
+        BloomSHA1.Reset cur = _current.prepareReset();
+        BloomSHA1.Reset prev = _previous.prepareReset();
         if (!getWriteLock())
             return;
         try {
-            _current.clear();
-            _previous.clear();
+            _current.applyReset(cur);
+            _previous.applyReset(prev);
             _currentDuplicates.set(0);
         } finally { releaseWriteLock(); }
     }
@@ -494,11 +579,22 @@ public class DecayingBloomFilter {
 
     /**
      * Decay the filter, moving the current buffer to the previous.
+     *
+     * <p>The buffer that becomes the new current one is reset to a freshly
+     * allocated array rather than zeroed in place. Zeroing in place is a memset
+     * of the whole filter held under the write lock, and every add() takes the
+     * read lock, so it stalls all inserts for its duration: measured at about
+     * 2.6ms at m=29. Allocating the replacement does the same zeroing without
+     * the lock and is in fact slightly cheaper at that size, so the lock is
+     * held only for the pointer swap. See {@link BloomSHA1#prepareReset()} for
+     * the allocation/GC tradeoff this accepts.
      */
     protected void decay() {
         int currentCount = 0;
         long dups = 0;
         double fpr = 0d;
+        // pay the memset before taking the write lock
+        BloomSHA1.Reset reset = _current.prepareReset();
         if (!getWriteLock())
             return;
         try {
@@ -508,8 +604,9 @@ public class DecayingBloomFilter {
                 fpr = _current.falsePositives();
             _previous = _current;
             _current = tmp;
-            _current.clear();
+            _current.applyReset(reset);
             dups = _currentDuplicates.getAndSet(0);
+            _lastWindowCount = currentCount;
         } finally { releaseWriteLock(); }
         if (_log.shouldDebug())
             _log.debug("Decaying the " + _name + " filter after inserting " + currentCount

@@ -55,13 +55,37 @@ public class DecayingHashSet extends DecayingBloomFilter {
      *
      *  @since 0.9.70+
      */
-    static final int MAX_ENTRIES = 128 * 1024;   // package visible for tests
+    static final int DEFAULT_MAX_ENTRIES = 128 * 1024;   // package visible for tests
     /**
-     *  The cap actually in force, {@link #MAX_ENTRIES} unless a test asked for
-     *  a smaller one so it can cross the threshold cheaply.
+     *  Measured retained cost per entry for 16 byte keys: about 72 bytes,
+     *  covering the map node, the {@link ArrayWrapper} and its share of the
+     *  table. Measured 9.01 MB for 131,000 entries.
      *  @since 0.9.71+
      */
-    private final int _maxEntries;
+    public static final long BYTES_PER_ENTRY = 72;
+    /**
+     *  The cap actually in force: {@link #DEFAULT_MAX_ENTRIES} unless a test
+     *  asked for a smaller one so it can cross the threshold cheaply, or the
+     *  router lowered it to hold memory down.
+     *
+     *  <p>A set has no fixed memory cost, so unlike a bloom filter it can only
+     *  be bounded by refusing growth: reaching the cap retires the older buffer
+     *  even if its entries have not expired. That trades duplicate detection
+     *  for a memory ceiling, so it is only the right call where the memory
+     *  ceiling is the harder constraint. Volatile so the setter can change it
+     *  while the router is running.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile int _maxEntries;
+    /**
+     *  True once {@link #setMaxEntries(int)} has been used, meaning a caller
+     *  has declared a memory ceiling to be the harder constraint. The default
+     *  cap stays soft: it is only a backstop, and preferring duplicate
+     *  detection over an early retirement is the right default.
+     *  @since 0.9.71+
+     */
+    private volatile boolean _hardCap;
     /**
      *  Nanotime of the last decay, used to space decays at least one interval
      *  apart. Volatile so the over-cap path can test it without taking the
@@ -98,14 +122,14 @@ public class DecayingHashSet extends DecayingBloomFilter {
      *  @throws IllegalArgumentException if entryBytes is not 1-32
      */
     public DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name) {
-        this(context, durationMs, entryBytes, name, MAX_ENTRIES);
+        this(context, durationMs, entryBytes, name, DEFAULT_MAX_ENTRIES);
     }
 
     /**
      *  As above, with an explicit cap. Only for tests, which need to cross the
-     *  over-cap path without inserting the full {@link #MAX_ENTRIES} entries.
+     *  over-cap path without inserting the full {@link #DEFAULT_MAX_ENTRIES} entries.
      *
-     *  @param maxEntries soft cap before a forced decay is attempted
+     *  @param maxEntries hard cap on entries across both buffers
      *  @since 0.9.71+
      */
     DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name, int maxEntries) {
@@ -134,6 +158,44 @@ public class DecayingHashSet extends DecayingBloomFilter {
     public int getInsertedCount() {
         return _current.size() + _previous.size();
     }
+
+    /**
+     *  The entry cap currently in force, across both buffers.
+     *
+     *  @return the cap
+     *  @since 0.9.71+
+     */
+    public int getMaxEntries() { return _maxEntries; }
+
+    /**
+     *  Change the entry cap while running, for the router's low-memory path.
+     *
+     *  <p>Lowering it takes effect at once: the next add() over the new cap
+     *  triggers a decay, which may retire entries that have not yet expired.
+     *  Raising it does not resurrect anything already retired.
+     *
+     *  @param maxEntries the new cap, must be positive
+     *  @throws IllegalArgumentException if maxEntries is not positive
+     *  @since 0.9.71+
+     */
+    public void setMaxEntries(int maxEntries) {
+        if (maxEntries <= 0)
+            throw new IllegalArgumentException("Bad cap [" + maxEntries + "]");
+        _maxEntries = maxEntries;
+        _hardCap = true;
+        if (_log.shouldDebug())
+            _log.debug("Set " + _name + " maxEntries to " + maxEntries + " (enforced immediately)");
+    }
+
+    /**
+     *  Bytes of memory the current contents occupy, at the measured rate of
+     *  about 72 bytes per entry for 16 byte keys. Reported so a caller sizing
+     *  against a memory budget can see the cost it is actually paying.
+     *
+     *  @return estimated retained bytes
+     *  @since 0.9.71+
+     */
+    public long getEstimatedMemoryBytes() { return (long) getInsertedCount() * BYTES_PER_ENTRY; }
 
     /** Stubbed rate; only used for logging elsewhere. */
     @Override
@@ -220,7 +282,13 @@ public class DecayingHashSet extends DecayingBloomFilter {
         // taken on every add, and taking the exclusive write lock only to
         // decide not to act would serialise all of them. The scheduled decay
         // covers the gap, so a stale read here is harmless.
-        if (System.nanoTime() - _lastDecayNanos < _durationMs * 1000000L) {
+        //
+        // An explicitly lowered cap is enforced straight away, because a cap
+        // that waits for the next scheduled decay provides no bound for up to a
+        // whole interval, which is exactly the window it exists to close. The
+        // default cap is not, so the ordinary path still never retires an
+        // entry that has not expired.
+        if (!_hardCap && System.nanoTime() - _lastDecayNanos < _durationMs * 1000000L) {
             maybeWarnOverCap();
             return;
         }
@@ -230,7 +298,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
         try {
             if (getInsertedCount() < _maxEntries)
                 return;
-            if (System.nanoTime() - _lastDecayNanos < _durationMs * 1000000L)
+            if (!_hardCap && System.nanoTime() - _lastDecayNanos < _durationMs * 1000000L)
                 return;
             counters = swapBuffers();
         } finally {
