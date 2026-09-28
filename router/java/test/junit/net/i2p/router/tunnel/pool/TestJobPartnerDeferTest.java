@@ -53,12 +53,16 @@ public class TestJobPartnerDeferTest {
         assertFalse(TestJob.shouldDeferForPartner(p, false));
     }
 
-    /** No partner at all is the missing-partner path's problem, not this
-     *  rule's: it has its own deferral with its own budget. */
+    /** With no partner at all the reply leg never existed, so the round is no
+     *  evidence about the tunnel under test and must defer.  This used to
+     *  charge the tunnel, which condemned healthy tunnels whenever the paired
+     *  pool was momentarily empty.  The defer is still bounded by
+     *  MAX_PARTNER_DEFERRALS in testFailed(), so a partner that never returns
+     *  cannot shield a genuinely dead tunnel. */
     @Test
-    public void missingPartnerDoesNotDeferHere() {
-        assertFalse(TestJob.shouldDeferForPartner(null, false));
-        assertFalse(TestJob.shouldDeferForPartner(null, true));
+    public void missingPartnerDefers() {
+        assertTrue(TestJob.shouldDeferForPartner(null, false));
+        assertTrue(TestJob.shouldDeferForPartner(null, true));
     }
 
     /** A 0-hop partner cannot carry the reply: the paired pool is degraded and

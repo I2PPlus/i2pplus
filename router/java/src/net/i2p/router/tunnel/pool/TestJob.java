@@ -73,6 +73,21 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     private int _partnerDeferrals;
+    /**
+     * True once this failure has already been re-tested against a different
+     * partner without charging the tunnel. Set on the first ambiguous failure
+     * so the following round is a confirmation; cleared on any success and
+     * once the failure is finally charged, so each charge needs a fresh
+     * confirmation.
+     * @since 0.9.71+
+     */
+    private boolean _confirmPending;
+    /**
+     * The partner whose failure triggered the current confirmation. The
+     * confirming round must not reuse it, or the retest proves nothing.
+     * @since 0.9.71+
+     */
+    private TunnelInfo _excludedPartner;
     private SessionTag _encryptTag;
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
@@ -621,8 +636,24 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     static String directionStat(boolean inbound, boolean success) {
-        return "tunnel.test" + (inbound ? "Inbound" : "Outbound") + (success ? "Success" : "Failed");
+        return directionStat(inbound, success ? "Success" : "Failed");
     }
+
+    /**
+     * Name of a per-direction stat for an outcome that is not simply
+     * pass/fail — a confirmation result, or condemnation by the pool.  Shares
+     * the {@code tunnel.test{Inbound,Outbound}<event>} scheme so every
+     * per-direction test stat is spelled from one place.
+     *
+     * @param inbound true for an inbound tunnel, false for outbound
+     * @param event the outcome, e.g. ConfirmPassed, ConfirmFailed, Condemned
+     * @return stat name, e.g. {@code tunnel.testOutboundCondemned}
+     * @since 0.9.71+
+     */
+    static String directionStat(boolean inbound, String event) {
+        return "tunnel.test" + (inbound ? "Inbound" : "Outbound") + event;
+    }
+
 
     /**
      * Register the four per-direction test outcome stats written by
@@ -645,6 +676,18 @@ public class TestJob extends JobImpl {
                 "Inbound tunnel tests failed (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, false),
                 "Outbound tunnel tests failed (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "ConfirmPassed"),
+                "Confirmations passed: 1st failure was the partner's (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "ConfirmPassed"),
+                "Confirmations passed: 1st failure was the partner's (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "ConfirmFailed"),
+                "Confirmations failed: tunnel charged (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "ConfirmFailed"),
+                "Confirmations failed: tunnel charged (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "Condemned"),
+                "Tunnels marked FAILED by the test cycle (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "Condemned"),
+                "Tunnels marked FAILED by the test cycle (count)", "Tunnels", periods);
     }
 
     /**
@@ -664,6 +707,60 @@ public class TestJob extends JobImpl {
      */
     static void recordDirectionStat(StatManager stats, boolean inbound, boolean success) {
         stats.addRateData(directionStat(inbound, success), 1);
+    }
+
+
+    /**
+     *  Arm a confirming round: mark the failure as unconfirmed, remember the
+     *  partner that must not be reused, and schedule the round ASAP.  The
+     *  tunnel is not charged for this failure; only a confirming round that
+     *  also fails charges it.
+     *
+     * @param partner the partner whose failure triggered this, may be null
+     * @return true if the confirming round was scheduled, false if it could
+     *         not be and the caller should charge the tunnel as before
+     *  @since 0.9.71+
+     */
+    private boolean beginConfirmationRound(TunnelInfo partner) {
+        _confirmPending = true;
+        _excludedPartner = partner;
+        if (scheduleRetest(true)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Tunnel Test failed -> confirming " + _cfg +
+                           " against a different partner before charging");
+            }
+            return true;
+        }
+        // Could not re-test: fall back to charging, exactly as before.
+        _confirmPending = false;
+        _excludedPartner = null;
+        return false;
+    }
+
+    /**
+     *  The partner the current round was actually routed through.
+     *
+     * @return the reply tunnel for an inbound test, the outbound for an
+     *         outbound test; null when none was selected
+     *  @since 0.9.71+
+     */
+    private TunnelInfo currentPartner() {
+        return _cfg.isInbound() ? _outTunnel : _replyTunnel;
+    }
+
+    /**
+     *  Whether a candidate partner is usable for this round, i.e. present and
+     *  not the one a confirming round is meant to avoid.  A confirming round
+     *  that reused the failed partner would prove nothing, so it must prefer a
+     *  different one; if none exists the round still proceeds with it, which
+     *  simply leaves the tunnel to be charged as it was before.
+     *
+     * @param t candidate partner, may be null
+     * @return true when the candidate may be used
+     *  @since 0.9.71+
+     */
+    private boolean usablePartner(TunnelInfo t) {
+        return t != null && t != _excludedPartner;
     }
 
     /**
@@ -2577,6 +2674,9 @@ public class TestJob extends JobImpl {
                 _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
             } else {
                 _outTunnel = ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
+                if (!usablePartner(_outTunnel)) {
+                    _outTunnel = null;
+                }
                 if (_outTunnel == null) {
                     // No GOOD outbound tunnel — use any non-expired tunnel from
                     // the paired outbound pool.  Untested tunnels are functional
@@ -2586,7 +2686,7 @@ public class TestJob extends JobImpl {
                     TunnelPool paired = _pool.getPairedPool();
                     if (paired != null) {
                         for (TunnelInfo t : paired.listTunnels()) {
-                            if (t.getExpiration() > now && t.getLength() > 1) {
+                            if (t.getExpiration() > now && t.getLength() > 1 && usablePartner(t)) {
                                 _outTunnel = t;
                                 break;
                             }
@@ -2634,6 +2734,9 @@ public class TestJob extends JobImpl {
                 _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
             } else {
                 _replyTunnel = ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
+                if (!usablePartner(_replyTunnel)) {
+                    _replyTunnel = null;
+                }
                 if (_replyTunnel == null) {
                     // No GOOD inbound tunnel — use any non-expired tunnel from
                     // the paired inbound pool.  Same rationale as above: untested
@@ -2641,7 +2744,7 @@ public class TestJob extends JobImpl {
                     TunnelPool paired = _pool.getPairedPool();
                     if (paired != null) {
                         for (TunnelInfo t : paired.listTunnels()) {
-                            if (t.getExpiration() > now && t.getLength() > 1) {
+                            if (t.getExpiration() > now && t.getLength() > 1 && usablePartner(t)) {
                                 _replyTunnel = t;
                                 break;
                             }
@@ -2664,6 +2767,14 @@ public class TestJob extends JobImpl {
                     return;
                 }
             }
+        }
+
+        // A confirming round that could not find a different partner proves
+        // nothing, so drop the confirmation and let this round be charged
+        // normally rather than crediting or blaming it on the partner.
+        if (_confirmPending && currentPartner() == _excludedPartner) {
+            _confirmPending = false;
+            _excludedPartner = null;
         }
 
         if (_replyTunnel == null || _outTunnel == null) {
@@ -2863,6 +2974,14 @@ public class TestJob extends JobImpl {
             }
         }
 
+        if (_confirmPending) {
+            // The confirming round against a different partner came back, so the
+            // earlier failure was the partner's doing, not this tunnel's. Credit
+            // the partner reset and leave the tunnel uncharged for that round.
+            getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "ConfirmPassed"), 1);
+            _confirmPending = false;
+            _excludedPartner = null;
+        }
         _cfg.testJobSuccessful(ms);
         // Share success credit with the paired tunnels — mirrors mainline
         // behavior.  Both inbound and outbound tunnels get their failure
@@ -3119,14 +3238,25 @@ public class TestJob extends JobImpl {
      *  recovers, and data-phase send failures still report independently of
      *  any test.
      *
-     *  @param partner the tunnel the round was routed through, may be null
-     *  @param partnerFallback true when the partner came from the exploratory
+     *  <p>A null partner defers: with no reply leg at all there was no reply
+     *  for any reason, so the round is no evidence about the tunnel.
+     *
+     * @param partner the tunnel the round was routed through, may be null
+     * @param partnerFallback true when the partner came from the exploratory
      *         pool because the paired pool could not supply one
-     *  @return true to defer the round rather than count the failure
-     *  @since 0.9.71+
+     * @return true to defer the round rather than count the failure
+     * @since 0.9.71+
      */
     static boolean shouldDeferForPartner(TunnelInfo partner, boolean partnerFallback) {
-        if (partner == null) {return false;}
+        // A missing partner is the strongest possible evidence that the round
+        // says nothing about the tunnel under test: the reply leg never
+        // existed, so there was no reply for any reason. Charging it here
+        // condemned healthy tunnels whenever the paired pool was momentarily
+        // empty — and because the partner leg is a stub, a missing partner is
+        // strictly worse evidence than a broken one. Defer, and let the bounded
+        // MAX_PARTNER_DEFERRALS budget eventually charge the tunnel if the
+        // partner never comes back, so this cannot livelock.
+        if (partner == null) {return true;}
         if (partner.getLength() <= 1) {return true;}
         if (partner.getTunnelFailed()) {return true;}
         if (partner.getTestStatus().isUnusable()) {return true;}
@@ -3172,6 +3302,30 @@ public class TestJob extends JobImpl {
                 return;
             }
         }
+
+        // Confirm-before-charge.  A round has two independent failure sources:
+        // the tunnel under test, and the partner leg the reply came back (or
+        // failed to come back) through.  The partner checks above only catch a
+        // partner that is *known* bad; a partner that is nominally GOOD but
+        // whose reply was lost, slow, or dropped still gets charged to the
+        // tunnel under test, and the error is one-directional — an inbound test
+        // gets an independently selected partner for its outbound leg, while an
+        // outbound test uses the tunnel under test itself.  So re-run the round
+        // once against a *different* partner before charging anything: if that
+        // passes, the first failure was the partner's, and the tunnel is not
+        // penalised for it.  Bounded by a single confirmation per charge, and
+        // skipped entirely when no different partner can be obtained, so this
+        // can neither livelock nor mask a genuinely dead tunnel.
+        if (!_confirmPending) {
+            if (beginConfirmationRound(partner)) {
+                return;
+            }
+        } else {
+            // The confirming round failed too: the tunnel itself is at fault.
+            getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "ConfirmFailed"), 1);
+        }
+        _confirmPending = false;
+        _excludedPartner = null;
 
         // Record the failed round so getSuccessRate() reflects reality and
         // getDelay() retests a failing tunnel sooner rather than slower.
@@ -3346,6 +3500,7 @@ public class TestJob extends JobImpl {
             int currentFailures = _cfg.getTunnelFailures();
             int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
             if (currentFailures > maxFailures) {
+                getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "Condemned"), 1);
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> Marking FAILED " + _cfg +
                               (maxFailures > 3 ? " (degraded mode)" : ""));
