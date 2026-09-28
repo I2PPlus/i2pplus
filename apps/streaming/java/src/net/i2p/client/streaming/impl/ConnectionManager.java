@@ -297,12 +297,14 @@ class ConnectionManager {
     private final ConcurrentHashMap<Hash, long[]> _recentSyns = new ConcurrentHashMap<>();
 
     /**
-     *  Each dest's most recent SYN-burst strike: the start of the burst window
-     *  that crossed the threshold plus the time the strike was recorded.
+     *  Each dest's most recent SYN-burst strikes: the start of the burst window
+     *  that crossed the threshold, the time that strike was recorded, and how
+     *  many distinct windows have tripped inside the current strike window.
      *  Forgiveness ages from the strike time — window start can precede the
      *  strike by up to a whole burst window, and aging from it would forgive
-     *  a second window's trip early. A trip from a DIFFERENT burst window
-     *  within {@link #STRIKE_WINDOW_MS} of the strike autobans; repeat trips
+     *  a later window's trip early. A trip from a DIFFERENT burst window
+     *  within {@link #STRIKE_WINDOW_MS} of the last strike adds one, and
+     *  reaching {@link #PROP_TEMP_BAN_STRIKES} of them autobans; repeat trips
      *  inside the window that already struck are ignored, so a single unlucky
      *  page-load burst never bans no matter how far over threshold it goes.
      *  After the strike window the entry is swept by BanExpiry.
@@ -317,6 +319,13 @@ class ConnectionManager {
      */
     private volatile long _synRateMs = DEFAULT_TEMP_BAN_RATE_MS;
     private volatile int _synBurst = DEFAULT_TEMP_BAN_SYN_BURST;
+    /**
+     *  Cached strikes-to-ban count, refreshed by the BanExpiry sweeper. 0 or 1
+     *  is raised to 2 at the decision point, so no setting can let a single
+     *  burst window ban on its own.
+     *  @since 0.9.71+
+     */
+    private volatile int _tempBanStrikes = DEFAULT_TEMP_BAN_STRIKES;
 
     /**
      *  Cached autoban duration (ms) and refusal threshold, refreshed by the
@@ -398,9 +407,30 @@ class ConnectionManager {
     private static final int DEFAULT_TEMP_BAN_SYN_BURST = 40;
 
     /**
-     *  Strike window for the two-strike SYN-burst gate: a second trip within
-     *  this many ms of the first autobans. A dest that trips once and then
-     *  quiesces for the window is forgiven (single unlucky page-load burst).
+     *  Autoban property: how many DISTINCT burst windows inside
+     *  {@link #STRIKE_WINDOW_MS} a dest must trip before the SYN-burst gate
+     *  autobans it. Default 3.
+     *
+     *  <p>A single burst window is not abuse: a browser page load, a client with
+     *  a high concurrent-stream ceiling, or a peer resuming after a pause can all
+     *  legitimately cross the sub-second threshold. Two was low enough that a
+     *  merely busy peer could lose five minutes of connectivity, so the default
+     *  demands sustained tripping of the gate. Raise it further on a
+     *  high-legitimate-traffic router, or set {@link #PROP_AUTOBAN} 0 to turn
+     *  off autoban entirely (which also disables the refusal-based ban).
+     *
+     *  <p>Values below 2 are raised to 2: a single window must never ban alone.
+     *  Tunable via i2p.streaming.tempBanStrikes.
+     *  @since 0.9.71+
+     */
+    public static final String PROP_TEMP_BAN_STRIKES = "i2p.streaming.tempBanStrikes";
+    private static final int DEFAULT_TEMP_BAN_STRIKES = 3;
+
+    /**
+     *  Strike window for the multi-strike SYN-burst gate: strikes more than
+     *  this many ms apart are forgiven, so the required count has to be met
+     *  inside one rolling window. A dest that trips once and then quiesces for
+     *  the window is forgiven (single unlucky page-load burst).
      *  @since 0.9.71+
      */
     static final long STRIKE_WINDOW_MS = 60 * 1000;
@@ -869,66 +899,109 @@ class ConnectionManager {
         IGNORE,
         /** First trip, or a prior strike that aged out: record a strike, do not ban. */
         RECORD,
-        /** Second distinct burst window inside the strike window: autoban. */
+        /** Nth distinct burst window inside the strike window: autoban. */
         BAN
     }
 
     /**
-     *  A recorded SYN-burst strike. Forgiveness ages from the strike TIME, not
-     *  from the burst window that caused it: a burst window is only milliseconds
-     *  long, so keying forgiveness to the window start (the pre-0.9.71+ value)
-     *  forgave a strike almost immediately and the two-strike autoban never fired.
+     *  A recorded SYN-burst strike, and how many distinct burst windows this dest
+     *  has tripped inside the current strike window. Forgiveness ages from the
+     *  strike TIME, not from the burst window that caused it: a burst window is
+     *  only milliseconds long, so keying forgiveness to the window start (the
+     *  pre-0.9.71+ value) forgave a strike almost immediately and the
+     *  multi-strike autoban never fired.
+     *
+     *  <p>{@link #strikeTime} is the time of the MOST RECENT strike, so the
+     *  window is rolling: a dest must produce every one of its strikes inside
+     *  {@link #STRIKE_WINDOW_MS} of the previous one to reach the ban count.
+     *  A dest that trips once and then stays quiet for the window is forgiven.
      *
      *  @since 0.9.71+
      */
     static final class SynStrike {
-        /** Window start of the burst that recorded this strike (identity for same-window IGNORE). */
+        /** Window start of the most recent burst (identity for same-window IGNORE). */
         final long windowStart;
-        /** Clock time at which this strike was recorded (forgiveness ages from here). */
+        /** Clock time of the most recent strike (forgiveness ages from here). */
         final long strikeTime;
+        /** Distinct burst windows recorded in this run, including this one. */
+        final int count;
 
         /**
+         *  A single strike, i.e. the first trip from this dest.
+         *
          * @param windowStart window start of the burst that recorded the strike
          * @param strikeTime clock time at which the strike was recorded
          */
         SynStrike(long windowStart, long strikeTime) {
+            this(windowStart, strikeTime, 1);
+        }
+
+        /**
+         * @param windowStart window start of the burst that recorded the strike
+         * @param strikeTime clock time at which the strike was recorded
+         * @param count distinct burst windows recorded so far, at least 1
+         */
+        SynStrike(long windowStart, long strikeTime, int count) {
             this.windowStart = windowStart;
             this.strikeTime = strikeTime;
+            this.count = count;
         }
     }
 
     /**
-     *  Pure decision for the two-strike SYN-burst gate. Two strikes means two
-     *  DISTINCT burst windows: repeat trips inside the window that recorded the
-     *  first strike are IGNOREd, so a single unlucky page-load burst can never
-     *  cost a 5-minute outage however far over threshold it goes. A trip from a
-     *  different window within {@link #STRIKE_WINDOW_MS} of the recorded strike
-     *  is BAN (demonstrable repeat abuse); after the window the strike is
-     *  forgiven and a new one RECORDs instead.
+     *  Whether {@code last} has aged out of the forgiveness window (or was
+     *  stamped in the future by a clock adjustment, which is treated the same
+     *  way so a skewed clock can never ban).
      *
-     *  <p>Forgiveness ages from the strike time, so the clock starts when the
-     *  strike was recorded, not when the (millisecond-scale) burst window began.
+     *  <p>Single source of truth: the decision function uses it to choose BAN
+     *  vs RECORD, and the recorder uses it to decide whether a RECORD extends
+     *  the running strike count or restarts it at 1. Sharing it keeps those two
+     *  from drifting, which would otherwise let a dest accumulate strikes across
+     *  unrelated hours of traffic.
      *
-     *  @param last recorded strike for this dest, or null if this dest has none
-     *  @param windowStart window start of the burst window that just tripped
-     *  @param now current clock time
-     *  @param strikeWindowMs strike forgiveness window (pass {@link #STRIKE_WINDOW_MS})
-     *  @return the action to take for this trip
      *  @since 0.9.71+
      */
-    static SynBurstAction synBurstStrikeAction(SynStrike last, long windowStart, long now, long strikeWindowMs) {
+    private static boolean strikeForgiven(SynStrike last, long now, long strikeWindowMs) {
+        long age = now - last.strikeTime;
+        return age < 0 || age >= strikeWindowMs;
+    }
+
+    /**
+     *  Pure decision for the multi-strike SYN-burst gate. Strikes mean DISTINCT
+     *  burst windows: repeat trips inside the window that recorded the most
+     *  recent strike are IGNOREd, so a single unlucky page-load burst can never
+     *  cost a 5-minute outage however far over threshold it goes. Only when a
+     *  dest has tripped {@code requiredStrikes} distinct windows inside
+     *  {@link #STRIKE_WINDOW_MS} of each other is this trip a BAN, i.e. the
+     *  demonstrable pattern of sustained abuse. After the window the count is
+     *  forgiven and a new one RECORDs instead.
+     *
+     *  <p>Forgiveness ages from the most recent strike time, so the window is
+     *  rolling and the clock starts when the strike was recorded, not when the
+     *  (millisecond-scale) burst window began.
+     *
+     * @param last recorded strike for this dest, or null if this dest has none
+     * @param windowStart window start of the burst window that just tripped
+     * @param now current clock time
+     * @param strikeWindowMs strike forgiveness window (pass {@link #STRIKE_WINDOW_MS})
+     * @param requiredStrikes distinct burst windows needed to ban; values below
+     *        2 are raised to 2 so a single window can never ban on its own
+     * @return the action to take for this trip
+     * @since 0.9.71+
+     */
+    static SynBurstAction synBurstStrikeAction(SynStrike last, long windowStart, long now,
+                                                long strikeWindowMs, int requiredStrikes) {
         if (strikeWindowMs <= 0)
             return SynBurstAction.IGNORE;
+        int needed = (requiredStrikes < 2) ? 2 : requiredStrikes;
         if (last == null)
             return SynBurstAction.RECORD;
         if (last.windowStart == windowStart)
-            // same burst window: the first strike already covers this episode
+            // same burst window: the recorded strike already covers this episode
             return SynBurstAction.IGNORE;
-        long age = now - last.strikeTime;
-        if (age < 0 || age >= strikeWindowMs)
-            // forgiven (or clock skew): start a fresh strike
+        if (strikeForgiven(last, now, strikeWindowMs))
             return SynBurstAction.RECORD;
-        return SynBurstAction.BAN;
+        return (last.count + 1 >= needed) ? SynBurstAction.BAN : SynBurstAction.RECORD;
     }
 
     /**
@@ -939,21 +1012,29 @@ class ConnectionManager {
      *  burst as two strikes) nor lose it to a racing put (letting a sustained
      *  flood escape the ban).
      *
-     *  @param strikes per-dest strike map
-     *  @param h remote dest hash, non-null
-     *  @param windowStart window start of the burst window that just tripped
-     *  @param now current clock time
-     *  @param strikeWindowMs strike forgiveness window (pass {@link #STRIKE_WINDOW_MS})
-     *  @return the action taken
-     *  @since 0.9.71+
+     * @param strikes per-dest strike map
+     * @param h remote dest hash, non-null
+     * @param windowStart window start of the burst window that just tripped
+     * @param now current clock time
+     * @param strikeWindowMs strike forgiveness window (pass {@link #STRIKE_WINDOW_MS})
+     * @param requiredStrikes distinct burst windows needed to autoban
+     * @return the action taken
+     * @since 0.9.71+
      */
     static SynBurstAction applySynBurstStrike(ConcurrentHashMap<Hash, SynStrike> strikes, Hash h,
-                                              long windowStart, long now, long strikeWindowMs) {
+                                              long windowStart, long now, long strikeWindowMs,
+                                              int requiredStrikes) {
         final SynBurstAction[] taken = { SynBurstAction.IGNORE };
         strikes.compute(h, (k, prev) -> {
-            SynBurstAction action = synBurstStrikeAction(prev, windowStart, now, strikeWindowMs);
+            SynBurstAction action = synBurstStrikeAction(prev, windowStart, now, strikeWindowMs, requiredStrikes);
             taken[0] = action;
-            return action == SynBurstAction.RECORD ? new SynStrike(windowStart, now) : prev;
+            if (action != SynBurstAction.RECORD)
+                return prev;
+            // a forgiven strike restarts the count at 1; a live one extends it,
+            // so the running total only ever spans one rolling window
+            int count = (prev != null && !strikeForgiven(prev, now, strikeWindowMs))
+                        ? prev.count + 1 : 1;
+            return new SynStrike(windowStart, now, count);
         });
         return taken[0];
     }
@@ -982,13 +1063,18 @@ class ConnectionManager {
     private boolean noteSynBurstStrike(Hash h, long windowStart, long now) {
         if (!_autobanEnabled)
             return false;
-        SynBurstAction action = applySynBurstStrike(_synBurstStrikes, h, windowStart, now, STRIKE_WINDOW_MS);
+        // mirror the clamp in synBurstStrikeAction so the log reports the count
+        // actually in force
+        int needed = Math.max(2, _tempBanStrikes);
+        SynBurstAction action = applySynBurstStrike(_synBurstStrikes, h, windowStart, now,
+                                                    STRIKE_WINDOW_MS, needed);
         if (action == SynBurstAction.BAN)
             return true;
         if (action == SynBurstAction.RECORD && _log.shouldWarn()) {
-            _log.warn("SYN burst strike for " + h.toBase32().substring(0, 6) +
-                      " (>" + _synBurst + " SYNs/" + _synRateMs + "ms); " +
-                      "a second burst window within " + (STRIKE_WINDOW_MS / 1000) + "s autobans");
+            _log.warn("SYN burst strike for " + h.toBase32().substring(0, 6)
+                      + " (>" + _synBurst + " SYNs/" + _synRateMs + "ms); "
+                      + needed + " burst windows within " + (STRIKE_WINDOW_MS / 1000)
+                      + "s autobans");
         }
         return false;
     }
@@ -1006,11 +1092,11 @@ class ConnectionManager {
      *
      *  <p>This routes the retransmit through the <em>same</em> per-destination
      *  sub-second burst window as fresh SYNs, so a dest that crosses the burst
-     *  threshold in two DISTINCT windows within the strike window — the
-     *  demonstrable pattern of repeat abuse — is autobanned and dropped. A single
-     *  burst only strikes, and with autoban disabled ({@link #PROP_AUTOBAN} 0)
-     *  nothing is recorded or dropped here. Once banned, subsequent calls return
-     *  {@code true} (drop) immediately.
+     *  threshold in {@link #PROP_TEMP_BAN_STRIKES} DISTINCT windows within the
+     *  strike window — the demonstrable pattern of sustained abuse — is autobanned
+     *  and dropped. A single burst only strikes, and with autoban disabled
+     *  ({@link #PROP_AUTOBAN} 0) nothing is recorded or dropped here. Once banned,
+     *  subsequent calls return {@code true} (drop) immediately.
      *
      *  @param h remote dest hash, non-null
      *  @param now current clock time
@@ -1365,12 +1451,12 @@ class ConnectionManager {
                         synPacket.getOptionalFrom().toBase32().substring(0, 6);
 
         // Sub-second SYN burst gate: a dest that blasts > tempBanSynBurst SYNs
-        // within tempBanSynRate-ms records a strike; a SECOND distinct burst
-        // window within the strike window autobans and drops this SYN. The gate
-        // runs before the stream budget and refusal counters are consulted, so
-        // only the second distinct window is stopped there — the FIRST window
-        // deliberately passes even far over threshold (grace: one unlucky
-        // page-load burst is never punished with a 5-minute outage), with the
+        // within tempBanSynRate-ms records a strike, and tempBanStrikes DISTINCT
+        // burst windows inside the strike window autoban and drop this SYN. The
+        // gate runs before the stream budget and refusal counters are consulted,
+        // so only that final window is stopped there — every earlier window
+        // deliberately passes even far over threshold (grace: a busy but
+        // legitimate peer is never punished with a 5-minute outage), with the
         // per-dest stream budget still capping what its connections may hold.
         // The autoban policy is read once here and snapshotted for the whole
         // evaluation of this SYN, so one SYN can never be gated under one
@@ -1382,7 +1468,7 @@ class ConnectionManager {
                 long windowStart = checkSynBurst(fromHash, now, autoban);
                 if (windowStart >= 0 && noteSynBurstStrike(fromHash, windowStart, now) &&
                     banPeer(fromHash, "exceeded max " + _synBurst + " SYNs/" + _synRateMs + "ms", now)) {
-                    // second demonstrated burst: dump the SYN like the temp-banned drop below
+                    // strike count reached: dump the SYN like the temp-banned drop below
                     return null;
                 }
             }
@@ -2956,6 +3042,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             _tempBanRefusals = _context.getProperty(PROP_TEMP_BAN_REFUSALS, DEFAULT_TEMP_BAN_REFUSALS);
             _synRateMs = _context.getProperty(PROP_TEMP_BAN_RATE_MS, DEFAULT_TEMP_BAN_RATE_MS);
             _synBurst = _context.getProperty(PROP_TEMP_BAN_SYN_BURST, DEFAULT_TEMP_BAN_SYN_BURST);
+            _tempBanStrikes = _context.getProperty(PROP_TEMP_BAN_STRIKES, DEFAULT_TEMP_BAN_STRIKES);
             final boolean autoban = _context.getProperty(PROP_AUTOBAN, DEFAULT_AUTOBAN) != 0;
             if (_autobanEnabled && !autoban) {
                 // Enforcement just turned off: strikes recorded under the old
