@@ -855,50 +855,104 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     * Calculate adaptive timeout based on tunnel characteristics and network conditions
+     *  Safety ceiling for any computed adaptive build timeout, regardless of
+     *  tunnel length, direction, system load, or measured RTT.
+     *
+     *  @since 0.9.71+
+     */
+    private static final long MAX_ADAPTIVE_TIMEOUT_MS = 45 * 1000L;
+    /**  ms added per extra hop beyond the 3-hop baseline  @since 0.9.71+ */
+    private static final long LENGTH_STEP_MS = 5 * 1000L;
+    /**  hop count at or below which no length adjustment applies  @since 0.9.71+ */
+    private static final int LENGTH_BASELINE = 3;
+    /**  cpu load above which the +2s load term applies  @since 0.9.71+ */
+    private static final int CPU_LOAD_HIGH = 80;
+    /**  cpu load above which the +3s load term applies  @since 0.9.71+ */
+    private static final int CPU_LOAD_CRITICAL = 90;
+    /**  ms added to the base timeout for the longer outbound reply path  @since 0.9.71+ */
+    private static final long OUTBOUND_EXTRA_MS = 8 * 1000L;
+
+    /**
+     * Calculate adaptive timeout based on tunnel characteristics and network conditions.
+     *
+     * Convenience wrapper for single-config callers; scans that evaluate many
+     * configs in one pass should fetch the two invariant inputs once and call
+     * {@link #calculateAdaptiveTimeout(PooledTunnelCreatorConfig, int, long)}.
      *
      * @param cfg the tunnel configuration
      * @return adaptive timeout in milliseconds
+     * @since 0.9.71+
      */
     private long calculateAdaptiveTimeout(PooledTunnelCreatorConfig cfg) {
-        long baseTimeout = _adaptiveTimeout;
+        return calculateAdaptiveTimeout(cfg, SystemVersion.getCPULoadAvg(), getRttTimeoutFloor());
+    }
 
-        // Adjust timeout based on tunnel length
-        int length = cfg.getLength();
-        if (length > 3) {
-            baseTimeout += (long) (length - 3) * 5*1000L;
+    /**
+     * Cached-variant of {@link #calculateAdaptiveTimeout(PooledTunnelCreatorConfig)}.
+     *
+     * The CPU load and RTT floor do not vary per config, only the tunnel length
+     * and direction do, so a scan over many in-flight builds fetches them once
+     * and passes them in.  {@link SystemVersion#getCPULoadAvg()} is already
+     * cached for one second and {@link #getRttTimeoutFloor()} reads a rate
+     * statistic, so both are stable across a single scan.
+     *
+     * @param cfg the tunnel configuration
+     * @param cpuLoad cached value of {@link SystemVersion#getCPULoadAvg()}
+     * @param rttFloor cached value of {@link #getRttTimeoutFloor()}
+     * @return adaptive timeout in milliseconds
+     * @since 0.9.71+
+     */
+    private long calculateAdaptiveTimeout(PooledTunnelCreatorConfig cfg, int cpuLoad, long rttFloor) {
+        return computeAdaptiveTimeout(_adaptiveTimeout, cfg.getLength(), cfg.isInbound(), cpuLoad, rttFloor);
+    }
+
+    /**
+     * Pure arithmetic for the adaptive build timeout.
+     *
+     * Extracted from {@link #calculateAdaptiveTimeout(PooledTunnelCreatorConfig, int, long)}
+     * so the term ordering can be pinned by unit tests without a router context.
+     * The terms are applied in a fixed order — length, then system load, then
+     * the outbound reply-path surcharge, then the RTT floor as a lower bound —
+     * so that result is bit-identical to the original inline implementation.
+     *
+     * <p>Outbound builds get a longer budget because the build reply returns
+     * through an IB exploratory tunnel; when those are congested OB builds time
+     * out at roughly twice the rate of IB builds, and the SSU2 handshake alone
+     * consumes ~8.5s.  The RTT floor feedforwards from measured network
+     * latency (udp.sendConfirmTime) so a latency spike cannot starve build
+     * timeouts, but it is bounded by the safety ceiling like everything else.
+     *
+     * @param baseTimeout the adaptive baseline timeout in milliseconds
+     * @param length tunnel length in hops
+     * @param isInbound true for an inbound (IB) build, false for outbound
+     * @param cpuLoad CPU load average percentage
+     * @param rttFloor timeout floor derived from measured RTT, or 0 for none
+     * @return the adaptive timeout in milliseconds, never above 45s
+     * @since 0.9.71+
+     */
+    static long computeAdaptiveTimeout(long baseTimeout, int length, boolean isInbound,
+                                       int cpuLoad, long rttFloor) {
+        long result = baseTimeout;
+
+        if (length > LENGTH_BASELINE) {
+            result += (long) (length - LENGTH_BASELINE) * LENGTH_STEP_MS;
         }
 
-        // Adjust based on system load
-        int cpuLoad = SystemVersion.getCPULoadAvg();
-        if (cpuLoad > 90) {
-            baseTimeout += 3*1000;
-        } else if (cpuLoad > 80) {
-            baseTimeout += 2*1000;
+        if (cpuLoad > CPU_LOAD_CRITICAL) {
+            result += 3 * 1000L;
+        } else if (cpuLoad > CPU_LOAD_HIGH) {
+            result += 2 * 1000L;
         }
 
-        // Outbound builds have a longer reply path: the build reply comes back
-        // through an IB exploratory tunnel.  If exploratory tunnels are congested
-        // (2 tunnels handling 18+ concurrent build replies), OB builds timeout
-        // at 2x the rate of IB builds (54% vs 80% success).  The SSU2 handshake
-        // alone takes ~8.5s, so +5s was insufficient when the IB reply path is
-        // also under load.  Raised to 8s to cover handshake + moderate queue.
-        if (!cfg.isInbound()) {
-            baseTimeout += 8 * 1000L;
+        if (!isInbound) {
+            result += OUTBOUND_EXTRA_MS;
         }
 
-        // Feedforward from measured network RTT: when the baseline round-trip
-        // time (udp.sendConfirmTime) is high, builds that would otherwise succeed
-        // are timed out prematurely.  Ensure the timeout covers the recent RTT
-        // plus a margin so a latency spike does not cause spurious build timeouts
-        // (which starves tunnel building and collapses the participating count).
-        long rttFloor = getRttTimeoutFloor();
-        if (rttFloor > baseTimeout) {
-            baseTimeout = rttFloor;
+        if (rttFloor > result) {
+            result = rttFloor;
         }
 
-        // Cap at 45s safety ceiling
-        return Math.min(baseTimeout, 45*1000L);
+        return Math.min(result, MAX_ADAPTIVE_TIMEOUT_MS);
     }
 
     /**
@@ -1021,9 +1075,12 @@ public class BuildExecutor implements Runnable {
          * directly would make timeouts take 20-320s.
          * Use creation time + adaptiveTimeout for consistent 20s timeout regardless of stagger.
          */
+        // Invariant across the scan below: only length and direction vary per config
+        final int cpuLoad = SystemVersion.getCPULoadAvg();
+        final long rttFloor = getRttTimeoutFloor();
         for (Iterator<PooledTunnelCreatorConfig> iter = _currentlyBuildingMap.values().iterator(); iter.hasNext(); ) {
             PooledTunnelCreatorConfig cfg = iter.next();
-            long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
+            long adaptiveTimeout = calculateAdaptiveTimeout(cfg, cpuLoad, rttFloor);
             long created = cfg.getConfig(0).getCreation();
             if (created > 0 && now - created >= adaptiveTimeout) {
                 PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg);
@@ -1036,8 +1093,9 @@ public class BuildExecutor implements Runnable {
                         expiredTimeouts = new HashMap<>(8);
                     }
                     expired.add(cfg);
-                    // Remember the timeout actually used: calculateAdaptiveTimeout()
-                    // varies per config (length, load, outbound, RTT floor).
+                    // Remember the timeout actually used: with the load and RTT floor
+                    // hoisted, calculateAdaptiveTimeout() varies per config only by
+                    // length and outbound direction.
                     expiredTimeouts.put(cfg.getReplyMessageId(), adaptiveTimeout);
                 }
             }
