@@ -75,19 +75,124 @@ public class DecayingBloomFilterTest {
     /**
      *  Negative and extreme long values are remembered.
      *
-     *  Note Long.MIN_VALUE is deliberately absent: add() negates negative
-     *  entries before encoding them, and 0 - Long.MIN_VALUE overflows back to
-     *  Long.MIN_VALUE, so DataHelper.toLong() rejects it with
-     *  IllegalArgumentException. See DecayingBloomFilter.add(long). That is a
-     *  pre-existing defect, not intended behaviour, so it is not pinned here.
+     *  Long.MIN_VALUE used to throw: the encoder computed 0 - entry, which
+     *  overflows back to Long.MIN_VALUE, and DataHelper.toLong() rejects
+     *  negatives. It is now folded onto Long.MAX_VALUE.
      */
     @Test
     public void testEdgeValues() {
-        long[] vals = { 0L, -1L, Long.MAX_VALUE, 1L << 40 };
+        long[] vals = { 0L, -1L, Long.MIN_VALUE, Long.MAX_VALUE, 1L << 40 };
         for (long v : vals) {
             filter.add(v);
             assertTrue("value " + v + " should be known", filter.isKnown(v));
         }
+    }
+
+    /**
+     *  A long and its negation must stay distinct. The sign is carried in the
+     *  top bit of the first byte, which is spare only because toLong() is big
+     *  endian and so the magnitude's high bit is always clear; the magnitudes
+     *  below bracket the bit-55 boundary where that would stop holding.
+     */
+    @Test
+    public void testSignIsSignificant() {
+        long[] mags = { 1234L, 12345L, 1L << 54, 1L << 55, (1L << 55) + 1234,
+                        1L << 56, Long.MAX_VALUE - 1 };
+        for (long m : mags) {
+            DecayingBloomFilter f = new DecayingBloomFilter(ctx, 60 * 1000, 8);
+            try {
+                f.add(m);
+                assertFalse("-" + m + " must not collide with " + m, f.isKnown(-m));
+            } finally {
+                f.clear();
+                f.stopDecaying();
+            }
+        }
+    }
+
+    /**
+     *  Every supported entryBytes must accept an entry. The extender count
+     *  used to be computed with ceiling division, so any size that did not
+     *  divide 32 overran the 32 byte hash buffer and threw "Result is too short".
+     */
+    @Test
+    public void testAllEntrySizesWork() {
+        for (int eb = 1; eb <= 16; eb++)
+            assertEntrySizeWorks(eb);
+        assertEntrySizeWorks(32);
+    }
+
+    private void assertEntrySizeWorks(int eb) {
+        DecayingBloomFilter f = new DecayingBloomFilter(ctx, 60 * 1000, eb);
+        try {
+            // Distinct values, so a stale tail left in the thread local buffer
+            // from an earlier insert would show up as a false positive.
+            byte[] a = new byte[eb];
+            byte[] b = new byte[eb];
+            byte[] c = new byte[eb];
+            a[0] = (byte) 0x11; a[eb - 1] = (byte) 0xA1;
+            b[0] = (byte) 0x22; b[eb - 1] = (byte) 0xB2;
+            c[0] = (byte) 0x33; c[eb - 1] = (byte) 0xC3;
+            assertFalse("entryBytes " + eb + ": A is new", f.add(a, 0, eb));
+            assertFalse("entryBytes " + eb + ": B is new", f.add(b, 0, eb));
+            assertTrue("entryBytes " + eb + ": A is a duplicate", f.add(a, 0, eb));
+            assertFalse("entryBytes " + eb + ": C must not alias A or B", f.add(c, 0, eb));
+        } finally {
+            f.clear();
+            f.stopDecaying();
+        }
+    }
+
+    /**
+     *  The accept boundary is part of the contract: 16 and 32 must work, 17
+     *  cannot be stretched to the 32 hashed bytes and must be refused up front.
+     */
+    @Test
+    public void testEntrySizeBoundary() {
+        assertEntrySizeWorks(16);
+        assertEntrySizeWorks(32);
+        try {
+            new DecayingBloomFilter(ctx, 60 * 1000, 17);
+            fail("17 must be refused, it cannot be stretched to 32 bytes");
+        } catch (IllegalArgumentException expected) {
+            // as above
+        }
+    }
+
+    /**
+     *  Sizes that cannot be stretched to the 32 hashed bytes are rejected up
+     *  front: 17-31 would need a partial trailing extender block, and hashing
+     *  them unextended overruns KeySelector's word selectors.
+     */
+    @Test
+    public void testBadEntrySizeRejected() {
+        int[] bad = { 0, -1, 17, 24, 31, 33, 64 };
+        for (int eb : bad) {
+            try {
+                new DecayingBloomFilter(ctx, 60 * 1000, eb);
+                fail("expected IllegalArgumentException for entryBytes " + eb);
+            } catch (IllegalArgumentException expected) {
+                // as above
+            }
+        }
+    }
+
+    /**
+     *  A read-only probe must not be counted as a duplicate. isKnown() used to
+     *  increment the duplicate counter, inflating the statistic and the
+     *  "false positives" figure logged at decay.
+     */
+    @Test
+    public void testIsKnownDoesNotCountAsDuplicate() {
+        filter.add(0xCAFEL);
+        long afterAdd = filter.getCurrentDuplicateCount();
+        for (int i = 0; i < 5; i++)
+            assertTrue(filter.isKnown(0xCAFEL));
+        assertEquals("probes must not inflate the duplicate count",
+                     afterAdd, filter.getCurrentDuplicateCount());
+        // a real duplicate insertion still counts
+        assertTrue(filter.add(0xCAFEL));
+        assertEquals(afterAdd + 1, filter.getCurrentDuplicateCount());
     }
 
     /** clear() forgets everything. */
