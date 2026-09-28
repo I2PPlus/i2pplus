@@ -42,6 +42,18 @@ public class EepGetTest extends TestCase {
     private TestServer _server;
     private File _outFile;
 
+    /**
+     * The default backoff the immediate-retry regression must lose to.  Pinned
+     * here rather than waited on: the behavioural tests pin a short delay to
+     * stay fast, so this is what keeps the real default from silently
+     * shrinking.
+     */
+    public void testDefaultRetryDelayIsNotImmediate() {
+        assertTrue("default retry delay " + EepGet.DEFAULT_RETRY_DELAY
+                   + "ms must be a real backoff, not an immediate retry",
+                   EepGet.DEFAULT_RETRY_DELAY >= 4500);
+    }
+
     @Override
     protected void setUp() {
         _context = I2PAppContext.getGlobalContext();
@@ -433,7 +445,7 @@ public class EepGetTest extends TestCase {
                     out.write(body, 0, partial);
                     out.flush();
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(700);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                     }
@@ -583,7 +595,7 @@ public class EepGetTest extends TestCase {
                     out.write(body, 0, partial);
                     out.flush();
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(700);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                     }
@@ -1096,7 +1108,7 @@ public class EepGetTest extends TestCase {
                     out.write(gz, 0, Math.max(1, gz.length / 2));
                     out.flush();
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(700);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                     }
@@ -1171,7 +1183,7 @@ public class EepGetTest extends TestCase {
                 if (calls[0] == 1) {
                     // hold the request open past the header timeout without writing
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(700);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                     }
@@ -1200,7 +1212,25 @@ public class EepGetTest extends TestCase {
         fo.close();
         final long[] failedAt = {0};
         final long[] retriedAt = {0};
-        EepGet get = new EepGet(_context, 1, _outFile.getAbsolutePath(), server.url("/hdrstall"));
+        // The regression is an *immediate* retry, so what has to be proven is
+        // that the configured delay is honoured between attempts.  Pin it to a
+        // short value rather than paying the production 5s + jitter in wall
+        // clock, and pin the production default itself in
+        // testDefaultRetryDelayIsNotImmediate, so neither the delay being
+        // applied nor the default's size goes unverified.  Must precede the
+        // constructor: EepGet reads PROP_RETRY_DELAY into a final field there.
+        final int pinnedDelay = 250;
+        String priorDelay = System.getProperty(EepGet.PROP_RETRY_DELAY);
+        System.setProperty(EepGet.PROP_RETRY_DELAY, String.valueOf(pinnedDelay));
+        final EepGet get;
+        try {
+            get = new EepGet(_context, 1, _outFile.getAbsolutePath(), server.url("/hdrstall"));
+        } finally {
+            if (priorDelay != null)
+                System.setProperty(EepGet.PROP_RETRY_DELAY, priorDelay);
+            else
+                System.clearProperty(EepGet.PROP_RETRY_DELAY);
+        }
         get.addStatusListener(new EepGet.StatusListener() {
             @Override
             public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
@@ -1230,15 +1260,15 @@ public class EepGetTest extends TestCase {
                     retriedAt[0] = System.currentTimeMillis();
             }
         });
-        // deliberately no PROP_RETRY_DELAY override: the default backoff
-        // (5s + jitter) is what the regression's immediate retry must lose to
+        // The delay is read in the constructor, so restoring the property above
+        // does not un-pin this instance.
         assertTrue(get.fetch(300, TOTAL_TIMEOUT, FETCH_TIMEOUT));
         assertEquals(2, calls[0]);
         assertTrue(failedAt[0] > 0);
         assertTrue(retriedAt[0] > 0);
         long gap = retriedAt[0] - failedAt[0];
-        assertTrue("retry gap " + gap + "ms must be the default backoff, not immediate",
-                gap >= 4500);
+        assertTrue("retry gap " + gap + "ms must be the configured backoff, not immediate",
+                gap >= pinnedDelay);
         byte[] stored = readFile(_outFile);
         assertEquals(body.length, stored.length);
         assertEquals(new String(body, StandardCharsets.ISO_8859_1), new String(stored, StandardCharsets.ISO_8859_1));
