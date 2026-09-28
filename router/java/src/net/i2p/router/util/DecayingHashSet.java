@@ -22,11 +22,16 @@ import net.i2p.util.ConcurrentHashSet;
  * Performance characteristics:
  * <ul>
  *   <li>Zero false positive rate for ≤8 byte keys (lossy hash for larger keys)</li>
- *   <li>5.4E-20 false positive rate for larger keys</li>
+ *   <li>Over 8 bytes entries are reduced to a 64 bit hash, so a false
+ *       positive needs a hash collision: about 5.4E-20 per pair, so
+ *       n^2/2^65 across n entries</li>
  *   <li>About 1.93x faster than {@link DecayingBloomFilter} for 8 byte (long)
  *       entries and 2.46x faster for 16 byte entries</li>
- *   <li>49.9 bytes of memory per entry, of which 16 bytes is the
- *       {@link ArrayWrapper} itself, leaving about 34 bytes for the entry</li>
+ *   <li>About 72 bytes of memory per 16 byte entry once loaded (measured: 9.01 MB
+ *       for 131,000 entries), covering the map node, the {@link ArrayWrapper}
+ *       and its share of the table. At the 128K soft cap that is roughly 9 MB
+ *       as a floor, not a ceiling: getInsertedCount() spans both buffers, so a
+ *       window deferred past the cap can take this to about twice that</li>
  *   <li>Space-proportional traffic handling</li>
  * </ul>
  * <p>
@@ -40,16 +45,47 @@ public class DecayingHashSet extends DecayingBloomFilter {
     private ConcurrentHashSet<ArrayWrapper> _previous;
 
     /**
-     *  Maximum entries before a forced early decay prevents unbounded memory growth.
+     *  Maximum entries before a forced early decay is attempted. This is a
+     *  soft target, not a hard ceiling: memory is bounded by roughly two
+     *  windows of traffic rather than by this number, because forcing a decay
+     *  sooner than an entry's lifetime would drop live entries.
+     *
+     *  Measured cost at this cap with 16 byte entries: about 9 MB, roughly
+     *  72 bytes per entry including the map node and the wrapper.
+     *
      *  @since 0.9.70+
      */
-    private static final int MAX_ENTRIES = 128 * 1024;
+    static final int MAX_ENTRIES = 128 * 1024;   // package visible for tests
+    /**
+     *  The cap actually in force, {@link #MAX_ENTRIES} unless a test asked for
+     *  a smaller one so it can cross the threshold cheaply.
+     *  @since 0.9.71+
+     */
+    private final int _maxEntries;
+    /**
+     *  Nanotime of the last decay, used to space decays at least one interval
+     *  apart. Volatile so the over-cap path can test it without taking the
+     *  write lock. Monotonic on purpose: a wall clock jump must not be able to
+     *  force an early decay, which would drop entries that are still live.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastDecayNanos;
+    /**
+     *  Nanotime of the last over-cap warning, so that a sustained flood does not
+     *  log once per entry. Same clock as {@link #_lastDecayNanos} on purpose, so
+     *  one policy decision never mixes a monotonic and a wall clock reading.
+     *  Volatile because the warn is reached from the unlocked pre-check in
+     *  forceDecayIfOverCap(); a lost update here only costs an extra log line.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastOverCapWarnNanos;
 
     /**
      * Create a double-buffered hash set that will decay its entries over time.
      *
      * @param durationMs entries last for at least this long, but no more than twice this long
      * @param entryBytes how large are the entries to be added?  1 to 32 bytes
+     * @throws IllegalArgumentException if entryBytes is not 1-32
      */
     public DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes) {
         this(context, durationMs, entryBytes, "DHS");
@@ -59,19 +95,41 @@ public class DecayingHashSet extends DecayingBloomFilter {
      *  Decaying hash set with a custom name.
      *
      *  @param name just for logging / debugging / stats
+     *  @throws IllegalArgumentException if entryBytes is not 1-32
      */
     public DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name) {
+        this(context, durationMs, entryBytes, name, MAX_ENTRIES);
+    }
+
+    /**
+     *  As above, with an explicit cap. Only for tests, which need to cross the
+     *  over-cap path without inserting the full {@link #MAX_ENTRIES} entries.
+     *
+     *  @param maxEntries soft cap before a forced decay is attempted
+     *  @since 0.9.71+
+     */
+    DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name, int maxEntries) {
         super(durationMs, entryBytes, name, context);
+        // entries are hashed directly, with no 32 byte stretching, so the full
+        // 1-32 range is usable here even though DecayingBloomFilter needs more
         if (entryBytes <= 0 || entryBytes > 32)
-            throw new IllegalArgumentException("Bad size");
+            throw new IllegalArgumentException("Bad size [" + entryBytes + "], must be 1-32");
+        if (maxEntries <= 0)
+            throw new IllegalArgumentException("Bad cap [" + maxEntries + "]");
+        _maxEntries = maxEntries;
         _current = new ConcurrentHashSet<>(128);
         _previous = new ConcurrentHashSet<>(128);
+        // no decay may run before one interval has passed
+        _lastDecayNanos = System.nanoTime();
         if (_log.shouldDebug())
             _log.debug("New DHS " + name + " entryBytes = " + entryBytes +
                      " cycle (s) = " + (durationMs / 1000));
     }
 
-    /** Unsynchronized but only used for logging elsewhere. */
+    /**
+     *  Unsynchronized. Read on the add() path by forceDecayIfOverCap(), as well
+     *  as for logging, so it is a hot call.
+     */
     @Override
     public int getInsertedCount() {
         return _current.size() + _previous.size();
@@ -82,6 +140,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     public double getFalsePositiveRate() {
         if (_entryBytes <= 8)
             return 0d;
+        // per-pair hash collision probability; only used for logging
         return 1d / Math.pow(2d, 64d);  // 5.4E-20
     }
 
@@ -140,20 +199,62 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  Force a decay cycle if the entry count exceeds the cap.
-     *  Best-effort: races are harmless (extra decay or one-entry overshoot).
+     *  Force a decay cycle if the entry count exceeds the soft cap.
+     *
+     *  A decay must never run more often than the decay interval: the swap in
+     *  {@link #decay()} drops the older buffer, and doing that before that
+     *  buffer has aged out would forget entries that are still live, turning
+     *  this duplicate/replay filter into a source of false negatives. So when
+     *  the cap is exceeded we decay only if at least one interval has passed
+     *  since the last decay, and otherwise leave it to the scheduled event.
+     *
+     *  Best-effort: races are harmless (an extra decay, or a one-entry
+     *  overshoot). Under sustained overload this holds up to about two
+     *  windows of entries rather than the cap.
      *  @since 0.9.70+
      */
     private void forceDecayIfOverCap() {
-        if (getInsertedCount() >= MAX_ENTRIES && getWriteLock()) {
-            try {
-                if (getInsertedCount() >= MAX_ENTRIES) {
-                    decay();
-                }
-            } finally {
-                releaseWriteLock();
-            }
+        if (getInsertedCount() < _maxEntries)
+            return;
+        // Cheap unlocked pre-check first: once over the cap this branch is
+        // taken on every add, and taking the exclusive write lock only to
+        // decide not to act would serialise all of them. The scheduled decay
+        // covers the gap, so a stale read here is harmless.
+        if (System.nanoTime() - _lastDecayNanos < _durationMs * 1000000L) {
+            maybeWarnOverCap();
+            return;
         }
+        if (!getWriteLock())
+            return;
+        DecayCounters counters = null;
+        try {
+            if (getInsertedCount() < _maxEntries)
+                return;
+            if (System.nanoTime() - _lastDecayNanos < _durationMs * 1000000L)
+                return;
+            counters = swapBuffers();
+        } finally {
+            releaseWriteLock();
+        }
+        // log outside the lock, so a slow logger cannot stall other adds
+        if (counters != null)
+            logDecay(counters);
+    }
+
+    /** Rate limited to once per decay interval, so a flood cannot spam the log. */
+    private void maybeWarnOverCap() {
+        if (!_log.shouldWarn())
+            return;
+        // same monotonic clock as the deferral test above, so a wall clock
+        // adjustment cannot suppress or burst the warning
+        long now = System.nanoTime();
+        if (now - _lastOverCapWarnNanos < _durationMs * 1000000L)
+            return;
+        _lastOverCapWarnNanos = now;
+        _log.warn("DecayingHashSet over the soft cap (" + getInsertedCount()
+                  + " > " + _maxEntries + ") less than " + (_durationMs / 1000)
+                  + "s after the last decay, deferring; memory now tracks traffic,"
+                  + " not the cap");
     }
 
     /**
@@ -174,8 +275,9 @@ public class DecayingHashSet extends DecayingBloomFilter {
                 seen = _current.contains(w);
         }
         if (seen) {
-            // why increment if addIfNew == false? Only used for stats...
-            _currentDuplicates.incrementAndGet();
+            // count only real duplicate insertions, not read-only isKnown() probes
+            if (addIfNew)
+                _currentDuplicates.incrementAndGet();
         }
         return seen;
     }
@@ -200,22 +302,54 @@ public class DecayingHashSet extends DecayingBloomFilter {
 
     @Override
     protected void decay() {
-        int currentCount;
-        long dups;
         if (!getWriteLock())
             return;
+        DecayCounters counters = null;
         try {
-            ConcurrentHashSet<ArrayWrapper> tmp = _previous;
-            currentCount = _current.size();
-            _previous = _current;
-            _current = tmp;
-            _current.clear();
-            dups = _currentDuplicates.getAndSet(0);
+            counters = swapBuffers();
         } finally { releaseWriteLock(); }
+        if (counters != null)
+            logDecay(counters);
+    }
 
+    /**
+     *  Retire the older buffer and clear the recycled one. Caller must hold
+     *  the write lock. Does no logging, so the lock is held only for the swap.
+     *
+     *  @return what was in the retiring buffer, for logging once unlocked
+     */
+    private DecayCounters swapBuffers() {
+        int currentCount = _current.size();
+        long dups = _currentDuplicates.getAndSet(0);
+        ConcurrentHashSet<ArrayWrapper> tmp = _previous;
+        _previous = _current;
+        _current = tmp;
+        _current.clear();
+        _lastDecayNanos = System.nanoTime();
+        return new DecayCounters(currentCount, dups);
+    }
+
+    /** Caller must not hold the write lock. */
+    private void logDecay(DecayCounters counters) {
         if (_log.shouldDebug())
-            _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
-                       + " elements and " + dups + " false positives");
+            _log.debug("Decaying the " + _name + " filter after inserting "
+                       + counters.count + " elements and " + counters.dups
+                       + " duplicates");
+    }
+
+    /**
+     *  What a decay found, carried out of the write lock so the caller can log
+     *  it without extending the exclusive section.
+     *  @since 0.9.71+
+     */
+    private static final class DecayCounters {
+        private final int count;
+        private final long dups;
+
+        DecayCounters(int count, long dups) {
+            this.count = count;
+            this.dups = dups;
+        }
     }
 
     /**
