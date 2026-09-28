@@ -582,6 +582,14 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildStalePruned", "Builds pruned due to stale queue", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildBanFiltered", "Tunnel build dropped (banlisted hop)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "Attempted"), "Inbound builds", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Attempted"), "Outbound builds", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "Succeeded"), "Inbound builds OK", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Succeeded"), "Outbound builds OK", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "Failed"), "Inbound builds failed", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Failed"), "Outbound builds failed", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "TimedOut"), "Inbound builds timed out", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "TimedOut"), "Outbound builds timed out", "Tunnels", RATES);
 
         StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
         String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
@@ -644,6 +652,44 @@ public class BuildExecutor implements Runnable {
                 state = existing;
         }
         return state;
+    }
+
+    /**
+     *  Name of a per-direction build outcome stat, so build success can be
+     *  compared inbound against outbound.  The aggregate
+     *  {@code tunnel.buildSuccessRate} cannot answer that: it mixes both
+     *  directions, and they do not fail for the same reasons.
+     *
+     * @param inbound true for an inbound tunnel build
+     * @param event Attempted, Succeeded, Failed or TimedOut
+     * @return the stat name
+     * @since 0.9.71+
+     */
+    static String buildDirectionStat(boolean inbound, String event) {
+        return "tunnel.build" + (inbound ? "Inbound" : "Outbound") + event;
+    }
+
+    /**
+     *  Record one build outcome against the direction being built.  Called for
+     *  every completed build, including the ones excluded from the adaptive
+     *  timeout statistics, so the counts are a true per-direction sample.
+     *
+     * @param cfg the tunnel that was being built, may be null
+     * @param result the outcome
+     *  @since 0.9.71+
+     */
+    private void recordBuildDirection(PooledTunnelCreatorConfig cfg, Result result) {
+        if (cfg == null) {return;}
+        StatManager sm = _context.statManager();
+        boolean in = cfg.isInbound();
+        sm.addRateData(buildDirectionStat(in, "Attempted"), 1);
+        if (result == Result.SUCCESS) {
+            sm.addRateData(buildDirectionStat(in, "Succeeded"), 1);
+        } else if (result == Result.TIMEOUT) {
+            sm.addRateData(buildDirectionStat(in, "TimedOut"), 1);
+        } else {
+            sm.addRateData(buildDirectionStat(in, "Failed"), 1);
+        }
     }
 
     /**
@@ -1143,6 +1189,7 @@ public class BuildExecutor implements Runnable {
                     }
                 }
                 updateBuildStats(Result.TIMEOUT);
+                recordBuildDirection(cfg, Result.TIMEOUT);
                 if (cfg.getDestination() == null) {
                     _context.statManager().addRateData("tunnel.buildExploratoryExpire", 1);
                 } else {
@@ -1873,6 +1920,7 @@ public class BuildExecutor implements Runnable {
      *  @since 0.9.53
      */
     public void buildComplete(PooledTunnelCreatorConfig cfg, Result result, String detail) {
+        recordBuildDirection(cfg, result);
         if (_log.shouldInfo()) {
             if ((result == Result.OTHER_FAILURE || result == Result.NO_TUNNELS ||
                  result == Result.NO_NETDB) && detail != null) {
