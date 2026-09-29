@@ -2352,9 +2352,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             _stallEventCount.incrementAndGet();
             if (_log != null && _log.shouldWarn()) {
-                _log.warn("[HTTPServer] Async body stalled - no read progress for " +
-                          ioStallTimeoutMs + "ms after " + _body.getBytesTransferred() +
-                          " bytes transferred, closing" + _body.getName());
+                // Name the side that actually stopped moving. A fresh read stamp
+                // with a stale write stamp means the Sender is blocked writing to
+                // the I2P side, i.e. egress congestion, not a silent local
+                // source -- reporting "no read progress" for that sent every
+                // diagnosis at the wrong layer.
+                long nowNanos = System.nanoTime();
+                long readAgeMs = (nowNanos - _body.getLastReadNanos()) / 1_000_000L;
+                long writeAgeMs = (nowNanos - _body.getLastWriteNanos()) / 1_000_000L;
+                String side = (readAgeMs <= writeAgeMs) ? "source (local backend silent)"
+                                                        : "destination (I2P egress congested)";
+                _log.warn("[HTTPServer] Async body stalled on the " + side +
+                          " - read idle " + readAgeMs + "ms, write idle " + writeAgeMs + "ms" +
+                          " after " + _body.getBytesTransferred() + " bytes transferred, closing" +
+                          _body.getName());
             }
             closeQuietly(_browserin);
             closeQuietly(_serverin);
@@ -2377,6 +2388,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private volatile long _bytesTransferred;
         /** NanoTime of the last successful read from _in. Used for stall detection. */
         private volatile long _lastReadNanos;
+        /**
+         *  NanoTime of the last completed write to _out. Tracked separately from
+         *  the read stamp because the two stall for entirely different reasons:
+         *  a stale read stamp means the local source is not delivering, while a
+         *  fresh read with a stale write stamp means the destination is not
+         *  accepting, i.e. I2P egress congestion. Both used to look identical,
+         *  because the read stamp was only advanced after the write returned, so a
+         *  write blocked on congestion was reported as a stalled source and
+         *  pointed every diagnosis at the wrong layer.
+         *
+         *  @since 0.9.71+
+         */
+        private volatile long _lastWriteNanos;
 
         /**
          *  Create a Sender to copy data from input to output streams.
@@ -2412,21 +2436,26 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
             long startNanos = System.nanoTime();
             _lastReadNanos = startNanos;
+            _lastWriteNanos = startNanos;
             try {
                 byte[] buf = new byte[BUF_SIZE];
                 int read;
                 while ((read = _in.read(buf)) != -1) {
                     long now = System.nanoTime();
                     long stallNs = now - _lastReadNanos;
+                    // Stamp the read before the write. The write is the step that
+                    // blocks on I2P egress congestion, so advancing this stamp
+                    // only after it returned made a congested destination
+                    // indistinguishable from a silent local source.
                     _lastReadNanos = now;
                     _bytesTransferred += read;
                     _out.write(buf, 0, read);
                     _out.flush();
+                    _lastWriteNanos = System.nanoTime();
                     // Progress includes the write: a slow but advancing I2P flush is
                     // not a stall. Idle is measured from the last completed copy step
                     // by runOnIO via getLastReadNanos(); the inter-read break below
                     // only fires when successive reads themselves were far apart.
-                    _lastReadNanos = System.nanoTime();
                     if (stallNs > ioStallTimeoutMs * 1_000_000L) {
                         _stallEventCount.incrementAndGet();
                         if (_log != null && _log.shouldWarn()) {
@@ -2495,6 +2524,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *  @since 0.9.71+
          */
         public long getLastReadNanos() { return _lastReadNanos; }
+
+        /**
+         *  NanoTime of the last completed write. Compared against
+         *  {@link #getLastReadNanos()} to tell a silent local source from a
+         *  congested I2P destination.
+         *
+         *  @return System.nanoTime() of the last completed write
+         *  @since 0.9.71+
+         */
+        public long getLastWriteNanos() { return _lastWriteNanos; }
 
         /**
          *  Abort this transfer without ever running it, closing both ends so the
