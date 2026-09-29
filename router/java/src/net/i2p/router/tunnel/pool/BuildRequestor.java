@@ -168,21 +168,27 @@ public abstract class BuildRequestor {
         return _cachedFirstHopTimeout;
     }
 
-    /**
-     *  The peer that will receive the tunnel build request (TBM): the
-     *  gateway (peer 0) for inbound tunnels, or the next hop (peer 1) for
-     *  outbound tunnels.  BuildExecutor's per-peer pacing guard must target
-     *  the same peer the dispatch code sends the request to, so both use
-     *  this single derivation.
-     *
-     *  @param cfg non-null, must have length &gt; 1 (zero-hop builds never
-     *             reach the dispatcher)
-     *  @return the dispatch target peer
-     *  @since 0.9.71+
-     */
-    public static Hash getBuildRequestPeer(PooledTunnelCreatorConfig cfg) {
-        return cfg.isInbound() ? cfg.getPeer(0) : cfg.getPeer(1);
-    }
+      /**
+       *  The peer that will receive the tunnel build request (TBM): the
+       *  gateway (peer 0) for inbound tunnels, or the next hop (peer 1) for
+       *  outbound tunnels.  BuildExecutor's per-peer pacing guard must target
+       *  the same peer the dispatch code sends the request to, so both use
+       *  this single derivation.
+       *
+       *  <p>Returns null for a config too short to have a hop 1. Exploratory
+       *  pools build length-1 tunnels whose peer array holds only the gateway,
+       *  so asking for hop 1 would throw and abandon the build outright — which
+       *  stops every exploratory pool from populating.
+       *
+       *  @param cfg non-null; may be a short config
+       *  @return the dispatch target peer, or null if the config has no hop 1
+       *  @since 0.9.71+
+       */
+      public static Hash getBuildRequestPeer(PooledTunnelCreatorConfig cfg) {
+          if (cfg.isInbound()) {return cfg.getPeer(0);}
+          return cfg.getLength() > 1 ? cfg.getPeer(1) : null;
+      }
+
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
