@@ -297,7 +297,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverHandler.threads", _x("Handler threads for incoming I2PTunnel connections."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverHandler.queueCapacity", _x("Inbound connections that may wait for a free server handler thread."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.server.threads", _x("Default cap on server handler threads for each server tunnel."));
-        PARAM_DESCRIPTIONS.put("i2ptunnel.serverIO.threads", _x("Dedicated pool for Server→Client data transfer, unblocks handler threads."));
+        PARAM_DESCRIPTIONS.put("i2ptunnel.serverIO.threads", _x("Dedicated pool for Server→Client transfers, unblocks handlers."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverIO.stallTimeoutMs", _x("Stall timeout for Server→Client data transfers (ms)."));
         PARAM_DESCRIPTIONS.put("router.buildHandlerThreads", _x("Thread pool for inbound build request processing."));
         PARAM_DESCRIPTIONS.put("i2ptunnel.clientRunner.max", _x("Ceiling for client proxy thread pool."));
@@ -327,7 +327,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.loadWeight", _x("Load score multiplier for request throttling (% of computed load)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.rtoMultiplier", _x("RTO growth multiplier per retransmission timeout (%, 100 = flat)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.socketConnectTimeout", _x("TCP socket connect timeout for tunnel server handler threads (ms)."));
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.ivFilterM", _x("Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."));
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.ivFilterM", _x("IV dedup filter size; too small drops valid tunnel data."));
         PARAM_DESCRIPTIONS.put("router.defaultProcessingTimeThrottle", _x("Max average message delay before rejecting transit (ms)."));
     }
 
