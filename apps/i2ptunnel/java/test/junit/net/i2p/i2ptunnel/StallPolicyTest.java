@@ -56,9 +56,14 @@ public class StallPolicyTest {
     }
 
     @Test
-    public void scalingIsCappedAtTenMinutes() {
+    public void scalingStopsAtTheTopTier() {
+        // The top tier is 8x the base window; the cap is a ceiling above that,
+        // not the value a large body reaches.
         long huge = 10_000L * 1024 * 1024;
-        assertEquals(600_000L, I2PTunnelHTTPServer.computeStallWindowMs(BASE, huge));
+        assertEquals(BASE * 8, I2PTunnelHTTPServer.computeStallWindowMs(BASE, huge));
+        assertTrue("the top tier must stay under the hard ceiling",
+                   I2PTunnelHTTPServer.computeStallWindowMs(BASE, huge)
+                       <= I2PTunnelHTTPServer.MAX_STALL_WINDOW_MS);
     }
 
     @Test

@@ -198,13 +198,16 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
      */
     public void testStallTimeoutConfig() {
         long origTimeout = I2PTunnelHTTPServer.ioStallTimeoutMs;
+        long floor = I2PTunnelHTTPServer.STALL_WINDOW_FLOOR_MS;
         try {
-            I2PTunnelHTTPServer.setIOStallTimeoutMs(30_000L);
-            assertEquals(30_000L, I2PTunnelHTTPServer.getIOStallTimeoutMs());
+            I2PTunnelHTTPServer.setIOStallTimeoutMs(90_000L);
+            assertEquals(90_000L, I2PTunnelHTTPServer.getIOStallTimeoutMs());
 
-            // Clamp test: minimum 5000ms
+            // Clamp test: the floor, not 5s. A window shorter than any pause in
+            // a bulk transfer aborts healthy downloads rather than freeing threads.
             I2PTunnelHTTPServer.setIOStallTimeoutMs(1000L);
-            assertEquals("Minimum should be 5000", 5000L, I2PTunnelHTTPServer.getIOStallTimeoutMs());
+            assertEquals("window below the floor must be raised to it",
+                         floor, I2PTunnelHTTPServer.getIOStallTimeoutMs());
 
             // Maximum 300000ms
             I2PTunnelHTTPServer.setIOStallTimeoutMs(600_000L);
