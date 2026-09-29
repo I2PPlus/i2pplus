@@ -178,103 +178,87 @@ public class TestJobDataTrustTest {
         return Hash.create(b);
     }
 
+    // ================= per-partner failure rate =================
+
     @Test
-    public void firstFailureThroughAPartnerIsNotARepeat() {
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
-        assertFalse(TestJob.isRepeatReplyPartnerFailure(mem, partner(hash(1)), 1000L));
+    public void anUnseenPartnerHasNoRecordedRate() {
+        Map<Hash, long[]> tally = new ConcurrentHashMap<>();
+        assertEquals(0d, TestJob.replyPartnerFailureRate(tally, partner(hash(1))), 0.001d);
     }
 
     @Test
-    public void secondFailureThroughTheSamePartnerIsARepetition() {
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
+    public void aPartnerThatAlwaysFailsRatesAtOne() {
+        Map<Hash, long[]> tally = new ConcurrentHashMap<>();
         TunnelInfo p = partner(hash(1));
-        TestJob.blameReplyPartner(mem, p, 1000L);
-        assertTrue(TestJob.isRepeatReplyPartnerFailure(mem, p, 2000L));
+        for (int i = 0; i < 5; i++) {
+            TestJob.noteReplyPartnerRound(tally, p, true);
+        }
+        assertEquals("five failures out of five rounds", 1d,
+                     TestJob.replyPartnerFailureRate(tally, p), 0.001d);
     }
 
     @Test
-    public void aDifferentPartnerIsNotARepetition() {
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
-        TestJob.blameReplyPartner(mem, partner(hash(1)), 1000L);
-        assertFalse("blaming one partner must not implicate another",
-                    TestJob.isRepeatReplyPartnerFailure(mem, partner(hash(2)), 2000L));
-    }
-
-    @Test
-    public void aStaleRepeatIsForgiven() {
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
+    public void aPartnerThatAlwaysSucceedsRatesAtZero() {
+        Map<Hash, long[]> tally = new ConcurrentHashMap<>();
         TunnelInfo p = partner(hash(1));
-        long now = 1_000_000_000L;
-        TestJob.blameReplyPartner(mem, p, now);
-        assertFalse("the memory window must expire, or one bad partner is permanent",
-                    TestJob.isRepeatReplyPartnerFailure(mem, p, now + 3_600_000L));
+        for (int i = 0; i < 5; i++) {
+            TestJob.noteReplyPartnerRound(tally, p, false);
+        }
+        assertEquals(0d, TestJob.replyPartnerFailureRate(tally, p), 0.001d);
     }
 
     /**
-     * A partner's peer array is allocated with null entries and only filled in
-     * as the build completes; a 0-hop tunnel is length 1, so its sole entry is
-     * null until it is built.  {@link java.util.concurrent.ConcurrentHashMap}
-     * rejects a null key with an NPE, so an unpopulated gateway must be
-     * treated as "nothing to attribute" rather than crashing the test job.
+     * The reason the repeat flag was replaced.  A raw "blamed before" flag
+     * reads a stable pool as bad because the same partners are re-picked, and
+     * a churning pool as good because partners are always new.  A rate is
+     * immune to that: these two partners fail equally often, but the one
+     * carrying many more rounds has the lower rate.
      */
     @Test
-    public void anUnpopulatedGatewayDoesNotThrow() {
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
+    public void theRateIsIndependentOfHowOftenAPartnerIsPicked() {
+        Map<Hash, long[]> tally = new ConcurrentHashMap<>();
+        TunnelInfo heavilyUsed = partner(hash(1));
+        TunnelInfo lightlyUsed = partner(hash(2));
+        // 9 rounds, 3 failed
+        for (int i = 0; i < 9; i++) {
+            TestJob.noteReplyPartnerRound(tally, heavilyUsed, i < 3);
+        }
+        // 1 round, 1 failed
+        TestJob.noteReplyPartnerRound(tally, lightlyUsed, true);
+        double heavy = TestJob.replyPartnerFailureRate(tally, heavilyUsed);
+        double light = TestJob.replyPartnerFailureRate(tally, lightlyUsed);
+        assertEquals(3d / 9d, heavy, 0.001d);
+        assertEquals(1d, light, 0.001d);
+        assertTrue("frequency of use must not decide who looks bad", heavy < light);
+    }
+
+    @Test
+    public void anUnpopulatedGatewayIsNotRecorded() {
+        Map<Hash, long[]> tally = new ConcurrentHashMap<>();
         TunnelInfo noGateway = mock(TunnelInfo.class);
         when(noGateway.getGateway()).thenReturn(null);
-        assertFalse(TestJob.isRepeatReplyPartnerFailure(mem, noGateway, 1000L));
-        TestJob.blameReplyPartner(mem, noGateway, 1000L);
-        assertTrue("a null gateway must not be recorded", mem.isEmpty());
-    }
-
-    /** Pruning must keep the map bounded without dropping live entries. */
-    @Test
-    public void pruningKeepsLiveEntriesAndDropsStaleOnes() {
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
-        long now = 1_000_000_000L;
-        TunnelInfo stale = partner(hash(9));
-        mem.put(stale.getGateway(), now - 3_600_000L);
-        TunnelInfo live = partner(hash(1));
-        mem.put(live.getGateway(), now);
-        TestJob.pruneStaleReplyPartners(mem, now);
-        assertFalse("a partner past the memory window is worth nothing to the diagnostic",
-                    mem.containsKey(stale.getGateway()));
-        assertTrue("a live partner must survive pruning", mem.containsKey(live.getGateway()));
-    }
-
-    /** Repeated blame must not grow the map without bound. */
-    @Test
-    public void repeatedBlameStaysBounded() {
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
-        long now = 1_000_000_000L;
-        // Far more distinct partners than the cap, all in-window, so the
-        // fallback oldest-eviction path is the one exercised.
-        for (int i = 0; i < 900; i++) {
-            TestJob.blameReplyPartner(mem, partner(hash(i)), now);
-        }
-        assertTrue("the diagnostic must stay bounded under sustained blame, was " + mem.size(),
-                   mem.size() <= 513);
+        TestJob.noteReplyPartnerRound(tally, noGateway, true);
+        assertTrue("a null gateway must not be recorded, and must not throw", tally.isEmpty());
+        assertEquals(0d, TestJob.replyPartnerFailureRate(tally, noGateway), 0.001d);
     }
 
     @Test
     public void nullsAreHandled() {
-        assertFalse(TestJob.isRepeatReplyPartnerFailure(null, partner(hash(1)), 1000L));
-        assertFalse(TestJob.isRepeatReplyPartnerFailure(new ConcurrentHashMap<>(), null, 1000L));
-        TestJob.blameReplyPartner(null, partner(hash(1)), 1000L);
-        TestJob.blameReplyPartner(new ConcurrentHashMap<>(), null, 1000L);
+        Map<Hash, long[]> tally = new ConcurrentHashMap<>();
+        assertEquals(0d, TestJob.replyPartnerFailureRate(null, partner(hash(1))), 0.001d);
+        assertEquals(0d, TestJob.replyPartnerFailureRate(tally, null), 0.001d);
+        TestJob.noteReplyPartnerRound(null, partner(hash(1)), true);
+        TestJob.noteReplyPartnerRound(tally, null, true);
     }
 
     @Test
-    public void theMemoryIsBounded() {
-        // The diagnostic rolls over every destination the router serves, so it
-        // must not grow without limit.  Seed past the cap, then confirm the
-        // bound holds after a blame that would otherwise overflow it.
-        Map<Hash, Long> mem = new ConcurrentHashMap<>();
-        for (int i = 0; i < 600; i++) {
-            TestJob.blameReplyPartner(mem, partner(hash(i)), 1000L + i);
+    public void repeatedRoundsStayBounded() {
+        Map<Hash, long[]> tally = new ConcurrentHashMap<>();
+        for (int i = 0; i < 900; i++) {
+            TestJob.noteReplyPartnerRound(tally, partner(hash(i)), i % 2 == 0);
         }
-        assertTrue("reply-partner memory must stay bounded, was " + mem.size(),
-                   mem.size() <= 513);
+        assertTrue("the tally must stay bounded under sustained use, was " + tally.size(),
+                   tally.size() <= 513);
     }
 
     @Test

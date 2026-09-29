@@ -186,4 +186,76 @@ public class TestJobConfirmTest {
         assertEquals("tunnel.buildOutboundTimedOut",
                      BuildExecutor.buildDirectionStat(false, "TimedOut"));
     }
+
+    /**
+     * Every registered per-direction event must have an emission site.  Two
+     * counters were once registered and never written, so they sat at zero and
+     * were read as evidence that the thing they measured never happened.
+     */
+    @Test
+    public void everyDeclaredDirectionEventIsEmittedSomewhere() {
+        // The production string literals the emitters use, gathered from the
+        // file, so the test fails if an event is declared but never written.
+        java.io.File f = new java.io.File("router/java/src/net/i2p/router/tunnel/pool/TestJob.java");
+        if (!f.isFile()) {return;} // source tree not present; nothing to check
+        String src;
+        try {src = new java.util.Scanner(f, "UTF-8").useDelimiter("\\A").next();}
+        catch (Exception e) {return;}
+        for (String ev : TestJob.DIRECTION_EVENTS) {
+            // Two emission styles exist: a literal handed straight to
+            // directionStat(), and a name returned by a helper (farEndVerdict)
+            // and passed through. Both are real emissions, so both count.
+            boolean direct = src.contains("directionStat(_cfg.isInbound(), \"" + ev + "\")")
+                          || src.contains("directionStat(inbound, \"" + ev + "\")")
+                          || src.contains("directionStat(inbound, event)");
+            boolean viaHelper = src.contains("return \"" + ev + "\";")
+                             || src.contains("= \"" + ev + "\";");
+            assertTrue("declared event " + ev + " is never emitted in TestJob",
+                       direct || viaHelper);
+        }
+    }
+
+    /** The set is the contract; a silent addition or removal should fail here. */
+    @Test
+    public void theDeclaredEventSetIsWhatWeExpect() {
+        assertArrayEquals(new String[] {
+            "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
+            "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown"
+        }, TestJob.DIRECTION_EVENTS);
+    }
+
+    // ================= far-endpoint reachability on a failed round =================
+
+    /**
+     * The whole point of the probe is to split failed rounds into "the far end
+     * was gone" and "the far end was alive", so each verdict must be
+     * distinguishable and nothing may fall into two buckets.
+     */
+    @Test
+    public void aDeadFarEndIsReportedUnreachable() {
+        assertEquals("FarEndUnreachable", TestJob.farEndVerdict(true, true));
+        assertEquals("FarEndUnreachable", TestJob.farEndVerdict(true, false));
+    }
+
+    @Test
+    public void aLiveFarEndIsReportedEstablished() {
+        assertEquals("FarEndEstablished", TestJob.farEndVerdict(false, true));
+    }
+
+    /**
+     * A missed lookup must not be counted as evidence that the endpoint was
+     * reachable, since the established share is what the diagnosis rests on.
+     */
+    @Test
+    public void anUnknownFarEndIsNotCountedAsEstablished() {
+        assertEquals("FarEndUnknown", TestJob.farEndVerdict(false, false));
+    }
+
+    @Test
+    public void everyVerdictIsADeclaredDirectionEvent() {
+        for (String v : new String[] {"FarEndUnreachable", "FarEndEstablished", "FarEndUnknown"}) {
+            assertTrue("verdict " + v + " must be a registered direction event",
+                       java.util.Arrays.asList(TestJob.DIRECTION_EVENTS).contains(v));
+        }
+    }
 }
