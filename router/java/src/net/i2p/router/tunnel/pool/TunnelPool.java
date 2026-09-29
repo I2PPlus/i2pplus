@@ -800,6 +800,96 @@ public class TunnelPool {
      *  @param lastResortTunnel first-pass result, kept by the second pass if set
      *  @return the scan result
      */
+    /**
+     *  Select a tunnel to serve as a test round's partner, preferring partners
+     *  that have demonstrated they work.
+     *
+     *  <p>Distinct from {@link #selectTunnel()}, which serves the live data
+     *  path and must keep its uniform-random choice: changing that would alter
+     *  which tunnel carries real traffic, which is well outside what a
+     *  diagnosis warrants.  This is used only where a test round picks the leg
+     *  its reply comes back through.
+     *
+     *  <p>A test round is a composite of the tunnel under test and the partner
+     *  the reply arrives through, and a single pass/fail bit cannot separate
+     *  them.  Choosing partners uniformly at random therefore injects a source
+     *  of noise that looks exactly like a failing tunnel: a partner whose
+     *  gateway has gone quiet since the tunnel was built still satisfies every
+     *  status gate, because those gates inspect the tunnel and never its
+     *  peers.  Ranked preference costs nothing and cannot reject a working
+     *  partner, because every tier falls through to the existing behaviour.
+     *
+     *  <p>Preference order, best first:
+     *  <ol>
+     *    <li>tested GOOD <em>and</em> carrying recent real traffic — the only
+     *        tier that proves the tunnel works end to end, since receiving
+     *        data means its gateway is delivering</li>
+     *    <li>tested GOOD</li>
+     *    <li>carrying real traffic, status not yet known</li>
+     *    <li>anything passing the scan gates (the previous behaviour)</li>
+     *  </ol>
+     *
+     *  <p>Deliberately a preference and not a filter.  A transport-level
+     *  reachability probe on the gateway was considered and rejected: the
+     *  gateway is a peer we may hold no session with, or an established but
+     *  idle one, so treating "not established" as disqualifying would discard
+     *  good partners and could make the round trip worse.
+     *
+     * @return the chosen tunnel, or null if none passes the scan gates
+     *  @since 0.9.71+
+     */
+    TunnelInfo selectTunnelForTest() {
+        long now = _context.clock().now();
+        long uptime = _context.router().getUptime();
+        boolean avoidZeroHop = !_settings.getAllowZeroHop();
+        _tunnelsLock.lock();
+        try {
+            TunnelInfo best = null;
+            int bestTier = Integer.MAX_VALUE;
+            long bestTraffic = Long.MIN_VALUE;
+            for (int i = 0; i < _tunnels.size(); i++) {
+                TunnelInfo info = _tunnels.get((i + _context.random().nextInt(_tunnels.size())) % _tunnels.size());
+                if (!passesScanGates(info, now, avoidZeroHop)) {continue;}
+                if (info instanceof PooledTunnelCreatorConfig && ((PooledTunnelCreatorConfig) info).isLastResort()) {continue;}
+                int tier = partnerPreferenceTier(info);
+                long traffic = info.getLastRealTraffic();
+                // Strictly better tier wins; within a tier, more recent real
+                // traffic wins.  Scanning in random order means no candidate
+                // has a positional advantage.
+                if (tier < bestTier || (tier == bestTier && traffic > bestTraffic)) {
+                    best = info;
+                    bestTier = tier;
+                    bestTraffic = traffic;
+                }
+            }
+            if (best != null) {
+                recordPooledActivity(best);
+                return best;
+            }
+        } finally {_tunnelsLock.unlock();}
+        if (_alive) {buildFallback();}
+        return selectTunnel();
+    }
+
+    /**
+     *  Rank a candidate test partner; lower is better.  See
+     *  {@link #selectTunnelForTest()} for why this is a preference.
+     *
+     * @param info a tunnel that already passed the scan gates
+     * @return the preference tier, 0 best
+     *  @since 0.9.71+
+     */
+    static int partnerPreferenceTier(TunnelInfo info) {
+        boolean good = info.getTestStatus() == TunnelTestStatus.GOOD;
+        // Receiving real data proves the whole tunnel delivers, gateway
+        // included, so it outranks a bare status.
+        boolean live = info.getLastRealTraffic() > 0 || info.getVerifiedBytesTransferred() > 0;
+        if (good && live) {return 0;}
+        if (good) {return 1;}
+        if (live) {return 2;}
+        return 3;
+    }
+
     private ScanResult scanPoolForTunnel(int startIdx, long now, boolean longTunnelsOnly, TunnelInfo lastResortTunnel) {
         TunnelInfo backloggedTunnel = null;
         for (int i = 0; i < _tunnels.size(); i++) {

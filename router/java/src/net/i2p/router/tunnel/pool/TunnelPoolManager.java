@@ -187,6 +187,41 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
+     *  Pick a tunnel from a destination's inbound pool to carry a test round's
+     *  reply, preferring partners that have demonstrated they work.  Used only
+     *  by the test cycle; the live data path keeps using the uniform-random
+     *  {@link #selectInboundTunnel(Hash)}.
+     *
+     * @param destination if null, an exploratory tunnel is used
+     * @return null if none
+     *  @since 0.9.71+
+     */
+    public TunnelInfo selectInboundTunnelForTest(Hash destination) {
+        if (destination == null) {return selectInboundTunnel();}
+        TunnelPool pool = _clientInboundPools.get(destination);
+        if (pool != null) {return pool.selectTunnelForTest();}
+        if (_log.shouldWarn()) {_log.warn("No pool available for Inbound tunnel for " + destination.toBase32());}
+        return null;
+    }
+
+    /**
+     *  Pick a tunnel from a destination's outbound pool to carry a test
+     *  round's outbound leg, preferring partners that have demonstrated they
+     *  work.  Test cycle only.
+     *
+     * @param destination if null, an exploratory tunnel is used
+     * @return null if none
+     *  @since 0.9.71+
+     */
+    public TunnelInfo selectOutboundTunnelForTest(Hash destination) {
+        if (destination == null) {return selectOutboundTunnel();}
+        TunnelPool pool = _clientOutboundPools.get(destination);
+        if (pool != null) {return pool.selectTunnelForTest();}
+        if (_log.shouldWarn()) {_log.warn("No pool available for Outbound tunnel for " + destination.toBase32());}
+        return null;
+    }
+
+    /**
      * Pick a random outbound tunnel from the given destination's pool.
      * Warning - selectOutboundTunnel(Hash, Hash) is preferred.
      *
