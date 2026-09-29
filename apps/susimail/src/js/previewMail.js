@@ -166,11 +166,11 @@ function previewMail() {
    */
   function cleanText(raw) {
     if (!raw) return "";
-    raw = raw.replace(/Having[\s\u00A0\u2000-\u200B\u3000]+problems[\s\u00A0\u2000-\u200B\u3000]+viewing[\s\u00A0\u2000-\u200B\u3000]+this[\s\u00A0\u2000-\u200B\u3000]+email\?View[\s\u00A0\u2000-\u200B\u3000]+email[\s\u00A0\u2000-\u200B\u3000]+online/gi, "");
-    raw = raw.replace(/[\s\u00A0\u2000-\u200B\u3000]+/g, " ");
-    raw = raw.replace(/,(?=\S)/g, ", ");
-    raw = raw.replace(/<([a-zA-Z][\w-]*)[^>]*>(.*?)<\/\1>/gi, "$2");
-    raw = raw.replace(/<([a-zA-Z][\w-]*)\b[^>]*\/>/g, "");
+    raw = raw.replaceAll(/Having[\s\u00A0\u2000-\u200B\u3000]+problems[\s\u00A0\u2000-\u200B\u3000]+viewing[\s\u00A0\u2000-\u200B\u3000]+this[\s\u00A0\u2000-\u200B\u3000]+email\?View[\s\u00A0\u2000-\u200B\u3000]+email[\s\u00A0\u2000-\u200B\u3000]+online/gi, "");
+    raw = raw.replaceAll(/[\s\u00A0\u2000-\u200B\u3000]+/g, " ");
+    raw = raw.replaceAll(/,(?=\S)/g, ", ");
+    raw = raw.replaceAll(/<([a-zA-Z][\w-]*)[^>]*>(.*?)<\/\1>/gi, "$2");
+    raw = raw.replaceAll(/<([a-zA-Z][\w-]*)\b[^>]*\/>/g, "");
     return raw.trim();
   }
 

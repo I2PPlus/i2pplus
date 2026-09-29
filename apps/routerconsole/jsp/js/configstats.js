@@ -52,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const bPart = bParts[i];
 
       if (aPart !== bPart) {
-        const aIsNumber = !isNaN(aPart);
-        const bIsNumber = !isNaN(bPart);
+        const aIsNumber = !Number.isNaN(aPart);
+        const bIsNumber = !Number.isNaN(bPart);
 
         if (aIsNumber && bIsNumber) {
           return parseInt(aPart, 10) - parseInt(bPart, 10);

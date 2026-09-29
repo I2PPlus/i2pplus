@@ -228,8 +228,8 @@ function draw() {
   // curve closed along the baseline.
   const firstDown = `${downPts[0].x.toFixed(1)},${downPts[0].y.toFixed(1)}`;
   const firstUp = `${upPts[0].x.toFixed(1)},${upPts[0].y.toFixed(1)}`;
-  const lastDown = downPts[downPts.length - 1];
-  const lastUp = upPts[upPts.length - 1];
+  const lastDown = downPts.at(-1);
+  const lastUp = upPts.at(-1);
   const svg =
     `<svg xmlns='http://www.w3.org/2000/svg' width='${view.w}' height='${view.h}' viewBox='0 0 ${view.w} ${view.h}'>` +
     (samples.length > 1

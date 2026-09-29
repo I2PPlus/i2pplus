@@ -51,7 +51,7 @@
           const speed = speedValue - manualSpeedScoreAdjustment;
           if (speed > 0) { // Only display if speed is greater than 0 B/s
             let convertedSpeed;
-            if (!isNaN(speed)) {
+            if (!Number.isNaN(speed)) {
               if (speed >= 1024) {
                 convertedSpeed = (speed / 1024).toFixed(2); // Convert to MB/s
                 tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + " MB/s</td></tr>";
@@ -73,7 +73,7 @@
         } else if (cleanedKey === "Average peer response time") {
           const responseTime = parseFloat(cleanedValue);
           let formattedResponseTime;
-          if (!isNaN(responseTime)) {
+          if (!Number.isNaN(responseTime)) {
             if (responseTime > 1000) {
               formattedResponseTime = (responseTime / 1000).toFixed(1) + " seconds";
             } else {
@@ -129,12 +129,12 @@
    * @returns {string} The cleaned and formatted value
    */
   function cleanValue(value) {
-    let cleanedValue = value.replace(/\[.*?\]/g, "").trim();
-    cleanedValue = cleanedValue.replace(/GMT/g, "");
-    cleanedValue = cleanedValue.replace(/_/g, " ");
-    cleanedValue = cleanedValue.replace(/0\.0/g, "0");
-    cleanedValue = cleanedValue.replace(/9999999/g, "9999999 (Low latency)")
-    cleanedValue = cleanedValue.replace(/-30/g, "-30 (High latency)")
+    let cleanedValue = value.replaceAll(/\[.*?\]/g, "").trim();
+    cleanedValue = cleanedValue.replaceAll("GMT", "");
+    cleanedValue = cleanedValue.replaceAll("_", " ");
+    cleanedValue = cleanedValue.replaceAll("0.0", "0");
+    cleanedValue = cleanedValue.replaceAll("9999999", "9999999 (Low latency)")
+    cleanedValue = cleanedValue.replaceAll("-30", "-30 (High latency)")
     if (cleanedValue.endsWith(".0")) {cleanedValue = cleanedValue.slice(0, -2);}
     return cleanedValue;
   }

@@ -76,7 +76,7 @@
         if (isFirstLoad && !expandedSections.has(sectionId)) {
           // Check if user has ever set a preference (localStorage exists)
           const hasUserPreference = localStorage.getItem(STORAGE_KEY) !== null;
-          if (!hasUserPreference && defaultStates.hasOwnProperty(sectionId)) {
+          if (!hasUserPreference && Object.hasOwn(defaultStates, sectionId)) {
             if (defaultStates[sectionId]) {
               expandedSections.add(sectionId);
             }

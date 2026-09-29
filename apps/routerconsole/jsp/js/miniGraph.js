@@ -272,7 +272,7 @@
               out.push(a + (b - a) * t);
           }
       }
-      out.push(lowRes[lowRes.length - 1]);
+      out.push(lowRes.at(-1));
       return out;
   }
 
@@ -349,7 +349,7 @@
           y: yMapper(v, maxVal)
       }));
       pts[0].x += rtl ? stepX * 0.5 : -stepX * 0.5;
-      pts[pts.length - 1].x += rtl ? -stepX * 0.5 : stepX * 0.5;
+      pts.at(-1).x += rtl ? -stepX * 0.5 : stepX * 0.5;
 
       ctx.save();
       ctx.beginPath();
@@ -361,7 +361,7 @@
       // Fill pass
       if (pass !== "stroke") {
           const fillStartX = pts[0].x;
-          const fillEndX = pts[pts.length - 1].x;
+          const fillEndX = pts.at(-1).x;
           ctx.fillStyle = parseFillStyle(ctx, fillColor, baselineY, fillDown ? HEIGHT : PAD);
           if (blendMode) {ctx.globalCompositeOperation = blendMode;}
           ctx.beginPath();
@@ -371,7 +371,7 @@
               const p0 = i > 0 ? pts[i - 1] : pts[0];
               const p1 = pts[i];
               const p2 = pts[i + 1];
-              const p3 = i + 2 < pts.length ? pts[i + 2] : pts[pts.length - 1];
+              const p3 = i + 2 < pts.length ? pts[i + 2] : pts.at(-1);
               const cp1x = p1.x + (p2.x - p0.x) / (6 * t);
               const cp1y = p1.y + (p2.y - p0.y) / (6 * t);
               const cp2x = p2.x - (p3.x - p1.x) / (6 * t);
@@ -542,8 +542,8 @@
                   for (let s = 0; s < maxShift; s++) {
                       rxBuffer.shift();
                       txBuffer.shift();
-                      rxBuffer.push(s === 0 && liveRx !== undefined ? liveRx : rxBuffer[rxBuffer.length - 1]);
-                      txBuffer.push(s === 0 && liveTx !== undefined ? liveTx : txBuffer[txBuffer.length - 1]);
+                      rxBuffer.push(s === 0 && liveRx !== undefined ? liveRx : rxBuffer.at(-1));
+                      txBuffer.push(s === 0 && liveTx !== undefined ? liveTx : txBuffer.at(-1));
                   }
                   lastShiftTime += shifts * SAMPLE_SECONDS * 1000;
                   if (!continuous) {saveBuffers(minutes);}

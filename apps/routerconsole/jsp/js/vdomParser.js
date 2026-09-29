@@ -300,7 +300,7 @@ const tokenize = (html, options = {}) => {
             } else if (char === 62 && inTag && !inTemplate) {
                 if (token === "/pre") inPre = false;
                 else if (token === "pre" || startsWith(token, "pre")) inPre = true;
-                if (specialTags.find((t) => t === token || startsWith(token, t)) && !endsWith(token, "/")) inStyleScript = true;
+                if (specialTags.some((t) => t === token || startsWith(token, t)) && !endsWith(token, "/")) inStyleScript = true;
                 const isDocType = startsWith(toLowerCase(token), "!doctype");
                 if (token) {
                     let isSC = endsWith(token, "/");
@@ -468,7 +468,7 @@ function decodeEntities(value) {
       const code = body.charCodeAt(1) === 120 || body.charCodeAt(1) === 88
         ? parseInt(body.slice(2), 16)
         : parseInt(body.slice(1), 10);
-      if (isNaN(code) || code > 0x10FFFF) { return m; }
+      if (Number.isNaN(code) || code > 0x10FFFF) { return m; }
       try { return String.fromCodePoint(code); } catch (e) { return m; }
     }
     return NAMED_ENTITIES[body] !== undefined ? NAMED_ENTITIES[body] : m;

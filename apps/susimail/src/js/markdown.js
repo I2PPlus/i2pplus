@@ -115,10 +115,10 @@ const RE_SCHEME = /^([a-z][a-z0-9+.-]*):/i;                  // URL scheme
  * @returns {string} Escaped string
  */
 const _esc = (str) => str
-  .replace(/&/g, "&amp;")
-  .replace(/</g, "&lt;")
-  .replace(/>/g, "&gt;")
-  .replace(/"/g, "&quot;");
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;");
 
 /**
  * HTML-escapes a string for element content.
@@ -126,9 +126,9 @@ const _esc = (str) => str
  * @returns {string} Escaped string
  */
 const _ent = (str) => str
-  .replace(/&/g, "&amp;")
-  .replace(/</g, "&lt;")
-  .replace(/>/g, "&gt;");
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;");
 
 /**
  * Checks if a URL uses an allowed scheme.
@@ -138,7 +138,7 @@ const _ent = (str) => str
 const _safeUrl = (url) => {
   const trimmed = url.trim();
   if (trimmed.startsWith("//")) return false;
-  if (trimmed.length !== trimmed.replace(/[\x00-\x1f\x7f]/g, "").length) return false;
+  if (trimmed.length !== trimmed.replaceAll(/[\x00-\x1f\x7f]/g, "").length) return false;
   if (/%[0-9a-f]{2}/i.test(trimmed)) {
     try {
       const decoded = decodeURIComponent(trimmed);
@@ -421,11 +421,11 @@ const _renderTable = (b) => {
  * @returns {string[]} Array of cell contents
  */
 const _splitCells = (row) => {
-  let escaped = row.replace(/\|\|/g, "\x01").replace(/\\\|/g, "\x00");
+  let escaped = row.replaceAll("||", "\x01").replaceAll("\\|", "\x00");
   let cells = escaped.split("|");
   if (cells.length > 0 && cells[0].trim() === "") cells.shift();
-  if (cells.length > 0 && cells[cells.length - 1].trim() === "") cells.pop();
-  return cells.map((c) => c.replace(/^\s+|\s+$/g, "").replace(/^\x01|\x01$/g, "").replace(/\x00/g, "|").replace(/\x01/g, "|"));
+  if (cells.length > 0 && cells.at(-1).trim() === "") cells.pop();
+  return cells.map((c) => c.replaceAll(/^\s+|\s+$/g, "").replaceAll(/^\x01|\x01$/g, "").replaceAll("\x00", "|").replaceAll("\x01", "|"));
 };
 
 /**
@@ -609,11 +609,11 @@ const _parseBlocks = (lines, start, end, refdefs = {}) => {
 
     m = trimmed.match(RE_TABLE_ROW);
     if (m) {
-      const last = blocks[blocks.length - 1];
+      const last = blocks.at(-1);
       if (!(last && last.type === "table")) {
         blocks.push({ type: "table", rows: [] });
       }
-      blocks[blocks.length - 1].rows.push(trimmed);
+      blocks.at(-1).rows.push(trimmed);
       i++;
       continue;
     }
@@ -770,7 +770,7 @@ const _groupBlocks = (blocks) => {
     }
 
     if (b.type === "table") {
-      const prev = out[out.length - 1];
+      const prev = out.at(-1);
       if (prev && prev.type === "table") {
         for (const row of b.rows) prev.rows.push(row);
       } else {
@@ -810,7 +810,7 @@ const _render = (blocks) => {
  * @returns {string} Normalized text
  */
 const _normalize = (text) => {
-  return text.replace(/[\u2000-\u200B\u202F\u205F\u3000]/g, " ");
+  return text.replaceAll(/[\u2000-\u200B\u202F\u205F\u3000]/g, " ");
 };
 
 /**

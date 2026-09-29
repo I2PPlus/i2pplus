@@ -31,7 +31,7 @@ function sanitizeHTML() {
       }
       // remove all !important declarations
       if (style.toLowerCase().indexOf("!important") !== -1) {
-        const newStyle = style.replace(/!important/gi, "");
+        const newStyle = style.replaceAll(/!important/gi, "");
         element.setAttribute("style", newStyle);
       }
     }

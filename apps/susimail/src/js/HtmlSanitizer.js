@@ -95,7 +95,7 @@ const HtmlSanitizer = new (function () {
     };
 
     let resultElement = makeSanitizedCopy(doc.body);
-    return resultElement.innerHTML.replace(/div><div/g, "div>\n<div");
+    return resultElement.innerHTML.replaceAll("div><div", "div>\n<div");
   };
 
   function startsWithAny(str, substrings) {

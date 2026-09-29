@@ -180,7 +180,7 @@ function start() {
       els.refreshInput.addEventListener("input", () => {
         els.refreshSpan.classList.add("listening");
         const value = els.refreshInput.value;
-        if (!value || isNaN(value)) { return; }
+        if (!value || Number.isNaN(value)) { return; }
 
         state.intervalValue = value;
         localStorage.setItem("logsRefresh", value);
