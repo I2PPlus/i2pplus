@@ -2219,6 +2219,68 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Ceiling for {@link #getWindowMultiplier()}. Exposed so the pool's
+     *  starvation bypass can widen the window without duplicating the bound.
+     *
+     *  @return the maximum multiplier
+     *  @since 0.9.71+
+     */
+    public static int getMaxWindowMultiplier() {
+        return MAX_WINDOW_MULTIPLIER;
+    }
+
+    /** Stat name for the live window multiplier. @see #publishWindowMultiplier */
+    public static final String WINDOW_MULTIPLIER_STAT = "tunnel.peerSelection.windowMultiplier";
+    /** Guards one-time stat creation; the setter runs on a tuning cycle, not a hot path. */
+    private static volatile boolean _windowMultiplierStatCreated;
+    /** Last value handed to the stat, so repeated publishes stay quiet. */
+    private static volatile int _lastPublishedMultiplier;
+
+    /**
+     *  Publish the current activity-window multiplier.
+     *
+     *  <p>The multiplier was a private field with no visible output, so a
+     *  multiplier stuck at its floor looked identical to a healthy one. During
+     *  a build slump that made the one control meant to relieve the slump
+     *  impossible to diagnose from the console: the window policy could be
+     *  inert and nothing on {@code /stats} or {@code /tuning} would say so.
+     *
+     *  <p>StatManager has no gauge setter, so the level is published as a rate
+     *  sample and recorded only when the value actually changes. That keeps the
+     *  stat's average equal to the current multiplier instead of an average
+     *  over the history, and avoids a sample on every selection.
+     *
+     * @param ctx router context; null is ignored so callers on odd paths do not
+     *            need a null check of their own
+     * @since 0.9.71+
+     */
+    public static void publishWindowMultiplier(RouterContext ctx) {
+        if (ctx == null) {return;}
+        try {
+            if (!_windowMultiplierStatCreated) {
+                synchronized (TunnelPeerSelector.class) {
+                    if (!_windowMultiplierStatCreated) {
+                        ctx.statManager().createRequiredRateStat(
+                            WINDOW_MULTIPLIER_STAT,
+                            "Peer activity window multiplier (higher = more peers eligible)",
+                            "Tunnels", null);
+                        _windowMultiplierStatCreated = true;
+                        _lastPublishedMultiplier = Integer.MIN_VALUE;
+                    }
+                }
+            }
+            int current = _windowMultiplier;
+            if (current == _lastPublishedMultiplier) {return;}
+            _lastPublishedMultiplier = current;
+            ctx.statManager().addRateData(WINDOW_MULTIPLIER_STAT, current);
+        } catch (RuntimeException re) {
+            // Observability must never break selection.
+            ctx.logManager().getLog(TunnelPeerSelector.class)
+               .log(Log.WARN, "Cannot publish window multiplier", re);
+        }
+    }
+
+    /**
      *  Current Tuner-controlled activity-window multiplier.
      *
      *  @return the current multiplier, in [1, 4]
