@@ -3453,10 +3453,40 @@
   </target>
 
   <!-- IzPack 4 -->
-  <target name="check-installer">
-    <uptodate property="installer.uptodate" targetfile="dist/install.jar">
+  <!-- Same contract as check-updater: a timestamp-only check against the built jars
+       cannot see an uncommitted source edit, so `ant installer` would skip the
+       rebuild and ship an installer that does not match the tree. installer.skip is
+       the conjunction the callers test - the raw uptodate result is kept separate
+       because Ant properties are immutable, so a dirty tree has to mask it rather
+       than overwrite it.
+       The srcfiles block mirrors check-updater: preppkg copies these installer/
+       resources trees verbatim, and none of them are visible to a jar-vs-jar
+       comparison, so a committed theme/eepsite/cert/geoip/.po/doc change would
+       otherwise be reported as up to date. Every dir listed must exist - Ant fails
+       the build on a missing srcfiles dir, and an empty one passes vacuously. -->
+  <target name="check-installer" depends="check-workspace-clean">
+    <uptodate property="installer.files.current" targetfile="dist/install.jar">
       <srcfiles dir="${build.root}build" includes="*.jar *.war" excludes="jbigi.jar tools.jar utility.jar"/>
+      <srcfiles dir="installer/resources/console/themes"/>
+      <srcfiles dir="installer/resources/eepsite"/>
+      <srcfiles dir="installer/resources/eepsite-jetty9.3"/>
+      <srcfiles dir="installer/resources/certificates"/>
+      <srcfiles dir="installer/resources/geoip"/>
+      <srcfiles dir="installer/resources/locale/po"/>
+      <srcfiles dir="docs"/>
     </uptodate>
+    <condition property="installer.skip">
+      <and>
+        <isset property="installer.files.current"/>
+        <not><isset property="workspace.dirty"/></not>
+      </and>
+    </condition>
+    <if>
+      <isset property="workspace.dirty"/>
+      <then>
+        <echo>Source tree has uncommitted changes -> forcing installer rebuild.${line.separator}Commit or stash the tree for incremental installer builds.</echo>
+      </then>
+    </if>
   </target>
   <!-- izpack-patches must stay a depends, not an <antcall> into the rebuild
        branch: it carries the <taskdef name="izpack">, and a taskdef registered in
@@ -3465,7 +3495,7 @@
        the already-up-to-date path is not worth trading a working installer for. -->
   <target name="installer" depends="check-installer, izpack-patches">
     <if>
-      <isset property="installer.uptodate"/>
+      <isset property="installer.skip"/>
       <then>
         <echo>dist/install.jar already up to date, skipping rebuild...${line.separator}Note: if you updated jbigi.jar / tools.jar / utility.jar, delete and rebuild</echo>
       </then>
@@ -3526,7 +3556,7 @@
 
   <target name="installer5" depends="check-installer, izpack5-patches">
     <if>
-      <isset property="installer.uptodate"/>
+      <isset property="installer.skip"/>
       <then>
         <echo>dist/install.jar already up to date, skipping rebuild...</echo>
       </then>
