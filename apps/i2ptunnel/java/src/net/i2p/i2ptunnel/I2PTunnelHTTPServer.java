@@ -482,8 +482,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final long BULK_STALL_8M = 8L * 1024L * 1024L;
     /** @since 0.9.71+ */
     private static final long BULK_STALL_32M = 32L * 1024L * 1024L;
-    /** Ceiling on a progress-scaled window, ms. @since 0.9.71+ */
-    private static final long MAX_STALL_WINDOW_MS = 600_000L;
+    /**
+     *  Hard ceiling on a progress-scaled window, ms. Above the top progress
+     *  tier (8x) so a raised base window still cannot push a body past ten
+     *  minutes without a stall.
+     *  @since 0.9.71+
+     */
+    static final long MAX_STALL_WINDOW_MS = 600_000L;
 
     /** Stall side reported when both stamps are equally stale. @since 0.9.71+ */
     static final String STALL_SIDE_INDETERMINATE = "source or destination (indeterminate)";
@@ -1264,9 +1269,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 boolean compress = allowGZIP && useGZIP;
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
-                Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
-                                                     _log, compress, upgrade, _clientExecutor, keepalive, waiter,
-                                                     this::getIOExecutor);
+                  Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
+                                                       _log, compress, upgrade, _clientExecutor, keepalive, waiter,
+                                                       this::getIOExecutor, tunnelId);
                 // Persistent connections run inline so the waiter can gate the
                 // next request on this connection. Non-keepalive requests
                 // (including GET/HEAD with keepalive off or Connection: close)
@@ -1951,6 +1956,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     private static class CompressedRequestor implements Runnable {
+        /**
+         *  Far-side label for transfer logs, e.g. {@code [skank / aanoquc2]}.
+         *  Null when the caller did not supply one.
+         *  @since 0.9.71+
+         */
+        private final String _tunnelId;
         private final Socket _webserver;
         private final I2PSocket _browser;
         private final String _headers;
@@ -1970,13 +1981,27 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *  @param waiter to notify when done, if non-null; will set value to 1: not keepalive-able response, or 2: keepalive
          *  @param ioPool resolves the owning tunnel's I/O transfer pool (never returns null in production)
          */
-        public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
-                                   I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
-                                   ThreadPoolExecutor tpe, boolean keepalive, AtomicInteger waiter,
-                                   Supplier<ThreadPoolExecutor> ioPool) {
-            _webserver = webserver;
-            _browser = browser;
-            _headers = headers;
+          public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
+                                     I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
+                                     ThreadPoolExecutor tpe, boolean keepalive, AtomicInteger waiter,
+                                     Supplier<ThreadPoolExecutor> ioPool) {
+              this(webserver, browser, headers, ctx, log, shouldCompress, upgrade, tpe, keepalive, waiter,
+                   ioPool, null);
+          }
+
+          /**
+           *  @param tunnelId far-side label for transfer logs, e.g.
+           *                  {@code [skank / aanoquc2]}; may be null
+           *  @since 0.9.71+
+           */
+          public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
+                                     I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
+                                     ThreadPoolExecutor tpe, boolean keepalive, AtomicInteger waiter,
+                                     Supplier<ThreadPoolExecutor> ioPool, String tunnelId) {
+              _tunnelId = tunnelId;
+              _webserver = webserver;
+              _browser = browser;
+              _headers = headers;
             _ctx = ctx;
             _log = log;
             _shouldCompress = shouldCompress;
@@ -2100,7 +2125,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                             SERVER_READ_TIMEOUT_MEDIUM :   // medium
                                             SERVER_READ_TIMEOUT_POST);     // long
                     _keepalive = false;
-                    sender = new Sender(serverout, browserin, "from Client -> Server", _log);
+                    sender = new Sender(serverout, browserin, "from Client -> Server", _tunnelId, _log);
+                    // The request line is only known now, so label the request
+                    // direction after the fact; the response direction already
+                    // carries the URL in its name.
+                    sender.setRequestLabel(req);
                     // run in the limited client pool
                     try {
                         _tpe.execute(sender);
@@ -2127,14 +2156,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // Push headers before the body handoff so TTFB does not
                     // wait on MessageOutputStream's passive flush interval.
                     compressedout.flush();
-                    s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
-                                   urlSuffix(req), _log);
+                      s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
+                                     urlSuffix(req), _tunnelId, _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
                     browserout.flush();
-                    s = new Sender(browserout, serverin, "Server -> Client " +
-                                   urlSuffix(req), _log);
+                      s = new Sender(browserout, serverin, "Server -> Client " +
+                                     urlSuffix(req), _tunnelId, _log);
                 }
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
@@ -2483,6 +2512,23 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final OutputStream _out;
         private final InputStream _in;
         private final String _name;
+        /**
+         *  Identity of the far side, e.g. {@code [skank / aanoquc2]}. The
+         *  request direction used to log a bare "from Client -> Server" with no
+         *  indication of which eepsite or client a transfer belonged to, which
+         *  made slow small transfers impossible to attribute.
+         *
+         *  @since 0.9.71+
+         */
+        private volatile String _targetLabel;
+        /**
+         *  Parsed request line for the transfer, set once known. The request
+         *  direction builds the Sender before the request line is read, so this
+         *  is applied after the fact and rendered only when present.
+         *
+         *  @since 0.9.71+
+         */
+        private volatile String _requestLabel;
         // shadows _log in super()
         private final Log _log;
         private volatile IOException _failure;
@@ -2514,11 +2560,99 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *  @param log the logging instance
          */
         public Sender(OutputStream out, InputStream in, String name, Log log) {
+            this(out, in, name, null, log);
+        }
+
+        /**
+         *  Create a Sender with an explicit far-side label.
+         *
+         *  @param out the output stream to write to
+         *  @param in the input stream to read from
+         *  @param name descriptive name for logging
+         *  @param targetLabel far-side identity, e.g. {@code [skank / aanoquc2]};
+         *                     may be null or empty
+         *  @param log the logging instance
+         *  @since 0.9.71+
+         */
+        public Sender(OutputStream out, InputStream in, String name, String targetLabel, Log log) {
             _out = out;
             _in = in;
             _name = name;
+            _targetLabel = (targetLabel != null && !targetLabel.isEmpty()) ? targetLabel : null;
             _log = log;
         }
+
+        /**
+         *  Set the far-side label. The request direction constructs the Sender
+         *  before the request line is parsed, so the label is applied once it is
+         *  known rather than at construction.
+         *
+         *  @param label far-side identity, or null/empty to leave unset
+         *  @since 0.9.71+
+         */
+        void setTargetLabel(String label) {
+            _targetLabel = (label != null && !label.isEmpty()) ? label : null;
+        }
+
+        /**
+         *  Set the parsed request line once it is known.
+         *
+         *  @param request request line or path; null/empty/"Unknown request" leaves it unset
+         *  @since 0.9.71+
+         */
+        void setRequestLabel(String request) {
+            _requestLabel = (request != null && !request.isEmpty()
+                             && !request.equals("Unknown request")) ? request : null;
+        }
+
+        /**
+         *  Describe the far side for a log line: label plus optional request
+         *  target, e.g. {@code [skank / aanoquc2] GET /installers/i2pinstall.exe}.
+         *  Pure and static so the formatting is testable without streams.
+         *
+         *  @param label far-side identity; may be null
+         *  @param request parsed request line or path; may be null
+         *  @return the suffix to append to a transfer name, "" if neither is known
+         *  @since 0.9.71+
+         */
+        static String describeTarget(String label, String request) {
+            boolean hasLabel = label != null && !label.isEmpty();
+            boolean hasRequest = request != null && !request.isEmpty()
+                && !request.equals("Unknown request");
+            if (!hasLabel && !hasRequest)
+                return "";
+            StringBuilder sb = new StringBuilder();
+            sb.append(' ').append(hasLabel ? label : "[?]");
+            if (hasRequest)
+                sb.append(' ').append(request);
+            return sb.toString();
+        }
+
+        /**
+         *  Format a transfer rate as {@code 10.5K/s} / {@code 1.2M/s}, in bytes
+         *  per second using 1000-based units. Suffixes are B/s below 1 KB/s, K/s
+         *  below 1 MB/s, and M/s above, so a rate never reads as a bare number
+         *  with an ambiguous "kbps" that is easy to mistake for bits per second.
+         *
+         * @param bytes bytes transferred
+         * @param secs elapsed seconds
+         * @return formatted rate, e.g. {@code 60.6K/s}; "0.0B/s" if secs <= 0
+         * @since 0.9.71+
+         */
+    static String formatTransferRate(long bytes, double secs) {
+        if (secs <= 0 || bytes < 0)
+            return "0.0B/s";
+        // Bytes per second, 1000-based. The unit is per second of transfer, not
+        // bits per second: the byte count is already known and dividing by eight
+        // to get a "kbps" figure only made the number harder to compare against
+        // the sizes in the same line.
+        double perSec = bytes / secs;
+        if (perSec >= 1_000_000.0)
+            return String.format("%.1fM/s", perSec / 1_000_000.0);
+        if (perSec >= 1_000.0)
+            return String.format("%.1fK/s", perSec / 1_000.0);
+        return String.format("%.1fB/s", perSec);
+    }
 
         /**
          *  Copy data from the input stream to the output stream, flushing
@@ -2569,14 +2703,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                 }
                 long elapsed = System.nanoTime() - startNanos;
+                String target = describeTarget(_targetLabel, _requestLabel);
                 if (_log != null && _log.shouldInfo() && elapsed > 5_000_000_000L) {
                     double secs = elapsed / 1_000_000_000.0;
-                    double kbps = (_bytesTransferred * 8.0) / (secs * 1000);
-                    _log.info("[HTTPServer] Done sending " + _name + ": " +
+                    _log.info("[HTTPServer] Done sending " + _name + target + ": " +
                               _bytesTransferred + " bytes in " + String.format("%.1f", secs) + "s " +
-                              "(" + String.format("%.1f", kbps) + " kbps)");
+                              formatTransferRate(_bytesTransferred, secs));
                 } else if (_log != null && _log.shouldDebug()) {
-                    _log.debug("[HTTPServer] Done sending " + _name);
+                    _log.debug("[HTTPServer] Done sending " + _name + target);
                 }
             } catch (IOException ioe) {
                 if (ioe.getMessage() != null) {
