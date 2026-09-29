@@ -165,7 +165,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
      *
      * @param resource may be null
      */
-    private void closeQuietly(AutoCloseable resource) {
+    private static void closeQuietly(AutoCloseable resource) {
         if (resource != null) {
             try {resource.close();}
             catch (Exception ignored) { /* ignored */ }
@@ -215,8 +215,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         } else {
             if (!keepaliveI2P) closeQuietly(i2pin);
             try {
-                if (keepaliveI2P) {if (i2pout != null) {i2pout.flush();}}
-                else {closeQuietly(i2pout);}
+                flushOrCloseI2POut(i2pout, keepaliveI2P);
             } catch (IOException ignored) { /* ignored */ }
         }
 
@@ -242,6 +241,14 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
             if (t1.isAlive() && _log.shouldWarn()) {
                 _log.warn("Upstream thread did not finish within timeout");
             }
+        }
+    }
+
+    private static void flushOrCloseI2POut(OutputStream i2pout, boolean keepaliveI2P) throws IOException {
+        if (keepaliveI2P) {
+            if (i2pout != null) {i2pout.flush();}
+        } else {
+            closeQuietly(i2pout);
         }
     }
 
