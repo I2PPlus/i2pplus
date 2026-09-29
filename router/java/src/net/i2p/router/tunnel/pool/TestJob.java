@@ -21,6 +21,7 @@ import net.i2p.data.SessionTag;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.router.CommSystemFacade;
 import net.i2p.router.JobImpl;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
@@ -211,6 +212,84 @@ public class TestJob extends JobImpl {
      * @return true when the round was deferred
      *  @since 0.9.71+
      */
+    /**
+     *  Probe the far endpoint of a tunnel whose test round just failed, and
+     *  record whether it was still reachable.
+     *
+     *  <p>A round times out, the tunnel is charged, and the pool loses it.  The
+     *  charge assumes the far endpoint was gone, but nothing records whether
+     *  that was true.  Two very different faults produce the same verdict: the
+     *  endpoint having died (the tunnel is genuinely broken, so the charge is
+     *  correct), and the endpoint being alive with the reply simply never
+     *  arriving (the tunnel is being condemned for something it does not own).
+     *  The first is a data-path fault; the second is a fault in the test's own
+     *  pass criterion, and the remedy is opposite.  One counter cannot tell
+     *  them apart, so this splits the population.
+     *
+     *  <p>Observational only: it never gates selection, never alters the
+     *  charge, and never changes timing, so it cannot itself change behaviour.
+     *  It runs only on rounds that have already failed and are already being
+     *  charged.
+     *
+     *  <p>Two signals are read rather than one, because
+     *  {@link CommSystemFacade#isEstablished} and
+     *  {@link CommSystemFacade#wasUnreachable} both default to {@code false}
+     *  in the interface and only their implementations answer.  A lookup that
+     *  misses therefore reports "reachable" silently; recording both makes that
+     *  failure mode visible in the data instead of hiding it.
+     *
+     *  <p>Caveats, so the result is not over-read: "established" means reachable
+     *  <em>now</em>, not that the peer was reachable when the message was sent
+     *  and chose not to answer; and it does not separate a send failure from a
+     *  lost reply, since both look the same from here.  Only failed rounds are
+     *  probed, so the counters describe the failure population only.
+     *
+     * @param cfg the tunnel whose round failed
+     *  @since 0.9.71+
+     */
+    private void probeFarEndpoint(TunnelInfo cfg) {
+        if (cfg == null) {return;}
+        Hash farEnd;
+        try {
+            farEnd = cfg.getFarEnd();
+        } catch (RuntimeException e) {
+            // A peer array not yet sized would throw here; nothing to report.
+            return;
+        }
+        if (farEnd == null) {return;}
+        boolean inbound = cfg.isInbound();
+        StatManager sm = getContext().statManager();
+        String event;
+        try {
+            CommSystemFacade comm = getContext().commSystem();
+            event = farEndVerdict(comm.wasUnreachable(farEnd), comm.isEstablished(farEnd));
+        } catch (RuntimeException e) {
+            event = "FarEndUnknown";
+        }
+        sm.addRateData(directionStat(inbound, event), 1);
+    }
+
+    /**
+     *  Classify a failed round's far endpoint into exactly one bucket.
+     *
+     *  <p>Unreachable outranks established, because a peer that is both
+     *  currently reachable and recently unreachable is a peer that was gone and
+     *  has since returned — which is the case where the tunnel's condemnation
+     *  was correct at the time.  "Unknown" is kept separate rather than folded
+     *  into either side, so a missed lookup cannot inflate the established
+     *  share that the whole diagnosis turns on.
+     *
+     * @param unreachable the far endpoint was recently unreachable
+     * @param established the far endpoint has a live transport session
+     * @return the event name
+     *  @since 0.9.71+
+     */
+    static String farEndVerdict(boolean unreachable, boolean established) {
+        if (unreachable) {return "FarEndUnreachable";}
+        if (established) {return "FarEndEstablished";}
+        return "FarEndUnknown";
+    }
+
     private boolean deferIfTooYoungToJudge() {
         if (!withinYoungTunnelGrace(_cfg.getCreationTime(), System.currentTimeMillis())) {
             return false;
@@ -244,14 +323,22 @@ public class TestJob extends JobImpl {
     }
     private int _replyPartnerDeferrals = 0;
     /**
+     *  Failure rate at or above which a reply partner counts as implicated in
+     *  the round that just failed.  A rate rather than a repeat flag: a flag
+     *  tracks how often a partner is re-picked, which measures pool churn
+     *  instead of partner health.
+     *  @since 0.9.71+
+     */
+    static final double IMPLICATED_REPLY_PARTNER_RATE = 0.5d;
+    /**
      *  Reply partner router hash to the time it was last blamed for a failed
      *  round, per direction.  Split by direction because the diagnosis is
      *  asymmetric: a reply leg that repeatedly fails for inbound tests is a
      *  different finding from one that does so for outbound.
      *  @since 0.9.71+
      */
-    private static final Map<Hash, Long> _inboundReplyPartnerFailures = new ConcurrentHashMap<>();
-    private static final Map<Hash, Long> _outboundReplyPartnerFailures = new ConcurrentHashMap<>();
+    private static final Map<Hash, long[]> _inboundReplyPartnerTally = new ConcurrentHashMap<>();
+    private static final Map<Hash, long[]> _outboundReplyPartnerTally = new ConcurrentHashMap<>();
 
     /**
      *  Whether a failing round is evidence about its reply partner rather than
@@ -265,98 +352,95 @@ public class TestJob extends JobImpl {
      * @return true when this partner was blamed within the memory window
      *  @since 0.9.71+
      */
-    static boolean isRepeatReplyPartnerFailure(Map<Hash, Long> memory, TunnelInfo replyPartner, long now) {
-        if (memory == null || memory.isEmpty() || replyPartner == null) {return false;}
+    /**
+     *  The pool manager, reached through this job's own pool rather than
+     *  {@code RouterContext.tunnelManager()}.  The latter is the public
+     *  {@link net.i2p.router.TunnelManagerFacade} interface, and adding the
+     *  ranked-partner methods there would break every out-of-tree implementor
+     *  for the sake of two test-cycle call sites.
+     *
+     * @return the pool manager, or null if this job has no pool
+     *  @since 0.9.71+
+     */
+    private TunnelPoolManager poolManager() {
+        return _pool == null ? null : _pool.getTunnelPoolManager();
+    }
+
+    /**
+     *  Failure rate of a reply partner: failures divided by rounds it carried.
+     *  A rate is the only figure comparable between partners — a raw "blamed
+     *  before" flag reads a stable pool as bad and a churning pool as good,
+     *  because it tracks how often a partner is re-picked rather than how
+     *  often it fails.  That confound was visible in the field: outbound tests
+     *  drew partners from the stable inbound pool and showed a 74% repeat
+     *  share, while inbound tests drew from the churning outbound pool and
+     *  showed 15%.  Neither number said anything about partner health.
+     *
+     * @param tally partner to failure/use counts, may be null
+     * @param replyPartner the tunnel the reply came back through, may be null
+     * @return failures per round carried, 0 when nothing is recorded
+     *  @since 0.9.71+
+     */
+    static double replyPartnerFailureRate(Map<Hash, long[]> tally, TunnelInfo replyPartner) {
+        if (tally == null || tally.isEmpty() || replyPartner == null) {return 0d;}
+        Hash gateway = replyPartner.getGateway();
+        if (gateway == null) {return 0d;}
+        long[] counts = tally.get(gateway);
+        if (counts == null || counts[1] <= 0) {return 0d;}
+        return (double) counts[0] / (double) counts[1];
+    }
+
+    /**
+     *  Record one round against its reply partner: the use always, the failure
+     *  only when the round failed.  Bounded, because this rolls over every
+     *  destination the router serves.
+     *
+     * @param tally partner to failure/use counts
+     * @param replyPartner the tunnel the reply came back through, may be null
+     * @param failed true when the round failed
+     *  @since 0.9.71+
+     */
+    static void noteReplyPartnerRound(Map<Hash, long[]> tally, TunnelInfo replyPartner, boolean failed) {
+        if (tally == null || replyPartner == null) {return;}
         Hash gateway = replyPartner.getGateway();
         // ConcurrentHashMap rejects a null key, and a partner's peer array is
-        // not populated until its build completes — a 0-hop tunnel is length 1
-        // with a null entry until then.  An unpopulated gateway means there is
-        // nothing to attribute, which is the same as "not a repeat".
-        if (gateway == null) {return false;}
-        Long last = memory.get(gateway);
-        return last != null && (now - last) < REPLY_PARTNER_MEMORY_MS;
-    }
-
-    /**
-     *  Blame a reply partner for a failed round, evicting the oldest entries
-     *  if the map is full.  Bounded because this is a rolling diagnostic over
-     *  every destination the router serves.
-     *
-     * @param memory partner to last-blamed timestamps
-     * @param replyPartner the tunnel the reply should have come back through
-     * @param now current time in ms
-     *  @since 0.9.71+
-     */
-    static void blameReplyPartner(Map<Hash, Long> memory, TunnelInfo replyPartner, long now) {
-        if (memory == null || replyPartner == null) {return;}
-        Hash gateway = replyPartner.getGateway();
-        // See isRepeatReplyPartnerFailure(): a null key is not an error here.
+        // not populated until its build completes -- a 0-hop tunnel is length 1
+        // with a null entry until then.
         if (gateway == null) {return;}
-        memory.put(gateway, now);
-        if (memory.size() > MAX_REPLY_PARTNER_MEMORY) {
-            pruneStaleReplyPartners(memory, now);
+        long[] counts = tally.get(gateway);
+        if (counts == null) {
+            long[] fresh = new long[2];
+            counts = tally.putIfAbsent(gateway, fresh);
+            if (counts == null) {counts = fresh;}
         }
+        counts[1]++;
+        if (failed) {counts[0]++;}
+        pruneReplyPartnerTally(tally);
     }
 
     /**
-     *  Drop partners whose blame has aged out of the memory window, keeping the
-     *  map bounded without a per-call scan.  Expiry rather than
-     *  least-recently-used eviction: the window is the same one
-     *  {@link #isRepeatReplyPartnerFailure} reads, so a stale entry is worth
-     *  nothing to the diagnostic, and pruning by age means the map drains
-     *  instead of pinning the oldest entries forever.  If everything is still
-     *  in-window the cap is enforced by dropping the oldest of them, which
-     *  costs one scan but only on the rare occasion the window is full of
-     *  live partners.
+     *  Keep the tally bounded.  Drops an arbitrary entry once over the cap:
+     *  the per-partner rate is a running diagnostic, so evicting the least
+     *  interesting entry is preferable to the scan that an oldest-first
+     *  eviction needs on every round.
      *
-     * @param memory partner to last-blamed timestamps
-     * @param now current time in ms
-     * @since 0.9.71+
-     */
-    static void pruneStaleReplyPartners(Map<Hash, Long> memory, long now) {
-        int live = 0;
-        Hash oldestKey = null;
-        long oldest = Long.MAX_VALUE;
-        for (Map.Entry<Hash, Long> e : memory.entrySet()) {
-            long ts = e.getValue();
-            if (now - ts >= REPLY_PARTNER_MEMORY_MS) {
-                if (memory.remove(e.getKey(), ts)) {continue;}
-            }
-            live++;
-            if (ts < oldest) {oldest = ts; oldestKey = e.getKey();}
-        }
-        if (live > MAX_REPLY_PARTNER_MEMORY && oldestKey != null) {
-            memory.remove(oldestKey);
-        }
-    }
-
-    /**
-     *  Record a failed round against its reply partner and stat whether this
-     *  partner was already implicated, which is what separates "this tunnel is
-     *  bad" from "this reply path is bad".
-     *
-     * @param inbound true if the tunnel under test is inbound
-     * @param replyPartner the tunnel the reply should have come back through
+     * @param tally partner to failure/use counts
      *  @since 0.9.71+
      */
-    /**
-     *  The reply-partner failure memory for a direction.
-     *
-     * @param inbound true for an inbound tunnel under test
-     * @return the memory to read and write for that direction
-     *  @since 0.9.71+
-     */
-    static Map<Hash, Long> replyPartnerMemory(boolean inbound) {
-        return inbound ? _inboundReplyPartnerFailures : _outboundReplyPartnerFailures;
+    static void pruneReplyPartnerTally(Map<Hash, long[]> tally) {
+        while (tally.size() > MAX_REPLY_PARTNER_MEMORY) {
+            Hash victim = null;
+            for (Hash k : tally.keySet()) {victim = k; break;}
+            if (victim == null || tally.remove(victim) == null) {return;}
+        }
     }
 
-    private void attributeFailureToReplyPartner(boolean inbound, TunnelInfo replyPartner) {
-        if (replyPartner == null) {return;}
-        Map<Hash, Long> memory = inbound ? _inboundReplyPartnerFailures : _outboundReplyPartnerFailures;
-        StatManager sm = getContext().statManager();
-        boolean repeat = isRepeatReplyPartnerFailure(memory, replyPartner, getContext().clock().now());
-        sm.addRateData(directionStat(inbound, repeat ? "ReplyPartnerRepeat" : "ReplyPartnerNew"), 1);
-        blameReplyPartner(memory, replyPartner, getContext().clock().now());
+    static Map<Hash, long[]> replyPartnerMemory(boolean inbound) {
+        return inbound ? _inboundReplyPartnerTally : _outboundReplyPartnerTally;
+    }
+
+    private void attributeRoundToReplyPartner(boolean inbound, TunnelInfo replyPartner, boolean failed) {
+        noteReplyPartnerRound(replyPartnerMemory(inbound), replyPartner, failed);
     }
 
     private static volatile RouterContext _cfgCtx;
@@ -889,6 +973,24 @@ public class TestJob extends JobImpl {
      * @param periods rate periods to record them over
      * @since 0.9.71+
      */
+    /**
+     *  The per-direction event names registered by
+     *  {@link #registerDirectionStats}, excluding the pass/fail pair which
+     *  {@link #directionStat(boolean, boolean)} spells itself.
+     *
+     *  <p>Declared in one place so a test can assert the registered set.  A
+     *  stat that is registered but never emitted sits at zero forever and
+     *  reads as "this never happens" rather than "this is broken", which is
+     *  how two dead per-direction counters survived a review here.
+     *
+     *  @return the event names, in registration order
+     *  @since 0.9.71+
+     */
+    static final String[] DIRECTION_EVENTS = {
+        "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
+        "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown"
+    };
+
     static void registerDirectionStats(StatManager stats, long[] periods) {
         stats.createRequiredRateStat(directionStat(true, true),
                 "Inbound tunnel tests passed (count)", "Tunnels", periods);
@@ -910,14 +1012,18 @@ public class TestJob extends JobImpl {
                 "Tests deferred: tunnel too young to judge (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "GraceDeferred"),
                 "Tests deferred: tunnel too young to judge (count)", "Tunnels", periods);
-        stats.createRequiredRateStat(directionStat(true, "ReplyPartnerNew"),
-                "Test failed, reply partner not yet implicated (count)", "Tunnels", periods);
-        stats.createRequiredRateStat(directionStat(false, "ReplyPartnerNew"),
-                "Test failed, reply partner not yet implicated (count)", "Tunnels", periods);
-        stats.createRequiredRateStat(directionStat(true, "ReplyPartnerRepeat"),
-                "Test failed, reply partner already implicated (count)", "Tunnels", periods);
-        stats.createRequiredRateStat(directionStat(false, "ReplyPartnerRepeat"),
-                "Test failed, reply partner already implicated (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "FarEndEstablished"),
+                "Failed round: far endpoint still established (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "FarEndEstablished"),
+                "Failed round: far endpoint still established (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "FarEndUnreachable"),
+                "Failed round: far endpoint unreachable (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "FarEndUnreachable"),
+                "Failed round: far endpoint unreachable (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(true, "FarEndUnknown"),
+                "Failed round: far endpoint reachability unknown (count)", "Tunnels", periods);
+        stats.createRequiredRateStat(directionStat(false, "FarEndUnknown"),
+                "Failed round: far endpoint reachability unknown (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(true, "Condemned"),
                 "Tunnels marked FAILED by the test cycle (count)", "Tunnels", periods);
         stats.createRequiredRateStat(directionStat(false, "Condemned"),
@@ -2986,7 +3092,7 @@ public class TestJob extends JobImpl {
             if (isExploratory) {
                 _outTunnel = ctx.tunnelManager().selectOutboundTunnel();
             } else {
-                _outTunnel = ctx.tunnelManager().selectOutboundTunnel(_pool.getSettings().getDestination());
+                _outTunnel = poolManager().selectOutboundTunnelForTest(_pool.getSettings().getDestination());
                 if (!usablePartner(_outTunnel)) {
                     _outTunnel = null;
                 }
@@ -3046,7 +3152,7 @@ public class TestJob extends JobImpl {
             if (isExploratory) {
                 _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
             } else {
-                _replyTunnel = ctx.tunnelManager().selectInboundTunnel(_pool.getSettings().getDestination());
+                _replyTunnel = poolManager().selectInboundTunnelForTest(_pool.getSettings().getDestination());
                 if (!usablePartner(_replyTunnel)) {
                     _replyTunnel = null;
                 }
@@ -3299,6 +3405,11 @@ public class TestJob extends JobImpl {
             _confirmPending = false;
             _excludedPartner = null;
         }
+        // Count the round against its reply partner even though it passed: a
+        // failure rate is only meaningful against how often the partner carried
+        // a round at all, and counting successes only would make every partner
+        // look perfect.
+        attributeRoundToReplyPartner(_cfg.isInbound(), _replyTunnel, false);
         _cfg.testJobSuccessful(ms);
         // Share success credit with the paired tunnels — mirrors mainline
         // behavior.  Both inbound and outbound tunnels get their failure
@@ -3612,8 +3723,8 @@ public class TestJob extends JobImpl {
      */
     private boolean deferForImplicatedReplyPartner() {
         if (_replyPartnerDeferrals >= MAX_REPLY_PARTNER_DEFERRALS) {return false;}
-        if (!isRepeatReplyPartnerFailure(replyPartnerMemory(_cfg.isInbound()), _replyTunnel,
-                                         getContext().clock().now())) {
+        if (replyPartnerFailureRate(replyPartnerMemory(_cfg.isInbound()), _replyTunnel)
+            < IMPLICATED_REPLY_PARTNER_RATE) {
             return false;
         }
         _replyPartnerDeferrals++;
@@ -3633,6 +3744,7 @@ public class TestJob extends JobImpl {
             decrementIfCounted();
             return;
         }
+        probeFarEndpoint(_cfg);
 
         // Reply-path protection: the partner tunnel is the one the round was
         // actually routed through, not the tunnel under test.  A round that
@@ -3695,7 +3807,6 @@ public class TestJob extends JobImpl {
         }
         _confirmPending = false;
         _excludedPartner = null;
-        attributeFailureToReplyPartner(_cfg.isInbound(), _replyTunnel);
 
         if (deferIfTooYoungToJudge()) {return;}
 
