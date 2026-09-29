@@ -789,6 +789,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _context.statManager().createRequiredRateStat(STAGE_STAT_PREFIX + stage,
                 "CPU usage of " + stage + " worker threads (pct of one core)", "Tuner", cpuRates);
         }
+        // A param that throws every cycle is otherwise invisible: the cycle
+        // handler swallows it and the param silently never tunes.
+        _context.statManager().createRequiredRateStat(PARAM_UPDATE_FAILED_STAT,
+            "Tunable params whose update threw during a tuning cycle", "Tuner", cpuRates);
     }
 
     /**
@@ -901,11 +905,57 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 }
                 param.update();
             } catch (Exception e) {
-                if (_log.shouldWarn())
-                    _log.warn("Tuner: error updating " + param.getName(), e);
+                noteParamUpdateFailure(param, e);
             }
         }
     }
+
+    /**
+     *  Record that a param's tuning cycle threw.
+     *
+     *  <p>A throwing param is invisible: the cycle handler swallows it, the
+     *  param never updates, and nothing anywhere shows it as dead. That is how
+     *  {@code i2p.tunnel.build.requestTimeout} sat permanently inert — it threw
+     *  on every cycle for the life of the router and the only evidence was a
+     *  repeated stack trace in a log file nobody reads.
+     *
+     *  <p>Two things make it visible now: a counter on
+     *  {@code tuner.paramUpdateFailed} that appears on {@code /stats}, and a
+     *  per-param rate limit so a permanently broken param logs once with its
+     *  trace and then stays quiet instead of re-printing every 15 seconds.
+     *  Both are needed — the counter says a param is dead, the single trace
+     *  says why.
+     *
+     * @param param the param that failed
+     * @param e     the failure
+     * @since 0.9.71+
+     */
+    private void noteParamUpdateFailure(TunableParam param, Exception e) {
+        try {
+            _context.statManager().addRateData(PARAM_UPDATE_FAILED_STAT, 1);
+        } catch (RuntimeException ignored) {
+            // The counter is best effort; never let it mask the real failure.
+        }
+        String name = param != null ? param.getName() : "?";
+        long now = _context.clock().now();
+        if (!_paramFailureLogged.contains(name) || now - _lastParamFailureLog.getOrDefault(name, 0L)
+                >= PARAM_FAILURE_LOG_INTERVAL_MS) {
+            _paramFailureLogged.add(name);
+            _lastParamFailureLog.put(name, now);
+            if (_log.shouldWarn()) {
+                _log.warn("Tuner: error updating " + name, e);
+            }
+        }
+    }
+
+    /** Params whose update failure has already been logged at least once. */
+    private final Set<String> _paramFailureLogged = new HashSet<>();
+    /** Last failure-log time per param name, for the rate limit. */
+    private final Map<String, Long> _lastParamFailureLog = new HashMap<>();
+    /** Minimum gap between repeated failure logs for the same param, ms. */
+    private static final long PARAM_FAILURE_LOG_INTERVAL_MS = 5L * 60 * 1000;
+    /** Counts params that threw during a tuning cycle. @see #noteParamUpdateFailure */
+    static final String PARAM_UPDATE_FAILED_STAT = "tuner.paramUpdateFailed";
 
     /** Refresh XDH, EDH and MLKEM precomputation pool sizes. */
     private void refreshCryptoPoolSizes() {
@@ -1826,7 +1876,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             System.arraycopy(_statHistory, 0, sh, 0, _historyCount);
             double obsVal = Double.NaN;
             try {
-                obsVal = getObservedStat(null);
+                obsVal = getObservedStat(_ctx);
             } catch (Exception e) {
                 if (_log.shouldDebug()) _log.debug(_name + " snapshot stat unavailable", e);
             }
@@ -1850,7 +1900,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Observed stat value used for autotuning.
          *
-         * @param ctx router context
+         * <p>{@code ctx} is always this param's own context: {@link Tuner} takes a
+         * single {@code RouterContext}, hands the same instance to every
+         * {@code BaseParam} constructor, and both call sites pass {@link #_ctx}.
+         * It was previously passed as {@code null}, which silently broke any
+         * implementation that used the argument instead of the field — a param
+         * reading a cross-reference stat then threw on every tuning cycle, was
+         * caught by the cycle handler, and never tuned at all, with nothing but
+         * a repeated WARN to show for it. Implementations may use either
+         * {@code ctx} or {@link #_ctx}; both are the same object.
+         *
+         * @param ctx router context, never null
          * @return observed stat value for autotuning
          */
         protected abstract double getObservedStat(RouterContext ctx);
@@ -2222,7 +2282,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.70+
          */
         public void update() {
-            double observed = getObservedStat(null);
+            double observed = getObservedStat(_ctx);
             recordHistory(observed);
             // First tick: restore persisted value from autotune.config
             if (_firstTick) {
