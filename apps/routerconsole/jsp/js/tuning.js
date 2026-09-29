@@ -60,7 +60,7 @@ function saveTuningState() {
     if (h.classList.contains("expanded"))
       expanded.push(h.textContent.trim());
   });
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(expanded)); } catch(e) {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(expanded)); } catch(e) { /* storage full or unavailable */ }
 }
 
 /**
@@ -82,7 +82,7 @@ function restoreTuningState() {
         h.classList.add("expanded");
       }
     });
-  } catch(e) {}
+  } catch(e) { /* corrupted or unavailable storage */ }
 }
 
 /**

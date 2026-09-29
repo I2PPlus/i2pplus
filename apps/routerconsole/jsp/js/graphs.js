@@ -255,7 +255,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
           if (resp.ok) img.src = src;
         })
       );
-    } catch(error) {}
+    } catch(error) { /* image refresh failed; keep current state */ }
   }
 
   if (typeof graphRefreshInterval !== "undefined" && graphRefreshInterval > 0) {

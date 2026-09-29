@@ -65,7 +65,7 @@ async function handleTorrentNotify(event, notificationElement, inputElement, for
       await refreshScreenLog(() => {
         requestAnimationFrame(() => { showNotification(notificationElement, inputElement, getLastMessage()); });
       }, true);
-    } catch (error) {}
+    } catch (error) { /* form submission failed; notification still shown */ }
   }
 }
 
@@ -122,7 +122,7 @@ async function submitForm(form) {
     const action = form.getAttribute("action");
     const response = await fetch(action, { method: form.method, body: formData });
     if (!response.ok) { throw new Error(`Form submission failed with status ${response.status}`); }
-  } catch (error) {}
+  } catch (error) { /* form submission failed; user can retry */ }
 }
 
 /**

@@ -182,7 +182,7 @@ function initLinkToggler() { // NOPMD - ConsistentReturn (nested scrollToTop ret
    */
   async function copyToClipboard(text) {
     try { await navigator.clipboard.writeText(text); }
-    catch (error) {}
+    catch (error) { /* clipboard API unavailable or permission denied */ }
   }
 
   setLinkMode();

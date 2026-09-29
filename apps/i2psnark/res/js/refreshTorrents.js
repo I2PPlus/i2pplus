@@ -829,7 +829,7 @@ async function refreshTorrents(payload) {
                        .forEach(el => el.style.opacity = "");
           }
         }
-      } catch (error) {}
+      } catch (error) { /* sort state unchanged */ }
     }
 
     return changed;
@@ -867,7 +867,7 @@ async function refreshScreenLog(callback, forceFetch = false) {
       convertEncodedSpaces();
     }
     if (callback) {callback();}
-  } catch (error) {}
+  } catch (error) { /* screen log update failed; retry on next tick */ }
 }
 
 /**
@@ -1160,7 +1160,7 @@ function cacheChimp() {
       reader.onerror = () => {reject(reader.error || new Error("chimp read failed"));};
       reader.readAsDataURL(blob);
     })).then((dataUrl) => {
-      try {sessionStorage.setItem(CHIMP_STORAGE_KEY, String(dataUrl));} catch (error) {}
+      try {sessionStorage.setItem(CHIMP_STORAGE_KEY, String(dataUrl));} catch (error) { /* storage full; overlay will use plain URL */ }
     }).catch((error) => {
       if (debugging) console.error(error);
     });
@@ -1177,7 +1177,7 @@ function chimpSrc() {
   try {
     const cached = sessionStorage.getItem(CHIMP_STORAGE_KEY);
     if (cached) {return cached;}
-  } catch (error) {}
+  } catch (error) { /* storage unavailable; use plain URL */ }
   return CHIMP_SRC;
 }
 

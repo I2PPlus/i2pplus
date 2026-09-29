@@ -39,7 +39,7 @@ import { refreshElements } from "./refreshElements.js";
     try {
       localStorage.setItem(LS_KEY, JSON.stringify([...disabledReasons]));
       localStorage.setItem(LS_KEY + "_forced", JSON.stringify([...userForcedActive]));
-    } catch (e) {}
+    } catch (e) { /* storage full or unavailable */ }
   }
 
   /**
@@ -59,7 +59,7 @@ import { refreshElements } from "./refreshElements.js";
       if (forced) {
         JSON.parse(forced).forEach(r => userForcedActive.add(r));
       }
-    } catch (e) {}
+    } catch (e) { /* corrupted or unavailable storage */ }
   }
 
   /**

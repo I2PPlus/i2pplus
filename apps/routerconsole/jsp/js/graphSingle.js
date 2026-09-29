@@ -35,7 +35,7 @@ function getLocalStorageHideLegend() {
 function setLocalStorageHideLegend(value) {
   try {
     localStorage.setItem(LS_KEY, value ? "true" : "false");
-  } catch (e) {}
+  } catch (e) { /* storage full or unavailable */ }
 }
 
 /**

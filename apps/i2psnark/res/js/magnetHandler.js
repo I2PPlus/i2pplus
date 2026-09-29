@@ -33,7 +33,7 @@ const MAGNET_RESULT_EVENT = "i2psnark:magnet-result";
         // page is gone and the fallback never fires.
         try {
             window.close();
-        } catch (e) {}
+        } catch (e) { /* close not allowed; fallback below */ }
         setTimeout(function () {
             if (!window.closed && history.length > 1) {
                 history.back();
@@ -56,7 +56,7 @@ const MAGNET_RESULT_EVENT = "i2psnark:magnet-result";
         // otherwise only hear about it on the next interval tick.
         try {
             new BroadcastChannel("i2psnark:refresh").postMessage("result");
-        } catch (e) {}
+        } catch (e) { /* BroadcastChannel unsupported; page will refresh on next tick */ }
         // Give the extension's content script a moment to forward the event to
         // the background page (chrome.runtime.sendMessage is async; closing the
         // tab in the same tick could drop the notification), then close.
