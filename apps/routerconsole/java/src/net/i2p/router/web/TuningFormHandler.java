@@ -296,6 +296,30 @@ public class TuningFormHandler extends FormHandler {
         TUNED.add(t);
         t = new Tunable("tunnel.pool.failureThreshold", "tunnelPoolFailurethreshold", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
+        // Params that were Tuner-tunable but absent from this whitelist, so the
+        // console rendered their rows read-only: getFormPrefix() returned null
+        // and no input was emitted. Listed here to make them editable. Prefixes
+        // follow the existing lower-case, dot-stripped convention and must stay
+        // unique across TUNED because the POST handler maps field -> property
+        // through this same list.
+        t = new Tunable("i2p.tunnel.ivFilterM", "i2ptunnelivFilterM", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("tunnel.build.staleThreshold", "tunnelbuildstaleThreshold", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("tunnel.build.concurrencyThrottle", "tunnelbuildconcurrencyThrottle", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("tunnel.build.firstHopCooldown", "tunnelbuildfirstHopCooldown", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("tunnel.build.firstHopThreshold", "tunnelbuildfirstHopThreshold", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("i2p.streaming.receiveWorkerThreads", "i2pstreamingreceiveWorkerThreads", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("i2ptunnel.serverIO.threads", "i2ptunnelserverIOthreads", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("i2ptunnel.serverIO.stallTimeoutMs", "i2ptunnelserverIOstallTimeoutMs", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
+        t = new Tunable("ntcp.pumper.maxIdleLps", "ntcppummermaxIdleLps", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
+        TUNED.add(t);
         t = new Tunable("tunnel.pumper.queueCapacity", "tunnelPumperQueuecapacity", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
         TUNED.add(t);
         t = new Tunable("tunnel.pumper.threads", "tunnelPumperThreads", HAS_RANGE | HAS_DEFAULT | HAS_OVERRIDE);
