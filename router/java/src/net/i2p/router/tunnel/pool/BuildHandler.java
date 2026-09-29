@@ -590,7 +590,7 @@ public class BuildHandler implements Runnable {
             try {handleInboundRequest();}
             catch (RuntimeException e) {_log.log(Log.CRIT, "Catastrophic tunnel build failure! -> " +  e.getMessage());}
         }
-        if (_log.shouldWarn()) {_log.warn("Completed handling Inbound build requests");}
+        if (_log.shouldDebug()) {_log.debug("Completed handling Inbound build requests");}
         _isRunning = false;
     }
 
