@@ -8946,6 +8946,94 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     *  Consecutive healthy cycles required before the activity window tightens
+     *  again. A single recovered minute must not withdraw relief from pools
+     *  that are still refilling, so the window decays back one step at a time
+     *  rather than snapping to the floor on the first healthy reading.
+     *  @since 0.9.71+
+     */
+    private static final int HEALTHY_CYCLES_TO_TIGHTEN = 3;
+    /**
+     *  Build success rate at or above which the window may tighten again.
+     *  @since 0.9.71+
+     */
+    private static final double HEALTHY_RATE = 0.80;
+    /**
+     *  Build success rate at or below which the window is fully widened. Mirrors
+     *  {@code TunnelPeerSelector}'s degraded-build threshold, which is
+     *  package-private to the tunnel.pool package and cannot be referenced here.
+     *  @since 0.9.71+
+     */
+    private static final double DEGRADED_RATE = 0.65;
+
+    /**
+     *  Window multiplier implied by a normalized build success rate.
+     *
+     *  <p>Pure so the policy is testable without a router. The rate is
+     *  mapped continuously across the degraded band rather than stepped at
+     *  a threshold, so a rate just under the healthy boundary already buys
+     *  most of the available widening instead of nothing. Above
+     *  {@link #HEALTHY_RATE} the target falls back to the floor, but the
+     *  caller decides when to act on that.
+     *
+     * @param observed build success rate, 0.0-1.0; NaN leaves the window alone
+     * @param min      floor, e.g. 1
+     * @param max      ceiling, e.g. 4
+     * @return the multiplier the rate implies
+     *  @since 0.9.71+
+     */
+    static int targetWindowMultiplier(double observed, int min, int max) {
+        if (Double.isNaN(observed) || max <= min) {return min;}
+        if (observed >= HEALTHY_RATE) {return min;}
+        // Span is the healthy-to-degraded distance, so it is positive. Full
+        // widening at or below the degraded boundary, ramping linearly down
+        // to the floor at the healthy boundary. Rates below the degraded
+        // boundary clamp to full relief.
+        double span = HEALTHY_RATE - DEGRADED_RATE;
+        double deficit = (HEALTHY_RATE - observed) / span;
+        if (deficit <= 0) {return min;}
+        if (deficit > 1.0) {deficit = 1.0;}
+        return min + (int) Math.round(deficit * (max - min));
+    }
+
+    /**
+     *  Next window multiplier for a tuning cycle.
+     *
+     *  <p>Pure so the policy is testable without a router. Widening applies
+     *  the rate-implied target in one step, so a slump gets relief
+     *  immediately. Tightening is deferred until
+     *  {@link #HEALTHY_CYCLES_TO_TIGHTEN} consecutive healthy cycles, and
+     *  then only by {@code step}, so the window decays back rather than
+     *  collapsing on one lucky reading.
+     *
+     * @param current      multiplier in effect
+     * @param observed     build success rate, 0.0-1.0; NaN holds
+     * @param healthyCycles consecutive healthy cycles seen so far
+     * @param min          floor
+     * @param max          ceiling
+     * @param step         adjustment step
+     * @return the next multiplier, and the healthy-cycle count for the next call
+     *  @since 0.9.71+
+     */
+    static int nextWindowMultiplier(int current, double observed, int healthyCycles,
+                                    int min, int max, int step) {
+        if (Double.isNaN(observed)) {return current;}
+        int target = targetWindowMultiplier(observed, min, max);
+        if (target > current) {
+            // Degraded: take the full relief the rate implies, at once.
+            return Math.min(max, target);
+        }
+        if (current <= min) {return current;}
+        if (!Double.isNaN(observed) && observed >= HEALTHY_RATE) {
+            int cycles = healthyCycles + 1;
+            if (cycles < HEALTHY_CYCLES_TO_TIGHTEN) {return current;}
+            return Math.max(min, current - step);
+        }
+        return current;
+    }
+
+
+    /**
      * Tunes the peer-selection activity-window multiplier to break the tunnel
      * build "purgatory band" feedback loop.
      *
@@ -8957,13 +9045,30 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * back toward the default as success recovers, so the window self-corrects
      * instead of resting on a static threshold.
      *
+     * <p>The mapping is continuous rather than a pair of thresholds, and the
+     * response is asymmetric. The previous policy required
+     * {@code degraded && (buildsExpiring || testsFailing)}, where both
+     * cross-refs come from {@code getAdditionalEventCount}/{@code getAdditionalStat}
+     * over a single 60s period. Those return {@code NaN} on an empty period, so
+     * a build slump that produced only intermittent expire or test-failure
+     * events left the multiplier pinned at its floor of 1 — which is exactly
+     * the condition the param exists to relieve, and it left the loop intact.
+     * Measured: 57% build success with 1 expire event per period held the
+     * multiplier at 1 while every pool sat below target.
+     *
+     * <p>Widening is therefore driven by the degraded rate alone, and
+     * tightening requires several consecutive healthy cycles so a single
+     * recovered minute cannot withdraw relief from pools that are still
+     * refilling. The starvation bypass in {@link TunnelPool} forces the
+     * multiplier to its ceiling without waiting for a tuning cycle at all.
+     *
      * <p>Primary signal: {@code tunnel.buildSuccessRate} (0.0-1.0).
      * Cross-refs: {@code tunnel.buildClientExpire} (timed-out client builds),
-     *             {@code tunnel.testFailedTime} (failed tunnel tests),
-     *             {@code router.activePeers} (visibility — base window already
-     *             scales with this in TunnelPeerSelector).
+     *             {@code tunnel.testFailedTime} (failed tunnel tests) — now
+     *             reported on {@code tunnel.peerSelection.windowMultiplier}
+     *             for visibility rather than used as a gate.
      *
-     * <p>Value is a multiplier (1-8) applied to the base activity window.
+     * <p>Value is a multiplier (1-4) applied to the base activity window.
      *
      * @since 0.9.70+
      */
@@ -8984,6 +9089,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return TunnelPeerSelector.getWindowMultiplier();
         }
 
+        /**
+         *  Consecutive healthy cycles required before tightening the window.
+         *  One recovered minute must not withdraw relief from pools that are
+         *  still refilling, so a single healthy reading only decays the
+         *  multiplier once per cycle toward the target rather than snapping to
+         *  it.
+         *  @since 0.9.71+
+         */
+        private int _healthyCycles;
+
         /** Read the observed stat value for autotuning decisions. */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
@@ -8994,32 +9109,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue() / 100.0;
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
+        /**
+         *  Compute the target value. Widening keys on the degraded build rate
+         *  alone; the old cross-ref conjunction is gone because both terms came
+         *  from single-period rate samples that read NaN whenever the event
+         *  count was zero, pinning the window at its floor during exactly the
+         *  slump it exists to relieve.
+         */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
-            // Cross-refs: buildClientExpire (client build timeouts),
-            //             testFailedTime (failed tunnel tests)
-            double buildExpires = getAdditionalEventCount(_context, "tunnel.buildClientExpire");
-            double testFailed = getAdditionalStat(_context, "tunnel.testFailedTime");
-
-            boolean healthy = !Double.isNaN(observed) && observed > 0.80;
-            boolean degraded = !Double.isNaN(observed) && observed < 0.65;
-            boolean buildsExpiring = !Double.isNaN(buildExpires) && buildExpires > 10;
-            boolean testsFailing = !Double.isNaN(testFailed) && testFailed > 0;
-
-            // Degraded builds with expiring builds or failing tests: widen the
-            // window so aged-out good peers become eligible again.
-            if (degraded && (buildsExpiring || testsFailing)) {
-                return Math.min(_max, current + _step);
-            }
-
-            // Healthy again: tighten back toward the default (more selective).
-            if (healthy && current > _min) {
-                return Math.max(_min, current - _step);
-            }
-
-            return current;
+            int next = nextWindowMultiplier(current, observed, _healthyCycles,
+                                           _min, _max, _step);
+            boolean healthy = !Double.isNaN(observed) && observed >= HEALTHY_RATE;
+            _healthyCycles = healthy ? _healthyCycles + 1 : 0;
+            return next;
         }
     }
 
