@@ -167,12 +167,20 @@ public class TunnelPool {
      *  Congestion / slow destinations must not mass-remove healthy tunnels
      *  at the hard-failure bar (4), but a tunnel that times out dozens of
      *  times with no successful tests still rotates out.
-     *  Lowered from 7 to 5 so degraded tunnels are marked failing sooner,
-     *  reducing the mark-and-replace cycle frequency.  A tunnel with 5+ soft
-     *  failures is degraded and should be excluded from selection promptly.
+     *
+     *  <p><b>Must stay strictly above {@link #SOFT_DEGRADED_FOR_ENSURE}.</b>
+     *  The gap between the two is the pre-emptive build window: at the
+     *  degraded count the ensure gate starts seeing a deficit and builds
+     *  replacements while the tunnel is still selectable, so a pool never
+     *  reaches zero usable tunnels. Equalising them collapses that window to
+     *  nothing — the ensure gate only reacts once the tunnel has already been
+     *  removed, which is total collapse rather than pre-emptive recovery, and
+     *  is what drove 38 EMERGENCY rebuilds and 128 all-backlogged events in one
+     *  short window. Lowering this to 5 (from 7) was a regression.
+     *
      *  @since 0.9.71+
      */
-    static final int SOFT_REMOVAL_THRESHOLD = 5;
+    static final int SOFT_REMOVAL_THRESHOLD = 7;
     /**
      * Pre-emergency threshold: fraction of target below which builds start immediately.
      * @since 0.9.71+
@@ -1413,7 +1421,13 @@ public class TunnelPool {
      *  them as healthy would hold the ensure gate at the long throttle
      *  while the pool cannot carry traffic.
      *
-     * @return the number of healthy (non soft-degraded) usable tunnels
+     *  <p>Also excludes tunnels whose next hop is <b>backlogged</b>. A
+     *  backlogged peer is congested, not healthy: it can pass tests and still
+     *  time out every data-phase send, which is exactly the condition that
+     *  produced 128 consecutive "All tunnels are backlogged" events while the
+     *  pool reported itself full and the ensure gate therefore never built.
+     *
+     * @return the number of healthy (non soft-degraded, non backlogged) usable tunnels
      * @since 0.9.71+
      */
     int getHealthyTunnelCount() {
@@ -1425,10 +1439,29 @@ public class TunnelPool {
                 if (t.getExpiration() <= now) continue;
                 if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
                 if (t.getSoftFailures() >= SOFT_DEGRADED_FOR_ENSURE) continue;
+                if (isBackloggedNextHop(t)) continue;
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
         return count;
+    }
+
+    /**
+     *  Whether the tunnel's next hop is backlogged, meaning congested.
+     *
+     *  <p>Pure enough to be a named predicate: a length-1 tunnel has no next
+     *  hop to be congested, so it is never treated as backlogged. Extracted so
+     *  the ensure gate and any future caller agree on what "backlogged" means
+     *  for a pool tunnel.
+     *
+     *  @param t the pool tunnel
+     *  @return true if the next hop exists and is currently backlogged
+     *  @since 0.9.71+
+     */
+    private boolean isBackloggedNextHop(TunnelInfo t) {
+        if (t == null || t.getLength() <= 1) {return false;}
+        Hash nextHop = t.getPeer(1);
+        return nextHop != null && _context.commSystem().isBacklogged(nextHop);
     }
 
     /**

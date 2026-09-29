@@ -161,7 +161,29 @@ public class TunnelPoolSoftDegradedDecisionTest {
     public void testSoftRemovalThreshold() {
         // Set to 7 from 5 to reduce mark-and-replace cycle frequency without
         // being as aggressive as 5 (which broke the soft-threshold test).
-        // Lowered 7 -> 5 so degraded tunnels rotate out sooner.
-        assertEquals(5, TunnelPool.SOFT_REMOVAL_THRESHOLD);
+        assertEquals(7, TunnelPool.SOFT_REMOVAL_THRESHOLD);
+    }
+
+    /**
+     *  The pre-emptive build window is the gap between these two constants.
+     *  While a tunnel is degraded-for-ensure but not yet removed, the ensure
+     *  gate sees a deficit and builds replacements while the tunnel is still
+     *  selectable. Equalising them collapses that window and turns pre-emptive
+     *  recovery into total collapse.
+     */
+    @Test
+    public void preEmptiveWindowIsNonZero() {
+        assertTrue("removal bar must stay above the degraded-for-ensure bar, or " +
+                   "the ensure gate only reacts after the tunnel is gone",
+                   TunnelPool.SOFT_REMOVAL_THRESHOLD > TunnelPool.SOFT_DEGRADED_FOR_ENSURE);
+    }
+
+    /** The window should be wide enough to cover a rebuild cycle. */
+    @Test
+    public void preEmptiveWindowIsWideEnough() {
+        assertTrue("window of " + (TunnelPool.SOFT_REMOVAL_THRESHOLD -
+                                   TunnelPool.SOFT_DEGRADED_FOR_ENSURE) +
+                   " soft failures is too narrow to cover a rebuild",
+                   TunnelPool.SOFT_REMOVAL_THRESHOLD - TunnelPool.SOFT_DEGRADED_FOR_ENSURE >= 2);
     }
 }
