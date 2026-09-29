@@ -11441,13 +11441,59 @@ protected int computeTarget(double observed) {
      *
      *  @since 0.9.71+
      */
+    /**
+     *  Floor and default for the I/O stall window, ms. Sized for a bulk
+     *  transfer: a large download over a congested path routinely pauses longer
+     *  than a few seconds between copy steps, and a window shorter than that
+     *  aborts healthy transfers rather than freeing threads.
+     *
+     *  @since 0.9.71+
+     */
+    static final int STALL_TIMEOUT_FLOOR_MS = 60_000;
+
+    /**
+     *  Next I/O stall window for an observed per-cycle stall delta.
+     *
+     *  <p>Pure, so the policy is testable without a router.
+     *
+     *  <p>The window only <b>loosens above the floor</b> when transfers are
+     *  being cut off, and relaxes back to the floor when they are not. It never
+     *  goes below the floor, and there is deliberately no "no stalls, tighten"
+     *  branch: a shorter window kills more legitimate transfers, which produces
+     *  more stall events, which loosens the window, which then tightens again on
+     *  the next quiet cycle. That limit cycle parked the window at its 5s
+     *  floor, shorter than any pause in a bulk transfer, and aborted 45MB
+     *  downloads partway through.
+     *
+     * @param current  the window in effect, ms
+     * @param observed stall events in this cycle
+     * @param minMs    floor, ms
+     * @param maxMs    ceiling, ms
+     * @return the next window, ms
+     * @since 0.9.71+
+     */
+    static int nextStallTimeoutMs(int current, double observed, int minMs, int maxMs) {
+        int floor = Math.max(0, minMs);
+        int target;
+        if (observed > 2) {
+            // Transfers are being cut off: give them room.
+            target = current + 10_000;
+        } else if (observed < 0.5) {
+            // Nothing is being cut off: settle back to the floor, never below.
+            target = Math.max(current - 10_000, floor);
+        } else {
+            target = current;
+        }
+        return Math.max(floor, Math.min(maxMs, target));
+    }
+
     private class I2PTunnelServerIOStallTimeoutParam extends BaseParam {
         private long _prevStallCount;
 
         I2PTunnelServerIOStallTimeoutParam() {
             super("i2ptunnel.serverIO.stallTimeoutMs", "I2PTunnel I/O stall timeout (ms)",
                   SUB_TUNNEL,
-                   5000, 300_000, 5000, "i2ptunnel.serverIO.stallEvents", _context);
+                   STALL_TIMEOUT_FLOOR_MS, 300_000, STALL_TIMEOUT_FLOOR_MS, "i2ptunnel.serverIO.stallEvents", _context);
             _prevStallCount = I2PTunnelReflector.invokeGetLong("getStallEventCount");
         }
 
@@ -11478,18 +11524,7 @@ protected int computeTarget(double observed) {
          *  - Low stall rate (1 per cycle): no change
          */
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            int target;
-            if (observed > 2) {
-                // Stalls happening frequently — loosen timeout to stop killing legit transfers
-                target = Math.min(current + 10_000, _max);
-            } else if (observed < 0.5) {
-                // No stalls — tighten timeout to free threads faster on real dead peers
-                target = Math.max(current - 5_000, _min);
-            } else {
-                target = current;
-            }
-            return Math.max(_min, Math.min(_max, target));
+            return nextStallTimeoutMs(getRuntimeValue(), observed, _min, _max);
         }
     }
 
