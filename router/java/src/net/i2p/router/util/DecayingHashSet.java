@@ -28,7 +28,7 @@ import net.i2p.util.ConcurrentHashSet;
  *   <li>About 1.93x faster than {@link DecayingBloomFilter} for 8 byte (long)
  *       entries and 2.46x faster for 16 byte entries</li>
  *   <li>About 72 bytes of memory per 16 byte entry once loaded (measured: 9.01 MB
- *       for 131,000 entries), covering the map node, the {@link ArrayWrapper}
+ *       for 131,000 entries), covering the map node, the {@code ArrayWrapper}
  *       and its share of the table. At the 128K soft cap that is roughly 9 MB
  *       as a floor, not a ceiling: getInsertedCount() spans both buffers, so a
  *       window deferred past the cap can take this to about twice that</li>
@@ -58,7 +58,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     static final int DEFAULT_MAX_ENTRIES = 128 * 1024;   // package visible for tests
     /**
      *  Measured retained cost per entry for 16 byte keys: about 72 bytes,
-     *  covering the map node, the {@link ArrayWrapper} and its share of the
+     *  covering the map node, the {@code ArrayWrapper} and its share of the
      *  table. Measured 9.01 MB for 131,000 entries.
      *  @since 0.9.71+
      */

@@ -439,7 +439,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  It also refills the recent-traffic test exemption budget.  That budget
      *  is spent when a test fails while the tunnel demonstrably carried data
      *  — a reply-path false negative rather than evidence against the tunnel —
-     *  and it used to be refilled only by {@link #testSuccessful()}, so a
+     *  and it used to be refilled only by {@link #testSuccessful(int)}, so a
      *  tunnel that could never answer a test but could still carry data got
      *  exactly one free pass for its whole lifetime and was then condemned by
      *  failures it had no way to clear.  Traffic is the stronger proof: the
