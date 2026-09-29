@@ -5305,6 +5305,35 @@ public class TunnelPool {
     }
 
     /**
+     *  Raise the peer-selection activity window to its ceiling because a pool
+     *  has no usable tunnels, and publish the new value.
+     *
+     *  <p>Deliberately not a reset: the multiplier only ever increases here, so
+     *  a transient collapse does not immediately withdraw the widened window
+     *  from pools that are still starved. Recovery is the Tuner's job, and its
+     *  decay is now asymmetric (three consecutive healthy cycles) precisely so
+     *  that a single recovered reading does not snap the window back.
+     *
+     *  @param ctx router context
+     *  @since 0.9.71+
+     */
+    private void relaxWindowForStarvation(RouterContext ctx) {
+        int before = TunnelPeerSelector.getWindowMultiplier();
+        if (before >= TunnelPeerSelector.getMaxWindowMultiplier()) {
+            // Already at the ceiling; still publish so a fresh console shows it.
+            TunnelPeerSelector.publishWindowMultiplier(ctx);
+            return;
+        }
+        TunnelPeerSelector.setWindowMultiplier(TunnelPeerSelector.getMaxWindowMultiplier());
+        TunnelPeerSelector.publishWindowMultiplier(ctx);
+        if (_log.shouldWarn()) {
+            _log.warn(toString() + " -> Starvation: peer activity window multiplier " +
+                      before + " -> " + TunnelPeerSelector.getWindowMultiplier() +
+                      " (zero usable tunnels)");
+        }
+    }
+
+    /**
      *  EMERGENCY rebuild: fires only when zero usable tunnels remain (no
      *  safe, none expiring, none untested) — never blocked by pool backoff,
      *  spaced by a cooldown to prevent death spirals, boosted per collapse,
@@ -5315,6 +5344,15 @@ public class TunnelPool {
         if (!isEmergencySituation(stats)) {
             return;
         }
+        // Starvation bypass: a pool with zero usable tunnels is the exact
+        // condition the peer-selection activity window exists to relieve, and
+        // waiting for a Tuner cycle to widen it can take minutes. Widen it now,
+        // and publish the value so the effect is visible on /stats.
+        //
+        // This is a floor, not a ceiling: the multiplier is monotonic, so a
+        // pool that recovers and stays healthy leaves it for the Tuner's
+        // asymmetric decay to walk back down.
+        relaxWindowForStarvation(_context);
         // EMERGENCY cooldown: prevent death spirals by spacing out
         // emergency builds.  Without this, EMERGENCY fires every 15s,
         // queues builds that timeout, triggering more EMERGENCYs.
