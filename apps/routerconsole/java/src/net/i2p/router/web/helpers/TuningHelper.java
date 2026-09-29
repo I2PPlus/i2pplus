@@ -314,7 +314,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadLagMs", _x("Job queue lag triggering moderate-load peer disconnect (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", _x("System load percent triggering moderate-load disconnect."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", _x("Duration of moderate load before declining requests (ms)."));
-        PARAM_DESCRIPTIONS.put("tunnel.peerSelection.activityWindowMultiplier", _x("Widens peer recency window to re-admit peers when builds fail."));
+        PARAM_DESCRIPTIONS.put("tunnel.peerSelection.activityWindowMultiplier", _x("Widens the peer recency window when fast peers run short."));
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", _x("Consecutive failures before pool backoff."));
         PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", _x("Cooldown duration after pool failure threshold (ms)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.targetBuffer", _x("Target spare tunnel count per pool."));
