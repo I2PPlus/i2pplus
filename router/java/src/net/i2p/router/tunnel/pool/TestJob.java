@@ -286,7 +286,7 @@ public class TestJob extends JobImpl {
         }
         getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "GraceDeferred"), 1);
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test failed -> too young to judge, deferring test of " + _cfg);
+            _log.debug("Tunnel Test failed -> too young to judge \n* Deferring test of " + _cfg);
         }
         if (!scheduleRetest(false)) {
             cleanupTunnelTracking();
@@ -3120,7 +3120,7 @@ public class TestJob extends JobImpl {
                         if (_outTunnel != null) {
                             _partnerFallback = true;
                             if (_log.shouldWarn())
-                                _log.warn("Falling back to exploratory outbound tunnel for test of " + _cfg);
+                                _log.warn("Falling back to exploratory outbound tunnel for test \n* " + _cfg);
                         }
                     }
                 }
@@ -3175,7 +3175,7 @@ public class TestJob extends JobImpl {
                         if (_replyTunnel != null) {
                             _partnerFallback = true;
                             if (_log.shouldWarn()) {
-                                _log.warn("Falling back to exploratory inbound tunnel for test of " + _cfg);
+                                _log.warn("Falling back to exploratory inbound tunnel for test \n* " + _cfg);
                             }
                         }
                     }
@@ -3775,12 +3775,12 @@ public class TestJob extends JobImpl {
         }
         _replyPartnerDeferrals++;
         if (_log.shouldWarn()) {
-            _log.warn("Tunnel Test failed -> reply partner " + _replyTunnel +
-                      " already implicated in a recent failure -> deferring test of " + _cfg +
+            _log.warn("Tunnel Test failed -> Reply partner " + _replyTunnel +
+                      " already implicated in a recent failure \n* Deferring test of " + _cfg +
                       " (" + _replyPartnerDeferrals + "/" + MAX_REPLY_PARTNER_DEFERRALS + ")");
         }
         deferForMissingPartner(_pool.getPairedPool(),
-                               _cfg.isInbound() ? "outbound" : "inbound");
+                               _cfg.isInbound() ? "Outbound" : "Inbound");
         return true;
     }
 
@@ -3817,11 +3817,11 @@ public class TestJob extends JobImpl {
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> partner " + partner +
                               (_partnerFallback ? " (exploratory fallback)" : "") +
-                              " is not usable -> deferring test of " + _cfg +
+                              " is not usable \n* Deferring test of " + _cfg +
                               " (" + _partnerDeferrals + "/" + MAX_PARTNER_DEFERRALS + ")");
                 }
                 deferForMissingPartner(_pool.getPairedPool(),
-                                       _cfg.isInbound() ? "outbound" : "inbound");
+                                       _cfg.isInbound() ? "Outbound" : "Inbound");
                 return;
             }
         }
@@ -4018,7 +4018,7 @@ public class TestJob extends JobImpl {
                 // seconds and was never excluded from selection.
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> Marking server pool tunnel FAILED after " +
-                              failures + " consecutive failures: " + _cfg);
+                              failures + " consecutive failures \n* " + _cfg);
                 }
                 _cfg.tunnelFailedCompletely();
                 _pool.tunnelFailed(_cfg);
@@ -4035,8 +4035,8 @@ public class TestJob extends JobImpl {
                 _pool.tunnelFailed(_cfg);
             }
             if (_log.shouldWarn()) {
-                _log.warn("Tunnel Test failed -> " + _cfg +
-                          " (" + failures + " consecutive) — kept for LS cycle");
+                _log.warn("Tunnel Test failed (consecutive " + failures +
+                          ") —> Kept for LS cycle \n* " + _cfg);
             }
         } else {
             // Client/exploratory: count failures with adaptive thresholds.
@@ -4051,8 +4051,8 @@ public class TestJob extends JobImpl {
             if (currentFailures > maxFailures) {
                 getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "Condemned"), 1);
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Marking FAILED " + _cfg +
-                              (maxFailures > 3 ? " (degraded mode)" : ""));
+                    _log.warn("Tunnel Test failed -> Marking FAILED " + (maxFailures > 3 ?
+                              " (degraded mode)" : "") + "\n* " + _cfg);
                 }
                 getContext().statManager().addRateData(
                     isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
@@ -4202,8 +4202,7 @@ public class TestJob extends JobImpl {
                     ctx.statManager().addRateData("tunnel.postKickDeferralExhausted", _cfg.getLength());
                     if (_log.shouldWarn()) {
                         _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
-                                  direction + " partner for " + _cfg +
-                                  " -> paired-pool kick budget and post-kick deferral budget spent, failing tunnel");
+                                  direction + " partner \n* Paired-pool kick budget + post-kick deferral budget spent, failing tunnel... \n*" + _cfg);
                     }
                     _cfg.incrementTestFailures();
                     _cfg.setTestFailed();
@@ -4212,17 +4211,16 @@ public class TestJob extends JobImpl {
                     return;
                 }
                 if (_deferredCount == MAX_DEFERRED && _log.shouldWarn()) {
-                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
-                              direction + " partner for " + _cfg +
-                              " -> paired-pool kick budget spent, deferring");
+                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " + direction +
+                              " partner \n* Paired-pool kick budget spent, deferring... \n* " + _cfg);
                 }
             } else {
                 _pairedPoolKicks++;
                 if (_log.shouldWarn()) {
-                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
-                              direction + " partner for " + _cfg +
-                              " -> rebuilding paired pool and retrying");
-                }
+                    _log.warn("Test deadlock after " + _deferredCount + " deferrals -> No " +
+                              direction + " partner \n* Rebuilding paired pool and retrying \n* " + _cfg);
+
+               }
                 if (paired != null) {paired.ensureSufficientTunnels();}
                 // Restart the window so the paired pool is kicked once per
                 // MAX_DEFERRED rounds, not on every retry.
