@@ -131,6 +131,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     static final AtomicLong _stallEventCount = new AtomicLong();
 
     /**
+     *  Bodies aborted because the I/O pool was saturated. A response aborted
+     *  here reaches the client as a truncated body, which is otherwise
+     *  indistinguishable from a socket close or a read timeout, so the counter
+     *  is what lets the cause be told apart in the log and on the console.
+     *  @since 0.9.71+
+     */
+    private static final AtomicLong _bodyAbortCount = new AtomicLong();
+
+    /**
+     *  @return bodies aborted due to I/O pool saturation since router start
+     *  @since 0.9.71+
+     */
+    public static long getBodyAbortCount() { return _bodyAbortCount.get(); }
+
+    /**
      *  Get (creating on first use) this tunnel's private I/O pool for data
      *  transfer. The pool is a share of the global ioTransferThreads budget so
      *  one tunnel's bulk downloads cannot starve another's.
@@ -319,18 +334,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @since 0.9.71+
      */
     public static long getStallEventCount() { return _stallEventCount.get(); }
-
     /**
      *  Submit a Server→Client Sender to the I/O pool and return without
      *  waiting for the transfer to finish, so the handler thread is free
      *  for the next request. Falls back to an inline run when the pool is
-     *  null, shut down, or rejects the task so the body is never dropped.
+     *  null or shut down. When the pool is <b>saturated</b> the body is
+     *  aborted instead: it must never run on the handler thread, because
+     *  pinning that thread for a multi-minute transfer exhausts the runner
+     *  pool and stalls every other request to this service.
      *
-     *  @param pool I/O executor; may be null (headless/unit path)
-     *  @param s the Sender to run
-     *  @param desc descriptive name for error messages
-     *  @return true if the body was submitted asynchronously, false if it ran inline
-     *  @since 0.9.71+
+     * @param pool I/O executor; may be null (headless/unit path)
+     * @param s the Sender to run
+     * @param desc descriptive name for error messages
+     * @return true if the body was submitted asynchronously, false if it ran
+     *         inline or was aborted
+     * @since 0.9.71+
      */
     static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc)
             throws IOException {
@@ -339,22 +357,26 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      *  As {@link #handOffBody(ThreadPoolExecutor, Sender, String)} with a
-     *  completion callback invoked after the Sender finishes (success or
-     *  failure), on the pool worker when submitted or on the caller when
-     *  falling back inline.
+     *  completion callback invoked after the Sender finishes (success,
+     *  failure, or abort), on the pool worker when submitted and on the
+     *  caller otherwise. The callback always runs, so a caller can rely on
+     *  it for connection teardown no matter which path was taken.
      *
-     *  @param onCompletion may be null; must not throw
-     *  @return true if the body was submitted asynchronously, false if it ran inline
-     *  @since 0.9.71+
+     * @param onCompletion may be null; must not throw
+     * @return true if the body was submitted asynchronously, false if it ran
+     *         inline or was aborted
+     * @since 0.9.71+
      */
+
     static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc,
                                Runnable onCompletion) throws IOException {
+        final Runnable completion = onCompletion;
         final Runnable task = () -> {
             try {
                 if (s != null) {s.run();}
             } finally {
-                if (onCompletion != null) {
-                    try {onCompletion.run();}
+                if (completion != null) {
+                    try {completion.run();}
                     catch (Throwable t) {
                         // Completion must not kill the pool worker
                         // (finish runs under AtomicBoolean; swallow here).
@@ -374,9 +396,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             pool.execute(task);
             return true;
         } catch (RejectedExecutionException ree) {
-            // Bounded queue: saturation runs the body on the handler thread so
-            // a response whose headers were already sent is never dropped.
-            task.run();
+            // The I/O pool is saturated. Do NOT run the body here: this is the
+            // handler thread, and a multi-minute body would pin it for the
+            // whole transfer, driving the runner pool to 0 free threads and
+            // stalling every other request to this service. Abort instead so
+            // the client fails fast and retries on a fresh connection.
+            long aborts = _bodyAbortCount.incrementAndGet();
+            s.abort(new IOException("I/O transfer pool saturated, body aborted (" + aborts
+                                    + " this session): " + desc, ree));
+            if (completion != null) {
+                try {completion.run();}
+                catch (Throwable t) {
+                    // Same contract as the pool-worker path: never propagate.
+                }
+            }
             return false;
         }
     }
@@ -2447,6 +2480,31 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *  @since 0.9.71+
          */
         public long getLastReadNanos() { return _lastReadNanos; }
+
+        /**
+         *  Abort this transfer without ever running it, closing both ends so the
+         *  connection is torn down promptly.
+         *
+         *  <p>Used when the body cannot be handed to the I/O pool. Running the
+         *  body on the caller's handler thread instead would pin that thread for
+         *  the whole transfer, which is how one saturated body starves the
+         *  runner pool and takes the entire service offline; a client that gets
+         *  a fast close retries, while one that gets a pinned thread waits
+         *  indefinitely.
+         *
+         *  @param cause recorded as the transfer failure, propagated to the caller
+         *  @since 0.9.71+
+         */
+        public void abort(IOException cause) {
+            synchronized (this) {
+                if (_failure == null) {
+                    _failure = cause != null ? cause
+                             : new IOException("Body transfer aborted before it started");
+                }
+            }
+            closeQuietly(_in);
+            closeQuietly(_out);
+        }
     }
 
     /**

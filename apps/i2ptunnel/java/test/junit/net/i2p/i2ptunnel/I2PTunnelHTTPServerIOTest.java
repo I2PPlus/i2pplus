@@ -259,17 +259,19 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
     }
 
     /**
-     * When every worker and queue slot is occupied, handOffBody falls back to
-     * running the body inline instead of dropping it or throwing.
+     * When every worker and queue slot is occupied, handOffBody must NOT run the
+     * body on the calling handler thread. Doing so pins that thread for the
+     * whole transfer, which is what drives the runner pool to zero free threads
+     * and stalls every other request to the service. The body is aborted
+     * instead, so the client fails fast and can retry.
      */
-    public void testHandOffInlineFallbackWhenSaturated() throws Exception {
+    public void testHandOffAbortsRatherThanPinningHandlerThread() throws Exception {
         final CountDownLatch blocker = new CountDownLatch(1);
         ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(
                 I2PTunnelHTTPServer.IO_POOL_FLOOR);
         try {
             int workers = pool.getCorePoolSize();
             int cap = I2PTunnelHTTPServer.ioQueueCap(workers);
-            // Occupy every worker and every queue slot with blocked Senders.
             for (int i = 0; i < workers + cap; i++) {
                 I2PTunnelHTTPServer.Sender block =
                         new I2PTunnelHTTPServer.Sender(
@@ -289,20 +291,77 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
             }
             assertEquals("queue must be full", cap, pool.getQueue().size());
 
-            // Next submission is rejected by the bounded queue and must run inline.
+            // Next submission is rejected. It must abort, transferring nothing.
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            I2PTunnelHTTPServer.Sender quick = new I2PTunnelHTTPServer.Sender(
-                    out, new ByteArrayInputStream("inline".getBytes()), "inline", null);
-            assertFalse("saturated handoff must fall back inline",
-                        I2PTunnelHTTPServer.handOffBody(pool, quick, "inline"));
-            assertEquals("inline fallback must copy the body",
-                         6, quick.getBytesTransferred());
-            assertEquals(6, out.size());
+            I2PTunnelHTTPServer.Sender aborted = new I2PTunnelHTTPServer.Sender(
+                    out, new ByteArrayInputStream("inline".getBytes()), "saturated", null);
+            final boolean[] completed = {false};
+            assertFalse("saturated handoff must not report async submission",
+                        I2PTunnelHTTPServer.handOffBody(pool, aborted, "saturated",
+                                                        () -> completed[0] = true));
+            assertEquals("aborted body must transfer nothing", 0L, aborted.getBytesTransferred());
+            assertEquals(0, out.size());
+            assertTrue("abort must record a failure", aborted.getFailure() != null);
+            assertTrue("abort must record the saturation cause",
+                       aborted.getFailure().getMessage().contains("saturated"));
+            assertTrue("completion must still run so the connection is torn down",
+                       completed[0]);
         } finally {
             blocker.countDown();
             pool.shutdownNow();
         }
     }
+
+    /**
+     * The abort must be prompt: it must not have consumed the body, so the
+     * caller's handler thread is free the instant handOffBody returns.
+     */
+    public void testHandOffAbortDoesNotRunTheBody() throws Exception {
+        final CountDownLatch blocker = new CountDownLatch(1);
+        ThreadPoolExecutor pool = I2PTunnelHTTPServer.createIOExecutor(
+                I2PTunnelHTTPServer.IO_POOL_FLOOR);
+        try {
+            int workers = pool.getCorePoolSize();
+            int cap = I2PTunnelHTTPServer.ioQueueCap(workers);
+            for (int i = 0; i < workers + cap; i++) {
+                I2PTunnelHTTPServer.Sender block =
+                        new I2PTunnelHTTPServer.Sender(
+                                new ByteArrayOutputStream(),
+                                new ByteArrayInputStream(new byte[0]), "block", null) {
+                            @Override
+                            public void run() {
+                                try {
+                                    blocker.await(10, TimeUnit.SECONDS);
+                                } catch (InterruptedException ie) {
+                                    Thread.currentThread().interrupt();
+                                }
+                            }
+                        };
+                I2PTunnelHTTPServer.handOffBody(pool, block, "block");
+            }
+            // A Sender whose run() would block forever if it were invoked.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            final CountDownLatch ran = new CountDownLatch(1);
+            I2PTunnelHTTPServer.Sender never = new I2PTunnelHTTPServer.Sender(
+                    out, new ByteArrayInputStream(new byte[0]), "never", null) {
+                        @Override
+                        public void run() {
+                            ran.countDown();
+                            try {
+                                blocker.await(5, TimeUnit.SECONDS);
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                    };
+            I2PTunnelHTTPServer.handOffBody(pool, never, "never");
+            assertFalse("body must not have been run on this thread", ran.await(250, TimeUnit.MILLISECONDS));
+        } finally {
+            blocker.countDown();
+            pool.shutdownNow();
+        }
+    }
+
 
     /**
      * Body watchdog stall decision: pure boundary, disabled, and not-started
