@@ -87,7 +87,11 @@ public class EepPost extends EepGet {
                     out = new FileOutputStream(tmp);
                     if (_log.shouldDebug()) _log.debug("Estimated size: " + sz + ", using temp file " + tmp);
                 } else {
-                    baos = new ByteArrayOutputStream(4096);
+                    // Keep the write target in `out` on both paths: sendFields()
+                    // writes through it unconditionally, so leaving it null here
+                    // threw an NPE for every multipart post that stayed under the
+                    // in-memory threshold.
+                    out = baos = new ByteArrayOutputStream(4096);
                 }
                 sendFields(out, sep, fields);
                 if (useTmp) {
