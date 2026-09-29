@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "No more torrents running."
-msgstr "Nincs több futó torrent."
-
-msgid "I2P tunnel closed."
-msgstr "I2P alagút lezárva."
-
 msgid "Magnet"
 msgstr "Mágnes"
 
@@ -23,12 +17,6 @@ msgstr "Nem lehet csatlakozni az I2P-hez"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Hiba az I2P-hez való csatlakozáskor - ellenőrizd az I2CP beállításait!"
 
-msgid "Download already running: "
-msgstr "Letöltés már folyamatban: "
-
-msgid "Downloading"
-msgstr "Letöltés"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Az Torrentok konfigurálása I2CP opciókkal"
 
@@ -37,6 +25,18 @@ msgstr "Nincs írási jogosultság az adatkönyvtárra"
 
 msgid "Data directory cannot be created"
 msgstr "Adatkönyvtár nem hozható létre"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "Engedélyezve van a +0/1 tunnel ugrik véletlenszerűsítése a kimenő 
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Letiltott a tunnel ugrik véletlenszerűsítése a kimenő tunnelekön"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Késleltetés indításkor megváltoztatva a következőre: {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Szakaszok hozzáadása és létrehozása, hogy csak a többoldalas torre
 msgid "API key updated."
 msgstr "API kulcs frissítve."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez."
 
@@ -246,6 +299,10 @@ msgstr "Érvénytelen torrent a következőben: \"{0}\""
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "HIBA – Elfogyott a memória, nem lehet torrentet létrehozni innen: {0}HIBA - nincs több memória, torrent létrehozása sikertelen a következőből: {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Az Torrentok inicializálása és alagutak megnyitása"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Torrent eltávolítva: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Torrentek hozzáadása itt: {0}"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "A felfelé irányuló sávszélesség korlátja {0} KB/s"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Csatlakozás az I2CP porthoz az I2P példányon: {0}"
-
-msgid "Connecting to I2P"
-msgstr "Kapcsolódás az I2P-hez"
-
-msgid "Connected to I2P at"
-msgstr "Csatlakozva az I2P-hez"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "A torrent indítása {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Tároló: {0}MB jelenleg elérhető letöltésre a konfigurált adatcím
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Figyelmeztetés - Csak {0}MB elérhető letöltésre a konfigurált adatcímterületen"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Torrent nem található"
 msgid "Opening the I2P tunnel"
 msgstr "Az I2P alagút megnyitása"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Az I2P alagút megnyitás, minden torrent indítás alatt."
+
+msgid "Connecting to I2P"
+msgstr "Kapcsolódás az I2P-hez"
+
+msgid "Connected to I2P at"
+msgstr "Csatlakozva az I2P-hez"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "A torrent indítása {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Az összes torrent leállítás és az I2P alagút lezárás alatt."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "I2P alagút bezárása a nyomkövetők értesítése után."
+
+msgid "I2P tunnel closed."
+msgstr "I2P alagút lezárva."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,551 +567,8 @@ msgstr "Torrent már a sorban van: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Érvénytelen torrent a következő helyen: {0}"
 
-msgid "Torrents"
-msgstr "Torrentek"
-
-msgid "Refresh page"
-msgstr "Lap újratöltése"
-
-msgid "Configure"
-msgstr "Beállít"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Forum"
-msgstr "Fórum"
-
-msgid "Search torrents"
-msgstr "Keresés torrentekben"
-
-msgid "Clear search"
-msgstr "Egyértelmű keresés"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Torrent leszedéséhez kattints a \"Torrent hozzáadása\" gombra"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Anonymous BitTorrent kliens"
-
 msgid "Configuration"
 msgstr "Beállítások"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Biztosan törölni szeretné a következőt: {0} és az összes letöltött adatot?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "<b>{0}</b> és minden kapcsolódó adat törlő..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Biztosan törli a \\''{0}\\'' fájlt (a letöltött adatok nem törlődnek)?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Megjegyzés: A letöltött adatok nem lesznek törölve."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "{0} és a kapcsolódó metaadatok törlése..."
-
-msgid "clear messages"
-msgstr "üzenetek törlése"
-
-msgid "Expand"
-msgstr "Bontsa ki"
-
-msgid "Shrink"
-msgstr "Zsugorodik"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Figyelem! A Javascript le van tiltva a böngészőjében. Ha a(z) {0} engedélyezve van, akkor frissítéskor elveszik minden bevitel a torrent hozzáadása/létrehozása szakaszban."
-
-msgid "page refresh"
-msgstr "oldalfrissítés"
-
-msgid "Warning - No I2P"
-msgstr "Figyelem – nincs I2P"
-
-msgid "No torrents found."
-msgstr "Nem található torrent."
-
-msgid "No torrents loaded."
-msgstr "Egy torrent sem került betöltésre."
-
-msgid "No DHT Peers"
-msgstr "Nincs DHT-társ"
-
-msgid "Status"
-msgstr "Állapot"
-
-msgid "Torrent"
-msgstr "Torrent"
-
-msgid "File type"
-msgstr "Fájltípus"
-
-msgid "Torrent name"
-msgstr "Torrent neve"
-
-msgid "ETA"
-msgstr "BIE"
-
-msgid "RX"
-msgstr "Be"
-
-msgid "RX Rate"
-msgstr "Letöltési arány"
-
-msgid "TX"
-msgstr "Ki"
-
-msgid "TX Rate"
-msgstr "TX sebesség"
-
-msgid "Start All"
-msgstr "Mind Indítása"
-
-msgid "Stop All"
-msgstr "Mindet Leállít"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Minden torrent és az I2P alagút leállítása"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Minden torrent és az I2P alagút indítása"
-
-msgid "Start all stopped torrents"
-msgstr "Minden leállított torrent indítása"
-
-msgid "Hide Peers"
-msgstr "Társak Elrejtése"
-
-msgid "Show Peers"
-msgstr "Társak Megjelenítése"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Rendezés: {0}"
-
-msgid "Up Rate"
-msgstr "Feltöltési Sebesség"
-
-msgid "Total size of loaded torrents"
-msgstr "A betöltött torrentek teljes mérete"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "1 csatlakozott társ"
-msgstr[1] "{0} csatlakozott társ"
-
-msgid "Active downloads"
-msgstr "Aktív letöltések"
-
-msgid "Active uploads"
-msgstr "Aktív feltöltések"
-
-msgid "Active Inbound tunnels"
-msgstr "Aktív bejövő tunnelek"
-
-msgid "Active Outbound tunnels"
-msgstr "Aktív kimenő tunnelek"
-
-msgid "Estimated download time for all torrents"
-msgstr "Az összes torrent letöltésének becsült ideje"
-
-msgid "Data downloaded this session"
-msgstr "Az adatok letöltve ebben a munkamenetben"
-
-msgid "Total download speed"
-msgstr "Teljes letöltési sebesség"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Összes feltöltött adat (a listázott torrentekhez)"
-
-msgid "Total upload speed"
-msgstr "Teljes feltöltési sebesség"
-
-msgid "Toggle Debug Panel"
-msgstr "Hibakereső panel ki-/bekapcsolása"
-
-msgid "Debug Mode"
-msgstr "Hibakeresés mód"
-
-msgid "Normal Mode"
-msgstr "Normál mód"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrent"
-
-msgid "Search"
-msgstr "Keresés"
-
-msgid "Show All"
-msgstr "Minden megjelenítése"
-
-msgid "Active"
-msgstr "Aktív"
-
-msgid "Inactive"
-msgstr "Inaktív"
-
-msgid "Connected"
-msgstr "Csatlakoztatva"
-
-msgid "Seeding"
-msgstr "Táplálás (seeding)"
-
-msgid "Complete"
-msgstr "Kész"
-
-msgid "Incomplete"
-msgstr "Hiányos"
-
-msgid "Stopped"
-msgstr "Leállítva"
-
-msgid "First"
-msgstr "Első"
-
-msgid "First page"
-msgstr "Első oldal"
-
-msgid "Prev"
-msgstr "Előző"
-
-msgid "Previous page"
-msgstr "Előző oldal"
-
-msgid "Next"
-msgstr "Következő"
-
-msgid "Next page"
-msgstr "Következő oldal"
-
-msgid "Last"
-msgstr "Utolsó"
-
-msgid "Last page"
-msgstr "Utolsó oldal"
-
-msgid "Enter URL or select torrent file"
-msgstr "Írja be az URL-t vagy válassza ki a torrent fájlt"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Hiba a torrent fájl feltöltésekor: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "A(z) {0} torrent nem adható hozzá egy másik torrenthez: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "A(z) {0} nem I2P helyről történő letöltés nem támogatott"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Hiba: A 2-es verziójú információs hash-ek nem támogatottak"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Érvénytelen URL: \"{0}\" vagy \"{1}\" karakterrel kell kezdődnie"
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Mágnes észlelve: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "A torrent fájlt nem sikerült törölni: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Adatfájl törölve: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Adatfájl törlése nem sikerült: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Könyvtár nem törölhető: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Könyvtár törölve: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Hiba a torrent létrehozásakor - Fájl vagy könyvtár megadása kötelező"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Nem sikerült torrent létrehozása, nemlétező adat: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "\".torrent\" végződésű torrent nem adható hozzá: {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "A Torrent már fut ezen a néven: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Az I2P könyvtárát tartalmazó torrent nem adható hozzá: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Nem lehet hozzáadni a(z) {0} torrentet, beleértve egy másik torrentet is: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Hiba – Nem tartalmazhat alternatív nyomkövetőket elsődleges nyomkövető nélkül"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Hiba – A privát és a nyilvános nyomkövetők nem keverhetők egy torrentben"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " fájlok vagy mappák kizártak a \"{0}\"-ből szűrési szabályok miatt."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Az alábbiakban a következő fájlok vagy mappák kizártak a \"{0}\"-ből szűrési szabályok miatt: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Torrent létrehozva a következőnek: \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Sok I2P követő (tracker) megköveteli az új torrentek regisztrációját táplálás (seed) előtt - kérlek, regisztrálj, mielőtt elindítod a következőt:  \"{0}\""
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Hiba történt a torrent létrehozásakor  \"{0}\" számára"
-
-msgid "Delete selected"
-msgstr "Kijelöltek törlése"
-
-msgid "Save tracker configuration"
-msgstr "A nyomkövető konfigurációjának mentése"
-
-msgid "Removed"
-msgstr "Eltávolítva"
-
-msgid "Add tracker"
-msgstr "Követő (tracker) hozzáadása"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Adj meg érvényes követő (tracker) nevet és URL címeket"
-
-msgid "Restore defaults"
-msgstr "Alapértelmezések visszaállítása"
-
-msgid "Restored default trackers"
-msgstr "Alapértelmezett követők (trackerek) visszaállítva"
-
-msgid "Save Filter Configuration"
-msgstr "Szűrőbeállítások mentése"
-
-msgid "Add File Filter"
-msgstr "Fájlszűrő hozzáadása"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Adjon meg érvényes nevet és szűrés mintát"
-
-msgid "Restored default torrent create filters"
-msgstr "Alapértelmezett torrent létrehozási szűrők visszaállítva"
-
-msgid "Torrent details"
-msgstr "Torrent részletek"
-
-msgid "Torrent has comments"
-msgstr "A Torrentnek vannak megjegyzései"
-
-msgid "Open file"
-msgstr "Fájl megnyitása"
-
-msgid "View files"
-msgstr "Fájlok megtekintése"
-
-msgid "Completed"
-msgstr "Befejezve"
-
-msgid "Share ratio"
-msgstr "Feltöltési arány"
-
-msgid "Last activity"
-msgstr "Utolsó aktivitás"
-
-msgid "Stop"
-msgstr "Leállítás"
-
-msgid "Stop torrent"
-msgstr "Torrent leállítása"
-
-msgid "Start"
-msgstr "Indítás"
-
-msgid "Start torrent"
-msgstr "Torrent indítása"
-
-msgid "Remove"
-msgstr "Eltávolítás"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Torrent eltávolítása az aktív listáról, a .torrent fájl törlésével"
-
-msgid "Delete"
-msgstr "Törlés"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Törölje a .torrent fájlt és a kapcsolódó adatfájlokat"
-
-msgid "Checking"
-msgstr "Ellenőrzés"
-
-msgid "Allocating"
-msgstr "Helyfoglalás"
-
-msgid "Starting"
-msgstr "Indítás"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Vetés a(z) {0} partnerhez"
-msgstr[1] "Vetés {0} társaknak"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Csatlakoztatva {0}/{1} társához a rajban"
-
-msgid "Stalled"
-msgstr "Beragadt"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Táplálás a raj {0} társához"
-msgstr[1] "Táplálás a raj {0} társához"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Letöltés a következőről: {0}"
-msgstr[1] "Letöltés {0} társtól"
-
-msgid "OK"
-msgstr "Rendben"
-
-msgid "No Peers"
-msgstr "Nincsenek Társak"
-
-msgid "Peer attached to swarm"
-msgstr "Peer csatolva a rajhoz"
-
-msgid "Destination (identity) of peer"
-msgstr "A társ rendeltetési helye (identitása)"
-
-msgid "seconds"
-msgstr "másodperc"
-
-msgid "Seed"
-msgstr "Táplálás (Seed)"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Érdektelen (társ nem rendelkezik számunkra szükséges részekkel)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Eltömődött (a társ nem engedi részek igénylését)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Peer érdeklődik, de jelenleg tétlen"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Érdektelen (nem rendelkezünk a társak számára szükséges részekkel)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Eltömődött (a társak számára a részek igénylése nem engedélyezett)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Részletek a következő követőn (tracker): {0}"
-
-msgid "Info"
-msgstr "Infó"
-
-msgid "Add Torrent"
-msgstr "Torrent Hozzáadása"
-
-msgid "From URL"
-msgstr "URL címről"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Adja meg a torrent fájl letöltési URL-jét (csak I2P), a mágneses hivatkozást vagy az információs hash-t"
-
-msgid "Add torrent"
-msgstr "Torrent hozzáadása"
-
-msgid "Torrent file"
-msgstr "Torrent fájl"
-
-msgid "Data dir"
-msgstr "Adatrend"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Adja meg azt a könyvtárat, ahová menteni szeretné az adatokat (alapértelmezett: {0})"
-
-msgid "Create Torrent"
-msgstr "Torrent létrehozása"
-
-msgid "Data to seed"
-msgstr "Adat táplálásra (seed)"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Fájl vagy könyvtár a kezdőponthoz (a teljes elérési út vagy a könyvtáron belül: {0})"
-
-msgid "Create torrent"
-msgstr "Torrent létrehozása"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Kizárja a fájlokat a torrentből, ha azok a torrent mappában találhatók"
-
-msgid "Content Filters"
-msgstr "Tartalom szűrők"
-
-msgid "Trackers"
-msgstr "Követők (trackerek)"
-
-msgid "Alternates"
-msgstr "Helyettesek"
-
-msgid "Primary"
-msgstr "Elsődleges"
-
-msgid "Tracker Type"
-msgstr "Nyomkövető típusa"
-
-msgid "Standard"
-msgstr "Normál"
-
-msgid "Open"
-msgstr "Megnyitás"
-
-msgid "Private"
-msgstr "Privát"
-
-msgid "none"
-msgstr "semmi"
 
 msgid "User Interface"
 msgstr "Felhasználói felület"
@@ -1043,6 +587,9 @@ msgstr "A témák manuális módosításához kapcsolja ki az univerzális tém�
 
 msgid "Universal theming is enabled."
 msgstr "Az univerzális témaválasztás engedélyezve van."
+
+msgid "Configure"
+msgstr "Beállít"
 
 msgid "Refresh time"
 msgstr "Idő frissítése"
@@ -1164,11 +711,20 @@ msgstr "A torrentek automatikus indítása hozzáadásakor és újraindítás az
 msgid "Startup delay"
 msgstr "Indítási késleltetés"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Mennyi idő múlva töltődnek be az automatikusan induló torrentek, amikor az Torrentok elindul"
-
 msgid "minutes"
 msgstr "perc"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Adattárolás"
@@ -1179,11 +735,35 @@ msgstr "Adatkönyvtár"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "A torrentek és a letöltött/megosztott fájlok tárolási könyvtára"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Mindenki által olvasható fájlok"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Állítsa be a fájlengedélyeket, hogy más helyi felhasználók hozzáférhessenek a letöltött fájlokhoz"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Maximum fájlok torrentenként"
@@ -1194,8 +774,14 @@ msgstr "Torrentenként megengedett fájlok maximális száma – vegye figyelemb
 msgid "Tunnel Configuration"
 msgstr "Alagút konfiguráció"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Célunk (identitásunk) ehhez a munkamenethez"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Cél"
@@ -1221,6 +807,24 @@ msgstr "Adj hozzá 0 vagy 1 további véletlenszerű ugrot a kimenő tunnelekhez
 msgid "Outbound"
 msgstr "Kimenő"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "I2CP hoszt"
 
@@ -1229,6 +833,49 @@ msgstr "I2CP port"
 
 msgid "I2CP options"
 msgstr "I2CP opciók"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Beállítások mentése"
@@ -1257,8 +904,23 @@ msgstr "Vége"
 msgid "Enabled by Default"
 msgstr "Alapértelmezett engedélyezve"
 
+msgid "Delete selected"
+msgstr "Kijelöltek törlése"
+
+msgid "Save Filter Configuration"
+msgstr "Szűrőbeállítások mentése"
+
+msgid "Restore defaults"
+msgstr "Alapértelmezések visszaállítása"
+
+msgid "Add File Filter"
+msgstr "Fájlszűrő hozzáadása"
+
 msgid "Add"
 msgstr "Hozzáadás"
+
+msgid "Trackers"
+msgstr "Követők (trackerek)"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Válassza ki az eltávolítani kívánt nyomkövetőket az Torrentok ismert listájáról"
@@ -1266,11 +928,521 @@ msgstr "Válassza ki az eltávolítani kívánt nyomkövetőket az Torrentok ism
 msgid "Website URL"
 msgstr "Weboldal URL"
 
+msgid "Standard"
+msgstr "Normál"
+
+msgid "Open"
+msgstr "Megnyitás"
+
+msgid "Private"
+msgstr "Privát"
+
 msgid "Announce URL"
 msgstr "Bejelentési URL"
 
 msgid "Mark tracker for deletion"
 msgstr "Jelölje meg a nyomkövetőt törlésre"
+
+msgid "Add tracker"
+msgstr "Követő (tracker) hozzáadása"
+
+msgid "Save tracker configuration"
+msgstr "A nyomkövető konfigurációjának mentése"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Ez beállítja a megnyitandó alagutak maximális számát, amelyet a csatlakoztatott társak száma határozza meg (a tényleges használat kevesebb lehet)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Ha ezt a beállítást 3 ugrásnál kevesebbre módosítja, az a névtelenség rovására javíthatja a sebességet, és nem ajánlott"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Torrent leszedéséhez kattints a \"Torrent hozzáadása\" gombra"
+
+msgid "Torrents"
+msgstr "Torrentek"
+
+msgid "Refresh page"
+msgstr "Lap újratöltése"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Fórum"
+
+msgid "Search torrents"
+msgstr "Keresés torrentekben"
+
+msgid "Clear search"
+msgstr "Egyértelmű keresés"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Anonymous BitTorrent kliens"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Biztosan törölni szeretné a következőt: {0} és az összes letöltött adatot?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "<b>{0}</b> és minden kapcsolódó adat törlő..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Biztosan törli a \\''{0}\\'' fájlt (a letöltött adatok nem törlődnek)?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Megjegyzés: A letöltött adatok nem lesznek törölve."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "{0} és a kapcsolódó metaadatok törlése..."
+
+msgid "clear messages"
+msgstr "üzenetek törlése"
+
+msgid "Expand"
+msgstr "Bontsa ki"
+
+msgid "Shrink"
+msgstr "Zsugorodik"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Figyelem! A Javascript le van tiltva a böngészőjében. Ha a(z) {0} engedélyezve van, akkor frissítéskor elveszik minden bevitel a torrent hozzáadása/létrehozása szakaszban."
+
+msgid "page refresh"
+msgstr "oldalfrissítés"
+
+msgid "Warning - No I2P"
+msgstr "Figyelem – nincs I2P"
+
+msgid "No torrents found."
+msgstr "Nem található torrent."
+
+msgid "No torrents loaded."
+msgstr "Egy torrent sem került betöltésre."
+
+msgid "Status"
+msgstr "Állapot"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "ETA"
+msgstr "BIE"
+
+msgid "RX"
+msgstr "Be"
+
+msgid "RX Rate"
+msgstr "Letöltési arány"
+
+msgid "TX"
+msgstr "Ki"
+
+msgid "TX Rate"
+msgstr "TX sebesség"
+
+msgid "Start All"
+msgstr "Mind Indítása"
+
+msgid "Stop All"
+msgstr "Mindet Leállít"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Minden torrent és az I2P alagút leállítása"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Minden torrent és az I2P alagút indítása"
+
+msgid "Start all stopped torrents"
+msgstr "Minden leállított torrent indítása"
+
+msgid "Hide Peers"
+msgstr "Társak Elrejtése"
+
+msgid "Show Peers"
+msgstr "Társak Megjelenítése"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Rendezés: {0}"
+
+msgid "Up Rate"
+msgstr "Feltöltési Sebesség"
+
+msgid "Total size of loaded torrents"
+msgstr "A betöltött torrentek teljes mérete"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 csatlakozott társ"
+msgstr[1] "{0} csatlakozott társ"
+
+msgid "Active downloads"
+msgstr "Aktív letöltések"
+
+msgid "Active uploads"
+msgstr "Aktív feltöltések"
+
+msgid "Active Inbound tunnels"
+msgstr "Aktív bejövő tunnelek"
+
+msgid "Active Outbound tunnels"
+msgstr "Aktív kimenő tunnelek"
+
+msgid "Estimated download time for all torrents"
+msgstr "Az összes torrent letöltésének becsült ideje"
+
+msgid "Data downloaded this session"
+msgstr "Az adatok letöltve ebben a munkamenetben"
+
+msgid "Total download speed"
+msgstr "Teljes letöltési sebesség"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Összes feltöltött adat (a listázott torrentekhez)"
+
+msgid "Total upload speed"
+msgstr "Teljes feltöltési sebesség"
+
+msgid "Toggle Debug Panel"
+msgstr "Hibakereső panel ki-/bekapcsolása"
+
+msgid "Debug Mode"
+msgstr "Hibakeresés mód"
+
+msgid "Normal Mode"
+msgstr "Normál mód"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrent"
+
+msgid "No DHT Peers"
+msgstr "Nincs DHT-társ"
+
+msgid "Search"
+msgstr "Keresés"
+
+msgid "Show All"
+msgstr "Minden megjelenítése"
+
+msgid "Active"
+msgstr "Aktív"
+
+msgid "Inactive"
+msgstr "Inaktív"
+
+msgid "Connected"
+msgstr "Csatlakoztatva"
+
+msgid "Downloading"
+msgstr "Letöltés"
+
+msgid "Seeding"
+msgstr "Táplálás (seeding)"
+
+msgid "Complete"
+msgstr "Kész"
+
+msgid "Incomplete"
+msgstr "Hiányos"
+
+msgid "Stopped"
+msgstr "Leállítva"
+
+msgid "First"
+msgstr "Első"
+
+msgid "First page"
+msgstr "Első oldal"
+
+msgid "Prev"
+msgstr "Előző"
+
+msgid "Previous page"
+msgstr "Előző oldal"
+
+msgid "Next"
+msgstr "Következő"
+
+msgid "Next page"
+msgstr "Következő oldal"
+
+msgid "Last"
+msgstr "Utolsó"
+
+msgid "Last page"
+msgstr "Utolsó oldal"
+
+msgid "Enter URL or select torrent file"
+msgstr "Írja be az URL-t vagy válassza ki a torrent fájlt"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Hiba a torrent fájl feltöltésekor: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "A(z) {0} nem I2P helyről történő letöltés nem támogatott"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Hiba: A 2-es verziójú információs hash-ek nem támogatottak"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Érvénytelen URL: \"{0}\" vagy \"{1}\" karakterrel kell kezdődnie"
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Mágnes észlelve: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "A torrent fájlt nem sikerült törölni: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Adatfájl törölve: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Adatfájl törlése nem sikerült: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Könyvtár nem törölhető: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Könyvtár törölve: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " fájlok vagy mappák kizártak a \"{0}\"-ből szűrési szabályok miatt."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Az alábbiakban a következő fájlok vagy mappák kizártak a \"{0}\"-ből szűrési szabályok miatt: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent létrehozva a következőnek: \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Sok I2P követő (tracker) megköveteli az új torrentek regisztrációját táplálás (seed) előtt - kérlek, regisztrálj, mielőtt elindítod a következőt:  \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Hiba történt a torrent létrehozásakor  \"{0}\" számára"
+
+msgid "Removed"
+msgstr "Eltávolítva"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Adj meg érvényes követő (tracker) nevet és URL címeket"
+
+msgid "Restored default trackers"
+msgstr "Alapértelmezett követők (trackerek) visszaállítva"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Adjon meg érvényes nevet és szűrés mintát"
+
+msgid "Restored default torrent create filters"
+msgstr "Alapértelmezett torrent létrehozási szűrők visszaállítva"
+
+msgid "Torrent details"
+msgstr "Torrent részletek"
+
+msgid "Torrent has comments"
+msgstr "A Torrentnek vannak megjegyzései"
+
+msgid "Open file"
+msgstr "Fájl megnyitása"
+
+msgid "View files"
+msgstr "Fájlok megtekintése"
+
+msgid "Completed"
+msgstr "Befejezve"
+
+msgid "Share ratio"
+msgstr "Feltöltési arány"
+
+msgid "Last activity"
+msgstr "Utolsó aktivitás"
+
+msgid "Stop"
+msgstr "Leállítás"
+
+msgid "Stop torrent"
+msgstr "Torrent leállítása"
+
+msgid "Start"
+msgstr "Indítás"
+
+msgid "Start torrent"
+msgstr "Torrent indítása"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Torrent eltávolítása az aktív listáról, a .torrent fájl törlésével"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Törölje a .torrent fájlt és a kapcsolódó adatfájlokat"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Ellenőrzés"
+
+msgid "Allocating"
+msgstr "Helyfoglalás"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Indítás"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Vetés a(z) {0} partnerhez"
+msgstr[1] "Vetés {0} társaknak"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Csatlakoztatva {0}/{1} társához a rajban"
+
+msgid "Stalled"
+msgstr "Beragadt"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Táplálás a raj {0} társához"
+msgstr[1] "Táplálás a raj {0} társához"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Letöltés a következőről: {0}"
+msgstr[1] "Letöltés {0} társtól"
+
+msgid "OK"
+msgstr "Rendben"
+
+msgid "No Peers"
+msgstr "Nincsenek Társak"
+
+msgid "Peer attached to swarm"
+msgstr "Peer csatolva a rajhoz"
+
+msgid "Destination (identity) of peer"
+msgstr "A társ rendeltetési helye (identitása)"
+
+msgid "seconds"
+msgstr "másodperc"
+
+msgid "Seed"
+msgstr "Táplálás (Seed)"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Érdektelen (társ nem rendelkezik számunkra szükséges részekkel)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Eltömődött (a társ nem engedi részek igénylését)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Peer érdeklődik, de jelenleg tétlen"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Érdektelen (nem rendelkezünk a társak számára szükséges részekkel)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Eltömődött (a társak számára a részek igénylése nem engedélyezett)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Részletek a következő követőn (tracker): {0}"
+
+msgid "Info"
+msgstr "Infó"
+
+msgid "Add Torrent"
+msgstr "Torrent Hozzáadása"
+
+msgid "From URL"
+msgstr "URL címről"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Adja meg a torrent fájl letöltési URL-jét (csak I2P), a mágneses hivatkozást vagy az információs hash-t"
+
+msgid "Add torrent"
+msgstr "Torrent hozzáadása"
+
+msgid "Torrent file"
+msgstr "Torrent fájl"
+
+msgid "Data dir"
+msgstr "Adatrend"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Adja meg azt a könyvtárat, ahová menteni szeretné az adatokat (alapértelmezett: {0})"
+
+msgid "Create Torrent"
+msgstr "Torrent létrehozása"
+
+msgid "Data to seed"
+msgstr "Adat táplálásra (seed)"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Fájl vagy könyvtár a kezdőponthoz (a teljes elérési út vagy a könyvtáron belül: {0})"
+
+msgid "Create torrent"
+msgstr "Torrent létrehozása"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Kizárja a fájlokat a torrentből, ha azok a torrent mappában találhatók"
+
+msgid "Content Filters"
+msgstr "Tartalom szűrők"
+
+msgid "Alternates"
+msgstr "Helyettesek"
+
+msgid "Primary"
+msgstr "Elsődleges"
+
+msgid "Tracker Type"
+msgstr "Nyomkövető típusa"
+
+msgid "none"
+msgstr "semmi"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Nem tudom hozzáadni a magnezt: A verzió 2-as magnezt link nem támogatott"
@@ -1279,20 +1451,20 @@ msgstr "Nem tudom hozzáadni a magnezt: A verzió 2-as magnezt link nem támogat
 msgid "Invalid magnet URL {0}"
 msgstr "Érvénytelen mágnes URL {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Ez beállítja a megnyitandó alagutak maximális számát, amelyet a csatlakoztatott társak száma határozza meg (a tényleges használat kevesebb lehet)"
+msgid "Files"
+msgstr "Fájlok"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Ha ezt a beállítást 3 ugrásnál kevesebbre módosítja, az a névtelenség rovására javíthatja a sebességet, és nem ajánlott"
+msgid "Save priorities"
+msgstr "Tulajdonságok mentése"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "A sorrend vagy fájlsorrend nem kerül mentve - a funkció jelenleg hibás."
-
-msgid "Unknown command"
-msgstr "Ismeretlen parancs"
+msgid "Comments"
+msgstr "Megjegyzések"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Kérjük, próbálja újra az űrlap beküldését (hibás nonce)"
+
+msgid "Unknown command"
+msgstr "Ismeretlen parancs"
 
 msgid "Resource Does Not Exist"
 msgstr "Az erőforrás nem létezik"
@@ -1303,11 +1475,11 @@ msgstr "Forrás"
 msgid "Base"
 msgstr "Bázis"
 
-msgid "Files"
-msgstr "Fájlok"
-
 msgid "Directory"
 msgstr "Könyvtár"
+
+msgid "File type"
+msgstr "Fájltípus"
 
 msgid "Size"
 msgstr "Méret"
@@ -1330,24 +1502,6 @@ msgstr "Vissza a felsőbb szintű könyvtárba"
 msgid "Audio Playlist"
 msgstr "Audio lejátszási lista"
 
-msgid "Not found"
-msgstr "Nem található"
-
-msgid "File not found in torrent"
-msgstr "File nem található a torrentben"
-
-msgid "Unrecognized"
-msgstr "Ismeretlen"
-
-msgid "Preview"
-msgstr "Előnézet"
-
-msgid "Save priorities"
-msgstr "Tulajdonságok mentése"
-
-msgid "Comments"
-msgstr "Megjegyzések"
-
 msgid "Resource Not found"
 msgstr "Az erőforrás nem található"
 
@@ -1356,6 +1510,10 @@ msgstr "Infó hash"
 
 msgid "Created"
 msgstr "Létrehozva"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Hozzáadva"
@@ -1420,15 +1578,6 @@ msgstr "kész"
 msgid "remaining"
 msgstr "hátralévő"
 
-msgid "Ratings and Comments"
-msgstr "Értékelések és megjegyzések"
-
-msgid "Author name required to rate or comment"
-msgstr "Az értékeléshez vagy megjegyzéshez a szerző neve szükséges"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Az Ön szerzője a közzétett megjegyzésekhez és értékelésekhez"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1465,6 +1614,15 @@ msgstr "Törlésre kijelöl"
 msgid "Delete Selected"
 msgstr "Kiválasztottak Törlése"
 
+msgid "Ratings and Comments"
+msgstr "Értékelések és megjegyzések"
+
+msgid "Author name required to rate or comment"
+msgstr "Az értékeléshez vagy megjegyzéshez a szerző neve szükséges"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Az Ön szerzője a közzétett megjegyzésekhez és értékelésekhez"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "A fájl letöltési prioritásai frissítve a torrenthez: "
 
@@ -1473,6 +1631,9 @@ msgstr "Torrent szerkesztése"
 
 msgid "Active Trackers"
 msgstr "Aktív nyomkövetők"
+
+msgid "Delete"
+msgstr "Törlés"
 
 msgid "Add Tracker"
 msgstr "Adja hozzá a Trackert"
@@ -1488,3 +1649,23 @@ msgstr "Módosítások mentése"
 
 msgid "Torrent must be stopped"
 msgstr "A torrentet le kell állítani"
+
+msgid "Not found"
+msgstr "Nem található"
+
+msgid "File not found in torrent"
+msgstr "File nem található a torrentben"
+
+msgid "Unrecognized"
+msgstr "Ismeretlen"
+
+msgid "Preview"
+msgstr "Előnézet"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "A(z) {0} torrent nem adható hozzá egy másik torrenthez: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Nem lehet hozzáadni a(z) {0} torrentet, beleértve egy másik torrentet is: {1}"

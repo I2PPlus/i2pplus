@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "No more torrents running."
-msgstr "Der kører ikke flere torrents."
-
-msgid "I2P tunnel closed."
-msgstr "I2P-tunnel lukket."
-
 msgid "Magnet"
 msgstr "Magnet"
 
@@ -23,12 +17,6 @@ msgstr "Kan ikke oprette forbindelse til I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Fejl ved forbindelse til I2P - tjek dine I2CP-indstillinger!"
 
-msgid "Download already running: "
-msgstr "Download kører allerede: "
-
-msgid "Downloading"
-msgstr "Downloader"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Konfiguration af Torrents med I2CP-indstillinger"
 
@@ -37,6 +25,18 @@ msgstr "Ingen skrivetilladelser til datakatalog"
 
 msgid "Data directory cannot be created"
 msgstr "Databibliotek kan ikke oprettes"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "Aktiveret +0/1 tunnel hop randomisering på udgående tunneller"
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Deaktiveret tunnel hop randomisering på udgående tunneller"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Opstartsforsinkelse ændret til {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Tilføj og opret sektioner for kun at blive vist på den første side af
 msgid "API key updated."
 msgstr "API-nøgle opdateret."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker-liste ændret - torrent-genstart kræves for at træde i kraft."
 
@@ -246,6 +299,10 @@ msgstr "Torrent i \"{0}\" er ugyldig"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "FEJL - Mangler hukommelse, kan ikke oprette torrent fra {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Initialisering af Torrents og åbning af tunneler"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Torrent fjernet: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Tilføjelse af torrents i {0}"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Op båndbreddegrænsen er {0} KBps"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Opretter forbindelse til I2CP-port på I2P-instans ved {0}"
-
-msgid "Connecting to I2P"
-msgstr "Opretter forbindelse til I2P"
-
-msgid "Connected to I2P at"
-msgstr "Forbundet til I2P ved"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Starter torrent {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Lagring: {0}MB er i øjeblikket tilgængelig til download på den konfig
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Advarsel - Kun {0}MB er tilgængelig til download på den konfigurerede datapartition"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Torrent ikke fundet"
 msgid "Opening the I2P tunnel"
 msgstr "Åbning af I2P-tunnelen"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Åbner I2P-tunnelen og starter alle torrents."
+
+msgid "Connecting to I2P"
+msgstr "Opretter forbindelse til I2P"
+
+msgid "Connected to I2P at"
+msgstr "Forbundet til I2P ved"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Starter torrent {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Stopper alle torrents og lukker I2P-tunnelen."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Lukker I2P-tunnelen efter at have underrettet trackere."
+
+msgid "I2P tunnel closed."
+msgstr "I2P-tunnel lukket."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,551 +567,8 @@ msgstr "Torrent allerede i køen: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent på {0} var ikke gyldig"
 
-msgid "Torrents"
-msgstr "Torrents"
-
-msgid "Refresh page"
-msgstr "Opdater side"
-
-msgid "Configure"
-msgstr "Konfigurer"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Forum"
-msgstr "Forum"
-
-msgid "Search torrents"
-msgstr "Søg i torrents"
-
-msgid "Clear search"
-msgstr "Ryd søgning"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Klik på knappen \"Tilføj torrent\" for at hente torrent"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Anonym BitTorrent-klient"
-
 msgid "Configuration"
 msgstr "Konfiguration"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Er du sikker på, at du vil slette {0} og alle downloadede data?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "Sletter <b>{0}</b> og alle tilknyttede data..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Er du sikker på, at du vil slette filen \\''{0}\\'' (downloadede data vil ikke blive slettet) ?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Bemærk: Downloadede data vil ikke blive slettet."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "Sletter {0} og tilknyttede metadata kun..."
-
-msgid "clear messages"
-msgstr "klar beskeder"
-
-msgid "Expand"
-msgstr "Udvid"
-
-msgid "Shrink"
-msgstr "Krympe"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Advarsel! JavaScript er deaktiveret i din browser. Hvis {0} er aktiveret, mister du ethvert input i tilføj/opret torrent -sektioner, når der opstår en opdatering."
-
-msgid "page refresh"
-msgstr "sideopdatering"
-
-msgid "Warning - No I2P"
-msgstr "Advarsel - Ingen I2P"
-
-msgid "No torrents found."
-msgstr "Ingen torrents fundet."
-
-msgid "No torrents loaded."
-msgstr "Ingen torrents indlæst."
-
-msgid "No DHT Peers"
-msgstr "Ingen DHT Peers"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Torrent"
-msgstr "Torrent"
-
-msgid "File type"
-msgstr "Filtype"
-
-msgid "Torrent name"
-msgstr "Torrent navn"
-
-msgid "ETA"
-msgstr "ETA"
-
-msgid "RX"
-msgstr "IAMSE,bilag V"
-
-msgid "RX Rate"
-msgstr "Download sats"
-
-msgid "TX"
-msgstr "TX"
-
-msgid "TX Rate"
-msgstr "Send sats"
-
-msgid "Start All"
-msgstr "Start alt"
-
-msgid "Stop All"
-msgstr "Stop alt"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Stop alle torrents og I2P-tunnelen"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Start alle torrents og I2P-tunnelen"
-
-msgid "Start all stopped torrents"
-msgstr "Start alle stoppede torrents"
-
-msgid "Hide Peers"
-msgstr "Skjul peers"
-
-msgid "Show Peers"
-msgstr "Vis peers"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Sortér efter {0}"
-
-msgid "Up Rate"
-msgstr "Op rate"
-
-msgid "Total size of loaded torrents"
-msgstr "Samlet størrelse af indlæste torrents"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "1 forbundet peer"
-msgstr[1] "{0} peer-forbindelser"
-
-msgid "Active downloads"
-msgstr "Aktive downloads"
-
-msgid "Active uploads"
-msgstr "Aktive uploads"
-
-msgid "Active Inbound tunnels"
-msgstr "Aktive indkommende tunneller"
-
-msgid "Active Outbound tunnels"
-msgstr "Aktive udgående tunneller"
-
-msgid "Estimated download time for all torrents"
-msgstr "Anslået downloadtid for alle torrents"
-
-msgid "Data downloaded this session"
-msgstr "Data downloadede denne session"
-
-msgid "Total download speed"
-msgstr "Samlet downloadhastighed"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Samlet uploadede data (for listede torrents)"
-
-msgid "Total upload speed"
-msgstr "Samlet uploadhastighed"
-
-msgid "Toggle Debug Panel"
-msgstr "Slå fejlfindingspanel til/fra"
-
-msgid "Debug Mode"
-msgstr "Fejlretningstilstand"
-
-msgid "Normal Mode"
-msgstr "Normal tilstand"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrents"
-
-msgid "Search"
-msgstr "Søg"
-
-msgid "Show All"
-msgstr "Vis alle"
-
-msgid "Active"
-msgstr "Aktiv"
-
-msgid "Inactive"
-msgstr "Inaktiv"
-
-msgid "Connected"
-msgstr "Forbundet"
-
-msgid "Seeding"
-msgstr "Seedning"
-
-msgid "Complete"
-msgstr "Afslut"
-
-msgid "Incomplete"
-msgstr "Ufuldstændig"
-
-msgid "Stopped"
-msgstr "Stoppet"
-
-msgid "First"
-msgstr "Første"
-
-msgid "First page"
-msgstr "Første side"
-
-msgid "Prev"
-msgstr "Forrige"
-
-msgid "Previous page"
-msgstr "Forrige side"
-
-msgid "Next"
-msgstr "Næste"
-
-msgid "Next page"
-msgstr "Næste side"
-
-msgid "Last"
-msgstr "Sidste"
-
-msgid "Last page"
-msgstr "Sidste side"
-
-msgid "Enter URL or select torrent file"
-msgstr "Indtast URL eller vælg torrent-fil"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Fejl ved upload af torrentfilen: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Kan ikke tilføje torrent {0} i en anden torrent: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Download fra ikke-I2P-placering {0} understøttes ikke"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Fejl: Version 2-info-hashes understøttes ikke"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Ugyldig URL: Skal starte med \"{0}\" eller \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Magnet slettet: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Torrent-fil kunne ikke slettes: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Datafil slettet: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Datafil kunne ikke slettes: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Mappen kunne ikke slettes: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Mappe slettet: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Fejl ved oprettelse af torrent - du skal indtaste en fil eller mappe"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Kan ikke oprette en torrent for de ikke-eksisterende data: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Kan ikke tilføje en torrent, der ender på \".torrent\": {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Torrent med dette navn kører allerede: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Kan ikke tilføje en torrent inklusive en I2P-mappe: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Kan ikke tilføje torrent {0} inklusive en anden torrent: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Fejl - Kan ikke inkludere alternative trackere uden en primær tracker"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Fejl - Kan ikke blande private og offentlige trackere i en torrent"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " filer eller mapper blev udeladt fra \"{0}\" på grund af filterregler."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Følgende filer eller mapper blev udeladt fra \"{0}\" på grund af filterregler: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Torrent oprettet til \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Mange I2P-trackere kræver, at du registrerer nye torrents før såning - gør det venligst, før du starter \"{0}\""
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Fejl ved oprettelse af en torrent til \"{0}\""
-
-msgid "Delete selected"
-msgstr "Slet valgte"
-
-msgid "Save tracker configuration"
-msgstr "Gem tracker-konfiguration"
-
-msgid "Removed"
-msgstr "Fjernet"
-
-msgid "Add tracker"
-msgstr "Tilføj tracker"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Indtast gyldigt trackernavn og URL'er"
-
-msgid "Restore defaults"
-msgstr "Gendanne standarder"
-
-msgid "Restored default trackers"
-msgstr "Gendannet standard trackere"
-
-msgid "Save Filter Configuration"
-msgstr "Gem filterkonfiguration"
-
-msgid "Add File Filter"
-msgstr "Tilføj filfilter"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Indtast gyldigt navn og filtermønster"
-
-msgid "Restored default torrent create filters"
-msgstr "Gendannet standard torrent oprettelsesfiltre"
-
-msgid "Torrent details"
-msgstr "Torrent detaljer"
-
-msgid "Torrent has comments"
-msgstr "Torrent har kommentarer"
-
-msgid "Open file"
-msgstr "Åben fil"
-
-msgid "View files"
-msgstr "Se filer"
-
-msgid "Completed"
-msgstr "Fuldført"
-
-msgid "Share ratio"
-msgstr "Upload-forhold"
-
-msgid "Last activity"
-msgstr "Sidste aktivitet"
-
-msgid "Stop"
-msgstr "Stop"
-
-msgid "Stop torrent"
-msgstr "Stop torrenten"
-
-msgid "Start"
-msgstr "Starte"
-
-msgid "Start torrent"
-msgstr "Pladser per torrent:"
-
-msgid "Remove"
-msgstr "Fjern"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Fjern torrenten fra den aktive liste ved at slette .torrent-filen"
-
-msgid "Delete"
-msgstr "Slet"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Slet .torrent-filen og de tilhørende datafiler"
-
-msgid "Checking"
-msgstr "Tjekker"
-
-msgid "Allocating"
-msgstr "Tildeling"
-
-msgid "Starting"
-msgstr "Starter"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Podning til {0} peer"
-msgstr[1] "Podning til {0} peers"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Forbundet til {0} af {1} peers i sværm"
-
-msgid "Stalled"
-msgstr "Går i stå"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Seeder til {0} peer i sværm"
-msgstr[1] "Seeder til {0} peers i sværm"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Download fra {0} peer"
-msgstr[1] "Download fra {0} peers"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "No Peers"
-msgstr "Ingen peers"
-
-msgid "Peer attached to swarm"
-msgstr "Peer knyttet til sværm"
-
-msgid "Destination (identity) of peer"
-msgstr "Perens destination (identitet)"
-
-msgid "seconds"
-msgstr "sekunder"
-
-msgid "Seed"
-msgstr "Frø"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Uinteressant (den peers har ingen brikker, vi skal bruge)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Choked (Personen tillader os ikke at anmode om stykker)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Peer er interesseret, men er i øjeblikket inaktiv"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Uinteresseret (Vi har ingen brikker, som peers har brug for)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Kvælning (Vi tillader ikke peers at anmode om brikker)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Detaljer på {0} tracker"
-
-msgid "Info"
-msgstr "Info"
-
-msgid "Add Torrent"
-msgstr "Tilføj torrent"
-
-msgid "From URL"
-msgstr "Fra URL"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Indtast URL-adressen til download af torrentfilen (kun I2P), magnetlink eller info-hash"
-
-msgid "Add torrent"
-msgstr "Tilføj torrent"
-
-msgid "Torrent file"
-msgstr "Torrent fil"
-
-msgid "Data dir"
-msgstr "Datamappe"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Indtast biblioteket for at gemme dataene i (standard {0})"
-
-msgid "Create Torrent"
-msgstr "Opret torrent"
-
-msgid "Data to seed"
-msgstr "Data til frø"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Fil eller bibliotek til seed (fuld sti eller i mappen {0} )"
-
-msgid "Create torrent"
-msgstr "Opret torrent"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Ekskluder filer fra torrenten, hvis de ligger i torrent-mappen"
-
-msgid "Content Filters"
-msgstr "Indholdsfiltre"
-
-msgid "Trackers"
-msgstr "Sporere"
-
-msgid "Alternates"
-msgstr "Suppleant"
-
-msgid "Primary"
-msgstr "Primære"
-
-msgid "Tracker Type"
-msgstr "Sportype"
-
-msgid "Standard"
-msgstr "Standard"
-
-msgid "Open"
-msgstr "Åbn"
-
-msgid "Private"
-msgstr "Privat"
-
-msgid "none"
-msgstr "ingen"
 
 msgid "User Interface"
 msgstr "Brugergrænseflade"
@@ -1043,6 +587,9 @@ msgstr "For at ændre temaer manuelt, deaktiver universelt tema"
 
 msgid "Universal theming is enabled."
 msgstr "Universelt tema er aktiveret."
+
+msgid "Configure"
+msgstr "Konfigurer"
 
 msgid "Refresh time"
 msgstr "Opdateringstidspunkt"
@@ -1164,11 +711,20 @@ msgstr "Start automatisk torrents, når de tilføjes, og genstart torrents, når
 msgid "Startup delay"
 msgstr "Opstartsforsinkelse"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Hvor lang tid før autostartede torrents indlæses, når Torrents starter"
-
 msgid "minutes"
 msgstr "minutter"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Datalagring"
@@ -1179,11 +735,35 @@ msgstr "Datakatalog"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Bibliotek hvor torrents og downloadede/delte filer gemmes"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Filer kan læses af alle"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Indstil filtilladelser for at give andre lokale brugere adgang til de downloadede filer"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Max filer pr. torrent"
@@ -1194,8 +774,14 @@ msgstr "Maksimalt antal tilladte filer pr. torrent - bemærk, at trackere kan s�
 msgid "Tunnel Configuration"
 msgstr "Tunnelkonfiguration"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Vores destination (identitet) for denne session"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Best."
@@ -1221,6 +807,24 @@ msgstr "Tilføj 0 eller 1 ekstra hop tilfældigt til udgående tunneller"
 msgid "Outbound"
 msgstr "Udgående"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "I2CP vært"
 
@@ -1229,6 +833,49 @@ msgstr "I2CP-port"
 
 msgid "I2CP options"
 msgstr "I2CP muligheder"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Gem konfiguration"
@@ -1257,8 +904,23 @@ msgstr "Slutter med"
 msgid "Enabled by Default"
 msgstr "Aktiveret som standard"
 
+msgid "Delete selected"
+msgstr "Slet valgte"
+
+msgid "Save Filter Configuration"
+msgstr "Gem filterkonfiguration"
+
+msgid "Restore defaults"
+msgstr "Gendanne standarder"
+
+msgid "Add File Filter"
+msgstr "Tilføj filfilter"
+
 msgid "Add"
 msgstr "Tilføje"
+
+msgid "Trackers"
+msgstr "Sporere"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Vælg trackere til fjernelse fra Torrentss kendte liste"
@@ -1266,11 +928,521 @@ msgstr "Vælg trackere til fjernelse fra Torrentss kendte liste"
 msgid "Website URL"
 msgstr "Webstedets URL"
 
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Open"
+msgstr "Åbn"
+
+msgid "Private"
+msgstr "Privat"
+
 msgid "Announce URL"
 msgstr "Annoncer URL"
 
 msgid "Mark tracker for deletion"
 msgstr "Mærk tracker til sletning"
+
+msgid "Add tracker"
+msgstr "Tilføj tracker"
+
+msgid "Save tracker configuration"
+msgstr "Gem tracker-konfiguration"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Dette konfigurerer det maksimale antal tunneler, der skal åbnes, bestemt af antallet af tilsluttede peers (faktisk brug kan være mindre)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Ændring af denne indstilling til mindre end 3 hop kan forbedre hastigheden på bekostning af anonymitet og anbefales ikke"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Klik på knappen \"Tilføj torrent\" for at hente torrent"
+
+msgid "Torrents"
+msgstr "Torrents"
+
+msgid "Refresh page"
+msgstr "Opdater side"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Search torrents"
+msgstr "Søg i torrents"
+
+msgid "Clear search"
+msgstr "Ryd søgning"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Anonym BitTorrent-klient"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Er du sikker på, at du vil slette {0} og alle downloadede data?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Sletter <b>{0}</b> og alle tilknyttede data..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Er du sikker på, at du vil slette filen \\''{0}\\'' (downloadede data vil ikke blive slettet) ?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Bemærk: Downloadede data vil ikke blive slettet."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Sletter {0} og tilknyttede metadata kun..."
+
+msgid "clear messages"
+msgstr "klar beskeder"
+
+msgid "Expand"
+msgstr "Udvid"
+
+msgid "Shrink"
+msgstr "Krympe"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Advarsel! JavaScript er deaktiveret i din browser. Hvis {0} er aktiveret, mister du ethvert input i tilføj/opret torrent -sektioner, når der opstår en opdatering."
+
+msgid "page refresh"
+msgstr "sideopdatering"
+
+msgid "Warning - No I2P"
+msgstr "Advarsel - Ingen I2P"
+
+msgid "No torrents found."
+msgstr "Ingen torrents fundet."
+
+msgid "No torrents loaded."
+msgstr "Ingen torrents indlæst."
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "IAMSE,bilag V"
+
+msgid "RX Rate"
+msgstr "Download sats"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "Send sats"
+
+msgid "Start All"
+msgstr "Start alt"
+
+msgid "Stop All"
+msgstr "Stop alt"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Stop alle torrents og I2P-tunnelen"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Start alle torrents og I2P-tunnelen"
+
+msgid "Start all stopped torrents"
+msgstr "Start alle stoppede torrents"
+
+msgid "Hide Peers"
+msgstr "Skjul peers"
+
+msgid "Show Peers"
+msgstr "Vis peers"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Sortér efter {0}"
+
+msgid "Up Rate"
+msgstr "Op rate"
+
+msgid "Total size of loaded torrents"
+msgstr "Samlet størrelse af indlæste torrents"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 forbundet peer"
+msgstr[1] "{0} peer-forbindelser"
+
+msgid "Active downloads"
+msgstr "Aktive downloads"
+
+msgid "Active uploads"
+msgstr "Aktive uploads"
+
+msgid "Active Inbound tunnels"
+msgstr "Aktive indkommende tunneller"
+
+msgid "Active Outbound tunnels"
+msgstr "Aktive udgående tunneller"
+
+msgid "Estimated download time for all torrents"
+msgstr "Anslået downloadtid for alle torrents"
+
+msgid "Data downloaded this session"
+msgstr "Data downloadede denne session"
+
+msgid "Total download speed"
+msgstr "Samlet downloadhastighed"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Samlet uploadede data (for listede torrents)"
+
+msgid "Total upload speed"
+msgstr "Samlet uploadhastighed"
+
+msgid "Toggle Debug Panel"
+msgstr "Slå fejlfindingspanel til/fra"
+
+msgid "Debug Mode"
+msgstr "Fejlretningstilstand"
+
+msgid "Normal Mode"
+msgstr "Normal tilstand"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrents"
+
+msgid "No DHT Peers"
+msgstr "Ingen DHT Peers"
+
+msgid "Search"
+msgstr "Søg"
+
+msgid "Show All"
+msgstr "Vis alle"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgid "Connected"
+msgstr "Forbundet"
+
+msgid "Downloading"
+msgstr "Downloader"
+
+msgid "Seeding"
+msgstr "Seedning"
+
+msgid "Complete"
+msgstr "Afslut"
+
+msgid "Incomplete"
+msgstr "Ufuldstændig"
+
+msgid "Stopped"
+msgstr "Stoppet"
+
+msgid "First"
+msgstr "Første"
+
+msgid "First page"
+msgstr "Første side"
+
+msgid "Prev"
+msgstr "Forrige"
+
+msgid "Previous page"
+msgstr "Forrige side"
+
+msgid "Next"
+msgstr "Næste"
+
+msgid "Next page"
+msgstr "Næste side"
+
+msgid "Last"
+msgstr "Sidste"
+
+msgid "Last page"
+msgstr "Sidste side"
+
+msgid "Enter URL or select torrent file"
+msgstr "Indtast URL eller vælg torrent-fil"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Fejl ved upload af torrentfilen: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Download fra ikke-I2P-placering {0} understøttes ikke"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Fejl: Version 2-info-hashes understøttes ikke"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Ugyldig URL: Skal starte med \"{0}\" eller \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magnet slettet: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Torrent-fil kunne ikke slettes: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Datafil slettet: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Datafil kunne ikke slettes: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Mappen kunne ikke slettes: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Mappe slettet: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " filer eller mapper blev udeladt fra \"{0}\" på grund af filterregler."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Følgende filer eller mapper blev udeladt fra \"{0}\" på grund af filterregler: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent oprettet til \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Mange I2P-trackere kræver, at du registrerer nye torrents før såning - gør det venligst, før du starter \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Fejl ved oprettelse af en torrent til \"{0}\""
+
+msgid "Removed"
+msgstr "Fjernet"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Indtast gyldigt trackernavn og URL'er"
+
+msgid "Restored default trackers"
+msgstr "Gendannet standard trackere"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Indtast gyldigt navn og filtermønster"
+
+msgid "Restored default torrent create filters"
+msgstr "Gendannet standard torrent oprettelsesfiltre"
+
+msgid "Torrent details"
+msgstr "Torrent detaljer"
+
+msgid "Torrent has comments"
+msgstr "Torrent har kommentarer"
+
+msgid "Open file"
+msgstr "Åben fil"
+
+msgid "View files"
+msgstr "Se filer"
+
+msgid "Completed"
+msgstr "Fuldført"
+
+msgid "Share ratio"
+msgstr "Upload-forhold"
+
+msgid "Last activity"
+msgstr "Sidste aktivitet"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "Stop torrent"
+msgstr "Stop torrenten"
+
+msgid "Start"
+msgstr "Starte"
+
+msgid "Start torrent"
+msgstr "Pladser per torrent:"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Fjern torrenten fra den aktive liste ved at slette .torrent-filen"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Slet .torrent-filen og de tilhørende datafiler"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Tjekker"
+
+msgid "Allocating"
+msgstr "Tildeling"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Starter"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Podning til {0} peer"
+msgstr[1] "Podning til {0} peers"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Forbundet til {0} af {1} peers i sværm"
+
+msgid "Stalled"
+msgstr "Går i stå"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Seeder til {0} peer i sværm"
+msgstr[1] "Seeder til {0} peers i sværm"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Download fra {0} peer"
+msgstr[1] "Download fra {0} peers"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Ingen peers"
+
+msgid "Peer attached to swarm"
+msgstr "Peer knyttet til sværm"
+
+msgid "Destination (identity) of peer"
+msgstr "Perens destination (identitet)"
+
+msgid "seconds"
+msgstr "sekunder"
+
+msgid "Seed"
+msgstr "Frø"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Uinteressant (den peers har ingen brikker, vi skal bruge)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Choked (Personen tillader os ikke at anmode om stykker)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Peer er interesseret, men er i øjeblikket inaktiv"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Uinteresseret (Vi har ingen brikker, som peers har brug for)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Kvælning (Vi tillader ikke peers at anmode om brikker)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Detaljer på {0} tracker"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Add Torrent"
+msgstr "Tilføj torrent"
+
+msgid "From URL"
+msgstr "Fra URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Indtast URL-adressen til download af torrentfilen (kun I2P), magnetlink eller info-hash"
+
+msgid "Add torrent"
+msgstr "Tilføj torrent"
+
+msgid "Torrent file"
+msgstr "Torrent fil"
+
+msgid "Data dir"
+msgstr "Datamappe"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Indtast biblioteket for at gemme dataene i (standard {0})"
+
+msgid "Create Torrent"
+msgstr "Opret torrent"
+
+msgid "Data to seed"
+msgstr "Data til frø"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Fil eller bibliotek til seed (fuld sti eller i mappen {0} )"
+
+msgid "Create torrent"
+msgstr "Opret torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Ekskluder filer fra torrenten, hvis de ligger i torrent-mappen"
+
+msgid "Content Filters"
+msgstr "Indholdsfiltre"
+
+msgid "Alternates"
+msgstr "Suppleant"
+
+msgid "Primary"
+msgstr "Primære"
+
+msgid "Tracker Type"
+msgstr "Sportype"
+
+msgid "none"
+msgstr "ingen"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Kan ikke tilføje magnet: Version 2 magnet links understøttes ikke"
@@ -1279,20 +1451,20 @@ msgstr "Kan ikke tilføje magnet: Version 2 magnet links understøttes ikke"
 msgid "Invalid magnet URL {0}"
 msgstr "Ugyldig magnet-URL {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Dette konfigurerer det maksimale antal tunneler, der skal åbnes, bestemt af antallet af tilsluttede peers (faktisk brug kan være mindre)"
+msgid "Files"
+msgstr "Filer"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Ændring af denne indstilling til mindre end 3 hop kan forbedre hastigheden på bekostning af anonymitet og anbefales ikke"
+msgid "Save priorities"
+msgstr "Gem prioriteringer"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Sekventiel stykke- eller filrækkefølge er ikke gemt - funktionen er i øjeblikket i stykker."
-
-msgid "Unknown command"
-msgstr "Ukendt kommando"
+msgid "Comments"
+msgstr "Kommentarer"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Prøv venligst at sende formularen igen (dårlig nonce)"
+
+msgid "Unknown command"
+msgstr "Ukendt kommando"
 
 msgid "Resource Does Not Exist"
 msgstr "Resource findes ikke"
@@ -1303,11 +1475,11 @@ msgstr "Ressource"
 msgid "Base"
 msgstr "Grundlag"
 
-msgid "Files"
-msgstr "Filer"
-
 msgid "Directory"
 msgstr "Vegbog"
+
+msgid "File type"
+msgstr "Filtype"
 
 msgid "Size"
 msgstr "Størrelse"
@@ -1330,24 +1502,6 @@ msgstr "Op til højere niveau bibliotek"
 msgid "Audio Playlist"
 msgstr "Lydafspilningsliste"
 
-msgid "Not found"
-msgstr "Ikke fundet"
-
-msgid "File not found in torrent"
-msgstr "Fil ikke fundet i torrent"
-
-msgid "Unrecognized"
-msgstr "Ugenkendt"
-
-msgid "Preview"
-msgstr "Forhåndsvisning"
-
-msgid "Save priorities"
-msgstr "Gem prioriteringer"
-
-msgid "Comments"
-msgstr "Kommentarer"
-
 msgid "Resource Not found"
 msgstr "Resource ikke fundet"
 
@@ -1356,6 +1510,10 @@ msgstr "Infohash"
 
 msgid "Created"
 msgstr "Oprettet"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Tilføjet"
@@ -1420,15 +1578,6 @@ msgstr "komplet"
 msgid "remaining"
 msgstr "rest"
 
-msgid "Ratings and Comments"
-msgstr "Bedømmelser og kommentarer"
-
-msgid "Author name required to rate or comment"
-msgstr "Forfatternavn påkrævet for at bedømme eller kommentere"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Dit forfatternavn til offentliggjorte kommentarer og vurderinger"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1465,6 +1614,15 @@ msgstr "Marker for sletning"
 msgid "Delete Selected"
 msgstr "Slet markedere"
 
+msgid "Ratings and Comments"
+msgstr "Bedømmelser og kommentarer"
+
+msgid "Author name required to rate or comment"
+msgstr "Forfatternavn påkrævet for at bedømme eller kommentere"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Dit forfatternavn til offentliggjorte kommentarer og vurderinger"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Prioriteter for fil-download opdateret for torrent "
 
@@ -1473,6 +1631,9 @@ msgstr "Rediger torrent"
 
 msgid "Active Trackers"
 msgstr "Aktive trackers"
+
+msgid "Delete"
+msgstr "Slet"
 
 msgid "Add Tracker"
 msgstr "Tilføj Tracker"
@@ -1488,3 +1649,23 @@ msgstr "Gem ændringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent skal stoppes"
+
+msgid "Not found"
+msgstr "Ikke fundet"
+
+msgid "File not found in torrent"
+msgstr "Fil ikke fundet i torrent"
+
+msgid "Unrecognized"
+msgstr "Ugenkendt"
+
+msgid "Preview"
+msgstr "Forhåndsvisning"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Kan ikke tilføje torrent {0} i en anden torrent: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Kan ikke tilføje torrent {0} inklusive en anden torrent: {1}"

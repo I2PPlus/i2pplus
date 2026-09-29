@@ -234,6 +234,9 @@ msgstr "Platzhalter für Verfolgungsbild entfernt"
 msgid "no subject"
 msgstr "kein Betreff"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Keine gültige Absenderadresse vorgefunden"
 

@@ -234,6 +234,9 @@ msgstr "Fjernet plassholdert for sporingsbilde"
 msgid "no subject"
 msgstr "inget emne"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Fant ingen gyldig avsenderadresse."
 

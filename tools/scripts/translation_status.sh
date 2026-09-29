@@ -29,11 +29,11 @@ if [ ! -d "$folder" ]; then
     exit 1
 fi
 
-# Collect every .po file under the path, preserving locale-dir grouping.
+# Collect every .po file under the path. Grouping is done in python below, so
+# the order here only has to be stable.
 # Use a temp file list (POSIX-safe; avoids bash process-substitution which fails under dash).
 po_list=$(mktemp /tmp/translation_status.XXXXXX.list)
-find "$folder" -type f -name "*.po" | grep -v "_en.po" | sort > "$po_list"
-find "$folder" -type f -name "*_en.po" | sort >> "$po_list"
+find "$folder" -type f -name "*.po" | sort > "$po_list"
 
 if [ ! -s "$po_list" ]; then
     rm -f "$po_list"
@@ -51,38 +51,49 @@ if [ "$MODE" != "stats" ]; then
     tmp_py=$(mktemp /tmp/msgid_diff.XXXXXX.py)
     cat > "$tmp_py" <<'PYEOF'
 import polib, sys, os
-po_files = sys.argv[1:]
-last_dir = None
-en = None
-for po_file in po_files:
-    po_dir = os.path.dirname(po_file)
-    filename = os.path.basename(po_file)
-    if po_dir != last_dir:
+from collections import OrderedDict
+
+def msgids(path):
+    # Obsolete (#~) entries are msgids that once existed and no longer do, so
+    # msgmerge leaves them in the translations forever. Counting them as
+    # "extra" reports every long-lived catalog as mismatched, so skip them.
+    return set(e.msgid for e in polib.pofile(path) if e.msgid and not e.obsolete)
+
+# Group by directory here rather than relying on the order of the file list,
+# so each directory prints exactly one header with its template first.
+groups = OrderedDict()
+for po_file in sys.argv[1:]:
+    groups.setdefault(os.path.dirname(po_file), []).append(po_file)
+
+for po_dir, files in groups.items():
+    names = [os.path.basename(f) for f in files]
+    if "messages_en.po" not in names:
+        # Nothing to diff against. Comparing against an empty set would mark
+        # every file 100% extra; the distro/ and man/ catalogs ship without a
+        # template, so just say they were not diffed.
         print()
-        print("msgid diff vs messages_en.po in '%s':" % po_dir)
+        print("msgid diff in '%s':" % po_dir)
         print("=================================================================")
-        last_dir = po_dir
-        en = None
-    if filename == "messages_en.po":
-        en = set(e.msgid for e in polib.pofile(po_file) if e.msgid)
-        print("%-40s [ %d msgids (template) ]" % (filename, len(en)))
+        print("  no messages_en.po template - %d file(s) not diffed" % len(names))
         continue
-    po = polib.pofile(po_file)
-    ids = set(e.msgid for e in po if e.msgid)
-    if en is None:
-        en_path = os.path.join(po_dir, "messages_en.po")
-        if os.path.exists(en_path):
-            en = set(e.msgid for e in polib.pofile(en_path) if e.msgid)
+    print()
+    print("msgid diff vs messages_en.po in '%s':" % po_dir)
+    print("=================================================================")
+    en = msgids(os.path.join(po_dir, "messages_en.po"))
+    print("%-40s [ %d msgids (template) ]" % ("messages_en.po", len(en)))
+    for po_file in sorted(files):
+        filename = os.path.basename(po_file)
+        if filename == "messages_en.po":
+            continue
+        ids = msgids(po_file)
+        missing = len(en - ids)
+        extra = len(ids - en)
+        matched = len(en & ids)
+        if missing == 0 and extra == 0:
+            flag = "OK"
         else:
-            en = set()
-    missing = len(en - ids)
-    extra = len(ids - en)
-    matched = len(en & ids)
-    if missing == 0 and extra == 0:
-        flag = "OK"
-    else:
-        flag = "MISMATCH"
-    print("%-40s matched=%-5d missing=%-5d extra=%-5d %s" % (filename, matched, missing, extra, flag))
+            flag = "MISMATCH"
+        print("%-40s matched=%-5d missing=%-5d extra=%-5d %s" % (filename, matched, missing, extra, flag))
 PYEOF
     python3 "$tmp_py" $po_files
     rm -f "$tmp_py"

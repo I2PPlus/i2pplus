@@ -137,17 +137,17 @@ msgstr "Sobrecarga de solicitudes"
 msgid "Connection limit reached"
 msgstr "Límite de conexión alcanzado"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Desechando solicitudes de túnel: Carga elevada"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Desechando solicitudes de túnel: Tiempo en cola"
-
 msgid "Transit throttle drop"
 msgstr "Descartar limitación de tránsito"
 
 msgid "Transit throttle reject"
 msgstr "Rechazar limitación de tránsito"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Desechando solicitudes de túnel: Carga elevada"
+
 msgid "Transit request throttle"
 msgstr "Limitación de solicitudes de tránsito"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Desechando solicitudes de túnel: Tiempo en cola"

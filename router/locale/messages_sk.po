@@ -137,17 +137,17 @@ msgstr "Túlterhelés kérése"
 msgid "Connection limit reached"
 msgstr "Elérte a csatlakozási korlátot"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Alagút kérések elvetése: Magas töltöttség"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Alagút kérések elvetése: Sorba állítási idő"
-
 msgid "Transit throttle drop"
 msgstr "Tranzitné obmedzenie — zamietnutie"
 
 msgid "Transit throttle reject"
 msgstr "Tranzitné obmedzenie — odmietnutie"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Alagút kérések elvetése: Magas töltöttség"
+
 msgid "Transit request throttle"
 msgstr "Obmedzenie tranzitných požiadaviek"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Alagút kérések elvetése: Sorba állítási idő"

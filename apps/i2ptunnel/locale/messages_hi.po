@@ -8,6 +8,197 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
 
+msgid "This seems to be a bad destination:"
+msgstr ""
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr ""
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr ""
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr ""
+
+msgid "Conflicting address helper destination"
+msgstr ""
+
+msgid "Corrupt Base32 address"
+msgstr ""
+
+msgid "Destination LeaseSet not found"
+msgstr ""
+
+msgid "Host"
+msgstr "होस्ट"
+
+msgid "Base32"
+msgstr "बेस32"
+
+msgid "Destination"
+msgstr "गंतव्य"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr ""
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr ""
+
+msgid "Continue without saving"
+msgstr ""
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr ""
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr ""
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr ""
+
+msgid "Save & continue"
+msgstr ""
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr ""
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr ""
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr ""
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr ""
+
+msgid "Base32 address requires lookup password"
+msgstr ""
+
+msgid "Base32 address requires encryption key"
+msgstr ""
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr ""
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr ""
+
+msgid "Generate"
+msgstr "उत्पन्न करें"
+
+msgid "Encryption key"
+msgstr ""
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr ""
+
+msgid "Ask the server operator for help."
+msgstr ""
+
+msgid "Enter PSK encryption key"
+msgstr ""
+
+msgid "Generate new DH encryption key"
+msgstr ""
+
+msgid "Lookup password"
+msgstr ""
+
+msgid "You must enter the password provided by the server operator."
+msgstr ""
+
+msgid "HTTP Outproxy"
+msgstr ""
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr ""
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Missing lookup password"
+msgstr ""
+
+msgid "Missing private key"
+msgstr ""
+
+msgid "Invalid private key"
+msgstr ""
+
+msgid "Your new encryption key"
+msgstr ""
+
+msgid "Router Console"
+msgstr ""
+
+msgid "Addressbook"
+msgstr ""
+
+msgid "Configuration"
+msgstr "सेटिंग"
+
+msgid "Help"
+msgstr ""
+
+msgid "Copy the key and send it to the server operator."
+msgstr ""
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr ""
+
+msgid "Go back and fix the error"
+msgstr ""
+
+msgid "router"
+msgstr ""
+
+msgid "master"
+msgstr ""
+
+msgid "private"
+msgstr ""
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr ""
+
+msgid "Redirection in progress"
+msgstr ""
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr ""
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr ""
+
+msgid "Click here if you are not redirected automatically."
+msgstr ""
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr ""
+
+msgid "Failed to save configuration"
+msgstr ""
+
+msgid "Configuration changes saved"
+msgstr ""
+
+msgid "Client"
+msgstr "क्लाइंट"
+
 msgid "internal"
 msgstr "आंतरिक"
 
@@ -82,9 +273,6 @@ msgstr "टनल रोका गया"
 
 msgid "Restarting tunnel"
 msgstr "टनल पुनः आरंभ हो रहा है"
-
-msgid "Please confirm removal"
-msgstr "कृपया हटाने की पुष्टि करें"
 
 msgid "New Tunnel"
 msgstr "नया टनल"
@@ -164,9 +352,6 @@ msgstr "इस सेटिंग को बदलने के लिए टन
 msgid "Tunnel must be stopped to change this configuration"
 msgstr "इस सेटिंग को बदलने के लिए टनल को स्थगित करना होगा"
 
-msgid "Configuration"
-msgstr "सेटिंग"
-
 msgid "New Client Configuration"
 msgstr "नई क्लाइंट सेटिंग"
 
@@ -217,9 +402,6 @@ msgstr "पोर्ट"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "इस सेवा को उपलब्ध कराने के लिए स्थानीय पोर्ट का नाम बताएं"
-
-msgid "Host"
-msgstr "होस्ट"
 
 msgid "Hostname or IP address of the target server"
 msgstr "क्ष्य सर्वर का होस्टनेम या आईपी पता"
@@ -878,9 +1060,6 @@ msgstr "इस सेवा की पहुँच के लिए एन्क
 msgid "Generate new encryption key"
 msgstr "नई एन्क्रिप्शन कुंजी उत्पन्न करें"
 
-msgid "Generate"
-msgstr "उत्पन्न करें"
-
 msgid "Tunnel must be stopped first"
 msgstr "पहले ही टनल को रोकना होगा"
 
@@ -895,9 +1074,6 @@ msgstr "क्लाइंट कुंजी"
 
 msgid "Revoke"
 msgstr "पुनर्मान्यता रद्द करें"
-
-msgid "Client"
-msgstr "क्लाइंट"
 
 msgid "Add"
 msgstr "जोड़ें"
@@ -1161,9 +1337,6 @@ msgstr "इस टनल को पुनः आरंभ करें"
 msgid "Restart"
 msgstr "पुनः आरंभ करें"
 
-msgid "Destination"
-msgstr "गंतव्य"
-
 msgid "Signature"
 msgstr "हस्ताक्षर"
 
@@ -1338,9 +1511,6 @@ msgstr "SSL सहायक"
 
 msgid "Experts only!"
 msgstr "केवल विशेषज्ञों के लिए!"
-
-msgid "Base32"
-msgstr "बेस32"
 
 msgid "Alt Base32"
 msgstr "विकल्प बेस32"

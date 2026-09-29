@@ -234,6 +234,9 @@ msgstr "İzləmə şəkli yer tutucusunu silindi"
 msgid "no subject"
 msgstr "mövzu yoxdur"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Etibarlı göndərici ünvanı tapmadı."
 

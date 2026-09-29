@@ -234,6 +234,9 @@ msgstr "བཟོ་བཅོས་པའི་རི་མོའི་སྟོ
 msgid "no subject"
 msgstr "དོན་ཚན་མི་འདུག"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "བཏོན་པའི་གློག་ཐུང་གི་ཡིག་རྒྱུའི་གནས་མི་རྙེད།"
 

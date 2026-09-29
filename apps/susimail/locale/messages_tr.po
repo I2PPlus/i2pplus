@@ -234,6 +234,9 @@ msgstr "İzleme görseli yer tutucusu kaldırıldı"
 msgid "no subject"
 msgstr "konu yok"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Geçerli bir kullanıcı adresi bulunamadı."
 

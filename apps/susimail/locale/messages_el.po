@@ -234,6 +234,9 @@ msgstr "Αφαιρέθηκε το κεντρικό στοιχείο εικόνα
 msgid "no subject"
 msgstr "κανένα θέμα"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Δεν βρέθηκε έγκυρη διεύθυνση αποστολέα."
 

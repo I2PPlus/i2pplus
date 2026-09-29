@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "No more torrents running."
-msgstr "Δεν τρέχουν άλλα torrents."
-
-msgid "I2P tunnel closed."
-msgstr "Η σήραγγα I2P έκλεισε."
-
 msgid "Magnet"
 msgstr "Μαγνήτης"
 
@@ -23,12 +17,6 @@ msgstr "Δεν είναι δυνατή η σύνδεση στο I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Σφάλμα σύνδεσης στο I2P - ελέγξτε τις ρυθμίσεις I2CP!"
 
-msgid "Download already running: "
-msgstr "Λήφη λήψε ήδη εκτελείται: "
-
-msgid "Downloading"
-msgstr "Λήψη"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Διαμόρφωση του Τορρέντ με επιλογές I2CP"
 
@@ -37,6 +25,18 @@ msgstr "Δεν υπάρχουν δικαιώματα εγγραφής για τ�
 
 msgid "Data directory cannot be created"
 msgstr "Δεν είναι δυνατή η δημιουργία καταλόγου δεδομένων"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "Ενεργοποίηση της τυχαίας διάλεξης +0/1 σ�
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Απενεργοποίηση της τυχαίας διάλεξης στροφών στους εξερχόμενους τούνελ"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Η καθυστέρηση εκκίνησης άλλαξε σε {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Προσθήκη και Δημιουργία ενοτήτων για ε�
 msgid "API key updated."
 msgstr "Το κλειδί API ενημερώθηκε."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Άνοιγμα λίστας παρακολούθησης άλλαξε - απαιτείται επανεκκίνηση torrent για να τεθεί σε ισχύ."
 
@@ -246,6 +299,10 @@ msgstr "Το torrent στο \"{0}\" δεν είναι έγκυρο"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ΣΦΑΛΜΑ - Δεν υπάρχει μνήμη, δεν είναι δυνατή η δημιουργία torrent από το {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Αρχικοποίηση Τορρέντ και άνοιγμα τούνελ"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Το torrent καταργήθηκε: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Προσθήκη torrent στο {0}"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Το ανώτατο όριο εύρους ζώνης είναι {0} KBps
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Σύνδεση στη θύρα I2CP στην περίπτωση I2P στο {0}"
-
-msgid "Connecting to I2P"
-msgstr "Σύνδεση σε I2P"
-
-msgid "Connected to I2P at"
-msgstr "Συνδέθηκε με το I2P στο"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Εκκίνηση torrent {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Αποθήκευση: {0}MB είναι σήμερα διαθέσιμα �
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Προειδοποίηση - Μόνο {0}MB είναι διαθέσιμα για λήψεις στην ρυθμισμένη διαμορφώση δεδομένων"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Το torrent δεν βρέθηκε"
 msgid "Opening the I2P tunnel"
 msgstr "Άνοιγμα της σήραγγας I2P"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Άνοιγμα της σήραγγας I2P και εκκίνηση όλων των torrents."
+
+msgid "Connecting to I2P"
+msgstr "Σύνδεση σε I2P"
+
+msgid "Connected to I2P at"
+msgstr "Συνδέθηκε με το I2P στο"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Εκκίνηση torrent {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Διακοπή όλων των χειμάρρων και κλείσιμο της σήραγγας I2P."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Κλείσιμο της σήραγγας I2P μετά την ειδοποίηση των ιχνηλατών."
+
+msgid "I2P tunnel closed."
+msgstr "Η σήραγγα I2P έκλεισε."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,551 +567,8 @@ msgstr "Torrent ήδη στην ουρά: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Το torrent στο {0} δεν ήταν έγκυρο"
 
-msgid "Torrents"
-msgstr "Τορρέντ"
-
-msgid "Refresh page"
-msgstr "Ανανέωση σελίδας"
-
-msgid "Configure"
-msgstr "Διαμόρφωση"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Forum"
-msgstr "Φόρουμ"
-
-msgid "Search torrents"
-msgstr "Αναζήτηση torrents"
-
-msgid "Clear search"
-msgstr "Εκκαθάριση αναζήτησης"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Κάντε κλικ στο κουμπί \"Προσθήκη torrent\" για λήψη torrent"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Ανώνυμος πελάτης BitTorrent"
-
 msgid "Configuration"
 msgstr "Ρυθμίσεις"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το {0} και όλα τα ληφθέντα δεδομένα;"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "Διαγραφή <b>{0}</b> και όλων των σχετικών δεδομένων..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το αρχείο \\''{0}\\'' (τα δεδομένα που έχουν ληφθεί δεν θα διαγραφούν) ?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Σημείωση: Τα ληφθέντα δεδομένα δεν θα διαγραφούν."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "Διαγραφή του {0} και μόνο των σχετικών μεταδεδομένων..."
-
-msgid "clear messages"
-msgstr "καθαρισμός μηνυμάτων"
-
-msgid "Expand"
-msgstr "Ανάπτυξη"
-
-msgid "Shrink"
-msgstr "Συρρίκνωση"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Προειδοποίηση! Η Javascript είναι απενεργοποιημένη στον browser σας. Εάν το {0} είναι ενεργοποιημένο, θα χάσετε οποιαδήποτε εισροή στα τμήματα Add/Create Torrent όταν εμφανιστεί μια ανανέωση."
-
-msgid "page refresh"
-msgstr "ανανέωση σελίδας"
-
-msgid "Warning - No I2P"
-msgstr "Προειδοποίηση - Όχι I2P"
-
-msgid "No torrents found."
-msgstr "Δεν βρέθηκαν torrents."
-
-msgid "No torrents loaded."
-msgstr "Δεν έχουν φορτωθεί torrents."
-
-msgid "No DHT Peers"
-msgstr "Χωρίς ομοτίμους DHT"
-
-msgid "Status"
-msgstr "Κατάσταση"
-
-msgid "Torrent"
-msgstr "Χείμαρος"
-
-msgid "File type"
-msgstr "Τύπος αρχείου"
-
-msgid "Torrent name"
-msgstr "Όνομα torrent"
-
-msgid "ETA"
-msgstr "ΕΤΑ"
-
-msgid "RX"
-msgstr "RX"
-
-msgid "RX Rate"
-msgstr "Ρυθμός λήψης"
-
-msgid "TX"
-msgstr "Αποστολή"
-
-msgid "TX Rate"
-msgstr "Επιτόκιο φόρτωσης"
-
-msgid "Start All"
-msgstr "Έναρξη όλων"
-
-msgid "Stop All"
-msgstr "Σταματήστε όλα"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Σταματήστε όλα τα torrents και τη σήραγγα I2P"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Ξεκινήστε όλα τα torrents και το τούνελ I2P"
-
-msgid "Start all stopped torrents"
-msgstr "Έναρξη όλων των σταματημένων torrents"
-
-msgid "Hide Peers"
-msgstr "Απόκρυψη συνομηλίκων"
-
-msgid "Show Peers"
-msgstr "Εμφάνιση συνομηλίκων"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Ταξινόμηση κατά {0}"
-
-msgid "Up Rate"
-msgstr "Ανώτερος ρυθμός"
-
-msgid "Total size of loaded torrents"
-msgstr "Συνολικό μέγεθος φορτωμένων torrents"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "1 συνδεδεμένος ομότιμος"
-msgstr[1] "{0} συνδεδεμένοι ομότιμοι"
-
-msgid "Active downloads"
-msgstr "Ενεργές λήψεις"
-
-msgid "Active uploads"
-msgstr "Ενεργές μεταφορτώσεις"
-
-msgid "Active Inbound tunnels"
-msgstr "Ενεργές εισερχόμενες σήραγγες"
-
-msgid "Active Outbound tunnels"
-msgstr "Ενεργές εξερχόμενες σήραγγες"
-
-msgid "Estimated download time for all torrents"
-msgstr "Εκτιμώμενος χρόνος λήψης για όλα τα torrent"
-
-msgid "Data downloaded this session"
-msgstr "Η λήψη δεδομένων αυτής της περιόδου σύνδεσης"
-
-msgid "Total download speed"
-msgstr "Συνολική ταχύτητα λήψης"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Συνολικά μεταφορτωμένα δεδομένα (για καταχωρισμένα torrents)"
-
-msgid "Total upload speed"
-msgstr "Συνολική ταχύτητα μεταφόρτωσης"
-
-msgid "Toggle Debug Panel"
-msgstr "Εναλλαγή πίνακα εντοπισμού σφαλμάτων"
-
-msgid "Debug Mode"
-msgstr "Λειτουργία εντοπισμού σφαλμάτων"
-
-msgid "Normal Mode"
-msgstr "Κανονική λειτουργία"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrents"
-
-msgid "Search"
-msgstr "Αναζήτηση"
-
-msgid "Show All"
-msgstr "Εμφάνιση όλων"
-
-msgid "Active"
-msgstr "Ενεργός"
-
-msgid "Inactive"
-msgstr "Ανενεργό"
-
-msgid "Connected"
-msgstr "Συνδεδεμένο"
-
-msgid "Seeding"
-msgstr "Σπορά"
-
-msgid "Complete"
-msgstr "Ολοκληρώθηκε"
-
-msgid "Incomplete"
-msgstr "Ημιτελές"
-
-msgid "Stopped"
-msgstr "Σταμάτησε"
-
-msgid "First"
-msgstr "Πρώτο"
-
-msgid "First page"
-msgstr "Πρώτη σελίδα"
-
-msgid "Prev"
-msgstr "Προηγούμενο"
-
-msgid "Previous page"
-msgstr "Προηγούμενη σελίδα"
-
-msgid "Next"
-msgstr "Επόμενο"
-
-msgid "Next page"
-msgstr "Επόμενη σελίδα"
-
-msgid "Last"
-msgstr "Τελευταίο"
-
-msgid "Last page"
-msgstr "Τελευταία σελίδα"
-
-msgid "Enter URL or select torrent file"
-msgstr "Εισαγάγετε τη διεύθυνση URL ή επιλέξτε αρχείο torrent"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου torrent: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Δεν είναι δυνατή η προσθήκη torrent {0} μέσα σε άλλο torrent: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Η λήψη από τοποθεσία που δεν ανήκει στο I2P {0} δεν υποστηρίζεται"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Σφάλμα: Οι κατακερματισμοί πληροφοριών έκδοσης 2 δεν υποστηρίζονται"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Μη έγκυρη διεύθυνση URL: Πρέπει να ξεκινά με \"{0}\" ή \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Διαγράφηκε ο μαγνήτης: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Δεν ήταν δυνατή η διαγραφή του αρχείου torrent: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Το αρχείο δεδομένων διαγράφηκε: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Δεν ήταν δυνατή η διαγραφή του αρχείου δεδομένων: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Δεν ήταν δυνατή η διαγραφή του καταλόγου: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Διαγράφηκε ο κατάλογος: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Σφάλμα δημιουργίας torrent - πρέπει να εισαγάγετε ένα αρχείο ή έναν κατάλογο"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Δεν είναι δυνατή η δημιουργία torrent για τα ανύπαρκτα δεδομένα: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Δεν είναι δυνατή η προσθήκη torrent που τελειώνει σε \".torrent\": {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Το torrent με αυτό το όνομα εκτελείται ήδη: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Δεν είναι δυνατή η προσθήκη torrent που περιλαμβάνει έναν κατάλογο I2P: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Δεν είναι δυνατή η προσθήκη torrent {0} συμπεριλαμβανομένου άλλου torrent: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Σφάλμα - Δεν είναι δυνατή η συμπερίληψη εναλλακτικών ιχνηλατών χωρίς κύριο πρόγραμμα παρακολούθησης"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Σφάλμα - Δεν είναι δυνατή η ανάμειξη ιδιωτικών και δημόσιων ιχνηλατών σε ένα torrent"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " τα αρχεία ή τα φακέλα αποκλείθηκαν από \"{0}\" λόγω κανόνων φίλτρου."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Τα εξής αρχεία ή φακέλα αποκλείθηκαν από \"{0}\" λόγω κανόνων φίλτρου: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Το torrent δημιουργήθηκε για το \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Πολλοί ανιχνευτές I2P απαιτούν να καταχωρήσετε νέα torrents πριν από τη σπορά - κάντε το πριν ξεκινήσετε το \"{0}\""
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Σφάλμα κατά τη δημιουργία ενός torrent για το \"{0}\""
-
-msgid "Delete selected"
-msgstr "Διαγραφή επιλεγμένων"
-
-msgid "Save tracker configuration"
-msgstr "Αποθήκευση διαμόρφωσης παρακολούθησης"
-
-msgid "Removed"
-msgstr "Αφαιρέθηκε"
-
-msgid "Add tracker"
-msgstr "Προσθήκη ιχνηλάτη"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Εισαγάγετε έγκυρο όνομα παρακολούθησης και διευθύνσεις URL"
-
-msgid "Restore defaults"
-msgstr "Επαναφορά προεπιλογών"
-
-msgid "Restored default trackers"
-msgstr "Επαναφορά προεπιλεγμένων ιχνηλατών"
-
-msgid "Save Filter Configuration"
-msgstr "Αποθήκευση Διατύπωσης Φίλτρου"
-
-msgid "Add File Filter"
-msgstr "Προσθήκη Φίλτρου Αρχείου"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Εισάγετε έγκυρο όνομα και σχεματισμό φίλτρου"
-
-msgid "Restored default torrent create filters"
-msgstr "Επαναφορά προεπιλεγμένων φίλτρων δημιουργίας torrent"
-
-msgid "Torrent details"
-msgstr "Λεπτομέρειες torrent"
-
-msgid "Torrent has comments"
-msgstr "Το Torrent έχει σχόλια"
-
-msgid "Open file"
-msgstr "Άνοιγμα αρχείου"
-
-msgid "View files"
-msgstr "Εμφάνιση αρχείων"
-
-msgid "Completed"
-msgstr "Ολοκληρώθηκε"
-
-msgid "Share ratio"
-msgstr "Αναλογία μεταφόρτωσης"
-
-msgid "Last activity"
-msgstr "Τελευταία δραστηριότητα"
-
-msgid "Stop"
-msgstr "Σταμάτα"
-
-msgid "Stop torrent"
-msgstr "Σταματήστε το torrent"
-
-msgid "Start"
-msgstr "Έναρξη"
-
-msgid "Start torrent"
-msgstr "Ξεκινήστε το torrent"
-
-msgid "Remove"
-msgstr "Αφαίρεση"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Καταργήστε το torrent από την ενεργή λίστα, διαγράφοντας το αρχείο .torrent"
-
-msgid "Delete"
-msgstr "Διαγραφή"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Διαγράψτε το αρχείο .torrent και τα σχετικά αρχεία δεδομένων"
-
-msgid "Checking"
-msgstr "Γίνεται έλεγχος"
-
-msgid "Allocating"
-msgstr "Κατανομή"
-
-msgid "Starting"
-msgstr "Έναρξη"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Σπορά σε {0} ομότιμο"
-msgstr[1] "Σπορά στους συνομηλίκους {0}"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Συνδέθηκε με {0} από {1} συνομηλίκους στο σμήνος"
-
-msgid "Stalled"
-msgstr "Σταμάτημα"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Σπορά σε {0} ομότιμο στο σμήνος"
-msgstr[1] "Σπορά σε {0} ομότιμους στο σμήνος"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Λήψη από {0} ομότιμο"
-msgstr[1] "Λήψη από {0} συνομηλίκους"
-
-msgid "OK"
-msgstr "ΟΚ"
-
-msgid "No Peers"
-msgstr "Όχι συνομήλικοι"
-
-msgid "Peer attached to swarm"
-msgstr "Συνομήλικοι προσκολλημένοι στο σμήνος"
-
-msgid "Destination (identity) of peer"
-msgstr "Προορισμός (ταυτότητα) συνομήλικου"
-
-msgid "seconds"
-msgstr "δευτερόλεπτα"
-
-msgid "Seed"
-msgstr "Σπόρος"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Δεν έχει ενδιαφέρον (Ο ομότιμος δεν έχει κομμάτια που χρειαζόμαστε)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Πνιγμένος (Ο ομότιμος δεν μας επιτρέπει να ζητήσουμε κομμάτια)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Ο Peer ενδιαφέρεται αλλά επί του παρόντος είναι αδρανής"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Χωρίς ενδιαφέρον (Δεν έχουμε κομμάτια που χρειάζονται οι συνομήλικοι)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Πνιγμός (Δεν επιτρέπουμε στον ομότιμο να ζητήσει κομμάτια)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Λεπτομέρειες στο πρόγραμμα παρακολούθησης {0}"
-
-msgid "Info"
-msgstr "Πληροφορίες"
-
-msgid "Add Torrent"
-msgstr "Προσθήκη Torrent"
-
-msgid "From URL"
-msgstr "Από το URL"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Εισαγάγετε τη διεύθυνση URL λήψης του αρχείου torrent (μόνο I2P), τον σύνδεσμο μαγνήτη ή τον κατακερματισμό πληροφοριών"
-
-msgid "Add torrent"
-msgstr "Προσθήκη torrent"
-
-msgid "Torrent file"
-msgstr "Αρχείο torrent"
-
-msgid "Data dir"
-msgstr "Δεδομένα σκην"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Εισαγάγετε τον κατάλογο στον οποίο θα αποθηκεύσετε τα δεδομένα (προεπιλογή {0})"
-
-msgid "Create Torrent"
-msgstr "Δημιουργία Torrent"
-
-msgid "Data to seed"
-msgstr "Δεδομένα για σπόρους"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Αρχείο ή κατάλογος προς δημιουργία (πλήρης διαδρομή ή εντός του καταλόγου {0} )"
-
-msgid "Create torrent"
-msgstr "Δημιουργία torrent"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Αποκλείστε τα αρχεία από το torrent αν βρίσκονται στο φάκελο torrent"
-
-msgid "Content Filters"
-msgstr "Φίλτρα Περιεχομένου"
-
-msgid "Trackers"
-msgstr "Ιχνηλάτες"
-
-msgid "Alternates"
-msgstr "Αναπληρωματικοί"
-
-msgid "Primary"
-msgstr "Δημοτικό"
-
-msgid "Tracker Type"
-msgstr "Τύπος ιχνηλάτη"
-
-msgid "Standard"
-msgstr "Γουιάνα"
-
-msgid "Open"
-msgstr "Άνοιγμα"
-
-msgid "Private"
-msgstr "Ιδιωτικό"
-
-msgid "none"
-msgstr "κανένα"
 
 msgid "User Interface"
 msgstr "Διεπαφή χρήστη"
@@ -1043,6 +587,9 @@ msgstr "Για να αλλάξετε θέματα με μη αυτόματο τ�
 
 msgid "Universal theming is enabled."
 msgstr "Το καθολικό θέμα είναι ενεργοποιημένο."
+
+msgid "Configure"
+msgstr "Διαμόρφωση"
 
 msgid "Refresh time"
 msgstr "Χρόνος ανανέωσης"
@@ -1164,11 +711,20 @@ msgstr "Αυτόματη εκκίνηση torrent όταν προστίθετα�
 msgid "Startup delay"
 msgstr "Καθυστέρηση εκκίνησης"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Πόσο καιρό πριν φορτωθούν τα torrent που ξεκινούν αυτόματα κατά την εκκίνηση του Τορρέντ"
-
 msgid "minutes"
 msgstr "λεπτά"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Αποθήκευση δεδομένων"
@@ -1179,11 +735,35 @@ msgstr "Κατάλογος δεδομένων"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Κατάλογος όπου αποθηκεύονται τα torrent και τα ληφθέντα/κοινόχρηστα αρχεία"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Αρχεία αναγνώσιμα από όλους"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Ορισμός δικαιωμάτων αρχείων ώστε να επιτρέπεται σε άλλους τοπικούς χρήστες να έχουν πρόσβαση στα ληφθέντα αρχεία"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Μέγιστος αριθμός αρχείων ανά torrent"
@@ -1194,8 +774,14 @@ msgstr "Μέγιστος επιτρεπόμενος αριθμός αρχείω�
 msgid "Tunnel Configuration"
 msgstr "Διαμόρφωση σήραγγας"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Ο προορισμός μας (ταυτότητα) για αυτήν την περίοδο σύνδεσης"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Dest."
@@ -1221,6 +807,24 @@ msgstr "Προσθέστε 0 ή 1 πρόσθετες τυχαίες στροφέ
 msgid "Outbound"
 msgstr "Εξερχόμενος"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "Κεντρικός υπολογιστής I2CP"
 
@@ -1229,6 +833,49 @@ msgstr "Θύρα I2CP"
 
 msgid "I2CP options"
 msgstr "Επιλογές I2CP"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Αποθήκευση διαμόρφωσης"
@@ -1257,8 +904,23 @@ msgstr "Λήγει με"
 msgid "Enabled by Default"
 msgstr "Ενεργοποιημένο Κατ' Ορισμό"
 
+msgid "Delete selected"
+msgstr "Διαγραφή επιλεγμένων"
+
+msgid "Save Filter Configuration"
+msgstr "Αποθήκευση Διατύπωσης Φίλτρου"
+
+msgid "Restore defaults"
+msgstr "Επαναφορά προεπιλογών"
+
+msgid "Add File Filter"
+msgstr "Προσθήκη Φίλτρου Αρχείου"
+
 msgid "Add"
 msgstr "Προσθηκη"
+
+msgid "Trackers"
+msgstr "Ιχνηλάτες"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Επιλέξτε ιχνηλάτες για κατάργηση από τη γνωστή λίστα του Τορρέντ"
@@ -1266,11 +928,521 @@ msgstr "Επιλέξτε ιχνηλάτες για κατάργηση από τ�
 msgid "Website URL"
 msgstr "Διεύθυνση URL ιστότοπου"
 
+msgid "Standard"
+msgstr "Γουιάνα"
+
+msgid "Open"
+msgstr "Άνοιγμα"
+
+msgid "Private"
+msgstr "Ιδιωτικό"
+
 msgid "Announce URL"
 msgstr "Ανακοινώστε τη διεύθυνση URL"
 
 msgid "Mark tracker for deletion"
 msgstr "Επισήμανση παρακολούθησης για διαγραφή"
+
+msgid "Add tracker"
+msgstr "Προσθήκη ιχνηλάτη"
+
+msgid "Save tracker configuration"
+msgstr "Αποθήκευση διαμόρφωσης παρακολούθησης"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Αυτό διαμορφώνει τον μέγιστο αριθμό σηράγγων προς άνοιγμα, που καθορίζεται από τον αριθμό των συνδεδεμένων ομότιμων (η πραγματική χρήση μπορεί να είναι μικρότερη)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Η αλλαγή αυτής της ρύθμισης σε λιγότερο από 3 άλματα μπορεί να βελτιώσει την ταχύτητα σε βάρος της ανωνυμίας και δεν συνιστάται"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Κάντε κλικ στο κουμπί \"Προσθήκη torrent\" για λήψη torrent"
+
+msgid "Torrents"
+msgstr "Τορρέντ"
+
+msgid "Refresh page"
+msgstr "Ανανέωση σελίδας"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Φόρουμ"
+
+msgid "Search torrents"
+msgstr "Αναζήτηση torrents"
+
+msgid "Clear search"
+msgstr "Εκκαθάριση αναζήτησης"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Ανώνυμος πελάτης BitTorrent"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το {0} και όλα τα ληφθέντα δεδομένα;"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Διαγραφή <b>{0}</b> και όλων των σχετικών δεδομένων..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το αρχείο \\''{0}\\'' (τα δεδομένα που έχουν ληφθεί δεν θα διαγραφούν) ?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Σημείωση: Τα ληφθέντα δεδομένα δεν θα διαγραφούν."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Διαγραφή του {0} και μόνο των σχετικών μεταδεδομένων..."
+
+msgid "clear messages"
+msgstr "καθαρισμός μηνυμάτων"
+
+msgid "Expand"
+msgstr "Ανάπτυξη"
+
+msgid "Shrink"
+msgstr "Συρρίκνωση"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Προειδοποίηση! Η Javascript είναι απενεργοποιημένη στον browser σας. Εάν το {0} είναι ενεργοποιημένο, θα χάσετε οποιαδήποτε εισροή στα τμήματα Add/Create Torrent όταν εμφανιστεί μια ανανέωση."
+
+msgid "page refresh"
+msgstr "ανανέωση σελίδας"
+
+msgid "Warning - No I2P"
+msgstr "Προειδοποίηση - Όχι I2P"
+
+msgid "No torrents found."
+msgstr "Δεν βρέθηκαν torrents."
+
+msgid "No torrents loaded."
+msgstr "Δεν έχουν φορτωθεί torrents."
+
+msgid "Status"
+msgstr "Κατάσταση"
+
+msgid "Torrent"
+msgstr "Χείμαρος"
+
+msgid "ETA"
+msgstr "ΕΤΑ"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "Ρυθμός λήψης"
+
+msgid "TX"
+msgstr "Αποστολή"
+
+msgid "TX Rate"
+msgstr "Επιτόκιο φόρτωσης"
+
+msgid "Start All"
+msgstr "Έναρξη όλων"
+
+msgid "Stop All"
+msgstr "Σταματήστε όλα"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Σταματήστε όλα τα torrents και τη σήραγγα I2P"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Ξεκινήστε όλα τα torrents και το τούνελ I2P"
+
+msgid "Start all stopped torrents"
+msgstr "Έναρξη όλων των σταματημένων torrents"
+
+msgid "Hide Peers"
+msgstr "Απόκρυψη συνομηλίκων"
+
+msgid "Show Peers"
+msgstr "Εμφάνιση συνομηλίκων"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Ταξινόμηση κατά {0}"
+
+msgid "Up Rate"
+msgstr "Ανώτερος ρυθμός"
+
+msgid "Total size of loaded torrents"
+msgstr "Συνολικό μέγεθος φορτωμένων torrents"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 συνδεδεμένος ομότιμος"
+msgstr[1] "{0} συνδεδεμένοι ομότιμοι"
+
+msgid "Active downloads"
+msgstr "Ενεργές λήψεις"
+
+msgid "Active uploads"
+msgstr "Ενεργές μεταφορτώσεις"
+
+msgid "Active Inbound tunnels"
+msgstr "Ενεργές εισερχόμενες σήραγγες"
+
+msgid "Active Outbound tunnels"
+msgstr "Ενεργές εξερχόμενες σήραγγες"
+
+msgid "Estimated download time for all torrents"
+msgstr "Εκτιμώμενος χρόνος λήψης για όλα τα torrent"
+
+msgid "Data downloaded this session"
+msgstr "Η λήψη δεδομένων αυτής της περιόδου σύνδεσης"
+
+msgid "Total download speed"
+msgstr "Συνολική ταχύτητα λήψης"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Συνολικά μεταφορτωμένα δεδομένα (για καταχωρισμένα torrents)"
+
+msgid "Total upload speed"
+msgstr "Συνολική ταχύτητα μεταφόρτωσης"
+
+msgid "Toggle Debug Panel"
+msgstr "Εναλλαγή πίνακα εντοπισμού σφαλμάτων"
+
+msgid "Debug Mode"
+msgstr "Λειτουργία εντοπισμού σφαλμάτων"
+
+msgid "Normal Mode"
+msgstr "Κανονική λειτουργία"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrents"
+
+msgid "No DHT Peers"
+msgstr "Χωρίς ομοτίμους DHT"
+
+msgid "Search"
+msgstr "Αναζήτηση"
+
+msgid "Show All"
+msgstr "Εμφάνιση όλων"
+
+msgid "Active"
+msgstr "Ενεργός"
+
+msgid "Inactive"
+msgstr "Ανενεργό"
+
+msgid "Connected"
+msgstr "Συνδεδεμένο"
+
+msgid "Downloading"
+msgstr "Λήψη"
+
+msgid "Seeding"
+msgstr "Σπορά"
+
+msgid "Complete"
+msgstr "Ολοκληρώθηκε"
+
+msgid "Incomplete"
+msgstr "Ημιτελές"
+
+msgid "Stopped"
+msgstr "Σταμάτησε"
+
+msgid "First"
+msgstr "Πρώτο"
+
+msgid "First page"
+msgstr "Πρώτη σελίδα"
+
+msgid "Prev"
+msgstr "Προηγούμενο"
+
+msgid "Previous page"
+msgstr "Προηγούμενη σελίδα"
+
+msgid "Next"
+msgstr "Επόμενο"
+
+msgid "Next page"
+msgstr "Επόμενη σελίδα"
+
+msgid "Last"
+msgstr "Τελευταίο"
+
+msgid "Last page"
+msgstr "Τελευταία σελίδα"
+
+msgid "Enter URL or select torrent file"
+msgstr "Εισαγάγετε τη διεύθυνση URL ή επιλέξτε αρχείο torrent"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου torrent: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Η λήψη από τοποθεσία που δεν ανήκει στο I2P {0} δεν υποστηρίζεται"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Σφάλμα: Οι κατακερματισμοί πληροφοριών έκδοσης 2 δεν υποστηρίζονται"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Μη έγκυρη διεύθυνση URL: Πρέπει να ξεκινά με \"{0}\" ή \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Διαγράφηκε ο μαγνήτης: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Δεν ήταν δυνατή η διαγραφή του αρχείου torrent: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Το αρχείο δεδομένων διαγράφηκε: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Δεν ήταν δυνατή η διαγραφή του αρχείου δεδομένων: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Δεν ήταν δυνατή η διαγραφή του καταλόγου: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Διαγράφηκε ο κατάλογος: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " τα αρχεία ή τα φακέλα αποκλείθηκαν από \"{0}\" λόγω κανόνων φίλτρου."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Τα εξής αρχεία ή φακέλα αποκλείθηκαν από \"{0}\" λόγω κανόνων φίλτρου: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Το torrent δημιουργήθηκε για το \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Πολλοί ανιχνευτές I2P απαιτούν να καταχωρήσετε νέα torrents πριν από τη σπορά - κάντε το πριν ξεκινήσετε το \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Σφάλμα κατά τη δημιουργία ενός torrent για το \"{0}\""
+
+msgid "Removed"
+msgstr "Αφαιρέθηκε"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Εισαγάγετε έγκυρο όνομα παρακολούθησης και διευθύνσεις URL"
+
+msgid "Restored default trackers"
+msgstr "Επαναφορά προεπιλεγμένων ιχνηλατών"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Εισάγετε έγκυρο όνομα και σχεματισμό φίλτρου"
+
+msgid "Restored default torrent create filters"
+msgstr "Επαναφορά προεπιλεγμένων φίλτρων δημιουργίας torrent"
+
+msgid "Torrent details"
+msgstr "Λεπτομέρειες torrent"
+
+msgid "Torrent has comments"
+msgstr "Το Torrent έχει σχόλια"
+
+msgid "Open file"
+msgstr "Άνοιγμα αρχείου"
+
+msgid "View files"
+msgstr "Εμφάνιση αρχείων"
+
+msgid "Completed"
+msgstr "Ολοκληρώθηκε"
+
+msgid "Share ratio"
+msgstr "Αναλογία μεταφόρτωσης"
+
+msgid "Last activity"
+msgstr "Τελευταία δραστηριότητα"
+
+msgid "Stop"
+msgstr "Σταμάτα"
+
+msgid "Stop torrent"
+msgstr "Σταματήστε το torrent"
+
+msgid "Start"
+msgstr "Έναρξη"
+
+msgid "Start torrent"
+msgstr "Ξεκινήστε το torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Καταργήστε το torrent από την ενεργή λίστα, διαγράφοντας το αρχείο .torrent"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Διαγράψτε το αρχείο .torrent και τα σχετικά αρχεία δεδομένων"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Γίνεται έλεγχος"
+
+msgid "Allocating"
+msgstr "Κατανομή"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Έναρξη"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Σπορά σε {0} ομότιμο"
+msgstr[1] "Σπορά στους συνομηλίκους {0}"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Συνδέθηκε με {0} από {1} συνομηλίκους στο σμήνος"
+
+msgid "Stalled"
+msgstr "Σταμάτημα"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Σπορά σε {0} ομότιμο στο σμήνος"
+msgstr[1] "Σπορά σε {0} ομότιμους στο σμήνος"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Λήψη από {0} ομότιμο"
+msgstr[1] "Λήψη από {0} συνομηλίκους"
+
+msgid "OK"
+msgstr "ΟΚ"
+
+msgid "No Peers"
+msgstr "Όχι συνομήλικοι"
+
+msgid "Peer attached to swarm"
+msgstr "Συνομήλικοι προσκολλημένοι στο σμήνος"
+
+msgid "Destination (identity) of peer"
+msgstr "Προορισμός (ταυτότητα) συνομήλικου"
+
+msgid "seconds"
+msgstr "δευτερόλεπτα"
+
+msgid "Seed"
+msgstr "Σπόρος"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Δεν έχει ενδιαφέρον (Ο ομότιμος δεν έχει κομμάτια που χρειαζόμαστε)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Πνιγμένος (Ο ομότιμος δεν μας επιτρέπει να ζητήσουμε κομμάτια)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Ο Peer ενδιαφέρεται αλλά επί του παρόντος είναι αδρανής"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Χωρίς ενδιαφέρον (Δεν έχουμε κομμάτια που χρειάζονται οι συνομήλικοι)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Πνιγμός (Δεν επιτρέπουμε στον ομότιμο να ζητήσει κομμάτια)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Λεπτομέρειες στο πρόγραμμα παρακολούθησης {0}"
+
+msgid "Info"
+msgstr "Πληροφορίες"
+
+msgid "Add Torrent"
+msgstr "Προσθήκη Torrent"
+
+msgid "From URL"
+msgstr "Από το URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Εισαγάγετε τη διεύθυνση URL λήψης του αρχείου torrent (μόνο I2P), τον σύνδεσμο μαγνήτη ή τον κατακερματισμό πληροφοριών"
+
+msgid "Add torrent"
+msgstr "Προσθήκη torrent"
+
+msgid "Torrent file"
+msgstr "Αρχείο torrent"
+
+msgid "Data dir"
+msgstr "Δεδομένα σκην"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Εισαγάγετε τον κατάλογο στον οποίο θα αποθηκεύσετε τα δεδομένα (προεπιλογή {0})"
+
+msgid "Create Torrent"
+msgstr "Δημιουργία Torrent"
+
+msgid "Data to seed"
+msgstr "Δεδομένα για σπόρους"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Αρχείο ή κατάλογος προς δημιουργία (πλήρης διαδρομή ή εντός του καταλόγου {0} )"
+
+msgid "Create torrent"
+msgstr "Δημιουργία torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Αποκλείστε τα αρχεία από το torrent αν βρίσκονται στο φάκελο torrent"
+
+msgid "Content Filters"
+msgstr "Φίλτρα Περιεχομένου"
+
+msgid "Alternates"
+msgstr "Αναπληρωματικοί"
+
+msgid "Primary"
+msgstr "Δημοτικό"
+
+msgid "Tracker Type"
+msgstr "Τύπος ιχνηλάτη"
+
+msgid "none"
+msgstr "κανένα"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Δεν μπορώ να προσθέσω magnet: Οι συνδέσεις magnet της έκδοσης 2 δεν υποστηρίζονται"
@@ -1279,20 +1451,20 @@ msgstr "Δεν μπορώ να προσθέσω magnet: Οι συνδέσεις 
 msgid "Invalid magnet URL {0}"
 msgstr "Μη έγκυρη διεύθυνση URL μαγνήτη {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Αυτό διαμορφώνει τον μέγιστο αριθμό σηράγγων προς άνοιγμα, που καθορίζεται από τον αριθμό των συνδεδεμένων ομότιμων (η πραγματική χρήση μπορεί να είναι μικρότερη)"
+msgid "Files"
+msgstr "Αρχεία"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Η αλλαγή αυτής της ρύθμισης σε λιγότερο από 3 άλματα μπορεί να βελτιώσει την ταχύτητα σε βάρος της ανωνυμίας και δεν συνιστάται"
+msgid "Save priorities"
+msgstr "Αποθήκευση προτεραιοτήτων"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Η σειριακή σειρά κομματιών ή αρχείων δεν αποθηκεύτηκε - η λειτουργία είναι επί του παρόντος χαλασμένη."
-
-msgid "Unknown command"
-msgstr "Άγνωστη εντολή"
+msgid "Comments"
+msgstr "Σχόλια"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Παρακαλώ επαναλάβετε την υποβολή της φόρμας (κακό nonce)"
+
+msgid "Unknown command"
+msgstr "Άγνωστη εντολή"
 
 msgid "Resource Does Not Exist"
 msgstr "Ο πόρος δεν υπάρχει"
@@ -1303,11 +1475,11 @@ msgstr "Πόρος"
 msgid "Base"
 msgstr "Βάση"
 
-msgid "Files"
-msgstr "Αρχεία"
-
 msgid "Directory"
 msgstr "Κατάλογος"
+
+msgid "File type"
+msgstr "Τύπος αρχείου"
 
 msgid "Size"
 msgstr "Μέγεθος"
@@ -1330,24 +1502,6 @@ msgstr "Κατάλογος μέχρι υψηλότερου επιπέδου"
 msgid "Audio Playlist"
 msgstr "Λίστα αναπαραγωγής ήχου"
 
-msgid "Not found"
-msgstr "Δεν βρέθηκε"
-
-msgid "File not found in torrent"
-msgstr "Δεν βρέθηκε το αρχείο σε torrent"
-
-msgid "Unrecognized"
-msgstr "Μη αναγνωρισμένη"
-
-msgid "Preview"
-msgstr "Προεπισκόπηση"
-
-msgid "Save priorities"
-msgstr "Αποθήκευση προτεραιοτήτων"
-
-msgid "Comments"
-msgstr "Σχόλια"
-
 msgid "Resource Not found"
 msgstr "Ο πόρος δεν βρέθηκε"
 
@@ -1356,6 +1510,10 @@ msgstr "Κατακερματισμός πληροφοριών"
 
 msgid "Created"
 msgstr "Δημιουργία"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Προστέθηκε"
@@ -1420,15 +1578,6 @@ msgstr "πλήρης"
 msgid "remaining"
 msgstr "απομένουν"
 
-msgid "Ratings and Comments"
-msgstr "Βαθμολογίες και σχόλια"
-
-msgid "Author name required to rate or comment"
-msgstr "Απαιτείται όνομα συγγραφέα για αξιολόγηση ή σχόλιο"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Το όνομα του συγγραφέα σας για δημοσιευμένα σχόλια και αξιολογήσεις"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1465,6 +1614,15 @@ msgstr "Επιλογή προς διαγραφή"
 msgid "Delete Selected"
 msgstr "Διαγραφή Επιλεγμένων"
 
+msgid "Ratings and Comments"
+msgstr "Βαθμολογίες και σχόλια"
+
+msgid "Author name required to rate or comment"
+msgstr "Απαιτείται όνομα συγγραφέα για αξιολόγηση ή σχόλιο"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Το όνομα του συγγραφέα σας για δημοσιευμένα σχόλια και αξιολογήσεις"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Οι προτεραιότητες λήψης αρχείων ενημερώθηκαν για το torrent "
 
@@ -1473,6 +1631,9 @@ msgstr "Επεξεργασία Torrent"
 
 msgid "Active Trackers"
 msgstr "Ενεργοί ιχνηλάτες"
+
+msgid "Delete"
+msgstr "Διαγραφή"
 
 msgid "Add Tracker"
 msgstr "Προσθήκη Tracker"
@@ -1488,3 +1649,23 @@ msgstr "Αποθήκευση αλλαγών"
 
 msgid "Torrent must be stopped"
 msgstr "Το torrent πρέπει να σταματήσει"
+
+msgid "Not found"
+msgstr "Δεν βρέθηκε"
+
+msgid "File not found in torrent"
+msgstr "Δεν βρέθηκε το αρχείο σε torrent"
+
+msgid "Unrecognized"
+msgstr "Μη αναγνωρισμένη"
+
+msgid "Preview"
+msgstr "Προεπισκόπηση"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Δεν είναι δυνατή η προσθήκη torrent {0} μέσα σε άλλο torrent: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Δεν είναι δυνατή η προσθήκη torrent {0} συμπεριλαμβανομένου άλλου torrent: {1}"

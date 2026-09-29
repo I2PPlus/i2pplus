@@ -234,6 +234,9 @@ msgstr ""
 msgid "no subject"
 msgstr ""
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr ""
 

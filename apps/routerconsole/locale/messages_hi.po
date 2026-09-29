@@ -65,10 +65,6 @@ msgid "Contacting reseed host"
 msgstr "रीसीड होस्ट से संपर्क कर रहा है"
 
 #, java-format
-msgid "Reseeding: fetching router info from seed URL ({0} successful, {1} errors)."
-msgstr "पुनःसंचय: सीड़ यूआरएल से राउटर जानकारी प्राप्त कर रहा है ({0} सफल, {1} त्रुटियाँ)."
-
-#, java-format
 msgid "Acquired {0} router infos from reseed hosts"
 msgstr "{0} राउटर जानकारियाँ रीसीड होस्ट्स से प्राप्त की गईं"
 
@@ -129,15 +125,6 @@ msgstr "प्रकाशित आईपी पता नहीं वाल�
 
 msgid "Average tunnel build success %"
 msgstr "औसत टंनल निर्माण सफलता प्रतिशत"
-
-msgid "unknown"
-msgstr "अज्ञात"
-
-msgid "Floodfill"
-msgstr "बाढ़फ़िलमार्कर"
-
-msgid "Show all routers with this capability in the NetDb"
-msgstr "NetDb में इस क्षमता के साथ सभी राउटर दिखाएं"
 
 msgid "No transports"
 msgstr "कोई पारिवहन नहीं (छिपा हुआ या शुरू हो रहा?)"
@@ -570,12 +557,6 @@ msgstr "सिस्ट्रे आईकॉन दिखाएं"
 msgid "Hide systray icon"
 msgstr "सिस्ट्रे आईकॉन छिपाएं"
 
-msgid "Installed I2P+ system service"
-msgstr "I2P+ सिस्टम सेवा स्थापित की गई"
-
-msgid "Warning: unable to install the service"
-msgstr "चेतावनी: सेवा स्थापित करने में असमर्थ"
-
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "I2P+ सेवा को सिस्टम शुरू होने पर स्वचालित शुरू करने की अनुमति दी"
 
@@ -587,6 +568,9 @@ msgstr "I2P+ सेवा को सिस्टम शुरू होने �
 
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "चेतावनी: I2P+ सेवा को मैनुअल स्टार्ट करने के लिए सेट करने में असमर्थ"
+
+msgid "Warning: could not locate the I2P+ install directory"
+msgstr ""
 
 msgid "Configuration saved successfully"
 msgstr "सेटिंग सफलतापूर्वक सहेजी गई"
@@ -760,6 +744,9 @@ msgstr[1] "{0} प्लगइन अद्यतन किए गए"
 msgid "Plugin check complete"
 msgstr "प्लगइन जाँच पूरी हो गई"
 
+msgid "Invalid value"
+msgstr "अमान्य मान"
+
 msgid "Restore Defaults"
 msgstr "डिफ़ॉल्ट पुनर्स्थापित करें"
 
@@ -777,9 +764,6 @@ msgstr "सहेजने के लिए कोई परिवर्तन �
 
 msgid "Tuning overrides applied"
 msgstr "ट्यूनिंग ओवरराइड लागू किए गए"
-
-msgid "Invalid value"
-msgstr "अमान्य मान"
 
 msgid "No bans currently active"
 msgstr "वर्तमान में कोई प्रतिबंध नहीं जारी"
@@ -810,6 +794,9 @@ msgstr "समाप्ति"
 
 msgid "Total session-only bans"
 msgstr "केवल सेशन के लिए कुल प्रतिबंध"
+
+msgid "Show all routers with this capability in the NetDb"
+msgstr "NetDb में इस क्षमता के साथ सभी राउटर दिखाएं"
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
 msgstr "सर्टिफिकेट इंटरनेट पर चल रहे संग्रहित सेवाओं की पहचान करने, मेजबानी की सेवाओं और राउटर कंसोल के लिए वैकल्पिक SSL प्रदान करने या राउटर परिवार की मालिकी की पुष्टि करने के लिए उपयोग किए जाते हैं।"
@@ -1436,6 +1423,9 @@ msgstr "अमान्य बैंडविड्थ"
 msgid "Updated bandwidth limits"
 msgstr "बैंडविड्थ सीमाएं अपडेट की गईं"
 
+msgid "unknown"
+msgstr "अज्ञात"
+
 msgid "Delete this value to disable"
 msgstr "इस मान को हटाएं अक्षम करने के लिए"
 
@@ -1448,6 +1438,9 @@ msgstr "{0}B प्रति महीना डेटा संचयन की
 
 msgid "Ban peer until restart"
 msgstr "पीयर तक पुनः शुरू होने तक प्रतिबंधित करें"
+
+msgid "Manually banned via configpeer"
+msgstr ""
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1605,15 +1598,6 @@ msgstr[1] "कृपया {0} टनलों के राउटिंग प�
 msgid "Restart in {0}"
 msgstr "{0} में पुनः शुरू होने की संभावना"
 
-msgid "Save order"
-msgstr "राज़ी बनाएं"
-
-msgid "Restore full default"
-msgstr "पूर्ण मानक वापस स्थापित करें"
-
-msgid "Restore minimal default"
-msgstr "अंतर्निहित मानक वापस स्थापित करें"
-
 msgid "Sidebar preferences updated"
 msgstr "साइडबार प्राथमिकताएं अपडेट की गईं"
 
@@ -1671,18 +1655,6 @@ msgstr "अन्वेषणी टनल की सेटिंग सफल�
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "सेटिंग सहेजने में त्रुटि (लागू की गई पर सहेजी नहीं) - कृपया त्रुटि लॉग देखें।"
 
-#, java-format
-msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] "{0} हॉप"
-msgstr[1] "{0} हॉप"
-
-#, java-format
-msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] "{0} टनल"
-msgstr[1] "{0} टनल"
-
 msgid "Exploratory tunnels"
 msgstr "अन्वेषणी टनल"
 
@@ -1730,9 +1702,6 @@ msgstr "इनबाउंड विकल्प"
 
 msgid "Outbound options"
 msgstr "ऑउटबाउंड विकल्प"
-
-msgid "Add user"
-msgstr "उपयोगकर्ता जोड़ें"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
 msgstr "थीम चयन नहीं बचा सकते, थीम नाम में अवैध वर्ण हैं"
@@ -2852,12 +2821,12 @@ msgstr "प्रतीक्षा {0}"
 msgid "Max wait: {0}"
 msgstr "अधिकतम प्रतीक्षा: {0}"
 
-msgid "Scheduled jobs"
-msgstr "निर्धारित कार्य"
-
 #, java-format
 msgid "{0} starting in {1}"
 msgstr "{0} {1} में शुरू होगा"
+
+msgid "Scheduled jobs"
+msgstr "निर्धारित कार्य"
 
 #, java-format
 msgid "Runners: {0} / {1}"
@@ -3022,9 +2991,6 @@ msgstr "पिछला पृष्ठ"
 msgid "Next Page"
 msgstr "अगला पृष्ठ"
 
-msgid "Results per page"
-msgstr "प्रति पृष्ठ परिणाम"
-
 msgid "Not initialized"
 msgstr "इनिशियलाइज़ेशन नहीं किया"
 
@@ -3177,6 +3143,9 @@ msgstr "इनिशियलाइज़ेशन हो रहा है"
 
 msgid "Our info"
 msgstr "हमारी जानकारी"
+
+msgid "Floodfill"
+msgstr "बाढ़फ़िलमार्कर"
 
 msgid "Router is banlisted"
 msgstr "राउटर बैनलिस्टेड है"
@@ -3559,102 +3528,6 @@ msgstr[1] "{0} विफलताएँ"
 msgid "backlogged"
 msgstr "बैकलॉग हुआ"
 
-msgid "Definitions"
-msgstr "परिभाषाएँ"
-
-msgid "Remote peer, identified by truncated router hash"
-msgstr "दूरस्थ समकक्ष, ट्रंकेटेड राउटर हैश द्वारा पहचाना"
-
-msgid "Direction"
-msgstr "दिशा"
-
-msgid "Outbound connection"
-msgstr "निर्गमी कनेक्शन"
-
-msgid "They offered to introduce us (help peers traverse our firewall)"
-msgstr "वे हमारे परिचय कराने का प्रस्ताव दिया (समकक्षों को हमारे फ़ायरवॉल को पार करने में मदद करें)"
-
-msgid "Inbound connection"
-msgstr "आगामी कनेक्शन"
-
-msgid "We offered to introduce them (help peers traverse their firewall)"
-msgstr "हमने उनके परिचय कराने का प्रस्ताव दिया (समकक्षों को उनके फ़ायरवॉल को पार करने में मदद करें)"
-
-msgid "How long since a packet has been received / sent"
-msgstr "पैकेट को प्राप्त / भेजा गया है के बाद से कितना समय हो गया है"
-
-msgid "Smoothed inbound / outbound transfer rate"
-msgstr "स्मूथेड आगामी / निर्गमी ट्रांस्फर गति"
-
-msgid "How long ago connection was established"
-msgstr "कनेक्शन स्थापित किया गया था कितने समय पहले"
-
-msgid "Difference between the peer's clock and our own"
-msgstr "समकक्ष के समय-तारीख और हमारे समय-तारीख के बीच का अंतर"
-
-msgid "How many bytes can be sent without acknowledgement"
-msgstr "नाखुशी के बिना कितने बाइट भेजे जा सकते हैं"
-
-msgid "Number of sent messages awaiting acknowledgement"
-msgstr "प्राप्ति की प्रतीक्षा में हुए भेजे गए संदेश की संख्या"
-
-msgid "Maximum number of concurrent messages to send"
-msgstr "भेजने के लिए समान्तर संदेश की अधिकतम संख्या"
-
-msgid "Number of pending sends which exceed window"
-msgstr "खिड़की को पार करने वाले पेंडिंग भेजने की संख्या"
-
-msgid "Maximum packet size before congestion avoidance"
-msgstr "भरपूरी रोक लगाने से पहले पैकेट का अधिकतम आकार"
-
-msgid "How long for packet to be sent to peer and back to us"
-msgstr "पैकेट को समकक्ष को भेजने और फिर हमें वापस लाने के लिए कितना समय लगेगा"
-
-msgid "Retransmit timeout"
-msgstr "पुनरावर्तन टाइमआउट"
-
-msgid "How long before peer gives up resending lost packet"
-msgstr "समकक्ष के पहले कितना समय लगेगा कि वह खोया पैकेट को पुनरावर्तित करने को छोड़े"
-
-msgid "Maximum send packet size"
-msgstr "अधिकतम भेजने वाले पैकेट का आकार"
-
-msgid "Estimated maximum receive packet size (bytes)"
-msgstr "अनुमानित अधिकतम प्राप्त पैकेट का आकार (बाइट)"
-
-msgid "Messages sent to peer"
-msgstr "समकक्ष को भेजे गए संदेश"
-
-msgid "Messages received from peer"
-msgstr "समकक्ष से प्राप्त संदेश"
-
-msgid "Packets retransmitted to peer"
-msgstr "समकक्ष को पुनरावर्तित पैकेट"
-
-msgid "Duplicate packets received from peer"
-msgstr "समकक्ष से प्राप्त दुगने वाले पैकेट"
-
-#, java-format
-msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] "{0} हालिया प्रोफ़ाइल दिखाई जा रही है।"
-msgstr[1] "{0} हालिया प्रोफ़ाइलें दिखाई जा रही हैं।"
-
-#, java-format
-msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] "{0} पुरानी प्रोफ़ाइल छिपाई जा रही है।"
-msgstr[1] "{0} पुरानी प्रोफ़ाइलें छिपाई जा रही हैं।"
-
-#, java-format
-msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] "{0} मानक प्रोफ़ाइल छिपाई जा रही है।"
-msgstr[1] "{0} मानक प्रोफ़ाइलें छिपाई जा रही हैं।"
-
-msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
-msgstr "ध्यान दें कि प्रोफ़ाइलर सहीप्रकाश समकक्षों के लिए गतिशील ग्राहक टंनल का उपयोग करता है।"
-
 msgid "Domain"
 msgstr "डोमेन"
 
@@ -3666,6 +3539,12 @@ msgstr "गति"
 
 msgid "Low Latency"
 msgstr "कम लैटेंसी"
+
+msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
+msgstr ""
+
+msgid "Loss"
+msgstr ""
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "समकक्ष ने सहभागिता करने के लिए सहमति दी है"
@@ -3718,71 +3597,67 @@ msgstr "समेकित"
 msgid "Configure Peer"
 msgstr "पीयर कॉन्फ़िगर करें"
 
-msgid "Thresholds"
-msgstr "सीमाएँ"
+#, java-format
+msgid "{0} in RAM / {1} on disk"
+msgstr ""
 
-msgid "Capacity"
-msgstr "क्षमता"
+msgid "High Cap"
+msgstr ""
 
-msgid "tunnels per hour"
-msgstr "घंटे में टंनल"
+msgid "Displayed"
+msgstr ""
 
-msgid "Integration"
-msgstr "समेकन"
+#, java-format
+msgid "Showing {0} of {1} profiles"
+msgstr ""
 
-msgid "peer"
-msgstr "समकक्ष"
+#, java-format
+msgid "{0} stale profile hidden"
+msgid_plural "{0} stale profiles hidden"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Share of total profiles shown"
+msgstr ""
 
 msgid "peers"
 msgstr "समकक्ष"
 
-#, java-format
-msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] "{0} तेज़ पीयर"
-msgstr[1] "{0} तेज़ पीयर"
+msgid "Share of tier profiles shown"
+msgstr ""
 
-#, java-format
-msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] "{0} उच्च क्षमता वाला पीयर"
-msgstr[1] "{0} उच्च क्षमता वाले पीयर"
+msgid "Window"
+msgstr ""
 
-#, java-format
-msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] "{0} एकीकृत पीयर"
-msgstr[1] "{0} एकीकृत पीयर"
+msgid "Fast RTT"
+msgstr ""
 
-msgid "1h Fail Rate"
-msgstr "1h विफलता दर"
+msgid "Max RTT for fast-tier membership (ms)"
+msgstr ""
 
-msgid "1h Resp. Time"
-msgstr "1h प्रतिक्रिया समय"
+msgid "Average loss of fast-tier peers (%)"
+msgstr ""
 
-msgid "Good Lookups"
-msgstr "अच्छी ढंग से ढूँढ़ना"
+msgid "Average loss of high-capacity peers (%)"
+msgstr ""
 
-msgid "Last Good Lookup"
-msgstr "अंतिम अच्छा ढूँढ़ना"
+msgid "Heard from within the display cutoff"
+msgstr ""
 
-msgid "Last Good Send"
-msgstr "अंतिम अच्छा भेजना"
+msgid "Lookups"
+msgstr ""
 
-msgid "Last Good Store"
-msgstr "अंतिम अच्छा संग्रह"
+msgid "Lookup success rate"
+msgstr ""
 
-msgid "Bad Lookups"
-msgstr "राब ढूँढ़ना"
+msgid "Stores"
+msgstr ""
 
-msgid "Last Bad Lookup"
-msgstr "अंतिम खराब ढूँढ़ना"
+msgid "Store success rate"
+msgstr ""
 
-msgid "Last Bad Send"
-msgstr "अंतिम खराब भेजना"
-
-msgid "Last Bad Store"
-msgstr "अंतिम खराब संग्रह"
+msgid "Definitions"
+msgstr "परिभाषाएँ"
 
 msgid "caps"
 msgstr "क्षमताएँ"
@@ -3848,6 +3723,57 @@ msgstr "एकीकरण"
 
 msgid "how many new peers have they told us about lately?"
 msgstr "हाल ही में वे हमें कितने नए पीयर के बारे में बताये हैं?"
+
+msgid "Known floodfills"
+msgstr ""
+
+msgid "No-Fail"
+msgstr ""
+
+msgid "No lookup failures (1h)"
+msgstr ""
+
+msgid "Response"
+msgstr ""
+
+msgid "Lookup response time (1h)"
+msgstr ""
+
+msgid "1h Contact"
+msgstr ""
+
+msgid "Contacted within 1h"
+msgstr ""
+
+msgid "1h Fail Rate"
+msgstr "1h विफलता दर"
+
+msgid "1h Resp. Time"
+msgstr "1h प्रतिक्रिया समय"
+
+msgid "Good Lookups"
+msgstr "अच्छी ढंग से ढूँढ़ना"
+
+msgid "Last Good Lookup"
+msgstr "अंतिम अच्छा ढूँढ़ना"
+
+msgid "Last Good Send"
+msgstr "अंतिम अच्छा भेजना"
+
+msgid "Last Good Store"
+msgstr "अंतिम अच्छा संग्रह"
+
+msgid "Bad Lookups"
+msgstr "राब ढूँढ़ना"
+
+msgid "Last Bad Lookup"
+msgstr "अंतिम खराब ढूँढ़ना"
+
+msgid "Last Bad Send"
+msgstr "अंतिम खराब भेजना"
+
+msgid "Last Bad Store"
+msgstr "अंतिम खराब संग्रह"
 
 msgid "All"
 msgstr "सभी"
@@ -3954,9 +3880,6 @@ msgstr "बनाना"
 
 msgid "Building tunnels"
 msgstr "टनल बना रहा है"
-
-msgid "Shared Clients"
-msgstr "साझा करने वाले क्लाइंट"
 
 msgid "Ping"
 msgstr "पिंग"
@@ -4805,6 +4728,12 @@ msgstr "नेगल फ्लश विलंब"
 msgid "Slow Start Window Cap"
 msgstr "स्लो स्टार्ट विंडो कैप"
 
+msgid "Max Inbound Buffer"
+msgstr ""
+
+msgid "Max Concurrent Streams"
+msgstr ""
+
 msgid "Max SYN Sends"
 msgstr "अधिकतम SYN भेजता है"
 
@@ -4816,6 +4745,9 @@ msgstr "अधिकतम पुनः भेजने का विलंब"
 
 msgid "Max Retransmissions"
 msgstr "अधिकतम पुनःप्रसारण"
+
+msgid "Receive Worker Threads"
+msgstr ""
 
 msgid "Writer Queue Size"
 msgstr "लेखक कतार आकार"
@@ -4898,6 +4830,18 @@ msgstr "अधिकतम समवर्ती खोज"
 msgid "Search Timeout"
 msgstr "खोज समय समाप्ति"
 
+msgid "Search Cap"
+msgstr ""
+
+msgid "Republish Window"
+msgstr ""
+
+msgid "Republish Fanout"
+msgstr ""
+
+msgid "Exploratory Breadth"
+msgstr ""
+
 msgid "LeaseSet Lookup Timeout"
 msgstr "लीज़सेट लुकअप समय समाप्ति"
 
@@ -4921,6 +4865,9 @@ msgstr "न्यूनतम उच्च क्षमता वाले प�
 
 msgid "Maximum High Capacity Peers"
 msgstr "अधिकतम उच्च क्षमता वाले पीयर"
+
+msgid "Lossy Peer Demotion Threshold"
+msgstr ""
 
 msgid "Tunnel Build Request Timeout"
 msgstr "टनल निर्माण अनुरोध समय समाप्ति"
@@ -4946,6 +4893,27 @@ msgstr "परीक्षणों के बीच न्यूनतम व�
 msgid "Max Delay Between Tests"
 msgstr "परीक्षणों के बीच अधिकतम विलंब"
 
+msgid "Tunnel Test Failure Window"
+msgstr ""
+
+msgid "Tunnel Test Failure Window Floor"
+msgstr ""
+
+msgid "First-Hop Failure Cooldown"
+msgstr ""
+
+msgid "First-Hop Failure Threshold"
+msgstr ""
+
+msgid "Inbound Congestion Threshold"
+msgstr ""
+
+msgid "Stale Build Pruning Threshold"
+msgstr ""
+
+msgid "Concurrency Throttle Threshold"
+msgstr ""
+
 msgid "NTCP Reader Threads"
 msgstr "NTCP रीडर थ्रेड"
 
@@ -4954,6 +4922,9 @@ msgstr "NTCP राइटर थ्रेड"
 
 msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP पंपर फेलसेफ अंतराल"
+
+msgid "NTCP Pumper Max Idle Loop Rate"
+msgstr ""
 
 msgid "Max Concurrent Peer Messages"
 msgstr "अधिकतम समवर्ती पीयर संदेश"
@@ -5024,6 +4995,9 @@ msgstr "निष्क्रियता समय समाप्ति"
 msgid "Max Window Size"
 msgstr "अधिकतम विंडो आकार"
 
+msgid "Connect Timeout Multiplier"
+msgstr ""
+
 msgid "Max Message Queue Age"
 msgstr "अधिकतम संदेश कतार आयु"
 
@@ -5039,11 +5013,26 @@ msgstr "पंपर थ्रेड"
 msgid "Server Handler Threads"
 msgstr "सर्वर हैंडलर थ्रेड"
 
+msgid "Server Handler Queue Capacity"
+msgstr ""
+
+msgid "Server Default Threads per Tunnel"
+msgstr ""
+
+msgid "I/O Transfer Threads"
+msgstr ""
+
+msgid "I/O Stall Timeout"
+msgstr ""
+
 msgid "Build Handler Threads"
 msgstr "निर्माण हैंडलर थ्रेड"
 
 msgid "Client Runner Max Threads"
 msgstr "क्लाइंट रनर अधिकतम थ्रेड"
+
+msgid "Client Default Max Connections"
+msgstr ""
 
 msgid "Participating Throttle Min"
 msgstr "भाग लेने थ्रॉटल न्यूनतम"
@@ -5077,9 +5066,6 @@ msgstr "मध्यम-लोड लैग दहलीज"
 
 msgid "Moderate-Load CPU Threshold"
 msgstr "मध्यम-लोड CPU दहलीज"
-
-msgid "Sustained High-Load Window"
-msgstr "निरंतर उच्च-लोड विंडो"
 
 msgid "Sustained Moderate-Load Window"
 msgstr "निरंतर मध्यम-लोड विंडो"
@@ -5122,6 +5108,9 @@ msgstr "सॉकेट कनेक्ट समय समाप्ति"
 
 msgid "Untested Tunnel Cap Multiplier"
 msgstr "परीक्षण न किया गया टनल कैप मल्टीप्लायर"
+
+msgid "Tunnel IV Filter Size"
+msgstr ""
 
 msgid "Message Processing Throttle"
 msgstr "संदेश प्रसंस्करण थ्रॉटल"
@@ -5171,6 +5160,12 @@ msgstr "नेगल फ्लश विलंब (ms)।"
 msgid "Max congestion window during slow start."
 msgstr "स्लो स्टार्ट के दौरान अधिकतम भीड़ विंडो।"
 
+msgid "Per-connection inbound buffer cap (bytes)."
+msgstr ""
+
+msgid "Dynamic cap on concurrent streams per destination."
+msgstr ""
+
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "हाथ मिलाना छोड़ने से पहले कुल SYN प्रयास।"
 
@@ -5182,6 +5177,9 @@ msgstr "पुनःप्रसारणों के बीच अधिकत
 
 msgid "Retransmissions before dropping the stream."
 msgstr "स्ट्रीम छोड़ने से पहले पुनःप्रसारण।"
+
+msgid "Inbound packet processing threads per streaming session."
+msgstr ""
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "स्ट्रीम छोड़ने से पहले अधिकतम निष्क्रिय समय (ms)।"
@@ -5270,6 +5268,18 @@ msgstr "अधिकतम एक साथ NetDB लुकअप।"
 msgid "Per-peer lookup timeout (ms)."
 msgstr "प्रति-पीयर लुकअप समय समाप्ति (ms)।"
 
+msgid "Hard deadline for each iterative search (ms)."
+msgstr ""
+
+msgid "Lifetime of lease republish store messages (ms)."
+msgstr ""
+
+msgid "Max peers that receive a republished lease after a search."
+msgstr ""
+
+msgid "Concurrent exploratory searches per cycle."
+msgstr ""
+
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "लीज़सेट लुकअप के लिए अनुकूली डेडलाइन कैप (ms)।"
 
@@ -5293,6 +5303,9 @@ msgstr "राउटिंग टेबल में न्यूनतम उ�
 
 msgid "Max high-capacity peers in routing table."
 msgstr "राउटिंग टेबल में अधिकतम उच्च क्षमता वाले पीयर।"
+
+msgid "Loss ratio that demotes a peer from the fast tiers (%)."
+msgstr ""
 
 msgid "Build reply timeout (ms)."
 msgstr "निर्माण उत्तर समय समाप्ति (ms)।"
@@ -5318,6 +5331,27 @@ msgstr "टनल परीक्षणों के बीच न्यून�
 msgid "Max interval between tunnel tests (ms)."
 msgstr "टनल परीक्षणों के बीच अधिकतम अंतराल (ms)।"
 
+msgid "Max time a tunnel test may take before failure (ms)."
+msgstr ""
+
+msgid "Floor for the tunnel test failure window (ms)."
+msgstr ""
+
+msgid "How long a peer is skipped after first-hop failures (ms)."
+msgstr ""
+
+msgid "Failures before a peer is skipped during cooldown."
+msgstr ""
+
+msgid "Inbound tunnel count below which builds are throttled."
+msgstr ""
+
+msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
+msgstr ""
+
+msgid "Timeout rate that triggers concurrent build reduction (%)."
+msgstr ""
+
 msgid "Threads decrypting inbound NTCP data."
 msgstr "इनबाउंड NTCP डेटा डिक्रिप्ट करने वाले थ्रेड।"
 
@@ -5326,6 +5360,9 @@ msgstr "थ्रेड जो आउटबाउंड एनटीसीपी
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "फँसे NTCP पंप के लिए फेलसेफ स्कैन अंतराल (ms)।"
+
+msgid "Cap on idle NTCP pump iterations per second (loops/s)."
+msgstr ""
 
 msgid "In-flight message limit per UDP peer."
 msgstr "प्रति UDP पीयर उड़ान में संदेश सीमा।"
@@ -5381,6 +5418,9 @@ msgstr "पेसिंग किक शुरू होने से पहल�
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT अनुमान पर ऊपरी सीमा (ms)।"
 
+msgid "Scales each client's connect timeout by network RTT (30-200%)."
+msgstr ""
+
 msgid "Delay before first retransmit (ms)."
 msgstr "पहले पुनःप्रसारण से पहले विलंब (ms)।"
 
@@ -5402,11 +5442,26 @@ msgstr "गेटवे पंपर थ्रेड गणना।"
 msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "आने वाले I2PTunnel कनेक्शन के लिए हैंडलर थ्रेड।"
 
+msgid "Inbound connections that may wait for a free server handler thread."
+msgstr ""
+
+msgid "Default cap on server handler threads for each server tunnel."
+msgstr ""
+
+msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
+msgstr ""
+
+msgid "Stall timeout for Server→Client data transfers (ms)."
+msgstr ""
+
 msgid "Thread pool for inbound build request processing."
 msgstr "इनबाउंड निर्माण अनुरोध प्रसंस्करण के लिए थ्रेड पूल।"
 
 msgid "Ceiling for client proxy thread pool."
 msgstr "क्लाइंट प्रॉक्सी थ्रेड पूल के लिए छत।"
+
+msgid "Default client connection cap."
+msgstr ""
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "कोई भी पीयर जितनी न्यूनतम दहलीज ट्रांज़िट टनल रख सकता है।"
@@ -5440,9 +5495,6 @@ msgstr "मध्यम-लोड पीयर डिस्कनेक्ट �
 
 msgid "System load percent triggering moderate-load disconnect."
 msgstr "मध्यम-लोड डिस्कनेक्ट ट्रिगर करने वाला सिस्टम लोड प्रतिशत।"
-
-msgid "Duration of high load before gating requests (ms)."
-msgstr "अनुरोधों को गेट करने से पहले उच्च लोड की अवधि (ms)।"
 
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "अनुरोधों को अस्वीकार करने से पहले मध्यम लोड की अवधि (ms)।"
@@ -5485,6 +5537,9 @@ msgstr "प्रति पुनःप्रसारण समय समाप
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "टनल सर्वर हैंडलर थ्रेड के लिए TCP सॉकेट कनेक्ट समय समाप्ति (ms)।"
+
+msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "ट्रांज़िट (एमएस) को अस्वीकार करने से पहले अधिकतम औसत संदेश विलंब।"
@@ -5613,6 +5668,9 @@ msgstr "पीयर द्वारा सभी टनल"
 msgid "Primary IP address"
 msgstr "मुख्य आईपी पता"
 
+msgid "No local or transit tunnels currently active."
+msgstr "वर्तमान में कोई स्थानीय या ट्रांजिट टनल सक्रिय नहीं है।"
+
 msgid "unique peers"
 msgstr "अद्वितीय पीयर"
 
@@ -5621,9 +5679,6 @@ msgstr "स्थानीय"
 
 msgid "transit"
 msgstr "ट्रांजिट"
-
-msgid "No local or transit tunnels currently active."
-msgstr "वर्तमान में कोई स्थानीय या ट्रांजिट टनल सक्रिय नहीं है।"
 
 msgid "PRIVATE IP ADDRESS"
 msgstr "निजी IP पता"
@@ -5634,6 +5689,15 @@ msgstr "बैंडविड्थ स्तर"
 #, java-format
 msgid "Over {0} shared bandwidth"
 msgstr "{0} से अधिक साझा बैंडविड्थ"
+
+msgid "Locally hosted tunnel"
+msgstr "स्थानीय रूप से मेजबानी करने वाला टनल"
+
+msgid "in"
+msgstr "अंदर"
+
+msgid "out"
+msgstr "बाहर"
 
 msgid "Inbound or outbound?"
 msgstr "आगंतुकीय या निर्गमनीय?"
@@ -5656,6 +5720,9 @@ msgstr "भागीदार"
 msgid "Endpoint"
 msgstr "समाप्तिस्थान"
 
+msgid "ms"
+msgstr ""
+
 msgid "Test successful"
 msgstr "परीक्षण सफल"
 
@@ -5677,15 +5744,6 @@ msgstr "पूल बजट से अधिक - शीघ्र समाप�
 
 msgid "Not yet tested"
 msgstr "अभी परीक्षण नहीं हुआ"
-
-msgid "Locally hosted tunnel"
-msgstr "स्थानीय रूप से मेजबानी करने वाला टनल"
-
-msgid "in"
-msgstr "अंदर"
-
-msgid "out"
-msgstr "बाहर"
 
 msgid "Data In"
 msgstr "आंतरिक डेटा"
@@ -5792,6 +5850,9 @@ msgstr "शुरुआत के समय वेब ब्राउज़र �
 
 msgid "shared clients"
 msgstr "साझा किए गए क्लाइंट"
+
+msgid "Shared Clients"
+msgstr "साझा करने वाले क्लाइंट"
 
 msgid "I2PMail SMTP Server"
 msgstr "I2PMail SMTP सर्वर"
@@ -6070,11 +6131,11 @@ msgstr "LU राउटर पर बैन लगाएं"
 msgid "Additional Router Caps"
 msgstr "अतिरिक्त राउटर कैप्स"
 
-msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
-msgstr "कैप्स समूह जोड़ें, स्पेस या अल्पविराम से अलग करें जैसे LUf,PUG"
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
+msgstr ""
 
-msgid "Misc Reasons"
-msgstr "विविध कारण"
+msgid "Misc"
+msgstr ""
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "फ़्लूफ़फ़िलमार्कर साथियों पर प्रतिबंध लगाएं जो प्रश्नों का उत्तर देने में विफल रहते हैं (विफलता दर >95%)"
@@ -6093,6 +6154,12 @@ msgstr "उन राउटर को प्रतिबंधित करे�
 
 msgid "Ban excessive tunnel requests"
 msgstr "अत्यधिक टनल अनुरोध प्रतिबंधित करें"
+
+msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
+msgstr ""
+
+msgid "Ban next-hop peers"
+msgstr ""
 
 msgid "Clear all bans"
 msgstr "सभी बैन साफ़ करें"
@@ -6233,6 +6300,12 @@ msgstr "I2CP संचार सुविधा"
 
 msgid "I2CP Port"
 msgstr "I2CP पोर्ट"
+
+msgid "Do not bypass the network when accessing locally hosted services"
+msgstr ""
+
+msgid "Disable Loopback"
+msgstr ""
 
 msgid "Require username and password"
 msgstr "उपयोगकर्ता नाम और पासवर्ड की आवश्यकता"
@@ -6507,6 +6580,9 @@ msgstr "प्रोफ़ाइल बोनस को समायोजित
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "बोनस सकारात्मक या नकारात्मक हो सकते हैं, और त्वरित और उच्च क्षमता वर्ग में समकक्षों की शामिली को प्रभावित करते हैं। त्वरित समकक्ष ग्राहक टनल के लिए उपयोग किए जाते हैं, और उच्च क्षमता वाले समकक्ष अनुसंधानी टनल के लिए कुछ के लिए उपयोग किए जाते हैं।"
 
+msgid "Capacity"
+msgstr "क्षमता"
+
 msgid "Banned IP Addresses"
 msgstr "बैन किए गए आईपी"
 
@@ -6740,6 +6816,12 @@ msgstr "ताज़ा अंतराल"
 msgid "Update graph every second"
 msgstr "हर सेकंड ग्राफ़ अद्यतन करें"
 
+msgid "Restore full default"
+msgstr "पूर्ण मानक वापस स्थापित करें"
+
+msgid "Restore minimal default"
+msgstr "अंतर्निहित मानक वापस स्थापित करें"
+
 msgid "config stats"
 msgstr "स्टैट्स की सेटिंग करें"
 
@@ -6820,6 +6902,9 @@ msgstr "यदि आप IE नहीं उपयोग कर रहे है
 
 msgid "Router Console Password"
 msgstr "राउटर कंसोल पासवर्ड"
+
+msgid "Add user"
+msgstr "उपयोगकर्ता जोड़ें"
 
 msgid "Router Console Language"
 msgstr "राउटर कंसोल भाषा"
@@ -7092,6 +7177,12 @@ msgstr "यह सेटिंग निर्दिष्ट देशों �
 msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
 msgstr "रखने के लिए अधिकतम सत्र बैनलॉग आर्काइव फ़ाइलें। अधिक होने पर, पुराने आर्काइव हटा दिए जाते हैं। [डिफ़ॉल्ट 5]"
 
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "यह सेटिंग, true पर सेट होने पर, G भीड़ कैप प्रकाशित करने वाले और न तो पहुंच योग्य और न ही अप्राप्य सभी X टियर राउटर से सीधे संचार को ब्लॉक करेगी, उन्हें सत्र बैनलिस्ट में जोड़ देगी। [डिफ़ॉल्ट false]"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "यह सेटिंग, true पर सेट होने पर, सभी LU टियर राउटर (कम बैंडविड्थ, अप्राप्य, या फ़ायरवॉल) से सीधे संचार को ब्लॉक करेगी, उन्हें सत्र बैनलिस्ट में जोड़ देगी। [डिफ़ॉल्ट true]"
+
 msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
 msgstr "संदिग्ध हैश पैटर्न (संभावित Sybil हमले) को स्कैन करने की आवृत्ति मिलीसेकंड में। अक्षम करने के लिए 0 सेट करें। [डिफ़ॉल्ट 3600000]"
 
@@ -7302,6 +7393,24 @@ msgstr "यह सेटिंग निर्धारित करती ह�
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "जब true पर सेट किया जाता है, तो यह सेटिंग आपके राउटर द्वारा कंजेशन कैप्स प्रकाशित करने के लिए आवश्यक शर्तों को शिथिल कर देगी, विशेष रूप से जब यह निर्धारित होता है कि आपका बैंडविड्थ उपयोग उच्च है। अन्य शर्तें, जैसे उच्च जॉब लैग या धीमे के रूप में वर्गीकृत राउटर, फिर भी कैप्स प्रकाशित होने का कारण बनेंगी। [डिफ़ॉल्ट गलत है] अन्य स्थितियाँ, जैसे उच्च जॉब लैग या धीमी के रूप में वर्गीकृत राउटर, अभी भी कैप प्रकाशित करने का कारण बनेंगी [डिफ़ॉल्ट असत्य है]"
 
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "निष्क्रिय सुरंगों की जाँच करने के लिए मिलीसेकंड में अवधि। इस अवधि के लिए बिना ट्रैफ़िक वाली सुरंगें गिराई जा सकती हैं। [डिफ़ॉल्ट 60000]"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "सक्रिय माने जाने के लिए सुरंग को पहचान अवधि में संसाधित करने वाले संदेशों की न्यूनतम संख्या। इस सीमा से नीचे की सुरंगें हटाने के लिए उम्मीदवार हैं। [डिफ़ॉल्ट 3]"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "निष्क्रिय ट्रांज़िट सुरंगों के स्कैन के बीच मिलीसेकंड में अंतराल। [डिफ़ॉल्ट 180000]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "यदि आप अनुस्मारक (.) की स्थापना करना चाहते हैं।zip) I2P अपडेट, तो यह router.config फ़ाइल में जोड़ना चाहिए, जबकि यदि आप पहले ही routerconsole.advanced=true सेट कर चुके हैं, तो यह विकल्प पहले से प्रदान किया गया होगा। नोट: I2P+ 0.9.48 से आगे, अनुस्मारक अपडेट की स्थापना मानक रूप से सक्षम है 48+, अहस्ताक्षरित अपडेट की स्थापना डिफ़ॉल्ट रूप से सक्षम है"
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "यदि सक्षम, तो यह सेटिंग आपको अनुस्मारक अपडेट सुविधा के लिए अपडेट URL को निर्धारित करने की अनुमति देती है। URL /i2pupdate.zip से समाप्त होना चाहिए। नोट: अनुस्मारक अपडेट स्थापित न करें जब तक आप अपडेट के स्रोत को विश्वास नहीं करते हैं! ज़िप नोट: जब तक आप अपडेट के स्रोत पर भरोसा नहीं करते, अहस्ताक्षरित अपडेट स्थापित न करें!"
+
+msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
+msgstr "यह सेटिंग (मिनट में) आपको नेटडीबी में RouterInfos की वैधता की जांच के लिए शुरुआत के बाद कितनी देर इंतजार करने की मात्रा को मैन्युअल रूप से सेट करने की अनुमति देती है, जिसके बाद केवल वैध राउटर्स को शामिल किया जाएगा। जब वैधता परीक्षण होता है, समय से पार गए RouterInfos और केवल SSU के माध्यम से पहुंचने वाले अक्षम समकक्षों को नेटडीबी से हटाया जाएगा। [मानक मान 60 मिनट है] नोट: यह सेटिंग पहले के राउटरों (मानक रूप से 0.9.29 से पुराने) पर कोई प्रभाव नहीं डालती है जो जब भी नेटडीबी स्टोर की कोशिश की जाती है, तो नेटडीबी से हटाए और राउटर सत्र के लिए प्रतिबंधित हो जाते हैं [डिफ़ॉल्ट 60 मिनट है] नोट: इस सेटिंग का पुराने राउटर पर कोई प्रभाव नहीं है (0 से पुराना 29 डिफ़ॉल्ट रूप से) जिन्हें NetDb स्टोर का प्रयास करते ही NetDb से हटा दिया जाता है और राउटर सत्र के लिए प्रतिबंधित कर दिया जाता है"
+
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
 msgstr "जब कॉन्फ़िगर किया जाता है, तो यह राउटर को एक साथ बनाने की अनुमति वाली सुरंगों की संख्या के लिए एक हार्ड सीमा निर्धारित करता है। डिफ़ॉल्ट रूप से राउटर इष्टतम निर्माण दर निर्धारित करने के लिए औसत निर्माण समय और वर्तमान आउटबाउंड बैंडविड्थ का उपयोग करता है। यह सेटिंग गतिशील है और पुनरारंभ के बिना प्रभावी होती है।"
 
@@ -7374,11 +7483,14 @@ msgstr "आपातकालीन पुनर्निर्माण तर�
 msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
 msgstr "सुरंग निर्माण प्रसंस्करण के दौरान समवर्ती अगले-हॉप RouterInfo लुकअप पर तल। कम सुरंगों के भाग लेने पर भी न्यूनतम लुकअप समवर्तीता सुनिश्चित करता है। [डिफ़ॉल्ट 10 (धीमी सिस्टम पर 4)]"
 
-msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
-msgstr "सुरंग निर्माण प्रसंस्करण के दौरान समवर्ती अगले-हॉप RouterInfo लुकअप पर छत। netDb को ओवरव्हेल्म करने से रोकने के लिए लुकअप समवर्तीता को सीमित करता है। [डिफ़ॉल्ट max(cores/2, 16) (धीमी सिस्टम पर 10)]"
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
+msgstr ""
 
-msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr "समवर्ती लुकअप सीमा को स्केल करने के लिए उपयोग किए जाने वाले वर्तमान भाग लेने वाली सुरंगों का प्रतिशत। प्रभावी सीमा minLookupLimit और maxLookupLimit के बीच क्लैम्प की जाती है। [डिफ़ॉल्ट 40 (धीमी सिस्टम पर 15)]"
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr ""
+
+msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
+msgstr ""
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "सुरंग निर्माण अनुरोध टाइमस्टैम्प के लिए अधिकतम अनुमत भविष्य तिरछापन। इससे अधिक भविष्य के टाइमस्टैम्प वाले अनुरोध संभावित रीप्ले हमलों के रूप में अस्वीकार कर दिए जाते हैं। [डिफ़ॉल्ट 300000 (5 मिनट)]"
@@ -7485,32 +7597,77 @@ msgstr "सामान्य खोजी पीयर चयन के लि�
 msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
 msgstr "खोजी पीयर चयन को प्रतिबंधित करने से पहले राउटर स्टार्टअप के दौरान आवश्यक न्यूनतम सक्रिय पीयर। प्रारंभिक स्टार्टअप के दौरान राउटर पीयर गुणवत्ता के बारे में अधिक उदार होता है। [डिफ़ॉल्ट 6]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
-msgstr "स्ट्रीमिंग कनेक्शन के लिए अधिकतम धीमी शुरुआत विंडो आकार। नेटवर्क को ओवरव्हेल्म करने से रोकने के लिए धीमी शुरुआत के दौरान भीड़ विंडो को सीमित करता है। [डिफ़ॉल्ट 64]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
+msgstr ""
 
-msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
-msgstr "स्ट्रीमिंग कनेक्शन के लिए मिलीसेकंड में अधिकतम राउंड-ट्रिप समय। नेटवर्क गड़बड़ी के बाद पैथोलॉजिकल टाइमआउट मानों को रोकने के लिए गणना किए गए RTT को सीमित करता है। [डिफ़ॉल्ट 60000 (60 सेकंड)]"
-
-msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
-msgstr "कनेक्शन छोड़ने से पहले अधिकतम पैकेट पुनर्प्रेषण। उच्च मान लॉसी लिंक पर विश्वसनीयता में सुधार करते हैं लेकिन विफलता का पता लगाने में देरी करते हैं। [डिफ़ॉल्ट 64]"
-
-msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
-msgstr "एक ही अप्राप्य गंतव्य के लिए कनेक्शन प्रयासों के बीच मिलीसेकंड में कूलडाउन अवधि। अप्राप्य पीयर को बार-बार हिट करने से रोकता है। [डिफ़ॉल्ट 60000 (60 सेकंड)]"
-
-msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
-msgstr "पीयर को पिंग करते समय पोंग उत्तर की प्रतीक्षा करने के लिए मिलीसेकंड में अधिकतम समय। [डिफ़ॉल्ट 300000 (5 मिनट)]"
-
-msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
-msgstr "थ्रॉटल किए गए गंतव्य को उत्तर देने की संख्या इससे पहले कि अतिरिक्त पैकेट चुपचाप गिरा दिए जाएं। कनेक्शन तूफान को राउटर को ओवरव्हेल्म करने से रोकता है। [डिफ़ॉल्ट 3]"
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "यह टंनल-विशेष सेटिंग आपको राउटर द्वारा मेजबान किए गए सर्वरों को पिंग करने वाले पिंग के जवाब को सक्षम या अक्षम करने की अनुमति देती है। पिंग को अक्षम करने के लिए, आपको ट्यूनल मैनेजर में सर्वर के विनिर्देशों के <i>Custom Options</i> खंड में <code>i2p.streaming.answerPings=false</code> लाइन जोड़नी होगी टनल मैनेजर में सर्वर के कॉन्फ़िगरेशन के लिए कस्टम विकल्प अनुभाग में answerPings=false"
 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "जब कोई स्पष्ट कनेक्ट टाइमआउट सेट नहीं है तो मिलीसेकंड में डिफ़ॉल्ट अधिकतम स्ट्रीम विलंब। [डिफ़ॉल्ट 10000 (10 सेकंड)]"
 
-msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr "प्राप्त SYN को स्वीकार() द्वारा खींचने से पहले प्राप्त SYN को स्वीकार कतार में अधिकतम समय तक प्रतीक्षा करनी पड़ सकती है। यदि स्वीकार() में देरी हो रही है (होस्टेड सर्वर व्यस्त है) तो इस विंडो के बाद कनेक्शन अस्वीकार कर दिया जाता है, इसलिए उच्च मूल्य संक्षिप्त स्टालों को सहन करता है। [डिफ़ॉल्ट 30000 (30 सेकंड) है]"
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr "सर्वर स्वीकार कतार में लंबित कनेक्शनों (SYNs और आंशिक पैकेट) की अधिकतम संख्या। पूर्ण होने पर, नए SYN को रीसेट करने के बजाय हटा दिया जाता है (क्लाइंट पुनः प्रयास करता है), इसलिए एक बड़ा मूल्य मेमोरी की कीमत पर कनेक्शन फटने को बेहतर ढंग से अवशोषित करता है। [डिफ़ॉल्ट 256 है (धीमे सिस्टम पर 128)]"
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "थ्रॉटल किए गए गंतव्य को उत्तर देने की संख्या इससे पहले कि अतिरिक्त पैकेट चुपचाप गिरा दिए जाएं। कनेक्शन तूफान को राउटर को ओवरव्हेल्म करने से रोकता है। [डिफ़ॉल्ट 3]"
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
+msgstr ""
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
+msgstr ""
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
+msgstr ""
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "पीयर को पिंग करते समय पोंग उत्तर की प्रतीक्षा करने के लिए मिलीसेकंड में अधिकतम समय। [डिफ़ॉल्ट 300000 (5 मिनट)]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "जब यह सेटिंग सक्षम होती है और <code>i2p.streaming.enablePongDelay</code> भी सक्षम होता है, तो यह पिंग-सक्षम सर्वरों के लिए पेश की गई अतिरिक्त यादृच्छिक पोंग देरी की अधिकतम सीमा बदलती है। जब तक व्यक्तिगत रूप से सेट नहीं किया जाता है, 50मिलीसेकंड की मूल मान उपयोग की जाएगी जब तक स्पष्ट रूप से सेट न किया गया हो, 50ms का डिफ़ॉल्ट मान उपयोग किया जाएगा"
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
+msgstr ""
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "मिलीसेकंड में अधिकतम पुनर्प्रेषण विलंब। बैकऑफ़ की परवाह किए बिना पुनर्प्रेषण अंतराल इस मान से अधिक नहीं होगा। भीड़भाड़ वाले पथों पर पुनर्प्रयासों के बीच अधिक समय देने के लिए बढ़ाएँ। [डिफ़ॉल्ट 30000 (30से)]"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
+msgstr ""
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "एक्सपोनेंशियल बैकऑफ़ (दोगुना) के बाद मिलीसेकंड में अधिकतम पुनर्प्रेषण टाइमआउट। गंभीर भीड़ के दौरान पुनर्प्रेषण का प्रयास करने से पहले प्रेषक के प्रतीक्षा समय को सीमित करता है। [डिफ़ॉल्ट 30000 (30से)]"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
+msgstr ""
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgstr ""
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgstr ""
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "मिलीसेकंड में न्यूनतम पुनर्प्रेषण विलंब। पैकेट इस अंतराल से तेज़ पुनर्प्रेषित नहीं किए जाएंगे। कम मान लॉसी कनेक्शनों पर तेज़ रिकवरी की अनुमति देते हैं। [डिफ़ॉल्ट 100ms]"
+
+msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
+msgstr ""
+
+msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
+msgstr ""
+
+msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
+msgstr ""
+
+msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
+msgstr ""
+
+msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "स्वचालित LeaseSet पुनर्प्रकाशन के बीच मिलीसेकंड में अंतराल। उच्च मान netdb ट्रैफ़िक कम करते हैं लेकिन पुरानी लीज़ जानकारी का कारण बन सकते हैं। [डिफ़ॉल्ट 300000 (5 मिनट)]"
@@ -7518,32 +7675,14 @@ msgstr "स्वचालित LeaseSet पुनर्प्रकाशन �
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "सक्रिय LeaseSet पुनर्प्रकाशन के लिए मिलीसेकंड में सीमा। यदि इस विंडो में लीज़ समाप्त हो रही है, तो अगले आवधिक चक्र की प्रतीक्षा करने के बजाय LeaseSet तुरंत पुनर्प्रकाशित किया जाता है। [डिफ़ॉल्ट 180000 (3 मिनट)]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
-msgstr "निष्क्रिय सुरंगों की जाँच करने के लिए मिलीसेकंड में अवधि। इस अवधि के लिए बिना ट्रैफ़िक वाली सुरंगें गिराई जा सकती हैं। [डिफ़ॉल्ट 60000]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgstr ""
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
-msgstr "सक्रिय माने जाने के लिए सुरंग को पहचान अवधि में संसाधित करने वाले संदेशों की न्यूनतम संख्या। इस सीमा से नीचे की सुरंगें हटाने के लिए उम्मीदवार हैं। [डिफ़ॉल्ट 3]"
-
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
-msgstr "निष्क्रिय ट्रांज़िट सुरंगों के स्कैन के बीच मिलीसेकंड में अंतराल। [डिफ़ॉल्ट 180000]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "यदि आप अनुस्मारक (.) की स्थापना करना चाहते हैं।zip) I2P अपडेट, तो यह router.config फ़ाइल में जोड़ना चाहिए, जबकि यदि आप पहले ही routerconsole.advanced=true सेट कर चुके हैं, तो यह विकल्प पहले से प्रदान किया गया होगा। नोट: I2P+ 0.9.48 से आगे, अनुस्मारक अपडेट की स्थापना मानक रूप से सक्षम है 48+, अहस्ताक्षरित अपडेट की स्थापना डिफ़ॉल्ट रूप से सक्षम है"
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "यदि सक्षम, तो यह सेटिंग आपको अनुस्मारक अपडेट सुविधा के लिए अपडेट URL को निर्धारित करने की अनुमति देती है। URL /i2pupdate.zip से समाप्त होना चाहिए। नोट: अनुस्मारक अपडेट स्थापित न करें जब तक आप अपडेट के स्रोत को विश्वास नहीं करते हैं! ज़िप नोट: जब तक आप अपडेट के स्रोत पर भरोसा नहीं करते, अहस्ताक्षरित अपडेट स्थापित न करें!"
-
-msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr "यह सेटिंग (मिनट में) आपको नेटडीबी में RouterInfos की वैधता की जांच के लिए शुरुआत के बाद कितनी देर इंतजार करने की मात्रा को मैन्युअल रूप से सेट करने की अनुमति देती है, जिसके बाद केवल वैध राउटर्स को शामिल किया जाएगा। जब वैधता परीक्षण होता है, समय से पार गए RouterInfos और केवल SSU के माध्यम से पहुंचने वाले अक्षम समकक्षों को नेटडीबी से हटाया जाएगा। [मानक मान 60 मिनट है] नोट: यह सेटिंग पहले के राउटरों (मानक रूप से 0.9.29 से पुराने) पर कोई प्रभाव नहीं डालती है जो जब भी नेटडीबी स्टोर की कोशिश की जाती है, तो नेटडीबी से हटाए और राउटर सत्र के लिए प्रतिबंधित हो जाते हैं [डिफ़ॉल्ट 60 मिनट है] नोट: इस सेटिंग का पुराने राउटर पर कोई प्रभाव नहीं है (0 से पुराना 29 डिफ़ॉल्ट रूप से) जिन्हें NetDb स्टोर का प्रयास करते ही NetDb से हटा दिया जाता है और राउटर सत्र के लिए प्रतिबंधित कर दिया जाता है"
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "true पर सेट होने पर, स्थानीय-स्थानीय लूपबैक डिलीवरी अक्षम करता है और सभी ट्रैफ़िक को सुरंगों के माध्यम से मजबूर करता है (आउटबाउंड सुरंग → नेटवर्क → इनबाउंड सुरंग → स्थानीय गंतव्य)। स्रोत और गंतव्य एक ही राउटर पर होने पर सुरंग रूटिंग व्यवहार के परीक्षण के लिए उपयोगी। [डिफ़ॉल्ट रूप से अक्षम]"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
 msgstr "यह सेटिंग, true पर सेट होने पर, आपके अपने देश के सभी राउटर से सीधे संचार को ब्लॉक करेगी और आपके राउटर के पुनरारंभ होने तक उन्हें आपकी बैनलिस्ट में जोड़ देगी। [डिफ़ॉल्ट false, या true यदि राउटर छिपे हुए मोड में है]"
-
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
-msgstr "यह सेटिंग, true पर सेट होने पर, G भीड़ कैप प्रकाशित करने वाले और न तो पहुंच योग्य और न ही अप्राप्य सभी X टियर राउटर से सीधे संचार को ब्लॉक करेगी, उन्हें सत्र बैनलिस्ट में जोड़ देगी। [डिफ़ॉल्ट false]"
-
-msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
-msgstr "यह सेटिंग, true पर सेट होने पर, सभी LU टियर राउटर (कम बैंडविड्थ, अप्राप्य, या फ़ायरवॉल) से सीधे संचार को ब्लॉक करेगी, उन्हें सत्र बैनलिस्ट में जोड़ देगी। [डिफ़ॉल्ट true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "यह सेटिंग आपको यह जांच करने के लिए SSU परीक्षणों को अक्षम करने की अनुमति देती है कि आपका राउटर फ़ायरवॉल के पीछे है या नहीं, और जो राउटर निश्चित रूप से फ़ायरवॉल के पीछे नहीं हैं लेकिन अनियमित फ़ायरवॉलिंग समस्याओं का सामना कर रहे हैं। यदि परीक्षण अक्षम किया जाता है, तो दोनों SSU और NTCP <a href=/info>राउटर जानकारी पृष्ठ</a> पर आपकी वर्तमान सार्वजनिक IP पता रिपोर्ट करने चाहिए। [रीस्टार्ट की आवश्यकता है] यदि परीक्षण अक्षम है, तो SSU और NTCP दोनों को राउटर जानकारी पृष्ठ पर आपका वर्तमान सार्वजनिक IP पता रिपोर्ट करना चाहिए [पुनर्प्रारंभ आवश्यक]"
@@ -7551,26 +7690,11 @@ msgstr "यह सेटिंग आपको यह जांच करने 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "यह सेटिंग देखभाल करने के लिए कौन सा ट्रांसपोर्ट प्राथमिकता प्राप्त करता है जब समकक्षों के साथ संवाद किया जाता है। मानक रूप से, एनटीसीपी को यूडीपी (एसएसयू) के मुक़ाबले में पसंद किया जाता है। यदि मान को सत्य कर दिया जाता है, तो यूडीपी को प्राथमिकता दी जाएगी जब तक कि पहले से मौजूद एनटीसीपी कनेक्शन नहीं हो; जब यह हमेशा के रूप में सेट किया जाता है, तो यूडीपी हमेशा उपयोग की जाएगा चाहे कितने भी पहले से मौजूद एनटीसीपी कनेक्शन हों। [मानक रूप से असत्य] डिफ़ॉल्ट रूप से, NTCP को UDP (SSU) पर प्राथमिकता दी जाती है मान को true पर सेट करने पर, UDP को प्राथमिकता दी जाएगी जब तक कोई पूर्व-मौजूद NTCP कनेक्शन न हो; always पर सेट करने पर, किसी भी पूर्व-मौजूद NTCP कनेक्शन के बावजूद UDP का हमेशा उपयोग किया जाएगा [डिफ़ॉल्ट असत्य है]"
 
-msgid "miscellaneous"
-msgstr "विविध"
-
-msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr "यदि सत्य कर दिया जाता है, तो यह विकल्प एक आइकॉन सिस्टम ट्रे / सूचना क्षेत्र में रखेगा, जिसमें मूल सेवा नियंत्रण विकल्प होंगे। [मानक रूप से अक्षम है]"
-
-msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "यह सेटिंग आपको डाउनलोडिंग या टॉरेंट बनाते समय टॉरेंट को कितने फ़ाइल की अधिकतम संख्या अनुमति देने की सेटिंग करने की अनुमति देती है। ध्यान दें कि मूल 2000 फ़ाइलों के मान से बहुत अधिक इस मान को बढ़ाने से मेजबान सिस्टम पर अतिरिक्त सेटिंग की आवश्यकता हो सकती है जिससे संगठन प्रणाली को खोले गए फ़ाइलों की अधिकतम संख्या बढ़ा जा सके (उदाहरण के लिए, लिनक्स पर <code>ulimit -n</code>)। बदलने के लिए, टॉरेंट के कॉन्फ़िगरेशन फ़ाइल <code>i2psnark.config</code> में अपडेट करें। [टॉरेंट या राउटर को रीस्टार्ट करना आवश्यक हो सकता है] जैसे लिनक्स पर ulimit -n) बदलने के लिए, टॉरेंट के कॉन्फ़िगरेशन फ़ाइल i2psnark में जोड़ें कॉन्फ़िग [टॉरेंट या राउटर का पुनर्प्रारंभ आवश्यक]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "यह टंनल-विशेष सेटिंग आपको राउटर द्वारा मेजबान किए गए सर्वरों को पिंग करने वाले पिंग के जवाब को सक्षम या अक्षम करने की अनुमति देती है। पिंग को अक्षम करने के लिए, आपको ट्यूनल मैनेजर में सर्वर के विनिर्देशों के <i>Custom Options</i> खंड में <code>i2p.streaming.answerPings=false</code> लाइन जोड़नी होगी टनल मैनेजर में सर्वर के कॉन्फ़िगरेशन के लिए कस्टम विकल्प अनुभाग में answerPings=false"
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "जब यह सेटिंग सक्षम होती है, तो राउटर द्वारा मेजबान किए गए सभी पिंग-सक्षम सर्वरों के लिए अपरिभाषित 50मिलीसेकंड तक की पोंग देरी पेश करती है। मूल रूप से यह अक्षम होता है। [रीस्टार्ट की आवश्यकता है] डिफ़ॉल्ट निष्क्रिय है [पुनर्प्रारंभ आवश्यक]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "जब यह सेटिंग सक्षम होती है और <code>i2p.streaming.enablePongDelay</code> भी सक्षम होता है, तो यह पिंग-सक्षम सर्वरों के लिए पेश की गई अतिरिक्त यादृच्छिक पोंग देरी की अधिकतम सीमा बदलती है। जब तक व्यक्तिगत रूप से सेट नहीं किया जाता है, 50मिलीसेकंड की मूल मान उपयोग की जाएगी जब तक स्पष्ट रूप से सेट न किया गया हो, 50ms का डिफ़ॉल्ट मान उपयोग किया जाएगा"
-
 msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
 msgstr "eepget HTTP अनुरोधों के लिए मिलीसेकंड में कनेक्ट टाइमआउट (प्रारंभिक प्रतिक्रिया हेडर की प्रतीक्षा करने का समय)। उच्च-विलंबता दूरस्थ पहुँच परिदृश्यों के लिए बढ़ाएँ। [डिफ़ॉल्ट 90000 (90से)]"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "eepget के लिए डिफ़ॉल्ट पुनर्प्रयास संख्या जब <code>-n</code> फ्लैग निर्दिष्ट नहीं है। [डिफ़ॉल्ट 10]"
 
 msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
 msgstr "eepget स्थानांतरण के लिए मिलीसेकंड में निष्क्रियता टाइमआउट (डेटा चरण के दौरान अधिकतम निष्क्रिय समय)। रुकावटों का अनुभव करने वाले धीमे कनेक्शनों के लिए बढ़ाएँ। [डिफ़ॉल्ट 300000 (5मि)]"
@@ -7578,35 +7702,68 @@ msgstr "eepget स्थानांतरण के लिए मिलीस�
 msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
 msgstr "eepget के हार मानने से पहले अधिकतम लगातार शून्य-डेटा स्थानांतरण विफलताएँ, भले ही पुनर्प्रयास शेष हों। यदि स्थानांतरण बिना कोई डेटा प्राप्त किए विफल होते हैं तो बढ़ाएँ। [डिफ़ॉल्ट 20]"
 
-msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
-msgstr "eepget के लिए डिफ़ॉल्ट पुनर्प्रयास संख्या जब <code>-n</code> फ्लैग निर्दिष्ट नहीं है। [डिफ़ॉल्ट 10]"
+msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
+msgstr ""
 
-msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
-msgstr "स्ट्रीमिंग कनेक्शन के डिस्कनेक्ट होने के बाद मिलीसेकंड में TIME-WAIT अवधि, जिसके दौरान देर से आने वाले पैकेट अभी भी स्वीकार किए जाते हैं। उच्च-विलंबता पथों के लिए बढ़ाएँ जहाँ अंतिम ACK में देरी हो सकती है। [डिफ़ॉल्ट 300000 (5मि)]"
+msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
+msgstr ""
 
-msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
-msgstr "स्ट्रीमिंग कनेक्ट टाइमआउट पर ऊपरी बाउंड क्लैम्प। प्रति-सुरंग कॉन्फ़िगरेशन की परवाह किए बिना प्रति-कनेक्शन टाइमआउट को इस सीमा से अधिक होने से रोकता है। बहुत उच्च-विलंबता दूरस्थ पहुँच के लिए बढ़ाएँ। [डिफ़ॉल्ट 120000 (2मि)]"
+msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
+msgstr ""
 
-msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
-msgstr "नए स्ट्रीमिंग कनेक्शन के लिए प्रारंभिक भीड़ विंडो आकार (पैकेट में)। बड़ी विंडो कनेक्शन तेज़ी से शुरू करती है लेकिन भीड़भाड़ वाले पथों पर अधिक पुनर्प्रेषण का कारण बन सकती है। [डिफ़ॉल्ट 8]"
+msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
+msgstr ""
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
-msgstr "स्ट्रीमिंग कनेक्शन के लिए अधिकतम भीड़ विंडो आकार (पैकेट में)। एकल स्ट्रीम के अधिकतम थ्रूपुट को सीमित करता है। [डिफ़ॉल्ट 128]"
+msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
 
-msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
-msgstr "मिलीसेकंड में न्यूनतम पुनर्प्रेषण विलंब। पैकेट इस अंतराल से तेज़ पुनर्प्रेषित नहीं किए जाएंगे। कम मान लॉसी कनेक्शनों पर तेज़ रिकवरी की अनुमति देते हैं। [डिफ़ॉल्ट 100ms]"
+msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
-msgstr "मिलीसेकंड में अधिकतम पुनर्प्रेषण विलंब। बैकऑफ़ की परवाह किए बिना पुनर्प्रेषण अंतराल इस मान से अधिक नहीं होगा। भीड़भाड़ वाले पथों पर पुनर्प्रयासों के बीच अधिक समय देने के लिए बढ़ाएँ। [डिफ़ॉल्ट 30000 (30से)]"
+msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
-msgstr "एक्सपोनेंशियल बैकऑफ़ (दोगुना) के बाद मिलीसेकंड में अधिकतम पुनर्प्रेषण टाइमआउट। गंभीर भीड़ के दौरान पुनर्प्रेषण का प्रयास करने से पहले प्रेषक के प्रतीक्षा समय को सीमित करता है। [डिफ़ॉल्ट 30000 (30से)]"
+msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
+msgstr ""
+
+msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
+msgstr ""
+
+msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
+msgstr ""
+
+msgid "miscellaneous"
+msgstr "विविध"
+
+msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
+msgstr "यदि सत्य कर दिया जाता है, तो यह विकल्प एक आइकॉन सिस्टम ट्रे / सूचना क्षेत्र में रखेगा, जिसमें मूल सेवा नियंत्रण विकल्प होंगे। [मानक रूप से अक्षम है]"
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "जब यह सत्य कर दिया जाता है, तो I2P नेटवर्क कनेक्टिविटी के बिना चलता है, जो यदि आप निरंतर राउटर को पुनः शुरू करके कोड अपडेट का परीक्षण कर रहे हों तो यह मददगार होता है क्योंकि यह नेटवर्क के विघटन को रोकता है।"
 
-msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
-msgstr "true पर सेट होने पर, स्थानीय-स्थानीय लूपबैक डिलीवरी अक्षम करता है और सभी ट्रैफ़िक को सुरंगों के माध्यम से मजबूर करता है (आउटबाउंड सुरंग → नेटवर्क → इनबाउंड सुरंग → स्थानीय गंतव्य)। स्रोत और गंतव्य एक ही राउटर पर होने पर सुरंग रूटिंग व्यवहार के परीक्षण के लिए उपयोगी। [डिफ़ॉल्ट रूप से अक्षम]"
+msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
+msgstr ""
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "यह सेटिंग आपको अनुप्रयोगी NTP सर्वरों के लिए सेटिंग करने की अनुमति देती है, जो सुनिश्चित करने के लिए आवश्यक हैं कि आपका राउटर सटीक समय रखे। [मानक मान 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org है] org]"
@@ -8945,6 +9102,9 @@ msgstr "एक सीमा जो जब पार की जाती है �
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
 msgstr "नोट: घोषणाओं का क्रम मायने रखता है। किसी निश्चित गंतव्य के लिए पहली सीमा घोषणा (स्पष्ट या संदर्भित फ़ाइल में सूचीबद्ध) कोई भविष्यवाणी सीमा को प्रभावित करेगी, स्पष्ट या फ़ाइल में सूचीबद्ध, जो भी हो। नोट: एक नया फ़िल्टर फ़ाइल लागू करने के लिए, टनल मैनेजर में स्थान स्थापित करने के बाद टनल को पुनः शुरू करना होगा। एक बार सेट किया जाने के बाद, एक परिभाषा फ़ाइल टार्गेट टनल को पुनः शुरू करने की आवश्यकता बिना अपडेट की जा सकती है, हालांकि ब्लॉक किए गए गंतव्य टनल को पुनः शुरू करने तक रहेंगे किसी दिए गए गंतव्य के लिए पहली सीमा घोषणा (चाहे स्पष्ट हो या संदर्भित फ़ाइल में सूचीबद्ध) उसी गंतव्य के लिए किसी भी भविष्य की सीमा को ओवरराइड करती है, चाहे वह स्पष्ट हो या फ़ाइल में सूचीबद्ध नोट: नई फ़िल्टर फ़ाइल लागू करने के लिए, टनल मैनेजर में स्थान निर्दिष्ट करने के बाद टनल को पुनर्प्रारंभ किया जाना चाहिए एक बार कॉन्फ़िगर होने के बाद, परिभाषा फ़ाइल को लक्ष्य टनल के पुनर्प्रारंभ की आवश्यकता के बिना अपडेट किया जा सकता है, हालाँकि अवरुद्ध गंतव्य टनल के पुनर्प्रारंभ तक बने रहेंगे"
 
+msgid "Thresholds"
+msgstr "सीमाएँ"
+
 msgid "A threshold is defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
 msgstr "एक सीमा उस संख्या के द्वारा परिभाषित होती है जितनी कनेक्शन प्रयासों को एक प्रतिष्ठित गंतव्य को करने की अनुमति दी जाती है, जिसके बाद \"पार\" होता है।"
 
@@ -9515,8 +9675,14 @@ msgstr "हमेशा"
 msgid "Set Password"
 msgstr "पासवर्ड सेट करें"
 
-msgid "network database"
-msgstr "नेटवर्क डेटाबेस"
+msgid "All Routers [Advanced]"
+msgstr ""
+
+msgid "Remote"
+msgstr "दूर"
+
+msgid "All Routers (Client NetDb) [Advanced]"
+msgstr ""
 
 msgid "Encryption type"
 msgstr "एन्क्रिप्शन प्रकार"
@@ -9535,9 +9701,6 @@ msgstr "स्थानीय रूप से होस्ट की गई स
 
 msgid "Requested client leaseset"
 msgstr "अनुरोधित क्लाइंट लीज़सेट"
-
-msgid "Remote"
-msgstr "दूर"
 
 msgid "network database router map"
 msgstr "नेटवर्क डेटाबेस राउटर मानचित्र"
@@ -9570,17 +9733,20 @@ msgstr "पीयर कनेक्शन"
 msgid "Network Peers"
 msgstr "नेटवर्क पीयर"
 
-msgid "peer profiles"
-msgstr "पीयर प्रोफ़ाइल"
+msgid "Fast Peers"
+msgstr ""
 
-msgid "Session Banned Peers"
-msgstr "सेशन में प्रतिबंधित पीयर"
+msgid "High Capacity Peers"
+msgstr ""
+
+msgid "Floodfill Peers"
+msgstr ""
 
 msgid "Banned Peers"
 msgstr "बैन किए गए समकक्ष"
 
-msgid "Fast / High Capacity"
-msgstr "तेज़ / उच्च क्षमता"
+msgid "Recent Peer Profiles"
+msgstr ""
 
 msgid "Configure router logging options"
 msgstr "राउटर लॉगिंग विकल्प सेट करें"
@@ -9683,9 +9849,6 @@ msgstr "टंनल स्विच करें"
 
 msgid "Peer Profile"
 msgstr "पीयर प्रोफ़ाइल"
-
-msgid "Session Bans"
-msgstr "सत्र प्रतिबंध"
 
 msgid "Profile View"
 msgstr "प्रोफ़ाइल दृश्य"

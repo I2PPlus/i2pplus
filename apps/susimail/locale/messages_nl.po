@@ -234,6 +234,9 @@ msgstr "Plaatshouders voor volgsjablonen verwijderd"
 msgid "no subject"
 msgstr "geen onderwerp"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Geen geldig afzenderadres gevonden."
 

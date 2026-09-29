@@ -63,10 +63,6 @@ msgid "Contacting reseed host"
 msgstr "再シードホストへの連絡"
 
 #, java-format
-msgid "Reseeding: fetching router info from seed URL ({0} successful, {1} errors)."
-msgstr "再シード中: シード URL ({0} 成功、 {1} エラー) からルータ情報を取得中。"
-
-#, java-format
 msgid "Acquired {0} router infos from reseed hosts"
 msgstr "再シード ホストから {0} ルーター情報を取得しました"
 
@@ -127,15 +123,6 @@ msgstr "IPアドレスが公開されていないピア"
 
 msgid "Average tunnel build success %"
 msgstr "平均トンネル構築成功率"
-
-msgid "unknown"
-msgstr "不明"
-
-msgid "Floodfill"
-msgstr "洪水フィルマーカー"
-
-msgid "Show all routers with this capability in the NetDb"
-msgstr "NetDBにこの機能を使用して、すべてのルーターを表示します"
 
 msgid "No transports"
 msgstr "トランスポートなし (隠されているかスタートアップ中？)"
@@ -568,12 +555,6 @@ msgstr "システムトレイのアイコンを表示"
 msgid "Hide systray icon"
 msgstr "システムトレイのアイコンを隠す"
 
-msgid "Installed I2P+ system service"
-msgstr "I2Pシステムサービスをインストール"
-
-msgid "Warning: unable to install the service"
-msgstr "警告: サービスをインストール出来ません"
-
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "システム起動時にI2Pサービスの自動起動を有効にしました"
 
@@ -585,6 +566,9 @@ msgstr "システム起動時の I2P サービスの自動起動を無効にし�
 
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "警告: I2P サービスを手動開始に設定できませんでした"
+
+msgid "Warning: could not locate the I2P+ install directory"
+msgstr ""
 
 msgid "Configuration saved successfully"
 msgstr "設定は正常に保存されました"
@@ -757,6 +741,9 @@ msgstr[0] "{0}プラグインが更新されました"
 msgid "Plugin check complete"
 msgstr "プラグインチェック完了"
 
+msgid "Invalid value"
+msgstr "無効な値"
+
 msgid "Restore Defaults"
 msgstr "デフォルトに戻す"
 
@@ -774,9 +761,6 @@ msgstr "保存する変更はありません"
 
 msgid "Tuning overrides applied"
 msgstr "チューニングのオーバーライドが適用されました"
-
-msgid "Invalid value"
-msgstr "無効な値"
 
 msgid "No bans currently active"
 msgstr "現在有効な禁止はありません"
@@ -807,6 +791,9 @@ msgstr "有効期限"
 
 msgid "Total session-only bans"
 msgstr "セッションのみの全面禁止"
+
+msgid "Show all routers with this capability in the NetDb"
+msgstr "NetDBにこの機能を使用して、すべてのルーターを表示します"
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
 msgstr "証明書は、ネットワーク上で実行されている暗号化されたサービスを認証し、ホストされたサービスとルーターコンソールにオプションのSSLを提供するか、ルーターファミリーの所有権の証明を提供するために使用されます。"
@@ -1433,6 +1420,9 @@ msgstr "無効な帯域幅"
 msgid "Updated bandwidth limits"
 msgstr "帯域幅制限を更新しました"
 
+msgid "unknown"
+msgstr "不明"
+
 msgid "Delete this value to disable"
 msgstr "無効にするにはこの値を削除します"
 
@@ -1445,6 +1435,9 @@ msgstr "{0}B 1か月あたりの最大データ転送"
 
 msgid "Ban peer until restart"
 msgstr "再起動までピアを禁止"
+
+msgid "Manually banned via configpeer"
+msgstr ""
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1599,15 +1592,6 @@ msgstr[0] "ルーティングコミットメントが {0} 個のトンネル に
 msgid "Restart in {0}"
 msgstr "{0} で再起動"
 
-msgid "Save order"
-msgstr "順番を保存"
-
-msgid "Restore full default"
-msgstr "完全なデフォルトに戻す"
-
-msgid "Restore minimal default"
-msgstr "最小のデフォルトに戻す"
-
 msgid "Sidebar preferences updated"
 msgstr "サイドバーの設定が更新されました"
 
@@ -1665,16 +1649,6 @@ msgstr "探索的トンネル構成が正常に保存されました。"
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "構成の保存中にエラーが発生しました (適用されましたが保存されませんでした) - エラー ログを参照してください。"
 
-#, java-format
-msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] "{0}ホップ"
-
-#, java-format
-msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] "{0} 個のトンネル"
-
 msgid "Exploratory tunnels"
 msgstr "予備トンネル"
 
@@ -1722,9 +1696,6 @@ msgstr "受信オプション"
 
 msgid "Outbound options"
 msgstr "送信オプション"
-
-msgid "Add user"
-msgstr "ユーザーを追加"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
 msgstr "テーマ選択を保存できません。テーマ名に不正な文字が含まれています。"
@@ -2844,12 +2815,12 @@ msgstr "待機中 {0}"
 msgid "Max wait: {0}"
 msgstr "最大待機: {0}"
 
-msgid "Scheduled jobs"
-msgstr "スケジュールされたジョブ"
-
 #, java-format
 msgid "{0} starting in {1}"
 msgstr "{0} は {1} に始まります"
+
+msgid "Scheduled jobs"
+msgstr "スケジュールされたジョブ"
 
 #, java-format
 msgid "Runners: {0} / {1}"
@@ -3014,9 +2985,6 @@ msgstr "前のページ"
 msgid "Next Page"
 msgstr "次のページ"
 
-msgid "Results per page"
-msgstr "ページあたりの結果"
-
 msgid "Not initialized"
 msgstr "未初期化"
 
@@ -3169,6 +3137,9 @@ msgstr "初期化"
 
 msgid "Our info"
 msgstr "情報"
+
+msgid "Floodfill"
+msgstr "洪水フィルマーカー"
 
 msgid "Router is banlisted"
 msgstr "ルーターが禁止リストに登録されています"
@@ -3549,99 +3520,6 @@ msgstr[0] "{0}失敗します"
 msgid "backlogged"
 msgstr "バッグログされました"
 
-msgid "Definitions"
-msgstr "定義"
-
-msgid "Remote peer, identified by truncated router hash"
-msgstr "リモート ピア、切り捨てられたルーター ハッシュによって識別される"
-
-msgid "Direction"
-msgstr "方向"
-
-msgid "Outbound connection"
-msgstr "送信接続"
-
-msgid "They offered to introduce us (help peers traverse our firewall)"
-msgstr "彼らは私たちを紹介することを申し出ました（仲間が私たちのファイアウォールを横断するのを助けます）"
-
-msgid "Inbound connection"
-msgstr "着信接続"
-
-msgid "We offered to introduce them (help peers traverse their firewall)"
-msgstr "私たちはそれらを紹介することを申し出ました（仲間がファイアウォールを横断するのを助けます）"
-
-msgid "How long since a packet has been received / sent"
-msgstr "パケットが受信/送信されてからの経過時間"
-
-msgid "Smoothed inbound / outbound transfer rate"
-msgstr "インバウンド/アウトバウンド転送速度の平滑化"
-
-msgid "How long ago connection was established"
-msgstr "接続が確立されてからどれくらい経ちますか"
-
-msgid "Difference between the peer's clock and our own"
-msgstr "相手の時計と自分の時計の違い"
-
-msgid "How many bytes can be sent without acknowledgement"
-msgstr "確認応答なしで送信できるバイト数"
-
-msgid "Number of sent messages awaiting acknowledgement"
-msgstr "確認を待っている送信メッセージの数"
-
-msgid "Maximum number of concurrent messages to send"
-msgstr "同時に送信するメッセージの最大数"
-
-msgid "Number of pending sends which exceed window"
-msgstr "ウィンドウを超えた保留中の送信数"
-
-msgid "Maximum packet size before congestion avoidance"
-msgstr "輻輳回避前の最大パケットサイズ"
-
-msgid "How long for packet to be sent to peer and back to us"
-msgstr "パケットがピアに送信されてから私たちに返されるまでの時間"
-
-msgid "Retransmit timeout"
-msgstr "再送タイムアウト"
-
-msgid "How long before peer gives up resending lost packet"
-msgstr "ピアが失われたパケットの再送を諦めるまでの時間"
-
-msgid "Maximum send packet size"
-msgstr "最大送信パケットサイズ"
-
-msgid "Estimated maximum receive packet size (bytes)"
-msgstr "推定最大受信パケットサイズ(バイト)"
-
-msgid "Messages sent to peer"
-msgstr "ピアに送信されるメッセージ"
-
-msgid "Messages received from peer"
-msgstr "ピアから受信したメッセージ"
-
-msgid "Packets retransmitted to peer"
-msgstr "ピアに再送信されたパケット"
-
-msgid "Duplicate packets received from peer"
-msgstr "ピアから受信した重複パケット"
-
-#, java-format
-msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] "{0}最近のプロファイルを表示します。"
-
-#, java-format
-msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] "{0}古いプロファイルを隠す。"
-
-#, java-format
-msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] "{0}標準プロファイルを隠す。"
-
-msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
-msgstr "プロファイラーは、ピアを正確にプロファイリングするために、クライアント トンネルの継続的な使用に依存していることに注意してください。"
-
 msgid "Domain"
 msgstr "ドメイン"
 
@@ -3653,6 +3531,12 @@ msgstr "速度"
 
 msgid "Low Latency"
 msgstr "低レイテンシー"
+
+msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
+msgstr ""
+
+msgid "Loss"
+msgstr ""
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "トンネルピアが参加することに同意しました"
@@ -3705,68 +3589,66 @@ msgstr "統合済み"
 msgid "Configure Peer"
 msgstr "ピアを設定"
 
-msgid "Thresholds"
-msgstr "しきい値"
+#, java-format
+msgid "{0} in RAM / {1} on disk"
+msgstr ""
 
-msgid "Capacity"
-msgstr "許容数"
+msgid "High Cap"
+msgstr ""
 
-msgid "tunnels per hour"
-msgstr "1時間あたりのトンネル"
+msgid "Displayed"
+msgstr ""
 
-msgid "Integration"
-msgstr "統合"
+#, java-format
+msgid "Showing {0} of {1} profiles"
+msgstr ""
 
-msgid "peer"
-msgstr "ピア"
+#, java-format
+msgid "{0} stale profile hidden"
+msgid_plural "{0} stale profiles hidden"
+msgstr[0] ""
+
+msgid "Share of total profiles shown"
+msgstr ""
 
 msgid "peers"
 msgstr "仲間"
 
-#, java-format
-msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] "{0}高速ピア"
+msgid "Share of tier profiles shown"
+msgstr ""
 
-#, java-format
-msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] "{0}大容量のピア"
+msgid "Window"
+msgstr ""
 
-#, java-format
-msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] "{0}統合ピア"
+msgid "Fast RTT"
+msgstr ""
 
-msgid "1h Fail Rate"
-msgstr "1時間失敗率"
+msgid "Max RTT for fast-tier membership (ms)"
+msgstr ""
 
-msgid "1h Resp. Time"
-msgstr "1時間応答時間"
+msgid "Average loss of fast-tier peers (%)"
+msgstr ""
 
-msgid "Good Lookups"
-msgstr "良いルックアップ"
+msgid "Average loss of high-capacity peers (%)"
+msgstr ""
 
-msgid "Last Good Lookup"
-msgstr "最終良好検索"
+msgid "Heard from within the display cutoff"
+msgstr ""
 
-msgid "Last Good Send"
-msgstr "最終良好送信"
+msgid "Lookups"
+msgstr ""
 
-msgid "Last Good Store"
-msgstr "最終良好保存"
+msgid "Lookup success rate"
+msgstr ""
 
-msgid "Bad Lookups"
-msgstr "悪いルックアップ"
+msgid "Stores"
+msgstr ""
 
-msgid "Last Bad Lookup"
-msgstr "最終不良検索"
+msgid "Store success rate"
+msgstr ""
 
-msgid "Last Bad Send"
-msgstr "最終不良送信"
-
-msgid "Last Bad Store"
-msgstr "最終不良保存"
+msgid "Definitions"
+msgstr "定義"
 
 msgid "caps"
 msgstr "大文字"
@@ -3832,6 +3714,57 @@ msgstr "統合"
 
 msgid "how many new peers have they told us about lately?"
 msgstr "最近、何人の新しい仲間について教えてくれましたか?"
+
+msgid "Known floodfills"
+msgstr ""
+
+msgid "No-Fail"
+msgstr ""
+
+msgid "No lookup failures (1h)"
+msgstr ""
+
+msgid "Response"
+msgstr ""
+
+msgid "Lookup response time (1h)"
+msgstr ""
+
+msgid "1h Contact"
+msgstr ""
+
+msgid "Contacted within 1h"
+msgstr ""
+
+msgid "1h Fail Rate"
+msgstr "1時間失敗率"
+
+msgid "1h Resp. Time"
+msgstr "1時間応答時間"
+
+msgid "Good Lookups"
+msgstr "良いルックアップ"
+
+msgid "Last Good Lookup"
+msgstr "最終良好検索"
+
+msgid "Last Good Send"
+msgstr "最終良好送信"
+
+msgid "Last Good Store"
+msgstr "最終良好保存"
+
+msgid "Bad Lookups"
+msgstr "悪いルックアップ"
+
+msgid "Last Bad Lookup"
+msgstr "最終不良検索"
+
+msgid "Last Bad Send"
+msgstr "最終不良送信"
+
+msgid "Last Bad Store"
+msgstr "最終不良保存"
 
 msgid "All"
 msgstr "すべて"
@@ -3938,9 +3871,6 @@ msgstr "構成中"
 
 msgid "Building tunnels"
 msgstr "トンネルを構成中"
-
-msgid "Shared Clients"
-msgstr "共有クライアント"
 
 msgid "Ping"
 msgstr "ピング"
@@ -4787,6 +4717,12 @@ msgstr "Nagle フラッシュ遅延"
 msgid "Slow Start Window Cap"
 msgstr "スロースタートウィンドウ上限"
 
+msgid "Max Inbound Buffer"
+msgstr ""
+
+msgid "Max Concurrent Streams"
+msgstr ""
+
 msgid "Max SYN Sends"
 msgstr "最大SYN送信数"
 
@@ -4798,6 +4734,9 @@ msgstr "最大再送遅延"
 
 msgid "Max Retransmissions"
 msgstr "最大再送信回数"
+
+msgid "Receive Worker Threads"
+msgstr ""
 
 msgid "Writer Queue Size"
 msgstr "ライターキューサイズ"
@@ -4880,6 +4819,18 @@ msgstr "最大同時検索数"
 msgid "Search Timeout"
 msgstr "検索タイムアウト"
 
+msgid "Search Cap"
+msgstr ""
+
+msgid "Republish Window"
+msgstr ""
+
+msgid "Republish Fanout"
+msgstr ""
+
+msgid "Exploratory Breadth"
+msgstr ""
+
 msgid "LeaseSet Lookup Timeout"
 msgstr "LeaseSet 検索タイムアウト"
 
@@ -4903,6 +4854,9 @@ msgstr "最小高負荷ピア数"
 
 msgid "Maximum High Capacity Peers"
 msgstr "最大高負荷ピア数"
+
+msgid "Lossy Peer Demotion Threshold"
+msgstr ""
 
 msgid "Tunnel Build Request Timeout"
 msgstr "トンネル構築要求タイムアウト"
@@ -4928,6 +4882,27 @@ msgstr "テスト間の最小遅延"
 msgid "Max Delay Between Tests"
 msgstr "テスト間の最大遅延"
 
+msgid "Tunnel Test Failure Window"
+msgstr ""
+
+msgid "Tunnel Test Failure Window Floor"
+msgstr ""
+
+msgid "First-Hop Failure Cooldown"
+msgstr ""
+
+msgid "First-Hop Failure Threshold"
+msgstr ""
+
+msgid "Inbound Congestion Threshold"
+msgstr ""
+
+msgid "Stale Build Pruning Threshold"
+msgstr ""
+
+msgid "Concurrency Throttle Threshold"
+msgstr ""
+
 msgid "NTCP Reader Threads"
 msgstr "NTCP リーダースレッド数"
 
@@ -4936,6 +4911,9 @@ msgstr "NTCP ライタースレッド数"
 
 msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP ポンパーフェイルセーフ間隔"
+
+msgid "NTCP Pumper Max Idle Loop Rate"
+msgstr ""
 
 msgid "Max Concurrent Peer Messages"
 msgstr "最大同時ピアメッセージ数"
@@ -5006,6 +4984,9 @@ msgstr "非アクティブタイムアウト"
 msgid "Max Window Size"
 msgstr "最大ウィンドウサイズ"
 
+msgid "Connect Timeout Multiplier"
+msgstr ""
+
 msgid "Max Message Queue Age"
 msgstr "最大メッセージキュー寿命"
 
@@ -5021,11 +5002,26 @@ msgstr "ポンパースレッド数"
 msgid "Server Handler Threads"
 msgstr "サーバーハンドラスレッド数"
 
+msgid "Server Handler Queue Capacity"
+msgstr ""
+
+msgid "Server Default Threads per Tunnel"
+msgstr ""
+
+msgid "I/O Transfer Threads"
+msgstr ""
+
+msgid "I/O Stall Timeout"
+msgstr ""
+
 msgid "Build Handler Threads"
 msgstr "ビルドハンドラスレッド数"
 
 msgid "Client Runner Max Threads"
 msgstr "クライアントランナー最大スレッド数"
+
+msgid "Client Default Max Connections"
+msgstr ""
 
 msgid "Participating Throttle Min"
 msgstr "参加スロットル最小値"
@@ -5059,9 +5055,6 @@ msgstr "中負荷ラグしきい値"
 
 msgid "Moderate-Load CPU Threshold"
 msgstr "中負荷 CPU しきい値"
-
-msgid "Sustained High-Load Window"
-msgstr "持続高負荷ウィンドウ"
 
 msgid "Sustained Moderate-Load Window"
 msgstr "持続中負荷ウィンドウ"
@@ -5104,6 +5097,9 @@ msgstr "ソケット接続タイムアウト"
 
 msgid "Untested Tunnel Cap Multiplier"
 msgstr "未テストのトンネル キャップ乗数"
+
+msgid "Tunnel IV Filter Size"
+msgstr ""
 
 msgid "Message Processing Throttle"
 msgstr "メッセージ処理スロットル"
@@ -5153,6 +5149,12 @@ msgstr "Nagle フラッシュ遅延（ミリ秒）。"
 msgid "Max congestion window during slow start."
 msgstr "スロースタート中の最大輻輳ウィンドウ。"
 
+msgid "Per-connection inbound buffer cap (bytes)."
+msgstr ""
+
+msgid "Dynamic cap on concurrent streams per destination."
+msgstr ""
+
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "ハンドシェイクを諦めるまでの SYN 試行の合計数。"
 
@@ -5164,6 +5166,9 @@ msgstr "再送信間の最大時間（ミリ秒）。"
 
 msgid "Retransmissions before dropping the stream."
 msgstr "ストリームを破棄するまでの再送信回数。"
+
+msgid "Inbound packet processing threads per streaming session."
+msgstr ""
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "ストリームを破棄するまでの最大アイドル時間（ミリ秒）。"
@@ -5252,6 +5257,18 @@ msgstr "最大同時 NetDB 検索数。"
 msgid "Per-peer lookup timeout (ms)."
 msgstr "ピアあたりの検索タイムアウト（ミリ秒）。"
 
+msgid "Hard deadline for each iterative search (ms)."
+msgstr ""
+
+msgid "Lifetime of lease republish store messages (ms)."
+msgstr ""
+
+msgid "Max peers that receive a republished lease after a search."
+msgstr ""
+
+msgid "Concurrent exploratory searches per cycle."
+msgstr ""
+
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "LeaseSet 検索の適応型デッドライン上限（ミリ秒）。"
 
@@ -5275,6 +5292,9 @@ msgstr "ルーティングテーブル内の最小高負荷ピア数。"
 
 msgid "Max high-capacity peers in routing table."
 msgstr "ルーティングテーブル内の最大高負荷ピア数。"
+
+msgid "Loss ratio that demotes a peer from the fast tiers (%)."
+msgstr ""
 
 msgid "Build reply timeout (ms)."
 msgstr "構築応答タイムアウト（ミリ秒）。"
@@ -5300,6 +5320,27 @@ msgstr "トンネルテスト間の最小間隔（ミリ秒）。"
 msgid "Max interval between tunnel tests (ms)."
 msgstr "トンネルテスト間の最大間隔（ミリ秒）。"
 
+msgid "Max time a tunnel test may take before failure (ms)."
+msgstr ""
+
+msgid "Floor for the tunnel test failure window (ms)."
+msgstr ""
+
+msgid "How long a peer is skipped after first-hop failures (ms)."
+msgstr ""
+
+msgid "Failures before a peer is skipped during cooldown."
+msgstr ""
+
+msgid "Inbound tunnel count below which builds are throttled."
+msgstr ""
+
+msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
+msgstr ""
+
+msgid "Timeout rate that triggers concurrent build reduction (%)."
+msgstr ""
+
 msgid "Threads decrypting inbound NTCP data."
 msgstr "インバウンド NTCP データを復号するスレッド数。"
 
@@ -5308,6 +5349,9 @@ msgstr "送信 NTCP メッセージを暗号化するスレッド。"
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "スタックした NTCP ポンプのフェイルセーフスキャン間隔（ミリ秒）。"
+
+msgid "Cap on idle NTCP pump iterations per second (loops/s)."
+msgstr ""
 
 msgid "In-flight message limit per UDP peer."
 msgstr "UDP ピアあたりの送信中メッセージ制限。"
@@ -5363,6 +5407,9 @@ msgstr "ペーシングが開始される前の最小送信レート (KB/秒)。
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT 推定の上限（ミリ秒）。"
 
+msgid "Scales each client's connect timeout by network RTT (30-200%)."
+msgstr ""
+
 msgid "Delay before first retransmit (ms)."
 msgstr "最初の再送信までの遅延（ミリ秒）。"
 
@@ -5384,11 +5431,26 @@ msgstr "ゲートウェイポンパースレッド数。"
 msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "着信 I2PTunnel 接続用ハンドラスレッド数。"
 
+msgid "Inbound connections that may wait for a free server handler thread."
+msgstr ""
+
+msgid "Default cap on server handler threads for each server tunnel."
+msgstr ""
+
+msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
+msgstr ""
+
+msgid "Stall timeout for Server→Client data transfers (ms)."
+msgstr ""
+
 msgid "Thread pool for inbound build request processing."
 msgstr "インバウンド構築要求処理用スレッドプール。"
 
 msgid "Ceiling for client proxy thread pool."
 msgstr "クライアントプロキシスレッドプールの上限。"
+
+msgid "Default client connection cap."
+msgstr ""
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "任意のピアが保持できる最小中継トンネル数。"
@@ -5422,9 +5484,6 @@ msgstr "中負荷のピア切断をトリガーするジョブ キューの遅�
 
 msgid "System load percent triggering moderate-load disconnect."
 msgstr "中負荷の切断をトリガーするシステム負荷パーセント。"
-
-msgid "Duration of high load before gating requests (ms)."
-msgstr "リクエストをゲートするまでの高負荷の継続時間 (ミリ秒)。"
 
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "リクエストを拒否するまでの中程度の負荷の継続時間 (ミリ秒)。"
@@ -5467,6 +5526,9 @@ msgstr "再送信タイムアウトあたりの RTO 増加倍率（%、100 = 一
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "トンネルサーバーハンドラスレッド用 TCP ソケット接続タイムアウト（ミリ秒）。"
+
+msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "転送を拒否するまでの最大平均メッセージ遅延 (ミリ秒)。"
@@ -5595,6 +5657,9 @@ msgstr "ピアによるすべてのトンネル"
 msgid "Primary IP address"
 msgstr "プライマリIPアドレス"
 
+msgid "No local or transit tunnels currently active."
+msgstr "現在アクティブなローカル トンネルまたはトランジット トンネルはありません。"
+
 msgid "unique peers"
 msgstr "ユニークなピア"
 
@@ -5603,9 +5668,6 @@ msgstr "ローカル"
 
 msgid "transit"
 msgstr "トランジット"
-
-msgid "No local or transit tunnels currently active."
-msgstr "現在アクティブなローカル トンネルまたはトランジット トンネルはありません。"
 
 msgid "PRIVATE IP ADDRESS"
 msgstr "プライベートIPアドレス"
@@ -5616,6 +5678,15 @@ msgstr "帯域幅階層"
 #, java-format
 msgid "Over {0} shared bandwidth"
 msgstr "{0} の共有帯域幅を超えています"
+
+msgid "Locally hosted tunnel"
+msgstr "地元でホストされたトンネル"
+
+msgid "in"
+msgstr "入力"
+
+msgid "out"
+msgstr "出力"
 
 msgid "Inbound or outbound?"
 msgstr "インバウンドかアウトバウンドか？"
@@ -5638,6 +5709,9 @@ msgstr "参加"
 msgid "Endpoint"
 msgstr "エンドポイント"
 
+msgid "ms"
+msgstr ""
+
 msgid "Test successful"
 msgstr "テスト成功"
 
@@ -5659,15 +5733,6 @@ msgstr "プールが予算超過 - 早期期限切れ予定"
 
 msgid "Not yet tested"
 msgstr "未テスト"
-
-msgid "Locally hosted tunnel"
-msgstr "地元でホストされたトンネル"
-
-msgid "in"
-msgstr "入力"
-
-msgid "out"
-msgstr "出力"
 
 msgid "Data In"
 msgstr "データ入力"
@@ -5774,6 +5839,9 @@ msgstr "スタートアップ時にウェブブラウザでルーターコンソ
 
 msgid "shared clients"
 msgstr "共有されたクライアント"
+
+msgid "Shared Clients"
+msgstr "共有クライアント"
 
 msgid "I2PMail SMTP Server"
 msgstr "I2PメールSMTPサーバー"
@@ -6052,11 +6120,11 @@ msgstr "LUルーターをバンする"
 msgid "Additional Router Caps"
 msgstr "追加のルーターキャップ"
 
-msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
-msgstr "キャップグループをスペースまたはカンマ区切りで追加（例: LUf,PUG）"
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
+msgstr ""
 
-msgid "Misc Reasons"
-msgstr "その他の理由"
+msgid "Misc"
+msgstr ""
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "クエリに応答しないフラッド ノード ピアを禁止します (失敗率 >95%)"
@@ -6075,6 +6143,12 @@ msgstr "過度なトンネル参加リクエストを送信するルーターを
 
 msgid "Ban excessive tunnel requests"
 msgstr "過度なトンネルリクエストを禁止"
+
+msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
+msgstr ""
+
+msgid "Ban next-hop peers"
+msgstr ""
 
 msgid "Clear all bans"
 msgstr "すべてのバンをクリア"
@@ -6215,6 +6289,12 @@ msgstr "I2CPインターフェース"
 
 msgid "I2CP Port"
 msgstr "I2CPポート"
+
+msgid "Do not bypass the network when accessing locally hosted services"
+msgstr ""
+
+msgid "Disable Loopback"
+msgstr ""
 
 msgid "Require username and password"
 msgstr "ユーザー名とパスワードが必要です"
@@ -6489,6 +6569,9 @@ msgstr "プロフィールボーナスの調整"
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "ボーナスはプラスまたはマイナスであり、高速および大容量の層へのピアの含有に影響を与える可能性があります。 高速ピアはクライアントトンネルに使用され、いくつかの探索的トンネルには大容量のピアが使用されます。"
 
+msgid "Capacity"
+msgstr "許容数"
+
 msgid "Banned IP Addresses"
 msgstr "禁止されたIP"
 
@@ -6722,6 +6805,12 @@ msgstr "更新間隔"
 msgid "Update graph every second"
 msgstr "毎秒グラフを更新"
 
+msgid "Restore full default"
+msgstr "完全なデフォルトに戻す"
+
+msgid "Restore minimal default"
+msgstr "最小のデフォルトに戻す"
+
 msgid "config stats"
 msgstr "構成統計"
 
@@ -6802,6 +6891,9 @@ msgstr "IEを使用していない場合、ブラウザがIEのふりをして�
 
 msgid "Router Console Password"
 msgstr "ルーターコンソールのパスワード"
+
+msgid "Add user"
+msgstr "ユーザーを追加"
 
 msgid "Router Console Language"
 msgstr "ルーターコンソール言語"
@@ -7074,6 +7166,12 @@ msgstr "この設定により、指定された国のルーターからの要求
 msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
 msgstr "保持するセッション バンログ アーカイブ ファイルの最大数。それを超えると、古いアーカイブは削除されます。 [デフォルトは5]"
 
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "この設定を true に設定すると、G 輻輳キャップを発行し、到達可能または到達不可能ではないすべての X 層ルーターからの直接通信がブロックされ、セッション禁止リストに追加されます。 [デフォルトは false]"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "この設定を true に設定すると、すべての LU 層ルーター (帯域幅が狭い、到達不能、またはファイアウォールで保護されている) からの直接通信がブロックされ、セッション禁止リストに追加されます。 [デフォルトはtrueです]"
+
 msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
 msgstr "疑わしいハッシュパターン（潜在的なSybil攻撃）をスキャンする頻度（ミリ秒単位）。0に設定すると無効になります。[デフォルトは3600000]"
 
@@ -7284,6 +7382,24 @@ msgstr "この設定は、興味のない (K または L ティア、到達不�
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "trueに設定すると、この設定は帯域幅使用量が高いと判断された場合に、ルーターが輻輻キャップを公開するために必要な条件を緩和します。その他の条件、ジョブラグが高いまたはルーターが遅いと分類された場合でも、キャップの公開は引き続き発生します。[デフォルトはfalse] その他の条件（高いジョブラグや遅いと分類されたルーターなど）でも、キャップの公開は引き続き発生します。[デフォルトはfalse]"
 
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "アイドルトンネルをチェックする期間（ミリ秒単位）。この期間トラフィックのないトンネルはドロップされる可能性があります。[デフォルトは60000]"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "アクティブとみなされるために、検出期間内にトンネルが処理する必要があるメッセージの最小数。このしきい値を下回るトンネルは削除の候補となります。 [デフォルトは3]"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "アイドル状態のトランジット トンネルをスキャンする間隔 (ミリ秒単位)。 [デフォルトは180000]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "署名されていない(.zip) I2Pアップデートをインストールする場合、<code>router.config</code> ファイルにこれを追加する必要があります。ただし、すでに<code>routerconsole.advanced=true</code>を設定している場合は、このオプションは既に提供されています。注意：I2P+ 0.9.48+以降、<a href=/configupdate#i2pupdates>署名されていないアップデート</a>のインストールはデフォルトで有効になっています。 48+以降、署名なしアップデートのインストールはデフォルトで有効です。"
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "この設定を使用すると、有効になっている場合、署名されていない更新機能のための更新URLを設定できます。URLは<code>/i2pupdate.zip</code>で終わる必要があります。注意：更新のソースを信頼していない限り、署名されていない更新をインストールしないでください！ zip。注意：アップデートのソースを信頼しない限り、署名なしアップデートをインストールしないでください！"
+
+msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
+msgstr "この設定（分単位）は、起動後にNetDb内のRouterInfoの有効性を確認するまでの待機時間を手動で設定することを可能にします。その後、有効なルーターのみが組み込まれます。検証が行われると、期限切れのRouterInfoとSSUでのみアクセス可能な応答のないピアがNetDbから削除されます。[デフォルトは60分] 注：この設定は、古いルーター（デフォルトでは0.9.29より古い）には影響しません。古いルーターはNetDbから削除され、NetDbストアの試行時にルーターセッションから禁止されます。 [デフォルトは60分] 注意：この設定は古いルーター（デフォルトでは0.9.29より古い）には影響しません。古いルーターはNetDbから削除され、NetDbストアが試行されるとルーターセッションから禁止されます。"
+
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
 msgstr "設定すると、ルーターが同時に構築できるトンネルの数にハード制限が設定されます。デフォルトでは、ルーターは平均ビルド時間と現在のアウトバウンド帯域幅を使用して、最適なビルド レートを決定します。この設定は動的であり、再起動しなくても有効になります。"
 
@@ -7356,11 +7472,14 @@ msgstr "緊急再構築ロジックをトリガーする前のプールあたり
 msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
 msgstr "トンネル構築処理中の同時ネクストホップ RouterInfo ルックアップのフロア。参加しているトンネルがほとんどない場合でも、最低レベルのルックアップ同時実行性を確保します。 [デフォルトは 10 (遅いシステムでは 4)]"
 
-msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
-msgstr "トンネル構築処理中の同時次ホップRouterInfoルックアップの上限。ルックアップ同時実行性を制限してnetDbの過負荷を防ぎます。[デフォルトはmax(cores/2, 16)（低速システムでは10）]"
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
+msgstr ""
 
-msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr "同時ルックアップ制限のスケーリングに使用される現在の参加トンネルの割合。実効制限はminLookupLimitとmaxLookupLimitの間でクランプされます。[デフォルトは40（低速システムでは15）]"
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr ""
+
+msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
+msgstr ""
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "トンネル構築リクエストのタイムスタンプの将来の許容最大スキュー。これよりも遠い将来のタイムスタンプを持つリクエストは、潜在的なリプレイ攻撃として拒否されます。 [デフォルトは300000(5分)]"
@@ -7467,32 +7586,77 @@ msgstr "通常の探索的ピア選択に必要なアクティブな (障害の�
 msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
 msgstr "ルータの起動時に探索的ピアの選択を制限する前に必要なアクティブ ピアの最小数。初期の起動中、ルーターはピアの品質に関してより寛大になります。 [デフォルトは6]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
-msgstr "ストリーミング接続のスロー スタート ウィンドウの最大サイズ。スロースタート中に輻輳ウィンドウを制限して、ネットワークに過大な負荷がかかるのを防ぎます。 [デフォルトは64]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
+msgstr ""
 
-msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
-msgstr "ストリーミング接続の最大ラウンドトリップ時間 (ミリ秒単位)。ネットワーク障害後の異常なタイムアウト値を防ぐために、計算された RTT に上限を設けます。 [デフォルトは60000(60秒)]"
-
-msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
-msgstr "接続を断念するまでのパケット再送信の最大回数。値を大きくすると、損失の多いリンクの信頼性が向上しますが、障害の検出が遅れます。 [デフォルトは64]"
-
-msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
-msgstr "同じ到達不能な宛先への接続試行間のクールダウン期間 (ミリ秒単位)。到達不能なピアへのハンマー攻撃を防ぎます。 [デフォルトは60000(60秒)]"
-
-msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
-msgstr "ピアに ping を送信するときに、pong 応答を待機する最大時間 (ミリ秒)。 [デフォルトは300000(5分)]"
-
-msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
-msgstr "過剰なパケットをサイレントにドロップする前に、調整された宛先に応答する回数。接続ストームがルーターに負荷をかけるのを防ぎます。 [デフォルトは3]"
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "このトンネル固有の設定では、ルーターにホストされるサーバーへのpingへの返信を有効化または無効化することができます。ピンの無効化には、Tunnel Managerのサーバーの設定の<i>Custom Options</i>セクションに<code>i2p.streaming.answerPings=false</code>の行を追加する必要があります。"
 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "明示的な接続タイムアウトが設定されていない場合のデフォルトの最大ストリーム遅延（ミリ秒単位）。[デフォルトは10000（10秒）]"
 
-msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr "受信した SYN が accept() によって取得されるまで、受け入れキュー内で待機できる最大時間 (ミリ秒単位)。 accept() が遅れた場合 (ホストサーバーがビジー状態の場合)、この時間枠の後に接続は拒否されるため、値を大きくすると短時間の停止が許容されます。 [デフォルトは30000(30秒)]"
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr "サーバー受け入れキュー内の保留中の接続 (SYN および部分パケット) の最大数。いっぱいになると、新しい SYN はリセットされるのではなくドロップされます (クライアントは再試行します)。そのため、値を大きくすると、メモリを犠牲にして接続バーストを吸収しやすくなります。 [デフォルトは 256 (遅いシステムでは 128)]"
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "過剰なパケットをサイレントにドロップする前に、調整された宛先に応答する回数。接続ストームがルーターに負荷をかけるのを防ぎます。 [デフォルトは3]"
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
+msgstr ""
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
+msgstr ""
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
+msgstr ""
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "ピアに ping を送信するときに、pong 応答を待機する最大時間 (ミリ秒)。 [デフォルトは300000(5分)]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "この設定を有効にすると、<code>i2p.streaming.enablePongDelay</code>も有効になっている場合、ping-enabledサーバーに導入されるランダムなpong遅延の最大追加値が変更されます。明示的に設定されていない場合、デフォルト値の50msが使用されます。 Unless explicitly set, the default value of 50ms will be used"
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
+msgstr ""
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "ミリ秒単位の最大再送信遅延。バックオフに関係なく、再送信間隔はこの値を超えることはありません。増加すると、混雑したパスでの再試行間隔が長くなります。 [デフォルトは30000(30秒)]"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
+msgstr ""
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "指数バックオフ (2 倍) 後の最大再送信タイムアウト (ミリ秒単位)。重度の輻輳時に再送信を試みるまでに送信者が待機する時間を制限します。 [デフォルトは30000(30秒)]"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
+msgstr ""
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgstr ""
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgstr ""
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "ミリ秒単位の最小再送信遅延。パケットはこの間隔より早く再送信されません。値を低くすると、損失のある接続での回復が速くなります。 [デフォルトは100ms]"
+
+msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
+msgstr ""
+
+msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
+msgstr ""
+
+msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
+msgstr ""
+
+msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
+msgstr ""
+
+msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "自動LeaseSet再公開の間隔（ミリ秒単位）。値が高いとnetdbトラフィックが減少しますが、リース情報が古くなる可能性があります。[デフォルトは300000（5分）]"
@@ -7500,32 +7664,14 @@ msgstr "自動LeaseSet再公開の間隔（ミリ秒単位）。値が高いとn
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "プロアクティブな LeaseSet 再公開のしきい値 (ミリ秒単位)。この期間内にリースの有効期限が切れる場合、LeaseSet は次の定期サイクルを待たずにすぐに再公開されます。 [デフォルトは180000(3分)]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
-msgstr "アイドルトンネルをチェックする期間（ミリ秒単位）。この期間トラフィックのないトンネルはドロップされる可能性があります。[デフォルトは60000]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgstr ""
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
-msgstr "アクティブとみなされるために、検出期間内にトンネルが処理する必要があるメッセージの最小数。このしきい値を下回るトンネルは削除の候補となります。 [デフォルトは3]"
-
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
-msgstr "アイドル状態のトランジット トンネルをスキャンする間隔 (ミリ秒単位)。 [デフォルトは180000]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "署名されていない(.zip) I2Pアップデートをインストールする場合、<code>router.config</code> ファイルにこれを追加する必要があります。ただし、すでに<code>routerconsole.advanced=true</code>を設定している場合は、このオプションは既に提供されています。注意：I2P+ 0.9.48+以降、<a href=/configupdate#i2pupdates>署名されていないアップデート</a>のインストールはデフォルトで有効になっています。 48+以降、署名なしアップデートのインストールはデフォルトで有効です。"
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "この設定を使用すると、有効になっている場合、署名されていない更新機能のための更新URLを設定できます。URLは<code>/i2pupdate.zip</code>で終わる必要があります。注意：更新のソースを信頼していない限り、署名されていない更新をインストールしないでください！ zip。注意：アップデートのソースを信頼しない限り、署名なしアップデートをインストールしないでください！"
-
-msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr "この設定（分単位）は、起動後にNetDb内のRouterInfoの有効性を確認するまでの待機時間を手動で設定することを可能にします。その後、有効なルーターのみが組み込まれます。検証が行われると、期限切れのRouterInfoとSSUでのみアクセス可能な応答のないピアがNetDbから削除されます。[デフォルトは60分] 注：この設定は、古いルーター（デフォルトでは0.9.29より古い）には影響しません。古いルーターはNetDbから削除され、NetDbストアの試行時にルーターセッションから禁止されます。 [デフォルトは60分] 注意：この設定は古いルーター（デフォルトでは0.9.29より古い）には影響しません。古いルーターはNetDbから削除され、NetDbストアが試行されるとルーターセッションから禁止されます。"
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "trueに設定すると、ローカル-ローカルループバック配信を無効にし、すべてのトラフィックをトンネル経由で強制します（送信トンネル→ネットワーク→受信トンネル→ローカル宛先）。送信元と宛先が同じルーター上にある場合のトンネルルーティング動作のテストに役立ちます。[デフォルトでは無効]"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
 msgstr "この設定を true に設定すると、ルーターが再起動されるまで、自国のすべてのルーターからの直接通信がブロックされ、禁止リストに追加されます。 [デフォルトは false、またはルーターが非表示モードの場合は true]"
-
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
-msgstr "この設定を true に設定すると、G 輻輳キャップを発行し、到達可能または到達不可能ではないすべての X 層ルーターからの直接通信がブロックされ、セッション禁止リストに追加されます。 [デフォルトは false]"
-
-msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
-msgstr "この設定を true に設定すると、すべての LU 層ルーター (帯域幅が狭い、到達不能、またはファイアウォールで保護されている) からの直接通信がブロックされ、セッション禁止リストに追加されます。 [デフォルトはtrueです]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "この設定により、ルータがファイアウォールであるかどうかを判断するためのSSUテストを無効にすることができます。ファイアウォールでないことが確認されているが、一時的なファイアウォールの問題が発生しているルータに対して有効にすることもできます。テストが無効にされている場合、SSUとNTCPの両方が<a href=/info>ルータ情報ページ</a>で現在の公開IPアドレスを報告するはずです。[再起動が必要です] テストが無効になっている場合、SSUとNTCPの両方がルーター情報ページで現在の公開IPアドレスを報告するはずです。[再起動が必要]"
@@ -7533,26 +7679,11 @@ msgstr "この設定により、ルータがファイアウォールであるか
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "この設定により、ピアとの通信時に優先されるトランスポートを決定します。デフォルトでは、UDP (SSU) よりもNTCPが優先されています。値をtrueに設定すると、事前のNTCP接続が存在しない限り、UDPが優先されます。alwaysに設定すると、事前のNTCP接続の有無に関係なく常にUDPが使用されます。[デフォルトはfalse]"
 
-msgid "miscellaneous"
-msgstr "その他"
-
-msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr "trueに設定すると、このオプションに基本的なサービス制御オプションを備えたアイコンがシステムトレイ/通知エリアに配置されます。[デフォルトでは無効]"
-
-msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "この設定は、トレントをダウンロードまたは作成する際にトレントが許可する最大ファイル数の構成を可能にします。デフォルトの2000ファイルからこの値を大幅に増やす場合、ホストシステムの追加の設定が必要になる場合があります。オペレーティングシステムが許可するオープンファイルの最大数を増やすために、例えばLinuxの場合は<code>ulimit -n</code>を追加設定する必要があります。変更するには、トレントの設定ファイル<code>i2psnark.config</code>に追加します。[トレントまたはルーターの再起動が必要です]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "このトンネル固有の設定では、ルーターにホストされるサーバーへのpingへの返信を有効化または無効化することができます。ピンの無効化には、Tunnel Managerのサーバーの設定の<i>Custom Options</i>セクションに<code>i2p.streaming.answerPings=false</code>の行を追加する必要があります。"
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "この設定は、有効にすると、ルーターにホストされるすべてのping-enabledサーバーに対して、最大50msのランダムなpongの遅延を導入します。デフォルトは無効です。[再起動が必要です] Default is disabled [Restart required]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "この設定を有効にすると、<code>i2p.streaming.enablePongDelay</code>も有効になっている場合、ping-enabledサーバーに導入されるランダムなpong遅延の最大追加値が変更されます。明示的に設定されていない場合、デフォルト値の50msが使用されます。 Unless explicitly set, the default value of 50ms will be used"
-
 msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
 msgstr "eepget HTTPリクエストの接続タイムアウト（ミリ秒単位）（初期応答ヘッダーを待つ時間）。高レイテンシのリモートアクセスシナリオでは増やします。[デフォルトは90000（90秒）]"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "<code>-n</code>フラグが指定されていない場合のeepgetのデフォルトリトライ数。[デフォルトは10]"
 
 msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
 msgstr "eepget転送の非アクティブタイムアウト（ミリ秒単位）（データフェーズ中の最大アイドル時間）。ストールが発生する低速接続では増やします。[デフォルトは300000（5分）]"
@@ -7560,35 +7691,68 @@ msgstr "eepget転送の非アクティブタイムアウト（ミリ秒単位）
 msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
 msgstr "再試行が残っている場合でも、eepget が中止されるまでの連続ゼロデータ転送失敗の最大数。データを受信せずに転送が失敗した場合は増加します。 [デフォルトは20]"
 
-msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
-msgstr "<code>-n</code>フラグが指定されていない場合のeepgetのデフォルトリトライ数。[デフォルトは10]"
+msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
+msgstr ""
 
-msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
-msgstr "ストリーミング接続が切断された後の TIME-WAIT 時間 (ミリ秒単位)。この期間中、遅延パケットは引き続き確認されます。最終 ACK が遅延する可能性がある高遅延パスの場合は増加します。 [デフォルトは300000(5分)]"
+msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
+msgstr ""
 
-msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
-msgstr "ストリーミング接続タイムアウトの上限クランプ。トンネルごとの構成に関係なく、接続ごとのタイムアウトがこの上限を超えないようにします。遅延が非常に長いリモート アクセスの場合は増加します。 [デフォルトは120000(2分)]"
+msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
+msgstr ""
 
-msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
-msgstr "新しいストリーミング接続の初期輻輳ウィンドウサイズ（パケット数）。ウィンドウが大きいと接続はより速く開始されますが、輻輳したパスでより多くの再送が発生する可能性があります。[デフォルトは8]"
+msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
+msgstr ""
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
-msgstr "ストリーミング接続の最大輻輳ウィンドウ サイズ (パケット単位)。単一ストリームの最大スループットを制限します。 [デフォルトは128]"
+msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
 
-msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
-msgstr "ミリ秒単位の最小再送信遅延。パケットはこの間隔より早く再送信されません。値を低くすると、損失のある接続での回復が速くなります。 [デフォルトは100ms]"
+msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
-msgstr "ミリ秒単位の最大再送信遅延。バックオフに関係なく、再送信間隔はこの値を超えることはありません。増加すると、混雑したパスでの再試行間隔が長くなります。 [デフォルトは30000(30秒)]"
+msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
-msgstr "指数バックオフ (2 倍) 後の最大再送信タイムアウト (ミリ秒単位)。重度の輻輳時に再送信を試みるまでに送信者が待機する時間を制限します。 [デフォルトは30000(30秒)]"
+msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
+msgstr ""
+
+msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
+msgstr ""
+
+msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
+msgstr ""
+
+msgid "miscellaneous"
+msgstr "その他"
+
+msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
+msgstr "trueに設定すると、このオプションに基本的なサービス制御オプションを備えたアイコンがシステムトレイ/通知エリアに配置されます。[デフォルトでは無効]"
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "trueに設定すると、I2Pはネットワーク接続なしで実行されます。これは、コードの更新をテストするためにルーターを頻繁に再起動する場合に便利であり、ネットワークの中断を防ぎます。"
 
-msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
-msgstr "trueに設定すると、ローカル-ローカルループバック配信を無効にし、すべてのトラフィックをトンネル経由で強制します（送信トンネル→ネットワーク→受信トンネル→ローカル宛先）。送信元と宛先が同じルーター上にある場合のトンネルルーティング動作のテストに役立ちます。[デフォルトでは無効]"
+msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
+msgstr ""
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "この設定は、ルーターが正確な時刻を維持するために必要な代替NTPサーバーの設定を許可します。[デフォルトは0.pool.ntp.org、1.pool.ntp.org、2.pool.ntp.org]"
@@ -8927,6 +9091,9 @@ msgstr "しきい値に違反すると、問題のあるリモート接続先が
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
 msgstr "注意：設定の順序が重要です。ある宛先に対して最初の閾値宣言（明示的なものであれば、または参照ファイルに指定されているもの）は、その宛先に対する将来の閾値（明示的なものであれば、またはファイルに指定されているもの）を無効にします。注：新しいフィルタファイルを適用するには、トンネルマネージャで場所が指定された後にトンネルを再起動する必要があります。一度設定された定義ファイルは、ターゲットトンネルの再起動を必要とせずに更新することができますが、ブロックされた宛先はトンネルが再起動されるまで永続します。 The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted"
 
+msgid "Thresholds"
+msgstr "しきい値"
+
 msgid "A threshold is defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
 msgstr "しきい値は、「侵害」が発生するまでに、指定された秒数にわたってリモート接続先が実行できる接続試行回数によって定義されます。"
 
@@ -9497,8 +9664,14 @@ msgstr "無期限"
 msgid "Set Password"
 msgstr "パスワードを設定"
 
-msgid "network database"
-msgstr "ネットワークデータベース"
+msgid "All Routers [Advanced]"
+msgstr ""
+
+msgid "Remote"
+msgstr "リモート"
+
+msgid "All Routers (Client NetDb) [Advanced]"
+msgstr ""
 
 msgid "Encryption type"
 msgstr "暗号化タイプ"
@@ -9517,9 +9690,6 @@ msgstr "ローカルでホストされているパブリックサービス"
 
 msgid "Requested client leaseset"
 msgstr "要求されたクライアントリースセット"
-
-msgid "Remote"
-msgstr "リモート"
 
 msgid "network database router map"
 msgstr "ネットワークデータベースルータマップ"
@@ -9552,17 +9722,20 @@ msgstr "ピア接続"
 msgid "Network Peers"
 msgstr "ネットワークピア"
 
-msgid "peer profiles"
-msgstr "ピアプロファイル"
+msgid "Fast Peers"
+msgstr ""
 
-msgid "Session Banned Peers"
-msgstr "セッション禁止ピア"
+msgid "High Capacity Peers"
+msgstr ""
+
+msgid "Floodfill Peers"
+msgstr ""
 
 msgid "Banned Peers"
 msgstr "禁止されているピア"
 
-msgid "Fast / High Capacity"
-msgstr "高速/大容量"
+msgid "Recent Peer Profiles"
+msgstr ""
 
 msgid "Configure router logging options"
 msgstr "ルーターのログオプションを構成する"
@@ -9665,9 +9838,6 @@ msgstr "トンネルを切り替え"
 
 msgid "Peer Profile"
 msgstr "ピアプロフィール"
-
-msgid "Session Bans"
-msgstr "セッション禁止"
 
 msgid "Profile View"
 msgstr "プロファイル表示"

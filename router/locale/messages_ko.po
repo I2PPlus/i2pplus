@@ -137,17 +137,17 @@ msgstr "오버로드 요청"
 msgid "Connection limit reached"
 msgstr "연결 제한에 도달했습니다"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "터널 요청 차단: 높은 부하"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "터널 요청 차단: 대기 시간"
-
 msgid "Transit throttle drop"
 msgstr "Transit 스로틀 드롭"
 
 msgid "Transit throttle reject"
 msgstr "Transit 스로틀 거부"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "터널 요청 차단: 높은 부하"
+
 msgid "Transit request throttle"
 msgstr "Transit 요청 스로틀"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "터널 요청 차단: 대기 시간"

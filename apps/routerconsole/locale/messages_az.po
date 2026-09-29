@@ -65,10 +65,6 @@ msgid "Contacting reseed host"
 msgstr "Reseed Host ilə əlaqə saxlamaq"
 
 #, java-format
-msgid "Reseeding: fetching router info from seed URL ({0} successful, {1} errors)."
-msgstr "Təkrarlama: toxum URL-dən router məlumatlarının əldə edilməsi ({0} uğurlu, {1} səhvlər)."
-
-#, java-format
 msgid "Acquired {0} router infos from reseed hosts"
 msgstr "Reseed hostlarından {0} ruter infosu əldə edilib"
 
@@ -129,15 +125,6 @@ msgstr "Dərc edilmiş IP ünvanı olmayan həmkarlar"
 
 msgid "Average tunnel build success %"
 msgstr "Orta tunel qurma uğuru %"
-
-msgid "unknown"
-msgstr "tanınmayan"
-
-msgid "Floodfill"
-msgstr "FLOODFLILLMARKER"
-
-msgid "Show all routers with this capability in the NetDb"
-msgstr "Bütün marşrutlaşdırıcıları netdbdə bu qabiliyyətə göstərin"
 
 msgid "No transports"
 msgstr "Nəqliyyat yoxdur (gizli və ya başlamaq?)"
@@ -570,12 +557,6 @@ msgstr "Systray piktoqramını göstər"
 msgid "Hide systray icon"
 msgstr "Systray piktoqramını gizlət"
 
-msgid "Installed I2P+ system service"
-msgstr "Quraşdırılmış I2P  sistemi xidməti"
-
-msgid "Warning: unable to install the service"
-msgstr "Xəbərdarlıq: xidməti quraşdırmaq mümkün deyil"
-
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Sistem başlanğıcında I2P  xidmətinin avtostartını aktivləşdirdi"
 
@@ -587,6 +568,9 @@ msgstr "Sistem başlanğıcında əlil I2P  Service avtostartı"
 
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Xəbərdarlıq: I2P  xidmətini manual başlama üçün təyin etmək mümkün olmadı"
+
+msgid "Warning: could not locate the I2P+ install directory"
+msgstr ""
 
 msgid "Configuration saved successfully"
 msgstr "Konfiqurasiya uğurla yaddaşda saxlandı"
@@ -760,6 +744,9 @@ msgstr[1] "{0} pluginlər yeniləndi"
 msgid "Plugin check complete"
 msgstr "Qoşmanın yoxlanması tamamlandı"
 
+msgid "Invalid value"
+msgstr "Yanlış dəyər"
+
 msgid "Restore Defaults"
 msgstr "Standart Dəyərləri Bərpa Et"
 
@@ -777,9 +764,6 @@ msgstr "Saxlanılacaq dəyişiklik yoxdur"
 
 msgid "Tuning overrides applied"
 msgstr "Tənzimləmə üstünlükləri tətbiq edildi"
-
-msgid "Invalid value"
-msgstr "Yanlış dəyər"
 
 msgid "No bans currently active"
 msgstr "Hazırda aktiv qadağa yoxdur"
@@ -810,6 +794,9 @@ msgstr "İstifadə müddəti"
 
 msgid "Total session-only bans"
 msgstr "Cəmi sessiya yalnız qadağalar"
+
+msgid "Show all routers with this capability in the NetDb"
+msgstr "Bütün marşrutlaşdırıcıları netdbdə bu qabiliyyətə göstərin"
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
 msgstr "Sertifikatlar şəbəkədə işləyən şifrələnmiş xidmətlərin identifikasiyası, ev sahibliyi edilmiş xidmətlər və router konsolu üçün qeyri-məcburi SSL-in təmin edilməsi və ya router ailəsinə məxsusluğun sübutu üçün istifadə olunur."
@@ -1436,6 +1423,9 @@ msgstr "Yanlış bant genişliyi"
 msgid "Updated bandwidth limits"
 msgstr "Yenilənmiş bant genişliyi məhdudiyyətləri"
 
+msgid "unknown"
+msgstr "tanınmayan"
+
 msgid "Delete this value to disable"
 msgstr "Deaktiv etmək üçün bu dəyəri silin"
 
@@ -1448,6 +1438,9 @@ msgstr "{0}B ayda maksimum məlumat ötürülməsi"
 
 msgid "Ban peer until restart"
 msgstr "Yenidən başlayana qədər peer-i qadağan edin"
+
+msgid "Manually banned via configpeer"
+msgstr ""
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1605,15 +1598,6 @@ msgstr[1] "Zəhmət olmasa, {0} tunel üçün sona çatmağın öhdəliyini göz
 msgid "Restart in {0}"
 msgstr "{0} sonra yenidən başladın"
 
-msgid "Save order"
-msgstr "Sifarişi yadda saxla"
-
-msgid "Restore full default"
-msgstr "Tam standartı bərpa edin"
-
-msgid "Restore minimal default"
-msgstr "Minimal defolt bərpa edin"
-
 msgid "Sidebar preferences updated"
 msgstr "Yan panel seçimləri yeniləndi"
 
@@ -1671,18 +1655,6 @@ msgstr "Kəşfiyyat tunelinin konfiqurasiyası uğurla yadda saxlanıldı."
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "Konfiqurasiyanın saxlanmasında xəta (tətbiq edilib, lakin saxlanmayıb) - xəta qeydlərinə baxın."
 
-#, java-format
-msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] "{0} hop"
-msgstr[1] "{0} hops"
-
-#, java-format
-msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] "{0} tunel"
-msgstr[1] "{0} tunellər"
-
 msgid "Exploratory tunnels"
 msgstr "Kəşfiyyat tunelləri"
 
@@ -1730,9 +1702,6 @@ msgstr "Gələn seçimlər"
 
 msgid "Outbound options"
 msgstr "Gidən seçimləri"
-
-msgid "Add user"
-msgstr "İstifadəçi əlavə et"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
 msgstr "Mövzu seçimini saxlamaq mümkün deyil, mövzu adında qeyri-leqal simvollar var"
@@ -2852,12 +2821,12 @@ msgstr "gözlənilir {0}"
 msgid "Max wait: {0}"
 msgstr "Maks. gözləmə: {0}"
 
-msgid "Scheduled jobs"
-msgstr "Planlaşdırılan işlər"
-
 #, java-format
 msgid "{0} starting in {1}"
 msgstr "{0} {1} ilə başlayır"
+
+msgid "Scheduled jobs"
+msgstr "Planlaşdırılan işlər"
 
 #, java-format
 msgid "Runners: {0} / {1}"
@@ -3022,9 +2991,6 @@ msgstr "Əvvəlki Səhifə"
 msgid "Next Page"
 msgstr "Növbəti səhifə"
 
-msgid "Results per page"
-msgstr "Səhifə başına nəticələr"
-
 msgid "Not initialized"
 msgstr "Başlanılmadı"
 
@@ -3177,6 +3143,9 @@ msgstr "Başlanğıc"
 
 msgid "Our info"
 msgstr "Bizim məlumatımız"
+
+msgid "Floodfill"
+msgstr "FLOODFLILLMARKER"
 
 msgid "Router is banlisted"
 msgstr "Router qadağan edilib"
@@ -3559,102 +3528,6 @@ msgstr[1] "{0} uğursuz olur"
 msgid "backlogged"
 msgstr "gecikmiş"
 
-msgid "Definitions"
-msgstr "Təyinlər"
-
-msgid "Remote peer, identified by truncated router hash"
-msgstr "Kəsilmiş marşrutlaşdırıcı heş ilə müəyyən edilmiş uzaqdan peer"
-
-msgid "Direction"
-msgstr "İstiqamət"
-
-msgid "Outbound connection"
-msgstr "Gidən əlaqə"
-
-msgid "They offered to introduce us (help peers traverse our firewall)"
-msgstr "Bizi təqdim etməyi təklif etdilər (yaşayışlara təhlükəsizlik duvarımızı keçməyə kömək edin)"
-
-msgid "Inbound connection"
-msgstr "Daxil olan əlaqə"
-
-msgid "We offered to introduce them (help peers traverse their firewall)"
-msgstr "Biz onları təqdim etməyi təklif etdik (yaşıdlara təhlükəsizlik divarını keçməyə kömək edin)"
-
-msgid "How long since a packet has been received / sent"
-msgstr "Paketin qəbulundan/göndərilməsindən nə qədər vaxt keçib"
-
-msgid "Smoothed inbound / outbound transfer rate"
-msgstr "Hamarlaşdırılmış gələn / gedən köçürmə sürəti"
-
-msgid "How long ago connection was established"
-msgstr "Bağlantı nə qədər əvvəl qurulub"
-
-msgid "Difference between the peer's clock and our own"
-msgstr "Həmyaşıd saatı ilə bizimkilər arasındakı fərq"
-
-msgid "How many bytes can be sent without acknowledgement"
-msgstr "Təsdiq etmədən neçə bayt göndərilə bilər"
-
-msgid "Number of sent messages awaiting acknowledgement"
-msgstr "Təsdiqi gözləyən göndərilən mesajların sayı"
-
-msgid "Maximum number of concurrent messages to send"
-msgstr "Göndərmək üçün paralel mesajların maksimum sayı"
-
-msgid "Number of pending sends which exceed window"
-msgstr "Pəncərəni aşan gözləyən göndərmələrin sayı"
-
-msgid "Maximum packet size before congestion avoidance"
-msgstr "Tıxacın qarşısını almaqdan əvvəl maksimum paket ölçüsü"
-
-msgid "How long for packet to be sent to peer and back to us"
-msgstr "Paketin həmyaşıdlara və bizə geri göndərilməsi nə qədərdir"
-
-msgid "Retransmit timeout"
-msgstr "Yenidən ötürmə vaxtı aşımı"
-
-msgid "How long before peer gives up resending lost packet"
-msgstr "Peer itirilmiş paketi yenidən göndərməkdən nə qədər əvvəl imtina edir"
-
-msgid "Maximum send packet size"
-msgstr "Maksimum göndərmə paketinin ölçüsü"
-
-msgid "Estimated maximum receive packet size (bytes)"
-msgstr "Təxmini maksimum qəbul paketi ölçüsü (bayt)"
-
-msgid "Messages sent to peer"
-msgstr "Həmyaşıdlara göndərilən mesajlar"
-
-msgid "Messages received from peer"
-msgstr "Həmyaşıdlardan alınan mesajlar"
-
-msgid "Packets retransmitted to peer"
-msgstr "Paketlər həmyaşıdlara təkrar ötürülür"
-
-msgid "Duplicate packets received from peer"
-msgstr "Həmyaşıddan alınan dublikat paketlər"
-
-#, java-format
-msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] "Göstərici {0} son profil."
-msgstr[1] "Göstərmək {0} son profillər."
-
-#, java-format
-msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] "{0} köhnə profilini gizlətmək."
-msgstr[1] "{0} köhnə profilləri gizlətmək."
-
-#, java-format
-msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] "{0} standart profil gizlətmək."
-msgstr[1] "{0} standart profilləri gizlətmək."
-
-msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
-msgstr "Qeyd edək ki, profil tərtibatçısı həmyaşıdlarını dəqiq profil etmək üçün davamlı müştəri tunelindən istifadə edir."
-
 msgid "Domain"
 msgstr "Domen"
 
@@ -3666,6 +3539,12 @@ msgstr "Sürət"
 
 msgid "Low Latency"
 msgstr "Aşağı gecikmə"
+
+msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
+msgstr ""
+
+msgid "Loss"
+msgstr ""
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tunel həmkarı iştirak etməyi qəbul etdi"
@@ -3718,71 +3597,67 @@ msgstr "İnteqrasiya edilmiş"
 msgid "Configure Peer"
 msgstr "Peer konfiqurasiya edin"
 
-msgid "Thresholds"
-msgstr "Eşiklər"
+#, java-format
+msgid "{0} in RAM / {1} on disk"
+msgstr ""
 
-msgid "Capacity"
-msgstr "Tutum"
+msgid "High Cap"
+msgstr ""
 
-msgid "tunnels per hour"
-msgstr "saatda tunellər"
+msgid "Displayed"
+msgstr ""
 
-msgid "Integration"
-msgstr "İnteqrasiya"
+#, java-format
+msgid "Showing {0} of {1} profiles"
+msgstr ""
 
-msgid "peer"
-msgstr "həmyaşıd"
+#, java-format
+msgid "{0} stale profile hidden"
+msgid_plural "{0} stale profiles hidden"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Share of total profiles shown"
+msgstr ""
 
 msgid "peers"
 msgstr "həmyaşıdları"
 
-#, java-format
-msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] "{0} sürətli həmyaşıd"
-msgstr[1] "{0} sürətli həmyaşıdları"
+msgid "Share of tier profiles shown"
+msgstr ""
 
-#, java-format
-msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] "{0} yüksək tutumlu həmyaşıd"
-msgstr[1] "{0} yüksək tutumlu həmyaşıdları"
+msgid "Window"
+msgstr ""
 
-#, java-format
-msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] "{0} inteqrasiya olunmuş həmyaşıd"
-msgstr[1] "{0} inteqrasiya olunmuş həmyaşıdları"
+msgid "Fast RTT"
+msgstr ""
 
-msgid "1h Fail Rate"
-msgstr "1 saat uğursuzluq dərəcəsi"
+msgid "Max RTT for fast-tier membership (ms)"
+msgstr ""
 
-msgid "1h Resp. Time"
-msgstr "1h Cavab."
+msgid "Average loss of fast-tier peers (%)"
+msgstr ""
 
-msgid "Good Lookups"
-msgstr "Yaxşı Axtarışlar"
+msgid "Average loss of high-capacity peers (%)"
+msgstr ""
 
-msgid "Last Good Lookup"
-msgstr "Son Yaxşı Axtarış"
+msgid "Heard from within the display cutoff"
+msgstr ""
 
-msgid "Last Good Send"
-msgstr "Son Yaxşı Göndərmə"
+msgid "Lookups"
+msgstr ""
 
-msgid "Last Good Store"
-msgstr "Son Yaxşı Mağaza"
+msgid "Lookup success rate"
+msgstr ""
 
-msgid "Bad Lookups"
-msgstr "Səhv Axtarışlar"
+msgid "Stores"
+msgstr ""
 
-msgid "Last Bad Lookup"
-msgstr "Son Pis Axtarış"
+msgid "Store success rate"
+msgstr ""
 
-msgid "Last Bad Send"
-msgstr "Son Səhv Göndərmə"
-
-msgid "Last Bad Store"
-msgstr "Son Pis Mağaza"
+msgid "Definitions"
+msgstr "Təyinlər"
 
 msgid "caps"
 msgstr "qapaqlar"
@@ -3848,6 +3723,57 @@ msgstr "inteqrasiya"
 
 msgid "how many new peers have they told us about lately?"
 msgstr "son vaxtlar bizə neçə yeni həmyaşıdları haqqında danışdılar?"
+
+msgid "Known floodfills"
+msgstr ""
+
+msgid "No-Fail"
+msgstr ""
+
+msgid "No lookup failures (1h)"
+msgstr ""
+
+msgid "Response"
+msgstr ""
+
+msgid "Lookup response time (1h)"
+msgstr ""
+
+msgid "1h Contact"
+msgstr ""
+
+msgid "Contacted within 1h"
+msgstr ""
+
+msgid "1h Fail Rate"
+msgstr "1 saat uğursuzluq dərəcəsi"
+
+msgid "1h Resp. Time"
+msgstr "1h Cavab."
+
+msgid "Good Lookups"
+msgstr "Yaxşı Axtarışlar"
+
+msgid "Last Good Lookup"
+msgstr "Son Yaxşı Axtarış"
+
+msgid "Last Good Send"
+msgstr "Son Yaxşı Göndərmə"
+
+msgid "Last Good Store"
+msgstr "Son Yaxşı Mağaza"
+
+msgid "Bad Lookups"
+msgstr "Səhv Axtarışlar"
+
+msgid "Last Bad Lookup"
+msgstr "Son Pis Axtarış"
+
+msgid "Last Bad Send"
+msgstr "Son Səhv Göndərmə"
+
+msgid "Last Bad Store"
+msgstr "Son Pis Mağaza"
 
 msgid "All"
 msgstr "Hamısı"
@@ -3954,9 +3880,6 @@ msgstr "Bina"
 
 msgid "Building tunnels"
 msgstr "Bina tunelləri"
-
-msgid "Shared Clients"
-msgstr "Paylaşılan Müştərilər"
 
 msgid "Ping"
 msgstr "Ping"
@@ -4805,6 +4728,12 @@ msgstr "Nagle Flush Gecikməsi"
 msgid "Slow Start Window Cap"
 msgstr "Yavaş Başlanğıc Pəncərə Tavanı"
 
+msgid "Max Inbound Buffer"
+msgstr ""
+
+msgid "Max Concurrent Streams"
+msgstr ""
+
 msgid "Max SYN Sends"
 msgstr "Maks. SYN göndərir"
 
@@ -4816,6 +4745,9 @@ msgstr "Maksimum Təkrar Göndərmə Gecikməsi"
 
 msgid "Max Retransmissions"
 msgstr "Maksimum Təkrar Ötürmələr"
+
+msgid "Receive Worker Threads"
+msgstr ""
 
 msgid "Writer Queue Size"
 msgstr "Yazıcı Növbə Ölçüsü"
@@ -4898,6 +4830,18 @@ msgstr "Maksimum Eyni Vaxtlı Axtarışlar"
 msgid "Search Timeout"
 msgstr "Axtarış Vaxtı"
 
+msgid "Search Cap"
+msgstr ""
+
+msgid "Republish Window"
+msgstr ""
+
+msgid "Republish Fanout"
+msgstr ""
+
+msgid "Exploratory Breadth"
+msgstr ""
+
 msgid "LeaseSet Lookup Timeout"
 msgstr "LeaseSet Axtarış Vaxtı"
 
@@ -4921,6 +4865,9 @@ msgstr "Minimum Yüksək Tutumlu Qovşaqlar"
 
 msgid "Maximum High Capacity Peers"
 msgstr "Maksimum Yüksək Tutumlu Qovşaqlar"
+
+msgid "Lossy Peer Demotion Threshold"
+msgstr ""
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Tunel Qurulması Sorğusu Vaxtı"
@@ -4946,6 +4893,27 @@ msgstr "Testlər Arası Minimum Gecikmə"
 msgid "Max Delay Between Tests"
 msgstr "Testlər Arası Maksimum Gecikmə"
 
+msgid "Tunnel Test Failure Window"
+msgstr ""
+
+msgid "Tunnel Test Failure Window Floor"
+msgstr ""
+
+msgid "First-Hop Failure Cooldown"
+msgstr ""
+
+msgid "First-Hop Failure Threshold"
+msgstr ""
+
+msgid "Inbound Congestion Threshold"
+msgstr ""
+
+msgid "Stale Build Pruning Threshold"
+msgstr ""
+
+msgid "Concurrency Throttle Threshold"
+msgstr ""
+
 msgid "NTCP Reader Threads"
 msgstr "NTCP Oxuyucu Mövzular"
 
@@ -4954,6 +4922,9 @@ msgstr "NTCP Yazıcı Mövzular"
 
 msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP Pompa Təhlükəsizlik Aralığı"
+
+msgid "NTCP Pumper Max Idle Loop Rate"
+msgstr ""
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Maksimum Eyni Vaxtlı Qovşaq Mesajları"
@@ -5024,6 +4995,9 @@ msgstr "Fəaliyyətsizlik Vaxtı"
 msgid "Max Window Size"
 msgstr "Maksimum Pəncərə Ölçüsü"
 
+msgid "Connect Timeout Multiplier"
+msgstr ""
+
 msgid "Max Message Queue Age"
 msgstr "Maksimum Mesaj Növbəsi Yaşı"
 
@@ -5039,11 +5013,26 @@ msgstr "Pompa Mövzuları"
 msgid "Server Handler Threads"
 msgstr "Server İşləyici Mövzular"
 
+msgid "Server Handler Queue Capacity"
+msgstr ""
+
+msgid "Server Default Threads per Tunnel"
+msgstr ""
+
+msgid "I/O Transfer Threads"
+msgstr ""
+
+msgid "I/O Stall Timeout"
+msgstr ""
+
 msgid "Build Handler Threads"
 msgstr "Qurulma İşləyici Mövzular"
 
 msgid "Client Runner Max Threads"
 msgstr "Müştəri İşlədici Maksimum Mövzular"
+
+msgid "Client Default Max Connections"
+msgstr ""
 
 msgid "Participating Throttle Min"
 msgstr "İştirakçı Boğulma Min"
@@ -5077,9 +5066,6 @@ msgstr "Orta Yük Gecikmə Həddi"
 
 msgid "Moderate-Load CPU Threshold"
 msgstr "Orta Yük CPU Həddi"
-
-msgid "Sustained High-Load Window"
-msgstr "Davamlı Yüksək Yük Pəncərəsi"
 
 msgid "Sustained Moderate-Load Window"
 msgstr "Davamlı Orta Yük Pəncərəsi"
@@ -5122,6 +5108,9 @@ msgstr "Soket Qoşulma Vaxtı"
 
 msgid "Untested Tunnel Cap Multiplier"
 msgstr "Yoxlanılmamış Tunel Qapağı Multiplikatoru"
+
+msgid "Tunnel IV Filter Size"
+msgstr ""
 
 msgid "Message Processing Throttle"
 msgstr "Mesaj emal tənzimləyicisi"
@@ -5171,6 +5160,12 @@ msgstr "Nagle flush gecikməsi (ms)."
 msgid "Max congestion window during slow start."
 msgstr "Yavaş başlanğıc zamanı maksimum tıxac pəncərəsi."
 
+msgid "Per-connection inbound buffer cap (bytes)."
+msgstr ""
+
+msgid "Dynamic cap on concurrent streams per destination."
+msgstr ""
+
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Əl sıxmaqdan imtina etməzdən əvvəl cəmi SYN cəhdləri."
 
@@ -5182,6 +5177,9 @@ msgstr "Təkrar ötürmələr arasındakı maksimum vaxt (ms)."
 
 msgid "Retransmissions before dropping the stream."
 msgstr "Axının atılmasından əvvəlki təkrar ötürmələr."
+
+msgid "Inbound packet processing threads per streaming session."
+msgstr ""
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Axının atılmasından əvvəlki maksimum boş vaxt (ms)."
@@ -5270,6 +5268,18 @@ msgstr "Maksimum eyni vaxtlı NetDB axtarışları."
 msgid "Per-peer lookup timeout (ms)."
 msgstr "Qovşaq başına axtarış vaxtı (ms)."
 
+msgid "Hard deadline for each iterative search (ms)."
+msgstr ""
+
+msgid "Lifetime of lease republish store messages (ms)."
+msgstr ""
+
+msgid "Max peers that receive a republished lease after a search."
+msgstr ""
+
+msgid "Concurrent exploratory searches per cycle."
+msgstr ""
+
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "LeaseSet axtarışları üçün adaptiv son müddət tavanı (ms)."
 
@@ -5293,6 +5303,9 @@ msgstr "Yönləndirmə cədvəlindəki minimum yüksək tutumlu qovşaqlar."
 
 msgid "Max high-capacity peers in routing table."
 msgstr "Yönləndirmə cədvəlindəki maksimum yüksək tutumlu qovşaqlar."
+
+msgid "Loss ratio that demotes a peer from the fast tiers (%)."
+msgstr ""
 
 msgid "Build reply timeout (ms)."
 msgstr "Qurulma cavabı vaxtı (ms)."
@@ -5318,6 +5331,27 @@ msgstr "Tunel testləri arasındakı minimum aralıq (ms)."
 msgid "Max interval between tunnel tests (ms)."
 msgstr "Tunel testləri arasındakı maksimum aralıq (ms)."
 
+msgid "Max time a tunnel test may take before failure (ms)."
+msgstr ""
+
+msgid "Floor for the tunnel test failure window (ms)."
+msgstr ""
+
+msgid "How long a peer is skipped after first-hop failures (ms)."
+msgstr ""
+
+msgid "Failures before a peer is skipped during cooldown."
+msgstr ""
+
+msgid "Inbound tunnel count below which builds are throttled."
+msgstr ""
+
+msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
+msgstr ""
+
+msgid "Timeout rate that triggers concurrent build reduction (%)."
+msgstr ""
+
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Giriş NTCP məlumatlarını deşifrələyən mövzular."
 
@@ -5326,6 +5360,9 @@ msgstr "Giden NTCP mesajlarını şifrələyən mövzular."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Çıxılmış NTCP pompaları üçün təhlükəsizlik skan aralığı (ms)."
+
+msgid "Cap on idle NTCP pump iterations per second (loops/s)."
+msgstr ""
 
 msgid "In-flight message limit per UDP peer."
 msgstr "UDP qovşaq başına uçuşda olan mesaj həddi."
@@ -5381,6 +5418,9 @@ msgstr "Pacing başlamazdan əvvəl minimum göndərmə sürəti (KB/s)."
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT təxminindəki yuxarı hədd (ms)."
 
+msgid "Scales each client's connect timeout by network RTT (30-200%)."
+msgstr ""
+
 msgid "Delay before first retransmit (ms)."
 msgstr "İlk təkrar ötürmədən əvvəlki gecikmə (ms)."
 
@@ -5402,11 +5442,26 @@ msgstr "Qateway pompa mövzu sayı."
 msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Gələn I2PTunnel bağlantıları üçün işləyici mövzular."
 
+msgid "Inbound connections that may wait for a free server handler thread."
+msgstr ""
+
+msgid "Default cap on server handler threads for each server tunnel."
+msgstr ""
+
+msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
+msgstr ""
+
+msgid "Stall timeout for Server→Client data transfers (ms)."
+msgstr ""
+
 msgid "Thread pool for inbound build request processing."
 msgstr "Giriş qurulma sorğusu emalı üçün mövzu hovuzu."
 
 msgid "Ceiling for client proxy thread pool."
 msgstr "Müştəri proxy mövzu hovuzu tavanı."
+
+msgid "Default client connection cap."
+msgstr ""
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "İstənilən qovşaqın saxlaya biləcəyi minimum tranzit tunelləri."
@@ -5440,9 +5495,6 @@ msgstr "Orta yüklü qovşaq kəsintisini tetikləyən iş növbəsi gecikməsi 
 
 msgid "System load percent triggering moderate-load disconnect."
 msgstr "Orta yüklü kəsintini tetikləyən sistem yük faizi."
-
-msgid "Duration of high load before gating requests (ms)."
-msgstr "Sorğular qapılanmadan əvvəlki yüksək yüklü müddət (ms)."
 
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Sorğular rədd edilmədən əvvəlki orta yüklü müddət (ms)."
@@ -5485,6 +5537,9 @@ msgstr "Təkrar ötürmə vaxtı başına RTO böyümə çarpansı (%, 100 = sab
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tunel server işləyici mövzuları üçün TCP soket qoşulma vaxtı (ms)."
+
+msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Tranzitdən imtina etməzdən əvvəl maksimum orta mesaj gecikməsi (ms)."
@@ -5613,6 +5668,9 @@ msgstr "Peer tərəfindən bütün tunellər"
 msgid "Primary IP address"
 msgstr "Əsas IP ünvanı"
 
+msgid "No local or transit tunnels currently active."
+msgstr "Hal-hazırda aktiv olan yerli və ya tranzit tunel yoxdur."
+
 msgid "unique peers"
 msgstr "unikal həmyaşıdlar"
 
@@ -5621,9 +5679,6 @@ msgstr "yerli"
 
 msgid "transit"
 msgstr "tranzit"
-
-msgid "No local or transit tunnels currently active."
-msgstr "Hal-hazırda aktiv olan yerli və ya tranzit tunel yoxdur."
 
 msgid "PRIVATE IP ADDRESS"
 msgstr "ÖZƏL IP ÜNVANI"
@@ -5634,6 +5689,15 @@ msgstr "Bant genişliyi səviyyələri"
 #, java-format
 msgid "Over {0} shared bandwidth"
 msgstr "{0}-dən çox paylaşılan bant genişliyi"
+
+msgid "Locally hosted tunnel"
+msgstr "Yerli ev sahibliyi edilən tunel"
+
+msgid "in"
+msgstr "ilə"
+
+msgid "out"
+msgstr "çıxdı"
 
 msgid "Inbound or outbound?"
 msgstr "Gələn və ya gedən?"
@@ -5656,6 +5720,9 @@ msgstr "İştirakçılar"
 msgid "Endpoint"
 msgstr "Son nöqtə"
 
+msgid "ms"
+msgstr ""
+
 msgid "Test successful"
 msgstr "Test uğurlu"
 
@@ -5677,15 +5744,6 @@ msgstr "Hovuz büdcəni aşdı - vaxtından əvvəl bitməyə planlaşdırılıb
 
 msgid "Not yet tested"
 msgstr "Hələ test edilməyib"
-
-msgid "Locally hosted tunnel"
-msgstr "Yerli ev sahibliyi edilən tunel"
-
-msgid "in"
-msgstr "ilə"
-
-msgid "out"
-msgstr "çıxdı"
 
 msgid "Data In"
 msgstr "Alınan məlumatlar"
@@ -5792,6 +5850,9 @@ msgstr "Başlanğıcda veb brauzerdə Router Konsolunu açın"
 
 msgid "shared clients"
 msgstr "ortaq müştərilər"
+
+msgid "Shared Clients"
+msgstr "Paylaşılan Müştərilər"
 
 msgid "I2PMail SMTP Server"
 msgstr "I2PMail SMTP Serveri"
@@ -6070,11 +6131,11 @@ msgstr "LU router-lərini qadağan edin"
 msgid "Additional Router Caps"
 msgstr "Əlavə Router Qabiliyyətləri"
 
-msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
-msgstr "Qabiliyyət qruplarını əlavə edin, boşluq və ya vergüllə ayrılmış məs. LUf,PUG"
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
+msgstr ""
 
-msgid "Misc Reasons"
-msgstr "Digər Səbəblər"
+msgid "Misc"
+msgstr ""
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Sorğulara cavab verməyən daşqın node həmyaşıdlarını qadağan edin (uğursuzluq nisbəti >95%)"
@@ -6093,6 +6154,12 @@ msgstr "Həddindən artıq tunel iştirak sorğusu göndərən ruterləri qadağ
 
 msgid "Ban excessive tunnel requests"
 msgstr "Həddindən artıq tunel sorğularını qadağan et"
+
+msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
+msgstr ""
+
+msgid "Ban next-hop peers"
+msgstr ""
 
 msgid "Clear all bans"
 msgstr "Bütün qadağaları təmizlə"
@@ -6233,6 +6300,12 @@ msgstr "I2CP interfeysi"
 
 msgid "I2CP Port"
 msgstr "I2CP Portu"
+
+msgid "Do not bypass the network when accessing locally hosted services"
+msgstr ""
+
+msgid "Disable Loopback"
+msgstr ""
 
 msgid "Require username and password"
 msgstr "İstifadəçi adı və parol tələb edin"
@@ -6507,6 +6580,9 @@ msgstr "Profil Bonuslarını Tənzimləyin"
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Bonuslar müsbət və ya mənfi ola bilər və həmyaşımanın sürətli və yüksək potensiallara daxil olmasına təsir göstərir. Sürətli həmyaşıdları müştəri tunelləri üçün istifadə olunur və bəzi kəşfiyyat tunelləri üçün yüksək tutumlu həmyaşıdları istifadə olunur."
 
+msgid "Capacity"
+msgstr "Tutum"
+
 msgid "Banned IP Addresses"
 msgstr "Qadağan edilmiş IP-lər"
 
@@ -6740,6 +6816,12 @@ msgstr "Yeniləmə İntervalı"
 msgid "Update graph every second"
 msgstr "Diaqramı hər saniyə yenilə"
 
+msgid "Restore full default"
+msgstr "Tam standartı bərpa edin"
+
+msgid "Restore minimal default"
+msgstr "Minimal defolt bərpa edin"
+
 msgid "config stats"
 msgstr "konfiqurasiya statistikası"
 
@@ -6820,6 +6902,9 @@ msgstr "Yəni istifadə etmirsinizsə, brauzerinizin IE kimi iddia etdiyi ehtima
 
 msgid "Router Console Password"
 msgstr "Router Konsolunun Şifrəsi"
+
+msgid "Add user"
+msgstr "İstifadəçi əlavə et"
 
 msgid "Router Console Language"
 msgstr "Router Konsol Dili"
@@ -7092,6 +7177,12 @@ msgstr "Bu parametr göstərilən ölkələrdəki marşrutlaşdırıcılardan g�
 msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
 msgstr "Saxlanılacaq maksimum sessiya banlog arxiv fayllarının sayı. Aşıldıqda, köhnə arxivlər silinir. [Standart 5]"
 
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "Bu parametr doğru olaraq təyin edildikdə, G sıxlıq həddi dərc edən bütün X səviyyəli router-lərdən birbaşa ünsiyyəti bloklayacaq"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "Bu parametr doğru olaraq təyin edildikdə, bütün LU səviyyəli router-lərdən (aşağı bant genişliyi, əlçatmaz və ya...) birbaşa ünsiyyəti bloklayacaq"
+
 msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
 msgstr "Şübhəli hash nümunələri (potensial Sybil hücumları) üçün skan etmə tezliyi millisaniyələrlə. Söndürmək üçün 0 təyin edin. [Standart 3600000]"
 
@@ -7302,6 +7393,24 @@ msgstr "Bu parametr maraqsız olaraq təsnif edilən marşrutlaşdırıcıların
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "Doğru olaraq ayarlandıqda, bu parametr marşrutlaşdırıcınızın sıxlıq hədlərini dərc etməsi üçün tələb olunan şərtləri yumşaldır, xüsusən də bant genişliyi istifadənizin yüksək olduğu müəyyən edildikdə. Yüksək iş gecikməsi və ya yavaş kimi təsnif edilən marşrutlaşdırıcı kimi digər şərtlər hələ də başlıqların dərc edilməsinə səbəb olacaq. [Defolt yanlışdır]"
 
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "Boş tunelləri yoxlamaq üçün dövr millisaniyələrlə. Bu müddət ərzində heç bir trafiki olmayan tunellər silinə bilər. [Standart 10000]"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "Aktiv sayılmaq üçün aşkarlama dövründə tunnelin emal etməli olduğu minimum mesaj sayı. Bundan az olan tunellər boş sayılır. [Standart 1]"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "Boş tranzit tunellərinin skan edilmələri arasında interval millisaniyələrlə. [Standart 180000]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "İmzasız (.zip) i2P yeniləmələrini quraşdırmaq istəyirsinizsə, bu, <kod> routerconsole.advenconsole.advanced = həqiqi </ kod> Bu seçim artıq təminatdır. Qeyd: i2P + 0.9.48+, quraşdırılması <a href=/configupdate#i2pupdates> imzasız yeniləmələri dəyişdirin</a> standart olaraq aktivdir."
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Bu parametr, effektiv olduqda, imzalanmamış yeniləmə xüsusiyyəti üçün yeniləmə URL-ni konfiqurasiya etməyə imkan verir. URL <kod> /i2pupdate.zip </ code> ilə bitməlidir. Qeyd: Yeniləmənin mənbəyinə etibar etməyincə imzalanmamış yeniləmələri quraşdırmayın!"
+
+msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
+msgstr "Bu ayar (dəqiqələrlə) sizin istəyinizə əsasən yönləndirici məlumatlarının İnformasiya İqliminin vaxtından sonra neçə dəqiqə gözlənilməsi haqqında əlavə tənzimləmə imkanı verir. Bu vaxtdan sonra, yalnız düzgün yönləndiricilər qəbul ediləcəkdir. Bu doğrulama zamanı, sona çatmış yönləndirici məlumatları və SSU vasitəsilə yalnız lazımsız müşahidəçilər qeyb olurlar, İnformasiya İqlimindən çıxarılacaq. [Default olaraq 60 dəqiqə] Qeyd edin: Bu ayar, İnformasiya İqlimimdən çıxarılaraq doruş tərəfdən qovulan köhnə yönləndiricilərin (default olaraq 0.9.29-dan köhnələri) İnformasiya İqlimidən kənarlaşdırmaq və qadağan etmək üçün nəzarətə çəkmir."
+
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
 msgstr "Konfiqurasiya edildikdə, bu, routerin paralel qurmasına icazə verilən tunellərin sayı üçün sərt limit təyin edir. Standart olaraq, router dinamik paralellikdən istifadə edir. [Standart 0 (limitsiz)]"
 
@@ -7374,11 +7483,14 @@ msgstr "Təcili yenidənqurma məntiqini işə salmazdan əvvəl hovuz başına 
 msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
 msgstr "Tunnel qurma emalı zamanı paralel növbəti hop RouterInfo axtarışları üçün minimum hədd. Minimum axtarış paralellik səviyyəsini təmin edir. [Standart 8]"
 
-msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
-msgstr "Tunnel qurma emalı zamanı paralel növbəti hop RouterInfo axtarışları üçün maksimum hədd. CPU-nu həddən artıq yükləməmək üçün axtarış paralelliyini məhdudlaşdırır. [Standart 32]"
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
+msgstr ""
 
-msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr "Paralel axtarış limitini miqyaslamaq üçün istifadə edilən cari iştirak edən tunellərin faizi. Effektiv limit minimum və maksimum arasında sıxışdırılır. [Standart 5.0]"
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr ""
+
+msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
+msgstr ""
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Tunnel qurma sorğu vaxt damğaları üçün icazə verilən maksimum gələcək sürüşmə. Vaxt damğaları bu hədddən daha çox gələcəkdə olan sorğular... [Standart 30000]"
@@ -7485,32 +7597,77 @@ msgstr "Normal kəşfiyyat həmyaşıd seçimi üçün tələb olunan minimum ak
 msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
 msgstr "Router başlanğıcı zamanı kəşfiyyat həmyaşıd seçimini məhdudlaşdırmazdan əvvəl tələb olunan minimum aktiv həmyaşıd sayı. Erkən başlanğıc zamanı... [Standart 100]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
-msgstr "Axın birləşmələri üçün maksimum yavaş başlanğıc pəncərə ölçüsü. Həddən artıq yüklənmənin qarşısını almaq üçün yavaş başlanğıc zamanı sıxlıq pəncərəsini məhdudlaşdırır. [Standart 30]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
+msgstr ""
 
-msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
-msgstr "Axın birləşmələri üçün maksimum dövr vaxtı millisaniyələrlə. Hesablanmış RTT-ni məhdudlaşdıraraq patoloji yenidən göndərmə vaxt aşımı dəyərlərinin qarşısını alır. [Standart 60000]"
-
-msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
-msgstr "Bağlantıdan imtina etmədən əvvəl maksimum paket yenidən göndərmə sayı. Daha yüksək dəyərlər itkili keçidlərdə etibarlılığı artırır. [Standart 10]"
-
-msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
-msgstr "Eyni əlçatmaz ünvana qoşulma cəhdləri arasında soyutma dövrü millisaniyələrlə. Əlçatmaz ünvanlara təkrarlanan qoşulmanın qarşısını alır. [Standart 60000]"
-
-msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
-msgstr "Həmyaşıd ping edərkən pong cavabını gözləmək üçün maksimum vaxt millisaniyələrlə. [Standart 300000 (5 dəqiqə)]"
-
-msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
-msgstr "Boğulmuş ünvana cavab vermə sayı, artıq paketləri səssizcə atmazdan əvvəl. Boğulmuş ünvanlarda qoşulma fırtınalarının qarşısını alır. [Standart 5]"
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Bu tunelə xas parametr routerin ev sahibliyi etdiyi serverlərə göndərilən pinqlərə cavabları aktiv və ya deaktiv etməyə imkan verir. Pinqləri deaktiv etmək üçün Tunel Menecerində serverin konfiqurasiyası üçün <i>Xüsusi Seçimlər</i> bölməsinə i2p.streaming.answerPings <code>=false</code> sətrini əlavə etməlisiniz."
 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "Açıq qoşulma vaxt aşımı təyin edilmədikdə standart maksimum axın gecikməsi millisaniyələrlə. [Standart 10000 (10 saniyə)]"
 
-msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr "Qəbul edilmiş SYN, accept() onu çəkməzdən əvvəl qəbul növbəsində gözləyə bilər, millisaniyələrlə maksimum vaxt. Əgər accept() gecikirsə (məşğul olan server) bu pəncərədən sonra əlaqə rədd edilir, ona görə də daha yüksək dəyər qısa dayanacaqlara dözür. [Defolt 30000 (30 saniyə)]"
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr "Serverdə gözlənilən bağlantıların maksimum sayı (SYN və qismən paketlər) növbə qəbul edir. Dolu olduqda, sıfırlama əvəzinə yeni SYN-lər atılır (müştəri yenidən cəhd edir), beləliklə, daha böyük dəyər yaddaş bahasına bağlantı partlamalarını daha yaxşı mənimsəyir. [Defolt 256 (yavaş sistemlərdə 128)]"
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "Boğulmuş ünvana cavab vermə sayı, artıq paketləri səssizcə atmazdan əvvəl. Boğulmuş ünvanlarda qoşulma fırtınalarının qarşısını alır. [Standart 5]"
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
+msgstr ""
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
+msgstr ""
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
+msgstr ""
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "Həmyaşıd ping edərkən pong cavabını gözləmək üçün maksimum vaxt millisaniyələrlə. [Standart 300000 (5 dəqiqə)]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Bu parametr aktiv edildikdə, i2p.streaming.enablePongDelay də aktivdirsə, ping effektiv serverlər üçün təqdim edilən maksimum əlavə <code></code> təsadüfi pong gecikməsini dəyişdirir. Açıq şəkildə təyin edilmədiyi təqdirdə, 50 milyon standart dəyərdən istifadə ediləcək."
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
+msgstr ""
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "Maksimum yenidən göndərmə gecikməsi millisaniyələrlə. Geri çəkilmədən asılı olmayaraq yenidən göndərmə intervalı bu dəyəri keçməyəcək. [Standart 60000]. [Standart 30000 (30s)]. [Standart 30000 (30s)]. [Defolt 30000 (30s)]"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
+msgstr ""
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "Eksponensial geri çəkilmədən sonra maksimum Yenidən Göndərmə Vaxt Aşımı millisaniyələrlə (ikiqat artırma). Təsdiqlənməmiş paketi yenidən göndərməzdən əvvəl göndəricinin nə qədər gözlədiyini məhdudlaşdırır. [Standart 120000]"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
+msgstr ""
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgstr ""
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgstr ""
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "Minimum yenidən göndərmə gecikməsi millisaniyələrlə. Paketlər bu intervaldan daha sürətli yenidən göndərilməyəcək. Aşağı dəyərlər daha sürətli yenidən göndərməyə imkan verir. [Standart 500]"
+
+msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
+msgstr ""
+
+msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
+msgstr ""
+
+msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
+msgstr ""
+
+msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
+msgstr ""
+
+msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Avtomatik LeaseSet yenidən dərc edilmələri arasında interval millisaniyələrlə. Daha yüksək dəyərlər netdb trafikini azaldır, lakin köhnəlmiş məlumatlara səbəb ola bilər. [Standart 300000]"
@@ -7518,32 +7675,14 @@ msgstr "Avtomatik LeaseSet yenidən dərc edilmələri arasında interval millis
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "Proaktiv LeaseSet yenidən dərci üçün hədd millisaniyələrlə. Bir icarə bu pəncərə ərzində bitərsə, LeaseSet vaxtından əvvəl yenidən dərc edilir. [Standart 60000]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
-msgstr "Boş tunelləri yoxlamaq üçün dövr millisaniyələrlə. Bu müddət ərzində heç bir trafiki olmayan tunellər silinə bilər. [Standart 10000]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgstr ""
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
-msgstr "Aktiv sayılmaq üçün aşkarlama dövründə tunnelin emal etməli olduğu minimum mesaj sayı. Bundan az olan tunellər boş sayılır. [Standart 1]"
-
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
-msgstr "Boş tranzit tunellərinin skan edilmələri arasında interval millisaniyələrlə. [Standart 180000]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "İmzasız (.zip) i2P yeniləmələrini quraşdırmaq istəyirsinizsə, bu, <kod> routerconsole.advenconsole.advanced = həqiqi </ kod> Bu seçim artıq təminatdır. Qeyd: i2P + 0.9.48+, quraşdırılması <a href=/configupdate#i2pupdates> imzasız yeniləmələri dəyişdirin</a> standart olaraq aktivdir."
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Bu parametr, effektiv olduqda, imzalanmamış yeniləmə xüsusiyyəti üçün yeniləmə URL-ni konfiqurasiya etməyə imkan verir. URL <kod> /i2pupdate.zip </ code> ilə bitməlidir. Qeyd: Yeniləmənin mənbəyinə etibar etməyincə imzalanmamış yeniləmələri quraşdırmayın!"
-
-msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr "Bu ayar (dəqiqələrlə) sizin istəyinizə əsasən yönləndirici məlumatlarının İnformasiya İqliminin vaxtından sonra neçə dəqiqə gözlənilməsi haqqında əlavə tənzimləmə imkanı verir. Bu vaxtdan sonra, yalnız düzgün yönləndiricilər qəbul ediləcəkdir. Bu doğrulama zamanı, sona çatmış yönləndirici məlumatları və SSU vasitəsilə yalnız lazımsız müşahidəçilər qeyb olurlar, İnformasiya İqlimindən çıxarılacaq. [Default olaraq 60 dəqiqə] Qeyd edin: Bu ayar, İnformasiya İqlimimdən çıxarılaraq doruş tərəfdən qovulan köhnə yönləndiricilərin (default olaraq 0.9.29-dan köhnələri) İnformasiya İqlimidən kənarlaşdırmaq və qadağan etmək üçün nəzarətə çəkmir."
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "Doğru olaraq təyin edildikdə, yerli-yerli loopback çatdırılmasını söndürür və bütün trafiki tunellər vasitəsilə məcbur edir (çıxış tunneli → şəbəkə → giriş tunneli)... Mənbə və təyinat eyni routerda olduqda tunnel marşrutlaşdırma davranışını test etmək üçün faydalıdır [Disabled by default]. Mənbə və təyinat eyni routerda olduqda tunnel marşrutlaşdırma davranışını test etmək üçün faydalıdır [Disabled by default]. Mənbə və təyinat eyni marşrutlaşdırıcıda olduqda tunel marşrutlaşdırma davranışını yoxlamaq üçün faydalıdır [Defolt olaraq qeyri-aktivdir]"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
 msgstr "Bu parametr doğru olaraq təyin edildikdə, ölkənizdəki bütün router-lərdən birbaşa ünsiyyəti bloklayacaq və onları qadağa siyahınıza əlavə edəcək"
-
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
-msgstr "Bu parametr doğru olaraq təyin edildikdə, G sıxlıq həddi dərc edən bütün X səviyyəli router-lərdən birbaşa ünsiyyəti bloklayacaq"
-
-msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
-msgstr "Bu parametr doğru olaraq təyin edildikdə, bütün LU səviyyəli router-lərdən (aşağı bant genişliyi, əlçatmaz və ya...) birbaşa ünsiyyəti bloklayacaq"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Bu parametr, ruterinizin möhkəm olub-olmadığını müəyyən etmək üçün SSU testlərini deaktiv etməyə icazə verir və mütləq firewalled olmayan, lakin aralıq yanğına qarşı problemlər yaşayan marşrutlaşdırıcılar üçün aktivləşdirilə bilər. Test qeyri-aktiv edildikdə, həm SDU, həm də NTCP <a href=/info>marşrutlaşdırıcı məlumat səhifəsində cari ictimai ip ünvanınızı bildirməlidir</a>. [Yenidən başladın tələb olunur]"
@@ -7551,26 +7690,11 @@ msgstr "Bu parametr, ruterinizin möhkəm olub-olmadığını müəyyən etmək 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Bu parametr həmkarlar ilə ünsiyyət zamanı hansı nəqliyyatın üstünlük təşkil etdiyini müəyyən edir. Standart olaraq, MTCP UDP-dən (SDU) üstün tutulur. Dəyəri doğru təyin etməklə əvvəlcədən mövcud NTCP bağlantısı mövcud olmayana qədər ÜPİ-yə üstünlük veriləcək; hər zaman təyin edildikdə, hər hansı əvvəlcədən mövcud NTCP bağlantısından asılı olmayaraq ÜPİ həmişə istifadə ediləcək. [Standart yanlışdır]"
 
-msgid "miscellaneous"
-msgstr "müxtəlif"
-
-msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr "Əslinə qalsa, bu seçim sistem lövhəsində/ bildiriş sahəsində əsas xidmətə nəzarət seçimləri olan piktoqram yerləşdirəcək. [Standart olaraq deaktiv edilib]"
-
-msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Bu ayar, bir torrent indirilirken veya bir torrent oluşturulurken Torrentlər'ın izin vereceği maksimum dosya sayısının yapılandırılmasına olanak sağlar. Bu değeri, varsayılan 2000 dosyadan önemli ölçüde artırmak, işletim sisteminde açık dosya sayısını artırmak için ana sistemde ek yapılandırma gerektirebilir (örneğin Linux'ta <code>ulimit -n</code>). Değiştirmek için, Torrentlər'ın yapılandırma dosyasına <code>i2psnark.config</code> ekleme yapın. [Torrentlər veya yönlendiriciyi yeniden başlatmak gerekiyor]. config [Restart of Torrentlər or router required]. config [Restart of Torrentlər or router required]. konfiqurasiya [Torrentlər və ya marşrutlaşdırıcının yenidən işə salınması tələb olunur]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Bu tunelə xas parametr routerin ev sahibliyi etdiyi serverlərə göndərilən pinqlərə cavabları aktiv və ya deaktiv etməyə imkan verir. Pinqləri deaktiv etmək üçün Tunel Menecerində serverin konfiqurasiyası üçün <i>Xüsusi Seçimlər</i> bölməsinə i2p.streaming.answerPings <code>=false</code> sətrini əlavə etməlisiniz."
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Bu parametr, aktiv olduqda, routerin ev sahibliyi etdiyi bütün ping effektiv serverlər üçün 50m-ə qədər təsadüfi pong gecikməsini təqdim edir. Standart deaktivdir. [Yenidən başladın tələb olunur]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Bu parametr aktiv edildikdə, i2p.streaming.enablePongDelay də aktivdirsə, ping effektiv serverlər üçün təqdim edilən maksimum əlavə <code></code> təsadüfi pong gecikməsini dəyişdirir. Açıq şəkildə təyin edilmədiyi təqdirdə, 50 milyon standart dəyərdən istifadə ediləcək."
-
 msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
 msgstr "Eepget HTTP sorğuları üçün qoşulma vaxt aşımı millisaniyələrlə (ilkin cavab başlıqlarını gözləmək üçün vaxt). Yavaş əlaqələr üçün artırın. [Standart 30000]"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "<code>-n</code> bayrağı göstərilmədikdə eepget üçün standart təkrar cəhd sayı. [Standart 10]"
 
 msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
 msgstr "Eepget köçürmələri üçün hərəkətsizlik vaxt aşımı millisaniyələrlə (məlumat mərhələsində maksimum boş vaxt). Yavaş qoşulmalar üçün artırın. [Standart 120000]"
@@ -7578,35 +7702,68 @@ msgstr "Eepget köçürmələri üçün hərəkətsizlik vaxt aşımı millisani
 msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
 msgstr "Cəhdlər qalsa belə, eepget-in imtina etməsindən əvvəl maksimum ardıcıl sıfır-məlumat ötürmə uğursuzluğu sayı. Transferlər qeyri-sabitdirsə artırın. [Standart 3]"
 
-msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
-msgstr "<code>-n</code> bayrağı göstərilmədikdə eepget üçün standart təkrar cəhd sayı. [Standart 10]"
+msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
+msgstr ""
 
-msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
-msgstr "Axın qoşulması ayrıldıqdan sonra TIME-WAIT müddəti millisaniyələrlə, bu müddət ərzində gecikmiş paketlər hələ də təsdiqlənir... [Standart 5000]. [Standart 300000 (5min)]. [Standart 300000 (5min)]. [Defolt 300000 (5 dəq)]"
+msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
+msgstr ""
 
-msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
-msgstr "Axın qoşulma vaxt aşımında yuxarı hədd sıxacı. Digər parametrlərdən asılı olmayaraq hər qoşulma vaxt aşımlarının bu tavanı keçməsinin qarşısını alır. [Standart 60000]. [Standart 120000 (2min)]. [Standart 120000 (2min)]. [Defolt 120000 (2 dəq)]"
+msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
+msgstr ""
 
-msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
-msgstr "Yeni axın qoşulmaları üçün ilkin sıxlıq pəncərəsi ölçüsü (paketlərlə). Daha böyük pəncərə qoşulmaları daha sürətli başladır, lakin sıxlığa səbəb ola bilər. [Standart 3]"
+msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
+msgstr ""
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
-msgstr "Axın qoşulmaları üçün maksimum sıxlıq pəncərəsi ölçüsü (paketlərlə). Tək bir axının maksimum ötürmə qabiliyyətini məhdudlaşdırır. [Standart 80]"
+msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
 
-msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
-msgstr "Minimum yenidən göndərmə gecikməsi millisaniyələrlə. Paketlər bu intervaldan daha sürətli yenidən göndərilməyəcək. Aşağı dəyərlər daha sürətli yenidən göndərməyə imkan verir. [Standart 500]"
+msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
-msgstr "Maksimum yenidən göndərmə gecikməsi millisaniyələrlə. Geri çəkilmədən asılı olmayaraq yenidən göndərmə intervalı bu dəyəri keçməyəcək. [Standart 60000]. [Standart 30000 (30s)]. [Standart 30000 (30s)]. [Defolt 30000 (30s)]"
+msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
-msgstr "Eksponensial geri çəkilmədən sonra maksimum Yenidən Göndərmə Vaxt Aşımı millisaniyələrlə (ikiqat artırma). Təsdiqlənməmiş paketi yenidən göndərməzdən əvvəl göndəricinin nə qədər gözlədiyini məhdudlaşdırır. [Standart 120000]"
+msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
+msgstr ""
+
+msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
+msgstr ""
+
+msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
+msgstr ""
+
+msgid "miscellaneous"
+msgstr "müxtəlif"
+
+msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
+msgstr "Əslinə qalsa, bu seçim sistem lövhəsində/ bildiriş sahəsində əsas xidmətə nəzarət seçimləri olan piktoqram yerləşdirəcək. [Standart olaraq deaktiv edilib]"
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "Əslinə qaldıqda, I2P şəbəkə bağlantısı olmadan işləyir. Bu, şəbəkənin pozulmasının qarşısını aldığı üçün routeri kod yeniləmələrini yoxlamaq üçün daim yenidən başlatsanız, faydalıdır."
 
-msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
-msgstr "Doğru olaraq təyin edildikdə, yerli-yerli loopback çatdırılmasını söndürür və bütün trafiki tunellər vasitəsilə məcbur edir (çıxış tunneli → şəbəkə → giriş tunneli)... Mənbə və təyinat eyni routerda olduqda tunnel marşrutlaşdırma davranışını test etmək üçün faydalıdır [Disabled by default]. Mənbə və təyinat eyni routerda olduqda tunnel marşrutlaşdırma davranışını test etmək üçün faydalıdır [Disabled by default]. Mənbə və təyinat eyni marşrutlaşdırıcıda olduqda tunel marşrutlaşdırma davranışını yoxlamaq üçün faydalıdır [Defolt olaraq qeyri-aktivdir]"
+msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
+msgstr ""
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Bu parametr ruterinizin dəqiq saat vaxtını qoruduğuna əmin olmaq üçün tələb olunan alternativ NTP serverlərinin konfiqurasiyasına icazə verir. [Standart 0.pool.ntp.org ,1.pool.ntp.org,2.pool.ntp.org]"
@@ -8945,6 +9102,9 @@ msgstr "İhlal edilmesi durumunda, ihlal edilen uzak hedefin belirtilen bir dosy
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
 msgstr "Qeyd: Bildirişlərin sırasının vacibliyi vardır. Mövcud destinasiya üçün ilk eşik bildirisi (explicit və ya istinad edilən sənəddəki) həm də sənəddə göstərilməsi həm də efektiv və ya göstərilməsə belə, yenidən daha sonra aşkar edilən hər hansı bir eşikdən (<i class=example>15/5</i>, <i class=example>60/60</i> kimi) daha güclü biridir. Qeyd: yeni bir filtr faylı tətbiq etmek üçün, yerin tünel meneceri tərəfindən göstərilməsindən sonra tünel yenidən başladılmalıdır. Konfiqurasiya edildikdən sonra, bir təyin faylı, hədəf tüneldə yenidən başlamadan yenilənə bilər, lakin blok edilmiş olan hədəflər tünel yenidən başlanıldıqda qalıb qalacaq."
 
+msgid "Thresholds"
+msgstr "Eşiklər"
+
 msgid "A threshold is defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
 msgstr "Eşik nöqtəsi müəyyənlənmiş saniyə sayı ərzində uzaq bir hədəf tərəfindən başlatılan bağlantı cəhdlərinin sayı tərəfindən müəyyənləşdirilir ki, bir \"qırılma\" baş vermədən əvvəl nə qədər edilə bilər."
 
@@ -9515,8 +9675,14 @@ msgstr "Həmişə"
 msgid "Set Password"
 msgstr "Şifrə Təyin Et"
 
-msgid "network database"
-msgstr "şəbəkə verilənlər bazası"
+msgid "All Routers [Advanced]"
+msgstr ""
+
+msgid "Remote"
+msgstr "Uzaq"
+
+msgid "All Routers (Client NetDb) [Advanced]"
+msgstr ""
 
 msgid "Encryption type"
 msgstr "Şifrələmə növü"
@@ -9535,9 +9701,6 @@ msgstr "Yerli olaraq ev sahibi ictimai xidmət"
 
 msgid "Requested client leaseset"
 msgstr "Tələb edilən müştəri icarələri"
-
-msgid "Remote"
-msgstr "Uzaq"
 
 msgid "network database router map"
 msgstr "Şəbəkə bazası ruter xəritəsi"
@@ -9570,17 +9733,20 @@ msgstr "həmyaşıd əlaqələri"
 msgid "Network Peers"
 msgstr "Şəbəkə həmyaşıdları"
 
-msgid "peer profiles"
-msgstr "həmyaşıd profilləri"
+msgid "Fast Peers"
+msgstr ""
 
-msgid "Session Banned Peers"
-msgstr "Sessiya Qadağan Edilən Həmyaşıdlar"
+msgid "High Capacity Peers"
+msgstr ""
+
+msgid "Floodfill Peers"
+msgstr ""
 
 msgid "Banned Peers"
 msgstr "Qadağan edilmiş həmyaşıdlar"
 
-msgid "Fast / High Capacity"
-msgstr "Sürətli / Yüksək Tutumlu"
+msgid "Recent Peer Profiles"
+msgstr ""
 
 msgid "Configure router logging options"
 msgstr "Router qeyd seçimlərini konfiqurasiya edin"
@@ -9683,9 +9849,6 @@ msgstr "Tonnelleri aktiv-passiv döndür"
 
 msgid "Peer Profile"
 msgstr "Həmyaşıd profili"
-
-msgid "Session Bans"
-msgstr "Sessiya qadağaları"
 
 msgid "Profile View"
 msgstr "Profil Görünüşü"

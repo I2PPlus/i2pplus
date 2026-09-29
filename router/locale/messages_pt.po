@@ -137,12 +137,6 @@ msgstr "Solicitar sobrecarga"
 msgid "Connection limit reached"
 msgstr "Limite de conexão atingido"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "A rejeitar pedidos de túneis: Carga elevada"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "A descartar pedidos de túneis: Tempo de fila"
-
 # /java/src/net/i2p/router/tunnel/pool/BuildHandler.java:997
 msgid "Transit throttle drop"
 msgstr "Descarte de throttle de trânsito"
@@ -151,6 +145,12 @@ msgstr "Descarte de throttle de trânsito"
 msgid "Transit throttle reject"
 msgstr "Rejeição de throttle de trânsito"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "A rejeitar pedidos de túneis: Carga elevada"
+
 # /java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1239
 msgid "Transit request throttle"
 msgstr "Throttle de solicitação de trânsito"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "A descartar pedidos de túneis: Tempo de fila"

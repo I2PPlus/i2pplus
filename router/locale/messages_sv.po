@@ -137,17 +137,17 @@ msgstr "Begär överbelastning"
 msgid "Connection limit reached"
 msgstr "Anslutningsgräns nådd"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Släpper tunnelförfrågningar: Hög belastning"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Släpper tunnelförfrågningar: Kötid"
-
 msgid "Transit throttle drop"
 msgstr "Transitdämpning bortkastad"
 
 msgid "Transit throttle reject"
 msgstr "Transitdämpning avvisad"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Släpper tunnelförfrågningar: Hög belastning"
+
 msgid "Transit request throttle"
 msgstr "Transitbegäran-dämpning"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Släpper tunnelförfrågningar: Kötid"

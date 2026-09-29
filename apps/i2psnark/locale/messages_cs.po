@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 
-msgid "No more torrents running."
-msgstr "Neběží žádné další torrenty."
-
-msgid "I2P tunnel closed."
-msgstr "I2P tunel uzavřen."
-
 msgid "Magnet"
 msgstr "Magnet"
 
@@ -23,12 +17,6 @@ msgstr "Nelze se připojit k I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Chyba při připojování k I2P – zkontrolujte nastavení I2CP!Při připojování k I2P nastala chyba, zkontrolujte prosím nastavení I2CP!"
 
-msgid "Download already running: "
-msgstr "Stahování již probíhá: "
-
-msgid "Downloading"
-msgstr "Stahování"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Konfigurace Torrenty s možnostmi I2CP"
 
@@ -37,6 +25,18 @@ msgstr "Žádná oprávnění k zápisu do datového adresáře"
 
 msgid "Data directory cannot be created"
 msgstr "Datový adresář nelze vytvořit"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "Povoleno náhodné přeskočení +0/1 na odchozích tunelích"
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Zakázáno náhodné přeskočení tunelu na odchozích tunelích"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Prodleva při startu změněna na {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Přidat a vytvořit sekce, které se mají zobrazit pouze na první str�
 msgid "API key updated."
 msgstr "API klíč aktualizován."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker list změněn - aby se projevil restart torrentu.Seznam otevřených trackerů změněn - aby se změna projevila je nutné restartovat všechny torrenty."
 
@@ -246,6 +299,10 @@ msgstr "Torrent v \"{0}\" je chybný"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "CHYBA - nedostatek paměti, nemohu vytvořit torrent z {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Inicializace Torrenty a otevření tunelů"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Torrent smazán: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Přidávání torrentů v {0}"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Limit vyšší šířky pásma je {0} kB/s"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Připojuji se k I2CP portu na instanci I2P na adrese {0}"
-
-msgid "Connecting to I2P"
-msgstr "Připojuji se k I2P"
-
-msgid "Connected to I2P at"
-msgstr "Připojeno k I2P na"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Spouštění torrentu {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Uložiště: {0} MB je momentálně k dispozici pro stažení na nakonfi
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Varování - Pro stahování na nakonfigurovaném oddílu dat je dostupno pouze {0} MB"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Torrent nenalezen"
 msgid "Opening the I2P tunnel"
 msgstr "Otevření I2P tunelu"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Otevření I2P tunelu a spuštění všech torrentů."
+
+msgid "Connecting to I2P"
+msgstr "Připojuji se k I2P"
+
+msgid "Connected to I2P at"
+msgstr "Připojeno k I2P na"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Spouštění torrentu {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Zastavení všech torrentů a uzavření I2P tunelu."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Uzavření I2P tunelu po upozornění sledovačů."
+
+msgid "I2P tunnel closed."
+msgstr "I2P tunel uzavřen."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,556 +567,8 @@ msgstr "Torrent již ve frontě: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent na adrese {0} nebyl platný"
 
-msgid "Torrents"
-msgstr "Torrenty"
-
-msgid "Refresh page"
-msgstr "Obnovit stránku"
-
-msgid "Configure"
-msgstr "Konfigurovat"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Forum"
-msgstr "Fórum"
-
-msgid "Search torrents"
-msgstr "Vyhledávejte torrenty"
-
-msgid "Clear search"
-msgstr "Vymazat vyhledávání"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Kliknutím na tlačítko \"Přidat torrent\" načtete torrent"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Anonymní klient BitTorrent"
-
 msgid "Configuration"
 msgstr "Konfigurace"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Opravdu chcete smazat {0} a všechna stažená data?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "Mazání <b>{0}</b> a všech souvisejících dat..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Opravdu chcete smazat soubor \\''{0}\\'' (stažená data nebudou smazána)?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Poznámka: Stažená data nebudou smazána."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "Mazání {0} a pouze souvisejících metadat..."
-
-msgid "clear messages"
-msgstr "jasné zprávy"
-
-msgid "Expand"
-msgstr "Rozbalit"
-
-msgid "Shrink"
-msgstr "Zmenšit"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Varování! JavaScript je deaktivován ve vašem prohlížeči. Pokud je povoleno {0}, ztratíte jakýkoli vstup do sekcí ADD/Create Torrent, když dojde k obnovení."
-
-msgid "page refresh"
-msgstr "obnovení stránky"
-
-msgid "Warning - No I2P"
-msgstr "Varování - Bez I2P"
-
-msgid "No torrents found."
-msgstr "Nebyly nalezeny žádné torrenty."
-
-msgid "No torrents loaded."
-msgstr "Žádné torrenty načteny."
-
-msgid "No DHT Peers"
-msgstr "Žádní DHT Peers"
-
-msgid "Status"
-msgstr "Postavení"
-
-msgid "Torrent"
-msgstr "Torrent se všemi díly: NyaaTorrents."
-
-msgid "File type"
-msgstr "Typ souboru"
-
-msgid "Torrent name"
-msgstr "Název torrentu"
-
-msgid "ETA"
-msgstr "Plán dokončení"
-
-msgid "RX"
-msgstr "Recept"
-
-msgid "RX Rate"
-msgstr "Míra stahování"
-
-msgid "TX"
-msgstr "Léčebný postup NOS"
-
-msgid "TX Rate"
-msgstr "Míra nahrávání"
-
-msgid "Start All"
-msgstr "Spustit vše"
-
-msgid "Stop All"
-msgstr "Zastavit vše"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Zastavte všechny torrenty a I2P tunel"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Spusťte všechny torrenty a I2P tunel"
-
-msgid "Start all stopped torrents"
-msgstr "Spusťte všechny zastavené torrenty"
-
-msgid "Hide Peers"
-msgstr "Skrýt peery"
-
-msgid "Show Peers"
-msgstr "Ukázat peery"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Seřadit podle {0}"
-
-msgid "Up Rate"
-msgstr "Zvýšená rychlost"
-
-msgid "Total size of loaded torrents"
-msgstr "Celková velikost načtených torrentů"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "1 připojený peer"
-msgstr[1] "{0} připojení peerů"
-msgstr[2] "{0} připojení peerů"
-
-msgid "Active downloads"
-msgstr "Aktivní stahování"
-
-msgid "Active uploads"
-msgstr "Aktivní nahrávání"
-
-msgid "Active Inbound tunnels"
-msgstr "Aktivní příchozí tunely"
-
-msgid "Active Outbound tunnels"
-msgstr "Aktivní odchozí tunely"
-
-msgid "Estimated download time for all torrents"
-msgstr "Odhadovaná doba stahování pro všechny torrenty"
-
-msgid "Data downloaded this session"
-msgstr "Data stažena tuto relaci"
-
-msgid "Total download speed"
-msgstr "Celková rychlost stahování"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Celková nahraná data (pro uvedené torrenty)"
-
-msgid "Total upload speed"
-msgstr "Celková rychlost odesílání"
-
-msgid "Toggle Debug Panel"
-msgstr "Přepnout panel ladění"
-
-msgid "Debug Mode"
-msgstr "Režim ladění"
-
-msgid "Normal Mode"
-msgstr "Normální režim"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrents"
-msgstr[2] "{0} torrents"
-
-msgid "Search"
-msgstr "Vyhledávání"
-
-msgid "Show All"
-msgstr "Zobrazit vše"
-
-msgid "Active"
-msgstr "Aktivní"
-
-msgid "Inactive"
-msgstr "Neaktivní"
-
-msgid "Connected"
-msgstr "Připojeno"
-
-msgid "Seeding"
-msgstr "Sezení"
-
-msgid "Complete"
-msgstr "Dokončit"
-
-msgid "Incomplete"
-msgstr "Neúplné"
-
-msgid "Stopped"
-msgstr "Zastaveno"
-
-msgid "First"
-msgstr "První"
-
-msgid "First page"
-msgstr "První stránka"
-
-msgid "Prev"
-msgstr "Před"
-
-msgid "Previous page"
-msgstr "Předchozí stránka"
-
-msgid "Next"
-msgstr "Další"
-
-msgid "Next page"
-msgstr "Další stránka"
-
-msgid "Last"
-msgstr "Poslední"
-
-msgid "Last page"
-msgstr "Poslední stránka"
-
-msgid "Enter URL or select torrent file"
-msgstr "Zadejte adresu URL nebo vyberte soubor torrent"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Chyba při nahrávání souboru torrentu: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Nelze přidat torrent {0} do jiného torrentu: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Stahování z jiného než I2P umístění {0} není podporováno"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Chyba: Info haše verze 2 nejsou podporovány"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Neplatná adresa URL: Musí začínat \"{0}\" nebo \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Magnet smazán: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Soubor torrentu nelze smazat: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Smazaný datový soubor: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Datový soubor nelze smazat: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Adresář nelze smazat: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Adresář smazán: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Chyba při vytváření torrentu – musíte zadat soubor nebo adresář"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Nelze vytvořit torrent pro neexistující data: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Nelze přidat torrent končící na \".torrent\": {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Torrent s tímto názvem již běží: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Nelze přidat torrent včetně adresáře I2P: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Nelze přidat torrent {0} včetně jiného torrentu: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Error - Nelze zahrnout alternativní sledovače bez primárního sledovače"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Error - Nelze kombinovat soukromé a veřejné trackery v torrentu"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " soubory nebo složky byly vyloučeny z \"{0}\" kvůli pravidlům filtru."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Následující soubory nebo složky byly vyloučeny z \"{0}\" kvůli pravidlům filtru: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Torrent vytvořen pro \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Mnoho I2P trackerů vyžaduje, abyste před nasazením zaregistrovali nové torrenty – udělejte to prosím před spuštěním \"{0}\""
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Chyba při vytváření torrentu pro \"{0}\""
-
-msgid "Delete selected"
-msgstr "Smazat vybrané"
-
-msgid "Save tracker configuration"
-msgstr "Uložte konfiguraci trackeru"
-
-msgid "Removed"
-msgstr "Odstraněno"
-
-msgid "Add tracker"
-msgstr "Přidat tracker"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Zadejte platný název měřiče a adresy URL"
-
-msgid "Restore defaults"
-msgstr "Obnovte výchozí nastavení"
-
-msgid "Restored default trackers"
-msgstr "Obnovené výchozí sledovače"
-
-msgid "Save Filter Configuration"
-msgstr "Uložit konfiguraci filtru"
-
-msgid "Add File Filter"
-msgstr "Přidat filtr souboru"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Zadejte platné jméno a vzor filtru"
-
-msgid "Restored default torrent create filters"
-msgstr "Obnoveno výchozí nastavení filtrů pro vytváření torrentů"
-
-msgid "Torrent details"
-msgstr "Podrobnosti o torrentu"
-
-msgid "Torrent has comments"
-msgstr "Torrent má komentáře"
-
-msgid "Open file"
-msgstr "Otevřete soubor"
-
-msgid "View files"
-msgstr "Zobrazit soubory"
-
-msgid "Completed"
-msgstr "Dokončeno"
-
-msgid "Share ratio"
-msgstr "Poměr nahrávání"
-
-msgid "Last activity"
-msgstr "Poslední aktivita"
-
-msgid "Stop"
-msgstr "Zastaveno"
-
-msgid "Stop torrent"
-msgstr "Zastavte torrent"
-
-msgid "Start"
-msgstr "Zapnout"
-
-msgid "Start torrent"
-msgstr "Spusťte torrent"
-
-msgid "Remove"
-msgstr "Odstranit"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Odstraňte torrent z aktivního seznamu a smažte soubor .torrent"
-
-msgid "Delete"
-msgstr "Smazat"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Smažte soubor .torrent a související datové soubory"
-
-msgid "Checking"
-msgstr "Kontroluji"
-
-msgid "Allocating"
-msgstr "Přidělování"
-
-msgid "Starting"
-msgstr "Startuji"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Seeding to {0} peer"
-msgstr[1] "Seeding to {0} peers"
-msgstr[2] "Seeding to {0} peers"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Připojeno k {0} z {1} vrstevníků v roji"
-
-msgid "Stalled"
-msgstr "Zastaveno"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Sdílím {0} peerovi v roji"
-msgstr[1] "Sdílím {0} peerům v roji"
-msgstr[2] "Sdílím {0} peerům v roji"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Stahování z {0} peer"
-msgstr[1] "Stahování z {0} peers"
-msgstr[2] "Stahování z {0} peers"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "No Peers"
-msgstr "Žádní vrstevníci"
-
-msgid "Peer attached to swarm"
-msgstr "Vrstevník připoutaný k roji"
-
-msgid "Destination (identity) of peer"
-msgstr "Cíl (identita) partnera"
-
-msgid "seconds"
-msgstr "sekund"
-
-msgid "Seed"
-msgstr "K setí"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Nezajímavý (Ten kolega nemá žádné kousky, které potřebujeme)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Dusený (Vrstevník nám nedovoluje požadovat kusy)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Peer má zájem, ale momentálně je nečinný"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Nezajímá mě (Nemáme žádné kousky, které by partner potřeboval)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Dušení (Nedovolujeme vrstevníkovi požadovat kousky)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Podrobnosti na trackeru {0}"
-
-msgid "Info"
-msgstr "Informace"
-
-msgid "Add Torrent"
-msgstr "Přidat torrent"
-
-msgid "From URL"
-msgstr "Z URL"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Zadejte adresu URL pro stažení torrent souboru (pouze I2P), magnetický odkaz nebo hash informací"
-
-msgid "Add torrent"
-msgstr "Přidat torrent"
-
-msgid "Torrent file"
-msgstr "Torrent soubor"
-
-msgid "Data dir"
-msgstr "Datová složka"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Zadejte adresář, do kterého se mají data uložit (výchozí {0})"
-
-msgid "Create Torrent"
-msgstr "Vytvořit torrent"
-
-msgid "Data to seed"
-msgstr "Data pro semeno"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Soubor nebo adresář, do kterého se má vložit (úplná cesta nebo v adresáři {0} )"
-
-msgid "Create torrent"
-msgstr "Vytvořit torrent"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Vyloučit soubory z torrentu, pokud se nacházejí v adresáři torrentu"
-
-msgid "Content Filters"
-msgstr "Filtrování obsahu"
-
-msgid "Trackers"
-msgstr "Trackery"
-
-msgid "Alternates"
-msgstr "Náhradníci"
-
-msgid "Primary"
-msgstr "Hlavní"
-
-msgid "Tracker Type"
-msgstr "Typ sledování"
-
-msgid "Standard"
-msgstr "Standarní"
-
-msgid "Open"
-msgstr "Otevřít"
-
-msgid "Private"
-msgstr "Soukromé"
-
-msgid "none"
-msgstr "žádný"
 
 msgid "User Interface"
 msgstr "Uživatelské rozhraní"
@@ -1048,6 +587,9 @@ msgstr "Chcete-li změnit motivy ručně, vypněte univerzální motivy"
 
 msgid "Universal theming is enabled."
 msgstr "Univerzální motivování je povoleno."
+
+msgid "Configure"
+msgstr "Konfigurovat"
 
 msgid "Refresh time"
 msgstr "Čas obnovení"
@@ -1169,11 +711,20 @@ msgstr "Automaticky spouštět torrenty po přidání a restartovat torrenty, kd
 msgid "Startup delay"
 msgstr "Zpoždění spouštění"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Za jak dlouho se načtou automaticky spouštěné torrenty při spuštění Torrenty"
-
 msgid "minutes"
 msgstr "minut"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Úložiště dat"
@@ -1184,11 +735,35 @@ msgstr "Datový adresář"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Adresář, kde jsou uloženy torrenty a stažené/sdílené soubory"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Soubory čitelné pro všechny"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Nastavte oprávnění k souborům, abyste umožnili ostatním místním uživatelům přístup ke staženým souborům"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Maximální počet souborů na torrent"
@@ -1199,8 +774,14 @@ msgstr "Maximální povolený počet souborů na torrent – ​​mějte na pam
 msgid "Tunnel Configuration"
 msgstr "Konfigurace tunelu"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Náš cíl (identita) pro tuto relaci"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Cíl"
@@ -1226,6 +807,24 @@ msgstr "Náhodně přidejte 0 nebo 1 další skoky k odchozím tunelům"
 msgid "Outbound"
 msgstr "Odchozí"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "Hostitel I2CP"
 
@@ -1234,6 +833,49 @@ msgstr "Port I2CP"
 
 msgid "I2CP options"
 msgstr "Možnosti I2CP"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Uložte konfiguraci"
@@ -1262,8 +904,23 @@ msgstr "Končí na"
 msgid "Enabled by Default"
 msgstr "Povoleno výchozím nastavením"
 
+msgid "Delete selected"
+msgstr "Smazat vybrané"
+
+msgid "Save Filter Configuration"
+msgstr "Uložit konfiguraci filtru"
+
+msgid "Restore defaults"
+msgstr "Obnovte výchozí nastavení"
+
+msgid "Add File Filter"
+msgstr "Přidat filtr souboru"
+
 msgid "Add"
 msgstr "Přidat"
+
+msgid "Trackers"
+msgstr "Trackery"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Vyberte sledovače k ​​odstranění ze známého seznamu Torrentsu"
@@ -1271,11 +928,526 @@ msgstr "Vyberte sledovače k ​​odstranění ze známého seznamu Torrentsu"
 msgid "Website URL"
 msgstr "URL webu"
 
+msgid "Standard"
+msgstr "Standarní"
+
+msgid "Open"
+msgstr "Otevřít"
+
+msgid "Private"
+msgstr "Soukromé"
+
 msgid "Announce URL"
 msgstr "Oznámit URL"
 
 msgid "Mark tracker for deletion"
 msgstr "Označte tracker pro smazání"
+
+msgid "Add tracker"
+msgstr "Přidat tracker"
+
+msgid "Save tracker configuration"
+msgstr "Uložte konfiguraci trackeru"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Toto konfiguruje maximální počet tunelů k otevření, určený počtem připojených peerů (skutečné využití může být menší)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Změna tohoto nastavení na méně než 3 skoky může zvýšit rychlost na úkor anonymity a nedoporučuje se"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Kliknutím na tlačítko \"Přidat torrent\" načtete torrent"
+
+msgid "Torrents"
+msgstr "Torrenty"
+
+msgid "Refresh page"
+msgstr "Obnovit stránku"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Fórum"
+
+msgid "Search torrents"
+msgstr "Vyhledávejte torrenty"
+
+msgid "Clear search"
+msgstr "Vymazat vyhledávání"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Anonymní klient BitTorrent"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Opravdu chcete smazat {0} a všechna stažená data?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Mazání <b>{0}</b> a všech souvisejících dat..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Opravdu chcete smazat soubor \\''{0}\\'' (stažená data nebudou smazána)?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Poznámka: Stažená data nebudou smazána."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Mazání {0} a pouze souvisejících metadat..."
+
+msgid "clear messages"
+msgstr "jasné zprávy"
+
+msgid "Expand"
+msgstr "Rozbalit"
+
+msgid "Shrink"
+msgstr "Zmenšit"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Varování! JavaScript je deaktivován ve vašem prohlížeči. Pokud je povoleno {0}, ztratíte jakýkoli vstup do sekcí ADD/Create Torrent, když dojde k obnovení."
+
+msgid "page refresh"
+msgstr "obnovení stránky"
+
+msgid "Warning - No I2P"
+msgstr "Varování - Bez I2P"
+
+msgid "No torrents found."
+msgstr "Nebyly nalezeny žádné torrenty."
+
+msgid "No torrents loaded."
+msgstr "Žádné torrenty načteny."
+
+msgid "Status"
+msgstr "Postavení"
+
+msgid "Torrent"
+msgstr "Torrent se všemi díly: NyaaTorrents."
+
+msgid "ETA"
+msgstr "Plán dokončení"
+
+msgid "RX"
+msgstr "Recept"
+
+msgid "RX Rate"
+msgstr "Míra stahování"
+
+msgid "TX"
+msgstr "Léčebný postup NOS"
+
+msgid "TX Rate"
+msgstr "Míra nahrávání"
+
+msgid "Start All"
+msgstr "Spustit vše"
+
+msgid "Stop All"
+msgstr "Zastavit vše"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Zastavte všechny torrenty a I2P tunel"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Spusťte všechny torrenty a I2P tunel"
+
+msgid "Start all stopped torrents"
+msgstr "Spusťte všechny zastavené torrenty"
+
+msgid "Hide Peers"
+msgstr "Skrýt peery"
+
+msgid "Show Peers"
+msgstr "Ukázat peery"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Seřadit podle {0}"
+
+msgid "Up Rate"
+msgstr "Zvýšená rychlost"
+
+msgid "Total size of loaded torrents"
+msgstr "Celková velikost načtených torrentů"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 připojený peer"
+msgstr[1] "{0} připojení peerů"
+msgstr[2] "{0} připojení peerů"
+
+msgid "Active downloads"
+msgstr "Aktivní stahování"
+
+msgid "Active uploads"
+msgstr "Aktivní nahrávání"
+
+msgid "Active Inbound tunnels"
+msgstr "Aktivní příchozí tunely"
+
+msgid "Active Outbound tunnels"
+msgstr "Aktivní odchozí tunely"
+
+msgid "Estimated download time for all torrents"
+msgstr "Odhadovaná doba stahování pro všechny torrenty"
+
+msgid "Data downloaded this session"
+msgstr "Data stažena tuto relaci"
+
+msgid "Total download speed"
+msgstr "Celková rychlost stahování"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Celková nahraná data (pro uvedené torrenty)"
+
+msgid "Total upload speed"
+msgstr "Celková rychlost odesílání"
+
+msgid "Toggle Debug Panel"
+msgstr "Přepnout panel ladění"
+
+msgid "Debug Mode"
+msgstr "Režim ladění"
+
+msgid "Normal Mode"
+msgstr "Normální režim"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrents"
+msgstr[2] "{0} torrents"
+
+msgid "No DHT Peers"
+msgstr "Žádní DHT Peers"
+
+msgid "Search"
+msgstr "Vyhledávání"
+
+msgid "Show All"
+msgstr "Zobrazit vše"
+
+msgid "Active"
+msgstr "Aktivní"
+
+msgid "Inactive"
+msgstr "Neaktivní"
+
+msgid "Connected"
+msgstr "Připojeno"
+
+msgid "Downloading"
+msgstr "Stahování"
+
+msgid "Seeding"
+msgstr "Sezení"
+
+msgid "Complete"
+msgstr "Dokončit"
+
+msgid "Incomplete"
+msgstr "Neúplné"
+
+msgid "Stopped"
+msgstr "Zastaveno"
+
+msgid "First"
+msgstr "První"
+
+msgid "First page"
+msgstr "První stránka"
+
+msgid "Prev"
+msgstr "Před"
+
+msgid "Previous page"
+msgstr "Předchozí stránka"
+
+msgid "Next"
+msgstr "Další"
+
+msgid "Next page"
+msgstr "Další stránka"
+
+msgid "Last"
+msgstr "Poslední"
+
+msgid "Last page"
+msgstr "Poslední stránka"
+
+msgid "Enter URL or select torrent file"
+msgstr "Zadejte adresu URL nebo vyberte soubor torrent"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Chyba při nahrávání souboru torrentu: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Stahování z jiného než I2P umístění {0} není podporováno"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Chyba: Info haše verze 2 nejsou podporovány"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Neplatná adresa URL: Musí začínat \"{0}\" nebo \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magnet smazán: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Soubor torrentu nelze smazat: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Smazaný datový soubor: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Datový soubor nelze smazat: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Adresář nelze smazat: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Adresář smazán: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " soubory nebo složky byly vyloučeny z \"{0}\" kvůli pravidlům filtru."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Následující soubory nebo složky byly vyloučeny z \"{0}\" kvůli pravidlům filtru: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent vytvořen pro \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Mnoho I2P trackerů vyžaduje, abyste před nasazením zaregistrovali nové torrenty – udělejte to prosím před spuštěním \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Chyba při vytváření torrentu pro \"{0}\""
+
+msgid "Removed"
+msgstr "Odstraněno"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Zadejte platný název měřiče a adresy URL"
+
+msgid "Restored default trackers"
+msgstr "Obnovené výchozí sledovače"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Zadejte platné jméno a vzor filtru"
+
+msgid "Restored default torrent create filters"
+msgstr "Obnoveno výchozí nastavení filtrů pro vytváření torrentů"
+
+msgid "Torrent details"
+msgstr "Podrobnosti o torrentu"
+
+msgid "Torrent has comments"
+msgstr "Torrent má komentáře"
+
+msgid "Open file"
+msgstr "Otevřete soubor"
+
+msgid "View files"
+msgstr "Zobrazit soubory"
+
+msgid "Completed"
+msgstr "Dokončeno"
+
+msgid "Share ratio"
+msgstr "Poměr nahrávání"
+
+msgid "Last activity"
+msgstr "Poslední aktivita"
+
+msgid "Stop"
+msgstr "Zastaveno"
+
+msgid "Stop torrent"
+msgstr "Zastavte torrent"
+
+msgid "Start"
+msgstr "Zapnout"
+
+msgid "Start torrent"
+msgstr "Spusťte torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Odstraňte torrent z aktivního seznamu a smažte soubor .torrent"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Smažte soubor .torrent a související datové soubory"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Kontroluji"
+
+msgid "Allocating"
+msgstr "Přidělování"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Startuji"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Seeding to {0} peer"
+msgstr[1] "Seeding to {0} peers"
+msgstr[2] "Seeding to {0} peers"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Připojeno k {0} z {1} vrstevníků v roji"
+
+msgid "Stalled"
+msgstr "Zastaveno"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Sdílím {0} peerovi v roji"
+msgstr[1] "Sdílím {0} peerům v roji"
+msgstr[2] "Sdílím {0} peerům v roji"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Stahování z {0} peer"
+msgstr[1] "Stahování z {0} peers"
+msgstr[2] "Stahování z {0} peers"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Žádní vrstevníci"
+
+msgid "Peer attached to swarm"
+msgstr "Vrstevník připoutaný k roji"
+
+msgid "Destination (identity) of peer"
+msgstr "Cíl (identita) partnera"
+
+msgid "seconds"
+msgstr "sekund"
+
+msgid "Seed"
+msgstr "K setí"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Nezajímavý (Ten kolega nemá žádné kousky, které potřebujeme)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Dusený (Vrstevník nám nedovoluje požadovat kusy)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Peer má zájem, ale momentálně je nečinný"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Nezajímá mě (Nemáme žádné kousky, které by partner potřeboval)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Dušení (Nedovolujeme vrstevníkovi požadovat kousky)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Podrobnosti na trackeru {0}"
+
+msgid "Info"
+msgstr "Informace"
+
+msgid "Add Torrent"
+msgstr "Přidat torrent"
+
+msgid "From URL"
+msgstr "Z URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Zadejte adresu URL pro stažení torrent souboru (pouze I2P), magnetický odkaz nebo hash informací"
+
+msgid "Add torrent"
+msgstr "Přidat torrent"
+
+msgid "Torrent file"
+msgstr "Torrent soubor"
+
+msgid "Data dir"
+msgstr "Datová složka"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Zadejte adresář, do kterého se mají data uložit (výchozí {0})"
+
+msgid "Create Torrent"
+msgstr "Vytvořit torrent"
+
+msgid "Data to seed"
+msgstr "Data pro semeno"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Soubor nebo adresář, do kterého se má vložit (úplná cesta nebo v adresáři {0} )"
+
+msgid "Create torrent"
+msgstr "Vytvořit torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Vyloučit soubory z torrentu, pokud se nacházejí v adresáři torrentu"
+
+msgid "Content Filters"
+msgstr "Filtrování obsahu"
+
+msgid "Alternates"
+msgstr "Náhradníci"
+
+msgid "Primary"
+msgstr "Hlavní"
+
+msgid "Tracker Type"
+msgstr "Typ sledování"
+
+msgid "none"
+msgstr "žádný"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Nelze přidat magnet: Odkazy magnet verze 2 nejsou podporovány"
@@ -1284,20 +1456,20 @@ msgstr "Nelze přidat magnet: Odkazy magnet verze 2 nejsou podporovány"
 msgid "Invalid magnet URL {0}"
 msgstr "Neplatná adresa URL magnetu {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Toto konfiguruje maximální počet tunelů k otevření, určený počtem připojených peerů (skutečné využití může být menší)"
+msgid "Files"
+msgstr "Soubory"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Změna tohoto nastavení na méně než 3 skoky může zvýšit rychlost na úkor anonymity a nedoporučuje se"
+msgid "Save priorities"
+msgstr "Uložit priority"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Sekvenční pořadí souborů nebo kusů není uloženo - funkce je momentálně nefunkční."
-
-msgid "Unknown command"
-msgstr "Neznámý příkaz"
+msgid "Comments"
+msgstr "Komentáře"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Prosím, opakujte odeslání formuláře (chybný nonce)"
+
+msgid "Unknown command"
+msgstr "Neznámý příkaz"
 
 msgid "Resource Does Not Exist"
 msgstr "Zdroj neexistuje"
@@ -1308,11 +1480,11 @@ msgstr "Zdroj"
 msgid "Base"
 msgstr "Základna"
 
-msgid "Files"
-msgstr "Soubory"
-
 msgid "Directory"
 msgstr "Adresář"
+
+msgid "File type"
+msgstr "Typ souboru"
 
 msgid "Size"
 msgstr "Velikost"
@@ -1335,24 +1507,6 @@ msgstr "Až do adresáře vyšší úrovně"
 msgid "Audio Playlist"
 msgstr "Seznam zvukových stop"
 
-msgid "Not found"
-msgstr "Nenalezeno"
-
-msgid "File not found in torrent"
-msgstr "Soubor nebyl nalezen v torrentu"
-
-msgid "Unrecognized"
-msgstr "Nerozpoznáno"
-
-msgid "Preview"
-msgstr "Náhled"
-
-msgid "Save priorities"
-msgstr "Uložit priority"
-
-msgid "Comments"
-msgstr "Komentáře"
-
 msgid "Resource Not found"
 msgstr "Zdroj nenalezen"
 
@@ -1361,6 +1515,10 @@ msgstr "Informační hash"
 
 msgid "Created"
 msgstr "Vytvořen"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Přidáno"
@@ -1425,15 +1583,6 @@ msgstr "kompletní"
 msgid "remaining"
 msgstr "zbývá"
 
-msgid "Ratings and Comments"
-msgstr "Hodnocení a komentáře"
-
-msgid "Author name required to rate or comment"
-msgstr "K hodnocení nebo komentáři je vyžadováno jméno autora"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Vaše jméno autora pro publikované komentáře a hodnocení"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1471,6 +1620,15 @@ msgstr "Označit pro smazání"
 msgid "Delete Selected"
 msgstr "Smazat vybrané"
 
+msgid "Ratings and Comments"
+msgstr "Hodnocení a komentáře"
+
+msgid "Author name required to rate or comment"
+msgstr "K hodnocení nebo komentáři je vyžadováno jméno autora"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Vaše jméno autora pro publikované komentáře a hodnocení"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Priorita stahování souborů aktualizována pro torrent "
 
@@ -1479,6 +1637,9 @@ msgstr "Upravit Torrent"
 
 msgid "Active Trackers"
 msgstr "Aktivní sledovači"
+
+msgid "Delete"
+msgstr "Smazat"
 
 msgid "Add Tracker"
 msgstr "Přidat Tracker"
@@ -1494,3 +1655,23 @@ msgstr "Uložit změny"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent musí být zastaven"
+
+msgid "Not found"
+msgstr "Nenalezeno"
+
+msgid "File not found in torrent"
+msgstr "Soubor nebyl nalezen v torrentu"
+
+msgid "Unrecognized"
+msgstr "Nerozpoznáno"
+
+msgid "Preview"
+msgstr "Náhled"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Nelze přidat torrent {0} do jiného torrentu: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Nelze přidat torrent {0} včetně jiného torrentu: {1}"

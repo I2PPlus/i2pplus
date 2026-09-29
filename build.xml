@@ -1433,10 +1433,27 @@
 
   <!-- end jbigi targets -->
 
-  <target name="poupdate-source" depends="set-lg2-en, poupdate"/>
+  <!-- Language scope for the translation update. Pass -Dlg2=<code> to restrict a
+       run to a single language. The scope is passed into a nested <ant> project
+       and never set on this one: an Ant <property> is set-once per project, so
+       setting lg2 here would also silence every later poupdate in the same
+       command line. "ant poupdate-source poupdate" would then update English
+       twice and no other language at all, with no error. -->
+  <target name="poupdate-source">
+    <ant target="poupdate-modules" inheritall="true">
+      <property name="lg2" value="en"/>
+    </ant>
+  </target>
 
-  <target name="set-lg2-en">
-    <property name="lg2" value="en"/>
+  <target name="poupdate">
+    <ant target="poupdate-modules" inheritall="true"/>
+    <!-- Report after the update, never during it. A template-only pass leaves
+         the translations unmerged, so a report emitted from inside
+         poupdate-modules would describe an intermediate state. Note that
+         .po file cleanup (cleanup_po.sh) is run separately, not inline here,
+         because the forked process is killed by the long-running chained
+         build. -->
+    <antcall target="po-status"/>
   </target>
 
   <!-- Validate .po files before updating (polib if available, else msgfmt) -->
@@ -1449,11 +1466,15 @@
   </target>
 
   <!-- the apps need to compile the jsps to poupdate -->
-  <target name="poupdate" depends="buildRouter, buildStreaming, buildSystray, buildSam, buildJetty, buildDesktopGui, buildJrobin, buildAddressbook, validate-po">
-    <echo message="Setting environment variable LG2 to a language code (e.g. de)"/>
-    <echo message="will restrict language update to the language you specified, leaving other languages unchanged."/>
-    <!-- Set if unset -->
+  <target name="poupdate-modules" depends="buildRouter, buildStreaming, buildSystray, buildSam, buildJetty, buildDesktopGui, buildJrobin, buildAddressbook, validate-po">
+    <!-- Set if unset. Empty means "every language"; a value restricts the run to
+         that one. Only the calling target decides this, so a template-only run
+         cannot narrow a later full run. -->
     <property name="lg2" value=""/>
+    <condition property="lg2.scope" value="language '${lg2}'" else="all languages">
+      <not><equals arg1="${lg2}" arg2=""/></not>
+    </condition>
+    <echo message="Updating .po files for ${lg2.scope}."/>
 
     <!-- Run module updates serially: the <parallel> form races on child subprocess
          streams and aborts the parent build silently (EXIT 1, no BUILD FAILED). -->
@@ -1526,11 +1547,6 @@
       <property name="...build.dir" location="${build.root}build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
-
-    <!-- Report translation status (msgid counts vs messages_en.po) after update.
-         Note: .po file cleanup (cleanup_po.sh) is run separately, not inline here,
-         because the forked process is killed by the long-running chained build. -->
-    <antcall target="po-status"/>
 
   </target>
 

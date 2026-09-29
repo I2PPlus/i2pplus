@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\\\n"
 
-msgid "No more torrents running."
-msgstr "Enempää Torrentteja ei ole aktiivisena."
-
-msgid "I2P tunnel closed."
-msgstr "I2P-käytävä suljettu."
-
 msgid "Magnet"
 msgstr "Magneetti"
 
@@ -23,12 +17,6 @@ msgstr "I2P-yhteyttä ei voi muodostaa"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Virhe yhdistettäessä I2P:hen - tarkista I2CP-asetuksesi!"
 
-msgid "Download already running: "
-msgstr "Lataus on jo käynnissä: "
-
-msgid "Downloading"
-msgstr "Ladataan"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Torrentsin määrittäminen I2CP-vaihtoehdoilla"
 
@@ -37,6 +25,18 @@ msgstr "Ei kirjoitusoikeuksia tietohakemistoon"
 
 msgid "Data directory cannot be created"
 msgstr "Data-hakemiston luominen epäonnistui"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "+0/1 tunnelin huppaaminen satunnaisesti otettu käyttöön ulostulevissa
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Tunnelin huppaaminen satunnaisesti poistettu käytöstä ulostulevissa tunnelissa"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Käynnistysviive vaihdettu arvoon {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Lisää ja luo osioita, jotka näkyvät vain monisivuisten torrent-luett
 msgid "API key updated."
 msgstr "API-avain päivitetty."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker -luettelo muutettu - torrentin uudelleenkäynnistys vaaditaan voimaantuloa varten."
 
@@ -246,6 +299,10 @@ msgstr "Vertaiverkko kohteessa \"{0}\" on virheellinen"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "VIRHE - Muisti loppu, torrentia ei voi luoda kohteesta {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Torrentsin alustus ja tunnelien avaaminen"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Vertaisverkko poistettu: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Torrentien lisääminen kohteeseen {0}..."
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Yläkaistanleveyden raja on {0} kt/s"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Yhdistetään I2CP-porttiin I2P-instanssissa osoitteessa {0}"
-
-msgid "Connecting to I2P"
-msgstr "Yhdistetään I2P:hen"
-
-msgid "Connected to I2P at"
-msgstr "Yhdistetty I2P:hen osoitteessa"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Torrentin käynnistys {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Tallennustila: {0}MB on tällä hetkellä saatavilla ladattavaksi määr
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Varoitus - Vain {0}MB on saatavilla ladattavaksi määritetystä datan osiossa"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Torrentia ei löydy"
 msgid "Opening the I2P tunnel"
 msgstr "Avataan I2P-tunneli"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Avataan I2P-tunneli ja käynnistetään kaikki vertaisverkot."
+
+msgid "Connecting to I2P"
+msgstr "Yhdistetään I2P:hen"
+
+msgid "Connected to I2P at"
+msgstr "Yhdistetty I2P:hen osoitteessa"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Torrentin käynnistys {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Pysäytetään kaikki vertaisverkot ja suljetaan I2P-tunneli."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Suljetaan I2P-tunneli sen jälkeen kun seuraajille on ilmoitettu."
+
+msgid "I2P tunnel closed."
+msgstr "I2P-käytävä suljettu."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,551 +567,8 @@ msgstr "Vertaisverkko on jo jonossa: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Vertaisverkko osoitteessa {0} ei ollut kelvollinen"
 
-msgid "Torrents"
-msgstr "Vertaisverkot"
-
-msgid "Refresh page"
-msgstr "Päivitä sivua"
-
-msgid "Configure"
-msgstr "Aseta"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Forum"
-msgstr "Foorumi"
-
-msgid "Search torrents"
-msgstr "Etsi torrentteja"
-
-msgid "Clear search"
-msgstr "Tyhjennä haku"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Hae torrent napsauttamalla \"Lisää torrent\" -painiketta"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Anonyymi BitTorrent-asiakas"
-
 msgid "Configuration"
 msgstr "Asetukset"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Haluatko varmasti poistaa {0} ja kaikki ladatut tiedot?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "Poistetaan <b>{0}</b> ja kaikki siihen liittyvät tiedot..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Haluatko varmasti poistaa tiedoston \\''{0}\\'' (ladattuja tietoja ei poisteta)?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Huomautus: Ladattuja tietoja ei poisteta."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "Poistetaan {0} ja siihen liittyvät metatiedot vain..."
-
-msgid "clear messages"
-msgstr "nollaa viestit"
-
-msgid "Expand"
-msgstr "Laajenna"
-
-msgid "Shrink"
-msgstr "Kutistuminen"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Varoitus! JavaScript on poistettu käytöstä selaimessa. Jos {0} on käytössä, menetät kaikki syötteet Add/Create Torrent -osiin, kun päivitys tapahtuu."
-
-msgid "page refresh"
-msgstr "sivun päivitys"
-
-msgid "Warning - No I2P"
-msgstr "Varoitus - Ei I2P:tä"
-
-msgid "No torrents found."
-msgstr "Torrenteja ei löytynyt."
-
-msgid "No torrents loaded."
-msgstr "Yhtään vertaisverkkoa ei ole ladattu."
-
-msgid "No DHT Peers"
-msgstr "Ei DHT-vertaisia"
-
-msgid "Status"
-msgstr "Tila"
-
-msgid "Torrent"
-msgstr "Vertaisverkko"
-
-msgid "File type"
-msgstr "Tiedostotyyppi"
-
-msgid "Torrent name"
-msgstr "Torrentin nimi"
-
-msgid "ETA"
-msgstr "ETA"
-
-msgid "RX"
-msgstr "RX"
-
-msgid "RX Rate"
-msgstr "Latausaste"
-
-msgid "TX"
-msgstr "TX"
-
-msgid "TX Rate"
-msgstr "TX-nopeus"
-
-msgid "Start All"
-msgstr "Käynnistä kaikki"
-
-msgid "Stop All"
-msgstr "Pysäytä kaikki"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Pysäytä kaikki vertaisverkot ja I2P-tunneli"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Käynnistä kaikki vertaisverkot ja I2P-tunneli"
-
-msgid "Start all stopped torrents"
-msgstr "Käynnistä kaikki pysäytetyt vertaisverkot"
-
-msgid "Hide Peers"
-msgstr "Piilota vertaiset"
-
-msgid "Show Peers"
-msgstr "Näytä vertaiset"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Lajitteluperuste: {0}"
-
-msgid "Up Rate"
-msgstr "Kopiointinopeus palvelimelle"
-
-msgid "Total size of loaded torrents"
-msgstr "Ladattujen torrentien kokonaiskoko"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "1 yhdistetty vertainen"
-msgstr[1] "{0} yhdistettyä vertaista"
-
-msgid "Active downloads"
-msgstr "Aktiiviset lataukset"
-
-msgid "Active uploads"
-msgstr "Aktiiviset lähetykset"
-
-msgid "Active Inbound tunnels"
-msgstr "Aktiiviset sisääntulevat tunnelit"
-
-msgid "Active Outbound tunnels"
-msgstr "Aktiiviset ulostulevat tunnelit"
-
-msgid "Estimated download time for all torrents"
-msgstr "Arvioitu latausaika kaikille torrenteille"
-
-msgid "Data downloaded this session"
-msgstr "Tämän istunnon tiedot ladattu"
-
-msgid "Total download speed"
-msgstr "Kokonaislatausnopeus"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Lähetetyt tiedot yhteensä (luetteloiduille torrenteille)"
-
-msgid "Total upload speed"
-msgstr "Kokonaislatausnopeus"
-
-msgid "Toggle Debug Panel"
-msgstr "Vaihda debug-paneelia"
-
-msgid "Debug Mode"
-msgstr "Debug-tilassa"
-
-msgid "Normal Mode"
-msgstr "Normaali tila"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrentti"
-msgstr[1] "{0} torrenttia"
-
-msgid "Search"
-msgstr "Hae"
-
-msgid "Show All"
-msgstr "Näytä kaikki"
-
-msgid "Active"
-msgstr "Aktiivinen"
-
-msgid "Inactive"
-msgstr "Ei aktiivinen"
-
-msgid "Connected"
-msgstr "Yhdistetty"
-
-msgid "Seeding"
-msgstr "Siemenenä"
-
-msgid "Complete"
-msgstr "Valmis"
-
-msgid "Incomplete"
-msgstr "Keskeneräinen"
-
-msgid "Stopped"
-msgstr "Pysäytetty"
-
-msgid "First"
-msgstr "Ensimmäinen"
-
-msgid "First page"
-msgstr "Ensimmäinen sivu"
-
-msgid "Prev"
-msgstr "Edellinen"
-
-msgid "Previous page"
-msgstr "Edellinen sivu"
-
-msgid "Next"
-msgstr "Seuraava"
-
-msgid "Next page"
-msgstr "Seuraava sivu"
-
-msgid "Last"
-msgstr "Viimeinen"
-
-msgid "Last page"
-msgstr "Viimeinen sivu"
-
-msgid "Enter URL or select torrent file"
-msgstr "Anna URL tai valitse torrent-tiedosto"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Virhe ladattaessa torrent-tiedostoa: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Torrenttia {0} ei voi lisätä toisen torrentin sisälle: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Lataus ei-I2P sijainnista {0} ei ole tuettu"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Virhe: Versio 2 tietotiivisteet eivät ole tuettuja"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Virheellinen URL: Aloitettava merkeillä \"{0}\" tai \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Magneetti poistettu: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Torrent-tiedostoa ei voitu poistaa: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Datatiedosto poistettu: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Datatiedostoa ei voitu poistaa: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Hakemistoa ei voitu poistaa: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Hakemisto poistettu: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Virhe luotaessa torrenttia - sinun on määritettävä tiedosto tai hakemisto"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Torrenttia ei voi luoda olemattomille tiedoille: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Torrenttia, joka päättyy \".torrent\":iin, ei voi lisätä: {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Torrent tällä nimellä on jo käynnissä: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Torrenttia, joka sisältää I2P-hakemiston, ei voi lisätä: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Torrenttia {0} ei voi lisätä, koska se sisältää toisen torrentin: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Virhe - Vaihtoehtoisia seurantalaitteita ei voi sisällyttää ilman ensisijaista seurantalaitetta"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Virhe - Yksityisiä ja julkisia seurantalaitteita ei voi sekoittaa samassa torrentissa"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " tiedostoa tai kansiota suljettiin pois kohteesta \"{0}\" suodatussääntöjen vuoksi."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Seuraavat tiedostot tai kansiot suljettiin pois kohteesta \"{0}\" suodatussääntöjen vuoksi: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Torrent luotu kohteelle \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Monet I2P-seurantalaitteet vaativat uusien torrenttien rekisteröintiä ennen siementämistä - ole hyvä ja tee se ennen \"{0}\" käynnistämistä"
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Virhe luotaessa torrenttia kohteelle \"{0}\""
-
-msgid "Delete selected"
-msgstr "Poista valitut"
-
-msgid "Save tracker configuration"
-msgstr "Tallenna seurantalaitteiden asetukset"
-
-msgid "Removed"
-msgstr "Poistettu"
-
-msgid "Add tracker"
-msgstr "Lisää seurantalaitteet"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Anna kelvollinen seurantalaitteen nimi ja URL-osoitteet"
-
-msgid "Restore defaults"
-msgstr "Palauta oletukset"
-
-msgid "Restored default trackers"
-msgstr "Oletusseurantalaitteet palautettu"
-
-msgid "Save Filter Configuration"
-msgstr "Tallenna suodatinasetukset"
-
-msgid "Add File Filter"
-msgstr "Lisää tiedostosuodatin"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Anna kelvollinen nimi ja suodatusmalli"
-
-msgid "Restored default torrent create filters"
-msgstr "Oletustorrentin luontisuodattimet palautettu"
-
-msgid "Torrent details"
-msgstr "Torrentin tiedot"
-
-msgid "Torrent has comments"
-msgstr "Torrentilla on kommentteja"
-
-msgid "Open file"
-msgstr "Avaa tiedosto"
-
-msgid "View files"
-msgstr "Näytä tiedostot"
-
-msgid "Completed"
-msgstr "Valmistunut"
-
-msgid "Share ratio"
-msgstr "Jakamisuhde"
-
-msgid "Last activity"
-msgstr "Viimeisin toiminta"
-
-msgid "Stop"
-msgstr "Pysäytä"
-
-msgid "Stop torrent"
-msgstr "Pysäytä torrent"
-
-msgid "Start"
-msgstr "Käynnistä"
-
-msgid "Start torrent"
-msgstr "Käynnistä torrent"
-
-msgid "Remove"
-msgstr "Poista"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Poista torrent ja poista se, säilyttäen ladatut tiedostot"
-
-msgid "Delete"
-msgstr "Poista"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Poista .torrent-tiedosto ja siihen liittyvät datatiedostot"
-
-msgid "Checking"
-msgstr "Tarkistetaan"
-
-msgid "Allocating"
-msgstr "Varataan"
-
-msgid "Starting"
-msgstr "Käynnistetään"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Siemenenä {0} vertaiselle"
-msgstr[1] "Siemenenä {0} vertaiselle"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Yhdistetty {0}/{1} vertaisiin parvessa"
-
-msgid "Stalled"
-msgstr "Pysähtynyt"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Siemenenä {0} vertaiselle parvessa"
-msgstr[1] "Siemenenä {0} vertaisille parvessa"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Lataaminen {0} vertaisarjasta"
-msgstr[1] "Lataaminen {0} ikätovereista"
-
-msgid "OK"
-msgstr "Valmis"
-
-msgid "No Peers"
-msgstr "Ei vertaisia"
-
-msgid "Peer attached to swarm"
-msgstr "Peer kiinnitetty parveen"
-
-msgid "Destination (identity) of peer"
-msgstr "Version kohde (identiteetti)"
-
-msgid "seconds"
-msgstr "sekuntia"
-
-msgid "Seed"
-msgstr "Siemen"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Epäkiinnostava (Vertaisella ei ole tarvittavia kappaleita)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Choked (Vertainen ei salli meidän pyytää kappaleita)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Peer on kiinnostunut, mutta tällä hetkellä toimettomana"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Ei kiinnosta (Meillä ei ole ikäisensä tarvitsemia kappaleita)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Tukehtuminen (Emme salli vertaisten pyytää kappaleita)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Tiedot osoitteessa {0} tracker"
-
-msgid "Info"
-msgstr "Tiedot"
-
-msgid "Add Torrent"
-msgstr "Lisää vertaisverkko"
-
-msgid "From URL"
-msgstr "Verkko-osoitteesta"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Anna torrent-tiedoston lataus-URL-osoite (vain I2P), magneettilinkki tai tietotiiviste"
-
-msgid "Add torrent"
-msgstr "Lisää vertaisverkko"
-
-msgid "Torrent file"
-msgstr "Torrent tiedosto"
-
-msgid "Data dir"
-msgstr "Tietohakemisto"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Anna hakemisto, johon tiedot tallennetaan (oletus {0})"
-
-msgid "Create Torrent"
-msgstr "Luo torrent"
-
-msgid "Data to seed"
-msgstr "Tiedoista siemenelle"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Siementiedosto tai hakemisto (koko polku tai hakemiston sisällä {0})"
-
-msgid "Create torrent"
-msgstr "Luo vertaisverkko"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Jätä tiedostot pois torrentista, jos ne sijaitsevat torrent-kansiossa"
-
-msgid "Content Filters"
-msgstr "Sisältösuoja"
-
-msgid "Trackers"
-msgstr "Seuraajat"
-
-msgid "Alternates"
-msgstr "Vaihtoehdot"
-
-msgid "Primary"
-msgstr "Ensisijainen"
-
-msgid "Tracker Type"
-msgstr "Seurantatyyppi"
-
-msgid "Standard"
-msgstr "Vakio"
-
-msgid "Open"
-msgstr "Avaa"
-
-msgid "Private"
-msgstr "Yksityinen"
-
-msgid "none"
-msgstr "ei mitään"
 
 msgid "User Interface"
 msgstr "Käyttöliittymä"
@@ -1043,6 +587,9 @@ msgstr "Jos haluat vaihtaa teemoja manuaalisesti, poista yleinen teemoitus käyt
 
 msgid "Universal theming is enabled."
 msgstr "Yleinen teema on käytössä."
+
+msgid "Configure"
+msgstr "Aseta"
 
 msgid "Refresh time"
 msgstr "Päivitysaika"
@@ -1164,11 +711,20 @@ msgstr "Käynnistä torrentit automaattisesti lisättäessä ja käynnistä torr
 msgid "Startup delay"
 msgstr "Käynnistysviive"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Kuinka kauan ennen kuin automaattisesti käynnistyneet torrentit ladataan, kun Torrentit käynnistyy"
-
 msgid "minutes"
 msgstr "minuuttia"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Tietovarasto"
@@ -1179,11 +735,35 @@ msgstr "Tietohakemisto"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Hakemisto, johon torrentit ja ladatut/jaetut tiedostot tallennetaan"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Kaikkien luettavissa olevat tiedostot"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Aseta tiedostojen käyttöoikeudet, jotta muut paikalliset käyttäjät voivat käyttää ladattuja tiedostoja"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Enimmäistiedostot per torrent"
@@ -1194,8 +774,14 @@ msgstr "Tiedostojen enimmäismäärä torrentia kohden – huomaa, että seurant
 msgid "Tunnel Configuration"
 msgstr "Tunnelin määritys"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Tämän istunnon määränpäämme (identiteettimme)"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Koh."
@@ -1221,6 +807,24 @@ msgstr "Lisää 0 tai 1 lisähyppy satunnaisesti ulostuleviin tunneliin"
 msgid "Outbound"
 msgstr "Uloskäynti"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "I2CP -palvelin"
 
@@ -1229,6 +833,49 @@ msgstr "I2CP-portti"
 
 msgid "I2CP options"
 msgstr "I2CP-valitsimet"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Tallenna asetukset"
@@ -1257,8 +904,23 @@ msgstr "Päättyy"
 msgid "Enabled by Default"
 msgstr "Oletuksena käytössä"
 
+msgid "Delete selected"
+msgstr "Poista valitut"
+
+msgid "Save Filter Configuration"
+msgstr "Tallenna suodatinasetukset"
+
+msgid "Restore defaults"
+msgstr "Palauta oletukset"
+
+msgid "Add File Filter"
+msgstr "Lisää tiedostosuodatin"
+
 msgid "Add"
 msgstr "Lisää"
+
+msgid "Trackers"
+msgstr "Seuraajat"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Valitse poistettavat seurantalaitteet Torrentsin tunnetusta luettelosta"
@@ -1266,11 +928,521 @@ msgstr "Valitse poistettavat seurantalaitteet Torrentsin tunnetusta luettelosta"
 msgid "Website URL"
 msgstr "Webbisivuston verkko-osoite"
 
+msgid "Standard"
+msgstr "Vakio"
+
+msgid "Open"
+msgstr "Avaa"
+
+msgid "Private"
+msgstr "Yksityinen"
+
 msgid "Announce URL"
 msgstr "Ilmoita URL-osoite"
 
 msgid "Mark tracker for deletion"
 msgstr "Merkitse seuranta poistettavaksi"
+
+msgid "Add tracker"
+msgstr "Lisää seurantalaitteet"
+
+msgid "Save tracker configuration"
+msgstr "Tallenna seurantalaitteiden asetukset"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Tämä määrittää avattavien tunneleiden enimmäismäärän, joka määräytyy yhdistettyjen kumppanien lukumäärän mukaan (todellinen käyttö voi olla pienempi)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Tämän asetuksen muuttaminen alle 3 hyppyyn voi parantaa nopeutta anonymiteetin kustannuksella, eikä sitä suositella"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Hae torrent napsauttamalla \"Lisää torrent\" -painiketta"
+
+msgid "Torrents"
+msgstr "Vertaisverkot"
+
+msgid "Refresh page"
+msgstr "Päivitä sivua"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Foorumi"
+
+msgid "Search torrents"
+msgstr "Etsi torrentteja"
+
+msgid "Clear search"
+msgstr "Tyhjennä haku"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Anonyymi BitTorrent-asiakas"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Haluatko varmasti poistaa {0} ja kaikki ladatut tiedot?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Poistetaan <b>{0}</b> ja kaikki siihen liittyvät tiedot..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Haluatko varmasti poistaa tiedoston \\''{0}\\'' (ladattuja tietoja ei poisteta)?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Huomautus: Ladattuja tietoja ei poisteta."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Poistetaan {0} ja siihen liittyvät metatiedot vain..."
+
+msgid "clear messages"
+msgstr "nollaa viestit"
+
+msgid "Expand"
+msgstr "Laajenna"
+
+msgid "Shrink"
+msgstr "Kutistuminen"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Varoitus! JavaScript on poistettu käytöstä selaimessa. Jos {0} on käytössä, menetät kaikki syötteet Add/Create Torrent -osiin, kun päivitys tapahtuu."
+
+msgid "page refresh"
+msgstr "sivun päivitys"
+
+msgid "Warning - No I2P"
+msgstr "Varoitus - Ei I2P:tä"
+
+msgid "No torrents found."
+msgstr "Torrenteja ei löytynyt."
+
+msgid "No torrents loaded."
+msgstr "Yhtään vertaisverkkoa ei ole ladattu."
+
+msgid "Status"
+msgstr "Tila"
+
+msgid "Torrent"
+msgstr "Vertaisverkko"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "Latausaste"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "TX-nopeus"
+
+msgid "Start All"
+msgstr "Käynnistä kaikki"
+
+msgid "Stop All"
+msgstr "Pysäytä kaikki"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Pysäytä kaikki vertaisverkot ja I2P-tunneli"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Käynnistä kaikki vertaisverkot ja I2P-tunneli"
+
+msgid "Start all stopped torrents"
+msgstr "Käynnistä kaikki pysäytetyt vertaisverkot"
+
+msgid "Hide Peers"
+msgstr "Piilota vertaiset"
+
+msgid "Show Peers"
+msgstr "Näytä vertaiset"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Lajitteluperuste: {0}"
+
+msgid "Up Rate"
+msgstr "Kopiointinopeus palvelimelle"
+
+msgid "Total size of loaded torrents"
+msgstr "Ladattujen torrentien kokonaiskoko"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 yhdistetty vertainen"
+msgstr[1] "{0} yhdistettyä vertaista"
+
+msgid "Active downloads"
+msgstr "Aktiiviset lataukset"
+
+msgid "Active uploads"
+msgstr "Aktiiviset lähetykset"
+
+msgid "Active Inbound tunnels"
+msgstr "Aktiiviset sisääntulevat tunnelit"
+
+msgid "Active Outbound tunnels"
+msgstr "Aktiiviset ulostulevat tunnelit"
+
+msgid "Estimated download time for all torrents"
+msgstr "Arvioitu latausaika kaikille torrenteille"
+
+msgid "Data downloaded this session"
+msgstr "Tämän istunnon tiedot ladattu"
+
+msgid "Total download speed"
+msgstr "Kokonaislatausnopeus"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Lähetetyt tiedot yhteensä (luetteloiduille torrenteille)"
+
+msgid "Total upload speed"
+msgstr "Kokonaislatausnopeus"
+
+msgid "Toggle Debug Panel"
+msgstr "Vaihda debug-paneelia"
+
+msgid "Debug Mode"
+msgstr "Debug-tilassa"
+
+msgid "Normal Mode"
+msgstr "Normaali tila"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrentti"
+msgstr[1] "{0} torrenttia"
+
+msgid "No DHT Peers"
+msgstr "Ei DHT-vertaisia"
+
+msgid "Search"
+msgstr "Hae"
+
+msgid "Show All"
+msgstr "Näytä kaikki"
+
+msgid "Active"
+msgstr "Aktiivinen"
+
+msgid "Inactive"
+msgstr "Ei aktiivinen"
+
+msgid "Connected"
+msgstr "Yhdistetty"
+
+msgid "Downloading"
+msgstr "Ladataan"
+
+msgid "Seeding"
+msgstr "Siemenenä"
+
+msgid "Complete"
+msgstr "Valmis"
+
+msgid "Incomplete"
+msgstr "Keskeneräinen"
+
+msgid "Stopped"
+msgstr "Pysäytetty"
+
+msgid "First"
+msgstr "Ensimmäinen"
+
+msgid "First page"
+msgstr "Ensimmäinen sivu"
+
+msgid "Prev"
+msgstr "Edellinen"
+
+msgid "Previous page"
+msgstr "Edellinen sivu"
+
+msgid "Next"
+msgstr "Seuraava"
+
+msgid "Next page"
+msgstr "Seuraava sivu"
+
+msgid "Last"
+msgstr "Viimeinen"
+
+msgid "Last page"
+msgstr "Viimeinen sivu"
+
+msgid "Enter URL or select torrent file"
+msgstr "Anna URL tai valitse torrent-tiedosto"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Virhe ladattaessa torrent-tiedostoa: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Lataus ei-I2P sijainnista {0} ei ole tuettu"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Virhe: Versio 2 tietotiivisteet eivät ole tuettuja"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Virheellinen URL: Aloitettava merkeillä \"{0}\" tai \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magneetti poistettu: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Torrent-tiedostoa ei voitu poistaa: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Datatiedosto poistettu: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Datatiedostoa ei voitu poistaa: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Hakemistoa ei voitu poistaa: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Hakemisto poistettu: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " tiedostoa tai kansiota suljettiin pois kohteesta \"{0}\" suodatussääntöjen vuoksi."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Seuraavat tiedostot tai kansiot suljettiin pois kohteesta \"{0}\" suodatussääntöjen vuoksi: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent luotu kohteelle \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Monet I2P-seurantalaitteet vaativat uusien torrenttien rekisteröintiä ennen siementämistä - ole hyvä ja tee se ennen \"{0}\" käynnistämistä"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Virhe luotaessa torrenttia kohteelle \"{0}\""
+
+msgid "Removed"
+msgstr "Poistettu"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Anna kelvollinen seurantalaitteen nimi ja URL-osoitteet"
+
+msgid "Restored default trackers"
+msgstr "Oletusseurantalaitteet palautettu"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Anna kelvollinen nimi ja suodatusmalli"
+
+msgid "Restored default torrent create filters"
+msgstr "Oletustorrentin luontisuodattimet palautettu"
+
+msgid "Torrent details"
+msgstr "Torrentin tiedot"
+
+msgid "Torrent has comments"
+msgstr "Torrentilla on kommentteja"
+
+msgid "Open file"
+msgstr "Avaa tiedosto"
+
+msgid "View files"
+msgstr "Näytä tiedostot"
+
+msgid "Completed"
+msgstr "Valmistunut"
+
+msgid "Share ratio"
+msgstr "Jakamisuhde"
+
+msgid "Last activity"
+msgstr "Viimeisin toiminta"
+
+msgid "Stop"
+msgstr "Pysäytä"
+
+msgid "Stop torrent"
+msgstr "Pysäytä torrent"
+
+msgid "Start"
+msgstr "Käynnistä"
+
+msgid "Start torrent"
+msgstr "Käynnistä torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Poista torrent ja poista se, säilyttäen ladatut tiedostot"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Poista .torrent-tiedosto ja siihen liittyvät datatiedostot"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Tarkistetaan"
+
+msgid "Allocating"
+msgstr "Varataan"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Käynnistetään"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Siemenenä {0} vertaiselle"
+msgstr[1] "Siemenenä {0} vertaiselle"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Yhdistetty {0}/{1} vertaisiin parvessa"
+
+msgid "Stalled"
+msgstr "Pysähtynyt"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Siemenenä {0} vertaiselle parvessa"
+msgstr[1] "Siemenenä {0} vertaisille parvessa"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Lataaminen {0} vertaisarjasta"
+msgstr[1] "Lataaminen {0} ikätovereista"
+
+msgid "OK"
+msgstr "Valmis"
+
+msgid "No Peers"
+msgstr "Ei vertaisia"
+
+msgid "Peer attached to swarm"
+msgstr "Peer kiinnitetty parveen"
+
+msgid "Destination (identity) of peer"
+msgstr "Version kohde (identiteetti)"
+
+msgid "seconds"
+msgstr "sekuntia"
+
+msgid "Seed"
+msgstr "Siemen"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Epäkiinnostava (Vertaisella ei ole tarvittavia kappaleita)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Choked (Vertainen ei salli meidän pyytää kappaleita)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Peer on kiinnostunut, mutta tällä hetkellä toimettomana"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Ei kiinnosta (Meillä ei ole ikäisensä tarvitsemia kappaleita)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Tukehtuminen (Emme salli vertaisten pyytää kappaleita)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Tiedot osoitteessa {0} tracker"
+
+msgid "Info"
+msgstr "Tiedot"
+
+msgid "Add Torrent"
+msgstr "Lisää vertaisverkko"
+
+msgid "From URL"
+msgstr "Verkko-osoitteesta"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Anna torrent-tiedoston lataus-URL-osoite (vain I2P), magneettilinkki tai tietotiiviste"
+
+msgid "Add torrent"
+msgstr "Lisää vertaisverkko"
+
+msgid "Torrent file"
+msgstr "Torrent tiedosto"
+
+msgid "Data dir"
+msgstr "Tietohakemisto"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Anna hakemisto, johon tiedot tallennetaan (oletus {0})"
+
+msgid "Create Torrent"
+msgstr "Luo torrent"
+
+msgid "Data to seed"
+msgstr "Tiedoista siemenelle"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Siementiedosto tai hakemisto (koko polku tai hakemiston sisällä {0})"
+
+msgid "Create torrent"
+msgstr "Luo vertaisverkko"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Jätä tiedostot pois torrentista, jos ne sijaitsevat torrent-kansiossa"
+
+msgid "Content Filters"
+msgstr "Sisältösuoja"
+
+msgid "Alternates"
+msgstr "Vaihtoehdot"
+
+msgid "Primary"
+msgstr "Ensisijainen"
+
+msgid "Tracker Type"
+msgstr "Seurantatyyppi"
+
+msgid "none"
+msgstr "ei mitään"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Ei voi lisätä magneettia: Versio 2 magneettisidoksia ei tueta"
@@ -1279,20 +1451,20 @@ msgstr "Ei voi lisätä magneettia: Versio 2 magneettisidoksia ei tueta"
 msgid "Invalid magnet URL {0}"
 msgstr "Virheellinen magneetin URL-osoite {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Tämä määrittää avattavien tunneleiden enimmäismäärän, joka määräytyy yhdistettyjen kumppanien lukumäärän mukaan (todellinen käyttö voi olla pienempi)"
+msgid "Files"
+msgstr "Tiedostot"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Tämän asetuksen muuttaminen alle 3 hyppyyn voi parantaa nopeutta anonymiteetin kustannuksella, eikä sitä suositella"
+msgid "Save priorities"
+msgstr "Tallenna prioriteetit"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Järjestyksellinen palasen tai tiedoston järjestystä ei tallenneta - toiminto on tällä hetkellä rikki."
-
-msgid "Unknown command"
-msgstr "Tuntematon komento"
+msgid "Comments"
+msgstr "Kommentit"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Yritä lomakkeen lähettämistä uudelleen (virheellinen nonce)"
+
+msgid "Unknown command"
+msgstr "Tuntematon komento"
 
 msgid "Resource Does Not Exist"
 msgstr "Resurssia ei ole olemassa"
@@ -1303,11 +1475,11 @@ msgstr "Resurssi"
 msgid "Base"
 msgstr "Perus"
 
-msgid "Files"
-msgstr "Tiedostot"
-
 msgid "Directory"
 msgstr "Hakemisto"
+
+msgid "File type"
+msgstr "Tiedostotyyppi"
 
 msgid "Size"
 msgstr "Koko"
@@ -1330,24 +1502,6 @@ msgstr "Siirry hakemistohierarkiassa ylöspäin"
 msgid "Audio Playlist"
 msgstr "Äänisoittolista"
 
-msgid "Not found"
-msgstr "Ei löydy"
-
-msgid "File not found in torrent"
-msgstr "Tiedostoa ei löytynyt vertaisverkossa"
-
-msgid "Unrecognized"
-msgstr "Tuntematon"
-
-msgid "Preview"
-msgstr "Esikatselu"
-
-msgid "Save priorities"
-msgstr "Tallenna prioriteetit"
-
-msgid "Comments"
-msgstr "Kommentit"
-
 msgid "Resource Not found"
 msgstr "Resurssia ei löydy"
 
@@ -1356,6 +1510,10 @@ msgstr "Info Hash"
 
 msgid "Created"
 msgstr "Luotu"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Lisätty"
@@ -1420,15 +1578,6 @@ msgstr "valmis"
 msgid "remaining"
 msgstr "jäljellä"
 
-msgid "Ratings and Comments"
-msgstr "Arviot ja kommentit"
-
-msgid "Author name required to rate or comment"
-msgstr "Arvostelua tai kommentointia varten tarvitaan tekijän nimi"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Tekijän nimi julkaistuja kommentteja ja arvioita varten"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1465,6 +1614,15 @@ msgstr "Merkitse poistettavaksi"
 msgid "Delete Selected"
 msgstr "Poista valitut"
 
+msgid "Ratings and Comments"
+msgstr "Arviot ja kommentit"
+
+msgid "Author name required to rate or comment"
+msgstr "Arvostelua tai kommentointia varten tarvitaan tekijän nimi"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Tekijän nimi julkaistuja kommentteja ja arvioita varten"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Tiedoston latausprioriteetit päivitetty torrentille "
 
@@ -1473,6 +1631,9 @@ msgstr "Muokkaa torrentia"
 
 msgid "Active Trackers"
 msgstr "Aktiiviset Seurantalaitteet"
+
+msgid "Delete"
+msgstr "Poista"
 
 msgid "Add Tracker"
 msgstr "Lisää seuranta"
@@ -1488,3 +1649,23 @@ msgstr "Tallenna muutokset"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent on pysäytettävä"
+
+msgid "Not found"
+msgstr "Ei löydy"
+
+msgid "File not found in torrent"
+msgstr "Tiedostoa ei löytynyt vertaisverkossa"
+
+msgid "Unrecognized"
+msgstr "Tuntematon"
+
+msgid "Preview"
+msgstr "Esikatselu"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Torrenttia {0} ei voi lisätä toisen torrentin sisälle: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Torrenttia {0} ei voi lisätä, koska se sisältää toisen torrentin: {1}"

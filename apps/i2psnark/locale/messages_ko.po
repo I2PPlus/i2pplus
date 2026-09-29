@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\\\n"
 
-msgid "No more torrents running."
-msgstr "작동중인 토렌트가 없습니다."
-
-msgid "I2P tunnel closed."
-msgstr "I2P 터널이 닫혔습니다."
-
 msgid "Magnet"
 msgstr "마그넷"
 
@@ -23,12 +17,6 @@ msgstr "I2P에 연결할 수 없습니다"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "에러: I2P에 연결할 수 없습니다. I2CP 설정을 확인하세요!"
 
-msgid "Download already running: "
-msgstr "이미 다운로드가 실행 중입니다: "
-
-msgid "Downloading"
-msgstr "다운로드"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2CP 옵션으로 토렌트 구성"
 
@@ -37,6 +25,18 @@ msgstr "데이터 디렉토리에 대한 쓰기 권한이 없습니다"
 
 msgid "Data directory cannot be created"
 msgstr "데이터 디렉토리를 만들 수 없습니다"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "출간 터널에서 +0/1 터널 점프 무작위화가 활성화되었�
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "출간 터널에서 터널 점프 무작위화가 비활성화되었습니다."
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "시작 딜레이가 {0}으로 설정되었습니다."
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "여러 페이지로 구성된 토렌트 목록 페이지의 첫 번째 �
 msgid "API key updated."
 msgstr "API 키가 업데이트되었습니다."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "오픈 트래커 리스트가 변경되었습니다 - 토렌트를 재시작해야 적용됩니다."
 
@@ -246,6 +299,10 @@ msgstr "토렌트 \"{0}\"가 올바르지 않습니다"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "에러 - 메모리 부족. {0}에서 토렌트를 만들 수 없습니다."
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "토렌트 초기화 및 터널 열기"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "토렌트 제거됨: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "{0}에 급류 추가 ..."
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "최대 대역폭 제한은 {0}KBps입니다"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "{0}의 I2P 인스턴스에서 I2CP 포트에 연결 중"
-
-msgid "Connecting to I2P"
-msgstr "I2P에 연결중"
-
-msgid "Connected to I2P at"
-msgstr "I2P에 연결됨 - 위치:"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "토렌트 시작: {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "저장소: 현재 구성된 데이터 파티션에서 {0}MB의 다운로
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "경고 - 구성된 데이터 파티션에서 다운로드 가능한 용량은 오직 {0}MB 입니다"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "토렌트를 찾을 수 없음"
 msgid "Opening the I2P tunnel"
 msgstr "I2P 터널 여는중"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "I2P 터널을 열고 모든 토렌트를 시작하는 중."
+
+msgid "Connecting to I2P"
+msgstr "I2P에 연결중"
+
+msgid "Connected to I2P at"
+msgstr "I2P에 연결됨 - 위치:"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "토렌트 시작: {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "모든 토렌트를 종료하고 I2P 터널을 닫는 중입니다."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "트래커에게 알린 후 I2P 터널을 닫는 중입니다."
+
+msgid "I2P tunnel closed."
+msgstr "I2P 터널이 닫혔습니다."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,546 +567,8 @@ msgstr "이미 대기열에 있습니다: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "토렌트 {0}이 올바로지 않습니다"
 
-msgid "Torrents"
-msgstr "토렌트"
-
-msgid "Refresh page"
-msgstr "페이지 새로고침"
-
-msgid "Configure"
-msgstr "구성"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "토렌트 및 파일 공유 포럼"
-
-msgid "Forum"
-msgstr "포럼"
-
-msgid "Search torrents"
-msgstr "토렌트 검색"
-
-msgid "Clear search"
-msgstr "검색 지우기"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "\"토렌트 추가\" 버튼으로 다운로드 시작"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "익명 비트토렌트 클라이언트"
-
 msgid "Configuration"
 msgstr "설정"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "{0}과(와) 모든 다운로드된 데이터를 삭제하시겠습니까?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "<b>{0}</b>과(와) 모든 관련 데이터를 삭제 중..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "참고: 다운로드된 데이터는 삭제되지 않습니다."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "{0}과(와) 관련 메타데이터만 삭제 중..."
-
-msgid "clear messages"
-msgstr "메세지 지우기"
-
-msgid "Expand"
-msgstr "확장"
-
-msgid "Shrink"
-msgstr "축소"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "경고! 브라우저에서 JavaScript가 비활성화되었습니다. {0}가 활성화되면 새로 고침이 발생하면 토렌트 섹션에 대한 입력을 잃게됩니다."
-
-msgid "page refresh"
-msgstr "페이지 새로고침"
-
-msgid "Warning - No I2P"
-msgstr "경고 - I2P 없음"
-
-msgid "No torrents found."
-msgstr "토렌트를 찾을 수 없습니다."
-
-msgid "No torrents loaded."
-msgstr "토렌트가 없습니다."
-
-msgid "No DHT Peers"
-msgstr "DHT 피어 없음"
-
-msgid "Status"
-msgstr "상태"
-
-msgid "Torrent"
-msgstr "토렌트"
-
-msgid "File type"
-msgstr "파일 타입"
-
-msgid "Torrent name"
-msgstr "토렌트 이름"
-
-msgid "ETA"
-msgstr "도착 예정 시간"
-
-msgid "RX"
-msgstr "RX"
-
-msgid "RX Rate"
-msgstr "RX 비율"
-
-msgid "TX"
-msgstr "TX"
-
-msgid "TX Rate"
-msgstr "TX 비율"
-
-msgid "Start All"
-msgstr "모두 시작"
-
-msgid "Stop All"
-msgstr "모두 멈춤"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "모든 토렌트와 I2P 터널을 멈춤"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "모든 토렌트와 I2P 터널 시작"
-
-msgid "Start all stopped torrents"
-msgstr "모든  멈춰진 토렌트 시작"
-
-msgid "Hide Peers"
-msgstr "피어 감추기"
-
-msgid "Show Peers"
-msgstr "피어 보이기"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "{0}로 정렬"
-
-msgid "Up Rate"
-msgstr "업로드 비율"
-
-msgid "Total size of loaded torrents"
-msgstr "로드된 토렌트의 총 크기"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "{0}개 연결된 피어"
-
-msgid "Active downloads"
-msgstr "활성 다운로드"
-
-msgid "Active uploads"
-msgstr "활성 업로드"
-
-msgid "Active Inbound tunnels"
-msgstr "활성 인바운드 터널"
-
-msgid "Active Outbound tunnels"
-msgstr "활성 출발 터널"
-
-msgid "Estimated download time for all torrents"
-msgstr "모든 토렌트의 예상 다운로드 시간"
-
-msgid "Data downloaded this session"
-msgstr "이 세션에서 데이터가 다운로드되었습니다"
-
-msgid "Total download speed"
-msgstr "총 다운로드 속도"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "업로드된 총 데이터(나열된 토렌트의 경우)"
-
-msgid "Total upload speed"
-msgstr "총 업로드 속도"
-
-msgid "Toggle Debug Panel"
-msgstr "디버그 패널 전환"
-
-msgid "Debug Mode"
-msgstr "디버그 모드"
-
-msgid "Normal Mode"
-msgstr "일반 모드"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "토렌트: {0}"
-
-msgid "Search"
-msgstr "찾다"
-
-msgid "Show All"
-msgstr "모두 보기"
-
-msgid "Active"
-msgstr "액티브"
-
-msgid "Inactive"
-msgstr "비활성"
-
-msgid "Connected"
-msgstr "연결됨"
-
-msgid "Seeding"
-msgstr "시딩중"
-
-msgid "Complete"
-msgstr "완료"
-
-msgid "Incomplete"
-msgstr "미완성"
-
-msgid "Stopped"
-msgstr "정지됨"
-
-msgid "First"
-msgstr "첫번째"
-
-msgid "First page"
-msgstr "첫 페이지"
-
-msgid "Prev"
-msgstr "전"
-
-msgid "Previous page"
-msgstr "전 페이지"
-
-msgid "Next"
-msgstr "다음"
-
-msgid "Next page"
-msgstr "다음 페이지"
-
-msgid "Last"
-msgstr "마지막"
-
-msgid "Last page"
-msgstr "마지막 페이지"
-
-msgid "Enter URL or select torrent file"
-msgstr "URL을 입력하거나 토렌트 파일을 선택하세요"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "토렌트 파일 업로드 오류: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "{1} 안의 {0} 토렌트를 추가할 수 없음"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "I2P가 아닌 위치 {0}에서의 다운로드는 지원되지 않습니다"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "오류: 버전 2 정보 해시는 지원되지 않습니다"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "잘못된 URL: \"{0}\" 또는 \"{1}\"로 시작해야 합니다."
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "마그넷 삭제됨: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Torrent 파일을 삭제할 수 없습니다: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "삭제된 데이터 파일: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "데이터 파일을 삭제할 수 없습니다: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "디렉토리를 삭제할 수 없습니다: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "삭제된 디렉토리: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "토렌트 생성 오류 - 파일이나 디렉토리를 입력하세요"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "존재하지 않는 데이터 \"{0}\"을 토렌트로 만들 수 없습니다"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "\".torrent\"로 끝나는 토렌트는 삭제할 수 없습니다: {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "해당 이름으로 작동중인 토렌트가 존재합니다: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "I2P 디렉토리를 포함한 토렌트는 추가할 수 없습니다: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "{1}을 포함하는 {0} 토렌트를 추가할 수 없음"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "오류 - 기본트래커 없이 대체트래커를 포함할 수 없습니다"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "오류 - 사설 트래커와 공개 트래커를 함께 가질 수 없습니다"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr "\"{0}\"에서 {0}개의 파일이나 폴더가 필터 규칙으로 제외되었습니다."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "\"{0}\"에서 다음 파일이나 폴더가 필터 규칙으로 제외되었습니다: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "\"{0}\" 토렌트 생성됨"
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "많은 I2P 트래커들은 토렌트를 시딩하기 전 가입을 요구합니다 - {0}을 시작하기 전 가입해주세요"
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "\"{0}\" 토렌트 시작 오류"
-
-msgid "Delete selected"
-msgstr "선택된 항목 지우기"
-
-msgid "Save tracker configuration"
-msgstr "트래커 설정 저장"
-
-msgid "Removed"
-msgstr "제거됨"
-
-msgid "Add tracker"
-msgstr "트래커 추가"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "유효한 트래커 이름과 URL을 적으세요"
-
-msgid "Restore defaults"
-msgstr "기본값으로"
-
-msgid "Restored default trackers"
-msgstr "기존 트래커로"
-
-msgid "Save Filter Configuration"
-msgstr "필터 설정 저장"
-
-msgid "Add File Filter"
-msgstr "파일 필터 추가"
-
-msgid "Enter valid name and filter pattern"
-msgstr "유효한 이름과 필터 패턴을 입력하세요."
-
-msgid "Restored default torrent create filters"
-msgstr "기본 토렌트 생성 필터 복원"
-
-msgid "Torrent details"
-msgstr "토렌트 세부정보"
-
-msgid "Torrent has comments"
-msgstr "토렌트에 댓글이 있습니다"
-
-msgid "Open file"
-msgstr "파일 열기"
-
-msgid "View files"
-msgstr "파일 보기"
-
-msgid "Completed"
-msgstr "완료된"
-
-msgid "Share ratio"
-msgstr "업로드 비율"
-
-msgid "Last activity"
-msgstr "마지막 활동"
-
-msgid "Stop"
-msgstr "정지"
-
-msgid "Stop torrent"
-msgstr "토렌트 정지"
-
-msgid "Start"
-msgstr "시작"
-
-msgid "Start torrent"
-msgstr "토렌트 시작"
-
-msgid "Remove"
-msgstr "삭제"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "토렌트 리스트에서 삭제 및 .torrent 파일도 지우기"
-
-msgid "Delete"
-msgstr "삭제"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Torrent 파일 및 관련 데이터 파일을 삭제합니다"
-
-msgid "Checking"
-msgstr "확인중"
-
-msgid "Allocating"
-msgstr "할당중"
-
-msgid "Starting"
-msgstr "시작중"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "{0} 피어에게 시드"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "떼의 {1} 피어 중 {0}에 연결됨"
-
-msgid "Stalled"
-msgstr "정체됨"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "떼에서 {0} 피어에게 시딩"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "{0} 피어에서 다운로드"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "No Peers"
-msgstr "피어 없음"
-
-msgid "Peer attached to swarm"
-msgstr "떼에 연결된 피어"
-
-msgid "Destination (identity) of peer"
-msgstr "피어의 대상(ID)"
-
-msgid "seconds"
-msgstr "초"
-
-msgid "Seed"
-msgstr "시드"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "흥미없음 (피어가 필요한 파일조각을 가지고 있지 않습니다.)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "차단됨 (피어가 파일조각을 요청하는것을 허락하지 않습니다.)"
-
-msgid "Peer is interested but currently idle"
-msgstr "피어가 관심이 있지만 현재 유휴 상태입니다"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "무시당함 (내가 피어가 필요로하는 부분을 가지고 있지 않습니다.)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "차단 중 (피어가 필요한 부분을 요청하도록 허락하지 않았습니다)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "{0} 트래커 상세"
-
-msgid "Info"
-msgstr "정보"
-
-msgid "Add Torrent"
-msgstr "토렌트 추가"
-
-msgid "From URL"
-msgstr "URL에서"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "토렌트 파일 다운로드 URL(I2P 전용), 마그넷 링크 또는 정보 해시를 입력하세요"
-
-msgid "Add torrent"
-msgstr "토렌트 추가"
-
-msgid "Torrent file"
-msgstr "토렌트 파일"
-
-msgid "Data dir"
-msgstr "데이터 디렉토리"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "데이터를 저장할 디렉토리를 입력하세요 (기본값 {0})"
-
-msgid "Create Torrent"
-msgstr "토렌트 만들기"
-
-msgid "Data to seed"
-msgstr "시딩할 데이터"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "시딩할 파일 혹은 디렉토리 (full path or within the directory {0} )"
-
-msgid "Create torrent"
-msgstr "토렌트 만들기"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "토렌트 폴더에 있는 파일을 토렌트에서 제외합니다."
-
-msgid "Content Filters"
-msgstr "콘텐츠 필터"
-
-msgid "Trackers"
-msgstr "트래커"
-
-msgid "Alternates"
-msgstr "대체"
-
-msgid "Primary"
-msgstr "기본"
-
-msgid "Tracker Type"
-msgstr "트래커 유형"
-
-msgid "Standard"
-msgstr "표준"
-
-msgid "Open"
-msgstr "열기"
-
-msgid "Private"
-msgstr "사설"
-
-msgid "none"
-msgstr "없음"
 
 msgid "User Interface"
 msgstr "사용자 인터페이스"
@@ -1038,6 +587,9 @@ msgstr "테마를 수동으로 변경하려면 범용 테마를 비활성화하�
 
 msgid "Universal theming is enabled."
 msgstr "범용 테마가 활성화되었습니다."
+
+msgid "Configure"
+msgstr "구성"
 
 msgid "Refresh time"
 msgstr "갱신 시간"
@@ -1159,11 +711,20 @@ msgstr "토렌트를 추가하면 자동으로 시작하고 토렌트가 시작�
 msgid "Startup delay"
 msgstr "시작 딜레이"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "토렌트가 시작될 때 자동 시작 토렌트가 로드되기까지의 시간"
-
 msgid "minutes"
 msgstr "분"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "데이터 저장"
@@ -1174,11 +735,35 @@ msgstr "데이터 디렉토리"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "토렌트 및 다운로드/공유 파일이 저장되는 디렉토리"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "모든 사람에게 파일읽기 허락"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "다른 로컬 사용자가 다운로드한 파일에 액세스할 수 있도록 파일 권한을 설정합니다"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "토렌트당 최대 파일 수"
@@ -1189,8 +774,14 @@ msgstr "토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한
 msgid "Tunnel Configuration"
 msgstr "터널 구성"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "이 세션의 목적지(ID)"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "목적지"
@@ -1216,6 +807,24 @@ msgstr "출간 터널에 무작위로 0 또는 1 추가 점프를 추가합니�
 msgid "Outbound"
 msgstr "출간"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "I2CP 호스트"
 
@@ -1224,6 +833,49 @@ msgstr "I2CP 포트"
 
 msgid "I2CP options"
 msgstr "I2CP 옵션"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "설정 저장"
@@ -1252,8 +904,23 @@ msgstr "종료는"
 msgid "Enabled by Default"
 msgstr "기본적으로 활성화됨"
 
+msgid "Delete selected"
+msgstr "선택된 항목 지우기"
+
+msgid "Save Filter Configuration"
+msgstr "필터 설정 저장"
+
+msgid "Restore defaults"
+msgstr "기본값으로"
+
+msgid "Add File Filter"
+msgstr "파일 필터 추가"
+
 msgid "Add"
 msgstr "추가"
+
+msgid "Trackers"
+msgstr "트래커"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "토렌트의 알려진 목록에서 제거할 추적기를 선택하세요."
@@ -1261,11 +928,516 @@ msgstr "토렌트의 알려진 목록에서 제거할 추적기를 선택하세�
 msgid "Website URL"
 msgstr "웹사이트 URL"
 
+msgid "Standard"
+msgstr "표준"
+
+msgid "Open"
+msgstr "열기"
+
+msgid "Private"
+msgstr "사설"
+
 msgid "Announce URL"
 msgstr "URL 전파"
 
 msgid "Mark tracker for deletion"
 msgstr "추적기를 삭제용으로 표시"
+
+msgid "Add tracker"
+msgstr "트래커 추가"
+
+msgid "Save tracker configuration"
+msgstr "트래커 설정 저장"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "연결된 피어 수에 따라 결정되는 열려는 최대 터널 수를 구성합니다(실제 사용량은 더 적을 수 있음)."
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "이 설정을 3홉 미만으로 변경하면 익명성이 희생되어 속도가 향상될 수 있으므로 권장되지 않습니다"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "\"토렌트 추가\" 버튼으로 다운로드 시작"
+
+msgid "Torrents"
+msgstr "토렌트"
+
+msgid "Refresh page"
+msgstr "페이지 새로고침"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "토렌트 및 파일 공유 포럼"
+
+msgid "Forum"
+msgstr "포럼"
+
+msgid "Search torrents"
+msgstr "토렌트 검색"
+
+msgid "Clear search"
+msgstr "검색 지우기"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "익명 비트토렌트 클라이언트"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "{0}과(와) 모든 다운로드된 데이터를 삭제하시겠습니까?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "<b>{0}</b>과(와) 모든 관련 데이터를 삭제 중..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "참고: 다운로드된 데이터는 삭제되지 않습니다."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "{0}과(와) 관련 메타데이터만 삭제 중..."
+
+msgid "clear messages"
+msgstr "메세지 지우기"
+
+msgid "Expand"
+msgstr "확장"
+
+msgid "Shrink"
+msgstr "축소"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "경고! 브라우저에서 JavaScript가 비활성화되었습니다. {0}가 활성화되면 새로 고침이 발생하면 토렌트 섹션에 대한 입력을 잃게됩니다."
+
+msgid "page refresh"
+msgstr "페이지 새로고침"
+
+msgid "Warning - No I2P"
+msgstr "경고 - I2P 없음"
+
+msgid "No torrents found."
+msgstr "토렌트를 찾을 수 없습니다."
+
+msgid "No torrents loaded."
+msgstr "토렌트가 없습니다."
+
+msgid "Status"
+msgstr "상태"
+
+msgid "Torrent"
+msgstr "토렌트"
+
+msgid "ETA"
+msgstr "도착 예정 시간"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "RX 비율"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "TX 비율"
+
+msgid "Start All"
+msgstr "모두 시작"
+
+msgid "Stop All"
+msgstr "모두 멈춤"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "모든 토렌트와 I2P 터널을 멈춤"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "모든 토렌트와 I2P 터널 시작"
+
+msgid "Start all stopped torrents"
+msgstr "모든  멈춰진 토렌트 시작"
+
+msgid "Hide Peers"
+msgstr "피어 감추기"
+
+msgid "Show Peers"
+msgstr "피어 보이기"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "{0}로 정렬"
+
+msgid "Up Rate"
+msgstr "업로드 비율"
+
+msgid "Total size of loaded torrents"
+msgstr "로드된 토렌트의 총 크기"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "{0}개 연결된 피어"
+
+msgid "Active downloads"
+msgstr "활성 다운로드"
+
+msgid "Active uploads"
+msgstr "활성 업로드"
+
+msgid "Active Inbound tunnels"
+msgstr "활성 인바운드 터널"
+
+msgid "Active Outbound tunnels"
+msgstr "활성 출발 터널"
+
+msgid "Estimated download time for all torrents"
+msgstr "모든 토렌트의 예상 다운로드 시간"
+
+msgid "Data downloaded this session"
+msgstr "이 세션에서 데이터가 다운로드되었습니다"
+
+msgid "Total download speed"
+msgstr "총 다운로드 속도"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "업로드된 총 데이터(나열된 토렌트의 경우)"
+
+msgid "Total upload speed"
+msgstr "총 업로드 속도"
+
+msgid "Toggle Debug Panel"
+msgstr "디버그 패널 전환"
+
+msgid "Debug Mode"
+msgstr "디버그 모드"
+
+msgid "Normal Mode"
+msgstr "일반 모드"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "토렌트: {0}"
+
+msgid "No DHT Peers"
+msgstr "DHT 피어 없음"
+
+msgid "Search"
+msgstr "찾다"
+
+msgid "Show All"
+msgstr "모두 보기"
+
+msgid "Active"
+msgstr "액티브"
+
+msgid "Inactive"
+msgstr "비활성"
+
+msgid "Connected"
+msgstr "연결됨"
+
+msgid "Downloading"
+msgstr "다운로드"
+
+msgid "Seeding"
+msgstr "시딩중"
+
+msgid "Complete"
+msgstr "완료"
+
+msgid "Incomplete"
+msgstr "미완성"
+
+msgid "Stopped"
+msgstr "정지됨"
+
+msgid "First"
+msgstr "첫번째"
+
+msgid "First page"
+msgstr "첫 페이지"
+
+msgid "Prev"
+msgstr "전"
+
+msgid "Previous page"
+msgstr "전 페이지"
+
+msgid "Next"
+msgstr "다음"
+
+msgid "Next page"
+msgstr "다음 페이지"
+
+msgid "Last"
+msgstr "마지막"
+
+msgid "Last page"
+msgstr "마지막 페이지"
+
+msgid "Enter URL or select torrent file"
+msgstr "URL을 입력하거나 토렌트 파일을 선택하세요"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "토렌트 파일 업로드 오류: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "I2P가 아닌 위치 {0}에서의 다운로드는 지원되지 않습니다"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "오류: 버전 2 정보 해시는 지원되지 않습니다"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "잘못된 URL: \"{0}\" 또는 \"{1}\"로 시작해야 합니다."
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "마그넷 삭제됨: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Torrent 파일을 삭제할 수 없습니다: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "삭제된 데이터 파일: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "데이터 파일을 삭제할 수 없습니다: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "디렉토리를 삭제할 수 없습니다: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "삭제된 디렉토리: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr "\"{0}\"에서 {0}개의 파일이나 폴더가 필터 규칙으로 제외되었습니다."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "\"{0}\"에서 다음 파일이나 폴더가 필터 규칙으로 제외되었습니다: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "\"{0}\" 토렌트 생성됨"
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "많은 I2P 트래커들은 토렌트를 시딩하기 전 가입을 요구합니다 - {0}을 시작하기 전 가입해주세요"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "\"{0}\" 토렌트 시작 오류"
+
+msgid "Removed"
+msgstr "제거됨"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "유효한 트래커 이름과 URL을 적으세요"
+
+msgid "Restored default trackers"
+msgstr "기존 트래커로"
+
+msgid "Enter valid name and filter pattern"
+msgstr "유효한 이름과 필터 패턴을 입력하세요."
+
+msgid "Restored default torrent create filters"
+msgstr "기본 토렌트 생성 필터 복원"
+
+msgid "Torrent details"
+msgstr "토렌트 세부정보"
+
+msgid "Torrent has comments"
+msgstr "토렌트에 댓글이 있습니다"
+
+msgid "Open file"
+msgstr "파일 열기"
+
+msgid "View files"
+msgstr "파일 보기"
+
+msgid "Completed"
+msgstr "완료된"
+
+msgid "Share ratio"
+msgstr "업로드 비율"
+
+msgid "Last activity"
+msgstr "마지막 활동"
+
+msgid "Stop"
+msgstr "정지"
+
+msgid "Stop torrent"
+msgstr "토렌트 정지"
+
+msgid "Start"
+msgstr "시작"
+
+msgid "Start torrent"
+msgstr "토렌트 시작"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "토렌트 리스트에서 삭제 및 .torrent 파일도 지우기"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Torrent 파일 및 관련 데이터 파일을 삭제합니다"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "확인중"
+
+msgid "Allocating"
+msgstr "할당중"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "시작중"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "{0} 피어에게 시드"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "떼의 {1} 피어 중 {0}에 연결됨"
+
+msgid "Stalled"
+msgstr "정체됨"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "떼에서 {0} 피어에게 시딩"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "{0} 피어에서 다운로드"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "피어 없음"
+
+msgid "Peer attached to swarm"
+msgstr "떼에 연결된 피어"
+
+msgid "Destination (identity) of peer"
+msgstr "피어의 대상(ID)"
+
+msgid "seconds"
+msgstr "초"
+
+msgid "Seed"
+msgstr "시드"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "흥미없음 (피어가 필요한 파일조각을 가지고 있지 않습니다.)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "차단됨 (피어가 파일조각을 요청하는것을 허락하지 않습니다.)"
+
+msgid "Peer is interested but currently idle"
+msgstr "피어가 관심이 있지만 현재 유휴 상태입니다"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "무시당함 (내가 피어가 필요로하는 부분을 가지고 있지 않습니다.)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "차단 중 (피어가 필요한 부분을 요청하도록 허락하지 않았습니다)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "{0} 트래커 상세"
+
+msgid "Info"
+msgstr "정보"
+
+msgid "Add Torrent"
+msgstr "토렌트 추가"
+
+msgid "From URL"
+msgstr "URL에서"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "토렌트 파일 다운로드 URL(I2P 전용), 마그넷 링크 또는 정보 해시를 입력하세요"
+
+msgid "Add torrent"
+msgstr "토렌트 추가"
+
+msgid "Torrent file"
+msgstr "토렌트 파일"
+
+msgid "Data dir"
+msgstr "데이터 디렉토리"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "데이터를 저장할 디렉토리를 입력하세요 (기본값 {0})"
+
+msgid "Create Torrent"
+msgstr "토렌트 만들기"
+
+msgid "Data to seed"
+msgstr "시딩할 데이터"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "시딩할 파일 혹은 디렉토리 (full path or within the directory {0} )"
+
+msgid "Create torrent"
+msgstr "토렌트 만들기"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "토렌트 폴더에 있는 파일을 토렌트에서 제외합니다."
+
+msgid "Content Filters"
+msgstr "콘텐츠 필터"
+
+msgid "Alternates"
+msgstr "대체"
+
+msgid "Primary"
+msgstr "기본"
+
+msgid "Tracker Type"
+msgstr "트래커 유형"
+
+msgid "none"
+msgstr "없음"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "마그넷 추가 불가: 버전 2 마그넷 링크는 지원되지 않습니다"
@@ -1274,20 +1446,20 @@ msgstr "마그넷 추가 불가: 버전 2 마그넷 링크는 지원되지 않�
 msgid "Invalid magnet URL {0}"
 msgstr "잘못된 마그넷 URL {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "연결된 피어 수에 따라 결정되는 열려는 최대 터널 수를 구성합니다(실제 사용량은 더 적을 수 있음)."
+msgid "Files"
+msgstr "파일"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "이 설정을 3홉 미만으로 변경하면 익명성이 희생되어 속도가 향상될 수 있으므로 권장되지 않습니다"
+msgid "Save priorities"
+msgstr "우선순위 저장"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "순차적 조각 또는 파일 순서가 저장되지 않음 - 기능이 현재 손상되었습니다."
-
-msgid "Unknown command"
-msgstr "알 수 없는 명령어"
+msgid "Comments"
+msgstr "코멘트"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "양식 제출을 다시 시도해 주십시오 (잘못된 nonce)"
+
+msgid "Unknown command"
+msgstr "알 수 없는 명령어"
 
 msgid "Resource Does Not Exist"
 msgstr "리소스가 존재하지 않습니다."
@@ -1298,11 +1470,11 @@ msgstr "자원"
 msgid "Base"
 msgstr "베이스"
 
-msgid "Files"
-msgstr "파일"
-
 msgid "Directory"
 msgstr "디렉토리"
+
+msgid "File type"
+msgstr "파일 타입"
 
 msgid "Size"
 msgstr "크기"
@@ -1325,24 +1497,6 @@ msgstr "상위 디렉토리로 이동"
 msgid "Audio Playlist"
 msgstr "오디오 재생 목록"
 
-msgid "Not found"
-msgstr "찾을 수 없음"
-
-msgid "File not found in torrent"
-msgstr "토렌트에 파일 없음"
-
-msgid "Unrecognized"
-msgstr "인식되지 않음"
-
-msgid "Preview"
-msgstr "미리보기"
-
-msgid "Save priorities"
-msgstr "우선순위 저장"
-
-msgid "Comments"
-msgstr "코멘트"
-
 msgid "Resource Not found"
 msgstr "리소스를 찾을 수 없습니다."
 
@@ -1351,6 +1505,10 @@ msgstr "정보 해시"
 
 msgid "Created"
 msgstr "생성됨"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "추가된"
@@ -1415,15 +1573,6 @@ msgstr "완료"
 msgid "remaining"
 msgstr "남은"
 
-msgid "Ratings and Comments"
-msgstr "평가 및 의견"
-
-msgid "Author name required to rate or comment"
-msgstr "평가하거나 댓글을 달려면 작성자 이름이 필요합니다"
-
-msgid "Your author name for published comments and ratings"
-msgstr "게시된 댓글 및 평가에 대한 작성자 이름"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1459,6 +1608,15 @@ msgstr "삭제표시"
 msgid "Delete Selected"
 msgstr "선택된 것 삭제"
 
+msgid "Ratings and Comments"
+msgstr "평가 및 의견"
+
+msgid "Author name required to rate or comment"
+msgstr "평가하거나 댓글을 달려면 작성자 이름이 필요합니다"
+
+msgid "Your author name for published comments and ratings"
+msgstr "게시된 댓글 및 평가에 대한 작성자 이름"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "토렌트의 파일 다운로드 우선순위가 업데이트되었습니다 "
 
@@ -1467,6 +1625,9 @@ msgstr "토렌트 편집"
 
 msgid "Active Trackers"
 msgstr "액티브 트래커"
+
+msgid "Delete"
+msgstr "삭제"
 
 msgid "Add Tracker"
 msgstr "트래커 추가"
@@ -1482,3 +1643,23 @@ msgstr "변경 사항 저장"
 
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
+
+msgid "Not found"
+msgstr "찾을 수 없음"
+
+msgid "File not found in torrent"
+msgstr "토렌트에 파일 없음"
+
+msgid "Unrecognized"
+msgstr "인식되지 않음"
+
+msgid "Preview"
+msgstr "미리보기"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "{1} 안의 {0} 토렌트를 추가할 수 없음"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "{1}을 포함하는 {0} 토렌트를 추가할 수 없음"

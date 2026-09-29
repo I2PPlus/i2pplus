@@ -234,6 +234,9 @@ msgstr "Borttagen plats hållare för spårningsbild"
 msgid "no subject"
 msgstr "inget ämne"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Hittade ingen giltig avsändaradress."
 

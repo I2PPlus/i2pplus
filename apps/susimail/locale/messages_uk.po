@@ -237,6 +237,9 @@ msgstr "Видалено місце резервування слідчого з
 msgid "no subject"
 msgstr "без теми"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Адреса відправника не дійсна."
 

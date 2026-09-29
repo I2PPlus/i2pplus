@@ -137,17 +137,17 @@ msgstr "Anforderungsüberlastung"
 msgid "Connection limit reached"
 msgstr "Verbindungslimit erreicht"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Ignoriere Tunnelanfragen: Hohe Last"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Ignoriere Tunnelanfragen: zu lange Warteschlange"
-
 msgid "Transit throttle drop"
 msgstr "Transit-Drosselung verworfen"
 
 msgid "Transit throttle reject"
 msgstr "Transit-Drosselung abgelehnt"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Ignoriere Tunnelanfragen: Hohe Last"
+
 msgid "Transit request throttle"
 msgstr "Transit-Anfrage-Drosselung"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Ignoriere Tunnelanfragen: zu lange Warteschlange"

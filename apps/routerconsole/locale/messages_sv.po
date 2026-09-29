@@ -65,10 +65,6 @@ msgid "Contacting reseed host"
 msgstr "Kontaktar reseed-värd"
 
 #, java-format
-msgid "Reseeding: fetching router info from seed URL ({0} successful, {1} errors)."
-msgstr "Återdistribuerar: hämtar routerinfo från seed-webbadress ({0} lyckade, {1} fel"
-
-#, java-format
 msgid "Acquired {0} router infos from reseed hosts"
 msgstr "Hämtade {0} routerinformation från återinställda värdar"
 
@@ -129,15 +125,6 @@ msgstr "Peers utan en publicerad IP-adress"
 
 msgid "Average tunnel build success %"
 msgstr "Genomsnittlig tunnelbyggd framgång %"
-
-msgid "unknown"
-msgstr "okänd"
-
-msgid "Floodfill"
-msgstr "översvämningsnod"
-
-msgid "Show all routers with this capability in the NetDb"
-msgstr "Visa alla routrar med denna funktion i NetDb"
 
 msgid "No transports"
 msgstr "Inga transporter (gömd eller håller på att startas?)"
@@ -570,12 +557,6 @@ msgstr "Visa systemfälts ikon"
 msgid "Hide systray icon"
 msgstr "Göm systemfälts ikon"
 
-msgid "Installed I2P+ system service"
-msgstr "Installerad I2P-systemtjänst"
-
-msgid "Warning: unable to install the service"
-msgstr "Varning: kunde inte installera tjänsten"
-
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Aktiverad I2P-tjänst autostart vid systemstart"
 
@@ -587,6 +568,9 @@ msgstr "Inaktiverad I2P Service autostart vid systemstart"
 
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Varning: kunde inte ställa in I2P-tjänsten till manuell start"
+
+msgid "Warning: could not locate the I2P+ install directory"
+msgstr ""
 
 msgid "Configuration saved successfully"
 msgstr "Konfigurationen sparades utan problem"
@@ -760,6 +744,9 @@ msgstr[1] "{0} plugins har uppdaterats"
 msgid "Plugin check complete"
 msgstr "Kontroll av plugin är klar"
 
+msgid "Invalid value"
+msgstr "Ogiltigt värde"
+
 msgid "Restore Defaults"
 msgstr "Återställ standardvärden"
 
@@ -777,9 +764,6 @@ msgstr "Inga ändringar att spara"
 
 msgid "Tuning overrides applied"
 msgstr "Tuningöverridningar tillämpade"
-
-msgid "Invalid value"
-msgstr "Ogiltigt värde"
 
 msgid "No bans currently active"
 msgstr "Inga förbud är aktiva för närvarande"
@@ -810,6 +794,9 @@ msgstr "Utgångsdatum"
 
 msgid "Total session-only bans"
 msgstr "Totala sessionsförbud"
+
+msgid "Show all routers with this capability in the NetDb"
+msgstr "Visa alla routrar med denna funktion i NetDb"
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
 msgstr "Certifikat används för att autentisera krypterade tjänster som körs på nätverket, tillhandahålla valfri SSL för värdtjänster och routerkonsolen, eller tillhandahålla bevis på ägande av en routerfamilj"
@@ -1436,6 +1423,9 @@ msgstr "Ogiltig bandbredd"
 msgid "Updated bandwidth limits"
 msgstr "Uppdaterade bandbreddsgräns"
 
+msgid "unknown"
+msgstr "okänd"
+
 msgid "Delete this value to disable"
 msgstr "Radera detta värde för att inaktivera"
 
@@ -1448,6 +1438,9 @@ msgstr "{0}B maximal dataöverföring per månad"
 
 msgid "Ban peer until restart"
 msgstr "Förbjud nod tills omstart"
+
+msgid "Manually banned via configpeer"
+msgstr ""
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1605,15 +1598,6 @@ msgstr[1] "Vänta medan routingåtagandet upphör för {0} tunnlar"
 msgid "Restart in {0}"
 msgstr "Omstart om {0}"
 
-msgid "Save order"
-msgstr "Spara ordning"
-
-msgid "Restore full default"
-msgstr "Återställ till grundinställningar"
-
-msgid "Restore minimal default"
-msgstr "Återställ till minimala grundinställningar"
-
 msgid "Sidebar preferences updated"
 msgstr "Sidofältets inställningar uppdaterade"
 
@@ -1671,18 +1655,6 @@ msgstr "Konfiguration för förberadande tunnlar har sparats."
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "Fel vid sparande av konfigurationen (tillämpad men inte sparad) - se felloggarna"
 
-#, java-format
-msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] "{0} hopp"
-msgstr[1] "{0} hopp"
-
-#, java-format
-msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] "{0} tunnel"
-msgstr[1] "{0} tunnlar"
-
 msgid "Exploratory tunnels"
 msgstr "Utforskande tunnlar"
 
@@ -1730,9 +1702,6 @@ msgstr "Inkommande alternativ"
 
 msgid "Outbound options"
 msgstr "Utgående alternativ"
-
-msgid "Add user"
-msgstr "Lägg till användare"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
 msgstr "Kan inte spara temaval, temanamnet har otillåtna tecken"
@@ -2852,12 +2821,12 @@ msgstr "väntar {0}"
 msgid "Max wait: {0}"
 msgstr "Max väntan: {0}"
 
-msgid "Scheduled jobs"
-msgstr "Schemalagda uppgifter"
-
 #, java-format
 msgid "{0} starting in {1}"
 msgstr "{0} börjar om {1}"
+
+msgid "Scheduled jobs"
+msgstr "Schemalagda uppgifter"
 
 #, java-format
 msgid "Runners: {0} / {1}"
@@ -3022,9 +2991,6 @@ msgstr "Föregående sida"
 msgid "Next Page"
 msgstr "Nästa sida"
 
-msgid "Results per page"
-msgstr "Resultat per sida"
-
 msgid "Not initialized"
 msgstr "Inte intierad"
 
@@ -3177,6 +3143,9 @@ msgstr "Initiering"
 
 msgid "Our info"
 msgstr "Vår information"
+
+msgid "Floodfill"
+msgstr "översvämningsnod"
 
 msgid "Router is banlisted"
 msgstr "Router är banlistad"
@@ -3559,102 +3528,6 @@ msgstr[1] "{0} misslyckas"
 msgid "backlogged"
 msgstr "eftersatta"
 
-msgid "Definitions"
-msgstr "Definitioner"
-
-msgid "Remote peer, identified by truncated router hash"
-msgstr "Remote peer, identifierad av trunkerad routerhash"
-
-msgid "Direction"
-msgstr "Riktning"
-
-msgid "Outbound connection"
-msgstr "Utgående anslutning"
-
-msgid "They offered to introduce us (help peers traverse our firewall)"
-msgstr "De erbjöd sig att presentera oss (hjälp kamrater att passera vår brandvägg"
-
-msgid "Inbound connection"
-msgstr "Inkommande anslutning"
-
-msgid "We offered to introduce them (help peers traverse their firewall)"
-msgstr "Vi erbjöd oss ​​att introducera dem (hjälp kamrater genom deras brandvägg"
-
-msgid "How long since a packet has been received / sent"
-msgstr "Tiden sedan ett paket har mottagits / sänts"
-
-msgid "Smoothed inbound / outbound transfer rate"
-msgstr "Utjämnad inkommande/utgående överföringshastighet"
-
-msgid "How long ago connection was established"
-msgstr "Hur länge sedan upprättades anslutningen"
-
-msgid "Difference between the peer's clock and our own"
-msgstr "Skillnaden mellan kamratens klocka och vår egen"
-
-msgid "How many bytes can be sent without acknowledgement"
-msgstr "Hur många byte kan skickas utan bekräftelse"
-
-msgid "Number of sent messages awaiting acknowledgement"
-msgstr "Antal skickade meddelanden som väntar på bekräftelse"
-
-msgid "Maximum number of concurrent messages to send"
-msgstr "Maximalt antal samtidiga meddelanden att skicka"
-
-msgid "Number of pending sends which exceed window"
-msgstr "Antal pågående sändningar som överskrider fönstret"
-
-msgid "Maximum packet size before congestion avoidance"
-msgstr "Maximal paketstorlek före undvikande av trängsel"
-
-msgid "How long for packet to be sent to peer and back to us"
-msgstr "Hur lång tid innan paketet ska skickas till peer och tillbaka till os"
-
-msgid "Retransmit timeout"
-msgstr "Timeout för återsändning"
-
-msgid "How long before peer gives up resending lost packet"
-msgstr "Hur lång tid innan peer ger upp om att skicka förlorat paket"
-
-msgid "Maximum send packet size"
-msgstr "Maximal sändningspaketstorlek"
-
-msgid "Estimated maximum receive packet size (bytes)"
-msgstr "Uppskattad maximal mottagarpaketstorlek (byte)"
-
-msgid "Messages sent to peer"
-msgstr "Meddelanden skickade till peer"
-
-msgid "Messages received from peer"
-msgstr "Meddelanden mottagna från peer"
-
-msgid "Packets retransmitted to peer"
-msgstr "Paket återsänds till peer"
-
-msgid "Duplicate packets received from peer"
-msgstr "Duplicerade paket mottagna från peer"
-
-#, java-format
-msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] "Visar {0} senaste profil."
-msgstr[1] "Visar {0} senaste profiler."
-
-#, java-format
-msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] "Döljer {0} äldre profil."
-msgstr[1] "Döljer {0} äldre profil."
-
-#, java-format
-msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] "Döljer {0} standardprofil."
-msgstr[1] "Döljer {0} standardprofiler."
-
-msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
-msgstr "Notera att profileraren förlitar sig på uthållig klienttunnelanvändning för att korrekt profilera peers"
-
 msgid "Domain"
 msgstr "Domän"
 
@@ -3666,6 +3539,12 @@ msgstr "Hastighet"
 
 msgid "Low Latency"
 msgstr "Låg latens"
+
+msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
+msgstr ""
+
+msgid "Loss"
+msgstr ""
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tunnlar peer har tackat ja till att delta i"
@@ -3718,71 +3597,67 @@ msgstr "Integrerade"
 msgid "Configure Peer"
 msgstr "Konfigurera peer"
 
-msgid "Thresholds"
-msgstr "Trösklar"
+#, java-format
+msgid "{0} in RAM / {1} on disk"
+msgstr ""
 
-msgid "Capacity"
-msgstr "Kapacitet"
+msgid "High Cap"
+msgstr ""
 
-msgid "tunnels per hour"
-msgstr "tunnlar per timme"
+msgid "Displayed"
+msgstr ""
 
-msgid "Integration"
-msgstr "Integration"
+#, java-format
+msgid "Showing {0} of {1} profiles"
+msgstr ""
 
-msgid "peer"
-msgstr "peer"
+#, java-format
+msgid "{0} stale profile hidden"
+msgid_plural "{0} stale profiles hidden"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Share of total profiles shown"
+msgstr ""
 
 msgid "peers"
 msgstr "peers"
 
-#, java-format
-msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] "{0} fast peer"
-msgstr[1] "{0} snabba peers"
+msgid "Share of tier profiles shown"
+msgstr ""
 
-#, java-format
-msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] "{0} peer med hög kapacitet"
-msgstr[1] "{0} peer med hög kapacitet"
+msgid "Window"
+msgstr ""
 
-#, java-format
-msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] "{0} integrated peer"
-msgstr[1] "{0} integrerade peers"
+msgid "Fast RTT"
+msgstr ""
 
-msgid "1h Fail Rate"
-msgstr "1h felfrekvens"
+msgid "Max RTT for fast-tier membership (ms)"
+msgstr ""
 
-msgid "1h Resp. Time"
-msgstr "1h svarstid"
+msgid "Average loss of fast-tier peers (%)"
+msgstr ""
 
-msgid "Good Lookups"
-msgstr "Bra uppslag"
+msgid "Average loss of high-capacity peers (%)"
+msgstr ""
 
-msgid "Last Good Lookup"
-msgstr "Senaste bra uppslag"
+msgid "Heard from within the display cutoff"
+msgstr ""
 
-msgid "Last Good Send"
-msgstr "Senaste bra försändning"
+msgid "Lookups"
+msgstr ""
 
-msgid "Last Good Store"
-msgstr "Senaste bra lagring"
+msgid "Lookup success rate"
+msgstr ""
 
-msgid "Bad Lookups"
-msgstr "Dåliga sökningar"
+msgid "Stores"
+msgstr ""
 
-msgid "Last Bad Lookup"
-msgstr "Senaste dåliga uppslag"
+msgid "Store success rate"
+msgstr ""
 
-msgid "Last Bad Send"
-msgstr "Senaste dåliga försändning"
-
-msgid "Last Bad Store"
-msgstr "Senaste dåliga lagring"
+msgid "Definitions"
+msgstr "Definitioner"
 
 msgid "caps"
 msgstr "kap."
@@ -3848,6 +3723,57 @@ msgstr "integration"
 
 msgid "how many new peers have they told us about lately?"
 msgstr "hur många nya noder har de berättat för oss om nyligen?"
+
+msgid "Known floodfills"
+msgstr ""
+
+msgid "No-Fail"
+msgstr ""
+
+msgid "No lookup failures (1h)"
+msgstr ""
+
+msgid "Response"
+msgstr ""
+
+msgid "Lookup response time (1h)"
+msgstr ""
+
+msgid "1h Contact"
+msgstr ""
+
+msgid "Contacted within 1h"
+msgstr ""
+
+msgid "1h Fail Rate"
+msgstr "1h felfrekvens"
+
+msgid "1h Resp. Time"
+msgstr "1h svarstid"
+
+msgid "Good Lookups"
+msgstr "Bra uppslag"
+
+msgid "Last Good Lookup"
+msgstr "Senaste bra uppslag"
+
+msgid "Last Good Send"
+msgstr "Senaste bra försändning"
+
+msgid "Last Good Store"
+msgstr "Senaste bra lagring"
+
+msgid "Bad Lookups"
+msgstr "Dåliga sökningar"
+
+msgid "Last Bad Lookup"
+msgstr "Senaste dåliga uppslag"
+
+msgid "Last Bad Send"
+msgstr "Senaste dåliga försändning"
+
+msgid "Last Bad Store"
+msgstr "Senaste dåliga lagring"
 
 msgid "All"
 msgstr "Alla"
@@ -3954,9 +3880,6 @@ msgstr "Bygger"
 
 msgid "Building tunnels"
 msgstr "Bygger tunnlar"
-
-msgid "Shared Clients"
-msgstr "Delade Kunder"
 
 msgid "Ping"
 msgstr "Ping"
@@ -4805,6 +4728,12 @@ msgstr "Nagle-tömningsfördröjning"
 msgid "Slow Start Window Cap"
 msgstr "Övre gräns för långsam start-fönster"
 
+msgid "Max Inbound Buffer"
+msgstr ""
+
+msgid "Max Concurrent Streams"
+msgstr ""
+
 msgid "Max SYN Sends"
 msgstr "Max SYN skickar"
 
@@ -4816,6 +4745,9 @@ msgstr "Max fördröjning för omsändning"
 
 msgid "Max Retransmissions"
 msgstr "Max antal omsändningar"
+
+msgid "Receive Worker Threads"
+msgstr ""
 
 msgid "Writer Queue Size"
 msgstr "Skrivarköns storlek"
@@ -4898,6 +4830,18 @@ msgstr "Max samtidiga sökningar"
 msgid "Search Timeout"
 msgstr "Tidsgräns för sökning"
 
+msgid "Search Cap"
+msgstr ""
+
+msgid "Republish Window"
+msgstr ""
+
+msgid "Republish Fanout"
+msgstr ""
+
+msgid "Exploratory Breadth"
+msgstr ""
+
 msgid "LeaseSet Lookup Timeout"
 msgstr "Tidsgräns för LeaseSet-uppslagning"
 
@@ -4921,6 +4865,9 @@ msgstr "Minsta antal noder med hög kapacitet"
 
 msgid "Maximum High Capacity Peers"
 msgstr "Högsta antal noder med hög kapacitet"
+
+msgid "Lossy Peer Demotion Threshold"
+msgstr ""
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Tidsgräns för tunnelbyggnadsbegäran"
@@ -4946,6 +4893,27 @@ msgstr "Min fördröjning mellan tester"
 msgid "Max Delay Between Tests"
 msgstr "Max fördröjning mellan tester"
 
+msgid "Tunnel Test Failure Window"
+msgstr ""
+
+msgid "Tunnel Test Failure Window Floor"
+msgstr ""
+
+msgid "First-Hop Failure Cooldown"
+msgstr ""
+
+msgid "First-Hop Failure Threshold"
+msgstr ""
+
+msgid "Inbound Congestion Threshold"
+msgstr ""
+
+msgid "Stale Build Pruning Threshold"
+msgstr ""
+
+msgid "Concurrency Throttle Threshold"
+msgstr ""
+
 msgid "NTCP Reader Threads"
 msgstr "NTCP läsartrådar"
 
@@ -4954,6 +4922,9 @@ msgstr "NTCP skrivartrådar"
 
 msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP pumpar-felsäkerhetsintervall"
+
+msgid "NTCP Pumper Max Idle Loop Rate"
+msgstr ""
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Max samtidiga nodmeddelanden"
@@ -5024,6 +4995,9 @@ msgstr "Tidsgräns för inaktivitet"
 msgid "Max Window Size"
 msgstr "Max fönsterstorlek"
 
+msgid "Connect Timeout Multiplier"
+msgstr ""
+
 msgid "Max Message Queue Age"
 msgstr "Max ålder för meddelandekö"
 
@@ -5039,11 +5013,26 @@ msgstr "Pumpartrådar"
 msgid "Server Handler Threads"
 msgstr "Serverhanterartrådar"
 
+msgid "Server Handler Queue Capacity"
+msgstr ""
+
+msgid "Server Default Threads per Tunnel"
+msgstr ""
+
+msgid "I/O Transfer Threads"
+msgstr ""
+
+msgid "I/O Stall Timeout"
+msgstr ""
+
 msgid "Build Handler Threads"
 msgstr "Byggnadshanterartrådar"
 
 msgid "Client Runner Max Threads"
 msgstr "Max trådar för klientkörning"
+
+msgid "Client Default Max Connections"
+msgstr ""
 
 msgid "Participating Throttle Min"
 msgstr "Min strypning för deltagande"
@@ -5077,9 +5066,6 @@ msgstr "Eftersläpningströskel vid måttlig belastning"
 
 msgid "Moderate-Load CPU Threshold"
 msgstr "CPU-tröskel vid måttlig belastning"
-
-msgid "Sustained High-Load Window"
-msgstr "Fönster för ihållande hög belastning"
 
 msgid "Sustained Moderate-Load Window"
 msgstr "Fönster för ihållande måttlig belastning"
@@ -5122,6 +5108,9 @@ msgstr "Tidsgräns för socketanslutning"
 
 msgid "Untested Tunnel Cap Multiplier"
 msgstr "Otestad Tunnel Cap Multiplikator"
+
+msgid "Tunnel IV Filter Size"
+msgstr ""
 
 msgid "Message Processing Throttle"
 msgstr "Meddelandebearbetning Throttle"
@@ -5171,6 +5160,12 @@ msgstr "Nagle-tömningsfördröjning (ms)."
 msgid "Max congestion window during slow start."
 msgstr "Max överbelastningsfönster under långsam start."
 
+msgid "Per-connection inbound buffer cap (bytes)."
+msgstr ""
+
+msgid "Dynamic cap on concurrent streams per destination."
+msgstr ""
+
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Totala SYN-försök innan du ger upp ett handslag."
 
@@ -5182,6 +5177,9 @@ msgstr "Max tid mellan omsändningar (ms)."
 
 msgid "Retransmissions before dropping the stream."
 msgstr "Omsändningar innan strömmen släpps."
+
+msgid "Inbound packet processing threads per streaming session."
+msgstr ""
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Max inaktiv tid innan en ström släpps (ms)."
@@ -5270,6 +5268,18 @@ msgstr "Max samtidiga NetDB-uppslagningar."
 msgid "Per-peer lookup timeout (ms)."
 msgstr "Tidsgräns för uppslagning per nod (ms)."
 
+msgid "Hard deadline for each iterative search (ms)."
+msgstr ""
+
+msgid "Lifetime of lease republish store messages (ms)."
+msgstr ""
+
+msgid "Max peers that receive a republished lease after a search."
+msgstr ""
+
+msgid "Concurrent exploratory searches per cycle."
+msgstr ""
+
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Adaptivt tidsgränstak för LeaseSet-uppslagningar (ms)."
 
@@ -5293,6 +5303,9 @@ msgstr "Min noder med hög kapacitet i routningstabellen."
 
 msgid "Max high-capacity peers in routing table."
 msgstr "Max noder med hög kapacitet i routningstabellen."
+
+msgid "Loss ratio that demotes a peer from the fast tiers (%)."
+msgstr ""
 
 msgid "Build reply timeout (ms)."
 msgstr "Tidsgräns för byggsvar (ms)."
@@ -5318,6 +5331,27 @@ msgstr "Min intervall mellan tunneltester (ms)."
 msgid "Max interval between tunnel tests (ms)."
 msgstr "Max intervall mellan tunneltester (ms)."
 
+msgid "Max time a tunnel test may take before failure (ms)."
+msgstr ""
+
+msgid "Floor for the tunnel test failure window (ms)."
+msgstr ""
+
+msgid "How long a peer is skipped after first-hop failures (ms)."
+msgstr ""
+
+msgid "Failures before a peer is skipped during cooldown."
+msgstr ""
+
+msgid "Inbound tunnel count below which builds are throttled."
+msgstr ""
+
+msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
+msgstr ""
+
+msgid "Timeout rate that triggers concurrent build reduction (%)."
+msgstr ""
+
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Trådar som dekrypterar inkommande NTCP-data."
 
@@ -5326,6 +5360,9 @@ msgstr "Trådar som krypterar utgående NTCP-meddelanden."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Felsäkert avsökningsintervall för fastnade NTCP-pumpar (ms)."
+
+msgid "Cap on idle NTCP pump iterations per second (loops/s)."
+msgstr ""
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Gräns för meddelanden under transport per UDP-nod."
@@ -5381,6 +5418,9 @@ msgstr "Minsta sändningshastighet innan pacing startar (KB/s)."
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "Övre gräns för RTT-uppskattning (ms)."
 
+msgid "Scales each client's connect timeout by network RTT (30-200%)."
+msgstr ""
+
 msgid "Delay before first retransmit (ms)."
 msgstr "Fördröjning innan första omsändningen (ms)."
 
@@ -5402,11 +5442,26 @@ msgstr "Antal gateway-pumpartrådar."
 msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Hanterartrådar för inkommande I2PTunnel-anslutningar."
 
+msgid "Inbound connections that may wait for a free server handler thread."
+msgstr ""
+
+msgid "Default cap on server handler threads for each server tunnel."
+msgstr ""
+
+msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
+msgstr ""
+
+msgid "Stall timeout for Server→Client data transfers (ms)."
+msgstr ""
+
 msgid "Thread pool for inbound build request processing."
 msgstr "Trådpool för behandling av inkommande byggnadsbegäranden."
 
 msgid "Ceiling for client proxy thread pool."
 msgstr "Övre gräns för klientproxyns trådpool."
+
+msgid "Default client connection cap."
+msgstr ""
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Min transittunnlar som en nod kan hålla."
@@ -5440,9 +5495,6 @@ msgstr "Jobbköns eftersläpning som utlöser nodfrånkoppling vid måttlig bela
 
 msgid "System load percent triggering moderate-load disconnect."
 msgstr "Systembelastningsprocent som utlöser frånkoppling vid måttlig belastning."
-
-msgid "Duration of high load before gating requests (ms)."
-msgstr "Varaktighet av hög belastning innan begäranden grindas (ms)."
 
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Varaktighet av måttlig belastning innan begäranden avvisas (ms)."
@@ -5485,6 +5537,9 @@ msgstr "RTO-tillväxtmultiplikator per omsändningstidsgräns (%, 100 = platt)."
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tidsgräns för TCP-socketanslutning för tunnelserverns hanterartrådar (ms)."
+
+msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Max genomsnittlig meddelandefördröjning innan transitering avvisas (ms)."
@@ -5613,6 +5668,9 @@ msgstr "Alla tunnlar av Peer"
 msgid "Primary IP address"
 msgstr "Primär IP-adress"
 
+msgid "No local or transit tunnels currently active."
+msgstr "Inga lokala eller transittunnlar är aktiva för närvarande."
+
 msgid "unique peers"
 msgstr "unika kamrater"
 
@@ -5621,9 +5679,6 @@ msgstr "lokal"
 
 msgid "transit"
 msgstr "genomresa"
-
-msgid "No local or transit tunnels currently active."
-msgstr "Inga lokala eller transittunnlar är aktiva för närvarande."
 
 msgid "PRIVATE IP ADDRESS"
 msgstr "PRIVAT IP-ADRESS"
@@ -5634,6 +5689,15 @@ msgstr "Bandbreddsnivåer"
 #, java-format
 msgid "Over {0} shared bandwidth"
 msgstr "Över {0} delad bandbredd"
+
+msgid "Locally hosted tunnel"
+msgstr "Lokalt värd tunnel"
+
+msgid "in"
+msgstr "i"
+
+msgid "out"
+msgstr "ut"
 
 msgid "Inbound or outbound?"
 msgstr "Inkommande eller utgående?"
@@ -5656,6 +5720,9 @@ msgstr "Deltagare"
 msgid "Endpoint"
 msgstr "Slutpunkt"
 
+msgid "ms"
+msgstr ""
+
 msgid "Test successful"
 msgstr "Test lyckades"
 
@@ -5677,15 +5744,6 @@ msgstr "Pool över budget - schemalagd för tidig utgång"
 
 msgid "Not yet tested"
 msgstr "Ännu inte testad"
-
-msgid "Locally hosted tunnel"
-msgstr "Lokalt värd tunnel"
-
-msgid "in"
-msgstr "i"
-
-msgid "out"
-msgstr "ut"
 
 msgid "Data In"
 msgstr "Data in"
@@ -5792,6 +5850,9 @@ msgstr "Öppna routerkonsolen i webbläsare vid uppstart"
 
 msgid "shared clients"
 msgstr "delade klienter"
+
+msgid "Shared Clients"
+msgstr "Delade Kunder"
 
 msgid "I2PMail SMTP Server"
 msgstr "I2PMail SMTP-server"
@@ -6070,11 +6131,11 @@ msgstr "Blockera LU-routrar"
 msgid "Additional Router Caps"
 msgstr "Ytterligare routerbegränsningar"
 
-msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
-msgstr "Lägg till begränsningsgrupper, separerade med mellanslag eller kommatecken t.ex. LUf,PU"
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
+msgstr ""
 
-msgid "Misc Reasons"
-msgstr "Övriga anledningar"
+msgid "Misc"
+msgstr ""
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Förbjud översvämningsnoder som inte svarar på frågor (felfrekvens >95 %)"
@@ -6093,6 +6154,12 @@ msgstr "Blockera routrar som skickar överdrivna tunnel-deltagandeförfrågninga
 
 msgid "Ban excessive tunnel requests"
 msgstr "Blockera överdrivna tunnelförfrågningar"
+
+msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
+msgstr ""
+
+msgid "Ban next-hop peers"
+msgstr ""
 
 msgid "Clear all bans"
 msgstr "Rensa alla avstängningar"
@@ -6233,6 +6300,12 @@ msgstr "I2CP-gränssnitt"
 
 msgid "I2CP Port"
 msgstr "I2CP-port"
+
+msgid "Do not bypass the network when accessing locally hosted services"
+msgstr ""
+
+msgid "Disable Loopback"
+msgstr ""
 
 msgid "Require username and password"
 msgstr "Kräver användarnamn och lösenord"
@@ -6507,6 +6580,9 @@ msgstr "Justera profilbonusar"
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "Bonusar kan vara positiva eller negativa och påverka kamratens inkludering i snabb- och högkapacitetsnivåerna. Snabba peers används för klienttunnlar och High Capacity peers används för vissa utforskande tunnlar"
 
+msgid "Capacity"
+msgstr "Kapacitet"
+
 msgid "Banned IP Addresses"
 msgstr "Förbjudna IP:n"
 
@@ -6740,6 +6816,12 @@ msgstr "Uppdateringsintervall"
 msgid "Update graph every second"
 msgstr "Uppdatera diagram varje sekund"
 
+msgid "Restore full default"
+msgstr "Återställ till grundinställningar"
+
+msgid "Restore minimal default"
+msgstr "Återställ till minimala grundinställningar"
+
 msgid "config stats"
 msgstr "konfigurera statistik"
 
@@ -6820,6 +6902,9 @@ msgstr "Om du inte använder Internet Explorer (IE), är det troligt att din web
 
 msgid "Router Console Password"
 msgstr "Routerkonsol lösenord"
+
+msgid "Add user"
+msgstr "Lägg till användare"
 
 msgid "Router Console Language"
 msgstr "Routerkonsolens språk"
@@ -7092,6 +7177,12 @@ msgstr "Denna inställning möjliggör att förfrågningar från routrar i angiv
 msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
 msgstr "Det maximala antalet sessionsbanlogsarkivfiler att behålla. När det överskrids raderas äldre arkiv. [Standard är 5"
 
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "Denna inställning, när satt till true, blockerar direkt kommunikation från alla X-nivå routrar som publicerar en G-stockningsgräns och varken är nåbara eller onåbara, och lägger till dem i sessionsbanlistan. [Standard är false"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "Denna inställning, när satt till true, blockerar direkt kommunikation från alla LU-nivå routrar (låg bandbredd, onåbara eller brandväggsskyddade), och lägger till dem i sessionsbanlistan. [Standard är true"
+
 msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
 msgstr "Frekvensen i millisekunder för att söka efter misstänkta hash-mönster (potentiella Sybil-attacker). Sätt till 0 för att inaktivera. [Standard är 3600000"
 
@@ -7302,6 +7393,24 @@ msgstr "Den här inställningen avgör om routerns som kategoriseras som ointres
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "När satt till true kommer denna inställning att lätta på villkoren som krävs för din router för att publicera trängselgränser, specifikt när det bestäms att din bandbreddsanvändning är hög. Andra villkor, såsom hög jobbfördröjning eller en router klassificerad som långsam, kommer fortfarande att orsaka att gränser publiceras. [Standard är false"
 
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "Perioden i millisekunder för att kontrollera inaktiva tunnlar. Tunnlar utan trafik under denna period kan släppas. [Standard är 60000"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "Minsta antal meddelanden en tunnel måste ha bearbetat under detektionsperioden för att anses aktiv. Tunnlar under denna tröskel är kandidater för borttagning. [Standard är 3"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "Intervallet i millisekunder mellan genomsökningar efter inaktiva transittunnlar. [Standard är 180000"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "Om du vill installera osignerade (.zip) I2P-uppdateringar bör detta läggas till i din <code>router.config</code>-fil om du inte redan har konfigurerat <code>routerconsole.advanced=true</code>, i vilket fall detta alternativ redan är levererat. Notera: Från och med I2P+ 0.9.48+ är installation av <a href=/configupdate#i2pupdates>osignerade uppdateringar</a> aktiverat som standard"
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "Denna inställning gör det möjligt att konfigurera uppdaterings-URL:en för funktionen osignerad uppdatering, om det är aktiverat. URL:en bör sluta med <code>/i2pupdate.zip</code>. Notera: installera inte osignerade uppdateringar om du inte litar på källan till uppdateringen"
+
+msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
+msgstr "Den här inställningen (i minuter) gör det möjligt att manuellt konfigurera hur länge du ska vänta efter start innan RouterInfos i NetDb kontrolleras för att vara giltiga, efter vilket endast giltiga routrar accepteras för inkludering. När valideringen sker kommer utgångna RouterInfos och oresponsiva peers som bara är tillgängliga via SSU att tas bort från NetDb. [Standard är 60 minuter] Observera: Den här inställningen har ingen inverkan på äldre routar (som är äldre än 0.9.29 som standard) som tas bort från NetDb och blir förbjudna för router-sessionen så snart en NetDb-lagring försöks att göras"
+
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
 msgstr "När det konfigurerats sätter detta en hård gräns för antalet tunnlar routern tillåts bygga samtidigt. Som standard använder routern genomsnittlig byggtid och nuvarande utgående bandbredd för att bestämma optimal bygghastighet. Denna inställning är dynamisk och träder i kraft utan omstart"
 
@@ -7374,11 +7483,14 @@ msgstr "Minsta måltunnlar per pool innan brådskande återbyggnadslogik utlöse
 msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
 msgstr "Golv för samtidiga nästa-hopp RouterInfo-uppslagningar under tunnelbyggprocessen. Säkerställer en miniminivå av uppslagningssamtidighet även när få tunnlar deltar. [Standard är 10 (4 på långsamma system)"
 
-msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
-msgstr "Tak för samtidiga nästa-hopp RouterInfo-uppslagningar under tunnelbyggprocessen. Begränsar uppslagningssamtidighet för att förhindra överbelastning av netDb. [Standard är max(kärnor/2, 16) (10 på långsamma system)"
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
+msgstr ""
 
-msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr "Procentandel av nuvarande deltagande tunnlar som används för att skala den samtidiga uppslagsningsgränsen. Den effektiva gränsen begränsas mellan minLookupLimit och maxLookupLimit. [Standard är 40 (15 på långsamma system)"
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr ""
+
+msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
+msgstr ""
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Maximal tillåten framtida snedhet för tunnelbyggförfrågningstidsstämplar. Förfrågningar med tidsstämplar längre fram i tiden än detta avvisas som potentiella replay-attacker. [Standard är 300000 (5 minuter)"
@@ -7485,32 +7597,77 @@ msgstr "Minsta antal aktiva (icke-misslyckade) noder som krävs för normalt utf
 msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
 msgstr "Minsta antal aktiva noder som krävs under routerstart innan utforskande nodval begränsas. Under tidig start är routern mer överseende med nodkvalitet. [Standard är 6"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
-msgstr "Maximal slow start-fönsterstorlek för strömningsanslutningar. Begränsar stockningsfönstret under slow start för att förhindra överbelastning av nätverket. [Standard är 64"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
+msgstr ""
 
-msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
-msgstr "Maximal rundturstid i millisekunder för strömningsanslutningar. Begränsar beräknad RTT för att förhindra patologiska tidsgränsvärden efter nätverksstörningar. [Standard är 60000 (60 sekunder)"
-
-msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
-msgstr "Maximalt antal paketåtersändningar innan man ger upp en anslutning. Högre värden förbättrar tillförlitlighet på förlustbehäftade länkar men fördröjer feldetektering. [Standard är 64"
-
-msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
-msgstr "Avkylningsperiod i millisekunder mellan anslutningsförsök till samma oåtkomliga destination. Förhindrar bankande på oåtkomliga noder. [Standard är 60000 (60 sekunder)"
-
-msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
-msgstr "Maximal tid i millisekunder att vänta på ett pong-svar vid pingning av en nod. [Standard är 300000 (5 minuter)"
-
-msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
-msgstr "Antal gånger att svara på en begränsad destination innan överskotts-paket tyst släpps. Förhindrar att anslutningsstormar överväldigar routern. [Standard är 3"
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Denna inställning för en specifik tunnel gör att du kan aktivera eller inaktivera svar på pingar som skickas till servrar som värd av routern. För att inaktivera pingar måste du lägga till raden <code>i2p.streaming.answerPings=false</code> i sektionen <i>Anpassade alternativ</i> för serverns konfiguration i Tunnelhanteraren"
 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "Standard maximal strömningsfördröjning i millisekunder när ingen explicit anslutningstidsgräns är inställd. [Standard är 10000 (10 sekunder)"
 
-msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr "Maximal tid i millisekunder en mottagen SYN kan vänta i acceptkön innan accept() drar den. Om accept() är fördröjd (upptagen värdserver) nekas anslutningen efter detta fönster, så ett högre värde tolererar korta stall. [Standard är 30 000 (30 sekunder)]"
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr "Maximalt antal väntande anslutningar (SYN och partiella paket) i serverns acceptkö. När de är fulla avbryts nya SYN (klienten försöker igen) snarare än att återställas, så ett högre värde absorberar anslutningsskurar bättre till kostnaden för minnet. [Standard är 256 (128 på långsamma system)]"
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "Antal gånger att svara på en begränsad destination innan överskotts-paket tyst släpps. Förhindrar att anslutningsstormar överväldigar routern. [Standard är 3"
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
+msgstr ""
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
+msgstr ""
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
+msgstr ""
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "Maximal tid i millisekunder att vänta på ett pong-svar vid pingning av en nod. [Standard är 300000 (5 minuter)"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Denna inställning gör att maxvärdet för den extra slumpmässiga pongfördröjningen som införs för ping-aktiverade servrar ändras om <code>i2p.streaming.enablePongDelay</code> också är aktiverad. Om den inte ställs in kommer standardvärdet på 50 ms att användas"
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
+msgstr ""
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "Maximal återsändningsfördröjning i millisekunder. Återsändningsintervall kommer inte att överstiga detta värde oavsett backoff. Öka för att tillåta längre mellan återförsök på stockade vägar. [Standard är 30000 (30s)"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
+msgstr ""
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "Maximal Retransmission TimeOut i millisekunder efter exponentiell backoff (fördubbling). Begränsar hur länge avsändaren väntar innan återsändning vid allvarlig stockning. [Standard är 30000 (30s)"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
+msgstr ""
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgstr ""
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgstr ""
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "Minsta återsändningsfördröjning i millisekunder. Paket kommer inte att skickas om snabbare än detta intervall. Lägre värden möjliggör snabbare återhämtning på förlustbehäftade anslutningar. [Standard är 100ms"
+
+msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
+msgstr ""
+
+msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
+msgstr ""
+
+msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
+msgstr ""
+
+msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
+msgstr ""
+
+msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Intervall i millisekunder mellan automatiska LeaseSet-ompublikationer. Högre värden minskar netdb-trafik men kan orsaka inaktuell leasinfo. [Standard är 300000 (5 minuter)"
@@ -7518,32 +7675,14 @@ msgstr "Intervall i millisekunder mellan automatiska LeaseSet-ompublikationer. H
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "Tröskel i millisekunder för proaktiv LeaseSet-ompublikation. Om ett lease löper ut inom detta fönster publiceras LeaseSet omedelbart istället för att vänta på nästa periodiska cykel. [Standard är 180000 (3 minuter)"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
-msgstr "Perioden i millisekunder för att kontrollera inaktiva tunnlar. Tunnlar utan trafik under denna period kan släppas. [Standard är 60000"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgstr ""
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
-msgstr "Minsta antal meddelanden en tunnel måste ha bearbetat under detektionsperioden för att anses aktiv. Tunnlar under denna tröskel är kandidater för borttagning. [Standard är 3"
-
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
-msgstr "Intervallet i millisekunder mellan genomsökningar efter inaktiva transittunnlar. [Standard är 180000"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Om du vill installera osignerade (.zip) I2P-uppdateringar bör detta läggas till i din <code>router.config</code>-fil om du inte redan har konfigurerat <code>routerconsole.advanced=true</code>, i vilket fall detta alternativ redan är levererat. Notera: Från och med I2P+ 0.9.48+ är installation av <a href=/configupdate#i2pupdates>osignerade uppdateringar</a> aktiverat som standard"
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "Denna inställning gör det möjligt att konfigurera uppdaterings-URL:en för funktionen osignerad uppdatering, om det är aktiverat. URL:en bör sluta med <code>/i2pupdate.zip</code>. Notera: installera inte osignerade uppdateringar om du inte litar på källan till uppdateringen"
-
-msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr "Den här inställningen (i minuter) gör det möjligt att manuellt konfigurera hur länge du ska vänta efter start innan RouterInfos i NetDb kontrolleras för att vara giltiga, efter vilket endast giltiga routrar accepteras för inkludering. När valideringen sker kommer utgångna RouterInfos och oresponsiva peers som bara är tillgängliga via SSU att tas bort från NetDb. [Standard är 60 minuter] Observera: Den här inställningen har ingen inverkan på äldre routar (som är äldre än 0.9.29 som standard) som tas bort från NetDb och blir förbjudna för router-sessionen så snart en NetDb-lagring försöks att göras"
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "När satt till true inaktiveras lokal-lokal loopback-leverans och all trafik tvingas genom tunnlar (utgående tunnel → nätverk → inkommande tunnel → lokal destination). Användbart för att testa tunnelroutningsbeteende när källa och destination är på samma router. [Inaktiverad som standard"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
 msgstr "Denna inställning, när satt till true, blockerar direkt kommunikation från alla routrar i ditt eget land och lägger till dem i din banlista tills routern startas om. [Standard är false, eller true om routern är i dolt läge"
-
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
-msgstr "Denna inställning, när satt till true, blockerar direkt kommunikation från alla X-nivå routrar som publicerar en G-stockningsgräns och varken är nåbara eller onåbara, och lägger till dem i sessionsbanlistan. [Standard är false"
-
-msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
-msgstr "Denna inställning, när satt till true, blockerar direkt kommunikation från alla LU-nivå routrar (låg bandbredd, onåbara eller brandväggsskyddade), och lägger till dem i sessionsbanlistan. [Standard är true"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Denna inställning tillåter inaktivering av SSU-tester för att avgöra om din router är brandväggad och kan aktiveras för routrar som definitivt inte är brandväggade men upplever intermittent brandväggningsproblem. Om testningen är inaktiverad ska både SSU och NTCP rapportera din nuvarande publika IP-adress på <a href=/info>routers informationsida</a>. [Omstart krävs"
@@ -7551,26 +7690,11 @@ msgstr "Denna inställning tillåter inaktivering av SSU-tester för att avgöra
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "Denna inställning avgör vilket transportmedel som får företräde vid kommunikation med peers. Som standard föredras NTCP framför UDP (SSU). Genom att sätta värdet till true kommer UDP att få företräde om ingen befintlig NTCP-anslutning finns; när värdet är satt till always kommer UDP alltid att användas oavsett eventuell befintlig NTCP-anslutning. [Standard är false"
 
-msgid "miscellaneous"
-msgstr "diverse"
-
-msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr "Om inställd på true kommer denna inställning att placera en ikon i systemfacket / meddelandeområdet, med grundläggande servicekontrollalternativ. [Inaktiverat som standard"
-
-msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Denna inställning tillåter konfiguration av det maximala antalet filer per torrent som Torrenter kommer att tillåta vid nedladdning eller skapande av en torrent. Observera att en betydande ökning av detta värde från standardvärdet på 2000 filer kan kräva ytterligare konfiguration på värdsystemet för att öka det maximala antalet öppna filer som operativsystemet tillåter (t.ex. <code> ulimit -n </code> på Linux). För att ändra detta lägger du till i Torrentss konfigurationsfil <code> i2psnark.config </code>. [Omplacering av Torrenter eller router krävs"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "Denna inställning för en specifik tunnel gör att du kan aktivera eller inaktivera svar på pingar som skickas till servrar som värd av routern. För att inaktivera pingar måste du lägga till raden <code>i2p.streaming.answerPings=false</code> i sektionen <i>Anpassade alternativ</i> för serverns konfiguration i Tunnelhanteraren"
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "Denna inställning, när den är aktiverad, gör att det införs en slumpmässig pongfördröjning i upp till 50 ms för alla ping-aktiverade servrar som hostas av routern. Standardinställningen är inaktiverad. [Omstart krävs"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "Denna inställning gör att maxvärdet för den extra slumpmässiga pongfördröjningen som införs för ping-aktiverade servrar ändras om <code>i2p.streaming.enablePongDelay</code> också är aktiverad. Om den inte ställs in kommer standardvärdet på 50 ms att användas"
-
 msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
 msgstr "Anslutningstidsgränsen i millisekunder för eepget HTTP-förfrågningar (tid att vänta på initiala svarshuvuden). Öka för höglatens fjärråtkomstscenarier. [Standard är 90000 (90s)"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "Standard antal återförsök för eepget när flaggan <code>-n</code> inte anges. [Standard är 10"
 
 msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
 msgstr "Inaktivitetstidsgränsen i millisekunder för eepget-överföringar (max inaktiv tid under datafasen). Öka för långsamma anslutningar som upplever stopp. [Standard är 300000 (5min)"
@@ -7578,35 +7702,68 @@ msgstr "Inaktivitetstidsgränsen i millisekunder för eepget-överföringar (max
 msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
 msgstr "Maximalt antal på varandra följande noll-data-överföringsfel innan eepget ger upp, även om återförsök återstår. Öka om överföringar misslyckas utan att ta emot någon data. [Standard är 20"
 
-msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
-msgstr "Standard antal återförsök för eepget när flaggan <code>-n</code> inte anges. [Standard är 10"
+msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
+msgstr ""
 
-msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
-msgstr "TIME-WAIT-tiden i millisekunder efter att en strömningsanslutning kopplas från, under vilken sena paket fortfarande bekräftas. Öka för höglatensvägar där slutliga ACK kan försenas. [Standard är 300000 (5min)"
+msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
+msgstr ""
 
-msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
-msgstr "Den övre gränsklämman för strömningsanslutningstidsgräns. Förhindrar att per-anslutning tidsgränser överstiger detta tak oavsett per-tunnelkonfiguration. Öka för mycket höglatens fjärråtkomst. [Standard är 120000 (2min)"
+msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
+msgstr ""
 
-msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
-msgstr "Initial stockningsfönsterstorlek (i paket) för nya strömningsanslutningar. Ett större fönster startar anslutningar snabbare men kan orsaka fler återsändningar på stockade vägar. [Standard är 8"
+msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
+msgstr ""
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
-msgstr "Maximal stockningsfönsterstorlek (i paket) för strömningsanslutningar. Begränsar maximal genomströmning av en enskild ström. [Standard är 128"
+msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
 
-msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
-msgstr "Minsta återsändningsfördröjning i millisekunder. Paket kommer inte att skickas om snabbare än detta intervall. Lägre värden möjliggör snabbare återhämtning på förlustbehäftade anslutningar. [Standard är 100ms"
+msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
-msgstr "Maximal återsändningsfördröjning i millisekunder. Återsändningsintervall kommer inte att överstiga detta värde oavsett backoff. Öka för att tillåta längre mellan återförsök på stockade vägar. [Standard är 30000 (30s)"
+msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
-msgstr "Maximal Retransmission TimeOut i millisekunder efter exponentiell backoff (fördubbling). Begränsar hur länge avsändaren väntar innan återsändning vid allvarlig stockning. [Standard är 30000 (30s)"
+msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
+msgstr ""
+
+msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
+msgstr ""
+
+msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
+msgstr ""
+
+msgid "miscellaneous"
+msgstr "diverse"
+
+msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
+msgstr "Om inställd på true kommer denna inställning att placera en ikon i systemfacket / meddelandeområdet, med grundläggande servicekontrollalternativ. [Inaktiverat som standard"
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "När det är inställt på true, körs I2P utan nätverksanslutning, vilket är hjälpsamt om du ständigt startar om routern för att testa koduppdateringar då detta förhindrar nätverksavbrott"
 
-msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
-msgstr "När satt till true inaktiveras lokal-lokal loopback-leverans och all trafik tvingas genom tunnlar (utgående tunnel → nätverk → inkommande tunnel → lokal destination). Användbart för att testa tunnelroutningsbeteende när källa och destination är på samma router. [Inaktiverad som standard"
+msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
+msgstr ""
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Denna inställning tillåter konfiguration av alternativa NTP-servrar som krävs för att se till att din router behåller korrekt klocktid. [Standardvärden är 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org"
@@ -8945,6 +9102,9 @@ msgstr "En tröskelvärde som, om det bryts, kommer att leda till att den stöta
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
 msgstr "Notera: Deklarationens ordning spelar roll. Den första gränsvärdet deklarationen för en given destination (oavsett om den är explicit eller listad i en refererad fil) åsidosätter alla framtida gränsvärden för samma destination, oavsett om de är explicita eller listade i en fil. Notera: För att tillämpa en ny filterfil måste tunneln startas om efter att platsen har angetts i tunnelhanteraren. När konfigurationen är klar kan en definitionsfil uppdateras utan att mål-tunneln behöver startas om, även om blockade destinationer kommer att bestå tills tunneln startas om"
 
+msgid "Thresholds"
+msgstr "Trösklar"
+
 msgid "A threshold is defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
 msgstr "En tröskelvärde definieras av antalet anslutningsförsök som en fjärrdestination får utföra under ett angivet antal sekunder innan en \"brott\" inträffar."
 
@@ -9515,8 +9675,14 @@ msgstr "För alltid"
 msgid "Set Password"
 msgstr "Ställ in lösenord"
 
-msgid "network database"
-msgstr "nätverksdatabasen"
+msgid "All Routers [Advanced]"
+msgstr ""
+
+msgid "Remote"
+msgstr "Fjärran"
+
+msgid "All Routers (Client NetDb) [Advanced]"
+msgstr ""
 
 msgid "Encryption type"
 msgstr "Krypteringstyp"
@@ -9535,9 +9701,6 @@ msgstr "Lokalt hostad offentlig tjänst"
 
 msgid "Requested client leaseset"
 msgstr "Begärd klientleasinguppsättning"
-
-msgid "Remote"
-msgstr "Fjärran"
 
 msgid "network database router map"
 msgstr "nätverksdatabasrouternyktert"
@@ -9570,17 +9733,20 @@ msgstr "nod-anslutningar"
 msgid "Network Peers"
 msgstr "Nätverkskollegor"
 
-msgid "peer profiles"
-msgstr "nodprofiler"
+msgid "Fast Peers"
+msgstr ""
 
-msgid "Session Banned Peers"
-msgstr "Session förbjudna kamrater"
+msgid "High Capacity Peers"
+msgstr ""
+
+msgid "Floodfill Peers"
+msgstr ""
 
 msgid "Banned Peers"
 msgstr "Förbjudna noder"
 
-msgid "Fast / High Capacity"
-msgstr "Snabb / hög kapacitet"
+msgid "Recent Peer Profiles"
+msgstr ""
 
 msgid "Configure router logging options"
 msgstr "Konfigurera routerloggningsalternativ"
@@ -9683,9 +9849,6 @@ msgstr "Växla Tunnlar"
 
 msgid "Peer Profile"
 msgstr "Nodprofil"
-
-msgid "Session Bans"
-msgstr "Sessionsförbud"
 
 msgid "Profile View"
 msgstr "Profilsvy"

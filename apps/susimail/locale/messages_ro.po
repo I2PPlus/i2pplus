@@ -237,6 +237,9 @@ msgstr "Locatorul pentru imagine a fost eliminat"
 msgid "no subject"
 msgstr "fară subiect"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Nu sa găsit nici o adresă de expeditor valabilă."
 

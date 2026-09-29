@@ -231,6 +231,9 @@ msgstr "已移除跟踪图片占位符"
 msgid "no subject"
 msgstr "没有主题"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "没有找到有效的发件人地址。"
 

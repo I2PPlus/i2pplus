@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\\\n"
 
-msgid "No more torrents running."
-msgstr "لا مزيد من السيول قيد التشغيل."
-
-msgid "I2P tunnel closed."
-msgstr "تم قفل النفق."
-
 msgid "Magnet"
 msgstr "مغناطيس"
 
@@ -23,12 +17,6 @@ msgstr "غير قادر على الاتصال بـ I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "فشل في الاتصال ب I2P - تخقق من اعدادات I2CP !"
 
-msgid "Download already running: "
-msgstr "التنزيل قيد التشغيل بالفعل: "
-
-msgid "Downloading"
-msgstr "جارى التحميل"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "تكوين السيول مع خيارات I2CP"
 
@@ -37,6 +25,18 @@ msgstr "لا توجد أذونات الكتابة لدليل البيانات"
 
 msgid "Data directory cannot be created"
 msgstr "لا يمكن إنشاء دليل البيانات"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "تم تفعيل تعدد القفزات العشوائي +0/1 في ال�
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "تم تعطيل تعدد القفزات العشوائي في الأنفاق الصادرة"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "تغير تأخير البداية الى {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "إضافة وإنشاء أقسام لعرضها فقط على الصفح
 msgid "API key updated."
 msgstr "تم تحديث مفتاح API."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "تغيير open trackers - يجب اعادة تشغيل التورنت لتفعيل التغيير."
 
@@ -246,6 +299,10 @@ msgstr "تورنت في \"{0}\"غير صحيح"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "خطأ - لا توجد ذاكرة كافية، لا يمكن انشاء تورنت {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "تهيئة السيول وفتح الأنفاق"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "تورنت محذوف: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "اضافة السيول في {0}"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "الحد الأقصى لعرض النطاق الترددي هو {0} كي
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "الاتصال بمنفذ I2CP على مثيل I2P في {0}"
-
-msgid "Connecting to I2P"
-msgstr "جاري الاتصال بشبكة I2P"
-
-msgid "Connected to I2P at"
-msgstr "متصل بـ I2P في"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "بدء تشغيل السيل {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "تخزين: {0}MB متاح حالياً للتنزيلات على قسم
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "تحذير - فقط {0}MB متاح للتنزيلات على قسم البيانات المكوّن"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "لم يتم العثور على تورنت"
 msgid "Opening the I2P tunnel"
 msgstr "فتح نفق I2P"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "فتح النفق واطلاق جميع التورنت."
+
+msgid "Connecting to I2P"
+msgstr "جاري الاتصال بشبكة I2P"
+
+msgid "Connected to I2P at"
+msgstr "متصل بـ I2P في"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "بدء تشغيل السيل {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "توقيف جميع التورنت و قفل النفق I2P."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "إغلاق نفق I2P بعد إخطار المتتبعين."
+
+msgid "I2P tunnel closed."
+msgstr "تم قفل النفق."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,14 +567,406 @@ msgstr "تورنت في قائمة الانتظار: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "تورنت غير صحيح {0}"
 
+msgid "Configuration"
+msgstr "اعدادات"
+
+msgid "User Interface"
+msgstr "واجهة المستخدم"
+
+msgid "Switch to Embedded Mode"
+msgstr "التبديل إلى الوضع المضمن"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "التبديل إلى وضع ملء الشاشة"
+
+msgid "Theme"
+msgstr "تيمة"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "لتغيير السمات يدويًا، قم بتعطيل السمات العامة"
+
+msgid "Universal theming is enabled."
+msgstr "تم تمكين السمات العالمية."
+
+msgid "Configure"
+msgstr "الضبط"
+
+msgid "Refresh time"
+msgstr "وقت التحديث"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "مدى تكرار تحديث حالة التورنت على الصفحة الرئيسية"
+
+msgid "Never"
+msgstr "أبد"
+
+msgid "Page size"
+msgstr "حجم الصفحة"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "الحد الأقصى لعدد السيول لعرضها في كل صفحة"
+
+msgid "torrents"
+msgstr "السيول"
+
+msgid "Language"
+msgstr "اللغة"
+
+msgid "Collapsible panels"
+msgstr "ألواح قابلة للطي"
+
+msgid "Your browser does not support this feature."
+msgstr "متصفحك لا يدعم هذه الميزة."
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "السماح بطي لوحات \"إضافة تورنت\" و\"إنشاء تورنت\"، وطيها بشكل افتراضي في الوضع غير المضمن"
+
+msgid "Torrent filter bar"
+msgstr "شريط تصفية تورنت"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "إظهار شريط التصفية أعلى السيول للعرض الانتقائي بناءً على الحالة"
+
+msgid "requires javascript"
+msgstr "يتطلب جافا سكريبت"
+
+msgid "Enable lightbox"
+msgstr "تمكين العرض المبسط"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "استخدم العرض المبسط لعرض الصور عند النقر على الصور المصغرة"
+
+msgid "Persist Add/Create"
+msgstr "استمر في الإضافة/الإنشاء"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "عرض قسمي \"إضافة\" و\"إنشاء\" على جميع صفحات قائمة التورنت عندما تكون في وضع الصفحات المتعددة"
+
+msgid "Comments &amp; Ratings"
+msgstr "تعليقات"
+
+msgid "Enable Ratings"
+msgstr "تمكين التقييمات"
+
+msgid "Show ratings on torrent pages"
+msgstr "إظهار التقييمات على صفحات التورنت"
+
+msgid "Enable Comments"
+msgstr "تمكين التعليقات"
+
+msgid "Show comments on torrent pages"
+msgstr "إظهار التعليقات على صفحات التورنت"
+
+msgid "Comment Author"
+msgstr "تعليق المؤلف"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "قم بتعيين اسم المؤلف لتعليقاتك وتقييماتك"
+
+msgid "Torrent Options"
+msgstr "خيارات التورنت"
+
+msgid "Half available bandwidth recommended."
+msgstr "ينصح باستعمال نصف سرعة الشبكة."
+
+msgid "Bandwidth limit"
+msgstr "حد السرعة النقل"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "الحد الأقصى للسرعة المخصصة للتحميل"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "الحد الأقصى لعرض النطاق الترددي المخصص للتحميل"
+
+msgid "View or change router bandwidth"
+msgstr "أظهر أو غير سرعة الموجه"
+
+msgid "Total uploader limit"
+msgstr "اقصى حد للرفع"
+
+msgid "Maximum number of peers to upload to"
+msgstr "الحد الأقصى لعدد النظراء للتحميل"
+
+msgid "peers"
+msgstr "النظائر"
+
+msgid "Use open trackers also"
+msgstr "استعمال open trackers ايضا"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "الإعلان عن السيول لفتح المتتبعات وكذلك المتتبعات المدرجة في ملف التورنت"
+
+msgid "Enable DHT"
+msgstr "تمكين DHT"
+
+msgid "Use DHT to find additional peers"
+msgstr "استخدم DHT للبحث عن أقران إضافيين"
+
+msgid "Auto start torrents"
+msgstr "بدء تشغيل السيول تلقائيًا"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "بدء تشغيل ملفات التورنت تلقائيًا عند إضافتها وإعادة تشغيل ملفات التورنت عند بدء تشغيل السيول"
+
+msgid "Startup delay"
+msgstr "تأخر البداية"
+
+msgid "minutes"
+msgstr "دقائق"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
+
+msgid "Data Storage"
+msgstr "تخزين البيانات"
+
+msgid "Data directory"
+msgstr "مجلد البيانات"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "الدليل حيث يتم تخزين السيول والملفات التي تم تنزيلها/المشتركة"
+
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
+msgid "Files readable by all"
+msgstr "ملفات قابلة للقراءة من قبل الجميع"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "قم بتعيين أذونات الملف للسماح للمستخدمين المحليين الآخرين بالوصول إلى الملفات التي تم تنزيلها"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
+
+msgid "Max files per torrent"
+msgstr "الحد الأقصى للملفات لكل تورنت"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "الحد الأقصى لعدد الملفات المسموح بها لكل تورنت - لاحظ أن المتتبعين قد يضعون حدودًا خاصة بهم، وقد يحدد نظام التشغيل لديك عدد الملفات المفتوحة، مما يمنع السيول التي تحتوي على العديد من الملفات (والسيول اللاحقة) من التحميل"
+
+msgid "Tunnel Configuration"
+msgstr "تكوين النفق"
+
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
+msgid "Our destination (identity) for this session"
+msgstr "وجهتنا ( هويتنا ) لهذه الجلسة"
+
+msgid "Primary Dest."
+msgstr ""
+
+msgid "Dest."
+msgstr "الوجهة."
+
+msgid "Inbound Settings"
+msgstr "اعدادت الاتصال الداخلي"
+
+msgid "Outbound Settings"
+msgstr "اعدادت الاتصال الخارجي"
+
+msgid "Vary Tunnel Length"
+msgstr "تباين طول الأنفاق"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "أضف 0 أو 1 قفزة إضافية بشكل عشوائي إلى الأنفاق الواردة"
+
+msgid "Inbound"
+msgstr "وارد"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "أضف 0 أو 1 قفزة إضافية بشكل عشوائي إلى الأنفاق الصادرة"
+
+msgid "Outbound"
+msgstr "صادرة"
+
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
+msgid "I2CP host"
+msgstr "المضيف I2CP"
+
+msgid "I2CP port"
+msgstr "منفذ I2CP"
+
+msgid "I2CP options"
+msgstr "خيارات I2CP"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
+
+msgid "Save configuration"
+msgstr "حفظ الاعدادات"
+
+msgid "Torrent Create File Filtering"
+msgstr "تنقية ملف إنشاء التورنت"
+
+msgid "Mark filter for deletion"
+msgstr "أعد تنقية للازالة"
+
+msgid "Name"
+msgstr "الاسم"
+
+msgid "Filter Pattern"
+msgstr "نمط التنقية"
+
+msgid "Starts With"
+msgstr "يبدأ بـ"
+
+msgid "Contains"
+msgstr "يحتوي على"
+
+msgid "Ends With"
+msgstr "ينتهي بـ"
+
+msgid "Enabled by Default"
+msgstr "مُمكّن افتراضياً"
+
+msgid "Delete selected"
+msgstr "حذف المحدد"
+
+msgid "Save Filter Configuration"
+msgstr "حفظ تكوين التنقية"
+
+msgid "Restore defaults"
+msgstr "استعادة الإعدادات الافتراضية"
+
+msgid "Add File Filter"
+msgstr "إضافة تنقية الملف"
+
+msgid "Add"
+msgstr "إضافة"
+
+msgid "Trackers"
+msgstr "أجهزة التتبع"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "حدد أدوات التتبع لإزالتها من قائمة السيول المعروفة"
+
+msgid "Website URL"
+msgstr "عنوان URL لموقع الويب"
+
+msgid "Standard"
+msgstr "عادي"
+
+msgid "Open"
+msgstr "فتح"
+
+msgid "Private"
+msgstr "خاص"
+
+msgid "Announce URL"
+msgstr "الإعلان عن عنوان URL"
+
+msgid "Mark tracker for deletion"
+msgstr "وضع علامة على المتعقب للحذف"
+
+msgid "Add tracker"
+msgstr "إضافة تعقب"
+
+msgid "Save tracker configuration"
+msgstr "حفظ تكوين التعقب"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "يقوم هذا بتكوين الحد الأقصى لعدد الأنفاق التي سيتم فتحها، والتي يحددها عدد النظراء المتصلين (قد يكون الاستخدام الفعلي أقل)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "تغيير هذا الإعداد إلى أقل من 3 قفزات قد يؤدي إلى تحسين السرعة على حساب عدم الكشف عن هويته ولا ينصح به"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "انقر فوق الزر \"إضافة تورنت\" لجلب التورنت"
+
 msgid "Torrents"
 msgstr "تورنت"
 
 msgid "Refresh page"
 msgstr "أنعش الصفحة"
-
-msgid "Configure"
-msgstr "الضبط"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "سيل"
@@ -501,14 +980,8 @@ msgstr "ابحث عن السيول"
 msgid "Clear search"
 msgstr "مسح البحث"
 
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "انقر فوق الزر \"إضافة تورنت\" لجلب التورنت"
-
 msgid "Anonymous BitTorrent Client"
 msgstr "عميل تورنت مجهول"
-
-msgid "Configuration"
-msgstr "اعدادات"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -554,20 +1027,11 @@ msgstr "لم يتم العثور على السيول."
 msgid "No torrents loaded."
 msgstr "لم يحمل تورنت."
 
-msgid "No DHT Peers"
-msgstr "لا يوجد أقران DHT"
-
 msgid "Status"
 msgstr "الحالة"
 
 msgid "Torrent"
 msgstr "تورنت"
-
-msgid "File type"
-msgstr "نوع الملف"
-
-msgid "Torrent name"
-msgstr "اسم التورنت"
 
 msgid "ETA"
 msgstr "إيتا"
@@ -671,6 +1135,9 @@ msgstr[3] "{0} السيول"
 msgstr[4] "{0} السيول"
 msgstr[5] "{0} السيول"
 
+msgid "No DHT Peers"
+msgstr "لا يوجد أقران DHT"
+
 msgid "Search"
 msgstr "يبحث"
 
@@ -685,6 +1152,9 @@ msgstr "غير نشط"
 
 msgid "Connected"
 msgstr "متصل"
+
+msgid "Downloading"
+msgstr "جارى التحميل"
 
 msgid "Seeding"
 msgstr "بشارك"
@@ -726,12 +1196,12 @@ msgid "Enter URL or select torrent file"
 msgstr "أدخل عنوان URL أو حدد ملف تورنت"
 
 #, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "خطأ في رفع ملف التورنت: {0}"
+msgid "Error adding the torrent: {0}"
+msgstr ""
 
 #, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "لا يمكن إضافة سيل {0} داخل سيل آخر: {1}"
+msgid "Error uploading the torrent file: {0}"
+msgstr "خطأ في رفع ملف التورنت: {0}"
 
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
@@ -768,34 +1238,12 @@ msgstr "لا يمكن حذف الدليل: {0}"
 msgid "Directory deleted: {0}"
 msgstr "تم حذف الدليل: {0}"
 
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "فشل في انشاء تورنت - عليك اختيار ملف أو مجلد"
+msgid "Browser API enabled."
+msgstr ""
 
 #, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "لا يمكن انشاء تورنت لبيانات غير موجودة: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "لا يمكن إضافة ملف تورنت ينتهي بـ \".torrent\": {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "السيل بهذا الاسم قيد التشغيل بالفعل: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "لا يمكن إضافة ملف تورنت يتضمن دليل I2P: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "لا يمكن إضافة تورنت {0} بما في ذلك تورنت آخر: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "خطأ - لا يمكن تضمين أدوات التتبع البديلة بدون أداة التتبع الأساسية"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "خطأ - لا يمكن خلط أدوات التتبع الخاصة والعامة في ملف تورنت"
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -817,32 +1265,14 @@ msgstr "يطلب منك العديد من متتبعي I2P تسجيل ملفات
 msgid "Error creating a torrent for \"{0}\""
 msgstr "فشل في انشاء تورنت لـ \"{0}\""
 
-msgid "Delete selected"
-msgstr "حذف المحدد"
-
-msgid "Save tracker configuration"
-msgstr "حفظ تكوين التعقب"
-
 msgid "Removed"
 msgstr "تمت الإزالة"
-
-msgid "Add tracker"
-msgstr "إضافة تعقب"
 
 msgid "Enter valid tracker name and URLs"
 msgstr "أدخل اسم المتتبع وعناوين URL الصالحة"
 
-msgid "Restore defaults"
-msgstr "استعادة الإعدادات الافتراضية"
-
 msgid "Restored default trackers"
 msgstr "استعادة أجهزة التتبع الافتراضية"
-
-msgid "Save Filter Configuration"
-msgstr "حفظ تكوين التنقية"
-
-msgid "Add File Filter"
-msgstr "إضافة تنقية الملف"
 
 msgid "Enter valid name and filter pattern"
 msgstr "أدخل الاسم والنمط الصحيح للتنقية"
@@ -883,23 +1313,23 @@ msgstr "ابدأ"
 msgid "Start torrent"
 msgstr "ابدأ التورنت"
 
-msgid "Remove"
-msgstr "حذف"
-
 msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "حذف التورنت من القائمة، حذف ملف .torrent"
 
-msgid "Delete"
-msgstr "حذف"
-
 msgid "Delete .torrent file and associated data files"
 msgstr "احذف ملف .torrent وملفات البيانات المرتبطة به"
+
+msgid "Destination"
+msgstr ""
 
 msgid "Checking"
 msgstr "الفحص"
 
 msgid "Allocating"
 msgstr "التخصيص"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
 
 msgid "Starting"
 msgstr "جاري البدأ"
@@ -1022,9 +1452,6 @@ msgstr "استبعد الملفات من التورنت إذا كانت تقع �
 msgid "Content Filters"
 msgstr "فلاتر المحتوى"
 
-msgid "Trackers"
-msgstr "أجهزة التتبع"
-
 msgid "Alternates"
 msgstr "البدائل"
 
@@ -1034,263 +1461,8 @@ msgstr "الأولي"
 msgid "Tracker Type"
 msgstr "نوع المقتفي"
 
-msgid "Standard"
-msgstr "عادي"
-
-msgid "Open"
-msgstr "فتح"
-
-msgid "Private"
-msgstr "خاص"
-
 msgid "none"
 msgstr "ﻻشيئ"
-
-msgid "User Interface"
-msgstr "واجهة المستخدم"
-
-msgid "Switch to Embedded Mode"
-msgstr "التبديل إلى الوضع المضمن"
-
-msgid "Switch to Fullscreen Mode"
-msgstr "التبديل إلى وضع ملء الشاشة"
-
-msgid "Theme"
-msgstr "تيمة"
-
-msgid "To change themes manually, disable universal theming"
-msgstr "لتغيير السمات يدويًا، قم بتعطيل السمات العامة"
-
-msgid "Universal theming is enabled."
-msgstr "تم تمكين السمات العالمية."
-
-msgid "Refresh time"
-msgstr "وقت التحديث"
-
-msgid "How frequently torrent status is updated on the main page"
-msgstr "مدى تكرار تحديث حالة التورنت على الصفحة الرئيسية"
-
-msgid "Never"
-msgstr "أبد"
-
-msgid "Page size"
-msgstr "حجم الصفحة"
-
-msgid "Maximum number of torrents to display per page"
-msgstr "الحد الأقصى لعدد السيول لعرضها في كل صفحة"
-
-msgid "torrents"
-msgstr "السيول"
-
-msgid "Language"
-msgstr "اللغة"
-
-msgid "Collapsible panels"
-msgstr "ألواح قابلة للطي"
-
-msgid "Your browser does not support this feature."
-msgstr "متصفحك لا يدعم هذه الميزة."
-
-msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
-msgstr "السماح بطي لوحات \"إضافة تورنت\" و\"إنشاء تورنت\"، وطيها بشكل افتراضي في الوضع غير المضمن"
-
-msgid "Torrent filter bar"
-msgstr "شريط تصفية تورنت"
-
-msgid "Show filter bar above torrents for selective display based on status"
-msgstr "إظهار شريط التصفية أعلى السيول للعرض الانتقائي بناءً على الحالة"
-
-msgid "requires javascript"
-msgstr "يتطلب جافا سكريبت"
-
-msgid "Enable lightbox"
-msgstr "تمكين العرض المبسط"
-
-msgid "Use a lightbox to display images when thumbnails are clicked"
-msgstr "استخدم العرض المبسط لعرض الصور عند النقر على الصور المصغرة"
-
-msgid "Persist Add/Create"
-msgstr "استمر في الإضافة/الإنشاء"
-
-msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
-msgstr "عرض قسمي \"إضافة\" و\"إنشاء\" على جميع صفحات قائمة التورنت عندما تكون في وضع الصفحات المتعددة"
-
-msgid "Comments &amp; Ratings"
-msgstr "تعليقات"
-
-msgid "Enable Ratings"
-msgstr "تمكين التقييمات"
-
-msgid "Show ratings on torrent pages"
-msgstr "إظهار التقييمات على صفحات التورنت"
-
-msgid "Enable Comments"
-msgstr "تمكين التعليقات"
-
-msgid "Show comments on torrent pages"
-msgstr "إظهار التعليقات على صفحات التورنت"
-
-msgid "Comment Author"
-msgstr "تعليق المؤلف"
-
-msgid "Set the author name for your comments and ratings"
-msgstr "قم بتعيين اسم المؤلف لتعليقاتك وتقييماتك"
-
-msgid "Torrent Options"
-msgstr "خيارات التورنت"
-
-msgid "Half available bandwidth recommended."
-msgstr "ينصح باستعمال نصف سرعة الشبكة."
-
-msgid "Bandwidth limit"
-msgstr "حد السرعة النقل"
-
-msgid "Maximum bandwidth allocated for downloading"
-msgstr "الحد الأقصى للسرعة المخصصة للتحميل"
-
-msgid "Maximum bandwidth allocated for uploading"
-msgstr "الحد الأقصى لعرض النطاق الترددي المخصص للتحميل"
-
-msgid "View or change router bandwidth"
-msgstr "أظهر أو غير سرعة الموجه"
-
-msgid "Total uploader limit"
-msgstr "اقصى حد للرفع"
-
-msgid "Maximum number of peers to upload to"
-msgstr "الحد الأقصى لعدد النظراء للتحميل"
-
-msgid "peers"
-msgstr "النظائر"
-
-msgid "Use open trackers also"
-msgstr "استعمال open trackers ايضا"
-
-msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
-msgstr "الإعلان عن السيول لفتح المتتبعات وكذلك المتتبعات المدرجة في ملف التورنت"
-
-msgid "Enable DHT"
-msgstr "تمكين DHT"
-
-msgid "Use DHT to find additional peers"
-msgstr "استخدم DHT للبحث عن أقران إضافيين"
-
-msgid "Auto start torrents"
-msgstr "بدء تشغيل السيول تلقائيًا"
-
-msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "بدء تشغيل ملفات التورنت تلقائيًا عند إضافتها وإعادة تشغيل ملفات التورنت عند بدء تشغيل السيول"
-
-msgid "Startup delay"
-msgstr "تأخر البداية"
-
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "كم من الوقت قبل أن يتم تحميل السيول التي يتم تشغيلها تلقائيًا عند بدء تشغيل السيول"
-
-msgid "minutes"
-msgstr "دقائق"
-
-msgid "Data Storage"
-msgstr "تخزين البيانات"
-
-msgid "Data directory"
-msgstr "مجلد البيانات"
-
-msgid "Directory where torrents and downloaded/shared files are stored"
-msgstr "الدليل حيث يتم تخزين السيول والملفات التي تم تنزيلها/المشتركة"
-
-msgid "Files readable by all"
-msgstr "ملفات قابلة للقراءة من قبل الجميع"
-
-msgid "Set file permissions to allow other local users to access the downloaded files"
-msgstr "قم بتعيين أذونات الملف للسماح للمستخدمين المحليين الآخرين بالوصول إلى الملفات التي تم تنزيلها"
-
-msgid "Max files per torrent"
-msgstr "الحد الأقصى للملفات لكل تورنت"
-
-msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
-msgstr "الحد الأقصى لعدد الملفات المسموح بها لكل تورنت - لاحظ أن المتتبعين قد يضعون حدودًا خاصة بهم، وقد يحدد نظام التشغيل لديك عدد الملفات المفتوحة، مما يمنع السيول التي تحتوي على العديد من الملفات (والسيول اللاحقة) من التحميل"
-
-msgid "Tunnel Configuration"
-msgstr "تكوين النفق"
-
-msgid "Our destination (identity) for this session"
-msgstr "وجهتنا ( هويتنا ) لهذه الجلسة"
-
-msgid "Dest."
-msgstr "الوجهة."
-
-msgid "Inbound Settings"
-msgstr "اعدادت الاتصال الداخلي"
-
-msgid "Outbound Settings"
-msgstr "اعدادت الاتصال الخارجي"
-
-msgid "Vary Tunnel Length"
-msgstr "تباين طول الأنفاق"
-
-msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
-msgstr "أضف 0 أو 1 قفزة إضافية بشكل عشوائي إلى الأنفاق الواردة"
-
-msgid "Inbound"
-msgstr "وارد"
-
-msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
-msgstr "أضف 0 أو 1 قفزة إضافية بشكل عشوائي إلى الأنفاق الصادرة"
-
-msgid "Outbound"
-msgstr "صادرة"
-
-msgid "I2CP host"
-msgstr "المضيف I2CP"
-
-msgid "I2CP port"
-msgstr "منفذ I2CP"
-
-msgid "I2CP options"
-msgstr "خيارات I2CP"
-
-msgid "Save configuration"
-msgstr "حفظ الاعدادات"
-
-msgid "Torrent Create File Filtering"
-msgstr "تنقية ملف إنشاء التورنت"
-
-msgid "Mark filter for deletion"
-msgstr "أعد تنقية للازالة"
-
-msgid "Name"
-msgstr "الاسم"
-
-msgid "Filter Pattern"
-msgstr "نمط التنقية"
-
-msgid "Starts With"
-msgstr "يبدأ بـ"
-
-msgid "Contains"
-msgstr "يحتوي على"
-
-msgid "Ends With"
-msgstr "ينتهي بـ"
-
-msgid "Enabled by Default"
-msgstr "مُمكّن افتراضياً"
-
-msgid "Add"
-msgstr "إضافة"
-
-msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "حدد أدوات التتبع لإزالتها من قائمة السيول المعروفة"
-
-msgid "Website URL"
-msgstr "عنوان URL لموقع الويب"
-
-msgid "Announce URL"
-msgstr "الإعلان عن عنوان URL"
-
-msgid "Mark tracker for deletion"
-msgstr "وضع علامة على المتعقب للحذف"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "لا يمكن إضافة الرابط المغناطيسي: لا يدعم الروابط المغناطيسية الإصدار 2"
@@ -1299,20 +1471,20 @@ msgstr "لا يمكن إضافة الرابط المغناطيسي: لا يدع�
 msgid "Invalid magnet URL {0}"
 msgstr "غنوان مغناطيس غير صحيح {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "يقوم هذا بتكوين الحد الأقصى لعدد الأنفاق التي سيتم فتحها، والتي يحددها عدد النظراء المتصلين (قد يكون الاستخدام الفعلي أقل)"
+msgid "Files"
+msgstr "الملفات"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "تغيير هذا الإعداد إلى أقل من 3 قفزات قد يؤدي إلى تحسين السرعة على حساب عدم الكشف عن هويته ولا ينصح به"
+msgid "Save priorities"
+msgstr "حفظ الأولويات"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "لم يتم حفظ ترتيب القطع أو الملفات التسلسلي - الميزة معطلة حالياً."
-
-msgid "Unknown command"
-msgstr "أمر غير معروف"
+msgid "Comments"
+msgstr "تعليقات"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "يرجى إعادة محاولة تقديم النموذج (nonce غير صالح)"
+
+msgid "Unknown command"
+msgstr "أمر غير معروف"
 
 msgid "Resource Does Not Exist"
 msgstr "المورد غير موجود"
@@ -1323,11 +1495,11 @@ msgstr "موارد"
 msgid "Base"
 msgstr "القاعدة"
 
-msgid "Files"
-msgstr "الملفات"
-
 msgid "Directory"
 msgstr "المجلد"
+
+msgid "File type"
+msgstr "نوع الملف"
 
 msgid "Size"
 msgstr "الحجم"
@@ -1350,24 +1522,6 @@ msgstr "ما يصل إلى دليل المستوى الأعلى"
 msgid "Audio Playlist"
 msgstr "قائمة تشغيل الصوت"
 
-msgid "Not found"
-msgstr "غير موجود"
-
-msgid "File not found in torrent"
-msgstr "الملف غير موجود في التورنت؟"
-
-msgid "Unrecognized"
-msgstr "غير معترف به"
-
-msgid "Preview"
-msgstr "معاينة"
-
-msgid "Save priorities"
-msgstr "حفظ الأولويات"
-
-msgid "Comments"
-msgstr "تعليقات"
-
 msgid "Resource Not found"
 msgstr "لم يتم العثور على المورد"
 
@@ -1376,6 +1530,10 @@ msgstr "تجزئة المعلومات"
 
 msgid "Created"
 msgstr "أُنشيء"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "أضيفت"
@@ -1440,15 +1598,6 @@ msgstr "اكتمل"
 msgid "remaining"
 msgstr "باقي"
 
-msgid "Ratings and Comments"
-msgstr "التقييمات والتعليقات"
-
-msgid "Author name required to rate or comment"
-msgstr "اسم المؤلف مطلوب للتقييم أو التعليق"
-
-msgid "Your author name for published comments and ratings"
-msgstr "اسم المؤلف الخاص بك للتعليقات والتقييمات المنشورة"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1489,6 +1638,15 @@ msgstr "اختر للحذف"
 msgid "Delete Selected"
 msgstr "حذف"
 
+msgid "Ratings and Comments"
+msgstr "التقييمات والتعليقات"
+
+msgid "Author name required to rate or comment"
+msgstr "اسم المؤلف مطلوب للتقييم أو التعليق"
+
+msgid "Your author name for published comments and ratings"
+msgstr "اسم المؤلف الخاص بك للتعليقات والتقييمات المنشورة"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "تم تحديث أولويات تنزيل الملفات للتورنت "
 
@@ -1497,6 +1655,9 @@ msgstr "تحرير تورنت"
 
 msgid "Active Trackers"
 msgstr "أجهزة التتبع النشطة"
+
+msgid "Delete"
+msgstr "حذف"
 
 msgid "Add Tracker"
 msgstr "إضافة المقتفي"
@@ -1512,3 +1673,23 @@ msgstr "حفظ التغييرات"
 
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"
+
+msgid "Not found"
+msgstr "غير موجود"
+
+msgid "File not found in torrent"
+msgstr "الملف غير موجود في التورنت؟"
+
+msgid "Unrecognized"
+msgstr "غير معترف به"
+
+msgid "Preview"
+msgstr "معاينة"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "لا يمكن إضافة سيل {0} داخل سيل آخر: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "لا يمكن إضافة تورنت {0} بما في ذلك تورنت آخر: {1}"

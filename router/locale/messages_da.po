@@ -137,12 +137,6 @@ msgstr "Anmod om overbelastning"
 msgid "Connection limit reached"
 msgstr "Forbindelsesgrænse nået"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Dropper tunnelforespørgsler: Høj belastning"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Dropper tunnelforespørgsler: Kø tid"
-
 # /java/src/net/i2p/router/tunnel/pool/BuildHandler.java:997
 msgid "Transit throttle drop"
 msgstr "Transit-throttle-dropped"
@@ -151,6 +145,12 @@ msgstr "Transit-throttle-dropped"
 msgid "Transit throttle reject"
 msgstr "Transit-throttle-afvist"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Dropper tunnelforespørgsler: Høj belastning"
+
 # /java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1239
 msgid "Transit request throttle"
 msgstr "Transit-anmodningsthrottle"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Dropper tunnelforespørgsler: Kø tid"

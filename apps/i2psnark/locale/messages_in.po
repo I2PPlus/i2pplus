@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "No more torrents running."
-msgstr "Tidak ada lagi torrents yang berjalan."
-
-msgid "I2P tunnel closed."
-msgstr "Tunnel I2P ditutup."
-
 msgid "Magnet"
 msgstr "magnet"
 
@@ -23,12 +17,6 @@ msgstr "Tidak dapat terhubung ke I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Kesalahan menghubungkan ke I2P - periksa pengaturan I2CP Anda!"
 
-msgid "Download already running: "
-msgstr "Unduhan sudah berjalan: "
-
-msgid "Downloading"
-msgstr "Mengunduh"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Mengonfigurasi Torrent dengan opsi I2CP"
 
@@ -37,6 +25,18 @@ msgstr "Tidak ada hak akses tulis untuk direktori data"
 
 msgid "Data directory cannot be created"
 msgstr "Direktori data tidak dapat dibuat"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "Randomisasi lompatan terowongan +0/1 diaktifkan pada terowongan keluar"
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Randomisasi lompatan terowongan dinonaktifkan pada terowongan keluar"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Startup delay berubah menjadi {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Tambahkan dan Buat bagian untuk ditampilkan hanya pada halaman pertama h
 msgid "API key updated."
 msgstr "Kunci API diperbarui."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Daftar Pelacak Terbuka diubah - torrent harus dimulai ulang agar dapat diterapkan."
 
@@ -246,6 +299,10 @@ msgstr "Torrent di \"{0}\" tidak valid"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "KESALAHAN - kehabisan memory - tidak bisa membuat torrent dari {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Menginisialisasi Torrent dan membuka terowongan"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Torrent dihapus: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Menambahkan torrent di {0}"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Batas bandwidth atas adalah {0} KBps"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Menghubungkan ke port I2P pada instance I2P di {0}"
-
-msgid "Connecting to I2P"
-msgstr "Menghubungkan ke I2P"
-
-msgid "Connected to I2P at"
-msgstr "Terhubung ke I2P di"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Memulai torrent {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Penyimpanan: {0}MB saat ini tersedia untuk unduhan pada partisi data yan
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Peringatan - Hanya {0}MB tersedia untuk unduhan pada partisi data yang dikonfigurasi"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Torrent tidak ditemukan"
 msgid "Opening the I2P tunnel"
 msgstr "Membuka I2P tunnel"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Membuka tunnel I2P dan mulai semua torrents."
+
+msgid "Connecting to I2P"
+msgstr "Menghubungkan ke I2P"
+
+msgid "Connected to I2P at"
+msgstr "Terhubung ke I2P di"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Memulai torrent {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Menghentikan semua torrents dan menutup tunnel I2P."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Menutup tunnel I2P setelah memberitahukan tracker."
+
+msgid "I2P tunnel closed."
+msgstr "Tunnel I2P ditutup."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,546 +567,8 @@ msgstr "Torrent sudah dalam antrian: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent di {0} tidak valid"
 
-msgid "Torrents"
-msgstr "Torrent"
-
-msgid "Refresh page"
-msgstr "Halaman Refresh"
-
-msgid "Configure"
-msgstr "Konfigurasi"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torn"
-
-msgid "Forum"
-msgstr "Forum"
-
-msgid "Search torrents"
-msgstr "Cari torrent"
-
-msgid "Clear search"
-msgstr "Hapus pencarian"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Klik tombol \"Add Torrent\" untuk mengambil torrent"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Klien BitTorrent Anonim"
-
 msgid "Configuration"
 msgstr "Konfigurasi"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Apakah Anda yakin ingin menghapus {0} dan semua data yang diunduh?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "Menghapus <b>{0}</b> dan semua data terkait..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Apakah Anda yakin ingin menghapus file {0} (data yang diunduh tidak akan dihapus)?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Catatan: Data yang diunduh tidak akan dihapus."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "Menghapus {0} dan metadata terkait saja..."
-
-msgid "clear messages"
-msgstr "hapus pesan"
-
-msgid "Expand"
-msgstr "Perluas"
-
-msgid "Shrink"
-msgstr "Kecilkan"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Peringatan! JavaScript dinonaktifkan di browser Anda. Jika {0} diaktifkan, Anda akan kehilangan input apa pun di bagian Tambah/Buat Torrent saat penyegaran terjadi."
-
-msgid "page refresh"
-msgstr "penyegaran halaman"
-
-msgid "Warning - No I2P"
-msgstr "Peringatan - Tidak ada I2P"
-
-msgid "No torrents found."
-msgstr "Tidak ditemukan torrent."
-
-msgid "No torrents loaded."
-msgstr "Tidak ada torrent dimuat."
-
-msgid "No DHT Peers"
-msgstr "Tidak Ada Rekan DHT"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Torrent"
-msgstr "torrent"
-
-msgid "File type"
-msgstr "Tipe file"
-
-msgid "Torrent name"
-msgstr "Nama torrent"
-
-msgid "ETA"
-msgstr "Waktu selesai"
-
-msgid "RX"
-msgstr "RX"
-
-msgid "RX Rate"
-msgstr "Tingkat RX"
-
-msgid "TX"
-msgstr "terima kasih"
-
-msgid "TX Rate"
-msgstr "Tingkat TX"
-
-msgid "Start All"
-msgstr "Mulai semua"
-
-msgid "Stop All"
-msgstr "Hentikan semua"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Hentikan semua torrents dan tunnel I2P"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Mulai semua torrents dan tunnel I2P"
-
-msgid "Start all stopped torrents"
-msgstr "Mulai semua torrents yang berhenti"
-
-msgid "Hide Peers"
-msgstr "Sembunyikan peer"
-
-msgid "Show Peers"
-msgstr "Tunjukkan peer"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Urutkan dengan {0}"
-
-msgid "Up Rate"
-msgstr "Kecepatan upload"
-
-msgid "Total size of loaded torrents"
-msgstr "Total ukuran torrent yang dimuat"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "{0} peer terhubung"
-
-msgid "Active downloads"
-msgstr "Unduhan aktif"
-
-msgid "Active uploads"
-msgstr "Unggahan aktif"
-
-msgid "Active Inbound tunnels"
-msgstr "Terowongan masuk aktif"
-
-msgid "Active Outbound tunnels"
-msgstr "Terowongan keluar aktif"
-
-msgid "Estimated download time for all torrents"
-msgstr "Perkiraan waktu pengunduhan untuk semua torrent"
-
-msgid "Data downloaded this session"
-msgstr "Data diunduh pada sesi ini"
-
-msgid "Total download speed"
-msgstr "Kecepatan pengunduhan total"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Total data yang diunggah (untuk torrent yang terdaftar)"
-
-msgid "Total upload speed"
-msgstr "Total kecepatan unggah"
-
-msgid "Toggle Debug Panel"
-msgstr "Tampilkan/Sembunyikan Panel Debug"
-
-msgid "Debug Mode"
-msgstr "Mode Debug"
-
-msgid "Normal Mode"
-msgstr "Modus Biasa"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0} torrent"
-
-msgid "Search"
-msgstr "Mencari"
-
-msgid "Show All"
-msgstr "Tampilkan Semua"
-
-msgid "Active"
-msgstr "Aktif"
-
-msgid "Inactive"
-msgstr "Tidak aktif"
-
-msgid "Connected"
-msgstr "Terhubung"
-
-msgid "Seeding"
-msgstr "Penyemaian"
-
-msgid "Complete"
-msgstr "Selesai"
-
-msgid "Incomplete"
-msgstr "Tidak lengkap"
-
-msgid "Stopped"
-msgstr "Dihentikan"
-
-msgid "First"
-msgstr "Pertama"
-
-msgid "First page"
-msgstr "Halaman pertama"
-
-msgid "Prev"
-msgstr "Sebelumnya"
-
-msgid "Previous page"
-msgstr "Halaman sebelumnya"
-
-msgid "Next"
-msgstr "Berikutnya"
-
-msgid "Next page"
-msgstr "Halaman berikutnya"
-
-msgid "Last"
-msgstr "Terakhir"
-
-msgid "Last page"
-msgstr "Halaman terakhir"
-
-msgid "Enter URL or select torrent file"
-msgstr "Masukkan URL atau pilih file torrent"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Kesalahan saat mengunggah file torrent: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Tidak dapat menambahkan torrent {0} dalam torrent lain: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Pengunduhan dari lokasi non-I2P {0} tidak didukung"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Kesalahan: Hash info versi 2 tidak didukung"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "URL tidak valid: Harus diawali dengan \"{0}\" atau \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Magnet dihapus: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "File torrent tidak dapat dihapus: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "File data yang dihapus: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Data file tidak dapat dihapus: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Direktori tidak dapat dihapus: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Direktori telah dihapus: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Kesalahan membuat torrent - anda harus memasukkan file atau direktori"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Tidak dapat membuat torrent untuk data yang tidak ada: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Tidak dapat menambahkan torrent yang diakhiri dengan \".torrent\": {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Torrent dengan nama ini sudah berjalan: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Tidak dapat menambahkan torrent termasuk direktori I2P: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Tidak dapat menambahkan torrent {0} termasuk torrent lain: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Kesalahan - Tidak dapat menyertakan pelacak alternatif tanpa pelacak utama"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Kesalahan - Tidak dapat menggabungkan pelacak pribadi dan publik dalam torrent"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " berkas atau folder telah dikecualikan dari \"{0}\" karena aturan filter."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Berkas atau folder berikut telah dikecualikan dari \"{0}\" karena aturan filter: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Torrent yang dibuat untuk \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Banyak pelacak I2P mengharuskan Anda mendaftarkan torrent baru sebelum melakukan penyemaian - harap lakukan sebelum memulai \"{0}\""
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Error membuat torrent untuk \"{0}\""
-
-msgid "Delete selected"
-msgstr "Hapus pilihan"
-
-msgid "Save tracker configuration"
-msgstr "Simpan konfigurasi tracker"
-
-msgid "Removed"
-msgstr "Telah dihapus"
-
-msgid "Add tracker"
-msgstr "Tambahkan tracker"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Masukkan nama tracker dan URL yang valid"
-
-msgid "Restore defaults"
-msgstr "Kembalikan ke default"
-
-msgid "Restored default trackers"
-msgstr "Tracker default yang telah dikembalikan"
-
-msgid "Save Filter Configuration"
-msgstr "Simpan Konfigurasi Filter"
-
-msgid "Add File Filter"
-msgstr "Tambahkan Filter Berkas"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Masukkan nama dan pola filter yang valid"
-
-msgid "Restored default torrent create filters"
-msgstr "Filter pembuatan torrent bawaan telah dipulihkan"
-
-msgid "Torrent details"
-msgstr "Rincian torrent"
-
-msgid "Torrent has comments"
-msgstr "Torrent mempunyai komentar"
-
-msgid "Open file"
-msgstr "Buka file"
-
-msgid "View files"
-msgstr "Lihat file"
-
-msgid "Completed"
-msgstr "Selesai"
-
-msgid "Share ratio"
-msgstr "Rasio upload"
-
-msgid "Last activity"
-msgstr "Aktivitas terakhir"
-
-msgid "Stop"
-msgstr "Hentikan"
-
-msgid "Stop torrent"
-msgstr "Hentikan torrent ini"
-
-msgid "Start"
-msgstr "Mulai"
-
-msgid "Start torrent"
-msgstr "Mulai torrent ini"
-
-msgid "Remove"
-msgstr "Hapus"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Hapus torrent dari daftar aktif, hapus .torrent file"
-
-msgid "Delete"
-msgstr "Hapus"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Hapus file .torrent dan file data terkait"
-
-msgid "Checking"
-msgstr "Memeriksa"
-
-msgid "Allocating"
-msgstr "Mengalokasikan"
-
-msgid "Starting"
-msgstr "Memulai"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Seeding kepada {0} peer"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Terhubung ke {0} dari peer {1} di dalam swarm"
-
-msgid "Stalled"
-msgstr "Terhenti"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Seeding kepada {0} peer di dalam swarm"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Men-download dari {0} peer"
-
-msgid "OK"
-msgstr "OKE"
-
-msgid "No Peers"
-msgstr "Tidak ada peer"
-
-msgid "Peer attached to swarm"
-msgstr "Rekan melekat ke swarm"
-
-msgid "Destination (identity) of peer"
-msgstr "Destinasi (identitas) peer"
-
-msgid "seconds"
-msgstr "detik"
-
-msgid "Seed"
-msgstr "Benih"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Uninteresting (peer memiliki potongan-potongan yang tidak kita perlu)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Chocked (peer tidak membiarkan kita untuk meminta potongan)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Rekan tertarik tapi saat ini menganggur"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Uninterested (kita  memiliki potongan-potongan diinginkan peer)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Choking (kita tidak membiarkan peer meminta potongan)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Rincian di {0} tracker"
-
-msgid "Info"
-msgstr "Informasi"
-
-msgid "Add Torrent"
-msgstr "Tambahkan Torrent"
-
-msgid "From URL"
-msgstr "Dari URL"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Masukkan URL unduhan file torrent (khusus I2P), tautan magnet, atau hash info"
-
-msgid "Add torrent"
-msgstr "Tambahkan torrent"
-
-msgid "Torrent file"
-msgstr "Berkas torrent"
-
-msgid "Data dir"
-msgstr "Direktori data"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Masukkan direktori untuk menyimpan data (default {0})"
-
-msgid "Create Torrent"
-msgstr "Buat Torrent"
-
-msgid "Data to seed"
-msgstr "Data untuk seeding"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "File atau direktori yang akan disemai (jalur lengkap atau dalam direktori {0} )"
-
-msgid "Create torrent"
-msgstr "Buat torrent"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Nonaktifkan berkas dari torrent jika berkas tersebut berada dalam folder torrent"
-
-msgid "Content Filters"
-msgstr "Filter Konten"
-
-msgid "Trackers"
-msgstr "Pelacak"
-
-msgid "Alternates"
-msgstr "Aternatif"
-
-msgid "Primary"
-msgstr "Utama"
-
-msgid "Tracker Type"
-msgstr "Jenis Tracker"
-
-msgid "Standard"
-msgstr "Standar"
-
-msgid "Open"
-msgstr "Terbuka"
-
-msgid "Private"
-msgstr "Pribadi"
-
-msgid "none"
-msgstr "tidak ada"
 
 msgid "User Interface"
 msgstr "Antarmuka Pengguna"
@@ -1038,6 +587,9 @@ msgstr "Untuk mengubah theme secara manual, nonaktifkan universal theming"
 
 msgid "Universal theming is enabled."
 msgstr "Universal theming diaktifkan."
+
+msgid "Configure"
+msgstr "Konfigurasi"
 
 msgid "Refresh time"
 msgstr "Waktu refresh"
@@ -1159,11 +711,20 @@ msgstr "Secara otomatis memulai torrent ketika ditambahkan dan memulai ulang tor
 msgid "Startup delay"
 msgstr "Penundaan startup"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Berapa lama sebelum torrent yang dimulai secara otomatis dimuat ketika Torrent dimulai"
-
 msgid "minutes"
 msgstr "menit"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Penyimpanan Data"
@@ -1174,11 +735,35 @@ msgstr "Direktori data"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Direktori di mana torrent dan file didownload/dibagikan disimpan"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "File yang dapat dibaca oleh semua"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Tetapkan izin file untuk mengizinkan pengguna lokal lainnya mengakses file yang diunduh"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Maksimum file per torrent"
@@ -1189,8 +774,14 @@ msgstr "Jumlah maksimum file yang diizinkan per torrent - perhatikan bahwa pelac
 msgid "Tunnel Configuration"
 msgstr "Konfigurasi Terowongan"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Destinasi (identitas) kita untuk sesi ini"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Tujuan."
@@ -1216,6 +807,24 @@ msgstr "Tambahkan 0 atau 1 lompatan tambahan secara acak ke terowongan keluar"
 msgid "Outbound"
 msgstr "Keluar"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "Host I2CP"
 
@@ -1224,6 +833,49 @@ msgstr "Port I2CP"
 
 msgid "I2CP options"
 msgstr "Opsi I2pC"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Simpan konfigurasi"
@@ -1252,8 +904,23 @@ msgstr "Berakhir Dengan"
 msgid "Enabled by Default"
 msgstr "Diaktifkan Secara Otomatis"
 
+msgid "Delete selected"
+msgstr "Hapus pilihan"
+
+msgid "Save Filter Configuration"
+msgstr "Simpan Konfigurasi Filter"
+
+msgid "Restore defaults"
+msgstr "Kembalikan ke default"
+
+msgid "Add File Filter"
+msgstr "Tambahkan Filter Berkas"
+
 msgid "Add"
 msgstr "Tambahkan"
+
+msgid "Trackers"
+msgstr "Pelacak"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Pilih tracker untuk penghapusan dari Torrent's known list"
@@ -1261,11 +928,516 @@ msgstr "Pilih tracker untuk penghapusan dari Torrent's known list"
 msgid "Website URL"
 msgstr "URL situs"
 
+msgid "Standard"
+msgstr "Standar"
+
+msgid "Open"
+msgstr "Terbuka"
+
+msgid "Private"
+msgstr "Pribadi"
+
 msgid "Announce URL"
 msgstr "Umumkan URL"
 
 msgid "Mark tracker for deletion"
 msgstr "Tandai tracker untuk dihapus"
+
+msgid "Add tracker"
+msgstr "Tambahkan tracker"
+
+msgid "Save tracker configuration"
+msgstr "Simpan konfigurasi tracker"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Ini mengonfigurasi jumlah maksimum terowongan yang akan dibuka, ditentukan oleh jumlah rekan yang terhubung (penggunaan sebenarnya mungkin lebih sedikit)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Mengubah pengaturan ini menjadi kurang dari 3 lompatan dapat meningkatkan kecepatan dengan mengorbankan anonimitas dan tidak disarankan"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Klik tombol \"Add Torrent\" untuk mengambil torrent"
+
+msgid "Torrents"
+msgstr "Torrent"
+
+msgid "Refresh page"
+msgstr "Halaman Refresh"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torn"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Search torrents"
+msgstr "Cari torrent"
+
+msgid "Clear search"
+msgstr "Hapus pencarian"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Klien BitTorrent Anonim"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Apakah Anda yakin ingin menghapus {0} dan semua data yang diunduh?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Menghapus <b>{0}</b> dan semua data terkait..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Apakah Anda yakin ingin menghapus file {0} (data yang diunduh tidak akan dihapus)?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Catatan: Data yang diunduh tidak akan dihapus."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Menghapus {0} dan metadata terkait saja..."
+
+msgid "clear messages"
+msgstr "hapus pesan"
+
+msgid "Expand"
+msgstr "Perluas"
+
+msgid "Shrink"
+msgstr "Kecilkan"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Peringatan! JavaScript dinonaktifkan di browser Anda. Jika {0} diaktifkan, Anda akan kehilangan input apa pun di bagian Tambah/Buat Torrent saat penyegaran terjadi."
+
+msgid "page refresh"
+msgstr "penyegaran halaman"
+
+msgid "Warning - No I2P"
+msgstr "Peringatan - Tidak ada I2P"
+
+msgid "No torrents found."
+msgstr "Tidak ditemukan torrent."
+
+msgid "No torrents loaded."
+msgstr "Tidak ada torrent dimuat."
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Torrent"
+msgstr "torrent"
+
+msgid "ETA"
+msgstr "Waktu selesai"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "Tingkat RX"
+
+msgid "TX"
+msgstr "terima kasih"
+
+msgid "TX Rate"
+msgstr "Tingkat TX"
+
+msgid "Start All"
+msgstr "Mulai semua"
+
+msgid "Stop All"
+msgstr "Hentikan semua"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Hentikan semua torrents dan tunnel I2P"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Mulai semua torrents dan tunnel I2P"
+
+msgid "Start all stopped torrents"
+msgstr "Mulai semua torrents yang berhenti"
+
+msgid "Hide Peers"
+msgstr "Sembunyikan peer"
+
+msgid "Show Peers"
+msgstr "Tunjukkan peer"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Urutkan dengan {0}"
+
+msgid "Up Rate"
+msgstr "Kecepatan upload"
+
+msgid "Total size of loaded torrents"
+msgstr "Total ukuran torrent yang dimuat"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "{0} peer terhubung"
+
+msgid "Active downloads"
+msgstr "Unduhan aktif"
+
+msgid "Active uploads"
+msgstr "Unggahan aktif"
+
+msgid "Active Inbound tunnels"
+msgstr "Terowongan masuk aktif"
+
+msgid "Active Outbound tunnels"
+msgstr "Terowongan keluar aktif"
+
+msgid "Estimated download time for all torrents"
+msgstr "Perkiraan waktu pengunduhan untuk semua torrent"
+
+msgid "Data downloaded this session"
+msgstr "Data diunduh pada sesi ini"
+
+msgid "Total download speed"
+msgstr "Kecepatan pengunduhan total"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Total data yang diunggah (untuk torrent yang terdaftar)"
+
+msgid "Total upload speed"
+msgstr "Total kecepatan unggah"
+
+msgid "Toggle Debug Panel"
+msgstr "Tampilkan/Sembunyikan Panel Debug"
+
+msgid "Debug Mode"
+msgstr "Mode Debug"
+
+msgid "Normal Mode"
+msgstr "Modus Biasa"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0} torrent"
+
+msgid "No DHT Peers"
+msgstr "Tidak Ada Rekan DHT"
+
+msgid "Search"
+msgstr "Mencari"
+
+msgid "Show All"
+msgstr "Tampilkan Semua"
+
+msgid "Active"
+msgstr "Aktif"
+
+msgid "Inactive"
+msgstr "Tidak aktif"
+
+msgid "Connected"
+msgstr "Terhubung"
+
+msgid "Downloading"
+msgstr "Mengunduh"
+
+msgid "Seeding"
+msgstr "Penyemaian"
+
+msgid "Complete"
+msgstr "Selesai"
+
+msgid "Incomplete"
+msgstr "Tidak lengkap"
+
+msgid "Stopped"
+msgstr "Dihentikan"
+
+msgid "First"
+msgstr "Pertama"
+
+msgid "First page"
+msgstr "Halaman pertama"
+
+msgid "Prev"
+msgstr "Sebelumnya"
+
+msgid "Previous page"
+msgstr "Halaman sebelumnya"
+
+msgid "Next"
+msgstr "Berikutnya"
+
+msgid "Next page"
+msgstr "Halaman berikutnya"
+
+msgid "Last"
+msgstr "Terakhir"
+
+msgid "Last page"
+msgstr "Halaman terakhir"
+
+msgid "Enter URL or select torrent file"
+msgstr "Masukkan URL atau pilih file torrent"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Kesalahan saat mengunggah file torrent: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Pengunduhan dari lokasi non-I2P {0} tidak didukung"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Kesalahan: Hash info versi 2 tidak didukung"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "URL tidak valid: Harus diawali dengan \"{0}\" atau \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magnet dihapus: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "File torrent tidak dapat dihapus: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "File data yang dihapus: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Data file tidak dapat dihapus: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Direktori tidak dapat dihapus: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Direktori telah dihapus: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " berkas atau folder telah dikecualikan dari \"{0}\" karena aturan filter."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Berkas atau folder berikut telah dikecualikan dari \"{0}\" karena aturan filter: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent yang dibuat untuk \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Banyak pelacak I2P mengharuskan Anda mendaftarkan torrent baru sebelum melakukan penyemaian - harap lakukan sebelum memulai \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Error membuat torrent untuk \"{0}\""
+
+msgid "Removed"
+msgstr "Telah dihapus"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Masukkan nama tracker dan URL yang valid"
+
+msgid "Restored default trackers"
+msgstr "Tracker default yang telah dikembalikan"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Masukkan nama dan pola filter yang valid"
+
+msgid "Restored default torrent create filters"
+msgstr "Filter pembuatan torrent bawaan telah dipulihkan"
+
+msgid "Torrent details"
+msgstr "Rincian torrent"
+
+msgid "Torrent has comments"
+msgstr "Torrent mempunyai komentar"
+
+msgid "Open file"
+msgstr "Buka file"
+
+msgid "View files"
+msgstr "Lihat file"
+
+msgid "Completed"
+msgstr "Selesai"
+
+msgid "Share ratio"
+msgstr "Rasio upload"
+
+msgid "Last activity"
+msgstr "Aktivitas terakhir"
+
+msgid "Stop"
+msgstr "Hentikan"
+
+msgid "Stop torrent"
+msgstr "Hentikan torrent ini"
+
+msgid "Start"
+msgstr "Mulai"
+
+msgid "Start torrent"
+msgstr "Mulai torrent ini"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Hapus torrent dari daftar aktif, hapus .torrent file"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Hapus file .torrent dan file data terkait"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Memeriksa"
+
+msgid "Allocating"
+msgstr "Mengalokasikan"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Memulai"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Seeding kepada {0} peer"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Terhubung ke {0} dari peer {1} di dalam swarm"
+
+msgid "Stalled"
+msgstr "Terhenti"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Seeding kepada {0} peer di dalam swarm"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Men-download dari {0} peer"
+
+msgid "OK"
+msgstr "OKE"
+
+msgid "No Peers"
+msgstr "Tidak ada peer"
+
+msgid "Peer attached to swarm"
+msgstr "Rekan melekat ke swarm"
+
+msgid "Destination (identity) of peer"
+msgstr "Destinasi (identitas) peer"
+
+msgid "seconds"
+msgstr "detik"
+
+msgid "Seed"
+msgstr "Benih"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Uninteresting (peer memiliki potongan-potongan yang tidak kita perlu)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Chocked (peer tidak membiarkan kita untuk meminta potongan)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Rekan tertarik tapi saat ini menganggur"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Uninterested (kita  memiliki potongan-potongan diinginkan peer)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Choking (kita tidak membiarkan peer meminta potongan)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Rincian di {0} tracker"
+
+msgid "Info"
+msgstr "Informasi"
+
+msgid "Add Torrent"
+msgstr "Tambahkan Torrent"
+
+msgid "From URL"
+msgstr "Dari URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Masukkan URL unduhan file torrent (khusus I2P), tautan magnet, atau hash info"
+
+msgid "Add torrent"
+msgstr "Tambahkan torrent"
+
+msgid "Torrent file"
+msgstr "Berkas torrent"
+
+msgid "Data dir"
+msgstr "Direktori data"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Masukkan direktori untuk menyimpan data (default {0})"
+
+msgid "Create Torrent"
+msgstr "Buat Torrent"
+
+msgid "Data to seed"
+msgstr "Data untuk seeding"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "File atau direktori yang akan disemai (jalur lengkap atau dalam direktori {0} )"
+
+msgid "Create torrent"
+msgstr "Buat torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Nonaktifkan berkas dari torrent jika berkas tersebut berada dalam folder torrent"
+
+msgid "Content Filters"
+msgstr "Filter Konten"
+
+msgid "Alternates"
+msgstr "Aternatif"
+
+msgid "Primary"
+msgstr "Utama"
+
+msgid "Tracker Type"
+msgstr "Jenis Tracker"
+
+msgid "none"
+msgstr "tidak ada"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Tidak dapat menambahkan magnet: Tautan magnet versi 2 tidak didukung"
@@ -1274,20 +1446,20 @@ msgstr "Tidak dapat menambahkan magnet: Tautan magnet versi 2 tidak didukung"
 msgid "Invalid magnet URL {0}"
 msgstr "Magnet URL {0} tidak valid"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Ini mengonfigurasi jumlah maksimum terowongan yang akan dibuka, ditentukan oleh jumlah rekan yang terhubung (penggunaan sebenarnya mungkin lebih sedikit)"
+msgid "Files"
+msgstr "FIle"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Mengubah pengaturan ini menjadi kurang dari 3 lompatan dapat meningkatkan kecepatan dengan mengorbankan anonimitas dan tidak disarankan"
+msgid "Save priorities"
+msgstr "Simpan prioritas"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Urutan potongan atau file sekuensial tidak disimpan - fitur saat ini rusak."
-
-msgid "Unknown command"
-msgstr "Perintah tidak dikenal"
+msgid "Comments"
+msgstr "Komentar"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Silakan coba lagi pengiriman formulir (nonce buruk)"
+
+msgid "Unknown command"
+msgstr "Perintah tidak dikenal"
 
 msgid "Resource Does Not Exist"
 msgstr "Sumber daya tidak ada"
@@ -1298,11 +1470,11 @@ msgstr "Sumber daya"
 msgid "Base"
 msgstr "Basis"
 
-msgid "Files"
-msgstr "FIle"
-
 msgid "Directory"
 msgstr "Direktori"
+
+msgid "File type"
+msgstr "Tipe file"
 
 msgid "Size"
 msgstr "Ukuran"
@@ -1325,24 +1497,6 @@ msgstr "Ke tingkat direktori yang lebih tinggi"
 msgid "Audio Playlist"
 msgstr "Daftar Putar Audio"
 
-msgid "Not found"
-msgstr "Tidak ditemukan"
-
-msgid "File not found in torrent"
-msgstr "File tidak ditemukan di torrent"
-
-msgid "Unrecognized"
-msgstr "Tidak dikenali"
-
-msgid "Preview"
-msgstr "Pratinjau"
-
-msgid "Save priorities"
-msgstr "Simpan prioritas"
-
-msgid "Comments"
-msgstr "Komentar"
-
 msgid "Resource Not found"
 msgstr "Sumber daya yang tidak ditemukan"
 
@@ -1351,6 +1505,10 @@ msgstr "Informasi hash"
 
 msgid "Created"
 msgstr "Dibuat"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Telah ditambah"
@@ -1415,15 +1573,6 @@ msgstr "selesai"
 msgid "remaining"
 msgstr "tersisa"
 
-msgid "Ratings and Comments"
-msgstr "Rating dan Komentar"
-
-msgid "Author name required to rate or comment"
-msgstr "Nama penulis diperlukan untuk memberikan rating atau komentar"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Nama penulis anda untuk rating dan komentar yang diterbitkan"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1459,6 +1608,15 @@ msgstr "Tandai untuk dihapus"
 msgid "Delete Selected"
 msgstr "Hapus Yang Dipilih"
 
+msgid "Ratings and Comments"
+msgstr "Rating dan Komentar"
+
+msgid "Author name required to rate or comment"
+msgstr "Nama penulis diperlukan untuk memberikan rating atau komentar"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Nama penulis anda untuk rating dan komentar yang diterbitkan"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Prioritas pengunduhan file diperbarui untuk torrent "
 
@@ -1467,6 +1625,9 @@ msgstr "Sunting Torrent"
 
 msgid "Active Trackers"
 msgstr "Pelacak Aktif"
+
+msgid "Delete"
+msgstr "Hapus"
 
 msgid "Add Tracker"
 msgstr "Tambahkan Pelacak"
@@ -1482,3 +1643,23 @@ msgstr "Simpan Perubahan"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent harus dihentikan"
+
+msgid "Not found"
+msgstr "Tidak ditemukan"
+
+msgid "File not found in torrent"
+msgstr "File tidak ditemukan di torrent"
+
+msgid "Unrecognized"
+msgstr "Tidak dikenali"
+
+msgid "Preview"
+msgstr "Pratinjau"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Tidak dapat menambahkan torrent {0} dalam torrent lain: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Tidak dapat menambahkan torrent {0} termasuk torrent lain: {1}"

@@ -137,17 +137,17 @@ msgstr "Перегрузка запроса"
 msgid "Connection limit reached"
 msgstr "Достигнут лимит подключений"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Игнорируем запросы туннелей: высокая нагрузка"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Отбрасывание туннельных запросов: время в очередиОтбрасывание туннельных запросов: время в очередиИгнорируем запросы туннелей: слишком большое время пребывания в очереди"
-
 msgid "Transit throttle drop"
 msgstr "Транзитное ограничение: отброшено"
 
 msgid "Transit throttle reject"
 msgstr "Транзитное ограничение: отклонено"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Игнорируем запросы туннелей: высокая нагрузка"
+
 msgid "Transit request throttle"
 msgstr "Ограничение транзитных запросов"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Отбрасывание туннельных запросов: время в очередиОтбрасывание туннельных запросов: время в очередиИгнорируем запросы туннелей: слишком большое время пребывания в очереди"

@@ -137,17 +137,17 @@ msgstr "Požadavek na přetížení"
 msgid "Connection limit reached"
 msgstr "Bylo dosaženo limitu připojení"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Odstranění požadavků na tunel: Vysoká zátěž"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Odstranění požadavků na tunel: Doba fronty"
-
 msgid "Transit throttle drop"
 msgstr "Tranzitní omezení: zamítnuto"
 
 msgid "Transit throttle reject"
 msgstr "Tranzitní omezení: odmítnuto"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Odstranění požadavků na tunel: Vysoká zátěž"
+
 msgid "Transit request throttle"
 msgstr "Omezení tranzitních požadavků"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Odstranění požadavků na tunel: Doba fronty"

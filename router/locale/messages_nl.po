@@ -137,17 +137,17 @@ msgstr "Verzoek overbelasting"
 msgid "Connection limit reached"
 msgstr "Verbindingslimiet bereikt"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Negeer tunnel aanvragen: Hoge load"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Negeer tunnel aanvragen: Wachttijd"
-
 msgid "Transit throttle drop"
 msgstr "Transit-throttle drop"
 
 msgid "Transit throttle reject"
 msgstr "Transit-throttle afgewezen"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Negeer tunnel aanvragen: Hoge load"
+
 msgid "Transit request throttle"
 msgstr "Transit-verzoekthrottel"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Negeer tunnel aanvragen: Wachttijd"

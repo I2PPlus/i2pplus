@@ -246,6 +246,9 @@ msgstr "تم إزالة مكان الحفظ للصورة المُتبعَة"
 msgid "no subject"
 msgstr "لا يوجد عنوان"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "لم يتم العثور على عنوان مرسل صالح."
 

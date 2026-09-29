@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "No more torrents running."
-msgstr "Ülejäänud torrenteid ei tööta."
-
-msgid "I2P tunnel closed."
-msgstr "I2P tünnel sulgetud."
-
 msgid "Magnet"
 msgstr "Magneet"
 
@@ -23,12 +17,6 @@ msgstr "Ühendamine I2P-ga ebaõnnestus"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Viga ühendamisel I2P-ga - kontrolli oma I2CP seadeid!"
 
-msgid "Download already running: "
-msgstr "Allalaadimine juba käib: "
-
-msgid "Downloading"
-msgstr "Allalaadimine"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Torrentsi seadistamine I2CP valikute abil"
 
@@ -37,6 +25,18 @@ msgstr "Andmekausta kirjutamise õigused puuduvad"
 
 msgid "Data directory cannot be created"
 msgstr "Andmekausta ei saa luua"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "+0/1 tunnelihüppe juhuslik kättesaadavus väljaminevatel tunnelitel on
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Tunnelihüpiste juhuslik kättesaadavus väljaminevatel tunnelitel on keelatud"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Alguses viivitus vahetatud {0}ks"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Lisa ja Looge seadmed kuvatakse ainult mitmelehe torrenti loetelu lehted
 msgid "API key updated."
 msgstr "API võti uuendatud."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Avalike trackerite loetelu on muutunud - torrenti tuleb taaskäivitada, et muudatus jõustuks."
 
@@ -246,6 +299,10 @@ msgstr "Torrent \"{0}\" on vigane"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "VIGA - Mälu puudus, torrenti ei saa luua {0} alusel"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Torrentsi algseadistamine ja tünnelite avamine"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Torrent eemaldatud: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Torrente lisamine {0}..."
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Üleslaadimise bändivõrgu piir on {0} KBps"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Ühendamine I2CP pordiga I2P instantsil {0}"
-
-msgid "Connecting to I2P"
-msgstr "Ühendamine I2P-ga"
-
-msgid "Connected to I2P at"
-msgstr "Ühendatud I2P-ga"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Torrenti käivitamine {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Mälu: {0}MB on praegu saadaval allalaadimiseks seadistatud andmekihis"
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Hoiatus - Vaid {0}MB on saadaval allalaadimiseks seadistatud andmekihis"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Torrentit ei leitud"
 msgid "Opening the I2P tunnel"
 msgstr "I2P tünneli avamine"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "I2P tünneli avamine ja kõik torrentid käivitatakse."
+
+msgid "Connecting to I2P"
+msgstr "Ühendamine I2P-ga"
+
+msgid "Connected to I2P at"
+msgstr "Ühendatud I2P-ga"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Torrenti käivitamine {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Kõik torrentid peatatud ja I2P tünnel sulgetud."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Trackerite teavitamise järel I2P tünneli sulgemine."
+
+msgid "I2P tunnel closed."
+msgstr "I2P tünnel sulgetud."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,551 +567,8 @@ msgstr "Torrent on juba järjekorras: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent asukohalt {0} ei olnud kehtiv"
 
-msgid "Torrents"
-msgstr "Torrentid"
-
-msgid "Refresh page"
-msgstr "Lehe värskendamine"
-
-msgid "Configure"
-msgstr "Seadista"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrenti ja failide jagamise foorum"
-
-msgid "Forum"
-msgstr "Foorum"
-
-msgid "Search torrents"
-msgstr "Otsi torrente"
-
-msgid "Clear search"
-msgstr "Tühjenda otsing"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Vajuta \"Lisa torrent\" nuppu torrenti hankimiseks"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Anonüümne BitTorrent klient"
-
 msgid "Configuration"
 msgstr "Seaded"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Kas oled kindel, et soovid kustutada {0} ja kõik allalaaditud andmed?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "<b>{0}</b> ja kõik seotud andmed kustutatakse..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Kas oled kindel, et soovid faili \\''{0}\\'' kustutada (allalaaditud andmed ei kustutata)?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Märkus: Allalaaditud andmeid ei kustutata."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "{0} ja seotud metaandmeid ainult kustutatakse..."
-
-msgid "clear messages"
-msgstr "kustuta sildid"
-
-msgid "Expand"
-msgstr "Laiena"
-
-msgid "Shrink"
-msgstr "Kõrvuta"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Hoiatus! Teie brauseris on Javascript keelatud. Kui {0} on lubatud, siis lehe uuendamisel kaotad kõik sisendid torrenti lisamise/loomise seadetes."
-
-msgid "page refresh"
-msgstr "lehe uuendamine"
-
-msgid "Warning - No I2P"
-msgstr "Hoiatus - Ei ole I2P"
-
-msgid "No torrents found."
-msgstr "Torrente ei leitud."
-
-msgid "No torrents loaded."
-msgstr "Torrente ei laetud."
-
-msgid "No DHT Peers"
-msgstr "DHT partnerid puuduvad"
-
-msgid "Status"
-msgstr "Olek"
-
-msgid "Torrent"
-msgstr "Torrent"
-
-msgid "File type"
-msgstr "Failitüüp"
-
-msgid "Torrent name"
-msgstr "Torrenti nimi"
-
-msgid "ETA"
-msgstr "ETA"
-
-msgid "RX"
-msgstr "RX"
-
-msgid "RX Rate"
-msgstr "RX Hinnang"
-
-msgid "TX"
-msgstr "TX"
-
-msgid "TX Rate"
-msgstr "TX Hinnang"
-
-msgid "Start All"
-msgstr "Käivita kõik"
-
-msgid "Stop All"
-msgstr "Peata kõik"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Peata kõik torrentid ja I2P tünnel"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Käivita kõik torrentid ja I2P tünnel"
-
-msgid "Start all stopped torrents"
-msgstr "Käivita kõik peatatud torrentid"
-
-msgid "Hide Peers"
-msgstr "Peeri varjamine"
-
-msgid "Show Peers"
-msgstr "Peeri näitamine"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Sorteeri {0} järgi"
-
-msgid "Up Rate"
-msgstr "Üles hinnang"
-
-msgid "Total size of loaded torrents"
-msgstr "Laetud torrentide kogusuurus"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "1 ühendatud kaasliige"
-msgstr[1] "{0} ühendatud kaasliiget"
-
-msgid "Active downloads"
-msgstr "Aktiivsed allalaadimised"
-
-msgid "Active uploads"
-msgstr "Aktiivsed üleslaadimised"
-
-msgid "Active Inbound tunnels"
-msgstr "Aktiivsed sissetulevad tunnelid"
-
-msgid "Active Outbound tunnels"
-msgstr "Aktiivsed väljaminevad tunnelid"
-
-msgid "Estimated download time for all torrents"
-msgstr "Kõigi torrentide hinnatud allalaadimisaeg"
-
-msgid "Data downloaded this session"
-msgstr "Selles sessios allalaaditud andmed"
-
-msgid "Total download speed"
-msgstr "Koguallalaadimise kiirus"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Koguüleslaaditud andmed (nimekirjas olevate torrentide jaoks)"
-
-msgid "Total upload speed"
-msgstr "Kogüleslaadimise kiirus"
-
-msgid "Toggle Debug Panel"
-msgstr "Lülita silumispaneel"
-
-msgid "Debug Mode"
-msgstr "Silumisrežiim"
-
-msgid "Normal Mode"
-msgstr "Tavaline režiim"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrentit"
-
-msgid "Search"
-msgstr "Otsi"
-
-msgid "Show All"
-msgstr "Näita kõike"
-
-msgid "Active"
-msgstr "Aktiivne"
-
-msgid "Inactive"
-msgstr "Mitteaktiivne"
-
-msgid "Connected"
-msgstr "Ühendatud"
-
-msgid "Seeding"
-msgstr "Seemimine"
-
-msgid "Complete"
-msgstr "Valmis"
-
-msgid "Incomplete"
-msgstr "Mittevalmis"
-
-msgid "Stopped"
-msgstr "Peatatud"
-
-msgid "First"
-msgstr "Esimene"
-
-msgid "First page"
-msgstr "Esimene leht"
-
-msgid "Prev"
-msgstr "Eelmine"
-
-msgid "Previous page"
-msgstr "Eelmine leht"
-
-msgid "Next"
-msgstr "Järgmine"
-
-msgid "Next page"
-msgstr "Järgmine leht"
-
-msgid "Last"
-msgstr "Viimane"
-
-msgid "Last page"
-msgstr "Viimane leht"
-
-msgid "Enter URL or select torrent file"
-msgstr "Sisesta URL või vali torrenti fail"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Viga torrenti faili üleslaadimisel: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Torrentit {0} ei saa lisada teise torrenti sees: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Allalaadimine asukohast {0}, mis ei ole I2P, ei ole toetatud"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Viga: Versiooni 2 info räsid ei ole toetatud"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Vigane URL: Peab algama \"{0}\" või \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Magneet kustutatud: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Torrenti faili ei saanud kustutada: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Andmefail kustutatud: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Andmefaili ei saanud kustutada: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Kausta ei saanud kustutada: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Kaust kustutatud: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Viga torrenti loomisel - pead sisestama faili või kataloogi"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Ei saa luua torrentit olematute andmete jaoks: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Torrenti, mis lõpeb \".torrent\", ei saa lisada: {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Torrent nimega {0} töötab juba"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Torrenti, mis sisaldab I2P kausta, ei saa lisada: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Torrentit {0}, mis sisaldab teist torrentit: {1}, ei saa lisada"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Viga - Võid peamist trackerit ilma alternatiivseteta lisada"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Viga - Torrentis ei saa segada privaatseid ja avalikke trackerite"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " failid või kaustad on eemaldatud \"{0}\" filtri reeglite tõttu."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Järgmised failid või kaustad on eemaldatud \"{0}\" filtri reeglite tõttu: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Torrent loodud \"{0}\" jaoks"
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Paljud I2P trackerid nõuavad, et registreeriks uusi torrente enne seemimist - palun tee see enne, kui käivitatad \"{0}\""
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Viga torrenti loomisel \"{0}\""
-
-msgid "Delete selected"
-msgstr "Kustuta valitud"
-
-msgid "Save tracker configuration"
-msgstr "Salvesta trackeri seaded"
-
-msgid "Removed"
-msgstr "Eemaldatud"
-
-msgid "Add tracker"
-msgstr "Lisa tracker"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Sisesta korrektne trackeri nimi ja URL-d"
-
-msgid "Restore defaults"
-msgstr "Taasta vaikimisi"
-
-msgid "Restored default trackers"
-msgstr "Taastati vaikimisi trackerid"
-
-msgid "Save Filter Configuration"
-msgstr "Salvesta filtri seaded"
-
-msgid "Add File Filter"
-msgstr "Lisa failifiltr"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Sisesta korrektne nimi ja filtrimustr"
-
-msgid "Restored default torrent create filters"
-msgstr "Taastati vaikimisi torrenti loomise filtreid"
-
-msgid "Torrent details"
-msgstr "Torrenti detailid"
-
-msgid "Torrent has comments"
-msgstr "Torrentil on kommentaarid"
-
-msgid "Open file"
-msgstr "Ava fail"
-
-msgid "View files"
-msgstr "Vaata faile"
-
-msgid "Completed"
-msgstr "Lõpetatud"
-
-msgid "Share ratio"
-msgstr "Üleslaadimise suhe"
-
-msgid "Last activity"
-msgstr "Viimane tegevus"
-
-msgid "Stop"
-msgstr "Peatu"
-
-msgid "Stop torrent"
-msgstr "Peata torrent"
-
-msgid "Start"
-msgstr "Alusta"
-
-msgid "Start torrent"
-msgstr "Alusta torrent"
-
-msgid "Remove"
-msgstr "Eemalda"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Eemalda torrent aktiivsest loetlusest, kustutades .torrent faili"
-
-msgid "Delete"
-msgstr "Kustuta"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Kustuta .torrent fail ja seotud andmefailid"
-
-msgid "Checking"
-msgstr "Kontrollimine"
-
-msgid "Allocating"
-msgstr "Reserveerimine"
-
-msgid "Starting"
-msgstr "Algamine"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Seeding {0} kaasliikmele"
-msgstr[1] "Seeding {0} kaasliikmel"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Ühendatud {0} / {1} kaasliikmel hulga"
-
-msgid "Stalled"
-msgstr "Ootus"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Seemendamine {0} kaasliikme jaoks"
-msgstr[1] "Seemendamine {0} kaasliikmetele"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Laenud alla {0} kaasliikmelt"
-msgstr[1] "Laenud alla {0} kaasliikmel"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "No Peers"
-msgstr "Kaasliikmeid pole"
-
-msgid "Peer attached to swarm"
-msgstr "Kaasliikme ühendamine hulgaga"
-
-msgid "Destination (identity) of peer"
-msgstr "Siht (identiteet) kaasliikmel"
-
-msgid "seconds"
-msgstr "sekundit"
-
-msgid "Seed"
-msgstr "Seemia"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Mitte huvitav (kaasliikmel ei ole vajalikke tükkide)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Piiratud (kaasliikme ei luba meil päringuid)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Kaasliikmel on huvi, kuid hetkel ootel"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Mitte huvitatud (Meil ei ole kaasliikme vajalikke tükkide)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Piiratud (Me ei luba kaasliikmel päringuid)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Detailid {0} trackeris"
-
-msgid "Info"
-msgstr "Info"
-
-msgid "Add Torrent"
-msgstr "Lisa Torrent"
-
-msgid "From URL"
-msgstr "URL-st"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Sisesta torrenti faili allalaadimise URL (vaid I2P), magnet lingi või info hash"
-
-msgid "Add torrent"
-msgstr "Lisa torrent"
-
-msgid "Torrent file"
-msgstr "Torrenti fail"
-
-msgid "Data dir"
-msgstr "Andmekataloog"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Sisesta kataloog, kus salvestada andmed (vaikimisi {0})"
-
-msgid "Create Torrent"
-msgstr "Loo Torrent"
-
-msgid "Data to seed"
-msgstr "Seemeandmed"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Fail või kataloog seemimiseks (täis tee või kataloogi {0} sees)"
-
-msgid "Create torrent"
-msgstr "Loo torrent"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Jäta torrentist välja need failid, mis asuvad torrenti kataloogis"
-
-msgid "Content Filters"
-msgstr "Sisu filtre"
-
-msgid "Trackers"
-msgstr "Trackerid"
-
-msgid "Alternates"
-msgstr "Vahelikud"
-
-msgid "Primary"
-msgstr "Peamine"
-
-msgid "Tracker Type"
-msgstr "Trackeri tüüp"
-
-msgid "Standard"
-msgstr "Standardne"
-
-msgid "Open"
-msgstr "Avatud"
-
-msgid "Private"
-msgstr "Privaatne"
-
-msgid "none"
-msgstr "puudub"
 
 msgid "User Interface"
 msgstr "Kasutajaliides"
@@ -1043,6 +587,9 @@ msgstr "Et muuta teemeid käsitsi, keela üldteemad"
 
 msgid "Universal theming is enabled."
 msgstr "Üldteemad on lubatud."
+
+msgid "Configure"
+msgstr "Seadista"
 
 msgid "Refresh time"
 msgstr "Värskendamise aeg"
@@ -1164,11 +711,20 @@ msgstr "Alusta torrente automaatselt neid lisades ning taaskäivita torrentid To
 msgid "Startup delay"
 msgstr "Käivituse viivitus"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Kui kaua enne kui autostartitud torrentid laaditakse Torrentsi käivitamisel"
-
 msgid "minutes"
 msgstr "minutit"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Andme salvestamine"
@@ -1179,11 +735,35 @@ msgstr "Andmekataloog"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Kataloog, kus torrentid ja allalaaditud/jagatud failid on salvestatud"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Kõigile lugemiseks kättesaadavad failid"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Määra faili õigused nii, et muud kohalikud kasutajad saaksid allalaaditud failidele juurde pääseda"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Maksimaalne failide arv torrentis"
@@ -1194,8 +774,14 @@ msgstr "Maksimaalne failide arv torrentis - märk, et trackerid võivad määrat
 msgid "Tunnel Configuration"
 msgstr "Tunneli seadistused"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Meie sihtkoht (identiteet) selles sessios"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Siht"
@@ -1221,6 +807,24 @@ msgstr "Lisa 0 või 1 juhuslikult lisahüpik väljaminevatel tunnelitel"
 msgid "Outbound"
 msgstr "Väljaminev"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "I2CP host"
 
@@ -1229,6 +833,49 @@ msgstr "I2CP port"
 
 msgid "I2CP options"
 msgstr "I2CP valikud"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Salvesta seadistused"
@@ -1257,8 +904,23 @@ msgstr "Lõpeb"
 msgid "Enabled by Default"
 msgstr "Vaikimisi lubatud"
 
+msgid "Delete selected"
+msgstr "Kustuta valitud"
+
+msgid "Save Filter Configuration"
+msgstr "Salvesta filtri seaded"
+
+msgid "Restore defaults"
+msgstr "Taasta vaikimisi"
+
+msgid "Add File Filter"
+msgstr "Lisa failifiltr"
+
 msgid "Add"
 msgstr "Lisa"
+
+msgid "Trackers"
+msgstr "Trackerid"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Vali trackerid eemaldamiseks Torrentsi tuntavast nimekirjast"
@@ -1266,11 +928,521 @@ msgstr "Vali trackerid eemaldamiseks Torrentsi tuntavast nimekirjast"
 msgid "Website URL"
 msgstr "Veebisaidi URL"
 
+msgid "Standard"
+msgstr "Standardne"
+
+msgid "Open"
+msgstr "Avatud"
+
+msgid "Private"
+msgstr "Privaatne"
+
 msgid "Announce URL"
 msgstr "Teavitamise URL"
 
 msgid "Mark tracker for deletion"
 msgstr "Märgi tracker kustutamiseks"
+
+msgid "Add tracker"
+msgstr "Lisa tracker"
+
+msgid "Save tracker configuration"
+msgstr "Salvesta trackeri seaded"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "See määrab maksimaalse tunnelite arvu, mis avatakse, sõltuvalt ühendatud kaasliikmete arvust ( tegelik kasutus võib olla väiksem)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Selle seadistuse muutmine vähem kui 3 hüppeni võib kiirust parandada anonüümsuse kulul ning seda ei soovita"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Vajuta \"Lisa torrent\" nuppu torrenti hankimiseks"
+
+msgid "Torrents"
+msgstr "Torrentid"
+
+msgid "Refresh page"
+msgstr "Lehe värskendamine"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrenti ja failide jagamise foorum"
+
+msgid "Forum"
+msgstr "Foorum"
+
+msgid "Search torrents"
+msgstr "Otsi torrente"
+
+msgid "Clear search"
+msgstr "Tühjenda otsing"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Anonüümne BitTorrent klient"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Kas oled kindel, et soovid kustutada {0} ja kõik allalaaditud andmed?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "<b>{0}</b> ja kõik seotud andmed kustutatakse..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Kas oled kindel, et soovid faili \\''{0}\\'' kustutada (allalaaditud andmed ei kustutata)?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Märkus: Allalaaditud andmeid ei kustutata."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "{0} ja seotud metaandmeid ainult kustutatakse..."
+
+msgid "clear messages"
+msgstr "kustuta sildid"
+
+msgid "Expand"
+msgstr "Laiena"
+
+msgid "Shrink"
+msgstr "Kõrvuta"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Hoiatus! Teie brauseris on Javascript keelatud. Kui {0} on lubatud, siis lehe uuendamisel kaotad kõik sisendid torrenti lisamise/loomise seadetes."
+
+msgid "page refresh"
+msgstr "lehe uuendamine"
+
+msgid "Warning - No I2P"
+msgstr "Hoiatus - Ei ole I2P"
+
+msgid "No torrents found."
+msgstr "Torrente ei leitud."
+
+msgid "No torrents loaded."
+msgstr "Torrente ei laetud."
+
+msgid "Status"
+msgstr "Olek"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "RX Hinnang"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "TX Hinnang"
+
+msgid "Start All"
+msgstr "Käivita kõik"
+
+msgid "Stop All"
+msgstr "Peata kõik"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Peata kõik torrentid ja I2P tünnel"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Käivita kõik torrentid ja I2P tünnel"
+
+msgid "Start all stopped torrents"
+msgstr "Käivita kõik peatatud torrentid"
+
+msgid "Hide Peers"
+msgstr "Peeri varjamine"
+
+msgid "Show Peers"
+msgstr "Peeri näitamine"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Sorteeri {0} järgi"
+
+msgid "Up Rate"
+msgstr "Üles hinnang"
+
+msgid "Total size of loaded torrents"
+msgstr "Laetud torrentide kogusuurus"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 ühendatud kaasliige"
+msgstr[1] "{0} ühendatud kaasliiget"
+
+msgid "Active downloads"
+msgstr "Aktiivsed allalaadimised"
+
+msgid "Active uploads"
+msgstr "Aktiivsed üleslaadimised"
+
+msgid "Active Inbound tunnels"
+msgstr "Aktiivsed sissetulevad tunnelid"
+
+msgid "Active Outbound tunnels"
+msgstr "Aktiivsed väljaminevad tunnelid"
+
+msgid "Estimated download time for all torrents"
+msgstr "Kõigi torrentide hinnatud allalaadimisaeg"
+
+msgid "Data downloaded this session"
+msgstr "Selles sessios allalaaditud andmed"
+
+msgid "Total download speed"
+msgstr "Koguallalaadimise kiirus"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Koguüleslaaditud andmed (nimekirjas olevate torrentide jaoks)"
+
+msgid "Total upload speed"
+msgstr "Kogüleslaadimise kiirus"
+
+msgid "Toggle Debug Panel"
+msgstr "Lülita silumispaneel"
+
+msgid "Debug Mode"
+msgstr "Silumisrežiim"
+
+msgid "Normal Mode"
+msgstr "Tavaline režiim"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrentit"
+
+msgid "No DHT Peers"
+msgstr "DHT partnerid puuduvad"
+
+msgid "Search"
+msgstr "Otsi"
+
+msgid "Show All"
+msgstr "Näita kõike"
+
+msgid "Active"
+msgstr "Aktiivne"
+
+msgid "Inactive"
+msgstr "Mitteaktiivne"
+
+msgid "Connected"
+msgstr "Ühendatud"
+
+msgid "Downloading"
+msgstr "Allalaadimine"
+
+msgid "Seeding"
+msgstr "Seemimine"
+
+msgid "Complete"
+msgstr "Valmis"
+
+msgid "Incomplete"
+msgstr "Mittevalmis"
+
+msgid "Stopped"
+msgstr "Peatatud"
+
+msgid "First"
+msgstr "Esimene"
+
+msgid "First page"
+msgstr "Esimene leht"
+
+msgid "Prev"
+msgstr "Eelmine"
+
+msgid "Previous page"
+msgstr "Eelmine leht"
+
+msgid "Next"
+msgstr "Järgmine"
+
+msgid "Next page"
+msgstr "Järgmine leht"
+
+msgid "Last"
+msgstr "Viimane"
+
+msgid "Last page"
+msgstr "Viimane leht"
+
+msgid "Enter URL or select torrent file"
+msgstr "Sisesta URL või vali torrenti fail"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Viga torrenti faili üleslaadimisel: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Allalaadimine asukohast {0}, mis ei ole I2P, ei ole toetatud"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Viga: Versiooni 2 info räsid ei ole toetatud"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Vigane URL: Peab algama \"{0}\" või \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magneet kustutatud: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Torrenti faili ei saanud kustutada: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Andmefail kustutatud: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Andmefaili ei saanud kustutada: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Kausta ei saanud kustutada: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Kaust kustutatud: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " failid või kaustad on eemaldatud \"{0}\" filtri reeglite tõttu."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Järgmised failid või kaustad on eemaldatud \"{0}\" filtri reeglite tõttu: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent loodud \"{0}\" jaoks"
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Paljud I2P trackerid nõuavad, et registreeriks uusi torrente enne seemimist - palun tee see enne, kui käivitatad \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Viga torrenti loomisel \"{0}\""
+
+msgid "Removed"
+msgstr "Eemaldatud"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Sisesta korrektne trackeri nimi ja URL-d"
+
+msgid "Restored default trackers"
+msgstr "Taastati vaikimisi trackerid"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Sisesta korrektne nimi ja filtrimustr"
+
+msgid "Restored default torrent create filters"
+msgstr "Taastati vaikimisi torrenti loomise filtreid"
+
+msgid "Torrent details"
+msgstr "Torrenti detailid"
+
+msgid "Torrent has comments"
+msgstr "Torrentil on kommentaarid"
+
+msgid "Open file"
+msgstr "Ava fail"
+
+msgid "View files"
+msgstr "Vaata faile"
+
+msgid "Completed"
+msgstr "Lõpetatud"
+
+msgid "Share ratio"
+msgstr "Üleslaadimise suhe"
+
+msgid "Last activity"
+msgstr "Viimane tegevus"
+
+msgid "Stop"
+msgstr "Peatu"
+
+msgid "Stop torrent"
+msgstr "Peata torrent"
+
+msgid "Start"
+msgstr "Alusta"
+
+msgid "Start torrent"
+msgstr "Alusta torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Eemalda torrent aktiivsest loetlusest, kustutades .torrent faili"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Kustuta .torrent fail ja seotud andmefailid"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Kontrollimine"
+
+msgid "Allocating"
+msgstr "Reserveerimine"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Algamine"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Seeding {0} kaasliikmele"
+msgstr[1] "Seeding {0} kaasliikmel"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Ühendatud {0} / {1} kaasliikmel hulga"
+
+msgid "Stalled"
+msgstr "Ootus"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Seemendamine {0} kaasliikme jaoks"
+msgstr[1] "Seemendamine {0} kaasliikmetele"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Laenud alla {0} kaasliikmelt"
+msgstr[1] "Laenud alla {0} kaasliikmel"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Kaasliikmeid pole"
+
+msgid "Peer attached to swarm"
+msgstr "Kaasliikme ühendamine hulgaga"
+
+msgid "Destination (identity) of peer"
+msgstr "Siht (identiteet) kaasliikmel"
+
+msgid "seconds"
+msgstr "sekundit"
+
+msgid "Seed"
+msgstr "Seemia"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Mitte huvitav (kaasliikmel ei ole vajalikke tükkide)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Piiratud (kaasliikme ei luba meil päringuid)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Kaasliikmel on huvi, kuid hetkel ootel"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Mitte huvitatud (Meil ei ole kaasliikme vajalikke tükkide)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Piiratud (Me ei luba kaasliikmel päringuid)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Detailid {0} trackeris"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Add Torrent"
+msgstr "Lisa Torrent"
+
+msgid "From URL"
+msgstr "URL-st"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Sisesta torrenti faili allalaadimise URL (vaid I2P), magnet lingi või info hash"
+
+msgid "Add torrent"
+msgstr "Lisa torrent"
+
+msgid "Torrent file"
+msgstr "Torrenti fail"
+
+msgid "Data dir"
+msgstr "Andmekataloog"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Sisesta kataloog, kus salvestada andmed (vaikimisi {0})"
+
+msgid "Create Torrent"
+msgstr "Loo Torrent"
+
+msgid "Data to seed"
+msgstr "Seemeandmed"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Fail või kataloog seemimiseks (täis tee või kataloogi {0} sees)"
+
+msgid "Create torrent"
+msgstr "Loo torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Jäta torrentist välja need failid, mis asuvad torrenti kataloogis"
+
+msgid "Content Filters"
+msgstr "Sisu filtre"
+
+msgid "Alternates"
+msgstr "Vahelikud"
+
+msgid "Primary"
+msgstr "Peamine"
+
+msgid "Tracker Type"
+msgstr "Trackeri tüüp"
+
+msgid "none"
+msgstr "puudub"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Magnet'i lisamine ei ole võimalik: Versiooni 2 magnet linke ei toeta"
@@ -1279,20 +1451,20 @@ msgstr "Magnet'i lisamine ei ole võimalik: Versiooni 2 magnet linke ei toeta"
 msgid "Invalid magnet URL {0}"
 msgstr "Vigane magnet URL {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "See määrab maksimaalse tunnelite arvu, mis avatakse, sõltuvalt ühendatud kaasliikmete arvust ( tegelik kasutus võib olla väiksem)"
+msgid "Files"
+msgstr "Failid"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Selle seadistuse muutmine vähem kui 3 hüppeni võib kiirust parandada anonüümsuse kulul ning seda ei soovita"
+msgid "Save priorities"
+msgstr "Salvesta prioriteedid"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Jadapoolitus või failide järjekord ei salvestata - funktsioon hetkel ei tööta."
-
-msgid "Unknown command"
-msgstr "Tundmatu käsk"
+msgid "Comments"
+msgstr "Kommentaarid"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Palun proovi vormi uuesti esitada (vigane nonce)"
+
+msgid "Unknown command"
+msgstr "Tundmatu käsk"
 
 msgid "Resource Does Not Exist"
 msgstr "Resurssi ei eksisteeri"
@@ -1303,11 +1475,11 @@ msgstr "Resurss"
 msgid "Base"
 msgstr "Baas"
 
-msgid "Files"
-msgstr "Failid"
-
 msgid "Directory"
 msgstr "Kataloog"
+
+msgid "File type"
+msgstr "Failitüüp"
 
 msgid "Size"
 msgstr "Suurus"
@@ -1330,24 +1502,6 @@ msgstr "Kõrgema taseme kataloogi"
 msgid "Audio Playlist"
 msgstr "Heliplaad"
 
-msgid "Not found"
-msgstr "Ei leitud"
-
-msgid "File not found in torrent"
-msgstr "Failit ei leitud torrentis"
-
-msgid "Unrecognized"
-msgstr "Tuvastamata"
-
-msgid "Preview"
-msgstr "Eelvaade"
-
-msgid "Save priorities"
-msgstr "Salvesta prioriteedid"
-
-msgid "Comments"
-msgstr "Kommentaarid"
-
 msgid "Resource Not found"
 msgstr "Resurssit ei leitud"
 
@@ -1356,6 +1510,10 @@ msgstr "Info räsi"
 
 msgid "Created"
 msgstr "Loodud"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Lisa"
@@ -1420,15 +1578,6 @@ msgstr "valmis"
 msgid "remaining"
 msgstr "jäänud"
 
-msgid "Ratings and Comments"
-msgstr "Hinnangud ja kommentaarid"
-
-msgid "Author name required to rate or comment"
-msgstr "Autori nimi hindamiseks või kommentaariks"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Sinu autori nimi avaldatud kommentaaride ja hinnangute jaoks"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1465,6 +1614,15 @@ msgstr "Märgi kustutamiseks"
 msgid "Delete Selected"
 msgstr "Kustuta valitud"
 
+msgid "Ratings and Comments"
+msgstr "Hinnangud ja kommentaarid"
+
+msgid "Author name required to rate or comment"
+msgstr "Autori nimi hindamiseks või kommentaariks"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Sinu autori nimi avaldatud kommentaaride ja hinnangute jaoks"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Failide allalaadimise prioriteedid uuendatud torrenti jaoks"
 
@@ -1473,6 +1631,9 @@ msgstr "Muuda torrent"
 
 msgid "Active Trackers"
 msgstr "Aktiivsed trackerid"
+
+msgid "Delete"
+msgstr "Kustuta"
 
 msgid "Add Tracker"
 msgstr "Lisa tracker"
@@ -1488,3 +1649,23 @@ msgstr "Salvesta muudatused"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent peab olema peatatud"
+
+msgid "Not found"
+msgstr "Ei leitud"
+
+msgid "File not found in torrent"
+msgstr "Failit ei leitud torrentis"
+
+msgid "Unrecognized"
+msgstr "Tuvastamata"
+
+msgid "Preview"
+msgstr "Eelvaade"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Torrentit {0} ei saa lisada teise torrenti sees: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Torrentit {0}, mis sisaldab teist torrentit: {1}, ei saa lisada"

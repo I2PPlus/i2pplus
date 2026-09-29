@@ -137,17 +137,17 @@ msgstr "Pyydä ylikuormitusta"
 msgid "Connection limit reached"
 msgstr "Yhteysraja saavutettu"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Pudotetaan käytäväpyyntöjä: Raskas kuorma"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Pudotetaan käytäväpyyntöjä: Jonotusaika"
-
 msgid "Transit throttle drop"
 msgstr "Läpikulkuvauhdikkuuden pudotus"
 
 msgid "Transit throttle reject"
 msgstr "Läpikulkuvauhdikkuuden hylkääminen"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Pudotetaan käytäväpyyntöjä: Raskas kuorma"
+
 msgid "Transit request throttle"
 msgstr "Läpikulkupyyntöjen nopeusrajoitin"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Pudotetaan käytäväpyyntöjä: Jonotusaika"

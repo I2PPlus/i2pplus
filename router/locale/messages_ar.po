@@ -137,17 +137,17 @@ msgstr "طلب الزائد"
 msgid "Connection limit reached"
 msgstr "تم الوصول إلى حد الاتصال"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "تجاوز النفق: ازدحام كبير"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "تجاوز النفق: وقت الانتظار"
-
 msgid "Transit throttle drop"
 msgstr "إسقاط throttle Transit"
 
 msgid "Transit throttle reject"
 msgstr "رفض throttle Transit"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "تجاوز النفق: ازدحام كبير"
+
 msgid "Transit request throttle"
 msgstr "throttle طلبات Transit"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "تجاوز النفق: وقت الانتظار"

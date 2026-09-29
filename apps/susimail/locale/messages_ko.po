@@ -231,6 +231,9 @@ msgstr "추적 이미지 플레이스홀더 제거"
 msgid "no subject"
 msgstr "제목 없음"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "올바른 보낸이 주소 없음."
 

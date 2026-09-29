@@ -68,6 +68,93 @@ if which find | grep -q -i windows; then
     export PATH=.:/bin:/usr/local/bin:$PATH
 fi
 
+# The English template is an input to every translation, so a translation older
+# than the template is stale even when its compiled bundle and its sources look
+# current. This happens after a template-only run (poupdate-source), which
+# rewrites messages_en.po without touching the other languages: their .po files
+# are then older than the template while the mtime-only check below would call
+# them up to date, leaving them permanently missing new msgids.
+EN_PO_NEWEST=""
+for f in $PO_GLOB; do
+    case "$(basename "$f")" in
+        *_en.po|en.po)
+            if [ -z "$EN_PO_NEWEST" ] || [ "$f" -nt "$EN_PO_NEWEST" ]; then
+                EN_PO_NEWEST="$f"
+            fi
+            ;;
+    esac
+done
+
+# True when $1 (a translation) is out of date with respect to the template.
+template_stale() {
+    [ -n "$EN_PO_NEWEST" ] && [ "$EN_PO_NEWEST" -nt "$1" ]
+}
+
+# Advisory diagnostics dropped from the build log. Neither affects the
+# generated .po/.mo/.class output. Set either to "none" in a
+# bundle-messages.cfg to see the raw tool output.
+#
+# WARN_FILTER_FORLOOP: xgettext's Java scanner mis-counts the parentheses of a
+# classic C-style for-loop header (for (init; cond; step)) and emits one
+# "')' found where '}' was expected" warning per loop. The scan only locates
+# comments and string literals, so extraction and the emitted line references
+# stay correct.
+#
+# WARN_FILTER_EMBEDDED_URL: gettext flags URLs left inline in translatable
+# strings. The routerconsole help pages link to around 45 external sites that
+# way. This is a real i18n finding, but the alternative is editing ~45 msgids
+# and invalidating their existing translations in every language, so it stays
+# filtered until the help text is reworked. Unfixed, not ignored.
+#
+# The defaults are assigned in separate steps on purpose: a '}' inside the
+# default of ${VAR:-...} terminates the expansion in dash, which breaks the
+# pattern.
+if [ -z "$WARN_FILTER_FORLOOP" ]; then
+    WARN_FILTER_FORLOOP="')' found where '}' was expected"
+fi
+if [ -z "$WARN_FILTER_EMBEDDED_URL" ]; then
+    WARN_FILTER_EMBEDDED_URL="Message contains an embedded URL"
+fi
+
+# filter_out <file> <fixed-string>: drop matching lines from <file> in place.
+filter_out() {
+    [ -n "$2" ] && [ "$2" != "none" ] || return 0
+    _tmp="$1.f"
+    grep -v -F -e "$2" "$1" > "$_tmp" 2>/dev/null
+    mv -f "$_tmp" "$1"
+}
+
+run_xgettext() {
+    _err="$TMPFILE.err"
+    xgettext "$@" 2> "$_err"
+    _rc=$?
+    filter_out "$_err" "$WARN_FILTER_FORLOOP"
+    filter_out "$_err" "$WARN_FILTER_EMBEDDED_URL"
+    [ -s "$_err" ] && cat "$_err" >&2
+    rm -f "$_err"
+    return $_rc
+}
+
+run_msgmerge() {
+    _err="$TMPFILE.err"
+    msgmerge "$@" 2> "$_err"
+    _rc=$?
+    filter_out "$_err" "$WARN_FILTER_EMBEDDED_URL"
+    [ -s "$_err" ] && cat "$_err" >&2
+    rm -f "$_err"
+    return $_rc
+}
+
+run_msgfmt() {
+    _err="$TMPFILE.err"
+    msgfmt "$@" 2> "$_err"
+    _rc=$?
+    filter_out "$_err" "$WARN_FILTER_EMBEDDED_URL"
+    [ -s "$_err" ] && cat "$_err" >&2
+    rm -f "$_err"
+    return $_rc
+}
+
 # --- TYPE=java specific defaults & validation ---
 if [ "$TYPE" = "java" ]; then
     : "${CLASS?ERROR: CLASS not set in bundle-messages.cfg}"
@@ -153,7 +240,7 @@ if [ "$TYPE" = "java" ]; then
         fi
 
         CLASSFILE="$CLASS_OUTPUT_DIR/$PACKAGE_PATH/messages_$LG.class"
-        if [ -s "$CLASSFILE" ] && [ "$CLASSFILE" -nt "$i" ] && [ ! -s "$TMPFILE" ]; then
+        if ! template_stale "$i" && [ -s "$CLASSFILE" ] && [ "$CLASSFILE" -nt "$i" ] && [ ! -s "$TMPFILE" ]; then
             continue
         fi
 
@@ -161,14 +248,14 @@ if [ "$TYPE" = "java" ]; then
             echo "Updating $i from source tags..."
             find $JPATHS -name '*.java' > "$TMPFILE" 2>/dev/null
 
-            xgettext -f "$TMPFILE" -L "$XGETTEXT_LANG" --from-code=UTF-8 \
+            run_xgettext -f "$TMPFILE" -L "$XGETTEXT_LANG" --from-code=UTF-8 \
                 $XGS $XGETTEXT_EXTRA_FLAGS $XGETTEXT_KEYWORDS -o "${i}t"
             if [ $? -ne 0 ]; then
                 echo "ERROR - xgettext failed on $i, not updating translations"
                 rm -f "${i}t"; RC=1; break
             fi
 
-            msgmerge -q -U -N --backup=none "$i" "${i}t"
+            run_msgmerge -q -U -N --backup=none "$i" "${i}t"
             if [ $? -ne 0 ]; then
                 echo "ERROR - msgmerge failed on $i, not updating translations"
                 rm -f "${i}t"; RC=1; break
@@ -190,7 +277,7 @@ if [ "$TYPE" = "java" ]; then
             TDY="$TD2/$PACKAGE_PATH"
             rm -rf "$TD"
             mkdir -p "$TD" "$TDY"
-            msgfmt --java2 --source -r "$CLASS" -l "$LG" -d "$TD" "$i"
+            run_msgfmt --java2 --source -r "$CLASS" -l "$LG" -d "$TD" "$i"
             if [ $? -ne 0 ]; then
                 echo "ERROR - msgfmt (fast) failed on $i"; rm -rf "$TD"
                 find "$CLASS_OUTPUT_DIR" -name "messages_${LG}.class" -exec rm -f {} \;
@@ -199,7 +286,7 @@ if [ "$TYPE" = "java" ]; then
             mv "$TDX/messages_$LG.java" "$TDY"
             rm -rf "$TD"
         else
-            msgfmt --java2 -r "$CLASS" -l "$LG" -d "$CLASS_OUTPUT_DIR" "$i"
+            run_msgfmt --java2 -r "$CLASS" -l "$LG" -d "$CLASS_OUTPUT_DIR" "$i"
             if [ $? -ne 0 ]; then
                 echo "ERROR - msgfmt failed on $i"
                 find "$CLASS_OUTPUT_DIR" -name "messages_${LG}.class" -exec rm -f {} \;
@@ -242,7 +329,7 @@ elif [ "$TYPE" = "mo" ]; then
         fi
 
         MO_FILE="$BD/$(echo "$MO_FILE_PATTERN" | sed "s/\$LG/$LG/g")"
-        if [ -s "$MO_FILE" ] && [ "$MO_FILE" -nt "$i" ] && [ ! -s "$TMPFILE" ]; then
+        if ! template_stale "$i" && [ -s "$MO_FILE" ] && [ "$MO_FILE" -nt "$i" ] && [ ! -s "$TMPFILE" ]; then
             continue
         fi
 
@@ -250,14 +337,14 @@ elif [ "$TYPE" = "mo" ]; then
             echo "Updating $i from source tags..."
             find $MO_SOURCE_PATHS $MO_SOURCE_FILTER > "$TMPFILE" 2>/dev/null
 
-            xgettext -f "$TMPFILE" -F -L "$XGETTEXT_LANG" --from-code=UTF-8 \
+            run_xgettext -f "$TMPFILE" -F -L "$XGETTEXT_LANG" --from-code=UTF-8 \
                 $XGETTEXT_EXTRA_FLAGS -o "${i}t"
             if [ $? -ne 0 ]; then
                 echo "ERROR - xgettext failed on $i"
                 rm -f "${i}t"; RC=1; break
             fi
 
-            msgmerge -q -U -N --backup=none "$i" "${i}t"
+            run_msgmerge -q -U -N --backup=none "$i" "${i}t"
             if [ $? -ne 0 ]; then
                 echo "ERROR - msgmerge failed on $i"
                 rm -f "${i}t"; RC=1; break
@@ -271,7 +358,7 @@ elif [ "$TYPE" = "mo" ]; then
         MO_DIR=$(dirname "$MO_FILE")
         mkdir -p "$MO_DIR"
         echo "Generating $LG ResourceBundle..."
-        msgfmt -o "$MO_FILE" "$i"
+        run_msgfmt -o "$MO_FILE" "$i"
         if [ $? -ne 0 ]; then
             echo "ERROR - msgfmt failed on $i"
             rm -rf "$MO_DIR"; RC=1; break

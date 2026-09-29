@@ -234,6 +234,9 @@ msgstr "Odstránený placeholder sledovacieho obrázka"
 msgid "no subject"
 msgstr "bez predmetu"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Nájdená žiadna platná adresa odosielateľa."
 

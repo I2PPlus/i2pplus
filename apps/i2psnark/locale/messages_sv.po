@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\\\n"
 
-msgid "No more torrents running."
-msgstr "Inga fler torrenter körs."
-
-msgid "I2P tunnel closed."
-msgstr "I2P-tunneln är stängd."
-
 msgid "Magnet"
 msgstr "Magnet"
 
@@ -23,12 +17,6 @@ msgstr "Kan inte ansluta till I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Fel vid anslutning till I2P - kontrollera dina I2CP-inställningar!Problem vid anslutning till I2P - kontrollera dina inställningar för I2CP!"
 
-msgid "Download already running: "
-msgstr "Nedladdning körs redan: "
-
-msgid "Downloading"
-msgstr "Nedladdning"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Konfigurera Torrenter med I2CP-alternativ"
 
@@ -37,6 +25,18 @@ msgstr "Inga skrivbehörigheter för datakatalog"
 
 msgid "Data directory cannot be created"
 msgstr "Datakatalog kan inte skapas"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "+0/1 tunnelhop slumpmässning aktiverad på utgående tunneln"
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Tunnelhop slumpmässning inaktiverad på utgående tunneln"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Fördröjning vid uppstart bytt till {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Lägg till och skapa sektioner som endast visas på första sidan av fle
 msgid "API key updated."
 msgstr "API-nyckeln uppdaterad."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Listan över offentliga bevakare förändrad - torrenten måste startas om för att inställningen ska träda i kraft."
 
@@ -246,6 +299,10 @@ msgstr "Torrent i \"{0}\" är ogiltig"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "FEL - Minnet har tagit slut, kan inte skapa torrent från {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Initialisering av Torrenter och öppning av tunnlar"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Torrent borttagen: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Lägga till torrenter i {0}"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Uppbandbreddsgränsen är {0} KBps"
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Ansluter till I2CP-port på I2P-instansen vid {0}"
-
-msgid "Connecting to I2P"
-msgstr "Ansluter till I2P"
-
-msgid "Connected to I2P at"
-msgstr "Ansluten till I2P vid"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Starta torrent {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Lagring: För närvarande tillgängligt {0}MB för nedladdningar på kon
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Varning - Endast {0}MB tillgängligt för nedladdningar på konfigurerad datadiskpartition"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Torrent hittades inte"
 msgid "Opening the I2P tunnel"
 msgstr "Öppnar I2P tunneln"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Öppnar I2P-tunneln och startar torrenter."
+
+msgid "Connecting to I2P"
+msgstr "Ansluter till I2P"
+
+msgid "Connected to I2P at"
+msgstr "Ansluten till I2P vid"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Starta torrent {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Stoppar alla torrenter och stänger I2P-tunneln."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Stänger I2P tunnel efter att ha meddelat bevakare."
+
+msgid "I2P tunnel closed."
+msgstr "I2P-tunneln är stängd."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,551 +567,8 @@ msgstr "Torrent finns redan i kön: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent vid {0} var inte giltig"
 
-msgid "Torrents"
-msgstr "Torrenter"
-
-msgid "Refresh page"
-msgstr "Ladda om sida"
-
-msgid "Configure"
-msgstr "Inställningar"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Forum"
-msgstr "Forum"
-
-msgid "Search torrents"
-msgstr "Sök torrents"
-
-msgid "Clear search"
-msgstr "Rensa sökningen"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Klicka på \"Lägg till torrent\" för att hämta en torrent"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Anonym BitTorrent Klient"
-
 msgid "Configuration"
 msgstr "Inställningar"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Är du säker på att du vill radera {0} och all nedladdad data?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "Raderar <b>{0}</b> och all tillhörande data..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Är du säker på att du vill radera filen  \\''{0}\\' (hämtade data kommer inte att raderas) ?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Obs: Nedladdad data kommer inte att raderas."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "Raderar {0} och tillhörande metadata endast..."
-
-msgid "clear messages"
-msgstr "rensa meddelandena"
-
-msgid "Expand"
-msgstr "Utöka"
-
-msgid "Shrink"
-msgstr "Krympa"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Varning! JavaScript är inaktiverat i din webbläsare. Om {0} är aktiverad kommer du att förlora alla ingångar i tillägg/skapa torrentavsnitt när en uppdatering inträffar."
-
-msgid "page refresh"
-msgstr "sida uppdateras"
-
-msgid "Warning - No I2P"
-msgstr "Varning - Ingen I2P"
-
-msgid "No torrents found."
-msgstr "Inga torrents hittades."
-
-msgid "No torrents loaded."
-msgstr "Inga torrenter laddades."
-
-msgid "No DHT Peers"
-msgstr "Inga DHT-peers"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Torrent"
-msgstr "Torrent"
-
-msgid "File type"
-msgstr "Filtyp"
-
-msgid "Torrent name"
-msgstr "Torrent namn"
-
-msgid "ETA"
-msgstr "Förväntas klar"
-
-msgid "RX"
-msgstr "RX"
-
-msgid "RX Rate"
-msgstr "RX-hastighet"
-
-msgid "TX"
-msgstr "TX"
-
-msgid "TX Rate"
-msgstr "TX rate"
-
-msgid "Start All"
-msgstr "Starta alla"
-
-msgid "Stop All"
-msgstr "Stoppa alla"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Stoppa alla torrenter och I2P-tunneln"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Starta alla torrenter och I2P-tunneln"
-
-msgid "Start all stopped torrents"
-msgstr "Starta alla stannade torrenter"
-
-msgid "Hide Peers"
-msgstr "Dölj jämlikar"
-
-msgid "Show Peers"
-msgstr "Visa jämlikar"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Sortera efter{0}"
-
-msgid "Up Rate"
-msgstr "Upphastighet"
-
-msgid "Total size of loaded torrents"
-msgstr "Total storlek av inlästa torrenter"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "1 ansluten jämlike"
-msgstr[1] "{0} anslutna jämlikar"
-
-msgid "Active downloads"
-msgstr "Aktiva nedladdningar"
-
-msgid "Active uploads"
-msgstr "Aktiva uppladdningar"
-
-msgid "Active Inbound tunnels"
-msgstr "Aktiva inkommande tunnlar"
-
-msgid "Active Outbound tunnels"
-msgstr "Aktiva utgående tunnlar"
-
-msgid "Estimated download time for all torrents"
-msgstr "Uppskattad nedladdningstid för alla torrenter"
-
-msgid "Data downloaded this session"
-msgstr "Data laddade ner denna session"
-
-msgid "Total download speed"
-msgstr "Total nedladdningshastighet"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Total data uppladdad (för listade torrenter)"
-
-msgid "Total upload speed"
-msgstr "Total uppladdningshastighet"
-
-msgid "Toggle Debug Panel"
-msgstr "Växla felsökningspanel"
-
-msgid "Debug Mode"
-msgstr "Felsökningsläge"
-
-msgid "Normal Mode"
-msgstr "Normalt läge"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrenter"
-
-msgid "Search"
-msgstr "Sök"
-
-msgid "Show All"
-msgstr "Visa alla"
-
-msgid "Active"
-msgstr "Aktiv"
-
-msgid "Inactive"
-msgstr "Inaktiv"
-
-msgid "Connected"
-msgstr "Ansluten"
-
-msgid "Seeding"
-msgstr "Uppladdning"
-
-msgid "Complete"
-msgstr "Färdig"
-
-msgid "Incomplete"
-msgstr "Ofullständig"
-
-msgid "Stopped"
-msgstr "Stoppad"
-
-msgid "First"
-msgstr "Första"
-
-msgid "First page"
-msgstr "Första sidan"
-
-msgid "Prev"
-msgstr "Bakåt"
-
-msgid "Previous page"
-msgstr "Föregående sida"
-
-msgid "Next"
-msgstr "Nästa"
-
-msgid "Next page"
-msgstr "Nästa sida"
-
-msgid "Last"
-msgstr "Sista"
-
-msgid "Last page"
-msgstr "Sista sidan"
-
-msgid "Enter URL or select torrent file"
-msgstr "Ange URL eller välj torrentfil"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Fel vid uppladdning av torrentfilen: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Kan inte lägga till torrent{0} inuti annan torrent:{1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Nedladdning från icke-I2P-plats {0} stöds inte"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Fel: Version 2-info-hashes stöds inte"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Ogiltig webbadress: Måste börja med \"{0}\" eller \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Magnet borttagen: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Torrentfilen kunde inte tas bort: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Datafil borttagen: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Datafil kunde inte tas bort: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Katalogen kunde inta tas bort: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Katalogen bort tagen: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Misslyckades med att skapa torrent - en fil eller mapp måste anges"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Det går inte att skapa en torrent för de obefintliga data: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Kan inte lägga till en torrent som slutar på \".torrent\":{0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Torrent med detta namn kör redan: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Kan inte lägga till en torrent som inkluderar en I2P directory:{0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Kan inte lägga till en torrent{0} som inkluderar en annan torrent{1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Fel - Kan inte inkludera alternativa bevakare utan en primär bevakare"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Fel - Kan inte blanda privata och offentliga bevakare i samma torrent"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " filer eller mappar har uteslutits från \"{0}\" på grund av filterregler."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Följande filer eller mappar har uteslutits från \"{0}\" på grund av filterregler: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Torrent skapad för \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P bevakare kräver att du registrerar nya torrenter innan uppladdningen påbörjas - gör det innan \"{0}\" startas"
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Misslyckades med att skapa torrent för \"{0}\""
-
-msgid "Delete selected"
-msgstr "Ta bort valda"
-
-msgid "Save tracker configuration"
-msgstr "Spara bevakare konfiguration"
-
-msgid "Removed"
-msgstr "Borttagen"
-
-msgid "Add tracker"
-msgstr "Lägg till bevakare"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Ange giltigt namn och adresser för bevakaren"
-
-msgid "Restore defaults"
-msgstr "Återställ standardvärden"
-
-msgid "Restored default trackers"
-msgstr "Återställ standard bevakare"
-
-msgid "Save Filter Configuration"
-msgstr "Spara filterinställningar"
-
-msgid "Add File Filter"
-msgstr "Lägg till filfilter"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Ange ett giltigt namn och filtermönster"
-
-msgid "Restored default torrent create filters"
-msgstr "Återställda standardfilter för torrentskapande"
-
-msgid "Torrent details"
-msgstr "Torrentdetaljer"
-
-msgid "Torrent has comments"
-msgstr "Torrent har kommentarer"
-
-msgid "Open file"
-msgstr "Öppna fil"
-
-msgid "View files"
-msgstr "Se filer"
-
-msgid "Completed"
-msgstr "Färdig"
-
-msgid "Share ratio"
-msgstr "Sändningsförhållande"
-
-msgid "Last activity"
-msgstr "Sista aktivitet"
-
-msgid "Stop"
-msgstr "Stoppa"
-
-msgid "Stop torrent"
-msgstr "Stoppa torrent"
-
-msgid "Start"
-msgstr "Starta"
-
-msgid "Start torrent"
-msgstr "Starta torrenten"
-
-msgid "Remove"
-msgstr "Ta bort"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Ta bort torrenten från den aktiva listan, tar bort .torrent filen"
-
-msgid "Delete"
-msgstr "Ta bort"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Ta bort .torrent-filen och tillhörande datafiler"
-
-msgid "Checking"
-msgstr "Kontrollerar"
-
-msgid "Allocating"
-msgstr "Allokerar"
-
-msgid "Starting"
-msgstr "Startar"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Sådd till {0} Peer"
-msgstr[1] "Sådd till {0} peers"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Ansluten till {0} av {1} jämlikar i svärm"
-
-msgid "Stalled"
-msgstr "Avstannad"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Sådd till {0} jämlike i svärm"
-msgstr[1] "Sådd till {0} jämlikar i svärm"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Nedladdning från {0} Peer"
-msgstr[1] "Nedladdning från {0} peers"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "No Peers"
-msgstr "Inga jämlikar"
-
-msgid "Peer attached to swarm"
-msgstr "Jämlike fäst vid svärm"
-
-msgid "Destination (identity) of peer"
-msgstr "Destinat (identitet) för jämlike"
-
-msgid "seconds"
-msgstr "sekunder"
-
-msgid "Seed"
-msgstr "Källa"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Ointressant (jämlike har inga delar vi behöver)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Strypt (jämlike låter oss inte be om delar)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Peer är intresserad men sysslar för närvarande"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Ointresserad (vi har inga delar jämlike behöver)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Stryper (vi låter inte jämlike be om delar)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Detaljer för {0} bevakare"
-
-msgid "Info"
-msgstr "Info"
-
-msgid "Add Torrent"
-msgstr "Lägg till torrent"
-
-msgid "From URL"
-msgstr "Adress"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Ange URL för nedladdning av torrentfil (endast I2P), magnetlänk eller info-hash"
-
-msgid "Add torrent"
-msgstr "Lägg till torrent"
-
-msgid "Torrent file"
-msgstr "Torrent-fil"
-
-msgid "Data dir"
-msgstr "Datakatalog"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Ange katalogen att spara datan i (förval {0})"
-
-msgid "Create Torrent"
-msgstr "Skapa torrent"
-
-msgid "Data to seed"
-msgstr "Data att ladda upp"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Fil eller katalog till frö (fullständig sökväg eller inom katalogen {0})Fil eller katalog att seeda (fullständig sökväg eller inom katalog {0})"
-
-msgid "Create torrent"
-msgstr "Skapa torrent"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Uteslut filer från torrenten om de befinner sig i torrentmappen"
-
-msgid "Content Filters"
-msgstr "Innehållsfiltrar"
-
-msgid "Trackers"
-msgstr "Bevakare"
-
-msgid "Alternates"
-msgstr "Alternativ"
-
-msgid "Primary"
-msgstr "Primär"
-
-msgid "Tracker Type"
-msgstr "Spårartyp"
-
-msgid "Standard"
-msgstr "Standard"
-
-msgid "Open"
-msgstr "Öppen"
-
-msgid "Private"
-msgstr "Privat"
-
-msgid "none"
-msgstr "inga"
 
 msgid "User Interface"
 msgstr "Användargränssnitt"
@@ -1043,6 +587,9 @@ msgstr "Om du vill ändra teman manuellt, inaktivera universella teman"
 
 msgid "Universal theming is enabled."
 msgstr "Universella teman är aktiverad."
+
+msgid "Configure"
+msgstr "Inställningar"
 
 msgid "Refresh time"
 msgstr "Uppdateringsintervall"
@@ -1164,11 +711,20 @@ msgstr "Starta automatiskt torrenter när de läggs till och starta om torrenter
 msgid "Startup delay"
 msgstr "Fördröjning av uppstart"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Hur länge innan automatiskt startade torrenter laddas när Torrenter startar"
-
 msgid "minutes"
 msgstr "minuter"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Datalagring"
@@ -1179,11 +735,35 @@ msgstr "Datamapp"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Katalog var torrenter och hämtade/delade filer lagras"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Filer läsbara för alla"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Ställ in filbehörigheter för att tillåta andra lokala användare att komma åt de nedladdade filerna"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Max filer per torrent"
@@ -1194,8 +774,14 @@ msgstr "Maximalt antal tillåtna filer per torrent - observera att spårare kan 
 msgid "Tunnel Configuration"
 msgstr "Tunnelkonfiguration"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Vår destination (identitet) för denna session"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Dest."
@@ -1221,6 +807,24 @@ msgstr "Lägg till 0 eller 1 ytterligare hopp slumpmässigt till utgående tunne
 msgid "Outbound"
 msgstr "Utgående"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "I2CP-värd"
 
@@ -1229,6 +833,49 @@ msgstr "I2CP-port"
 
 msgid "I2CP options"
 msgstr "Alternativ för I2CP"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Spara inställningar"
@@ -1257,8 +904,23 @@ msgstr "Slutar med"
 msgid "Enabled by Default"
 msgstr "Aktiverat som standard"
 
+msgid "Delete selected"
+msgstr "Ta bort valda"
+
+msgid "Save Filter Configuration"
+msgstr "Spara filterinställningar"
+
+msgid "Restore defaults"
+msgstr "Återställ standardvärden"
+
+msgid "Add File Filter"
+msgstr "Lägg till filfilter"
+
 msgid "Add"
 msgstr "Lägg till"
+
+msgid "Trackers"
+msgstr "Bevakare"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Välj bevakare för borttagning från Torrentss kända lista"
@@ -1266,11 +928,521 @@ msgstr "Välj bevakare för borttagning från Torrentss kända lista"
 msgid "Website URL"
 msgstr "Webbplatsadress"
 
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Open"
+msgstr "Öppen"
+
+msgid "Private"
+msgstr "Privat"
+
 msgid "Announce URL"
 msgstr "Annonseringsadress"
 
 msgid "Mark tracker for deletion"
 msgstr "Markera bevakare för borttagning"
+
+msgid "Add tracker"
+msgstr "Lägg till bevakare"
+
+msgid "Save tracker configuration"
+msgstr "Spara bevakare konfiguration"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Detta konfigurerar det maximala antalet tunnlar som ska öppnas, bestämt av antalet anslutna peers (faktisk användning kan vara mindre)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Att ändra denna inställning till mindre än 3 hopp kan förbättra hastigheten på bekostnad av anonymitet och rekommenderas inte"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Klicka på \"Lägg till torrent\" för att hämta en torrent"
+
+msgid "Torrents"
+msgstr "Torrenter"
+
+msgid "Refresh page"
+msgstr "Ladda om sida"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Search torrents"
+msgstr "Sök torrents"
+
+msgid "Clear search"
+msgstr "Rensa sökningen"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Anonym BitTorrent Klient"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Är du säker på att du vill radera {0} och all nedladdad data?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Raderar <b>{0}</b> och all tillhörande data..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Är du säker på att du vill radera filen  \\''{0}\\' (hämtade data kommer inte att raderas) ?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Obs: Nedladdad data kommer inte att raderas."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Raderar {0} och tillhörande metadata endast..."
+
+msgid "clear messages"
+msgstr "rensa meddelandena"
+
+msgid "Expand"
+msgstr "Utöka"
+
+msgid "Shrink"
+msgstr "Krympa"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Varning! JavaScript är inaktiverat i din webbläsare. Om {0} är aktiverad kommer du att förlora alla ingångar i tillägg/skapa torrentavsnitt när en uppdatering inträffar."
+
+msgid "page refresh"
+msgstr "sida uppdateras"
+
+msgid "Warning - No I2P"
+msgstr "Varning - Ingen I2P"
+
+msgid "No torrents found."
+msgstr "Inga torrents hittades."
+
+msgid "No torrents loaded."
+msgstr "Inga torrenter laddades."
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "ETA"
+msgstr "Förväntas klar"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "RX-hastighet"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "TX rate"
+
+msgid "Start All"
+msgstr "Starta alla"
+
+msgid "Stop All"
+msgstr "Stoppa alla"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Stoppa alla torrenter och I2P-tunneln"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Starta alla torrenter och I2P-tunneln"
+
+msgid "Start all stopped torrents"
+msgstr "Starta alla stannade torrenter"
+
+msgid "Hide Peers"
+msgstr "Dölj jämlikar"
+
+msgid "Show Peers"
+msgstr "Visa jämlikar"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Sortera efter{0}"
+
+msgid "Up Rate"
+msgstr "Upphastighet"
+
+msgid "Total size of loaded torrents"
+msgstr "Total storlek av inlästa torrenter"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 ansluten jämlike"
+msgstr[1] "{0} anslutna jämlikar"
+
+msgid "Active downloads"
+msgstr "Aktiva nedladdningar"
+
+msgid "Active uploads"
+msgstr "Aktiva uppladdningar"
+
+msgid "Active Inbound tunnels"
+msgstr "Aktiva inkommande tunnlar"
+
+msgid "Active Outbound tunnels"
+msgstr "Aktiva utgående tunnlar"
+
+msgid "Estimated download time for all torrents"
+msgstr "Uppskattad nedladdningstid för alla torrenter"
+
+msgid "Data downloaded this session"
+msgstr "Data laddade ner denna session"
+
+msgid "Total download speed"
+msgstr "Total nedladdningshastighet"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Total data uppladdad (för listade torrenter)"
+
+msgid "Total upload speed"
+msgstr "Total uppladdningshastighet"
+
+msgid "Toggle Debug Panel"
+msgstr "Växla felsökningspanel"
+
+msgid "Debug Mode"
+msgstr "Felsökningsläge"
+
+msgid "Normal Mode"
+msgstr "Normalt läge"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrenter"
+
+msgid "No DHT Peers"
+msgstr "Inga DHT-peers"
+
+msgid "Search"
+msgstr "Sök"
+
+msgid "Show All"
+msgstr "Visa alla"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Inactive"
+msgstr "Inaktiv"
+
+msgid "Connected"
+msgstr "Ansluten"
+
+msgid "Downloading"
+msgstr "Nedladdning"
+
+msgid "Seeding"
+msgstr "Uppladdning"
+
+msgid "Complete"
+msgstr "Färdig"
+
+msgid "Incomplete"
+msgstr "Ofullständig"
+
+msgid "Stopped"
+msgstr "Stoppad"
+
+msgid "First"
+msgstr "Första"
+
+msgid "First page"
+msgstr "Första sidan"
+
+msgid "Prev"
+msgstr "Bakåt"
+
+msgid "Previous page"
+msgstr "Föregående sida"
+
+msgid "Next"
+msgstr "Nästa"
+
+msgid "Next page"
+msgstr "Nästa sida"
+
+msgid "Last"
+msgstr "Sista"
+
+msgid "Last page"
+msgstr "Sista sidan"
+
+msgid "Enter URL or select torrent file"
+msgstr "Ange URL eller välj torrentfil"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Fel vid uppladdning av torrentfilen: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Nedladdning från icke-I2P-plats {0} stöds inte"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Fel: Version 2-info-hashes stöds inte"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Ogiltig webbadress: Måste börja med \"{0}\" eller \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magnet borttagen: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Torrentfilen kunde inte tas bort: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Datafil borttagen: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Datafil kunde inte tas bort: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Katalogen kunde inta tas bort: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Katalogen bort tagen: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " filer eller mappar har uteslutits från \"{0}\" på grund av filterregler."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Följande filer eller mappar har uteslutits från \"{0}\" på grund av filterregler: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent skapad för \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P-spårare kräver att du registrerar nya torrents innan du sådd - vänligen gör det innan du börjar \"{0}\"Många I2P bevakare kräver att du registrerar nya torrenter innan uppladdningen påbörjas - gör det innan \"{0}\" startas"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Misslyckades med att skapa torrent för \"{0}\""
+
+msgid "Removed"
+msgstr "Borttagen"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Ange giltigt namn och adresser för bevakaren"
+
+msgid "Restored default trackers"
+msgstr "Återställ standard bevakare"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Ange ett giltigt namn och filtermönster"
+
+msgid "Restored default torrent create filters"
+msgstr "Återställda standardfilter för torrentskapande"
+
+msgid "Torrent details"
+msgstr "Torrentdetaljer"
+
+msgid "Torrent has comments"
+msgstr "Torrent har kommentarer"
+
+msgid "Open file"
+msgstr "Öppna fil"
+
+msgid "View files"
+msgstr "Se filer"
+
+msgid "Completed"
+msgstr "Färdig"
+
+msgid "Share ratio"
+msgstr "Sändningsförhållande"
+
+msgid "Last activity"
+msgstr "Sista aktivitet"
+
+msgid "Stop"
+msgstr "Stoppa"
+
+msgid "Stop torrent"
+msgstr "Stoppa torrent"
+
+msgid "Start"
+msgstr "Starta"
+
+msgid "Start torrent"
+msgstr "Starta torrenten"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Ta bort torrenten från den aktiva listan, tar bort .torrent filen"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Ta bort .torrent-filen och tillhörande datafiler"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Kontrollerar"
+
+msgid "Allocating"
+msgstr "Allokerar"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Startar"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Sådd till {0} Peer"
+msgstr[1] "Sådd till {0} peers"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Ansluten till {0} av {1} jämlikar i svärm"
+
+msgid "Stalled"
+msgstr "Avstannad"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Sådd till {0} jämlike i svärm"
+msgstr[1] "Sådd till {0} jämlikar i svärm"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Nedladdning från {0} Peer"
+msgstr[1] "Nedladdning från {0} peers"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Inga jämlikar"
+
+msgid "Peer attached to swarm"
+msgstr "Jämlike fäst vid svärm"
+
+msgid "Destination (identity) of peer"
+msgstr "Destinat (identitet) för jämlike"
+
+msgid "seconds"
+msgstr "sekunder"
+
+msgid "Seed"
+msgstr "Källa"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Ointressant (jämlike har inga delar vi behöver)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Strypt (jämlike låter oss inte be om delar)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Peer är intresserad men sysslar för närvarande"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Ointresserad (vi har inga delar jämlike behöver)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Stryper (vi låter inte jämlike be om delar)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Detaljer för {0} bevakare"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Add Torrent"
+msgstr "Lägg till torrent"
+
+msgid "From URL"
+msgstr "Adress"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Ange URL för nedladdning av torrentfil (endast I2P), magnetlänk eller info-hash"
+
+msgid "Add torrent"
+msgstr "Lägg till torrent"
+
+msgid "Torrent file"
+msgstr "Torrent-fil"
+
+msgid "Data dir"
+msgstr "Datakatalog"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Ange katalogen att spara datan i (förval {0})"
+
+msgid "Create Torrent"
+msgstr "Skapa torrent"
+
+msgid "Data to seed"
+msgstr "Data att ladda upp"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Fil eller katalog till frö (fullständig sökväg eller inom katalogen {0})Fil eller katalog att seeda (fullständig sökväg eller inom katalog {0})"
+
+msgid "Create torrent"
+msgstr "Skapa torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Uteslut filer från torrenten om de befinner sig i torrentmappen"
+
+msgid "Content Filters"
+msgstr "Innehållsfiltrar"
+
+msgid "Alternates"
+msgstr "Alternativ"
+
+msgid "Primary"
+msgstr "Primär"
+
+msgid "Tracker Type"
+msgstr "Spårartyp"
+
+msgid "none"
+msgstr "inga"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Kan inte lägga till magnetlänk: Stöd för magnetlänkar version 2 saknas"
@@ -1279,20 +1451,20 @@ msgstr "Kan inte lägga till magnetlänk: Stöd för magnetlänkar version 2 sak
 msgid "Invalid magnet URL {0}"
 msgstr "Ogiltig magnet-adress {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Detta konfigurerar det maximala antalet tunnlar som ska öppnas, bestämt av antalet anslutna peers (faktisk användning kan vara mindre)"
+msgid "Files"
+msgstr "Filer"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Att ändra denna inställning till mindre än 3 hopp kan förbättra hastigheten på bekostnad av anonymitet och rekommenderas inte"
+msgid "Save priorities"
+msgstr "Spara prioriteter"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Sekventiell del- eller filordning sparades inte - funktionen är för närvarande bruten."
-
-msgid "Unknown command"
-msgstr "Okänt kommando"
+msgid "Comments"
+msgstr "Kommentarer"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Vänligen försök skicka formuläret igen (felaktig nonce)"
+
+msgid "Unknown command"
+msgstr "Okänt kommando"
 
 msgid "Resource Does Not Exist"
 msgstr "Resurs finns inte"
@@ -1303,11 +1475,11 @@ msgstr "Resurs"
 msgid "Base"
 msgstr "Grund"
 
-msgid "Files"
-msgstr "Filer"
-
 msgid "Directory"
 msgstr "Mapp"
+
+msgid "File type"
+msgstr "Filtyp"
 
 msgid "Size"
 msgstr "Storlek"
@@ -1330,24 +1502,6 @@ msgstr "Upp till högre mappnivå"
 msgid "Audio Playlist"
 msgstr "Ljudspellista"
 
-msgid "Not found"
-msgstr "Finns ej"
-
-msgid "File not found in torrent"
-msgstr "Filen hittades inte i torrent"
-
-msgid "Unrecognized"
-msgstr "Okänd"
-
-msgid "Preview"
-msgstr "Förhandsgranskning"
-
-msgid "Save priorities"
-msgstr "Spara prioriteter"
-
-msgid "Comments"
-msgstr "Kommentarer"
-
 msgid "Resource Not found"
 msgstr "Resurs hittades inte"
 
@@ -1356,6 +1510,10 @@ msgstr "Info hash"
 
 msgid "Created"
 msgstr "Skapad"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Tillagd"
@@ -1420,15 +1578,6 @@ msgstr "färdig"
 msgid "remaining"
 msgstr "kvar"
 
-msgid "Ratings and Comments"
-msgstr "Betyg och kommentarer"
-
-msgid "Author name required to rate or comment"
-msgstr "Författarnamn krävs för att betygsätta eller kommentera"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Ditt författarnamn för publicerade kommentarer och betyg"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1465,6 +1614,15 @@ msgstr "Markera för borttagning"
 msgid "Delete Selected"
 msgstr "Radera Valda"
 
+msgid "Ratings and Comments"
+msgstr "Betyg och kommentarer"
+
+msgid "Author name required to rate or comment"
+msgstr "Författarnamn krävs för att betygsätta eller kommentera"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Ditt författarnamn för publicerade kommentarer och betyg"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Nedladdningsprioriteter uppdaterade för torrent "
 
@@ -1473,6 +1631,9 @@ msgstr "Redigera torrent"
 
 msgid "Active Trackers"
 msgstr "Aktiva spårare"
+
+msgid "Delete"
+msgstr "Ta bort"
 
 msgid "Add Tracker"
 msgstr "Lägg till spårare"
@@ -1488,3 +1649,23 @@ msgstr "Spara ändringar"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent måste stoppas"
+
+msgid "Not found"
+msgstr "Finns ej"
+
+msgid "File not found in torrent"
+msgstr "Filen hittades inte i torrent"
+
+msgid "Unrecognized"
+msgstr "Okänd"
+
+msgid "Preview"
+msgstr "Förhandsgranskning"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Kan inte lägga till torrent{0} inuti annan torrent:{1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Kan inte lägga till en torrent{0} som inkluderar en annan torrent{1}"

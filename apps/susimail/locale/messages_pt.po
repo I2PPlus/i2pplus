@@ -234,6 +234,9 @@ msgstr "Removido o marcador de posição da imagem de rastreamento"
 msgid "no subject"
 msgstr "sem assunto"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Nenhum endereço válido de remetente encontrado."
 

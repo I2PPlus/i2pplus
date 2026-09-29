@@ -65,10 +65,6 @@ msgid "Contacting reseed host"
 msgstr ""
 
 #, java-format
-msgid "Reseeding: fetching router info from seed URL ({0} successful, {1} errors)."
-msgstr ""
-
-#, java-format
 msgid "Acquired {0} router infos from reseed hosts"
 msgstr ""
 
@@ -128,15 +124,6 @@ msgid "Peers without a published IP address"
 msgstr ""
 
 msgid "Average tunnel build success %"
-msgstr ""
-
-msgid "unknown"
-msgstr ""
-
-msgid "Floodfill"
-msgstr ""
-
-msgid "Show all routers with this capability in the NetDb"
 msgstr ""
 
 msgid "No transports"
@@ -570,12 +557,6 @@ msgstr ""
 msgid "Hide systray icon"
 msgstr ""
 
-msgid "Installed I2P+ system service"
-msgstr ""
-
-msgid "Warning: unable to install the service"
-msgstr ""
-
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr ""
 
@@ -586,6 +567,9 @@ msgid "Disabled I2P+ Service autostart at system startup"
 msgstr ""
 
 msgid "Warning: could not set the I2P+ service to manual start"
+msgstr ""
+
+msgid "Warning: could not locate the I2P+ install directory"
 msgstr ""
 
 msgid "Configuration saved successfully"
@@ -760,6 +744,9 @@ msgstr[1] ""
 msgid "Plugin check complete"
 msgstr ""
 
+msgid "Invalid value"
+msgstr ""
+
 msgid "Restore Defaults"
 msgstr ""
 
@@ -776,9 +763,6 @@ msgid "No changes to save"
 msgstr ""
 
 msgid "Tuning overrides applied"
-msgstr ""
-
-msgid "Invalid value"
 msgstr ""
 
 msgid "No bans currently active"
@@ -809,6 +793,9 @@ msgid "Expiry"
 msgstr ""
 
 msgid "Total session-only bans"
+msgstr ""
+
+msgid "Show all routers with this capability in the NetDb"
 msgstr ""
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
@@ -1436,6 +1423,9 @@ msgstr ""
 msgid "Updated bandwidth limits"
 msgstr ""
 
+msgid "unknown"
+msgstr ""
+
 msgid "Delete this value to disable"
 msgstr ""
 
@@ -1447,6 +1437,9 @@ msgid "{0}B maximum data transfer per month"
 msgstr ""
 
 msgid "Ban peer until restart"
+msgstr ""
+
+msgid "Manually banned via configpeer"
 msgstr ""
 
 #, java-format
@@ -1605,15 +1598,6 @@ msgstr[1] ""
 msgid "Restart in {0}"
 msgstr ""
 
-msgid "Save order"
-msgstr ""
-
-msgid "Restore full default"
-msgstr ""
-
-msgid "Restore minimal default"
-msgstr ""
-
 msgid "Sidebar preferences updated"
 msgstr ""
 
@@ -1671,18 +1655,6 @@ msgstr ""
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr ""
 
-#, java-format
-msgid "{0} hop"
-msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
-
-#, java-format
-msgid "{0} tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Exploratory tunnels"
 msgstr ""
 
@@ -1729,9 +1701,6 @@ msgid "Inbound options"
 msgstr ""
 
 msgid "Outbound options"
-msgstr ""
-
-msgid "Add user"
 msgstr ""
 
 msgid "Cannot save theme choice, theme name has illegal characters"
@@ -2852,11 +2821,11 @@ msgstr ""
 msgid "Max wait: {0}"
 msgstr ""
 
-msgid "Scheduled jobs"
-msgstr ""
-
 #, java-format
 msgid "{0} starting in {1}"
+msgstr ""
+
+msgid "Scheduled jobs"
 msgstr ""
 
 #, java-format
@@ -3022,9 +2991,6 @@ msgstr ""
 msgid "Next Page"
 msgstr ""
 
-msgid "Results per page"
-msgstr ""
-
 msgid "Not initialized"
 msgstr ""
 
@@ -3176,6 +3142,9 @@ msgid "Initializing"
 msgstr ""
 
 msgid "Our info"
+msgstr ""
+
+msgid "Floodfill"
 msgstr ""
 
 msgid "Router is banlisted"
@@ -3559,102 +3528,6 @@ msgstr[1] ""
 msgid "backlogged"
 msgstr ""
 
-msgid "Definitions"
-msgstr ""
-
-msgid "Remote peer, identified by truncated router hash"
-msgstr ""
-
-msgid "Direction"
-msgstr ""
-
-msgid "Outbound connection"
-msgstr ""
-
-msgid "They offered to introduce us (help peers traverse our firewall)"
-msgstr ""
-
-msgid "Inbound connection"
-msgstr ""
-
-msgid "We offered to introduce them (help peers traverse their firewall)"
-msgstr ""
-
-msgid "How long since a packet has been received / sent"
-msgstr ""
-
-msgid "Smoothed inbound / outbound transfer rate"
-msgstr ""
-
-msgid "How long ago connection was established"
-msgstr ""
-
-msgid "Difference between the peer's clock and our own"
-msgstr ""
-
-msgid "How many bytes can be sent without acknowledgement"
-msgstr ""
-
-msgid "Number of sent messages awaiting acknowledgement"
-msgstr ""
-
-msgid "Maximum number of concurrent messages to send"
-msgstr ""
-
-msgid "Number of pending sends which exceed window"
-msgstr ""
-
-msgid "Maximum packet size before congestion avoidance"
-msgstr ""
-
-msgid "How long for packet to be sent to peer and back to us"
-msgstr ""
-
-msgid "Retransmit timeout"
-msgstr ""
-
-msgid "How long before peer gives up resending lost packet"
-msgstr ""
-
-msgid "Maximum send packet size"
-msgstr ""
-
-msgid "Estimated maximum receive packet size (bytes)"
-msgstr ""
-
-msgid "Messages sent to peer"
-msgstr ""
-
-msgid "Messages received from peer"
-msgstr ""
-
-msgid "Packets retransmitted to peer"
-msgstr ""
-
-msgid "Duplicate packets received from peer"
-msgstr ""
-
-#, java-format
-msgid "Showing {0} recent profile."
-msgid_plural "Showing {0} recent profiles."
-msgstr[0] ""
-msgstr[1] ""
-
-#, java-format
-msgid "Hiding {0} older profile."
-msgid_plural "Hiding {0} older profiles."
-msgstr[0] ""
-msgstr[1] ""
-
-#, java-format
-msgid "Hiding {0} standard profile."
-msgid_plural "Hiding {0} standard profiles."
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
-msgstr ""
-
 msgid "Domain"
 msgstr ""
 
@@ -3665,6 +3538,12 @@ msgid "Speed"
 msgstr ""
 
 msgid "Low Latency"
+msgstr ""
+
+msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
+msgstr ""
+
+msgid "Loss"
 msgstr ""
 
 msgid "Tunnels peer has agreed to participate in"
@@ -3718,70 +3597,66 @@ msgstr ""
 msgid "Configure Peer"
 msgstr ""
 
-msgid "Thresholds"
+#, java-format
+msgid "{0} in RAM / {1} on disk"
 msgstr ""
 
-msgid "Capacity"
+msgid "High Cap"
 msgstr ""
 
-msgid "tunnels per hour"
+msgid "Displayed"
 msgstr ""
 
-msgid "Integration"
+#, java-format
+msgid "Showing {0} of {1} profiles"
 msgstr ""
 
-msgid "peer"
+#, java-format
+msgid "{0} stale profile hidden"
+msgid_plural "{0} stale profiles hidden"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Share of total profiles shown"
 msgstr ""
 
 msgid "peers"
 msgstr ""
 
-#, java-format
-msgid "{0} fast peer"
-msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
-
-#, java-format
-msgid "{0} high capacity peer"
-msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
-
-#, java-format
-msgid "{0} integrated peer"
-msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "1h Fail Rate"
+msgid "Share of tier profiles shown"
 msgstr ""
 
-msgid "1h Resp. Time"
+msgid "Window"
 msgstr ""
 
-msgid "Good Lookups"
+msgid "Fast RTT"
 msgstr ""
 
-msgid "Last Good Lookup"
+msgid "Max RTT for fast-tier membership (ms)"
 msgstr ""
 
-msgid "Last Good Send"
+msgid "Average loss of fast-tier peers (%)"
 msgstr ""
 
-msgid "Last Good Store"
+msgid "Average loss of high-capacity peers (%)"
 msgstr ""
 
-msgid "Bad Lookups"
+msgid "Heard from within the display cutoff"
 msgstr ""
 
-msgid "Last Bad Lookup"
+msgid "Lookups"
 msgstr ""
 
-msgid "Last Bad Send"
+msgid "Lookup success rate"
 msgstr ""
 
-msgid "Last Bad Store"
+msgid "Stores"
+msgstr ""
+
+msgid "Store success rate"
+msgstr ""
+
+msgid "Definitions"
 msgstr ""
 
 msgid "caps"
@@ -3847,6 +3722,57 @@ msgid "integration"
 msgstr ""
 
 msgid "how many new peers have they told us about lately?"
+msgstr ""
+
+msgid "Known floodfills"
+msgstr ""
+
+msgid "No-Fail"
+msgstr ""
+
+msgid "No lookup failures (1h)"
+msgstr ""
+
+msgid "Response"
+msgstr ""
+
+msgid "Lookup response time (1h)"
+msgstr ""
+
+msgid "1h Contact"
+msgstr ""
+
+msgid "Contacted within 1h"
+msgstr ""
+
+msgid "1h Fail Rate"
+msgstr ""
+
+msgid "1h Resp. Time"
+msgstr ""
+
+msgid "Good Lookups"
+msgstr ""
+
+msgid "Last Good Lookup"
+msgstr ""
+
+msgid "Last Good Send"
+msgstr ""
+
+msgid "Last Good Store"
+msgstr ""
+
+msgid "Bad Lookups"
+msgstr ""
+
+msgid "Last Bad Lookup"
+msgstr ""
+
+msgid "Last Bad Send"
+msgstr ""
+
+msgid "Last Bad Store"
 msgstr ""
 
 msgid "All"
@@ -3953,9 +3879,6 @@ msgid "Building"
 msgstr ""
 
 msgid "Building tunnels"
-msgstr ""
-
-msgid "Shared Clients"
 msgstr ""
 
 msgid "Ping"
@@ -4805,6 +4728,12 @@ msgstr ""
 msgid "Slow Start Window Cap"
 msgstr ""
 
+msgid "Max Inbound Buffer"
+msgstr ""
+
+msgid "Max Concurrent Streams"
+msgstr ""
+
 msgid "Max SYN Sends"
 msgstr ""
 
@@ -4815,6 +4744,9 @@ msgid "Max Resend Delay"
 msgstr ""
 
 msgid "Max Retransmissions"
+msgstr ""
+
+msgid "Receive Worker Threads"
 msgstr ""
 
 msgid "Writer Queue Size"
@@ -4898,6 +4830,18 @@ msgstr ""
 msgid "Search Timeout"
 msgstr ""
 
+msgid "Search Cap"
+msgstr ""
+
+msgid "Republish Window"
+msgstr ""
+
+msgid "Republish Fanout"
+msgstr ""
+
+msgid "Exploratory Breadth"
+msgstr ""
+
 msgid "LeaseSet Lookup Timeout"
 msgstr ""
 
@@ -4920,6 +4864,9 @@ msgid "Minimum High Capacity Peers"
 msgstr ""
 
 msgid "Maximum High Capacity Peers"
+msgstr ""
+
+msgid "Lossy Peer Demotion Threshold"
 msgstr ""
 
 msgid "Tunnel Build Request Timeout"
@@ -4946,6 +4893,27 @@ msgstr ""
 msgid "Max Delay Between Tests"
 msgstr ""
 
+msgid "Tunnel Test Failure Window"
+msgstr ""
+
+msgid "Tunnel Test Failure Window Floor"
+msgstr ""
+
+msgid "First-Hop Failure Cooldown"
+msgstr ""
+
+msgid "First-Hop Failure Threshold"
+msgstr ""
+
+msgid "Inbound Congestion Threshold"
+msgstr ""
+
+msgid "Stale Build Pruning Threshold"
+msgstr ""
+
+msgid "Concurrency Throttle Threshold"
+msgstr ""
+
 msgid "NTCP Reader Threads"
 msgstr ""
 
@@ -4953,6 +4921,9 @@ msgid "NTCP Writer Threads"
 msgstr ""
 
 msgid "NTCP Pumper Failsafe Interval"
+msgstr ""
+
+msgid "NTCP Pumper Max Idle Loop Rate"
 msgstr ""
 
 msgid "Max Concurrent Peer Messages"
@@ -5024,6 +4995,9 @@ msgstr ""
 msgid "Max Window Size"
 msgstr ""
 
+msgid "Connect Timeout Multiplier"
+msgstr ""
+
 msgid "Max Message Queue Age"
 msgstr ""
 
@@ -5039,10 +5013,25 @@ msgstr ""
 msgid "Server Handler Threads"
 msgstr ""
 
+msgid "Server Handler Queue Capacity"
+msgstr ""
+
+msgid "Server Default Threads per Tunnel"
+msgstr ""
+
+msgid "I/O Transfer Threads"
+msgstr ""
+
+msgid "I/O Stall Timeout"
+msgstr ""
+
 msgid "Build Handler Threads"
 msgstr ""
 
 msgid "Client Runner Max Threads"
+msgstr ""
+
+msgid "Client Default Max Connections"
 msgstr ""
 
 msgid "Participating Throttle Min"
@@ -5076,9 +5065,6 @@ msgid "Moderate-Load Lag Threshold"
 msgstr ""
 
 msgid "Moderate-Load CPU Threshold"
-msgstr ""
-
-msgid "Sustained High-Load Window"
 msgstr ""
 
 msgid "Sustained Moderate-Load Window"
@@ -5121,6 +5107,9 @@ msgid "Socket Connect Timeout"
 msgstr ""
 
 msgid "Untested Tunnel Cap Multiplier"
+msgstr ""
+
+msgid "Tunnel IV Filter Size"
 msgstr ""
 
 msgid "Message Processing Throttle"
@@ -5171,6 +5160,12 @@ msgstr ""
 msgid "Max congestion window during slow start."
 msgstr ""
 
+msgid "Per-connection inbound buffer cap (bytes)."
+msgstr ""
+
+msgid "Dynamic cap on concurrent streams per destination."
+msgstr ""
+
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr ""
 
@@ -5181,6 +5176,9 @@ msgid "Max time between retransmissions (ms)."
 msgstr ""
 
 msgid "Retransmissions before dropping the stream."
+msgstr ""
+
+msgid "Inbound packet processing threads per streaming session."
 msgstr ""
 
 msgid "Max idle time before dropping a stream (ms)."
@@ -5270,6 +5268,18 @@ msgstr ""
 msgid "Per-peer lookup timeout (ms)."
 msgstr ""
 
+msgid "Hard deadline for each iterative search (ms)."
+msgstr ""
+
+msgid "Lifetime of lease republish store messages (ms)."
+msgstr ""
+
+msgid "Max peers that receive a republished lease after a search."
+msgstr ""
+
+msgid "Concurrent exploratory searches per cycle."
+msgstr ""
+
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr ""
 
@@ -5292,6 +5302,9 @@ msgid "Min high-capacity peers in routing table."
 msgstr ""
 
 msgid "Max high-capacity peers in routing table."
+msgstr ""
+
+msgid "Loss ratio that demotes a peer from the fast tiers (%)."
 msgstr ""
 
 msgid "Build reply timeout (ms)."
@@ -5318,6 +5331,27 @@ msgstr ""
 msgid "Max interval between tunnel tests (ms)."
 msgstr ""
 
+msgid "Max time a tunnel test may take before failure (ms)."
+msgstr ""
+
+msgid "Floor for the tunnel test failure window (ms)."
+msgstr ""
+
+msgid "How long a peer is skipped after first-hop failures (ms)."
+msgstr ""
+
+msgid "Failures before a peer is skipped during cooldown."
+msgstr ""
+
+msgid "Inbound tunnel count below which builds are throttled."
+msgstr ""
+
+msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
+msgstr ""
+
+msgid "Timeout rate that triggers concurrent build reduction (%)."
+msgstr ""
+
 msgid "Threads decrypting inbound NTCP data."
 msgstr ""
 
@@ -5325,6 +5359,9 @@ msgid "Threads that encrypt outbound NTCP messages."
 msgstr ""
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
+msgstr ""
+
+msgid "Cap on idle NTCP pump iterations per second (loops/s)."
 msgstr ""
 
 msgid "In-flight message limit per UDP peer."
@@ -5381,6 +5418,9 @@ msgstr ""
 msgid "Upper bound on RTT estimate (ms)."
 msgstr ""
 
+msgid "Scales each client's connect timeout by network RTT (30-200%)."
+msgstr ""
+
 msgid "Delay before first retransmit (ms)."
 msgstr ""
 
@@ -5402,10 +5442,25 @@ msgstr ""
 msgid "Handler threads for incoming I2PTunnel connections."
 msgstr ""
 
+msgid "Inbound connections that may wait for a free server handler thread."
+msgstr ""
+
+msgid "Default cap on server handler threads for each server tunnel."
+msgstr ""
+
+msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
+msgstr ""
+
+msgid "Stall timeout for Server→Client data transfers (ms)."
+msgstr ""
+
 msgid "Thread pool for inbound build request processing."
 msgstr ""
 
 msgid "Ceiling for client proxy thread pool."
+msgstr ""
+
+msgid "Default client connection cap."
 msgstr ""
 
 msgid "Min transit tunnels any peer can hold."
@@ -5439,9 +5494,6 @@ msgid "Job queue lag triggering moderate-load peer disconnect (ms)."
 msgstr ""
 
 msgid "System load percent triggering moderate-load disconnect."
-msgstr ""
-
-msgid "Duration of high load before gating requests (ms)."
 msgstr ""
 
 msgid "Duration of moderate load before declining requests (ms)."
@@ -5484,6 +5536,9 @@ msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
 msgstr ""
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
+msgstr ""
+
+msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
 msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
@@ -5613,6 +5668,9 @@ msgstr ""
 msgid "Primary IP address"
 msgstr ""
 
+msgid "No local or transit tunnels currently active."
+msgstr ""
+
 msgid "unique peers"
 msgstr ""
 
@@ -5620,9 +5678,6 @@ msgid "local"
 msgstr ""
 
 msgid "transit"
-msgstr ""
-
-msgid "No local or transit tunnels currently active."
 msgstr ""
 
 msgid "PRIVATE IP ADDRESS"
@@ -5633,6 +5688,15 @@ msgstr ""
 
 #, java-format
 msgid "Over {0} shared bandwidth"
+msgstr ""
+
+msgid "Locally hosted tunnel"
+msgstr ""
+
+msgid "in"
+msgstr ""
+
+msgid "out"
 msgstr ""
 
 msgid "Inbound or outbound?"
@@ -5656,6 +5720,9 @@ msgstr ""
 msgid "Endpoint"
 msgstr ""
 
+msgid "ms"
+msgstr ""
+
 msgid "Test successful"
 msgstr ""
 
@@ -5676,15 +5743,6 @@ msgid "Pool over budget - scheduled for early expiry"
 msgstr ""
 
 msgid "Not yet tested"
-msgstr ""
-
-msgid "Locally hosted tunnel"
-msgstr ""
-
-msgid "in"
-msgstr ""
-
-msgid "out"
 msgstr ""
 
 msgid "Data In"
@@ -5791,6 +5849,9 @@ msgid "Open Router Console in web browser at startup"
 msgstr ""
 
 msgid "shared clients"
+msgstr ""
+
+msgid "Shared Clients"
 msgstr ""
 
 msgid "I2PMail SMTP Server"
@@ -6070,10 +6131,10 @@ msgstr ""
 msgid "Additional Router Caps"
 msgstr ""
 
-msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
 msgstr ""
 
-msgid "Misc Reasons"
+msgid "Misc"
 msgstr ""
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
@@ -6092,6 +6153,12 @@ msgid "Ban routers that send excessive tunnel participation requests"
 msgstr ""
 
 msgid "Ban excessive tunnel requests"
+msgstr ""
+
+msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
+msgstr ""
+
+msgid "Ban next-hop peers"
 msgstr ""
 
 msgid "Clear all bans"
@@ -6232,6 +6299,12 @@ msgid "I2CP Interface"
 msgstr ""
 
 msgid "I2CP Port"
+msgstr ""
+
+msgid "Do not bypass the network when accessing locally hosted services"
+msgstr ""
+
+msgid "Disable Loopback"
 msgstr ""
 
 msgid "Require username and password"
@@ -6507,6 +6580,9 @@ msgstr ""
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr ""
 
+msgid "Capacity"
+msgstr ""
+
 msgid "Banned IP Addresses"
 msgstr ""
 
@@ -6740,6 +6816,12 @@ msgstr ""
 msgid "Update graph every second"
 msgstr ""
 
+msgid "Restore full default"
+msgstr ""
+
+msgid "Restore minimal default"
+msgstr ""
+
 msgid "config stats"
 msgstr ""
 
@@ -6819,6 +6901,9 @@ msgid "If you're not using IE, it's likely that your browser is pretending to be
 msgstr ""
 
 msgid "Router Console Password"
+msgstr ""
+
+msgid "Add user"
 msgstr ""
 
 msgid "Router Console Language"
@@ -7092,6 +7177,12 @@ msgstr ""
 msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
 msgstr ""
 
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr ""
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr ""
+
 msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
 msgstr ""
 
@@ -7302,6 +7393,24 @@ msgstr ""
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr ""
 
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr ""
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr ""
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr ""
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr ""
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr ""
+
+msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
+msgstr ""
+
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
 msgstr ""
 
@@ -7374,10 +7483,13 @@ msgstr ""
 msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
 msgstr ""
 
-msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
 msgstr ""
 
-msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr ""
+
+msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
 msgstr ""
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
@@ -7485,31 +7597,76 @@ msgstr ""
 msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
 msgstr ""
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
 msgstr ""
 
-msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
-msgstr ""
-
-msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
-msgstr ""
-
-msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
-msgstr ""
-
-msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
-msgstr ""
-
-msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr ""
 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr ""
 
-msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
 msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr ""
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
+msgstr ""
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
+msgstr ""
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
+msgstr ""
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr ""
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr ""
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
+msgstr ""
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr ""
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
+msgstr ""
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr ""
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
+msgstr ""
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgstr ""
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgstr ""
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr ""
+
+msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
+msgstr ""
+
+msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
+msgstr ""
+
+msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
+msgstr ""
+
+msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
+msgstr ""
+
+msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
 msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
@@ -7518,31 +7675,13 @@ msgstr ""
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr ""
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
 msgstr ""
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
-msgstr ""
-
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
-msgstr ""
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr ""
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr ""
-
-msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr ""
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
-msgstr ""
-
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
-msgstr ""
-
-msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
 msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
@@ -7551,25 +7690,10 @@ msgstr ""
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr ""
 
-msgid "miscellaneous"
-msgstr ""
-
-msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr ""
-
-msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr ""
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr ""
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr ""
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
-
 msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
+msgstr ""
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
 msgstr ""
 
 msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
@@ -7578,34 +7702,67 @@ msgstr ""
 msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
 msgstr ""
 
-msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
 msgstr ""
 
-msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
+msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
 msgstr ""
 
-msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
+msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
 msgstr ""
 
-msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
+msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
 msgstr ""
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
+msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
 msgstr ""
 
-msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
 msgstr ""
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
 msgstr ""
 
-msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
+msgstr ""
+
+msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
+msgstr ""
+
+msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
+msgstr ""
+
+msgid "miscellaneous"
+msgstr ""
+
+msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr ""
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr ""
 
-msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
 msgstr ""
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -8945,6 +9102,9 @@ msgstr ""
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
 msgstr ""
 
+msgid "Thresholds"
+msgstr ""
+
 msgid "A threshold is defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
 msgstr ""
 
@@ -9515,7 +9675,13 @@ msgstr ""
 msgid "Set Password"
 msgstr ""
 
-msgid "network database"
+msgid "All Routers [Advanced]"
+msgstr ""
+
+msgid "Remote"
+msgstr ""
+
+msgid "All Routers (Client NetDb) [Advanced]"
 msgstr ""
 
 msgid "Encryption type"
@@ -9534,9 +9700,6 @@ msgid "Locally hosted public service"
 msgstr ""
 
 msgid "Requested client leaseset"
-msgstr ""
-
-msgid "Remote"
 msgstr ""
 
 msgid "network database router map"
@@ -9570,16 +9733,19 @@ msgstr ""
 msgid "Network Peers"
 msgstr ""
 
-msgid "peer profiles"
+msgid "Fast Peers"
 msgstr ""
 
-msgid "Session Banned Peers"
+msgid "High Capacity Peers"
+msgstr ""
+
+msgid "Floodfill Peers"
 msgstr ""
 
 msgid "Banned Peers"
 msgstr ""
 
-msgid "Fast / High Capacity"
+msgid "Recent Peer Profiles"
 msgstr ""
 
 msgid "Configure router logging options"
@@ -9682,9 +9848,6 @@ msgid "Toggle Tunnels"
 msgstr ""
 
 msgid "Peer Profile"
-msgstr ""
-
-msgid "Session Bans"
 msgstr ""
 
 msgid "Profile View"

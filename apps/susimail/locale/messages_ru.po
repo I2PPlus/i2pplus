@@ -240,6 +240,9 @@ msgstr "Удален временный элемент для изображен
 msgid "no subject"
 msgstr "без темы"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Не найдено корректного адреса отправителя."
 

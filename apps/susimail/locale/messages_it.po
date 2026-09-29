@@ -234,6 +234,9 @@ msgstr "Rimosso il segnaposto dell'immagine di tracciamento"
 msgid "no subject"
 msgstr "nessun oggetto"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Non è stato trovato nessun indirizzo mittente valido."
 

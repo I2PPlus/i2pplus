@@ -231,6 +231,9 @@ msgstr "追跡画像のプレースホルダーを削除しました"
 msgid "no subject"
 msgstr "無題"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "有効な差出人アドレスが見つかりませんでした。"
 

@@ -137,17 +137,17 @@ msgstr "Demande de surcharge"
 msgid "Connection limit reached"
 msgstr "Limite de connexion atteinte"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Abandon des requêtes des tunnels: Charge élevée"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Abandon des requêtes des tunnels : temps d’attente"
-
 msgid "Transit throttle drop"
 msgstr "Abandon de limitation de transit"
 
 msgid "Transit throttle reject"
 msgstr "Rejet de limitation de transit"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Abandon des requêtes des tunnels: Charge élevée"
+
 msgid "Transit request throttle"
 msgstr "Limitation de demandes de transit"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Abandon des requêtes des tunnels : temps d’attente"

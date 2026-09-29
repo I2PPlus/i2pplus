@@ -234,6 +234,9 @@ msgstr "Se eliminó el marcador de posición de la imagen de seguimiento"
 msgid "no subject"
 msgstr "sin asunto"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "No se ha encontrado una dirección de remitente válida."
 

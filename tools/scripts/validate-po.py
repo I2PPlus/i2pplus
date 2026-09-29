@@ -91,6 +91,12 @@ def validate_with_polib(filepath, check_empty=False):
                 continue
             if entry.msgid_plural:
                 for idx, form in entry.msgstr_plural.items():
+                    if not form:
+                        # Untranslated form: gettext falls back to the msgid at
+                        # runtime, so it cannot mismatch. Matches the
+                        # non-plural branch below and msgfmt --check-format,
+                        # which both skip empty msgstr.
+                        continue
                     tgt_ph = set(re.findall(r'\{(\d+)\}', form))
                     if tgt_ph != src_ph:
                         errors.append(
@@ -107,20 +113,15 @@ def validate_with_polib(filepath, check_empty=False):
                         f"msgstr has {{{','.join(sorted(tgt_ph)) if tgt_ph else 'none'}}}"
                     )
 
-    # Check 3: plural form consistency (skip English templates — empty msgstr is expected)
-    is_english = '_en.po' in filepath or '/en.po' in filepath
-    for entry in po:
-        if not entry.msgid:
-            continue
-        if entry.msgid_plural:
-            if not is_english:
-                if not entry.msgstr_plural or not any(entry.msgstr_plural.values()):
-                    errors.append(f"  EMPTY_PLURAL line {entry.linenum}: '{entry.msgid[:50]}'")
-
-    # Check 4: orphan quotes (raw file check)
+    # Check 3: orphan quotes (raw file check)
     errors.extend(check_orphan_quotes(filepath))
 
-    # Check 5: empty translations (optional)
+    # Check 4: untranslated entries (optional).
+    # A plural counts as untranslated when every msgstr[n] is empty. Unfixed
+    # the entries used to be hard errors here, but an untranslated entry falls
+    # back to its msgid at runtime, so it is a coverage gap rather than a
+    # defect: the build's translation-coverage summary reports it, and
+    # --check-empty counts it per file.
     if check_empty:
         for entry in po:
             if not entry.msgid:
@@ -157,7 +158,8 @@ def main():
     parser.add_argument('--quiet', '-q', action='store_true',
                         help='Suppress per-file output')
     parser.add_argument('--check-empty', action='store_true',
-                        help='Report entries with empty msgstr')
+                        help='Count entries with an empty msgstr, including '
+                             'plurals with no translated form')
     parser.add_argument('--repo-root', default=None,
                         help='Repository root directory')
     parser.add_argument('files', nargs='*',

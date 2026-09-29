@@ -234,6 +234,9 @@ msgstr "Eemaldati jälgimispildi asendaja"
 msgid "no subject"
 msgstr "Teema puudub"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Kehtivat saatja aadressi ei leitud."
 

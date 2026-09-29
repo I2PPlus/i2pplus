@@ -234,6 +234,9 @@ msgstr "Fjernet pladsholder for sporing af billede"
 msgid "no subject"
 msgstr "intet emne"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Fandt ingen gyldig afsenderadresse."
 

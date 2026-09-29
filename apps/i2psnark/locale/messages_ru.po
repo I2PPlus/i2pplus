@@ -8,12 +8,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "No more torrents running."
-msgstr "Нет запущенных торрентов."
-
-msgid "I2P tunnel closed."
-msgstr "Соединение с I2P закрыто."
-
 msgid "Magnet"
 msgstr "Magnet"
 
@@ -23,12 +17,6 @@ msgstr "Невозможно подключиться к I2P"
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Ошибка соединения с I2P, проверьте настройки I2CP!"
 
-msgid "Download already running: "
-msgstr "Загрузка уже запущена: "
-
-msgid "Downloading"
-msgstr "Загрузка"
-
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "Настройка i2psnark с параметрами I2CP"
 
@@ -37,6 +25,18 @@ msgstr "Нет доступа на запись в каталог с данны�
 
 msgid "Data directory cannot be created"
 msgstr "Не удалось создать директорию для файлов"
+
+msgid "No write permissions for temp directory"
+msgstr ""
+
+msgid "Temp directory cannot be created"
+msgstr ""
+
+msgid "No write permissions for torrent directory"
+msgstr ""
+
+msgid "Torrent directory cannot be created"
+msgstr ""
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -77,9 +77,28 @@ msgstr "Включена рандомизация перепрыгивания �
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Выключена рандомизация перепрыгивания туннелей на исходящих туннелях"
 
+msgid "Enabled a separate destination for each torrent"
+msgstr ""
+
+msgid "Disabled a separate destination for each torrent"
+msgstr ""
+
 #, java-format
-msgid "Startup delay changed to {0}"
-msgstr "Задержка запуска изменена на {0}"
+msgid "Maximum destinations changed to {0}"
+msgstr ""
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr ""
+
+msgid "Enabled randomizing torrent start times"
+msgstr ""
+
+msgid "Disabled randomizing torrent start times"
+msgstr ""
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr ""
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -201,6 +220,40 @@ msgstr "Отображать доп.опции только на первой с
 msgid "API key updated."
 msgstr "Ключ API обновлен."
 
+msgid "Preallocate files for new torrents enabled."
+msgstr ""
+
+msgid "Preallocate files for new torrents disabled."
+msgstr ""
+
+msgid "Preserve original file names enabled."
+msgstr ""
+
+msgid "Preserve original file names disabled."
+msgstr ""
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr ""
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr ""
+
+msgid "Temp directory staging disabled."
+msgstr ""
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr ""
+
+msgid "Torrent directory reset to data directory."
+msgstr ""
+
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Список открытых трекеров изменён - требуется перезапуск торрента для вступления изменений в силу.Изменен список открытых трекеров. Требуется перезапуск торрентов, чтобы изменения вступили в силу."
 
@@ -246,6 +299,10 @@ msgstr "Торрент в \"{0}\" некорректен"
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ОШИБКА - нехватка памяти, невозможно создать торрент из {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr ""
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Инициализация Торренты и открытия туннелей"
@@ -338,8 +395,8 @@ msgid "Torrent removed: {0}"
 msgstr "Торрент удален: \"{0}\""
 
 #, java-format
-msgid "Adding torrents in {0}&hellip;"
-msgstr "Добавление торрентов в {0}&hellip;"
+msgid "Starting torrents in {0}&hellip;"
+msgstr ""
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -352,16 +409,6 @@ msgstr "Максимальное значение для скорости отд
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Подключение к порту I2CP на экземпляре I2P по адресу {0}"
-
-msgid "Connecting to I2P"
-msgstr "Устанавливается соединение с I2P"
-
-msgid "Connected to I2P at"
-msgstr "Подключено к I2P по адресу"
-
-#, java-format
-msgid "Starting up torrent {0}"
-msgstr "Торрент запускается: {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
@@ -378,6 +425,18 @@ msgstr "Хранение: в настоящее время доступно {0}�
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "Предупреждение - доступно только {0}МБ для загрузок на настроенной разделе данных"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr ""
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
 
 #, java-format
 msgid "Download finished: {0}"
@@ -402,14 +461,42 @@ msgstr "Торрент не найден"
 msgid "Opening the I2P tunnel"
 msgstr "Открытие I2P туннеля"
 
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr ""
+
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Соединяемся с I2P и запускаем все торренты."
+
+msgid "Connecting to I2P"
+msgstr "Устанавливается соединение с I2P"
+
+msgid "Connected to I2P at"
+msgstr "Подключено к I2P по адресу"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Торрент запускается: {0}"
 
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Останавливаем все торренты и закрываем соединение с I2P."
 
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Закрытие туннеля I2P после уведомления трекеров."
+
+msgid "I2P tunnel closed."
+msgstr "Соединение с I2P закрыто."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr ""
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr ""
 
 #, java-format
 msgid "Cannot check {0}"
@@ -480,561 +567,8 @@ msgstr "Торрент уже в очереди: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Торрент полученный из {0} некорректен"
 
-msgid "Torrents"
-msgstr "Торренты"
-
-msgid "Refresh page"
-msgstr "Обновить страницу"
-
-msgid "Configure"
-msgstr "Настройки"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Торрент и файлообменный форум"
-
-msgid "Forum"
-msgstr "Форум"
-
-msgid "Search torrents"
-msgstr "Поиск торрентов"
-
-msgid "Clear search"
-msgstr "Очистить поиск"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Нажмите \"Добавить торрент\", чтобы получить торрент"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "Анонимный BitTorrent клиент"
-
 msgid "Configuration"
 msgstr "Настройки"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "Вы уверены, что хотите удалить {0} и все загруженные данные?"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "Удаление <b>{0}</b> и всех связанных данных..."
-
-#, java-format
-msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Вы уверены, что хотите удалить торрент-файл {0} и связанные метаданные?"
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "Примечание: Загруженные данные не будут удалены."
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "Удаление {0} и только связанных метаданных..."
-
-msgid "clear messages"
-msgstr "очистить сообщения"
-
-msgid "Expand"
-msgstr "Развернуть"
-
-msgid "Shrink"
-msgstr "Свернуть"
-
-#, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Внимание! У вас отключен JavaScript. Если {0} включен, при обновлении страницы вы потеряете информацию из полей добавления и создания."
-
-msgid "page refresh"
-msgstr "oбновить страницу"
-
-msgid "Warning - No I2P"
-msgstr "Внимани: нет I2P"
-
-msgid "No torrents found."
-msgstr "Торренты не найдены."
-
-msgid "No torrents loaded."
-msgstr "Нет загруженных торрентов."
-
-msgid "No DHT Peers"
-msgstr "Нет DHT-пиров"
-
-msgid "Status"
-msgstr "Статус"
-
-msgid "Torrent"
-msgstr "Торрент"
-
-msgid "File type"
-msgstr "Тип файла"
-
-msgid "Torrent name"
-msgstr "Имя торрента"
-
-msgid "ETA"
-msgstr "Осталось"
-
-msgid "RX"
-msgstr "Принято"
-
-msgid "RX Rate"
-msgstr "Скорость получения"
-
-msgid "TX"
-msgstr "Отдано"
-
-msgid "TX Rate"
-msgstr "Скорость отдачи"
-
-msgid "Start All"
-msgstr "Запустить все"
-
-msgid "Stop All"
-msgstr "Остановить все"
-
-msgid "Stop all torrents and the I2P tunnel"
-msgstr "Остановить все торренты и закрыть соединение с I2P"
-
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Запустить все торренты и открыть соединение с I2P"
-
-msgid "Start all stopped torrents"
-msgstr "Запустить все остановленные торренты"
-
-msgid "Hide Peers"
-msgstr "Скрыть список пиров"
-
-msgid "Show Peers"
-msgstr "Показать список пиров"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Сортировать по {0}"
-
-msgid "Up Rate"
-msgstr "Скорость отдачи"
-
-msgid "Total size of loaded torrents"
-msgstr "Общий размер загруженных торрентов"
-
-#, java-format
-msgid "1 connected peer"
-msgid_plural "{0} peer connections"
-msgstr[0] "{0} подключенный пир"
-msgstr[1] "{0} подключенных пира"
-msgstr[2] "{0} подключенных пира"
-msgstr[3] "{0} подключенных пиров"
-
-msgid "Active downloads"
-msgstr "Активные загрузки"
-
-msgid "Active uploads"
-msgstr "Активные отдачи"
-
-msgid "Active Inbound tunnels"
-msgstr "Активные входящие туннели"
-
-msgid "Active Outbound tunnels"
-msgstr "Активные исходящие туннели"
-
-msgid "Estimated download time for all torrents"
-msgstr "Ожидаемое время загрузки всех торрентов"
-
-msgid "Data downloaded this session"
-msgstr "Данные, загруженные за эту сессию"
-
-msgid "Total download speed"
-msgstr "Общая скорость загрузки"
-
-msgid "Total data uploaded (for listed torrents)"
-msgstr "Всего отдано (для торрентов из списка)"
-
-msgid "Total upload speed"
-msgstr "Общая скорость отдачи"
-
-msgid "Toggle Debug Panel"
-msgstr "Переключить панель отладки"
-
-msgid "Debug Mode"
-msgstr "Отладка"
-
-msgid "Normal Mode"
-msgstr "Нормальный"
-
-#, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0} торрент"
-msgstr[1] "{0} торрента"
-msgstr[2] "{0} торрента"
-msgstr[3] "{0} торрентов"
-
-msgid "Search"
-msgstr "Поиск"
-
-msgid "Show All"
-msgstr "Показать все"
-
-msgid "Active"
-msgstr "Активный"
-
-msgid "Inactive"
-msgstr "Неактивный"
-
-msgid "Connected"
-msgstr "Подключено"
-
-msgid "Seeding"
-msgstr "Раздается"
-
-msgid "Complete"
-msgstr "Завершен"
-
-msgid "Incomplete"
-msgstr "Неполный"
-
-msgid "Stopped"
-msgstr "Остановлен"
-
-msgid "First"
-msgstr "Первый"
-
-msgid "First page"
-msgstr "Первая страница"
-
-msgid "Prev"
-msgstr "Предыдущий"
-
-msgid "Previous page"
-msgstr "Предыдущая страница"
-
-msgid "Next"
-msgstr "Следующий"
-
-msgid "Next page"
-msgstr "Следующая страница"
-
-msgid "Last"
-msgstr "Последний"
-
-msgid "Last page"
-msgstr "Последняя страница"
-
-msgid "Enter URL or select torrent file"
-msgstr "Введите URL или выберите торрент-файл"
-
-#, java-format
-msgid "Error uploading the torrent file: {0}"
-msgstr "Ошибка загрузки торрент-файла: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Не могу добавить торрент {0} в состав другого торрента: {1}"
-
-#, java-format
-msgid "Download from non-I2P location {0} is not supported"
-msgstr "Загрузка не из I2P ({0}) не поддерживается"
-
-msgid "Error: Version 2 info hashes are not supported"
-msgstr "Ошибка: хеши версии 2 не поддерживаются"
-
-#, java-format
-msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr "Некорректный URL: используйте \"{0}\", или \"{1}\""
-
-#, java-format
-msgid "Magnet deleted: {0}"
-msgstr "Magnet удален: {0}"
-
-#, java-format
-msgid "Torrent file could not be deleted: {0}"
-msgstr "Не удалось удалить торрент-файл: {0}"
-
-#, java-format
-msgid "Data file deleted: {0}"
-msgstr "Файл удален: {0}"
-
-#, java-format
-msgid "Data file could not be deleted: {0}"
-msgstr "Не удалось удалить файл: {0}"
-
-#, java-format
-msgid "Directory could not be deleted: {0}"
-msgstr "Каталог не может быть удалён: {0}"
-
-#, java-format
-msgid "Directory deleted: {0}"
-msgstr "Каталог удалён: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Торрент не создан — вы должны указать файл или директорию"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Невозможно создать торрент для несуществующих данных: {0}"
-
-#, java-format
-msgid "Cannot add a torrent ending in \".torrent\": {0}"
-msgstr "Не могу добавить окончание торрента в файл \".torrent\": {0}"
-
-#, java-format
-msgid "Torrent with this name is already running: {0}"
-msgstr "Торрент с таким именем уже запущен: {0}"
-
-#, java-format
-msgid "Cannot add a torrent including an I2P directory: {0}"
-msgstr "Не могу добавить торрент с I2P директорией: {0}"
-
-#, java-format
-msgid "Cannot add torrent {0} including another torrent: {1}"
-msgstr "Не могу добавить торрент {0}, включающий в себя другой торрент: {1}"
-
-msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Ошибка - нельзя добавить альтернативные трекеры без основного"
-
-msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Ошибка - невозможно объединить приватный и публичные трекеры в торренте"
-
-#, java-format
-msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr " файлов или папок исключены из \"{0}\" по правилам фильтрации."
-
-#, java-format
-msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr "Следующие файлы или папки были исключены из \"{0}\", в соответствии с правилами фильтрации: "
-
-#, java-format
-msgid "Torrent created for \"{0}\""
-msgstr "Создан торрент для \"{0}\""
-
-#, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Многие I2P трекеры требуют зарегистрировать на них торрент перед началом раздачи — пожалуйста проверьте требуется ли это перед запуском \"{0}\""
-
-#, java-format
-msgid "Error creating a torrent for \"{0}\""
-msgstr "Ошибка при создании торрента для: \"{0}\""
-
-msgid "Delete selected"
-msgstr "Удалить выбранное"
-
-msgid "Save tracker configuration"
-msgstr "Сохранить настройки трекеров"
-
-msgid "Removed"
-msgstr "Удален"
-
-msgid "Add tracker"
-msgstr "Добавить трекер"
-
-msgid "Enter valid tracker name and URLs"
-msgstr "Введите действительное название и URL трекера"
-
-msgid "Restore defaults"
-msgstr "Восстановить значения по-умолчанию"
-
-msgid "Restored default trackers"
-msgstr "Восстановить трекеры по-умолчанию"
-
-msgid "Save Filter Configuration"
-msgstr "Сохранить конфигурацию фильтра"
-
-msgid "Add File Filter"
-msgstr "Добавить фильтр файлов"
-
-msgid "Enter valid name and filter pattern"
-msgstr "Введите действительное имя и шаблон фильтра"
-
-msgid "Restored default torrent create filters"
-msgstr "Восстановлены стандартные фильтры создания торрента"
-
-msgid "Torrent details"
-msgstr "Подробная информация"
-
-msgid "Torrent has comments"
-msgstr "Имеются комментарии"
-
-msgid "Open file"
-msgstr "Открыть файл"
-
-msgid "View files"
-msgstr "Просмотр файлов"
-
-msgid "Completed"
-msgstr "Завершено"
-
-msgid "Share ratio"
-msgstr "Коэффициент отдачи"
-
-msgid "Last activity"
-msgstr "Последняя активность"
-
-msgid "Stop"
-msgstr "Остановить"
-
-msgid "Stop torrent"
-msgstr "Остановить торрент"
-
-msgid "Start"
-msgstr "Запустить"
-
-msgid "Start torrent"
-msgstr "Запустить торрент"
-
-msgid "Remove"
-msgstr "Удалить"
-
-msgid "Remove and delete torrent, retaining downloaded files"
-msgstr "Удалить торрент из списка и с диска"
-
-msgid "Delete"
-msgstr "Удалить"
-
-msgid "Delete .torrent file and associated data files"
-msgstr "Удалить .torrent-файл и все связанные с ним файлы"
-
-msgid "Checking"
-msgstr "Проверка"
-
-msgid "Allocating"
-msgstr "Выделение места"
-
-msgid "Starting"
-msgstr "Запускается"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Раздаем {0} пиру"
-msgstr[1] "Раздаем {0} пирам"
-msgstr[2] "Раздаем {0} пирам"
-msgstr[3] "Раздаем {0} пирам"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Соединены с {0} из {1} доступных пиров"
-
-msgid "Stalled"
-msgstr "Простаивает"
-
-#, java-format
-msgid "Seeding to {0} peer in swarm"
-msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] "Раздаем {0} пиру в рое"
-msgstr[1] "Раздаем {0} пирам в рое"
-msgstr[2] "Раздаем {0} пирам в рое"
-msgstr[3] "Раздаем {0} пирам в рое"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Скачиваем с {0} пира"
-msgstr[1] "Скачиваем с {0} пиров"
-msgstr[2] "Скачиваем с {0} пиров"
-msgstr[3] "Скачиваем с {0} пиров"
-
-msgid "OK"
-msgstr "ОК"
-
-msgid "No Peers"
-msgstr "Нет пиров"
-
-msgid "Peer attached to swarm"
-msgstr "Пир присоединён к доступным"
-
-msgid "Destination (identity) of peer"
-msgstr "Адрес назначения пира"
-
-msgid "seconds"
-msgstr "секунд"
-
-msgid "Seed"
-msgstr "Сид"
-
-msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Uninteresting (У пира нет нужных нам частей торрента)"
-
-msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Choked (Этот пир не позволяет нам запрашивать части торрента)"
-
-msgid "Peer is interested but currently idle"
-msgstr "Пир заинтересован, но простаивает"
-
-msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Uninterested (У нас нужных этому пиру частей торрента)"
-
-msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Choking (Мы не позволяем этому пиру запрашивать у нас части торрента)"
-
-#, java-format
-msgid "Details at {0} tracker"
-msgstr "Детали на трекере {0}"
-
-msgid "Info"
-msgstr "Информация"
-
-msgid "Add Torrent"
-msgstr "Добавить Торрент"
-
-msgid "From URL"
-msgstr "Из URL"
-
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "Введите URL для скачивания torrent-файла (только I2P), magnet-ссылку или info hash"
-
-msgid "Add torrent"
-msgstr "Добавить торрент"
-
-msgid "Torrent file"
-msgstr "Торрент-файл"
-
-msgid "Data dir"
-msgstr "Директория для файлов"
-
-#, java-format
-msgid "Enter the directory to save the data in (default {0})"
-msgstr "Путь для сохранения файлов (по умолчанию {0})"
-
-msgid "Create Torrent"
-msgstr "Создать Торрент"
-
-msgid "Data to seed"
-msgstr "Файлы для раздачи"
-
-#, java-format
-msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Файл или директория для раздачи (полный путь или относительно директории {0} )"
-
-msgid "Create torrent"
-msgstr "Создать торрент"
-
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "Исключить файлы из торрента, если они находятся в папке торрента"
-
-msgid "Content Filters"
-msgstr "Фильтры контента"
-
-msgid "Trackers"
-msgstr "Трекеры"
-
-msgid "Alternates"
-msgstr "Альтернативный"
-
-msgid "Primary"
-msgstr "Основной"
-
-msgid "Tracker Type"
-msgstr "Тип трекера"
-
-msgid "Standard"
-msgstr "Стандартный"
-
-msgid "Open"
-msgstr "Открытый"
-
-msgid "Private"
-msgstr "Частный"
-
-msgid "none"
-msgstr "нет"
 
 msgid "User Interface"
 msgstr "Пользовательский интерфейс"
@@ -1053,6 +587,9 @@ msgstr "Для ручного изменения тем выключите ун�
 
 msgid "Universal theming is enabled."
 msgstr "Универсальная тема включена."
+
+msgid "Configure"
+msgstr "Настройки"
 
 msgid "Refresh time"
 msgstr "Частота обновления"
@@ -1174,11 +711,20 @@ msgstr "Автоматически стартовать торренты при 
 msgid "Startup delay"
 msgstr "Задержка запуска"
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "При старте Торренты как долго ждать перед автостартом торрентов"
-
 msgid "minutes"
 msgstr "минут"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr ""
+
+msgid "max"
+msgstr ""
 
 msgid "Data Storage"
 msgstr "Хранилище данных"
@@ -1189,11 +735,35 @@ msgstr "Директория для файлов"
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Каталог для хранения торрентов и скачанных/раздаваемых файлов"
 
+msgid "Temp directory"
+msgstr ""
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr ""
+
+msgid "Torrent directory"
+msgstr ""
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr ""
+
 msgid "Files readable by all"
 msgstr "Файлы доступны для чтения всеми"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Установить разрешения файла для доступа других локальных пользователей к скачанным файлам"
+
+msgid "Preallocate files"
+msgstr ""
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+
+msgid "Preserve file names"
+msgstr ""
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr ""
 
 msgid "Max files per torrent"
 msgstr "Максимальные файлы на торрент"
@@ -1204,8 +774,14 @@ msgstr "Максимальное количество файлов, разреш
 msgid "Tunnel Configuration"
 msgstr "Конфигурация туннеля"
 
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr ""
+
 msgid "Our destination (identity) for this session"
 msgstr "Мой адрес назначения в этой сессии"
+
+msgid "Primary Dest."
+msgstr ""
 
 msgid "Dest."
 msgstr "Назначения"
@@ -1231,6 +807,24 @@ msgstr "Добавлять 0 или 1 дополнительный хоп слу
 msgid "Outbound"
 msgstr "Исходящий"
 
+msgid "Multi-destination"
+msgstr ""
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr ""
+
+msgid "Maximum destinations"
+msgstr ""
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr ""
+
+msgid "Random startup delay"
+msgstr ""
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+
 msgid "I2CP host"
 msgstr "Адрес I2CP"
 
@@ -1239,6 +833,49 @@ msgstr "Порт I2CP"
 
 msgid "I2CP options"
 msgstr "Параметры I2CP"
+
+msgid "Browser Integration"
+msgstr ""
+
+msgid "Enable browser API"
+msgstr ""
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr ""
+
+msgid "Allowed hosts"
+msgstr ""
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr ""
+
+msgid "API key"
+msgstr ""
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+
+msgid "Install browser handler"
+msgstr ""
+
+msgid "Update browser handler"
+msgstr ""
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr ""
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr ""
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr ""
+
+msgid "Download browser handler script"
+msgstr ""
 
 msgid "Save configuration"
 msgstr "Сохранить настройки"
@@ -1267,8 +904,23 @@ msgstr "Заканчивается на"
 msgid "Enabled by Default"
 msgstr "Включен по умолчанию"
 
+msgid "Delete selected"
+msgstr "Удалить выбранное"
+
+msgid "Save Filter Configuration"
+msgstr "Сохранить конфигурацию фильтра"
+
+msgid "Restore defaults"
+msgstr "Восстановить значения по-умолчанию"
+
+msgid "Add File Filter"
+msgstr "Добавить фильтр файлов"
+
 msgid "Add"
 msgstr "Добавить"
+
+msgid "Trackers"
+msgstr "Трекеры"
 
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Выбрать трекеры для удаления из листа Торренты"
@@ -1276,11 +928,531 @@ msgstr "Выбрать трекеры для удаления из листа Т
 msgid "Website URL"
 msgstr "URL сайта"
 
+msgid "Standard"
+msgstr "Стандартный"
+
+msgid "Open"
+msgstr "Открытый"
+
+msgid "Private"
+msgstr "Частный"
+
 msgid "Announce URL"
 msgstr "URL анонсирования"
 
 msgid "Mark tracker for deletion"
 msgstr "Пометить трекер для удаления"
+
+msgid "Add tracker"
+msgstr "Добавить трекер"
+
+msgid "Save tracker configuration"
+msgstr "Сохранить настройки трекеров"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Максимальное количество активных туннелей, определяемое количеством подключенных пиров (фактически может быть меньше)Максимальное количество активных туннелей, определяемое количеством подключенных пиров (фактически может быть меньше)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Установка менее 3 прыжков может повысить скорость за счет анонимности, не рекомендуется"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr ""
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Нажмите \"Добавить торрент\", чтобы получить торрент"
+
+msgid "Torrents"
+msgstr "Торренты"
+
+msgid "Refresh page"
+msgstr "Обновить страницу"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Торрент и файлообменный форум"
+
+msgid "Forum"
+msgstr "Форум"
+
+msgid "Search torrents"
+msgstr "Поиск торрентов"
+
+msgid "Clear search"
+msgstr "Очистить поиск"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Анонимный BitTorrent клиент"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Вы уверены, что хотите удалить {0} и все загруженные данные?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Удаление <b>{0}</b> и всех связанных данных..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Вы уверены, что хотите удалить торрент-файл {0} и связанные метаданные?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Примечание: Загруженные данные не будут удалены."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Удаление {0} и только связанных метаданных..."
+
+msgid "clear messages"
+msgstr "очистить сообщения"
+
+msgid "Expand"
+msgstr "Развернуть"
+
+msgid "Shrink"
+msgstr "Свернуть"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Внимание! У вас отключен JavaScript. Если {0} включен, при обновлении страницы вы потеряете информацию из полей добавления и создания."
+
+msgid "page refresh"
+msgstr "oбновить страницу"
+
+msgid "Warning - No I2P"
+msgstr "Внимани: нет I2P"
+
+msgid "No torrents found."
+msgstr "Торренты не найдены."
+
+msgid "No torrents loaded."
+msgstr "Нет загруженных торрентов."
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Torrent"
+msgstr "Торрент"
+
+msgid "ETA"
+msgstr "Осталось"
+
+msgid "RX"
+msgstr "Принято"
+
+msgid "RX Rate"
+msgstr "Скорость получения"
+
+msgid "TX"
+msgstr "Отдано"
+
+msgid "TX Rate"
+msgstr "Скорость отдачи"
+
+msgid "Start All"
+msgstr "Запустить все"
+
+msgid "Stop All"
+msgstr "Остановить все"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Остановить все торренты и закрыть соединение с I2P"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Запустить все торренты и открыть соединение с I2P"
+
+msgid "Start all stopped torrents"
+msgstr "Запустить все остановленные торренты"
+
+msgid "Hide Peers"
+msgstr "Скрыть список пиров"
+
+msgid "Show Peers"
+msgstr "Показать список пиров"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Сортировать по {0}"
+
+msgid "Up Rate"
+msgstr "Скорость отдачи"
+
+msgid "Total size of loaded torrents"
+msgstr "Общий размер загруженных торрентов"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "{0} подключенный пир"
+msgstr[1] "{0} подключенных пира"
+msgstr[2] "{0} подключенных пира"
+msgstr[3] "{0} подключенных пиров"
+
+msgid "Active downloads"
+msgstr "Активные загрузки"
+
+msgid "Active uploads"
+msgstr "Активные отдачи"
+
+msgid "Active Inbound tunnels"
+msgstr "Активные входящие туннели"
+
+msgid "Active Outbound tunnels"
+msgstr "Активные исходящие туннели"
+
+msgid "Estimated download time for all torrents"
+msgstr "Ожидаемое время загрузки всех торрентов"
+
+msgid "Data downloaded this session"
+msgstr "Данные, загруженные за эту сессию"
+
+msgid "Total download speed"
+msgstr "Общая скорость загрузки"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Всего отдано (для торрентов из списка)"
+
+msgid "Total upload speed"
+msgstr "Общая скорость отдачи"
+
+msgid "Toggle Debug Panel"
+msgstr "Переключить панель отладки"
+
+msgid "Debug Mode"
+msgstr "Отладка"
+
+msgid "Normal Mode"
+msgstr "Нормальный"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0} торрент"
+msgstr[1] "{0} торрента"
+msgstr[2] "{0} торрента"
+msgstr[3] "{0} торрентов"
+
+msgid "No DHT Peers"
+msgstr "Нет DHT-пиров"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Show All"
+msgstr "Показать все"
+
+msgid "Active"
+msgstr "Активный"
+
+msgid "Inactive"
+msgstr "Неактивный"
+
+msgid "Connected"
+msgstr "Подключено"
+
+msgid "Downloading"
+msgstr "Загрузка"
+
+msgid "Seeding"
+msgstr "Раздается"
+
+msgid "Complete"
+msgstr "Завершен"
+
+msgid "Incomplete"
+msgstr "Неполный"
+
+msgid "Stopped"
+msgstr "Остановлен"
+
+msgid "First"
+msgstr "Первый"
+
+msgid "First page"
+msgstr "Первая страница"
+
+msgid "Prev"
+msgstr "Предыдущий"
+
+msgid "Previous page"
+msgstr "Предыдущая страница"
+
+msgid "Next"
+msgstr "Следующий"
+
+msgid "Next page"
+msgstr "Следующая страница"
+
+msgid "Last"
+msgstr "Последний"
+
+msgid "Last page"
+msgstr "Последняя страница"
+
+msgid "Enter URL or select torrent file"
+msgstr "Введите URL или выберите торрент-файл"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr ""
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Ошибка загрузки торрент-файла: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Загрузка не из I2P ({0}) не поддерживается"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Ошибка: хеши версии 2 не поддерживаются"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Некорректный URL: используйте \"{0}\", или \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magnet удален: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Не удалось удалить торрент-файл: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Файл удален: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Не удалось удалить файл: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Каталог не может быть удалён: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Каталог удалён: {0}"
+
+msgid "Browser API enabled."
+msgstr ""
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr ""
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " файлов или папок исключены из \"{0}\" по правилам фильтрации."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Следующие файлы или папки были исключены из \"{0}\", в соответствии с правилами фильтрации: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Создан торрент для \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Многие I2P трекеры требуют зарегистрировать на них торрент перед началом раздачи — пожалуйста проверьте требуется ли это перед запуском \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Ошибка при создании торрента для: \"{0}\""
+
+msgid "Removed"
+msgstr "Удален"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Введите действительное название и URL трекера"
+
+msgid "Restored default trackers"
+msgstr "Восстановить трекеры по-умолчанию"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Введите действительное имя и шаблон фильтра"
+
+msgid "Restored default torrent create filters"
+msgstr "Восстановлены стандартные фильтры создания торрента"
+
+msgid "Torrent details"
+msgstr "Подробная информация"
+
+msgid "Torrent has comments"
+msgstr "Имеются комментарии"
+
+msgid "Open file"
+msgstr "Открыть файл"
+
+msgid "View files"
+msgstr "Просмотр файлов"
+
+msgid "Completed"
+msgstr "Завершено"
+
+msgid "Share ratio"
+msgstr "Коэффициент отдачи"
+
+msgid "Last activity"
+msgstr "Последняя активность"
+
+msgid "Stop"
+msgstr "Остановить"
+
+msgid "Stop torrent"
+msgstr "Остановить торрент"
+
+msgid "Start"
+msgstr "Запустить"
+
+msgid "Start torrent"
+msgstr "Запустить торрент"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Удалить торрент из списка и с диска"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Удалить .torrent-файл и все связанные с ним файлы"
+
+msgid "Destination"
+msgstr ""
+
+msgid "Checking"
+msgstr "Проверка"
+
+msgid "Allocating"
+msgstr "Выделение места"
+
+msgid "Failed to connect to all configured trackers"
+msgstr ""
+
+msgid "Starting"
+msgstr "Запускается"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Раздаем {0} пиру"
+msgstr[1] "Раздаем {0} пирам"
+msgstr[2] "Раздаем {0} пирам"
+msgstr[3] "Раздаем {0} пирам"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Соединены с {0} из {1} доступных пиров"
+
+msgid "Stalled"
+msgstr "Простаивает"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Раздаем {0} пиру в рое"
+msgstr[1] "Раздаем {0} пирам в рое"
+msgstr[2] "Раздаем {0} пирам в рое"
+msgstr[3] "Раздаем {0} пирам в рое"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Скачиваем с {0} пира"
+msgstr[1] "Скачиваем с {0} пиров"
+msgstr[2] "Скачиваем с {0} пиров"
+msgstr[3] "Скачиваем с {0} пиров"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "No Peers"
+msgstr "Нет пиров"
+
+msgid "Peer attached to swarm"
+msgstr "Пир присоединён к доступным"
+
+msgid "Destination (identity) of peer"
+msgstr "Адрес назначения пира"
+
+msgid "seconds"
+msgstr "секунд"
+
+msgid "Seed"
+msgstr "Сид"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Uninteresting (У пира нет нужных нам частей торрента)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Choked (Этот пир не позволяет нам запрашивать части торрента)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Пир заинтересован, но простаивает"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Uninterested (У нас нужных этому пиру частей торрента)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Choking (Мы не позволяем этому пиру запрашивать у нас части торрента)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Детали на трекере {0}"
+
+msgid "Info"
+msgstr "Информация"
+
+msgid "Add Torrent"
+msgstr "Добавить Торрент"
+
+msgid "From URL"
+msgstr "Из URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Введите URL для скачивания torrent-файла (только I2P), magnet-ссылку или info hash"
+
+msgid "Add torrent"
+msgstr "Добавить торрент"
+
+msgid "Torrent file"
+msgstr "Торрент-файл"
+
+msgid "Data dir"
+msgstr "Директория для файлов"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Путь для сохранения файлов (по умолчанию {0})"
+
+msgid "Create Torrent"
+msgstr "Создать Торрент"
+
+msgid "Data to seed"
+msgstr "Файлы для раздачи"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Файл или директория для раздачи (полный путь или относительно директории {0} )"
+
+msgid "Create torrent"
+msgstr "Создать торрент"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Исключить файлы из торрента, если они находятся в папке торрента"
+
+msgid "Content Filters"
+msgstr "Фильтры контента"
+
+msgid "Alternates"
+msgstr "Альтернативный"
+
+msgid "Primary"
+msgstr "Основной"
+
+msgid "Tracker Type"
+msgstr "Тип трекера"
+
+msgid "none"
+msgstr "нет"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
 msgstr "Невозможно добавить magnet: ссылки magnet версии 2 не поддерживаются"
@@ -1289,20 +1461,20 @@ msgstr "Невозможно добавить magnet: ссылки magnet вер
 msgid "Invalid magnet URL {0}"
 msgstr "Неправильный magnet URL {0}"
 
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "Максимальное количество активных туннелей, определяемое количеством подключенных пиров (фактически может быть меньше)Максимальное количество активных туннелей, определяемое количеством подключенных пиров (фактически может быть меньше)"
+msgid "Files"
+msgstr "Файлов"
 
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "Установка менее 3 прыжков может повысить скорость за счет анонимности, не рекомендуется"
+msgid "Save priorities"
+msgstr "Сохранить приоритеты"
 
-msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr "Последовательный порядок кусочков или файлов не сохраняется - функция в настоящее время сломана."
-
-msgid "Unknown command"
-msgstr "Неизвестная команда"
+msgid "Comments"
+msgstr "Комментарии"
 
 msgid "Please retry form submission (bad nonce)"
 msgstr "Пожалуйста, повторите отправку формы (неправильный nonce)"
+
+msgid "Unknown command"
+msgstr "Неизвестная команда"
 
 msgid "Resource Does Not Exist"
 msgstr "Ресурс не существует"
@@ -1313,11 +1485,11 @@ msgstr "Ресурс"
 msgid "Base"
 msgstr "База"
 
-msgid "Files"
-msgstr "Файлов"
-
 msgid "Directory"
 msgstr "Директория"
+
+msgid "File type"
+msgstr "Тип файла"
 
 msgid "Size"
 msgstr "Размер"
@@ -1340,24 +1512,6 @@ msgstr "Перейти в директорию уровнем выше"
 msgid "Audio Playlist"
 msgstr "Плейлист аудио"
 
-msgid "Not found"
-msgstr "Не найден"
-
-msgid "File not found in torrent"
-msgstr "Файл в торренте не найден"
-
-msgid "Unrecognized"
-msgstr "Непризнанный"
-
-msgid "Preview"
-msgstr "Предпросмотр"
-
-msgid "Save priorities"
-msgstr "Сохранить приоритеты"
-
-msgid "Comments"
-msgstr "Комментарии"
-
 msgid "Resource Not found"
 msgstr "Ресурс не найден"
 
@@ -1366,6 +1520,10 @@ msgstr "Инфохеш"
 
 msgid "Created"
 msgstr "Создан"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr ""
 
 msgid "Added"
 msgstr "Добавлено"
@@ -1430,15 +1588,6 @@ msgstr "скачано"
 msgid "remaining"
 msgstr "осталось"
 
-msgid "Ratings and Comments"
-msgstr "Рейтинги и комментарии"
-
-msgid "Author name required to rate or comment"
-msgstr "Требуется имя автора для добавления оценки или комментария"
-
-msgid "Your author name for published comments and ratings"
-msgstr "Ваше имя автора для комментариев и рейтинга"
-
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1477,6 +1626,15 @@ msgstr "Пометить для удаления"
 msgid "Delete Selected"
 msgstr "Удалить выбранное"
 
+msgid "Ratings and Comments"
+msgstr "Рейтинги и комментарии"
+
+msgid "Author name required to rate or comment"
+msgstr "Требуется имя автора для добавления оценки или комментария"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Ваше имя автора для комментариев и рейтинга"
+
 msgid "File downloading priorities updated for torrent "
 msgstr "Приоритеты загрузки файлов обновлены для торрента "
 
@@ -1485,6 +1643,9 @@ msgstr "Изменить торрент"
 
 msgid "Active Trackers"
 msgstr "Активные трекеры"
+
+msgid "Delete"
+msgstr "Удалить"
 
 msgid "Add Tracker"
 msgstr "Добавить трекер"
@@ -1500,3 +1661,23 @@ msgstr "Сохранить изменения"
 
 msgid "Torrent must be stopped"
 msgstr "Торрент должен быть остановлен"
+
+msgid "Not found"
+msgstr "Не найден"
+
+msgid "File not found in torrent"
+msgstr "Файл в торренте не найден"
+
+msgid "Unrecognized"
+msgstr "Непризнанный"
+
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Не могу добавить торрент {0} в состав другого торрента: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Не могу добавить торрент {0}, включающий в себя другой торрент: {1}"

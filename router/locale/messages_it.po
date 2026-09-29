@@ -137,17 +137,17 @@ msgstr "Richiesta di sovraccarico"
 msgid "Connection limit reached"
 msgstr "Limite di connessione raggiunto"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "Abbandono delle richieste tunnel: Carico elevato"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "Abbandono delle richieste tunnel: Tempo della coda scaduto"
-
 msgid "Transit throttle drop"
 msgstr "Rimozione limitazione di transito"
 
 msgid "Transit throttle reject"
 msgstr "Rifiuto limitazione di transito"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Abbandono delle richieste tunnel: Carico elevato"
+
 msgid "Transit request throttle"
 msgstr "Limitazione delle richieste di transito"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Abbandono delle richieste tunnel: Tempo della coda scaduto"

@@ -240,6 +240,9 @@ msgstr "Odstranjen omenjak sledilne slike"
 msgid "no subject"
 msgstr "brez naslova"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "Veljavnega naslovodajalca ni bilo mogoče najti."
 

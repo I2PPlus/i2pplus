@@ -137,17 +137,17 @@ msgstr "请求过载"
 msgid "Connection limit reached"
 msgstr "达到连接限制"
 
-msgid "Dropping Tunnel Requests: High load"
-msgstr "忽略共享隧道请求：高负载"
-
-msgid "Dropping Tunnel Requests: Queue time"
-msgstr "忽略共享隧道请求：队列积压"
-
 msgid "Transit throttle drop"
 msgstr "Transit throttle 丢弃"
 
 msgid "Transit throttle reject"
 msgstr "Transit throttle 拒绝"
 
+msgid "Dropping Tunnel Requests: High load"
+msgstr "忽略共享隧道请求：高负载"
+
 msgid "Transit request throttle"
 msgstr "Transit 请求 throttle"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "忽略共享隧道请求：队列积压"

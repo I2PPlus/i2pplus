@@ -234,6 +234,9 @@ msgstr "ट्रैकिंग छवि के स्थानीयकरण
 msgid "no subject"
 msgstr "कोई विषय नहीं"
 
+msgid "No Drafts folder?"
+msgstr ""
+
 msgid "Found no valid sender address."
 msgstr "वैध भेजने वाले पते को नहीं मिला."
 

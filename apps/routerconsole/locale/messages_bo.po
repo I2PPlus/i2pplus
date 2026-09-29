@@ -40,11 +40,13 @@ msgstr "སྐྱེད་བསྲིང་འགོ་བརྩམས་བཞ
 
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
-msgstr "Acquired {0} router info from reseed hosts"
+msgid_plural "Acquired {0} router infos from reseed hosts"
+msgstr[0] ""
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
-msgstr "Acquired only 1 router info from reseed hosts"
+msgid_plural "Acquired only {0} router infos from reseed hosts"
+msgstr[0] ""
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
@@ -59,10 +61,6 @@ msgstr "སྐྱེད་བསྲིང་རམ་འདེགས།"
 
 msgid "Contacting reseed host"
 msgstr "སྐྱེད་བསྲིང་ཧོསི་དང་འབྲེལ་བ་བྱེད་བཞིན་པ།"
-
-#, java-format
-msgid "Reseeding: fetching router info from seed URL ({0} successful, {1} errors)."
-msgstr "སྐྱེད་བསྲིང་བྱེད་བཞིན་པ།: seed URL ནས་རྒྱུད་པའི་ཆ་འཕྲིན་བཟོ་བཞིན་པ། ({0} ལེགས་གྲུབ། {1} ནོར་འཁྲུལ།)"
 
 #, java-format
 msgid "Acquired {0} router infos from reseed hosts"
@@ -125,15 +123,6 @@ msgstr "IP ཁ་བྱང་སྤེལ་མེད་པའི་མཐུད
 
 msgid "Average tunnel build success %"
 msgstr "གདོང་ལམ་བཟོ་སྐྲུན་ལེགས་གྲུབ་ཀྱི་ཆ་སྙོམས། %"
-
-msgid "unknown"
-msgstr "མི་ཤེས་པ།"
-
-msgid "Floodfill"
-msgstr "ཁེངས་གསོག"
-
-msgid "Show all routers with this capability in the NetDb"
-msgstr "NetDb ནང་གི་ནུས་པ་འདི་ཡོད་པའི་རྒྱུད་པ་ཚང་མ་སྟོན།"
 
 msgid "No transports"
 msgstr "འགྲེམ་སྤེལ་མེད། (སྦས་གསང་ཡང་ན་འགོ་བརྩམས་བཞིན་པ།)"
@@ -566,12 +555,6 @@ msgstr "རོགས་དྲན་མཐོང་བྱེད་པ།"
 msgid "Hide systray icon"
 msgstr "རོགས་དྲན་མཐོང་མི་རྒྱུན་དུ་བཙོན་པའི་ཐོན་པར་མི་འཚམས།"
 
-msgid "Installed I2P+ system service"
-msgstr "I2P+ རྒྱུན་དུ་བཙོན་པའི་བཤོལ་བཞིན་པ།"
-
-msgid "Warning: unable to install the service"
-msgstr "དམིག་བཤོལ་བཞིན་པ།: བཤོལ་བའི་བཤོལ་བཞིན་མེད།"
-
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "I2P+ བཤོལ་བའི་རོགས་དྲན་རྒྱུན་དུ་བཙོན་པའི་ཐོན་པར་མི་འཚམས།"
 
@@ -583,6 +566,9 @@ msgstr "I2P+ བཤོལ་བའི་རོགས་དྲན་རྒྱུ�
 
 msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "དམིག་བཤོལ་བཞིན་པ།: I2P+ བཤོལ་བའི་རོགས་དྲན་རྒྱུན་དུ་བཙོན་པའི་ཐོན་པར་མི་འཚམས།"
+
+msgid "Warning: could not locate the I2P+ install directory"
+msgstr ""
 
 msgid "Configuration saved successfully"
 msgstr "རོགས་དྲན་ཐོབ་བཏང་བཞིན་པ།"
@@ -749,10 +735,14 @@ msgstr "བརྒྱུད་བཏོན་པའི་བསྐྱར་བཏ
 
 #, java-format
 msgid "{0} plugin updated"
-msgstr "{0} plugin updated"
+msgid_plural "{0} plugins updated"
+msgstr[0] ""
 
 msgid "Plugin check complete"
 msgstr "བརྒྱུད་བཏོན་པའི་བལྟ་བཞིན་མེད།"
+
+msgid "Invalid value"
+msgstr "གྲུབ་མེད་ཀྱི་རིན་ཐང་།"
 
 msgid "Restore Defaults"
 msgstr "སྔོན་མའི་སྒྲིག་ལ་སླར་གསོ།"
@@ -771,9 +761,6 @@ msgstr "སྲུང་སའི་འགྱུར་བ་མེད།"
 
 msgid "Tuning overrides applied"
 msgstr "སྒྲིག་གི་དབང་བསྒྱུར་བཀོལ་ཟིན།"
-
-msgid "Invalid value"
-msgstr "གྲུབ་མེད་ཀྱི་རིན་ཐང་།"
 
 msgid "No bans currently active"
 msgstr "ད་ལོ་བཙོན་པ་ད་གི་རྒྱུན་དུ་བཙོན་པ་མེད།"
@@ -804,6 +791,9 @@ msgstr "ཚོད་བཤོལ་བ།"
 
 msgid "Total session-only bans"
 msgstr "རྒྱུན་དུ་བཙོན་པའི་ཚོད་བཤོལ་བ།"
+
+msgid "Show all routers with this capability in the NetDb"
+msgstr "NetDb ནང་གི་ནུས་པ་འདི་ཡོད་པའི་རྒྱུད་པ་ཚང་མ་སྟོན།"
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
 msgstr "དཔང་ཡིག་དེ་དག་ནི་དྲ་རྒྱའི་སྟེང་དུ་གསང་སྦྱོར་བྱས་པའི་ཞབས་ཞུ་དག་ལ་ངོས་འཛིན་བྱེད་པ། གཞོན་ཞབས་ཞུ་དང་རྒྱུད་ཀོན་སོལ་ལ་གདམ་ངོས་ཀྱི་SSL གྲ་སྒྲིག་བྱེད་པ། ཡང་ན་རྒྱུད་པའི་ཁྱིམ་ཚང་གི་བདག་དབང་དཔང་རྟགས་སྤྲོད་པར་བེད་སྤྱོད་བྱེད།"
@@ -1430,6 +1420,9 @@ msgstr "དྲྭ་རྒྱུད་ཀྱི་རྒྱུན་མི་ལ
 msgid "Updated bandwidth limits"
 msgstr "དྲྭ་རྒྱུད་ཀྱི་ཚད་ཆེན་བསྒྱུར་བཏོན་པ།"
 
+msgid "unknown"
+msgstr "མི་ཤེས་པ།"
+
 msgid "Delete this value to disable"
 msgstr "ནུས་མེད་གཏོང་བར་གནས་ཐང་འདི་སུབ་པ།"
 
@@ -1442,6 +1435,9 @@ msgstr "ཟླ་རེར་{0}B མང་མཐའི་གནས་སྐབ�
 
 msgid "Ban peer until restart"
 msgstr "སླར་འཛུགས་བར་དུ་ལག་གདང་བཀག་པ།"
+
+msgid "Manually banned via configpeer"
+msgstr ""
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1540,7 +1536,8 @@ msgstr "ཡིག་ཆ་ནས་རྒྱུན་དུ་བཙོན་པ
 
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
-msgstr "Reseed successful, loaded {0} router info from file."
+msgid_plural "Reseed successful, loaded {0} router infos from file."
+msgstr[0] ""
 
 msgid "Reset URL list"
 msgstr "URL ཐོ་བཀོད་སླར་སྒྲིག"
@@ -1583,24 +1580,17 @@ msgstr "{0} ལ་སྒོ་བརྒྱག"
 
 #, java-format
 msgid "{0} transit tunnel still active"
-msgstr "{0} transit tunnel still active"
+msgid_plural "{0} transit tunnels still active"
+msgstr[0] ""
 
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
-msgstr "Please wait for routing commitment to expire for {0} tunnel"
+msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
+msgstr[0] ""
 
 #, java-format
 msgid "Restart in {0}"
 msgstr "{0} ལ་སླར་འཛུགས།"
-
-msgid "Save order"
-msgstr "གོ་རིམ་ཉར།"
-
-msgid "Restore full default"
-msgstr "ཆ་ཚང་སློག་སྐྱེལ་སླར་གསོ།"
-
-msgid "Restore minimal default"
-msgstr "ཉུང་མཐའི་སློག་སྐྱེལ་སླར་གསོ།"
 
 msgid "Sidebar preferences updated"
 msgstr "ཟུར་ངོས་ཕྲེང་བའི་དགའ་གདམ་བསྒྱུར་བཏོན་པ།"
@@ -1659,14 +1649,6 @@ msgstr "འཚོལ་ཞིབ་སྐུད་སྲོག་སྐར་ག
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
 msgstr "རྒྱུད་སྟེན་ཉར་ནོཙ་འཛོལ་བ། (བཀོད་ཡོད་ཀྱང་གིས་ཉར་མ་ཐུབ།) - འཛོལ་བའི་ཟིག་ཐོ་ལ་གཟིགས་རོགས།"
 
-#, java-format
-msgid "{0} hop"
-msgstr "{0} hop"
-
-#, java-format
-msgid "{0} tunnel"
-msgstr "{0} tunnel"
-
 msgid "Exploratory tunnels"
 msgstr "འཚོལ་ཞིབ་སྐུད་སྲོག་སྐར་དག།"
 
@@ -1714,9 +1696,6 @@ msgstr "ནང་འདྲེན་གྱི་གདམ་ག"
 
 msgid "Outbound options"
 msgstr "ཕྱི་འདྲེན་གྱི་གདམ་ག"
-
-msgid "Add user"
-msgstr "སྤྱོད་མཁན་ཁ་སྣོན།"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
 msgstr "བརྗོད་བྱ་འདེམས་ཐོག་ཉར་མི་ཐུབ། བརྗོད་བྱའི་མིང་ལ་ཁྲིམས་འགལ་གྱི་ཡི་གེ་ཡོད།"
@@ -2836,12 +2815,12 @@ msgstr "སྒུག་པ། {0}"
 msgid "Max wait: {0}"
 msgstr "སྒུག་པའི་ཆེ་ཤོས། {0}"
 
-msgid "Scheduled jobs"
-msgstr "ལེགས་འགོད་ལས་ཀ།"
-
 #, java-format
 msgid "{0} starting in {1}"
 msgstr "{0} {1} ནང་འགོ་ཚུགས།"
+
+msgid "Scheduled jobs"
+msgstr "ལེགས་འགོད་ལས་ཀ།"
 
 #, java-format
 msgid "Runners: {0} / {1}"
@@ -3006,9 +2985,6 @@ msgstr "སྔོན་མའི་ཤོག་ངོས།"
 msgid "Next Page"
 msgstr "རྗེས་མའི་ཤོག་ངོས།"
 
-msgid "Results per page"
-msgstr "ཤོག་ངོས་རེར་འབྲས་བུ།"
-
 msgid "Not initialized"
 msgstr "འགོ་ཚུགས་མེད།"
 
@@ -3161,6 +3137,9 @@ msgstr "འགོ་ཚོགས་བཞིན་པ།"
 
 msgid "Our info"
 msgstr "ང་ཚོའི་ཆ་འཕྲིན།"
+
+msgid "Floodfill"
+msgstr "ཁེངས་གསོག"
 
 msgid "Router is banlisted"
 msgstr "རོ་ཌེར་བློག་ཐོར་ནང་ཡོད།"
@@ -3443,7 +3422,8 @@ msgstr "མཐུད་འབྲེལ་ལ་འགྲེམ་གྲལ་འ
 
 #, java-format
 msgid "{0} peer"
-msgstr "{0} peer"
+msgid_plural "{0} peers"
+msgstr[0] ""
 
 msgid "UDP connections"
 msgstr "UDP མཐུད་འབྲེལ།"
@@ -3534,100 +3514,11 @@ msgstr "ཁོང་ཚོས་ང་ཚོར་ངོ་སྤྲོད་བ
 
 #, java-format
 msgid "{0} fail"
-msgstr "{0} fail"
+msgid_plural "{0} fails"
+msgstr[0] ""
 
 msgid "backlogged"
 msgstr "ལས་ཀའི་གྲལ་རིམ་ནང་།"
-
-msgid "Definitions"
-msgstr "ངེས་ཚིག་ཁག"
-
-msgid "Remote peer, identified by truncated router hash"
-msgstr "ཐུམ་སྒྲིལ་བརྒྱུད་རོ་ཌེར་གྱི་ཨོ་རུ་ཤེན་པས་ངོས་འཛིན་བྱས་པའི་ཐག་རིང་གི་ལག་གདང་།"
-
-msgid "Direction"
-msgstr "ཁ་ཕྱོགས།"
-
-msgid "Outbound connection"
-msgstr "ཕྱི་འགྲོ་མཐུད་འབྲེལ།"
-
-msgid "They offered to introduce us (help peers traverse our firewall)"
-msgstr "ཁོང་ཚོས་ང་ཚོར་ངོ་སྤྲོད་བྱེད་རྒྱུར་སྐུལ་མ་བྱས། (ལག་གདང་རྣམས་ང་ཚོའི་མེ་སྒྲོན་བརྒྱུད་འགྲོ་རོགས་བྱེད།)"
-
-msgid "Inbound connection"
-msgstr "ནང་འོག་ཐོན་པའི་འབྲེལ་བ།"
-
-msgid "We offered to introduce them (help peers traverse their firewall)"
-msgstr "ང་ཚོས་ཁོང་ཚོར་ངོ་སྤྲོད་བྱེད་རྒྱུར་རོགས་བརྒྱུད་བཏོན་པ། (ལག་གདང་རྣམས་ཁོང་ཚོའི་མེ་སྒྲོན་བརྒྱུད་འགྲོ་རོགས་བྱེད།)"
-
-msgid "How long since a packet has been received / sent"
-msgstr "ཐུམ་སྒྲིལ་ཞིག་བརྒྱུད་ནས་ཐོབ་པ་/བཏོན་པ་ནས་དུས་ཚོད་ག་ཚོད་རེད།"
-
-msgid "Smoothed inbound / outbound transfer rate"
-msgstr "ནང་འོག་ཐོན་པ་/ཕྱིར་ཐོན་པའི་བརྒྱུད་བཏོན་ཚད་ཀྱི་སྙོམས་སྒྲིག་བྱས་པ།"
-
-msgid "How long ago connection was established"
-msgstr "འབྲེལ་བ་དེ་གཏན་འབེབས་བྱེད་ནས་དུས་ཚོད་ག་ཚོད་རེད།"
-
-msgid "Difference between the peer's clock and our own"
-msgstr "ལག་གདང་གི་ཆུ་ཚོད་དང་ང་ཚོའི་ཆུ་ཚོད་བར་གྱི་ཁྱད་པར།"
-
-msgid "How many bytes can be sent without acknowledgement"
-msgstr "ངོས་ལེན་མེད་པར་བཡི་ཊི་ག་ཚོད་བཏོན་ཐུབ།"
-
-msgid "Number of sent messages awaiting acknowledgement"
-msgstr "ངོས་ལེན་སྒུག་བའི་བཏོན་པའི་བརྡ་འཕྲིན་གྱི་གྲངས་ཀ།"
-
-msgid "Maximum number of concurrent messages to send"
-msgstr "མཉམ་དུ་བཏོན་རྒྱུའི་བརྡ་འཕྲིན་གྱི་མང་མཐའ་གྲངས་ཀ།"
-
-msgid "Number of pending sends which exceed window"
-msgstr "སྒེའུ་ཁུང་ལས་བརྒལ་བའི་སྒུག་བའི་བཏོན་པའི་གྲངས་ཀ།"
-
-msgid "Maximum packet size before congestion avoidance"
-msgstr "འདུས་འཛིང་ཉུང་དུ་གཏོང་བའི་སྔོན་གྱི་ཚད་མཐོ་བའི་ཐུམ་སྒྲིལ་ཆེ་ཚད།"
-
-msgid "How long for packet to be sent to peer and back to us"
-msgstr "ཐུམ་སྒྲིལ་དེ་ལྷན་ཚོགས་ལ་བཏང་ནས་ང་ཚོར་ཕྱིར་ལོག་པར་དུས་ཚོད་ག་ཚོད་རེད།"
-
-msgid "Retransmit timeout"
-msgstr "བསྐྱར་བཏང་དུས་ཚོད་ཐིམ་པ།"
-
-msgid "How long before peer gives up resending lost packet"
-msgstr "ལྷན་ཚོགས་ཀྱིས་བརླག་པའི་ཐུམ་སྒྲིལ་བསྐྱར་བཏང་བྱེད་མཚམས་བཞག་པའི་སྔོན་དུ་དུས་ཚོད་ག་ཚོད་རེད།"
-
-msgid "Maximum send packet size"
-msgstr "བཏང་བའི་ཐུམ་སྒྲིལ་ཆེ་ཚད་མཐོ་ཤོས།"
-
-msgid "Estimated maximum receive packet size (bytes)"
-msgstr "རྩིས་སྤྲོད་བྱས་པའི་བདག་ལེན་ཐུམ་སྒྲིལ་ཆེ་ཚད་མཐོ་ཤོས། (བའིཊིས)"
-
-msgid "Messages sent to peer"
-msgstr "ལྷན་ཚོགས་ལ་བཏང་བའི་འཕྲིན་ཐུང་།"
-
-msgid "Messages received from peer"
-msgstr "ལྷན་ཚོགས་ནས་བདག་ལེན་བྱས་པའི་འཕྲིན་ཐུང་།"
-
-msgid "Packets retransmitted to peer"
-msgstr "ལྷན་ཚོགས་ལ་བསྐྱར་བཏང་བའི་ཐུམ་སྒྲིལ།"
-
-msgid "Duplicate packets received from peer"
-msgstr "ལྷན་ཚོགས་ནས་བདག་ལེན་བྱས་པའི་ཐུམ་སྒྲིལ་ངོ་མ།"
-
-#, java-format
-msgid "Showing {0} recent profile."
-msgstr "Showing {0} recent profile."
-
-#, java-format
-msgid "Hiding {0} older profile."
-msgstr "Hiding {0} older profile."
-
-#, java-format
-msgid "Hiding {0} standard profile."
-msgstr "Hiding {0} standard profile."
-
-msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
-msgstr "དྲན་ཤེས་པར་ཞིབ་འཇུག་པ་ནི་རྒྱུན་མཐུགས་པའི་ལེན་གནད་གྲུང་ནེལ་བེད་སྤྱོད་ལ་བརྟེན་ནས་གནད་སྤུས་ལྡན་པའི་སྒོ་ནས་རྒྱུན་དུ་བཙོན་པའི་ཚོགས་པར་ཞིབ་བཤོལ་བྱེད་པར་རྒྱུག་གི་ཡོད།"
 
 msgid "Domain"
 msgstr "ས་ཁོངས།"
@@ -3640,6 +3531,12 @@ msgstr "མྱུར་ཚད།"
 
 msgid "Low Latency"
 msgstr "དལ་བའི་གཡོར་བ།"
+
+msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
+msgstr ""
+
+msgid "Loss"
+msgstr ""
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "གྲུང་ནེལ་རྒྱུན་དུ་བཙོན་པའི་ཚོགས་པས་ཞུགས་རྒྱུར་མོས་མཐུན་བྱས་པའི།"
@@ -3692,65 +3589,66 @@ msgstr "མཉམ་འདྲེས་བྱུང་བ།"
 msgid "Configure Peer"
 msgstr "Peer སྲོད་བརྒྱུག་པ"
 
-msgid "Thresholds"
-msgstr "ཚད་གཞི།"
+#, java-format
+msgid "{0} in RAM / {1} on disk"
+msgstr ""
 
-msgid "Capacity"
-msgstr "ནུས་པ།"
+msgid "High Cap"
+msgstr ""
 
-msgid "tunnels per hour"
-msgstr "ཆུ་ཚོད་རེར་གྲུང་ནེལ།"
+msgid "Displayed"
+msgstr ""
 
-msgid "Integration"
-msgstr "མཉམ་འདྲེས།"
+#, java-format
+msgid "Showing {0} of {1} profiles"
+msgstr ""
 
-msgid "peer"
-msgstr "ལག་གདང་།"
+#, java-format
+msgid "{0} stale profile hidden"
+msgid_plural "{0} stale profiles hidden"
+msgstr[0] ""
+
+msgid "Share of total profiles shown"
+msgstr ""
 
 msgid "peers"
 msgstr "ལག་གདང་རྣམས།"
 
-#, java-format
-msgid "{0} fast peer"
-msgstr "{0} fast peer"
+msgid "Share of tier profiles shown"
+msgstr ""
 
-#, java-format
-msgid "{0} high capacity peer"
-msgstr "{0} high capacity peer"
+msgid "Window"
+msgstr ""
 
-#, java-format
-msgid "{0} integrated peer"
-msgstr "{0} integrated peer"
+msgid "Fast RTT"
+msgstr ""
 
-msgid "1h Fail Rate"
-msgstr "ཆུ་ཚོད་གཅིག་གི་ཕམ་ཚད།"
+msgid "Max RTT for fast-tier membership (ms)"
+msgstr ""
 
-msgid "1h Resp. Time"
-msgstr "ཆུ་ཚོད་གཅིག་གི་ལན་གྱི་དུས་ཚོད།"
+msgid "Average loss of fast-tier peers (%)"
+msgstr ""
 
-msgid "Good Lookups"
-msgstr "འཚོལ་བཤོལ་བཟང་པོ།"
+msgid "Average loss of high-capacity peers (%)"
+msgstr ""
 
-msgid "Last Good Lookup"
-msgstr "མཐའ་མའི་འཚོལ་བཤོལ་བཟང་པོ།"
+msgid "Heard from within the display cutoff"
+msgstr ""
 
-msgid "Last Good Send"
-msgstr "མཐའ་མའི་གཏོང་བཟང་པོ།"
+msgid "Lookups"
+msgstr ""
 
-msgid "Last Good Store"
-msgstr "མཐའ་མའི་ཉར་བཟང་པོ།"
+msgid "Lookup success rate"
+msgstr ""
 
-msgid "Bad Lookups"
-msgstr "འཚོལ་བཤོལ་བཟང་པོ་མིན་པ།"
+msgid "Stores"
+msgstr ""
 
-msgid "Last Bad Lookup"
-msgstr "མཐའ་མའི་འཚོལ་བཤོལ་བཟང་པོ་མིན་པ།"
+msgid "Store success rate"
+msgstr ""
 
-msgid "Last Bad Send"
-msgstr "མཐའ་མའི་གཏོང་བཟང་པོ་མིན་པ།"
-
-msgid "Last Bad Store"
-msgstr "མཐའ་མའི་ཉར་བཟང་པོ་མིན་པ།"
+msgid "Definitions"
+msgstr "ངེས་ཚིག་ཁག"
 
 msgid "caps"
 msgstr "ནུས་པ།"
@@ -3816,6 +3714,57 @@ msgstr "མཉམ་འབྲེལ།"
 
 msgid "how many new peers have they told us about lately?"
 msgstr "ཉེ་ཆར་ཁོང་ཚོས་ང་ཚོར་བཤད་པའི་གསར་པའི་ལག་གདང་གནས་ག་ཚད་རེད།"
+
+msgid "Known floodfills"
+msgstr ""
+
+msgid "No-Fail"
+msgstr ""
+
+msgid "No lookup failures (1h)"
+msgstr ""
+
+msgid "Response"
+msgstr ""
+
+msgid "Lookup response time (1h)"
+msgstr ""
+
+msgid "1h Contact"
+msgstr ""
+
+msgid "Contacted within 1h"
+msgstr ""
+
+msgid "1h Fail Rate"
+msgstr "ཆུ་ཚོད་གཅིག་གི་ཕམ་ཚད།"
+
+msgid "1h Resp. Time"
+msgstr "ཆུ་ཚོད་གཅིག་གི་ལན་གྱི་དུས་ཚོད།"
+
+msgid "Good Lookups"
+msgstr "འཚོལ་བཤོལ་བཟང་པོ།"
+
+msgid "Last Good Lookup"
+msgstr "མཐའ་མའི་འཚོལ་བཤོལ་བཟང་པོ།"
+
+msgid "Last Good Send"
+msgstr "མཐའ་མའི་གཏོང་བཟང་པོ།"
+
+msgid "Last Good Store"
+msgstr "མཐའ་མའི་ཉར་བཟང་པོ།"
+
+msgid "Bad Lookups"
+msgstr "འཚོལ་བཤོལ་བཟང་པོ་མིན་པ།"
+
+msgid "Last Bad Lookup"
+msgstr "མཐའ་མའི་འཚོལ་བཤོལ་བཟང་པོ་མིན་པ།"
+
+msgid "Last Bad Send"
+msgstr "མཐའ་མའི་གཏོང་བཟང་པོ་མིན་པ།"
+
+msgid "Last Bad Store"
+msgstr "མཐའ་མའི་ཉར་བཟང་པོ་མིན་པ།"
 
 msgid "All"
 msgstr "ཚང་མ།"
@@ -3922,9 +3871,6 @@ msgstr "བཟོ་བཞིན་པ།"
 
 msgid "Building tunnels"
 msgstr "གྲུང་ནེལ་བཟོ་བཞིན་པ།"
-
-msgid "Shared Clients"
-msgstr "སྤེལ་བའི་ལེན་གནད།"
 
 msgid "Ping"
 msgstr "Ping"
@@ -4417,7 +4363,8 @@ msgstr "ཚེ་ཚད་གྱི་ཆ་སྙོམ་ཐེགས་ཚད
 
 #, java-format
 msgid "{0} event"
-msgstr "{0} event"
+msgid_plural "{0} events"
+msgstr[0] ""
 
 msgid "rate"
 msgstr "ཚད་ཚད།"
@@ -4461,7 +4408,8 @@ msgstr "ཚེ་ཚད་གྱི་ཆ་སྙོམ་གནས་ཐང་
 
 #, java-format
 msgid "1 event"
-msgstr "1 event"
+msgid_plural "{0} events"
+msgstr[0] ""
 
 msgid "sent"
 msgstr "བཏང་བ།"
@@ -4769,6 +4717,12 @@ msgstr "Nagle བཀྲུས་གཏོང་གི་དུས་འགྱང
 msgid "Slow Start Window Cap"
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་སྒོ་སྟེགས་ཀྱི་མཐའ་ཚད།"
 
+msgid "Max Inbound Buffer"
+msgstr ""
+
+msgid "Max Concurrent Streams"
+msgstr ""
+
 msgid "Max SYN Sends"
 msgstr "Max SYN Sends"
 
@@ -4780,6 +4734,9 @@ msgstr "སླར་གཏོང་གི་དུས་འགྱངས་མཐ
 
 msgid "Max Retransmissions"
 msgstr "སླར་གཏོང་ཚར་རེའི་གྲངས་མཐོ་ཤོས།"
+
+msgid "Receive Worker Threads"
+msgstr ""
 
 msgid "Writer Queue Size"
 msgstr "བྲིས་མཁན་རིམ་པའི་ཚད་ཀ།"
@@ -4862,6 +4819,18 @@ msgstr "དུས་མཉམ་འཚོལ་ཞིབ་མཐོ་ཤོས
 msgid "Search Timeout"
 msgstr "འཚོལ་ཞིབ་ཀྱི་དུས་ཚད།"
 
+msgid "Search Cap"
+msgstr ""
+
+msgid "Republish Window"
+msgstr ""
+
+msgid "Republish Fanout"
+msgstr ""
+
+msgid "Exploratory Breadth"
+msgstr ""
+
 msgid "LeaseSet Lookup Timeout"
 msgstr "LeaseSet འཚོལ་བའི་དུས་ཚད།"
 
@@ -4885,6 +4854,9 @@ msgstr "ནུས་པ་མཐོ་བའི་ཟླ་གྲོགས་ད
 
 msgid "Maximum High Capacity Peers"
 msgstr "ནུས་པ་མཐོ་བའི་ཟླ་གྲོགས་མཐོ་ཤོས།"
+
+msgid "Lossy Peer Demotion Threshold"
+msgstr ""
 
 msgid "Tunnel Build Request Timeout"
 msgstr "ཁ་བསྐྲུན་བཟོ་སྐྲུན་མངགས་བཀོད་ཀྱི་དུས་ཚད།"
@@ -4910,6 +4882,27 @@ msgstr "བརྟག་ཞིབ་དབར་གྱི་དུས་འགྱ
 msgid "Max Delay Between Tests"
 msgstr "བརྟག་ཞིབ་དབར་གྱི་དུས་འགྱངས་མཐོ་ཤོས།"
 
+msgid "Tunnel Test Failure Window"
+msgstr ""
+
+msgid "Tunnel Test Failure Window Floor"
+msgstr ""
+
+msgid "First-Hop Failure Cooldown"
+msgstr ""
+
+msgid "First-Hop Failure Threshold"
+msgstr ""
+
+msgid "Inbound Congestion Threshold"
+msgstr ""
+
+msgid "Stale Build Pruning Threshold"
+msgstr ""
+
+msgid "Concurrency Throttle Threshold"
+msgstr ""
+
 msgid "NTCP Reader Threads"
 msgstr "NTCP ཀློག་མཁན་རྒྱུན་རིམ།"
 
@@ -4918,6 +4911,9 @@ msgstr "NTCP བྲིས་མཁན་རྒྱུན་རིམ།"
 
 msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP མེ་སིན་བྱེད་མཁན་གྱི་བདེ་འཇགས་འཕྲལ་སྡོམ་དབར་ཡུན།"
+
+msgid "NTCP Pumper Max Idle Loop Rate"
+msgstr ""
 
 msgid "Max Concurrent Peer Messages"
 msgstr "དུས་མཉམ་ཟླ་གྲོགས་འཕྲོས་པ་མཐོ་ཤོས།"
@@ -4988,6 +4984,9 @@ msgstr "བྱ་སྤེལ་མེད་པའི་དུས་ཚད།"
 msgid "Max Window Size"
 msgstr "Max Window Size"
 
+msgid "Connect Timeout Multiplier"
+msgstr ""
+
 msgid "Max Message Queue Age"
 msgstr "འཕྲོས་པ་རིམ་པའི་དུས་ཡོལ་མཐོ་ཤོས།"
 
@@ -5003,11 +5002,26 @@ msgstr "མེ་སིན་བྱེད་མཁན་རྒྱུན་རི
 msgid "Server Handler Threads"
 msgstr "ཞབས་ཞུ་པ་ལས་སྒྲུབ་རྒྱུན་རིམ།"
 
+msgid "Server Handler Queue Capacity"
+msgstr ""
+
+msgid "Server Default Threads per Tunnel"
+msgstr ""
+
+msgid "I/O Transfer Threads"
+msgstr ""
+
+msgid "I/O Stall Timeout"
+msgstr ""
+
 msgid "Build Handler Threads"
 msgstr "བཟོ་སྐྲུན་ལས་སྒྲུབ་རྒྱུན་རིམ།"
 
 msgid "Client Runner Max Threads"
 msgstr "ཞབས་ཞུ་བའི་འཁོར་སྐྱོད་མཐོ་ཤོས་རྒྱུན་རིམ།"
+
+msgid "Client Default Max Connections"
+msgstr ""
 
 msgid "Participating Throttle Min"
 msgstr "མཉམ་ཞུགས་འཆང་རྐྱེན་དམའ་མ།"
@@ -5041,9 +5055,6 @@ msgstr "འཐམ་པོའི་མང་བའི་（lag）ཚད་གཞ
 
 msgid "Moderate-Load CPU Threshold"
 msgstr "འཐམ་པོའི་མང་བའི་CPU ཚད་གཞི།"
-
-msgid "Sustained High-Load Window"
-msgstr "རྒྱུན་མཐུད་མངོན་ཆེན་མང་བའི་སྒོ་སྟེགས།"
 
 msgid "Sustained Moderate-Load Window"
 msgstr "རྒྱུན་མཐུད་འཐམ་པོའི་མང་བའི་སྒོ་སྟེགས།"
@@ -5086,6 +5097,9 @@ msgstr "སོ་ཁེའི་(socket)་སྦྲེལ་མའི་དུ�
 
 msgid "Untested Tunnel Cap Multiplier"
 msgstr "Untested Tunnel Cap Multiplier"
+
+msgid "Tunnel IV Filter Size"
+msgstr ""
 
 msgid "Message Processing Throttle"
 msgstr "Message Processing Throttle"
@@ -5135,6 +5149,12 @@ msgstr "Nagle བཀྲུས་གཏོང་གི་དུས་འགྱང
 msgid "Max congestion window during slow start."
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་དུས་ཀྱི་འགོག་རྐྱེན་སྒོ་སྟེགས་མཐོ་ཤོས།"
 
+msgid "Per-connection inbound buffer cap (bytes)."
+msgstr ""
+
+msgid "Dynamic cap on concurrent streams per destination."
+msgstr ""
+
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Total SYN attempts before giving up on a handshake."
 
@@ -5146,6 +5166,9 @@ msgstr "སླར་གཏོང་དབར་གྱི་དུས་ཚོད
 
 msgid "Retransmissions before dropping the stream."
 msgstr "རྒྱུན་ཁམས་བོར་སྔོན་གྱི་སླར་གཏོང་།"
+
+msgid "Inbound packet processing threads per streaming session."
+msgstr ""
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "རྒྱུན་ཁམས་བོར་སྔོན་གྱི་སྟོང་བའི་དུས་ཚོད་མཐོ་ཤོས།(ms)"
@@ -5234,6 +5257,18 @@ msgstr "དུས་མཉམ་NetDB འཚོལ་བ་མཐོ་ཤོས
 msgid "Per-peer lookup timeout (ms)."
 msgstr "ཟླ་གྲོགས་རེར་འཚོལ་བའི་དུས་ཚད།(ms)"
 
+msgid "Hard deadline for each iterative search (ms)."
+msgstr ""
+
+msgid "Lifetime of lease republish store messages (ms)."
+msgstr ""
+
+msgid "Max peers that receive a republished lease after a search."
+msgstr ""
+
+msgid "Concurrent exploratory searches per cycle."
+msgstr ""
+
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "LeaseSet འཚོལ་བའི་སྒྲིག་འགྱུར་དུས་བཀག་མཐའ་ཚད།(ms)"
 
@@ -5257,6 +5292,9 @@ msgstr "མཛོད་སྤྲོད་རེའུ་མིག་ནང་ག
 
 msgid "Max high-capacity peers in routing table."
 msgstr "མཛོད་སྤྲོད་རེའུ་མིག་ནང་གི་ནུས་པ་མཐོ་བའི་ཟླ་གྲོགས་མཐོ་ཤོས།"
+
+msgid "Loss ratio that demotes a peer from the fast tiers (%)."
+msgstr ""
 
 msgid "Build reply timeout (ms)."
 msgstr "བཟོ་སྐྲུན་ལན་འདེབས་ཀྱི་དུས་ཚད།(ms)"
@@ -5282,6 +5320,27 @@ msgstr "ཁ་བསྐྲུན་བརྟག་ཞིབ་དབར་གྱ
 msgid "Max interval between tunnel tests (ms)."
 msgstr "ཁ་བསྐྲུན་བརྟག་ཞིབ་དབར་གྱི་དབར་ཡུན་མཐོ་ཤོས།(ms)"
 
+msgid "Max time a tunnel test may take before failure (ms)."
+msgstr ""
+
+msgid "Floor for the tunnel test failure window (ms)."
+msgstr ""
+
+msgid "How long a peer is skipped after first-hop failures (ms)."
+msgstr ""
+
+msgid "Failures before a peer is skipped during cooldown."
+msgstr ""
+
+msgid "Inbound tunnel count below which builds are throttled."
+msgstr ""
+
+msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
+msgstr ""
+
+msgid "Timeout rate that triggers concurrent build reduction (%)."
+msgstr ""
+
 msgid "Threads decrypting inbound NTCP data."
 msgstr "ནང་འབྱོར་NTCP གནས་སྡུད་ཉོག་འགྲོལ་བྱེད་པའི་རྒྱུན་རིམ།"
 
@@ -5290,6 +5349,9 @@ msgstr "Threads that encrypt outbound NTCP messages."
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "འཐེབས་པའི་NTCP མེ་སིན་བྱེད་མཁན་གྱི་བདེ་འཇགས་འཕྲལ་སྡོམ་བརྟག་ཞིབ་དབར་ཡུན།(ms)"
+
+msgid "Cap on idle NTCP pump iterations per second (loops/s)."
+msgstr ""
 
 msgid "In-flight message limit per UDP peer."
 msgstr "UDP ཟླ་གྲོགས་རེར་འཕྲོས་བཞིན་པའི་འཕྲོས་པའི་ཚད།"
@@ -5345,6 +5407,9 @@ msgstr "Minimum send rate before pacing kicks in (KB/s)."
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT གདེངས་གཞིའི་མཐའ་མིག (ms)།"
 
+msgid "Scales each client's connect timeout by network RTT (30-200%)."
+msgstr ""
+
 msgid "Delay before first retransmit (ms)."
 msgstr "སླར་གཏོང་དང་པོའི་སྔོན་གྱི་དུས་འགྱངས།(ms)"
 
@@ -5366,11 +5431,26 @@ msgstr "ལམ་སྒོའི་མེ་སིན་བྱེད་མཁན
 msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "ནང་འབྱོར་I2PTunnel སྦྲེལ་མར་བེད་སྤྱོད་བྱེད་པའི་ལས་སྒྲུབ་རྒྱུན་རིམ།"
 
+msgid "Inbound connections that may wait for a free server handler thread."
+msgstr ""
+
+msgid "Default cap on server handler threads for each server tunnel."
+msgstr ""
+
+msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
+msgstr ""
+
+msgid "Stall timeout for Server→Client data transfers (ms)."
+msgstr ""
+
 msgid "Thread pool for inbound build request processing."
 msgstr "ནང་འབྱོར་བཟོ་སྐྲུན་མངགས་བཀོད་བཟོ་སྐྲུན་གྱི་རྒྱུན་རིམ་གཞི་ཚོགས།"
 
 msgid "Ceiling for client proxy thread pool."
 msgstr "ཞབས་ཞུ་བའི་མས་ལངས་རྒྱུན་རིམ་གཞི་ཚོགས་ཀྱི་ནམ་མཁའི་མཐའ།"
+
+msgid "Default client connection cap."
+msgstr ""
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "ཟླ་གྲོགས་གང་རུང་གིས་བཟུང་ཐུབ་པའི་འགྲུམ་ལམ་ཁ་བསྐྲུན་དམའ་མ།"
@@ -5404,9 +5484,6 @@ msgstr "འཐམ་པོའི་མང་བའི་ཟླ་གྲོགས
 
 msgid "System load percent triggering moderate-load disconnect."
 msgstr "འཐམ་པོའི་མང་བའི་དོམ་ཕྱལ་དུ་འཕྲུ་བའི་རིགས་པའི་མང་བའི་ཚོད་གཞི།"
-
-msgid "Duration of high load before gating requests (ms)."
-msgstr "མངགས་བཀོད་འགོག་སྔོན་གྱི་མངོན་ཆེན་མང་བའི་དུས་ཡུན།(ms)"
 
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "མངགས་བཀོད་རྟོག་པའི་སྔོན་གྱི་འཐམ་པོའི་མང་བའི་དུས་ཡུན།(ms)"
@@ -5449,6 +5526,9 @@ msgstr "སླར་གཏོང་དུས་ཚད་རེར་RTO འཕ�
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "ཁ་བསྐྲུན་ཞབས་ཞུ་པ་ལས་སྒྲུབ་རྒྱུན་རིམ་གྱི་TCP སོ་ཁེ་སྦྲེལ་མའི་དུས་ཚད།(ms)"
+
+msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Max average message delay before rejecting transit (ms)."
@@ -5577,6 +5657,9 @@ msgstr "རྒྱུན་དུ་བཙོན་པའི་གྲུང་ན
 msgid "Primary IP address"
 msgstr "གཙོ་བཟོ་བའི་IP ཁ་བྱང་།"
 
+msgid "No local or transit tunnels currently active."
+msgstr "ད་ལོའི་ནང་ཁུག་ཡང་ན་གྲུང་ནེལ་ད་ལོའི་སྐར་འགོ་ཚུགས་པ་ད་ལོའི་སྐར་འགོ་ཚུགས་པ་མེད།"
+
 msgid "unique peers"
 msgstr "ཐུན་མི་རྒྱུན་དུ་བཙོན་པ།"
 
@@ -5585,9 +5668,6 @@ msgstr "ནང་ཁུག་"
 
 msgid "transit"
 msgstr "གྲུང་ནེལ་"
-
-msgid "No local or transit tunnels currently active."
-msgstr "ད་ལོའི་ནང་ཁུག་ཡང་ན་གྲུང་ནེལ་ད་ལོའི་སྐར་འགོ་ཚུགས་པ་ད་ལོའི་སྐར་འགོ་ཚུགས་པ་མེད།"
 
 msgid "PRIVATE IP ADDRESS"
 msgstr "སྲོད་པ"
@@ -5598,6 +5678,15 @@ msgstr "བརྒྱུད་བཏོན་ཚད་གྱི་རིམ་པ
 #, java-format
 msgid "Over {0} shared bandwidth"
 msgstr "{0} བརྒྱུད་བཏོན་ཚད་ཐེགས་བརྒྱུད་པ།"
+
+msgid "Locally hosted tunnel"
+msgstr "ནང་ཁུག་ལ་འཛུགས་པའི་གྲུང་ནེལ་"
+
+msgid "in"
+msgstr "ནང་"
+
+msgid "out"
+msgstr "ཕྱི་"
 
 msgid "Inbound or outbound?"
 msgstr "ནང་འདྲེན་ཡང་ཕྱི་འདྲེན་?"
@@ -5620,6 +5709,9 @@ msgstr "ལེ་ཞུགས་པ།"
 msgid "Endpoint"
 msgstr "མཐོག་ས་གནས།"
 
+msgid "ms"
+msgstr ""
+
 msgid "Test successful"
 msgstr "ཚོད་ལྟ་ལེགས་པར་གྲུབ།"
 
@@ -5641,15 +5733,6 @@ msgstr "ཆོག་མཛོད་དེ་སྒྲིག་འཛུགས་
 
 msgid "Not yet tested"
 msgstr "ད་དུང་ཚོད་ལྟ་མ་བྱས།"
-
-msgid "Locally hosted tunnel"
-msgstr "ནང་ཁུག་ལ་འཛུགས་པའི་གྲུང་ནེལ་"
-
-msgid "in"
-msgstr "ནང་"
-
-msgid "out"
-msgstr "ཕྱི་"
 
 msgid "Data In"
 msgstr "གནད་དོན་ནང་"
@@ -5756,6 +5839,9 @@ msgstr "འགོ་ཚུགས་སྐབས་web འགྲུབ་འཕ�
 
 msgid "shared clients"
 msgstr "སྤེལ་བཞིན་པའི་ལེན་གནད་ཚུད་པ།"
+
+msgid "Shared Clients"
+msgstr "སྤེལ་བའི་ལེན་གནད།"
 
 msgid "I2PMail SMTP Server"
 msgstr "I2PMail SMTP སརྟོན་པ།"
@@ -6034,11 +6120,11 @@ msgstr "LU router བཀག་པ།"
 msgid "Additional Router Caps"
 msgstr "Router ཀྱི་ནུས་པ་གཞན།"
 
-msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
-msgstr "ནུས་པའི་ཚོགས་པ་ཀྱིས་གསལ་བཤད། བར་སྟོང་ཡང་ན་ཚིག་འབྲེལ་ དཔེར་ན། LUf,PUG"
+msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
+msgstr ""
 
-msgid "Misc Reasons"
-msgstr "སྣ་ཚོགས་རྒྱུ་མཚན།"
+msgid "Misc"
+msgstr ""
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "འདྲི་རྩད་ལ་ལན་མི་སྤྲོད་པའི་ཆུ་འཁྱིལ་Peerཚོད་བཟུང་བ།(ཕྱིར་ཉམས་ཚད་ >95%)"
@@ -6057,6 +6143,12 @@ msgstr "ཡན་ལག་གི་ཞུགས་པའི་རེ་བ་མ
 
 msgid "Ban excessive tunnel requests"
 msgstr "ཡན་ལག་གི་རེ་བ་མང་དྲགས་པ་ཚོད་བཟུང་བ།"
+
+msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
+msgstr ""
+
+msgid "Ban next-hop peers"
+msgstr ""
 
 msgid "Clear all bans"
 msgstr "བཀག་པ་ཚང་མ་གསུབ།"
@@ -6197,6 +6289,12 @@ msgstr "I2CP ངོས་སྐབ་བརྒྱུན་སྒྲིག་བ�
 
 msgid "I2CP Port"
 msgstr "I2CP སྒོ་མོ།"
+
+msgid "Do not bypass the network when accessing locally hosted services"
+msgstr ""
+
+msgid "Disable Loopback"
+msgstr ""
 
 msgid "Require username and password"
 msgstr "སྤྱོད་མཁན་མིང་དང་གསང་ཐོང་བདགོས་པར་རེད་བ།"
@@ -6471,6 +6569,9 @@ msgstr "གསལ་ཐོའི་ལྡབ་སྐྱེལ་བསྒྱུ
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
 msgstr "ལྡབ་སྐྱེལ་ནི་དགེ་བའམ་ཉེས་པ་ཡིན་ཆོག་ལ། རྒྱུན་དུ་བཙོན་པའི་མྱུར་བ་དང་ནུས་པོ་ཆེ་བའི་རིམ་པར་ཚུད་པར་གདེང་བ་ཐོབ། མྱུར་བའི་རྒྱུན་དུ་བཙོན་པ་ནི་ཞབས་འདེགས་ཀྱི་གསང་ལམ་དུ་བེད་སྤྱོད་བྱེད་པ་དང་། ནུས་པོ་ཆེ་བའི་རྒྱུན་དུ་བཙོན་པ་ནི་འཚོལ་བཤེར་གསང་ལམ་ཁག་ཅིག་ལ་བེད་སྤྱོད་བྱེད།"
 
+msgid "Capacity"
+msgstr "ནུས་པ།"
+
 msgid "Banned IP Addresses"
 msgstr "བློག་པའི་ IP ཁ་བྱང་།"
 
@@ -6704,6 +6805,12 @@ msgstr "གསར་བརྗེས་བར་ཆད།"
 msgid "Update graph every second"
 msgstr "སྐར་མ་རེར་གྲ་རིས་གསར་བརྗེས་བྱེད་པ།"
 
+msgid "Restore full default"
+msgstr "ཆ་ཚང་སློག་སྐྱེལ་སླར་གསོ།"
+
+msgid "Restore minimal default"
+msgstr "ཉུང་མཐའི་སློག་སྐྱེལ་སླར་གསོ།"
+
 msgid "config stats"
 msgstr "བཀོད་སྒྲིག་ཚད་རྩིས།"
 
@@ -6784,6 +6891,9 @@ msgstr "ཁྱེད་ཀྱིས་ IE བེད་སྤྱོད་བཞ�
 
 msgid "Router Console Password"
 msgstr "རོ་ཌེར་རོགས་སྒྱུར་བཞིན་པ།"
+
+msgid "Add user"
+msgstr "སྤྱོད་མཁན་ཁ་སྣོན།"
 
 msgid "Router Console Language"
 msgstr "རོ་ཌེར་རོགས་སྒྲག་སྟེན།"
@@ -7056,6 +7166,12 @@ msgstr "འདིའི་བཀོད་སྒྲིག་གིས་གསལ
 msgid "The maximum number of session banlog archive files to keep. When exceeded, older archives are deleted. [Default is 5]"
 msgstr "ཚེས་གྲངས་བཀག་ཐོའི་ཡིག་སྒམ་སྲུང་བྱ་ཡོད་པའི་ཆེ་ཤོས། བརྒལ་ན། ཡིག་སྒམ་རྙིང་པ་གསུབ་རྒྱུ། [མ་འོངས་པར་ ༥]. When exceeded, older archives are deleted [Default is 5]. When exceeded, older archives are deleted [Default is 5]. When exceeded, older archives are deleted [Default is 5]. When exceeded, older archives are deleted [Default is 5]"
 
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
+msgstr "སྒྲིག་འཇུག་འདི་བདེན་པར་བཟོས་ན། G འཁོར་འཁྱོག་ཚད་ཁྱབ་བསྒྲགས་བྱེད་པའི་X རིམ་པའི་router ཚང་མའི་ཐད་ཀར་འབྲེལ་བ་བཀག་ངེས།"
+
+msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
+msgstr "སྒྲིག་འཇུག་འདི་བདེན་པར་བཟོས་ན། LU རིམ་པའི་router ཚང་མའི་ (དྲ་བའི་ཤུགས་ཚད་དམའ་བ། འབྲེལ་མི་ཐུབ་པ། ཡང་ན...) ཐད་ཀར་འབྲེལ་བ་བཀག་ངེས།"
+
 msgid "The frequency in milliseconds to scan for suspicious hash patterns (potential Sybil attacks). Set to 0 to disable. [Default is 3600000]"
 msgstr "དོགས་པ་ཡོད་པའི་hash རྣམ་པ་ (Sybil འཕེན་ཡོང་བ) ཞིབ་བཤེར་བྱེད་པའི་སྐར་ཆའི་བར་ཚད། དོ་དམ་མེད་པར་བཏང་བར་ ༠ བཟོ། [མ་འོངས་པར་ 3600000]. Set to 0 to disable [Default is 3600000]. Set to 0 to disable [Default is 3600000]. Set to 0 to disable [Default is 3600000]. Set to 0 to disable [Default is 3600000]"
 
@@ -7266,6 +7382,24 @@ msgstr "སྒྲིག་འགོད་འདིས་སྤྱི་བཏང
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 msgstr "true ལ་གཏན་འཁེལ་བྱས་ཚེ། སྒྲིག་འགོད་འདིས་ཁྱེད་ཀྱི་རྒྱུད་པས་འགག་འཕྲང་ཚད་སྤེལ་བྱེད་པར་མཁོ་བའི་ཆ་རྐྱེན་ཞལ་དུ་གཏོང་བ་དང་། ལྷག་པར་དུ་ཁྱེད་ཀྱི་རྒྱུག་ཚད་བེད་སྤྱོད་མཐོ་བར་གཏན་འཁེལ་བྱས་ཚེ་རེད། ཆ་རྐྱེན་གཞན་དག་ལས་ཀའི་རྗེས་འགྲོས་མཐོ་བ་ཡང་ན་རྒྱུད་པ་དལ་བར་དབྱེ་བ་བཅས་ཀྱིས་སྔར་བཞིན་ཚད་སྤེལ་བྱེད་པར་བརྒྱུན་འགྱུར་བྱེད། [སྔོན་སྒྲིག་ནི་ false]. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published [Default is false]. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published [Default is false]. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published [Default is false]. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published [Default is false]"
 
+msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
+msgstr "ལས་མེད་འབྲེལ་ལམ་ཞིབ་བཤེར་བྱེད་པའི་སྐར་ཆའི་དུས་ཚོད། དུས་ཚོད་འདིའི་ནང་དུ་འགྲུལ་སྐྱོད་མེད་པའི་འབྲེལ་ལམ་དོར་ཐུབ།. Tunnels with no traffic for this period may be dropped [Default is 60000]. Tunnels with no traffic for this period may be dropped [Default is 60000]. Tunnels with no traffic for this period may be dropped [Default is 60000]. Tunnels with no traffic for this period may be dropped [Default is 60000]"
+
+msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
+msgstr "བྱེད་སྒོ་ཡོད་པར་བརྩི་བར་ཞིབ་བཤེར་དུས་སྐབས་སུ་འབྲེལ་ལམ་གྱིས་བྱེད་སྒོ་བྱས་པའི་མཐའ་མའི་འཕྲིན་ཡིག་གི་གྲངས། འདི་ལས་ཉུང་བའི་འབྲེལ་ལམ་ལས་མེད་པར་བརྩི།. Tunnels below this threshold are candidates for removal [Default is 3]. Tunnels below this threshold are candidates for removal [Default is 3]. Tunnels below this threshold are candidates for removal [Default is 3]. Tunnels below this threshold are candidates for removal [Default is 3]"
+
+msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
+msgstr "ལས་མེད་བརྒྱུད་འབྲེལ་ལམ་ཞིབ་བཤེར་བར་གྱི་སྐར་ཆའི་དུས་བར་ཚད། [མ་འོངས་པར་ 180000]"
+
+msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
+msgstr "གལ་ཏེ་ཁྱེད་ཀྱིས་མིང་རྟགས་མེད་པའི་(.zip) I2P གསར་བསྐྱར་སྒྲིག་འཛུགས་བྱེད་འདོད་ན། ཁྱེད་ཀྱིས་ <code>routerconsole.advanced=true</code> རྒྱུན་ལྡན་བྱས་ཟིན་མེད་ན་འདི་ཁྱེད་ཀྱི་ <code>router.config</code> ཡིག་ཆར་ཁ་སྣོན་བྱེད་དགོས། གལ་ཏེ་ཁྱེད་ཀྱིས་ <code>routerconsole.advanced=true</code> རྒྱུན་ལྡན་བྱས་ཟིན་ན་གདམ་ཀ་འདི་སྔོན་ནས་གྲ་སྒྲིག་བྱས་ཡོད། དྲན་རྟགས། I2P+ 0.9.48+ ནས་བཟུང་། <a href=/configupdate#i2pupdates>མིང་རྟགས་མེད་པའི་གསར་བསྐྱར་</a> སྒྲིག་འཛུགས་སྔོན་སྒྲིག་ལྟར་བརྒྱུད་ཡོད།"
+
+msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
+msgstr "སྒྲིག་འགོད་འདིས་ཁྱེད་ལ་མིང་རྟགས་མེད་པའི་གསར་བསྐྱར་གྱི་ཁྱད་ཆོད་ལ་ URL རྒྱུན་ལྡན་བྱེད་དུ་འཇུག་པར་གྱི་གནས་ཐབས་བྱེད། URL ནི་ <code>/i2pupdate.zip</code> ཐིག་སྣེ་ནས་མཇུག་དགོས། དྲན་རྟགས། གསར་བསྐྱར་གྱི་འབྱུང་ཁུངས་ལ་ཡིད་རྟོན་མེད་ན་མིང་རྟགས་མེད་པའི་གསར་བསྐྱར་སྒྲིག་འཛུགས་མི་བྱེད།. zip Note: do not install unsigned updates unless you trust the source of the update!. zip Note: do not install unsigned updates unless you trust the source of the update!. zip Note: do not install unsigned updates unless you trust the source of the update! zip Note: do not install unsigned updates unless you trust the source of the update!"
+
+msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
+msgstr "སྒྲིག་འགོད་འདི་(སྐར་ཆ་ནང་) ཁྱེད་ལ་ NetDb ནང་གི་ RouterInfos ནུས་མེད་མིན་པ་བརྟག་དཔྱད་བྱེད་པའི་སྔོན་ལ་འགོ་ཚོགས་རྗེས་སྒུག་དུས་ཚོད་ག་ཚོད་ཅིག་ལག་བསྟར་རྒྱུན་ལྡན་བྱེད་དུ་འཇུག་པར་གྱི་གནས་ཐབས་བྱེད། དེའི་རྗེས་ནུས་ལྡན་པའི་རྒྱུད་པ་ཁོ་ན་ནང་འདྲེན་བྱེད། ནུས་མེད་བརྟག་དཔྱད་བྱེད་སྐབས། དུས་ཡོལ་བའི་ RouterInfos དང་ SSU བརྒྱུད་ཐོག་ནས་འཛུལ་ཐུབ་པའི་ལྡན་ལུག་མེད་པའི་མཐུད་སྣེ་རྣམས་ NetDb ནས་རྩ་བོར། [སྔོན་སྒྲིག་ནི་སྐར་ཆ་ 60] དྲན་རྟགས། སྒྲིག་འགོད་འདིས་རྒྱུད་པ་རྙིང་པ་(སྔོན་སྒྲིག་ལྟར་ 0.9.29 ལས་རྙིང་བ) ལ་ཤུགས་རྐྱེན་མེད། དེ་དག་ NetDb ནས་རྩ་བོར་བ་དང་རྒྱུད་པའི་ལོགས་སྐབས་སུ་བཀག་པ་ཡིན།. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted"
+
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
 msgstr "སྒྲིག་འཇུག་བྱས་ན། འདིས་router ཀྱིས་མཉམ་དུ་འཛུགས་ཆོག་པའི་འབྲེལ་ལམ་གྱི་གྲངས་ལ་ཚད་ངེས་ཅན་ཞིག་བཟོ་གི་ཡོད། མ་འོངས་པར། router ཀྱིས་གསར་སྒྱུར་གྱི་མཉམ་བྱེད་བེད་སྤྱོད་བྱེད།. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate This setting is dynamic and takes effect without restart. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate This setting is dynamic and takes effect without restart. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate This setting is dynamic and takes effect without restart. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate This setting is dynamic and takes effect without restart"
 
@@ -7338,11 +7472,14 @@ msgstr "མྱུར་འགོས་སླར་འཛུགས་ཀྱི་
 msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build processing. Ensures a minimum level of lookup concurrency even when few tunnels are participating. [Default is 10 (4 on slow systems)]"
 msgstr "འབྲེལ་ལམ་འཛུགས་སྐྲུན་བྱེད་སྒོའི་སྐབས་མཉམ་དུ་རྒྱུག་པའི་མཆོང་རྒྱག་རྗེས་མའི་RouterInfo འཚོལ་བསྡུའི་དམའ་ཚད། འཚོལ་བསྡུའི་མཉམ་བྱེད་མཐའ་མའི་ཚད་ལྡན་དུ་འགན་ལེན་བྱེད།. Ensures a minimum level of lookup concurrency even when few tunnels are participating [Default is 10 (4 on slow systems)]. Ensures a minimum level of lookup concurrency even when few tunnels are participating [Default is 10 (4 on slow systems)]. Ensures a minimum level of lookup concurrency even when few tunnels are participating [Default is 10 (4 on slow systems)]. Ensures a minimum level of lookup concurrency even when few tunnels are participating [Default is 10 (4 on slow systems)]"
 
-msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Caps lookup concurrency to prevent overwhelming the netDb. [Default is max(cores/2, 16) (10 on slow systems)]"
-msgstr "འབྲེལ་ལམ་འཛུགས་སྐྲུན་བྱེད་སྒོའི་སྐབས་མཉམ་དུ་རྒྱུག་པའི་མཆོང་རྒྱག་རྗེས་མའི་RouterInfo འཚོལ་བསྡུའི་མཐོ་ཚད། CPU ལ་ཁུར་མི་བརྒལ་བར་འཚོལ་བསྡུའི་མཉམ་བྱེད་ལ་ཚད་འཛིན་བྱེད།. Caps lookup concurrency to prevent overwhelming the netDb [Default is max(cores/2, 16) (10 on slow systems)]. Caps lookup concurrency to prevent overwhelming the netDb [Default is max(cores/2, 16) (10 on slow systems)]. Caps lookup concurrency to prevent overwhelming the netDb [Default is max(cores/2, 16) (10 on slow systems)]. Caps lookup concurrency to prevent overwhelming the netDb [Default is max(cores/2, 16) (10 on slow systems)]"
+msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
+msgstr ""
 
-msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr "མཉམ་བྱེད་འཚོལ་བསྡུའི་ཚད་སྐྱོད་པར་བཀོལ་བའི་ད་ལྟ་མཉམ་ཞུགས་ཀྱི་འབྲེལ་ལམ་གྱི་བརྒྱ་ཆ། ནུས་ལྡན་གྱི་ཚད་དེ་མཐའ་མ་དང་མཐོ་ཚད་བར་དུ་བཀག་ཡོད།. The effective limit is clamped between minLookupLimit and maxLookupLimit [Default is 40 (15 on slow systems)]. The effective limit is clamped between minLookupLimit and maxLookupLimit [Default is 40 (15 on slow systems)]. The effective limit is clamped between minLookupLimit and maxLookupLimit [Default is 40 (15 on slow systems)]. The effective limit is clamped between minLookupLimit and maxLookupLimit [Default is 40 (15 on slow systems)]"
+msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
+msgstr ""
+
+msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
+msgstr ""
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "འབྲེལ་ལམ་འཛུགས་སྐྲུན་རེ་སྐུལ་གྱི་དུས་ཐོའི་མ་འོངས་པའི་གཞུང་འཁྱོག་གི་ཆོག་མཆན། དུས་ཐོ་དེ་གཞི་འདི་ལས་མ་འོངས་པར་མང་བའི་རེ་སྐུལ།... Requests with timestamps farther in the future than this are rejected as potential replay attacks [Default is 300000 (5 minutes)]. Requests with timestamps farther in the future than this are rejected as potential replay attacks [Default is 300000 (5 minutes)]. Requests with timestamps farther in the future than this are rejected as potential replay attacks [Default is 300000 (5 minutes)]. Requests with timestamps farther in the future than this are rejected as potential replay attacks [Default is 300000 (5 minutes)]"
@@ -7449,32 +7586,77 @@ msgstr "རྒྱུན་ལྡན་གྱི་ཞིབ་འཇུག་ག
 msgid "Minimum number of active peers required during router startup before restricting exploratory peer selection. During early startup the router is more lenient about peer quality. [Default is 6]"
 msgstr "Router འགོ་འཛུགས་སྐབས་ཞིབ་འཇུག་གྲོགས་པོ་འདེམས་སྟངས་ལ་ཚད་འཛིན་བྱེད་པའི་སྔོན་དུ་དགོས་པའི་མཐའ་མའི་བྱེད་སྒོ་ཡོད་པའི་གྲོགས་པོའི་གྲངས། སྔོན་གྱི་འགོ་འཛུགས་སྐབས།... During early startup the router is more lenient about peer quality [Default is 6]. During early startup the router is more lenient about peer quality [Default is 6]. During early startup the router is more lenient about peer quality [Default is 6]. During early startup the router is more lenient about peer quality [Default is 6]"
 
-msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 64]"
-msgstr "རྒྱུན་འབྲེལ་ཀྱི་ཆེ་ཤོས་འགོ་འཛུགས་བུལ་བའི་སྒོ་ཁྱིམ་ཚད། ཁུར་མི་བརྒལ་བར་འགོ་འཛུགས་བུལ་བའི་སྐབས་འཁོར་འཁྱོག་སྒོ་ཁྱིམ་ལ་ཚད་འཛིན་བྱེད།. Caps the congestion window during slow start to prevent overwhelming the network [Default is 64]. Caps the congestion window during slow start to prevent overwhelming the network [Default is 64]. Caps the congestion window during slow start to prevent overwhelming the network [Default is 64]. Caps the congestion window during slow start to prevent overwhelming the network [Default is 64]"
+msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
+msgstr ""
 
-msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 60000 (60 seconds)]"
-msgstr "རྒྱུན་འབྲེལ་ཀྱི་ཆེ་ཤོས་སྐར་ཆའི་འཁོར་ལོའི་དུས་ཚོད། གསོག་ཉར་གྱི་སླར་སྐུར་དུས་འདས་ཀྱི་གྲངས་མི་འབྱུང་བར་རྩིས་པའི་ RTT ལ་ཚད་འཛིན་བྱེད།. Caps the computed RTT to prevent pathological timeout values after network disturbances [Default is 60000 (60 seconds)]. Caps the computed RTT to prevent pathological timeout values after network disturbances [Default is 60000 (60 seconds)]. Caps the computed RTT to prevent pathological timeout values after network disturbances [Default is 60000 (60 seconds)]. Caps the computed RTT to prevent pathological timeout values after network disturbances [Default is 60000 (60 seconds)]"
-
-msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 64]"
-msgstr "འབྲེལ་བ་བཏང་བའི་སྔོན་དུ་ཆེ་ཤོས་དེབ་ཕྲེང་སླར་སྐུར་གྱི་གྲངས། གྲངས་མཐོ་ཤོས་ཀྱིས་དེབ་ཕྲེང་འཕྲོ་སའི་འབྲེལ་ལམ་ཐོག་ཡིད་ཆེས་ལྡན་པར་བྱེད།. Higher values improve reliability on lossy links but delay failure detection [Default is 64]. Higher values improve reliability on lossy links but delay failure detection [Default is 64]. Higher values improve reliability on lossy links but delay failure detection [Default is 64]. Higher values improve reliability on lossy links but delay failure detection [Default is 64]"
-
-msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 60000 (60 seconds)]"
-msgstr "འབྲེལ་མི་ཐུབ་པའི་འབྲེལ་སར་འབྲེལ་བའི་ཚོད་ལྟ་བར་གྱི་ངར་ཞིའི་སྐར་ཆའི་དུས་ཚོད། འབྲེལ་མི་ཐུབ་པའི་འབྲེལ་སར་བསྐྱར་འབྲེལ་མི་བྱེད་པར་སྔོག་པ།. Prevents hammering unreachable peers [Default is 60000 (60 seconds)]. Prevents hammering unreachable peers [Default is 60000 (60 seconds)]. Prevents hammering unreachable peers [Default is 60000 (60 seconds)]. Prevents hammering unreachable peers [Default is 60000 (60 seconds)]"
-
-msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
-msgstr "གྲོགས་པོ་ ping བྱེད་སྐབས་ pong ལན་སྒུག་པའི་ཆེ་ཤོས་སྐར་ཆའི་དུས་ཚོད། [མ་འོངས་པར་ 300000 (སྐར་མ ༥)]"
-
-msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
-msgstr "ཚད་འཛིན་བྱས་པའི་འབྲེལ་སར་ལན་འདེབས་བྱེད་པའི་ཐེངས་གྲངས། ལྷག་པའི་དེབ་ཕྲེང་རྗེས་འཇགས་སུ་དོར་བའི་སྔོན་དུ། ཚད་འཛིན་བྱས་པའི་འབྲེལ་སར་འབྲེལ་བའི་འབར་བ་མི་འབྱུང་བར་སྔོག་པ།. Prevents connection storms from overwhelming the router [Default is 3]. Prevents connection storms from overwhelming the router [Default is 3]. Prevents connection storms from overwhelming the router [Default is 3]. Prevents connection storms from overwhelming the router [Default is 3]"
+msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "གདོང་ལམ་ཆེད་གཉེར་གྱི་སྒྲིག་འགོད་འདིས་ཁྱེད་ལ་རྒྱུད་པས་སྣོན་སྐྲུན་པའི་སྦྲེལ་ཐབས་ལ་བརྡ་ཞིང་ལན་ལན་བརྒྱུད་པར་བརྒྱུད་པ་བརྒྱུད་པར་བཀོད་བརྒྱུད་བྱེད། ལན་ལན་སྒོ་བ་བརྒྱུད་པར། ཁྱེད་ཀྱིས་གདོང་ལམ་དོ་དམ་པའི་ནང་སྦྲེལ་ཐབས་ཀྱི་རྒྱུན་ལྡན་རྣམ་གཞག་གི་ <i>སྒྲིག་སྦྲེལ་གདམ་ཀ།</i> ཁག་ནང་ <code>i2p.streaming.answerPings=false</code> དུམ་ཐིག་ཁ་སྣོན་བྱེད་དགོས།. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager"
 
 msgid "Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]"
 msgstr "དངོས་ཀྱི་འབྲེལ་བའི་དུས་འདས་མ་བཟོས་སྐབས་མ་འོངས་པའི་ཆེ་ཤོས་རྒྱུན་བརྒྱུད་དུས།"
 
-msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
-msgstr "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]"
+msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
+msgstr ""
 
-msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
-msgstr "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]"
+msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
+msgstr ""
+
+msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
+msgstr "ཚད་འཛིན་བྱས་པའི་འབྲེལ་སར་ལན་འདེབས་བྱེད་པའི་ཐེངས་གྲངས། ལྷག་པའི་དེབ་ཕྲེང་རྗེས་འཇགས་སུ་དོར་བའི་སྔོན་དུ། ཚད་འཛིན་བྱས་པའི་འབྲེལ་སར་འབྲེལ་བའི་འབར་བ་མི་འབྱུང་བར་སྔོག་པ།. Prevents connection storms from overwhelming the router [Default is 3]. Prevents connection storms from overwhelming the router [Default is 3]. Prevents connection storms from overwhelming the router [Default is 3]. Prevents connection storms from overwhelming the router [Default is 3]"
+
+msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
+msgstr ""
+
+msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
+msgstr ""
+
+msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
+msgstr ""
+
+msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
+msgstr "གྲོགས་པོ་ ping བྱེད་སྐབས་ pong ལན་སྒུག་པའི་ཆེ་ཤོས་སྐར་ཆའི་དུས་ཚོད། [མ་འོངས་པར་ 300000 (སྐར་མ ༥)]"
+
+msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "སྒྲིག་འགོད་འདི་བརྒྱུད་བྱས་ཚེ། <code>i2p.streaming.enablePongDelay</code> ཡང་བརྒྱུད་བྱས་ཚེ། ལན་ལན་སྣོན་བྱེད་པའི་སྦྲེལ་ཐབས་པའི་སྣོན་བྱེད་པའི་སྣོན་བྱེད་པའི་མང་ཤོས་བསྒྱུར་བཅོས། གལ་ཏེ་གསལ་བཤད་ཀྱིས་གཏན་འཁེལ་མ་བྱས་ན། སྔོན་སྒྲིག་གནས་གྲངས་ 50ms བེད་སྤྱོད་བྱེད།. Unless explicitly set, the default value of 50ms will be used. Unless explicitly set, the default value of 50ms will be used. Unless explicitly set, the default value of 50ms will be used. Unless explicitly set, the default value of 50ms will be used"
+
+msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
+msgstr ""
+
+msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
+msgstr "ཆེ་ཤོས་སླར་སྐུར་བརྒྱུད་དུས། ཕྱིར་སྐྱོད་ལ་མ་ལྟོས་པར་སླར་སྐུར་བར་ཚད་དེ་གཞི་འདི་ལས་མི་བརྒལ།. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]"
+
+msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
+msgstr ""
+
+msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
+msgstr "རྒྱུན་སྤེལ་ཕྱིར་སྐྱོད་རྗེས་ཀྱི་ཆེ་ཤོས་སླར་སྐུར་དུས་འདས། ངོས་མ་ལེན་པའི་དེབ་ཕྲེང་སླར་སྐུར་བྱེད་པའི་སྔོན་དུ་སྐུར་མཁན་གྱིས་སྒུག་པའི་དུས་ལ་ཚད་འཛིན་བྱེད།. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]"
+
+msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
+msgstr ""
+
+msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
+msgstr ""
+
+msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
+msgstr ""
+
+msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
+msgstr "མཐའ་མའི་སླར་སྐུར་བརྒྱུད་དུས། དེབ་ཕྲེང་དེ་དུས་བར་འདི་ལས་མྱུར་དུ་སླར་སྐུར་བྱེད་མི་ཐུབ། གྲངས་དམའ་ཤོས་ཀྱིས་མྱུར་དུ་སླར་སྐུར་བྱེད་ཆོག. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]"
+
+msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
+msgstr ""
+
+msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
+msgstr ""
+
+msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
+msgstr ""
+
+msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
+msgstr ""
+
+msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
+msgstr ""
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "རང་འགུལ་གྱི་ LeaseSet སླར་ཁྱབ་བསྒྲགས་བར་གྱི་སྐར་ཆའི་དུས་བར་ཚད། གྲངས་མཐོ་ཤོས་ཀྱིས་ netdb འགྲུལ་སྐྱོད་ཉུང་དུ་གཏོང་ཡང་གནས་ཚུལ་རྙིང་པར་འགྱུར་སྲིད།. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]. Higher values reduce netdb traffic but may cause stale lease info [Default is 300000 (5 minutes)]"
@@ -7482,32 +7664,14 @@ msgstr "རང་འགུལ་གྱི་ LeaseSet སླར་ཁྱབ་�
 msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle. [Default is 180000 (3 minutes)]"
 msgstr "སྔོན་འགོར་གྱི་LeaseSet སླར་ཁྱབ་བསྒྲགས་ཀྱི་སྐར་ཆའི་མཐའ་འཁོར། གལ་ཏེ་བོགས་འཛིན་ཞིག་སྒོ་ཁྱིམ་འདིའི་ནང་དུ་དུས་ཡོལ་བཞིན་ཡོད་ན། LeaseSet སྔོན་འགོར་དུ་སླར་ཁྱབ་བསྒྲགས་བྱེད།. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle [Default is 180000 (3 minutes)]. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle [Default is 180000 (3 minutes)]. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle [Default is 180000 (3 minutes)]. If a lease is expiring within this window, the LeaseSet is republished immediately rather than waiting for the next periodic cycle [Default is 180000 (3 minutes)]"
 
-msgid "The period in milliseconds to check for idle tunnels. Tunnels with no traffic for this period may be dropped. [Default is 60000]"
-msgstr "ལས་མེད་འབྲེལ་ལམ་ཞིབ་བཤེར་བྱེད་པའི་སྐར་ཆའི་དུས་ཚོད། དུས་ཚོད་འདིའི་ནང་དུ་འགྲུལ་སྐྱོད་མེད་པའི་འབྲེལ་ལམ་དོར་ཐུབ།. Tunnels with no traffic for this period may be dropped [Default is 60000]. Tunnels with no traffic for this period may be dropped [Default is 60000]. Tunnels with no traffic for this period may be dropped [Default is 60000]. Tunnels with no traffic for this period may be dropped [Default is 60000]"
+msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
+msgstr ""
 
-msgid "The minimum number of messages a tunnel must have processed in the detection period to be considered active. Tunnels below this threshold are candidates for removal. [Default is 3]"
-msgstr "བྱེད་སྒོ་ཡོད་པར་བརྩི་བར་ཞིབ་བཤེར་དུས་སྐབས་སུ་འབྲེལ་ལམ་གྱིས་བྱེད་སྒོ་བྱས་པའི་མཐའ་མའི་འཕྲིན་ཡིག་གི་གྲངས། འདི་ལས་ཉུང་བའི་འབྲེལ་ལམ་ལས་མེད་པར་བརྩི།. Tunnels below this threshold are candidates for removal [Default is 3]. Tunnels below this threshold are candidates for removal [Default is 3]. Tunnels below this threshold are candidates for removal [Default is 3]. Tunnels below this threshold are candidates for removal [Default is 3]"
-
-msgid "The interval in milliseconds between scans for idle transit tunnels. [Default is 180000]"
-msgstr "ལས་མེད་བརྒྱུད་འབྲེལ་ལམ་ཞིབ་བཤེར་བར་གྱི་སྐར་ཆའི་དུས་བར་ཚད། [མ་འོངས་པར་ 180000]"
-
-msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "གལ་ཏེ་ཁྱེད་ཀྱིས་མིང་རྟགས་མེད་པའི་(.zip) I2P གསར་བསྐྱར་སྒྲིག་འཛུགས་བྱེད་འདོད་ན། ཁྱེད་ཀྱིས་ <code>routerconsole.advanced=true</code> རྒྱུན་ལྡན་བྱས་ཟིན་མེད་ན་འདི་ཁྱེད་ཀྱི་ <code>router.config</code> ཡིག་ཆར་ཁ་སྣོན་བྱེད་དགོས། གལ་ཏེ་ཁྱེད་ཀྱིས་ <code>routerconsole.advanced=true</code> རྒྱུན་ལྡན་བྱས་ཟིན་ན་གདམ་ཀ་འདི་སྔོན་ནས་གྲ་སྒྲིག་བྱས་ཡོད། དྲན་རྟགས། I2P+ 0.9.48+ ནས་བཟུང་། <a href=/configupdate#i2pupdates>མིང་རྟགས་མེད་པའི་གསར་བསྐྱར་</a> སྒྲིག་འཛུགས་སྔོན་སྒྲིག་ལྟར་བརྒྱུད་ཡོད།"
-
-msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr "སྒྲིག་འགོད་འདིས་ཁྱེད་ལ་མིང་རྟགས་མེད་པའི་གསར་བསྐྱར་གྱི་ཁྱད་ཆོད་ལ་ URL རྒྱུན་ལྡན་བྱེད་དུ་འཇུག་པར་གྱི་གནས་ཐབས་བྱེད། URL ནི་ <code>/i2pupdate.zip</code> ཐིག་སྣེ་ནས་མཇུག་དགོས། དྲན་རྟགས། གསར་བསྐྱར་གྱི་འབྱུང་ཁུངས་ལ་ཡིད་རྟོན་མེད་ན་མིང་རྟགས་མེད་པའི་གསར་བསྐྱར་སྒྲིག་འཛུགས་མི་བྱེད།. zip Note: do not install unsigned updates unless you trust the source of the update!. zip Note: do not install unsigned updates unless you trust the source of the update!. zip Note: do not install unsigned updates unless you trust the source of the update! zip Note: do not install unsigned updates unless you trust the source of the update!"
-
-msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr "སྒྲིག་འགོད་འདི་(སྐར་ཆ་ནང་) ཁྱེད་ལ་ NetDb ནང་གི་ RouterInfos ནུས་མེད་མིན་པ་བརྟག་དཔྱད་བྱེད་པའི་སྔོན་ལ་འགོ་ཚོགས་རྗེས་སྒུག་དུས་ཚོད་ག་ཚོད་ཅིག་ལག་བསྟར་རྒྱུན་ལྡན་བྱེད་དུ་འཇུག་པར་གྱི་གནས་ཐབས་བྱེད། དེའི་རྗེས་ནུས་ལྡན་པའི་རྒྱུད་པ་ཁོ་ན་ནང་འདྲེན་བྱེད། ནུས་མེད་བརྟག་དཔྱད་བྱེད་སྐབས། དུས་ཡོལ་བའི་ RouterInfos དང་ SSU བརྒྱུད་ཐོག་ནས་འཛུལ་ཐུབ་པའི་ལྡན་ལུག་མེད་པའི་མཐུད་སྣེ་རྣམས་ NetDb ནས་རྩ་བོར། [སྔོན་སྒྲིག་ནི་སྐར་ཆ་ 60] དྲན་རྟགས། སྒྲིག་འགོད་འདིས་རྒྱུད་པ་རྙིང་པ་(སྔོན་སྒྲིག་ལྟར་ 0.9.29 ལས་རྙིང་བ) ལ་ཤུགས་རྐྱེན་མེད། དེ་དག་ NetDb ནས་རྩ་བོར་བ་དང་རྒྱུད་པའི་ལོགས་སྐབས་སུ་བཀག་པ་ཡིན།. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0 29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted"
+msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
+msgstr "བདེན་པར་བཟོས་ན། ས་གནས་སུ་འཁོར་སྐྱོད་སྤྲོད་ལེན་དོ་དམ་མེད་པར་བཏང་སྟེ། འགྲུལ་སྐྱོད་ཚང་མ་འབྲེལ་ལམ་བརྒྱུད་དུ་བཙན་པོར་བྱེད། (ཕྱི་འབྲེལ་ལམ། → དྲ་བ། → ནང་འབྲེལ་ལམ།)... ཁུངས་དང་འབྲེལ་ས་རོ་ཌེར་གཅིག་པར་ཡོད་སྐབས་tunnel རྒྱུ་ལམ་སྤྱོད་སྟངས་ཚོད་ལྟ་ལ་ཕན། [Disabled by default]. ཁུངས་དང་འབྲེལ་ས་རོ་ཌེར་གཅིག་པར་ཡོད་སྐབས་tunnel རྒྱུ་ལམ་སྤྱོད་སྟངས་ཚོད་ལྟ་ལ་ཕན། [Disabled by default]. Useful for testing tunnel routing behavior when the source and destination are on the same router [Disabled by default]. Useful for testing tunnel routing behavior when the source and destination are on the same router [Disabled by default]"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false, or true if router is in hidden mode]"
 msgstr "སྒྲིག་འཇུག་འདི་བདེན་པར་བཟོས་ན། རང་གི་རྒྱལ་ཁབ་ཀྱི་ router ཚང་མའི་ཐད་ཀར་འབྲེལ་བ་བཀག་ཏེ། བཀག་ཐོར་ཁ་སྣོན་བྱེད་ངེས།"
-
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]"
-msgstr "སྒྲིག་འཇུག་འདི་བདེན་པར་བཟོས་ན། G འཁོར་འཁྱོག་ཚད་ཁྱབ་བསྒྲགས་བྱེད་པའི་X རིམ་པའི་router ཚང་མའི་ཐད་ཀར་འབྲེལ་བ་བཀག་ངེས།"
-
-msgid "This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is true]"
-msgstr "སྒྲིག་འཇུག་འདི་བདེན་པར་བཟོས་ན། LU རིམ་པའི་router ཚང་མའི་ (དྲ་བའི་ཤུགས་ཚད་དམའ་བ། འབྲེལ་མི་ཐུབ་པ། ཡང་ན...) ཐད་ཀར་འབྲེལ་བ་བཀག་ངེས།"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "སྒྲིག་འགོད་འདིས་ SSU ཚོད་ལྟ་སྒོ་བ་བརྒྱུད་པ་མེ་བརྒྱུད་པ་མེ་བར་དུག་ཡོད་མེད་པ་བརྒྱུད་པ་མེ་བར་དུག་ཡོད་མེད་པ་ཡིན་ཡོད་པའི་རྒྱུད་པ་དག་ལ་བརྒྱུད་བྱེད་པར་གྱི་གནས་ཐབས་བྱེད། ཚོད་ལྟ་སྒོ་བ་བརྒྱུད་བྱེད་པའི་གནས་ཚུལ་དུ། SSU དང་ NTCP གཉིས་ཀ <a href=/info>རྒྱུད་པའི་ཆ་འཕྲིན་ཤོག་ངོས།</a> ཐོག་ཁྱེད་ཀྱི་ད་ལྟའི་སྤྱི་ IP ཁ་བྱང་སྙན་སྒྲོན་བྱེད་དགོས། [བསྐྱར་འགོ་ཚོགས་དགོས།]. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on the router info page [Restart required]. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on the router info page [Restart required]. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on the router info page [Restart required]. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on the router info page [Restart required]"
@@ -7515,26 +7679,11 @@ msgstr "སྒྲིག་འགོད་འདིས་ SSU ཚོད་ལྟ�
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr "སྒྲིག་འགོད་འདིས་མཐུད་སྣེ་དང་བརྒྱུད་བྱེད་སྐབས་གང་ཞིག་འགྲེམ་སྤེལ་ལ་གཙོ་བོར་འཇོག་པ་གཏན་འཁེལ་བྱེད། སྔོན་སྒྲིག་ལྟར་ NTCP ནི་ UDP (SSU) ལས་གཙོ་བོར་འཇོག གནས་གྲངས་ true ལ་གཏན་འཁེལ་བྱས་ཚེ། སྔོན་ནས་ཡོད་པའི་ NTCP འབྲེལ་བ་མེན་ན་ UDP ལ་གཙོ་བོར་འཇོག ནམ་རྟགས་ལ་གཏན་འཁེལ་བྱས་ཚེ། སྔོན་ནས་ཡོད་པའི་ NTCP འབྲེལ་བ་ལ་མ་ལྟོས་པར་ UDP ནམ་རྟགས་བེད་སྤྱོད་བྱེད། [སྔོན་སྒྲིག་ནི་ false]. By default, NTCP is favored over UDP (SSU) By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection [Default is false]. By default, NTCP is favored over UDP (SSU) By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection [Default is false]. By default, NTCP is favored over UDP (SSU) By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection [Default is false]. By default, NTCP is favored over UDP (SSU) By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection [Default is false]"
 
-msgid "miscellaneous"
-msgstr "སྣ་ཚོགས།"
-
-msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr "true ལ་གཏན་འཁེལ་བྱས་ཚེ། གདམ་ཀ་འདིས་རིམ་ལག་བརྒྱུད་སྒྲིག་སྣོན་བྱེད་པའི་རྒྱུད་སྒྲིག་སྣོན་བྱེད་པའི་སྒང་ངོས་ནང་། གཞི་བྱེད་པའི་ཞབས་ཞུངས་ཚོད་ལྟ་སྒོ་བ་བརྒྱུད་བྱེད་པའི་གདམ་ཀ་བཀོད་སྒྲིག་སྣོན་བྱེད། [སྔོན་སྒྲིག་ལྟར་སྒོ་བ་བརྒྱུད་བྱེད་མེད།]"
-
-msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "སྒྲིག་འགོད་འདིས་ གྲུ་ཐོར། གིས་ torrent རེ་མོན་ལོག་བའགྲེམ་ཡང་བཟོ་སྐྲུན་བྱེད་པའི་ཡིག་ཆ་གྲངས་ཀྱི་མང་ཉུང་མཐའ་རྒྱུན་ལྡན་བྱེད། སྔོན་སྒྲིག་གྲངས་གནས་ 2000 ནས་ཚད་གནས་ཆེར་འཕར་བར་གྱི་གནས་གྲངས་འདི་ལས་རྟེན་པའི་མངའ་ཁུངས་རྒྱུན་ལྡན་བྱེད་པར་གྱི་གནས་ཐབས་བྱེད་སྲིད། (དཔེན་ Linux ཐོག་ <code>ulimit -n</code>) འདི་བསྒྱུར་བྱེད་པར། གྲུ་ཐོར། གི་རྒྱུན་ལྡན་ཡིག་ཆ་ <code>i2psnark.config</code> ནང་ཁ་སྣོན་བྱེད། [གྲུ་ཐོར། ཡང་ན་རྒྱུད་པ་བསྐྱར་འགོ་ཚོགས་དགོས།]. g ulimit -n on Linux) To change, add to གྲུ་ཐོར།'s configuration file i2psnark config [Restart of གྲུ་ཐོར། or router required]. g ulimit -n on Linux) To change, add to གྲུ་ཐོར།'s configuration file i2psnark config [Restart of གྲུ་ཐོར། or router required]. g ulimit -n on Linux) To change, add to གྲུ་ཐོར།'s configuration file i2psnark config [Restart of གྲུ་ཐོར། or router required]. g ulimit -n on Linux) To change, add to གྲུ་ཐོར།'s configuration file i2psnark config [Restart of གྲུ་ཐོར། or router required]"
-
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "གདོང་ལམ་ཆེད་གཉེར་གྱི་སྒྲིག་འགོད་འདིས་ཁྱེད་ལ་རྒྱུད་པས་སྣོན་སྐྲུན་པའི་སྦྲེལ་ཐབས་ལ་བརྡ་ཞིང་ལན་ལན་བརྒྱུད་པར་བརྒྱུད་པ་བརྒྱུད་པར་བཀོད་བརྒྱུད་བྱེད། ལན་ལན་སྒོ་བ་བརྒྱུད་པར། ཁྱེད་ཀྱིས་གདོང་ལམ་དོ་དམ་པའི་ནང་སྦྲེལ་ཐབས་ཀྱི་རྒྱུན་ལྡན་རྣམ་གཞག་གི་ <i>སྒྲིག་སྦྲེལ་གདམ་ཀ།</i> ཁག་ནང་ <code>i2p.streaming.answerPings=false</code> དུམ་ཐིག་ཁ་སྣོན་བྱེད་དགོས།. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager. answerPings=false to the Custom Options section for the server's configuration in the Tunnel Manager"
-
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "སྒྲིག་འགོད་འདི་བརྒྱུད་བྱས་ཚེ། རྒྱུད་པས་སྣོན་བྱེད་པའི་ཚང་མ་དང་ཐད་ཀྱི་སྦྲེལ་ཐབས་པའི་སྣོན་བྱེད་པའི་སྦྲེལ་ཐབས་པར་ 50ms བར་གི་རྟགས་མེད་པའི་སྣོན་བྱེད། སྔོན་སྒྲིག་ནི་སྒོ་བརྒྱུད་བྱས་མེད། [བསྐྱར་འགོ་ཚོགས་དགོས།]. སྔོན་སྒྲིག་བཀག་ཡོད། [Restart required]. སྔོན་སྒྲིག་བཀག་ཡོད། [Restart required]. Default is disabled [Restart required]. Default is disabled [Restart required]"
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "སྒྲིག་འགོད་འདི་བརྒྱུད་བྱས་ཚེ། <code>i2p.streaming.enablePongDelay</code> ཡང་བརྒྱུད་བྱས་ཚེ། ལན་ལན་སྣོན་བྱེད་པའི་སྦྲེལ་ཐབས་པའི་སྣོན་བྱེད་པའི་སྣོན་བྱེད་པའི་མང་ཤོས་བསྒྱུར་བཅོས། གལ་ཏེ་གསལ་བཤད་ཀྱིས་གཏན་འཁེལ་མ་བྱས་ན། སྔོན་སྒྲིག་གནས་གྲངས་ 50ms བེད་སྤྱོད་བྱེད།. Unless explicitly set, the default value of 50ms will be used. Unless explicitly set, the default value of 50ms will be used. Unless explicitly set, the default value of 50ms will be used. Unless explicitly set, the default value of 50ms will be used"
-
 msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
 msgstr "eepget HTTP རེ་སྐུལ་གྱི་འབྲེལ་བའི་དུས་འདས། (མགོ་མཇུག་གི་ལན་མགོ་སྒུག་པའི་དུས།) བུལ་བའི་འབྲེལ་བར་སྤར།. Increase for high-latency remote access scenarios [Default is 90000 (90s)]. Increase for high-latency remote access scenarios [Default is 90000 (90s)]. Increase for high-latency remote access scenarios [Default is 90000 (90s)]. Increase for high-latency remote access scenarios [Default is 90000 (90s)]"
+
+msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
+msgstr "<code>-n</code> རྟགས་མ་བསྟན་སྐབས་ eepget ཀྱི་མ་འོངས་པའི་སླར་ཚོད་གྲངས།"
 
 msgid "The inactivity timeout in milliseconds for eepget transfers (max idle time during data phase). Increase for slow connections experiencing stalls. [Default is 300000 (5min)]"
 msgstr "eepget སྤྲོད་ལེན་གྱི་ལས་མེད་དུས་འདས། (གཞི་གྲངས་དུས་སྐབས་ཀྱི་ཆེ་ཤོས་ལས་མེད་དུས།) བུལ་བའི་འབྲེལ་བར་སྤར།. Increase for slow connections experiencing stalls [Default is 300000 (5min)]. Increase for slow connections experiencing stalls [Default is 300000 (5min)]. Increase for slow connections experiencing stalls [Default is 300000 (5min)]. Increase for slow connections experiencing stalls [Default is 300000 (5min)]"
@@ -7542,35 +7691,68 @@ msgstr "eepget སྤྲོད་ལེན་གྱི་ལས་མེད་�
 msgid "Maximum number of consecutive zero-data transfer failures before eepget gives up, even if retries remain. Increase if transfers fail without receiving any data. [Default is 20]"
 msgstr "eepget ཀྱིས་བཏང་བའི་སྔོན་དུ་ཆེ་ཤོས་རྒྱུན་མཐུད་གཞི་གྲངས་སྤྲོད་ལེན་ཕམ་པ། སླར་ཚོད་ལྷག་ཡོད་ནའང་། སྤྲོད་ལེན་བརྟན་པོ་མེད་ན་སྤར།. Increase if transfers fail without receiving any data [Default is 20]. Increase if transfers fail without receiving any data [Default is 20]. Increase if transfers fail without receiving any data [Default is 20]. Increase if transfers fail without receiving any data [Default is 20]"
 
-msgid "Default number of retries for eepget when the <code>-n</code> flag is not specified. [Default is 10]"
-msgstr "<code>-n</code> རྟགས་མ་བསྟན་སྐབས་ eepget ཀྱི་མ་འོངས་པའི་སླར་ཚོད་གྲངས།"
+msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
+msgstr ""
 
-msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 300000 (5min)]"
-msgstr "རྒྱུན་འབྲེལ་འབྲེལ་བ་གཅོད་པའི་རྗེས་ཀྱི་ TIME-WAIT སྐར་ཆའི་དུས་ཚོད། དུས་ཚོད་འདིའི་ནང་དུ་འཁྱོལ་བའི་དེབ་ཕྲེང་ད་དུང་ངོས་ལེན་བྱེད་བཞིན་ཡོད།... Increase for high-latency paths where final ACKs may be delayed [Default is 300000 (5min)]. Increase for high-latency paths where final ACKs may be delayed [Default is 300000 (5min)]. Increase for high-latency paths where final ACKs may be delayed [Default is 300000 (5min)]. Increase for high-latency paths where final ACKs may be delayed [Default is 300000 (5min)]"
+msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
+msgstr ""
 
-msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration. Increase for very high-latency remote access. [Default is 120000 (2min)]"
-msgstr "རྒྱུན་འབྲེལ་དུས་འདས་ཀྱི་མཐོ་ཚད། གཞན་པའི་སྒྲིག་འཇུག་ལ་མ་ལྟོས་པར་འབྲེལ་བ་རེ་རེའི་དུས་འདས་མཐོ་ཚད་འདི་ལས་མི་བརྒལ་བར་སྔོག་པ།. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration Increase for very high-latency remote access [Default is 120000 (2min)]. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration Increase for very high-latency remote access [Default is 120000 (2min)]. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration Increase for very high-latency remote access [Default is 120000 (2min)]. Prevents per-connection timeouts from exceeding this ceiling regardless of per-tunnel configuration Increase for very high-latency remote access [Default is 120000 (2min)]"
+msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
+msgstr ""
 
-msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 8]"
-msgstr "རྒྱུན་འབྲེལ་གསར་པའི་མགོ་འཛུགས་འཁོར་འཁྱོག་སྒོ་ཁྱིམ་ཚད། (དེབ་ཕྲེང་གི་ཚད་དུ) སྒོ་ཁྱིམ་ཆེ་ཤོས་ཀྱིས་འབྲེལ་བ་མྱུར་དུ་འགོ་འཛུགས་ཀྱང་འཁོར་འཁྱོག་བཟོ་སྲིད།. A larger window starts connections faster but may cause more retransmissions on congested paths [Default is 8]. A larger window starts connections faster but may cause more retransmissions on congested paths [Default is 8]. A larger window starts connections faster but may cause more retransmissions on congested paths [Default is 8]. A larger window starts connections faster but may cause more retransmissions on congested paths [Default is 8]"
+msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
+msgstr ""
 
-msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 128]"
-msgstr "རྒྱུན་འབྲེལ་ཀྱི་ཆེ་ཤོས་འཁོར་འཁྱོག་སྒོ་ཁྱིམ་ཚད། (དེབ་ཕྲེང་གི་ཚད་དུ) རྒྱུན་གཅིག་གི་སྤྱི་འགྲེམ་ཚད་ལ་ཚད་འཛིན་བྱེད།. Caps the maximum throughput of a single stream [Default is 128]. Caps the maximum throughput of a single stream [Default is 128]. Caps the maximum throughput of a single stream [Default is 128]. Caps the maximum throughput of a single stream [Default is 128]"
+msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
 
-msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
-msgstr "མཐའ་མའི་སླར་སྐུར་བརྒྱུད་དུས། དེབ་ཕྲེང་དེ་དུས་བར་འདི་ལས་མྱུར་དུ་སླར་སྐུར་བྱེད་མི་ཐུབ། གྲངས་དམའ་ཤོས་ཀྱིས་མྱུར་དུ་སླར་སྐུར་བྱེད་ཆོག. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]. Packets will not be resent faster than this interval Lower values allow faster recovery on lossy connections [Default is 100ms]"
+msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
-msgstr "ཆེ་ཤོས་སླར་སྐུར་བརྒྱུད་དུས། ཕྱིར་སྐྱོད་ལ་མ་ལྟོས་པར་སླར་སྐུར་བར་ཚད་དེ་གཞི་འདི་ལས་མི་བརྒལ།. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]. Retransmit interval will not exceed this value regardless of backoff Increase to allow longer between retries on congested paths [Default is 30000 (30s)]"
+msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
+msgstr ""
 
-msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
-msgstr "རྒྱུན་སྤེལ་ཕྱིར་སྐྱོད་རྗེས་ཀྱི་ཆེ་ཤོས་སླར་སྐུར་དུས་འདས། ངོས་མ་ལེན་པའི་དེབ་ཕྲེང་སླར་སྐུར་བྱེད་པའི་སྔོན་དུ་སྐུར་མཁན་གྱིས་སྒུག་པའི་དུས་ལ་ཚད་འཛིན་བྱེད།. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]. Caps how long the sender waits before attempting retransmission during severe congestion [Default is 30000 (30s)]"
+msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
+msgstr ""
+
+msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
+msgstr ""
+
+msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
+msgstr ""
+
+msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
+msgstr ""
+
+msgid "miscellaneous"
+msgstr "སྣ་ཚོགས།"
+
+msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
+msgstr "true ལ་གཏན་འཁེལ་བྱས་ཚེ། གདམ་ཀ་འདིས་རིམ་ལག་བརྒྱུད་སྒྲིག་སྣོན་བྱེད་པའི་རྒྱུད་སྒྲིག་སྣོན་བྱེད་པའི་སྒང་ངོས་ནང་། གཞི་བྱེད་པའི་ཞབས་ཞུངས་ཚོད་ལྟ་སྒོ་བ་བརྒྱུད་བྱེད་པའི་གདམ་ཀ་བཀོད་སྒྲིག་སྣོན་བྱེད། [སྔོན་སྒྲིག་ལྟར་སྒོ་བ་བརྒྱུད་བྱེད་མེད།]"
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
 msgstr "true ལ་གཏན་འཁེལ་བྱས་ཚེ། I2P ནི་དྲ་བའི་འབྲེལ་བ་མེད་པར་འཁོར་སྐྱོང་བ་དང་། འདིས་ཁྱེད་ཀྱིས་རྒྱུད་པ་རྒྱུན་ཆད་བསྐྱར་འགོ་ཚོགས་བྱས་ནས་རྩལ་གསར་བསྐྱར་ཚོད་ལྟ་བྱེད་སྐབས་དྲ་བའི་གནས་སྐྱོང་མི་འབྱུང་བར་རམ་འདེགས་བྱེད།"
 
-msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
-msgstr "བདེན་པར་བཟོས་ན། ས་གནས་སུ་འཁོར་སྐྱོད་སྤྲོད་ལེན་དོ་དམ་མེད་པར་བཏང་སྟེ། འགྲུལ་སྐྱོད་ཚང་མ་འབྲེལ་ལམ་བརྒྱུད་དུ་བཙན་པོར་བྱེད། (ཕྱི་འབྲེལ་ལམ། → དྲ་བ། → ནང་འབྲེལ་ལམ།)... ཁུངས་དང་འབྲེལ་ས་རོ་ཌེར་གཅིག་པར་ཡོད་སྐབས་tunnel རྒྱུ་ལམ་སྤྱོད་སྟངས་ཚོད་ལྟ་ལ་ཕན། [Disabled by default]. ཁུངས་དང་འབྲེལ་ས་རོ་ཌེར་གཅིག་པར་ཡོད་སྐབས་tunnel རྒྱུ་ལམ་སྤྱོད་སྟངས་ཚོད་ལྟ་ལ་ཕན། [Disabled by default]. Useful for testing tunnel routing behavior when the source and destination are on the same router [Disabled by default]. Useful for testing tunnel routing behavior when the source and destination are on the same router [Disabled by default]"
+msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
+msgstr ""
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "སྒྲིག་འགོད་འདིས་ཁྱེད་ཀྱི་རྒྱུད་པས་ཆུ་ཚད་གཏན་ཐིག་འཛིན་པར་རྒྱུན་འཁྱོངས་བྱེད་པར་མཁོ་བའི་ NTP སྦྲེལ་ཐབས་གཞན་རྒྱུན་ལྡན་བྱེད། [སྔོན་སྒྲིག་ནི་ 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]. org]. org]. org]. org]"
@@ -8909,6 +9091,9 @@ msgstr "ཚོད་འཛིན་ཞིག་གི་རྐྱེན་ནས
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
 msgstr "དཔེར་བརྗོད། བཞེངས་པའི་གོ་རིམ་ནི་གནས་གོང་གི་ཚོད་འཛིན་གཅིག་གི་བཞེངས་པ་དང་པོ་(མངོན་དུ་ཡང་ན་བཤེར་བའི་ཡིག་ཆ་ནང་གི་ཡང་ན་)གཅིག་གི་རྐྱེན་ནས་གནས་གོང་གི་ཚོད་འཛིན་གཞན་རྣམས་ལ་མཐུན་མི་འབྱུང་། དཔེར་བརྗོད། གློག་སྒྲོམ་བདེན་པའི་ཡིག་ཆ་གསར་བརྟེན་ནས་གློག་སྒྲོམ་དེ་རྒྱུན་འཁོར་བྱེད་དགོས། དོ་དམ་ནང་གི་གནས་གོང་གི་གོ་བཤུས་རྗེས་སུ། ཡིག་ཆ་གཞིར་བཟུང་ནས་ཚོད་འཛིན་གཙང་མ་བྱེད་ཀྱང་གློག་སྒྲོམ་རྒྱུན་འཁོར་བྱེད་མི་བྱེད་ཀྱང་ཡང་ན་བཟོ་འཐབ་བྱེད་མཁན་གི་གནས་གོང་རྣམས་ནི་གློག་སྒྲོམ་རྒྱུན་འཁོར་བྱེད་བར་གྲོལ་མི་འབྱུང་།. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted"
 
+msgid "Thresholds"
+msgstr "ཚད་གཞི།"
+
 msgid "A threshold is defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
 msgstr "ཚོད་འཛིན་ཞིག་ནི་བཟོ་འཐབ་བྱེད་མཁན་གི་གནས་གོང་གི་བརྒྱུད་རྒྱུའི་ཚོད་འཛིན་གཞིར་བཟུང་བརྗེ་བཅོས་བྱེད་པའི་ཐོག་མ་ཡིན་ཞིག་གིས་\"ཚོད་འཛིན་བཟོ་འཐབ\"བྱུང་བའི་སྐབས་ཀྱི་གཞི་ཡིན།"
 
@@ -9479,8 +9664,14 @@ msgstr "རྟག་ཏུ།"
 msgid "Set Password"
 msgstr "གསང་ཚིག་བཟོ།"
 
-msgid "network database"
-msgstr "དྲ་བའི་གཞི་གྲངས།"
+msgid "All Routers [Advanced]"
+msgstr ""
+
+msgid "Remote"
+msgstr "བརྒྱུག་པ"
+
+msgid "All Routers (Client NetDb) [Advanced]"
+msgstr ""
 
 msgid "Encryption type"
 msgstr "གསང་བཅད་རིགས།"
@@ -9499,9 +9690,6 @@ msgstr "ས་གནས་སུ་བཞག་པའི་སྤྱི་པའ
 
 msgid "Requested client leaseset"
 msgstr "བླང་བའི་ client leaseset"
-
-msgid "Remote"
-msgstr "བརྒྱུག་པ"
 
 msgid "network database router map"
 msgstr "དྲ་བའི་གཞི་གྲངས་རོ་ཌེར་ས་ཁྲ།"
@@ -9534,17 +9722,20 @@ msgstr "peer འབྲེལ་བ།"
 msgid "Network Peers"
 msgstr "དྲ་བའི་ Peers"
 
-msgid "peer profiles"
-msgstr "peer གསལ་ཐོ།"
+msgid "Fast Peers"
+msgstr ""
 
-msgid "Session Banned Peers"
-msgstr "ལོ་རིམ་བློག་པའི་ Peers"
+msgid "High Capacity Peers"
+msgstr ""
+
+msgid "Floodfill Peers"
+msgstr ""
 
 msgid "Banned Peers"
 msgstr "བློག་པའི་ Peers"
 
-msgid "Fast / High Capacity"
-msgstr "མགྱོགས་ / ནུས་པ་ཆེན་པོ།"
+msgid "Recent Peer Profiles"
+msgstr ""
 
 msgid "Configure router logging options"
 msgstr "རོ་ཌེར་ཟིན་ཐོ་བྲི་བའི་གདམ་ཀ་བཀོད་སྒྲིག"
@@ -9647,9 +9838,6 @@ msgstr "གྲུ་བཞི་སོར་སྟོན།"
 
 msgid "Peer Profile"
 msgstr "Peer གསལ་ཐོ།"
-
-msgid "Session Bans"
-msgstr "གྲོས་ཚོགས་བཀག་པ།"
 
 msgid "Profile View"
 msgstr "གསལ་ཐོ་ལྟ་བ།"
