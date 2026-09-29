@@ -17,6 +17,7 @@ import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.util.StallRegistry;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.BandwidthEstimator;
 import net.i2p.util.Log;
@@ -1647,6 +1648,7 @@ class Connection {
         switch (verdict) {
             case STALLED:
                 _context.statManager().addRateData("stream.con.stallDetected", 1);
+                markStalledForRotation();
                 if (_log.shouldWarn()) {
                     _log.warn("Stream has made no progress for " + (STALL_GRACE_MS / 1000)
                               + "s (no bytes acknowledged) on " + this);
@@ -1660,6 +1662,34 @@ class Connection {
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     *  Publish a stall to the router so outbound tunnel selection can prefer a
+     *  different path for this destination.
+     *
+     *  <p>Only STALLED marks, not THROTTLED: a slow-but-delivering path is not
+     *  proven dead, and rotating on it would churn a destination that simply has
+     *  no better route. A hard stall is unambiguous.
+     *
+     *  <p>The connection is deliberately left open. Egress is chosen per message
+     *  in the router, so the router can move this stream onto another tunnel
+     *  without touching it, and the client sees a retransmitted gap rather than
+     *  an aborted download.
+     *
+     *  @since 0.9.71+
+     */
+    private void markStalledForRotation() {
+        try {
+            Destination remote = getRemotePeer();
+            if (remote == null) {return;}
+            StallRegistry.markStalled(remote.getHash(), _context.clock().now());
+        } catch (RuntimeException re) {
+            // Never let a telemetry path break a live stream.
+            if (_log.shouldWarn()) {
+                _log.warn("Could not publish stall signal for rotation: " + re);
+            }
         }
     }
     /**

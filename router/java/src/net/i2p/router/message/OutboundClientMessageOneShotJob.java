@@ -24,6 +24,7 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2cp.MessageId;
 import net.i2p.data.i2cp.MessageStatusMessage;
+import net.i2p.util.StallRegistry;
 import net.i2p.data.i2np.DataMessage;
 import net.i2p.data.i2np.DeliveryInstructions;
 import net.i2p.data.i2np.DeliveryStatusMessage;
@@ -1029,10 +1030,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             tunnel = _cache.tunnelCache.get(_hashPair);
             if (tunnel != null) {
                 if (getContext().tunnelManager().isValidTunnel(_from.calculateHash(), tunnel)) {
-                    if (tunnel.getLength() <= 1 || !getContext().commSystem().isBacklogged(tunnel.getPeer(1))) {
+                    boolean backlogged = tunnel.getLength() > 1 &&
+                        getContext().commSystem().isBacklogged(tunnel.getPeer(1));
+                    boolean stalled = backlogged ? false : isStalledForRotation();
+                    if (!backlogged && !stalled) {
                         return tunnel;
                     }
-                    // backlogged
+                    // backlogged or stalled
                     // Keep using the same tunnel if we just started, to prevent
                     // out-of-order delivery that causes unnecessary NACK storms.
                     Long startTime = _cache.tunnelStartTime.get(_hashPair);
@@ -1041,9 +1045,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                         return tunnel;
                     }
                     if (_log.shouldWarn()) {
-                        _log.warn("Switching from backlogged [Tunnel " + tunnel + "] for " + _toString);
+                        _log.warn("Switching from " + (stalled ? "stalled" : "backlogged") +
+                                  " [Tunnel " + tunnel + "] for " + _toString);
                     }
-                    _cache.backloggedTunnelCache.put(_hashPair, tunnel);
+                    if (stalled) {
+                        _cache.stalledTunnelCache.put(_hashPair, tunnel);
+                    } else {
+                        _cache.backloggedTunnelCache.put(_hashPair, tunnel);
+                    }
                 } // else no longer valid
                 _cache.tunnelCache.remove(_hashPair);
             }
@@ -1294,6 +1303,35 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     static boolean isPoolStarvationFailure(int status) {
         return status == MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED ||
                status == MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS;
+    }
+
+    /**
+     *  Default cooldown a stall mark stays in effect: how long the router
+     *  prefers another outbound tunnel for a destination that stopped
+     *  delivering. Long enough to ride out a bad path, short enough that a
+     *  briefly-bad tunnel is not withheld from a small pool for long.
+     *
+     *  @since 0.9.71+
+     */
+    private static final long STALL_ROTATION_COOLDOWN_MS = 3 * 60 * 1000L;
+
+    /**
+     *  Whether the current (source, destination) pair is inside a stall
+     *  cooldown, and rotation is enabled.
+     *
+     *  <p>Always a hint. When true the caller prefers another tunnel but must
+     *  still return one — a destination whose every tunnel is inside a
+     *  cooldown has to keep using one of them, or the send fails outright and
+     *  a slow path becomes a dead one.
+     *
+     *  @return true if a different tunnel should be preferred
+     *  @since 0.9.71+
+     */
+    private boolean isStalledForRotation() {
+        long cooldown = getContext().getProperty("router.tunnel.stallRotation", STALL_ROTATION_COOLDOWN_MS);
+        if (cooldown <= 0) {return false;}
+        return StallRegistry.recentlyStalled(_to.calculateHash(),
+                                            getContext().clock().now(), cooldown);
     }
 
     /**

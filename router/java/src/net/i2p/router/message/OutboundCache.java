@@ -50,6 +50,14 @@ public class OutboundCache {
      * Also uses ConcurrentHashMap for consistency and concurrency.
      */
     final ConcurrentHashMap<HashPair, TunnelInfo> backloggedTunnelCache = new ConcurrentHashMap<>(128, 0.9f, 16);
+    /**
+     *  Cache for tunnels set aside because the stream to that destination
+     *  stalled. Held apart from tunnelCache so the pair reselects, and drained
+     *  with the backlogged cache so an entry cannot pin a dead tunnel. Purely
+     *  advisory: the caller still returns a tunnel when every candidate is here.
+     *  @since 0.9.71+
+     */
+    final ConcurrentHashMap<HashPair, TunnelInfo> stalledTunnelCache = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /**
      * Tracks when each tunnel was first selected for a source-destination pair,
@@ -207,6 +215,7 @@ public class OutboundCache {
         }
         if (outTunnel != null) {
             backloggedTunnelCache.remove(hashPair, outTunnel);
+            stalledTunnelCache.remove(hashPair, outTunnel);
             tunnelCache.remove(hashPair, outTunnel);
             tunnelStartTime.remove(hashPair);
         }
@@ -222,6 +231,7 @@ public class OutboundCache {
         leaseSetCache.clear();
         leaseCache.clear();
         backloggedTunnelCache.clear();
+        stalledTunnelCache.clear();
         tunnelStartTime.clear();
         tunnelCache.clear();
         lastReplyRequestCache.clear();
@@ -423,6 +433,7 @@ public class OutboundCache {
             cleanLeaseCache(leaseCache);
             cleanTunnelCache(_context, tunnelCache);
             cleanTunnelCache(_context, backloggedTunnelCache);
+            cleanTunnelCache(_context, stalledTunnelCache);
             // Remove stale tunnel start times for tunnels no longer cached
             tunnelStartTime.keySet().removeIf(k -> !tunnelCache.containsKey(k));
             cleanReplyCache(_context, lastReplyRequestCache);
