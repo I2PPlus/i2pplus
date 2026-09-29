@@ -38,7 +38,7 @@ public class RouterPasswordManager extends PasswordManager {
     private static final String PROP_I2CP_OLD_PW = I2PClient.PROP_PW;
     private static final String PROP_I2CP_OLD_USER = I2PClient.PROP_USER;
     private static final String PROP_I2CP_NEW = "i2cp.auth";
-/****
+/*
     // migrate these to b64
     private static final String[] MIGRATE_FROM = {
         // This has a separate router.reseedProxy.username prop,

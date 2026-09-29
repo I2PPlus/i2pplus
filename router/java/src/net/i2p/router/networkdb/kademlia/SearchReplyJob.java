@@ -95,6 +95,7 @@ class SearchReplyJob extends JobImpl {
                     //       the floodfill's behavior
                     // This keeps us from continually chasing blocklisted floodfills
                     if (getContext().banlist().isBanlisted(peer)) {
+                        /* blocklisted target; never add it to the search path */
                     } else {
                         shouldAdd = true;
                     }

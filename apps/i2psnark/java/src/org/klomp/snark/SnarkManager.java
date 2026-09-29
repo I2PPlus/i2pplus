@@ -3756,7 +3756,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         Snark existing = getTorrentByInfoHash(infoHash);
         if (existing != null) {
             String existingName = null;
-            try { existingName = existing.getName(); } catch (Exception ignore) {}
+            try { existingName = existing.getName(); } catch (Exception ignore) { /* getName() can fail while the torrent is mid-teardown; leave the name null and use the fallbacks below */ }
             boolean isOurLookup = existingName != null && (existingName.startsWith("Lookup [") || existingName.contains("zzzot-lookup"));
             // Also check storage base for temp dir
             try {
@@ -3766,7 +3766,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (base != null && base.getPath().contains("zzzot-lookup"))
                         isOurLookup = true;
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) { /* storage unreachable (already stopped); isOurLookup stays as decided from the name */ }
             if (!isOurLookup) {
                 try {
                     MetaInfo meta = existing.getMetaInfo();
@@ -3775,7 +3775,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         if (mn != null && !mn.isEmpty())
                             return mn;
                     }
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* metainfo not loaded yet; fall back to the name-based return below */ }
                 if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("Lookup ["))
                     return existingName;
                 // Fall through to wait for existing lookup-* to resolve
@@ -3835,9 +3835,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // Still clean up the magnet we just created
             Snark toReject = getTorrentByInfoHash(infoHash);
             if (toReject != null && created) {
-                try { deleteMagnet(toReject); } catch (Exception ignore) {}
+                try { deleteMagnet(toReject); } catch (Exception ignore) { /* best-effort cleanup of the magnet we just added; the lookup is rejected either way */ }
             }
-            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) {}
+            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
             return null;
         }
         scheduleStaleLookupCleanup();
@@ -3858,7 +3858,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             break;
                         }
                     }
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* metainfo unreadable on this tick; retry on the next poll */ }
                 // Fallback: after promotion, getName() may be the .torrent path
                 try {
                     String n = cur.getName();
@@ -3872,7 +3872,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         }
                         break;
                     }
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* getName() unreadable on this tick; retry until the timeout expires */ }
             }
         } finally {
             _lookupSemaphore.release();
@@ -3882,11 +3882,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (toDelete != null) {
                 String toDeleteName = null;
                 File storageBase = null;
-                try { toDeleteName = toDelete.getName(); } catch (Exception ignore) {}
+                try { toDeleteName = toDelete.getName(); } catch (Exception ignore) { /* name unreadable during teardown; the storage-path check below still identifies our lookup */ }
                 try {
                     Storage st = toDelete.getStorage();
                     if (st != null) storageBase = st.getBase();
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* storage already gone; only the name check can identify a lookup torrent */ }
                 boolean isLookup = false;
                 if (toDeleteName != null && (toDeleteName.startsWith("Lookup [") || toDeleteName.contains("zzzot-lookup")))
                     isLookup = true;
@@ -3909,12 +3909,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             if (tf.exists() && tf.getParentFile() != null && tf.getParentFile().getPath().contains("zzzot-lookup")) {
                                 tf.delete();
                             }
-                        } catch (Exception ignore) {}
+                        } catch (Exception ignore) { /* best-effort removal of the temp .torrent file */ }
                     }
                 }
             }
             // Always delete our tmp dir (contains pre-allocated data if any)
-            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) {}
+            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup on every exit path */ }
         }
         return result;
     }
@@ -3959,7 +3959,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         Snark existing = getTorrentByInfoHash(infoHash);
         if (existing != null) {
             String existingName = null;
-            try { existingName = existing.getName(); } catch (Exception ignore) {}
+            try { existingName = existing.getName(); } catch (Exception ignore) { /* getName() can fail while the torrent is mid-teardown; leave the name null and use the fallbacks below */ }
             boolean isOurLookup = existingName != null && (existingName.startsWith("Lookup [") || existingName.contains("zzzot-lookup"));
             try {
                 Storage st = existing.getStorage();
@@ -3968,7 +3968,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (base != null && base.getPath().contains("zzzot-lookup"))
                         isOurLookup = true;
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) { /* storage unreachable (already stopped); isOurLookup stays as decided from the name */ }
             if (!isOurLookup) {
                 try {
                     MetaInfo meta = existing.getMetaInfo();
@@ -3977,7 +3977,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         if (mn != null && !mn.isEmpty())
                             return new TorrentInfo(mn, meta.getDataLength());
                     }
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* metainfo not loaded yet; fall back to the name-based return below */ }
                 // If no MetaInfo yet (magnet without metadata), don't return placeholder
                 // — fall through to wait or return null
                 if (existingName != null && !existingName.isEmpty() && !existingName.startsWith("Lookup [") && !existingName.startsWith("Magnet")) {
@@ -4022,9 +4022,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             if (created) {
                 Snark toReject = getTorrentByInfoHash(infoHash);
-                if (toReject != null) try { deleteMagnet(toReject); } catch (Exception ignore) {}
+                if (toReject != null) try { deleteMagnet(toReject); } catch (Exception ignore) { /* best-effort cleanup of the magnet we just added; the lookup is rejected either way */ }
             }
-            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) {}
+            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
             return null;
         }
         scheduleStaleLookupCleanup();
@@ -4044,18 +4044,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             break;
                         }
                     }
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* metainfo unreadable on this tick; retry on the next poll */ }
                 try {
                     String n = cur.getName();
                     if (n != null && !n.isEmpty() && !n.equals(magnetName) && !n.startsWith("Lookup [")) {
                         if (n.endsWith(".torrent")) {
                             try { n = new File(n).getName().replaceFirst("\\.torrent$", ""); }
-                            catch (Exception ignore) {}
+                            catch (Exception ignore) { /* basename extraction failed; the raw path is used as the name */ }
                         }
                         result = new TorrentInfo(n, 0);
                         break;
                     }
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* getName() unreadable on this tick; retry until the timeout expires */ }
             }
         } finally {
             _lookupSemaphore.release();
@@ -4064,11 +4064,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (toDelete != null) {
                 String toDeleteName = null;
                 File storageBase = null;
-                try { toDeleteName = toDelete.getName(); } catch (Exception ignore) {}
+                try { toDeleteName = toDelete.getName(); } catch (Exception ignore) { /* name unreadable during teardown; the storage-path check below still identifies our lookup */ }
                 try {
                     Storage st = toDelete.getStorage();
                     if (st != null) storageBase = st.getBase();
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) { /* storage already gone; only the name check can identify a lookup torrent */ }
                 boolean isLookup = false;
                 if (toDeleteName != null && (toDeleteName.startsWith("Lookup [") || toDeleteName.contains("zzzot-lookup")))
                     isLookup = true;
@@ -4083,11 +4083,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             File tf = new File(toDeleteName);
                             if (tf.exists() && tf.getParentFile() != null && tf.getParentFile().getPath().contains("zzzot-lookup"))
                                 tf.delete();
-                        } catch (Exception ignore) {}
+                        } catch (Exception ignore) { /* best-effort removal of the temp .torrent file */ }
                     }
                 }
             }
-            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) {}
+            try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup on every exit path */ }
         }
         return result;
     }
@@ -4142,7 +4142,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         synchronized (_snarks) {
             for (Snark snark : _snarks.values()) {
                 String name = null;
-                try { name = snark.getName(); } catch (Exception ignore) {}
+                try { name = snark.getName(); } catch (Exception ignore) { /* name unreadable; the storage-path check below can still identify our lookup */ }
                 boolean isLookup = (name != null && (name.startsWith("Lookup [") || name.contains("zzzot-lookup")));
                 if (!isLookup) {
                     try {
@@ -4152,7 +4152,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             if (base != null && base.getPath().contains("zzzot-lookup"))
                                 isLookup = true;
                         }
-                    } catch (Exception ignore) {}
+                    } catch (Exception ignore) { /* storage unreachable; nothing to clean for this torrent */ }
                 }
                 if (isLookup) {
                     Long created = _lookupCreationTimes.get(new SHA1Hash(snark.getInfoHash()));
@@ -4185,7 +4185,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (base != null && base.getPath().contains("zzzot-lookup"))
                         FileUtil.rmdir(base, false);
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) { /* storage unreachable; the stale magnet itself was already removed above */ }
         }
     }
 
@@ -5333,7 +5333,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 File base = storage.getBase();
                 if (base != null && base.getPath().contains("zzzot-lookup"))
                     return;
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) { /* storage base unavailable; the normal persistence and validation path runs instead */ }
             saveTorrentStatus(
                     meta,
                     storage.getBitField(),
@@ -5383,7 +5383,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                     return null;
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) { /* storage base unavailable; fall through to the normal validation below */ }
             String rejectMessage = validateTorrent(meta);
             if (rejectMessage != null) {
                 addMessage(rejectMessage);

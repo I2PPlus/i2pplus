@@ -589,7 +589,7 @@ public class SSLEepGet extends EepGet {
         }
         } catch (RuntimeException | IOException e) {
             if (pipeSink != null) {
-                try { pipeSink.close(); } catch (IOException ioe) {}
+                try { pipeSink.close(); } catch (IOException ioe) { /* sink already closed or the file is gone; the pusher is still joined below */ }
                 // let the decompressor drain and finish before a retry reopens the file
                 try { pusher.join(); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             }

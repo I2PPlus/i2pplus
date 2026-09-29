@@ -509,7 +509,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             } catch (IOException ioe) {
                 _log.warn("Error loading " + _file, ioe);
             } finally {
-                if (fis != null) { try { fis.close(); } catch (IOException ig) {} }
+                if (fis != null) { try { fis.close(); } catch (IOException ig) { /* load already failed and was logged; a close failure adds nothing */ } }
             }
         }
 
@@ -537,7 +537,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             } catch (IOException ioe) {
                 _log.warn("Error saving " + _file, ioe);
             } finally {
-                if (fos != null) { try { fos.close(); } catch (IOException ig) {} }
+                if (fos != null) { try { fos.close(); } catch (IOException ig) { /* save already failed and was logged; a close failure adds nothing */ } }
             }
         }
 
@@ -551,7 +551,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             String val = _props.getProperty(key);
             if (val != null) {
                 try { return Integer.parseInt(val); }
-                catch (NumberFormatException nfe) {}
+                catch (NumberFormatException nfe) { /* corrupt or hand-edited value; use the caller default */ }
             }
             return defaultVal;
         }

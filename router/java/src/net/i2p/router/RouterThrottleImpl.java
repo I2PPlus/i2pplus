@@ -477,7 +477,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (tuned >= 0.0d) return tuned;
         String p = ctx.getProperty(PROP_TUNNEL_GROWTH_FACTOR);
         if (p != null) {
-            try { return Double.parseDouble(p); } catch (NumberFormatException nfe) {}
+            try { return Double.parseDouble(p); } catch (NumberFormatException nfe) { /* unparseable property; use the default tunnel growth factor */ }
         }
         return DEFAULT_TUNNEL_GROWTH_FACTOR;
     }

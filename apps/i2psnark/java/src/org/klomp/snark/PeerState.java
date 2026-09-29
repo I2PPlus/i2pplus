@@ -1029,6 +1029,7 @@ class PeerState implements DataLoader {
         } else if (havesBeforeMetaInfo != null) {
             bitfield = new BitField(meta.getPieces());
         } else {
+            /* no bitfield and no pre-metainfo haves; leave bitfield null until the first have arrives */
         }
         metainfo = meta;
         if (bitfield != null) {

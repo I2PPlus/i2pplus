@@ -202,6 +202,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                             requests.add(r);
                             lastRequest = r;
                         } else {
+                            /* not consecutive for this piece; cannot be glued into the open byte range */
                         }
                     }
                 }

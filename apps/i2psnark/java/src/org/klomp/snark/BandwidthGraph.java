@@ -252,7 +252,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
                             long rx = Long.parseLong(p[1].trim());
                             long tx = Long.parseLong(p[2].trim());
                             if (rx > 100000 || tx > 100000) { looksLikeBytes = true; break; }
-                        } catch (NumberFormatException nfe) {}
+                        } catch (NumberFormatException nfe) { /* non-numeric field; this row is not in the legacy byte format */ }
                     }
                 }
                 if (looksLikeBytes) { Files.deleteIfExists(file.toPath()); return; }
@@ -273,7 +273,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
                     _head = (_head + 1) % CAPACITY;
                     if (_count < CAPACITY) {_count++;}
                     _version++;
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* corrupt sample line; skip it and keep the rest of the ring */ }
             }
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {_log.warn("Bandwidth graph load failed", ioe);}

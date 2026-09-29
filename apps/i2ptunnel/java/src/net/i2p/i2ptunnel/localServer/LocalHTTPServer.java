@@ -283,6 +283,7 @@ public abstract class LocalHTTPServer {
 
                 int authType = BlindData.AUTH_NONE;
                 if (!code.equals("3") && !code.equals("4")) {
+                    /* not a redirect or error response; no key exchange is needed */
                 } else if ("newdh".equals(action) || "newpsk".equals(action)) {
                     // newpsk probably not required
                     KeyPair kp = context.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);

@@ -1147,7 +1147,7 @@ public class PluginStarter implements Runnable {
         return rv;
     }
 
-/******
+/*
     private static void addToClasspath(String classpath, String clientName, Log log) {
         StringTokenizer tok = new StringTokenizer(classpath, ",");
         while (tok.hasMoreTokens()) {

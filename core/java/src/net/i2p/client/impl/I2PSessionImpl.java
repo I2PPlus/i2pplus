@@ -490,6 +490,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     return minutes;
                 }
             } catch (NumberFormatException nfe) {
+                /* unparseable or non-positive value; use the 60 minute default */
             }
         }
         return 60;

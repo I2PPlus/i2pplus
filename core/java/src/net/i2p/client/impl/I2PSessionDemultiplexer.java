@@ -83,7 +83,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
                 try {
                     byte[] msg = session.receiveMessage(msgId);
                     _log.warn("Message:\n" + net.i2p.util.HexDump.dump(msg));
-                } catch (I2PSessionException ise) {}
+                } catch (I2PSessionException ise) { /* diagnostic dump only; the message was already undeliverable */ }
             } else {
                 session.discardMessage(msgId);
             }

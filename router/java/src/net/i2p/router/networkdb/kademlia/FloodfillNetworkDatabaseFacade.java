@@ -1120,7 +1120,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         String nofail = _context.getProperty("router.noFailGracePeriod");
         if (nofail != null) {
             try {FloodfillNetworkDatabaseFacade.DONT_FAIL_PERIOD = Long.parseLong(nofail)*60*1000L;}
-            catch (NumberFormatException nfe) {}
+            catch (NumberFormatException nfe) { /* unparseable override; keep the default no-fail grace period */ }
         }
         int knownRouters = getKBucketSetSize();
         if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS || (uptime < DONT_FAIL_PERIOD && knownRouters < 2000) ||

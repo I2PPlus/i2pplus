@@ -1149,6 +1149,7 @@ public class RouterConsoleRunner implements RouterApp {
         try {
             DataHelper.loadProps(rv, cfgFile);
         } catch (IOException ioe) {
+            /* no webapp config file yet (first run); return the empty defaults */
         }
 
         return rv;
@@ -1164,6 +1165,7 @@ public class RouterConsoleRunner implements RouterApp {
         try {
             DataHelper.storeProps(props, cfgFile);
         } catch (IOException ioe) {
+            /* config dir not writable; webapp enable flags are re-derived on the next start */
         }
     }
 

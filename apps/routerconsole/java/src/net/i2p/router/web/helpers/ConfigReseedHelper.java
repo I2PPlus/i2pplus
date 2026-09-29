@@ -150,7 +150,7 @@ public class ConfigReseedHelper extends HelperBase {
         return getChecked(Reseeder.PROP_PROXY_AUTH_ENABLE);
     }
 
-/****
+/*
     public String getSenable() {
         return getChecked(Reseeder.PROP_SPROXY_ENABLE);
     }

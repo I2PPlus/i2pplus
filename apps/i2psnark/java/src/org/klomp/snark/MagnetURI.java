@@ -65,7 +65,7 @@ public class MagnetURI {
             if (xl != null) {
                 try {
                     length = Long.parseLong(xl);
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) { /* unparseable "xl"; length stays 0 (unknown) */ }
             }
         } else if (url.startsWith(MAGGOT)) {
             // maggot://0691e40aae02e552cfcb57af1dca56214680c0c5:0b557bbdf8718e95d352fbe994dec3a383e2ede7

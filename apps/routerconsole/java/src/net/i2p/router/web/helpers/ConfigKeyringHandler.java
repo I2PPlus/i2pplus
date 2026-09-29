@@ -196,6 +196,7 @@ public class ConfigKeyringHandler extends FormHandler {
                 }
             }
         } else {
+            /* unrecognised action; there is nothing to apply to the keyring */
         }
     }
 

@@ -372,6 +372,7 @@ public final class CertUtil {
                     rv = kf.generatePrivate(ks);
                     break;
                 } catch (GeneralSecurityException gse) {
+                    /* this SigAlgo does not match the key; try the next one */
                 }
             }
             if (rv == null) {

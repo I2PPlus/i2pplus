@@ -1087,7 +1087,7 @@ public class I2PSnarkServlet extends BasicServlet {
         long clientVersion = -1;
         String gv = req.getParameter("gv");
         if (gv != null) {
-            try {clientVersion = Long.parseLong(gv.trim());} catch (NumberFormatException nfe) {}
+            try {clientVersion = Long.parseLong(gv.trim());} catch (NumberFormatException nfe) { /* unparseable gv param; version stays -1 so the client is sent the full dataset */ }
         }
         out.write("<div id=snarkGraphData data-v=\"" + version + "\"");
         if (clientVersion < version) {

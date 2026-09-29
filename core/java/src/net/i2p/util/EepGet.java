@@ -1466,7 +1466,7 @@ public class EepGet {
             }
         } catch (RuntimeException | IOException e) {
             if (pipeSink != null) {
-                try { pipeSink.close(); } catch (IOException ioe) {}
+                try { pipeSink.close(); } catch (IOException ioe) { /* sink already closed or the file is gone; the pusher is still joined below */ }
                 // let the decompressor drain and finish before a retry reopens the file
                 if (pusher != null) {
                     try { pusher.join(); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
@@ -1474,7 +1474,7 @@ public class EepGet {
             }
             // close the file we opened, but never a caller-supplied stream
             if (_outputStream == null && _out != null) {
-                try { _out.close(); } catch (IOException ioe) {}
+                try { _out.close(); } catch (IOException ioe) { /* close not allowed or already done; the partial file is discarded and re-fetched anyway */ }
             }
             _out = null;
             throw e;

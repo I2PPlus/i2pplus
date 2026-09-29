@@ -1440,7 +1440,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             (rootDataDir != null && rootDataDir.getPath().contains("zzzot-lookup"))) {
             meta = metainfo;
             if (completeListener != null) {
-                try { completeListener.gotMetaInfo(this); } catch (Exception ignore) {}
+                try { completeListener.gotMetaInfo(this); } catch (Exception ignore) { /* lookup poller did not take the notification; its wait loop simply times out instead */ }
             }
             return;
         }

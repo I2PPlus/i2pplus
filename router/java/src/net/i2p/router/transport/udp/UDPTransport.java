@@ -1045,7 +1045,9 @@ public class UDPTransport extends TransportImpl {
     int getSSUVersion(RouterAddress addr) {
         String style = addr.getTransportStyle();
         if (style.equals(STYLE)) {
+            /* both SSU styles are accepted; the option checks below decide */
         } else if (style.equals(STYLE2)) {
+            /* likewise accepted; the option checks below decide */
         } else {
             return 0;
         }

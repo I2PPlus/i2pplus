@@ -1453,7 +1453,7 @@ public class NTCPTransport extends TransportImpl {
                 if (_log.shouldInfo()) {_log.info("[NTCP] Listening on " + addr);}
                 _pumper.register(chan);
                 } catch (IOException ioe2) {
-                    try {chan.close();} catch (IOException ignore) {}
+                    try {chan.close();} catch (IOException ignore) { /* close not allowed; the original IOException is rethrown below */ }
                     throw ioe2;
                 }
             } catch (IOException ioe) {
@@ -1783,8 +1783,8 @@ public class NTCPTransport extends TransportImpl {
      */
     private static int getNTCPVersion(RouterAddress addr) {
         String style = addr.getTransportStyle();
-        if (style.equals(STYLE)) {}
-        else if (style.equals(STYLE2)) {}
+        if (style.equals(STYLE)) { /* both NTCP styles are accepted; the option checks below decide */ }
+        else if (style.equals(STYLE2)) { /* likewise accepted; the option checks below decide */ }
         else {return 0;}
         // check version == "2" || version starts with "2,"
         // and static key, and iv
