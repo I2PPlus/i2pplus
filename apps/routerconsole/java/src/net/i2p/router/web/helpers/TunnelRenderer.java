@@ -1189,20 +1189,25 @@ class TunnelRenderer {
             }
         }
 
-        int colCount = 5 + maxLength;
-        buf.append("<tfoot class=statusnotes>")
-           .append("<tr class=bwUsage><td colspan=").append(colCount)
-           .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
-           .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
-           .append("B ").append(_t("in")).append(", ")
-           .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
-           .append("B ").append(_t("out")).append("</b></td></tr></tfoot>\n");
+          int colCount = 5 + maxLength;
+          // The summary table above is a separate, closed element and this
+          // footer belongs to the tunnel table. When no tunnel table was opened
+          // there is nothing for a tfoot to attach to, so emitting one left it
+          // loose in the wrapper div, outside any table. Close the body, emit
+          // the footer and the table closer as one unit, or emit nothing.
+          if (tableOpen) {
+              buf.append("</tbody>\n<tfoot class=statusnotes>")
+                 .append("<tr class=bwUsage><td colspan=").append(colCount)
+                 .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
+                 .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
+                 .append("B ").append(_t("in")).append(", ")
+                 .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
+                 .append("B ").append(_t("out")).append("</b></td></tr></tfoot>\n");
+              buf.append("</table>\n");
+          }
+          flushBuf(out, buf);
+      }
 
-        if (tableOpen) {
-            buf.append("</table>\n");
-        }
-        flushBuf(out, buf);
-    }
 
     /**
      *  Append the tunnel table header row: In/Out, Status, Expiry, Latency,
@@ -1212,7 +1217,7 @@ class TunnelRenderer {
      *  @since 0.9.70+
      */
     private void appendTableHeader(StringBuilder buf, int maxLength) {
-        buf.append("<table class=\"tunneldisplay tunnels_client\">\n<tr><th title=\"")
+        buf.append("<table class=\"tunneldisplay tunnels_client\">\n<thead>\n<tr><th title=\"")
            .append(_t("Inbound or outbound?"))
            .append("\">")
            .append(_t("In/Out"))
@@ -1240,14 +1245,18 @@ class TunnelRenderer {
                .append(_t("Participants"))
                .append("</th>");
         } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
-        if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
-        buf.append("</tr>\n");
-    }
+          if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
+          buf.append("</tr>\n</thead>\n<tbody>\n");
+      }
+
 
     /**
      *  Append one tunnel row: direction badge, test status, expiry bar,
-     *  latency, data transferred, and the peer cells, terminated with the
-     *  row and table body closers.
+     *  latency, data transferred, and the peer cells.
+     *
+     *  <p>Terminates the row only. The table body is closed once by the caller
+     *  after the last row, so closing it here put a stray {@code </tbody>}
+     *  after every row and left the remaining rows outside the body.
      *
      *  @return the processed message count, for the bandwidth footer
      *  @since 0.9.70+
@@ -1306,10 +1315,11 @@ class TunnelRenderer {
         buf.append("</td>");
         int length = info.getLength();
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
-        appendPeerCells(buf, info, length, maxLength, isAdvanced, localHopTip, localLabel, tunnelIdTip);
-        buf.append("</tr>\n</tbody>\n");
-        return count;
-    }
+          appendPeerCells(buf, info, length, maxLength, isAdvanced, localHopTip, localLabel, tunnelIdTip);
+          buf.append("</tr>\n");
+          return count;
+      }
+
 
     /**
      *  Append the peer cells for one tunnel: the local hop renders as a
