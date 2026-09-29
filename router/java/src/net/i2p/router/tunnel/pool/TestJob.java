@@ -506,7 +506,28 @@ public class TestJob extends JobImpl {
         return _cachedMinTestDelay;
     }
     /**
-     * The max test delay in effect, tuned value if set else config.
+     *  Minimum gap between two tests of the <b>same already-tested</b> tunnel.
+     *
+     *  <p>The retest delay is derived from the observed success rate and can
+     *  bottom out near {@link #getMinTestDelay}, so a pool full of healthy,
+     *  fast-testing tunnels can re-enter the queue faster than tests complete.
+     *  That fills the job queue with test work and starves the builds and
+     *  dispatches that actually move a pool. A floor bounds the retest rate.
+     *
+     *  <p>Applies only to retests. A tunnel's <b>first</b> test is never
+     *  delayed, so pool population is unaffected.
+     *
+     *  <p>An <b>expedited</b> test bypasses the floor. Expedited is set when a
+     *  pool is critical, in deficit, or has zero active tunnels, and those are
+     *  exactly the states where a 90s gap would leave a pool empty — the
+     *  pre-emptive recovery path depends on those tests being prompt.
+     *
+     *  @since 0.9.71+
+     */
+    private static final long MIN_RETEST_GAP_MS = 90_000;
+
+    /**
+      * The max test delay in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the max test delay in ms
      * @since 0.9.71+
@@ -3460,6 +3481,23 @@ public class TestJob extends JobImpl {
         }
     }
 
+    /**
+     *  Apply the minimum retest gap to a computed delay.
+     *
+     *  <p>Pure, so the floor and its exemption are testable without a router.
+     *
+     *  @param delayMs   the delay the success-rate scaling produced
+     *  @param minGapMs  the floor; non-positive disables it
+     *  @param expedited true when the tunnel is marked expedited and must not be
+     *                   held back
+     *  @return the delay to actually use, in ms
+     *  @since 0.9.71+
+     */
+    static int applyMinRetestGap(int delayMs, long minGapMs, boolean expedited) {
+        if (expedited || minGapMs <= 0) {return delayMs;}
+        return (int) Math.max(delayMs, minGapMs);
+    }
+
     private int getDelay() {
         // Minimum 30s between retests; scale up for reliable tunnels
         // so the test queue prioritizes UNTESTED and failing tunnels.
@@ -3512,9 +3550,10 @@ public class TestJob extends JobImpl {
               scaled += scaled / 2;
           }
         scaled = Math.min(scaled, getMaxTestDelay(getContext()) * 2);
-        // Add a small jitter to avoid thundering herd (ensure positive jitter)
-        int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
-        return scaled + jitter;
+          // Add a small jitter to avoid thundering herd (ensure positive jitter)
+          int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
+          long minGap = getContext().getProperty("tunnel.test.minRetestGap", MIN_RETEST_GAP_MS);
+          return applyMinRetestGap(scaled + jitter, minGap, _cfg.needsExpeditedTest());
     }
 
     private float getSuccessRate() {
