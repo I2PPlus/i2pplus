@@ -123,6 +123,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     static final long SOFT_FAILURE_WINDOW_MS = 10 * 60 * 1000L;
     /**
+     *  Ceiling for the soft failure streak. The count exists only to cross the
+     *  soft removal bar, so saturating well above it costs nothing and stops a
+     *  retained tunnel that keeps timing out from reporting a streak long
+     *  enough to be mistaken for a count of independent failures.
+     *  @since 0.9.71+
+     */
+    static final int MAX_SOFT_FAILURES = 32;
+    /**
      *  Consecutive first-hop send failures before an outbound tunnel is
      *  retired.  Send failures are not proof the tunnel is dead: most come
      *  from local congestion (expired-on-queue, CoDel drops, no-bid replies)
@@ -509,7 +517,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         synchronized (this) {
             int current = effectiveSoftFailures(_softFailures.get(), _lastSoftFailure,
                                                 now, SOFT_FAILURE_WINDOW_MS);
-            _softFailures.set(current + 1);
+            // Saturate rather than wrap: the count only has to cross the removal
+            // bar, and an unbounded streak on a retained tunnel produced counts
+            // in the thousands that read as distinct failures when they were one
+            // condition counted once per timeout.
+            _softFailures.set(current >= MAX_SOFT_FAILURES
+                              ? MAX_SOFT_FAILURES : current + 1);
             _lastSoftFailure = now;
         }
     }
