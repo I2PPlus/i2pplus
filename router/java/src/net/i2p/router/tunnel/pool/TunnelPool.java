@@ -5319,17 +5319,33 @@ public class TunnelPool {
      */
     private void relaxWindowForStarvation(RouterContext ctx) {
         int before = TunnelPeerSelector.getWindowMultiplier();
+        // An empty pool is a symptom, not a cause. Admitting older peers only
+        // helps when we are genuinely short of the peers selection would
+        // otherwise use; with plenty of fast peers in hand it is pure quality
+        // loss. So the bypass defers to the same peer-supply gate the Tuner
+        // uses, and reports when it declines to widen.
+        int allowed = TunnelPeerSelector.windowMultiplierFor(ctx);
+        if (allowed <= before) {
+            TunnelPeerSelector.publishWindowMultiplier(ctx);
+            if (_log.shouldWarn()) {
+                _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample " +
+                          "(" + ctx.profileOrganizer().countFastPeers() + " fast peers, " +
+                          "threshold " + TunnelPeerSelector.SCARCE_FAST_PEERS +
+                          "), not widening the peer activity window");
+            }
+            return;
+        }
         if (before >= TunnelPeerSelector.getMaxWindowMultiplier()) {
             // Already at the ceiling; still publish so a fresh console shows it.
             TunnelPeerSelector.publishWindowMultiplier(ctx);
             return;
         }
-        TunnelPeerSelector.setWindowMultiplier(TunnelPeerSelector.getMaxWindowMultiplier());
+        TunnelPeerSelector.setWindowMultiplier(allowed);
         TunnelPeerSelector.publishWindowMultiplier(ctx);
         if (_log.shouldWarn()) {
             _log.warn(toString() + " -> Starvation: peer activity window multiplier " +
                       before + " -> " + TunnelPeerSelector.getWindowMultiplier() +
-                      " (zero usable tunnels)");
+                      " (zero usable tunnels, peer supply scarce)");
         }
     }
 

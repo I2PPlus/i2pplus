@@ -9006,131 +9006,70 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Consecutive healthy cycles required before the activity window tightens
-     *  again. A single recovered minute must not withdraw relief from pools
-     *  that are still refilling, so the window decays back one step at a time
-     *  rather than snapping to the floor on the first healthy reading.
+     *  Consecutive cycles with ample peer supply required before the activity
+     *  window tightens again. A single ample reading must not withdraw relief
+     *  from pools that are still refilling, so the window holds for this many
+     *  cycles rather than snapping to the floor immediately.
      *  @since 0.9.71+
      */
     private static final int HEALTHY_CYCLES_TO_TIGHTEN = 3;
-    /**
-     *  Build success rate at or above which the window may tighten again.
-     *  @since 0.9.71+
-     */
-    private static final double HEALTHY_RATE = 0.80;
-    /**
-     *  Build success rate at or below which the window is fully widened. Mirrors
-     *  {@code TunnelPeerSelector}'s degraded-build threshold, which is
-     *  package-private to the tunnel.pool package and cannot be referenced here.
-     *  @since 0.9.71+
-     */
-    private static final double DEGRADED_RATE = 0.65;
 
     /**
-     *  Window multiplier implied by a normalized build success rate.
+     *  Next window multiplier for a tuning cycle, keyed on peer supply.
      *
-     *  <p>Pure so the policy is testable without a router. The rate is
-     *  mapped continuously across the degraded band rather than stepped at
-     *  a threshold, so a rate just under the healthy boundary already buys
-     *  most of the available widening instead of nothing. Above
-     *  {@link #HEALTHY_RATE} the target falls back to the floor, but the
-     *  caller decides when to act on that.
+     *  <p>Pure so the policy is testable without a router. The multiplier is the
+     *  ceiling {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#windowMultiplierFor}
+     *  allows for the current fast-peer count, and widening applies in one step
+     *  because scarcity is not noisy the way a single build-success sample was.
+     *  Tightening waits for {@link #HEALTHY_CYCLES_TO_TIGHTEN} consecutive cycles
+     *  with ample supply, so a momentary dip cannot withdraw relief from a pool
+     *  that is still refilling.
      *
-     * @param observed build success rate, 0.0-1.0; NaN leaves the window alone
-     * @param min      floor, e.g. 1
-     * @param max      ceiling, e.g. 4
-     * @return the multiplier the rate implies
+     *  @param fastPeers    peers currently classified fast
+     *  @param startupGrace true during the startup grace period
+     *  @param healthyCycles consecutive cycles observed with ample peer supply
+     *  @param min          floor, e.g. 1
+     *  @param max          ceiling, e.g. 4
+     *  @param step         retained for call-site symmetry; the gate is continuous
+     *  @return the multiplier to apply
      *  @since 0.9.71+
      */
-    static int targetWindowMultiplier(double observed, int min, int max) {
-        if (Double.isNaN(observed) || max <= min) {return min;}
-        if (observed >= HEALTHY_RATE) {return min;}
-        // Span is the healthy-to-degraded distance, so it is positive. Full
-        // widening at or below the degraded boundary, ramping linearly down
-        // to the floor at the healthy boundary. Rates below the degraded
-        // boundary clamp to full relief.
-        double span = HEALTHY_RATE - DEGRADED_RATE;
-        double deficit = (HEALTHY_RATE - observed) / span;
-        if (deficit <= 0) {return min;}
-        if (deficit > 1.0) {deficit = 1.0;}
-        return min + (int) Math.round(deficit * (max - min));
-    }
-
-    /**
-     *  Next window multiplier for a tuning cycle.
-     *
-     *  <p>Pure so the policy is testable without a router. Widening applies
-     *  the rate-implied target in one step, so a slump gets relief
-     *  immediately. Tightening is deferred until
-     *  {@link #HEALTHY_CYCLES_TO_TIGHTEN} consecutive healthy cycles, and
-     *  then only by {@code step}, so the window decays back rather than
-     *  collapsing on one lucky reading.
-     *
-     * @param current      multiplier in effect
-     * @param observed     build success rate, 0.0-1.0; NaN holds
-     * @param healthyCycles consecutive healthy cycles seen so far
-     * @param min          floor
-     * @param max          ceiling
-     * @param step         adjustment step
-     * @return the next multiplier, and the healthy-cycle count for the next call
-     *  @since 0.9.71+
-     */
-    static int nextWindowMultiplier(int current, double observed, int healthyCycles,
+    static int nextWindowMultiplier(int fastPeers, boolean startupGrace, int healthyCycles,
                                     int min, int max, int step) {
-        if (Double.isNaN(observed)) {return current;}
-        int target = targetWindowMultiplier(observed, min, max);
-        if (target > current) {
-            // Degraded: take the full relief the rate implies, at once.
-            return Math.min(max, target);
+        int target = TunnelPeerSelector.windowMultiplierFor(fastPeers, startupGrace, min, max);
+        boolean ample = fastPeers >= TunnelPeerSelector.SCARCE_FAST_PEERS && !startupGrace;
+        if (ample && healthyCycles + 1 < HEALTHY_CYCLES_TO_TIGHTEN) {
+            // Hold the previous value one more cycle to avoid flapping.
+            return Math.max(target, min + step);
         }
-        if (current <= min) {return current;}
-        if (!Double.isNaN(observed) && observed >= HEALTHY_RATE) {
-            int cycles = healthyCycles + 1;
-            if (cycles < HEALTHY_CYCLES_TO_TIGHTEN) {return current;}
-            return Math.max(min, current - step);
-        }
-        return current;
+        return target;
     }
 
-
     /**
-     * Tunes the peer-selection activity-window multiplier to break the tunnel
-     * build "purgatory band" feedback loop.
+     *  Tunes the peer-selection activity-window multiplier to the recency window
+     *  that peer supply actually warrants.
      *
-     * <p>When build success sits in the 40-79% band, the client-tunnel recency
-     * gate ({@code TunnelPeerSelector} "no-signal" pre-qualification) prunes good
-     * peers whose last successful test has aged out faster than they can be
-     * re-tested, shrinking the eligible pool and pushing success lower still.
-     * This param widens the activity window as success degrades and tightens it
-     * back toward the default as success recovers, so the window self-corrects
-     * instead of resting on a static threshold.
+     *  <p>The window exists to trade recency for pool thickness when, and only
+     *  when, the router is short of the peers selection would otherwise use. An
+     *  earlier version drove it from {@code tunnel.buildSuccessRate} instead,
+     *  which was a category error: build success measures outcomes, not supply,
+     *  and is depressed just as much by unresponsive peers, build timeouts and
+     *  unreachable destinations as by an over-tight recency window. Keying the
+     *  window to it closed a positive feedback loop — worse builds widened the
+     *  window, admitting older peers, which worsened the builds — and did so
+     *  while ample fast and high-capacity peers sat unused.
      *
-     * <p>The mapping is continuous rather than a pair of thresholds, and the
-     * response is asymmetric. The previous policy required
-     * {@code degraded && (buildsExpiring || testsFailing)}, where both
-     * cross-refs come from {@code getAdditionalEventCount}/{@code getAdditionalStat}
-     * over a single 60s period. Those return {@code NaN} on an empty period, so
-     * a build slump that produced only intermittent expire or test-failure
-     * events left the multiplier pinned at its floor of 1 — which is exactly
-     * the condition the param exists to relieve, and it left the loop intact.
-     * Measured: 57% build success with 1 expire event per period held the
-     * multiplier at 1 while every pool sat below target.
+     *  <p>The sole gate is now peer supply, shared with
+     *  {@link net.i2p.router.tunnel.pool.TunnelPeerSelector} and the pool
+     *  starvation bypass so all three callers agree. Above
+     *  {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#SCARCE_FAST_PEERS}
+     *  fast peers the multiplier stays at its floor regardless of build success.
+     *  The one exception is the startup grace period, where a cold profile set
+     *  makes every peer look stale for want of test history rather than fault.
      *
-     * <p>Widening is therefore driven by the degraded rate alone, and
-     * tightening requires several consecutive healthy cycles so a single
-     * recovered minute cannot withdraw relief from pools that are still
-     * refilling. The starvation bypass in {@link TunnelPool} forces the
-     * multiplier to its ceiling without waiting for a tuning cycle at all.
+     *  <p>Value is a multiplier (1-4) applied to the base activity window.
      *
-     * <p>Primary signal: {@code tunnel.buildSuccessRate} (0.0-1.0).
-     * Cross-refs: {@code tunnel.buildClientExpire} (timed-out client builds),
-     *             {@code tunnel.testFailedTime} (failed tunnel tests) — now
-     *             reported on {@code tunnel.peerSelection.windowMultiplier}
-     *             for visibility rather than used as a gate.
-     *
-     * <p>Value is a multiplier (1-4) applied to the base activity window.
-     *
-     * @since 0.9.70+
+     *  @since 0.9.70+
      */
     private class ActivityWindowParam extends BaseParam {
 
@@ -9150,16 +9089,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         *  Consecutive healthy cycles required before tightening the window.
-         *  One recovered minute must not withdraw relief from pools that are
-         *  still refilling, so a single healthy reading only decays the
-         *  multiplier once per cycle toward the target rather than snapping to
-         *  it.
+         *  Consecutive cycles observed with ample peer supply, counting toward
+         *  {@link #HEALTHY_CYCLES_TO_TIGHTEN}. Reset whenever supply is scarce
+         *  or the router is in its startup grace period, so relief is withdrawn
+         *  only after sustained evidence that it is no longer needed.
          *  @since 0.9.71+
          */
         private int _healthyCycles;
 
-        /** Read the observed stat value for autotuning decisions. */
+        /**
+         *  Observed stat, retained for the base-class contract and the console
+         *  cross-reference only. This param no longer gates on it: build success
+         *  is an outcome, not a measure of peer supply, so widening the recency
+         *  window in response to it fed back on itself. See the class javadoc.
+         *
+         *  @return the current build success rate, or NaN when unavailable
+         *  @since 0.9.71+
+         */
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) {return Double.NaN;}
@@ -9170,19 +9116,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         *  Compute the target value. Widening keys on the degraded build rate
-         *  alone; the old cross-ref conjunction is gone because both terms came
-         *  from single-period rate samples that read NaN whenever the event
-         *  count was zero, pinning the window at its floor during exactly the
-         *  slump it exists to relieve.
+         *  Compute the target multiplier from peer supply, ignoring the observed
+         *  build success rate. Ample fast peers pin the window at its floor no
+         *  matter how degraded builds look; scarcity, or the startup grace
+         *  period, is the only thing that widens it.
+         *
+         *  @param observed build success rate; carried for the base-class contract
+         *                  and deliberately not consulted
+         *  @return the multiplier to apply
+         *  @since 0.9.71+
          */
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            int next = nextWindowMultiplier(current, observed, _healthyCycles,
-                                           _min, _max, _step);
-            boolean healthy = !Double.isNaN(observed) && observed >= HEALTHY_RATE;
-            _healthyCycles = healthy ? _healthyCycles + 1 : 0;
-            return next;
+            int fastPeers = _context.profileOrganizer().countFastPeers();
+            boolean startupGrace = TunnelPeerSelector.isInStartupGracePeriod(_context);
+            boolean ample = fastPeers >= TunnelPeerSelector.SCARCE_FAST_PEERS && !startupGrace;
+            _healthyCycles = ample ? _healthyCycles + 1 : 0;
+            return nextWindowMultiplier(fastPeers, startupGrace, _healthyCycles,
+                                        _min, _max, _step);
         }
     }
 

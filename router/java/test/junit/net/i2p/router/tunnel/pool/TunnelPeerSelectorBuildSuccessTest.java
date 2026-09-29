@@ -16,6 +16,14 @@ import net.i2p.router.RouterTestHelper;
  *
  * Pure statics are exercised without a router context; the overload
  * smoke tests use a fresh isolated RouterContext when available.
+ *
+ * <p>Note that the activity window is deliberately NOT build-success-gated.
+ * It used to carry a 4h "degraded" floor keyed on build success, which closed
+ * a positive feedback loop — worse builds widened the window, admitting older
+ * peers, which worsened the builds — while ample fast peers sat unused. The
+ * buildSuccess overload of getActivityWindow is retained only for source
+ * compatibility and must be equivalent to the no-arg form; the tests below pin
+ * that equivalence so the coupling cannot quietly return.
  */
 public class TunnelPeerSelectorBuildSuccessTest {
 
@@ -186,17 +194,25 @@ public class TunnelPeerSelectorBuildSuccessTest {
     @Test
     public void testGetActivityWindowInRange() {
         RouterContext ctx = getContext();
-        long w = TunnelPeerSelector.getActivityWindow(ctx, 0.85);
-        assertTrue("window " + w + " outside [4h, 12h]", w >= 4 * HOUR_MS && w <= 12 * HOUR_MS);
+        long w = TunnelPeerSelector.getActivityWindow(ctx);
+        assertTrue("window " + w + " outside [1h, 12h]",
+                   w >= 1 * HOUR_MS && w <= 12 * HOUR_MS);
     }
 
+    /**
+     * The buildSuccess overload must be inert. If build success can move the
+     * window at all, the feedback loop is back: a slump widens recency, stale
+     * peers get selected, and the slump deepens.
+     */
     @Test
-    public void testGetActivityWindowSameForDegraded() {
+    public void testGetActivityWindowIgnoresBuildSuccess() {
         RouterContext ctx = getContext();
         long healthy = TunnelPeerSelector.getActivityWindow(ctx, 0.85);
         long degraded = TunnelPeerSelector.getActivityWindow(ctx, 0.2);
         long noData = TunnelPeerSelector.getActivityWindow(ctx, 0.0);
-        assertEquals("degraded floor must not exceed base window", healthy, degraded);
+        long absent = TunnelPeerSelector.getActivityWindow(ctx);
+        assertEquals("build success must not widen the window", healthy, degraded);
         assertEquals(healthy, noData);
+        assertEquals("the overload must match the no-arg form exactly", absent, healthy);
     }
 }

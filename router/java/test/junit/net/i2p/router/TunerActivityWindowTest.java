@@ -4,18 +4,24 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import net.i2p.router.tunnel.pool.TunnelPeerSelector;
+
 /**
- * Tests the peer-selection activity-window policy:
- * {@link Tuner#targetWindowMultiplier} and
- * {@link Tuner#nextWindowMultiplier}.
+ * Tests the peer-selection activity-window policy, which is keyed on peer
+ * supply rather than on build outcomes.
  *
- * <p>The regression: the old policy required
- * {@code degraded && (buildsExpiring || testsFailing)}, where both cross-refs
- * are single-period rate samples that return NaN on an empty period. A build
- * slump producing only intermittent expire or test-failure events left the
- * multiplier pinned at its floor of 1 while every pool sat below target — the
- * one control meant to break the recency-pruning loop was inert during exactly
- * the slump it exists to relieve.
+ * <p>The regression this replaces: the window used to widen as build success
+ * fell. Build success measures outcomes, not supply — it is depressed just as
+ * readily by unresponsive peers, build timeouts and unreachable destinations as
+ * by an over-tight recency window — so the control closed a positive feedback
+ * loop (worse builds widened the window, admitting older peers, which worsened
+ * the builds) and did so while ample fast peers sat unused. A healthy router
+ * here holds ~1000 fast peers and still pinned the multiplier at its ceiling.
+ *
+ * <p>The window's only legitimate reason to widen is being short of the peers
+ * selection would otherwise use, so peer supply is now the sole gate. The one
+ * exception is the startup grace period, where a cold profile set makes every
+ * peer look stale for want of test history rather than fault.
  *
  * @since 0.9.71+
  */
@@ -24,159 +30,156 @@ public class TunerActivityWindowTest {
     private static final int MIN = 1;
     private static final int MAX = 4;
     private static final int STEP = 1;
+    private static final int SCARCE = TunnelPeerSelector.SCARCE_FAST_PEERS;
 
-    private static int target(double observed) {
-        return Tuner.targetWindowMultiplier(observed, MIN, MAX);
+    private static int gate(int fastPeers, boolean startupGrace) {
+        return TunnelPeerSelector.windowMultiplierFor(fastPeers, startupGrace, MIN, MAX);
     }
 
-    private static int invokeTarget(double observed, int min, int max) {
-        return Tuner.targetWindowMultiplier(observed, min, max);
+    private static int next(int fastPeers, boolean startupGrace, int healthyCycles) {
+        return Tuner.nextWindowMultiplier(fastPeers, startupGrace, healthyCycles, MIN, MAX, STEP);
     }
 
-    private static int next(int current, double observed, int healthyCycles) {
-        return Tuner.nextWindowMultiplier(current, observed, healthyCycles, MIN, MAX, STEP);
-    }
-
-    // ---- targetWindowMultiplier: direction and bounds ----
+    // ---- the gate: peer supply decides, build success does not ----
 
     @Test
-    public void healthyRateGetsNoWidening() {
-        assertEquals(MIN, target(1.0));
-        assertEquals(MIN, target(0.90));
-        assertEquals(MIN, target(0.80));
-    }
-
-    @Test
-    public void degradedRateGetsFullWidening() {
-        assertEquals("at or below the degraded boundary the window is fully widened",
-                     MAX, target(0.65));
-        assertEquals(MAX, target(0.649));
+    public void ampleFastPeersPinTheWindowToTheFloor() {
+        assertEquals(MIN, gate(SCARCE, false));
+        assertEquals(MIN, gate(SCARCE + 1, false));
+        assertEquals("a healthy router's ~1000 fast peers must not widen the window",
+                     MIN, gate(1084, false));
+        assertEquals(MIN, gate(2000, false));
     }
 
     @Test
-    public void worseThanDegradedStaysAtCeiling() {
-        assertEquals(MAX, target(0.569));
-        assertEquals(MAX, target(0.30));
-        assertEquals(MAX, target(0.0));
+    public void scarcityWidensUpToTheCeiling() {
+        assertEquals(MAX, gate(0, false));
+        assertEquals(MAX, gate(1, false));
     }
 
-    /**
-     * The bug this caught: the span was computed as
-     * {@code DEGRADED_RATE - HEALTHY_RATE}, which is negative, so the deficit
-     * inverted and a worse build rate produced a <em>smaller</em> multiplier.
-     */
     @Test
-    public void worseRateNeverMeansLessWidening() {
-        double[] rates = { 0.80, 0.75, 0.70, 0.65, 0.60, 0.50, 0.30, 0.0 };
-        for (int i = 1; i < rates.length; i++) {
-            assertTrue("rate " + rates[i] + " (" + target(rates[i]) + ") must widen at least as much"
-                       + " as rate " + rates[i - 1] + " (" + target(rates[i - 1]) + ")",
-                       target(rates[i]) >= target(rates[i - 1]));
+    public void shortageRampsMonotonically() {
+        // Fewer fast peers must never mean less widening. Walk down from just
+        // above the threshold (where the window is already at the floor) to
+        // zero, and require the multiplier to be non-decreasing.
+        int prev = gate(SCARCE + 10, false);
+        assertEquals("just above the threshold the window must be at the floor",
+                     MIN, prev);
+        for (int fast = SCARCE; fast >= 0; fast -= 10) {
+            int t = gate(fast, false);
+            assertTrue("fast=" + fast + " -> " + t + " must widen at least as much as "
+                       + (fast + 10) + " -> " + prev, t >= prev);
+            prev = t;
         }
+        assertEquals("running out of fast peers must reach the ceiling",
+                     MAX, prev);
     }
 
     @Test
-    public void midBandWidensProportionally() {
-        // Between the boundaries the mapping is continuous, not stepped.
-        int atHigh = target(0.79);
-        int atMid = target(0.725);
-        int atLow = target(0.66);
-        assertTrue("expected a ramp between the boundaries", atHigh < atMid && atMid < atLow);
+    public void rampIsContinuousNotStepped() {
+        int atThreshold = gate(SCARCE, false);
+        int midway = gate(SCARCE / 2, false);
+        int nearZero = gate(SCARCE / 10, false);
+        assertEquals(MIN, atThreshold);
+        assertTrue("expected a ramp below the threshold, got " + midway,
+                   midway > atThreshold && midway < nearZero);
+        assertEquals(MAX, nearZero);
     }
+
+    // ---- startup: the one legitimate exception ----
+
+    @Test
+    public void startupGraceWidensRegardlessOfPeerCount() {
+        assertEquals("a cold router has no test history, so peers look stale unfairly",
+                     MAX, gate(0, true));
+        assertEquals(MAX, gate(SCARCE, true));
+        assertEquals("startup is exempt even when the count is nominally ample",
+                     MAX, gate(1084, true));
+    }
+
+    @Test
+    public void startupGraceOverridesAnAlreadyAmpleCount() {
+        assertTrue(gate(5000, true) > gate(5000, false));
+    }
+
+    // ---- bounds and degenerate input ----
 
     @Test
     public void neverOutsideTheConfiguredBounds() {
-        for (double r = -1; r <= 2; r += 0.01) {
-            int t = target(r);
-            assertTrue("rate " + r + " -> " + t, t >= MIN && t <= MAX);
+        for (int fast = -5; fast <= SCARCE * 2; fast += 3) {
+            for (boolean startup : new boolean[] {false, true}) {
+                int t = gate(fast, startup);
+                assertTrue("fast=" + fast + " startup=" + startup + " -> " + t,
+                           t >= MIN && t <= MAX);
+            }
         }
     }
 
     @Test
-    public void nanRateFallsBackToTheFloor() {
-        assertEquals(MIN, target(Double.NaN));
+    public void negativePeerCountClampsToTheCeiling() {
+        assertEquals(MAX, gate(-1, false));
     }
 
     @Test
     public void degenerateBoundsReturnTheFloor() {
-        assertEquals(2, invokeTarget(0.3, 2, 2));
+        assertEquals(2, TunnelPeerSelector.windowMultiplierFor(0, false, 2, 2));
         // Inverted bounds (min > max) cannot express a widening, so the floor
         // is returned; the caller clamps anyway, and the point is not to throw.
-        assertEquals(4, invokeTarget(0.3, 4, 2));
+        assertEquals(4, TunnelPeerSelector.windowMultiplierFor(0, false, 4, 2));
     }
 
-    // ---- nextWindowMultiplier: asymmetric response ----
+    // ---- nextWindowMultiplier: cycle pacing on top of the gate ----
 
     @Test
-    public void degradedWidensInOneStep() {
-        // The reported case: 57% success with the multiplier stuck at 1.
-        assertEquals("a degraded rate must widen immediately, not after a cycle",
-                     MAX, next(MIN, 0.569, 0));
-    }
-
-    @Test
-    public void healthyHoldsUntilTheCycleBudgetIsSpent() {
-        // healthyCycles counts PRIOR healthy cycles, so 0 and 1 are the first
-        // and second and must hold; 2 means this is the third and tightens.
-        assertEquals("one healthy cycle must not withdraw relief",
-                     MAX, next(MAX, 1.0, 0));
-        assertEquals("two healthy cycles still hold",
-                     MAX, next(MAX, 1.0, 1));
+    public void scarcityWidensInOneStep() {
+        assertEquals("a scarce peer set must widen immediately, not after a cycle",
+                     MAX, next(0, false, 0));
     }
 
     @Test
-    public void healthyDecaysAfterThreeCycles() {
-        assertEquals("the third consecutive healthy cycle tightens by one step",
-                     MAX - STEP, next(MAX, 1.0, 2));
+    public void ampleSupplyHoldsUntilTheCycleBudgetIsSpent() {
+        // healthyCycles counts PRIOR ample cycles, so 0 and 1 must still hold.
+        assertEquals("one ample cycle must not be enough to tighten",
+                     MIN + STEP, next(SCARCE, false, 0));
+        assertEquals(MIN + STEP, next(SCARCE, false, 1));
     }
 
     @Test
-    public void decayIsGradualNotASnapBack() {
-        int window = MAX;
-        window = next(window, 1.0, 0);
-        window = next(window, 1.0, 1);
-        window = next(window, 1.0, 2);
-        assertEquals(MAX - 1, window);
-        // Still above the floor, so the pool keeps some relief.
-        assertTrue(window > MIN);
+    public void ampleSupplyTightensAfterThreeCycles() {
+        assertEquals("the third consecutive ample cycle tightens to the floor",
+                     MIN, next(SCARCE, false, 2));
     }
 
     @Test
-    public void healthyCyclesResetWhenDegradedAgain() {
-        assertEquals(MAX, next(MIN, 0.569, 0));
-        // Two healthy cycles do not yet justify tightening...
-        assertEquals(MAX, next(MAX, 1.0, 0));
-        assertEquals(MAX, next(MAX, 1.0, 1));
-        // ...and a degraded reading reopens the window, resetting the budget.
-        assertEquals(MAX, next(MAX, 0.60, 0));
-    }
-
-    @Test
-    public void nanRateHoldsTheWindow() {
-        assertEquals(MAX, next(MAX, Double.NaN, 0));
-        assertEquals(MIN, next(MIN, Double.NaN, 0));
+    public void healthyCyclesResetWhenSupplyDropsAgain() {
+        assertEquals(MAX, next(0, false, 0));
+        // Two ample cycles do not yet justify tightening...
+        assertEquals(MIN + STEP, next(SCARCE, false, 0));
+        assertEquals(MIN + STEP, next(SCARCE, false, 1));
+        // ...and renewed scarcity reopens the window, resetting the budget.
+        assertEquals(MAX, next(10, false, 0));
     }
 
     @Test
     public void neverExceedsCeilingOrDropsBelowFloor() {
         int window = MIN;
-        double[] rates = { 0.0, 0.1, 0.4, 0.569, 0.72, 0.79, 0.85, 1.0, 0.3, 0.95 };
+        int[] counts = { 2000, 50, SCARCE, 0, 1084, 10, 0, SCARCE, SCARCE };
         int cycles = 0;
-        for (double r : rates) {
-            window = next(window, r, cycles);
-            assertTrue("window " + window + " out of bounds after rate " + r,
+        for (int fast : counts) {
+            window = next(fast, false, cycles);
+            assertTrue("window " + window + " out of bounds at fast=" + fast,
                        window >= MIN && window <= MAX);
-            cycles = r >= 0.80 ? cycles + 1 : 0;
+            cycles = fast >= SCARCE ? cycles + 1 : 0;
         }
     }
 
     @Test
-    public void aFullHealthyRunReturnsToTheFloor() {
+    public void aSustainedAmpleRunSettlesAtTheFloor() {
         int window = MAX;
         for (int i = 0; i < 12; i++) {
-            window = next(window, 1.0, i);
+            window = next(SCARCE, false, i);
         }
-        assertEquals("sustained health must walk the window back to the floor",
+        assertEquals("sustained ample supply must settle the window at the floor",
                      MIN, window);
     }
 }

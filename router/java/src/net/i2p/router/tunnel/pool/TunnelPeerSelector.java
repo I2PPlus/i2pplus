@@ -192,15 +192,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** Duration in ms to suppress startup warnings */
     protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000L;
 
-    /**
-     *  Build success at or below this widens the activity window to counter the
-     *  purgatory band (40-79% success) where the recency gate prunes good peers
-     *  faster than they can be re-tested, tightening the eligible pool in a
-     *  self-reinforcing loop. Higher than {@link #ATTACK_THRESHOLD} because
-     *  relaxing recency is far safer than relaxing capability exclusions.
-     */
-    protected static final double DEGRADED_BUILD_THRESHOLD = 0.65;
-
     /** Multiplier applied to the base activity window by {@link #getActivityWindow}. */
     private static final int MIN_WINDOW_MULTIPLIER = 1;
     private static final int MAX_WINDOW_MULTIPLIER = 4;
@@ -659,14 +650,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * Is the router in the startup grace period?
-     * During startup, peers haven't accumulated test history yet, so
-     * quality filters (pre-qualification, tier capping) should be relaxed
-     * to allow tunnels to build.
-     * @param ctx the router context
-     * @return true if uptime is between 1ms and STARTUP_WARNING_SUPPRESS_MS
+     *  Is the router in the startup grace period?
+     *  During startup, peers haven't accumulated test history yet, so
+     *  quality filters (pre-qualification, tier capping) should be relaxed
+     *  to allow tunnels to build. Public so the Tuner can share the same
+     *  definition when deciding whether to widen the activity window.
+     *
+     *  @param ctx the router context
+     *  @return true if uptime is between 1ms and STARTUP_WARNING_SUPPRESS_MS
+     *  @since 0.9.70+
      */
-    protected static boolean isInStartupGracePeriod(RouterContext ctx) {
+    public static boolean isInStartupGracePeriod(RouterContext ctx) {
         long uptime = ctx.router().getUptime();
         return uptime > 0 && uptime < STARTUP_WARNING_SUPPRESS_MS;
     }
@@ -964,7 +958,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             // connectivity within the activity window (see hasConnectivitySignal).
             if (!established &&
                 (profile == null || !hasConnectivitySignal(profile, ctx.clock().now(),
-                                                           getActivityWindow(ctx, buildSuccess)))) {
+                                                           getActivityWindow(ctx)))) {
                 return "no-signal";
             }
         }
@@ -2145,28 +2139,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (profile == null)
             return false;
         long now = ctx.clock().now();
-        long cutoff = now - getActivityWindow(ctx, buildSuccess);
+        long cutoff = now - getActivityWindow(ctx);
         return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
-    }
-
-    /**
-     *  Compute the activity window for peer selection based on current network
-     *  visibility.  When we hear from many peers, we can be selective (short window).
-     *  When the router is fresh or the network is sparse, use a wider window to
-     *  avoid starving peer pools.
-     *
-     *  The base window (from active-peer count) is scaled by the Tuner-controlled
-     *  multiplier ({@link #setWindowMultiplier}) and floored to at least 4 hours
-     *  when build success is in the degraded/purgatory band, so good peers whose
-     *  last successful test has aged out are re-admitted instead of pruned in a
-     *  self-reinforcing loop.
-     *
-     *  @param ctx the router context
-     *  @return activity window in milliseconds
-     *  @since 0.9.70+
-     */
-    public static long getActivityWindow(RouterContext ctx) {
-        return getActivityWindow(ctx, getBuildSuccess(ctx));
     }
 
     /**
@@ -2187,6 +2161,32 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.70+
      */
     public static long getActivityWindow(RouterContext ctx, double buildSuccess) {
+        return getActivityWindow(ctx);
+    }
+
+    /**
+     *  Compute the activity window for peer selection from the base ladder only,
+     *  scaled by whatever multiplier the availability gate has granted.
+     *
+     *  <p>The {@code buildSuccess} argument is ignored. It used to drive an acute
+     *  floor that pinned the window at 4h whenever build success was in the
+     *  degraded band, but build success measures <em>outcomes</em>, not peer
+     *  supply: it is depressed by unresponsive peers, build timeouts and
+     *  unreachable destinations just as readily as by an over-tight recency
+     *  window. Keying the window to it therefore closed a positive feedback loop
+     *  — worse builds widened the window, admitting older peers, which made
+     *  builds worse still — and did so while ample fast and high-capacity peers
+     *  were sitting unused. Peer supply is the only thing the window should
+     *  respond to, and that decision now lives solely in
+     *  {@link #windowMultiplierFor}, so the Tuner and the pool starvation bypass
+     *  cannot disagree with this ladder.
+     *
+     *  @param ctx the router context
+     *  @param buildSuccess ignored; retained for source compatibility
+     *  @return activity window in milliseconds
+     *  @since 0.9.71+
+     */
+    public static long getActivityWindow(RouterContext ctx) {
         int active = ctx.commSystem().countActivePeers();
         long base;
         if (active >= 500) {base = 1 * 60 * 60 * 1000L;}        // 1 hour
@@ -2194,16 +2194,77 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         else if (active >= 100) {base = 4 * 60 * 60 * 1000L;}   // 4 hours
         else {base = 8 * 60 * 60 * 1000L;}                      // 8 hours
 
-        long window = base * _windowMultiplier;
+        return Math.min(base * _windowMultiplier, MAX_WINDOW_MS);
+    }
 
-        // Acute floor: when builds are degraded, never let the window fall below
-        // 4 hours regardless of active-peer count, to break the pruning loop fast
-        // (the Tuner multiplier reacts more slowly across cycles).
-        if (buildSuccess > 0 && buildSuccess < DEGRADED_BUILD_THRESHOLD) {
-            window = Math.max(window, 4 * 60 * 60 * 1000L);
-        }
+    /**
+     *  Number of fast peers at or above which the peer set is considered well
+     *  supplied and the activity window is never widened on availability grounds.
+     *
+     *  <p>Deliberately far below the ~1000 a healthy router typically holds: the
+     *  question is not "is the network healthy" but "are we short of the peers
+     *  selection would otherwise use". Only then is trading recency for pool
+     *  thickness the right trade.
+     *
+     *  @since 0.9.71+
+     */
+    public static final int SCARCE_FAST_PEERS = 200;
 
-        return Math.min(window, 12 * 60 * 60 * 1000L);
+    /** Upper bound on the activity window, applied after the multiplier. @since 0.9.71+ */
+    public static final long MAX_WINDOW_MS = 12 * 60 * 60 * 1000L;
+
+    /**
+     *  Multiplier the peer-supply signal earns, independent of any build-outcome
+     *  metric. This is the single gate on widening the activity window, shared by
+     *  the Tuner param, the pool starvation bypass and
+     *  {@link #getActivityWindow(RouterContext)} so the three cannot drift apart.
+     *
+     *  <p>Rules, in order:
+     *  <ol>
+     *    <li>Above {@link #SCARCE_FAST_PEERS} the window is never widened, no
+     *        matter how bad build success looks. Plenty of good peers are
+     *        available, so admitting stale ones is a pure loss of quality.</li>
+     *    <li>During the startup grace period the window is widened to the
+     *        ceiling. This is the one legitimate exception: a cold router has an
+     *        almost-empty profile set, so peers look stale purely for lack of test
+     *        history rather than for any fault of their own.</li>
+     *    <li>Below the threshold the multiplier ramps linearly to the ceiling as
+     *        fast peers approach zero.</li>
+     *  </ol>
+     *
+     *  <p>Pure, so the policy is testable without a router, and public because the
+     *  Tuner and the pool both consult it. A single shared definition of "we are
+     *  short of peers" is the whole point; two copies would drift apart and
+     *  reintroduce exactly the disagreement this change removes.
+     *
+     *  @param fastPeers peers currently classified fast
+     *  @param startupGrace true while the router is within its startup grace period
+     *  @param min floor multiplier
+     *  @param max ceiling multiplier
+     *  @return multiplier in [min, max]
+     *  @since 0.9.71+
+     */
+    public static int windowMultiplierFor(int fastPeers, boolean startupGrace, int min, int max) {
+        if (max <= min) {return min;}
+        if (startupGrace) {return max;}
+        if (fastPeers >= SCARCE_FAST_PEERS) {return min;}
+        if (fastPeers <= 0) {return max;}
+        double deficit = (double) (SCARCE_FAST_PEERS - fastPeers) / SCARCE_FAST_PEERS;
+        return min + (int) Math.round(deficit * (max - min));
+    }
+
+    /**
+     *  {@link #windowMultiplierFor(int, boolean, int, int)} bound to the live
+     *  router: reads the current fast-peer count and startup state.
+     *
+     *  @param ctx the router context
+     *  @return multiplier in [MIN_WINDOW_MULTIPLIER, MAX_WINDOW_MULTIPLIER}
+     *  @since 0.9.71+
+     */
+    public static int windowMultiplierFor(RouterContext ctx) {
+        return windowMultiplierFor(ctx.profileOrganizer().countFastPeers(),
+                                   isInStartupGracePeriod(ctx),
+                                   MIN_WINDOW_MULTIPLIER, MAX_WINDOW_MULTIPLIER);
     }
 
     /**
